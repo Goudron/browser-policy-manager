@@ -8,4 +8,4 @@ templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "t
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "message": "It works!"})
+    return templates.TemplateResponse(request, "index.html", {"message": "It works!"})
