@@ -1,11 +1,72 @@
-<!doctype html>
-<html lang="ru">
-<meta charset="utf-8">
-<title>Browser Policy Manager</title>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Browser Policy Manager</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <style>
+    body {
+      background-color: #fafafa;
+    }
+
+    .hero.is-primary {
+      background-color: #363636;
+    }
+
+    .footer {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      color: #666;
+    }
+
+    .button.is-link {
+      background-color: #3273dc;
+    }
+
+    .card {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
 
 <body>
-  <h1>Browser Policy Manager</h1>
-  <p>{{ message }} — now from dev branch!</p>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      <p class="title">Browser Policy Manager</p>
+      <p class="subtitle">Centralized control for Firefox Enterprise policies</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <h3 class="title is-4">Welcome!</h3>
+            <p>
+              This is the <strong>Browser Policy Manager</strong> web interface.
+              It allows you to create, edit, and export Firefox <code>policies.json</code>
+              profiles for enterprise environments.
+            </p>
+            <p>
+              To begin managing your policies, open the Profiles section below.
+            </p>
+            <p>
+              <a class="button is-link" href="/profiles">Open Profiles</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>
+      &copy; {{ now().year if now else 2025 }} Browser Policy Manager.
+      Licensed under <a href="https://www.mozilla.org/en-US/MPL/2.0/" target="_blank">MPL 2.0</a>.
+    </p>
+  </footer>
 </body>
 
 </html>

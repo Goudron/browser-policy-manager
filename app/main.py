@@ -5,18 +5,19 @@ import os
 
 from app.models.db import init_db
 from app.api import policies, exports, health
+from app.web.routes import router as web_router
 
 app = FastAPI(title="Browser Policy Manager")
 init_db()
 
-# UI (простой заглушкой пока)
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse(request, "index.html", {"message": "It works!"})
 
-# REST
+# REST + WEB
 app.include_router(health.router)
 app.include_router(policies.router)
 app.include_router(exports.router)
+app.include_router(web_router)
