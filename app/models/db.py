@@ -1,7 +1,7 @@
 from __future__ import annotations
 from sqlmodel import SQLModel, Field, create_engine, Session, select
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import os, json
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..")
@@ -16,15 +16,15 @@ class PolicyProfile(SQLModel, table=True):
     description: Optional[str] = None
     active_schema_version: str
     payload_json: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class PolicyVersion(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     profile_id: int = Field(foreign_key="policyprofile.id")
     author: Optional[str] = None
     payload_json: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 def init_db() -> None:
     SQLModel.metadata.create_all(engine)
