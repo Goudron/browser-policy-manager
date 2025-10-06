@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit profile</h2>
+<form method="post" action="/profiles/{{ p.id }}/edit" style="display:grid;gap:.75rem;max-width:560px;">
+    <label>
+        <div>Name</div>
+        <input type="text" name="name" value="{{ p.name }}" required style="width:100%;padding:.4rem;">
+    </label>
+
+    <label>
+        <div>Description</div>
+        <input type="text" name="description" value="{{ p.description or '' }}" style="width:100%;padding:.4rem;">
+    </label>
+
+    <label>
+        <div>Schema version</div>
+        <input type="text" name="schema_version" value="{{ p.active_schema_version }}"
+            style="width:100%;padding:.4rem;">
+    </label>
+
+    <fieldset style="border:1px solid #ddd;padding:.75rem;">
+        <legend>Flags</legend>
+        <label style="display:flex;gap:.5rem;align-items:center;">
+            <input type="checkbox" name="disable_telemetry" {% if flags.DisableTelemetry %}checked{% endif %}>
+            DisableTelemetry
+        </label>
+        <label style="display:flex;gap:.5rem;align-items:center;">
+            <input type="checkbox" name="disable_pocket" {% if flags.DisablePocket %}checked{% endif %}>
+            DisablePocket
+        </label>
+    </fieldset>
+
+    <div>
+        <button type="submit" class="button is-link" style="padding:.5rem 1rem;">Save</button>
+        <a href="/profiles/{{ p.id }}" class="button" style="margin-left:.5rem;">Cancel</a>
+    </div>
+</form>
+{% endblock %}

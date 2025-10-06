@@ -6,5 +6,5 @@ def test_root():
     r = client.get("/")
     assert r.status_code == 200
     # Новые проверки под актуальный index.html:
-    assert "Browser Policy Manager" in r.text
+    assert "Valery Ledovskoy" in r.text
     assert '/profiles' in r.text  # ссылка на раздел профилей

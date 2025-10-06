@@ -1,31 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-  <div style="display:flex;justify-content:space-between;align-items:center;">
-    <h2 style="margin:0;">Profiles</h2>
-    <a href="/profiles/new">+ New profile</a>
-  </div>
-  <table style="width:100%;border-collapse:collapse;margin-top:1rem;">
-    <thead>
-      <tr>
-        <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Name</th>
-        <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Schema</th>
-        <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Updated</th>
-        <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Export</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for p in profiles %}
-      <tr>
-        <td style="padding:.5rem;border-bottom:1px solid #eee;">{{ p.name }}</td>
-        <td style="padding:.5rem;border-bottom:1px solid #eee;">{{ p.active_schema_version }}</td>
-        <td style="padding:.5rem;border-bottom:1px solid #eee;">{{ p.updated_at }}</td>
-        <td style="padding:.5rem;border-bottom:1px solid #eee;">
-          <a href="/api/export/{{ p.id }}/policies.json" target="_blank">policies.json</a>
-        </td>
-      </tr>
-      {% else %}
-      <tr><td colspan="4" style="padding:.75rem;color:#777;">No profiles yet.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div style="display:flex;justify-content:space-between;align-items:center;">
+  <h2 style="margin:0;">Profiles</h2>
+  <a href="/profiles/new">+ New profile</a>
+</div>
+<table style="width:100%;border-collapse:collapse;margin-top:1rem;">
+  <thead>
+    <tr>
+      <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Name</th>
+      <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Schema</th>
+      <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Updated</th>
+      <th style="text-align:left;border-bottom:1px solid #ddd;padding:.5rem;">Export</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in profiles %}
+    <tr>
+      <td style="padding:.5rem;border-bottom:1px solid #eee;">
+        <a href="/profiles/{{ p.id }}">{{ p.name }}</a>
+      </td>
+      <td style="padding:.5rem;border-bottom:1px solid #eee;">{{ p.active_schema_version }}</td>
+      <td style="padding:.5rem;border-bottom:1px solid #eee;">{{ p.updated_at }}</td>
+      <td style="padding:.5rem;border-bottom:1px solid #eee;">
+        <a href="/api/export/{{ p.id }}/policies.json" target="_blank">policies.json</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="4" style="padding:.75rem;color:#777;">No profiles yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
