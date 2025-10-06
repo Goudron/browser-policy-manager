@@ -1,38 +1,84 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Edit profile</h2>
-<form method="post" action="/profiles/{{ p.id }}/edit" style="display:grid;gap:.75rem;max-width:560px;">
-    <label>
-        <div>Name</div>
-        <input type="text" name="name" value="{{ p.name }}" required style="width:100%;padding:.4rem;">
-    </label>
 
-    <label>
-        <div>Description</div>
-        <input type="text" name="description" value="{{ p.description or '' }}" style="width:100%;padding:.4rem;">
-    </label>
-
-    <label>
-        <div>Schema version</div>
-        <input type="text" name="schema_version" value="{{ p.active_schema_version }}"
-            style="width:100%;padding:.4rem;">
-    </label>
-
-    <fieldset style="border:1px solid #ddd;padding:.75rem;">
-        <legend>Flags</legend>
-        <label style="display:flex;gap:.5rem;align-items:center;">
-            <input type="checkbox" name="disable_telemetry" {% if flags.DisableTelemetry %}checked{% endif %}>
-            DisableTelemetry
+<div style="display:flex;gap:2rem;flex-wrap:wrap;">
+    <!-- ======== LEFT: FORM ======== -->
+    <form id="editForm" method="post" action="/profiles/{{ p.id }}/edit"
+        style="flex:1;min-width:320px;display:grid;gap:.75rem;">
+        <label>
+            <div>Name</div>
+            <input type="text" name="name" value="{{ p.name }}" required style="width:100%;padding:.4rem;">
         </label>
-        <label style="display:flex;gap:.5rem;align-items:center;">
-            <input type="checkbox" name="disable_pocket" {% if flags.DisablePocket %}checked{% endif %}>
-            DisablePocket
-        </label>
-    </fieldset>
 
-    <div>
-        <button type="submit" class="button is-link" style="padding:.5rem 1rem;">Save</button>
-        <a href="/profiles/{{ p.id }}" class="button" style="margin-left:.5rem;">Cancel</a>
+        <label>
+            <div>Description</div>
+            <input type="text" name="description" value="{{ p.description or '' }}" style="width:100%;padding:.4rem;">
+        </label>
+
+        <label>
+            <div>Schema version</div>
+            <input type="text" name="schema_version" value="{{ p.active_schema_version }}"
+                style="width:100%;padding:.4rem;">
+        </label>
+
+        <fieldset style="border:1px solid #ddd;padding:.75rem;">
+            <legend>Flags</legend>
+            <label style="display:flex;gap:.5rem;align-items:center;">
+                <input type="checkbox" name="disable_telemetry" {% if flags.DisableTelemetry %}checked{% endif %}>
+                DisableTelemetry
+            </label>
+            <label style="display:flex;gap:.5rem;align-items:center;">
+                <input type="checkbox" name="disable_pocket" {% if flags.DisablePocket %}checked{% endif %}>
+                DisablePocket
+            </label>
+        </fieldset>
+
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;">
+            <button type="submit" class="button is-link">Save</button>
+            <a href="/profiles/{{ p.id }}" class="button">Cancel</a>
+        </div>
+    </form>
+
+    <!-- ======== RIGHT: JSON PREVIEW ======== -->
+    <div style="flex:1;min-width:340px;">
+        <h3>Live preview (policies.json)</h3>
+        <pre id="jsonPreview"
+            style="background:#f6f8fa;border:1px solid #ddd;padding:1rem;overflow:auto;min-height:320px;font-size:.9rem;"></pre>
     </div>
-</form>
+</div>
+
+<script>
+    function buildPolicyJSON() {
+        const form = document.getElementById('editForm');
+        const name = form.name.value.trim();
+        const description = form.description.value.trim();
+        const schema = form.schema_version.value.trim();
+        const disableTelemetry = form.disable_telemetry.checked;
+        const disablePocket = form.disable_pocket.checked;
+
+        const payload = {
+            name: name,
+            description: description,
+            schema_version: schema,
+            policies: {
+                DisableTelemetry: disableTelemetry,
+                DisablePocket: disablePocket
+            }
+        };
+
+        return JSON.stringify(payload, null, 2);
+    }
+
+    function updatePreview() {
+        document.getElementById('jsonPreview').textContent = buildPolicyJSON();
+    }
+
+    // Инициализация предпросмотра
+    document.addEventListener('DOMContentLoaded', () => {
+        updatePreview();
+        const inputs = document.querySelectorAll('#editForm input');
+        inputs.forEach(input => input.addEventListener('input', updatePreview));
+    });
+</script>
 {% endblock %}
