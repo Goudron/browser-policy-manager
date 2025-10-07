@@ -4,12 +4,12 @@ from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select
 from sqlalchemy import or_, func
 from typing import Optional
-import os
-import json
+import os, json
 from datetime import datetime, timezone
 
 from app.models.db import get_session, PolicyProfile, PolicyVersion
 from app.services.policy_service import PolicyService
+from app.services.schema_service import list_schemas
 
 templates = Jinja2Templates(
     directory=os.path.join(os.path.dirname(__file__), "..", "templates")
@@ -54,18 +54,17 @@ def profiles_list(request: Request, session: Session = Depends(get_session)):
 # ============================================================
 @router.get("/profiles/new")
 def profile_new_get(request: Request):
+    schema_options = list_schemas()
+    # firefox-release — по умолчанию
+    default_schema = "firefox-release"
     return templates.TemplateResponse(
         request,
         "profile_new.html",
         {
-            "defaults": {
-                "schema_version": "firefox-ESR",
-                "DisableTelemetry": True,
-                "DisablePocket": True,
-            }
+            "schema_options": schema_options,
+            "default_schema": default_schema,
         },
     )
-
 
 @router.post("/profiles/new")
 def profile_new_post(
@@ -73,18 +72,24 @@ def profile_new_post(
     name: str = Form(...),
     description: Optional[str] = Form(None),
     schema_version: str = Form(...),
-    disable_telemetry: Optional[bool] = Form(False),
-    disable_pocket: Optional[bool] = Form(False),
+    flags_json: Optional[str] = Form(None),
     session: Session = Depends(get_session),
 ):
+    # флаги приходят в JSON (динамически выбранные чекбоксы)
+    flags = {}
+    if flags_json:
+        try:
+            flags = json.loads(flags_json)
+            # оставим только bool
+            flags = {k: bool(v) for k, v in flags.items()}
+        except Exception:
+            flags = {}
+
     data = {
         "name": name,
         "description": description,
         "schema_version": schema_version,
-        "flags": {
-            "DisableTelemetry": bool(disable_telemetry),
-            "DisablePocket": bool(disable_pocket),
-        },
+        "flags": flags,
     }
     payload = PolicyService.build_payload(data)
 
@@ -98,9 +103,7 @@ def profile_new_post(
     session.commit()
     session.refresh(row)
 
-    session.add(
-        PolicyVersion(profile_id=row.id, author="ui", payload_json=row.payload_json)
-    )
+    session.add(PolicyVersion(profile_id=row.id, author="ui", payload_json=row.payload_json))
     session.commit()
 
     return RedirectResponse(url="/profiles", status_code=303)
@@ -133,18 +136,18 @@ def profile_edit_get(profile_id: int, request: Request, session: Session = Depen
     if not row:
         raise HTTPException(404, "Profile not found")
 
+    # распакуем флаги из payload (только bool)
     payload = json.loads(row.payload_json)
-    flags = {
-        "DisableTelemetry": bool(payload.get("policies", {}).get("DisableTelemetry", False)),
-        "DisablePocket": bool(payload.get("policies", {}).get("DisablePocket", False)),
-    }
+    pol = payload.get("policies", {})
+    flags = {k: v for k, v in pol.items() if isinstance(v, bool)}
+
+    schema_options = list_schemas()
 
     return templates.TemplateResponse(
         request,
         "profile_edit.html",
-        {"p": row, "flags": flags},
+        {"p": row, "flags": flags, "schema_options": schema_options},
     )
-
 
 @router.post("/profiles/{profile_id}/edit")
 def profile_edit_post(
@@ -153,22 +156,26 @@ def profile_edit_post(
     name: str = Form(...),
     description: Optional[str] = Form(None),
     schema_version: str = Form(...),
-    disable_telemetry: Optional[bool] = Form(False),
-    disable_pocket: Optional[bool] = Form(False),
+    flags_json: Optional[str] = Form(None),
     session: Session = Depends(get_session),
 ):
     row = session.get(PolicyProfile, profile_id)
     if not row:
         raise HTTPException(404, "Profile not found")
 
+    flags = {}
+    if flags_json:
+        try:
+            flags = json.loads(flags_json)
+            flags = {k: bool(v) for k, v in flags.items()}
+        except Exception:
+            flags = {}
+
     data = {
         "name": name,
         "description": description,
         "schema_version": schema_version,
-        "flags": {
-            "DisableTelemetry": bool(disable_telemetry),
-            "DisablePocket": bool(disable_pocket),
-        },
+        "flags": flags,
     }
     payload = PolicyService.build_payload(data)
 
@@ -181,9 +188,7 @@ def profile_edit_post(
     session.commit()
     session.refresh(row)
 
-    session.add(
-        PolicyVersion(profile_id=row.id, author="ui", payload_json=row.payload_json)
-    )
+    session.add(PolicyVersion(profile_id=row.id, author="ui", payload_json=row.payload_json))
     session.commit()
 
     return RedirectResponse(url=f"/profiles/{row.id}", status_code=303)
@@ -198,3 +203,4 @@ def profile_delete(profile_id: int, session: Session = Depends(get_session)):
         session.delete(row)
         session.commit()
     return RedirectResponse(url="/profiles", status_code=303)
+# ============================================================
