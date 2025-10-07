@@ -55,7 +55,6 @@ def profiles_list(request: Request, session: Session = Depends(get_session)):
 @router.get("/profiles/new")
 def profile_new_get(request: Request):
     schema_options = list_schemas()
-    # firefox-release — по умолчанию
     default_schema = "firefox-release"
     return templates.TemplateResponse(
         request,
@@ -73,23 +72,38 @@ def profile_new_post(
     description: Optional[str] = Form(None),
     schema_version: str = Form(...),
     flags_json: Optional[str] = Form(None),
+    doh_enabled: Optional[bool] = Form(False),
+    doh_provider_url: Optional[str] = Form(None),
+    doh_locked: Optional[bool] = Form(False),
+    preferences_json: Optional[str] = Form(None),
+    extension_settings_json: Optional[str] = Form(None),
+    advanced_json: Optional[str] = Form(None),
     session: Session = Depends(get_session),
 ):
-    # флаги приходят в JSON (динамически выбранные чекбоксы)
+    # флаги (boolean)
     flags = {}
     if flags_json:
         try:
             flags = json.loads(flags_json)
-            # оставим только bool
             flags = {k: bool(v) for k, v in flags.items()}
         except Exception:
             flags = {}
+
+    doh = {
+        "Enabled": bool(doh_enabled),
+        "ProviderURL": (doh_provider_url or "").strip(),
+        "Locked": bool(doh_locked),
+    }
 
     data = {
         "name": name,
         "description": description,
         "schema_version": schema_version,
         "flags": flags,
+        "doh": doh,
+        "preferences_json": preferences_json,
+        "extension_settings_json": extension_settings_json,
+        "advanced_json": advanced_json,
     }
     payload = PolicyService.build_payload(data)
 
@@ -136,17 +150,42 @@ def profile_edit_get(profile_id: int, request: Request, session: Session = Depen
     if not row:
         raise HTTPException(404, "Profile not found")
 
-    # распакуем флаги из payload (только bool)
     payload = json.loads(row.payload_json)
-    pol = payload.get("policies", {})
+    pol = payload.get("policies", {}) if isinstance(payload, dict) else {}
+
+    # флаги (только bool)
     flags = {k: v for k, v in pol.items() if isinstance(v, bool)}
+
+    # DoH
+    doh = pol.get("DNSOverHTTPS") if isinstance(pol, dict) else {}
+    doh_enabled = bool(doh.get("Enabled")) if isinstance(doh, dict) else False
+    doh_provider_url = (doh.get("ProviderURL") or "") if isinstance(doh, dict) else ""
+    doh_locked = bool(doh.get("Locked")) if isinstance(doh, dict) else False
+
+    # Preferences / ExtensionSettings / Advanced
+    preferences_json = json.dumps(pol.get("Preferences", {}), indent=2, ensure_ascii=False) if isinstance(pol.get("Preferences"), dict) else ""
+    extension_settings_json = json.dumps(pol.get("ExtensionSettings", {}), indent=2, ensure_ascii=False) if isinstance(pol.get("ExtensionSettings"), dict) else ""
+
+    # Advanced нельзя восстановить из уже объединённого payload (мы его просто применяли поверх).
+    # Для простоты оставляем пустым; пользователь может добавить новые оверрайды здесь.
+    advanced_json = ""
 
     schema_options = list_schemas()
 
     return templates.TemplateResponse(
         request,
         "profile_edit.html",
-        {"p": row, "flags": flags, "schema_options": schema_options},
+        {
+            "p": row,
+            "flags": flags,
+            "schema_options": schema_options,
+            "doh_enabled": doh_enabled,
+            "doh_provider_url": doh_provider_url,
+            "doh_locked": doh_locked,
+            "preferences_json": preferences_json,
+            "extension_settings_json": extension_settings_json,
+            "advanced_json": advanced_json,
+        },
     )
 
 @router.post("/profiles/{profile_id}/edit")
@@ -157,6 +196,12 @@ def profile_edit_post(
     description: Optional[str] = Form(None),
     schema_version: str = Form(...),
     flags_json: Optional[str] = Form(None),
+    doh_enabled: Optional[bool] = Form(False),
+    doh_provider_url: Optional[str] = Form(None),
+    doh_locked: Optional[bool] = Form(False),
+    preferences_json: Optional[str] = Form(None),
+    extension_settings_json: Optional[str] = Form(None),
+    advanced_json: Optional[str] = Form(None),
     session: Session = Depends(get_session),
 ):
     row = session.get(PolicyProfile, profile_id)
@@ -171,11 +216,21 @@ def profile_edit_post(
         except Exception:
             flags = {}
 
+    doh = {
+        "Enabled": bool(doh_enabled),
+        "ProviderURL": (doh_provider_url or "").strip(),
+        "Locked": bool(doh_locked),
+    }
+
     data = {
         "name": name,
         "description": description,
         "schema_version": schema_version,
         "flags": flags,
+        "doh": doh,
+        "preferences_json": preferences_json,
+        "extension_settings_json": extension_settings_json,
+        "advanced_json": advanced_json,
     }
     payload = PolicyService.build_payload(data)
 
@@ -203,4 +258,3 @@ def profile_delete(profile_id: int, session: Session = Depends(get_session)):
         session.delete(row)
         session.commit()
     return RedirectResponse(url="/profiles", status_code=303)
-# ============================================================

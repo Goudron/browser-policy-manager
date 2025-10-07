@@ -29,7 +29,43 @@
       <div id="flagsContainer" style="display:grid;gap:.25rem;"></div>
     </fieldset>
 
-    <!-- hidden JSON with selected flags -->
+    <fieldset style="border:1px solid #ddd;padding:.75rem;">
+      <legend>DNS over HTTPS</legend>
+      <label style="display:flex;gap:.5rem;align-items:center;">
+        <input type="checkbox" name="doh_enabled"> Enable DoH
+      </label>
+      <label>
+        <div>Provider URL</div>
+        <input type="text" name="doh_provider_url" placeholder="https://dns.example/cdn..."
+          style="width:100%;padding:.4rem;">
+      </label>
+      <label style="display:flex;gap:.5rem;align-items:center;">
+        <input type="checkbox" name="doh_locked"> Locked
+      </label>
+    </fieldset>
+
+    <label>
+      <div>Preferences (JSON object)</div>
+      <textarea name="preferences_json" id="preferencesJson" rows="6"
+        placeholder='{"browser.startup.page": 3, "privacy.donottrackheader.enabled": true}'
+        style="width:100%;font-family:monospace;"></textarea>
+    </label>
+
+    <label>
+      <div>ExtensionSettings (JSON object)</div>
+      <textarea name="extension_settings_json" id="extJson" rows="6"
+        placeholder='{"*": {"installation_mode": "blocked"}, "addon@corp": {"installation_mode": "force_installed", "updates": true}}'
+        style="width:100%;font-family:monospace;"></textarea>
+    </label>
+
+    <label>
+      <div>Advanced JSON override (merged on top of policies)</div>
+      <textarea name="advanced_json" id="advJson" rows="6"
+        placeholder='{"Certificates": {"Install": ["/path/rootCA.cer"]}}'
+        style="width:100%;font-family:monospace;"></textarea>
+    </label>
+
+    <!-- hidden JSON with selected boolean flags -->
     <input type="hidden" name="flags_json" id="flagsJson" value="{}" />
 
     <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem;">
@@ -42,7 +78,7 @@
   <div style="flex:1;min-width:340px;">
     <h3>Live preview (policies.json)</h3>
     <pre id="jsonPreview"
-      style="background:#f6f8fa;border:1px solid #ddd;padding:1rem;overflow:auto;min-height:320px;font-size:.9rem;"></pre>
+      style="background:#f6f8fa;border:1px solid #ddd;padding:1rem;overflow:auto;min-height:420px;font-size:.9rem;"></pre>
   </div>
 </div>
 
@@ -51,11 +87,45 @@
     name: "",
     description: "",
     schema_version: "{{ default_schema }}",
-    flags: {}
+    flags: {},
+    doh: { Enabled: false, ProviderURL: "", Locked: false },
+    preferences_json: "",
+    extension_settings_json: "",
+    advanced_json: ""
   };
 
   function updateHidden() {
     document.getElementById('flagsJson').value = JSON.stringify(state.flags || {});
+  }
+
+  function safeParse(jsonStr) {
+    if (!jsonStr || !jsonStr.trim()) return null;
+    try { return JSON.parse(jsonStr); } catch { return null; }
+  }
+
+  function buildPoliciesObject() {
+    const pol = { ...state.flags };
+
+    // DoH
+    const dohOut = {};
+    if (state.doh?.Enabled) dohOut.Enabled = true;
+    if (state.doh?.ProviderURL && state.doh.ProviderURL.trim()) dohOut.ProviderURL = state.doh.ProviderURL.trim();
+    if (state.doh?.Locked) dohOut.Locked = true;
+    if (Object.keys(dohOut).length) pol["DNSOverHTTPS"] = dohOut;
+
+    // Preferences
+    const prefs = safeParse(state.preferences_json);
+    if (prefs && typeof prefs === "object" && !Array.isArray(prefs)) pol["Preferences"] = prefs;
+
+    // ExtensionSettings
+    const ext = safeParse(state.extension_settings_json);
+    if (ext && typeof ext === "object" && !Array.isArray(ext)) pol["ExtensionSettings"] = ext;
+
+    // Advanced override (merge поверх)
+    const adv = safeParse(state.advanced_json);
+    if (adv && typeof adv === "object" && !Array.isArray(adv)) Object.assign(pol, adv);
+
+    return pol;
   }
 
   function buildPayloadPreview() {
@@ -63,7 +133,7 @@
       name: state.name,
       description: state.description,
       schema_version: state.schema_version,
-      policies: { ...state.flags }
+      policies: buildPoliciesObject()
     };
     return JSON.stringify(payload, null, 2);
   }
@@ -80,14 +150,11 @@
     const container = document.getElementById('flagsContainer');
     container.innerHTML = "";
 
-    // сбрасываем флаги, сохраняем отмеченные при смене схемы, если совпадают имена
+    // сохранение отмеченных при смене схемы, если совпадают имена
     const oldFlags = { ...(state.flags || {}) };
     state.flags = {};
 
     keys.sort().forEach((key) => {
-      const id = `flag_${key}`;
-      const checked = (key in oldFlags) ? !!oldFlags[key] : false;
-
       const label = document.createElement('label');
       label.style.display = "flex";
       label.style.gap = ".5rem";
@@ -95,8 +162,7 @@
 
       const input = document.createElement('input');
       input.type = "checkbox";
-      input.id = id;
-      input.checked = checked;
+      input.checked = !!oldFlags[key];
       input.addEventListener('change', () => {
         state.flags[key] = input.checked;
         updateHidden();
@@ -110,7 +176,7 @@
       label.appendChild(text);
       container.appendChild(label);
 
-      state.flags[key] = checked;
+      state.flags[key] = !!oldFlags[key];
     });
 
     updateHidden();
@@ -119,21 +185,38 @@
 
   function attachFormHandlers() {
     const form = document.getElementById('newForm');
-    const nameInput = form.name;
-    const descInput = form.description;
-    const schemaSel = document.getElementById('schemaSelect');
 
-    nameInput.addEventListener('input', () => { state.name = nameInput.value; renderPreview(); });
-    descInput.addEventListener('input', () => { state.description = descInput.value; renderPreview(); });
+    form.name.addEventListener('input', () => { state.name = form.name.value; renderPreview(); });
+    form.description.addEventListener('input', () => { state.description = form.description.value; renderPreview(); });
+
+    const schemaSel = document.getElementById('schemaSelect');
     schemaSel.addEventListener('change', async () => {
       state.schema_version = schemaSel.value;
       await loadBooleanFlags(state.schema_version);
     });
 
-    // init state
+    // DoH
+    form.doh_enabled.addEventListener('change', () => { state.doh.Enabled = form.doh_enabled.checked; renderPreview(); });
+    form.doh_provider_url.addEventListener('input', () => { state.doh.ProviderURL = form.doh_provider_url.value; renderPreview(); });
+    form.doh_locked.addEventListener('change', () => { state.doh.Locked = form.doh_locked.checked; renderPreview(); });
+
+    // JSON areas
+    const prefs = document.getElementById('preferencesJson');
+    const ext = document.getElementById('extJson');
+    const adv = document.getElementById('advJson');
+
+    prefs.addEventListener('input', () => { state.preferences_json = prefs.value; renderPreview(); });
+    ext.addEventListener('input', () => { state.extension_settings_json = ext.value; renderPreview(); });
+    adv.addEventListener('input', () => { state.advanced_json = adv.value; renderPreview(); });
+
+    // init
     state.schema_version = schemaSel.value;
-    state.name = nameInput.value || "";
-    state.description = descInput.value || "";
+    state.name = form.name.value || "";
+    state.description = form.description.value || "";
+    state.doh = { Enabled: form.doh_enabled.checked, ProviderURL: form.doh_provider_url.value, Locked: form.doh_locked.checked };
+    state.preferences_json = prefs.value || "";
+    state.extension_settings_json = ext.value || "";
+    state.advanced_json = adv.value || "";
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
