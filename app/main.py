@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 import os
 
 from app.models.db import init_db
@@ -10,7 +11,11 @@ from app.web.routes import router as web_router
 app = FastAPI(title="Browser Policy Manager")
 init_db()
 
+# Шаблоны
 templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "templates"))
+
+# Раздача статики (favicon, css, js)
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
