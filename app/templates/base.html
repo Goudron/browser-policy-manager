@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Browser Policy Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+  <!-- UI CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <style>
+    body {
+      background-color: #fafafa;
+    }
+
+    .container-narrow {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body class="container-narrow">
+  <header class="is-flex is-justify-content-space-between is-align-items-center" style="margin:1.25rem 0;">
+    <h1 class="title is-4" style="margin:0;">Browser Policy Manager</h1>
+    <nav class="buttons">
+      <a class="button is-white" href="/">Home</a>
+      <a class="button is-white" href="/profiles">Profiles</a>
+    </nav>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <footer class="has-text-centered" style="padding:2rem 0;color:#666;">
+    © 2025 Valery Ledovskoy · <a href="https://www.mozilla.org/MPL/2.0/" target="_blank">MPL 2.0</a>
+  </footer>
+</body>
+
+</html>

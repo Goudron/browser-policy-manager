@@ -5,4 +5,6 @@ def test_root():
     client = TestClient(app)
     r = client.get("/")
     assert r.status_code == 200
-    assert "It works!" in r.text
+    # Новые проверки под актуальный index.html:
+    assert "Valery Ledovskoy" in r.text
+    assert '/profiles' in r.text  # ссылка на раздел профилей
