@@ -1,21 +1,21 @@
-from fastapi import APIRouter, Depends, Request, Form, HTTPException
+import json
+import os
+from datetime import UTC, datetime
+
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import func, or_
 from sqlmodel import Session, select
-from sqlalchemy import or_, func
-from typing import Optional
-import os, json
-from datetime import datetime, timezone
 
-from app.models.db import get_session, PolicyProfile, PolicyVersion
+from app.models.db import PolicyProfile, PolicyVersion, get_session
 from app.services.policy_service import PolicyService
 from app.services.schema_service import list_schemas
 
-templates = Jinja2Templates(
-    directory=os.path.join(os.path.dirname(__file__), "..", "templates")
-)
+templates = Jinja2Templates(directory=os.path.join(os.path.dirname(__file__), "..", "templates"))
 
 router = APIRouter(tags=["web"])
+
 
 # ============================================================
 # LIST + SEARCH
@@ -49,6 +49,7 @@ def profiles_list(request: Request, session: Session = Depends(get_session)):
         },
     )
 
+
 # ============================================================
 # CREATE
 # ============================================================
@@ -65,19 +66,20 @@ def profile_new_get(request: Request):
         },
     )
 
+
 @router.post("/profiles/new")
 def profile_new_post(
     request: Request,
     name: str = Form(...),
-    description: Optional[str] = Form(None),
+    description: str | None = Form(None),
     schema_version: str = Form(...),
-    flags_json: Optional[str] = Form(None),
-    doh_enabled: Optional[bool] = Form(False),
-    doh_provider_url: Optional[str] = Form(None),
-    doh_locked: Optional[bool] = Form(False),
-    preferences_json: Optional[str] = Form(None),
-    extension_settings_json: Optional[str] = Form(None),
-    advanced_json: Optional[str] = Form(None),
+    flags_json: str | None = Form(None),
+    doh_enabled: bool | None = Form(False),
+    doh_provider_url: str | None = Form(None),
+    doh_locked: bool | None = Form(False),
+    preferences_json: str | None = Form(None),
+    extension_settings_json: str | None = Form(None),
+    advanced_json: str | None = Form(None),
     session: Session = Depends(get_session),
 ):
     # флаги (boolean)
@@ -122,6 +124,7 @@ def profile_new_post(
 
     return RedirectResponse(url="/profiles", status_code=303)
 
+
 # ============================================================
 # VIEW
 # ============================================================
@@ -140,6 +143,7 @@ def profile_view(profile_id: int, request: Request, session: Session = Depends(g
             "payload_pretty": json.dumps(payload, indent=2, ensure_ascii=False),
         },
     )
+
 
 # ============================================================
 # EDIT
@@ -163,8 +167,16 @@ def profile_edit_get(profile_id: int, request: Request, session: Session = Depen
     doh_locked = bool(doh.get("Locked")) if isinstance(doh, dict) else False
 
     # Preferences / ExtensionSettings / Advanced
-    preferences_json = json.dumps(pol.get("Preferences", {}), indent=2, ensure_ascii=False) if isinstance(pol.get("Preferences"), dict) else ""
-    extension_settings_json = json.dumps(pol.get("ExtensionSettings", {}), indent=2, ensure_ascii=False) if isinstance(pol.get("ExtensionSettings"), dict) else ""
+    preferences_json = (
+        json.dumps(pol.get("Preferences", {}), indent=2, ensure_ascii=False)
+        if isinstance(pol.get("Preferences"), dict)
+        else ""
+    )
+    extension_settings_json = (
+        json.dumps(pol.get("ExtensionSettings", {}), indent=2, ensure_ascii=False)
+        if isinstance(pol.get("ExtensionSettings"), dict)
+        else ""
+    )
 
     # Advanced нельзя восстановить из уже объединённого payload (мы его просто применяли поверх).
     # Для простоты оставляем пустым; пользователь может добавить новые оверрайды здесь.
@@ -188,20 +200,21 @@ def profile_edit_get(profile_id: int, request: Request, session: Session = Depen
         },
     )
 
+
 @router.post("/profiles/{profile_id}/edit")
 def profile_edit_post(
     profile_id: int,
     request: Request,
     name: str = Form(...),
-    description: Optional[str] = Form(None),
+    description: str | None = Form(None),
     schema_version: str = Form(...),
-    flags_json: Optional[str] = Form(None),
-    doh_enabled: Optional[bool] = Form(False),
-    doh_provider_url: Optional[str] = Form(None),
-    doh_locked: Optional[bool] = Form(False),
-    preferences_json: Optional[str] = Form(None),
-    extension_settings_json: Optional[str] = Form(None),
-    advanced_json: Optional[str] = Form(None),
+    flags_json: str | None = Form(None),
+    doh_enabled: bool | None = Form(False),
+    doh_provider_url: str | None = Form(None),
+    doh_locked: bool | None = Form(False),
+    preferences_json: str | None = Form(None),
+    extension_settings_json: str | None = Form(None),
+    advanced_json: str | None = Form(None),
     session: Session = Depends(get_session),
 ):
     row = session.get(PolicyProfile, profile_id)
@@ -238,7 +251,7 @@ def profile_edit_post(
     row.description = description
     row.active_schema_version = schema_version
     row.payload_json = json.dumps(payload)
-    row.updated_at = datetime.now(timezone.utc)
+    row.updated_at = datetime.now(UTC)
     session.add(row)
     session.commit()
     session.refresh(row)
@@ -247,6 +260,7 @@ def profile_edit_post(
     session.commit()
 
     return RedirectResponse(url=f"/profiles/{row.id}", status_code=303)
+
 
 # ============================================================
 # DELETE

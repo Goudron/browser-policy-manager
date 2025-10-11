@@ -1,17 +1,20 @@
 from __future__ import annotations
-from typing import Any, Dict, List
-import json
 
-def _lines_to_list(value: str) -> List[str]:
+import json
+from typing import Any
+
+
+def _lines_to_list(value: str) -> list[str]:
     return [ln.strip() for ln in (value or "").splitlines() if ln.strip()]
 
-def build_policies(payload: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str, Any]:
+
+def build_policies(payload: dict[str, Any], schema: dict[str, Any]) -> dict[str, Any]:
     """
     payload: { policy_id: value_from_form, ... }
     schema:  parsed YAML (app/schemas/firefox.yaml)
     Returns: dict suitable for policies.json -> { "policies": { ... } }
     """
-    policies: Dict[str, Any] = {}
+    policies: dict[str, Any] = {}
     index = {p["id"]: p for p in schema.get("policies", [])}
 
     for pid, val in payload.items():
@@ -44,13 +47,16 @@ def build_policies(payload: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str,
 
     return {"policies": policies}
 
-def build_form_payload_from_policies(policies_json: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str, Any]:
+
+def build_form_payload_from_policies(
+    policies_json: dict[str, Any], schema: dict[str, Any]
+) -> dict[str, Any]:
     """
     Обратное преобразование: { "policies": { Key: Value, ... } } -> form payload по id.
     Возвращает { policy_id: value_for_form }, где массивы превращаем в многострочный текст,
     объекты — в компактный JSON.
     """
-    result: Dict[str, Any] = {}
+    result: dict[str, Any] = {}
     index_by_key = {p["key"]: p for p in schema.get("policies", [])}
     pol = (policies_json or {}).get("policies", {})
 

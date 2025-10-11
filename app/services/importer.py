@@ -1,12 +1,13 @@
 from __future__ import annotations
-from typing import Any, Dict, Tuple, List
+
+from typing import Any
 
 ALLOWED_TOP = {"policies"}
 
 
-def normalize_policies(data: Any) -> Tuple[Dict[str, Any], List[str]]:
+def normalize_policies(data: Any) -> tuple[dict[str, Any], list[str]]:
     """Нормализуем входной JSON Firefox policies."""
-    warnings: List[str] = []
+    warnings: list[str] = []
     if not isinstance(data, dict):
         return {}, ["Input JSON must be an object (dict)"]
 

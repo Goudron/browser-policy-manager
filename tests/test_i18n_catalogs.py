@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
+
 import pytest
 
 I18N_DIR = Path(__file__).resolve().parents[1] / "app" / "i18n"
+
 
 @pytest.mark.parametrize("lang", ["en", "ru"])
 def test_i18n_catalog_parses_and_contains_ui_header_title(lang):

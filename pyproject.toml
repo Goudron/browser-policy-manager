@@ -1,4 +1,53 @@
+# -----------------------------
+# Ruff (linter + formatter)
+# -----------------------------
 [tool.ruff]
+target-version = "py313"
 line-length = 100
-select = ["E", "F", "I", "UP"]
-ignore = ["E203"]
+extend-exclude = [
+  "venv",
+  ".venv",
+  "build",
+  "dist",
+  "node_modules",
+  "migrations",
+]
+
+[tool.ruff.lint]
+# Включаем основные наборы правил:
+# E, W — pycodestyle; F — pyflakes; I — isort; UP — pyupgrade
+select = ["E", "W", "F", "I", "UP"]
+
+# Исключения (при необходимости добавь свои)
+ignore = [
+  # "E203", "W503",
+]
+
+[tool.ruff.format]
+quote-style = "preserve"
+indent-style = "space"
+docstring-code-format = true
+line-ending = "lf"
+
+# -----------------------------
+# Pytest
+# -----------------------------
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = "-q"
+
+# -----------------------------
+# Mypy (мягкий режим)
+# -----------------------------
+[tool.mypy]
+python_version = "3.13"
+strict = false
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+ignore_missing_imports = true
+no_strict_optional = false
+check_untyped_defs = false
+disallow_untyped_defs = false
+pretty = true

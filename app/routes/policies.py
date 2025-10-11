@@ -1,24 +1,28 @@
 from __future__ import annotations
-from typing import Dict, Any, List, Optional
+
+from typing import Any
+
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 router = APIRouter(prefix="/api", tags=["policies"])
 
+
 # --- Модели ---
 class PolicyIn(BaseModel):
     name: str = Field(..., min_length=1)
-    description: Optional[str] = ""
+    description: str | None = ""
     schema_version: str = "firefox-ESR"
-    flags: Dict[str, Any] = Field(default_factory=dict)
+    flags: dict[str, Any] = Field(default_factory=dict)
+
 
 class PolicyOut(PolicyIn):
     id: str  # для тестов id обязателен; берём равным name
 
 
 # --- Память в процессе (для dev/тестов) ---
-_STORE: Dict[str, PolicyOut] = {}  # key = id
+_STORE: dict[str, PolicyOut] = {}  # key = id
 
 
 @router.post("/policies", response_model=PolicyOut, status_code=status.HTTP_201_CREATED)
@@ -31,7 +35,7 @@ def create_policy(body: PolicyIn):
     return obj
 
 
-@router.get("/policies", response_model=List[PolicyOut])
+@router.get("/policies", response_model=list[PolicyOut])
 def list_policies():
     return list(_STORE.values())
 

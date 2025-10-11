@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
@@ -15,7 +16,8 @@ class LocaleMiddleware(BaseHTTPMiddleware):
         response: Response = await call_next(request)
         if "lang" in request.query_params:
             response.set_cookie(
-                "lang", lang,
+                "lang",
+                lang,
                 max_age=60 * 60 * 24 * 365,
                 httponly=False,
                 samesite="lax",

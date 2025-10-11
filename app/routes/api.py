@@ -1,21 +1,25 @@
 from __future__ import annotations
-from typing import Dict, Any, List
-from fastapi import APIRouter, HTTPException, Body
-from fastapi.responses import JSONResponse
+
 import uuid
+from typing import Any
+
+from fastapi import APIRouter, Body, HTTPException
+from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/api", tags=["api"])
 
 # Простая in-memory "БД" для профилей политик (достаточно для тестов)
-_POLICIES_DB: Dict[str, Dict[str, Any]] = {}
+_POLICIES_DB: dict[str, dict[str, Any]] = {}
 
-def _ensure_profile_exists(pid: str) -> Dict[str, Any]:
+
+def _ensure_profile_exists(pid: str) -> dict[str, Any]:
     if pid not in _POLICIES_DB:
         raise HTTPException(status_code=404, detail="Policy profile not found")
     return _POLICIES_DB[pid]
 
+
 @router.post("/policies", status_code=201)
-def create_policy_profile(payload: Dict[str, Any] = Body(...)) -> JSONResponse:
+def create_policy_profile(payload: dict[str, Any] = Body(...)) -> JSONResponse:
     """
     Ожидается тело:
     {
@@ -36,21 +40,25 @@ def create_policy_profile(payload: Dict[str, Any] = Body(...)) -> JSONResponse:
     _POLICIES_DB[pid] = record
     return JSONResponse(record, status_code=201)
 
+
 @router.get("/policies")
-def list_policy_profiles() -> List[Dict[str, Any]]:
+def list_policy_profiles() -> list[dict[str, Any]]:
     return list(_POLICIES_DB.values())
 
+
 @router.get("/policies/{pid}")
-def get_policy_profile(pid: str) -> Dict[str, Any]:
+def get_policy_profile(pid: str) -> dict[str, Any]:
     return _ensure_profile_exists(pid)
 
+
 @router.put("/policies/{pid}")
-def update_policy_profile(pid: str, payload: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
+def update_policy_profile(pid: str, payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
     rec = _ensure_profile_exists(pid)
     for k in ("name", "description", "schema_version", "flags"):
         if k in payload:
             rec[k] = payload[k]
     return rec
+
 
 @router.delete("/policies/{pid}", status_code=204)
 def delete_policy_profile(pid: str):
@@ -58,14 +66,16 @@ def delete_policy_profile(pid: str):
     _POLICIES_DB.pop(pid, None)
     return JSONResponse(status_code=204, content=None)
 
+
 # Старый экспорт (оставляем совместимостью)
 @router.get("/policies/{pid}/export")
-def export_policy_profile(pid: str) -> Dict[str, Any]:
+def export_policy_profile(pid: str) -> dict[str, Any]:
     rec = _ensure_profile_exists(pid)
     flags = rec.get("flags") or {}
     if not isinstance(flags, dict):
         raise HTTPException(400, detail="Invalid flags format")
     return {"policies": flags}
+
 
 # НОВЫЙ маршрут под тест: GET /api/export/{pid}/policies.json
 @router.get("/export/{pid}/policies.json")

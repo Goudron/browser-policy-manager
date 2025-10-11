@@ -1,16 +1,20 @@
 from __future__ import annotations
-from fastapi import APIRouter, UploadFile, File, Body, HTTPException, Request
-from pydantic import BaseModel
-from typing import Any, Dict, List
+
 import json
+from typing import Any
+
+from fastapi import APIRouter, Body, File, HTTPException, Request, UploadFile
+from pydantic import BaseModel
 
 from app.services.importer import normalize_policies
 
 router = APIRouter(prefix="/api", tags=["import"])
 
+
 class ImportResponse(BaseModel):
-    policies: Dict[str, Any]
-    warnings: List[str] = []
+    policies: dict[str, Any]
+    warnings: list[str] = []
+
 
 @router.post("/import-policies", response_model=ImportResponse)
 async def import_policies(

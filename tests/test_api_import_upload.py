@@ -1,5 +1,7 @@
 import io
+
 from fastapi.testclient import TestClient
+
 from app.main import app
 
 client = TestClient(app)
@@ -9,17 +11,14 @@ def test_import_policies_via_file_multipart_ok():
     sample = {
         "policies": {
             "DisableTelemetry": True,
-            "Preferences": {
-                "browser.startup.homepage": "https://example.org"
-            }
+            "Preferences": {"browser.startup.homepage": "https://example.org"},
         }
     }
     import json
+
     payload = json.dumps(sample).encode("utf-8")
 
-    files = {
-        "file": ("policies.json", io.BytesIO(payload), "application/json")
-    }
+    files = {"file": ("policies.json", io.BytesIO(payload), "application/json")}
     r = client.post("/api/import-policies", files=files)
     assert r.status_code == 200, r.text
 
@@ -33,9 +32,7 @@ def test_import_policies_via_file_multipart_ok():
 
 def test_import_policies_via_file_multipart_bad_json():
     bad_payload = b"{ not-a-json ]"
-    files = {
-        "file": ("policies.json", io.BytesIO(bad_payload), "application/json")
-    }
+    files = {"file": ("policies.json", io.BytesIO(bad_payload), "application/json")}
     r = client.post("/api/import-policies", files=files)
     assert r.status_code == 400
     # сервер должен вернуть detail с описанием ошибки
