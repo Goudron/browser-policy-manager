@@ -113,5 +113,22 @@
     "policy.extensions_enabled.title": "Разрешённые расширения (ID)",
     "policy.extensions_enabled.desc": "Ограничение по списку ID.",
     "policy.disable_filesystem.title": "Запрет доступа к ФС",
-    "policy.disable_filesystem.desc": "Ограничение доступа к файловой системе (зависит от окружения)."
+    "policy.disable_filesystem.desc": "Ограничение доступа к файловой системе (зависит от окружения).",
+    "ui": {
+        "header": {
+            "title": "Менеджер политик браузера",
+            "subtitle": "Управляйте корпоративными политиками Firefox с удобным интерфейсом."
+        },
+        "import": {
+            "title": "Импорт файла policies.json",
+            "hint": "Используйте эндпоинт",
+            "cont": "чтобы импортировать и просмотреть набор политик Firefox."
+        },
+        "docs": {
+            "link": "Подробности см. в README."
+        },
+        "footer": {
+            "note": "Это минимальный шаблон интерфейса Browser Policy Manager."
+        }
+    }
 }

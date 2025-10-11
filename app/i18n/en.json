@@ -113,5 +113,22 @@
     "policy.extensions_enabled.title": "Extensions Enabled (IDs)",
     "policy.extensions_enabled.desc": "Restrict to a fixed list of extension IDs.",
     "policy.disable_filesystem.title": "Disable File System Access",
-    "policy.disable_filesystem.desc": "Restrict file system access (env-dependent)."
+    "policy.disable_filesystem.desc": "Restrict file system access (env-dependent).",
+    "ui": {
+        "header": {
+            "title": "Browser Policy Manager",
+            "subtitle": "Manage Firefox enterprise policies easily."
+        },
+        "import": {
+            "title": "Import policies.json",
+            "hint": "Use the endpoint",
+            "cont": "to import and preview your Firefox policy set."
+        },
+        "docs": {
+            "link": "See README for details."
+        },
+        "footer": {
+            "note": "This is a minimal placeholder template for Browser Policy Manager."
+        }
+    }
 }
