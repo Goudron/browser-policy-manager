@@ -1,0 +1,39 @@
+vendor: firefox
+name_i18n: preset.soc_hard.name
+description_i18n: preset.soc_hard.desc
+include:
+  disable_app_update: true
+  app_auto_update: false
+  disable_system_addon_update: true
+  block_about_config: true
+  block_addons_manager: true
+  block_about_profiles: true
+  disable_firefox_accounts: true
+  disable_pocket: true
+  disable_firefox_studies: true
+  disable_private_browsing: true
+  dns_over_https:
+    Enabled: true
+    ProviderURL: https://dns.example.secure/dns-query
+    Locked: true
+  proxy:
+    Mode: manual
+    HTTPProxy: proxy.sec.local:3128
+    SSLProxy: proxy.sec.local:3128
+    UseHTTPProxyForAllProtocols: true
+  certificates:
+    ImportEnterpriseRoots: true
+    Install:
+      - /etc/pki/anchors/org-rootCA.crt
+  permissions:
+    Camera: block
+    Microphone: block
+    Location: block
+  preferences:
+    network.IDN_show_punycode: true
+    privacy.firstparty.isolate: true
+    security.tls.version.min: 3
+    browser.safebrowsing.downloads.enabled: false
+  extension_settings:
+    "*":
+      installation_mode: blocked

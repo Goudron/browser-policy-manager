@@ -1,0 +1,30 @@
+vendor: firefox
+name_i18n: preset.classroom_kiosk.name
+description_i18n: preset.classroom_kiosk.desc
+include:
+  kiosk_mode: true
+  printing:
+    DisablePrintPreview: true
+    DisablePrinting: false
+  disable_private_browsing: true
+  block_about_config: true
+  block_about_profiles: true
+  disable_pdf_viewer: false
+  homepage:
+    URL: https://start.school.local/
+    Locked: true
+    StartPage: homepage
+  proxy:
+    Mode: system
+  permissions:
+    Camera: allow
+    Microphone: allow
+    Location: block
+  extensions:
+    - https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi
+  extension_settings:
+    "*":
+      installation_mode: blocked
+    "uBlock0@raymondhill.net":
+      installation_mode: force_installed
+      install_url: https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi
