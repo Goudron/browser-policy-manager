@@ -25,7 +25,7 @@ It is designed for corporate and educational environments where unified browser 
 
 | Layer | Tools |
 |-------|--------|
-| Language | Python 3.12 |
+| Language | Python 3.13 |
 | Framework | FastAPI |
 | ASGI server | Uvicorn |
 | Templates | Jinja2 |
