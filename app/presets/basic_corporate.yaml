@@ -1,0 +1,42 @@
+vendor: firefox
+name_i18n: preset.basic_corporate.name
+description_i18n: preset.basic_corporate.desc
+include:
+  disable_app_update: true
+  disable_system_addon_update: true
+  app_auto_update: false
+  disable_telemetry: true
+  disable_firefox_accounts: true
+  disable_pocket: true
+  block_about_config: true
+  block_about_profiles: true
+  password_manager_enabled: false
+  offer_to_save_logins: false
+  primary_password_required: false
+  homepage:
+    URL: https://intranet.example.local/
+    Locked: true
+    StartPage: homepage
+  always_ask_downloads: true
+  extension_settings:
+    "*":
+      installation_mode: blocked
+  extensions: []
+  popup_blocking: true
+  certificates:
+    ImportEnterpriseRoots: true
+    Install: []
+  proxy:
+    Mode: system
+  dns_over_https:
+    Enabled: false
+    Locked: true
+  disable_firefox_studies: true
+  preferences:
+    browser.tabs.warnOnClose: false
+    privacy.trackingprotection.enabled: true
+  disable_profile_refresh: true
+  disable_profile_import: true
+  firefox_suggest:
+    SponsoredSuggestions: false
+    ImproveSuggest: false

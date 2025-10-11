@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Firefox Policies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/favicon.ico">
+    <style>
+        .container {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .form-control,
+        .form-select,
+        .btn {
+            padding: .5rem;
+            font-size: 1rem;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+        }
+
+        .card-body {
+            padding: 1rem 1rem;
+        }
+
+        .policy-card {
+            padding: .25rem 0;
+        }
+
+        .font-monospace {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: .75rem 0;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .gap-2 {
+            gap: .5rem;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-1 {
+            margin-top: .25rem;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.25);
+        }
+
+        pre.preview {
+            background: #111;
+            color: #eee;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-3">Firefox Policies</h1>
+
+        <div class="mb-3">
+            <input type="search" id="policy-search" class="form-control" placeholder="Search policies…">
+            <small class="text-muted">Tip: type a key or part of description</small>
+        </div>
+
+        <div class="mb-3 d-flex gap-2">
+            <select id="preset-select" class="form-select">
+                <option value="">Load preset…</option>
+                <option value="basic_corporate">Basic Corporate</option>
+                <option value="classroom_kiosk">Classroom/Kiosk</option>
+                <option value="soc_hard">SOC Hardening</option>
+            </select>
+            <button id="btn-apply-preset" class="btn">Apply</button>
+            <button id="btn-show-changed" class="btn">Show changed only</button>
+        </div>
+
+        {% for group, items in grouped_policies.items() %}
+        <h3 class="mt-4">{{ group }}</h3>
+        <div class="card mb-3">
+            <div class="card-body">
+                {% for p in items %}
+                <div class="mb-3 policy-card" data-key="{{ p.key }}" data-id="{{ p.id }}">
+                    <label class="form-label"><strong>{{ p.title_i18n }}</strong></label>
+                    <div class="form-text">{{ p.description_i18n }}</div>
+
+                    {% if p.type == 'boolean' %}
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input" type="checkbox" name="{{ p.id }}" data-type="boolean" {% if
+                            p.default %}checked{% endif %}>
+                    </div>
+                    {% elif p.type in ['string', 'integer', 'number'] %}
+                    <input class="form-control mt-2" type="text" name="{{ p.id }}" data-type="{{ p.type }}"
+                        placeholder="{{ p.ui.placeholder if p.ui and p.ui.placeholder else '' }}">
+                    {% elif p.type == 'enum' %}
+                    <select class="form-select mt-2" name="{{ p.id }}" data-type="enum">
+                        {% for v in p.enum %}
+                        <option value="{{ v }}" {% if v==p.default %}selected{% endif %}>{{ v }}</option>
+                        {% endfor %}
+                    </select>
+                    {% elif p.type == 'array' %}
+                    <textarea class="form-control mt-2" rows="3" name="{{ p.id }}" data-type="array"></textarea>
+                    <div class="form-text">One entry per line</div>
+                    {% elif p.type == 'object' %}
+                    <textarea class="form-control mt-2 font-monospace" rows="6" name="{{ p.id }}" data-type="object"
+                        placeholder="{{ p.examples[0] if p.examples else '{}' }}"></textarea>
+                    <div class="form-text">JSON object</div>
+                    {% endif %}
+
+                    {% if p.docs_url %}
+                    <div class="mt-1">
+                        <a href="{{ p.docs_url }}" target="_blank" rel="noopener">Documentation</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="d-flex gap-2">
+            <button id="btn-preview-json" class="btn">Preview JSON</button>
+            <button id="btn-download-json" class="btn">Download policies.json</button>
+            <label class="btn">
+                Import policies.json
+                <input id="file-import" type="file" accept="application/json" hidden>
+            </label>
+        </div>
+
+        <div id="preview" class="mt-4 hidden">
+            <h3>Preview</h3>
+            <pre class="preview" id="preview-text"></pre>
+        </div>
+    </div>
+
+    <script>
+        const search = document.getElementById('policy-search');
+        search.addEventListener('input', () => {
+            const q = search.value.toLowerCase();
+            document.querySelectorAll('.policy-card').forEach(el => {
+                const key = el.dataset.key.toLowerCase();
+                const id = el.dataset.id.toLowerCase();
+                el.style.display = (key.includes(q) || id.includes(q)) ? '' : 'none';
+            });
+        });
+
+        function collectPayload() {
+            const payload = {};
+            document.querySelectorAll('[name]').forEach(el => {
+                const name = el.getAttribute('name');
+                const type = el.dataset.type;
+                if (type === 'boolean') {
+                    payload[name] = el.checked;
+                } else if (type === 'array' || type === 'object') {
+                    payload[name] = el.value;
+                } else {
+                    payload[name] = el.value;
+                }
+            });
+            return payload;
+        }
+
+        function fillFormFromPayload(payload) {
+            Object.keys(payload || {}).forEach(id => {
+                const el = document.querySelector(`[name="${id}"]`);
+                if (!el) return;
+                const type = el.dataset.type;
+                if (type === 'boolean') {
+                    el.checked = !!payload[id];
+                } else {
+                    el.value = payload[id];
+                }
+            });
+        }
+
+        document.getElementById('btn-preview-json').addEventListener('click', async () => {
+            const payload = collectPayload();
+            const res = await fetch('/firefox/export', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            document.getElementById('preview-text').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('preview').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-download-json').addEventListener('click', async () => {
+            const payload = collectPayload();
+            const res = await fetch('/firefox/export/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const text = await res.text();
+            const blob = new Blob([text], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'policies.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        });
+
+        document.getElementById('btn-apply-preset').addEventListener('click', async () => {
+            const name = document.getElementById('preset-select').value;
+            if (!name) return;
+            const res = await fetch(`/firefox/presets/${name}`);
+            if (!res.ok) { alert('Preset not found'); return; }
+            const data = await res.json();
+            fillFormFromPayload(data.payload);
+        });
+
+        let showChanged = false;
+        document.getElementById('btn-show-changed').addEventListener('click', () => {
+            showChanged = !showChanged;
+            const btn = document.getElementById('btn-show-changed');
+            btn.textContent = showChanged ? 'Show all' : 'Show changed only';
+            document.querySelectorAll('.policy-card').forEach(el => {
+                const input = el.querySelector('[name]');
+                if (!input) return;
+                const type = input.dataset.type;
+                let isChanged = false;
+                if (type === 'boolean') {
+                    isChanged = input.checked === true;
+                } else {
+                    isChanged = input.value && input.value.trim() !== '';
+                }
+                el.style.display = (showChanged && !isChanged) ? 'none' : '';
+            });
+        });
+
+        document.getElementById('file-import').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const form = new FormData();
+            form.append('file', file);
+            const res = await fetch('/firefox/import', { method: 'POST', body: form });
+            const data = await res.json();
+            if (data && data.payload) fillFormFromPayload(data.payload);
+            else alert('Import failed');
+        });
+    </script>
+</body>
+
+</html>
