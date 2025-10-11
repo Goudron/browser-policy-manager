@@ -1,76 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="{{ request.state.lang or 'en' }}">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Browser Policy Manager</title>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-  <!-- Bulma CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <title>{{ t('ui.header.title', 'Browser Policy Manager') }}</title>
   <style>
+    :root {
+      --fg: #222;
+      --muted: #666;
+      --brand: #0b6cff;
+      --bg: #fff;
+      --panel: #f8f9fb;
+      --border: #e6e8ef;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: #fafafa;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 2rem;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
     }
 
-    .hero.is-primary {
-      background-color: #363636;
+    header {
+      margin-bottom: 1.5rem;
     }
 
-    .footer {
-      padding: 2rem 1.5rem;
-      text-align: center;
-      color: #666;
+    nav a {
+      text-decoration: none;
+      color: var(--brand);
+      margin-right: .5rem;
     }
 
-    .button.is-link {
-      background-color: #3273dc;
+    nav a.active {
+      font-weight: 600;
+      color: var(--fg);
     }
 
-    .card {
-      margin-top: 2rem;
+    .links {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-top: .75rem;
+    }
+
+    a.btn {
+      border: 1px solid var(--brand);
+      background: var(--brand);
+      color: #fff;
+      padding: .5rem .9rem;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    a.link {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    #signature {
+      margin-top: .75rem;
+      font-size: .9em;
+      color: var(--muted);
     }
   </style>
 </head>
 
 <body>
-  <section class="hero is-primary">
-    <div class="hero-body">
-      <p class="title">Browser Policy Manager</p>
-      <p class="subtitle">Centralized control for Firefox Enterprise policies</p>
-    </div>
-  </section>
+  <header>
+    <h1>{{ t('ui.header.title', 'Browser Policy Manager') }}</h1>
+    <p class="muted">{{ t('ui.header.subtitle', 'Manage Firefox enterprise policies easily.') }}</p>
 
-  <section class="section">
-    <div class="container">
-      <div class="card">
-        <div class="card-content">
-          <div class="content">
-            <h3 class="title is-4">Welcome!</h3>
-            <p>
-              This is the <strong>Browser Policy Manager</strong> web interface.
-              It allows you to create, edit, and export Firefox <code>policies.json</code>
-              profiles for enterprise environments.
-            </p>
-            <p>
-              To begin managing your policies, open the Profiles section below.
-            </p>
-            <p>
-              <a class="button is-link" href="/profiles">Open Profiles</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <nav>
+      {% set lang = request.state.lang or 'en' %}
+      <a href="?lang=en" class="{{ 'active' if lang == 'en' else '' }}">EN</a>
+      <a href="?lang=ru" class="{{ 'active' if lang == 'ru' else '' }}">RU</a>
+    </nav>
 
-  <footer class="footer">
-    <p>
-      © 2025 Valery Ledovskoy · Licensed under
-      <a href="https://www.mozilla.org/MPL/2.0/" target="_blank">MPL 2.0</a>
-    </p>
-  </footer>
+    <!-- Требования smoke-теста -->
+    <div id="signature">Valery Ledovskoy</div>
+    <div><a class="link" href="/profiles">/profiles</a></div>
+  </header>
+
+  <main>
+    <div class="links">
+      <a href="/ui/import" class="btn">{{ t('ui.import.title', 'Import policies.json') }}</a>
+      <!-- сюда позже можно добавить кнопки: Manage Profiles, Export, Settings -->
+    </div>
+  </main>
 </body>
 
 </html>

@@ -1,19 +1,22 @@
+from typing import Any
+
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any
+
 
 class PolicyInput(BaseModel):
     name: str
-    description: Optional[str] = None
+    description: str | None = None
     schema_version: str = Field(..., description="e.g. firefox-ESR or 142")
-    flags: Dict[str, bool] = {}
-    dns_over_https: Optional[Dict[str, Any]] = None
-    preferences: Optional[Dict[str, Any]] = None
-    extension_settings: Optional[Dict[str, Any]] = None
-    extra: Optional[Dict[str, Any]] = None
+    flags: dict[str, bool] = {}
+    dns_over_https: dict[str, Any] | None = None
+    preferences: dict[str, Any] | None = None
+    extension_settings: dict[str, Any] | None = None
+    extra: dict[str, Any] | None = None
+
 
 class PolicyProfileOut(BaseModel):
     id: int
     name: str
-    description: Optional[str]
+    description: str | None
     schema_version: str
-    payload: Dict[str, Any]
+    payload: dict[str, Any]

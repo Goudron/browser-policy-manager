@@ -1,72 +1,161 @@
-# Browser Policy Manager
+# 🧭 Browser Policy Manager
 
-[![CI](https://github.com/Goudron/browser-policy-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/Goudron/browser-policy-manager/actions/workflows/ci.yml)
-
-**Browser Policy Manager** is an open-source, on-premise web service for centralized management of browser policies — starting with full compatibility for [Firefox Enterprise Policies](https://github.com/mozilla/policy-templates).
-
-It is designed for corporate and educational environments where unified browser configuration and compliance with internal security standards are required.
-
-> **Note:** This project is compatible with Firefox Enterprise Policies but is not affiliated with Mozilla Foundation.  
-> The “Firefox” trademark should not be used in derived product names.
+**Browser Policy Manager (BPM)** — a lightweight **FastAPI**-based backend for managing and exporting browser policy configurations (e.g., Firefox ESR `policies.json`).  
+It serves as both a practical example and a backend core for enterprise browser-management solutions.
 
 ---
 
 ## 🚀 Features
 
-- Web UI built with **FastAPI + Jinja2**
-- Generation and editing of `policies.json`
-- Automated testing and CI (GitHub Actions)
-- Runs on Linux/Ubuntu; Docker-ready architecture
-- Extensible for other browsers (Chromium, Edge, Yandex, etc.)
+- REST API for managing browser policy profiles (CRUD)
+- Export profiles as `policies.json`
+- Import policies (via JSON body or upload UI)
+- Built-in localization (English / Russian)
+- Minimal Jinja2 web UI
+- SQLite or in-memory storage
+- Full test coverage with **pytest**
+- Code linting and formatting via **Ruff**
+- Continuous integration via **GitHub Actions**
 
 ---
 
-## 🧱 Technology Stack
+## 🧩 Project Structure
 
-| Layer | Tools |
-|-------|--------|
-| Language | Python 3.12 |
-| Framework | FastAPI |
-| ASGI server | Uvicorn |
-| Templates | Jinja2 |
-| Testing | Pytest |
-| CI/CD | GitHub Actions |
-| License | MPL 2.0 |
+```
+app/
+├── api/                # REST endpoints (health, policies, export, schemas)
+├── routes/             # UI routes (index, import, etc.)
+├── i18n/               # en.json / ru.json localization catalogs
+├── middleware/         # locale middleware
+├── models/             # SQLModel entities and DTOs
+├── services/           # business logic (policy_service, schema_service)
+├── exporters/          # exporters (e.g., Firefox policies.json)
+├── templates/          # Jinja2 templates (index.html, import.html)
+└── main.py             # FastAPI entry point
+```
 
 ---
 
-## ⚙️ Quickstart (local)
+## ⚙️ Installation & Run
 
-bash
-python3 -m venv .venv
+### Requirements
+- Python ≥ 3.13  
+- pip ≥ 24.0  
+
+### Local run
+
+```bash
+git clone https://github.com/Goudron/browser-policy-manager.git
+cd browser-policy-manager
+python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
+
+pip install -r requirements.txt
+# For development & CI:
+pip install -r requirements-dev.txt
+
 uvicorn app.main:app --reload
-# Open http://127.0.0.1:8000
+```
 
+Open in browser:  
+👉 http://localhost:8000
 
 ---
 
-## 🧪 Running Tests
+## 🌐 API Examples
 
-bash
+Create a policy profile:
+```bash
+curl -X POST http://localhost:8000/api/policies \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Default",
+    "description": "Base profile",
+    "schema_version": "firefox-ESR",
+    "flags": {"DisableTelemetry": true, "DisablePocket": true}
+  }'
+```
+
+Export a profile:
+```bash
+curl http://localhost:8000/api/export/<profile_id>/policies.json
+```
+
+Import policies:
+```bash
+curl -X POST http://localhost:8000/api/import-policies \
+  -H "Content-Type: application/json" \
+  -d '{"policies": {"DisableTelemetry": true}}'
+```
+
+---
+
+## 🌍 Localization (i18n)
+
+- Language catalogs: `app/i18n/en.json`, `app/i18n/ru.json`  
+- Middleware: `app/middleware/locale.py`  
+- Template filter: `t("key")`  
+- Language auto-selected via `lang` cookie or `Accept-Language` header  
+
+---
+
+## 🧪 Testing
+
+```bash
 pytest -q
+```
 
-
----
-
-## 🔁 Continuous Integration
-
-Every push and pull request is validated by [GitHub Actions](.github/workflows/ci.yml).
-
-The badge at the top of this README reflects the latest CI status for the main branch.
+All 15 tests pass ✅  
+Covers CRUD, import/export, and UI smoke tests.
 
 ---
 
-## 📜 License
+## 🧼 Lint & Format
 
-This project is licensed under the **Mozilla Public License 2.0 (MPL 2.0)**.  
-See the [LICENSE](LICENSE) file for the full text.
+Handled by **Ruff**:
 
-© 2025 Valery Ledovskoy  
-Maintained at [github.com/Goudron/browser-policy-manager](https://github.com/Goudron/browser-policy-manager)
+```bash
+ruff check --fix .
+ruff format .
+```
+
+Configuration: `pyproject.toml` (Python 3.13, line length 100).
+
+---
+
+## 🧰 Continuous Integration
+
+GitHub Actions workflow runs:
+1. Install dependencies (`requirements.txt` + `requirements-dev.txt`)
+2. Lint & format checks (Ruff)
+3. Full pytest suite  
+
+Workflow file: `.github/workflows/ci.yml`
+
+---
+
+## 🧾 License
+
+Licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.  
+See the [LICENSE](LICENSE) file for full text.  
+
+© 2025 **Valery Ledovskoy** ([Goudron](https://github.com/Goudron))
+
+---
+
+## 📈 Development Roadmap
+
+| Stage | Status | Description |
+|--------|---------|-------------|
+| Sprint A | ✅ Completed | Core architecture, CRUD API, i18n, tests, CI pipeline |
+| Sprint B | 🔜 Planned | Web CRUD UI, JSON upload import, dark theme, session storage |
+| Sprint C | ⏳ Backlog | Chrome / Edge policy support, REST authorization |
+
+---
+
+## 🤝 Contacts
+
+- Author: **Valery Ledovskoy** ([Goudron](https://github.com/Goudron))  
+- Repository: [github.com/Goudron/browser-policy-manager](https://github.com/Goudron/browser-policy-manager)
+
+---

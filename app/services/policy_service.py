@@ -1,11 +1,16 @@
-from typing import Dict, Any
 import json
+from typing import Any
 
 ALLOWED_FLAGS = {
-    "DisableTelemetry", "DisablePocket", "DisableFirefoxStudies",
-    "DisableFirefoxAccounts", "DontCheckDefaultBrowser",
-    "OfferToSaveLoginsDefault", "PasswordManagerEnabled",
+    "DisableTelemetry",
+    "DisablePocket",
+    "DisableFirefoxStudies",
+    "DisableFirefoxAccounts",
+    "DontCheckDefaultBrowser",
+    "OfferToSaveLoginsDefault",
+    "PasswordManagerEnabled",
 }
+
 
 def _safe_load_json(value: str | None):
     if not value:
@@ -15,9 +20,10 @@ def _safe_load_json(value: str | None):
     except Exception:
         return None
 
+
 class PolicyService:
     @staticmethod
-    def build_payload(data: Dict[str, Any]) -> Dict[str, Any]:
+    def build_payload(data: dict[str, Any]) -> dict[str, Any]:
         """
         Собирает итоговый объект policies.json из структур формы.
         Ожидаемые ключи в data:
@@ -27,7 +33,7 @@ class PolicyService:
           - extension_settings_json: str (JSON)
           - advanced_json: str (JSON)  -> «поверх» всего, последний перезаписывает ключи
         """
-        policies: Dict[str, Any] = {}
+        policies: dict[str, Any] = {}
 
         # 1) Флаги
         flags = data.get("flags") or {}
@@ -39,7 +45,7 @@ class PolicyService:
         doh = data.get("doh")
         if isinstance(doh, dict):
             # фильтруем только поддерживаемые поля
-            doh_out: Dict[str, Any] = {}
+            doh_out: dict[str, Any] = {}
             if isinstance(doh.get("Enabled"), bool):
                 doh_out["Enabled"] = doh["Enabled"]
             if isinstance(doh.get("ProviderURL"), str) and doh["ProviderURL"].strip():

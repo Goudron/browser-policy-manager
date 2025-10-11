@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
+
 from app.main import app
+
 
 def test_profiles_crud_and_export():
     c = TestClient(app)
@@ -8,7 +10,7 @@ def test_profiles_crud_and_export():
         "name": "Default",
         "description": "Base profile",
         "schema_version": "firefox-ESR",
-        "flags": {"DisableTelemetry": True, "DisablePocket": True}
+        "flags": {"DisableTelemetry": True, "DisablePocket": True},
     }
     r = c.post("/api/policies", json=body)
     assert r.status_code == 201, r.text

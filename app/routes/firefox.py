@@ -1,12 +1,13 @@
+import json
 from pathlib import Path
-from fastapi import APIRouter, Body, HTTPException, Request, UploadFile, File
+
+import yaml
+from fastapi import APIRouter, Body, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
-import yaml
-import json
 
+from app.exporters.firefox import build_form_payload_from_policies, build_policies
 from app.routes.utils import group_by_ui_group
-from app.exporters.firefox import build_policies, build_form_payload_from_policies
 
 router = APIRouter(prefix="/firefox", tags=["firefox"])
 
@@ -14,23 +15,26 @@ SCHEMA_PATH = Path("app/schemas/firefox.yaml")
 PRESETS_DIR = Path("app/presets")
 templates = Jinja2Templates(directory="app/templates")
 
+
 def _load_schema():
     if not SCHEMA_PATH.exists():
         raise HTTPException(500, detail="Schema file not found: app/schemas/firefox.yaml")
     return yaml.safe_load(SCHEMA_PATH.read_text(encoding="utf-8"))
 
+
 @router.get("/schema")
 def get_schema():
     return _load_schema()
+
 
 @router.get("/form")
 def render_form(request: Request):
     data = _load_schema()
     grouped = group_by_ui_group(data["policies"])
     return templates.TemplateResponse(
-        "policies_form.html.j2",
-        {"request": request, "grouped_policies": grouped}
+        "policies_form.html.j2", {"request": request, "grouped_policies": grouped}
     )
+
 
 @router.post("/export")
 def export_policies(form_payload: dict = Body(...)):
@@ -50,6 +54,7 @@ def export_policies(form_payload: dict = Body(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.post("/export/download", response_class=PlainTextResponse)
 def export_download(form_payload: dict = Body(...)):
     """
@@ -58,10 +63,9 @@ def export_download(form_payload: dict = Body(...)):
     schema = _load_schema()
     result = build_policies(form_payload, schema)
     text = json.dumps(result, ensure_ascii=False, indent=2)
-    headers = {
-        "Content-Disposition": 'attachment; filename="policies.json"'
-    }
+    headers = {"Content-Disposition": 'attachment; filename="policies.json"'}
     return PlainTextResponse(text, headers=headers)
+
 
 @router.get("/presets/{name}")
 def get_preset(name: str):
@@ -85,10 +89,18 @@ def get_preset(name: str):
     form_payload = {}
     for k, v in include.items():
         if k in by_id:
-            form_payload[k] = v if not isinstance(v, (dict, list)) else json.dumps(v, ensure_ascii=False, separators=(",", ":"))
+            form_payload[k] = (
+                v
+                if not isinstance(v, (dict, list))
+                else json.dumps(v, ensure_ascii=False, separators=(",", ":"))
+            )
         elif k in by_key:
             pid = by_key[k]["id"]
-            form_payload[pid] = v if not isinstance(v, (dict, list)) else json.dumps(v, ensure_ascii=False, separators=(",", ":"))
+            form_payload[pid] = (
+                v
+                if not isinstance(v, (dict, list))
+                else json.dumps(v, ensure_ascii=False, separators=(",", ":"))
+            )
         else:
             # неизвестный ключ — пропустим
             continue
@@ -96,6 +108,7 @@ def get_preset(name: str):
         if isinstance(include[k], list):
             form_payload[list(form_payload.keys())[-1]] = "\n".join(str(x) for x in include[k])
     return JSONResponse({"payload": form_payload})
+
 
 @router.post("/import")
 async def import_policies(file: UploadFile = File(...)):

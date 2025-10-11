@@ -1,23 +1,30 @@
+import json
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
+
 from app.models.db import PolicyProfile, PolicyVersion, get_session
 from app.models.dto import PolicyInput, PolicyProfileOut
 from app.services.policy_service import PolicyService
-from datetime import datetime
-import json
 
 router = APIRouter(prefix="/api/policies", tags=["policies"])
+
 
 @router.get("", response_model=list[PolicyProfileOut])
 def list_profiles(session: Session = Depends(get_session)):
     rows = session.exec(select(PolicyProfile)).all()
-    return [PolicyProfileOut(
-        id=r.id,
-        name=r.name,
-        description=r.description,
-        schema_version=r.active_schema_version,
-        payload=json.loads(r.payload_json),
-    ) for r in rows]
+    return [
+        PolicyProfileOut(
+            id=r.id,
+            name=r.name,
+            description=r.description,
+            schema_version=r.active_schema_version,
+            payload=json.loads(r.payload_json),
+        )
+        for r in rows
+    ]
+
 
 @router.post("", response_model=PolicyProfileOut, status_code=201)
 def create_profile(body: PolicyInput, session: Session = Depends(get_session)):
@@ -36,9 +43,13 @@ def create_profile(body: PolicyInput, session: Session = Depends(get_session)):
     session.commit()
 
     return PolicyProfileOut(
-        id=row.id, name=row.name, description=row.description,
-        schema_version=row.active_schema_version, payload=payload
+        id=row.id,
+        name=row.name,
+        description=row.description,
+        schema_version=row.active_schema_version,
+        payload=payload,
     )
+
 
 @router.get("/{profile_id}", response_model=PolicyProfileOut)
 def get_profile(profile_id: int, session: Session = Depends(get_session)):
@@ -46,9 +57,13 @@ def get_profile(profile_id: int, session: Session = Depends(get_session)):
     if not row:
         raise HTTPException(404, "Not found")
     return PolicyProfileOut(
-        id=row.id, name=row.name, description=row.description,
-        schema_version=row.active_schema_version, payload=json.loads(row.payload_json)
+        id=row.id,
+        name=row.name,
+        description=row.description,
+        schema_version=row.active_schema_version,
+        payload=json.loads(row.payload_json),
     )
+
 
 @router.put("/{profile_id}", response_model=PolicyProfileOut)
 def update_profile(profile_id: int, body: PolicyInput, session: Session = Depends(get_session)):
@@ -71,9 +86,13 @@ def update_profile(profile_id: int, body: PolicyInput, session: Session = Depend
     session.commit()
 
     return PolicyProfileOut(
-        id=row.id, name=row.name, description=row.description,
-        schema_version=row.active_schema_version, payload=payload
+        id=row.id,
+        name=row.name,
+        description=row.description,
+        schema_version=row.active_schema_version,
+        payload=payload,
     )
+
 
 @router.delete("/{profile_id}", status_code=204)
 def delete_profile(profile_id: int, session: Session = Depends(get_session)):
