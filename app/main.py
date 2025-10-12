@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from jinja2 import pass_context
@@ -26,14 +26,28 @@ def t(ctx, key: str, default: str = "") -> str:
     return translate(key, lang=lang, default=default)
 
 
+# регистрируем t в env
 templates.env.globals["t"] = t
+# делаем шаблонизатор доступным для других роутеров
+app.state.templates = templates
 
 STATIC_DIR = Path(__file__).parent / "static"
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+
+# --- favicon в корне ---
+@app.get("/favicon.ico")
+def favicon() -> FileResponse:
+    """
+    Отдаём favicon из app/static/favicon.ico по пути /favicon.ico,
+    потому что браузеры запрашивают именно корень.
+    """
+    path = STATIC_DIR / "favicon.ico"
+    return FileResponse(path)  # если файла нет, FastAPI вернёт 404 автоматически
+
+
 # === API ===
-# импорт JSON
 try:
     from app.routes import api_import
 
@@ -41,7 +55,6 @@ try:
 except Exception:
     pass
 
-# CRUD /api/policies (наш лёгкий dev-CRUD для тестов)
 try:
     from app.routes import policies as policies_router
 
@@ -50,7 +63,6 @@ except Exception:
     pass
 
 # === UI ===
-# отдельная страница импорта
 try:
     from app.routes import ui_import
 
@@ -58,6 +70,11 @@ try:
 except Exception:
     pass
 
+try:
+    from app.routes import ui_profiles
+    app.include_router(ui_profiles.router)
+except Exception:
+    pass
 
 @app.get("/health", tags=["meta"])
 async def health() -> dict:
