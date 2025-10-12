@@ -72,9 +72,11 @@ except Exception:
 
 try:
     from app.routes import ui_profiles
+
     app.include_router(ui_profiles.router)
 except Exception:
     pass
+
 
 @app.get("/health", tags=["meta"])
 async def health() -> dict:
