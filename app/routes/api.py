@@ -52,7 +52,9 @@ def get_policy_profile(pid: str) -> dict[str, Any]:
 
 
 @router.put("/policies/{pid}")
-def update_policy_profile(pid: str, payload: dict[str, Any] = Body(...)) -> dict[str, Any]:
+def update_policy_profile(
+    pid: str, payload: dict[str, Any] = Body(...)
+) -> dict[str, Any]:
     rec = _ensure_profile_exists(pid)
     for k in ("name", "description", "schema_version", "flags"):
         if k in payload:

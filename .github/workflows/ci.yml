@@ -2,42 +2,72 @@ name: CI
 
 on:
   push:
-    branches:
-      - "**"
+    branches: [main, dev]
   pull_request:
-    branches:
-      - "**"
-  workflow_dispatch:
+    branches: [main, dev]
 
 jobs:
-  tests:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Upgrade pip
-        run: python -m pip install -U pip
-
-      - name: Install project deps (if any)
         run: |
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install -U pip wheel
 
-      - name: Install dev deps (httpx, pytest, ruff)
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install project (editable) with extras
         run: |
-          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-          python -m pip install -U httpx pytest ruff
+          pip install -e ".[test,dev]"
 
-      - name: Lint
+      - name: Show environment
+        run: |
+          python --version
+          pip list
+
+      - name: Ruff (lint)
         run: |
           ruff check .
-          ruff format --check .
 
-      - name: Run tests
-        run: pytest -q
+      - name: Black (format check)
+        run: |
+          black --check .
+
+      - name: Mypy (type check)
+        run: |
+          mypy app
+
+      - name: Import smoke (FastAPI app loads)
+        run: |
+          python - << 'PY'
+          import importlib
+          m = importlib.import_module("app.main")
+          assert getattr(m, "app", None) is not None, "FastAPI app not found"
+          print("FastAPI app imported OK")
+          PY
+
+      - name: Run tests (pytest + coverage)
+        run: |
+          pytest --maxfail=1 --disable-warnings --cov=app --cov-report=xml
+
+      - name: Upload coverage.xml
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml

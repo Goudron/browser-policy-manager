@@ -78,7 +78,9 @@ def build_form_payload_from_policies(
                 result[pid] = str(value)
         elif t == "object":
             try:
-                result[pid] = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+                result[pid] = json.dumps(
+                    value, ensure_ascii=False, separators=(",", ":")
+                )
             except Exception:
                 result[pid] = "{}"
         else:
