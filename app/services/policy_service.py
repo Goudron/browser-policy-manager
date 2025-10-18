@@ -46,9 +46,7 @@ class PolicyService:
             return existing
 
     @staticmethod
-    async def update(
-        session: AsyncSession, policy_id: int, data: PolicyUpdate
-    ) -> Optional[Policy]:
+    async def update(session: AsyncSession, policy_id: int, data: PolicyUpdate) -> Optional[Policy]:
         entity = await session.get(Policy, policy_id)
         if not entity:
             return None

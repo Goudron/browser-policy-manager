@@ -25,10 +25,7 @@ def test_import_policies_via_file_multipart_ok():
     data = r.json()
     assert "policies" in data
     assert data["policies"]["DisableTelemetry"] is True
-    assert (
-        data["policies"]["Preferences"]["browser.startup.homepage"]
-        == "https://example.org"
-    )
+    assert data["policies"]["Preferences"]["browser.startup.homepage"] == "https://example.org"
     # допускаем пустые warnings на корректном json
     assert isinstance(data.get("warnings", []), list)
 

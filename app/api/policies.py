@@ -20,16 +20,12 @@ async def list_policies(session: AsyncSession = Depends(get_session)):
 async def get_policy(policy_id: int, session: AsyncSession = Depends(get_session)):
     entity = await PolicyService.get(session, policy_id)
     if not entity:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found")
     return PolicyOut.model_validate(entity)
 
 
 @router.post("", response_model=PolicyOut, status_code=status.HTTP_201_CREATED)
-async def create_policy(
-    data: PolicyCreate, session: AsyncSession = Depends(get_session)
-):
+async def create_policy(data: PolicyCreate, session: AsyncSession = Depends(get_session)):
     entity = await PolicyService.create(session, data)
     await session.commit()
     return PolicyOut.model_validate(entity)
@@ -41,9 +37,7 @@ async def update_policy(
 ):
     entity = await PolicyService.update(session, policy_id, data)
     if not entity:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found")
     await session.commit()
     return PolicyOut.model_validate(entity)
 
@@ -52,8 +46,6 @@ async def update_policy(
 async def delete_policy(policy_id: int, session: AsyncSession = Depends(get_session)):
     ok = await PolicyService.delete(session, policy_id)
     if not ok:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found")
     await session.commit()
     return None

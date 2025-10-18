@@ -26,9 +26,7 @@ async def validate_policy_doc(doc: Dict[str, Any] = Body(...)):
     Tests expect 422 with detail as a DICT containing 'message' and 'error' on bad input.
     """
     if not doc:
-        raise HTTPException(
-            status_code=422, detail={"message": "Document is empty", "error": True}
-        )
+        raise HTTPException(status_code=422, detail={"message": "Document is empty", "error": True})
     if not isinstance(doc.get("policies"), dict):
         raise HTTPException(
             status_code=422,

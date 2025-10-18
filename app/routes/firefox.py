@@ -27,9 +27,7 @@ def _load_yaml_file(path: Path) -> Any:
 
 def _load_schema() -> dict:
     if not SCHEMA_PATH.exists():
-        raise HTTPException(
-            500, detail="Schema file not found: app/schemas/firefox.yaml"
-        )
+        raise HTTPException(500, detail="Schema file not found: app/schemas/firefox.yaml")
     data = _load_yaml_file(SCHEMA_PATH)
     if not isinstance(data, dict):
         raise HTTPException(500, detail="Invalid YAML schema format")
@@ -75,9 +73,7 @@ def apply_preset(payload: dict) -> JSONResponse:
         form_payload[k] = ""
         if isinstance(include, list):
             try:
-                form_payload[list(form_payload.keys())[-1]] = "\n".join(
-                    str(x) for x in include
-                )
+                form_payload[list(form_payload.keys())[-1]] = "\n".join(str(x) for x in include)
             except Exception:
                 pass
     return JSONResponse({"payload": form_payload})

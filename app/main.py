@@ -55,25 +55,19 @@ def create_app() -> FastAPI:
 
     # i18n middleware (optional)
     locale_mod = _optional_module("app.middleware.locale")
-    LocalizeMiddleware = (
-        getattr(locale_mod, "LocalizeMiddleware", None) if locale_mod else None
-    )
+    LocalizeMiddleware = getattr(locale_mod, "LocalizeMiddleware", None) if locale_mod else None
     if LocalizeMiddleware is not None:
         app.add_middleware(LocalizeMiddleware)
 
     # --- API routers ---
-    _include_if_present(
-        app, _optional_module("app.api.health"), prefix="/api", tags=["health"]
-    )
+    _include_if_present(app, _optional_module("app.api.health"), prefix="/api", tags=["health"])
 
     # Policies (DB-backed; mandatory for Sprint E)
     app.include_router(policies_router.router)  # already prefixed with /api/policies
 
     # Newly added to satisfy tests:
     _include_if_present(app, _optional_module("app.api.export"))  # has absolute paths
-    _include_if_present(
-        app, _optional_module("app.api.import_policies")
-    )  # has absolute paths
+    _include_if_present(app, _optional_module("app.api.import_policies"))  # has absolute paths
     _include_if_present(app, _optional_module("app.api.schemas"))  # uses /api/v1/*
 
     # --- UI routes (server-rendered Jinja) ---

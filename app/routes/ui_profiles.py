@@ -63,16 +63,10 @@ def _collect_profiles() -> List[Dict[str, Any]]:
             result.append(
                 {
                     "id": pid,
-                    "name": (
-                        str(data.get("name") or "") if isinstance(data, dict) else ""
-                    ),
-                    "description": (
-                        data.get("description") if isinstance(data, dict) else None
-                    ),
+                    "name": (str(data.get("name") or "") if isinstance(data, dict) else ""),
+                    "description": (data.get("description") if isinstance(data, dict) else None),
                     "schema_version": (
-                        str(data.get("schema_version") or "")
-                        if isinstance(data, dict)
-                        else ""
+                        str(data.get("schema_version") or "") if isinstance(data, dict) else ""
                     ),
                 }
             )

@@ -20,7 +20,5 @@ def test_i18n_catalog_parses_and_contains_ui_header_title(lang):
     header = ui.get("header") or {}
     title = header.get("title")
 
-    assert (
-        isinstance(title, str) and title.strip()
-    ), f"Missing or empty title in {lang}.json"
+    assert isinstance(title, str) and title.strip(), f"Missing or empty title in {lang}.json"
     print(f"{lang}.json: title = {title!r}")

@@ -76,9 +76,7 @@ class PolicyVersion(Base):
     __tablename__ = "policy_versions"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    profile_id: Mapped[int] = mapped_column(
-        ForeignKey("policy_profiles.id"), nullable=False
-    )
+    profile_id: Mapped[int] = mapped_column(ForeignKey("policy_profiles.id"), nullable=False)
     author: Mapped[str] = mapped_column(String(128), default="system", nullable=False)
     payload_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
 
