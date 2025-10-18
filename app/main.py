@@ -14,11 +14,11 @@ import logging
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable, Optional
 
-from fastapi import FastAPI
+from fastapi import Body, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -126,7 +126,7 @@ _include_router_safely("app.web.routes", name="ui_web")
 
 
 # -----------------------------------------------------------------------------
-# Безусловный корневой "/"
+# Гарантированный корневой "/"
 # -----------------------------------------------------------------------------
 @app.get("/", tags=["web"], response_class=HTMLResponse)
 def root_page() -> str:
@@ -143,6 +143,64 @@ def root_page() -> str:
         '<p><a href="/docs">/docs</a> — OpenAPI Docs</p>'
         "</main></body></html>"
     )
+
+
+# -----------------------------------------------------------------------------
+# Фолбэк: /api/import-policies (если ни один модуль не зарегистрировал)
+# -----------------------------------------------------------------------------
+def _has_route(path: str, method: str) -> bool:
+    method = method.upper()
+    for r in app.router.routes:
+        try:
+            p = getattr(r, "path", None)
+            methods = getattr(r, "methods", set()) or set()
+        except Exception:
+            continue
+        if p == path and method in methods:
+            return True
+    return False
+
+
+if not _has_route("/api/import-policies", "POST"):
+
+    @app.post("/api/import-policies", tags=["import"])
+    async def _import_policies_fallback(
+        body: Optional[Any] = Body(None),
+        file: Optional[UploadFile] = File(None),
+    ) -> JSONResponse:
+        """
+        Универсальный импорт политик (фолбэк).
+        Поддержка:
+          - application/json: dict или строка JSON
+          - multipart/form-data: файл (policies.json)
+        """
+        import json as _json
+
+        data: Any = None
+
+        if file is not None:
+            try:
+                raw = await file.read()
+                txt = raw.decode("utf-8", errors="strict")
+                data = _json.loads(txt)
+            except Exception:
+                raise HTTPException(status_code=400, detail="Invalid JSON file payload")
+        elif body is not None:
+            if isinstance(body, dict):
+                data = body
+            elif isinstance(body, str):
+                try:
+                    data = _json.loads(body)
+                except Exception:
+                    raise HTTPException(
+                        status_code=400, detail="Invalid JSON string payload"
+                    )
+            else:
+                raise HTTPException(status_code=400, detail="Unsupported payload type")
+        else:
+            raise HTTPException(status_code=400, detail="Empty payload")
+
+        return JSONResponse({"ok": True, "received": data})
 
 
 # -----------------------------------------------------------------------------
