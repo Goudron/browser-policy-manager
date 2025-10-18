@@ -111,6 +111,8 @@ _include_router_safely("app.api.legacy_core", name="legacy_core")
 _include_router_safely("app.api.legacy_policies", name="legacy_policies")
 _include_router_safely("app.api.legacy_firefox", name="legacy_firefox")
 _include_router_safely("app.api.legacy_api_import", name="legacy_api_import")
+# Современный совместимый импорт-путь (если легаси-модуль отсутствует)
+_include_router_safely("app.api.import_policies", name="import_policies_compat")
 
 # НОВЫЕ служебные JSON-API (под /api/v1)
 _include_router_safely("app.api.schemas", prefix="/api/v1", name="schemas_api")
