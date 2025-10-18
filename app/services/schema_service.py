@@ -116,8 +116,7 @@ def validate_policy(
         labels = ", ".join(sorted(available().values()))
         return (
             False,
-            f"Schema not found for channel={ch}, version={ver or 'stable'}. "
-            f"Available: {labels}",
+            f"Schema not found for channel={ch}, version={ver or 'stable'}. Available: {labels}",
         )
 
     schema = _INDEX[key]

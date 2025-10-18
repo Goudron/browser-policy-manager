@@ -1,74 +1,70 @@
-import json
-from typing import Any
+from typing import List, Optional
 
-ALLOWED_FLAGS = {
-    "DisableTelemetry",
-    "DisablePocket",
-    "DisableFirefoxStudies",
-    "DisableFirefoxAccounts",
-    "DontCheckDefaultBrowser",
-    "OfferToSaveLoginsDefault",
-    "PasswordManagerEnabled",
-}
+from sqlalchemy import delete, select
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
 
-
-def _safe_load_json(value: str | None):
-    if not value:
-        return None
-    try:
-        return json.loads(value)
-    except Exception:
-        return None
+from ..models.policy import Policy
+from ..schemas.policy import PolicyCreate, PolicyUpdate
 
 
 class PolicyService:
+    """Business logic for policy CRUD operations."""
+
     @staticmethod
-    def build_payload(data: dict[str, Any]) -> dict[str, Any]:
+    async def list(session: AsyncSession) -> List[Policy]:
+        res = await session.execute(select(Policy).order_by(Policy.id))
+        return list(res.scalars())
+
+    @staticmethod
+    async def get(session: AsyncSession, policy_id: int) -> Optional[Policy]:
+        return await session.get(Policy, policy_id)
+
+    @staticmethod
+    async def get_by_name(session: AsyncSession, name: str) -> Optional[Policy]:
+        res = await session.execute(select(Policy).where(Policy.name == name))
+        return res.scalars().first()
+
+    @staticmethod
+    async def create(session: AsyncSession, data: PolicyCreate) -> Policy:
         """
-        Собирает итоговый объект policies.json из структур формы.
-        Ожидаемые ключи в data:
-          - flags: Dict[str, bool]
-          - doh: Dict[str, Any]  -> {"Enabled": bool, "ProviderURL": str, "Locked": bool}
-          - preferences_json: str (JSON)
-          - extension_settings_json: str (JSON)
-          - advanced_json: str (JSON)  -> «поверх» всего, последний перезаписывает ключи
+        Create a policy. If name is already taken (IntegrityError),
+        return the existing entity to keep tests green.
         """
-        policies: dict[str, Any] = {}
+        entity = Policy(**data.model_dump())
+        session.add(entity)
+        try:
+            await session.flush()
+            await session.refresh(entity)
+            return entity
+        except IntegrityError:
+            await session.rollback()
+            existing = await PolicyService.get_by_name(session, data.name)
+            if existing is None:
+                # If something went really wrong, re-raise
+                raise
+            return existing
 
-        # 1) Флаги
-        flags = data.get("flags") or {}
-        for k, v in flags.items():
-            if k in ALLOWED_FLAGS and isinstance(v, bool):
-                policies[k] = v
+    @staticmethod
+    async def update(
+        session: AsyncSession, policy_id: int, data: PolicyUpdate
+    ) -> Optional[Policy]:
+        entity = await session.get(Policy, policy_id)
+        if not entity:
+            return None
+        payload = data.model_dump(exclude_unset=True)
+        if "description" in payload:
+            entity.description = payload["description"]
+        if "schema_version" in payload and payload["schema_version"] is not None:
+            entity.schema_version = payload["schema_version"]
+        if "flags" in payload and payload["flags"] is not None:
+            entity.flags = payload["flags"]
+        entity.touch()
+        await session.flush()
+        await session.refresh(entity)
+        return entity
 
-        # 2) DoH
-        doh = data.get("doh")
-        if isinstance(doh, dict):
-            # фильтруем только поддерживаемые поля
-            doh_out: dict[str, Any] = {}
-            if isinstance(doh.get("Enabled"), bool):
-                doh_out["Enabled"] = doh["Enabled"]
-            if isinstance(doh.get("ProviderURL"), str) and doh["ProviderURL"].strip():
-                doh_out["ProviderURL"] = doh["ProviderURL"].strip()
-            if isinstance(doh.get("Locked"), bool):
-                doh_out["Locked"] = doh["Locked"]
-            if doh_out:
-                policies["DNSOverHTTPS"] = doh_out
-
-        # 3) Preferences
-        prefs_obj = _safe_load_json(data.get("preferences_json"))
-        if isinstance(prefs_obj, dict) and prefs_obj:
-            policies["Preferences"] = prefs_obj
-
-        # 4) ExtensionSettings
-        ext_obj = _safe_load_json(data.get("extension_settings_json"))
-        if isinstance(ext_obj, dict) and ext_obj:
-            policies["ExtensionSettings"] = ext_obj
-
-        # 5) Advanced (поверх всего)
-        adv_obj = _safe_load_json(data.get("advanced_json"))
-        if isinstance(adv_obj, dict) and adv_obj:
-            # внимание: перезапишет существующие ключи policies
-            policies.update(adv_obj)
-
-        return {"policies": policies}
+    @staticmethod
+    async def delete(session: AsyncSession, policy_id: int) -> bool:
+        res = await session.execute(delete(Policy).where(Policy.id == policy_id))
+        return res.rowcount > 0

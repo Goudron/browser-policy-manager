@@ -97,8 +97,7 @@ def profiles_page() -> str:
             desc = f" — {p['description']}" if p.get("description") else ""
             ver = p.get("schema_version") or ""
             yield (
-                f'<li><a href="/api/policies/{pid}">{name}</a>'
-                f"{desc} <small>({ver})</small></li>"
+                f'<li><a href="/api/policies/{pid}">{name}</a>{desc} <small>({ver})</small></li>'
             )
 
     html = (

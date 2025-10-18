@@ -1,54 +1,94 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Optional
+from typing import Any, Dict, cast
 
-from fastapi import APIRouter, Body, File, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, HTTPException, Request, UploadFile
+from starlette.datastructures import FormData
+from starlette.datastructures import UploadFile as StarletteUploadFile
 
-# Вшиваем префикс /api, чтобы конечный путь был /api/import-policies
-router = APIRouter(prefix="/api", tags=["import"])
+router = APIRouter(tags=["import"])
 
 
-@router.post("/import-policies")
-async def import_policies(
-    body: Optional[Any] = Body(None),
-    file: Optional[UploadFile] = File(None),
-) -> JSONResponse:
+def _unwrap_policies(obj: Any) -> Dict[str, Any]:
     """
-    Универсальный импорт политик.
-
-    Поддерживаем:
-      - application/json: dict ИЛИ строка JSON
-      - multipart/form-data: файл (policies.json), тип значения не критичен
-    Возвращаем 200 на валидном JSON, 400 — на битом входе.
-    Содержимое ответа для тестов несущественно.
+    Accept either {"policies": {...}} or a plain dict and return {"policies": {...}}.
+    Raise HTTP 400 if shape is invalid.
     """
-    data: Any = None
+    if isinstance(obj, dict):
+        if "policies" in obj and isinstance(obj["policies"], dict):
+            return {"policies": obj["policies"]}
+        # Treat as direct policies dictionary
+        return {"policies": obj}
+    raise HTTPException(status_code=400, detail="Missing or invalid 'policies' key")
 
-    # 1) multipart: берём файл
-    if file is not None:
+
+@router.post("/api/import-policies")
+async def import_policies(request: Request):
+    """
+    Universal import endpoint compatible with tests:
+
+    Accepts:
+      - application/json:
+          * {"policies": {...}} -> OK
+          * JSON string of dict (e.g., '{"DisableTelemetry": true}') -> OK (wrap as policies)
+          * plain dict like {"DisableTelemetry": true} -> OK (wrap as policies)
+      - multipart/form-data:
+          * file field containing a JSON document:
+              - {"policies": {...}} -> OK
+              - or a plain dict -> wrap as policies
+    """
+    ctype = (request.headers.get("content-type") or "").lower()
+
+    # Multipart branch (file upload). Detect by content type.
+    if ctype.startswith("multipart/form-data"):
+        form: FormData = await request.form()
+
+        # Prefer common keys first
+        candidate = form.get("file")
+        if candidate is None:
+            # Fallback: try to find the first file-like object among all fields
+            for _k, v in form.multi_items():
+                if isinstance(v, (UploadFile, StarletteUploadFile)):
+                    candidate = v
+                    break
+
+        if candidate is None:
+            raise HTTPException(status_code=400, detail="Missing file field")
+
+        # Ensure UploadFile
+        if not isinstance(candidate, (UploadFile, StarletteUploadFile)):
+            raise HTTPException(status_code=400, detail="Missing file field")
+
+        upload: StarletteUploadFile = cast(StarletteUploadFile, candidate)
         try:
-            raw = await file.read()
-            txt = raw.decode("utf-8", errors="strict")
-            data = json.loads(txt)
+            raw = await upload.read()
+            data = json.loads(raw.decode("utf-8"))
         except Exception:
-            raise HTTPException(status_code=400, detail="Invalid JSON file payload")
+            raise HTTPException(status_code=400, detail="Invalid JSON file")
 
-    # 2) application/json
-    elif body is not None:
-        if isinstance(body, dict):
-            data = body
-        elif isinstance(body, str):
-            try:
-                data = json.loads(body)
-            except Exception:
-                raise HTTPException(
-                    status_code=400, detail="Invalid JSON string payload"
-                )
-        else:
-            raise HTTPException(status_code=400, detail="Unsupported payload type")
-    else:
-        raise HTTPException(status_code=400, detail="Empty payload")
+        return _unwrap_policies(data)
 
-    return JSONResponse({"ok": True, "received": data})
+    # JSON branch (read raw body and parse ourselves)
+    raw = await request.body()
+    if not raw:
+        raise HTTPException(status_code=400, detail="Missing body")
+
+    try:
+        payload: Any = json.loads(raw.decode("utf-8"))
+    except json.JSONDecodeError:
+        # body may be a JSON string quoted twice or invalid
+        raise HTTPException(status_code=400, detail="Invalid JSON string")
+
+    if isinstance(payload, dict):
+        return _unwrap_policies(payload)
+
+    if isinstance(payload, str):
+        # If JSON contains a JSON-encoded string
+        try:
+            parsed = json.loads(payload)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=400, detail="Invalid JSON string")
+        return _unwrap_policies(parsed)
+
+    raise HTTPException(status_code=400, detail="Unsupported payload type")
