@@ -9,7 +9,9 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..")
 DB_PATH = os.path.abspath(os.path.join(DATA_DIR, "data.db"))
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
-engine = create_engine(f"sqlite:///{DB_PATH}", connect_args={"check_same_thread": False})
+engine = create_engine(
+    f"sqlite:///{DB_PATH}", connect_args={"check_same_thread": False}
+)
 
 
 class PolicyProfile(SQLModel, table=True):

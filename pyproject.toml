@@ -13,15 +13,14 @@ authors = [
   { name = "Valery Ledovskoy" }
 ]
 
-# Основные зависимости для запуска приложения
 dependencies = [
   "fastapi>=0.115.0",
   "uvicorn>=0.30.0",
   "jinja2>=3.1.4",
-  "jsonschema>=4.23.0"
+  "jsonschema>=4.23.0",
+  "PyYAML>=6.0.1"
 ]
 
-# Доп. зависимости: тесты и дев-инструменты (устанавливаются по желанию)
 [project.optional-dependencies]
 test = [
   "pytest>=8.2.0",
@@ -35,18 +34,10 @@ dev = [
   "types-setuptools>=68.0.0.3"
 ]
 
-# Скриптовые entry points (по желанию). Пример: запуск через `python -m bpm`
-# [project.scripts]
-# bpm = "app.__main__:main"
-
-# setuptools-конфигурация: не пытаемся собирать пакет, нам нужна только установка зависимостей
 [tool.setuptools]
 packages = []
 include-package-data = false
 
-# ------------------------------
-# Инструменты/линтеры (опционально)
-# ------------------------------
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
@@ -54,11 +45,19 @@ addopts = "-q"
 [tool.ruff]
 line-length = 88
 target-version = "py313"
-# Можно сузить/расширить набор правил по мере необходимости
+
+[tool.ruff.lint]
 select = ["E", "F", "W", "I"]
-# игноры при необходимости:
-# ignore = []
+ignore = ["E501"]
+per-file-ignores = { "app/api/legacy_*.py" = ["F401"] }
 
 [tool.black]
 line-length = 88
 target-version = ["py313"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = false
+warn_unused_configs = true
+warn_unused_ignores = false
+ignore_missing_imports = true

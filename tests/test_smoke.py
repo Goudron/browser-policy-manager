@@ -9,4 +9,4 @@ def test_root():
     assert r.status_code == 200
     # Новые проверки под актуальный index.html:
     assert "Valery Ledovskoy" in r.text
-    assert '/profiles' in r.text  # ссылка на раздел профилей
+    assert "/profiles" in r.text  # ссылка на раздел профилей

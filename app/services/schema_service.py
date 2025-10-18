@@ -1,84 +1,96 @@
-# pyright: reportMissingTypeStubs=false, reportUnknownMemberType=false
 """
 Schema validation service for Browser Policy Manager.
 
-Loads JSON schemas from app/schemas/ (e.g. firefox_esr_115.json, firefox_release.json)
-and validates incoming policy documents against the correct schema.
+Scans app/schemas/ for JSON or YAML schemas and validates policy documents.
+Supported file extensions: .json, .yaml, .yml
+Filename patterns:
+  - *release*.json|yaml|yml      -> (channel="release", version=None)
+  - *esr_<digits>*.json|yaml|yml -> (channel="esr",    version="<digits>")
 """
 
 from __future__ import annotations
 
 import json
 import re
+from importlib import resources
 from typing import Any, Dict, Optional, Tuple
 
-from importlib import resources
+from jsonschema import Draft202012Validator
+from jsonschema.exceptions import ValidationError
 
-# NOTE:
-# jsonschema often lacks bundled type stubs; VS Code may show a type-stub warning.
-# The pyright directive at the top suppresses that benign warning.
-try:
-    from jsonschema import Draft202012Validator
-    from jsonschema.exceptions import ValidationError
-except Exception as exc:  # pragma: no cover
-    raise RuntimeError(
-        "The 'jsonschema' package is required. Install it with:\n\n"
-        "    pip install 'jsonschema>=4.23'\n"
-    ) from exc
+# PyYAML подгружаем динамически в _load_yaml
 
 
-# Key for the schema index: (channel, version or None)
-SchemaKey = Tuple[str, Optional[str]]
-
-# Internal schema registry
+SchemaKey = Tuple[str, Optional[str]]  # (channel, version|None)
 _INDEX: Dict[SchemaKey, dict] = {}
 
-# Expected filenames in app/schemas/:
-#   firefox_release.json
-#   firefox_esr_115.json
-#   firefox_esr_128.json
-_FILE_RE = re.compile(
-    r"firefox_(?P<channel>esr|release)(?:_(?P<version>\d+))?\.json$",
-    re.IGNORECASE,
-)
+_RE_ESR = re.compile(r"\besr[_-]?(?P<ver>\d+)\b", re.IGNORECASE)
+_RE_REL = re.compile(r"\brelease\b", re.IGNORECASE)
+_ALLOWED_EXT = (".json", ".yaml", ".yml")
+
+
+def _load_yaml(text: str) -> Optional[dict]:
+    """Lazy-load PyYAML and parse mapping; return None if not a mapping."""
+    try:
+        import importlib
+
+        yaml = importlib.import_module("yaml")
+        data = yaml.safe_load(text)
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _load_mapping(entry: Any) -> Optional[dict]:
+    """Load schema file as dict (JSON or YAML)."""
+    name = str(entry.name).lower()
+    text = entry.read_text(encoding="utf-8")
+    if name.endswith(".json"):
+        try:
+            mapping = json.loads(text)
+        except Exception:
+            return None
+        return mapping if isinstance(mapping, dict) else None
+    if name.endswith((".yaml", ".yml")):
+        return _load_yaml(text)
+    return None
+
+
+def _classify(name: str) -> Optional[SchemaKey]:
+    """Infer (channel, version) from filename."""
+    if _RE_REL.search(name):
+        return ("release", None)
+    m = _RE_ESR.search(name)
+    if m:
+        return ("esr", m.group("ver"))
+    return None
 
 
 def _scan_schemas() -> None:
-    """Scan app/schemas for JSON schema files and build an in-memory index."""
+    """Scan app/schemas and build the in-memory index."""
     global _INDEX
     _INDEX.clear()
 
     pkg = "app.schemas"
-    try:
-        # Cast to Any to silence strict type checkers complaining about Traversable
-        folder: Any = resources.files(pkg)  # type: ignore[attr-defined]
-    except Exception as e:  # pragma: no cover
-        raise RuntimeError(f"Cannot access schemas package '{pkg}': {e}") from e
+    folder: Any = resources.files(pkg)
 
     for entry in folder.iterdir():
         name = str(entry.name).lower()
-        if not name.endswith(".json"):
+        if not name.endswith(_ALLOWED_EXT):
             continue
 
-        match = _FILE_RE.match(name)
-        if not match:
-            # Skip unexpected filenames to avoid accidental misloads
+        key = _classify(name) or ("release", None)
+        mapping = _load_mapping(entry)
+        if not isinstance(mapping, dict):
             continue
 
-        channel = match.group("channel").lower()
-        version = match.group("version") if channel == "esr" else None
-
-        with entry.open("r", encoding="utf-8") as f:
-            schema = json.load(f)
-
-        _INDEX[(channel, version)] = schema
+        _INDEX[key] = mapping
 
 
 def available() -> Dict[SchemaKey, str]:
-    """Return a dict of available schemas: {(ch, ver): 'ch:ver|stable'}."""
+    """Return {(ch, ver): 'ch:ver|stable'}."""
     if not _INDEX:
         _scan_schemas()
-
     return {k: f"{k[0]}:{k[1] or 'stable'}" for k in _INDEX}
 
 
@@ -88,17 +100,7 @@ def validate_policy(
     channel: Optional[str] = None,
     version: Optional[str] = None,
 ) -> tuple[bool, Optional[str]]:
-    """
-    Validate a policy document against the appropriate schema.
-
-    Priority of schema selection:
-      1. Explicit parameters channel/version (if provided)
-      2. Fields in the document: doc['channel'], doc['version']
-      3. Fallback: ("release", None)
-
-    Returns:
-        (ok: bool, error_message: str | None)
-    """
+    """Validate the document against the selected schema."""
     if not _INDEX:
         _scan_schemas()
 
@@ -108,16 +110,14 @@ def validate_policy(
         if version is not None
         else (str(doc.get("version")) if doc.get("version") is not None else None)
     )
-
-    # For release channel version is ignored (always stable)
     key: SchemaKey = (ch, ver if ch == "esr" else None)
 
     if key not in _INDEX:
-        avail = ", ".join(sorted(available().values()))
+        labels = ", ".join(sorted(available().values()))
         return (
             False,
             f"Schema not found for channel={ch}, version={ver or 'stable'}. "
-            f"Available: {avail}",
+            f"Available: {labels}",
         )
 
     schema = _INDEX[key]
@@ -127,3 +127,6 @@ def validate_policy(
     except ValidationError as e:
         path = "/".join(map(str, e.path)) or "#"
         return False, f"{e.message} @ {path}"
+
+    # Страховочный возврат для mypy (логически сюда не дойдём)
+    return False, "Validation failed (unexpected path)"

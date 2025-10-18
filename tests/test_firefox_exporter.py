@@ -35,7 +35,11 @@ def test_reverse_parser_roundtrip():
         "policies": {
             "DisableAppUpdate": True,
             "Extensions": ["a.xpi", "b.xpi"],
-            "Homepage": {"URL": "https://intra", "Locked": True, "StartPage": "homepage"},
+            "Homepage": {
+                "URL": "https://intra",
+                "Locked": True,
+                "StartPage": "homepage",
+            },
         }
     }
     form_payload = build_form_payload_from_policies(policies, schema)

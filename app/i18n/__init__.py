@@ -23,7 +23,7 @@ def catalogs() -> dict[str, dict[str, Any]]:
 
 def _get_nested(d: dict[str, Any], key: str) -> str | None:
     cur: Any = d
-    for part in key.split('.'):
+    for part in key.split("."):
         if isinstance(cur, dict) and part in cur:
             cur = cur[part]
         else:

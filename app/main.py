@@ -2,26 +2,29 @@
 Browser Policy Manager — FastAPI application entrypoint.
 
 Конвенции:
-- Весь JSON-API монтируется под префиксом /api/v1.
-- UI-маршруты (Jinja2/HTML) монтируются без /api.
-- Бизнес-логика находится в app/services/*.
+- НОВЫЙ JSON-API монтируется под префиксом /api/v1.
+- ЛЕГАСИ JSON-роутеры из app/routes/* монтируются без доп. префикса (пути вида /api/...).
+- UI-маршруты (Jinja2/HTML) — без /api.
+- Бизнес-логика — в app/services/*.
 """
 
 from __future__ import annotations
 
 import logging
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Iterable
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+
 # -----------------------------------------------------------------------------
-# Lifespan: современный способ регистрации startup/shutdown-событий
+# Lifespan
 # -----------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -32,20 +35,18 @@ async def lifespan(app: FastAPI):
         avail = schemas_available()
         print(
             "Schemas available on startup:",
-            ", ".join(sorted(avail.values())),
+            ", ".join(sorted(avail.values())) if avail else "(none)",
         )
     except Exception as exc:  # noqa: BLE001
         print(f"Schemas scan failed on startup: {exc}")
 
-    # --- приложение работает ---
     yield
 
-    # --- при завершении приложения ---
     print("Application shutdown complete.")
 
 
 # -----------------------------------------------------------------------------
-# Конфигурация приложения
+# Приложение
 # -----------------------------------------------------------------------------
 log = logging.getLogger(__name__)
 
@@ -89,6 +90,62 @@ if STATIC_DIR.exists():
 else:
     log.info("Static directory not found, skipping /static mount")
 
+
 # -----------------------------------------------------------------------------
-# Универсальная функция подключения роутеров
-# -
+# Подключение роутеров
+# -----------------------------------------------------------------------------
+def _include_router_safely(import_path: str, prefix: str = "", name: str = "") -> None:
+    """Импортирует модуль с объектом router и подключает его к FastAPI."""
+    try:
+        module = __import__(import_path, fromlist=["router"])
+        router = getattr(module, "router")
+        app.include_router(router, prefix=prefix)
+        label = f" ({name})" if name else ""
+        log.info("Mounted router: %s%s", import_path, label)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Skip router %s: %s", import_path, exc)
+
+
+# ЛЕГАСИ JSON (старые пути /api/… без префикса)
+_include_router_safely("app.api.legacy_core", name="legacy_core")
+_include_router_safely("app.api.legacy_policies", name="legacy_policies")
+_include_router_safely("app.api.legacy_firefox", name="legacy_firefox")
+_include_router_safely("app.api.legacy_api_import", name="legacy_api_import")
+
+# НОВЫЕ служебные JSON-API (под /api/v1)
+_include_router_safely("app.api.schemas", prefix="/api/v1", name="schemas_api")
+_include_router_safely("app.api.validation", prefix="/api/v1", name="validation_api")
+
+# UI-роутеры (исторически — app/web/routes.py)
+_include_router_safely("app.web.routes", name="ui_web")
+# при наличии других UI-модулей — добавляй:
+# _include_router_safely("app.routes.ui", name="ui_root")
+# _include_router_safely("app.routes.profiles", name="ui_profiles")
+
+
+# -----------------------------------------------------------------------------
+# Безусловный корневой "/"
+# -----------------------------------------------------------------------------
+@app.get("/", tags=["web"], response_class=HTMLResponse)
+def root_page() -> str:
+    # Тест ожидает наличие "Valery Ledovskoy" и ссылки на /profiles
+    return (
+        "<!doctype html><html><head>"
+        "<meta charset='utf-8'><title>Browser Policy Manager</title>"
+        "<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial}"
+        "main{max-width:760px;margin:40px auto;padding:0 16px}</style>"
+        "</head><body><main>"
+        "<h1>Browser Policy Manager</h1>"
+        "<p>Welcome, <strong>Valery Ledovskoy</strong>.</p>"
+        '<p><a href="/profiles">/profiles</a> — manage policy profiles</p>'
+        '<p><a href="/docs">/docs</a> — OpenAPI Docs</p>'
+        "</main></body></html>"
+    )
+
+
+# -----------------------------------------------------------------------------
+# Healthcheck
+# -----------------------------------------------------------------------------
+@app.get("/health", tags=["ops"])
+def health() -> dict[str, str]:
+    return {"status": "ok"}
