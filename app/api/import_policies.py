@@ -6,10 +6,11 @@ from typing import Any, Optional
 from fastapi import APIRouter, Body, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 
-router = APIRouter(tags=["import"])
+# Вшиваем префикс /api, чтобы конечный путь был /api/import-policies
+router = APIRouter(prefix="/api", tags=["import"])
 
 
-@router.post("/api/import-policies")
+@router.post("/import-policies")
 async def import_policies(
     body: Optional[Any] = Body(None),
     file: Optional[UploadFile] = File(None),
@@ -36,10 +37,8 @@ async def import_policies(
 
     # 2) application/json
     elif body is not None:
-        # Может прийти сразу dict
         if isinstance(body, dict):
             data = body
-        # Или строка с JSON — парсим
         elif isinstance(body, str):
             try:
                 data = json.loads(body)
@@ -48,11 +47,8 @@ async def import_policies(
                     status_code=400, detail="Invalid JSON string payload"
                 )
         else:
-            # Нестандартный тип
             raise HTTPException(status_code=400, detail="Unsupported payload type")
-
     else:
         raise HTTPException(status_code=400, detail="Empty payload")
 
-    # На этом этапе data — валидный JSON-объект/значение
     return JSONResponse({"ok": True, "received": data})
