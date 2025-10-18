@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.2.2"
+version = "0.3.0"
 description = "FastAPI backend for managing and exporting enterprise browser policy configurations"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -12,7 +12,7 @@ license = { text = "MPL-2.0" }
 authors = [
   { name = "Valery Ledovskoy", email = "valery@ledovskoy.com" }
 ]
-keywords = ["fastapi", "browser", "enterprise", "policies", "firefox", "json", "yaml"]
+keywords = ["fastapi", "browser", "enterprise", "policies", "json", "yaml"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.13",
@@ -21,7 +21,7 @@ classifiers = [
   "Typing :: Typed"
 ]
 
-# Runtime dependencies (PEP 621)
+# Runtime dependencies
 dependencies = [
   "fastapi>=0.115",
   "uvicorn>=0.30",
@@ -30,18 +30,13 @@ dependencies = [
   "pydantic-settings>=2.3",
   "python-multipart>=0.0.9",
 
-  # Database stack (Sprint E)
+  # Database stack
   "SQLAlchemy>=2.0",
   "aiosqlite>=0.20",
   "alembic>=1.13",
-
-  # NEW: required by tests/services
-  "PyYAML>=6.0.1",
-  "jsonschema>=4.23",
 ]
 
 [project.optional-dependencies]
-# Developer / CI tooling
 dev = [
   "pytest>=8",
   "pytest-asyncio>=0.23",
@@ -51,10 +46,8 @@ dev = [
   "mypy>=1.11",
   "alembic>=1.13",
   "aiosqlite>=0.20",
-  "types-PyYAML>=6.0.12.20240808",
 ]
 
-# Postgres extras for production / staging
 postgres = [
   "asyncpg>=0.29",
   "psycopg[binary]>=3.2"
@@ -64,31 +57,21 @@ postgres = [
 Homepage = "https://github.com/Goudron/browser-policy-manager"
 Repository = "https://github.com/Goudron/browser-policy-manager"
 
-# ----------------------------
-# Setuptools configuration
-# ----------------------------
-
 [tool.setuptools]
-# Only package the "app" package; exclude "alembic", "tests", etc.
 packages = ["app"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-# Include templates, i18n and any static assets within the "app" package
 app = [
   "templates/**/*.html",
   "i18n/*.json",
   "static/**/*"
 ]
 
-# ----------------------------
-# Tooling configuration
-# ----------------------------
-
 [tool.ruff]
 line-length = 100
 target-version = "py313"
-lint.extend-select = ["I"]  # isort
+lint.extend-select = ["I"]
 lint.fixable = ["ALL"]
 
 [tool.ruff.format]
