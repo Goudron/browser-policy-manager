@@ -1,38 +1,46 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException, Query
+from typing import Any, Dict, List, Optional, Tuple
 
-from app.services.schema_service import validate_policy
-
-router = APIRouter(prefix="/policies", tags=["policies"])
+from app.services.schema_service import available_list, validate_doc
 
 
-@router.post("/validate")
-def validate(
-    doc: dict | None = None,
-    channel: str | None = Query(None),
-    version: str | None = Query(None),
-):
+def select_version(channel: Optional[str] = None, version: Optional[str] = None) -> str:
     """
-    Валидирует тело профиля (JSON) по выбранной схеме.
+    Pick a concrete schema version string based on optional channel/version hints.
 
-    Правила:
-      - Пустой документ ({} или None) отклоняется: 422.
-      - Иначе проверяем по схеме (release|esr, версия для esr опциональна).
+    Rules:
+      - If 'version' provided -> use it verbatim.
+      - Else if 'channel' provided -> pick the first available item with matching channel.
+      - Else -> fallback to the first available version.
     """
-    if not isinstance(doc, dict) or not doc:
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "message": "Schema validation failed",
-                "error": "Empty document",
-            },
-        )
+    items = available_list()  # List[{"channel","version"}]
 
-    ok, err = validate_policy(doc, channel=channel, version=version)
-    if not ok:
-        raise HTTPException(
-            status_code=422,
-            detail={"message": "Schema validation failed", "error": err},
-        )
-    return {"ok": True}
+    if version:
+        return version
+
+    if channel:
+        for it in items:
+            if it.get("channel") == channel and "version" in it:
+                return it["version"]
+
+    # Default fallback
+    if items and "version" in items[0]:
+        return items[0]["version"]
+    return "firefox-ESR"
+
+
+def validate_payload(
+    doc: Dict[str, Any],
+    *,
+    channel: Optional[str] = None,
+    version: Optional[str] = None,
+) -> Tuple[bool, List[str]]:
+    """
+    Validate a policy document against a selected schema version.
+
+    Ensures we pass a concrete 'str' version into validate_doc(), which expects str.
+    """
+    selected: str = select_version(channel=channel, version=version)
+    ok, errors = validate_doc(doc, version=selected)
+    return ok, errors

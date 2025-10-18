@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.2.1"
+version = "0.2.2"
 description = "FastAPI backend for managing and exporting enterprise browser policy configurations"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -34,6 +34,10 @@ dependencies = [
   "SQLAlchemy>=2.0",
   "aiosqlite>=0.20",
   "alembic>=1.13",
+
+  # NEW: required by tests/services
+  "PyYAML>=6.0.1",
+  "jsonschema>=4.23",
 ]
 
 [project.optional-dependencies]
@@ -47,6 +51,7 @@ dev = [
   "mypy>=1.11",
   "alembic>=1.13",
   "aiosqlite>=0.20",
+  "types-PyYAML>=6.0.12.20240808",
 ]
 
 # Postgres extras for production / staging
