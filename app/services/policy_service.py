@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from sqlalchemy import delete, select
+from sqlalchemy import select  # delete оставил, если пригодится в будущем
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -64,5 +64,13 @@ class PolicyService:
 
     @staticmethod
     async def delete(session: AsyncSession, policy_id: int) -> bool:
-        res = await session.execute(delete(Policy).where(Policy.id == policy_id))
-        return res.rowcount > 0
+        """
+        Delete using ORM to keep mypy happy and avoid Result.rowcount typing issues.
+        Returns True if entity existed and was scheduled for deletion, False otherwise.
+        """
+        entity = await session.get(Policy, policy_id)
+        if entity is None:
+            return False
+        await session.delete(entity)
+        # commit happens at the API layer
+        return True
