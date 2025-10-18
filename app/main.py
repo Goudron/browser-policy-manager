@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import importlib
 import importlib.util
 from contextlib import asynccontextmanager
@@ -28,7 +29,7 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
-    # Здесь можно добавить shutdown-логику, например await engine.dispose()
+    # Здесь можно добавить shutdown-логику, например: await engine.dispose()
 
 
 def _optional_module(path: str) -> Optional[ModuleType]:
@@ -53,6 +54,32 @@ def _include_if_present(
     if router is None:
         return
     app.include_router(router, prefix=prefix, tags=list(tags) if tags else None)
+
+
+async def _ensure_tables_async() -> None:
+    """Асинхронно создаёт таблицы ORM (идемпотентно)."""
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+def _ensure_tables_blocking() -> None:
+    """
+    Синхронная, «страхующая» инициализация таблиц.
+
+    Зачем: на некоторых версиях Starlette/fastapi TestClient(app) без контекст-менеджера
+    не запускает lifespan. Тогда первый тест падает на 'no such table'.
+    Этот вызов выполняется во время сборки приложения и гарантирует наличие схемы.
+    """
+    try:
+        loop = asyncio.new_event_loop()
+        try:
+            loop.run_until_complete(_ensure_tables_async())
+        finally:
+            loop.close()
+    except Exception:
+        # Не мешаем импорту приложения даже если что-то пошло не так.
+        # Lifespan всё равно повторит попытку при старте.
+        pass
 
 
 def create_app() -> FastAPI:
@@ -85,6 +112,9 @@ def create_app() -> FastAPI:
     _include_if_present(app, _optional_module("app.api.import_policies"))
     _include_if_present(app, _optional_module("app.api.schemas"))
     _include_if_present(app, _optional_module("app.routes.ui"))
+
+    # Страхующая инициализация таблиц (важно для CI/тестов без lifespan)
+    _ensure_tables_blocking()
 
     return app
 
