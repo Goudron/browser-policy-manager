@@ -1,67 +1,140 @@
+# alembic/env.py
 from __future__ import annotations
 
-import sys
+import asyncio
+import os
 from logging.config import fileConfig
-from pathlib import Path
+from typing import Any, Optional
 
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import pool
+from sqlalchemy.engine import Connection
+from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from alembic import context
 
-# Ensure project root is on sys.path so "app" package is importable
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+# Project imports
+from app.models.policy import Base
 
-# Import ORM metadata after sys.path fix
-from app.models.policy import Base  # noqa: E402
+try:
+    from app.core.config import get_settings  # our pydantic settings factory
+except Exception:
+    get_settings = None  # fallback if import fails
 
-# Alembic Config object, provides access to the .ini values
+# Alembic Config
 config = context.config
-if config.config_ini_section is None:
-    config.config_ini_section = "alembic"
 
-# Configure logging from ini file if present
+# Logging config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Model metadata for autogenerate/compare
+# Target metadata for autogenerate
 target_metadata = Base.metadata
 
 
+def _pick_database_url() -> str:
+    """
+    Try to resolve an async DB URL from settings/env with several common names.
+    Fallback to sqlite+aiosqlite:///bpm.db.
+    """
+    # 1) environment overrides (useful for CI/containers)
+    env_candidates = [
+        "DATABASE_URL",
+        "SQLALCHEMY_DATABASE_URL",
+        "DB_URL",
+    ]
+    for key in env_candidates:
+        val = os.getenv(key)
+        if val:
+            return _ensure_async_sqlite(val)
+
+    # 2) settings object (pydantic)
+    settings_obj: Optional[Any] = None
+    if get_settings is not None:
+        try:
+            settings_obj = get_settings()
+        except Exception:
+            settings_obj = None
+
+    if settings_obj is not None:
+        attr_candidates = [
+            "database_url",
+            "DATABASE_URL",
+            "db_url",
+            "SQLALCHEMY_DATABASE_URL",
+            "sqlalchemy_database_uri",
+        ]
+        for attr in attr_candidates:
+            if hasattr(settings_obj, attr):
+                val = getattr(settings_obj, attr)
+                if isinstance(val, str) and val:
+                    return _ensure_async_sqlite(val)
+
+    # 3) alembic.ini default (may be sync, we’ll convert if needed)
+    ini_url = config.get_main_option("sqlalchemy.url")
+    if ini_url:
+        return _ensure_async_sqlite(ini_url)
+
+    # 4) final fallback
+    return "sqlite+aiosqlite:///bpm.db"
+
+
+def _ensure_async_sqlite(url: str) -> str:
+    """
+    If URL is SQLite but not async, convert to sqlite+aiosqlite.
+    Otherwise return as is.
+    """
+    # Normalize common sync DSNs:
+    if url.startswith("sqlite:///") and not url.startswith("sqlite+aiosqlite:///"):
+        return "sqlite+aiosqlite://" + url[len("sqlite://") :]
+    if url.startswith("sqlite://") and not url.startswith("sqlite+aiosqlite://"):
+        # cover sqlite:///:memory: etc.
+        return "sqlite+aiosqlite" + url[len("sqlite") :]
+    return url
+
+
+# Resolve and inject URL into alembic config
+DATABASE_URL = _pick_database_url()
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
+
+
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode using the configured URL."""
-    url = config.get_main_option("sqlalchemy.url")
+    """Run migrations in 'offline' mode."""
     context.configure(
-        url=url,
+        url=DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         compare_type=True,
+        compare_server_default=True,
     )
     with context.begin_transaction():
         context.run_migrations()
 
 
-def run_migrations_online() -> None:
-    """Run migrations in 'online' mode using a synchronous engine."""
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
+def _run_migrations_sync(connection: Connection) -> None:
+    """Synchronous body executed within an async connection."""
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        compare_type=True,
+        compare_server_default=True,
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+async def run_migrations_online() -> None:
+    """Run migrations in 'online' mode using AsyncEngine."""
+    connectable: AsyncEngine = create_async_engine(
+        DATABASE_URL,
         poolclass=pool.NullPool,
         future=True,
     )
-
-    with connectable.connect() as connection:  # type: Connection
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            compare_type=True,
-        )
-        with context.begin_transaction():
-            context.run_migrations()
+    async with connectable.connect() as async_conn:
+        await async_conn.run_sync(_run_migrations_sync)
+    await connectable.dispose()
 
 
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    run_migrations_online()
+    asyncio.run(run_migrations_online())

@@ -1,3 +1,4 @@
+# app/api/export.py
 from __future__ import annotations
 
 from typing import Any, Dict
@@ -26,5 +27,4 @@ async def export_policies_json(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
 
     flags: Dict[str, Any] = entity.flags or {}
-    # Return flags as JSON. Tests проверяют только статус-код, но оставляем корректный ответ.
     return JSONResponse(content=flags, status_code=status.HTTP_200_OK)

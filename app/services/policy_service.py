@@ -1,68 +1,73 @@
+# app/services/policy_service.py
+from __future__ import annotations
+
 from typing import List, Optional
 
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..models.policy import Policy
-from ..schemas.policy import PolicyCreate, PolicyUpdate
+from app.models.policy import Policy
+from app.schemas.policy import PolicyCreate, PolicyRead, PolicyUpdate
 
 
 class PolicyService:
-    """Business logic for policy CRUD operations."""
+    """Business logic for Policy CRUD."""
 
     @staticmethod
-    async def list(session: AsyncSession) -> List[Policy]:
-        res = await session.execute(select(Policy).order_by(Policy.id))
-        return list(res.scalars())
+    async def list_all(session: AsyncSession) -> List[PolicyRead]:
+        result = await session.execute(select(Policy).order_by(Policy.id.asc()))
+        items = result.scalars().all()
+        return [PolicyRead.model_validate(x) for x in items]
 
     @staticmethod
     async def get(session: AsyncSession, policy_id: int) -> Optional[Policy]:
-        return await session.get(Policy, policy_id)
+        result = await session.execute(select(Policy).where(Policy.id == policy_id).limit(1))
+        return result.scalar_one_or_none()
 
     @staticmethod
-    async def get_by_name(session: AsyncSession, name: str) -> Optional[Policy]:
-        res = await session.execute(select(Policy).where(Policy.name == name))
-        return res.scalars().first()
-
-    @staticmethod
-    async def create(session: AsyncSession, data: PolicyCreate) -> Policy:
-        """
-        Create a policy; уникальность имени обеспечивает БД.
-        IntegrityError пробрасываем наверх (API вернёт 409).
-        """
-        entity = Policy(**data.model_dump())
+    async def create(session: AsyncSession, data: PolicyCreate) -> PolicyRead:
+        entity = Policy(
+            name=data.name,
+            description=data.description,
+            schema_version=data.schema_version,
+            flags=data.flags,
+            owner=data.owner,
+        )
         session.add(entity)
         try:
             await session.flush()
-            await session.refresh(entity)
-            return entity
-        except IntegrityError:
+        except IntegrityError as e:
             await session.rollback()
-            raise
+            raise e
+        await session.refresh(entity)
+        return PolicyRead.model_validate(entity)
 
     @staticmethod
-    async def update(session: AsyncSession, policy_id: int, data: PolicyUpdate) -> Optional[Policy]:
-        entity = await session.get(Policy, policy_id)
+    async def update(
+        session: AsyncSession, policy_id: int, data: PolicyUpdate
+    ) -> Optional[PolicyRead]:
+        entity = await PolicyService.get(session, policy_id)
         if not entity:
             return None
-        payload = data.model_dump(exclude_unset=True)
-        if "description" in payload:
-            entity.description = payload["description"]
-        if "schema_version" in payload and payload["schema_version"] is not None:
-            entity.schema_version = payload["schema_version"]
-        if "flags" in payload and payload["flags"] is not None:
-            entity.flags = payload["flags"]
-        entity.touch()
+
+        if data.description is not None:
+            entity.description = data.description
+        if data.schema_version is not None:
+            entity.schema_version = data.schema_version
+        if data.flags is not None:
+            entity.flags = data.flags
+        if data.owner is not None:
+            entity.owner = data.owner
+
         await session.flush()
         await session.refresh(entity)
-        return entity
+        return PolicyRead.model_validate(entity)
 
     @staticmethod
     async def delete(session: AsyncSession, policy_id: int) -> bool:
-        """Удаление через ORM (типобезопасно для mypy)."""
-        entity = await session.get(Policy, policy_id)
-        if entity is None:
+        entity = await PolicyService.get(session, policy_id)
+        if not entity:
             return False
         await session.delete(entity)
         return True
