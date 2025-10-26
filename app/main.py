@@ -9,10 +9,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import export as export_router
 from app.api import policies as policies_router
+from app.api.validation import router as validation_router  # <-- mount validation API
 from app.db import init_db
-from app.middleware.security import SecurityHeadersMiddleware  # NEW
+from app.middleware.security import SecurityHeadersMiddleware
 
-# Logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -41,15 +41,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Security headers (NEW)
+# Security headers
 app.add_middleware(SecurityHeadersMiddleware)
 
-# Routers
+# API routers
 app.include_router(policies_router.router)
 app.include_router(export_router.router)
+app.include_router(validation_router)  # <-- add this line
 
 
+# Healthcheck
 @app.get("/")
 async def root() -> dict[str, str]:
-    """Healthcheck."""
+    """Simple healthcheck endpoint."""
     return {"message": "Browser Policy Manager by Valery Ledovskoy"}
