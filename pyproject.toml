@@ -33,6 +33,7 @@ dev = [
   "black>=24.10",
   "mypy>=1.11",
   "coverage>=7.6",
+  "types-PyYAML",
 ]
 
 [project.urls]
