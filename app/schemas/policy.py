@@ -4,13 +4,14 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PolicyBase(BaseModel):
     name: str = Field(..., max_length=255)
     description: Optional[str] = None
-    schema_version: str = Field(default="firefox-ESR", max_length=50)
+    # Keep free-form; business logic enforces supported values elsewhere
+    schema_version: str = Field(default="esr-140", max_length=50)
     flags: Dict[str, Any] = Field(default_factory=dict)
     owner: Optional[str] = Field(default=None, max_length=255)
 
@@ -30,6 +31,8 @@ class PolicyRead(PolicyBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    deleted_at: Optional[datetime] = None
+    is_deleted: bool
 
-    class Config:
-        from_attributes = True
+    # Pydantic v2 style config (replaces deprecated class Config)
+    model_config = ConfigDict(from_attributes=True)

@@ -1,108 +1,47 @@
-# alembic/env.py
 from __future__ import annotations
 
 import asyncio
 import os
 from logging.config import fileConfig
-from typing import Any, Optional
 
 from sqlalchemy import pool
-from sqlalchemy.engine import Connection
+from sqlalchemy.engine import Connection, create_engine
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from alembic import context
 
-# Project imports
-from app.models.policy import Base
+# Если у вас есть declarative Base в проекте, можно импортировать metadata:
+# from app.db_models import Base
+# target_metadata = Base.metadata
+target_metadata = None  # мы не используем автогенерацию в этом проекте
 
-try:
-    from app.core.config import get_settings  # our pydantic settings factory
-except Exception:
-    get_settings = None  # fallback if import fails
-
-# Alembic Config
+# Конфигурация Alembic
 config = context.config
 
-# Logging config
+# Логирование из alembic.ini
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Target metadata for autogenerate
-target_metadata = Base.metadata
 
-
-def _pick_database_url() -> str:
-    """
-    Try to resolve an async DB URL from settings/env with several common names.
-    Fallback to sqlite+aiosqlite:///bpm.db.
-    """
-    # 1) environment overrides (useful for CI/containers)
-    env_candidates = [
-        "DATABASE_URL",
-        "SQLALCHEMY_DATABASE_URL",
-        "DB_URL",
-    ]
-    for key in env_candidates:
-        val = os.getenv(key)
-        if val:
-            return _ensure_async_sqlite(val)
-
-    # 2) settings object (pydantic)
-    settings_obj: Optional[Any] = None
-    if get_settings is not None:
-        try:
-            settings_obj = get_settings()
-        except Exception:
-            settings_obj = None
-
-    if settings_obj is not None:
-        attr_candidates = [
-            "database_url",
-            "DATABASE_URL",
-            "db_url",
-            "SQLALCHEMY_DATABASE_URL",
-            "sqlalchemy_database_uri",
-        ]
-        for attr in attr_candidates:
-            if hasattr(settings_obj, attr):
-                val = getattr(settings_obj, attr)
-                if isinstance(val, str) and val:
-                    return _ensure_async_sqlite(val)
-
-    # 3) alembic.ini default (may be sync, we’ll convert if needed)
-    ini_url = config.get_main_option("sqlalchemy.url")
-    if ini_url:
-        return _ensure_async_sqlite(ini_url)
-
-    # 4) final fallback
-    return "sqlite+aiosqlite:///bpm.db"
-
-
-def _ensure_async_sqlite(url: str) -> str:
-    """
-    If URL is SQLite but not async, convert to sqlite+aiosqlite.
-    Otherwise return as is.
-    """
-    # Normalize common sync DSNs:
-    if url.startswith("sqlite:///") and not url.startswith("sqlite+aiosqlite:///"):
-        return "sqlite+aiosqlite://" + url[len("sqlite://") :]
-    if url.startswith("sqlite://") and not url.startswith("sqlite+aiosqlite://"):
-        # cover sqlite:///:memory: etc.
-        return "sqlite+aiosqlite" + url[len("sqlite") :]
+# Берём URL ТОЛЬКО из alembic.ini / переданного Config (тест вписывает его через set_main_option)
+def get_url() -> str:
+    url = config.get_main_option("sqlalchemy.url")
+    if not url:
+        # последний шанс — переменная окружения (на локалке)
+        url = os.environ.get("ALEMBIC_SQLALCHEMY_URL", "")
+    if not url:
+        raise RuntimeError("SQLAlchemy URL is not configured for Alembic")
     return url
 
 
-# Resolve and inject URL into alembic config
-DATABASE_URL = _pick_database_url()
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
-
-
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode."""
+    """Запуск в offline-режиме (генерация SQL без подключения)."""
+    url = get_url()
     context.configure(
-        url=DATABASE_URL,
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
         compare_type=True,
         compare_server_default=True,
     )
@@ -110,8 +49,8 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def _run_migrations_sync(connection: Connection) -> None:
-    """Synchronous body executed within an async connection."""
+def do_run_migrations(connection: Connection) -> None:
+    """Общий запуск миграций при активном соединении."""
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
@@ -122,19 +61,35 @@ def _run_migrations_sync(connection: Connection) -> None:
         context.run_migrations()
 
 
-async def run_migrations_online() -> None:
-    """Run migrations in 'online' mode using AsyncEngine."""
-    connectable: AsyncEngine = create_async_engine(
-        DATABASE_URL,
-        poolclass=pool.NullPool,
-        future=True,
-    )
-    async with connectable.connect() as async_conn:
-        await async_conn.run_sync(_run_migrations_sync)
+def run_migrations_online_sync() -> None:
+    """Синхронный движок (sqlite+pysqlite и т.п.)."""
+    url = get_url()
+    connectable = create_engine(url, poolclass=pool.NullPool, future=True)
+    with connectable.connect() as connection:
+        do_run_migrations(connection)
+    connectable.dispose()
+
+
+async def run_migrations_online_async() -> None:
+    """Асинхронный движок (sqlite+aiosqlite, postgresql+asyncpg и т.п.)."""
+    url = get_url()
+    connectable: AsyncEngine = create_async_engine(url, poolclass=pool.NullPool, future=True)
+    async with connectable.connect() as async_connection:
+        await async_connection.run_sync(do_run_migrations)
     await connectable.dispose()
+
+
+def run_migrations_online() -> None:
+    """Выбираем sync/async по схеме URL."""
+    url = get_url()
+    if "+aiosqlite" in url or "+asyncpg" in url or url.startswith("postgresql+"):
+        # грубая эвристика: если драйвер асинхронный — идём через async
+        asyncio.run(run_migrations_online_async())
+    else:
+        run_migrations_online_sync()
 
 
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    asyncio.run(run_migrations_online())
+    run_migrations_online()

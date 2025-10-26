@@ -1,0 +1,14 @@
+{
+    "profiles.title": "Редактор профилей",
+    "profiles.subtitle": "Управление профилями политик браузера (JSON / YAML). Поддерживаются: ESR 140, Release 144.",
+    "profiles.search": "Поиск...",
+    "profiles.reload": "Обновить",
+    "profiles.show_deleted": "Показывать удалённые",
+    "profiles.create": "Создать профиль",
+    "profiles.none_selected": "Ничего не выбрано",
+    "profiles.validate": "Проверить",
+    "profiles.format": "Форматировать",
+    "profiles.save": "Сохранить",
+    "profiles.soft_delete": "Мягкое удаление",
+    "profiles.restore": "Восстановить"
+}

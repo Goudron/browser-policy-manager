@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import export as export_router
 from app.api import policies as policies_router
 from app.db import init_db
+from app.middleware.security import SecurityHeadersMiddleware  # NEW
 
 # Logging
 logging.basicConfig(level=logging.INFO)
@@ -18,17 +19,20 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
+    """Initialize DB on startup and log shutdown."""
     await init_db()
-    logger.info("DB initialized")
+    logger.info("Database initialized")
     yield
-    # Shutdown
-    logger.info("App shutdown complete")
+    logger.info("Application shutdown")
 
 
-app = FastAPI(title="Browser Policy Manager", version="0.1.0", lifespan=lifespan)
+app = FastAPI(
+    title="Browser Policy Manager",
+    version="0.3.0",
+    lifespan=lifespan,
+)
 
-# CORS (open during early dev)
+# CORS (open during active development)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -36,6 +40,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Security headers (NEW)
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Routers
 app.include_router(policies_router.router)

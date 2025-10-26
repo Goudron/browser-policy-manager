@@ -1,0 +1,14 @@
+{
+    "profiles.title": "Profiles Editor",
+    "profiles.subtitle": "Manage browser policy profiles (JSON / YAML). Supported: ESR 140, Release 144.",
+    "profiles.search": "Search...",
+    "profiles.reload": "Reload",
+    "profiles.show_deleted": "Show deleted",
+    "profiles.create": "New profile",
+    "profiles.none_selected": "Nothing selected",
+    "profiles.validate": "Validate",
+    "profiles.format": "Format",
+    "profiles.save": "Save",
+    "profiles.soft_delete": "Soft delete",
+    "profiles.restore": "Restore"
+}

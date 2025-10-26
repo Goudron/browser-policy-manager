@@ -2,8 +2,11 @@
 from __future__ import annotations
 
 import asyncio
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 
+from sqlalchemy import inspect as sa_inspect
+from sqlalchemy import text
+from sqlalchemy.engine import Connection as SyncConnection
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -11,39 +14,89 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
+# Project settings and ORM base
 from .core.config import get_settings
 from .models.policy import Base
 
-settings = get_settings()
-
-# --- Берём URL базы из Settings ---
-db_url: str = settings.DATABASE_URL
-
-# --- Создание асинхронного движка ---
-engine: AsyncEngine = create_async_engine(
-    db_url,
-    echo=settings.ECHO_SQL,
-    future=True,
-)
-
-# --- Фабрика сессий ---
-SessionLocal: async_sessionmaker[AsyncSession] = async_sessionmaker(
-    bind=engine,
-    expire_on_commit=False,
-    autoflush=False,
-)
-
+_engine: Optional[AsyncEngine] = None
+SessionLocal: async_sessionmaker[AsyncSession] | None = None
 _initialized: bool = False
 
 
-async def init_db() -> None:
-    """Создаёт таблицы, если их ещё нет."""
-    async with engine.begin() as conn:
+def _database_url() -> str:
+    """
+    Resolve database URL from settings or fallback to local SQLite.
+    """
+    settings = get_settings()
+    url = getattr(settings, "DATABASE_URL", None) or getattr(settings, "database_url", None)
+    if not url:
+        # Dev-friendly default
+        url = "sqlite+aiosqlite:///./bpm.db"
+    return url
+
+
+async def _create_engine() -> None:
+    global _engine, SessionLocal
+    if _engine is None:
+        _engine = create_async_engine(
+            _database_url(),
+            echo=False,
+            future=True,
+        )
+        SessionLocal = async_sessionmaker(bind=_engine, expire_on_commit=False)
+
+
+async def _create_schema() -> None:
+    """
+    Create tables if they do not exist (async wrapper around metadata.create_all).
+    """
+    assert _engine is not None
+    async with _engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
+def _has_deleted_at(sync_conn: SyncConnection) -> bool:
+    """
+    Inspect 'policies' columns in a synchronous context and check 'deleted_at'.
+    Works across SQLite/PostgreSQL backends via SQLAlchemy inspector.
+    """
+    insp = sa_inspect(sync_conn)
+    try:
+        cols = insp.get_columns("policies")
+    except Exception:
+        # Table may not exist yet
+        return False
+    for c in cols:
+        if c.get("name") == "deleted_at":
+            return True
+    return False
+
+
+async def _apply_minimal_migrations() -> None:
+    """
+    Minimal dev/CI migrations to keep schema in sync without Alembic:
+    - Add 'deleted_at' to 'policies' if missing.
+    """
+    assert _engine is not None
+    async with _engine.begin() as conn:
+        has_col = await conn.run_sync(_has_deleted_at)
+        if not has_col:
+            # Portable-ish SQL: SQLAlchemy will adapt types for the dialect.
+            # For SQLite: TIMESTAMP is acceptable, timezone info is not enforced.
+            await conn.execute(text("ALTER TABLE policies ADD COLUMN deleted_at TIMESTAMP NULL"))
+
+
+async def init_db() -> None:
+    """
+    Initialize engine, create schema, and apply minimal migrations.
+    Intended for app startup and test bootstrap.
+    """
+    await _create_engine()
+    await _create_schema()
+    await _apply_minimal_migrations()
+
+
 async def _ensure_initialized() -> None:
-    """Гарантирует, что init_db() вызван один раз."""
     global _initialized
     if not _initialized:
         await init_db()
@@ -51,12 +104,15 @@ async def _ensure_initialized() -> None:
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    """Dependency для FastAPI — возвращает готовую асинхронную сессию."""
+    """
+    FastAPI dependency that yields an async SQLAlchemy session.
+    """
     await _ensure_initialized()
+    assert SessionLocal is not None
     async with SessionLocal() as session:
         yield session
 
 
 def init_db_sync() -> None:  # pragma: no cover
-    """Утилита для ручного вызова в консоли."""
+    """Helper to run initialization from a synchronous context (CLI, etc.)."""
     asyncio.run(init_db())
