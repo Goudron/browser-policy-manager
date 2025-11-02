@@ -1,136 +1,446 @@
 <!doctype html>
-<html lang="{{ request.state.lang or 'en' }}">
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{{ t('ui.profiles.title', 'Profiles') }} · {{ t('ui.header.title', 'Browser Policy Manager') }}</title>
-    <link rel="icon" href="/favicon.ico">
-    <style>
-        :root {
-            --fg: #222;
-            --muted: #666;
-            --brand: #0b6cff;
-            --bg: #fff;
-            --panel: #f8f9fb;
-            --border: #e6e8ef;
-        }
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        * {
-            box-sizing: border-box;
-        }
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-            margin: 2rem;
-            line-height: 1.6;
-            color: var(--fg);
-            background: var(--bg);
-        }
+    <!-- js-yaml for YAML↔JSON -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 
-        header {
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--brand);
-            margin-right: .5rem;
-        }
-
-        nav a.active {
-            font-weight: 600;
-            color: var(--fg);
-        }
-
-        a.link {
-            color: var(--brand);
-            text-decoration: none;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            text-align: left;
-            padding: .6rem .5rem;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
-        }
-
-        .muted {
-            color: var(--muted);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: .15rem .5rem;
-            border-radius: 999px;
-            background: #111;
-            color: #fff;
-            font-size: .75rem;
-        }
-
-        .empty {
-            padding: 1rem;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-        }
-    </style>
+    <!-- Monaco Editor -->
+    <script>
+        window.require = { paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs" } };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs/loader.min.js"></script>
 </head>
 
-<body>
-    <header>
-        <div>
-            <a href="/" class="link">← {{ t('ui.back.home', 'Back to Home') }}</a>
-            <h1 style="margin:.4rem 0 0;">{{ t('ui.profiles.title', 'Profiles') }}</h1>
-            <p class="muted">{{ t('ui.profiles.subtitle', 'Saved policy profiles (dev view)') }}</p>
-        </div>
-        <nav>
-            {% set lang = request.state.lang or 'en' %}
-            <a href="?lang=en" class="{{ 'active' if lang == 'en' else '' }}">EN</a>
-            <a href="?lang=ru" class="{{ 'active' if lang == 'ru' else '' }}">RU</a>
-        </nav>
-    </header>
+<body class="min-h-screen bg-slate-50 text-slate-900">
+    <div class="max-w-[1400px] mx-auto p-4 md:p-6">
+        <header class="mb-4 flex items-center justify-between flex-wrap gap-2">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-semibold" data-i18n="profiles.title">Profiles Editor</h1>
+                <p class="text-sm text-slate-600" data-i18n="profiles.subtitle">
+                    Manage browser policy profiles (JSON / YAML). Supported: ESR 140, Release 144.
+                </p>
+            </div>
+            <div class="flex items-center gap-2">
+                <select id="lang" class="border rounded px-2 py-1 text-sm">
+                    <option value="en" selected>English</option>
+                    <option value="ru">Русский</option>
+                </select>
+            </div>
+        </header>
 
-    <main>
-        {% if profiles %}
-        <table aria-label="Profiles list">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>{{ t('ui.profiles.name', 'Name') }}</th>
-                    <th>{{ t('ui.profiles.schema', 'Schema') }}</th>
-                    <th>{{ t('ui.profiles.flags', 'Flags') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for p in profiles %}
-                <tr>
-                    <td><span class="badge">{{ p.id }}</span></td>
-                    <td>{{ p.name }}</td>
-                    <td>{{ p.schema_version }}</td>
-                    <td>
-                        <pre style="margin:0; white-space:pre-wrap">{{ p.flags | tojson(indent=0) }}</pre>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <div class="empty">
-            {{ t('ui.profiles.empty', 'No profiles yet. Try creating one via API and refresh this page.') }}
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <!-- Sidebar -->
+            <aside class="md:col-span-4 lg:col-span-3">
+                <div class="rounded-2xl bg-white shadow p-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <input id="search" type="text" placeholder="Search..."
+                            class="w-full border rounded-lg px-3 py-2 text-sm"
+                            data-i18n-placeholder="profiles.search" />
+                        <button id="refresh" class="border rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
+                            title="Reload" data-i18n-title="profiles.reload">
+                            ⟲
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 text-xs mb-2 items-center">
+                        <label class="inline-flex items-center gap-1">
+                            <input id="include-deleted" type="checkbox" class="rounded" />
+                            <span data-i18n="profiles.show_deleted">Show deleted</span>
+                        </label>
+                        <select id="sort" class="border rounded px-2 py-1">
+                            <option value="updated_at">Updated</option>
+                            <option value="created_at">Created</option>
+                            <option value="name">Name</option>
+                            <option value="id">ID</option>
+                        </select>
+                        <select id="order" class="border rounded px-2 py-1">
+                            <option value="desc">DESC</option>
+                            <option value="asc">ASC</option>
+                        </select>
+                        <button id="new-profile" class="ml-auto border rounded-lg px-3 py-1.5 text-xs hover:bg-slate-50"
+                            data-i18n="profiles.create">
+                            New profile
+                        </button>
+                    </div>
+
+                    <ul id="list" class="divide-y max-h-[60vh] overflow-auto"></ul>
+                </div>
+            </aside>
+
+            <!-- Editor -->
+            <main class="md:col-span-8 lg:col-span-9">
+                <div class="rounded-2xl bg-white shadow p-3">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <div class="grow">
+                            <div id="current-name" class="font-medium" data-i18n="profiles.none_selected">
+                                Nothing selected
+                            </div>
+                            <div id="current-meta" class="text-xs text-slate-500"></div>
+                        </div>
+
+                        <select id="profile-type" class="border rounded px-2 py-1" title="Schema profile">
+                            <option value="esr-140">ESR 140</option>
+                            <option value="release-144">Release 144</option>
+                        </select>
+
+                        <select id="mode" class="border rounded px-2 py-1">
+                            <option value="json" selected>JSON</option>
+                            <option value="yaml">YAML</option>
+                        </select>
+
+                        <button id="validate" class="border rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
+                            data-i18n="profiles.validate">
+                            Validate
+                        </button>
+                        <button id="format" class="border rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
+                            data-i18n="profiles.format">
+                            Format
+                        </button>
+                        <button id="save"
+                            class="bg-slate-900 text-white rounded-lg px-3 py-2 text-sm hover:bg-slate-800"
+                            data-i18n="profiles.save">
+                            Save
+                        </button>
+                        <button id="soft-delete"
+                            class="border border-red-300 text-red-700 rounded-lg px-3 py-2 text-sm hover:bg-red-50"
+                            data-i18n="profiles.soft_delete">
+                            Soft delete
+                        </button>
+                        <button id="restore"
+                            class="border border-emerald-300 text-emerald-700 rounded-lg px-3 py-2 text-sm hover:bg-emerald-50"
+                            data-i18n="profiles.restore">
+                            Restore
+                        </button>
+                        <!-- New: downloads -->
+                        <a id="download-json" href="#" target="_blank"
+                            class="border rounded-lg px-3 py-2 text-sm hover:bg-slate-50">Download JSON</a>
+                        <a id="download-yaml" href="#" target="_blank"
+                            class="border rounded-lg px-3 py-2 text-sm hover:bg-slate-50">Download YAML</a>
+                    </div>
+
+                    <div id="editor" class="border rounded-xl h-[60vh] w-full"></div>
+                    <div id="status" class="mt-2 text-xs text-slate-600"></div>
+                </div>
+            </main>
         </div>
-        {% endif %}
-    </main>
+    </div>
+
+    <script>
+        // === i18n ===
+        let currentLang = "en";
+        async function loadLocale(lang) {
+            try {
+                const res = await fetch(`/i18n/${lang}.json`);
+                if (!res.ok) throw new Error(await res.text());
+                const dict = await res.json();
+                document.querySelectorAll("[data-i18n]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n");
+                    if (dict[key]) el.textContent = dict[key];
+                });
+                document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n-placeholder");
+                    if (dict[key]) el.placeholder = dict[key];
+                });
+                document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n-title");
+                    if (dict[key]) el.title = dict[key];
+                });
+            } catch (e) {
+                console.warn("i18n load failed:", e);
+            }
+        }
+
+        // === Core logic ===
+        let editor, currentId = null, currentRaw = {};
+
+        function setStatus(msg, ok = true) {
+            const el = document.getElementById("status");
+            el.textContent = msg;
+            el.className = "mt-2 text-xs " + (ok ? "text-green-700" : "text-red-700");
+        }
+
+        function toEditorValue(obj, mode) {
+            try {
+                return mode === "yaml" ? jsyaml.dump(obj, { skipInvalid: true, sortKeys: false }) : JSON.stringify(obj, null, 2);
+            } catch {
+                return "";
+            }
+        }
+
+        function fromEditorValue(text, mode) {
+            if (!text || !text.trim()) return {};
+            return mode === "yaml" ? jsyaml.load(text) : JSON.parse(text);
+        }
+
+        // API helpers
+        async function listProfiles() {
+            const q = document.getElementById("search").value.trim();
+            const includeDeleted = document.getElementById("include-deleted").checked;
+            const sort = document.getElementById("sort").value;
+            const order = document.getElementById("order").value;
+            const url = new URL("/api/policies", window.location.origin);
+            if (q) url.searchParams.set("q", q);
+            if (includeDeleted) url.searchParams.set("include_deleted", "true");
+            url.searchParams.set("sort", sort);
+            url.searchParams.set("order", order);
+            const res = await fetch(url.toString());
+            if (!res.ok) throw new Error(await res.text());
+            return await res.json();
+        }
+
+        async function getProfile(id) {
+            const res = await fetch(`/api/policies/${id}`);
+            if (!res.ok) throw new Error(await res.text());
+            return await res.json();
+        }
+
+        async function createProfile(body) {
+            const res = await fetch(`/api/policies`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            });
+            if (!res.ok) throw new Error(await res.text());
+            return await res.json();
+        }
+
+        async function patchProfile(id, payload) {
+            const res = await fetch(`/api/policies/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            if (!res.ok) throw new Error(await res.text());
+            return await res.json();
+        }
+
+        async function softDeleteProfile(id) {
+            const res = await fetch(`/api/policies/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error(await res.text());
+        }
+
+        async function restoreProfile(id) {
+            const res = await fetch(`/api/policies/{id}/restore`.replace("{id}", id), { method: "POST" });
+            if (!res.ok) throw new Error(await res.text());
+            return await res.json();
+        }
+
+        async function validateFlags(profileKey, flagsObj) {
+            const res = await fetch(`/api/validate/${encodeURIComponent(profileKey)}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ document: flagsObj }),
+            });
+            if (!res.ok) throw new Error(await res.text());
+            return await res.json();
+        }
+
+        function updateDownloadLinks() {
+            const j = document.getElementById("download-json");
+            const y = document.getElementById("download-yaml");
+            if (!currentId) {
+                j.setAttribute("href", "#");
+                y.setAttribute("href", "#");
+                j.classList.add("pointer-events-none", "opacity-50");
+                y.classList.add("pointer-events-none", "opacity-50");
+                return;
+            }
+            j.classList.remove("pointer-events-none", "opacity-50");
+            y.classList.remove("pointer-events-none", "opacity-50");
+
+            // Совместимый роут под тесты: /api/export/{id}/policies.json
+            j.setAttribute("href", `/api/export/${currentId}/policies.json`);
+            y.setAttribute("href", `/api/export/${currentId}/policies.yaml`);
+        }
+
+        // Renderers
+        function renderList(items) {
+            const ul = document.getElementById("list");
+            ul.innerHTML = "";
+            for (const p of items) {
+                const li = document.createElement("li");
+                li.className = "py-2";
+                const btn = document.createElement("button");
+                btn.className = "w-full text-left px-2 py-1 rounded hover:bg-slate-50";
+                btn.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <div class="font-medium">${p.name}</div>
+                <div class="text-xs text-slate-500">${p.description || ""}</div>
+              </div>
+              ${p.is_deleted ? '<span class="text-xs text-red-600">deleted</span>' : ""}
+            </div>
+          `;
+                btn.onclick = () => loadProfile(p.id);
+                li.appendChild(btn);
+                ul.appendChild(li);
+            }
+        }
+
+        function setMeta(p) {
+            document.getElementById("current-name").textContent = p ? p.name : "Nothing selected";
+            document.getElementById("current-meta").textContent = p
+                ? `ID ${p.id} • schema=${p.schema_version} • updated=${p.updated_at}`
+                : "";
+            if (p) {
+                document.getElementById("profile-type").value = p.schema_version === "release-144" ? "release-144" : "esr-140";
+            }
+        }
+
+        // Actions
+        async function reloadList() {
+            try {
+                const items = await listProfiles();
+                renderList(items);
+            } catch (e) {
+                setStatus(`List error: ${e}`, false);
+            }
+        }
+
+        async function loadProfile(id) {
+            try {
+                const p = await getProfile(id);
+                currentId = p.id;
+                currentRaw = p.flags || {};
+                const mode = document.getElementById("mode").value;
+                editor.setValue(toEditorValue(currentRaw, mode));
+                setMeta(p);
+                setStatus("Profile loaded");
+                updateDownloadLinks();
+            } catch (e) {
+                setStatus(`Load error: ${e}`, false);
+            }
+        }
+
+        async function saveCurrent() {
+            if (!currentId) return setStatus("Select a profile first", false);
+            try {
+                const mode = document.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const schemaVersion = document.getElementById("profile-type").value;
+                const updated = await patchProfile(currentId, { flags: parsed, schema_version: schemaVersion });
+                currentRaw = updated.flags || {};
+                setMeta(updated);
+                setStatus("Saved successfully");
+            } catch (e) {
+                setStatus(`Save error: ${e}`, false);
+            }
+        }
+
+        async function createNew() {
+            const name = prompt("Profile name:");
+            if (!name) return;
+            try {
+                const schemaVersion = document.getElementById("profile-type").value;
+                const body = {
+                    name,
+                    description: "New profile",
+                    schema_version: schemaVersion,
+                    flags: {},
+                };
+                const created = await createProfile(body);
+                await reloadList();
+                await loadProfile(created.id);
+                setStatus("Profile created");
+            } catch (e) {
+                setStatus(`Create error: ${e}`, false);
+            }
+        }
+
+        async function doSoftDelete() {
+            if (!currentId) return setStatus("Select a profile first", false);
+            if (!confirm("Soft delete this profile?")) return;
+            try {
+                await softDeleteProfile(currentId);
+                await reloadList();
+                setStatus("Soft-deleted");
+            } catch (e) {
+                setStatus(`Delete error: ${e}`, false);
+            }
+        }
+
+        async function doRestore() {
+            if (!currentId) return setStatus("Select a profile first", false);
+            try {
+                const restored = await restoreProfile(currentId);
+                await reloadList();
+                setMeta(restored);
+                setStatus("Restored");
+            } catch (e) {
+                setStatus(`Restore error: ${e}`, false);
+            }
+        }
+
+        async function doValidate() {
+            try {
+                const profileKey = document.getElementById("profile-type").value;
+                const mode = document.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const res = await validateFlags(profileKey, parsed);
+                if (res.ok) setStatus("Validation OK");
+                else setStatus(`Validation error: ${res.detail || "invalid"}`, false);
+            } catch (e) {
+                setStatus(`Validation failed: ${e}`, false);
+            }
+        }
+
+        // Monaco setup and init
+        function initMonaco() {
+            require(["vs/editor/editor.main"], function () {
+                editor = monaco.editor.create(document.getElementById("editor"), {
+                    value: "",
+                    language: "json",
+                    automaticLayout: true,
+                    minimap: { enabled: false },
+                    theme: "vs",
+                });
+
+                document.getElementById("format").addEventListener("click", () => {
+                    try {
+                        const mode = document.getElementById("mode").value;
+                        const parsed = fromEditorValue(editor.getValue(), mode);
+                        editor.setValue(toEditorValue(parsed, mode));
+                        setStatus("Formatted");
+                    } catch (e) {
+                        setStatus(`Format error: ${e}`, false);
+                    }
+                });
+
+                document.getElementById("mode").addEventListener("change", (e) => {
+                    const mode = e.target.value;
+                    monaco.editor.setModelLanguage(editor.getModel(), mode === "yaml" ? "yaml" : "json");
+                    editor.setValue(toEditorValue(currentRaw, mode));
+                    setStatus(`Switched to ${mode.toUpperCase()}`);
+                });
+
+                document.getElementById("save").addEventListener("click", saveCurrent);
+                document.getElementById("new-profile").addEventListener("click", createNew);
+                document.getElementById("soft-delete").addEventListener("click", doSoftDelete);
+                document.getElementById("restore").addEventListener("click", doRestore);
+                document.getElementById("validate").addEventListener("click", doValidate);
+                document.getElementById("refresh").addEventListener("click", reloadList);
+
+                document.getElementById("lang").addEventListener("change", async (e) => {
+                    await loadLocale(e.target.value);
+                });
+
+                // Initial
+                reloadList();
+                loadLocale("en");
+                updateDownloadLinks();
+            });
+        }
+
+        initMonaco();
+    </script>
 </body>
 
 </html>

@@ -1,161 +1,155 @@
-# 🧭 Browser Policy Manager
+# Browser Policy Manager (BPM)
 
-**Browser Policy Manager (BPM)** — a lightweight **FastAPI**-based backend for managing and exporting browser policy configurations (e.g., Firefox ESR `policies.json`).  
-It serves as both a practical example and a backend core for enterprise browser-management solutions.
-
----
-
-## 🚀 Features
-
-- REST API for managing browser policy profiles (CRUD)
-- Export profiles as `policies.json`
-- Import policies (via JSON body or upload UI)
-- Built-in localization (English / Russian)
-- Minimal Jinja2 web UI
-- SQLite or in-memory storage
-- Full test coverage with **pytest**
-- Code linting and formatting via **Ruff**
-- Continuous integration via **GitHub Actions**
+> **Enterprise browser configuration manager** built with FastAPI — a unified backend and web UI to manage, validate, and export browser policy profiles for Firefox (Release & ESR).
 
 ---
 
-## 🧩 Project Structure
+## 🧭 Overview
 
-```
-app/
-├── api/                # REST endpoints (health, policies, export, schemas)
-├── routes/             # UI routes (index, import, etc.)
-├── i18n/               # en.json / ru.json localization catalogs
-├── middleware/         # locale middleware
-├── models/             # SQLModel entities and DTOs
-├── services/           # business logic (policy_service, schema_service)
-├── exporters/          # exporters (e.g., Firefox policies.json)
-├── templates/          # Jinja2 templates (index.html, import.html)
-└── main.py             # FastAPI entry point
-```
+**Browser Policy Manager (BPM)** provides administrators and security teams with a centralized tool to manage Firefox enterprise policies.  
+It validates, stores, and exports structured configuration profiles compatible with Firefox’s `policies.json` format.
+
+**Author:** Valery Ledovskoy  
+**Version:** `0.3.0 (Sprint F – Release Preview)`  
+**License:** [MPL-2.0](LICENSE)  
+**Backend:** FastAPI + SQLAlchemy (async) + Alembic  
+**Frontend:** Jinja2 + TailwindCSS + Monaco Editor (planned)  
+**Database:** SQLite (default, async via `aiosqlite`)  
+**Python:** 3.13
 
 ---
 
-## ⚙️ Installation & Run
+## 🚀 Current Capabilities
 
-### Requirements
-- Python ≥ 3.13  
-- pip ≥ 24.0  
+### ✅ Core API
+| Endpoint | Description |
+|-----------|--------------|
+| `POST /api/policies` | Create a new browser policy profile |
+| `GET /api/policies` | List all profiles (with filtering & pagination) |
+| `GET /api/policies/{id}` | Retrieve one profile |
+| `PATCH /api/policies/{id}` | Update profile |
+| `DELETE /api/policies/{id}` | Soft delete |
+| `GET /api/export/{id}/policies.json` | Export to JSON |
+| `GET /api/export/{id}/policies.yaml` | Export to YAML |
+| `POST /api/validate/{version}` | Validate a policy document |
+| `GET /healthz`, `GET /readyz` | Health probes |
 
-### Local run
+> Duplicate names return `409 Conflict`.  
+> Soft-deleted profiles can be restored via the API.
+
+---
+
+## 🧱 Technology Stack
+
+| Layer | Implementation |
+|-------|----------------|
+| **Framework** | FastAPI (async, OpenAPI auto-docs) |
+| **Database** | SQLite (`sqlalchemy.ext.asyncio` + Alembic migrations) |
+| **Schemas** | JSON Schema v2020–12 for Firefox policies |
+| **Validation** | `jsonschema` with version-aware schema loader |
+| **Testing** | `pytest`, `mypy`, `ruff`, `coverage ≥ 85%` |
+| **CI/CD** | GitHub Actions (`dev` branch trigger) |
+| **Security** | Custom middleware with strict HTTP headers (CSP, HSTS, X-Frame-Options) |
+
+---
+
+## 🧪 Quick Start
 
 ```bash
-git clone https://github.com/Goudron/browser-policy-manager.git
-cd browser-policy-manager
+# Create venv
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
 
-pip install -r requirements.txt
-# For development & CI:
-pip install -r requirements-dev.txt
+# Install for development
+pip install -e ".[dev]"
 
+# Run app
 uvicorn app.main:app --reload
 ```
 
-Open in browser:  
-👉 http://localhost:8000
+Then open: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 ---
 
-## 🌐 API Examples
+## 🧰 Database & Migrations
 
-Create a policy profile:
+- Default DB: `bpm.db` (SQLite).  
+- Migrations live in `alembic/`.  
+- Auto-generated migrations are supported.
+
 ```bash
-curl -X POST http://localhost:8000/api/policies \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Default",
-    "description": "Base profile",
-    "schema_version": "firefox-ESR",
-    "flags": {"DisableTelemetry": true, "DisablePocket": true}
-  }'
+alembic revision --autogenerate -m "add new field"
+alembic upgrade head
 ```
 
-Export a profile:
+To verify migration integrity:
+
 ```bash
-curl http://localhost:8000/api/export/<profile_id>/policies.json
+pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
 ```
 
-Import policies:
-```bash
-curl -X POST http://localhost:8000/api/import-policies \
-  -H "Content-Type: application/json" \
-  -d '{"policies": {"DisableTelemetry": true}}'
-```
+---
+
+## 🧩 Current Schema Versions
+
+| Channel | Version | Status |
+|----------|----------|---------|
+| **ESR** | 140 | ✅ Active |
+| **Release** | 144 | ✅ Current |
+| **Beta / Dev** | — | ❌ Not supported |
+
+> BPM tracks the official [Firefox release calendar](https://whattrainisitnow.com/calendar/) and will later auto-update schemas for new releases (e.g., 145, 146…).
 
 ---
 
 ## 🌍 Localization (i18n)
 
-- Language catalogs: `app/i18n/en.json`, `app/i18n/ru.json`  
-- Middleware: `app/middleware/locale.py`  
-- Template filter: `t("key")`  
-- Language auto-selected via `lang` cookie or `Accept-Language` header  
+- Base language: **English**  
+- Additional: **Russian (ru)**  
+- All UI elements and validation messages are localized via `/app/i18n/*.json`.
 
 ---
 
-## 🧪 Testing
+## 🧠 Development Guidelines
 
-```bash
-pytest -q
-```
-
-All 15 tests pass ✅  
-Covers CRUD, import/export, and UI smoke tests.
-
----
-
-## 🧼 Lint & Format
-
-Handled by **Ruff**:
-
-```bash
-ruff check --fix .
-ruff format .
-```
-
-Configuration: `pyproject.toml` (Python 3.13, line length 100).
+- Code comments and docstrings — **English only**.  
+- User documentation and this README may include bilingual notes.  
+- Default branch for development: **`dev`**  
+  - CI runs on push/pull-request to `dev`.  
+  - Manual merge to `main` produces a release.  
+- Test coverage goal: **≥ 85%**  
+- Code style enforced by:
+  ```bash
+  ruff check . --fix
+  ruff format .
+  mypy app
+  pytest -q
+  ```
 
 ---
 
-## 🧰 Continuous Integration
+## 🧭 Road Ahead
 
-GitHub Actions workflow runs:
-1. Install dependencies (`requirements.txt` + `requirements-dev.txt`)
-2. Lint & format checks (Ruff)
-3. Full pytest suite  
+**Next sprint (G, version 0.4.0):**
+- Dynamic schema loader (auto-fetch current Firefox Release & ESR).
+- Cached schema store (`/data/schemas`).
+- Version-aware validation and schema endpoint (`/api/schemas/latest`).
+- Prepare for full UI with policy section breakdown.
 
-Workflow file: `.github/workflows/ci.yml`
-
----
-
-## 🧾 License
-
-Licensed under the **Mozilla Public License 2.0 (MPL-2.0)**.  
-See the [LICENSE](LICENSE) file for full text.  
-
-© 2025 **Valery Ledovskoy** ([Goudron](https://github.com/Goudron))
+**Later sprints:**
+- Interactive UI for all policies (Monaco-based).
+- Import/export in `.reg` and `.mobileconfig`.
+- Templates and preset policy bundles.
+- Chrome/Edge schema compatibility.
 
 ---
 
-## 📈 Development Roadmap
+## 👤 Maintainer
 
-| Stage | Status | Description |
-|--------|---------|-------------|
-| Sprint A | ✅ Completed | Core architecture, CRUD API, i18n, tests, CI pipeline |
-| Sprint B | 🔜 Planned | Web CRUD UI, JSON upload import, dark theme, session storage |
-| Sprint C | ⏳ Backlog | Chrome / Edge policy support, REST authorization |
+**Valery Ledovskoy**  
+📧 [valery@ledovskoy.com](mailto:valery@ledovskoy.com)
 
----
-
-## 🤝 Contacts
-
-- Author: **Valery Ledovskoy** ([Goudron](https://github.com/Goudron))  
-- Repository: [github.com/Goudron/browser-policy-manager](https://github.com/Goudron/browser-policy-manager)
+© 2025–present • Released under [Mozilla Public License 2.0](LICENSE)
 
 ---

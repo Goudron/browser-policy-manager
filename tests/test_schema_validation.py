@@ -1,28 +1,38 @@
-from __future__ import annotations
+# tests/test_schema_validation.py
+"""
+Basic tests for schema loading and policy validation.
 
-from fastapi.testclient import TestClient
+The tests assert:
+- Schemas for "esr-140" and "release-144" are loadable.
+- Validator is constructible for each supported profile.
+- Passing a clearly wrong type (e.g., integer) fails validation.
+"""
 
-from app.main import app
-from app.services.schema_service import available
+import pytest
+from jsonschema import ValidationError
 
-client = TestClient(app)
-
-
-def test_schema_service_available_not_empty():
-    # Сервис должен вернуть хотя бы одну доступную схему
-    avail = available()
-    assert isinstance(avail, dict)
-    assert len(avail) >= 1
+from app.core.schemas_loader import available_profiles, load_schema
+from app.core.validation import PolicySchemaValidator
 
 
-def test_validate_rejects_invalid_doc():
-    # Заведомо некорректный документ (почти пустой) должен быть отклонён
-    r = client.post("/api/v1/policies/validate", json={})
-    assert r.status_code == 422
-    data = r.json()
-    assert "detail" in data
-    # Наш эндпоинт возвращает структуру с message/error
-    detail = data["detail"]
-    assert isinstance(detail, dict)
-    assert "message" in detail
-    assert "error" in detail
+def test_available_profiles_scope():
+    profiles = available_profiles()
+    assert set(profiles.keys()) == {"esr-140", "release-144"}
+    assert profiles["esr-140"].endswith("firefox-esr140.json")
+    assert profiles["release-144"].endswith("firefox-release.json")
+
+
+@pytest.mark.parametrize("profile", ["esr-140", "release-144"])
+def test_load_schema_ok(profile):
+    schema = load_schema(profile)
+    assert isinstance(schema, dict)
+    # Minimal sanity: schema should declare an object at top-level or have properties/anyOf/etc.
+    assert isinstance(schema, dict) and len(schema) > 0
+
+
+@pytest.mark.parametrize("profile", ["esr-140", "release-144"])
+def test_validator_rejects_wrong_type(profile):
+    validator = PolicySchemaValidator(profile)
+    with pytest.raises(ValidationError):
+        # Most Firefox policy schemas expect an object; int should be invalid
+        validator.validate(123)

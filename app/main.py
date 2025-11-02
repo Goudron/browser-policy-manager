@@ -1,211 +1,103 @@
-"""
-Browser Policy Manager — FastAPI application entrypoint.
-
-Конвенции:
-- НОВЫЙ JSON-API монтируется под префиксом /api/v1.
-- ЛЕГАСИ JSON-роутеры из app/routes/* монтируются без доп. префикса (пути вида /api/...).
-- UI-маршруты (Jinja2/HTML) — без /api.
-- Бизнес-логика — в app/services/*.
-"""
-
-from __future__ import annotations
-
-import logging
-import os
-from contextlib import asynccontextmanager
+import importlib
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Iterable, Optional
+from types import ModuleType
+from typing import Any
 
-from fastapi import Body, FastAPI, File, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+
+# API routers must be imported at the top (ruff E402)
+from app.api import export as export_api
+from app.api import health as health_api
+from app.api import policies as policies_api
+from app.api import validation as validation_api
+
+# Optional web router module (load via importlib to keep mypy happy)
+profiles_web: ModuleType | None
+try:
+    profiles_web = importlib.import_module("app.web.profiles")
+except ImportError:
+    profiles_web = None
 
 
-# -----------------------------------------------------------------------------
-# Lifespan
-# -----------------------------------------------------------------------------
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Выполняется при запуске и завершении приложения."""
-    try:
-        from app.services.schema_service import available as schemas_available
+def _register_function_middleware(app: FastAPI, func: Callable[..., Any]) -> None:
+    """
+    Attach a function-based HTTP middleware without calling app.middleware(...) at runtime.
+    This avoids mypy's "None not callable" complaint while keeping behavior identical.
+    """
 
-        avail = schemas_available()
-        print(
-            "Schemas available on startup:",
-            ", ".join(sorted(avail.values())) if avail else "(none)",
-        )
-    except Exception as exc:  # noqa: BLE001
-        print(f"Schemas scan failed on startup: {exc}")
-
-    yield
-
-    print("Application shutdown complete.")
+    @app.middleware("http")
+    async def _dynamic_security_mw(request, call_next):
+        return await func(request, call_next)
 
 
-# -----------------------------------------------------------------------------
-# Приложение
-# -----------------------------------------------------------------------------
-log = logging.getLogger(__name__)
+# Resolve security middleware:
+# 1) prefer a function `add_security_headers(request, call_next)` → register via helper above
+# 2) else, if class `SecurityHeadersMiddleware` exists → app.add_middleware(...)
+try:
+    security_mod = importlib.import_module("app.middleware.security")
+    add_fn = getattr(security_mod, "add_security_headers", None)
+    mw_cls = getattr(security_mod, "SecurityHeadersMiddleware", None)
+except ImportError:
+    add_fn = None
+    mw_cls = None
 
+# Application instance
+# NOTE: Keep "Valery Ledovskoy" in metadata because tests rely on it.
 app = FastAPI(
-    title="Browser Policy Manager",
-    version=os.getenv("BPM_VERSION", "0.1.0"),
-    docs_url="/docs",
-    redoc_url="/redoc",
-    openapi_url="/openapi.json",
-    lifespan=lifespan,
+    title="Browser Policy Manager — Valery Ledovskoy",
+    description=(
+        "Manage Firefox enterprise policies (ESR/Release). "
+        "Maintainer: Valery Ledovskoy"
+    ),
+    version="0.3.0",
 )
 
-# -----------------------------------------------------------------------------
-# CORS
-# -----------------------------------------------------------------------------
-ALLOW_ORIGINS: Iterable[str] = os.getenv("BPM_CORS_ORIGINS", "*").split(",")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[o.strip() for o in ALLOW_ORIGINS if o.strip()],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Attach security headers middleware if available
+if callable(add_fn):
+    _register_function_middleware(app, add_fn)
+elif mw_cls is not None:
+    app.add_middleware(mw_cls)
 
-# -----------------------------------------------------------------------------
-# Шаблоны и статика
-# -----------------------------------------------------------------------------
-TEMPLATES_DIR = Path("app/templates")
-STATIC_DIR = Path("app/static")
+# Health endpoints must be reachable exactly at /health and /health/ready
+app.include_router(health_api.router)
 
-templates: Jinja2Templates | None = None
-if TEMPLATES_DIR.exists():
-    templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
-    log.info("Templates enabled: %s", TEMPLATES_DIR.resolve())
-else:
-    log.info("Templates directory not found, UI pages may be limited")
+# Routers already define their own paths; do NOT add prefix here
+app.include_router(policies_api.router)
+app.include_router(export_api.router)
+app.include_router(validation_api.router)
 
-if STATIC_DIR.exists():
-    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
-    log.info("Static files mounted: %s -> /static", STATIC_DIR.resolve())
-else:
-    log.info("Static directory not found, skipping /static mount")
+# Web routes (optional)
+if profiles_web is not None:
+    router = getattr(profiles_web, "router", None)
+    if router is not None:
+        app.include_router(router)
 
 
-# -----------------------------------------------------------------------------
-# Подключение роутеров
-# -----------------------------------------------------------------------------
-def _include_router_safely(import_path: str, prefix: str = "", name: str = "") -> None:
-    """Импортирует модуль с объектом router и подключает его к FastAPI."""
-    try:
-        module = __import__(import_path, fromlist=["router"])
-        router = getattr(module, "router")
-        app.include_router(router, prefix=prefix)
-        label = f" ({name})" if name else ""
-        log.info("Mounted router: %s%s", import_path, label)
-    except Exception as exc:  # noqa: BLE001
-        log.warning("Skip router %s: %s", import_path, exc)
+# Minimal root page expected by tests (must include the author's name)
+@app.get("/", include_in_schema=False)
+def root_page() -> HTMLResponse:
+    """Simple landing page used by smoke tests to check availability and author name."""
+    html = """
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Browser Policy Manager — Valery Ledovskoy</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+      </head>
+      <body>
+        <h1>Browser Policy Manager</h1>
+        <p>Maintainer: <strong>Valery Ledovskoy</strong></p>
+      </body>
+    </html>
+    """
+    return HTMLResponse(html, status_code=200)
 
 
-# ЛЕГАСИ JSON (старые пути /api/… без префикса)
-_include_router_safely("app.api.legacy_core", name="legacy_core")
-_include_router_safely("app.api.legacy_policies", name="legacy_policies")
-_include_router_safely("app.api.legacy_firefox", name="legacy_firefox")
-_include_router_safely("app.api.legacy_api_import", name="legacy_api_import")
-# Современный совместимый импорт-путь (если легаси-модуль отсутствует)
-_include_router_safely("app.api.import_policies", name="import_policies_compat")
-
-# НОВЫЕ служебные JSON-API (под /api/v1)
-_include_router_safely("app.api.schemas", prefix="/api/v1", name="schemas_api")
-_include_router_safely("app.api.validation", prefix="/api/v1", name="validation_api")
-
-# UI-роутеры (исторически — app/web/routes.py)
-_include_router_safely("app.web.routes", name="ui_web")
-# при наличии других UI-модулей — добавляй:
-# _include_router_safely("app.routes.ui", name="ui_root")
-# _include_router_safely("app.routes.profiles", name="ui_profiles")
-
-
-# -----------------------------------------------------------------------------
-# Гарантированный корневой "/"
-# -----------------------------------------------------------------------------
-@app.get("/", tags=["web"], response_class=HTMLResponse)
-def root_page() -> str:
-    # Тест ожидает наличие "Valery Ledovskoy" и ссылки на /profiles
-    return (
-        "<!doctype html><html><head>"
-        "<meta charset='utf-8'><title>Browser Policy Manager</title>"
-        "<style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial}"
-        "main{max-width:760px;margin:40px auto;padding:0 16px}</style>"
-        "</head><body><main>"
-        "<h1>Browser Policy Manager</h1>"
-        "<p>Welcome, <strong>Valery Ledovskoy</strong>.</p>"
-        '<p><a href="/profiles">/profiles</a> — manage policy profiles</p>'
-        '<p><a href="/docs">/docs</a> — OpenAPI Docs</p>'
-        "</main></body></html>"
-    )
-
-
-# -----------------------------------------------------------------------------
-# Фолбэк: /api/import-policies (если ни один модуль не зарегистрировал)
-# -----------------------------------------------------------------------------
-def _has_route(path: str, method: str) -> bool:
-    method = method.upper()
-    for r in app.router.routes:
-        try:
-            p = getattr(r, "path", None)
-            methods = getattr(r, "methods", set()) or set()
-        except Exception:
-            continue
-        if p == path and method in methods:
-            return True
-    return False
-
-
-if not _has_route("/api/import-policies", "POST"):
-
-    @app.post("/api/import-policies", tags=["import"])
-    async def _import_policies_fallback(
-        body: Optional[Any] = Body(None),
-        file: Optional[UploadFile] = File(None),
-    ) -> JSONResponse:
-        """
-        Универсальный импорт политик (фолбэк).
-        Поддержка:
-          - application/json: dict или строка JSON
-          - multipart/form-data: файл (policies.json)
-        """
-        import json as _json
-
-        data: Any = None
-
-        if file is not None:
-            try:
-                raw = await file.read()
-                txt = raw.decode("utf-8", errors="strict")
-                data = _json.loads(txt)
-            except Exception:
-                raise HTTPException(status_code=400, detail="Invalid JSON file payload")
-        elif body is not None:
-            if isinstance(body, dict):
-                data = body
-            elif isinstance(body, str):
-                try:
-                    data = _json.loads(body)
-                except Exception:
-                    raise HTTPException(
-                        status_code=400, detail="Invalid JSON string payload"
-                    )
-            else:
-                raise HTTPException(status_code=400, detail="Unsupported payload type")
-        else:
-            raise HTTPException(status_code=400, detail="Empty payload")
-
-        return JSONResponse({"ok": True, "received": data})
-
-
-# -----------------------------------------------------------------------------
-# Healthcheck
-# -----------------------------------------------------------------------------
-@app.get("/health", tags=["ops"])
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+# Static assets (optional)
+_static_dir = Path(__file__).parent / "static"
+if _static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")
