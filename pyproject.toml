@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,7 +9,7 @@ description = "Manage Firefox enterprise policies (profiles, schemas, presets)."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Valery Ledovskoy", email = "goudron@users.noreply.github.com" }]
-license = { text = "MPL-2.0" }
+license = "MPL-2.0"
 dependencies = [
   "fastapi>=0.115",
   "uvicorn>=0.30",
@@ -30,6 +30,22 @@ dev = [
   "mypy>=1.11",
   "ruff>=0.6",
   "types-PyYAML",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+# Explicit package discovery to avoid picking up 'alembic', 'tests', etc.
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["tests*", "alembic*", "docs*", "scripts*", "tools*", "misc*", "examples*"]
+
+# Ship templates/static/schemas inside the wheel
+[tool.setuptools.package-data]
+app = [
+  "**/*.html", "**/*.jinja2", "**/*.j2",
+  "**/*.json", "**/*.yaml", "**/*.yml",
+  "**/*.css", "**/*.js", "**/*.txt"
 ]
 
 [tool.ruff]
