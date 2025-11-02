@@ -1,35 +1,50 @@
+import importlib
+from collections.abc import Callable
 from pathlib import Path
-from typing import Optional, Callable
+from types import ModuleType
+from typing import Any
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
-# --- Middleware (robust import; skip gracefully if symbol name differs) ---
-add_security_headers: Optional[Callable] = None
-try:
-    from app.middleware.security import add_security_headers as _add_security_headers  # type: ignore[attr-defined]
-    add_security_headers = _add_security_headers
-except Exception:
-    try:
-        from app.middleware.security import security_headers_middleware as _add_security_headers  # type: ignore[attr-defined]
-        add_security_headers = _add_security_headers
-    except Exception:
-        add_security_headers = None  # no-op if not available
-
-# --- API routers (already define their own paths in the snapshot) ---
+# API routers must be imported at the top (ruff E402)
+from app.api import export as export_api
 from app.api import health as health_api
 from app.api import policies as policies_api
-from app.api import export as export_api
 from app.api import validation as validation_api
 
-# Optional web router (do not crash if the module is absent)
+# Optional web router module (load via importlib to keep mypy happy)
+profiles_web: ModuleType | None
 try:
-    from app.web import profiles as profiles_web  # type: ignore
-except Exception:
+    profiles_web = importlib.import_module("app.web.profiles")
+except ImportError:
     profiles_web = None
 
-# --- Application instance ---
+
+def _register_function_middleware(app: FastAPI, func: Callable[..., Any]) -> None:
+    """
+    Attach a function-based HTTP middleware without calling app.middleware(...) at runtime.
+    This avoids mypy's "None not callable" complaint while keeping behavior identical.
+    """
+
+    @app.middleware("http")
+    async def _dynamic_security_mw(request, call_next):
+        return await func(request, call_next)
+
+
+# Resolve security middleware:
+# 1) prefer a function `add_security_headers(request, call_next)` → register via helper above
+# 2) else, if class `SecurityHeadersMiddleware` exists → app.add_middleware(...)
+try:
+    security_mod = importlib.import_module("app.middleware.security")
+    add_fn = getattr(security_mod, "add_security_headers", None)
+    mw_cls = getattr(security_mod, "SecurityHeadersMiddleware", None)
+except ImportError:
+    add_fn = None
+    mw_cls = None
+
+# Application instance
 # NOTE: Keep "Valery Ledovskoy" in metadata because tests rely on it.
 app = FastAPI(
     title="Browser Policy Manager — Valery Ledovskoy",
@@ -41,21 +56,25 @@ app = FastAPI(
 )
 
 # Attach security headers middleware if available
-if add_security_headers is not None:
-    app.middleware("http")(add_security_headers)
+if callable(add_fn):
+    _register_function_middleware(app, add_fn)
+elif mw_cls is not None:
+    app.add_middleware(mw_cls)
 
 # Health endpoints must be reachable exactly at /health and /health/ready
 app.include_router(health_api.router)
 
-# IMPORTANT:
-# Do NOT add an extra prefix here. The routers in the snapshot already expose the correct paths.
+# Routers already define their own paths; do NOT add prefix here
 app.include_router(policies_api.router)
 app.include_router(export_api.router)
 app.include_router(validation_api.router)
 
 # Web routes (optional)
-if profiles_web:
-    app.include_router(profiles_web.router)
+if profiles_web is not None:
+    router = getattr(profiles_web, "router", None)
+    if router is not None:
+        app.include_router(router)
+
 
 # Minimal root page expected by tests (must include the author's name)
 @app.get("/", include_in_schema=False)
@@ -76,6 +95,7 @@ def root_page() -> HTMLResponse:
     </html>
     """
     return HTMLResponse(html, status_code=200)
+
 
 # Static assets (optional)
 _static_dir = Path(__file__).parent / "static"
