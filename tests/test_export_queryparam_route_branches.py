@@ -38,7 +38,9 @@ def test_single_export_queryparam_yaml_and_404_and_include_deleted():
     cdy = ry.headers.get("content-disposition", "")
     if cdy:
         assert (
-            "attachment" in cdy.lower() and cdy.lower().endswith('.yaml"') or ".yaml" in cdy.lower()
+            "attachment" in cdy.lower()
+            and cdy.lower().endswith('.yaml"')
+            or ".yaml" in cdy.lower()
         )
     assert "DisableTelemetry" in ry.text
 

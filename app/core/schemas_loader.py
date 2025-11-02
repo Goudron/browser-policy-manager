@@ -15,12 +15,12 @@ from __future__ import annotations
 import json
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 SCHEMAS_DIR = Path(__file__).resolve().parent.parent / "schemas"
 
 # Explicit mapping for Sprint F scope.
-PROFILE_TO_SCHEMA_FILE: Dict[str, str] = {
+PROFILE_TO_SCHEMA_FILE: dict[str, str] = {
     "esr-140": "firefox-esr140.json",
     "release-144": "firefox-release.json",
 }
@@ -34,13 +34,13 @@ class UnsupportedProfileError(ValueError):
     """Raised when an unsupported profile key was requested."""
 
 
-def _read_json(path: Path) -> Dict[str, Any]:
+def _read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
 
 
 @lru_cache(maxsize=16)
-def load_schema(profile: str) -> Dict[str, Any]:
+def load_schema(profile: str) -> dict[str, Any]:
     """
     Load a JSON Schema for a given profile key.
 
@@ -73,7 +73,7 @@ def load_schema(profile: str) -> Dict[str, Any]:
     return _read_json(schema_file)
 
 
-def available_profiles() -> Dict[str, str]:
+def available_profiles() -> dict[str, str]:
     """
     Return mapping of supported profiles to their schema filenames.
 

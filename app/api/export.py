@@ -10,7 +10,7 @@
 
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -84,7 +84,9 @@ async def export_policy(
         "json",
         description="Export format: json | yaml",
     ),
-    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
+    include_deleted: bool = Query(
+        False, description="Include soft-deleted item if true"
+    ),
     session: AsyncSession = Depends(get_session),
 ):
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
@@ -117,7 +119,9 @@ async def export_policy(
 )
 async def export_policy_json_compat(
     policy_id: int,
-    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
+    include_deleted: bool = Query(
+        False, description="Include soft-deleted item if true"
+    ),
     session: AsyncSession = Depends(get_session),
 ):
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
@@ -137,7 +141,9 @@ async def export_policy_json_compat(
 )
 async def export_policy_yaml_compat(
     policy_id: int,
-    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
+    include_deleted: bool = Query(
+        False, description="Include soft-deleted item if true"
+    ),
     session: AsyncSession = Depends(get_session),
 ):
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
@@ -201,16 +207,16 @@ async def export_policies(
         description="Export format: json | yaml",
     ),
     include_deleted: bool = Query(False, description="Include soft-deleted items"),
-    q: Optional[str] = Query(None, description="Search by name/description (ILIKE)"),
-    owner: Optional[str] = Query(None),
-    schema_version: Optional[str] = Query(None),
+    q: str | None = Query(None, description="Search by name/description (ILIKE)"),
+    owner: str | None = Query(None),
+    schema_version: str | None = Query(None),
     limit: int = Query(500, ge=1, le=5000),
     offset: int = Query(0, ge=0),
     sort: str = Query("updated_at", pattern="^(created_at|updated_at|name|id)$"),
     order: str = Query("desc", pattern="^(asc|desc)$"),
     session: AsyncSession = Depends(get_session),
 ):
-    items: List[PolicyRead] = await PolicyService.list(
+    items: list[PolicyRead] = await PolicyService.list(
         session,
         q=q,
         owner=owner,

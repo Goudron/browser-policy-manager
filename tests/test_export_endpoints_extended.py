@@ -31,7 +31,8 @@ def test_export_yaml_and_json_and_404():
     assert "DisableTelemetry" in ry.text
     # Content-Type may be application/x-yaml or text/plain depending on impl
     assert any(
-        ry.headers["content-type"].startswith(t) for t in ("application/x-yaml", "text/plain")
+        ry.headers["content-type"].startswith(t)
+        for t in ("application/x-yaml", "text/plain")
     )
 
     # Export JSON

@@ -24,9 +24,9 @@ import subprocess
 import sys
 import tempfile
 import zipfile
-from datetime import datetime, timezone
+from collections.abc import Iterable
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterable
 
 import requests
 
@@ -39,7 +39,15 @@ INCLUDE_REPORTS = ["coverage.xml", "pytest-report.txt"]
 ZIP_NAME = "snapshot.zip"
 MANIFEST_NAME = "manifest.json"
 
-EXCLUDE_DIRS = {".git", ".venv", "venv", "__pycache__", ".ruff_cache", ".mypy_cache", ".pytest_cache"}
+EXCLUDE_DIRS = {
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".ruff_cache",
+    ".mypy_cache",
+    ".pytest_cache",
+}
 
 
 def die(msg: str) -> None:
@@ -54,7 +62,9 @@ def is_excluded(path: Path) -> bool:
 def project_files() -> Iterable[Path]:
     # Prefer git-tracked files; fall back to rglob if git fails.
     try:
-        out = subprocess.check_output(["git", "ls-files"], cwd=ROOT).decode().splitlines()
+        out = (
+            subprocess.check_output(["git", "ls-files"], cwd=ROOT).decode().splitlines()
+        )
         for rel in out:
             p = ROOT / rel
             if p.is_file() and not is_excluded(p):
@@ -93,7 +103,7 @@ def make_manifest() -> dict:
         rel = p.relative_to(ROOT).as_posix()
         items.append({"path": rel, "size": p.stat().st_size, "sha256": sha256(p)})
     return {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "git": git_info(),
         "files": items,
     }
@@ -110,9 +120,14 @@ def make_zip(tmpdir: Path) -> Path:
 
 def create_or_update_gist(manifest: dict, zip_path: Path) -> str:
     if not TOKEN:
-        die("Please set GIST_TOKEN environment variable with your GitHub token (gist scope only).")
+        die(
+            "Please set GIST_TOKEN environment variable with your GitHub token (gist scope only)."
+        )
 
-    headers = {"Authorization": f"Bearer {TOKEN}", "Accept": "application/vnd.github+json"}
+    headers = {
+        "Authorization": f"Bearer {TOKEN}",
+        "Accept": "application/vnd.github+json",
+    }
 
     # Base payload with manifest + zip (zip as base64 to avoid binary issues via API)
     files_payload = {

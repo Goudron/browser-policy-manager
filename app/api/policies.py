@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.exc import IntegrityError
@@ -21,7 +21,7 @@ SortOrder = Literal["asc", "desc"]
 
 @router.get(
     "/policies",
-    response_model=List[PolicyRead],
+    response_model=list[PolicyRead],
     summary="List policies",
     description=(
         "List policies with filters, soft-delete visibility and sorting.\n\n"
@@ -53,16 +53,16 @@ SortOrder = Literal["asc", "desc"]
     },
 )
 async def list_policies(
-    q: Optional[str] = Query(None, description="Search by name/description (ILIKE)"),
-    owner: Optional[str] = Query(None),
-    schema_version: Optional[str] = Query(None),
+    q: str | None = Query(None, description="Search by name/description (ILIKE)"),
+    owner: str | None = Query(None),
+    schema_version: str | None = Query(None),
     include_deleted: bool = Query(False),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
     sort: SortField = Query("updated_at"),
     order: SortOrder = Query("desc"),
     session: AsyncSession = Depends(get_session),
-) -> List[PolicyRead]:
+) -> list[PolicyRead]:
     return await PolicyService.list(
         session,
         q=q,
@@ -134,7 +134,9 @@ async def create_policy(
         return created
     except IntegrityError:
         await session.rollback()
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Name already exists")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="Name already exists"
+        )
 
 
 @router.patch(

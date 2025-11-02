@@ -1,6 +1,10 @@
 import pytest
 
-from app.core.schemas_loader import UnsupportedProfileError, available_profiles, load_schema
+from app.core.schemas_loader import (
+    UnsupportedProfileError,
+    available_profiles,
+    load_schema,
+)
 
 
 def test_load_schema_success_and_cache():

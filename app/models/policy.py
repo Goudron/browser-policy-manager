@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from sqlalchemy import JSON, DateTime, Integer, String, Text, UniqueConstraint, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -26,8 +26,10 @@ class Policy(Base):
     __tablename__ = "policies"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False, index=True, unique=True)
-    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    name: Mapped[str] = mapped_column(
+        String(255), nullable=False, index=True, unique=True
+    )
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Sprint F scope: ESR-140 and Release-144. Value is a free string to avoid hard-coupling here.
     schema_version: Mapped[str] = mapped_column(
@@ -35,9 +37,9 @@ class Policy(Base):
     )
 
     # Arbitrary flags / raw policy blob (JSON)
-    flags: Mapped[Dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
+    flags: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
 
-    owner: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
+    owner: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
@@ -51,7 +53,7 @@ class Policy(Base):
     )
 
     # Soft delete marker
-    deleted_at: Mapped[Optional[datetime]] = mapped_column(
+    deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True, index=True
     )
 

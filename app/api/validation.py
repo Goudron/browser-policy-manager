@@ -108,7 +108,9 @@ class ValidationResponse(BaseModel):
         },
         400: {
             "description": "Unsupported profile or initialization error",
-            "content": {"application/json": {"example": {"detail": "Unsupported profile: beta"}}},
+            "content": {
+                "application/json": {"example": {"detail": "Unsupported profile: beta"}}
+            },
         },
         # 422 is FastAPI's validation error for malformed JSON / missing body, added implicitly.
     },

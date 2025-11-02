@@ -1,7 +1,7 @@
 # app/services/policy_service.py
 from __future__ import annotations
 
-from typing import List, Optional
+import builtins
 
 from sqlalchemy import asc, desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,15 +36,15 @@ class PolicyService:
     async def list(
         session: AsyncSession,
         *,
-        q: Optional[str] = None,
-        owner: Optional[str] = None,
-        schema_version: Optional[str] = None,
+        q: str | None = None,
+        owner: str | None = None,
+        schema_version: str | None = None,
         include_deleted: bool = False,
         limit: int = 50,
         offset: int = 0,
         sort: SortField = "updated_at",
         order: SortOrder = "desc",
-    ) -> List[PolicyRead]:
+    ) -> builtins.list[PolicyRead]:
         stmt = select(Policy)
 
         if not include_deleted:
@@ -52,7 +52,9 @@ class PolicyService:
 
         if q:
             like = f"%{q.strip()}%"
-            stmt = stmt.where((Policy.name.ilike(like)) | (Policy.description.ilike(like)))
+            stmt = stmt.where(
+                (Policy.name.ilike(like)) | (Policy.description.ilike(like))
+            )
 
         if owner:
             stmt = stmt.where(Policy.owner == owner)
@@ -60,7 +62,11 @@ class PolicyService:
         if schema_version:
             stmt = stmt.where(Policy.schema_version == schema_version)
 
-        stmt = stmt.order_by(PolicyService._sort_clause(sort, order)).limit(limit).offset(offset)
+        stmt = (
+            stmt.order_by(PolicyService._sort_clause(sort, order))
+            .limit(limit)
+            .offset(offset)
+        )
         res = await session.scalars(stmt)
         items = list(res)
         return [PolicyRead.model_validate(x) for x in items]
@@ -68,7 +74,7 @@ class PolicyService:
     @staticmethod
     async def get(
         session: AsyncSession, policy_id: int, include_deleted: bool = False
-    ) -> Optional[PolicyRead]:
+    ) -> PolicyRead | None:
         stmt = select(Policy).where(Policy.id == policy_id)
         if not include_deleted:
             stmt = stmt.where(Policy.deleted_at.is_(None))
@@ -93,7 +99,7 @@ class PolicyService:
     @staticmethod
     async def update(
         session: AsyncSession, policy_id: int, data: PolicyUpdate
-    ) -> Optional[PolicyRead]:
+    ) -> PolicyRead | None:
         stmt = select(Policy).where(Policy.id == policy_id, Policy.deleted_at.is_(None))
         res = await session.scalars(stmt)
         entity = res.first()
@@ -127,8 +133,10 @@ class PolicyService:
         return True
 
     @staticmethod
-    async def restore(session: AsyncSession, policy_id: int) -> Optional[PolicyRead]:
-        stmt = select(Policy).where(Policy.id == policy_id, Policy.deleted_at.is_not(None))
+    async def restore(session: AsyncSession, policy_id: int) -> PolicyRead | None:
+        stmt = select(Policy).where(
+            Policy.id == policy_id, Policy.deleted_at.is_not(None)
+        )
         res = await session.scalars(stmt)
         entity = res.first()
         if not entity:

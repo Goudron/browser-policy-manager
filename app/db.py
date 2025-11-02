@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import AsyncGenerator, Optional
+from collections.abc import AsyncGenerator
 
 from sqlalchemy import inspect as sa_inspect
 from sqlalchemy import text
@@ -18,7 +18,7 @@ from sqlalchemy.ext.asyncio import (
 from .core.config import get_settings
 from .models.policy import Base
 
-_engine: Optional[AsyncEngine] = None
+_engine: AsyncEngine | None = None
 SessionLocal: async_sessionmaker[AsyncSession] | None = None
 _initialized: bool = False
 
@@ -28,7 +28,9 @@ def _database_url() -> str:
     Resolve database URL from settings or fallback to local SQLite.
     """
     settings = get_settings()
-    url = getattr(settings, "DATABASE_URL", None) or getattr(settings, "database_url", None)
+    url = getattr(settings, "DATABASE_URL", None) or getattr(
+        settings, "database_url", None
+    )
     if not url:
         # Dev-friendly default
         url = "sqlite+aiosqlite:///./bpm.db"
@@ -83,7 +85,9 @@ async def _apply_minimal_migrations() -> None:
         if not has_col:
             # Portable-ish SQL: SQLAlchemy will adapt types for the dialect.
             # For SQLite: TIMESTAMP is acceptable, timezone info is not enforced.
-            await conn.execute(text("ALTER TABLE policies ADD COLUMN deleted_at TIMESTAMP NULL"))
+            await conn.execute(
+                text("ALTER TABLE policies ADD COLUMN deleted_at TIMESTAMP NULL")
+            )
 
 
 async def init_db() -> None:

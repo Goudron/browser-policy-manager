@@ -10,7 +10,7 @@ Unified validation for Firefox Enterprise policies.
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError  # keep test expectation
@@ -27,12 +27,12 @@ class PolicySchemaValidator:
 
     def __init__(self, profile: str) -> None:
         self.profile = profile
-        schema: Dict[str, Any] = load_schema(profile)
+        schema: dict[str, Any] = load_schema(profile)
         # Build validator once for performance
         self._validator = Draft202012Validator(schema)
 
     @property
-    def supported(self) -> Dict[str, str]:
+    def supported(self) -> dict[str, str]:
         """Return supported profile -> file mapping."""
         return available_profiles()
 
