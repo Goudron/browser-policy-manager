@@ -20,9 +20,7 @@ def _mk(name_prefix: str, owner: str = "ops@example.org"):
 
 
 def _ok_yaml(ct: str) -> bool:
-    return any(
-        ct.startswith(t) for t in ("application/x-yaml", "text/yaml", "text/plain")
-    )
+    return any(ct.startswith(t) for t in ("application/x-yaml", "text/yaml", "text/plain"))
 
 
 def _status_ok_for_unknown_fmt(code: int) -> bool:

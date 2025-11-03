@@ -52,9 +52,7 @@ class PolicyService:
 
         if q:
             like = f"%{q.strip()}%"
-            stmt = stmt.where(
-                (Policy.name.ilike(like)) | (Policy.description.ilike(like))
-            )
+            stmt = stmt.where((Policy.name.ilike(like)) | (Policy.description.ilike(like)))
 
         if owner:
             stmt = stmt.where(Policy.owner == owner)
@@ -62,11 +60,7 @@ class PolicyService:
         if schema_version:
             stmt = stmt.where(Policy.schema_version == schema_version)
 
-        stmt = (
-            stmt.order_by(PolicyService._sort_clause(sort, order))
-            .limit(limit)
-            .offset(offset)
-        )
+        stmt = stmt.order_by(PolicyService._sort_clause(sort, order)).limit(limit).offset(offset)
         res = await session.scalars(stmt)
         items = list(res)
         return [PolicyRead.model_validate(x) for x in items]
@@ -134,9 +128,7 @@ class PolicyService:
 
     @staticmethod
     async def restore(session: AsyncSession, policy_id: int) -> PolicyRead | None:
-        stmt = select(Policy).where(
-            Policy.id == policy_id, Policy.deleted_at.is_not(None)
-        )
+        stmt = select(Policy).where(Policy.id == policy_id, Policy.deleted_at.is_not(None))
         res = await session.scalars(stmt)
         entity = res.first()
         if not entity:

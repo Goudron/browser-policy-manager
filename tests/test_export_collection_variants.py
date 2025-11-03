@@ -74,8 +74,5 @@ def test_export_collection_json_yaml_download_filters_sort_paginate():
         assert ".yaml" in cd2.lower()
     # YAML envelope keys
     assert (
-        "items:" in ry.text
-        and "limit:" in ry.text
-        and "offset:" in ry.text
-        and "count:" in ry.text
+        "items:" in ry.text and "limit:" in ry.text and "offset:" in ry.text and "count:" in ry.text
     )

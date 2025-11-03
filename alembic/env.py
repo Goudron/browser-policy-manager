@@ -73,9 +73,7 @@ def run_migrations_online_sync() -> None:
 async def run_migrations_online_async() -> None:
     """Асинхронный движок (sqlite+aiosqlite, postgresql+asyncpg и т.п.)."""
     url = get_url()
-    connectable: AsyncEngine = create_async_engine(
-        url, poolclass=pool.NullPool, future=True
-    )
+    connectable: AsyncEngine = create_async_engine(url, poolclass=pool.NullPool, future=True)
     async with connectable.connect() as async_connection:
         await async_connection.run_sync(do_run_migrations)
     await connectable.dispose()

@@ -1,16 +1,3 @@
-"""
-Schemas package.
-
-This package exposes the SchemaManager API at the app.schemas top-level
-so that tests and application code can import it as:
-
-    from app.schemas import SchemaManager, SchemaVersion
-
-It also exports typed exceptions for convenience.
-"""
-
-from __future__ import annotations
-
 from .schema_manager import (
     SchemaDownloadError,
     SchemaManager,
@@ -22,9 +9,9 @@ from .schema_manager import (
 
 __all__ = [
     "SchemaManager",
-    "SchemaVersion",
     "SchemaManagerError",
     "SchemaDownloadError",
     "SchemaNotFoundError",
+    "SchemaVersion",
     "normalize_schema_for_internal_use",
 ]

@@ -66,8 +66,5 @@ def test_export_collection_default_fmt_json_with_indent_pretty_download():
         assert ".json" in cd.lower()
     # Envelope
     assert (
-        '"items"' in r.text
-        and '"limit"' in r.text
-        and '"offset"' in r.text
-        and '"count"' in r.text
+        '"items"' in r.text and '"limit"' in r.text and '"offset"' in r.text and '"count"' in r.text
     )

@@ -62,9 +62,7 @@ def is_excluded(path: Path) -> bool:
 def project_files() -> Iterable[Path]:
     # Prefer git-tracked files; fall back to rglob if git fails.
     try:
-        out = (
-            subprocess.check_output(["git", "ls-files"], cwd=ROOT).decode().splitlines()
-        )
+        out = subprocess.check_output(["git", "ls-files"], cwd=ROOT).decode().splitlines()
         for rel in out:
             p = ROOT / rel
             if p.is_file() and not is_excluded(p):
@@ -120,9 +118,7 @@ def make_zip(tmpdir: Path) -> Path:
 
 def create_or_update_gist(manifest: dict, zip_path: Path) -> str:
     if not TOKEN:
-        die(
-            "Please set GIST_TOKEN environment variable with your GitHub token (gist scope only)."
-        )
+        die("Please set GIST_TOKEN environment variable with your GitHub token (gist scope only).")
 
     headers = {
         "Authorization": f"Bearer {TOKEN}",

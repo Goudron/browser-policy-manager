@@ -27,9 +27,7 @@ def _has_table(table: str) -> bool:
 
 
 def _has_column(table: str, column: str) -> bool:
-    cols = (
-        {c["name"] for c in _insp().get_columns(table)} if _has_table(table) else set()
-    )
+    cols = {c["name"] for c in _insp().get_columns(table)} if _has_table(table) else set()
     return column in cols
 
 
@@ -76,9 +74,7 @@ def upgrade() -> None:
     # 2) Если таблица есть — добавляем колонку, если её нет
     if not _has_column("policies", "deleted_at"):
         with op.batch_alter_table("policies") as batch_op:
-            batch_op.add_column(
-                sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True)
-            )
+            batch_op.add_column(sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True))
 
 
 def downgrade() -> None:

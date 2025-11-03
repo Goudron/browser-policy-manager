@@ -84,9 +84,7 @@ async def export_policy(
         "json",
         description="Export format: json | yaml",
     ),
-    include_deleted: bool = Query(
-        False, description="Include soft-deleted item if true"
-    ),
+    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
     session: AsyncSession = Depends(get_session),
 ):
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
@@ -119,9 +117,7 @@ async def export_policy(
 )
 async def export_policy_json_compat(
     policy_id: int,
-    include_deleted: bool = Query(
-        False, description="Include soft-deleted item if true"
-    ),
+    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
     session: AsyncSession = Depends(get_session),
 ):
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
@@ -141,9 +137,7 @@ async def export_policy_json_compat(
 )
 async def export_policy_yaml_compat(
     policy_id: int,
-    include_deleted: bool = Query(
-        False, description="Include soft-deleted item if true"
-    ),
+    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
     session: AsyncSession = Depends(get_session),
 ):
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)

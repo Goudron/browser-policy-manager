@@ -49,8 +49,7 @@ except ImportError:
 app = FastAPI(
     title="Browser Policy Manager — Valery Ledovskoy",
     description=(
-        "Manage Firefox enterprise policies (ESR/Release). "
-        "Maintainer: Valery Ledovskoy"
+        "Manage Firefox enterprise policies (ESR/Release). " "Maintainer: Valery Ledovskoy"
     ),
     version="0.3.0",
 )

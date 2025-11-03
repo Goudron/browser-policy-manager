@@ -1,58 +1,73 @@
-# app/core/validation.py
 """
-Unified validation for Firefox Enterprise policies.
+Validation utilities for Browser Policy Manager.
 
-- Builds jsonschema validators per supported profile.
-- Validates arbitrary policy documents against correct schema.
-- Enforces object type at the top-level to satisfy enterprise policy expectations
-  and test suite requirements even if a schema does not explicitly declare it.
+- Wraps JSON Schema validation using fastjsonschema.
+- Uses app.core.schemas_loader to obtain upstream Mozilla schemas.
+- Exposes a small OO wrapper (PolicySchemaValidator) used by API and tests.
 """
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from functools import lru_cache
 from typing import Any
 
-from jsonschema import Draft202012Validator
-from jsonschema.exceptions import ValidationError  # keep test expectation
+import fastjsonschema
 
-from .schemas_loader import available_profiles, load_schema
+from app.core.schemas_loader import (
+    SchemaNotFoundError,
+    UnsupportedProfileError,
+    load_schema,
+)
+from app.core.schemas_loader import (
+    available_profiles as _available_profiles,
+)
+
+
+class ValidationError(Exception):
+    """Raised when validation cannot proceed due to environment issues."""
 
 
 class PolicySchemaValidator:
     """
-    Policy validator that uses Sprint F schema scope:
-      - "esr-140"
-      - "release-144"
+    Thin validator around a compiled JSON Schema.
+
+    Usage:
+        v = PolicySchemaValidator("esr-140")
+        ok, errors = v.validate({"some": "doc"})
     """
 
     def __init__(self, profile: str) -> None:
-        self.profile = profile
-        schema: dict[str, Any] = load_schema(profile)
-        # Build validator once for performance
-        self._validator = Draft202012Validator(schema)
+        try:
+            schema: dict[str, Any] = load_schema(profile)
+        except (UnsupportedProfileError, SchemaNotFoundError) as err:
+            raise ValidationError(str(err)) from err
 
-    @property
-    def supported(self) -> dict[str, str]:
-        """Return supported profile -> file mapping."""
-        return available_profiles()
+        # Compile fastjsonschema validator once per instance
+        self._validate_fn: Callable[[Any], None] = fastjsonschema.compile(schema)
 
-    def validate(self, data: Any) -> None:
+    def validate(self, document: Any) -> tuple[bool, list[str]]:
         """
-        Validate given document in-place.
+        Validate a JSON-like document against the compiled schema.
 
-        Parameters
-        ----------
-        data : Any
-            Policy document (expected to be a JSON-like mapping/object).
-
-        Raises
-        ------
-        ValidationError
-            If document does not conform to the profile schema or is not an object.
+        Returns:
+            (ok, errors)
+            ok: True if document is valid.
+            errors: list of human-readable messages if not valid.
         """
-        # Enforce object top-level independently of schema looseness.
-        if not isinstance(data, dict):
-            raise ValidationError("Top-level policy must be a JSON object")
+        try:
+            self._validate_fn(document)
+            return True, []
+        except fastjsonschema.JsonSchemaException as err:
+            # Keep a single-line message; tests only check ok/status, but this helps debugging.
+            return False, [str(err)]
 
-        # Delegate to jsonschema validator.
-        self._validator.validate(data)
+
+@lru_cache(maxsize=1)
+def supported_profiles() -> list[str]:
+    """
+    Return the list of supported profile keys (cached).
+
+    We expose list[str] explicitly (not a dict), which aligns with actual usage in tests.
+    """
+    return list(_available_profiles())

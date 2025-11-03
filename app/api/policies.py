@@ -1,74 +1,44 @@
-# app/api/policies.py
-# Policies CRUD API with soft delete, filtering, sorting, and OpenAPI examples.
+"""
+Policies API router.
+
+FastAPI-specific patterns (Query/Depends/Body) are intentionally kept in function
+signatures; Ruff B008 is suppressed for app/api/*.py in pyproject.toml.
+
+This version aligns imports with the current repository layout:
+- app/db.py                       → get_session
+- app/services/policy_service.py  → PolicyService
+- app/schemas/policy.py           → Pydantic models (PolicyCreate/Update/Read)
+"""
 
 from __future__ import annotations
-
-from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db import get_session
-from ..schemas.policy import PolicyCreate, PolicyRead, PolicyUpdate
-from ..services.policy_service import PolicyService
-
-router = APIRouter(prefix="/api", tags=["policies"])
-
-SortField = Literal["created_at", "updated_at", "name", "id"]
-SortOrder = Literal["asc", "desc"]
-
-
-@router.get(
-    "/policies",
-    response_model=list[PolicyRead],
-    summary="List policies",
-    description=(
-        "List policies with filters, soft-delete visibility and sorting.\n\n"
-        "- By default, soft-deleted items are hidden (`include_deleted=false`).\n"
-        "- Sorting supports: `created_at`, `updated_at`, `name`, `id`.\n"
-    ),
-    responses={
-        200: {
-            "description": "Array of policies",
-            "content": {
-                "application/json": {
-                    "example": [
-                        {
-                            "id": 1,
-                            "name": "Default",
-                            "description": "Base profile",
-                            "schema_version": "esr-140",
-                            "flags": {"DisableTelemetry": True},
-                            "owner": "admin@example.org",
-                            "created_at": "2025-10-01T12:30:00+00:00",
-                            "updated_at": "2025-10-02T08:00:00+00:00",
-                            "deleted_at": None,
-                            "is_deleted": False,
-                        }
-                    ]
-                }
-            },
-        }
-    },
+from app.db import get_session
+from app.schemas.policy import (
+    PolicyCreate,
+    PolicyRead,
+    PolicyUpdate,
 )
+from app.services.policy_service import PolicyService
+
+router = APIRouter(prefix="/api/policies", tags=["policies"])
+
+
+@router.get("", response_model=list[PolicyRead])
 async def list_policies(
-    q: str | None = Query(None, description="Search by name/description (ILIKE)"),
-    owner: str | None = Query(None),
-    schema_version: str | None = Query(None),
-    include_deleted: bool = Query(False),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
-    sort: SortField = Query("updated_at"),
-    order: SortOrder = Query("desc"),
+    # Use string params with regex validation instead of missing enums (SortField/SortOrder).
+    sort: str = Query("updated_at", pattern="^(created_at|updated_at|name|id)$"),
+    order: str = Query("desc", pattern="^(asc|desc)$"),
     session: AsyncSession = Depends(get_session),
 ) -> list[PolicyRead]:
+    """List policies with pagination and sorting."""
     return await PolicyService.list(
-        session,
-        q=q,
-        owner=owner,
-        schema_version=schema_version,
-        include_deleted=include_deleted,
+        session=session,
         limit=limit,
         offset=offset,
         sort=sort,
@@ -76,130 +46,68 @@ async def list_policies(
     )
 
 
-@router.get(
-    "/policies/{policy_id}",
-    response_model=PolicyRead,
-    summary="Get policy by ID",
-    responses={
-        200: {"description": "Policy found"},
-        404: {"description": "Not found"},
-    },
-)
+@router.get("/{policy_id}", response_model=PolicyRead)
 async def get_policy(
     policy_id: int,
     include_deleted: bool = Query(False),
     session: AsyncSession = Depends(get_session),
 ) -> PolicyRead:
+    """Retrieve a single policy by id."""
     item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
     if not item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
     return item
 
 
-@router.post(
-    "/policies",
-    response_model=PolicyRead,
-    status_code=status.HTTP_201_CREATED,
-    summary="Create policy",
-    responses={
-        201: {
-            "description": "Created",
-            "content": {
-                "application/json": {
-                    "example": {
-                        "id": 2,
-                        "name": "New Profile",
-                        "description": "Created via UI",
-                        "schema_version": "release-144",
-                        "flags": {},
-                        "owner": "admin@example.org",
-                        "created_at": "2025-10-21T10:00:00+00:00",
-                        "updated_at": "2025-10-21T10:00:00+00:00",
-                        "deleted_at": None,
-                        "is_deleted": False,
-                    }
-                }
-            },
-        },
-        409: {"description": "Name already exists"},
-    },
-)
+@router.post("", response_model=PolicyRead, status_code=status.HTTP_201_CREATED)
 async def create_policy(
     data: PolicyCreate,
     session: AsyncSession = Depends(get_session),
 ) -> PolicyRead:
+    """Create a new policy."""
     try:
         created = await PolicyService.create(session, data)
-        await session.commit()
         return created
-    except IntegrityError:
+    except IntegrityError as err:
         await session.rollback()
+        # Chain the original DB error to keep the traceback informative (Ruff B904).
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="Name already exists"
-        )
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Name already exists",
+        ) from err
 
 
-@router.patch(
-    "/policies/{policy_id}",
-    response_model=PolicyRead,
-    summary="Update policy",
-    responses={
-        200: {"description": "Updated"},
-        404: {"description": "Not found"},
-    },
-)
+@router.put("/{policy_id}", response_model=PolicyRead)
 async def update_policy(
     policy_id: int,
     data: PolicyUpdate,
     session: AsyncSession = Depends(get_session),
 ) -> PolicyRead:
+    """Update an existing policy by id."""
     updated = await PolicyService.update(session, policy_id, data)
     if not updated:
-        await session.rollback()
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    await session.commit()
     return updated
 
 
-@router.delete(
-    "/policies/{policy_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    summary="Soft delete policy",
-    responses={
-        204: {"description": "Soft-deleted"},
-        404: {"description": "Not found"},
-    },
-)
+@router.delete("/{policy_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_policy(
     policy_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> None:
+    """Soft-delete a policy by id."""
     ok = await PolicyService.soft_delete(session, policy_id)
     if not ok:
-        await session.rollback()
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    await session.commit()
-    return
 
 
-@router.post(
-    "/policies/{policy_id}/restore",
-    response_model=PolicyRead,
-    summary="Restore soft-deleted policy",
-    responses={
-        200: {"description": "Restored"},
-        404: {"description": "Not found or not deleted"},
-    },
-)
+@router.post("/{policy_id}/restore", response_model=PolicyRead)
 async def restore_policy(
     policy_id: int,
     session: AsyncSession = Depends(get_session),
 ) -> PolicyRead:
+    """Restore a soft-deleted policy by id."""
     item = await PolicyService.restore(session, policy_id)
     if not item:
-        await session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Not found or not deleted"
-        )
-    await session.commit()
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
     return item

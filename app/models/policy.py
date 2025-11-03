@@ -26,9 +26,7 @@ class Policy(Base):
     __tablename__ = "policies"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(
-        String(255), nullable=False, index=True, unique=True
-    )
+    name: Mapped[str] = mapped_column(String(255), nullable=False, index=True, unique=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Sprint F scope: ESR-140 and Release-144. Value is a free string to avoid hard-coupling here.
