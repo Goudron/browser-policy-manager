@@ -1,20 +1,33 @@
 #!/usr/bin/env python
 """
-Publish a snapshot of the repository to a GitHub Gist, using a manifest file.
+Publish a snapshot of the repository to a single GitHub Gist file.
 
-- Reads configuration from tools/gist_manifest.json
-- Uses GIST_TOKEN environment variable (fine for CI and local runs)
-- Supports both create (POST) and update (PATCH) modes
-- Skips binary / non-UTF-8 files
+- Packs (almost) the whole repo into a ZIP archive.
+- Encodes the ZIP as base64 and uploads it as one file:
+    browser-policy-manager-snapshot.zip.b64
+
+- Uses GIST_TOKEN from the environment.
+- Reads optional configuration from tools/gist_manifest.json:
+    {
+      "description": "Browser Policy Manager snapshot for ChatGPT",
+      "public": false,
+      "gist_id": "4352f9974fb97696e139cc03c9fc1950"
+    }
+
+  If gist_id is missing, a new gist is created and gist_id is written
+  back to tools/gist_manifest.json.
 """
 
 from __future__ import annotations
 
+import base64
 import json
 import os
 import sys
+import io
+import zipfile
 from pathlib import Path
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict
 
 import requests
 
@@ -29,126 +42,163 @@ class GistError(RuntimeError):
     """Raised when the GitHub Gist API returns an error."""
 
 
-def load_manifest(path: Path = MANIFEST_PATH) -> Dict[str, Any]:
-    if not path.exists():
-        print(f"[gist] Manifest file not found: {path}", file=sys.stderr)
-        raise SystemExit(1)
+def load_manifest() -> Dict[str, Any]:
+    """
+    Load tools/gist_manifest.json if it exists.
 
-    with path.open("r", encoding="utf-8") as fh:
-        data = json.load(fh)
+    Minimal expected structure:
+      {
+        "description": "Browser Policy Manager snapshot for ChatGPT",
+        "public": false,
+        "gist_id": "...."   # optional, can be missing for first run
+      }
+    """
+    if not MANIFEST_PATH.exists():
+        # Reasonable defaults if file does not exist
+        return {
+            "description": "Browser Policy Manager snapshot for ChatGPT",
+            "public": False,
+        }
 
-    # Basic sanity checks
+    try:
+        with MANIFEST_PATH.open("r", encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[gist] Failed to read manifest {MANIFEST_PATH}: {exc}", file=sys.stderr)
+        return {
+            "description": "Browser Policy Manager snapshot for ChatGPT",
+            "public": False,
+        }
+
     if "description" not in data:
-        data["description"] = "Browser Policy Manager snapshot"
+        data["description"] = "Browser Policy Manager snapshot for ChatGPT"
     if "public" not in data:
         data["public"] = False
-
-    include = data.get("include") or []
-    exclude = data.get("exclude") or []
-
-    if not isinstance(include, list) or not include:
-        print("[gist] Manifest 'include' must be a non-empty list", file=sys.stderr)
-        raise SystemExit(1)
-
-    if not isinstance(exclude, list):
-        print("[gist] Manifest 'exclude' must be a list (can be empty)", file=sys.stderr)
-        raise SystemExit(1)
 
     return data
 
 
-def _pattern_matches(patterns: List[str], rel_path: str) -> bool:
-    """Return True if rel_path matches any of the patterns.
+def save_manifest(manifest: Dict[str, Any]) -> None:
+    """Write updated manifest back to disk."""
+    try:
+        with MANIFEST_PATH.open("w", encoding="utf-8") as fh:
+            json.dump(manifest, fh, indent=2, ensure_ascii=False)
+        print(f"[gist] Updated manifest at {MANIFEST_PATH}")
+    except Exception as exc:  # noqa: BLE001
+        print(f"[gist] Warning: could not update manifest: {exc}", file=sys.stderr)
 
-    Patterns support two simple forms:
-    - "prefix"         → matches "prefix" and anything under "prefix/"
-    - glob pattern     → if it contains *, ?, or [ ... ] then fnmatch is used
+
+def should_exclude(rel_path: str) -> bool:
     """
-    from fnmatch import fnmatch
+    Decide whether a path (relative to repo root, posix style) should be excluded from the ZIP snapshot.
+    """
+    parts = rel_path.split("/")
 
-    for pat in patterns:
-        if not pat:
-            continue
-        if any(ch in pat for ch in "*?["):
-            if fnmatch(rel_path, pat):
-                return True
-        else:
-            # Treat as directory / prefix
-            if rel_path == pat or rel_path.startswith(pat.rstrip("/") + "/"):
-                return True
+    # Exclude some top-level / nested directories
+    excluded_dirs = {
+        ".git",
+        ".github",        # можно убрать, если хочется включать CI в снапшот
+        ".venv",
+        "__pycache__",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".ruff_cache",
+        "dist",
+        "build",
+        ".idea",
+        ".vscode",
+    }
+    if any(part in excluded_dirs for part in parts):
+        return True
+
+    # Exclude some common binary / tooling artefacts
+    excluded_suffixes = {
+        ".pyc",
+        ".pyo",
+        ".pyd",
+        ".so",
+        ".dll",
+        ".dylib",
+        ".zip",
+        ".tgz",
+        ".gz",
+        ".xz",
+        ".whl",
+        ".db",
+        ".sqlite3",
+        ".log",
+    }
+    if any(rel_path.endswith(suf) for suf in excluded_suffixes):
+        return True
+
     return False
 
 
-def _iter_candidate_files(include: List[str], exclude: List[str]) -> Iterable[Path]:
-    """Yield repository files that match include and do not match exclude."""
-    for path in REPO_ROOT.rglob("*"):
-        if not path.is_file():
-            continue
-        rel = path.relative_to(REPO_ROOT).as_posix()
-        if not _pattern_matches(include, rel):
-            continue
-        if _pattern_matches(exclude, rel):
-            continue
-        yield path
+def build_repo_zip() -> bytes:
+    """
+    Walk the repository and pack files into an in-memory ZIP archive.
 
+    Returns raw ZIP bytes.
+    """
+    buf = io.BytesIO()
 
-def _is_text_file(path: Path) -> bool:
-    """Heuristic: try to read as UTF-8. If it fails, treat as binary and skip."""
-    try:
-        with path.open("rb") as fh:
-            chunk = fh.read(4096)
-        chunk.decode("utf-8")
-        return True
-    except UnicodeDecodeError:
-        return False
+    with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for path in REPO_ROOT.rglob("*"):
+            if not path.is_file():
+                continue
 
+            rel = path.relative_to(REPO_ROOT).as_posix()
 
-def build_files_payload(include: List[str], exclude: List[str]) -> Dict[str, Dict[str, str]]:
-    files: Dict[str, Dict[str, str]] = {}
+            if should_exclude(rel):
+                # Comment out next line if логов слишком много
+                # print(f"[gist] Excluding from ZIP: {rel}")
+                continue
 
-    for path in _iter_candidate_files(include, exclude):
-        rel = path.relative_to(REPO_ROOT).as_posix()
+            # Never include the snapshot itself if он окажется в репо
+            if rel.endswith("browser-policy-manager-snapshot.zip") or rel.endswith(
+                "browser-policy-manager-snapshot.zip.b64"
+            ):
+                continue
 
-        if not _is_text_file(path):
-            print(f"[gist] Skipping non-text or non-UTF8 file: {rel}")
-            continue
+            zf.write(path, arcname=rel)
 
-        # Sanitize filename for Gist: replace "/" with "__" to avoid any oddities
-        filename = rel.replace("/", "__")
-
-        try:
-            content = path.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
-            print(f"[gist] Skipping file due to decode error: {rel}")
-            continue
-
-        files[filename] = {"content": content}
-
-    return files
+    return buf.getvalue()
 
 
 def create_or_update_gist(manifest: Dict[str, Any]) -> str:
+    """
+    Create or update the Gist with repo snapshot.
+    Returns the Gist HTML URL.
+    """
     token = os.environ.get("GIST_TOKEN")
     if not token:
         print("[gist] Environment variable GIST_TOKEN is not set", file=sys.stderr)
         raise SystemExit(1)
 
-    include = manifest.get("include", [])
-    exclude = manifest.get("exclude", [])
-
-    files_payload = build_files_payload(include, exclude)
-
-    if not files_payload:
-        print("[gist] No files selected for Gist (files_payload is empty)", file=sys.stderr)
+    zip_bytes = build_repo_zip()
+    if not zip_bytes:
+        print("[gist] ZIP snapshot is empty, aborting", file=sys.stderr)
         raise SystemExit(1)
 
-    gist_id = manifest.get("gist_id")
-    description = manifest.get("description", "Browser Policy Manager snapshot")
+    # Encode ZIP to base64 so it can be safely stored in a JSON string.
+    b64_content = base64.b64encode(zip_bytes).decode("ascii")
+
+    description = manifest.get(
+        "description", "Browser Policy Manager snapshot for ChatGPT"
+    )
     public = bool(manifest.get("public", False))
+    gist_id = manifest.get("gist_id")
 
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
+    }
+
+    # Single file in the Gist: base64-encoded ZIP
+    files_payload: Dict[str, Dict[str, str]] = {
+        "browser-policy-manager-snapshot.zip.b64": {
+            "content": b64_content,
+        }
     }
 
     payload: Dict[str, Any] = {
@@ -164,9 +214,9 @@ def create_or_update_gist(manifest: Dict[str, Any]) -> str:
         method = "POST"
         url = f"{GITHUB_API_URL}/gists"
 
-    print(f"[gist] {method} {url} with {len(files_payload)} files")
+    print(f"[gist] {method} {url} (1 file, ZIP encoded as base64, {len(zip_bytes)} bytes)")
 
-    resp = requests.request(method, url, headers=headers, json=payload, timeout=60)
+    resp = requests.request(method, url, headers=headers, json=payload, timeout=120)
 
     if resp.status_code >= 400:
         print("[gist] GitHub API error:")
@@ -176,17 +226,19 @@ def create_or_update_gist(manifest: Dict[str, Any]) -> str:
     data = resp.json()
     gist_url = data.get("html_url") or data.get("url") or "<unknown>"
 
-    # If this was a create operation, store the new gist_id in the manifest on disk.
+    # If it was a create, remember the new gist_id
     if not gist_id:
         new_id = data.get("id")
         if new_id:
             manifest["gist_id"] = new_id
-            try:
-                with MANIFEST_PATH.open("w", encoding="utf-8") as fh:
-                    json.dump(manifest, fh, indent=2, ensure_ascii=False)
-                print(f"[gist] Updated manifest with gist_id={new_id}")
-            except OSError as exc:
-                print(f"[gist] Warning: could not update manifest: {exc}", file=sys.stderr)
+            save_manifest(manifest)
+            print(f"[gist] Created new Gist with id={new_id}")
+        else:
+            print(
+                "[gist] Warning: created Gist but response has no 'id'", file=sys.stderr
+            )
+    else:
+        print(f"[gist] Updated existing Gist id={gist_id}")
 
     print(f"[gist] Done: {gist_url}")
     return gist_url
