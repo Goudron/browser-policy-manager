@@ -30,14 +30,25 @@ def validate_profile(profile: str, payload: ValidationRequest) -> dict[str, Any]
     Validate a policy document for the given profile.
 
     Response shape:
-        { "ok": true }                       on success
-        { "ok": false, "error": "<message>" } on validation failure
+        { "ok": true, "profile": "<profile>" }
+        { "ok": false, "profile": "<profile>", "detail": "<message>", "error": "<message>" }
     """
     validator = _get_validator_or_404(profile)
 
     try:
         validator.validate(payload.document)
-    except Exception as exc:  # noqa: BLE001 - we deliberately return a generic error payload
-        return {"ok": False, "error": str(exc)}
+    except Exception as exc:  # noqa: BLE001 - tests expect a generic error payload
+        message = str(exc)
+        return {
+            "ok": False,
+            "profile": profile,
+            # tests look for "detail", so we provide it
+            "detail": message,
+            # keep "error" for potential consumers expecting this key
+            "error": message,
+        }
 
-    return {"ok": True}
+    return {
+        "ok": True,
+        "profile": profile,
+    }

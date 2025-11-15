@@ -40,13 +40,22 @@ def create_app() -> FastAPI:
         """
         Simple JSON landing endpoint used by smoke tests.
         """
+        app_name = settings.APP_NAME
         return {
-            "name": settings.APP_NAME,
+            "status": "ok",
+            "app": app_name,  # explicitly required by tests
+            "name": app_name,
             "version": getattr(settings, "APP_VERSION", "0.1.0"),
             "message": "Browser Policy Manager API is running",
         }
 
     return app
+
+
+# Backward-compatible alias if tests or utilities import make_app.
+def make_app() -> FastAPI:
+    """Alias for create_app used in some tests."""
+    return create_app()
 
 
 # Default application instance used by tests and ASGI servers.
