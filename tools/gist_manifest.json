@@ -1,5 +1,38 @@
 {
-    "description": "Browser Policy Manager snapshot archive",
-    "filename": "browser-policy-manager-snapshot.zip.b64",
-    "gist_id": null
+    "description": "Browser Policy Manager snapshot for ChatGPT (auto-collected project files)",
+    "gist_id": "4352f9974fb97696e139cc03c9fc1950",
+    "include": [
+        "README.md",
+        "LICENSE*",
+        "pyproject.toml",
+        ".gitignore",
+        ".ruff.toml",
+        ".pre-commit-config.yaml",
+        ".github",
+        "app",
+        "tests",
+        "alembic",
+        "migrations",
+        "templates",
+        "static",
+        "tools"
+    ],
+    "exclude": [
+        ".git",
+        ".venv",
+        "__pycache__",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".idea",
+        ".vscode",
+        "dist",
+        "build",
+        "*.pyc",
+        "*.pyo",
+        "*.pyd",
+        "*.db",
+        "*.sqlite",
+        "*.sqlite3",
+        "*.egg-info"
+    ]
 }

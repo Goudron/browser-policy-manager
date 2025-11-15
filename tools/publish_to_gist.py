@@ -1,239 +1,228 @@
-#!/usr/bin/env python3
-"""
-Publish a snapshot of the repository to a GitHub Gist.
-
-Behavior:
-- Create a ZIP archive with the current repo contents (excluding .git, .venv, dist, __pycache__).
-- Base64-encode the archive and upload it as a single file to a (private) Gist.
-- If gist_manifest.json contains a valid gist_id, try to PATCH that Gist.
-  If PATCH returns 404/422, fall back to creating a new Gist via POST.
-- Update gist_manifest.json with the new gist_id and print the HTML URL to stdout.
-
-This script is intentionally self-contained and defensive so it can be used
-both locally and from CI.
-"""
-
+#!/usr/bin/env python
 from __future__ import annotations
 
-import argparse
-import base64
+import fnmatch
 import json
 import os
-from pathlib import Path
 import sys
-import zipfile
+from pathlib import Path
 from typing import Any, Dict
 
 import requests
 
-
-API_URL = "https://api.github.com/gists"
-MANIFEST_NAME = "gist_manifest.json"
-
-
-def repo_root_from_this_file() -> Path:
-    """Return the repository root assuming tools/ directory layout."""
-    return Path(__file__).resolve().parents[1]
-
-
-def manifest_path() -> Path:
-    """Return path to gist_manifest.json next to this script."""
-    return Path(__file__).resolve().with_name(MANIFEST_NAME)
+ROOT_DIR = Path(__file__).resolve().parents[1]
+MANIFEST_PATH = ROOT_DIR / "tools" / "gist_manifest.json"
 
 
 def load_manifest() -> Dict[str, Any]:
-    """Load manifest or return a sensible default if it does not exist."""
-    mpath = manifest_path()
-    if not mpath.exists():
-        return {
-            "description": "Browser Policy Manager snapshot archive",
-            "gist_id": None,
-            "filename": "browser-policy-manager-snapshot.zip.b64",
+    """
+    Load gist manifest describing which project files to publish.
+
+    Supported schema (JSON):
+
+    1) Explicit mapping (legacy mode):
+
+        {
+          "description": "Snapshot",
+          "gist_id": "...",
+          "files": {
+            "app/main.py": "app/main.py",
+            "pyproject.toml": "pyproject.toml"
+          }
         }
 
-    with mpath.open("r", encoding="utf-8") as f:
-        data = json.load(f)
+    2) Auto-discovery mode (recommended):
 
-    # Ensure required keys exist, but keep any extra keys untouched.
-    data.setdefault("description", "Browser Policy Manager snapshot archive")
-    data.setdefault("gist_id", None)
-    data.setdefault("filename", "browser-policy-manager-snapshot.zip.b64")
-    return data
-
-
-def save_manifest(manifest: Dict[str, Any]) -> None:
-    """Persist manifest to disk with pretty JSON formatting."""
-    mpath = manifest_path()
-    with mpath.open("w", encoding="utf-8") as f:
-        json.dump(manifest, f, ensure_ascii=False, indent=2, sort_keys=True)
-
-
-def should_exclude(path: Path, root: Path) -> bool:
+        {
+          "description": "Snapshot",
+          "gist_id": "...",
+          "include": ["README.md", "pyproject.toml", "app", "tests", ".github"],
+          "exclude": [".git", ".venv", "__pycache__", "*.pyc", "*.db", "dist", "build"]
+        }
     """
-    Decide whether a given path should be excluded from the snapshot.
+    if not MANIFEST_PATH.exists():
+        raise SystemExit(f"Manifest not found: {MANIFEST_PATH}")
 
-    Exclude:
-    - .git, .venv, dist, __pycache__ and their contents.
+    with MANIFEST_PATH.open("r", encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _is_excluded(rel_path: Path, patterns: list[str]) -> bool:
     """
-    rel = path.relative_to(root)
-    parts = rel.parts
-    if not parts:
-        return False
+    Return True if the given relative path matches any of the exclude patterns.
 
-    if parts[0] in {".git", ".venv", "dist", "__pycache__"}:
-        return True
+    Patterns support simple fnmatch-style wildcards (e.g. "*.pyc", "dist", ".venv").
+    Matching is done against the POSIX-style string of the relative path,
+    and also against each individual path part for convenience.
+    """
+    s = rel_path.as_posix()
+    parts = rel_path.parts
 
-    # Also skip nested __pycache__ directories
-    if "__pycache__" in parts:
-        return True
-
+    for pattern in patterns:
+        # Direct full path match or wildcard over full path
+        if fnmatch.fnmatch(s, pattern):
+            return True
+        # Also check each individual component (e.g. ".venv", "__pycache__")
+        if any(fnmatch.fnmatch(p, pattern) for p in parts):
+            return True
     return False
 
 
-def create_zip_snapshot(root: Path) -> Path:
+def _discover_files(manifest: Dict[str, Any]) -> Dict[str, str]:
     """
-    Create a ZIP archive with repository files under <root>/dist.
+    Auto-discover project files based on include/exclude patterns from manifest.
 
-    Returns the path to the created ZIP file.
+    Returns a mapping {gist_filename: project_rel_path}.
     """
-    dist_dir = root / "dist"
-    dist_dir.mkdir(parents=True, exist_ok=True)
+    include_patterns = manifest.get("include")
+    if not include_patterns:
+        raise SystemExit(
+            "Manifest must define either 'files' or 'include' patterns "
+            "for auto-discovery."
+        )
 
-    zip_path = dist_dir / "browser-policy-manager-snapshot.zip"
+    exclude_patterns = manifest.get("exclude", [])
 
-    # Recreate archive every time to avoid stale contents.
-    if zip_path.exists():
-        zip_path.unlink()
+    file_map: Dict[str, str] = {}
 
-    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-        for item in root.rglob("*"):
-            if not item.is_file():
-                continue
-            if should_exclude(item, root):
-                continue
-            arcname = item.relative_to(root)
-            zf.write(item, arcname)
+    for pattern in include_patterns:
+        # Allow both files and directories and glob patterns.
+        matches = list(ROOT_DIR.glob(pattern))
 
-    return zip_path
+        if not matches:
+            # Non-fatal: just warn to stderr.
+            sys.stderr.write(
+                f"[gist] Warning: include pattern '{pattern}' did not match anything\n"
+            )
+            continue
+
+        for path in matches:
+            if path.is_file():
+                rel = path.relative_to(ROOT_DIR)
+                if _is_excluded(rel, exclude_patterns):
+                    continue
+                file_map[rel.as_posix()] = rel.as_posix()
+            elif path.is_dir():
+                for child in path.rglob("*"):
+                    if not child.is_file():
+                        continue
+                    rel = child.relative_to(ROOT_DIR)
+                    if _is_excluded(rel, exclude_patterns):
+                        continue
+                    file_map[rel.as_posix()] = rel.as_posix()
+
+    if not file_map:
+        raise SystemExit(
+            "Auto-discovery produced no files. "
+            "Check 'include'/'exclude' patterns in gist_manifest.json."
+        )
+
+    return file_map
 
 
-def build_gist_payload(manifest: Dict[str, Any], archive_path: Path) -> Dict[str, Any]:
+def build_files_payload(files_map: Dict[str, str]) -> Dict[str, Dict[str, str]]:
     """
-    Build the JSON payload for GitHub Gist API.
+    Build the 'files' payload for GitHub Gist API from a mapping
+    {gist_filename: relative_project_path}.
 
-    The archive is base64-encoded and uploaded as a single file.
+    Only text files are included. Binary files are skipped with a warning.
     """
-    raw = archive_path.read_bytes()
-    b64 = base64.b64encode(raw).decode("ascii")
+    payload: Dict[str, Dict[str, str]] = {}
 
-    filename = manifest.get("filename") or "browser-policy-manager-snapshot.zip.b64"
-    manifest["filename"] = filename
+    for gist_name, rel_path in files_map.items():
+        path = ROOT_DIR / rel_path
+        if not path.exists():
+            raise SystemExit(f"File listed in manifest does not exist: {rel_path}")
 
-    description = manifest.get("description") or "Browser Policy Manager snapshot archive"
+        try:
+            content = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            # Skip binary / non-UTF-8 files; they are not very useful in the gist context.
+            sys.stderr.write(
+                f"[gist] Skipping non-text or non-UTF8 file: {rel_path}\n"
+            )
+            continue
 
-    payload: Dict[str, Any] = {
-        "description": description,
-        "public": False,
-        "files": {
-            filename: {
-                "content": b64,
-            }
-        },
-    }
+        payload[gist_name] = {"content": content}
+
+    if not payload:
+        raise SystemExit("No text files to upload to Gist (payload is empty).")
+
     return payload
 
 
-def get_gist_token() -> str:
+def get_token() -> str:
     """
-    Resolve GitHub token for Gist operations.
+    Obtain GitHub token from environment.
 
-    Tries GIST_TOKEN first, then GITHUB_TOKEN. Raises if neither is set.
+    We support both GITHUB_TOKEN (GitHub Actions) and GH_TOKEN (local runs).
     """
-    token = os.getenv("GIST_TOKEN") or os.getenv("GITHUB_TOKEN")
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     if not token:
-        raise RuntimeError("Missing GitHub token: set GIST_TOKEN or GITHUB_TOKEN env variable")
+        raise SystemExit("GITHUB_TOKEN or GH_TOKEN must be set in the environment")
     return token
 
 
-def create_or_update_gist(manifest: Dict[str, Any], archive_path: Path) -> str:
+def create_or_update_gist(manifest: Dict[str, Any]) -> str:
     """
-    Create or update a Gist with the given manifest and archive.
+    Create or update a Gist based on the manifest.
 
-    Returns the HTML URL of the resulting Gist.
+    If "gist_id" is present, a PATCH is issued to update an existing Gist.
+    Otherwise, a new private Gist is created via POST.
     """
-    token = get_gist_token()
+    description = manifest.get(
+        "description", "Browser Policy Manager snapshot for ChatGPT (auto files)"
+    )
+
+    # Legacy explicit mapping mode
+    if "files" in manifest and isinstance(manifest["files"], dict):
+        files_map: Dict[str, str] = manifest["files"]
+    else:
+        # Auto-discovery mode (recommended)
+        files_map = _discover_files(manifest)
+
+    files_payload = build_files_payload(files_map)
+
     headers = {
-        "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
-        "User-Agent": "browser-policy-manager-gist-publisher",
+        "Authorization": f"Bearer {get_token()}",
+        "X-GitHub-Api-Version": "2022-11-28",
     }
 
-    payload = build_gist_payload(manifest, archive_path)
     gist_id = manifest.get("gist_id")
-
-    # Helper: create new Gist
-    def _post_new() -> requests.Response:
-        return requests.post(API_URL, headers=headers, json=payload, timeout=60)
-
-    # Helper: patch existing Gist
-    def _patch_existing(gid: str) -> requests.Response:
-        url = f"{API_URL}/{gid}"
-        return requests.patch(url, headers=headers, json=payload, timeout=60)
-
-    response: requests.Response
-
     if gist_id:
-        # First try to patch existing gist
-        response = _patch_existing(str(gist_id))
-        if response.status_code in (404, 422):
-            # Stale or invalid gist; fall back to creating a new one
-            print(
-                f"Existing gist {gist_id} returned {response.status_code}, "
-                "creating a new gist instead.",
-                file=sys.stderr,
-            )
-            manifest["gist_id"] = None
-            response = _post_new()
+        url = f"https://api.github.com/gists/{gist_id}"
+        body: Dict[str, Any] = {
+            "description": description,
+            "files": files_payload,
+        }
+        resp = requests.patch(url, headers=headers, json=body, timeout=60)
     else:
-        # No gist_id in manifest, always create new gist
-        response = _post_new()
+        url = "https://api.github.com/gists"
+        body = {
+            "description": description,
+            "public": False,
+            "files": files_payload,
+        }
+        resp = requests.post(url, headers=headers, json=body, timeout=60)
 
-    # Raise if still not successful
-    response.raise_for_status()
-    data = response.json()
+    try:
+        resp.raise_for_status()
+    except requests.HTTPError:
+        sys.stderr.write(
+            f"[gist] GitHub API error {resp.status_code}:\n{resp.text}\n"
+        )
+        raise
 
-    new_id = data.get("id")
-    html_url = data.get("html_url")
-
-    if not new_id or not html_url:
-        raise RuntimeError(f"Unexpected Gist API response: {data!r}")
-
-    manifest["gist_id"] = new_id
-    save_manifest(manifest)
-
+    data = resp.json()
+    html_url = data.get("html_url", "")
+    print(html_url)
     return html_url
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Publish repository snapshot to GitHub Gist.")
-    parser.add_argument(
-        "--root",
-        type=Path,
-        default=repo_root_from_this_file(),
-        help="Repository root to snapshot (default: project root inferred from tools/).",
-    )
-    args = parser.parse_args()
-
-    root = args.root.resolve()
-    if not root.exists():
-        raise SystemExit(f"Root path does not exist: {root}")
-
-    archive_path = create_zip_snapshot(root)
     manifest = load_manifest()
-    url = create_or_update_gist(manifest, archive_path)
-
-    # Print URL to stdout so CI can capture it if needed.
-    print(url)
+    create_or_update_gist(manifest)
 
 
 if __name__ == "__main__":
