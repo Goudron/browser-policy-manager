@@ -6,7 +6,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import requests
 
@@ -14,7 +14,7 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT_DIR / "tools" / "gist_manifest.json"
 
 
-def load_manifest() -> Dict[str, Any]:
+def load_manifest() -> dict[str, Any]:
     """
     Load gist manifest describing which project files to publish.
 
@@ -68,7 +68,7 @@ def _is_excluded(rel_path: Path, patterns: list[str]) -> bool:
     return False
 
 
-def _discover_files(manifest: Dict[str, Any]) -> Dict[str, str]:
+def _discover_files(manifest: dict[str, Any]) -> dict[str, str]:
     """
     Auto-discover project files based on include/exclude patterns from manifest.
 
@@ -77,13 +77,12 @@ def _discover_files(manifest: Dict[str, Any]) -> Dict[str, str]:
     include_patterns = manifest.get("include")
     if not include_patterns:
         raise SystemExit(
-            "Manifest must define either 'files' or 'include' patterns "
-            "for auto-discovery."
+            "Manifest must define either 'files' or 'include' patterns " "for auto-discovery."
         )
 
     exclude_patterns = manifest.get("exclude", [])
 
-    file_map: Dict[str, str] = {}
+    file_map: dict[str, str] = {}
 
     for pattern in include_patterns:
         # Allow both files and directories and glob patterns.
@@ -120,14 +119,14 @@ def _discover_files(manifest: Dict[str, Any]) -> Dict[str, str]:
     return file_map
 
 
-def build_files_payload(files_map: Dict[str, str]) -> Dict[str, Dict[str, str]]:
+def build_files_payload(files_map: dict[str, str]) -> dict[str, dict[str, str]]:
     """
     Build the 'files' payload for GitHub Gist API from a mapping
     {gist_filename: relative_project_path}.
 
     Only text files are included. Binary files are skipped with a warning.
     """
-    payload: Dict[str, Dict[str, str]] = {}
+    payload: dict[str, dict[str, str]] = {}
 
     for gist_name, rel_path in files_map.items():
         path = ROOT_DIR / rel_path
@@ -138,9 +137,7 @@ def build_files_payload(files_map: Dict[str, str]) -> Dict[str, Dict[str, str]]:
             content = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             # Skip binary / non-UTF-8 files; they are not very useful in the gist context.
-            sys.stderr.write(
-                f"[gist] Skipping non-text or non-UTF8 file: {rel_path}\n"
-            )
+            sys.stderr.write(f"[gist] Skipping non-text or non-UTF8 file: {rel_path}\n")
             continue
 
         payload[gist_name] = {"content": content}
@@ -163,7 +160,7 @@ def get_token() -> str:
     return token
 
 
-def create_or_update_gist(manifest: Dict[str, Any]) -> str:
+def create_or_update_gist(manifest: dict[str, Any]) -> str:
     """
     Create or update a Gist based on the manifest.
 
@@ -176,7 +173,7 @@ def create_or_update_gist(manifest: Dict[str, Any]) -> str:
 
     # Legacy explicit mapping mode
     if "files" in manifest and isinstance(manifest["files"], dict):
-        files_map: Dict[str, str] = manifest["files"]
+        files_map: dict[str, str] = manifest["files"]
     else:
         # Auto-discovery mode (recommended)
         files_map = _discover_files(manifest)
@@ -192,7 +189,7 @@ def create_or_update_gist(manifest: Dict[str, Any]) -> str:
     gist_id = manifest.get("gist_id")
     if gist_id:
         url = f"https://api.github.com/gists/{gist_id}"
-        body: Dict[str, Any] = {
+        body: dict[str, Any] = {
             "description": description,
             "files": files_payload,
         }
@@ -209,9 +206,7 @@ def create_or_update_gist(manifest: Dict[str, Any]) -> str:
     try:
         resp.raise_for_status()
     except requests.HTTPError:
-        sys.stderr.write(
-            f"[gist] GitHub API error {resp.status_code}:\n{resp.text}\n"
-        )
+        sys.stderr.write(f"[gist] GitHub API error {resp.status_code}:\n{resp.text}\n")
         raise
 
     data = resp.json()

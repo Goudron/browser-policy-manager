@@ -1,38 +1,28 @@
 {
-    "description": "Browser Policy Manager snapshot for ChatGPT (auto-collected project files)",
-    "gist_id": "4352f9974fb97696e139cc03c9fc1950",
+    "description": "Browser Policy Manager snapshot for ChatGPT (auto-discovered files)",
     "include": [
         "README.md",
-        "LICENSE*",
         "pyproject.toml",
+        "uv.lock",
         ".gitignore",
-        ".ruff.toml",
-        ".pre-commit-config.yaml",
         ".github",
         "app",
         "tests",
-        "alembic",
-        "migrations",
-        "templates",
-        "static",
         "tools"
     ],
     "exclude": [
         ".git",
         ".venv",
         "__pycache__",
-        ".mypy_cache",
-        ".pytest_cache",
-        ".idea",
-        ".vscode",
-        "dist",
-        "build",
         "*.pyc",
         "*.pyo",
         "*.pyd",
         "*.db",
-        "*.sqlite",
         "*.sqlite3",
-        "*.egg-info"
+        "dist",
+        "build",
+        "*.egg-info",
+        ".mypy_cache",
+        ".pytest_cache"
     ]
 }
