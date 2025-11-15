@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 router = APIRouter(prefix="/api/policies", tags=["policies"])
 
@@ -17,8 +17,8 @@ class PolicyBase(BaseModel):
     flags: dict[str, Any] = {}
     owner: str | None = None
 
-    class Config:
-        allow_population_by_field_name = True
+    # Pydantic v2-style configuration
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class PolicyCreate(PolicyBase):
@@ -40,8 +40,8 @@ class PolicyOut(PolicyBase):
     id: int
     deleted: bool = False
 
-    class Config:
-        orm_mode = True
+    # Pydantic v2-style configuration, including from_attributes for ORM-like usage
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
 def _get_store(request: Request) -> dict[int, dict[str, Any]]:
@@ -89,7 +89,8 @@ async def create_policy(payload: PolicyCreate, request: Request) -> PolicyOut:
             raise HTTPException(status_code=409, detail="Policy with this name already exists")
 
     pid = _next_id(request)
-    data = payload.dict(by_alias=True)
+    # Pydantic v2: use model_dump instead of dict
+    data = payload.model_dump(by_alias=True)
     record: dict[str, Any] = {
         "id": pid,
         "name": data["name"],
@@ -165,7 +166,8 @@ async def patch_policy(policy_id: int, payload: PolicyUpdate, request: Request) 
     store = _get_store(request)
     policy = _get_policy_or_404(store, policy_id)
 
-    data = payload.dict(exclude_unset=True)
+    # Pydantic v2: use model_dump instead of dict
+    data = payload.model_dump(exclude_unset=True)
     if "description" in data:
         policy["description"] = data["description"]
     if "flags" in data and data["flags"] is not None:
