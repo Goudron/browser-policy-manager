@@ -1,170 +1,239 @@
 #!/usr/bin/env python3
 """
-Publish current project snapshot (ZIP + manifest.json + optional reports) to a secret GitHub Gist.
-
-Requirements:
-  - Environment variable: GIST_TOKEN (PAT with "gist" scope only)
-  - requests (pip install requests)
+Publish a snapshot of the repository to a GitHub Gist.
 
 Behavior:
-  - Creates manifest.json with (path, size, sha256) for tracked project files.
-  - Packs project into snapshot.zip (excludes .git/, .venv/, venv/, .ruff_cache/, __pycache__/).
-  - If coverage.xml / pytest-report.txt exist in the project root, they are also uploaded as Gist files.
-  - Finds an existing secret Gist with the same description and updates it; otherwise creates a new one.
-  - Prints the resulting Gist URL and writes it to 'gist_url.txt' in the current working directory.
+- Create a ZIP archive with the current repo contents (excluding .git, .venv, dist, __pycache__).
+- Base64-encode the archive and upload it as a single file to a (private) Gist.
+- If gist_manifest.json contains a valid gist_id, try to PATCH that Gist.
+  If PATCH returns 404/422, fall back to creating a new Gist via POST.
+- Update gist_manifest.json with the new gist_id and print the HTML URL to stdout.
+
+This script is intentionally self-contained and defensive so it can be used
+both locally and from CI.
 """
 
 from __future__ import annotations
 
+import argparse
 import base64
-import hashlib
 import json
 import os
-import subprocess
-import sys
-import tempfile
-import zipfile
-from collections.abc import Iterable
-from datetime import UTC, datetime
 from pathlib import Path
+import sys
+import zipfile
+from typing import Any, Dict
 
 import requests
 
-ROOT = Path(__file__).resolve().parents[1]
-GIST_DESC = "Browser Policy Manager snapshot"
-GIST_API = "https://api.github.com/gists"
-TOKEN = os.getenv("GIST_TOKEN")
 
-INCLUDE_REPORTS = ["coverage.xml", "pytest-report.txt"]
-ZIP_NAME = "snapshot.zip"
-MANIFEST_NAME = "manifest.json"
-
-EXCLUDE_DIRS = {
-    ".git",
-    ".venv",
-    "venv",
-    "__pycache__",
-    ".ruff_cache",
-    ".mypy_cache",
-    ".pytest_cache",
-}
+API_URL = "https://api.github.com/gists"
+MANIFEST_NAME = "gist_manifest.json"
 
 
-def die(msg: str) -> None:
-    print(f"❌ {msg}", file=sys.stderr)
-    sys.exit(1)
+def repo_root_from_this_file() -> Path:
+    """Return the repository root assuming tools/ directory layout."""
+    return Path(__file__).resolve().parents[1]
 
 
-def is_excluded(path: Path) -> bool:
-    return any(part in EXCLUDE_DIRS for part in path.parts)
+def manifest_path() -> Path:
+    """Return path to gist_manifest.json next to this script."""
+    return Path(__file__).resolve().with_name(MANIFEST_NAME)
 
 
-def project_files() -> Iterable[Path]:
-    # Prefer git-tracked files; fall back to rglob if git fails.
-    try:
-        out = subprocess.check_output(["git", "ls-files"], cwd=ROOT).decode().splitlines()
-        for rel in out:
-            p = ROOT / rel
-            if p.is_file() and not is_excluded(p):
-                yield p
-    except Exception:
-        for p in ROOT.rglob("*"):
-            if p.is_file() and not is_excluded(p):
-                yield p
+def load_manifest() -> Dict[str, Any]:
+    """Load manifest or return a sensible default if it does not exist."""
+    mpath = manifest_path()
+    if not mpath.exists():
+        return {
+            "description": "Browser Policy Manager snapshot archive",
+            "gist_id": None,
+            "filename": "browser-policy-manager-snapshot.zip.b64",
+        }
+
+    with mpath.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # Ensure required keys exist, but keep any extra keys untouched.
+    data.setdefault("description", "Browser Policy Manager snapshot archive")
+    data.setdefault("gist_id", None)
+    data.setdefault("filename", "browser-policy-manager-snapshot.zip.b64")
+    return data
 
 
-def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
+def save_manifest(manifest: Dict[str, Any]) -> None:
+    """Persist manifest to disk with pretty JSON formatting."""
+    mpath = manifest_path()
+    with mpath.open("w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def git_info() -> dict:
-    def cmd(*args: str) -> str:
-        try:
-            return subprocess.check_output(args, cwd=ROOT).decode().strip()
-        except Exception:
-            return "unknown"
+def should_exclude(path: Path, root: Path) -> bool:
+    """
+    Decide whether a given path should be excluded from the snapshot.
 
-    return {
-        "branch": cmd("git", "rev-parse", "--abbrev-ref", "HEAD"),
-        "commit": cmd("git", "rev-parse", "--short", "HEAD"),
-        "dirty": cmd("git", "status", "--porcelain") != "",
-    }
+    Exclude:
+    - .git, .venv, dist, __pycache__ and their contents.
+    """
+    rel = path.relative_to(root)
+    parts = rel.parts
+    if not parts:
+        return False
 
+    if parts[0] in {".git", ".venv", "dist", "__pycache__"}:
+        return True
 
-def make_manifest() -> dict:
-    items = []
-    for p in project_files():
-        rel = p.relative_to(ROOT).as_posix()
-        items.append({"path": rel, "size": p.stat().st_size, "sha256": sha256(p)})
-    return {
-        "generated_at": datetime.now(UTC).isoformat(),
-        "git": git_info(),
-        "files": items,
-    }
+    # Also skip nested __pycache__ directories
+    if "__pycache__" in parts:
+        return True
+
+    return False
 
 
-def make_zip(tmpdir: Path) -> Path:
-    zip_path = tmpdir / ZIP_NAME
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        for p in project_files():
-            rel = p.relative_to(ROOT).as_posix()
-            zf.write(p, arcname=rel)
+def create_zip_snapshot(root: Path) -> Path:
+    """
+    Create a ZIP archive with repository files under <root>/dist.
+
+    Returns the path to the created ZIP file.
+    """
+    dist_dir = root / "dist"
+    dist_dir.mkdir(parents=True, exist_ok=True)
+
+    zip_path = dist_dir / "browser-policy-manager-snapshot.zip"
+
+    # Recreate archive every time to avoid stale contents.
+    if zip_path.exists():
+        zip_path.unlink()
+
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for item in root.rglob("*"):
+            if not item.is_file():
+                continue
+            if should_exclude(item, root):
+                continue
+            arcname = item.relative_to(root)
+            zf.write(item, arcname)
+
     return zip_path
 
 
-def create_or_update_gist(manifest: dict, zip_path: Path) -> str:
-    if not TOKEN:
-        die("Please set GIST_TOKEN environment variable with your GitHub token (gist scope only).")
+def build_gist_payload(manifest: Dict[str, Any], archive_path: Path) -> Dict[str, Any]:
+    """
+    Build the JSON payload for GitHub Gist API.
 
+    The archive is base64-encoded and uploaded as a single file.
+    """
+    raw = archive_path.read_bytes()
+    b64 = base64.b64encode(raw).decode("ascii")
+
+    filename = manifest.get("filename") or "browser-policy-manager-snapshot.zip.b64"
+    manifest["filename"] = filename
+
+    description = manifest.get("description") or "Browser Policy Manager snapshot archive"
+
+    payload: Dict[str, Any] = {
+        "description": description,
+        "public": False,
+        "files": {
+            filename: {
+                "content": b64,
+            }
+        },
+    }
+    return payload
+
+
+def get_gist_token() -> str:
+    """
+    Resolve GitHub token for Gist operations.
+
+    Tries GIST_TOKEN first, then GITHUB_TOKEN. Raises if neither is set.
+    """
+    token = os.getenv("GIST_TOKEN") or os.getenv("GITHUB_TOKEN")
+    if not token:
+        raise RuntimeError("Missing GitHub token: set GIST_TOKEN or GITHUB_TOKEN env variable")
+    return token
+
+
+def create_or_update_gist(manifest: Dict[str, Any], archive_path: Path) -> str:
+    """
+    Create or update a Gist with the given manifest and archive.
+
+    Returns the HTML URL of the resulting Gist.
+    """
+    token = get_gist_token()
     headers = {
-        "Authorization": f"Bearer {TOKEN}",
+        "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
+        "User-Agent": "browser-policy-manager-gist-publisher",
     }
 
-    # Base payload with manifest + zip (zip as base64 to avoid binary issues via API)
-    files_payload = {
-        MANIFEST_NAME: {"content": json.dumps(manifest, ensure_ascii=False, indent=2)},
-        ZIP_NAME: {"content": base64.b64encode(zip_path.read_bytes()).decode()},
-    }
+    payload = build_gist_payload(manifest, archive_path)
+    gist_id = manifest.get("gist_id")
 
-    # Optionally include reports if present at repository root
-    for name in INCLUDE_REPORTS:
-        p = ROOT / name
-        if p.exists():
-            files_payload[name] = {"content": p.read_text(errors="replace")}
+    # Helper: create new Gist
+    def _post_new() -> requests.Response:
+        return requests.post(API_URL, headers=headers, json=payload, timeout=60)
 
-    payload = {"description": GIST_DESC, "public": False, "files": files_payload}
+    # Helper: patch existing Gist
+    def _patch_existing(gid: str) -> requests.Response:
+        url = f"{API_URL}/{gid}"
+        return requests.patch(url, headers=headers, json=payload, timeout=60)
 
-    # Try to find an existing gist with the same description
-    rlist = requests.get(GIST_API, headers=headers)
-    rlist.raise_for_status()
-    gist = next((g for g in rlist.json() if g.get("description") == GIST_DESC), None)
+    response: requests.Response
 
-    if gist:
-        gist_id = gist["id"]
-        r = requests.patch(f"{GIST_API}/{gist_id}", headers=headers, json=payload)
-        r.raise_for_status()
-        return f"https://gist.github.com/{gist_id}"
+    if gist_id:
+        # First try to patch existing gist
+        response = _patch_existing(str(gist_id))
+        if response.status_code in (404, 422):
+            # Stale or invalid gist; fall back to creating a new one
+            print(
+                f"Existing gist {gist_id} returned {response.status_code}, "
+                "creating a new gist instead.",
+                file=sys.stderr,
+            )
+            manifest["gist_id"] = None
+            response = _post_new()
+    else:
+        # No gist_id in manifest, always create new gist
+        response = _post_new()
 
-    r = requests.post(GIST_API, headers=headers, json=payload)
-    r.raise_for_status()
-    gist_id = r.json()["id"]
-    return f"https://gist.github.com/{gist_id}"
+    # Raise if still not successful
+    response.raise_for_status()
+    data = response.json()
+
+    new_id = data.get("id")
+    html_url = data.get("html_url")
+
+    if not new_id or not html_url:
+        raise RuntimeError(f"Unexpected Gist API response: {data!r}")
+
+    manifest["gist_id"] = new_id
+    save_manifest(manifest)
+
+    return html_url
 
 
 def main() -> None:
-    with tempfile.TemporaryDirectory() as td:
-        tmp = Path(td)
-        manifest = make_manifest()
-        zpath = make_zip(tmp)
-        url = create_or_update_gist(manifest, zpath)
-        print(f"🔗 Gist URL: {url}")
-        # Write URL for CI to pick up as artifact
-        Path("gist_url.txt").write_text(url, encoding="utf-8")
+    parser = argparse.ArgumentParser(description="Publish repository snapshot to GitHub Gist.")
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=repo_root_from_this_file(),
+        help="Repository root to snapshot (default: project root inferred from tools/).",
+    )
+    args = parser.parse_args()
+
+    root = args.root.resolve()
+    if not root.exists():
+        raise SystemExit(f"Root path does not exist: {root}")
+
+    archive_path = create_zip_snapshot(root)
+    manifest = load_manifest()
+    url = create_or_update_gist(manifest, archive_path)
+
+    # Print URL to stdout so CI can capture it if needed.
+    print(url)
 
 
 if __name__ == "__main__":
