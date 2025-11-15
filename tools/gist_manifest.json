@@ -1,28 +1,34 @@
 {
-    "description": "Browser Policy Manager snapshot for ChatGPT (auto-discovered files)",
+    "description": "Browser Policy Manager snapshot (dev branch)",
+    "public": false,
+    "gist_id": "4352f9974fb97696e139cc03c9fc1950",
     "include": [
-        "README.md",
         "pyproject.toml",
-        "uv.lock",
+        "README.md",
         ".gitignore",
-        ".github",
+        ".ruff.toml",
+        ".github/workflows/ci.yml",
         "app",
         "tests",
-        "tools"
+        "migrations",
+        "templates",
+        "static",
+        "tools/publish_to_gist.py",
+        "tools/gist_manifest.json"
     ],
     "exclude": [
-        ".git",
         ".venv",
         "__pycache__",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".git",
+        ".idea",
+        ".vscode",
         "*.pyc",
         "*.pyo",
         "*.pyd",
         "*.db",
         "*.sqlite3",
-        "dist",
-        "build",
-        "*.egg-info",
-        ".mypy_cache",
-        ".pytest_cache"
+        "app/static/favicon.ico"
     ]
 }

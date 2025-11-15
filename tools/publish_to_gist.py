@@ -1,172 +1,203 @@
 #!/usr/bin/env python
+"""
+Publish a snapshot of the repository to a GitHub Gist, using a manifest file.
+
+- Reads configuration from tools/gist_manifest.json
+- Uses GIST_TOKEN environment variable (fine for CI and local runs)
+- Supports both create (POST) and update (PATCH) modes
+- Skips binary / non-UTF-8 files
+"""
+
 from __future__ import annotations
 
 import json
 import os
 import sys
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict
-import fnmatch
+from typing import Any, Dict, Iterable, List
 
 import requests
 
-# Репозиторий: .../browser-policy-manager/
-ROOT = Path(__file__).resolve().parents[1]
-MANIFEST_PATH = ROOT / "tools" / "gist_manifest.json"
+
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parent
+MANIFEST_PATH = HERE / "gist_manifest.json"
+GITHUB_API_URL = "https://api.github.com"
 
 
-@dataclass
-class GistManifest:
-    description: str
-    public: bool
-    include: list[str]
-    exclude: list[str]
-    gist_id: str | None = None
-
-    @classmethod
-    def load(cls) -> "GistManifest":
-        if not MANIFEST_PATH.exists():
-            print(f"[gist] Manifest not found: {MANIFEST_PATH}", file=sys.stderr)
-            sys.exit(1)
-        data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-        return cls(
-            description=data.get("description", "browser-policy-manager snapshot"),
-            public=bool(data.get("public", False)),
-            include=list(data.get("include", [])),
-            exclude=list(data.get("exclude", [])),
-            gist_id=data.get("gist_id") or None,
-        )
-
-    def save(self) -> None:
-        data: Dict[str, Any] = {
-            "description": self.description,
-            "public": self.public,
-            "include": self.include,
-            "exclude": self.exclude,
-        }
-        if self.gist_id:
-            data["gist_id"] = self.gist_id
-        MANIFEST_PATH.write_text(
-            json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
+class GistError(RuntimeError):
+    """Raised when the GitHub Gist API returns an error."""
 
 
-def _matches_any(path: str, patterns: list[str]) -> bool:
-    """Check if relative path matches any of exclude patterns."""
-    return any(
-        fnmatch.fnmatch(path, pat) or path.startswith(pat.rstrip("/"))
-        for pat in patterns
-    )
+def load_manifest(path: Path = MANIFEST_PATH) -> Dict[str, Any]:
+    if not path.exists():
+        print(f"[gist] Manifest file not found: {path}", file=sys.stderr)
+        raise SystemExit(1)
+
+    with path.open("r", encoding="utf-8") as fh:
+        data = json.load(fh)
+
+    # Basic sanity checks
+    if "description" not in data:
+        data["description"] = "Browser Policy Manager snapshot"
+    if "public" not in data:
+        data["public"] = False
+
+    include = data.get("include") or []
+    exclude = data.get("exclude") or []
+
+    if not isinstance(include, list) or not include:
+        print("[gist] Manifest 'include' must be a non-empty list", file=sys.stderr)
+        raise SystemExit(1)
+
+    if not isinstance(exclude, list):
+        print("[gist] Manifest 'exclude' must be a list (can be empty)", file=sys.stderr)
+        raise SystemExit(1)
+
+    return data
 
 
-def build_files_payload(manifest: GistManifest) -> Dict[str, Dict[str, str]]:
+def _pattern_matches(patterns: List[str], rel_path: str) -> bool:
+    """Return True if rel_path matches any of the patterns.
+
+    Patterns support two simple forms:
+    - "prefix"         → matches "prefix" and anything under "prefix/"
+    - glob pattern     → if it contains *, ?, or [ ... ] then fnmatch is used
+    """
+    from fnmatch import fnmatch
+
+    for pat in patterns:
+        if not pat:
+            continue
+        if any(ch in pat for ch in "*?["):
+            if fnmatch(rel_path, pat):
+                return True
+        else:
+            # Treat as directory / prefix
+            if rel_path == pat or rel_path.startswith(pat.rstrip("/") + "/"):
+                return True
+    return False
+
+
+def _iter_candidate_files(include: List[str], exclude: List[str]) -> Iterable[Path]:
+    """Yield repository files that match include and do not match exclude."""
+    for path in REPO_ROOT.rglob("*"):
+        if not path.is_file():
+            continue
+        rel = path.relative_to(REPO_ROOT).as_posix()
+        if not _pattern_matches(include, rel):
+            continue
+        if _pattern_matches(exclude, rel):
+            continue
+        yield path
+
+
+def _is_text_file(path: Path) -> bool:
+    """Heuristic: try to read as UTF-8. If it fails, treat as binary and skip."""
+    try:
+        with path.open("rb") as fh:
+            chunk = fh.read(4096)
+        chunk.decode("utf-8")
+        return True
+    except UnicodeDecodeError:
+        return False
+
+
+def build_files_payload(include: List[str], exclude: List[str]) -> Dict[str, Dict[str, str]]:
     files: Dict[str, Dict[str, str]] = {}
-    included_paths: set[Path] = set()
 
-    for pattern in manifest.include:
-        # Глоб-паттерн
-        if any(ch in pattern for ch in "*?[]"):
-            matches = list(ROOT.glob(pattern))
-            if not matches:
-                print(f"[gist] Warning: include pattern '{pattern}' did not match anything")
-                continue
-            for m in matches:
-                if m.is_file():
-                    included_paths.add(m)
-                elif m.is_dir():
-                    included_paths.update(p for p in m.rglob("*") if p.is_file())
-            continue
+    for path in _iter_candidate_files(include, exclude):
+        rel = path.relative_to(REPO_ROOT).as_posix()
 
-        # Прямой путь (файл или директория)
-        p = ROOT / pattern
-        if not p.exists():
-            print(f"[gist] Warning: include pattern '{pattern}' did not match anything")
-            continue
-        if p.is_file():
-            included_paths.add(p)
-        elif p.is_dir():
-            included_paths.update(f for f in p.rglob("*") if f.is_file())
-
-    for path in sorted(included_paths):
-        rel = path.relative_to(ROOT).as_posix()
-
-        if _matches_any(rel, manifest.exclude):
-            continue
-
-        try:
-            text = path.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
+        if not _is_text_file(path):
             print(f"[gist] Skipping non-text or non-UTF8 file: {rel}")
             continue
 
-        if not text:
-            # Пустые файлы смысла тащить нет (GitHub ещё и капризничает)
+        # Sanitize filename for Gist: replace "/" with "__" to avoid any oddities
+        filename = rel.replace("/", "__")
+
+        try:
+            content = path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            print(f"[gist] Skipping file due to decode error: {rel}")
             continue
 
-        files[rel] = {"content": text}
-
-    if not files:
-        print("[gist] ERROR: No files collected to publish (files payload is empty).", file=sys.stderr)
-        sys.exit(1)
+        files[filename] = {"content": content}
 
     return files
 
 
-def create_or_update_gist(manifest: GistManifest) -> str:
-    token = os.getenv("GIST_TOKEN")
+def create_or_update_gist(manifest: Dict[str, Any]) -> str:
+    token = os.environ.get("GIST_TOKEN")
     if not token:
-        print("[gist] ERROR: GIST_TOKEN environment variable is not set", file=sys.stderr)
-        sys.exit(1)
+        print("[gist] Environment variable GIST_TOKEN is not set", file=sys.stderr)
+        raise SystemExit(1)
 
-    files_payload = build_files_payload(manifest)
+    include = manifest.get("include", [])
+    exclude = manifest.get("exclude", [])
+
+    files_payload = build_files_payload(include, exclude)
+
+    if not files_payload:
+        print("[gist] No files selected for Gist (files_payload is empty)", file=sys.stderr)
+        raise SystemExit(1)
+
+    gist_id = manifest.get("gist_id")
+    description = manifest.get("description", "Browser Policy Manager snapshot")
+    public = bool(manifest.get("public", False))
 
     headers = {
-        "Authorization": f"Bearer {token}",
+        "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
     }
 
-    if manifest.gist_id:
-        url = f"https://api.github.com/gists/{manifest.gist_id}"
-        method = "PATCH"
-    else:
-        url = "https://api.github.com/gists"
-        method = "POST"
-
     payload: Dict[str, Any] = {
-        "description": manifest.description,
-        "public": manifest.public,
+        "description": description,
+        "public": public,
         "files": files_payload,
     }
 
+    if gist_id:
+        method = "PATCH"
+        url = f"{GITHUB_API_URL}/gists/{gist_id}"
+    else:
+        method = "POST"
+        url = f"{GITHUB_API_URL}/gists"
+
     print(f"[gist] {method} {url} with {len(files_payload)} files")
+
     resp = requests.request(method, url, headers=headers, json=payload, timeout=60)
 
-    if resp.status_code == 422:
-        print("[gist] GitHub API error 422:", file=sys.stderr)
-        print(resp.text, file=sys.stderr)
-        # Явно падаем, чтобы в логах было видно, что именно не понравилось
-        sys.exit(1)
+    if resp.status_code >= 400:
+        print("[gist] GitHub API error:")
+        print(resp.text)
+        raise GistError(f"GitHub API error {resp.status_code} for {url}")
 
-    resp.raise_for_status()
     data = resp.json()
-    gist_url = data.get("html_url") or data.get("url")
+    gist_url = data.get("html_url") or data.get("url") or "<unknown>"
 
-    # Если только что создали новый гист — сохраняем его id в манифест
-    if not manifest.gist_id and data.get("id"):
-        manifest.gist_id = data["id"]
-        manifest.save()
-        print(f"[gist] Created new gist: {gist_url}")
-    else:
-        print(f"[gist] Updated gist: {gist_url}")
+    # If this was a create operation, store the new gist_id in the manifest on disk.
+    if not gist_id:
+        new_id = data.get("id")
+        if new_id:
+            manifest["gist_id"] = new_id
+            try:
+                with MANIFEST_PATH.open("w", encoding="utf-8") as fh:
+                    json.dump(manifest, fh, indent=2, ensure_ascii=False)
+                print(f"[gist] Updated manifest with gist_id={new_id}")
+            except OSError as exc:
+                print(f"[gist] Warning: could not update manifest: {exc}", file=sys.stderr)
 
-    return str(gist_url)
+    print(f"[gist] Done: {gist_url}")
+    return gist_url
 
 
 def main() -> None:
-    manifest = GistManifest.load()
-    create_or_update_gist(manifest)
+    manifest = load_manifest()
+    try:
+        create_or_update_gist(manifest)
+    except GistError:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
