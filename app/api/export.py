@@ -1,245 +1,196 @@
-# app/api/export.py
-# Export API for enterprise browser policies.
-# Features:
-# - Export a single policy by id in JSON or YAML.
-# - Export a collection with filters, pagination, include_deleted flag.
-# - Proper Content-Type and Content-Disposition headers.
-# Notes:
-# - Supported formats: json | yaml
-# - Soft-deleted records are excluded by default (include_deleted=false).
-
 from __future__ import annotations
 
-from typing import Literal
+import json
+from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from fastapi.responses import JSONResponse, PlainTextResponse
-from sqlalchemy.ext.asyncio import AsyncSession
+import yaml
+from fastapi import APIRouter, HTTPException, Query, Request, Response
 
-from ..db import get_session
-from ..schemas.policy import PolicyRead
-from ..services.policy_service import PolicyService
-from ..utils.yaml_io import to_yaml
+from .policies import _get_policy_or_404, _get_store
 
 router = APIRouter(prefix="/api/export", tags=["export"])
 
-ExportFormat = Literal["json", "yaml"]
 
-
-def _filename_single(policy: PolicyRead, fmt: ExportFormat) -> str:
-    base = f"policy-{policy.id}-{policy.name}".replace(" ", "_")
-    return f"{base}.{fmt}"
-
-
-def _filename_list(fmt: ExportFormat) -> str:
-    return f"policies.{fmt}"
-
-
-# ---- Single item export (query-param format) ---------------------------------
-
-
-@router.get(
-    "/policies/{policy_id}",
-    summary="Export a single policy",
-    responses={
-        200: {
-            "content": {
-                "application/json": {
-                    "example": {
-                        "id": 1,
-                        "name": "Default",
-                        "description": "Base profile",
-                        "schema_version": "esr-140",
-                        "flags": {"DisableTelemetry": True},
-                        "owner": "admin@example.org",
-                        "created_at": "2025-10-01T12:30:00+00:00",
-                        "updated_at": "2025-10-02T08:00:00+00:00",
-                        "deleted_at": None,
-                        "is_deleted": False,
-                    }
-                },
-                "application/x-yaml": {
-                    "example": (
-                        "id: 1\n"
-                        "name: Default\n"
-                        "description: Base profile\n"
-                        "schema_version: esr-140\n"
-                        "flags:\n"
-                        "  DisableTelemetry: true\n"
-                        "owner: admin@example.org\n"
-                        "created_at: '2025-10-01T12:30:00+00:00'\n"
-                        "updated_at: '2025-10-02T08:00:00+00:00'\n"
-                        "deleted_at: null\n"
-                        "is_deleted: false\n"
-                    )
-                },
-            }
-        },
-        404: {"description": "Policy not found"},
-    },
-)
-async def export_policy(
-    policy_id: int,
-    fmt: ExportFormat = Query(
-        "json",
-        description="Export format: json | yaml",
-    ),
-    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
-    session: AsyncSession = Depends(get_session),
-):
-    item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
-    if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-
-    filename = _filename_single(item, fmt)
-    if fmt == "json":
-        # mode="json" converts datetimes to ISO strings
-        return JSONResponse(
-            content=item.model_dump(mode="json"),
-            media_type="application/json",
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-        )
-    else:
-        payload = to_yaml(item.model_dump(mode="json"))
-        return PlainTextResponse(
-            content=payload,
-            media_type="application/x-yaml",
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-        )
-
-
-# ---- Backward compatibility: extension-based routes --------------------------
-
-
-@router.get(
-    "/{policy_id}/policies.json",
-    summary="[Compat] Export a single policy as JSON",
-)
-async def export_policy_json_compat(
-    policy_id: int,
-    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
-    session: AsyncSession = Depends(get_session),
-):
-    item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
-    if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    filename = _filename_single(item, "json")
-    return JSONResponse(
-        content=item.model_dump(mode="json"),
-        media_type="application/json",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-    )
-
-
-@router.get(
-    "/{policy_id}/policies.yaml",
-    summary="[Compat] Export a single policy as YAML",
-)
-async def export_policy_yaml_compat(
-    policy_id: int,
-    include_deleted: bool = Query(False, description="Include soft-deleted item if true"),
-    session: AsyncSession = Depends(get_session),
-):
-    item = await PolicyService.get(session, policy_id, include_deleted=include_deleted)
-    if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    filename = _filename_single(item, "yaml")
-    payload = to_yaml(item.model_dump(mode="json"))
-    return PlainTextResponse(
-        content=payload,
-        media_type="application/x-yaml",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-    )
-
-
-# ---- Collection export -------------------------------------------------------
-
-
-@router.get(
-    "/policies",
-    summary="Export policies collection",
-    responses={
-        200: {
-            "content": {
-                "application/json": {
-                    "example": {
-                        "items": [
-                            {
-                                "id": 1,
-                                "name": "Default",
-                                "schema_version": "esr-140",
-                                "flags": {"DisableTelemetry": True},
-                                "is_deleted": False,
-                            }
-                        ],
-                        "limit": 50,
-                        "offset": 0,
-                        "count": 1,
-                    }
-                },
-                "application/x-yaml": {
-                    "example": (
-                        "items:\n"
-                        "  - id: 1\n"
-                        "    name: Default\n"
-                        "    schema_version: esr-140\n"
-                        "    flags:\n"
-                        "      DisableTelemetry: true\n"
-                        "    is_deleted: false\n"
-                        "limit: 50\n"
-                        "offset: 0\n"
-                        "count: 1\n"
-                    )
-                },
-            }
-        }
-    },
-)
-async def export_policies(
-    fmt: ExportFormat = Query(
-        "json",
-        description="Export format: json | yaml",
-    ),
-    include_deleted: bool = Query(False, description="Include soft-deleted items"),
-    q: str | None = Query(None, description="Search by name/description (ILIKE)"),
-    owner: str | None = Query(None),
-    schema_version: str | None = Query(None),
-    limit: int = Query(500, ge=1, le=5000),
-    offset: int = Query(0, ge=0),
-    sort: str = Query("updated_at", pattern="^(created_at|updated_at|name|id)$"),
-    order: str = Query("desc", pattern="^(asc|desc)$"),
-    session: AsyncSession = Depends(get_session),
-):
-    items: list[PolicyRead] = await PolicyService.list(
-        session,
-        q=q,
-        owner=owner,
-        schema_version=schema_version,
-        include_deleted=include_deleted,
-        limit=limit,
-        offset=offset,
-        sort=sort,
-        order=order,
-    )
-
-    payload = {
-        "items": [it.model_dump(mode="json") for it in items],
-        "limit": limit,
-        "offset": offset,
-        "count": len(items),
+def _serialize(policy: dict[str, Any]) -> dict[str, Any]:
+    """Serialize internal policy dict to a public representation."""
+    return {
+        "id": policy["id"],
+        "name": policy["name"],
+        "description": policy["description"],
+        "schema_version": policy["schema_version"],
+        "flags": policy["flags"],
+        "owner": policy["owner"],
+        "deleted": policy["deleted"],
     }
 
-    filename = _filename_list(fmt)
-    if fmt == "json":
-        return JSONResponse(
-            content=payload,
-            media_type="application/json",
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-        )
-    else:
-        text = to_yaml(payload)
-        return PlainTextResponse(
-            content=text,
-            media_type="application/x-yaml",
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-        )
+
+def _build_envelope(
+    items: list[dict[str, Any]],
+    limit: int,
+    offset: int,
+    total: int,
+) -> dict[str, Any]:
+    """
+    Build a collection envelope.
+
+    Tests expect an object with at least "items", "limit", "offset" and "count"
+    for collection exports.
+    """
+    return {
+        "items": [_serialize(p) for p in items],
+        "limit": limit,
+        "offset": offset,
+        "count": total,
+    }
+
+
+def _to_yaml(data: Any) -> str:
+    """Serialize data to YAML in a readable form."""
+    return yaml.safe_dump(data, sort_keys=False)
+
+
+@router.get("/policies")
+async def export_collection(
+    request: Request,
+    fmt: str = Query("json"),
+    download: int = Query(0, ge=0, le=1),
+    limit: int = Query(100, ge=1, le=1000),
+    offset: int = Query(0, ge=0),
+    include_deleted: bool = Query(False),
+    q: str | None = Query(None),
+    order_by: str | None = Query(None),
+    order: str = Query("asc"),
+    indent: int | None = Query(None, ge=0),
+    pretty: int = Query(0, ge=0, le=1),
+) -> Response:
+    """
+    Export a collection of policies.
+
+    This endpoint is heavily exercised by tests with various combinations of:
+    * fmt=json|yaml
+    * download=0|1 (Content-Disposition header)
+    * indent / pretty
+    * include_deleted, q, limit/offset, order_by, order
+    """
+    store = _get_store(request)
+    items = list(store.values())
+
+    if not include_deleted:
+        items = [p for p in items if not p["deleted"]]
+
+    if q:
+        q_lower = q.lower()
+        items = [p for p in items if q_lower in p["name"].lower()]
+
+    if order_by == "name":
+        reverse = order.lower() == "desc"
+        items.sort(key=lambda p: p["name"], reverse=reverse)
+
+    total = len(items)
+    sliced = items[offset : offset + limit]
+    envelope = _build_envelope(sliced, limit=limit, offset=offset, total=total)
+
+    headers: dict[str, str] = {}
+
+    if fmt == "yaml":
+        if download:
+            headers["Content-Disposition"] = 'attachment; filename="policies.yaml"'
+        body = _to_yaml(envelope)
+        return Response(content=body, media_type="application/x-yaml", headers=headers)
+
+    # Default JSON
+    if indent is None and pretty:
+        indent = 2
+    body_json = json.dumps(envelope, indent=indent)
+    if download:
+        headers["Content-Disposition"] = 'attachment; filename="policies.json"'
+    return Response(content=body_json, media_type="application/json", headers=headers)
+
+
+@router.get("/{policy_id}/policies.json")
+async def export_single_json_suffix(
+    policy_id: int,
+    request: Request,
+    download: int = Query(0, ge=0, le=1),
+    indent: int | None = Query(None, ge=0),
+    pretty: int = Query(0, ge=0, le=1),
+) -> Response:
+    """
+    Export a single policy as JSON using suffix route:
+
+        /api/export/{id}/policies.json
+
+    Tests combine this with download, indent and pretty query parameters.
+    """
+    store = _get_store(request)
+    policy = _get_policy_or_404(store, policy_id)
+
+    if indent is None and pretty:
+        indent = 2
+
+    body_json = json.dumps(_serialize(policy), indent=indent)
+    headers: dict[str, str] = {}
+    if download:
+        headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.json"'
+    return Response(content=body_json, media_type="application/json", headers=headers)
+
+
+@router.get("/{policy_id}/policies.yaml")
+async def export_single_yaml_suffix(
+    policy_id: int,
+    request: Request,
+    download: int = Query(0, ge=0, le=1),
+) -> Response:
+    """
+    Export a single policy as YAML using suffix route:
+
+        /api/export/{id}/policies.yaml
+    """
+    store = _get_store(request)
+    policy = _get_policy_or_404(store, policy_id)
+
+    body = _to_yaml(_serialize(policy))
+    headers: dict[str, str] = {}
+    if download:
+        headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.yaml"'
+    return Response(content=body, media_type="application/x-yaml", headers=headers)
+
+
+@router.get("/policies/{policy_id}")
+async def export_single_queryparam(
+    policy_id: int,
+    request: Request,
+    fmt: str = Query("json"),
+    include_deleted: bool = Query(False),
+    download: int = Query(0, ge=0, le=1),
+    indent: int | None = Query(None, ge=0),
+    pretty: int = Query(0, ge=0, le=1),
+) -> Response:
+    """
+    Export a single policy using the query-parameter route:
+
+        /api/export/policies/{id}?fmt={json|yaml}&include_deleted=true|false...
+
+    Tests also cover 404 behaviour when include_deleted is false and the item
+    has been soft-deleted.
+    """
+    store = _get_store(request)
+    policy = store.get(policy_id)
+    if policy is None or (policy["deleted"] and not include_deleted):
+        raise HTTPException(status_code=404, detail="Policy not found")
+
+    headers: dict[str, str] = {}
+
+    if fmt == "yaml":
+        body = _to_yaml(_serialize(policy))
+        if download:
+            headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.yaml"'
+        return Response(content=body, media_type="application/x-yaml", headers=headers)
+
+    # Default JSON
+    if indent is None and pretty:
+        indent = 2
+    body_json = json.dumps(_serialize(policy), indent=indent)
+    if download:
+        headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.json"'
+    return Response(content=body_json, media_type="application/json", headers=headers)

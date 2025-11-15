@@ -1,81 +1,92 @@
-# app/db.py
 from __future__ import annotations
 
-import asyncio
-from contextlib import asynccontextmanager
-from pathlib import Path
-from typing import AsyncGenerator
+import importlib
+import importlib.util
+from collections.abc import AsyncIterator
+from typing import cast
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import MetaData
+from sqlalchemy.engine import Connection
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
-# Import models to ensure metadata is populated
-from app.models.policy import Policy  # noqa: F401
+from app.core.config import get_settings
 
-
-DB_PATH = Path("./data/bpm.db")
-SQLITE_URL = f"sqlite+aiosqlite:///{DB_PATH.as_posix()}"
-
-_engine: AsyncEngine | None = None
-_session_factory: async_sessionmaker[AsyncSession] | None = None
-_initialized = False
-
-
-class Base(DeclarativeBase):
-    """Base for ORM models."""
-    pass
+# Cached metadata instance
+_metadata: MetaData | None = None
 
 
-async def _create_schema() -> None:
-    """Create folders and tables if not exist."""
-    # Ensure ./data exists
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    assert _engine is not None
+def _resolve_metadata() -> MetaData:
+    """
+    Resolve project's central SQLAlchemy MetaData dynamically.
 
-    # Import metadata from DeclarativeBase via any mapped model import above
-    from app.models.base import metadata  # if you keep central metadata
-    # Fallback to Base.metadata if you don’t have a custom metadata
-    meta = getattr(metadata, "tables", None)
-    target_metadata = getattr(Policy, "metadata", None) or Base.metadata
+    Order:
+      1) Try importing `app.models` (look for `metadata` or `Base.metadata`)
+      2) Try importing `app.models.base` (look for `Base.metadata`)
+      3) Fallback: create a local Base (for testing or empty setups)
+    """
+    # 1) app.models
+    try:
+        models = importlib.import_module("app.models")
+        md = getattr(models, "metadata", None)
+        if isinstance(md, MetaData):
+            return md
+        base = getattr(models, "Base", None)
+        if base is not None and hasattr(base, "metadata"):
+            return cast(MetaData, base.metadata)
+    except Exception:
+        pass
 
-    async with _engine.begin() as conn:
-        await conn.run_sync(target_metadata.create_all)
+    # 2) app.models.base
+    try:
+        if importlib.util.find_spec("app.models.base") is not None:
+            mod_base = importlib.import_module("app.models.base")
+            base = getattr(mod_base, "Base", None)
+            if base is not None and hasattr(base, "metadata"):
+                return cast(MetaData, base.metadata)
+    except Exception:
+        pass
+
+    # 3) Fallback - local Base
+    from sqlalchemy.orm import declarative_base
+
+    LocalBase = declarative_base()
+    return LocalBase.metadata
+
+
+def get_metadata() -> MetaData:
+    """Return cached MetaData, resolving it on first use."""
+    global _metadata
+    if _metadata is None:
+        _metadata = _resolve_metadata()
+    return _metadata
+
+
+# Settings
+_settings = get_settings()
+_DATABASE_URL: str = cast(str, getattr(_settings, "database_url", "sqlite+aiosqlite:///./bpm.db"))
+_DATABASE_ECHO: bool = cast(bool, getattr(_settings, "database_echo", False))
+
+# Engine / Session
+engine: AsyncEngine = create_async_engine(_DATABASE_URL, echo=_DATABASE_ECHO)
+SessionLocal: async_sessionmaker[AsyncSession] = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def init_db() -> None:
-    """Initialize engine/session and create schema."""
-    global _engine, _session_factory, _initialized
+    """Create tables if they do not exist (idempotent)."""
+    async with engine.begin() as conn:
 
-    if _initialized:
-        return
+        def _create_all(sync_conn: Connection) -> None:
+            get_metadata().create_all(bind=sync_conn)
 
-    _engine = create_async_engine(
-        SQLITE_URL,
-        echo=False,
-        future=True,
-        pool_pre_ping=True,
-    )
-    _session_factory = async_sessionmaker(_engine, expire_on_commit=False)
-    await _create_schema()
-    _initialized = True
+        await conn.run_sync(_create_all)
 
 
-async def _ensure_initialized() -> None:
-    if not _initialized:
-        await init_db()
-
-
-@asynccontextmanager
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    """FastAPI dependency for DB session."""
-    await _ensure_initialized()
-    assert _session_factory is not None
-    session = _session_factory()
-    try:
+async def get_session() -> AsyncIterator[AsyncSession]:
+    """FastAPI dependency that yields an AsyncSession."""
+    async with SessionLocal() as session:
         yield session
-        await session.commit()
-    except Exception:
-        await session.rollback()
-        raise
-    finally:
-        await session.close()
