@@ -114,7 +114,7 @@ def _discover_files(manifest: Dict[str, Any]) -> Dict[str, str]:
     if not file_map:
         raise SystemExit(
             "Auto-discovery produced no files. "
-            "Check 'include'/'exclude' patterns in gist_manifest.json."
+            "Check 'include'/'exclude' patterns in tools/gist_manifest.json."
         )
 
     return file_map
@@ -155,11 +155,11 @@ def get_token() -> str:
     """
     Obtain GitHub token from environment.
 
-    We support both GITHUB_TOKEN (GitHub Actions) and GH_TOKEN (local runs).
+    CI / локальный запуск ожидают переменную окружения GIST_TOKEN.
     """
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    token = os.environ.get("GIST_TOKEN")
     if not token:
-        raise SystemExit("GITHUB_TOKEN or GH_TOKEN must be set in the environment")
+        raise SystemExit("Environment variable GIST_TOKEN must be set for Gist publish")
     return token
 
 
