@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import export, health, policies, validation
+from app.api import export, health, policies, profiles, validation
 from app.core.config import Settings as AppSettings
 
 # Local settings instance for this module.
@@ -21,6 +23,7 @@ def create_app() -> FastAPI:
 
     # Basic CORS configuration. Tests do not depend on strict values here.
     allow_origins = getattr(settings, "cors_allow_origins", ["*"])
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allow_origins,
@@ -31,7 +34,10 @@ def create_app() -> FastAPI:
 
     # Routers
     app.include_router(health.router)
+    # In-memory policies CRUD used by tests
     app.include_router(policies.router)
+    # DB-backed profiles CRUD with Firefox policy validation
+    app.include_router(profiles.router)
     app.include_router(export.router)
     app.include_router(validation.router)
 
@@ -54,7 +60,9 @@ def create_app() -> FastAPI:
 
 # Backward-compatible alias if tests or utilities import make_app.
 def make_app() -> FastAPI:
-    """Alias for create_app used in some tests."""
+    """
+    Alias for create_app used in some tests.
+    """
     return create_app()
 
 

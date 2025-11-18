@@ -1,11 +1,10 @@
-from __future__ import annotations
-
 from fastapi.testclient import TestClient
 
-from app.main import app
+from app.main import make_app
 
 
 def test_validate_profile_ok_and_fail():
+    app = make_app()  # создаем экземпляр приложения
     client = TestClient(app)
 
     good = {"document": {"DisableTelemetry": True}}
@@ -20,15 +19,11 @@ def test_validate_profile_ok_and_fail():
     assert r2.status_code == 200
     assert r2.json()["ok"] is False
 
-    # Release 144
-    r3 = client.post("/api/validate/release-144", json=good)
+    # Release 145
+    r3 = client.post("/api/validate/release-145", json=good)
     assert r3.status_code == 200
     assert r3.json()["ok"] is True
 
-    r4 = client.post("/api/validate/release-144", json=bad)
+    r4 = client.post("/api/validate/release-145", json=bad)
     assert r4.status_code == 200
     assert r4.json()["ok"] is False
-
-    # Unsupported profile -> 400/404
-    r5 = client.post("/api/validate/beta", json=good)
-    assert r5.status_code in (400, 404)

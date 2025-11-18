@@ -79,6 +79,7 @@ pytestdebug.log
 *.tar.gz
 *.orig
 *.rej
+*.sh
 
 # -----------------------------------------------------------------------------
 # Database files (local dev/test artifacts)
