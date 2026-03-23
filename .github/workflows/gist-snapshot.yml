@@ -1,61 +1,47 @@
-name: gist-snapshot
+name: Gist Snapshot
 
 on:
-    push:
-        branches: ["dev"]
-    workflow_dispatch:
+  workflow_dispatch:
 
 permissions:
-    contents: read
+  contents: read
+
+concurrency:
+  group: gist-snapshot-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-    test-and-publish-gist:
-        runs-on: ubuntu-latest
+  publish-gist:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: "3.13"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
 
-            - name: Install project (dev)
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install -e .[dev]
-                  # ensure requests for gist script
-                  pip install requests
+      - name: Install gist publishing dependency
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
-            - name: Ruff + mypy (do not fail job)
-              continue-on-error: true
-              run: |
-                  ruff check .
-                  mypy app || true
+      - name: Check GIST token
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+        run: |
+          if [ -z "${GIST_TOKEN}" ]; then
+            echo "GIST_TOKEN secret is not configured."
+            exit 1
+          fi
 
-            - name: Run tests with coverage (do not fail job)
-              continue-on-error: true
-              run: |
-                  set -o pipefail
-                  pytest -q --maxfail=1 --disable-warnings \
-                    --cov=app --cov-report=term-missing:skip-covered \
-                    --cov-report=xml \
-                    | tee pytest-report.txt
-
-            - name: Publish snapshot to Secret Gist
-              env:
-                  GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
-              run: |
-                  python tools/publish_to_gist.py
-
-            - name: Upload gist info artifact
-              uses: actions/upload-artifact@v4
-              with:
-                  name: gist-info
-                  path: |
-                      gist_url.txt
-                      coverage.xml
-                      pytest-report.txt
+      - name: Publish snapshot to Secret Gist
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+        run: |
+          python tools/publish_to_gist.py
