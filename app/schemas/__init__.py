@@ -11,6 +11,7 @@ It also exports typed exceptions for convenience.
 
 from __future__ import annotations
 
+from .profile import ProfileCreate, ProfileRead, ProfileUpdate
 from .schema_manager import (
     SchemaDownloadError,
     SchemaManager,
@@ -27,4 +28,7 @@ __all__ = [
     "SchemaDownloadError",
     "SchemaNotFoundError",
     "normalize_schema_for_internal_use",
+    "ProfileCreate",
+    "ProfileRead",
+    "ProfileUpdate",
 ]

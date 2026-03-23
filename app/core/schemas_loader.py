@@ -16,11 +16,11 @@ class UnsupportedProfileError(ValueError):
 
 # Filenames are chosen to match test expectations.
 # Tests check:
-#   - esr-140  -> endswith("firefox-esr140.json")
-#   - release-144 -> endswith("firefox-release.json")
+#   - esr-140 -> endswith("firefox-esr140.json")
+#   - release-145 -> endswith("firefox-release.json")
 _PROFILE_FILES: dict[str, str] = {
     "esr-140": "firefox-esr140.json",
-    "release-144": "firefox-release.json",
+    "release-145": "firefox-release.json",
 }
 
 # Directories relative to this file:
@@ -71,7 +71,7 @@ def _minimal_schema(title: str) -> dict[str, Any]:
         "additionalProperties": True,
         "properties": {
             "DisableTelemetry": {"type": "boolean"},
-            "DisablePocket": {"type": "boolean"},
+            "DisablePrivateBrowsing": {"type": "boolean"},
         },
     }
 
@@ -110,7 +110,7 @@ def load_schema(profile: str) -> dict[str, Any]:
     title = (
         "Firefox ESR 140 Policies (stub)"
         if profile == "esr-140"
-        else "Firefox Release 144 Policies (stub)"
+        else "Firefox Release 145 Policies (stub)"
     )
     stub = _minimal_schema(title)
     _write_json_file(cache_path, stub)

@@ -1,13 +1,26 @@
 from __future__ import annotations
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
 
-from app.api import export, health, policies, profiles, validation
-from app.core.config import Settings as AppSettings
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
+from fastapi.staticfiles import StaticFiles
+
+from app.api import export, health, profiles, validation
+from app.core.config import get_settings
+from app.middleware.security import SecurityHeadersMiddleware
+from app.web import profiles as web_profiles
 
 # Local settings instance for this module.
-settings = AppSettings()
+settings = get_settings()
+
+
+def _resolve_path(path_value: str | Path) -> Path:
+    path = Path(path_value)
+    if path.is_absolute():
+        return path
+    return settings.ROOT_DIR / path
 
 
 def create_app() -> FastAPI:
@@ -18,31 +31,51 @@ def create_app() -> FastAPI:
     """
     app = FastAPI(
         title=settings.APP_NAME,
-        version=getattr(settings, "APP_VERSION", "0.1.0"),
+        version=settings.APP_VERSION,
     )
+
+    app.add_middleware(SecurityHeadersMiddleware)
 
     # Basic CORS configuration. Tests do not depend on strict values here.
-    allow_origins = getattr(settings, "cors_allow_origins", ["*"])
+    allow_origins = settings.CORS_ALLOW_ORIGINS
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=allow_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+    if settings.ENABLE_CORS:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=allow_origins,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+    app.mount("/static", StaticFiles(directory=str(settings.STATIC_DIR)), name="static")
 
     # Routers
+    app.include_router(web_profiles.router)
     app.include_router(health.router)
-    # In-memory policies CRUD used by tests
-    app.include_router(policies.router)
     # DB-backed profiles CRUD with Firefox policy validation
     app.include_router(profiles.router)
     app.include_router(export.router)
     app.include_router(validation.router)
 
+    @app.get("/i18n/{locale}.json", include_in_schema=False)
+    async def locale_catalog(locale: str) -> Response:
+        if locale not in settings.SUPPORTED_LOCALES:
+            raise HTTPException(status_code=404, detail="Locale not supported")
+
+        locale_path = _resolve_path(settings.I18N_DIR) / f"{locale}.json"
+        if not locale_path.is_file():
+            raise HTTPException(status_code=404, detail="Locale file not found")
+
+        return Response(content=locale_path.read_text(encoding="utf-8"), media_type="application/json")
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    async def favicon() -> Response:
+        favicon_path = settings.STATIC_DIR / "favicon.ico"
+        return Response(content=favicon_path.read_bytes(), media_type="image/x-icon")
+
     @app.get("/")
-    def root() -> dict[str, str]:
+    async def root() -> dict[str, str]:
         """
         Simple JSON landing endpoint used by smoke tests.
         """
@@ -51,7 +84,7 @@ def create_app() -> FastAPI:
             "status": "ok",
             "app": app_name,  # explicitly required by tests
             "name": app_name,
-            "version": getattr(settings, "APP_VERSION", "0.1.0"),
+            "version": settings.APP_VERSION,
             "message": "Browser Policy Manager API is running",
         }
 

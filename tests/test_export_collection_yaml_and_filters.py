@@ -1,43 +1,37 @@
 from __future__ import annotations
 
-import uuid
-
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import TestClient, build_profile_payload
 
 
 def _mk_body(name_prefix: str, owner: str, schema: str):
-    """Build a policy with specific owner / schema to exercise filters."""
-    u = uuid.uuid4().hex[:6]
-    return {
-        "name": f"{name_prefix}-{u}",
-        "description": "Collection export",
-        "schema_version": schema,
-        "flags": {"DisableTelemetry": True},
-        "owner": owner,
-    }
+    return build_profile_payload(
+        name_prefix=name_prefix,
+        owner=owner,
+        schema_version=schema,
+        description="Collection export",
+    )
 
 
 def test_export_collection_yaml_with_filters_and_sorting():
-    """Covers /api/export/policies with fmt=yaml + filters + sorting + pagination."""
+    """Covers /api/export/profiles with fmt=yaml + filters + sorting + pagination."""
     client = TestClient(app)
 
     # Seed a few diverse items
     seeds = [
-        _mk_body("ColA", "ops@example.org", "firefox-ESR"),
-        _mk_body("ColB", "sec@example.org", "firefox-ESR"),
-        _mk_body("ColC", "ops@example.org", "firefox-ESR"),
+        _mk_body("ColA", "ops@example.org", "esr-140"),
+        _mk_body("ColB", "sec@example.org", "esr-140"),
+        _mk_body("ColC", "ops@example.org", "esr-140"),
     ]
     for body in seeds:
-        r = client.post("/api/policies", json=body)
+        r = client.post("/api/profiles", json=body)
         assert r.status_code == 201, r.text
 
     # YAML export with owner/schema filters, search query, sorting and pagination
     params = {
         "fmt": "yaml",
         "owner": "ops@example.org",
-        "schema_version": "firefox-ESR",
+        "schema_version": "esr-140",
         "q": "Col",  # substring match in name
         "include_deleted": "false",
         "limit": 2,
@@ -45,7 +39,7 @@ def test_export_collection_yaml_with_filters_and_sorting():
         "sort": "name",
         "order": "asc",
     }
-    r = client.get("/api/export/policies", params=params)
+    r = client.get("/api/export/profiles", params=params)
     assert r.status_code == 200
     txt = r.text
     # Ensure YAML envelope keys are present
@@ -56,4 +50,4 @@ def test_export_collection_yaml_with_filters_and_sorting():
     # Attachment name (if present) should be for YAML list
     cd = r.headers.get("content-disposition", "")
     if cd:
-        assert "policies.yaml" in cd.lower()
+        assert "profiles.yaml" in cd.lower()

@@ -1,34 +1,28 @@
 from __future__ import annotations
 
-import uuid
-
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import TestClient, build_profile_payload
 
 
 def _mk_profile_body():
-    """Generate a unique policy profile for export tests."""
-    unique = uuid.uuid4().hex[:8]
-    return {
-        "name": f"Dl-{unique}",
-        "description": "Export with download",
-        "schema_version": "firefox-ESR",
-        "flags": {"DisableTelemetry": True, "DisableFirefoxAccounts": True},
-    }
+    return build_profile_payload(
+        name_prefix="Dl",
+        description="Export with download",
+        flags={"DisableTelemetry": True, "DisableFirefoxAccounts": True},
+    )
 
 
 def test_export_with_download_headers_and_content_type():
     """Covers YAML/JSON export with ?download=1 and Content-Type variations."""
     client = TestClient(app)
 
-    # Create a policy profile
-    r = client.post("/api/policies", json=_mk_profile_body())
+    # Create a profile
+    r = client.post("/api/profiles", json=_mk_profile_body())
     assert r.status_code == 201, r.text
     pid = r.json()["id"]
 
     # JSON export with download=1
-    rj = client.get(f"/api/export/{pid}/policies.json?download=1")
+    rj = client.get(f"/api/export/profiles/{pid}.json?download=1")
     assert rj.status_code == 200
     cd = rj.headers.get("content-disposition", "")
     if cd:
@@ -37,7 +31,7 @@ def test_export_with_download_headers_and_content_type():
     assert '"DisableTelemetry"' in rj.text
 
     # YAML export with download=1
-    ry = client.get(f"/api/export/{pid}/policies.yaml?download=1")
+    ry = client.get(f"/api/export/profiles/{pid}.yaml?download=1")
     assert ry.status_code == 200
     cd2 = ry.headers.get("content-disposition", "")
     if cd2:

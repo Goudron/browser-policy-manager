@@ -1,6 +1,5 @@
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import TestClient
 
 
 def test_app_starts_and_root_responds_ok():

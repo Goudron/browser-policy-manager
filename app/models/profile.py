@@ -1,10 +1,10 @@
-# app/models/policy.py
+# app/models/profile.py
 from __future__ import annotations
 
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import JSON, DateTime, Integer, String, Text, UniqueConstraint, func
+from sqlalchemy import JSON, DateTime, Integer, String, Text, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -14,27 +14,27 @@ class Base(DeclarativeBase):
     pass
 
 
-class Policy(Base):
+class Profile(Base):
     """
-    Enterprise browser policy profile.
+    Stored browser profile entity.
 
     Soft-delete is implemented via `deleted_at`:
       - Active records: deleted_at IS NULL
       - Deleted records: deleted_at IS NOT NULL
     """
 
-    __tablename__ = "policies"
+    __tablename__ = "profiles"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False, index=True, unique=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    # Sprint F scope: ESR-140 and Release-144. Value is a free string to avoid hard-coupling here.
+    # Schema version stays free-form here; business rules live in validation code.
     schema_version: Mapped[str] = mapped_column(
         String(50), nullable=False, index=True, default="esr-140"
     )
 
-    # Arbitrary flags / raw policy blob (JSON)
+    # Raw Firefox policy payload stored as JSON on the profile entity.
     flags: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
 
     owner: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
@@ -55,12 +55,10 @@ class Policy(Base):
         DateTime(timezone=True), nullable=True, index=True
     )
 
-    __table_args__ = (UniqueConstraint("name", name="uq_policies_name"),)
-
     @property
     def is_deleted(self) -> bool:
         """Convenience property for Pydantic models."""
         return self.deleted_at is not None
 
     def __repr__(self) -> str:  # pragma: no cover
-        return f"<Policy id={self.id} name={self.name!r} deleted={self.is_deleted}>"
+        return f"<Profile id={self.id} name={self.name!r} deleted={self.is_deleted}>"

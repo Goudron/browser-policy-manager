@@ -1,38 +1,34 @@
-from fastapi.testclient import TestClient
-
 from app.main import make_app
+from tests.support import TestClient
+
+
+def _make_client() -> TestClient:
+    return TestClient(make_app())
 
 
 def test_validate_rejects_non_object_release145():
-    app = make_app()  # create an instance of the app
-    client = TestClient(app)
+    client = _make_client()
 
     payload = {"document": 123}
-    r = client.post("/api/validate/release-145", json=payload)
-    assert r.status_code == 200
+    response = client.post("/api/validate/release-145", json=payload)
+
+    assert response.status_code == 200
+    assert response.json()["ok"] is False
 
 
 def test_validate_profile_ok_and_fail():
-    app = make_app()  # create an instance of the app
-    client = TestClient(app)
+    client = _make_client()
 
     good = {"document": {"DisableTelemetry": True}}
-    bad = {"document": 123}  # should produce ok=False
+    bad = {"document": 123}
 
-    # ESR 140
-    r1 = client.post("/api/validate/esr-140", json=good)
-    assert r1.status_code == 200, r1.text
-    assert r1.json()["ok"] is True
+    for profile in ("esr-140", "release-145"):
+        ok_response = client.post(f"/api/validate/{profile}", json=good)
+        assert ok_response.status_code == 200, ok_response.text
+        assert ok_response.json() == {"ok": True, "profile": profile}
 
-    r2 = client.post("/api/validate/esr-140", json=bad)
-    assert r2.status_code == 200
-    assert r2.json()["ok"] is False
-
-    # Release 145
-    r3 = client.post("/api/validate/release-145", json=good)
-    assert r3.status_code == 200
-    assert r3.json()["ok"] is True
-
-    r4 = client.post("/api/validate/release-145", json=bad)
-    assert r4.status_code == 200
-    assert r4.json()["ok"] is False
+        bad_response = client.post(f"/api/validate/{profile}", json=bad)
+        assert bad_response.status_code == 200
+        bad_body = bad_response.json()
+        assert bad_body["ok"] is False
+        assert bad_body["profile"] == profile

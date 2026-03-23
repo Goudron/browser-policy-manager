@@ -13,7 +13,7 @@ The manager is designed to work in CI and offline environments:
 
 Target versions in Sprint G:
 - ESR 140   -> version key: "esr140"
-- Release 144 -> version key: "release144"
+- Release 145 -> version key: "release145"
 """
 
 from __future__ import annotations
@@ -67,12 +67,12 @@ class SchemaVersion(Enum):
     """
 
     ESR140 = "esr140"
-    RELEASE144 = "release144"
+    RELEASE145 = "release145"
 
     @property
     def refs(self) -> list[str]:
         # We keep several plausible refs for robustness:
-        # tags (e.g., "release-144.0"), the "release" branch, and ESR branches.
+        # tags (e.g., "release-145.0"), the "release" branch, and ESR branches.
         if self is SchemaVersion.ESR140:
             return [
                 # Try exact tags first (most stable)
@@ -83,9 +83,9 @@ class SchemaVersion(Enum):
                 # Final fallback to main
                 "main",
             ]
-        elif self is SchemaVersion.RELEASE144:
+        elif self is SchemaVersion.RELEASE145:
             return [
-                "release-144.0",
+                "release-145.0",
                 "release",  # rolling branch for releases
                 "main",  # ultimate fallback
             ]
@@ -93,15 +93,15 @@ class SchemaVersion(Enum):
 
     @property
     def cache_subdir(self) -> str:
-        return "esr140" if self is SchemaVersion.ESR140 else "release144"
+        return "esr140" if self is SchemaVersion.ESR140 else "release145"
 
     @staticmethod
     def from_key(key: str) -> SchemaVersion:
         k = key.strip().lower()
         if k in {"esr140", "firefox-esr140"}:
             return SchemaVersion.ESR140
-        if k in {"release144", "firefox-release144"}:
-            return SchemaVersion.RELEASE144
+        if k in {"release145", "firefox-release145"}:
+            return SchemaVersion.RELEASE145
         raise ValueError(f"Unsupported schema version key: {key!r}")
 
 
@@ -128,7 +128,7 @@ class SchemaManager:
     Typical usage:
         manager = SchemaManager()
         schema = manager.load("esr140")         # dict with the raw JSON schema
-        schema = manager.load("release144", force_refresh=True)
+        schema = manager.load("release145", force_refresh=True)
 
     For testing, you can inject a custom fetcher:
         manager = SchemaManager(fetcher=my_fake_fetcher)

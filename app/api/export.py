@@ -1,31 +1,34 @@
 from __future__ import annotations
 
 import json
-from typing import Any
+from typing import Any, Literal
 
 import yaml
-from fastapi import APIRouter, HTTPException, Query, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from .policies import _get_policy_or_404, _get_store
+from app.db import get_session
+from app.schemas.profile import ProfileRead
+from app.services.profile_service import ProfileService
 
 router = APIRouter(prefix="/api/export", tags=["export"])
 
 
-def _serialize(policy: dict[str, Any]) -> dict[str, Any]:
-    """Serialize internal policy dict to a public representation."""
+def _serialize(profile: ProfileRead) -> dict[str, Any]:
+    """Serialize an internal profile model to the public export shape."""
     return {
-        "id": policy["id"],
-        "name": policy["name"],
-        "description": policy["description"],
-        "schema_version": policy["schema_version"],
-        "flags": policy["flags"],
-        "owner": policy["owner"],
-        "deleted": policy["deleted"],
+        "id": profile.id,
+        "name": profile.name,
+        "description": profile.description,
+        "schema_version": profile.schema_version,
+        "flags": profile.flags,
+        "owner": profile.owner,
+        "is_deleted": profile.is_deleted,
     }
 
 
 def _build_envelope(
-    items: list[dict[str, Any]],
+    items: list[ProfileRead],
     limit: int,
     offset: int,
     total: int,
@@ -49,52 +52,54 @@ def _to_yaml(data: Any) -> str:
     return yaml.safe_dump(data, sort_keys=False)
 
 
-@router.get("/policies")
+@router.get(
+    "/profiles",
+    summary="Export profiles collection",
+    description="Export a filtered collection of profiles as JSON or YAML.",
+)
 async def export_collection(
-    request: Request,
-    fmt: str = Query("json"),
+    session: AsyncSession = Depends(get_session),
+    fmt: Literal["json", "yaml"] = Query("json"),
     download: int = Query(0, ge=0, le=1),
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
     include_deleted: bool = Query(False),
     q: str | None = Query(None),
+    owner: str | None = Query(None),
+    schema_version: str | None = Query(None),
     order_by: str | None = Query(None),
+    sort: str | None = Query(None),
     order: str = Query("asc"),
     indent: int | None = Query(None, ge=0),
     pretty: int = Query(0, ge=0, le=1),
 ) -> Response:
-    """
-    Export a collection of policies.
-
-    This endpoint is heavily exercised by tests with various combinations of:
-    * fmt=json|yaml
-    * download=0|1 (Content-Disposition header)
-    * indent / pretty
-    * include_deleted, q, limit/offset, order_by, order
-    """
-    store = _get_store(request)
-    items = list(store.values())
-
-    if not include_deleted:
-        items = [p for p in items if not p["deleted"]]
-
-    if q:
-        q_lower = q.lower()
-        items = [p for p in items if q_lower in p["name"].lower()]
-
-    if order_by == "name":
-        reverse = order.lower() == "desc"
-        items.sort(key=lambda p: p["name"], reverse=reverse)
-
-    total = len(items)
-    sliced = items[offset : offset + limit]
-    envelope = _build_envelope(sliced, limit=limit, offset=offset, total=total)
+    """Export a collection of profiles."""
+    effective_sort = sort or order_by or "id"
+    items = await ProfileService.list(
+        session,
+        q=q,
+        owner=owner,
+        schema_version=schema_version,
+        include_deleted=include_deleted,
+        limit=limit,
+        offset=offset,
+        sort=effective_sort,
+        order=order,
+    )
+    total = await ProfileService.count(
+        session,
+        q=q,
+        owner=owner,
+        schema_version=schema_version,
+        include_deleted=include_deleted,
+    )
+    envelope = _build_envelope(items, limit=limit, offset=offset, total=total)
 
     headers: dict[str, str] = {}
 
     if fmt == "yaml":
         if download:
-            headers["Content-Disposition"] = 'attachment; filename="policies.yaml"'
+            headers["Content-Disposition"] = 'attachment; filename="profiles.yaml"'
         body = _to_yaml(envelope)
         return Response(content=body, media_type="application/x-yaml", headers=headers)
 
@@ -103,94 +108,90 @@ async def export_collection(
         indent = 2
     body_json = json.dumps(envelope, indent=indent)
     if download:
-        headers["Content-Disposition"] = 'attachment; filename="policies.json"'
+        headers["Content-Disposition"] = 'attachment; filename="profiles.json"'
     return Response(content=body_json, media_type="application/json", headers=headers)
 
 
-@router.get("/{policy_id}/policies.json")
+@router.get(
+    "/profiles/{profile_id}.json",
+    summary="Export profile as JSON",
+    description="Export a single profile as JSON via a suffix route.",
+)
 async def export_single_json_suffix(
-    policy_id: int,
-    request: Request,
+    profile_id: int,
+    session: AsyncSession = Depends(get_session),
     download: int = Query(0, ge=0, le=1),
     indent: int | None = Query(None, ge=0),
     pretty: int = Query(0, ge=0, le=1),
 ) -> Response:
-    """
-    Export a single policy as JSON using suffix route:
-
-        /api/export/{id}/policies.json
-
-    Tests combine this with download, indent and pretty query parameters.
-    """
-    store = _get_store(request)
-    policy = _get_policy_or_404(store, policy_id)
+    """Export one profile as JSON."""
+    profile = await ProfileService.get(session, profile_id, include_deleted=True)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Profile not found")
 
     if indent is None and pretty:
         indent = 2
 
-    body_json = json.dumps(_serialize(policy), indent=indent)
+    body_json = json.dumps(_serialize(profile), indent=indent)
     headers: dict[str, str] = {}
     if download:
-        headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.json"'
+        headers["Content-Disposition"] = f'attachment; filename="profile-{profile_id}.json"'
     return Response(content=body_json, media_type="application/json", headers=headers)
 
 
-@router.get("/{policy_id}/policies.yaml")
+@router.get(
+    "/profiles/{profile_id}.yaml",
+    summary="Export profile as YAML",
+    description="Export a single profile as YAML via a suffix route.",
+)
 async def export_single_yaml_suffix(
-    policy_id: int,
-    request: Request,
+    profile_id: int,
+    session: AsyncSession = Depends(get_session),
     download: int = Query(0, ge=0, le=1),
 ) -> Response:
-    """
-    Export a single policy as YAML using suffix route:
+    """Export one profile as YAML."""
+    profile = await ProfileService.get(session, profile_id, include_deleted=True)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Profile not found")
 
-        /api/export/{id}/policies.yaml
-    """
-    store = _get_store(request)
-    policy = _get_policy_or_404(store, policy_id)
-
-    body = _to_yaml(_serialize(policy))
+    body = _to_yaml(_serialize(profile))
     headers: dict[str, str] = {}
     if download:
-        headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.yaml"'
+        headers["Content-Disposition"] = f'attachment; filename="profile-{profile_id}.yaml"'
     return Response(content=body, media_type="application/x-yaml", headers=headers)
 
 
-@router.get("/policies/{policy_id}")
+@router.get(
+    "/profiles/{profile_id}",
+    summary="Export single profile",
+    description="Export a single profile as JSON or YAML using the fmt query parameter.",
+)
 async def export_single_queryparam(
-    policy_id: int,
-    request: Request,
-    fmt: str = Query("json"),
+    profile_id: int,
+    session: AsyncSession = Depends(get_session),
+    fmt: Literal["json", "yaml"] = Query("json"),
     include_deleted: bool = Query(False),
     download: int = Query(0, ge=0, le=1),
     indent: int | None = Query(None, ge=0),
     pretty: int = Query(0, ge=0, le=1),
 ) -> Response:
-    """
-    Export a single policy using the query-parameter route:
-
-        /api/export/policies/{id}?fmt={json|yaml}&include_deleted=true|false...
-
-    Tests also cover 404 behaviour when include_deleted is false and the item
-    has been soft-deleted.
-    """
-    store = _get_store(request)
-    policy = store.get(policy_id)
-    if policy is None or (policy["deleted"] and not include_deleted):
-        raise HTTPException(status_code=404, detail="Policy not found")
+    """Export one profile using the fmt query parameter route."""
+    profile = await ProfileService.get(session, profile_id, include_deleted=include_deleted)
+    if profile is None:
+        raise HTTPException(status_code=404, detail="Profile not found")
 
     headers: dict[str, str] = {}
 
     if fmt == "yaml":
-        body = _to_yaml(_serialize(policy))
+        body = _to_yaml(_serialize(profile))
         if download:
-            headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.yaml"'
+            headers["Content-Disposition"] = f'attachment; filename="profile-{profile_id}.yaml"'
         return Response(content=body, media_type="application/x-yaml", headers=headers)
 
     # Default JSON
     if indent is None and pretty:
         indent = 2
-    body_json = json.dumps(_serialize(policy), indent=indent)
+    body_json = json.dumps(_serialize(profile), indent=indent)
     if download:
-        headers["Content-Disposition"] = f'attachment; filename="policy-{policy_id}.json"'
+        headers["Content-Disposition"] = f'attachment; filename="profile-{profile_id}.json"'
     return Response(content=body_json, media_type="application/json", headers=headers)

@@ -4,30 +4,38 @@ import asyncio
 import os
 from logging.config import fileConfig
 
-from sqlalchemy import pool
+from sqlalchemy import pool, text
 from sqlalchemy.engine import Connection, create_engine
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 from alembic import context
 
-# Если у вас есть declarative Base в проекте, можно импортировать metadata:
+# If your project has a declarative Base, you can import its metadata here:
 # from app.db_models import Base
 # target_metadata = Base.metadata
-target_metadata = None  # мы не используем автогенерацию в этом проекте
+target_metadata = None  # We do not use autogeneration in this project.
 
-# Конфигурация Alembic
+# Alembic configuration
 config = context.config
 
-# Логирование из alembic.ini
+# Logging from alembic.ini
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
-# Берём URL ТОЛЬКО из alembic.ini / переданного Config (тест вписывает его через set_main_option)
+LEGACY_REVISION_ALIASES = {
+    "5cb73fdb68ed": "20251022_init_profiles",
+    "20251026_add_deleted_at": "20251026_add_deleted_at_profiles",
+    "20260323_rename_profiles": "20260323_normalize_profiles",
+}
+
+
+# Read the URL ONLY from alembic.ini / injected Config
+# (tests set it via set_main_option).
 def get_url() -> str:
     url = config.get_main_option("sqlalchemy.url")
     if not url:
-        # последний шанс — переменная окружения (на локалке)
+        # Last resort: environment variable for local runs.
         url = os.environ.get("ALEMBIC_SQLALCHEMY_URL", "")
     if not url:
         raise RuntimeError("SQLAlchemy URL is not configured for Alembic")
@@ -35,7 +43,7 @@ def get_url() -> str:
 
 
 def run_migrations_offline() -> None:
-    """Запуск в offline-режиме (генерация SQL без подключения)."""
+    """Run migrations in offline mode (generate SQL without connecting)."""
     url = get_url()
     context.configure(
         url=url,
@@ -50,7 +58,8 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
-    """Общий запуск миграций при активном соединении."""
+    """Shared migration runner for an active connection."""
+    _rewrite_legacy_alembic_versions(connection)
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
@@ -61,29 +70,64 @@ def do_run_migrations(connection: Connection) -> None:
         context.run_migrations()
 
 
+def _rewrite_legacy_alembic_versions(connection: Connection) -> None:
+    """
+    Rewrite old local revision ids to the current canonical names.
+
+    This keeps existing development databases upgradeable after we cleaned up
+    the revision constants to profile-oriented names.
+    """
+    inspector = connection.dialect.has_table(connection, "alembic_version")
+    if not inspector:
+        return
+
+    rows = connection.execute(text("SELECT version_num FROM alembic_version")).fetchall()
+    if not rows:
+        return
+
+    for (version_num,) in rows:
+        target = LEGACY_REVISION_ALIASES.get(version_num)
+        if target is None:
+            continue
+        connection.execute(
+            text(
+                """
+                UPDATE alembic_version
+                SET version_num = :target
+                WHERE version_num = :current
+                """
+            ),
+            {"target": target, "current": version_num},
+        )
+
+
 def run_migrations_online_sync() -> None:
-    """Синхронный движок (sqlite+pysqlite и т.п.)."""
+    """Synchronous engine path (sqlite+pysqlite, etc.)."""
     url = get_url()
     connectable = create_engine(url, poolclass=pool.NullPool, future=True)
     with connectable.connect() as connection:
         do_run_migrations(connection)
+        if connection.in_transaction():
+            connection.commit()
     connectable.dispose()
 
 
 async def run_migrations_online_async() -> None:
-    """Асинхронный движок (sqlite+aiosqlite, postgresql+asyncpg и т.п.)."""
+    """Asynchronous engine path (sqlite+aiosqlite, postgresql+asyncpg, etc.)."""
     url = get_url()
     connectable: AsyncEngine = create_async_engine(url, poolclass=pool.NullPool, future=True)
     async with connectable.connect() as async_connection:
         await async_connection.run_sync(do_run_migrations)
+        if async_connection.in_transaction():
+            await async_connection.commit()
     await connectable.dispose()
 
 
 def run_migrations_online() -> None:
-    """Выбираем sync/async по схеме URL."""
+    """Choose sync or async mode based on the URL scheme."""
     url = get_url()
     if "+aiosqlite" in url or "+asyncpg" in url or url.startswith("postgresql+"):
-        # грубая эвристика: если драйвер асинхронный — идём через async
+        # Rough heuristic: use async path when the driver is async.
         asyncio.run(run_migrations_online_async())
     else:
         run_migrations_online_sync()

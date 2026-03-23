@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables (.env supported)."""
 
     # Load from .env at repo root; ignore unknown variables to keep flexibility
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="BPM_", extra="ignore")
 
     # -------------------------------------------------------------------------
     # Core application info

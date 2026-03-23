@@ -26,8 +26,8 @@ class ValidationRequest(BaseModel):
     document: Any
 
 
-# Add the new channel release-144 to the list of supported profiles.
-_SUPPORTED_PROFILES: set[str] = {"esr-140", "release-144", "release-145"}
+# Supported profiles are aligned with the bundled internal policy schemas.
+_SUPPORTED_PROFILES: set[str] = {"esr-140", "release-145"}
 
 
 def _get_schema_or_404(profile: str) -> dict[str, Any]:
@@ -38,7 +38,7 @@ def _get_schema_or_404(profile: str) -> dict[str, Any]:
 
 
 @router.post("/{profile}")
-def validate_profile(profile: str, payload: ValidationRequest) -> dict[str, Any]:
+async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str, Any]:
     """
     Validate a policy document for the given profile.
 

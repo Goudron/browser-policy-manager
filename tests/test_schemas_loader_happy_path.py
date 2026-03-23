@@ -10,7 +10,7 @@ from app.core.schemas_loader import (
 def test_load_schema_success_and_cache():
     """Covers normal and cached load of known schemas in schemas_loader."""
     profiles = available_profiles()
-    assert "esr-140" in profiles and "release-144" in profiles
+    assert "esr-140" in profiles and "release-145" in profiles
 
     for key in profiles:
         schema = load_schema(key)

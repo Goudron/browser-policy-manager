@@ -1,22 +1,16 @@
 from __future__ import annotations
 
-import uuid
-
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import TestClient, build_profile_payload
 
 
 def _mk(name_prefix: str, owner: str = "ops@example.org"):
-    """Create a policy payload with predictable fields."""
-    u = uuid.uuid4().hex[:6]
-    return {
-        "name": f"{name_prefix}-{u}",
-        "description": "Matrix export",
-        "schema_version": "firefox-ESR",
-        "flags": {"DisableTelemetry": True, "DisablePocket": True},
-        "owner": owner,
-    }
+    return build_profile_payload(
+        name_prefix=name_prefix,
+        owner=owner,
+        description="Matrix export",
+        flags={"DisableTelemetry": True, "DisablePrivateBrowsing": True},
+    )
 
 
 def _ok_yaml(ct: str) -> bool:
@@ -31,7 +25,7 @@ def _status_ok_for_unknown_fmt(code: int) -> bool:
 def _ensure_created(client: TestClient, n: int, prefix: str) -> list[int]:
     ids: list[int] = []
     for _ in range(n):
-        r = client.post("/api/policies", json=_mk(prefix))
+        r = client.post("/api/profiles", json=_mk(prefix))
         assert r.status_code == 201, r.text
         ids.append(r.json()["id"])
     return ids
@@ -46,9 +40,9 @@ def test_export_full_matrix_single_and_collection():
     pid = ids[0]
 
     # --- SINGLE EXPORTS ---
-    # 1) Suffix routes: /api/export/{id}/policies.(json|yaml)
+    # 1) Suffix routes: /api/export/profiles/{id}.(json|yaml)
     for fmt in ("json", "yaml"):
-        url = f"/api/export/{pid}/policies.{fmt}"
+        url = f"/api/export/profiles/{pid}.{fmt}"
         # with/without download, with indent/pretty toggles
         for download in ("0", "1"):
             for indent in (None, "2"):
@@ -76,7 +70,7 @@ def test_export_full_matrix_single_and_collection():
                         assert "attachment" in cd.lower()
                         assert f".{fmt}" in cd.lower()
 
-    # 2) Query-param route: /api/export/policies/{id}?fmt=...
+    # 2) Query-param route: /api/export/profiles/{id}?fmt=...
     for fmt in ("json", "yaml"):
         for download in ("0", "1"):
             for indent in (None, "2"):
@@ -88,7 +82,7 @@ def test_export_full_matrix_single_and_collection():
                         qs.append(f"indent={indent}")
                     if pretty == "1":
                         qs.append("pretty=1")
-                    r = client.get(f"/api/export/policies/{pid}?" + "&".join(qs))
+                    r = client.get(f"/api/export/profiles/{pid}?" + "&".join(qs))
                     assert r.status_code == 200
                     ct = r.headers.get("content-type", "")
                     if fmt == "json":
@@ -103,41 +97,41 @@ def test_export_full_matrix_single_and_collection():
                         assert f".{fmt}" in cd.lower()
 
     # 3) Soft-delete the item and exercise include_deleted branches & 404
-    rdel = client.delete(f"/api/policies/{pid}")
+    rdel = client.delete(f"/api/profiles/{pid}")
     assert rdel.status_code in (200, 204)
 
     # Default (include_deleted=false) should 404
-    r404_json = client.get(f"/api/export/policies/{pid}?fmt=json")
+    r404_json = client.get(f"/api/export/profiles/{pid}?fmt=json")
     assert r404_json.status_code == 404
-    r404_yaml = client.get(f"/api/export/policies/{pid}?fmt=yaml")
+    r404_yaml = client.get(f"/api/export/profiles/{pid}?fmt=yaml")
     assert r404_yaml.status_code == 404
 
     # With include_deleted=true should return data
-    rj = client.get(f"/api/export/policies/{pid}?fmt=json&include_deleted=true")
+    rj = client.get(f"/api/export/profiles/{pid}?fmt=json&include_deleted=true")
     assert rj.status_code == 200 and rj.headers.get("content-type", "").startswith(
         "application/json"
     )
-    ry = client.get(f"/api/export/policies/{pid}?fmt=yaml&include_deleted=true")
+    ry = client.get(f"/api/export/profiles/{pid}?fmt=yaml&include_deleted=true")
     assert ry.status_code == 200 and _ok_yaml(ry.headers.get("content-type", ""))
 
     # 4) Non-existent ID should return 404 for both suffix and query-param routes
     bad_id = 9_999_999
-    r_bad_sfx_json = client.get(f"/api/export/{bad_id}/policies.json")
-    r_bad_sfx_yaml = client.get(f"/api/export/{bad_id}/policies.yaml")
+    r_bad_sfx_json = client.get(f"/api/export/profiles/{bad_id}.json")
+    r_bad_sfx_yaml = client.get(f"/api/export/profiles/{bad_id}.yaml")
     assert r_bad_sfx_json.status_code in (404, 400)
     assert r_bad_sfx_yaml.status_code in (404, 400)
-    r_bad_qp_json = client.get(f"/api/export/policies/{bad_id}?fmt=json")
-    r_bad_qp_yaml = client.get(f"/api/export/policies/{bad_id}?fmt=yaml")
+    r_bad_qp_json = client.get(f"/api/export/profiles/{bad_id}?fmt=json")
+    r_bad_qp_yaml = client.get(f"/api/export/profiles/{bad_id}?fmt=yaml")
     assert r_bad_qp_json.status_code in (404, 400)
     assert r_bad_qp_yaml.status_code in (404, 400)
 
     # 5) Unknown fmt (validation may 422)
-    r_unknown = client.get(f"/api/export/policies/{pid}?fmt=txt")
+    r_unknown = client.get(f"/api/export/profiles/{pid}?fmt=txt")
     assert _status_ok_for_unknown_fmt(r_unknown.status_code)
 
     # --- COLLECTION EXPORTS ---
     # Default (no fmt) should be JSON envelope
-    r_def = client.get("/api/export/policies?limit=1&offset=0&pretty=1&indent=2")
+    r_def = client.get("/api/export/profiles?limit=1&offset=0&pretty=1&indent=2")
     assert r_def.status_code == 200
     assert r_def.headers.get("content-type", "").startswith("application/json")
     assert (
@@ -149,12 +143,12 @@ def test_export_full_matrix_single_and_collection():
 
     # JSON with filters (owner/schema_version/q), pagination, sorting, download
     r_coll_json = client.get(
-        "/api/export/policies",
+        "/api/export/profiles",
         params={
             "fmt": "json",
             "download": "1",
             "owner": "ops@example.org",
-            "schema_version": "firefox-ESR",
+            "schema_version": "esr-140",
             "q": "MATRIX-",
             "include_deleted": "true",
             "limit": 2,
@@ -171,12 +165,12 @@ def test_export_full_matrix_single_and_collection():
 
     # YAML with different sort and pagination
     r_coll_yaml = client.get(
-        "/api/export/policies",
+        "/api/export/profiles",
         params={
             "fmt": "yaml",
             "download": "1",
             "owner": "ops@example.org",
-            "schema_version": "firefox-ESR",
+            "schema_version": "esr-140",
             "q": "MATRIX-",
             "include_deleted": "true",
             "limit": 3,
@@ -193,11 +187,11 @@ def test_export_full_matrix_single_and_collection():
     assert "items:" in txt and "limit:" in txt and "offset:" in txt and "count:" in txt
 
     # Empty set envelope (unmatchable q)
-    r_empty_json = client.get("/api/export/policies?q=__NO_MATCH_EXPECTED__")
+    r_empty_json = client.get("/api/export/profiles?q=__NO_MATCH_EXPECTED__")
     assert r_empty_json.status_code == 200
     assert '"items"' in r_empty_json.text
 
-    r_empty_yaml = client.get("/api/export/policies?fmt=yaml&q=__NO_MATCH_EXPECTED__")
+    r_empty_yaml = client.get("/api/export/profiles?fmt=yaml&q=__NO_MATCH_EXPECTED__")
     assert r_empty_yaml.status_code == 200
     assert _ok_yaml(r_empty_yaml.headers.get("content-type", ""))
     assert "items:" in r_empty_yaml.text

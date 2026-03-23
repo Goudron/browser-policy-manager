@@ -5,13 +5,13 @@ import uuid
 import pytest
 
 from app.db import get_session, init_db
-from app.schemas.policy import PolicyCreate
-from app.services.policy_service import PolicyService
+from app.schemas.profile import ProfileCreate
+from app.services.profile_service import ProfileService
 
 
 def _mk(owner: str, schema: str, name_prefix: str = "SRV", flags: dict | None = None):
     u = uuid.uuid4().hex[:6]
-    return PolicyCreate(
+    return ProfileCreate(
         name=f"{name_prefix}-{u}",
         description="Service list",
         schema_version=schema,
@@ -22,15 +22,15 @@ def _mk(owner: str, schema: str, name_prefix: str = "SRV", flags: dict | None = 
 
 @pytest.mark.anyio
 async def test_service_list_filters_sort_and_pagination_direct():
-    """Exercise PolicyService.list directly (owner/schema_version/sort/limit/offset and q branch)."""
+    """Exercise ProfileService.list directly (owner/schema_version/sort/limit/offset and q branch)."""
     await init_db()
 
     # Create a few records via service and COMMIT so they are visible to subsequent queries
     async for session in get_session():
         for owner in ("ops@example.org", "sec@example.org"):
             for i in range(2):
-                await PolicyService.create(
-                    session, _mk(owner, "firefox-ESR", name_prefix=f"SVC-{i}")
+                await ProfileService.create(
+                    session, _mk(owner, "esr-140", name_prefix=f"SVC-{i}")
                 )
         await session.commit()
         break
@@ -38,11 +38,11 @@ async def test_service_list_filters_sort_and_pagination_direct():
     # Now query through the service with different combinations
     async for session in get_session():
         # 1) Owner + schema_version without q -> should return at least one item
-        items = await PolicyService.list(
+        items = await ProfileService.list(
             session,
             q=None,
             owner="ops@example.org",
-            schema_version="firefox-ESR",
+            schema_version="esr-140",
             sort="name",
             order="asc",
             limit=2,
@@ -52,11 +52,11 @@ async def test_service_list_filters_sort_and_pagination_direct():
         assert len(items) >= 1
 
         # 2) Different sorting and pagination
-        items2 = await PolicyService.list(
+        items2 = await ProfileService.list(
             session,
             q=None,
             owner=None,
-            schema_version="firefox-ESR",
+            schema_version="esr-140",
             sort="updated_at",
             order="desc",
             limit=1,
@@ -65,7 +65,7 @@ async def test_service_list_filters_sort_and_pagination_direct():
         assert isinstance(items2, list)
 
         # 3) Apply q branch explicitly; do not require non-empty result (we just want to hit the code path)
-        items3 = await PolicyService.list(
+        items3 = await ProfileService.list(
             session,
             q="SVC-",
             owner=None,

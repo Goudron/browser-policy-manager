@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from fastapi import status
-from fastapi.testclient import TestClient
 
 from app.main import create_app
+from tests.support import TestClient
 
-# Use the real application factory to ensure all routers are included.
 app = create_app()
 client = TestClient(app)
 
@@ -55,6 +54,4 @@ def test_create_profile_invalid_schema_version_returns_400():
 
     body = response.json()
     assert body["detail"]["message"] == "Profile validation failed"
-    # The exact wording comes from load_policy_schema_for_channel(...)
-    # which raises ValueError("Unsupported channel '<channel>'").
     assert "Unsupported channel" in body["detail"]["error"]

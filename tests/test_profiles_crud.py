@@ -5,11 +5,11 @@ import pytest
 async def test_create_list_get_update_delete(client):
     # Create
     r = await client.post(
-        "/api/policies",
+        "/api/profiles",
         json={
             "name": "Default",
             "description": "Base profile",
-            "schema_version": "firefox-ESR",
+            "schema_version": "esr-140",
             "flags": {"DisableTelemetry": True},
         },
     )
@@ -18,7 +18,7 @@ async def test_create_list_get_update_delete(client):
     pid = created["id"]
 
     # List
-    r = await client.get("/api/policies")
+    r = await client.get("/api/profiles")
     assert r.status_code == 200
     items = r.json()
 
@@ -27,25 +27,24 @@ async def test_create_list_get_update_delete(client):
     assert any(p["id"] == pid and p["name"] == "Default" for p in items)
 
     # Get
-    r = await client.get(f"/api/policies/{pid}")
+    r = await client.get(f"/api/profiles/{pid}")
     assert r.status_code == 200
     assert r.json()["id"] == pid
 
     # Update
-    r = await client.patch(f"/api/policies/{pid}", json={"description": "Updated"})
+    r = await client.patch(f"/api/profiles/{pid}", json={"description": "Updated"})
     assert r.status_code == 200
     assert r.json()["description"] == "Updated"
 
     # Delete (soft delete)
-    r = await client.delete(f"/api/policies/{pid}")
+    r = await client.delete(f"/api/profiles/{pid}")
     assert r.status_code in (204, 200)
 
     # Verify behavior after delete:
-    # depending on API semantics this may be 404 or 200 with deleted=True.
-    r = await client.get(f"/api/policies/{pid}")
+    # depending on API semantics this may be 404 or 200 with is_deleted=True.
+    r = await client.get(f"/api/profiles/{pid}")
     assert r.status_code in (404, 200)
     if r.status_code == 200:
         data = r.json()
         assert data["id"] == pid
-        # current API exposes soft-delete flag as "deleted"
-        assert data.get("deleted") is True
+        assert data["is_deleted"] is True

@@ -1,4 +1,4 @@
-# app/schemas/policy.py
+# app/schemas/profile.py
 from __future__ import annotations
 
 from datetime import datetime
@@ -7,7 +7,7 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class PolicyBase(BaseModel):
+class ProfileBase(BaseModel):
     name: str = Field(..., max_length=255)
     description: str | None = None
     # Keep free-form; business logic enforces supported values elsewhere
@@ -16,18 +16,18 @@ class PolicyBase(BaseModel):
     owner: str | None = Field(default=None, max_length=255)
 
 
-class PolicyCreate(PolicyBase):
+class ProfileCreate(ProfileBase):
     pass
 
 
-class PolicyUpdate(BaseModel):
+class ProfileUpdate(BaseModel):
     description: str | None = None
     schema_version: str | None = Field(default=None, max_length=50)
     flags: dict[str, Any] | None = None
     owner: str | None = Field(default=None, max_length=255)
 
 
-class PolicyRead(PolicyBase):
+class ProfileRead(ProfileBase):
     id: int
     created_at: datetime
     updated_at: datetime

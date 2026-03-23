@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import uuid
 
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import TestClient
 
 
 def _mk(prefix: str = "EXY"):
@@ -12,7 +11,7 @@ def _mk(prefix: str = "EXY"):
     return {
         "name": f"{prefix}-{u}",
         "description": "YAML download path",
-        "schema_version": "firefox-ESR",
+        "schema_version": "esr-140",
         "flags": {"DisableTelemetry": True},
     }
 
@@ -23,10 +22,10 @@ def test_single_export_not_found_json_and_yaml():
     # use a very large/non-existent id
     bad_id = 9_999_999
 
-    rj = client.get(f"/api/export/{bad_id}/policies.json")
+    rj = client.get(f"/api/export/profiles/{bad_id}.json")
     assert rj.status_code in (404, 400)
 
-    ry = client.get(f"/api/export/{bad_id}/policies.yaml")
+    ry = client.get(f"/api/export/profiles/{bad_id}.yaml")
     assert ry.status_code in (404, 400)
 
 
@@ -35,12 +34,12 @@ def test_single_export_yaml_suffix_with_download_headers():
     client = TestClient(app)
 
     # Create
-    r = client.post("/api/policies", json=_mk())
+    r = client.post("/api/profiles", json=_mk())
     assert r.status_code == 201, r.text
     pid = r.json()["id"]
 
     # YAML by suffix with ?download=1
-    ry = client.get(f"/api/export/{pid}/policies.yaml?download=1")
+    ry = client.get(f"/api/export/profiles/{pid}.yaml?download=1")
     assert ry.status_code == 200
     # content-type variations allowed
     assert any(
