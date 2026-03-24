@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 FALLBACK_SECTION_MAPPINGS: dict[str, dict[str, tuple[str, list[str]]]] = {
     "browser_behavior": {
         "AllowFileSelectionDialogs": ("files", ["files"]),
@@ -81,7 +80,8 @@ def infer_widget(policy_type: str, schema_node: dict[str, Any] | None) -> str:
     if policy_type == "string":
         return "enum-select" if isinstance(node.get("enum"), list) else "text"
     if policy_type == "array":
-        items = node.get("items") if isinstance(node.get("items"), dict) else {}
+        raw_items = node.get("items")
+        items: dict[str, Any] = raw_items if isinstance(raw_items, dict) else {}
         if isinstance(items.get("properties"), dict):
             return "array-of-objects"
         return "list"

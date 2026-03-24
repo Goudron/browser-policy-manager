@@ -3,15 +3,15 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from app.core.config import get_settings
-from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_manual_policy_controls import get_manual_policy_controls_catalog
+from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_settings_catalog import get_wizard_settings_catalog
 from app.web.firefox_starter_presets import get_wizard_starter_catalog
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
@@ -25,7 +25,7 @@ templates = Jinja2Templates(directory=str(settings.TEMPLATES_DIR))
 @router.get("/profiles", response_class=HTMLResponse)
 async def profiles_page(request: Request) -> HTMLResponse:
     """Render the main Profiles editor page."""
-    current_year = datetime.now(timezone.utc).year
+    current_year = datetime.now(UTC).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
     wizard_settings_catalog = get_wizard_settings_catalog()
     wizard_preferences_catalog = get_wizard_preferences_catalog(wizard_settings_catalog)

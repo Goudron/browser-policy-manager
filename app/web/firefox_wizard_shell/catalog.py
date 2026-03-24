@@ -8,7 +8,6 @@ from app.web.firefox_preferences import get_wizard_preferences_catalog
 from .inline_editors import build_inline_editor
 from .serializer import humanize_identifier, serialize_policy
 
-
 SUPPORTED_POLICY_CHANNELS = ("esr-140", "release-148")
 
 WIZARD_SHELL_STEPS: list[dict[str, Any]] = [

@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from .common import PREFERENCES_STATUS_ENUM, PREFERENCES_TYPE_ENUM, SchemaPolicyDefinition, UpstreamPolicyEntry
+from .common import (
+    PREFERENCES_STATUS_ENUM,
+    PREFERENCES_TYPE_ENUM,
+    SchemaPolicyDefinition,
+    UpstreamPolicyEntry,
+)
 from .snippet_parser import parse_min_version_from_compatibility
 
 

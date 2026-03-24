@@ -4,7 +4,6 @@ from typing import Any
 
 from .serializer import humanize_identifier
 
-
 INLINE_EDITOR_POLICY_IDS = {
     "Authentication",
     "Bookmarks",
@@ -45,9 +44,9 @@ def build_inline_editor(definition) -> dict[str, Any] | None:
     if definition.type != "object":
         return None
 
-    fields = []
+    fields: list[dict[str, Any]] = []
     unsupported_count = 0
-    managed_fields = []
+    managed_fields: list[str] = []
 
     for prop_name, prop in definition.properties.items():
         field_spec = _build_object_field_spec(prop)
@@ -103,8 +102,8 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
         }
 
     if allow_nested and prop.type == "object" and prop.properties:
-        fields = []
-        managed_fields = []
+        fields: list[dict[str, Any]] = []
+        managed_fields: list[str] = []
         unsupported_count = 0
 
         for child_name, child_prop in prop.properties.items():
@@ -133,7 +132,7 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
             }
 
     if allow_nested and prop.type == "object" and prop.additional_property_type == "object" and prop.additional_property_properties:
-        fields = []
+        nested_fields: list[dict[str, Any]] = []
         unsupported_count = 0
 
         for child_name, child_prop in prop.additional_property_properties.items():
@@ -142,7 +141,7 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
                 unsupported_count += 1
                 continue
 
-            fields.append(
+            nested_fields.append(
                 {
                     "name": child_name,
                     "label": humanize_identifier(child_name),
@@ -150,17 +149,17 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
                 }
             )
 
-        if fields:
+        if nested_fields:
             return {
                 "kind": "nested-dictionary-object",
-                "fields": fields,
+                "fields": nested_fields,
                 "unsupported_field_count": unsupported_count,
                 "required": prop.required,
                 "enum": list(prop.enum or []),
             }
 
     if allow_nested and prop.type == "array" and prop.items_type == "object" and prop.item_properties:
-        fields = []
+        array_item_fields: list[dict[str, Any]] = []
         unsupported_count = 0
 
         for child_name, child_prop in prop.item_properties.items():
@@ -169,7 +168,7 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
                 unsupported_count += 1
                 continue
 
-            fields.append(
+            array_item_fields.append(
                 {
                     "name": child_name,
                     "label": humanize_identifier(child_name),
@@ -177,10 +176,10 @@ def _build_object_field_spec(prop, *, allow_nested: bool = True) -> dict[str, An
                 }
             )
 
-        if fields:
+        if array_item_fields:
             return {
                 "kind": "nested-array-of-objects",
-                "fields": fields,
+                "fields": array_item_fields,
                 "unsupported_field_count": unsupported_count,
                 "required": prop.required,
                 "enum": list(prop.enum or []),
@@ -202,7 +201,7 @@ def _build_array_inline_editor(definition) -> dict[str, Any] | None:
     if not definition.item_properties:
         return None
 
-    fields = []
+    fields: list[dict[str, Any]] = []
     for prop_name, prop in definition.item_properties.items():
         field_kind = _resolve_array_field_kind(prop)
         if field_kind is None:
@@ -227,7 +226,7 @@ def _build_array_inline_editor(definition) -> dict[str, Any] | None:
 
 
 def _build_dictionary_inline_editor(definition) -> dict[str, Any] | None:
-    fields = []
+    fields: list[dict[str, Any]] = []
     for prop_name, prop in definition.additional_property_properties.items():
         field_kind = _resolve_array_field_kind(prop)
         if field_kind is None:
@@ -255,7 +254,7 @@ def _build_branch_inline_editor(definition) -> dict[str, Any] | None:
     if not definition.branches:
         return None
 
-    branches = []
+    branches: list[dict[str, Any]] = []
     for branch in definition.branches:
         if branch.type == "boolean":
             branches.append(
@@ -269,8 +268,8 @@ def _build_branch_inline_editor(definition) -> dict[str, Any] | None:
         if branch.type != "object":
             continue
 
-        fields = []
-        managed_fields = []
+        fields: list[dict[str, Any]] = []
+        managed_fields: list[str] = []
         unsupported_count = 0
         for prop_name, prop in branch.properties.items():
             field_spec = _build_object_field_spec(prop)

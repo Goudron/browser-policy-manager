@@ -2,8 +2,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from .common import SchemaPolicyDefinition, UpstreamPolicyEntry, SCALAR_TYPES
-from .html_parser import _canonical_policy_name, extract_policies_table, extract_policy_details, load_html
+from .common import SchemaPolicyDefinition, UpstreamPolicyEntry
+from .html_parser import (
+    _canonical_policy_name,
+    extract_policies_table,
+    extract_policy_details,
+    load_html,
+)
 from .schema_inference import (
     _apply_property_description_hints,
     _apply_required_property_hints,
@@ -20,7 +25,6 @@ from .snippet_parser import (
     _extract_policy_value_nodes,
     infer_type_from_policies_json,
     infer_value_type_from_python,
-    load_linux_policy_examples,
     parse_min_version_from_compatibility,
 )
 

@@ -40,7 +40,7 @@ It validates, stores, and exports structured configuration profiles compatible w
 ### ✅ Web UI
 | Route | Description |
 |-------|-------------|
-| `GET /profiles` | Main browser UI for profile editing |
+| `GET /profiles` | Main browser UI for profile editing and guided Firefox policy composition |
 | `GET /i18n/{locale}.json` | Localization catalogs (`en`, `ru`) |
 | `GET /favicon.ico` | App favicon |
 
@@ -54,6 +54,9 @@ It validates, stores, and exports structured configuration profiles compatible w
 - Export endpoints read from the same DB-backed model as the main API.
 - Firefox policy validation is enforced on profile create/update.
 - The `/profiles` UI uses the canonical `/api/profiles` API directly.
+- The Firefox web experience is now schema-driven and split into modular catalogs for general settings, home/startup, privacy, search, sync, starter presets, manual controls, and inline editors for complex policies.
+- Policy UI placement is resolved through a dedicated Firefox policy UI registry with explicit overrides plus safe fallbacks inferred from schema structure.
+- The profile editor page has been decomposed into reusable Jinja partials and modular frontend bundles instead of one monolithic template/script.
 - Security headers are enabled for HTTP responses.
 
 ---
@@ -66,7 +69,7 @@ It validates, stores, and exports structured configuration profiles compatible w
 | **Database** | SQLite + Alembic migrations |
 | **Schemas** | JSON Schema v2020–12 for Firefox policies |
 | **Validation** | `jsonschema` with version-aware schema loader |
-| **Testing** | `pytest`, `mypy`, `ruff`, `coverage ≥ 85%` |
+| **Testing** | `pytest`, `mypy`, `ruff`, branch coverage, `coverage ≥ 85%` gate |
 | **CI/CD** | GitHub Actions (`dev` branch trigger) |
 | **Security** | Custom middleware with strict HTTP headers (CSP, HSTS, X-Frame-Options) |
 
@@ -91,6 +94,14 @@ Then open:
 
 - API root: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - Web UI: [http://127.0.0.1:8000/profiles](http://127.0.0.1:8000/profiles)
+
+Useful local quality commands:
+
+```bash
+ruff check .
+mypy app
+pytest --cov=app --cov-branch --cov-report=term-missing
+```
 
 ---
 
@@ -124,6 +135,12 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
 > BPM currently ships with bundled internal schemas for the supported ESR and Release channels.
 > Mozilla's official `v7.8` release package for Firefox 148 / ESR 140.8 ships docs and platform templates, but not a standalone raw `policies-schema.json`, so BPM keeps a local converted schema pipeline.
 
+### Schema Tooling
+
+- `tools/convert_policies_from_upstream.py` is now a thin entrypoint over a reusable `tools.convert_policies_from_upstream_lib` package.
+- The conversion pipeline is split into HTML parsing, snippet parsing, inference, semantic hints, schema emission, and CLI layers.
+- Bundled release schema has been advanced from Firefox Release 145 to Release 148.
+
 ---
 
 ## 🌍 Localization (i18n)
@@ -142,12 +159,13 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
   - CI runs on push/pull-request to `dev`.  
   - Manual merge to `main` produces a release.  
 - Test coverage goal: **≥ 85%**  
+- Current local suite status: `236 passed`, `100%` line coverage, `100%` branch coverage for `app/`.  
 - Code style enforced by:
   ```bash
   ruff check . --fix
   ruff format .
   mypy app
-  pytest -q
+  pytest --cov=app --cov-branch --cov-report=term-missing
   ```
 
 ---
@@ -155,9 +173,9 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
 ## 🧭 Current Focus
 
 - Keep the `profiles` API and web UI aligned around one data model.
-- Expand web-layer coverage and polish the `/profiles` UX.
+- Expand and refine the schema-driven Firefox workflow in `/profiles`.
 - Continue simplifying schema/version management around bundled ESR/Release schemas.
-- Strengthen integration coverage for profile CRUD, validation, and export.
+- Keep CI quality gates green across `ruff`, `mypy`, and coverage artifact generation.
 
 ## 🗺️ Roadmap
 

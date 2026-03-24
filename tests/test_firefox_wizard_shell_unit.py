@@ -2,9 +2,13 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from app.models.policy_schema import PolicyBranch, PolicyDefinition, PolicyProperty, PolicyUiMetadata
-from app.web.firefox_wizard_shell import inline_editors
-from app.web.firefox_wizard_shell import serializer
+from app.models.policy_schema import (
+    PolicyBranch,
+    PolicyDefinition,
+    PolicyProperty,
+    PolicyUiMetadata,
+)
+from app.web.firefox_wizard_shell import inline_editors, serializer
 
 
 def _ui() -> PolicyUiMetadata:

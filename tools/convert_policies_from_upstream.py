@@ -29,6 +29,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tools.convert_policies_from_upstream_lib import api as _api
+from tools.convert_policies_from_upstream_lib.cli import main
 
 globals().update({name: getattr(_api, name) for name in _api.__all__})
 

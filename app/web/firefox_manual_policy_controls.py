@@ -5,7 +5,6 @@ from typing import Any
 
 from app.services.policy_schema_service import get_policy_definition
 
-
 _MANUAL_POLICY_GROUPS: list[dict[str, Any]] = [
     {
         "id": "general_browser_behavior",
@@ -141,7 +140,7 @@ def get_manual_policy_controls_catalog(schema_version: str = "release-148") -> d
     """Return the curated manual policy controls backed by the active schema."""
 
     groups = []
-    quick_policy_keys = []
+    quick_policy_keys: list[str] = []
 
     for group in _MANUAL_POLICY_GROUPS:
         items = [_resolve_control_item(item, schema_version) for item in group["items"]]

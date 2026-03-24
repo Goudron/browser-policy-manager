@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from app.models.policy_schema import PolicyDefinition, PolicyProperty, PolicySchema, PolicyUiMetadata, PolicyUiSection
+from app.models.policy_schema import (
+    PolicyDefinition,
+    PolicyProperty,
+    PolicySchema,
+    PolicyUiMetadata,
+    PolicyUiSection,
+)
 
 
 def test_policy_schema_models_defaults_and_lookup():

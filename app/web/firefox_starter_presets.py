@@ -5,7 +5,6 @@ from typing import Any
 
 from app.services.policy_schema_service import get_policy_definition
 
-
 SUPPORTED_POLICY_CHANNELS = ("esr-140", "release-148")
 SCHEMA_ENABLED = "__SCHEMA_ENABLED__"
 

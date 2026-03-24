@@ -1,5 +1,5 @@
-from app.web.firefox_settings_catalog import get_wizard_settings_catalog
 from app.web.firefox_preferences import _build_known_preferences, get_wizard_preferences_catalog
+from app.web.firefox_settings_catalog import get_wizard_settings_catalog
 
 
 def test_wizard_settings_catalog_is_single_source_of_truth():

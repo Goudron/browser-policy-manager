@@ -9,6 +9,7 @@ from typing import Any, cast
 from sqlalchemy import MetaData, create_engine, inspect
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
@@ -199,24 +200,25 @@ def _upgrade_legacy_sqlite_schema(sync_engine: Engine) -> None:
 
 if _is_sqlite_async_url(_DATABASE_URL):
     _SYNC_DATABASE_URL = _to_sync_sqlite_url(_DATABASE_URL)
-    engine: Engine = create_engine(
+    engine: Any = create_engine(
         _SYNC_DATABASE_URL,
         echo=_DATABASE_ECHO,
         future=True,
         poolclass=NullPool,
     )
-    SessionLocal = sessionmaker(
+    SessionLocal: Any = sessionmaker(
         bind=engine,
         expire_on_commit=False,
     )
     _SQLITE_SYNC_MODE = True
 else:
-    engine = create_async_engine(
+    async_engine: AsyncEngine = create_async_engine(
         _DATABASE_URL,
         echo=_DATABASE_ECHO,
     )
+    engine = async_engine
     SessionLocal = async_sessionmaker(
-        engine,
+        async_engine,
         expire_on_commit=False,
     )
     _SQLITE_SYNC_MODE = False
@@ -236,7 +238,7 @@ async def init_db() -> None:
         await conn.run_sync(_create_all)
 
 
-async def get_session() -> AsyncIterator[AsyncSession]:
+async def get_session() -> AsyncIterator[AsyncSession | AsyncSessionAdapter]:
     """FastAPI dependency that yields an AsyncSession."""
     await init_db()
     if _SQLITE_SYNC_MODE:

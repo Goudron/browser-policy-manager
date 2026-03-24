@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
     "AppAutoUpdate": {
         "section": "browser_behavior",

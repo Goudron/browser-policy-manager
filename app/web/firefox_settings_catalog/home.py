@@ -2,7 +2,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from .builders import bundle_item, chip, doc_target, known_pref, pref_bundle, pref_doc, preset, value_option
+from .builders import (
+    bundle_item,
+    chip,
+    doc_target,
+    known_pref,
+    pref_bundle,
+    pref_doc,
+    preset,
+    value_option,
+)
 
 
 def get_home_section() -> dict[str, Any]:

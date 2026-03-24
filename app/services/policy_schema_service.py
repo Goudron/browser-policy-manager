@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import Any
 
 from app.models.policy_schema import PolicyBranch, PolicyDefinition, PolicySchema
-from app.services.firefox_policy_ui_registry import get_policy_ui_sections, resolve_policy_ui_metadata
+from app.services.firefox_policy_ui_registry import (
+    get_policy_ui_sections,
+    resolve_policy_ui_metadata,
+)
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 SCHEMAS_DIR = BASE_DIR / "schemas" / "policies"
@@ -153,20 +156,7 @@ def _json_schema_to_policy_branch(node: dict[str, Any]) -> PolicyBranch:
         if isinstance(prop_schema, dict)
     }
     additional_properties = node.get("additionalProperties", True)
-    additional_property_type = None
-    additional_property_properties = {}
     if isinstance(additional_properties, dict):
-        additional_property_type = _json_schema_type(additional_properties)
-        additional_required_properties = set(additional_properties.get("required") or [])
-        additional_property_properties = {
-            prop_name: _json_schema_to_policy_property(
-                prop_name,
-                prop_schema,
-                required=prop_name in additional_required_properties,
-            )
-            for prop_name, prop_schema in (additional_properties.get("properties") or {}).items()
-            if isinstance(prop_schema, dict)
-        }
         additional_properties = True
 
     return PolicyBranch.model_validate(

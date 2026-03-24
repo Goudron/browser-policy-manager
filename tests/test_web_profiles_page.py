@@ -1,6 +1,6 @@
 import asyncio
 import importlib
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi.responses import HTMLResponse
 from starlette.requests import Request
@@ -708,7 +708,7 @@ def test_profiles_page_renders_review_sections():
 
 
 def test_profiles_page_renders_schema_export_footer_and_headers():
-    current_year = datetime.now(timezone.utc).year
+    current_year = datetime.now(UTC).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
 
     response = _profiles_page_response()
@@ -768,7 +768,7 @@ def test_profiles_page_uses_single_year_footer_for_2025(monkeypatch):
     class FrozenDateTime:
         @classmethod
         def now(cls, tz=None):
-            return datetime(2025, 1, 1, tzinfo=tz or timezone.utc)
+            return datetime(2025, 1, 1, tzinfo=tz or UTC)
 
     def fake_template_response(request, name, context):
         captured["request"] = request

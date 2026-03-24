@@ -60,7 +60,7 @@ def known_pref(
     value_control: str = "",
     value_options: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    item = {
+    item: dict[str, Any] = {
         "pref": pref,
         "label_key": label_key,
         "fallback": fallback,
@@ -79,7 +79,7 @@ def known_pref(
 
 
 def value_option(value: Any, fallback: str, label_key: str = "") -> dict[str, Any]:
-    item = {
+    item: dict[str, Any] = {
         "value": value,
         "fallback": fallback,
     }

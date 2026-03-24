@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from app.models.policy_schema import PolicyUiSection
 
-
 UI_SECTIONS = [
     PolicyUiSection(
         id="browser_behavior",
