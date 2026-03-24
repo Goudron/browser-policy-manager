@@ -2,12 +2,12 @@
 import uuid
 
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def test_profiles_crud_and_export():
     """Create -> list -> export roundtrip on a fresh unique profile."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     unique = uuid.uuid4().hex[:8]
     body = {

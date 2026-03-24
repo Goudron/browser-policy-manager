@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import uuid
+from collections.abc import Iterable, Mapping
 from typing import Any
 
 import httpx
@@ -90,3 +91,29 @@ def build_profile_payload(
     if owner is not None:
         payload["owner"] = owner
     return payload
+
+
+def make_test_client(app: FastAPI | None = None, **kwargs: Any) -> TestClient:
+    """
+    Build a sync-friendly ASGI test client.
+
+    When no application is supplied, create a fresh app instance so tests do
+    not share router-level state through a module-global client.
+    """
+
+    if app is None:
+        from app.main import create_app
+
+        app = create_app()
+
+    return TestClient(app, **kwargs)
+
+
+def assert_contains_all(text: str, snippets: Iterable[str]) -> None:
+    missing = [snippet for snippet in snippets if snippet not in text]
+    assert not missing, f"Missing expected snippets: {missing[:10]}"
+
+
+def assert_has_keys(mapping: Mapping[str, Any], keys: Iterable[str]) -> None:
+    missing = [key for key in keys if key not in mapping]
+    assert not missing, f"Missing expected keys: {missing[:10]}"

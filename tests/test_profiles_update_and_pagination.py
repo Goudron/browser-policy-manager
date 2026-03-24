@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk_body(prefix: str = "Pag"):
@@ -9,7 +9,7 @@ def _mk_body(prefix: str = "Pag"):
 
 
 def test_update_and_pagination_and_ordering_like():
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create 3 profiles
     created_ids = []
@@ -37,7 +37,7 @@ def test_update_and_pagination_and_ordering_like():
         "flags": {"DisableTelemetry": False, "DisablePrivateBrowsing": True},
     }
     r_upd = client.patch(f"/api/profiles/{pid}", json=patch)
-    assert r_upd.status_code in (200, 204), r_upd.text  # both OK patterns
+    assert r_upd.status_code == 200, r_upd.text
 
     # Read back and verify was updated
     r_get = client.get(f"/api/profiles/{pid}")

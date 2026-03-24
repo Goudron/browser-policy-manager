@@ -1,0 +1,57 @@
+<section class="wizard-panel is-active" id="wizard-step-1">
+    <div class="wizard-grid">
+        <label>
+            <div class="field-label mb-1" data-i18n="profiles.name_label">Profile name</div>
+            <input id="wizard-name" type="text" class="soft-input" data-i18n-placeholder="profiles.name_placeholder" placeholder="Corporate baseline" />
+        </label>
+        <label>
+            <div class="field-label mb-1" data-i18n="profiles.schema_label">Schema</div>
+            <select id="wizard-schema" class="soft-input">
+                <option value="esr-140">ESR 140</option>
+                <option value="release-148">Release 148</option>
+            </select>
+        </label>
+        <label class="wizard-field-full">
+            <div class="field-label mb-1" data-i18n="profiles.mode_label">Editor mode</div>
+            <select id="wizard-mode" class="soft-input">
+                <option value="json" selected>JSON</option>
+                <option value="yaml">YAML</option>
+            </select>
+        </label>
+        <div class="wizard-field-full wizard-section-group">
+            <div class="wizard-section-heading">
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_starter_title">Starting point</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_starter_body">
+                    Choose how to begin this profile. Presets only touch the wizard-managed common booleans and keep other advanced keys intact.
+                </p>
+            </div>
+            <div class="wizard-starter-grid" id="wizard-starter-grid">
+                <button type="button" class="wizard-starter-card wizard-starter-card--active" data-starter-key="blank">
+                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_blank_badge">Blank</span>
+                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_blank_title">Start from a blank draft</span>
+                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_blank_copy">Use a clean document and turn on policies yourself step by step.</span>
+                </button>
+                <button type="button" class="wizard-starter-card" data-starter-key="keep_current">
+                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_keep_badge">Keep current</span>
+                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_keep_title">Keep current profile as-is</span>
+                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_keep_copy">Best for editing an existing profile without replacing its current baseline.</span>
+                </button>
+                <button type="button" class="wizard-starter-card" data-starter-key="basic_corporate">
+                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_basic_badge">Corporate</span>
+                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_basic_title">Basic corporate baseline</span>
+                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_basic_copy">Turns on the usual telemetry, account, update, and hardening defaults for managed workstations.</span>
+                </button>
+                <button type="button" class="wizard-starter-card" data-starter-key="classroom_kiosk">
+                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_classroom_badge">Kiosk</span>
+                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_classroom_title">Classroom and kiosk baseline</span>
+                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_classroom_copy">A leaner baseline for guided shared devices with fewer user escape paths.</span>
+                </button>
+                <button type="button" class="wizard-starter-card" data-starter-key="soc_hard">
+                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_soc_badge">SOC</span>
+                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_soc_title">Security-hardened baseline</span>
+                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_soc_copy">Stricter defaults for analyst workstations and more locked-down environments.</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

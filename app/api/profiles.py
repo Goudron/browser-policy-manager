@@ -77,7 +77,7 @@ async def _list_profiles_core(
     offset: int = 0,
     sort: str = "updated_at",
     order: str = "desc",
-) -> list[ProfileRead]:
+    ) -> list[ProfileRead]:
     return await ProfileService.list(
         session,
         q=q,
@@ -89,6 +89,33 @@ async def _list_profiles_core(
         sort=sort,
         order=order,
     )
+
+
+async def _profile_library_stats_core(
+    session: AsyncSession,
+    *,
+    q: str | None = None,
+    owner: str | None = None,
+    schema_version: str | None = None,
+    include_deleted: bool = False,
+) -> dict[str, int]:
+    filtered = await ProfileService.count(
+        session,
+        q=q,
+        owner=owner,
+        schema_version=schema_version,
+        include_deleted=include_deleted,
+    )
+    total = await ProfileService.count(
+        session,
+        owner=owner,
+        schema_version=schema_version,
+        include_deleted=include_deleted,
+    )
+    return {
+        "filtered": filtered,
+        "total": total,
+    }
 
 
 async def _get_profile_or_404_core(
@@ -199,6 +226,25 @@ async def _restore_profile_core(
     return restored
 
 
+async def _hard_delete_profile_core(
+    profile_id: int,
+    session: AsyncSession,
+    *,
+    not_found_detail: str = "Profile not found",
+) -> None:
+    ok = await ProfileService.hard_delete(session, profile_id)
+    if not ok:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=not_found_detail)
+
+    await session.commit()
+
+
+async def _reset_profiles_library_core(session: AsyncSession) -> dict[str, int]:
+    deleted = await ProfileService.hard_delete_all(session)
+    await session.commit()
+    return {"deleted": deleted}
+
+
 @router.get("", response_model=list[ProfileRead], summary="List profiles")
 async def list_profiles(
     session: AsyncSession = Depends(get_session),
@@ -222,6 +268,30 @@ async def list_profiles(
         sort=sort,
         order=order,
     )
+
+
+@router.get("/stats", summary="Get profile library stats")
+async def profile_library_stats(
+    session: AsyncSession = Depends(get_session),
+    q: str | None = Query(None, description="Substring filter for profile name/description"),
+    owner: str | None = Query(None, description="Filter by owner"),
+    schema_version: str | None = Query(None, description="Filter by schema_version (channel)"),
+    include_deleted: bool = Query(False, description="Include soft-deleted profiles"),
+) -> dict[str, int]:
+    return await _profile_library_stats_core(
+        session,
+        q=q,
+        owner=owner,
+        schema_version=schema_version,
+        include_deleted=include_deleted,
+    )
+
+
+@router.delete("/reset", summary="Hard-delete all profiles from the library")
+async def reset_profiles_library(
+    session: AsyncSession = Depends(get_session),
+) -> dict[str, int]:
+    return await _reset_profiles_library_core(session)
 
 
 @router.get("/{profile_id}", response_model=ProfileRead, summary="Get profile")
@@ -269,6 +339,19 @@ async def delete_profile(
     session: AsyncSession = Depends(get_session),
 ) -> None:
     await _delete_profile_core(profile_id, session)
+    return None
+
+
+@router.delete(
+    "/{profile_id}/hard",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Hard-delete profile",
+)
+async def hard_delete_profile(
+    profile_id: int,
+    session: AsyncSession = Depends(get_session),
+) -> None:
+    await _hard_delete_profile_core(profile_id, session)
     return None
 
 

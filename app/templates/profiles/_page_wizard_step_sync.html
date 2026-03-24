@@ -1,0 +1,286 @@
+{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_settings_docs, render_settings_pills, render_wizard_schema_shell %}
+
+<section class="wizard-panel" id="wizard-step-6">
+    {{ render_wizard_schema_shell(6) }}
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_sync_title">Sync and Firefox Accounts</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_sync_body">
+                Keep the Sync-facing enterprise controls together with the add-on posture administrators usually manage nearby.
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">Firefox Settings areas</div>
+        {{ render_settings_pills(wizard_settings_sections["sync"]["ui_maps"]["policy"], "wizard-settings-map-sync") }}
+        {{ render_settings_docs(wizard_settings_sections["sync"]["ui_maps"]["policy"], wizard_settings_sections["sync"]["ui_docs"]["policy"], "wizard-settings-docs-sync") }}
+        <div class="wizard-policy-grid">
+            {{ render_manual_policy_controls(wizard_manual_policy_groups["sync_accounts"]["items"]) }}
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_sync_title">Managed Preferences for Sync</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_preferences_sync_body">
+                Add structured `Preferences` entries for account and sync-adjacent surfaces when you need finer control than top-level policies provide.
+            </p>
+        </div>
+        <div class="wizard-section-group" data-preference-section="sync" data-settings-target="pref-section:sync">
+            <div class="wizard-search-engine-head">
+                <div>
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">Quick preference presets</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_presets_body">
+                        Start from curated entries, then adjust the raw preference key, value, status, and type when needed.
+                    </div>
+                </div>
+                <button type="button" id="wizard-preferences-sync-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">Add preference</button>
+            </div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">Firefox Settings areas</div>
+            {{ render_settings_pills(wizard_settings_sections["sync"]["preferences"]["gui_groups"], "wizard-preferences-sync-groups") }}
+            {{ render_settings_docs(wizard_settings_sections["sync"]["preferences"]["gui_groups"], wizard_settings_sections["sync"]["preferences"]["docs"], "wizard-preferences-sync-docs") }}
+            <div id="wizard-preferences-sync-presets" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">Quick bundles</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_bundles_body">
+                Apply a small, coherent group of related managed preferences at once.
+            </div>
+            <div id="wizard-preferences-sync-bundles" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">Known Firefox preferences</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_known_body">
+                Add a known key with its suggested type and, when safe, a recommended managed default.
+            </div>
+            <div id="wizard-preferences-sync-known" class="wizard-search-engine-preset-grid"></div>
+            <div id="wizard-preferences-sync-empty" class="wizard-input-hint" data-i18n="profiles.wizard_preferences_empty">
+                No managed preferences in this section yet.
+            </div>
+            <div id="wizard-preferences-sync-list" class="wizard-search-engine-list"></div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_title">Extensions and add-ons</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_body">
+                Manage the default install posture and the core add-on lists without leaving the wizard. One item per line for URLs and add-on IDs.
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">Firefox Settings areas</div>
+        {{ render_settings_pills(wizard_settings_sections["sync"]["ui_maps"]["extensions"], "wizard-settings-map-extensions") }}
+        {{ render_settings_docs(wizard_settings_sections["sync"]["ui_maps"]["extensions"], wizard_settings_sections["sync"]["ui_docs"]["extensions"], "wizard-settings-docs-extensions") }}
+        <div class="wizard-grid">
+            <label data-settings-target="field:wizard-extension-default-mode">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_mode_label">Default add-on policy</div>
+                <select id="wizard-extension-default-mode" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_extensions_mode_inherit">Inherit Firefox default</option>
+                    <option value="allowed" data-i18n="profiles.wizard_extensions_mode_allowed">Allow installs</option>
+                    <option value="blocked" data-i18n="profiles.wizard_extensions_mode_blocked">Block installs</option>
+                </select>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_mode_hint">
+                    This writes to ExtensionSettings["*"].installation_mode.
+                </div>
+            </label>
+            <label data-settings-target="field:wizard-extension-install">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_install_label">Managed install URLs</div>
+                <textarea id="wizard-extension-install" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_install_placeholder" placeholder="https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"></textarea>
+            </label>
+            <label data-settings-target="field:wizard-extension-locked">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_locked_label">Locked add-on IDs</div>
+                <textarea id="wizard-extension-locked" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_locked_placeholder" placeholder="uBlock0@raymondhill.net"></textarea>
+            </label>
+            <label class="wizard-field-full" data-settings-target="field:wizard-extension-uninstall">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_uninstall_label">Add-on IDs to uninstall</div>
+                <textarea id="wizard-extension-uninstall" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_uninstall_placeholder" placeholder="bad_addon_id@mozilla.org"></textarea>
+            </label>
+        </div>
+        <div class="wizard-grid">
+            <div class="wizard-section-group wizard-toggle" data-settings-target="field:extension-profile-ublock">
+                <div class="wizard-input-stack">
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_ublock_title">uBlock Origin</div>
+                    <div class="wizard-input-hint">uBlock0@raymondhill.net</div>
+                    <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="uBlock0@raymondhill.net">No explicit rule</div>
+                </div>
+                <label class="wizard-input-stack">
+                    <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">Install mode</div>
+                    <select class="soft-input" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="mode">
+                        <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">No explicit rule</option>
+                        <option value="allowed" data-i18n="profiles.wizard_extension_profile_mode_allowed">Allowed</option>
+                        <option value="blocked" data-i18n="profiles.wizard_extension_profile_mode_blocked">Blocked</option>
+                        <option value="force_installed" data-i18n="profiles.wizard_extension_profile_mode_force">Force install</option>
+                        <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">Install but allow disable</option>
+                    </select>
+                </label>
+                <label class="wizard-input-stack wizard-field-full">
+                    <div class="field-label" data-i18n="profiles.wizard_extension_profile_url_label">Install URL</div>
+                    <input type="text" class="soft-input" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="url" data-i18n-placeholder="profiles.wizard_extension_profile_ublock_url" placeholder="https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi" />
+                </label>
+                <label class="wizard-toggle">
+                    <input type="checkbox" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="updates_disabled" />
+                    <div>
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_updates_label">Disable auto-updates</div>
+                        <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_updates_copy">Keeps this extension pinned unless you update it explicitly.</div>
+                    </div>
+                </label>
+                <label class="wizard-toggle">
+                    <input type="checkbox" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="private_browsing" />
+                    <div>
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_private_label">Enable in private browsing</div>
+                        <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_private_copy">Sets whether this extension is enabled in private windows.</div>
+                    </div>
+                </label>
+            </div>
+            <div class="wizard-section-group wizard-toggle">
+                <div class="wizard-input-stack">
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_adguard_title">AdGuard AdBlocker</div>
+                    <div class="wizard-input-hint">adguardadblocker@adguard.com</div>
+                    <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="adguardadblocker@adguard.com">No explicit rule</div>
+                </div>
+                <label class="wizard-input-stack">
+                    <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">Install mode</div>
+                    <select class="soft-input" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="mode">
+                        <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">No explicit rule</option>
+                        <option value="allowed" data-i18n="profiles.wizard_extension_profile_mode_allowed">Allowed</option>
+                        <option value="blocked" data-i18n="profiles.wizard_extension_profile_mode_blocked">Blocked</option>
+                        <option value="force_installed" data-i18n="profiles.wizard_extension_profile_mode_force">Force install</option>
+                        <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">Install but allow disable</option>
+                    </select>
+                </label>
+                <label class="wizard-input-stack wizard-field-full">
+                    <div class="field-label" data-i18n="profiles.wizard_extension_profile_url_label">Install URL</div>
+                    <input type="text" class="soft-input" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="url" data-i18n-placeholder="profiles.wizard_extension_profile_adguard_url" placeholder="https://addons.mozilla.org/firefox/downloads/latest/adguardadblocker@adguard.com/latest.xpi" />
+                </label>
+                <label class="wizard-toggle">
+                    <input type="checkbox" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="updates_disabled" />
+                    <div>
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_updates_label">Disable auto-updates</div>
+                        <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_updates_copy">Keeps this extension pinned unless you update it explicitly.</div>
+                    </div>
+                </label>
+                <label class="wizard-toggle">
+                    <input type="checkbox" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="private_browsing" />
+                    <div>
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_private_label">Enable in private browsing</div>
+                        <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_private_copy">Sets whether this extension is enabled in private windows.</div>
+                    </div>
+                </label>
+            </div>
+            <div class="wizard-section-group wizard-toggle">
+                <div class="wizard-input-stack">
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_https_everywhere_title">HTTPS Everywhere</div>
+                    <div class="wizard-input-hint">https-everywhere@eff.org</div>
+                    <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="https-everywhere@eff.org">No explicit rule</div>
+                </div>
+                <label class="wizard-input-stack">
+                    <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">Install mode</div>
+                    <select class="soft-input" data-extension-profile="https-everywhere@eff.org" data-extension-field="mode">
+                        <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">No explicit rule</option>
+                        <option value="allowed" data-i18n="profiles.wizard_extension_profile_mode_allowed">Allowed</option>
+                        <option value="blocked" data-i18n="profiles.wizard_extension_profile_mode_blocked">Blocked</option>
+                        <option value="force_installed" data-i18n="profiles.wizard_extension_profile_mode_force">Force install</option>
+                        <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">Install but allow disable</option>
+                    </select>
+                </label>
+                <label class="wizard-input-stack wizard-field-full">
+                    <div class="field-label" data-i18n="profiles.wizard_extension_profile_url_label">Install URL</div>
+                    <input type="text" class="soft-input" data-extension-profile="https-everywhere@eff.org" data-extension-field="url" data-i18n-placeholder="profiles.wizard_extension_profile_https_everywhere_url" placeholder="https://addons.mozilla.org/firefox/downloads/latest/https-everywhere/latest.xpi" />
+                </label>
+                <label class="wizard-toggle">
+                    <input type="checkbox" data-extension-profile="https-everywhere@eff.org" data-extension-field="updates_disabled" />
+                    <div>
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_updates_label">Disable auto-updates</div>
+                        <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_updates_copy">Keeps this extension pinned unless you update it explicitly.</div>
+                    </div>
+                </label>
+                <label class="wizard-toggle">
+                    <input type="checkbox" data-extension-profile="https-everywhere@eff.org" data-extension-field="private_browsing" />
+                    <div>
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_private_label">Enable in private browsing</div>
+                        <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_private_copy">Sets whether this extension is enabled in private windows.</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="wizard-section-group">
+            <div class="wizard-section-heading">
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_review_title">Extension review summary</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_review_body">
+                    Quick totals for curated profile rules, arbitrary ExtensionSettings entries, and custom install URLs.
+                </p>
+            </div>
+            <div class="wizard-summary-list">
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_extensions_review_curated">Curated profile rules</span>
+                    <span class="wizard-summary-value" id="wizard-extension-summary-curated">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-extension-summary-curated-jump" data-extension-review-jump="curated" data-i18n="profiles.wizard_extensions_review_open">Open</button>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_extensions_review_arbitrary">Arbitrary ExtensionSettings rules</span>
+                    <span class="wizard-summary-value" id="wizard-extension-summary-arbitrary">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-extension-summary-arbitrary-jump" data-extension-review-jump="arbitrary" data-i18n="profiles.wizard_extensions_review_open">Open</button>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_extensions_review_custom_urls">Custom install URLs</span>
+                    <span class="wizard-summary-value" id="wizard-extension-summary-custom-urls">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-extension-summary-custom-urls-jump" data-extension-review-jump="custom_urls" data-i18n="profiles.wizard_extensions_review_open">Open</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_advanced_title">Advanced extension rules</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_advanced_body">
+                Use the full ExtensionSettings and install-permission policies for arbitrary add-on IDs, install sources, blocked messages, and other advanced fields. These controls stay in sync with the simpler extension fields above.
+            </p>
+        </div>
+        <div class="wizard-grid">
+            <div id="wizard-install-addons-permission-card" data-settings-target="policy:InstallAddonsPermission"></div>
+        </div>
+        <div id="wizard-extension-settings-card" data-settings-target="policy:ExtensionSettings"></div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_bookmarks_review_title">Bookmarks review summary</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_bookmarks_review_body">
+                Quick totals for bookmark entries, managed bookmark folders, and rows that already carry nested bookmark trees.
+            </p>
+        </div>
+        <div class="wizard-summary-list">
+            <div class="wizard-summary-row">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_bookmarks_review_links">Bookmark entries</span>
+                <span class="wizard-summary-value" id="wizard-bookmark-summary-links">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-bookmark-summary-links-jump" data-bookmark-review-jump="bookmarks" data-i18n="profiles.wizard_bookmarks_review_open">Open</button>
+            </div>
+            <div class="wizard-summary-row">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_bookmarks_review_folders">Managed bookmark folders</span>
+                <span class="wizard-summary-value" id="wizard-bookmark-summary-folders">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-bookmark-summary-folders-jump" data-bookmark-review-jump="managed" data-i18n="profiles.wizard_bookmarks_review_open">Open</button>
+            </div>
+            <div class="wizard-summary-row">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_bookmarks_review_nested">Rows with nested children</span>
+                <span class="wizard-summary-value" id="wizard-bookmark-summary-nested">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-bookmark-summary-nested-jump" data-bookmark-review-jump="nested" data-i18n="profiles.wizard_bookmarks_review_open">Open</button>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_access_review_title">Website access review</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_website_access_review_body">
+                Quick totals for blocked sites, explicit WebsiteFilter exceptions, and Handler mappings that still live in the advanced shell.
+            </p>
+        </div>
+        <div class="wizard-summary-list">
+            <div class="wizard-summary-row">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_website_access_review_blocked">Blocked sites</span>
+                <span class="wizard-summary-value" id="wizard-website-access-summary-blocked">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-website-access-summary-blocked-jump" data-website-access-review-jump="blocked" data-i18n="profiles.wizard_website_access_review_open">Open</button>
+            </div>
+            <div class="wizard-summary-row">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_website_access_review_exceptions">WebsiteFilter exceptions</span>
+                <span class="wizard-summary-value" id="wizard-website-access-summary-exceptions">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-website-access-summary-exceptions-jump" data-website-access-review-jump="exceptions" data-i18n="profiles.wizard_website_access_review_open">Open</button>
+            </div>
+            <div class="wizard-summary-row">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_website_access_review_handlers">Handler mappings</span>
+                <span class="wizard-summary-value" id="wizard-website-access-summary-handlers">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-website-access-summary-handlers-jump" data-website-access-review-jump="handlers" data-i18n="profiles.wizard_website_access_review_open">Open</button>
+            </div>
+        </div>
+    </div>
+</section>

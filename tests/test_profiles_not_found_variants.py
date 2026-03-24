@@ -1,10 +1,10 @@
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def test_profiles_not_found_branches_get_delete_restore():
     """Exercise 404 branches in app/api/profiles.py."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # GET not found
     r_get = client.get("/api/profiles/999999")

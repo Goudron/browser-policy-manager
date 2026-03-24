@@ -6,7 +6,7 @@ from starlette.types import Message
 
 from app import main as main_module
 from app.middleware.security import SecurityHeadersMiddleware
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def test_resolve_path_preserves_absolute_path(tmp_path):
@@ -24,7 +24,7 @@ def test_make_app_returns_fastapi_app():
 def test_locale_catalog_rejects_unsupported_locale(monkeypatch):
     original_locales = list(main_module.settings.SUPPORTED_LOCALES)
     monkeypatch.setattr(main_module.settings, "SUPPORTED_LOCALES", ["en"])
-    client = TestClient(main_module.create_app())
+    client = make_test_client(main_module.create_app())
 
     response = client.get("/i18n/de.json")
 
@@ -39,7 +39,7 @@ def test_locale_catalog_returns_file_not_found_for_missing_catalog(tmp_path, mon
     i18n_dir.mkdir()
     monkeypatch.setattr(main_module.settings, "SUPPORTED_LOCALES", ["en", "ru"])
     monkeypatch.setattr(main_module.settings, "I18N_DIR", str(i18n_dir))
-    client = TestClient(main_module.create_app())
+    client = make_test_client(main_module.create_app())
 
     response = client.get("/i18n/ru.json")
 
@@ -78,7 +78,7 @@ def test_append_if_missing_keeps_existing_header_value():
 
 def test_create_app_works_when_cors_disabled(monkeypatch):
     monkeypatch.setattr(main_module.settings, "ENABLE_CORS", False)
-    client = TestClient(main_module.create_app())
+    client = make_test_client(main_module.create_app())
 
     response = client.get("/")
 

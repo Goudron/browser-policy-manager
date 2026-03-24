@@ -1,17 +1,53 @@
 from __future__ import annotations
 
-import json
-
 import pytest
 
 from app.core import policy_validation as validation
+
+
+def _rich_policy_schema() -> dict:
+    return {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+            "DisableTelemetry": {"type": "boolean"},
+            "Extensions": {
+                "type": "object",
+                "properties": {
+                    "Install": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    }
+                },
+                "required": ["Install"],
+                "additionalProperties": False,
+            },
+            "Proxy": {"$ref": "#/$defs/proxy"},
+            "Mode": {
+                "oneOf": [
+                    {"const": "auto"},
+                    {"type": "integer", "minimum": 1},
+                ]
+            },
+        },
+        "$defs": {
+            "proxy": {
+                "type": "object",
+                "properties": {
+                    "Mode": {"enum": ["system", "manual"]},
+                },
+                "required": ["Mode"],
+                "additionalProperties": False,
+            }
+        },
+    }
 
 
 def test_policy_validation_error_stores_issues():
     issues = [
         validation.PolicyValidationIssue(
             policy="DisableTelemetry",
-            path=["policies", "DisableTelemetry"],
+            path=["DisableTelemetry"],
             message="Bad value",
         )
     ]
@@ -22,230 +58,81 @@ def test_policy_validation_error_stores_issues():
     assert error.issues == issues
 
 
-def test_project_root_and_schemas_dir_are_resolved():
-    root = validation._project_root()
-    schemas_dir = validation._schemas_dir()
+def test_load_policy_schema_for_channel_uses_shared_loader(monkeypatch):
+    sentinel = {"title": "Policies"}
+    monkeypatch.setattr(validation, "load_schema", lambda channel: sentinel)
 
-    assert root.name == "app"
-    assert schemas_dir == root / "schemas" / "policies"
-
-
-def test_load_policy_schema_for_channel_reads_files_from_schemas_dir(tmp_path, monkeypatch):
-    schemas_dir = tmp_path / "schemas"
-    schemas_dir.mkdir()
-    esr = {"policies": {"DisableTelemetry": {"type": "boolean"}}}
-    release = {"policies": {"DisablePrivateBrowsing": {"type": "boolean"}}}
-    (schemas_dir / "firefox-esr-140.json").write_text(json.dumps(esr), encoding="utf-8")
-    (schemas_dir / "firefox-release-145.json").write_text(json.dumps(release), encoding="utf-8")
-    validation.load_policy_schema_for_channel.cache_clear()
-    monkeypatch.setattr(validation, "_schemas_dir", lambda: schemas_dir)
-
-    assert validation.load_policy_schema_for_channel("esr-140") == esr
-    assert validation.load_policy_schema_for_channel("release-145") == release
+    assert validation.load_policy_schema_for_channel("esr-140") is sentinel
 
 
 def test_load_policy_schema_for_channel_rejects_unknown_channel():
-    validation.load_policy_schema_for_channel.cache_clear()
-
     with pytest.raises(ValueError, match="Unsupported channel"):
         validation.load_policy_schema_for_channel("beta-999")
 
 
-def test_load_policy_schema_for_channel_raises_when_file_missing(tmp_path, monkeypatch):
-    validation.load_policy_schema_for_channel.cache_clear()
-    monkeypatch.setattr(validation, "_schemas_dir", lambda: tmp_path)
-
-    with pytest.raises(FileNotFoundError, match="Internal policy schema not found"):
-        validation.load_policy_schema_for_channel("esr-140")
-
-
-@pytest.mark.parametrize(
-    ("value", "expected", "matches"),
-    [
-        (True, "boolean", True),
-        ("yes", "string", True),
-        (7, "integer", True),
-        (True, "integer", False),
-        (1.5, "number", True),
-        (True, "number", False),
-        (["a"], "array", True),
-        ({"a": 1}, "object", True),
-        ("anything", "mystery", True),
-    ],
-)
-def test_python_type_matches(value, expected, matches):
-    assert validation._python_type_matches(value, expected) is matches
-
-
-def test_validate_scalar_or_array_reports_type_mismatch():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_scalar_or_array(
-        value="wrong",
-        node_schema={"type": "boolean"},
-        policy_id="DisableTelemetry",
-        path=["policies", "DisableTelemetry"],
-        issues=issues,
-    )
-
-    assert len(issues) == 1
-    assert issues[0].message == "Expected type 'boolean', got 'str'"
-
-
-def test_validate_scalar_or_array_reports_array_enum_and_item_type_issues():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_scalar_or_array(
-        value=["bad", 2],
-        node_schema={"type": "array", "enum": ["ok"], "items_type": "string"},
-        policy_id="AllowedHosts",
-        path=["policies", "AllowedHosts"],
-        issues=issues,
-    )
-
-    assert len(issues) == 3
-    assert issues[0].path == ["policies", "AllowedHosts", 0]
-    assert "expected one of ['ok']" in issues[0].message
-    assert issues[-1].path == ["policies", "AllowedHosts", 1]
-    assert issues[-1].message == "Expected item type 'string', got 'int'"
-
-
-def test_validate_scalar_or_array_reports_scalar_enum_issue():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_scalar_or_array(
-        value="bad",
-        node_schema={"type": "string", "enum": ["good"]},
-        policy_id="HomepageLocation",
-        path=["policies", "HomepageLocation"],
-        issues=issues,
-    )
-
-    assert len(issues) == 1
-    assert issues[0].message == "Value 'bad' is not allowed; expected one of ['good']"
-
-
-def test_validate_scalar_or_array_array_branch_noops_when_type_checker_allows_non_list(monkeypatch):
-    issues: list[validation.PolicyValidationIssue] = []
-    monkeypatch.setattr(validation, "_python_type_matches", lambda value, expected: True)
-
-    validation._validate_scalar_or_array(
-        value="still-not-a-list",
-        node_schema={"type": "array"},
-        policy_id="AllowedHosts",
-        path=["policies", "AllowedHosts"],
-        issues=issues,
-    )
-
-    assert issues == []
-
-
-def test_validate_object_policy_requires_dict():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_object_policy(
-        value="nope",
-        policy_schema={"type": "object"},
-        policy_id="Preferences",
-        path=["policies", "Preferences"],
-        issues=issues,
-    )
-
-    assert len(issues) == 1
-    assert issues[0].message == "Expected object for policy 'Preferences', got 'str'"
-
-
-def test_validate_object_policy_reports_unknown_properties_and_nested_issues():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_object_policy(
-        value={"known": "bad", "extra": True},
-        policy_schema={
-            "type": "object",
-            "additional_properties": False,
-            "properties": {"known": {"type": "boolean"}},
-        },
-        policy_id="Preferences",
-        path=["policies", "Preferences"],
-        issues=issues,
-    )
-
-    assert len(issues) == 2
-    assert issues[0].path == ["policies", "Preferences", "extra"]
-    assert issues[0].message == "Unknown property 'extra' for policy 'Preferences'"
-    assert issues[1].path == ["policies", "Preferences", "known"]
-    assert issues[1].message == "Expected type 'boolean', got 'str'"
-
-
-def test_validate_object_policy_ignores_missing_known_properties():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_object_policy(
-        value={},
-        policy_schema={
-            "type": "object",
-            "additional_properties": False,
-            "properties": {"known": {"type": "boolean"}},
-        },
-        policy_id="Preferences",
-        path=["policies", "Preferences"],
-        issues=issues,
-    )
-
-    assert issues == []
-
-
-def test_validate_object_policy_allows_unknown_properties_when_additional_enabled():
-    issues: list[validation.PolicyValidationIssue] = []
-
-    validation._validate_object_policy(
-        value={"extra": True},
-        policy_schema={"type": "object", "additional_properties": True, "properties": {}},
-        policy_id="Preferences",
-        path=["policies", "Preferences"],
-        issues=issues,
-    )
-
-    assert issues == []
-
-
-def test_validate_profile_policies_collects_unknown_and_known_policy_issues():
+def test_normalize_policy_document_schema_rejects_unknown_top_level_policies():
     schema = {
-        "policies": {
+        "type": "object",
+        "properties": {
             "DisableTelemetry": {"type": "boolean"},
-            "AllowedHosts": {"type": "array", "items_type": "string"},
-            "Preferences": {
-                "type": "object",
-                "additional_properties": False,
-                "properties": {"Enabled": {"type": "boolean"}},
-            },
-        }
+        },
+        "additionalProperties": True,
     }
 
+    issues = validation.validate_profile_policies({"UnknownOne": True}, schema)
+
+    assert len(issues) == 1
+    assert issues[0].policy == "UnknownOne"
+    assert issues[0].path == ["UnknownOne"]
+    assert "unexpected" in issues[0].message
+
+
+def test_validate_profile_policies_uses_json_schema_features():
     issues = validation.validate_profile_policies(
         {
             "UnknownOne": True,
             "DisableTelemetry": "bad",
-            "AllowedHosts": ["ok", 5],
-            "Preferences": {"Enabled": "no", "Extra": 1},
+            "Extensions": {"Extra": True},
+            "Proxy": {},
+            "Mode": False,
         },
-        schema,
+        _rich_policy_schema(),
     )
 
-    assert [issue.policy for issue in issues] == [
-        "UnknownOne",
-        "DisableTelemetry",
-        "AllowedHosts",
-        "Preferences",
-        "Preferences",
-    ]
+    summary = {(issue.policy, tuple(issue.path), issue.message) for issue in issues}
+
+    assert any(policy == "UnknownOne" and path == ("UnknownOne",) for policy, path, _ in summary)
+    assert any(
+        policy == "DisableTelemetry"
+        and path == ("DisableTelemetry",)
+        and "is not of type 'boolean'" in message
+        for policy, path, message in summary
+    )
+    assert any(
+        policy == "Extensions"
+        and path == ("Extensions", "Extra")
+        and "Additional properties are not allowed" in message
+        for policy, path, message in summary
+    )
+    assert any(
+        policy == "Proxy"
+        and path == ("Proxy", "Mode")
+        and "required property" in message
+        for policy, path, message in summary
+    )
+    assert any(
+        policy == "Mode"
+        and path == ("Mode",)
+        and "is not valid under any of the given schemas" in message
+        for policy, path, message in summary
+    )
 
 
 def test_validate_profile_policies_or_raise_raises_for_invalid_payload():
     with pytest.raises(validation.PolicyValidationError) as excinfo:
         validation.validate_profile_policies_or_raise(
             {"DisableTelemetry": "bad"},
-            {"policies": {"DisableTelemetry": {"type": "boolean"}}},
+            _rich_policy_schema(),
         )
 
     assert excinfo.value.issues[0].policy == "DisableTelemetry"
@@ -256,23 +143,35 @@ def test_validate_profile_payload_with_schema_defaults_channel_and_validates(mon
 
     def _fake_load(channel: str):
         captured["channel"] = channel
-        return {"policies": {"DisableTelemetry": {"type": "boolean"}}}
+        return {
+            "type": "object",
+            "properties": {"DisableTelemetry": {"type": "boolean"}},
+        }
 
     monkeypatch.setattr(validation, "load_policy_schema_for_channel", _fake_load)
 
     validation.validate_profile_payload_with_schema({"policies": {"DisableTelemetry": True}})
 
-    assert captured["channel"] == "release-145"
+    assert captured["channel"] == "release-148"
 
 
 def test_validate_profile_payload_with_schema_rejects_non_mapping_policies(monkeypatch):
-    monkeypatch.setattr(validation, "load_policy_schema_for_channel", lambda channel: {"policies": {}})
+    monkeypatch.setattr(
+        validation,
+        "load_policy_schema_for_channel",
+        lambda channel: {"type": "object", "properties": {}},
+    )
 
     with pytest.raises(validation.PolicyValidationError) as excinfo:
         validation.validate_profile_payload_with_schema({"channel": "esr-140", "policies": [1]})
 
-    assert excinfo.value.issues[0].path == ["policies"]
-    assert excinfo.value.issues[0].message == "Expected object with policy mappings"
+    assert excinfo.value.issues == [
+        validation.PolicyValidationIssue(
+            policy=None,
+            path=["policies"],
+            message="Expected object with policy mappings",
+        )
+    ]
 
 
 def test_validate_profile_payload_with_schema_passes_explicit_channel_to_loader(monkeypatch):
@@ -280,10 +179,37 @@ def test_validate_profile_payload_with_schema_passes_explicit_channel_to_loader(
 
     def _fake_load(channel: str):
         captured["channel"] = channel
-        return {"policies": {}}
+        return {"type": "object", "properties": {}}
 
     monkeypatch.setattr(validation, "load_policy_schema_for_channel", _fake_load)
 
     validation.validate_profile_payload_with_schema({"channel": "esr-140", "policies": {}})
 
     assert captured["channel"] == "esr-140"
+
+
+def test_normalize_policy_document_schema_leaves_non_object_schema_unchanged():
+    schema = {"type": "string"}
+
+    assert validation._normalize_policy_document_schema(schema) is schema
+
+
+def test_extend_error_path_handles_unmatched_required_and_multiple_additional_properties():
+    required_error = validation.ValidationError(
+        "missing property",
+        validator="required",
+        path=["Proxy"],
+    )
+    additional_error = validation.ValidationError(
+        "Additional properties are not allowed ('Foo', 'Bar' were unexpected)",
+        validator="additionalProperties",
+        path=["Extensions"],
+    )
+
+    assert validation._extend_error_path(required_error) == ["Proxy"]
+    assert validation._extend_error_path(additional_error) == ["Extensions"]
+
+
+def test_policy_for_path_returns_none_for_empty_or_non_string_paths():
+    assert validation._policy_for_path([]) is None
+    assert validation._policy_for_path([0, "policy"]) is None

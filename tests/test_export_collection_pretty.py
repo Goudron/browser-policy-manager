@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def test_collection_export_pretty_defaults_to_indented_json():
-    client = TestClient(app)
+    client = make_test_client(app)
     create = client.post(
         "/api/profiles",
         json=build_profile_payload(name_prefix="Pretty", description="Pretty export"),

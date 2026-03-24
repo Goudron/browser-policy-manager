@@ -1,0 +1,167 @@
+<div class="app-layout grid grid-cols-1 gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
+    <aside class="sidebar-column space-y-4 xl:sticky xl:top-6 xl:self-start">
+        <section id="library-panel" class="panel-card sidebar-card surface-panel rounded-[28px] p-4 shadow-soft fade-up">
+            <div class="compact-sidebar-head">
+                <div>
+                    <div class="section-kicker mb-1" data-i18n="profiles.sidebar_title">Profile library</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.sidebar_hint">
+                        Select a profile or start a new draft.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center justify-end gap-2 text-xs font-semibold">
+                    <div class="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
+                        <span data-i18n="profiles.library_filtered_short">Filtered</span>
+                        <strong id="list-summary" class="ml-1">0</strong>
+                    </div>
+                    <div class="rounded-full bg-emerald-50 px-3 py-1 text-emerald-800">
+                        <span data-i18n="profiles.library_total_short">Library</span>
+                        <strong id="list-total-summary" class="ml-1">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <button id="refresh"
+                    class="button-base ghost-button soft-input inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    title="Reload" data-i18n-title="profiles.reload">
+                    <span data-i18n="profiles.reload">Reload</span>
+                </button>
+            </div>
+
+            <div class="support-hidden">
+                <input id="search" type="text" placeholder="Search..." data-i18n-placeholder="profiles.search" />
+                <input id="include-deleted" type="checkbox" />
+                <select id="sort">
+                    <option value="updated_at">Updated</option>
+                    <option value="created_at">Created</option>
+                    <option value="name">Name</option>
+                    <option value="id">ID</option>
+                </select>
+                <select id="order">
+                    <option value="desc">DESC</option>
+                    <option value="asc">ASC</option>
+                </select>
+            </div>
+
+            <ul id="list" class="max-h-[calc(100vh-18rem)] space-y-2 overflow-y-auto pr-1"></ul>
+        </section>
+    </aside>
+
+    <main class="workspace-column space-y-4">
+        <section id="overview-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="compact-editor-grid">
+                <div>
+                    <div class="compact-profile-meta">
+                        <h2 id="current-name" class="headline-font text-3xl font-semibold tracking-tight text-slate-900"
+                            data-i18n="profiles.none_selected">
+                            Nothing selected
+                        </h2>
+                        <span id="profile-state-badge"
+                            class="state-chip state-chip--draft"
+                            data-i18n="profiles.badge_draft">
+                            Draft
+                        </span>
+                        <span id="workspace-signal"
+                            class="signal-chip signal-chip--saved"
+                            data-i18n="profiles.signal_saved">
+                            All changes saved
+                        </span>
+                    </div>
+                    <p class="compact-profile-copy" id="current-meta"></p>
+                </div>
+
+                <div class="support-hidden" aria-live="polite">
+                    <div id="workspace-helper">
+                        <h3 id="workspace-helper-title" data-i18n="profiles.helper_no_selection_title">
+                            Choose a profile from the library to open it
+                        </h3>
+                        <p id="workspace-helper-copy" data-i18n="profiles.helper_no_selection_body">
+                            Click any profile card on the left. Once opened, its metadata appears here and its browser policies load into the document editor below.
+                        </p>
+                    </div>
+                    <div id="overview-schema">ESR 140</div>
+                    <div id="overview-mode">JSON</div>
+                    <div id="overview-status">All changes saved</div>
+                    <div id="overview-context">New draft</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="content-grid grid gap-4">
+            <section id="details-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+                <div class="compact-profile-bar">
+                    <label style="grid-column: 1 / -1;">
+                        <div class="field-label mb-1" data-i18n="profiles.name_label">Profile name</div>
+                        <input id="profile-name" type="text"
+                            class="soft-input w-full rounded-2xl px-4 py-3 text-sm"
+                            placeholder="Corporate baseline"
+                            data-i18n-placeholder="profiles.name_placeholder" />
+                        <div id="name-hint" class="mt-2 text-xs text-slate-500" data-i18n="profiles.name_hint">
+                            Choose a unique name for a new profile draft.
+                        </div>
+                    </label>
+                    <label>
+                        <div class="field-label mb-1" data-i18n="profiles.schema_label">Schema</div>
+                        <select id="profile-type" class="soft-input w-full rounded-2xl px-3 py-3 text-sm" title="Schema profile">
+                            <option value="esr-140">ESR 140</option>
+                            <option value="release-148">Release 148</option>
+                        </select>
+                    </label>
+                    <label>
+                        <div class="field-label mb-1" data-i18n="profiles.mode_label">Editor mode</div>
+                        <select id="mode" class="soft-input w-full rounded-2xl px-3 py-3 text-sm">
+                            <option value="json" selected>JSON</option>
+                            <option value="yaml">YAML</option>
+                        </select>
+                    </label>
+                    <a id="download-json" href="#" target="_blank"
+                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-i18n="profiles.download_json">
+                        Download JSON
+                    </a>
+                    <a id="download-yaml" href="#" target="_blank"
+                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-i18n="profiles.download_yaml">
+                        Download YAML
+                    </a>
+                </div>
+
+                <div class="support-hidden">
+                    <input id="profile-owner" type="text"
+                        placeholder="ops@example.org"
+                        data-i18n-placeholder="profiles.owner_placeholder" />
+                    <textarea id="profile-description"
+                        placeholder="Short operational note for this profile"
+                        data-i18n-placeholder="profiles.description_placeholder"></textarea>
+                </div>
+            </section>
+        </div>
+
+        <section id="editor-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="editor-header mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <div class="section-kicker mb-2" data-i18n="profiles.editor_title_section">Policy document</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.editor_section_hint">
+                        Monaco handles JSON or YAML editing with formatting and validation shortcuts.
+                    </p>
+                </div>
+                <div class="editor-note-box surface-soft-box rounded-[22px] px-4 py-3 text-sm text-slate-600">
+                    <span data-i18n="profiles.editor_note">
+                    One structured editor, one validation route, and direct exports to `/api/export/profiles`.
+                    </span>
+                </div>
+            </div>
+
+            <div id="editor"
+                class="editor-frame h-[56vh] min-h-[440px] w-full overflow-hidden rounded-[28px] border border-slate-200 shadow-inner"></div>
+
+            <div class="mt-4">
+                <div id="status"
+                    aria-live="polite"
+                    class="status-banner status-banner--info rounded-2xl border px-4 py-3 text-sm">
+                    Workspace ready.
+                </div>
+            </div>
+        </section>
+    </main>
+</div>

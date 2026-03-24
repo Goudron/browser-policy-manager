@@ -92,6 +92,7 @@ pytestdebug.log
 *.sqlite-shm
 *.sqlite-wal
 /data/
+/app/schemas/cache/
 
 # -----------------------------------------------------------------------------
 # Local deployment helpers

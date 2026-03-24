@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def _mk(prefix: str = "QP"):
@@ -18,7 +18,7 @@ def _mk(prefix: str = "QP"):
 
 def test_single_export_queryparam_yaml_and_404_and_include_deleted():
     """Covers /api/export/profiles/{id}?fmt=... with YAML branch, 404 branch, and include_deleted=True."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create a profile
     r = client.post("/api/profiles", json=_mk())
@@ -43,7 +43,7 @@ def test_single_export_queryparam_yaml_and_404_and_include_deleted():
 
     # Soft-delete item to make the default include_deleted=False return 404
     rdel = client.delete(f"/api/profiles/{pid}")
-    assert rdel.status_code in (200, 204)
+    assert rdel.status_code == 204
 
     # Now same query-param route WITHOUT include_deleted should return 404 (Not found branch)
     r404 = client.get(f"/api/export/profiles/{pid}?fmt=json")
@@ -61,14 +61,14 @@ def test_single_export_queryparam_yaml_and_404_and_include_deleted():
 
 def test_collection_yaml_queryparam_with_include_deleted_and_filters_for_envelope():
     """Covers collection export YAML branch with include_deleted=True and filters; verifies YAML envelope."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Seed and delete one record so include_deleted=True makes a difference
     r = client.post("/api/profiles", json=_mk(prefix="QPC"))
     assert r.status_code == 201, r.text
     pid = r.json()["id"]
     rdel = client.delete(f"/api/profiles/{pid}")
-    assert rdel.status_code in (200, 204)
+    assert rdel.status_code == 204
 
     # Export collection in YAML with include_deleted=true and some filters/pagination
     params = {

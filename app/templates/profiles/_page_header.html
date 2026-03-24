@@ -1,0 +1,111 @@
+<header class="compact-toolbar surface-panel fade-up mb-4">
+    <div class="compact-toolbar-main">
+        <div class="section-kicker" data-i18n="profiles.kicker">Control Room</div>
+        <h1 class="compact-toolbar-title headline-font text-slate-900" data-i18n="profiles.title">Profiles Editor</h1>
+        <p class="compact-toolbar-subtitle" data-i18n="profiles.subtitle">
+            Manage browser profiles with Firefox policy sets (JSON / YAML). Supported: ESR 140, Release 148.
+        </p>
+    </div>
+
+    <div class="compact-toolbar-actions">
+        <div class="compact-counter">
+            <strong id="workspace-profile-count">0</strong>
+            <span id="workspace-profile-label">profiles loaded</span>
+        </div>
+        <label class="compact-toolbar-control">
+            <span class="compact-toolbar-copy">
+                <strong data-i18n="profiles.locale_label">Locale</strong>
+                <span data-i18n="profiles.locale_hint">UI language</span>
+            </span>
+            <select id="lang" class="soft-input rounded-xl px-3 py-2 text-sm">
+                <option value="system" selected data-i18n="profiles.locale_system">Browser</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+        </label>
+        <label class="compact-toolbar-control">
+            <span class="compact-toolbar-copy">
+                <strong data-i18n="profiles.theme_label">Theme</strong>
+                <span data-i18n="profiles.theme_hint">Appearance mode</span>
+            </span>
+            <select id="theme" class="soft-input rounded-xl px-3 py-2 text-sm">
+                <option value="system" selected data-i18n="profiles.theme_system">System</option>
+                <option value="light" data-i18n="profiles.theme_light">Light</option>
+                <option value="dark" data-i18n="profiles.theme_dark">Dark</option>
+            </select>
+        </label>
+        <button id="new-profile"
+            class="button-base primary-button inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
+            data-i18n="profiles.create">
+            New draft
+        </button>
+    </div>
+</header>
+
+<section class="workspace-dock surface-panel fade-up" id="command-deck">
+    <div class="dock-summary">
+        <div class="section-kicker" data-i18n="profiles.actions_title">Actions</div>
+        <h2 class="dock-title" data-i18n="profiles.editor_title">Profile workspace</h2>
+        <p class="dock-copy" data-i18n="profiles.actions_hint">
+            Choose schema, switch editor mode, validate changes, then save or export.
+        </p>
+        <div class="dock-meta">
+            <span class="dock-pill">
+                <span data-i18n="profiles.dock_shortcut_label">Shortcut</span>
+                <strong data-i18n="profiles.shortcut_hint">Ctrl/Cmd+S to save</strong>
+            </span>
+            <span class="dock-pill">
+                <span data-i18n="profiles.dock_status_label">Status</span>
+                <strong id="dock-status-text" data-i18n="profiles.signal_saved">All changes saved</strong>
+            </span>
+        </div>
+    </div>
+
+    <div class="dock-actions">
+        <div class="dock-actions-grid">
+            <button id="validate"
+                class="button-base ghost-button soft-input flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                data-i18n="profiles.validate">
+                Validate
+            </button>
+            <button id="format"
+                class="button-base ghost-button soft-input flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                data-i18n="profiles.format">
+                Format
+            </button>
+            <button id="save"
+                class="button-base primary-button flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
+                data-i18n="profiles.save">
+                Save
+            </button>
+        </div>
+
+        <div class="dock-secondary-grid">
+            <button id="soft-delete"
+                class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
+                data-i18n="profiles.soft_delete">
+                Soft delete
+            </button>
+            <button id="hard-delete"
+                class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
+                data-i18n="profiles.hard_delete">
+                Hard delete
+            </button>
+            <button id="restore"
+                class="button-base restore-button flex w-full items-center justify-center rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
+                data-i18n="profiles.restore">
+                Restore
+            </button>
+        </div>
+        <button id="reset-library"
+            class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
+            data-i18n="profiles.reset_library">
+            Reset profile library
+        </button>
+
+        <div class="dock-feedback surface-soft-box">
+            <div class="section-kicker" data-i18n="profiles.status_title">Activity</div>
+            <div id="validation-preview" aria-live="polite" class="max-w-full text-xs text-slate-500"></div>
+        </div>
+    </div>
+</section>

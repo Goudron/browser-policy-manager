@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk_body(prefix: str = "Edge"):
@@ -10,7 +10,7 @@ def _mk_body(prefix: str = "Edge"):
 
 def test_soft_delete_twice_and_restore_twice_and_update_flags_merge():
     """Covers soft delete/restore and PATCH flag updates."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create a profile
     r = client.post("/api/profiles", json=_mk_body())
@@ -19,24 +19,25 @@ def test_soft_delete_twice_and_restore_twice_and_update_flags_merge():
 
     # First delete (soft)
     rdel1 = client.delete(f"/api/profiles/{pid}")
-    assert rdel1.status_code in (204, 200)
+    assert rdel1.status_code == 204
 
-    # Second delete on already deleted: must not crash
+    # Second delete on already deleted returns the explicit not-found response.
     rdel2 = client.delete(f"/api/profiles/{pid}")
-    assert rdel2.status_code in (200, 204, 404, 409)
+    assert rdel2.status_code == 404
 
     # Restore back
     rres1 = client.post(f"/api/profiles/{pid}/restore")
-    assert rres1.status_code in (200, 204)
+    assert rres1.status_code == 200
 
-    # Second restore when already active: allow 404 as "not found among deleted"
+    # Second restore when already active returns 404 because the profile is no
+    # longer in the deleted set.
     rres2 = client.post(f"/api/profiles/{pid}/restore")
-    assert rres2.status_code in (200, 204, 400, 404, 409)
+    assert rres2.status_code == 404
 
     # Update flags: merge/overwrite behavior shouldn't crash
     patch = {"flags": {"DisableTelemetry": False, "DisablePrivateBrowsing": True}}
     rupd = client.patch(f"/api/profiles/{pid}", json=patch)
-    assert rupd.status_code in (200, 204)
+    assert rupd.status_code == 200
 
     # Read back and verify flags structure
     rget = client.get(f"/api/profiles/{pid}")
@@ -49,7 +50,7 @@ def test_soft_delete_twice_and_restore_twice_and_update_flags_merge():
 
 def test_ordering_query_params_do_not_break():
     """Ensure ordering and filtering query params do not raise errors."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Ensure at least one item exists
     client.post("/api/profiles", json=_mk_body(prefix="Sort"))

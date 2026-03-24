@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk(name_prefix: str, owner: str, schema: str, flags: dict | None = None):
@@ -15,7 +15,7 @@ def _mk(name_prefix: str, owner: str, schema: str, flags: dict | None = None):
 
 
 def test_list_filters_include_deleted_sort_and_pagination():
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Seed multiple records with different owners/schemas; delete one
     r1 = client.post("/api/profiles", json=_mk("LF-A", "ops@example.org", "esr-140"))
@@ -24,7 +24,7 @@ def test_list_filters_include_deleted_sort_and_pagination():
     assert r1.status_code == r2.status_code == r3.status_code == 201
     pid_deleted = r2.json()["id"]
     rdel = client.delete(f"/api/profiles/{pid_deleted}")
-    assert rdel.status_code in (200, 204)
+    assert rdel.status_code == 204
 
     # Default list hides deleted
     r = client.get("/api/profiles")

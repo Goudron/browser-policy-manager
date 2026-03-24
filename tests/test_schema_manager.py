@@ -30,11 +30,11 @@ def fake_fetcher_factory(payload: dict, status: int = 200):
 def test_compute_cache_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"))
     p_esr = manager.compute_cache_path("esr140")
-    p_rel = manager.compute_cache_path("release145")
+    p_rel = manager.compute_cache_path("release148")
 
     assert p_esr.name == "policies-schema.json"
     assert p_esr.parent.name == "esr140"
-    assert p_rel.parent.name == "release145"
+    assert p_rel.parent.name == "release148"
 
 
 def test_load_writes_cache_and_reads(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
@@ -66,7 +66,7 @@ def test_load_falls_back_to_cache_on_network_error(tmp_path: Path, monkeypatch: 
     initial_payload = {"title": "CachedPolicies"}
     ok_fetcher = fake_fetcher_factory(initial_payload)
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=ok_fetcher)
-    assert manager.load("release145")["title"] == "CachedPolicies"
+    assert manager.load("release148")["title"] == "CachedPolicies"
 
     # Now simulate network failure
     def failing_fetcher(_url: str, _timeout: int):
@@ -74,4 +74,4 @@ def test_load_falls_back_to_cache_on_network_error(tmp_path: Path, monkeypatch: 
 
     manager_fail = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=failing_fetcher)
     # Should fall back to cache and still return the cached payload
-    assert manager_fail.load("release145")["title"] == "CachedPolicies"
+    assert manager_fail.load("release148")["title"] == "CachedPolicies"

@@ -118,10 +118,11 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
 | Channel | Version | Status |
 |----------|----------|---------|
 | **ESR** | 140 | ✅ Active |
-| **Release** | 145 | ✅ Current |
+| **Release** | 148 | ✅ Current |
 | **Beta / Dev** | — | ❌ Not supported |
 
 > BPM currently ships with bundled internal schemas for the supported ESR and Release channels.
+> Mozilla's official `v7.8` release package for Firefox 148 / ESR 140.8 ships docs and platform templates, but not a standalone raw `policies-schema.json`, so BPM keeps a local converted schema pipeline.
 
 ---
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk_profile_body():
@@ -13,7 +13,7 @@ def _mk_profile_body():
 
 
 def test_export_yaml_and_json_and_404():
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create
     r = client.post("/api/profiles", json=_mk_profile_body())
@@ -35,6 +35,6 @@ def test_export_yaml_and_json_and_404():
     # Do not rely on top-level shape; ensure key is present somewhere
     assert '"DisableTelemetry"' in rj.text or "DisableTelemetry" in rj.text
 
-    # Unknown id -> 404/400 depending on implementation detail
+    # Unknown id should return the explicit not-found response.
     r404 = client.get("/api/export/profiles/999999.json")
-    assert r404.status_code in (404, 400)
+    assert r404.status_code == 404

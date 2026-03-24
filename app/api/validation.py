@@ -27,7 +27,7 @@ class ValidationRequest(BaseModel):
 
 
 # Supported profiles are aligned with the bundled internal policy schemas.
-_SUPPORTED_PROFILES: set[str] = {"esr-140", "release-145"}
+_SUPPORTED_PROFILES: set[str] = {"esr-140", "release-148"}
 
 
 def _get_schema_or_404(profile: str) -> dict[str, Any]:
@@ -43,7 +43,7 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
     Validate a policy document for the given profile.
 
     Request example:
-        POST /api/validate/release-145
+        POST /api/validate/release-148
         {
           "document": {
             "DisableAppUpdate": true,
@@ -52,12 +52,12 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
         }
 
     Successful response:
-        { "ok": true, "profile": "release-145" }
+        { "ok": true, "profile": "release-148" }
 
     Validation error response:
         {
           "ok": false,
-          "profile": "release-145",
+          "profile": "release-148",
           "detail": "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]",
           "error":  "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]"
         }

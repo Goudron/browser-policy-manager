@@ -2,11 +2,7 @@ from __future__ import annotations
 
 from fastapi import status
 
-from app.main import create_app
-from tests.support import TestClient
-
-app = create_app()
-client = TestClient(app)
+from tests.support import make_test_client
 
 
 def test_create_profile_invalid_policies_returns_422():
@@ -16,15 +12,16 @@ def test_create_profile_invalid_policies_returns_422():
     """
     payload = {
         "name": "Invalid profile",
-        "schema_version": "release-145",
+        "schema_version": "release-148",
         "flags": {
-            # HttpAllowlist in our generated schemas has an enum of allowed URLs;
-            # "http://evil.example" is intentionally not part of it.
-            "HttpAllowlist": ["http://evil.example"],
+            # HttpAllowlist currently accepts arbitrary strings, so we use an
+            # invalid item type that still reaches schema validation.
+            "HttpAllowlist": [42],
         },
     }
 
-    response = client.post("/api/profiles", json=payload)
+    with make_test_client() as client:
+        response = client.post("/api/profiles", json=payload)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
     body = response.json()
@@ -33,7 +30,7 @@ def test_create_profile_invalid_policies_returns_422():
 
     # There must be at least one issue attached to HttpAllowlist.
     assert any(issue["policy"] == "HttpAllowlist" for issue in issues)
-    assert any("not allowed" in issue["message"] for issue in issues)
+    assert any("is not of type 'string'" in issue["message"] for issue in issues)
 
 
 def test_create_profile_invalid_schema_version_returns_400():
@@ -49,7 +46,8 @@ def test_create_profile_invalid_schema_version_returns_400():
         },
     }
 
-    response = client.post("/api/profiles", json=payload)
+    with make_test_client() as client:
+        response = client.post("/api/profiles", json=payload)
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     body = response.json()

@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 """
-CLI utility to fetch and cache Mozilla policies-schema.json files.
+CLI utility to fetch and cache Mozilla raw policies-schema.json files.
+
+Mozilla's official release packages currently publish `policy_templates_v*.zip`
+artifacts rather than a standalone raw JSON schema, so this tool is best-effort:
+it tries historical raw-schema locations and refreshes the local cache only if
+such a file is actually available upstream.
 
 Examples:
     python tools/update_schemas.py --version esr140
-    python tools/update_schemas.py --version release144
+    python tools/update_schemas.py --version release148
     python tools/update_schemas.py --all
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import sys
 from pathlib import Path
 
@@ -20,13 +26,23 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from app.schemas import SchemaManager  # noqa: E402
+
+def _load_schema_manager_class():
+    module_path = REPO_ROOT / "app" / "schemas" / "schema_manager.py"
+    spec = importlib.util.spec_from_file_location("bpm_schema_manager", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load schema_manager module from {module_path}")
+
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module.SchemaManager
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Update cached Mozilla policy schemas")
     g = p.add_mutually_exclusive_group(required=True)
-    g.add_argument("--version", choices=["esr140", "release144"], help="Target schema version")
+    g.add_argument("--version", choices=["esr140", "release148"], help="Target schema version")
     g.add_argument("--all", action="store_true", help="Update all supported versions")
     p.add_argument("--force", action="store_true", help="Force re-download even if cache exists")
     return p.parse_args()
@@ -34,9 +50,10 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    manager = SchemaManager()
+    schema_manager_cls = _load_schema_manager_class()
+    manager = schema_manager_cls()
 
-    keys = ["esr140", "release144"] if args.all else [args.version]
+    keys = ["esr140", "release148"] if args.all else [args.version]
 
     exit_code = 0
     for key in keys:

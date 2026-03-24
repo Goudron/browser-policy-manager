@@ -1,0 +1,111 @@
+{% from "profiles/_wizard_macros.html" import render_wizard_schema_shell %}
+
+<section class="wizard-panel" id="wizard-step-7">
+    {{ render_wizard_schema_shell(7) }}
+    <div class="wizard-review">
+        <div class="wizard-summary-card">
+            <div class="section-kicker" data-i18n="profiles.wizard_export_title">Export</div>
+            <p class="wizard-subtitle" data-i18n="profiles.wizard_export_review_body">
+                Check whether the current editor state matches what the export links will download, then save or validate right here if needed.
+            </p>
+            <div class="wizard-summary-list">
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_profile_state">Profile record</span>
+                    <span class="wizard-summary-value" id="wizard-export-profile-state">Draft only</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_workspace_state">Workspace state</span>
+                    <span class="wizard-summary-value" id="wizard-export-workspace-state">All changes saved</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_validation_state">Validation</span>
+                    <span class="wizard-summary-value" id="wizard-export-validation-state">Validate before export if you want a fresh API check.</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_ready_state">Export target</span>
+                    <span class="wizard-summary-value" id="wizard-export-ready-state">Save this profile before export.</span>
+                </div>
+            </div>
+            <div class="dock-actions-grid">
+                <button type="button" id="wizard-export-save-action" class="button-base ghost-button" data-i18n="profiles.save">Save</button>
+                <button type="button" id="wizard-export-validate-action" class="button-base ghost-button" data-i18n="profiles.validate">Validate</button>
+            </div>
+        </div>
+        <div class="wizard-summary-card">
+            <div class="section-kicker" data-i18n="profiles.wizard_export_compatibility_title">Compatibility</div>
+            <p class="wizard-subtitle" data-i18n="profiles.wizard_export_compatibility_body">
+                See how much of the current document is covered by mapped UI, how much still relies on raw fallback, and whether deprecated or unknown keys still need attention.
+            </p>
+            <div class="wizard-summary-list">
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_policy_count">Top-level policies</span>
+                    <span class="wizard-summary-value" id="wizard-export-policy-count">0</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_preferences_count">Managed preferences</span>
+                    <span class="wizard-summary-value" id="wizard-export-preferences-count">0</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_raw_count">Configured raw-fallback policies</span>
+                    <span class="wizard-summary-value" id="wizard-export-raw-count">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-export-raw-jump" data-final-review-jump="raw" data-i18n="profiles.wizard_export_open">Open</button>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_deprecated_count">Configured deprecated policies</span>
+                    <span class="wizard-summary-value" id="wizard-export-deprecated-count">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-export-deprecated-jump" data-final-review-jump="deprecated" data-i18n="profiles.wizard_export_open">Open</button>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_unknown_count">Unknown top-level keys</span>
+                    <span class="wizard-summary-value" id="wizard-export-unknown-count">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-export-unknown-jump" data-final-review-jump="unknown" data-i18n="profiles.wizard_export_open">Open</button>
+                </div>
+            </div>
+        </div>
+        <div class="wizard-actions-card">
+            <div class="section-kicker" data-i18n="profiles.wizard_export_ready_title">Ready to download</div>
+            <p class="wizard-subtitle" id="wizard-export-ready-copy" data-i18n="profiles.wizard_export_ready_body">
+                Save the profile first if needed, then export the current version in JSON or YAML.
+            </p>
+            <div class="wizard-shell-badges" id="wizard-export-checklist" aria-live="polite"></div>
+            <div class="wizard-summary-list">
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.name_label">Profile name</span>
+                    <span class="wizard-summary-value" id="wizard-summary-name">-</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_schema">Schema</span>
+                    <span class="wizard-summary-value" id="wizard-summary-schema">ESR 140</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_starter">Starting point</span>
+                    <span class="wizard-summary-value" id="wizard-summary-starter">Blank draft</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_mode">Editor mode</span>
+                    <span class="wizard-summary-value" id="wizard-summary-mode">JSON</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_policies">Quick policies enabled</span>
+                    <span class="wizard-summary-value" id="wizard-summary-policies">0</span>
+                </div>
+                <div class="wizard-summary-row">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_extensions">Managed add-ons</span>
+                    <span class="wizard-summary-value" id="wizard-summary-extensions">0</span>
+                </div>
+            </div>
+            <div class="dock-actions-grid">
+                <a id="wizard-export-json" href="#"
+                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    data-i18n="profiles.download_json">
+                    Download JSON
+                </a>
+                <a id="wizard-export-yaml" href="#"
+                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    data-i18n="profiles.download_yaml">
+                    Download YAML
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

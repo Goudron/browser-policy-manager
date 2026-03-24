@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import builtins
 
-from sqlalchemy import asc, desc, func, select
+from sqlalchemy import asc, delete, desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import ColumnElement
 
@@ -163,3 +163,16 @@ class ProfileService:
         await session.flush()
         await session.refresh(entity)
         return ProfileRead.model_validate(entity)
+
+    @staticmethod
+    async def hard_delete(session: AsyncSession, profile_id: int) -> bool:
+        stmt = delete(Profile).where(Profile.id == profile_id)
+        result = await session.execute(stmt)
+        await session.flush()
+        return bool(result.rowcount)
+
+    @staticmethod
+    async def hard_delete_all(session: AsyncSession) -> int:
+        result = await session.execute(delete(Profile))
+        await session.flush()
+        return int(result.rowcount or 0)

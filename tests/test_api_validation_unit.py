@@ -54,7 +54,7 @@ async def test_validate_profile_400_on_unexpected_error(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "release-145",
+            "release-148",
             validation_module.ValidationRequest(document={"DisableTelemetry": True}),
         )
 

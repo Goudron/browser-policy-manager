@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from jsonschema import Draft202012Validator
+from jsonschema import FormatChecker
+from jsonschema.validators import validator_for
 
 from app.core.schemas_loader import load_schema
 
@@ -16,7 +17,9 @@ class PolicySchemaValidator:
 
     def __init__(self, profile: str) -> None:
         schema: dict[str, Any] = load_schema(profile)
-        self._validator = Draft202012Validator(schema)
+        validator_class = validator_for(schema)
+        validator_class.check_schema(schema)
+        self._validator = validator_class(schema, format_checker=FormatChecker())
 
     def validate(self, document: Any) -> None:
         """

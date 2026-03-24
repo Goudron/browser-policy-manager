@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk(name_prefix: str, owner: str):
@@ -13,7 +13,7 @@ def _mk(name_prefix: str, owner: str):
 
 
 def test_export_collection_json_yaml_download_filters_sort_paginate():
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Seed several records
     for prefix, owner in (

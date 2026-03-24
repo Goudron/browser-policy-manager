@@ -2,8 +2,8 @@
 Schema Manager for Mozilla Firefox Enterprise Policies.
 
 This module handles:
-- Resolving remote URLs for official Mozilla policy schemas
-- Downloading and caching policies-schema.json per target version
+- Resolving remote URLs for historical/raw Mozilla policy schema locations
+- Downloading and caching policies-schema.json when such a file is published
 - Returning parsed schemas as Python dicts
 - Optional transformation hook to normalize/annotate the schema
 
@@ -11,9 +11,15 @@ The manager is designed to work in CI and offline environments:
 - If online fetch fails, it falls back to the cached file (if present)
 - Timeouts and clear error messages help diagnose network issues
 
+Important note:
+- Mozilla's official `policy_templates_v*.zip` releases for Firefox 148 / ESR 140.8
+  publish docs, policies.json examples, plist, and ADMX assets, but do not
+  include a raw `policies-schema.json`. The URL probing in this module is
+  therefore best-effort and mainly supports historical/internal workflows.
+
 Target versions in Sprint G:
 - ESR 140   -> version key: "esr140"
-- Release 145 -> version key: "release145"
+- Release 148 -> version key: "release148"
 """
 
 from __future__ import annotations
@@ -31,12 +37,12 @@ import requests
 # === Constants & Defaults =====================================================
 
 DEFAULT_BASE_URL = "https://raw.githubusercontent.com/mozilla/policy-templates"
-# Candidate paths inside the mozilla/policy-templates repo where
-# policies-schema.json is commonly found; we try them in order.
+# Candidate paths inside the mozilla/policy-templates repo where a raw
+# policies-schema.json may exist. These are historical guesses; current
+# official releases may not publish any such file at all.
 CANDIDATE_SCHEMA_PATHS = [
-    # The primary, current path in policy-templates repository
+    # Historical/guessed locations retained for compatibility probing.
     "src/schema/policies-schema.json",
-    # Historical/alternative locations (kept for robustness)
     "policy_templates/schema/policies-schema.json",
     "schemas/policies-schema.json",
 ]
@@ -67,12 +73,12 @@ class SchemaVersion(Enum):
     """
 
     ESR140 = "esr140"
-    RELEASE145 = "release145"
+    RELEASE148 = "release148"
 
     @property
     def refs(self) -> list[str]:
         # We keep several plausible refs for robustness:
-        # tags (e.g., "release-145.0"), the "release" branch, and ESR branches.
+        # tags (e.g., "release-148.0"), the "release" branch, and ESR branches.
         if self is SchemaVersion.ESR140:
             return [
                 # Try exact tags first (most stable)
@@ -83,9 +89,9 @@ class SchemaVersion(Enum):
                 # Final fallback to main
                 "main",
             ]
-        elif self is SchemaVersion.RELEASE145:
+        elif self is SchemaVersion.RELEASE148:
             return [
-                "release-145.0",
+                "release-148.0",
                 "release",  # rolling branch for releases
                 "main",  # ultimate fallback
             ]
@@ -93,15 +99,15 @@ class SchemaVersion(Enum):
 
     @property
     def cache_subdir(self) -> str:
-        return "esr140" if self is SchemaVersion.ESR140 else "release145"
+        return "esr140" if self is SchemaVersion.ESR140 else "release148"
 
     @staticmethod
     def from_key(key: str) -> SchemaVersion:
         k = key.strip().lower()
         if k in {"esr140", "firefox-esr140"}:
             return SchemaVersion.ESR140
-        if k in {"release145", "firefox-release145"}:
-            return SchemaVersion.RELEASE145
+        if k in {"release148", "firefox-release148"}:
+            return SchemaVersion.RELEASE148
         raise ValueError(f"Unsupported schema version key: {key!r}")
 
 
@@ -128,7 +134,7 @@ class SchemaManager:
     Typical usage:
         manager = SchemaManager()
         schema = manager.load("esr140")         # dict with the raw JSON schema
-        schema = manager.load("release145", force_refresh=True)
+        schema = manager.load("release148", force_refresh=True)
 
     For testing, you can inject a custom fetcher:
         manager = SchemaManager(fetcher=my_fake_fetcher)
@@ -229,7 +235,10 @@ class SchemaManager:
 
         # If we reached here, we failed all candidates
         raise SchemaDownloadError(
-            f"Unable to download policies-schema.json for {version.value}. "
+            "Unable to download policies-schema.json for "
+            f"{version.value}. Upstream may not publish a raw schema for this "
+            "Firefox release anymore; the official v7.8 release package contains "
+            "docs/index.md and platform templates, but no policies-schema.json. "
             f"Last error: {last_error}"
         )
 

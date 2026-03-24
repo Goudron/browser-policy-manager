@@ -1,5 +1,5 @@
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def test_app_starts_and_root_responds_ok():
@@ -7,8 +7,8 @@ def test_app_starts_and_root_responds_ok():
     Smoke test to ensure the FastAPI application starts correctly
     and the root endpoint returns a valid JSON payload.
     """
-    client = TestClient(app)
-    response = client.get("/")
+    with make_test_client(app) as client:
+        response = client.get("/")
     assert response.status_code == 200, "Root endpoint must return HTTP 200"
 
     data = response.json()

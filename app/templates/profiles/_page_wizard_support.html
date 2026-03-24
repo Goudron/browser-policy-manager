@@ -1,0 +1,65 @@
+<template id="wizard-preference-row-template">
+    <div class="wizard-search-engine-card" data-preference-row>
+        <div class="wizard-search-engine-head">
+            <div>
+                <div class="wizard-search-engine-title" data-preference-title>Preference</div>
+                <div class="wizard-search-engine-meta" data-preference-meta>Writes one item into Preferences.</div>
+            </div>
+            <button type="button" class="button-base danger-button" data-preference-remove>Remove</button>
+        </div>
+        <div class="wizard-search-engine-summary" data-preference-summary>Set the preference key, value, status, and optional explicit type.</div>
+        <div class="wizard-search-engine-warning" data-preference-warning hidden>Preference key is required. Value is required unless status is clear.</div>
+        <div class="wizard-grid">
+            <label class="wizard-field-full">
+                <div class="field-label mb-1" data-preference-label="name">Preference key</div>
+                <input
+                    type="text"
+                    class="soft-input"
+                    data-preference-field="name"
+                    data-i18n-placeholder="profiles.wizard_preferences_name_placeholder"
+                    placeholder="browser.tabs.warnOnClose"
+                />
+            </label>
+            <label>
+                <div class="field-label mb-1" data-preference-label="status">Status</div>
+                <select class="soft-input" data-preference-field="status">
+                    <option value="default">default</option>
+                    <option value="locked">locked</option>
+                    <option value="user">user</option>
+                    <option value="clear">clear</option>
+                </select>
+            </label>
+            <label>
+                <div class="field-label mb-1" data-preference-label="type">Value type</div>
+                <select class="soft-input" data-preference-field="type">
+                    <option value="">Infer</option>
+                    <option value="boolean">boolean</option>
+                    <option value="number">number</option>
+                    <option value="string">string</option>
+                </select>
+            </label>
+            <label class="wizard-field-full">
+                <div class="field-label mb-1" data-preference-label="value">Value</div>
+                <input
+                    type="text"
+                    class="soft-input"
+                    data-preference-field="value"
+                    data-preference-value-input
+                    data-i18n-placeholder="profiles.wizard_preferences_value_placeholder_default"
+                    placeholder="true"
+                />
+                <select class="soft-input" data-preference-field="value" data-preference-value-select hidden></select>
+                <div class="wizard-input-hint" data-preference-hint data-i18n="profiles.wizard_preferences_hint_default">Use true/false, numbers, or text. JSON objects and arrays are also accepted when value type is inferred.</div>
+            </label>
+        </div>
+    </div>
+</template>
+<datalist id="wizard-preferences-known-list"></datalist>
+<div class="wizard-nav">
+    <div class="text-sm text-slate-500" id="wizard-progress-text" data-i18n="profiles.wizard_progress_one">Step 1 of 7: profile setup</div>
+    <div class="wizard-nav-actions">
+        <button type="button" id="wizard-prev" class="button-base ghost-button" data-i18n="profiles.wizard_prev">Back</button>
+        <button type="button" id="wizard-next" class="button-base ghost-button" data-i18n="profiles.wizard_next">Next step</button>
+        <button type="button" id="wizard-finish" class="button-base primary-button" data-i18n="profiles.wizard_finish">Finish</button>
+    </div>
+</div>

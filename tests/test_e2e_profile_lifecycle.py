@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def _make_profile_payload() -> dict:
@@ -21,7 +21,7 @@ def _make_profile_payload() -> dict:
 
 
 def test_profile_lifecycle_create_validate_save_export_delete_restore():
-    client = TestClient(app)
+    client = make_test_client(app)
 
     payload = _make_profile_payload()
 
@@ -81,7 +81,7 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
 
     # Soft-delete the profile and ensure normal reads/exports hide it.
     delete_response = client.delete(f"/api/profiles/{profile_id}")
-    assert delete_response.status_code in (200, 204)
+    assert delete_response.status_code == 204
 
     get_deleted = client.get(f"/api/profiles/{profile_id}")
     assert get_deleted.status_code == 404

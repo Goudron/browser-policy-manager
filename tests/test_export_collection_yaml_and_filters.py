@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk_body(name_prefix: str, owner: str, schema: str):
@@ -15,7 +15,7 @@ def _mk_body(name_prefix: str, owner: str, schema: str):
 
 def test_export_collection_yaml_with_filters_and_sorting():
     """Covers /api/export/profiles with fmt=yaml + filters + sorting + pagination."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Seed a few diverse items
     seeds = [

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def test_export_collection_empty_result_has_envelope():
     """Covers collection export envelope (items/limit/offset/count) for empty set."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Use an impossible query that can't match anything
     params = {

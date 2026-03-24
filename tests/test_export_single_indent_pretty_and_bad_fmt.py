@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def _mk(name_prefix: str = "ESI"):
@@ -19,7 +19,7 @@ def _mk(name_prefix: str = "ESI"):
 
 def test_single_export_json_with_indent_pretty_and_download():
     """Covers JSON single export with indent/pretty/download and unknown fmt branch."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create one
     r = client.post("/api/profiles", json=_mk())
@@ -34,6 +34,6 @@ def test_single_export_json_with_indent_pretty_and_download():
         assert "attachment" in cd.lower() and ".json" in cd.lower()
     assert '"DisableTelemetry"' in rj.text
 
-    # Unknown fmt should not 500; 422 is also acceptable for validation error
+    # Invalid query fmt is rejected by FastAPI validation.
     rbad = client.get(f"/api/export/profiles/{pid}?fmt=txt")
-    assert rbad.status_code in (200, 400, 404, 422)
+    assert rbad.status_code == 422

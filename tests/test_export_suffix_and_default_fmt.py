@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 
 from app.main import app
-from tests.support import TestClient
+from tests.support import make_test_client
 
 
 def _mk_body(prefix: str = "SFX"):
@@ -18,7 +18,7 @@ def _mk_body(prefix: str = "SFX"):
 
 def test_single_export_suffix_json_and_yaml_and_download_headers():
     """Hit suffix routes: /api/export/profiles/{id}.json and .yaml with/without download."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create a profile
     r = client.post("/api/profiles", json=_mk_body())
@@ -50,7 +50,7 @@ def test_single_export_suffix_json_and_yaml_and_download_headers():
 
 def test_export_collection_default_fmt_json_with_indent_pretty_download():
     """Call /api/export/profiles WITHOUT fmt (default JSON), with indent/pretty/download."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Seed a couple records so the list is non-empty
     for _ in range(2):

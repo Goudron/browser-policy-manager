@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk_profile_body():
@@ -14,7 +14,7 @@ def _mk_profile_body():
 
 def test_export_with_download_headers_and_content_type():
     """Covers YAML/JSON export with ?download=1 and Content-Type variations."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create a profile
     r = client.post("/api/profiles", json=_mk_profile_body())

@@ -38,13 +38,8 @@ async def test_create_list_get_update_delete(client):
 
     # Delete (soft delete)
     r = await client.delete(f"/api/profiles/{pid}")
-    assert r.status_code in (204, 200)
+    assert r.status_code == 204
 
-    # Verify behavior after delete:
-    # depending on API semantics this may be 404 or 200 with is_deleted=True.
+    # Deleted profiles are hidden from the default GET route.
     r = await client.get(f"/api/profiles/{pid}")
-    assert r.status_code in (404, 200)
-    if r.status_code == 200:
-        data = r.json()
-        assert data["id"] == pid
-        assert data["is_deleted"] is True
+    assert r.status_code == 404

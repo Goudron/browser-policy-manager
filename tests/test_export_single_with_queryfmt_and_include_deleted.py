@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.main import app
-from tests.support import TestClient, build_profile_payload
+from tests.support import build_profile_payload, make_test_client
 
 
 def _mk_body(name_prefix: str = "XDel", owner: str | None = None):
@@ -15,7 +15,7 @@ def _mk_body(name_prefix: str = "XDel", owner: str | None = None):
 
 def test_export_single_with_query_format_and_include_deleted():
     """Covers /api/export/profiles/{id}?fmt={json|yaml}&include_deleted=true."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Create a profile
     r = client.post("/api/profiles", json=_mk_body(owner="ops@example.org"))
@@ -24,7 +24,7 @@ def test_export_single_with_query_format_and_include_deleted():
 
     # Soft delete it so default lookups would hide it
     rdel = client.delete(f"/api/profiles/{pid}")
-    assert rdel.status_code in (204, 200)
+    assert rdel.status_code == 204
 
     # Export with include_deleted=true and fmt=yaml (query-param format)
     ry = client.get(f"/api/export/profiles/{pid}?fmt=yaml&include_deleted=true")

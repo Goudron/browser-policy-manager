@@ -119,3 +119,11 @@ pythonpath = ["."]
 markers = [
   "order: test order marker",
 ]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
