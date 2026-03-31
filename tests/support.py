@@ -7,6 +7,11 @@ from typing import Any
 
 import httpx
 from fastapi import FastAPI
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from app.db import AsyncSessionAdapter, get_session
+from app.models.profile import Base
 
 
 class TestClient:
@@ -14,9 +19,16 @@ class TestClient:
 
     __test__ = False
 
-    def __init__(self, app: FastAPI, base_url: str = "http://testserver", **kwargs: Any):
+    def __init__(
+        self,
+        app: FastAPI,
+        base_url: str = "http://testserver",
+        on_close: Any | None = None,
+        **kwargs: Any,
+    ):
         self.app = app
         self.base_url = base_url
+        self._on_close = on_close
         self._client_kwargs = kwargs
         self._runner = asyncio.Runner()
         self._closed = False
@@ -58,6 +70,8 @@ class TestClient:
     def close(self):
         if self._closed:
             return
+        if self._on_close is not None:
+            self._on_close()
         self._runner.close()
         self._closed = True
 
@@ -106,7 +120,26 @@ def make_test_client(app: FastAPI | None = None, **kwargs: Any) -> TestClient:
 
         app = create_app()
 
-    return TestClient(app, **kwargs)
+    engine = create_engine("sqlite:///:memory:", echo=False, future=True)
+    testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(bind=engine)
+    session = testing_session_factory()
+    previous_override = app.dependency_overrides.get(get_session)
+
+    async def override_get_session():
+        yield AsyncSessionAdapter(session)
+
+    app.dependency_overrides[get_session] = override_get_session
+
+    def _cleanup() -> None:
+        if previous_override is None:
+            app.dependency_overrides.pop(get_session, None)
+        else:
+            app.dependency_overrides[get_session] = previous_override
+        session.close()
+        engine.dispose()
+
+    return TestClient(app, on_close=_cleanup, **kwargs)
 
 
 def assert_contains_all(text: str, snippets: Iterable[str]) -> None:

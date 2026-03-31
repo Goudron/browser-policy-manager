@@ -53,6 +53,7 @@ dev = [
   "pytest-cov>=6.1.1",
   "pytest-asyncio>=0.24.0",
   "anyio>=4.4.0",
+  "beautifulsoup4>=4.12.3",
   "selenium>=4.28.0",
 
   # lint & format & types
