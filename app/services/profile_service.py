@@ -2,12 +2,12 @@
 from __future__ import annotations
 
 import builtins
+from typing import Any, cast
 
 from sqlalchemy import asc, delete, desc, func, select
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import ColumnElement
-from typing import Any, cast
 
 from app.models.profile import Profile
 from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
