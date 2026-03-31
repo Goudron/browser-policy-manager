@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import importlib
 from types import SimpleNamespace
+from pathlib import Path
 
 import pytest
 from sqlalchemy import MetaData, create_engine, inspect
@@ -49,6 +50,26 @@ def test_sqlite_url_helpers():
     assert db_module._is_sqlite_async_url("sqlite+aiosqlite:///./bpm.db") is True
     assert db_module._is_sqlite_async_url("postgresql+asyncpg://example") is False
     assert db_module._to_sync_sqlite_url("sqlite+aiosqlite:///./bpm.db") == "sqlite:///./bpm.db"
+
+
+def test_ensure_sqlite_parent_dir_skips_memory_and_non_sqlite_urls(tmp_path: Path):
+    memory_target = tmp_path / "memory-parent"
+    nonsqlite_target = tmp_path / "postgres-parent"
+
+    db_module._ensure_sqlite_parent_dir(f"sqlite:///{memory_target}/:memory:")
+    db_module._ensure_sqlite_parent_dir(f"postgresql:///{nonsqlite_target}/db")
+
+    assert not memory_target.exists()
+    assert not nonsqlite_target.exists()
+
+
+def test_ensure_sqlite_parent_dir_creates_missing_parent(tmp_path: Path):
+    target_dir = tmp_path / "nested" / "sqlite"
+    db_url = f"sqlite:///{target_dir / 'app.db'}"
+
+    db_module._ensure_sqlite_parent_dir(db_url)
+
+    assert target_dir.is_dir()
 
 
 def test_async_session_adapter_delegates_calls():
