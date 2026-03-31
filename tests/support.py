@@ -72,6 +72,7 @@ class TestClient:
             return
         if self._on_close is not None:
             self._on_close()
+            self._on_close = None
         self._runner.close()
         self._closed = True
 
@@ -79,10 +80,7 @@ class TestClient:
         try:
             if self._closed:
                 return
-            loop = getattr(self._runner, "_loop", None)
-            if loop is not None and not loop.is_closed():
-                loop.close()
-            self._closed = True
+            self.close()
         except Exception:
             pass
 

@@ -49,13 +49,16 @@ jobs:
 
       - name: Guard legacy schema refs
         run: |
-          ! rg -n \
-            -g '!alembic/versions/20260330_upgrade_profiles_to_firefox149.py' \
-            -g '!.github/workflows/ci.yml' \
-            -g '!tests/test_migrations.py' \
-            -g '!tests/test_no_legacy_schema_refs.py' \
+          if grep -RInE \
+            --exclude='20260330_upgrade_profiles_to_firefox149.py' \
+            --exclude='ci.yml' \
+            --exclude='test_migrations.py' \
+            --exclude='test_no_legacy_schema_refs.py' \
             'release-148|esr-140\.8|firefox-release-148\.json|firefox-esr-140\.8\.json|firefox-esr140\.json|mozilla-policy-templates-v7\.8|release148' \
-            app tests tools .github README.md
+            app tests tools .github README.md; then
+            echo "Legacy schema references found"
+            exit 1
+          fi
 
       - name: Mypy
         run: |
