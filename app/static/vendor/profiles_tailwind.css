@@ -1,0 +1,485 @@
+/*
+ * Local utility subset replacing Tailwind Play CDN for the /profiles page.
+ * Keep this file intentionally narrow and update it alongside templates/JS
+ * when new utility classes are introduced.
+ */
+
+.bg-emerald-50 {
+    background-color: rgb(236 253 245);
+}
+
+.bg-slate-100 {
+    background-color: rgb(241 245 249);
+}
+
+.bg-white {
+    background-color: rgb(255 255 255);
+}
+
+.bg-white\/80 {
+    background-color: rgb(255 255 255 / 0.8);
+}
+
+.border {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.border-dashed {
+    border-style: dashed;
+}
+
+.border-emerald-300 {
+    border-color: rgb(110 231 183);
+}
+
+.border-red-300 {
+    border-color: rgb(252 165 165);
+}
+
+.border-slate-200 {
+    border-color: rgb(226 232 240);
+}
+
+.border-white\/80 {
+    border-color: rgb(255 255 255 / 0.8);
+}
+
+.flex {
+    display: flex;
+}
+
+.grid {
+    display: grid;
+}
+
+.inline-flex {
+    display: inline-flex;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.w-14 {
+    width: 3.5rem;
+}
+
+.h-14 {
+    height: 3.5rem;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.min-h-\[440px\] {
+    min-height: 440px;
+}
+
+.h-\[56vh\] {
+    height: 56vh;
+}
+
+.max-h-\[calc\(100vh-18rem\)\] {
+    max-height: calc(100vh - 18rem);
+}
+
+.max-w-full {
+    max-width: 100%;
+}
+
+.max-w-\[240px\] {
+    max-width: 240px;
+}
+
+.max-w-\[1520px\] {
+    max-width: 1520px;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.items-start {
+    align-items: flex-start;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-3 {
+    gap: 0.75rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.5rem;
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.rounded-xl {
+    border-radius: 0.75rem;
+}
+
+.rounded-2xl {
+    border-radius: 1rem;
+}
+
+.rounded-\[22px\] {
+    border-radius: 22px;
+}
+
+.rounded-\[24px\] {
+    border-radius: 24px;
+}
+
+.rounded-\[26px\] {
+    border-radius: 26px;
+}
+
+.rounded-\[28px\] {
+    border-radius: 28px;
+}
+
+.rounded-\[30px\] {
+    border-radius: 30px;
+}
+
+.border,
+.p-4,
+.px-3,
+.px-4,
+.py-1,
+.py-2,
+.py-3,
+.py-4,
+.pb-2,
+.pr-1,
+.mb-0,
+.mb-1,
+.mb-2,
+.mb-4,
+.ml-1,
+.mr-2,
+.mt-2,
+.mt-4,
+.mx-2,
+.mx-auto {
+    box-sizing: border-box;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.py-1 {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.py-2 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.pb-2 {
+    padding-bottom: 0.5rem;
+}
+
+.pr-1 {
+    padding-right: 0.25rem;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.ml-1 {
+    margin-left: 0.25rem;
+}
+
+.mr-2 {
+    margin-right: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mx-2 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+    line-height: 1rem;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+}
+
+.text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.text-\[11px\] {
+    font-size: 11px;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.leading-6 {
+    line-height: 1.5rem;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.tracking-\[0\.16em\] {
+    letter-spacing: 0.16em;
+}
+
+.text-emerald-700 {
+    color: rgb(4 120 87);
+}
+
+.text-emerald-800 {
+    color: rgb(6 95 70);
+}
+
+.text-red-700 {
+    color: rgb(185 28 28);
+}
+
+.text-amber-800 {
+    color: rgb(146 64 14);
+}
+
+.text-slate-400 {
+    color: rgb(148 163 184);
+}
+
+.text-slate-500 {
+    color: rgb(100 116 139);
+}
+
+.text-slate-600 {
+    color: rgb(71 85 105);
+}
+
+.text-slate-700 {
+    color: rgb(51 65 85);
+}
+
+.text-slate-900 {
+    color: rgb(15 23 42);
+}
+
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shadow-inner {
+    box-shadow: inset 0 2px 4px rgb(15 23 42 / 0.06);
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.1);
+}
+
+.shadow-emerald-900\/10 {
+    --bpm-shadow-color: rgb(6 78 59 / 0.1);
+    box-shadow: 0 10px 15px -3px var(--bpm-shadow-color), 0 4px 6px -4px var(--bpm-shadow-color);
+}
+
+.shadow-panel {
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.1);
+}
+
+.shadow-soft {
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+}
+
+.hover\:bg-emerald-50:hover {
+    background-color: rgb(236 253 245);
+}
+
+.hover\:bg-red-50:hover {
+    background-color: rgb(254 242 242);
+}
+
+.hover\:bg-slate-50:hover {
+    background-color: rgb(248 250 252);
+}
+
+@media (min-width: 768px) {
+    .md\:p-5 {
+        padding: 1.25rem;
+    }
+
+    .md\:px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .md\:py-6 {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:flex-row {
+        flex-direction: row;
+    }
+
+    .lg\:items-start {
+        align-items: flex-start;
+    }
+
+    .lg\:justify-between {
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: 1280px) {
+    .xl\:sticky {
+        position: sticky;
+    }
+
+    .xl\:top-6 {
+        top: 1.5rem;
+    }
+
+    .xl\:self-start {
+        align-self: flex-start;
+    }
+
+    .xl\:grid-cols-\[360px_minmax\(0\,1fr\)\] {
+        grid-template-columns: 360px minmax(0, 1fr);
+    }
+}

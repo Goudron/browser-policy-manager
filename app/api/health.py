@@ -5,13 +5,13 @@ router = APIRouter(tags=["health"])
 
 
 @router.get("/health", summary="Liveness probe")
-def health() -> dict:
+async def health() -> dict:
     """Return a simple OK payload to indicate the app is alive."""
     return {"status": "ok"}
 
 
 @router.get("/health/ready", summary="Readiness probe")
-def ready() -> dict:
+async def ready() -> dict:
     """
     Return a readiness payload.
     NOTE: Tests expect a boolean flag 'ready' set to True.

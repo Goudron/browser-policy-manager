@@ -1,0 +1,71 @@
+<section class="wizard-shell surface-panel fade-up" id="wizard-panel">
+    <div class="wizard-header">
+        <div class="wizard-copy">
+            <div class="section-kicker" data-i18n="profiles.wizard_kicker">{{ tr("profiles.wizard_kicker") }}</div>
+            <h2 class="wizard-title" data-i18n="profiles.wizard_title">{{ tr("profiles.wizard_title") }}</h2>
+            <p class="wizard-subtitle" data-i18n="profiles.wizard_body">{{ tr("profiles.wizard_body") }}</p>
+            <p class="wizard-subtitle" id="wizard-context-copy" data-i18n="profiles.wizard_context_new">{{ tr("profiles.wizard_context_new") }}</p>
+        </div>
+        <div class="wizard-settings-search-shell surface-soft-box">
+            <label class="wizard-settings-search-field" for="wizard-settings-search-input">
+                <span class="field-label" data-i18n="profiles.wizard_settings_search_label">{{ tr("profiles.wizard_settings_search_label") }}</span>
+                <div class="wizard-settings-search-row">
+                    <input
+                        id="wizard-settings-search-input"
+                        type="search"
+                        class="soft-input"
+                        data-i18n-placeholder="profiles.wizard_settings_search_placeholder"
+                        placeholder="{{ tr('profiles.wizard_settings_search_placeholder') }}"
+                        autocomplete="off"
+                        spellcheck="false"
+                    />
+                    <button
+                        type="button"
+                        id="wizard-settings-search-clear"
+                        class="button-base ghost-button wizard-settings-search-clear"
+                        data-i18n="profiles.wizard_settings_search_clear"
+                        hidden>
+                        {{ tr("profiles.wizard_settings_search_clear") }}
+                    </button>
+                </div>
+            </label>
+            <div id="wizard-settings-search-meta" class="wizard-input-hint" data-i18n="profiles.wizard_settings_search_hint">{{ tr("profiles.wizard_settings_search_hint") }}</div>
+            <div id="wizard-settings-search-results" class="wizard-settings-search-results" hidden></div>
+        </div>
+        </div>
+
+        <div class="wizard-layout">
+        <div class="wizard-stepper" id="wizard-stepper">
+            {% for step in wizard_steps %}
+            <button
+                type="button"
+                class="wizard-step{% if loop.first %} wizard-step--active{% endif %}"
+                data-step="{{ step.step }}"
+                aria-controls="wizard-step-{{ step.step }}"
+                {% if loop.first %}aria-current="step"{% endif %}
+                data-step-progress-key="{{ step.progress_key }}"
+                data-step-progress-fallback="{{ step.progress_fallback }}">
+                <span class="wizard-step-top">
+                    <span class="wizard-step-index">{{ step.step }}</span>
+                    <span class="wizard-step-label" data-i18n="{{ step.label_key }}">{{ tr(step.label_key, step.label_fallback) }}</span>
+                </span>
+                <span class="wizard-step-copy" data-i18n="{{ step.copy_key }}">{{ tr(step.copy_key, step.copy_fallback) }}</span>
+            </button>
+            {% endfor %}
+        </div>
+
+        <div class="wizard-content">
+            <div class="wizard-panels">
+                {% include "profiles/_page_wizard_step_setup.html" %}
+                {% include "profiles/_page_wizard_step_general.html" %}
+                {% include "profiles/_page_wizard_step_home.html" %}
+                {% include "profiles/_page_wizard_step_search.html" %}
+                {% include "profiles/_page_wizard_step_privacy.html" %}
+                {% include "profiles/_page_wizard_step_sync.html" %}
+                {% include "profiles/_page_wizard_step_ai.html" %}
+                {% include "profiles/_page_wizard_step_export.html" %}
+                {% include "profiles/_page_wizard_support.html" %}
+            </div>
+        </div>
+    </div>
+</section>

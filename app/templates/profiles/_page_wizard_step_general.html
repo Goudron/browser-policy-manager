@@ -1,0 +1,215 @@
+{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_settings_docs, render_settings_pills, render_wizard_schema_shell with context %}
+
+<section class="wizard-panel" id="wizard-step-2">
+    {{ render_wizard_schema_shell(2) }}
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_general_policy_title">{{ tr("profiles.wizard_general_policy_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_general_policy_body">
+                {{ tr("profiles.wizard_general_policy_body") }}
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
+        {{ render_settings_pills(wizard_settings_sections["general"]["ui_maps"]["policy"], "wizard-settings-map-general") }}
+        {{ render_settings_docs(wizard_settings_sections["general"]["ui_maps"]["policy"], wizard_settings_sections["general"]["ui_docs"]["policy"], "wizard-settings-docs-general") }}
+        <div class="wizard-policy-grid">
+            {{ render_manual_policy_controls(wizard_manual_policy_groups["general_browser_behavior"]["items"]) }}
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_proxy_title">{{ tr("profiles.wizard_proxy_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_proxy_body">
+                {{ tr("profiles.wizard_proxy_body") }}
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
+        {{ render_settings_pills(wizard_settings_sections["general"]["ui_maps"]["proxy"], "wizard-settings-map-proxy") }}
+        {{ render_settings_docs(wizard_settings_sections["general"]["ui_maps"]["proxy"], wizard_settings_sections["general"]["ui_docs"]["proxy"], "wizard-settings-docs-proxy") }}
+        <div class="wizard-grid wizard-stage-panel">
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+            <label data-settings-target="field:wizard-proxy-mode">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_mode_label">{{ tr("profiles.wizard_proxy_mode_label") }}</div>
+                <select id="wizard-proxy-mode" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_proxy_mode_inherit">{{ tr("profiles.wizard_proxy_mode_inherit") }}</option>
+                    <option value="none" data-i18n="profiles.wizard_proxy_mode_none">{{ tr("profiles.wizard_proxy_mode_none") }}</option>
+                    <option value="system" data-i18n="profiles.wizard_proxy_mode_system">{{ tr("profiles.wizard_proxy_mode_system") }}</option>
+                    <option value="manual" data-i18n="profiles.wizard_proxy_mode_manual">{{ tr("profiles.wizard_proxy_mode_manual") }}</option>
+                    <option value="autoDetect" data-i18n="profiles.wizard_proxy_mode_auto_detect">{{ tr("profiles.wizard_proxy_mode_auto_detect") }}</option>
+                    <option value="autoConfig" data-i18n="profiles.wizard_proxy_mode_auto_config">{{ tr("profiles.wizard_proxy_mode_auto_config") }}</option>
+                </select>
+            </label>
+            <div id="wizard-proxy-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status wizard-field-full" data-i18n="profiles.wizard_proxy_section_state_empty">
+                {{ tr("profiles.wizard_proxy_section_state_empty") }}
+            </div>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-proxy-mode-group="manual autoConfig" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <div class="wizard-input-hint wizard-field-full" data-proxy-mode-group="manual" data-i18n="profiles.wizard_proxy_manual_hint">
+                {{ tr("profiles.wizard_proxy_manual_hint") }}
+            </div>
+            <div class="wizard-input-hint wizard-field-full" data-proxy-mode-group="autoConfig" data-i18n="profiles.wizard_proxy_auto_config_hint">
+                {{ tr("profiles.wizard_proxy_auto_config_hint") }}
+            </div>
+            <label data-settings-target="field:wizard-proxy-auto-config-url" data-proxy-mode-group="autoConfig">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_auto_config_label">{{ tr("profiles.wizard_proxy_auto_config_label") }}</div>
+                <input id="wizard-proxy-auto-config-url" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_proxy_auto_config_placeholder" placeholder="{{ tr('profiles.wizard_proxy_auto_config_placeholder') }}" />
+            </label>
+            <label data-settings-target="field:wizard-proxy-http" data-proxy-mode-group="manual">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_http_label">{{ tr("profiles.wizard_proxy_http_label") }}</div>
+                <input id="wizard-proxy-http" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_proxy_host_placeholder" placeholder="{{ tr('profiles.wizard_proxy_host_placeholder') }}" />
+            </label>
+            <label data-proxy-mode-group="manual">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_ssl_label">{{ tr("profiles.wizard_proxy_ssl_label") }}</div>
+                <input id="wizard-proxy-ssl" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_proxy_host_placeholder" placeholder="{{ tr('profiles.wizard_proxy_host_placeholder') }}" />
+            </label>
+            <label data-proxy-mode-group="manual">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_ftp_label">{{ tr("profiles.wizard_proxy_ftp_label") }}</div>
+                <input id="wizard-proxy-ftp" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_proxy_host_placeholder" placeholder="{{ tr('profiles.wizard_proxy_host_placeholder') }}" />
+            </label>
+            <label data-proxy-mode-group="manual">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_socks_label">{{ tr("profiles.wizard_proxy_socks_label") }}</div>
+                <input id="wizard-proxy-socks" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_proxy_host_placeholder" placeholder="{{ tr('profiles.wizard_proxy_host_placeholder') }}" />
+            </label>
+            <label data-proxy-mode-group="manual">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_socks_version_label">{{ tr("profiles.wizard_proxy_socks_version_label") }}</div>
+                <select id="wizard-proxy-socks-version" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_proxy_socks_version_inherit">{{ tr("profiles.wizard_proxy_socks_version_inherit") }}</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </label>
+            <label class="wizard-field-full" data-settings-target="field:wizard-proxy-passthrough" data-proxy-mode-group="manual autoConfig">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_passthrough_label">{{ tr("profiles.wizard_proxy_passthrough_label") }}</div>
+                <textarea id="wizard-proxy-passthrough" class="soft-input" rows="3" spellcheck="false" data-i18n-placeholder="profiles.wizard_proxy_passthrough_placeholder" placeholder="{{ tr('profiles.wizard_proxy_passthrough_placeholder') }}"></textarea>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_proxy_passthrough_hint">
+                    {{ tr("profiles.wizard_proxy_passthrough_hint") }}
+                </div>
+            </label>
+            <label class="wizard-toggle" data-settings-target="field:wizard-proxy-locked">
+                <input id="wizard-proxy-locked" type="checkbox" />
+                <div>
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_proxy_locked_label">{{ tr("profiles.wizard_proxy_locked_label") }}</div>
+                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_proxy_locked_copy">{{ tr("profiles.wizard_proxy_locked_copy") }}</div>
+                </div>
+            </label>
+            <label class="wizard-toggle" data-proxy-mode-group="manual">
+                <input id="wizard-proxy-use-http-for-all" type="checkbox" />
+                <div>
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_proxy_use_http_all_label">{{ tr("profiles.wizard_proxy_use_http_all_label") }}</div>
+                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_proxy_use_http_all_copy">{{ tr("profiles.wizard_proxy_use_http_all_copy") }}</div>
+                </div>
+            </label>
+            <label class="wizard-toggle" data-proxy-mode-group="manual autoConfig">
+                <input id="wizard-proxy-auto-login" type="checkbox" />
+                <div>
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_proxy_auto_login_label">{{ tr("profiles.wizard_proxy_auto_login_label") }}</div>
+                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_proxy_auto_login_copy">{{ tr("profiles.wizard_proxy_auto_login_copy") }}</div>
+                </div>
+            </label>
+            <label class="wizard-toggle" data-proxy-mode-group="manual">
+                <input id="wizard-proxy-use-dns" type="checkbox" />
+                <div>
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_proxy_use_dns_label">{{ tr("profiles.wizard_proxy_use_dns_label") }}</div>
+                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_proxy_use_dns_copy">{{ tr("profiles.wizard_proxy_use_dns_copy") }}</div>
+                </div>
+            </label>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_network_enterprise_title">{{ tr("profiles.wizard_network_enterprise_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_network_enterprise_body">
+                {{ tr("profiles.wizard_network_enterprise_body") }}
+            </p>
+        </div>
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
+            <div id="wizard-dns-over-https-card" data-settings-target="policy:DNSOverHTTPS"></div>
+            <div id="wizard-windows-sso-card" data-settings-target="policy:WindowsSSO"></div>
+        </div>
+        <div id="wizard-network-enterprise-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_network_enterprise_section_state_empty">
+            {{ tr("profiles.wizard_network_enterprise_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_network_enterprise_fine_tuning_body">
+                {{ tr("profiles.wizard_network_enterprise_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-network-enterprise-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-network-enterprise-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-network-enterprise-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <div id="wizard-authentication-card" class="wizard-field-full" data-settings-target="policy:Authentication"></div>
+            <div id="wizard-certificates-card" class="wizard-field-full" data-settings-target="policy:Certificates"></div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_network_review_title">{{ tr("profiles.wizard_network_review_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_network_review_body">
+                {{ tr("profiles.wizard_network_review_body") }}
+            </p>
+        </div>
+        <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_authentication">{{ tr("profiles.wizard_network_review_authentication") }}</span>
+                <span class="wizard-summary-value" id="wizard-network-summary-authentication">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-network-summary-authentication-jump" data-network-review-jump="authentication" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_certificates">{{ tr("profiles.wizard_network_review_certificates") }}</span>
+                <span class="wizard-summary-value" id="wizard-network-summary-certificates">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-network-summary-certificates-jump" data-network-review-jump="certificates" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_dns">{{ tr("profiles.wizard_network_review_dns") }}</span>
+                <span class="wizard-summary-value" id="wizard-network-summary-dns">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-network-summary-dns-jump" data-network-review-jump="dns" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_windows_sso">{{ tr("profiles.wizard_network_review_windows_sso") }}</span>
+                <span class="wizard-summary-value" id="wizard-network-summary-windows-sso">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-network-summary-windows-sso-jump" data-network-review-jump="windows_sso" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_general_title">{{ tr("profiles.wizard_preferences_general_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_preferences_general_body">
+                {{ tr("profiles.wizard_preferences_general_body") }}
+            </p>
+        </div>
+        <div class="wizard-section-group" data-preference-section="general" data-settings-target="pref-section:general">
+            <div class="wizard-search-engine-head">
+                <div>
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">{{ tr("profiles.wizard_preferences_presets_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_presets_body">
+                        {{ tr("profiles.wizard_preferences_presets_body") }}
+                    </div>
+                </div>
+                <button type="button" id="wizard-preferences-general-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">{{ tr("profiles.wizard_preferences_add_button") }}</button>
+            </div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">{{ tr("profiles.wizard_preferences_gui_label") }}</div>
+            {{ render_settings_pills(wizard_settings_sections["general"]["preferences"]["gui_groups"], "wizard-preferences-general-groups") }}
+            {{ render_settings_docs(wizard_settings_sections["general"]["preferences"]["gui_groups"], wizard_settings_sections["general"]["preferences"]["docs"], "wizard-preferences-general-docs") }}
+            <div id="wizard-preferences-general-presets" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">{{ tr("profiles.wizard_preferences_bundles_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_bundles_body">
+                {{ tr("profiles.wizard_preferences_bundles_body") }}
+            </div>
+            <div id="wizard-preferences-general-bundles" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">{{ tr("profiles.wizard_preferences_known_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_known_body">
+                {{ tr("profiles.wizard_preferences_known_body") }}
+            </div>
+            <div id="wizard-preferences-general-known" class="wizard-search-engine-preset-grid"></div>
+            <div id="wizard-preferences-general-empty" class="wizard-input-hint" data-i18n="profiles.wizard_preferences_empty">
+                {{ tr("profiles.wizard_preferences_empty") }}
+            </div>
+            <div id="wizard-preferences-general-list" class="wizard-search-engine-list"></div>
+        </div>
+    </div>
+</section>

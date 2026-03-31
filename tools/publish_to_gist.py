@@ -1,174 +1,267 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
-Publish current project snapshot (ZIP + manifest.json + optional reports) to a secret GitHub Gist.
+Publish a snapshot of the repository to a single GitHub Gist file.
 
-Requirements:
-  - Environment variable: GIST_TOKEN (PAT with "gist" scope only)
-  - requests (pip install requests)
+- Packs (almost) the whole repo into a ZIP archive.
+- Encodes the ZIP as base64 and uploads it as one file:
+  browser-policy-manager-snapshot.zip.b64
+- Uses GIST_TOKEN from the environment.
+- Reads optional configuration from tools/gist_manifest.json:
+    {
+      "description": "Browser Policy Manager snapshot for ChatGPT",
+      "public": false,
+      "gist_id": "4352f9974fb97696e139cc03c9fc1950"
+    }
 
-Behavior:
-  - Creates manifest.json with (path, size, sha256) for tracked project files.
-  - Packs project into snapshot.zip (excludes .git/, .venv/, venv/, .ruff_cache/, __pycache__/).
-  - If coverage.xml / pytest-report.txt exist in the project root, they are also uploaded as Gist files.
-  - Finds an existing secret Gist with the same description and updates it; otherwise creates a new one.
-  - Prints the resulting Gist URL and writes it to 'gist_url.txt' in the current working directory.
+If gist_id is missing, a new gist is created and gist_id is written back
+to tools/gist_manifest.json.
 """
 
 from __future__ import annotations
 
 import base64
-import hashlib
+import io
 import json
+import logging
 import os
-import subprocess
-import sys
-import tempfile
 import zipfile
-from collections.abc import Iterable
-from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import requests
 
-ROOT = Path(__file__).resolve().parents[1]
-GIST_DESC = "Browser Policy Manager snapshot"
-GIST_API = "https://api.github.com/gists"
-TOKEN = os.getenv("GIST_TOKEN")
+HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parent
+MANIFEST_PATH = HERE / "gist_manifest.json"
+GITHUB_API_URL = "https://api.github.com"
 
-INCLUDE_REPORTS = ["coverage.xml", "pytest-report.txt"]
-ZIP_NAME = "snapshot.zip"
-MANIFEST_NAME = "manifest.json"
-
-EXCLUDE_DIRS = {
-    ".git",
-    ".venv",
-    "venv",
-    "__pycache__",
-    ".ruff_cache",
-    ".mypy_cache",
-    ".pytest_cache",
-}
+logger = logging.getLogger("publish_to_gist")
 
 
-def die(msg: str) -> None:
-    print(f"❌ {msg}", file=sys.stderr)
-    sys.exit(1)
+class GistError(RuntimeError):
+    """Raised when the GitHub Gist API returns an error."""
 
 
-def is_excluded(path: Path) -> bool:
-    return any(part in EXCLUDE_DIRS for part in path.parts)
+def load_manifest() -> dict[str, Any]:
+    """
+    Load tools/gist_manifest.json if it exists.
 
+    Minimal expected structure:
+      {
+        "description": "Browser Policy Manager snapshot for ChatGPT",
+        "public": false,
+        "gist_id": "...."   # optional, can be missing for first run
+      }
+    """
+    if not MANIFEST_PATH.exists():
+        # Reasonable defaults if file does not exist.
+        return {
+            "description": "Browser Policy Manager snapshot for ChatGPT",
+            "public": False,
+        }
 
-def project_files() -> Iterable[Path]:
-    # Prefer git-tracked files; fall back to rglob if git fails.
     try:
-        out = (
-            subprocess.check_output(["git", "ls-files"], cwd=ROOT).decode().splitlines()
-        )
-        for rel in out:
-            p = ROOT / rel
-            if p.is_file() and not is_excluded(p):
-                yield p
-    except Exception:
-        for p in ROOT.rglob("*"):
-            if p.is_file() and not is_excluded(p):
-                yield p
+        with MANIFEST_PATH.open("r", encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Failed to read manifest %s: %s", MANIFEST_PATH, exc)
+        return {
+            "description": "Browser Policy Manager snapshot for ChatGPT",
+            "public": False,
+        }
+
+    if "description" not in data:
+        data["description"] = "Browser Policy Manager snapshot for ChatGPT"
+    if "public" not in data:
+        data["public"] = False
+
+    return data
 
 
-def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
+def save_manifest(manifest: dict[str, Any]) -> None:
+    """Write updated manifest back to disk."""
+    try:
+        with MANIFEST_PATH.open("w", encoding="utf-8") as fh:
+            json.dump(manifest, fh, indent=2, ensure_ascii=False)
+        logger.info("Updated manifest at %s", MANIFEST_PATH)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Could not update manifest: %s", exc)
 
 
-def git_info() -> dict:
-    def cmd(*args: str) -> str:
-        try:
-            return subprocess.check_output(args, cwd=ROOT).decode().strip()
-        except Exception:
-            return "unknown"
+def should_exclude(rel_path: str) -> bool:
+    """Return True if a path (relative to repo root) should be excluded."""
+    parts = rel_path.split("/")
 
-    return {
-        "branch": cmd("git", "rev-parse", "--abbrev-ref", "HEAD"),
-        "commit": cmd("git", "rev-parse", "--short", "HEAD"),
-        "dirty": cmd("git", "status", "--porcelain") != "",
+    # Exclude some top-level / nested directories.
+    excluded_dirs = {
+        ".git",
+        ".github",
+        ".venv",
+        "__pycache__",
+        ".pytest_cache",
+        ".mypy_cache",
+        ".ruff_cache",
+        "dist",
+        "build",
+        ".idea",
+        ".vscode",
     }
+    if any(part in excluded_dirs for part in parts):
+        return True
 
-
-def make_manifest() -> dict:
-    items = []
-    for p in project_files():
-        rel = p.relative_to(ROOT).as_posix()
-        items.append({"path": rel, "size": p.stat().st_size, "sha256": sha256(p)})
-    return {
-        "generated_at": datetime.now(UTC).isoformat(),
-        "git": git_info(),
-        "files": items,
+    # Exclude some common binary / tooling artefacts.
+    excluded_suffixes = {
+        ".pyc",
+        ".pyo",
+        ".pyd",
+        ".so",
+        ".dll",
+        ".dylib",
+        ".zip",
+        ".tgz",
+        ".gz",
+        ".xz",
+        ".whl",
+        ".db",
+        ".sqlite3",
+        ".log",
     }
+    if any(rel_path.endswith(suf) for suf in excluded_suffixes):
+        return True
+
+    return False
 
 
-def make_zip(tmpdir: Path) -> Path:
-    zip_path = tmpdir / ZIP_NAME
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        for p in project_files():
-            rel = p.relative_to(ROOT).as_posix()
-            zf.write(p, arcname=rel)
-    return zip_path
+def build_repo_zip() -> bytes:
+    """
+    Walk the repository and pack files into an in-memory ZIP archive.
+
+    Returns raw ZIP bytes.
+    """
+    buf = io.BytesIO()
+
+    with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for path in REPO_ROOT.rglob("*"):
+            if not path.is_file():
+                continue
+
+            rel = path.relative_to(REPO_ROOT).as_posix()
+
+            if should_exclude(rel):
+                # Uncomment this line if you need verbose logging.
+                # logger.debug("Excluding from ZIP: %s", rel)
+                continue
+
+            # Never include the snapshot itself if it ends up in the repo.
+            if rel.endswith("browser-policy-manager-snapshot.zip") or rel.endswith(
+                "browser-policy-manager-snapshot.zip.b64",
+            ):
+                continue
+
+            zf.write(path, arcname=rel)
+
+    return buf.getvalue()
 
 
-def create_or_update_gist(manifest: dict, zip_path: Path) -> str:
-    if not TOKEN:
-        die(
-            "Please set GIST_TOKEN environment variable with your GitHub token (gist scope only)."
-        )
+def create_or_update_gist(manifest: dict[str, Any]) -> str:
+    """
+    Create or update the Gist with repo snapshot.
+
+    Returns the Gist HTML URL.
+    """
+    token = os.environ.get("GIST_TOKEN")
+    if not token:
+        logger.error("Environment variable GIST_TOKEN is not set")
+        raise SystemExit(1)
+
+    zip_bytes = build_repo_zip()
+    if not zip_bytes:
+        logger.error("ZIP snapshot is empty, aborting")
+        raise SystemExit(1)
+
+    # Encode ZIP to base64 so it can be safely stored in a JSON string.
+    b64_content = base64.b64encode(zip_bytes).decode("ascii")
+
+    description = manifest.get(
+        "description",
+        "Browser Policy Manager snapshot for ChatGPT",
+    )
+    public = bool(manifest.get("public", False))
+    gist_id = manifest.get("gist_id")
 
     headers = {
-        "Authorization": f"Bearer {TOKEN}",
+        "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
     }
 
-    # Base payload with manifest + zip (zip as base64 to avoid binary issues via API)
-    files_payload = {
-        MANIFEST_NAME: {"content": json.dumps(manifest, ensure_ascii=False, indent=2)},
-        ZIP_NAME: {"content": base64.b64encode(zip_path.read_bytes()).decode()},
+    # Single file in the Gist: base64-encoded ZIP.
+    files_payload: dict[str, dict[str, str]] = {
+        "browser-policy-manager-snapshot.zip.b64": {
+            "content": b64_content,
+        },
     }
 
-    # Optionally include reports if present at repository root
-    for name in INCLUDE_REPORTS:
-        p = ROOT / name
-        if p.exists():
-            files_payload[name] = {"content": p.read_text(errors="replace")}
+    payload: dict[str, Any] = {
+        "description": description,
+        "public": public,
+        "files": files_payload,
+    }
 
-    payload = {"description": GIST_DESC, "public": False, "files": files_payload}
+    if gist_id:
+        method = "PATCH"
+        url = f"{GITHUB_API_URL}/gists/{gist_id}"
+    else:
+        method = "POST"
+        url = f"{GITHUB_API_URL}/gists"
 
-    # Try to find an existing gist with the same description
-    rlist = requests.get(GIST_API, headers=headers)
-    rlist.raise_for_status()
-    gist = next((g for g in rlist.json() if g.get("description") == GIST_DESC), None)
+    logger.info(
+        "%s %s (1 file, ZIP encoded as base64, %d bytes)",
+        method,
+        url,
+        len(zip_bytes),
+    )
 
-    if gist:
-        gist_id = gist["id"]
-        r = requests.patch(f"{GIST_API}/{gist_id}", headers=headers, json=payload)
-        r.raise_for_status()
-        return f"https://gist.github.com/{gist_id}"
+    resp = requests.request(method, url, headers=headers, json=payload, timeout=120)
 
-    r = requests.post(GIST_API, headers=headers, json=payload)
-    r.raise_for_status()
-    gist_id = r.json()["id"]
-    return f"https://gist.github.com/{gist_id}"
+    if resp.status_code >= 400:
+        logger.error("GitHub API error: %s", resp.text)
+        raise GistError(f"GitHub API error {resp.status_code} for {url}")
+
+    data = resp.json()
+    gist_url = data.get("html_url") or data.get("url") or "<unknown>"
+
+    # If it was a create, remember the new gist_id.
+    if not gist_id:
+        new_id = data.get("id")
+        if new_id:
+            manifest["gist_id"] = new_id
+            save_manifest(manifest)
+            logger.info("Created new Gist with id=%s", new_id)
+        else:
+            logger.warning(
+                "Created Gist but response has no 'id', response=%s",
+                data,
+            )
+    else:
+        logger.info("Updated existing Gist id=%s", gist_id)
+
+    logger.info("Gist URL: %s", gist_url)
+    return gist_url
 
 
 def main() -> None:
-    with tempfile.TemporaryDirectory() as td:
-        tmp = Path(td)
-        manifest = make_manifest()
-        zpath = make_zip(tmp)
-        url = create_or_update_gist(manifest, zpath)
-        print(f"🔗 Gist URL: {url}")
-        # Write URL for CI to pick up as artifact
-        Path("gist_url.txt").write_text(url, encoding="utf-8")
+    """Entry point for CLI usage."""
+    # Simple logging setup for CLI runs; CI can override root config.
+    logging.basicConfig(
+        level=logging.INFO,
+        format="[%(levelname)s] %(message)s",
+    )
+
+    manifest = load_manifest()
+    try:
+        create_or_update_gist(manifest)
+    except GistError:
+        raise SystemExit(1) from None
 
 
 if __name__ == "__main__":

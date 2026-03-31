@@ -1,0 +1,429 @@
+{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_settings_docs, render_settings_pills, render_wizard_schema_shell with context %}
+
+<section class="wizard-panel" id="wizard-step-6">
+    {{ render_wizard_schema_shell(6) }}
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_sync_title">{{ tr("profiles.wizard_sync_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_sync_body">
+                {{ tr("profiles.wizard_sync_body") }}
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
+        {{ render_settings_pills(wizard_settings_sections["sync"]["ui_maps"]["policy"], "wizard-settings-map-sync") }}
+            {{ render_settings_docs(wizard_settings_sections["sync"]["ui_maps"]["policy"], wizard_settings_sections["sync"]["ui_docs"]["policy"], "wizard-settings-docs-sync") }}
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-policy-grid wizard-stage-panel">
+            {{ render_manual_policy_controls(wizard_manual_policy_groups["sync_accounts"]["items"]) }}
+        </div>
+        <div id="wizard-sync-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_sync_section_state_empty">
+            {{ tr("profiles.wizard_sync_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_sync_fine_tuning_body">
+                {{ tr("profiles.wizard_sync_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-sync-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-sync-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-sync-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <div id="wizard-user-messaging-card" class="wizard-field-full" data-settings-target="policy:UserMessaging"></div>
+        </div>
+    </div>
+    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_sync_title">{{ tr("profiles.wizard_preferences_sync_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_preferences_sync_body">
+                {{ tr("profiles.wizard_preferences_sync_body") }}
+            </p>
+        </div>
+        <div class="wizard-section-group" data-preference-section="sync" data-settings-target="pref-section:sync">
+            <div class="wizard-search-engine-head">
+                <div>
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">{{ tr("profiles.wizard_preferences_presets_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_presets_body">
+                        {{ tr("profiles.wizard_preferences_presets_body") }}
+                    </div>
+                </div>
+                <button type="button" id="wizard-preferences-sync-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">{{ tr("profiles.wizard_preferences_add_button") }}</button>
+            </div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">{{ tr("profiles.wizard_preferences_gui_label") }}</div>
+            {{ render_settings_pills(wizard_settings_sections["sync"]["preferences"]["gui_groups"], "wizard-preferences-sync-groups") }}
+            {{ render_settings_docs(wizard_settings_sections["sync"]["preferences"]["gui_groups"], wizard_settings_sections["sync"]["preferences"]["docs"], "wizard-preferences-sync-docs") }}
+            <div id="wizard-preferences-sync-presets" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">{{ tr("profiles.wizard_preferences_bundles_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_bundles_body">
+                {{ tr("profiles.wizard_preferences_bundles_body") }}
+            </div>
+            <div id="wizard-preferences-sync-bundles" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">{{ tr("profiles.wizard_preferences_known_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_known_body">
+                {{ tr("profiles.wizard_preferences_known_body") }}
+            </div>
+            <div id="wizard-preferences-sync-known" class="wizard-search-engine-preset-grid"></div>
+            <div id="wizard-preferences-sync-empty" class="wizard-input-hint" data-i18n="profiles.wizard_preferences_empty">
+                {{ tr("profiles.wizard_preferences_empty") }}
+            </div>
+            <div id="wizard-preferences-sync-list" class="wizard-search-engine-list"></div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_language_translation_title">{{ tr("profiles.wizard_language_translation_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_language_translation_body">
+                {{ tr("profiles.wizard_language_translation_body") }}
+            </p>
+        </div>
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
+            <div id="wizard-requested-locales-card" data-settings-target="policy:RequestedLocales"></div>
+            <div id="wizard-translate-enabled-card" data-settings-target="policy:TranslateEnabled"></div>
+        </div>
+        <div id="wizard-language-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_language_section_state_empty">
+            {{ tr("profiles.wizard_language_section_state_empty") }}
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_title">{{ tr("profiles.wizard_extensions_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_body">
+                {{ tr("profiles.wizard_extensions_body") }}
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
+        {{ render_settings_pills(wizard_settings_sections["sync"]["ui_maps"]["extensions"], "wizard-settings-map-extensions") }}
+        {{ render_settings_docs(wizard_settings_sections["sync"]["ui_maps"]["extensions"], wizard_settings_sections["sync"]["ui_docs"]["extensions"], "wizard-settings-docs-extensions") }}
+        <div class="wizard-grid wizard-stage-panel">
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+            <label data-settings-target="field:wizard-extension-default-mode">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_mode_label">{{ tr("profiles.wizard_extensions_mode_label") }}</div>
+                <select id="wizard-extension-default-mode" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_extensions_mode_inherit">{{ tr("profiles.wizard_extensions_mode_inherit") }}</option>
+                    <option value="allowed" data-i18n="profiles.wizard_extensions_mode_allowed">{{ tr("profiles.wizard_extensions_mode_allowed") }}</option>
+                    <option value="blocked" data-i18n="profiles.wizard_extensions_mode_blocked">{{ tr("profiles.wizard_extensions_mode_blocked") }}</option>
+                </select>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_mode_hint">
+                    {{ tr("profiles.wizard_extensions_mode_hint") }}
+                </div>
+            </label>
+        </div>
+        <div id="wizard-extension-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_extensions_section_state_empty">
+            {{ tr("profiles.wizard_extensions_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_fine_tuning_body">
+                {{ tr("profiles.wizard_extensions_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-extension-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-extension-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-extension-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <label data-settings-target="field:wizard-extension-install">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_install_label">{{ tr("profiles.wizard_extensions_install_label") }}</div>
+                <textarea id="wizard-extension-install" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_install_placeholder" placeholder="{{ tr('profiles.wizard_extensions_install_placeholder') }}"></textarea>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_install_hint">
+                    {{ tr("profiles.wizard_extensions_install_hint") }}
+                </div>
+            </label>
+            <label data-settings-target="field:wizard-extension-locked">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_locked_label">{{ tr("profiles.wizard_extensions_locked_label") }}</div>
+                <textarea id="wizard-extension-locked" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_locked_placeholder" placeholder="{{ tr('profiles.wizard_extensions_locked_placeholder') }}"></textarea>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_locked_hint">
+                    {{ tr("profiles.wizard_extensions_locked_hint") }}
+                </div>
+            </label>
+            <div class="wizard-toolbar-row wizard-fine-tuning-bar wizard-field-full">
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_more_rules_body">
+                    {{ tr("profiles.wizard_extensions_more_rules_body") }}
+                </div>
+                <button type="button" id="wizard-extension-more-rules-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-extension-more-rules-panel" data-i18n="profiles.wizard_more_rules_show">
+                    {{ tr("profiles.wizard_more_rules_show") }}
+                </button>
+            </div>
+            <div class="wizard-grid wizard-field-full wizard-fine-tuning-panel wizard-fine-tuning-panel--nested" id="wizard-extension-more-rules-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_more_rules_label">{{ tr("profiles.wizard_more_rules_label") }}</div>
+            <label class="wizard-field-full" data-settings-target="field:wizard-extension-uninstall">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_uninstall_label">{{ tr("profiles.wizard_extensions_uninstall_label") }}</div>
+                <textarea id="wizard-extension-uninstall" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_uninstall_placeholder" placeholder="{{ tr('profiles.wizard_extensions_uninstall_placeholder') }}"></textarea>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_uninstall_hint">
+                    {{ tr("profiles.wizard_extensions_uninstall_hint") }}
+                </div>
+            </label>
+            <div class="wizard-section-group wizard-field-full wizard-subsection-card wizard-subsection-card--soft" id="wizard-extension-curated-section">
+                <div class="wizard-section-heading">
+                    <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_profiles_title">{{ tr("profiles.wizard_extensions_profiles_title") }}</h3>
+                    <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_profiles_body">
+                        {{ tr("profiles.wizard_extensions_profiles_body") }}
+                    </p>
+                </div>
+                <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+                    <div id="wizard-extension-curated-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_extensions_profiles_empty">
+                        {{ tr("profiles.wizard_extensions_profiles_empty") }}
+                    </div>
+                    <button type="button" id="wizard-extension-curated-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-extension-curated-panel" data-i18n="profiles.wizard_extensions_profiles_show">
+                        {{ tr("profiles.wizard_extensions_profiles_show") }}
+                    </button>
+                </div>
+            </div>
+            <div class="wizard-grid wizard-field-full wizard-search-engine-list wizard-search-engine-list--airy" id="wizard-extension-curated-panel" hidden>
+            <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--compact wizard-extension-profile-card" data-extension-profile-card="uBlock0@raymondhill.net" data-settings-target="field:extension-profile-ublock">
+                <div class="wizard-extension-profile-head">
+                    <div class="wizard-input-stack">
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_ublock_title">uBlock Origin</div>
+                        <div class="wizard-input-hint">uBlock0@raymondhill.net</div>
+                        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="uBlock0@raymondhill.net" data-i18n="profiles.wizard_extension_profile_state_missing">{{ tr("profiles.wizard_extension_profile_state_missing") }}</div>
+                    </div>
+                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="uBlock0@raymondhill.net" aria-expanded="false" aria-controls="wizard-extension-profile-details-ublock" data-i18n="profiles.wizard_extension_profile_details_show">
+                        {{ tr("profiles.wizard_extension_profile_details_show") }}
+                    </button>
+                </div>
+                <div class="wizard-extension-profile-main">
+                    <label class="wizard-input-stack">
+                        <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">{{ tr("profiles.wizard_extension_profile_mode_label") }}</div>
+                        <select class="soft-input" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="mode">
+                            <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">{{ tr("profiles.wizard_extension_profile_mode_inherit") }}</option>
+                            <option value="allowed" data-i18n="profiles.wizard_extension_profile_mode_allowed">{{ tr("profiles.wizard_extension_profile_mode_allowed") }}</option>
+                            <option value="blocked" data-i18n="profiles.wizard_extension_profile_mode_blocked">{{ tr("profiles.wizard_extension_profile_mode_blocked") }}</option>
+                            <option value="force_installed" data-i18n="profiles.wizard_extension_profile_mode_force">{{ tr("profiles.wizard_extension_profile_mode_force") }}</option>
+                            <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">{{ tr("profiles.wizard_extension_profile_mode_normal") }}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="wizard-grid wizard-extension-profile-details" id="wizard-extension-profile-details-ublock" data-extension-profile-details-panel="uBlock0@raymondhill.net" hidden>
+                    <label class="wizard-input-stack wizard-field-full">
+                        <div class="field-label" data-i18n="profiles.wizard_extension_profile_url_label">{{ tr("profiles.wizard_extension_profile_url_label") }}</div>
+                        <input type="text" class="soft-input" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="url" data-i18n-placeholder="profiles.wizard_extension_profile_ublock_url" placeholder="{{ tr('profiles.wizard_extension_profile_ublock_url') }}" />
+                    </label>
+                    <label class="wizard-toggle">
+                        <input type="checkbox" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="updates_disabled" />
+                        <div>
+                            <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_updates_label">{{ tr("profiles.wizard_extension_profile_updates_label") }}</div>
+                            <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_updates_copy">{{ tr("profiles.wizard_extension_profile_updates_copy") }}</div>
+                        </div>
+                    </label>
+                    <label class="wizard-toggle">
+                        <input type="checkbox" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="private_browsing" />
+                        <div>
+                            <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_private_label">{{ tr("profiles.wizard_extension_profile_private_label") }}</div>
+                            <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_private_copy">{{ tr("profiles.wizard_extension_profile_private_copy") }}</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--compact wizard-extension-profile-card" data-extension-profile-card="adguardadblocker@adguard.com">
+                <div class="wizard-extension-profile-head">
+                    <div class="wizard-input-stack">
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_adguard_title">AdGuard AdBlocker</div>
+                        <div class="wizard-input-hint">adguardadblocker@adguard.com</div>
+                        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="adguardadblocker@adguard.com" data-i18n="profiles.wizard_extension_profile_state_missing">{{ tr("profiles.wizard_extension_profile_state_missing") }}</div>
+                    </div>
+                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="adguardadblocker@adguard.com" aria-expanded="false" aria-controls="wizard-extension-profile-details-adguard" data-i18n="profiles.wizard_extension_profile_details_show">
+                        {{ tr("profiles.wizard_extension_profile_details_show") }}
+                    </button>
+                </div>
+                <div class="wizard-extension-profile-main">
+                    <label class="wizard-input-stack">
+                        <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">{{ tr("profiles.wizard_extension_profile_mode_label") }}</div>
+                        <select class="soft-input" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="mode">
+                            <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">{{ tr("profiles.wizard_extension_profile_mode_inherit") }}</option>
+                            <option value="allowed" data-i18n="profiles.wizard_extension_profile_mode_allowed">{{ tr("profiles.wizard_extension_profile_mode_allowed") }}</option>
+                            <option value="blocked" data-i18n="profiles.wizard_extension_profile_mode_blocked">{{ tr("profiles.wizard_extension_profile_mode_blocked") }}</option>
+                            <option value="force_installed" data-i18n="profiles.wizard_extension_profile_mode_force">{{ tr("profiles.wizard_extension_profile_mode_force") }}</option>
+                            <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">{{ tr("profiles.wizard_extension_profile_mode_normal") }}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="wizard-grid wizard-extension-profile-details" id="wizard-extension-profile-details-adguard" data-extension-profile-details-panel="adguardadblocker@adguard.com" hidden>
+                    <label class="wizard-input-stack wizard-field-full">
+                        <div class="field-label" data-i18n="profiles.wizard_extension_profile_url_label">{{ tr("profiles.wizard_extension_profile_url_label") }}</div>
+                        <input type="text" class="soft-input" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="url" data-i18n-placeholder="profiles.wizard_extension_profile_adguard_url" placeholder="{{ tr('profiles.wizard_extension_profile_adguard_url') }}" />
+                    </label>
+                    <label class="wizard-toggle">
+                        <input type="checkbox" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="updates_disabled" />
+                        <div>
+                            <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_updates_label">{{ tr("profiles.wizard_extension_profile_updates_label") }}</div>
+                            <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_updates_copy">{{ tr("profiles.wizard_extension_profile_updates_copy") }}</div>
+                        </div>
+                    </label>
+                    <label class="wizard-toggle">
+                        <input type="checkbox" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="private_browsing" />
+                        <div>
+                            <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_private_label">{{ tr("profiles.wizard_extension_profile_private_label") }}</div>
+                            <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_private_copy">{{ tr("profiles.wizard_extension_profile_private_copy") }}</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--compact wizard-extension-profile-card" data-extension-profile-card="https-everywhere@eff.org">
+                <div class="wizard-extension-profile-head">
+                    <div class="wizard-input-stack">
+                        <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_https_everywhere_title">HTTPS Everywhere</div>
+                        <div class="wizard-input-hint">https-everywhere@eff.org</div>
+                        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="https-everywhere@eff.org" data-i18n="profiles.wizard_extension_profile_state_missing">{{ tr("profiles.wizard_extension_profile_state_missing") }}</div>
+                    </div>
+                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="https-everywhere@eff.org" aria-expanded="false" aria-controls="wizard-extension-profile-details-https-everywhere" data-i18n="profiles.wizard_extension_profile_details_show">
+                        {{ tr("profiles.wizard_extension_profile_details_show") }}
+                    </button>
+                </div>
+                <div class="wizard-extension-profile-main">
+                    <label class="wizard-input-stack">
+                        <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">{{ tr("profiles.wizard_extension_profile_mode_label") }}</div>
+                        <select class="soft-input" data-extension-profile="https-everywhere@eff.org" data-extension-field="mode">
+                            <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">{{ tr("profiles.wizard_extension_profile_mode_inherit") }}</option>
+                            <option value="allowed" data-i18n="profiles.wizard_extension_profile_mode_allowed">{{ tr("profiles.wizard_extension_profile_mode_allowed") }}</option>
+                            <option value="blocked" data-i18n="profiles.wizard_extension_profile_mode_blocked">{{ tr("profiles.wizard_extension_profile_mode_blocked") }}</option>
+                            <option value="force_installed" data-i18n="profiles.wizard_extension_profile_mode_force">{{ tr("profiles.wizard_extension_profile_mode_force") }}</option>
+                            <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">{{ tr("profiles.wizard_extension_profile_mode_normal") }}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="wizard-grid wizard-extension-profile-details" id="wizard-extension-profile-details-https-everywhere" data-extension-profile-details-panel="https-everywhere@eff.org" hidden>
+                    <label class="wizard-input-stack wizard-field-full">
+                        <div class="field-label" data-i18n="profiles.wizard_extension_profile_url_label">{{ tr("profiles.wizard_extension_profile_url_label") }}</div>
+                        <input type="text" class="soft-input" data-extension-profile="https-everywhere@eff.org" data-extension-field="url" data-i18n-placeholder="profiles.wizard_extension_profile_https_everywhere_url" placeholder="{{ tr('profiles.wizard_extension_profile_https_everywhere_url') }}" />
+                    </label>
+                    <label class="wizard-toggle">
+                        <input type="checkbox" data-extension-profile="https-everywhere@eff.org" data-extension-field="updates_disabled" />
+                        <div>
+                            <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_updates_label">{{ tr("profiles.wizard_extension_profile_updates_label") }}</div>
+                            <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_updates_copy">{{ tr("profiles.wizard_extension_profile_updates_copy") }}</div>
+                        </div>
+                    </label>
+                    <label class="wizard-toggle">
+                        <input type="checkbox" data-extension-profile="https-everywhere@eff.org" data-extension-field="private_browsing" />
+                        <div>
+                            <div class="wizard-toggle-title" data-i18n="profiles.wizard_extension_profile_private_label">{{ tr("profiles.wizard_extension_profile_private_label") }}</div>
+                            <div class="wizard-toggle-copy" data-i18n="profiles.wizard_extension_profile_private_copy">{{ tr("profiles.wizard_extension_profile_private_copy") }}</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            </div>
+            </div>
+        </div>
+        <div class="wizard-section-group">
+            <div class="wizard-section-heading">
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_review_title">{{ tr("profiles.wizard_extensions_review_title") }}</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_review_body">
+                    {{ tr("profiles.wizard_extensions_review_body") }}
+                </p>
+            </div>
+            <div class="wizard-summary-list wizard-summary-list--cards">
+                <div class="wizard-summary-row wizard-summary-row--decision">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_extensions_review_curated">{{ tr("profiles.wizard_extensions_review_curated") }}</span>
+                    <span class="wizard-summary-value" id="wizard-extension-summary-curated">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-extension-summary-curated-jump" data-extension-review-jump="curated" data-i18n="profiles.wizard_extensions_review_open">{{ tr("profiles.wizard_extensions_review_open") }}</button>
+                </div>
+                <div class="wizard-summary-row wizard-summary-row--decision">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_extensions_review_arbitrary">{{ tr("profiles.wizard_extensions_review_arbitrary") }}</span>
+                    <span class="wizard-summary-value" id="wizard-extension-summary-arbitrary">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-extension-summary-arbitrary-jump" data-extension-review-jump="arbitrary" data-i18n="profiles.wizard_extensions_review_open">{{ tr("profiles.wizard_extensions_review_open") }}</button>
+                </div>
+                <div class="wizard-summary-row wizard-summary-row--decision">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_extensions_review_custom_urls">{{ tr("profiles.wizard_extensions_review_custom_urls") }}</span>
+                    <span class="wizard-summary-value" id="wizard-extension-summary-custom-urls">0</span>
+                    <button type="button" class="button-base ghost-button" id="wizard-extension-summary-custom-urls-jump" data-extension-review-jump="custom_urls" data-i18n="profiles.wizard_extensions_review_open">{{ tr("profiles.wizard_extensions_review_open") }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_behavior_title">{{ tr("profiles.wizard_website_behavior_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_website_behavior_body">
+                {{ tr("profiles.wizard_website_behavior_body") }}
+            </p>
+        </div>
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
+            <div id="wizard-website-filter-card" class="wizard-field-full" data-settings-target="policy:WebsiteFilter"></div>
+        </div>
+        <div id="wizard-website-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_website_section_state_empty">
+            {{ tr("profiles.wizard_website_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_website_fine_tuning_body">
+                {{ tr("profiles.wizard_website_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-website-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-website-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-website-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <div id="wizard-handlers-card" class="wizard-field-full" data-settings-target="policy:Handlers"></div>
+        </div>
+    </div>
+    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_advanced_title">{{ tr("profiles.wizard_extensions_advanced_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_advanced_body">
+                {{ tr("profiles.wizard_extensions_advanced_body") }}
+            </p>
+        </div>
+        <div class="wizard-grid">
+            <div id="wizard-install-addons-permission-card" data-settings-target="policy:InstallAddonsPermission"></div>
+        </div>
+        <div id="wizard-extension-settings-card" data-settings-target="policy:ExtensionSettings"></div>
+    </div>
+    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_bookmarks_review_title">{{ tr("profiles.wizard_bookmarks_review_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_bookmarks_review_body">
+                {{ tr("profiles.wizard_bookmarks_review_body") }}
+            </p>
+        </div>
+        <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_bookmarks_review_links">{{ tr("profiles.wizard_bookmarks_review_links") }}</span>
+                <span class="wizard-summary-value" id="wizard-bookmark-summary-links">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-bookmark-summary-links-jump" data-bookmark-review-jump="bookmarks" data-i18n="profiles.wizard_bookmarks_review_open">{{ tr("profiles.wizard_bookmarks_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_bookmarks_review_folders">{{ tr("profiles.wizard_bookmarks_review_folders") }}</span>
+                <span class="wizard-summary-value" id="wizard-bookmark-summary-folders">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-bookmark-summary-folders-jump" data-bookmark-review-jump="managed" data-i18n="profiles.wizard_bookmarks_review_open">{{ tr("profiles.wizard_bookmarks_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_bookmarks_review_nested">{{ tr("profiles.wizard_bookmarks_review_nested") }}</span>
+                <span class="wizard-summary-value" id="wizard-bookmark-summary-nested">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-bookmark-summary-nested-jump" data-bookmark-review-jump="nested" data-i18n="profiles.wizard_bookmarks_review_open">{{ tr("profiles.wizard_bookmarks_review_open") }}</button>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_access_review_title">{{ tr("profiles.wizard_website_access_review_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_website_access_review_body">
+                {{ tr("profiles.wizard_website_access_review_body") }}
+            </p>
+        </div>
+        <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_website_access_review_blocked">{{ tr("profiles.wizard_website_access_review_blocked") }}</span>
+                <span class="wizard-summary-value" id="wizard-website-access-summary-blocked">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-website-access-summary-blocked-jump" data-website-access-review-jump="blocked" data-i18n="profiles.wizard_website_access_review_open">{{ tr("profiles.wizard_website_access_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_website_access_review_exceptions">{{ tr("profiles.wizard_website_access_review_exceptions") }}</span>
+                <span class="wizard-summary-value" id="wizard-website-access-summary-exceptions">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-website-access-summary-exceptions-jump" data-website-access-review-jump="exceptions" data-i18n="profiles.wizard_website_access_review_open">{{ tr("profiles.wizard_website_access_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_website_access_review_handlers">{{ tr("profiles.wizard_website_access_review_handlers") }}</span>
+                <span class="wizard-summary-value" id="wizard-website-access-summary-handlers">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-website-access-summary-handlers-jump" data-website-access-review-jump="handlers" data-i18n="profiles.wizard_website_access_review_open">{{ tr("profiles.wizard_website_access_review_open") }}</button>
+            </div>
+        </div>
+    </div>
+</section>

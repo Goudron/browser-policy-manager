@@ -1,5 +1,6 @@
 # ruff: noqa: E402
 import asyncio
+import gc
 import sys
 from pathlib import Path
 
@@ -10,12 +11,12 @@ if str(PROJECT_ROOT) not in sys.path:
 
 import httpx
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.db import get_session
+from app.db import AsyncSessionAdapter, get_session
 from app.main import app
-from app.models.policy import Base
+from app.models.profile import Base
 
 
 @pytest.fixture(scope="session")
@@ -30,23 +31,38 @@ def event_loop():
     loop.close()
 
 
+@pytest.fixture(autouse=True)
+def cleanup_global_sqlite_engine():
+    yield
+    try:
+        from app import db as db_module
+
+        db_module.engine.dispose()
+    except Exception:
+        pass
+    gc.collect()
+
+
 @pytest.fixture
 async def test_session():
-    engine = create_async_engine(
-        "sqlite+aiosqlite:///:memory:", echo=False, future=True
-    )
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    async with async_session() as session:
-        yield session
-    await engine.dispose()
+    engine = create_engine("sqlite:///:memory:", echo=False, future=True)
+    testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(bind=engine)
+    session = testing_session_factory()
+    try:
+        yield AsyncSessionAdapter(session)
+    finally:
+        session.close()
+        engine.dispose()
 
 
 @pytest.fixture
-async def client(test_session: AsyncSession):
+async def client(test_session):
     # Override FastAPI dependency to use in-memory session for tests
-    app.dependency_overrides[get_session] = lambda: test_session
+    async def override_get_session():
+        yield test_session
+
+    app.dependency_overrides[get_session] = override_get_session
 
     transport = httpx.ASGITransport(app=app)
     async with httpx.AsyncClient(transport=transport, base_url="http://test") as c:

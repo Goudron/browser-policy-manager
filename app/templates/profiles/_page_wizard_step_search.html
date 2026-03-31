@@ -1,0 +1,286 @@
+{% from "profiles/_wizard_macros.html" import render_settings_docs, render_settings_pills, render_wizard_schema_shell with context %}
+
+<section class="wizard-panel" id="wizard-step-4">
+    {{ render_wizard_schema_shell(4) }}
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_search_title">{{ tr("profiles.wizard_search_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_search_body">
+                {{ tr("profiles.wizard_search_body") }}
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
+        {{ render_settings_pills(wizard_settings_sections["search"]["ui_maps"]["search"], "wizard-settings-map-search") }}
+        {{ render_settings_docs(wizard_settings_sections["search"]["ui_maps"]["search"], wizard_settings_sections["search"]["ui_docs"]["search"], "wizard-settings-docs-search") }}
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
+            <label data-settings-target="field:wizard-search-suggest">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_search_suggest_label">{{ tr("profiles.wizard_search_suggest_label") }}</div>
+                <select id="wizard-search-suggest" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_boolean_enabled">{{ tr("profiles.wizard_boolean_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_boolean_disabled">{{ tr("profiles.wizard_boolean_disabled") }}</option>
+                </select>
+            </label>
+            <label data-settings-target="field:wizard-search-default-engine">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_search_default_engine_label">{{ tr("profiles.wizard_search_default_engine_label") }}</div>
+                <input id="wizard-search-default-engine" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_search_default_engine_placeholder" placeholder="{{ tr('profiles.wizard_search_default_engine_placeholder') }}" />
+            </label>
+        </div>
+        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-search-defaults-section-status" data-i18n="profiles.wizard_search_defaults_section_state_empty">{{ tr("profiles.wizard_search_defaults_section_state_empty") }}</div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_search_defaults_fine_tuning_body">
+                {{ tr("profiles.wizard_search_defaults_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-search-defaults-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-search-defaults-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-search-defaults-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <label data-settings-target="field:wizard-search-bar">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_search_bar_label">{{ tr("profiles.wizard_search_bar_label") }}</div>
+                <select id="wizard-search-bar" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_search_bar_inherit">{{ tr("profiles.wizard_search_bar_inherit") }}</option>
+                    <option value="unified" data-i18n="profiles.wizard_search_bar_unified">{{ tr("profiles.wizard_search_bar_unified") }}</option>
+                    <option value="separate" data-i18n="profiles.wizard_search_bar_separate">{{ tr("profiles.wizard_search_bar_separate") }}</option>
+                </select>
+            </label>
+            <label data-settings-target="field:wizard-search-prevent-installs">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_search_prevent_installs_label">{{ tr("profiles.wizard_search_prevent_installs_label") }}</div>
+                <select id="wizard-search-prevent-installs" class="soft-input">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_search_prevent_installs_allow">{{ tr("profiles.wizard_search_prevent_installs_allow") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_search_prevent_installs_block">{{ tr("profiles.wizard_search_prevent_installs_block") }}</option>
+                </select>
+            </label>
+            <label class="wizard-field-full" data-settings-target="field:wizard-search-remove">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_search_remove_label">{{ tr("profiles.wizard_search_remove_label") }}</div>
+                <textarea id="wizard-search-remove" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_search_remove_placeholder" placeholder="{{ tr('profiles.wizard_search_remove_placeholder') }}"></textarea>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_search_remove_hint">
+                    {{ tr("profiles.wizard_search_remove_hint") }}
+                </div>
+            </label>
+            <div class="wizard-field-full wizard-section-group wizard-subsection-card wizard-subsection-card--soft">
+                <div class="wizard-search-engine-head">
+                    <div>
+                        <div class="field-label mb-1" data-i18n="profiles.wizard_search_add_title">{{ tr("profiles.wizard_search_add_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_search_add_body">
+                            {{ tr("profiles.wizard_search_add_body") }}
+                        </div>
+                    </div>
+                    <button type="button" id="wizard-search-engine-add" class="button-base ghost-button" data-i18n="profiles.wizard_search_add_button">{{ tr("profiles.wizard_search_add_button") }}</button>
+                </div>
+                <div class="wizard-input-stack">
+                    <div class="field-label" data-i18n="profiles.wizard_search_presets_title">{{ tr("profiles.wizard_search_presets_title") }}</div>
+                    <div class="wizard-search-engine-preset-grid">
+                        <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="docs_portal" data-settings-target="search-engine-preset:docs_portal">
+                            <span data-i18n="profiles.wizard_search_preset_docs_title">{{ tr("profiles.wizard_search_preset_docs_title") }}</span>
+                            <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_docs_copy">{{ tr("profiles.wizard_search_preset_docs_copy") }}</span>
+                        </button>
+                        <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="ticket_queue" data-settings-target="search-engine-preset:ticket_queue">
+                            <span data-i18n="profiles.wizard_search_preset_ticket_title">{{ tr("profiles.wizard_search_preset_ticket_title") }}</span>
+                            <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_ticket_copy">{{ tr("profiles.wizard_search_preset_ticket_copy") }}</span>
+                        </button>
+                        <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="wiki_portal" data-settings-target="search-engine-preset:wiki_portal">
+                            <span data-i18n="profiles.wizard_search_preset_wiki_title">{{ tr("profiles.wizard_search_preset_wiki_title") }}</span>
+                            <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_wiki_copy">{{ tr("profiles.wizard_search_preset_wiki_copy") }}</span>
+                        </button>
+                        <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="duckduckgo" data-settings-target="search-engine-preset:duckduckgo">
+                            <span data-i18n="profiles.wizard_search_preset_ddg_title">{{ tr("profiles.wizard_search_preset_ddg_title") }}</span>
+                            <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_ddg_copy">{{ tr("profiles.wizard_search_preset_ddg_copy") }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="wizard-search-engine-empty" class="wizard-input-hint" data-i18n="profiles.wizard_search_add_empty">
+                    {{ tr("profiles.wizard_search_add_empty") }}
+                </div>
+                <div id="wizard-search-engine-list" class="wizard-search-engine-list wizard-search-engine-list--airy"></div>
+                <template id="wizard-search-engine-template">
+                    <div class="wizard-search-engine-card" data-search-engine-row>
+                        <div class="wizard-search-engine-head">
+                            <div>
+                                <div class="wizard-search-engine-title" data-search-engine-title>{{ tr("profiles.wizard_search_engine_card_title") }}</div>
+                                <div class="wizard-search-engine-meta" data-search-engine-meta>{{ tr("profiles.wizard_search_engine_card_meta") }}</div>
+                            </div>
+                            <button type="button" class="button-base danger-button" data-search-engine-remove>{{ tr("profiles.wizard_search_engine_remove") }}</button>
+                        </div>
+                        <div class="wizard-search-engine-summary" data-search-engine-summary>{{ tr("profiles.wizard_search_engine_summary_default") }}</div>
+                        <div class="wizard-search-engine-warning" data-search-engine-warning hidden>{{ tr("profiles.wizard_search_engine_warning_required") }}</div>
+                        <div class="wizard-grid">
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="Name">{{ tr("profiles.wizard_search_engine_name_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="Name" placeholder="{{ tr('profiles.wizard_search_engine_name_placeholder') }}" />
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="URLTemplate">{{ tr("profiles.wizard_search_engine_url_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="URLTemplate" placeholder="{{ tr('profiles.wizard_search_engine_url_placeholder') }}" />
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="Method">{{ tr("profiles.wizard_search_engine_method_label") }}</div>
+                                <select class="soft-input" data-search-engine-field="Method">
+                                    <option value="">{{ tr("profiles.wizard_search_engine_method_default") }}</option>
+                                    <option value="GET">{{ tr("profiles.wizard_search_engine_method_get") }}</option>
+                                    <option value="POST">{{ tr("profiles.wizard_search_engine_method_post") }}</option>
+                                </select>
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="Alias">{{ tr("profiles.wizard_search_engine_alias_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="Alias" placeholder="{{ tr('profiles.wizard_search_engine_alias_placeholder') }}" />
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="IconURL">{{ tr("profiles.wizard_search_engine_icon_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="IconURL" placeholder="{{ tr('profiles.wizard_search_engine_icon_placeholder') }}" />
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="Encoding">{{ tr("profiles.wizard_search_engine_encoding_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="Encoding" placeholder="{{ tr('profiles.wizard_search_engine_encoding_placeholder') }}" />
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="SuggestURLTemplate">{{ tr("profiles.wizard_search_engine_suggest_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="SuggestURLTemplate" placeholder="{{ tr('profiles.wizard_search_engine_suggest_placeholder') }}" />
+                            </label>
+                            <label>
+                                <div class="field-label mb-1" data-search-engine-label="Description">{{ tr("profiles.wizard_search_engine_description_label") }}</div>
+                                <input type="text" class="soft-input" data-search-engine-field="Description" placeholder="{{ tr('profiles.wizard_search_engine_description_placeholder') }}" />
+                            </label>
+                            <label class="wizard-field-full">
+                                <div class="field-label mb-1" data-search-engine-label="PostData">{{ tr("profiles.wizard_search_engine_post_data_label") }}</div>
+                                <textarea class="soft-input" rows="3" spellcheck="false" data-search-engine-field="PostData" placeholder="{{ tr('profiles.wizard_search_engine_post_data_placeholder') }}"></textarea>
+                            </label>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_suggest_title">{{ tr("profiles.wizard_firefox_suggest_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_firefox_suggest_body">
+                {{ tr("profiles.wizard_firefox_suggest_body") }}
+            </p>
+        </div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
+        {{ render_settings_pills(wizard_settings_sections["search"]["ui_maps"]["suggest"], "wizard-settings-map-suggest") }}
+        {{ render_settings_docs(wizard_settings_sections["search"]["ui_maps"]["suggest"], wizard_settings_sections["search"]["ui_docs"]["suggest"], "wizard-settings-docs-suggest") }}
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
+            <label data-settings-target="field:firefox-suggest-web">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_suggest_web_label">{{ tr("profiles.wizard_firefox_suggest_web_label") }}</div>
+                <select class="soft-input" data-firefox-suggest-key="WebSuggestions">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_boolean_enabled">{{ tr("profiles.wizard_boolean_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_boolean_disabled">{{ tr("profiles.wizard_boolean_disabled") }}</option>
+                </select>
+            </label>
+        </div>
+        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-firefox-suggest-section-status" data-i18n="profiles.wizard_firefox_suggest_section_state_empty">{{ tr("profiles.wizard_firefox_suggest_section_state_empty") }}</div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_suggest_fine_tuning_body">
+                {{ tr("profiles.wizard_firefox_suggest_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-search-suggest-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-search-suggest-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-search-suggest-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <label data-settings-target="field:firefox-suggest-sponsored">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_suggest_sponsored_label">{{ tr("profiles.wizard_firefox_suggest_sponsored_label") }}</div>
+                <select class="soft-input" data-firefox-suggest-key="SponsoredSuggestions">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_boolean_enabled">{{ tr("profiles.wizard_boolean_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_boolean_disabled">{{ tr("profiles.wizard_boolean_disabled") }}</option>
+                </select>
+            </label>
+            <label data-settings-target="field:firefox-suggest-improve">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_suggest_improve_label">{{ tr("profiles.wizard_firefox_suggest_improve_label") }}</div>
+                <select class="soft-input" data-firefox-suggest-key="ImproveSuggest">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_boolean_enabled">{{ tr("profiles.wizard_boolean_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_boolean_disabled">{{ tr("profiles.wizard_boolean_disabled") }}</option>
+                </select>
+            </label>
+            <label data-settings-target="field:firefox-suggest-locked">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_suggest_locked_label">{{ tr("profiles.wizard_firefox_suggest_locked_label") }}</div>
+                <select class="soft-input" data-firefox-suggest-key="Locked">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_suggest_locked_on">{{ tr("profiles.wizard_firefox_suggest_locked_on") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_suggest_locked_off">{{ tr("profiles.wizard_firefox_suggest_locked_off") }}</option>
+                </select>
+            </label>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_search_review_title">{{ tr("profiles.wizard_search_review_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_search_review_body">
+                {{ tr("profiles.wizard_search_review_body") }}
+            </p>
+        </div>
+        <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_defaults">{{ tr("profiles.wizard_search_review_defaults") }}</span>
+                <span class="wizard-summary-value" id="wizard-search-summary-defaults">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-search-summary-defaults-jump" data-search-review-jump="defaults" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_hidden">{{ tr("profiles.wizard_search_review_hidden") }}</span>
+                <span class="wizard-summary-value" id="wizard-search-summary-hidden">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-search-summary-hidden-jump" data-search-review-jump="hidden" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_custom">{{ tr("profiles.wizard_search_review_custom") }}</span>
+                <span class="wizard-summary-value" id="wizard-search-summary-custom">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-search-summary-custom-jump" data-search-review-jump="custom" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_suggest">{{ tr("profiles.wizard_search_review_suggest") }}</span>
+                <span class="wizard-summary-value" id="wizard-search-summary-suggest">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-search-summary-suggest-jump" data-search-review-jump="suggest" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_search_title">{{ tr("profiles.wizard_preferences_search_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_preferences_search_body">
+                {{ tr("profiles.wizard_preferences_search_body") }}
+            </p>
+        </div>
+        <div class="wizard-section-group" data-preference-section="search" data-settings-target="pref-section:search">
+            <div class="wizard-search-engine-head">
+                <div>
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">{{ tr("profiles.wizard_preferences_presets_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_presets_body">
+                        {{ tr("profiles.wizard_preferences_presets_body") }}
+                    </div>
+                </div>
+                <button type="button" id="wizard-preferences-search-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">{{ tr("profiles.wizard_preferences_add_button") }}</button>
+            </div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">{{ tr("profiles.wizard_preferences_gui_label") }}</div>
+            {{ render_settings_pills(wizard_settings_sections["search"]["preferences"]["gui_groups"], "wizard-preferences-search-groups") }}
+            {{ render_settings_docs(wizard_settings_sections["search"]["preferences"]["gui_groups"], wizard_settings_sections["search"]["preferences"]["docs"], "wizard-preferences-search-docs") }}
+            <div id="wizard-preferences-search-presets" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">{{ tr("profiles.wizard_preferences_bundles_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_bundles_body">
+                {{ tr("profiles.wizard_preferences_bundles_body") }}
+            </div>
+            <div id="wizard-preferences-search-bundles" class="wizard-search-engine-preset-grid"></div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">{{ tr("profiles.wizard_preferences_known_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_known_body">
+                {{ tr("profiles.wizard_preferences_known_body") }}
+            </div>
+            <div id="wizard-preferences-search-known" class="wizard-search-engine-preset-grid"></div>
+            <div id="wizard-preferences-search-empty" class="wizard-input-hint" data-i18n="profiles.wizard_preferences_empty">
+                {{ tr("profiles.wizard_preferences_empty") }}
+            </div>
+            <div id="wizard-preferences-search-list" class="wizard-search-engine-list"></div>
+        </div>
+    </div>
+</section>

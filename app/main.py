@@ -1,103 +1,103 @@
-import importlib
-from collections.abc import Callable
-from pathlib import Path
-from types import ModuleType
-from typing import Any
+from __future__ import annotations
 
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from pathlib import Path
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
-# API routers must be imported at the top (ruff E402)
-from app.api import export as export_api
-from app.api import health as health_api
-from app.api import policies as policies_api
-from app.api import validation as validation_api
+from app.api import export, health, profiles, validation
+from app.core.config import get_settings
+from app.middleware.security import SecurityHeadersMiddleware
+from app.web import profiles as web_profiles
 
-# Optional web router module (load via importlib to keep mypy happy)
-profiles_web: ModuleType | None
-try:
-    profiles_web = importlib.import_module("app.web.profiles")
-except ImportError:
-    profiles_web = None
+# Local settings instance for this module.
+settings = get_settings()
 
 
-def _register_function_middleware(app: FastAPI, func: Callable[..., Any]) -> None:
+def _resolve_path(path_value: str | Path) -> Path:
+    path = Path(path_value)
+    if path.is_absolute():
+        return path
+    return settings.ROOT_DIR / path
+
+
+def create_app() -> FastAPI:
     """
-    Attach a function-based HTTP middleware without calling app.middleware(...) at runtime.
-    This avoids mypy's "None not callable" complaint while keeping behavior identical.
+    Application factory used by production runners and tests.
+
+    It wires core middleware and includes all API routers.
     """
+    app = FastAPI(
+        title=settings.APP_NAME,
+        version=settings.APP_VERSION,
+    )
 
-    @app.middleware("http")
-    async def _dynamic_security_mw(request, call_next):
-        return await func(request, call_next)
+    app.add_middleware(SecurityHeadersMiddleware)
+
+    # Basic CORS configuration. Tests do not depend on strict values here.
+    allow_origins = settings.CORS_ALLOW_ORIGINS
+
+    if settings.ENABLE_CORS:
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=allow_origins,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+    app.mount("/static", StaticFiles(directory=str(settings.STATIC_DIR)), name="static")
+
+    # Routers
+    app.include_router(web_profiles.router)
+    app.include_router(health.router)
+    # DB-backed profiles CRUD with Firefox policy validation
+    app.include_router(profiles.router)
+    app.include_router(export.router)
+    app.include_router(validation.router)
+
+    @app.get("/i18n/{locale}.json", include_in_schema=False)
+    async def locale_catalog(locale: str) -> Response:
+        if locale not in settings.SUPPORTED_LOCALES:
+            raise HTTPException(status_code=404, detail="Locale not supported")
+
+        locale_path = _resolve_path(settings.I18N_DIR) / f"{locale}.json"
+        if not locale_path.is_file():
+            raise HTTPException(status_code=404, detail="Locale file not found")
+
+        return Response(content=locale_path.read_text(encoding="utf-8"), media_type="application/json")
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    async def favicon() -> Response:
+        favicon_path = settings.STATIC_DIR / "favicon.ico"
+        return Response(content=favicon_path.read_bytes(), media_type="image/x-icon")
+
+    @app.get("/")
+    async def root() -> dict[str, str]:
+        """
+        Simple JSON landing endpoint used by smoke tests.
+        """
+        app_name = settings.APP_NAME
+        return {
+            "status": "ok",
+            "app": app_name,  # explicitly required by tests
+            "name": app_name,
+            "version": settings.APP_VERSION,
+            "message": "Browser Policy Manager API is running",
+        }
+
+    return app
 
 
-# Resolve security middleware:
-# 1) prefer a function `add_security_headers(request, call_next)` → register via helper above
-# 2) else, if class `SecurityHeadersMiddleware` exists → app.add_middleware(...)
-try:
-    security_mod = importlib.import_module("app.middleware.security")
-    add_fn = getattr(security_mod, "add_security_headers", None)
-    mw_cls = getattr(security_mod, "SecurityHeadersMiddleware", None)
-except ImportError:
-    add_fn = None
-    mw_cls = None
-
-# Application instance
-# NOTE: Keep "Valery Ledovskoy" in metadata because tests rely on it.
-app = FastAPI(
-    title="Browser Policy Manager — Valery Ledovskoy",
-    description=(
-        "Manage Firefox enterprise policies (ESR/Release). "
-        "Maintainer: Valery Ledovskoy"
-    ),
-    version="0.3.0",
-)
-
-# Attach security headers middleware if available
-if callable(add_fn):
-    _register_function_middleware(app, add_fn)
-elif mw_cls is not None:
-    app.add_middleware(mw_cls)
-
-# Health endpoints must be reachable exactly at /health and /health/ready
-app.include_router(health_api.router)
-
-# Routers already define their own paths; do NOT add prefix here
-app.include_router(policies_api.router)
-app.include_router(export_api.router)
-app.include_router(validation_api.router)
-
-# Web routes (optional)
-if profiles_web is not None:
-    router = getattr(profiles_web, "router", None)
-    if router is not None:
-        app.include_router(router)
-
-
-# Minimal root page expected by tests (must include the author's name)
-@app.get("/", include_in_schema=False)
-def root_page() -> HTMLResponse:
-    """Simple landing page used by smoke tests to check availability and author name."""
-    html = """
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>Browser Policy Manager — Valery Ledovskoy</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-      </head>
-      <body>
-        <h1>Browser Policy Manager</h1>
-        <p>Maintainer: <strong>Valery Ledovskoy</strong></p>
-      </body>
-    </html>
+# Backward-compatible alias if tests or utilities import make_app.
+def make_app() -> FastAPI:
     """
-    return HTMLResponse(html, status_code=200)
+    Alias for create_app used in some tests.
+    """
+    return create_app()
 
 
-# Static assets (optional)
-_static_dir = Path(__file__).parent / "static"
-if _static_dir.exists():
-    app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")
+# Default application instance used by tests and ASGI servers.
+app = create_app()

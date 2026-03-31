@@ -1,61 +1,68 @@
 # app/middleware/security.py
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable
-
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.requests import Request
-from starlette.responses import Response
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 
-class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+class SecurityHeadersMiddleware:
     """Middleware that adds basic HTTP security headers.
 
     Notes:
-        - CSP is permissive enough for CDN-hosted scripts/styles (e.g., Monaco/Tailwind).
-          When moving to self-hosted static assets, CSP can be tightened.
+        - CSP is limited to strict self-hosted assets across the whole app.
+        - Script execution is limited to self-hosted assets; `/profiles`
+          no longer relies on inline executable bootstrapping or Monaco's AMD loader.
         - HSTS is commented out intentionally; enable only in HTTPS environments.
     """
 
-    def __init__(self, app, *, csp: str | None = None) -> None:
-        super().__init__(app)
-        # Default CSP allows local and CDN content; adjust as needed.
+    def __init__(self, app: ASGIApp, *, csp: str | None = None) -> None:
+        self.app = app
         self.csp = csp or (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+            "script-src 'self'; "
+            "style-src 'self'; "
             "img-src 'self' data:; "
-            "font-src 'self' https://cdn.jsdelivr.net; "
+            "font-src 'self'; "
             "connect-src 'self'; "
+            "worker-src 'self'; "
+            "child-src 'self'; "
             "frame-ancestors 'none'; "
             "base-uri 'self'; "
             "form-action 'self'"
         )
 
-    async def dispatch(
-        self,
-        request: Request,
-        call_next: Callable[[Request], Awaitable[Response]],
-    ) -> Response:
-        """Injects headers into the outgoing response."""
-        response = await call_next(request)
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
 
-        # Prevent clickjacking
-        response.headers.setdefault("X-Frame-Options", "DENY")
-        # Disable legacy XSS filter (modern browsers handle this automatically)
-        response.headers.setdefault("X-XSS-Protection", "0")
-        # Prevent MIME-type sniffing
-        response.headers.setdefault("X-Content-Type-Options", "nosniff")
-        # Hide referrer information
-        response.headers.setdefault("Referrer-Policy", "no-referrer")
-        # Restrict browser features
-        response.headers.setdefault(
-            "Permissions-Policy",
-            "geolocation=(), microphone=(), camera=()",
-        )
-        # Apply Content Security Policy
-        response.headers.setdefault("Content-Security-Policy", self.csp)
-        # Enable this only under HTTPS deployments
-        # response.headers.setdefault("Strict-Transport-Security", "max-age=15552000; includeSubDomains")
+        async def send_with_security_headers(message: Message) -> None:
+            if message["type"] == "http.response.start":
+                headers = message.setdefault("headers", [])
+                self._append_if_missing(headers, b"x-frame-options", b"DENY")
+                self._append_if_missing(headers, b"x-xss-protection", b"0")
+                self._append_if_missing(headers, b"x-content-type-options", b"nosniff")
+                self._append_if_missing(headers, b"referrer-policy", b"no-referrer")
+                self._append_if_missing(
+                    headers,
+                    b"permissions-policy",
+                    b"geolocation=(), microphone=(), camera=()",
+                )
+                self._append_if_missing(
+                    headers,
+                    b"content-security-policy",
+                    self.csp.encode("utf-8"),
+                )
+            await send(message)
 
-        return response
+        await self.app(scope, receive, send_with_security_headers)
+
+    @staticmethod
+    def _append_if_missing(
+        headers: list[tuple[bytes, bytes]],
+        name: bytes,
+        value: bytes,
+    ) -> None:
+        normalized = name.lower()
+        if any(header_name.lower() == normalized for header_name, _ in headers):
+            return
+        headers.append((name, value))

@@ -1,11 +1,49 @@
 # Changelog
 
+## Unreleased
+
+Build target: `0.5.0-dev`
+
+### Added
+- Introduced a schema-driven Firefox policy editing experience for `/profiles` with modular catalogs for guided settings, starter presets, manual policy controls, preferences, and schema-shell editing.
+- Added a dedicated `firefox_policy_ui_registry` service layer to map policy schemas into UI sections, widgets, tags, and fallback placement metadata.
+- Added modular frontend bundles and Jinja partials for the profiles page instead of one monolithic template/script pair.
+- Added a reusable `tools.convert_policies_from_upstream_lib` package to split the schema conversion pipeline into parser, inference, semantic hint, emission, and CLI modules.
+- Added targeted tests for Firefox UI registry inference, preferences, starter presets, wizard shell behavior, settings catalog builders, and manual policy controls.
+- Added Firefox-ready `policies.json` export wiring plus regression coverage for browser-consumable policy documents.
+- Added checked-in self-hosted `/profiles` vendor assets, including vendored `js-yaml`, Monaco bundles/workers, and local bootstrap scripts.
+- Added dedicated GitHub Actions workflows for live Firefox coverage and a separate AMO-backed canary path.
+
+### Changed
+- Consolidated the application around the canonical `/api/profiles` CRUD API.
+- Removed the old `/api/policies` compatibility layer from the app.
+- Updated supported bundled schema versions to ESR 140.9 and Release 149.
+- Switched the web UI to use the canonical profiles API end-to-end.
+- Added mounted web functionality for `/profiles`, `/i18n/{locale}.json`, and `/favicon.ico`.
+- Enabled security headers in the running application through middleware.
+- Refactored Firefox schema loading and policy metadata handling around the new UI registry and richer policy schema models.
+- Reworked the test suite to use a shared sync client helper, narrower HTTP assertions, and decomposed large scenario files into smaller, more focused tests.
+- Raised automated coverage for `app/` to `100%`, including branch coverage.
+- Moved the main GitHub PR CI back to deterministic quality gates only, keeping live-browser coverage in separate canary workflows.
+- Shifted the `/profiles` runtime away from CDN assumptions and toward reproducible checked-in frontend assets and local build tooling.
+
+### Fixed
+- Resolved bootstrap/config issues around environment variable handling and DB settings.
+- Stabilized SQLite execution in the current environment with the project-specific session adapter path.
+- Fixed template loading paths for the web UI.
+- Eliminated hangs caused by security/static response interaction by moving security headers to ASGI middleware.
+- Aligned documentation and test naming with the current `profiles` architecture.
+- Fixed CI quality-gate failures caused by Ruff and Mypy issues in the new Firefox UI and schema tooling modules.
+- Restored successful coverage artifact generation in GitHub Actions by ensuring the lint/type/test pipeline completes end-to-end.
+- Prevented flaky PR failures caused by coupling standard CI to environment-sensitive live Firefox checks.
+- Closed the gap where CI could install Python dependencies but still miss required checked-in frontend runtime assets.
+
 ## Sprint F (2025-10-26)
 
 ### Added
 - ESR-140 / Release-144 schemas, validators, and `/api/validate/{profile}`.
 - CRUD for policies with soft delete and restore.
-- Export API with JSON/YAML and legacy-compatible routes:
+- Export API with JSON/YAML routes:
   - `/api/export/{id}/policies.json|yaml`
 - Web UI `/profiles`:
   - Monaco editor (JSON/YAML), create/update/delete/restore, validation.

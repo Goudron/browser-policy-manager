@@ -1,0 +1,65 @@
+<template id="wizard-preference-row-template">
+    <div class="wizard-search-engine-card" data-preference-row>
+        <div class="wizard-search-engine-head">
+            <div>
+                <div class="wizard-search-engine-title" data-preference-title data-i18n="profiles.wizard_preferences_card_title">{{ tr("profiles.wizard_preferences_card_title") }}</div>
+                <div class="wizard-search-engine-meta" data-preference-meta data-i18n="profiles.wizard_preferences_card_meta">{{ tr("profiles.wizard_preferences_card_meta") }}</div>
+            </div>
+            <button type="button" class="button-base danger-button" data-preference-remove data-i18n="profiles.wizard_preferences_remove_button">{{ tr("profiles.wizard_preferences_remove_button") }}</button>
+        </div>
+        <div class="wizard-search-engine-summary" data-preference-summary data-i18n="profiles.wizard_preferences_summary_default">{{ tr("profiles.wizard_preferences_summary_default") }}</div>
+        <div class="wizard-search-engine-warning" data-preference-warning hidden data-i18n="profiles.wizard_preferences_warning_required">{{ tr("profiles.wizard_preferences_warning_required") }}</div>
+        <div class="wizard-grid">
+            <label class="wizard-field-full">
+                <div class="field-label mb-1" data-preference-label="name" data-i18n="profiles.wizard_preferences_field_name">{{ tr("profiles.wizard_preferences_field_name") }}</div>
+                <input
+                    type="text"
+                    class="soft-input"
+                    data-preference-field="name"
+                    data-i18n-placeholder="profiles.wizard_preferences_name_placeholder"
+                    placeholder="{{ tr('profiles.wizard_preferences_name_placeholder') }}"
+                />
+            </label>
+            <label>
+                <div class="field-label mb-1" data-preference-label="status" data-i18n="profiles.wizard_preferences_field_status">{{ tr("profiles.wizard_preferences_field_status") }}</div>
+                <select class="soft-input" data-preference-field="status">
+                    <option value="default" data-i18n="profiles.wizard_preferences_status_default">{{ tr("profiles.wizard_preferences_status_default") }}</option>
+                    <option value="locked" data-i18n="profiles.wizard_preferences_status_locked">{{ tr("profiles.wizard_preferences_status_locked") }}</option>
+                    <option value="user" data-i18n="profiles.wizard_preferences_status_user">{{ tr("profiles.wizard_preferences_status_user") }}</option>
+                    <option value="clear" data-i18n="profiles.wizard_preferences_status_clear">{{ tr("profiles.wizard_preferences_status_clear") }}</option>
+                </select>
+            </label>
+            <label>
+                <div class="field-label mb-1" data-preference-label="type" data-i18n="profiles.wizard_preferences_field_type">{{ tr("profiles.wizard_preferences_field_type") }}</div>
+                <select class="soft-input" data-preference-field="type">
+                    <option value="" data-i18n="profiles.wizard_preferences_type_auto_option">{{ tr("profiles.wizard_preferences_type_auto_option") }}</option>
+                    <option value="boolean" data-i18n="profiles.wizard_preferences_type_boolean">{{ tr("profiles.wizard_preferences_type_boolean") }}</option>
+                    <option value="number" data-i18n="profiles.wizard_preferences_type_number">{{ tr("profiles.wizard_preferences_type_number") }}</option>
+                    <option value="string" data-i18n="profiles.wizard_preferences_type_string">{{ tr("profiles.wizard_preferences_type_string") }}</option>
+                </select>
+            </label>
+            <label class="wizard-field-full">
+                <div class="field-label mb-1" data-preference-label="value" data-i18n="profiles.wizard_preferences_field_value">{{ tr("profiles.wizard_preferences_field_value") }}</div>
+                <input
+                    type="text"
+                    class="soft-input"
+                    data-preference-field="value"
+                    data-preference-value-input
+                    data-i18n-placeholder="profiles.wizard_preferences_value_placeholder_default"
+                    placeholder="{{ tr('profiles.wizard_preferences_value_placeholder_default') }}"
+                />
+                <select class="soft-input" data-preference-field="value" data-preference-value-select hidden></select>
+                <div class="wizard-input-hint" data-preference-hint data-i18n="profiles.wizard_preferences_hint_default">{{ tr("profiles.wizard_preferences_hint_default") }}</div>
+            </label>
+        </div>
+    </div>
+</template>
+<datalist id="wizard-preferences-known-list"></datalist>
+<div class="wizard-nav">
+    <div class="text-sm text-slate-500" id="wizard-progress-text" role="status" aria-live="polite" data-i18n="{{ wizard_steps[0].progress_key }}">{{ tr(wizard_steps[0].progress_key, wizard_steps[0].progress_fallback) }}</div>
+    <div class="wizard-nav-actions">
+        <button type="button" id="wizard-prev" class="button-base ghost-button" data-i18n="profiles.wizard_prev">{{ tr("profiles.wizard_prev") }}</button>
+        <button type="button" id="wizard-next" class="button-base ghost-button" data-i18n="profiles.wizard_next">{{ tr("profiles.wizard_next") }}</button>
+        <button type="button" id="wizard-finish" class="button-base primary-button" data-i18n="profiles.wizard_finish">{{ tr("profiles.wizard_finish") }}</button>
+    </div>
+</div>

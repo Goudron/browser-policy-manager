@@ -1,13 +1,12 @@
 from __future__ import annotations
 
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import make_test_client
 
 
 def test_export_collection_empty_result_has_envelope():
     """Covers collection export envelope (items/limit/offset/count) for empty set."""
-    client = TestClient(app)
+    client = make_test_client(app)
 
     # Use an impossible query that can't match anything
     params = {
@@ -17,7 +16,7 @@ def test_export_collection_empty_result_has_envelope():
     }
 
     # Default fmt (JSON)
-    rj = client.get("/api/export/policies", params=params)
+    rj = client.get("/api/export/profiles", params=params)
     assert rj.status_code == 200
     assert rj.headers.get("content-type", "").startswith("application/json")
     # envelope keys
@@ -29,7 +28,7 @@ def test_export_collection_empty_result_has_envelope():
     )
 
     # YAML fmt
-    ry = client.get("/api/export/policies", params={**params, "fmt": "yaml"})
+    ry = client.get("/api/export/profiles", params={**params, "fmt": "yaml"})
     assert ry.status_code == 200
     assert any(
         ry.headers.get("content-type", "").startswith(t)

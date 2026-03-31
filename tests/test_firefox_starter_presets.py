@@ -1,0 +1,116 @@
+from app.core.policy_validation import validate_profile_payload_with_schema
+from app.models.policy_schema import PolicyDefinition
+from app.web import firefox_starter_presets as starter_module
+from app.web.firefox_starter_presets import (
+    _resolve_schema_enabled_value,
+    build_wizard_starter_document,
+    get_wizard_starter_catalog,
+)
+
+
+def test_wizard_starter_catalog_is_schema_aware():
+    catalog = get_wizard_starter_catalog()
+
+    assert {"blank", "keep_current", "basic_corporate", "classroom_kiosk", "soc_hard"} <= set(
+        catalog["presets"]
+    )
+    assert "DisablePocket" in catalog["managed_policy_keys"]
+    assert (
+        catalog["presets"]["basic_corporate"]["policy_values"]["esr-140.9"]["DisablePocket"]
+        is True
+    )
+    assert catalog["quick_policy_enabled_values"]["DisablePocket"]["release-149"] is True
+    assert "ExtensionSettings" in catalog["managed_policy_keys"]
+    assert "WebsiteFilter" in catalog["managed_policy_keys"]
+    assert "SanitizeOnShutdown" in catalog["managed_policy_keys"]
+
+
+def test_wizard_starter_presets_validate_for_esr_and_release_148():
+    catalog = get_wizard_starter_catalog()
+
+    for schema_version in ("esr-140.9", "release-149"):
+        for starter_key in catalog["presets"]:
+            document = build_wizard_starter_document(starter_key, schema_version)
+            validate_profile_payload_with_schema(
+                {
+                    "name": f"{starter_key}-{schema_version}",
+                    "channel": schema_version,
+                    "policies": document,
+                }
+            )
+
+    office_esr = build_wizard_starter_document("basic_corporate", "esr-140.9")
+    office_release = build_wizard_starter_document("basic_corporate", "release-149")
+    soc_esr = build_wizard_starter_document("soc_hard", "esr-140.9")
+    soc_release = build_wizard_starter_document("soc_hard", "release-149")
+
+    assert office_esr["DisablePocket"] is True
+    assert office_release["DisablePocket"] is True
+    assert soc_esr["DisablePocket"] is True
+    assert soc_release["DisablePocket"] is True
+
+
+def test_wizard_starter_presets_include_operational_baseline_controls():
+    office = build_wizard_starter_document("basic_corporate", "release-149")
+    kiosk = build_wizard_starter_document("classroom_kiosk", "release-149")
+    soc = build_wizard_starter_document("soc_hard", "release-149")
+
+    assert office["Certificates"]["ImportEnterpriseRoots"] is True
+    assert office["DNSOverHTTPS"] == {"Enabled": False, "Locked": True}
+    assert office["EnableTrackingProtection"]["Category"] == "strict"
+    assert office["ExtensionSettings"]["*"]["installation_mode"] == "blocked"
+    assert office["FirefoxHome"]["Locked"] is True
+    assert office["FirefoxSuggest"]["WebSuggestions"] is False
+    assert office["Homepage"]["Additional"] == [
+        "https://helpdesk.example.local/",
+        "https://docs.example.local/",
+    ]
+    assert office["PopupBlocking"]["Locked"] is True
+    assert office["Proxy"]["Locked"] is True
+    assert office["UserMessaging"]["SkipOnboarding"] is True
+
+    assert kiosk["DisableDeveloperTools"] is True
+    assert kiosk["BlockAboutAddons"] is True
+    assert kiosk["BlockAboutSupport"] is True
+    assert kiosk["InstallAddonsPermission"]["Default"] is False
+    assert kiosk["Permissions"]["Camera"]["Allow"] == [
+        "https://classroom.example.local",
+        "https://lms.example.local",
+    ]
+    assert kiosk["Permissions"]["Autoplay"]["Default"] == "block-audio-video"
+    assert kiosk["WebsiteFilter"]["Block"] == ["<all_urls>"]
+    assert kiosk["Homepage"]["StartPage"] == "homepage-locked"
+
+    assert soc["HttpsOnlyMode"] == "force_enabled"
+    assert soc["Cookies"]["Behavior"] == "reject-tracker-and-partition-foreign"
+    assert soc["DNSOverHTTPS"]["ProviderURL"] == "https://dns.example.secure/dns-query"
+    assert soc["Permissions"]["Autoplay"]["Default"] == "block-audio-video"
+    assert soc["Proxy"]["Locked"] is True
+    assert soc["Proxy"]["Passthrough"] == "localhost, 127.0.0.1"
+    assert soc["SanitizeOnShutdown"]["Locked"] is True
+    assert soc["UserMessaging"]["FirefoxLabs"] is False
+
+
+def test_resolve_schema_enabled_value_uses_definition_type(monkeypatch):
+    definitions = {
+        "Missing": None,
+        "ObjectPolicy": PolicyDefinition(id="ObjectPolicy", type="object"),
+        "ArrayPolicy": PolicyDefinition(id="ArrayPolicy", type="array"),
+        "StringPolicy": PolicyDefinition(id="StringPolicy", type="string"),
+        "NumberPolicy": PolicyDefinition(id="NumberPolicy", type="number"),
+        "IntegerPolicy": PolicyDefinition(id="IntegerPolicy", type="integer"),
+        "BooleanPolicy": PolicyDefinition(id="BooleanPolicy", type="boolean"),
+    }
+    monkeypatch.setattr(
+        starter_module,
+        "get_policy_definition",
+        lambda schema_version, policy_id: definitions[policy_id],
+    )
+
+    assert _resolve_schema_enabled_value("Missing", "release-149") is True
+    assert _resolve_schema_enabled_value("ObjectPolicy", "release-149") == {}
+    assert _resolve_schema_enabled_value("ArrayPolicy", "release-149") == []
+    assert _resolve_schema_enabled_value("StringPolicy", "release-149") == ""
+    assert _resolve_schema_enabled_value("NumberPolicy", "release-149") == 1
+    assert _resolve_schema_enabled_value("IntegerPolicy", "release-149") == 1
+    assert _resolve_schema_enabled_value("BooleanPolicy", "release-149") is True

@@ -1,155 +1,121 @@
-# app/api/validation.py
-# Validation API for Firefox Enterprise policies (ESR-140 / Release-144).
-# - POST /api/validate/{profile}
-#   Validates a JSON policy document (object) against the selected schema.
-#   Supported profiles: "esr-140", "release-144".
-#
-# Notes:
-# - No Beta, ESR 115/128 are supported in Sprint F.
-# - Top-level type MUST be an object (enforced by validator, not by Pydantic).
-
 from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Body, HTTPException
-from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
-from pydantic import BaseModel, ConfigDict
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
-from app.core.validation import PolicySchemaValidator
+from app.core.policy_validation import (
+    PolicyValidationError,
+    load_policy_schema_for_channel,
+    validate_profile_policies_or_raise,
+)
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNEL_SET
 
-router = APIRouter(tags=["validation"])
+router = APIRouter(prefix="/api/validate", tags=["validation"])
 
 
 class ValidationRequest(BaseModel):
-    """Input payload wrapper."""
+    """Request body for policy validation endpoints."""
 
-    # Accept any JSON value; object requirement is enforced by the validator.
+    # The document to validate. Expected to be a mapping of policy_id -> value,
+    # for example:
+    # {
+    #   "DisableAppUpdate": true,
+    #   "HttpAllowlist": ["http://example.org"],
+    # }
     document: Any
 
-    # Pydantic v2 schema extras with request examples
-    model_config = ConfigDict(
-        json_schema_extra={
-            "examples": [
-                {
-                    "document": {
-                        "DisableTelemetry": True,
-                        "DisableFirefoxAccounts": True,
-                        "Preferences": {"browser.startup.homepage": "about:blank"},
-                    }
-                },
-                {"document": 123},  # invalid: top-level must be object
-            ]
-        }
-    )
+
+# Supported profiles are aligned with the bundled internal policy schemas.
+_SUPPORTED_PROFILES: set[str] = set(SUPPORTED_SCHEMA_CHANNEL_SET)
 
 
-class ValidationResponse(BaseModel):
-    """Validation result DTO."""
-
-    ok: bool
-    profile: str
-    detail: str | None = None
-
-    # Pydantic v2 schema extras with response examples
-    model_config = ConfigDict(
-        json_schema_extra={
-            "examples": [
-                {
-                    "ok": True,
-                    "profile": "esr-140",
-                    "detail": None,
-                },
-                {
-                    "ok": False,
-                    "profile": "release-144",
-                    "detail": "Top-level policy must be a JSON object",
-                },
-            ]
-        }
-    )
-
-
-@router.post(
-    "/api/validate/{profile}",
-    response_model=ValidationResponse,
-    summary="Validate a policy document against a Firefox Enterprise schema",
-    description=(
-        "Validate a JSON policy object against the selected schema.\n\n"
-        "**Supported profiles:** `esr-140`, `release-144`.\n\n"
-        '**Request body:** `{ "document": <any JSON> }` — the validator ensures the top-level is an object.\n\n'
-        "**Notes:** Beta and legacy ESR (115/128) are not supported."
-    ),
-    responses={
-        200: {
-            "description": "Validation result",
-            "content": {
-                "application/json": {
-                    "examples": {
-                        "ok": {
-                            "summary": "Valid document",
-                            "value": {
-                                "ok": True,
-                                "profile": "esr-140",
-                                "detail": None,
-                            },
-                        },
-                        "failed": {
-                            "summary": "Schema violation",
-                            "value": {
-                                "ok": False,
-                                "profile": "release-144",
-                                "detail": "Top-level policy must be a JSON object",
-                            },
-                        },
-                    }
-                }
-            },
-        },
-        400: {
-            "description": "Unsupported profile or initialization error",
-            "content": {
-                "application/json": {"example": {"detail": "Unsupported profile: beta"}}
-            },
-        },
-        # 422 is FastAPI's validation error for malformed JSON / missing body, added implicitly.
-    },
-)
-async def validate_policy(
-    profile: str,
-    payload: ValidationRequest = Body(
-        ...,
-        description="Wrapper object with the policy document to validate.",
-    ),
-) -> ValidationResponse:
-    """
-    Validate a policy document against the given profile schema.
-
-    Parameters
-    ----------
-    profile : str
-        One of: "esr-140", "release-144".
-    payload : ValidationRequest
-        JSON body: {"document": ...} (any JSON value; must be an object logically)
-
-    Returns
-    -------
-    ValidationResponse
-        ok=True if validation passes. Otherwise ok=False with detail.
-    """
+def _get_schema_or_404(profile: str) -> dict[str, Any]:
+    """Return schema JSON for the given profile or raise 404 if it is unknown."""
+    if profile not in _SUPPORTED_PROFILES:
+        raise HTTPException(status_code=404, detail=f"Unknown profile '{profile}'")
     try:
-        validator = PolicySchemaValidator(profile)
-    except Exception as e:
-        # Provide a clean 400 for unsupported profile names or init issues
-        raise HTTPException(status_code=400, detail=str(e)) from e
+        return load_policy_schema_for_channel(profile)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Schema for profile '{profile}' is not available",
+        ) from exc
+
+
+@router.post("/{profile}")
+async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str, Any]:
+    """
+    Validate a policy document for the given profile.
+
+    Request example:
+        POST /api/validate/release-149
+        {
+          "document": {
+            "DisableAppUpdate": true,
+            "HttpAllowlist": ["http://example.org"]
+          }
+        }
+
+    Successful response:
+        { "ok": true, "profile": "release-149" }
+
+    Validation error response:
+        {
+          "ok": false,
+          "profile": "release-149",
+          "detail": "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]",
+          "error":  "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]"
+        }
+    """
+    schema = _get_schema_or_404(profile)
+    document = payload.document
+
+    if not isinstance(document, dict):
+        message = "Expected object with policy mappings"
+        return {
+            "ok": False,
+            "profile": profile,
+            "detail": message,
+            "error": message,
+        }
 
     try:
-        validator.validate(payload.document)
-        return ValidationResponse(ok=True, profile=profile)
-    except JsonSchemaValidationError as ve:
-        # Normalized error path: 200 OK with ok=False and human-readable detail
-        return ValidationResponse(
-            ok=False,
-            profile=profile,
-            detail=str(ve.message or ve),
-        )
+        validate_profile_policies_or_raise(document, schema)
+    except PolicyValidationError as exc:
+        if exc.issues:
+            first = exc.issues[0]
+            policy_prefix = f"{first.policy}: " if first.policy else ""
+            message = f"{policy_prefix}{first.message}"
+        else:
+            message = "Policy validation failed"
+
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "message": "Policy validation failed",
+                "issues": [
+                    {
+                        "policy": issue.policy,
+                        "path": issue.path,
+                        "message": issue.message,
+                    }
+                    for issue in exc.issues
+                ],
+            },
+        ) from exc
+    except Exception as exc:
+        message = str(exc)
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": "Profile validation failed",
+                "error": message,
+            },
+        ) from exc
+
+    return {
+        "ok": True,
+        "profile": profile,
+    }

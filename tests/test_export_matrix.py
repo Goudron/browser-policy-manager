@@ -1,162 +1,150 @@
 from __future__ import annotations
 
-import uuid
-
-from fastapi.testclient import TestClient
-
 from app.main import app
+from tests.support import TestClient, assert_contains_all, build_profile_payload, make_test_client
 
 
 def _mk(name_prefix: str, owner: str = "ops@example.org"):
-    """Create a policy payload with predictable fields."""
-    u = uuid.uuid4().hex[:6]
-    return {
-        "name": f"{name_prefix}-{u}",
-        "description": "Matrix export",
-        "schema_version": "firefox-ESR",
-        "flags": {"DisableTelemetry": True, "DisablePocket": True},
-        "owner": owner,
-    }
-
-
-def _ok_yaml(ct: str) -> bool:
-    return any(
-        ct.startswith(t) for t in ("application/x-yaml", "text/yaml", "text/plain")
+    return build_profile_payload(
+        name_prefix=name_prefix,
+        owner=owner,
+        description="Matrix export",
+        flags={"DisableTelemetry": True, "DisablePrivateBrowsing": True},
     )
 
 
-def _status_ok_for_unknown_fmt(code: int) -> bool:
-    # FastAPI often returns 422 for invalid enum; other impls may do 400 or 404.
-    return code in (200, 400, 404, 422)
+def _ok_yaml(content_type: str) -> bool:
+    return any(
+        content_type.startswith(prefix)
+        for prefix in ("application/x-yaml", "text/yaml", "text/plain")
+    )
 
 
 def _ensure_created(client: TestClient, n: int, prefix: str) -> list[int]:
     ids: list[int] = []
     for _ in range(n):
-        r = client.post("/api/policies", json=_mk(prefix))
-        assert r.status_code == 201, r.text
-        ids.append(r.json()["id"])
+        response = client.post("/api/profiles", json=_mk(prefix))
+        assert response.status_code == 201, response.text
+        ids.append(response.json()["id"])
     return ids
 
 
-def test_export_full_matrix_single_and_collection():
-    """Systematically cover export branches for single & collection endpoints."""
-    client = TestClient(app)
+def _seed_matrix_profiles(prefix: str = "MATRIX") -> tuple[TestClient, list[int]]:
+    client = make_test_client(app)
+    ids = _ensure_created(client, 2, prefix)
+    return client, ids
 
-    # Seed items
-    ids = _ensure_created(client, 2, "MATRIX")
-    pid = ids[0]
 
-    # --- SINGLE EXPORTS ---
-    # 1) Suffix routes: /api/export/{id}/policies.(json|yaml)
+def _assert_single_export_response(response, fmt: str) -> None:
+    assert response.status_code == 200
+    content_type = response.headers.get("content-type", "")
+    if fmt == "json":
+        assert content_type.startswith("application/json")
+        assert '"DisableTelemetry"' in response.text
+    else:
+        assert _ok_yaml(content_type)
+        assert "DisableTelemetry" in response.text
+
+    if content_disposition := response.headers.get("content-disposition", ""):
+        assert "attachment" in content_disposition.lower()
+        assert f".{fmt}" in content_disposition.lower()
+
+
+def _assert_collection_envelope(response, fmt: str) -> None:
+    assert response.status_code == 200
+    if fmt == "json":
+        assert response.headers.get("content-type", "").startswith("application/json")
+        assert_contains_all(response.text, ('"items"', '"limit"', '"offset"', '"count"'))
+    else:
+        assert _ok_yaml(response.headers.get("content-type", ""))
+        assert_contains_all(response.text, ("items:", "limit:", "offset:", "count:"))
+
+
+def test_export_single_suffix_matrix():
+    client, ids = _seed_matrix_profiles()
+    profile_id = ids[0]
+
     for fmt in ("json", "yaml"):
-        url = f"/api/export/{pid}/policies.{fmt}"
-        # with/without download, with indent/pretty toggles
+        base_url = f"/api/export/profiles/{profile_id}.{fmt}"
         for download in ("0", "1"):
             for indent in (None, "2"):
                 for pretty in ("0", "1"):
-                    qs = []
+                    query = []
                     if download == "1":
-                        qs.append("download=1")
+                        query.append("download=1")
                     if indent is not None:
-                        qs.append(f"indent={indent}")
+                        query.append(f"indent={indent}")
                     if pretty == "1":
-                        qs.append("pretty=1")
-                    full = url + (("?" + "&".join(qs)) if qs else "")
-                    r = client.get(full)
-                    assert r.status_code == 200
-                    ct = r.headers.get("content-type", "")
-                    if fmt == "json":
-                        assert ct.startswith("application/json")
-                        assert '"DisableTelemetry"' in r.text
-                    else:
-                        assert _ok_yaml(ct)
-                        assert "DisableTelemetry" in r.text
-                    # optional Content-Disposition
-                    cd = r.headers.get("content-disposition", "")
-                    if cd:
-                        assert "attachment" in cd.lower()
-                        assert f".{fmt}" in cd.lower()
+                        query.append("pretty=1")
+                    url = base_url + (("?" + "&".join(query)) if query else "")
+                    response = client.get(url)
+                    _assert_single_export_response(response, fmt)
 
-    # 2) Query-param route: /api/export/policies/{id}?fmt=...
+
+def test_export_single_queryparam_matrix():
+    client, ids = _seed_matrix_profiles()
+    profile_id = ids[0]
+
     for fmt in ("json", "yaml"):
         for download in ("0", "1"):
             for indent in (None, "2"):
                 for pretty in ("0", "1"):
-                    qs = [f"fmt={fmt}"]
+                    query = [f"fmt={fmt}"]
                     if download == "1":
-                        qs.append("download=1")
+                        query.append("download=1")
                     if indent is not None:
-                        qs.append(f"indent={indent}")
+                        query.append(f"indent={indent}")
                     if pretty == "1":
-                        qs.append("pretty=1")
-                    r = client.get(f"/api/export/policies/{pid}?" + "&".join(qs))
-                    assert r.status_code == 200
-                    ct = r.headers.get("content-type", "")
-                    if fmt == "json":
-                        assert ct.startswith("application/json")
-                        assert '"DisableTelemetry"' in r.text
-                    else:
-                        assert _ok_yaml(ct)
-                        assert "DisableTelemetry" in r.text
-                    cd = r.headers.get("content-disposition", "")
-                    if cd:
-                        assert "attachment" in cd.lower()
-                        assert f".{fmt}" in cd.lower()
+                        query.append("pretty=1")
+                    response = client.get(f"/api/export/profiles/{profile_id}?" + "&".join(query))
+                    _assert_single_export_response(response, fmt)
 
-    # 3) Soft-delete the item and exercise include_deleted branches & 404
-    rdel = client.delete(f"/api/policies/{pid}")
-    assert rdel.status_code in (200, 204)
 
-    # Default (include_deleted=false) should 404
-    r404_json = client.get(f"/api/export/policies/{pid}?fmt=json")
-    assert r404_json.status_code == 404
-    r404_yaml = client.get(f"/api/export/policies/{pid}?fmt=yaml")
-    assert r404_yaml.status_code == 404
-
-    # With include_deleted=true should return data
-    rj = client.get(f"/api/export/policies/{pid}?fmt=json&include_deleted=true")
-    assert rj.status_code == 200 and rj.headers.get("content-type", "").startswith(
-        "application/json"
-    )
-    ry = client.get(f"/api/export/policies/{pid}?fmt=yaml&include_deleted=true")
-    assert ry.status_code == 200 and _ok_yaml(ry.headers.get("content-type", ""))
-
-    # 4) Non-existent ID should return 404 for both suffix and query-param routes
+def test_export_single_deleted_not_found_and_bad_format_paths():
+    client, ids = _seed_matrix_profiles()
+    profile_id = ids[0]
     bad_id = 9_999_999
-    r_bad_sfx_json = client.get(f"/api/export/{bad_id}/policies.json")
-    r_bad_sfx_yaml = client.get(f"/api/export/{bad_id}/policies.yaml")
-    assert r_bad_sfx_json.status_code in (404, 400)
-    assert r_bad_sfx_yaml.status_code in (404, 400)
-    r_bad_qp_json = client.get(f"/api/export/policies/{bad_id}?fmt=json")
-    r_bad_qp_yaml = client.get(f"/api/export/policies/{bad_id}?fmt=yaml")
-    assert r_bad_qp_json.status_code in (404, 400)
-    assert r_bad_qp_yaml.status_code in (404, 400)
 
-    # 5) Unknown fmt (validation may 422)
-    r_unknown = client.get(f"/api/export/policies/{pid}?fmt=txt")
-    assert _status_ok_for_unknown_fmt(r_unknown.status_code)
+    delete_response = client.delete(f"/api/profiles/{profile_id}")
+    assert delete_response.status_code == 204
 
-    # --- COLLECTION EXPORTS ---
-    # Default (no fmt) should be JSON envelope
-    r_def = client.get("/api/export/policies?limit=1&offset=0&pretty=1&indent=2")
-    assert r_def.status_code == 200
-    assert r_def.headers.get("content-type", "").startswith("application/json")
-    assert (
-        '"items"' in r_def.text
-        and '"limit"' in r_def.text
-        and '"offset"' in r_def.text
-        and '"count"' in r_def.text
-    )
+    hidden_json = client.get(f"/api/export/profiles/{profile_id}?fmt=json")
+    hidden_yaml = client.get(f"/api/export/profiles/{profile_id}?fmt=yaml")
+    assert hidden_json.status_code == 404
+    assert hidden_yaml.status_code == 404
 
-    # JSON with filters (owner/schema_version/q), pagination, sorting, download
-    r_coll_json = client.get(
-        "/api/export/policies",
+    deleted_json = client.get(f"/api/export/profiles/{profile_id}?fmt=json&include_deleted=true")
+    deleted_yaml = client.get(f"/api/export/profiles/{profile_id}?fmt=yaml&include_deleted=true")
+    _assert_single_export_response(deleted_json, "json")
+    _assert_single_export_response(deleted_yaml, "yaml")
+
+    bad_suffix_json = client.get(f"/api/export/profiles/{bad_id}.json")
+    bad_suffix_yaml = client.get(f"/api/export/profiles/{bad_id}.yaml")
+    assert bad_suffix_json.status_code == 404
+    assert bad_suffix_yaml.status_code == 404
+
+    bad_query_json = client.get(f"/api/export/profiles/{bad_id}?fmt=json")
+    bad_query_yaml = client.get(f"/api/export/profiles/{bad_id}?fmt=yaml")
+    assert bad_query_json.status_code == 404
+    assert bad_query_yaml.status_code == 404
+
+    bad_format = client.get(f"/api/export/profiles/{profile_id}?fmt=txt")
+    assert bad_format.status_code == 422
+
+
+def test_export_collection_default_and_filtered_json_yaml():
+    client, _ = _seed_matrix_profiles()
+
+    default_json = client.get("/api/export/profiles?limit=1&offset=0&pretty=1&indent=2")
+    _assert_collection_envelope(default_json, "json")
+
+    filtered_json = client.get(
+        "/api/export/profiles",
         params={
             "fmt": "json",
             "download": "1",
             "owner": "ops@example.org",
-            "schema_version": "firefox-ESR",
+            "schema_version": "esr-140.9",
             "q": "MATRIX-",
             "include_deleted": "true",
             "limit": 2,
@@ -165,20 +153,17 @@ def test_export_full_matrix_single_and_collection():
             "order": "desc",
         },
     )
-    assert r_coll_json.status_code == 200
-    assert r_coll_json.headers.get("content-type", "").startswith("application/json")
-    if cd := r_coll_json.headers.get("content-disposition", ""):
-        assert ".json" in cd.lower()
-    assert '"items"' in r_coll_json.text
+    _assert_collection_envelope(filtered_json, "json")
+    if content_disposition := filtered_json.headers.get("content-disposition", ""):
+        assert ".json" in content_disposition.lower()
 
-    # YAML with different sort and pagination
-    r_coll_yaml = client.get(
-        "/api/export/policies",
+    filtered_yaml = client.get(
+        "/api/export/profiles",
         params={
             "fmt": "yaml",
             "download": "1",
             "owner": "ops@example.org",
-            "schema_version": "firefox-ESR",
+            "schema_version": "esr-140.9",
             "q": "MATRIX-",
             "include_deleted": "true",
             "limit": 3,
@@ -187,19 +172,16 @@ def test_export_full_matrix_single_and_collection():
             "order": "asc",
         },
     )
-    assert r_coll_yaml.status_code == 200
-    assert _ok_yaml(r_coll_yaml.headers.get("content-type", ""))
-    if cd2 := r_coll_yaml.headers.get("content-disposition", ""):
-        assert ".yaml" in cd2.lower()
-    txt = r_coll_yaml.text
-    assert "items:" in txt and "limit:" in txt and "offset:" in txt and "count:" in txt
+    _assert_collection_envelope(filtered_yaml, "yaml")
+    if content_disposition := filtered_yaml.headers.get("content-disposition", ""):
+        assert ".yaml" in content_disposition.lower()
 
-    # Empty set envelope (unmatchable q)
-    r_empty_json = client.get("/api/export/policies?q=__NO_MATCH_EXPECTED__")
-    assert r_empty_json.status_code == 200
-    assert '"items"' in r_empty_json.text
 
-    r_empty_yaml = client.get("/api/export/policies?fmt=yaml&q=__NO_MATCH_EXPECTED__")
-    assert r_empty_yaml.status_code == 200
-    assert _ok_yaml(r_empty_yaml.headers.get("content-type", ""))
-    assert "items:" in r_empty_yaml.text
+def test_export_collection_empty_envelopes_for_json_and_yaml():
+    client, _ = _seed_matrix_profiles()
+
+    empty_json = client.get("/api/export/profiles?q=__NO_MATCH_EXPECTED__")
+    _assert_collection_envelope(empty_json, "json")
+
+    empty_yaml = client.get("/api/export/profiles?fmt=yaml&q=__NO_MATCH_EXPECTED__")
+    _assert_collection_envelope(empty_yaml, "yaml")
