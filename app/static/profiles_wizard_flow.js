@@ -11,6 +11,7 @@
             fromEditorValue,
             toEditorValue,
             formatSchemaLabel,
+            getDefaultSchemaVersion,
             renderWizardSchemaShell,
             buildWizardSettingsSearchIndex,
             renderWizardSettingsSearchResults,
@@ -21,7 +22,7 @@
         } = dependencies;
 
         const getEditor = state.getEditor || (() => null);
-        const setCurrentRaw = state.setCurrentRaw || (() => {});
+        const setCurrentRaw = state.setCurrentRaw || (() => { });
         const getCurrentId = state.getCurrentId || (() => null);
 
         const {
@@ -57,23 +58,24 @@
         } = elements;
 
         const wizardTotalSteps = wizardPanels.length;
+        const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         let wizardStep = 1;
         let wizardStarter = "blank";
 
         function updateWizardContext() {
             if (!wizardContextCopyEl) return;
             wizardContextCopyEl.textContent = getCurrentId()
-                ? t("profiles.wizard_context_existing", "You are editing an existing profile. Open any step you need, save when ready, and export from the last step.")
-                : t("profiles.wizard_context_new", "You are creating a new profile. Set the essentials first, then jump to any step you need.");
+                ? t("profiles.wizard_context_existing")
+                : t("profiles.wizard_context_new");
         }
 
         function formatWizardStarterLabel(key) {
             const starterLabels = {
-                blank: t("profiles.wizard_starter_blank_label", "Blank draft"),
-                keep_current: t("profiles.wizard_starter_keep_label", "Keep current"),
-                basic_corporate: t("profiles.wizard_starter_basic_label", "Basic corporate"),
-                classroom_kiosk: t("profiles.wizard_starter_classroom_label", "Classroom kiosk"),
-                soc_hard: t("profiles.wizard_starter_soc_label", "Security hardened"),
+                blank: t("profiles.wizard_starter_blank_label"),
+                keep_current: t("profiles.wizard_starter_keep_label"),
+                basic_corporate: t("profiles.wizard_starter_basic_label"),
+                classroom_kiosk: t("profiles.wizard_starter_classroom_label"),
+                soc_hard: t("profiles.wizard_starter_soc_label"),
             };
             return starterLabels[key] || starterLabels.blank;
         }
@@ -96,13 +98,13 @@
 
             if (starterKey === "keep_current") {
                 setWizardStarter(starterKey);
-                setStatus(t("profiles.wizard_starter_applied_keep", "Current profile baseline kept."), "info");
+                setStatus(t("profiles.wizard_starter_applied_keep"), "info");
                 return;
             }
 
             try {
                 const mode = documentRef.getElementById("mode").value;
-                const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || "esr-140";
+                const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
                 const parsed = fromEditorValue(editor.getValue(), mode);
                 const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
                 const nextHomepage = {
@@ -145,15 +147,15 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setWizardStarter(starterKey);
-                setStatus(t("profiles.wizard_starter_applied", "Starter baseline applied."), "info");
+                setStatus(t("profiles.wizard_starter_applied"), "info");
             } catch (e) {
-                setStatus(`Wizard starter error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_wizard_starter").replace("{detail}", e.message || e), "error");
             }
         }
 
         function syncWizardFieldsFromForm() {
             wizardNameEl.value = nameInput.value;
-            wizardSchemaEl.value = documentRef.getElementById("profile-type").value || "esr-140";
+            wizardSchemaEl.value = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
             wizardModeEl.value = documentRef.getElementById("mode").value || "json";
             wizardNameEl.disabled = nameInput.disabled;
             renderWizardSchemaShell();
@@ -163,7 +165,7 @@
         }
 
         function resolveQuickPolicyEnabledValue(policyKey) {
-            const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || "esr-140";
+            const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
             const configuredValue = quickPolicyEnabledValues[policyKey];
             if (!configuredValue) return true;
 
@@ -206,7 +208,7 @@
             }
 
             wizardSummaryNameEl.textContent = form.name || "—";
-            wizardSummarySchemaEl.textContent = formatSchemaLabel(form.schemaVersion || "esr-140");
+            wizardSummarySchemaEl.textContent = formatSchemaLabel(form.schemaVersion || defaultSchemaVersion);
             wizardSummaryStarterEl.textContent = formatWizardStarterLabel(wizardStarter);
             wizardSummaryModeEl.textContent = mode.toUpperCase();
             wizardSummaryPoliciesEl.textContent = `${enabledQuickPolicies}`;
@@ -261,9 +263,9 @@
 
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_policy_applied", "Quick policy updated."), "info");
+                setStatus(t("profiles.wizard_policy_applied"), "info");
             } catch (e) {
-                setStatus(`Wizard policy error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -285,48 +287,42 @@
 
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_policy_applied", "Quick policy updated."), "info");
+                setStatus(t("profiles.wizard_policy_applied"), "info");
             } catch (e) {
-                setStatus(`Wizard policy error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
             }
         }
 
         function setWizardStep(nextStep) {
             wizardStep = Math.min(wizardTotalSteps, Math.max(1, Number(nextStep) || 1));
+            let activeStepButton = null;
 
             wizardStepButtons.forEach((button) => {
-                button.classList.toggle("wizard-step--active", Number(button.dataset.step) === wizardStep);
+                const isActive = Number(button.dataset.step) === wizardStep;
+                button.classList.toggle("wizard-step--active", isActive);
+                if (isActive) {
+                    button.setAttribute("aria-current", "step");
+                } else {
+                    button.removeAttribute("aria-current");
+                }
+                if (isActive) {
+                    activeStepButton = button;
+                }
             });
             wizardPanels.forEach((panel) => {
-                panel.classList.toggle("is-active", panel.id === `wizard-step-${wizardStep}`);
+                const isActive = panel.id === `wizard-step-${wizardStep}`;
+                panel.classList.toggle("is-active", isActive);
+                panel.setAttribute("aria-hidden", isActive ? "false" : "true");
             });
 
             wizardPrevEl.disabled = wizardStep === 1;
-            wizardPrevEl.style.visibility = wizardStep === 1 ? "hidden" : "visible";
+            wizardPrevEl.classList.toggle("is-visibility-hidden", wizardStep === 1);
             wizardNextEl.disabled = wizardStep === wizardTotalSteps;
-            wizardNextEl.style.visibility = wizardStep === wizardTotalSteps ? "hidden" : "visible";
-            wizardNextEl.textContent = t("profiles.wizard_next", "Next step");
+            wizardNextEl.classList.toggle("is-visibility-hidden", wizardStep === wizardTotalSteps);
+            wizardNextEl.textContent = t("profiles.wizard_next");
 
-            const progressKeys = [
-                "profiles.wizard_progress_one",
-                "profiles.wizard_progress_two",
-                "profiles.wizard_progress_three",
-                "profiles.wizard_progress_four",
-                "profiles.wizard_progress_five",
-                "profiles.wizard_progress_six",
-                "profiles.wizard_progress_seven",
-            ];
-            const progressFallbacks = [
-                "Step 1 of 7: profile setup",
-                "Step 2 of 7: General",
-                "Step 3 of 7: Home",
-                "Step 4 of 7: Search",
-                "Step 5 of 7: Privacy & security",
-                "Step 6 of 7: Sync and add-ons",
-                "Step 7 of 7: export",
-            ];
-            const progressKey = progressKeys[wizardStep - 1] || progressKeys[0];
-            const progressFallback = progressFallbacks[wizardStep - 1] || progressFallbacks[0];
+            const progressKey = activeStepButton?.dataset?.stepProgressKey || "profiles.wizard_progress_one";
+            const progressFallback = activeStepButton?.dataset?.stepProgressFallback || "Step 1 of 8: start";
             wizardProgressTextEl.textContent = t(progressKey, progressFallback);
             updateWizardSummary();
         }
@@ -339,12 +335,12 @@
             const { invalid, dirty } = currentSnapshotState();
 
             if (invalid) {
-                setStatus(t("profiles.wizard_finish_invalid", "Fix invalid JSON or YAML before finishing."), "warn");
+                setStatus(t("profiles.wizard_finish_invalid"), "warn");
                 return;
             }
 
             if (!getCurrentId() && !nameInput.value.trim()) {
-                setStatus(t("profiles.wizard_finish_name_required", "Profile name is required before finishing."), "warn");
+                setStatus(t("profiles.wizard_finish_name_required"), "warn");
                 setWizardStep(1);
                 nameInput.focus();
                 return;

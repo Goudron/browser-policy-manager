@@ -12,9 +12,21 @@
         getManagedExtensionProfileById,
         getManagedExtensionField,
         getAuthenticationObjectSummary,
+        formatAuthenticationObjectState,
         getCertificatesObjectSummary,
+        formatCertificatesObjectState,
         getDnsOverHttpsObjectSummary,
+        formatDnsOverHttpsObjectState,
+        getWebsiteFilterObjectSummary,
+        formatWebsiteFilterObjectState,
+        getPermissionsObjectSummary,
+        formatPermissionsObjectState,
+        getCookiesObjectSummary,
+        formatCookiesObjectState,
+        getHandlersObjectSummary,
+        formatHandlersObjectState,
         getUserMessagingObjectSummary,
+        formatUserMessagingObjectState,
         findSettingsTarget,
         state = {},
     }) {
@@ -58,6 +70,12 @@
             wizardBookmarkSummaryLinksJumpEl,
             wizardBookmarkSummaryFoldersJumpEl,
             wizardBookmarkSummaryNestedJumpEl,
+            wizardAiSummaryAvailabilityEl,
+            wizardAiSummaryProvidersEl,
+            wizardAiSummarySurfacesEl,
+            wizardAiSummaryAvailabilityJumpEl,
+            wizardAiSummaryProvidersJumpEl,
+            wizardAiSummarySurfacesJumpEl,
             wizardWebsiteAccessSummaryBlockedEl,
             wizardWebsiteAccessSummaryExceptionsEl,
             wizardWebsiteAccessSummaryHandlersEl,
@@ -70,6 +88,9 @@
             wizardPrivacySummaryPermissionsConfiguredJumpEl,
             wizardPrivacySummaryPermissionsLockedJumpEl,
             wizardPrivacySummaryCookiesJumpEl,
+            wizardPrivacyUserDataSectionStatusEl,
+            wizardLockdownSectionStatusEl,
+            wizardPrivacySiteSectionStatusEl,
             wizardExportProfileStateEl,
             wizardExportWorkspaceStateEl,
             wizardExportValidationStateEl,
@@ -84,6 +105,18 @@
             wizardExportUnknownJumpEl,
             wizardExportReadyCopyEl,
             wizardExportChecklistEl,
+            wizardExportSummaryNetworkEl,
+            wizardExportSummaryHomeEl,
+            wizardExportSummarySearchEl,
+            wizardExportSummaryFeaturesEl,
+            wizardExportSummaryAiEl,
+            wizardExportSummaryPrivacyEl,
+            wizardExportSummaryNetworkJumpEl,
+            wizardExportSummaryHomeJumpEl,
+            wizardExportSummarySearchJumpEl,
+            wizardExportSummaryFeaturesJumpEl,
+            wizardExportSummaryAiJumpEl,
+            wizardExportSummaryPrivacyJumpEl,
             editorEl,
             overviewPanelEl,
         } = elements;
@@ -98,6 +131,125 @@
             if (el) {
                 el.textContent = String(value);
             }
+        }
+
+        function formatHttpsOnlyModeLabel(value) {
+            if (value === "allowed") {
+                return t("profiles.wizard_https_only_mode_allowed");
+            }
+            if (value === "disallowed") {
+                return t("profiles.wizard_https_only_mode_disallowed");
+            }
+            if (value === "enabled") {
+                return t("profiles.wizard_https_only_mode_enabled");
+            }
+            if (value === "force_enabled") {
+                return t("profiles.wizard_https_only_mode_force_enabled");
+            }
+            return value;
+        }
+
+        function setSummaryTone(el, tone = "") {
+            const row = el?.closest(".wizard-summary-row");
+            if (!row) return;
+            if (!tone) {
+                delete row.dataset.summaryTone;
+                return;
+            }
+            row.dataset.summaryTone = tone;
+        }
+
+        function setSummaryValue(el, value, tone = "") {
+            setText(el, value);
+            setSummaryTone(el, tone);
+        }
+
+        function hasMeaningfulValue(value) {
+            if (typeof value === "boolean" || typeof value === "number") return true;
+            if (typeof value === "string") return value.trim().length > 0;
+            if (Array.isArray(value)) return value.some((entry) => hasMeaningfulValue(entry));
+            if (value && typeof value === "object") return Object.values(value).some((entry) => hasMeaningfulValue(entry));
+            return false;
+        }
+
+        function countConfiguredObjectEntries(value) {
+            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+            return Object.values(currentObject).filter((entry) => hasMeaningfulValue(entry)).length;
+        }
+
+        function formatCountText(key, count) {
+            return t(key).replace("{count}", String(count));
+        }
+
+        function buildHumanSummaryText(fragments) {
+            return fragments.length
+                ? fragments.join("; ")
+                : t("profiles.wizard_export_guided_empty");
+        }
+
+        function buildCompactStateText(fragments, emptyKey = "profiles.wizard_review_default") {
+            return fragments.length ? fragments.join(" • ") : t(emptyKey);
+        }
+
+        function formatCountLabel(key, count) {
+            return t(key).replace("{count}", String(count));
+        }
+
+        function formatHomepageStartPageLabel(value) {
+            if (value === "none") return t("profiles.wizard_homepage_start_none");
+            if (value === "homepage") return t("profiles.wizard_homepage_start_homepage");
+            if (value === "previous-session") return t("profiles.wizard_homepage_start_previous");
+            if (value === "homepage-locked") return t("profiles.wizard_homepage_start_locked");
+            return value;
+        }
+
+        function formatSearchBarLabel(value) {
+            if (value === "unified") return t("profiles.wizard_search_bar_unified");
+            if (value === "separate") return t("profiles.wizard_search_bar_separate");
+            return value;
+        }
+
+        function buildFirefoxHomeDecisionFragments(summary) {
+            const visible = [];
+            const hidden = [];
+            [
+                [summary.firefoxHomeSearchValue, t("profiles.wizard_firefox_home_search_label")],
+                [summary.firefoxHomeTopSitesValue, t("profiles.wizard_firefox_home_top_sites_label")],
+                [summary.firefoxHomePocketValue, t("profiles.wizard_firefox_home_pocket_label")],
+            ].forEach(([value, label]) => {
+                if (value === true) visible.push(label);
+                if (value === false) hidden.push(label);
+            });
+
+            const parts = [];
+            if (visible.length) {
+                parts.push(
+                    t("profiles.wizard_review_firefox_home_visible")
+                        .replace("{value}", visible.join(", ")),
+                );
+            }
+            if (hidden.length) {
+                parts.push(
+                    t("profiles.wizard_review_firefox_home_hidden")
+                        .replace("{value}", hidden.join(", ")),
+                );
+            }
+            if (summary.firefoxHomeSecondaryRules > 0) {
+                parts.push(
+                    t("profiles.wizard_review_firefox_home_more")
+                        .replace("{count}", String(summary.firefoxHomeSecondaryRules)),
+                );
+            }
+            if (summary.firefoxHomeLocked) {
+                parts.push(t("profiles.wizard_review_locked"));
+            }
+            return parts;
+        }
+
+        function formatBooleanManagedValue(value) {
+            if (value === true) return t("profiles.wizard_review_enabled");
+            if (value === false) return t("profiles.wizard_review_disabled");
+            return t("profiles.wizard_review_default");
         }
 
         function getExtensionReviewSummaryData(parsed) {
@@ -185,9 +337,21 @@
 
         function renderExtensionReviewSummary(parsed) {
             const summary = getExtensionReviewSummaryData(parsed);
-            setText(wizardExtensionSummaryCuratedEl, summary.curatedProfiles);
-            setText(wizardExtensionSummaryArbitraryEl, summary.arbitraryRules);
-            setText(wizardExtensionSummaryCustomUrlsEl, summary.customInstallUrls);
+            setSummaryValue(
+                wizardExtensionSummaryCuratedEl,
+                summary.curatedProfiles,
+                summary.curatedProfiles > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardExtensionSummaryArbitraryEl,
+                summary.arbitraryRules,
+                summary.arbitraryRules > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardExtensionSummaryCustomUrlsEl,
+                summary.customInstallUrls,
+                summary.customInstallUrls > 0 ? "active" : "default",
+            );
             renderExtensionReviewJumpButtons(summary);
         }
 
@@ -196,12 +360,17 @@
             const certificates = getCertificatesObjectSummary(parsed?.Certificates, []);
             const dnsOverHttps = getDnsOverHttpsObjectSummary(parsed?.DNSOverHTTPS, []);
             const windowsSsoExplicit = typeof parsed?.WindowsSSO === "boolean" ? 1 : 0;
+            const windowsSsoValue = typeof parsed?.WindowsSSO === "boolean" ? parsed.WindowsSSO : null;
 
             return {
+                authentication,
+                certificates,
+                dnsOverHttps,
                 authenticationControls: authentication.configuredControls,
                 certificateEntries: certificates.configuredEntries,
                 dnsEntries: dnsOverHttps.configuredEntries,
                 windowsSsoExplicit,
+                windowsSsoValue,
             };
         }
 
@@ -240,10 +409,26 @@
 
         function renderNetworkReviewSummary(parsed) {
             const summary = getNetworkReviewSummaryData(parsed);
-            setText(wizardNetworkSummaryAuthenticationEl, summary.authenticationControls);
-            setText(wizardNetworkSummaryCertificatesEl, summary.certificateEntries);
-            setText(wizardNetworkSummaryDnsEl, summary.dnsEntries);
-            setText(wizardNetworkSummaryWindowsSsoEl, summary.windowsSsoExplicit);
+            setSummaryValue(
+                wizardNetworkSummaryAuthenticationEl,
+                formatAuthenticationObjectState(summary.authentication),
+                summary.authenticationControls > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardNetworkSummaryCertificatesEl,
+                formatCertificatesObjectState(summary.certificates),
+                summary.certificateEntries > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardNetworkSummaryDnsEl,
+                formatDnsOverHttpsObjectState(summary.dnsOverHttps),
+                summary.dnsEntries > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardNetworkSummaryWindowsSsoEl,
+                formatBooleanManagedValue(summary.windowsSsoValue),
+                summary.windowsSsoExplicit > 0 ? "active" : "default",
+            );
             renderNetworkReviewJumpButtons(summary);
         }
 
@@ -255,22 +440,99 @@
                 ? parsed.FirefoxHome
                 : {};
             const userMessaging = getUserMessagingObjectSummary(parsed?.UserMessaging, []);
+            const additionalCount = Array.isArray(homepage.Additional) ? homepage.Additional.length : 0;
+            const showCount = Object.entries(firefoxHome).filter(([, value]) => value === true).length;
+            const hideCount = Object.entries(firefoxHome).filter(([, value]) => value === false).length;
+            const firefoxHomeSecondaryRules = [
+                "SponsoredTopSites",
+                "Highlights",
+                "Stories",
+                "SponsoredPocket",
+                "SponsoredStories",
+                "Snippets",
+            ].filter((key) => typeof firefoxHome[key] === "boolean").length;
 
-            const homepageControls = (typeof homepage.URL === "string" && homepage.URL.trim() ? 1 : 0)
-                + (Array.isArray(homepage.Additional) ? homepage.Additional.length : 0)
-                + (typeof homepage.StartPage === "string" && homepage.StartPage.trim() ? 1 : 0)
+            const homepageUrl = typeof homepage.URL === "string" ? homepage.URL.trim() : "";
+            const startPage = typeof homepage.StartPage === "string" ? homepage.StartPage.trim() : "";
+            const homepageControls = (homepageUrl ? 1 : 0)
+                + additionalCount
+                + (startPage ? 1 : 0)
                 + (homepage.Locked === true ? 1 : 0);
-            const overrideSurfaces = (typeof parsed?.NewTabPage === "boolean" ? 1 : 0)
-                + (typeof parsed?.OverrideFirstRunPage === "string" && parsed.OverrideFirstRunPage.trim() ? 1 : 0)
-                + (typeof parsed?.OverridePostUpdatePage === "string" && parsed.OverridePostUpdatePage.trim() ? 1 : 0);
-            const firefoxHomeManaged = Object.values(firefoxHome).filter((value) => typeof value === "boolean").length;
+            const newTabManaged = typeof parsed?.NewTabPage === "boolean";
+            const overrideFirstRunPage = typeof parsed?.OverrideFirstRunPage === "string" ? parsed.OverrideFirstRunPage.trim() : "";
+            const overridePostUpdatePage = typeof parsed?.OverridePostUpdatePage === "string" ? parsed.OverridePostUpdatePage.trim() : "";
+            const overrideSurfaces = (newTabManaged ? 1 : 0)
+                + (overrideFirstRunPage ? 1 : 0)
+                + (overridePostUpdatePage ? 1 : 0);
+            const firefoxHomeManaged = showCount + hideCount + firefoxHomeSecondaryRules + (firefoxHome.Locked === true ? 1 : 0);
 
             return {
+                homepageUrl,
+                additionalCount,
+                startPage,
+                homepageLocked: homepage.Locked === true,
+                newTabManaged,
+                newTabValue: typeof parsed?.NewTabPage === "boolean" ? parsed.NewTabPage : null,
+                overrideFirstRunPage,
+                overridePostUpdatePage,
+                firefoxHomeShowCount: showCount,
+                firefoxHomeHideCount: hideCount,
+                firefoxHomeSearchValue: typeof firefoxHome.Search === "boolean" ? firefoxHome.Search : null,
+                firefoxHomeTopSitesValue: typeof firefoxHome.TopSites === "boolean" ? firefoxHome.TopSites : null,
+                firefoxHomePocketValue: typeof firefoxHome.Pocket === "boolean" ? firefoxHome.Pocket : null,
+                firefoxHomeSecondaryRules,
+                firefoxHomeLocked: firefoxHome.Locked === true,
                 homepageControls,
                 overrideSurfaces,
                 firefoxHomeManaged,
                 userMessagingControls: userMessaging.configuredSurfaces,
+                userMessaging,
             };
+        }
+
+        function formatHomepageReviewValue(summary) {
+            const parts = [];
+            if (summary.homepageUrl) {
+                parts.push(t("profiles.wizard_review_homepage_set"));
+            }
+            if (summary.additionalCount > 0) {
+                parts.push(formatCountLabel("profiles.wizard_review_extra_tabs", summary.additionalCount));
+            }
+            if (summary.startPage) {
+                parts.push(
+                    t("profiles.wizard_review_start_page")
+                        .replace("{value}", formatHomepageStartPageLabel(summary.startPage)),
+                );
+            }
+            if (summary.homepageLocked) {
+                parts.push(t("profiles.wizard_review_locked"));
+            }
+            return buildCompactStateText(parts);
+        }
+
+        function formatHomeOverridesReviewValue(summary) {
+            const parts = [];
+            if (summary.newTabManaged) {
+                parts.push(
+                    summary.newTabValue === true
+                        ? t("profiles.wizard_review_new_tab_enabled")
+                        : t("profiles.wizard_review_new_tab_disabled"),
+                );
+            }
+            if (summary.overrideFirstRunPage) {
+                parts.push(t("profiles.wizard_review_first_run_page"));
+            }
+            if (summary.overridePostUpdatePage) {
+                parts.push(t("profiles.wizard_review_post_update_page"));
+            }
+            return buildCompactStateText(parts);
+        }
+
+        function formatFirefoxHomeReviewValue(summary) {
+            if (!summary.firefoxHomeManaged) {
+                return t("profiles.wizard_review_default");
+            }
+            return buildCompactStateText(buildFirefoxHomeDecisionFragments(summary));
         }
 
         function findHomeReviewTarget(kind) {
@@ -306,10 +568,26 @@
 
         function renderHomeReviewSummary(parsed) {
             const summary = getHomeReviewSummaryData(parsed);
-            setText(wizardHomeSummaryHomepageEl, summary.homepageControls);
-            setText(wizardHomeSummaryOverridesEl, summary.overrideSurfaces);
-            setText(wizardHomeSummaryFirefoxHomeEl, summary.firefoxHomeManaged);
-            setText(wizardHomeSummaryUserMessagingEl, summary.userMessagingControls);
+            setSummaryValue(
+                wizardHomeSummaryHomepageEl,
+                formatHomepageReviewValue(summary),
+                summary.homepageControls > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardHomeSummaryOverridesEl,
+                formatHomeOverridesReviewValue(summary),
+                summary.overrideSurfaces > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardHomeSummaryFirefoxHomeEl,
+                formatFirefoxHomeReviewValue(summary),
+                summary.firefoxHomeManaged > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardHomeSummaryUserMessagingEl,
+                formatUserMessagingObjectState(summary.userMessaging),
+                summary.userMessagingControls > 0 ? "active" : "default",
+            );
             renderHomeReviewJumpButtons(summary);
         }
 
@@ -327,14 +605,91 @@
                 + (typeof searchEngines.PreventInstalls === "boolean" ? 1 : 0);
             const hiddenEngines = Array.isArray(searchEngines.Remove) ? searchEngines.Remove.length : 0;
             const customEngines = Array.isArray(searchEngines.Add) ? searchEngines.Add.length : 0;
-            const suggestControls = Object.values(firefoxSuggest).filter((value) => typeof value === "boolean").length;
+            const suggestEnabledCount = Object.values(firefoxSuggest).filter((value) => value === true).length;
+            const suggestDisabledCount = Object.values(firefoxSuggest).filter((value) => value === false).length;
+            const suggestControls = suggestEnabledCount + suggestDisabledCount;
 
             return {
+                searchBarValue: typeof parsed?.SearchBar === "string" ? parsed.SearchBar.trim() : "",
+                searchSuggestEnabledValue: typeof parsed?.SearchSuggestEnabled === "boolean" ? parsed.SearchSuggestEnabled : null,
+                defaultEngine: typeof searchEngines.Default === "string" ? searchEngines.Default.trim() : "",
+                preventInstallsValue: typeof searchEngines.PreventInstalls === "boolean" ? searchEngines.PreventInstalls : null,
+                webSuggestionsValue: typeof firefoxSuggest.WebSuggestions === "boolean" ? firefoxSuggest.WebSuggestions : null,
+                sponsoredSuggestionsValue: typeof firefoxSuggest.SponsoredSuggestions === "boolean" ? firefoxSuggest.SponsoredSuggestions : null,
+                improveSuggestValue: typeof firefoxSuggest.ImproveSuggest === "boolean" ? firefoxSuggest.ImproveSuggest : null,
+                lockedValue: typeof firefoxSuggest.Locked === "boolean" ? firefoxSuggest.Locked : null,
                 defaultControls,
                 hiddenEngines,
                 customEngines,
                 suggestControls,
+                suggestEnabledCount,
+                suggestDisabledCount,
             };
+        }
+
+        function formatSearchDefaultsReviewValue(summary) {
+            const parts = [];
+            if (summary.defaultEngine) {
+                parts.push(
+                    t("profiles.wizard_review_default_engine")
+                        .replace("{value}", summary.defaultEngine),
+                );
+            }
+            if (summary.searchBarValue) {
+                parts.push(
+                    t("profiles.wizard_review_search_bar")
+                        .replace("{value}", formatSearchBarLabel(summary.searchBarValue)),
+                );
+            }
+            if (summary.searchSuggestEnabledValue === true) {
+                parts.push(t("profiles.wizard_review_search_suggestions_on"));
+            } else if (summary.searchSuggestEnabledValue === false) {
+                parts.push(t("profiles.wizard_review_search_suggestions_off"));
+            }
+            if (summary.preventInstallsValue === true) {
+                parts.push(t("profiles.wizard_review_search_engine_installs_blocked"));
+            } else if (summary.preventInstallsValue === false) {
+                parts.push(t("profiles.wizard_review_search_engine_installs_allowed"));
+            }
+            return buildCompactStateText(parts);
+        }
+
+        function formatHiddenEnginesReviewValue(summary) {
+            return summary.hiddenEngines > 0
+                ? formatCountLabel("profiles.wizard_review_hidden_engines", summary.hiddenEngines)
+                : t("profiles.wizard_review_default");
+        }
+
+        function formatCustomEnginesReviewValue(summary) {
+            return summary.customEngines > 0
+                ? formatCountLabel("profiles.wizard_review_managed_engines", summary.customEngines)
+                : t("profiles.wizard_review_default");
+        }
+
+        function formatSearchSuggestReviewValue(summary) {
+            if (!summary.suggestControls) {
+                return t("profiles.wizard_review_default");
+            }
+            const parts = [];
+            if (summary.webSuggestionsValue === true) {
+                parts.push(t("profiles.wizard_review_firefox_suggest_web_on"));
+            } else if (summary.webSuggestionsValue === false) {
+                parts.push(t("profiles.wizard_review_firefox_suggest_web_off"));
+            }
+            if (summary.sponsoredSuggestionsValue === true) {
+                parts.push(t("profiles.wizard_review_firefox_suggest_sponsored_on"));
+            } else if (summary.sponsoredSuggestionsValue === false) {
+                parts.push(t("profiles.wizard_review_firefox_suggest_sponsored_off"));
+            }
+            if (summary.improveSuggestValue === true) {
+                parts.push(t("profiles.wizard_review_firefox_suggest_improve_on"));
+            } else if (summary.improveSuggestValue === false) {
+                parts.push(t("profiles.wizard_review_firefox_suggest_improve_off"));
+            }
+            if (summary.lockedValue === true) {
+                parts.push(t("profiles.wizard_review_locked"));
+            }
+            return buildCompactStateText(parts);
         }
 
         function findSearchReviewTarget(kind) {
@@ -368,10 +723,26 @@
 
         function renderSearchReviewSummary(parsed) {
             const summary = getSearchReviewSummaryData(parsed);
-            setText(wizardSearchSummaryDefaultsEl, summary.defaultControls);
-            setText(wizardSearchSummaryHiddenEl, summary.hiddenEngines);
-            setText(wizardSearchSummaryCustomEl, summary.customEngines);
-            setText(wizardSearchSummarySuggestEl, summary.suggestControls);
+            setSummaryValue(
+                wizardSearchSummaryDefaultsEl,
+                formatSearchDefaultsReviewValue(summary),
+                summary.defaultControls > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardSearchSummaryHiddenEl,
+                formatHiddenEnginesReviewValue(summary),
+                summary.hiddenEngines > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardSearchSummaryCustomEl,
+                formatCustomEnginesReviewValue(summary),
+                summary.customEngines > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardSearchSummarySuggestEl,
+                formatSearchSuggestReviewValue(summary),
+                summary.suggestControls > 0 ? "active" : "default",
+            );
             renderSearchReviewJumpButtons(summary);
         }
 
@@ -426,9 +797,27 @@
 
         function renderBookmarkReviewSummary(parsed) {
             const summary = getBookmarkReviewSummaryData(parsed);
-            setText(wizardBookmarkSummaryLinksEl, summary.bookmarkEntries);
-            setText(wizardBookmarkSummaryFoldersEl, summary.managedFolders);
-            setText(wizardBookmarkSummaryNestedEl, summary.nestedRows);
+            setSummaryValue(
+                wizardBookmarkSummaryLinksEl,
+                summary.bookmarkEntries > 0
+                    ? formatCountLabel("profiles.wizard_review_bookmarks", summary.bookmarkEntries)
+                    : t("profiles.wizard_review_default"),
+                summary.bookmarkEntries > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardBookmarkSummaryFoldersEl,
+                summary.managedFolders > 0
+                    ? formatCountLabel("profiles.wizard_review_bookmark_folders", summary.managedFolders)
+                    : t("profiles.wizard_review_default"),
+                summary.managedFolders > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardBookmarkSummaryNestedEl,
+                summary.nestedRows > 0
+                    ? formatCountLabel("profiles.wizard_review_bookmark_nested", summary.nestedRows)
+                    : t("profiles.wizard_review_default"),
+                summary.nestedRows > 0 ? "active" : "default",
+            );
             renderBookmarkReviewJumpButtons(summary);
         }
 
@@ -445,13 +834,15 @@
             const handlers = parsed?.Handlers && typeof parsed.Handlers === "object" && !Array.isArray(parsed.Handlers)
                 ? parsed.Handlers
                 : {};
+            const websiteFilterSummary = getWebsiteFilterObjectSummary(websiteFilter, []);
+            const handlersSummary = getHandlersObjectSummary(handlers, []);
 
             return {
-                blockedSites: Array.isArray(websiteFilter.Block) ? websiteFilter.Block.length : 0,
-                exceptions: Array.isArray(websiteFilter.Exceptions) ? websiteFilter.Exceptions.length : 0,
-                handlerRules: countHandlerRuleBucket(handlers.mimeTypes)
-                    + countHandlerRuleBucket(handlers.schemes)
-                    + countHandlerRuleBucket(handlers.extensions),
+                blockedSites: websiteFilterSummary.blockedCount,
+                exceptions: websiteFilterSummary.exceptionCount,
+                handlerRules: handlersSummary.totalRules,
+                websiteFilterSummary,
+                handlersSummary,
             };
         }
 
@@ -483,10 +874,101 @@
 
         function renderWebsiteAccessReviewSummary(parsed) {
             const summary = getWebsiteAccessReviewSummaryData(parsed);
-            setText(wizardWebsiteAccessSummaryBlockedEl, summary.blockedSites);
-            setText(wizardWebsiteAccessSummaryExceptionsEl, summary.exceptions);
-            setText(wizardWebsiteAccessSummaryHandlersEl, summary.handlerRules);
+            setSummaryValue(
+                wizardWebsiteAccessSummaryBlockedEl,
+                summary.blockedSites > 0
+                    ? formatCountLabel("profiles.wizard_review_blocked_sites_short", summary.blockedSites)
+                    : t("profiles.wizard_review_default"),
+                summary.blockedSites > 0 ? "strict" : "default",
+            );
+            setSummaryValue(
+                wizardWebsiteAccessSummaryExceptionsEl,
+                summary.exceptions > 0
+                    ? formatCountLabel("profiles.wizard_review_allowed_exceptions_short", summary.exceptions)
+                    : t("profiles.wizard_review_default"),
+                summary.exceptions > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardWebsiteAccessSummaryHandlersEl,
+                formatHandlersObjectState(summary.handlersSummary),
+                summary.handlerRules > 0 ? "active" : "default",
+            );
             renderWebsiteAccessReviewJumpButtons(summary);
+        }
+
+        function getAiReviewSummaryData(parsed) {
+            const generativeAi = parsed?.GenerativeAI && typeof parsed.GenerativeAI === "object" && !Array.isArray(parsed.GenerativeAI)
+                ? parsed.GenerativeAI
+                : {};
+            return {
+                generativeAiControls: countConfiguredObjectEntries(generativeAi),
+                visualSearchManaged: typeof parsed?.VisualSearchEnabled === "boolean",
+                visualSearchEnabled: parsed?.VisualSearchEnabled === true,
+            };
+        }
+
+        function findAiReviewTarget(kind) {
+            const generativeAiCardEl = documentRef.querySelector('[data-schema-policy-id="GenerativeAI"][data-schema-policy-kind="object-card"]');
+            const visualSearchCardEl = documentRef.querySelector('[data-schema-policy-id="VisualSearchEnabled"][data-schema-policy-kind="boolean-card"]')
+                || documentRef.querySelector('[data-schema-policy-id="VisualSearchEnabled"][data-schema-policy-kind="object-card"]');
+
+            if (kind === "availability") {
+                return generativeAiCardEl
+                    || findSettingsTarget("policy:GenerativeAI")
+                    || findSettingsTarget("shell-policy:7:GenerativeAI");
+            }
+            if (kind === "providers") {
+                return documentRef.getElementById("wizard-ai-providers-section-anchor")
+                    || documentRef.getElementById("wizard-ai-providers-section-status")
+                    || documentRef.getElementById("wizard-step-7");
+            }
+            if (kind === "surfaces") {
+                return visualSearchCardEl
+                    || findSettingsTarget("policy:VisualSearchEnabled")
+                    || findSettingsTarget("shell-policy:7:VisualSearchEnabled");
+            }
+            return null;
+        }
+
+        function renderAiReviewJumpButtons(summary) {
+            [
+                { el: wizardAiSummaryAvailabilityJumpEl, enabled: summary.generativeAiControls > 0, kind: "availability" },
+                { el: wizardAiSummaryProvidersJumpEl, enabled: true, kind: "providers" },
+                { el: wizardAiSummarySurfacesJumpEl, enabled: summary.visualSearchManaged, kind: "surfaces" },
+            ].forEach(({ el, enabled, kind }) => {
+                if (!el) return;
+                el.disabled = !enabled || !findAiReviewTarget(kind);
+            });
+        }
+
+        function renderAiReviewSummary(parsed) {
+            const summary = getAiReviewSummaryData(parsed);
+
+            setSummaryValue(
+                wizardAiSummaryAvailabilityEl,
+                summary.generativeAiControls > 0
+                    ? formatCountLabel("profiles.wizard_ai_review_availability_state", summary.generativeAiControls)
+                    : t("profiles.wizard_review_default"),
+                summary.generativeAiControls > 0 ? "active" : "default",
+            );
+            setSummaryValue(
+                wizardAiSummaryProvidersEl,
+                t("profiles.wizard_ai_review_providers_state_empty"),
+                "default",
+            );
+            setSummaryValue(
+                wizardAiSummarySurfacesEl,
+                summary.visualSearchManaged
+                    ? (
+                        summary.visualSearchEnabled
+                            ? t("profiles.wizard_ai_review_surfaces_on")
+                            : t("profiles.wizard_ai_review_surfaces_off")
+                    )
+                    : t("profiles.wizard_review_default"),
+                summary.visualSearchManaged ? "active" : "default",
+            );
+
+            renderAiReviewJumpButtons(summary);
         }
 
         function getPermissionCategorySummary(categoryValue) {
@@ -521,6 +1003,8 @@
             const permissions = parsed?.Permissions && typeof parsed.Permissions === "object" && !Array.isArray(parsed.Permissions)
                 ? parsed.Permissions
                 : {};
+            const permissionsSummary = getPermissionsObjectSummary(permissions, []);
+            const cookiesSummary = getCookiesObjectSummary(parsed?.Cookies, []);
 
             let configuredPermissionCategories = 0;
             let lockedPermissionCategories = 0;
@@ -535,6 +1019,290 @@
                 configuredPermissionCategories,
                 lockedPermissionCategories,
                 cookieRuleCount: getCookiesReviewCount(parsed?.Cookies),
+                permissionsSummary,
+                cookiesSummary,
+            };
+        }
+
+        function getPrivacyUserDataSectionStatus(parsed) {
+            const fragments = [];
+
+            if (parsed?.DisableTelemetry === true) {
+                fragments.push(t("profiles.wizard_privacy_section_state_telemetry"));
+            }
+            if (parsed?.DisableFirefoxStudies === true) {
+                fragments.push(t("profiles.wizard_privacy_section_state_studies"));
+            }
+            if (parsed?.DisablePrivateBrowsing === true) {
+                fragments.push(t("profiles.wizard_privacy_section_state_private_browsing"));
+            }
+            if (typeof parsed?.OfferToSaveLogins === "boolean") {
+                fragments.push(
+                    parsed.OfferToSaveLogins
+                        ? t("profiles.wizard_privacy_section_state_logins_on")
+                        : t("profiles.wizard_privacy_section_state_logins_off"),
+                );
+            }
+            if (typeof parsed?.PasswordManagerEnabled === "boolean") {
+                fragments.push(
+                    parsed.PasswordManagerEnabled
+                        ? t("profiles.wizard_privacy_section_state_password_manager_on")
+                        : t("profiles.wizard_privacy_section_state_password_manager_off"),
+                );
+            }
+
+            return fragments.length
+                ? fragments.join(" • ")
+                : t("profiles.wizard_privacy_section_state_empty");
+        }
+
+        function getLockdownSectionStatus(parsed) {
+            const fragments = [];
+
+            if (parsed?.BlockAboutConfig === true) {
+                fragments.push(t("profiles.wizard_lockdown_section_state_about_config"));
+            }
+            if (parsed?.BlockAboutProfiles === true) {
+                fragments.push(t("profiles.wizard_lockdown_section_state_about_profiles"));
+            }
+            if (parsed?.DisableDeveloperTools === true) {
+                fragments.push(t("profiles.wizard_lockdown_section_state_devtools"));
+            }
+            if (parsed?.DisableBuiltinPDFViewer === true) {
+                fragments.push(t("profiles.wizard_lockdown_section_state_pdf"));
+            }
+            if (typeof parsed?.HttpsOnlyMode === "string" && parsed.HttpsOnlyMode.trim()) {
+                fragments.push(
+                    t("profiles.wizard_lockdown_section_state_https_only")
+                        .replace("{value}", formatHttpsOnlyModeLabel(parsed.HttpsOnlyMode.trim())),
+                );
+            }
+
+            return fragments.length
+                ? fragments.join(" • ")
+                : t("profiles.wizard_lockdown_section_state_empty");
+        }
+
+        function getPrivacySiteSectionStatus(summary) {
+            const fragments = [];
+
+            if (summary.configuredPermissionCategories > 0) {
+                fragments.push(
+                    t("profiles.wizard_privacy_site_section_state_permissions")
+                        .replace("{value}", formatPermissionsObjectState(summary.permissionsSummary)),
+                );
+            }
+            if (summary.cookieRuleCount > 0) {
+                fragments.push(
+                    t("profiles.wizard_privacy_site_section_state_cookies")
+                        .replace("{value}", formatCookiesObjectState(summary.cookiesSummary)),
+                );
+            }
+
+            return fragments.length
+                ? fragments.join(" • ")
+                : t("profiles.wizard_privacy_site_section_state_empty");
+        }
+
+        function renderPrivacySectionStatuses(parsed, summary) {
+            setText(wizardPrivacyUserDataSectionStatusEl, getPrivacyUserDataSectionStatus(parsed));
+            setText(wizardLockdownSectionStatusEl, getLockdownSectionStatus(parsed));
+            setText(wizardPrivacySiteSectionStatusEl, getPrivacySiteSectionStatus(summary));
+        }
+
+        function getFeatureReviewSummaryData(parsed) {
+            const extensions = parsed?.Extensions && typeof parsed.Extensions === "object" && !Array.isArray(parsed.Extensions)
+                ? parsed.Extensions
+                : {};
+            const extensionSettings = parsed?.ExtensionSettings && typeof parsed.ExtensionSettings === "object" && !Array.isArray(parsed.ExtensionSettings)
+                ? parsed.ExtensionSettings
+                : {};
+            const requestedLocales = Array.isArray(parsed?.RequestedLocales)
+                ? parsed.RequestedLocales.filter((entry) => typeof entry === "string" && entry.trim())
+                : [];
+            const generativeAi = parsed?.GenerativeAI && typeof parsed.GenerativeAI === "object" && !Array.isArray(parsed.GenerativeAI)
+                ? parsed.GenerativeAI
+                : {};
+            const extensionReview = getExtensionReviewSummaryData(parsed);
+            const websiteReview = getWebsiteAccessReviewSummaryData(parsed);
+            const bookmarkReview = getBookmarkReviewSummaryData(parsed);
+
+            return {
+                accountsManaged: typeof parsed?.DisableFirefoxAccounts === "boolean" ? 1 : 0,
+                accountsDisabled: parsed?.DisableFirefoxAccounts === true,
+                requestedLocales: requestedLocales.length,
+                translateManaged: typeof parsed?.TranslateEnabled === "boolean" ? 1 : 0,
+                translateEnabled: parsed?.TranslateEnabled === true,
+                visualSearchManaged: typeof parsed?.VisualSearchEnabled === "boolean" ? 1 : 0,
+                visualSearchEnabled: parsed?.VisualSearchEnabled === true,
+                generativeAiControls: countConfiguredObjectEntries(generativeAi),
+                extensionReview,
+                managedAddonControls: (Array.isArray(extensions.Install) ? extensions.Install.length : 0)
+                    + (Array.isArray(extensions.Locked) ? extensions.Locked.length : 0)
+                    + (Array.isArray(extensions.Uninstall) ? extensions.Uninstall.length : 0)
+                    + (typeof extensionSettings["*"]?.installation_mode === "string" && extensionSettings["*"].installation_mode.trim() ? 1 : 0)
+                    + extensionReview.curatedProfiles
+                    + extensionReview.arbitraryRules,
+                websiteHandlingRules: websiteReview.blockedSites + websiteReview.exceptions + websiteReview.handlerRules,
+                bookmarkGroups: bookmarkReview.bookmarkEntries + bookmarkReview.managedFolders,
+                websiteReview,
+                bookmarkReview,
+            };
+        }
+
+        function getExportGuidedSummaryData(parsed) {
+            const proxyConfigured = countConfiguredObjectEntries(parsed?.Proxy) > 0;
+            const network = getNetworkReviewSummaryData(parsed);
+            const home = getHomeReviewSummaryData(parsed);
+            const search = getSearchReviewSummaryData(parsed);
+            const features = getFeatureReviewSummaryData(parsed);
+            const privacy = getPrivacyReviewSummaryData(parsed);
+
+            const networkFragments = [];
+            if (proxyConfigured) {
+                networkFragments.push(t("profiles.wizard_export_guided_network_proxy"));
+            }
+            if (network.dnsEntries > 0) {
+                networkFragments.push(formatDnsOverHttpsObjectState(network.dnsOverHttps));
+            }
+            if (network.authenticationControls > 0) {
+                networkFragments.push(formatAuthenticationObjectState(network.authentication));
+            }
+            if (network.certificateEntries > 0) {
+                networkFragments.push(formatCertificatesObjectState(network.certificates));
+            }
+            if (network.windowsSsoExplicit > 0) {
+                networkFragments.push(
+                    network.windowsSsoValue === true
+                        ? t("profiles.wizard_export_guided_network_sso_on")
+                        : t("profiles.wizard_export_guided_network_sso_off"),
+                );
+            }
+
+            const homeFragments = [];
+            if (home.homepageControls > 0) {
+                homeFragments.push(formatHomepageReviewValue(home));
+            }
+            if (home.overrideSurfaces > 0) {
+                homeFragments.push(formatHomeOverridesReviewValue(home));
+            }
+            if (home.firefoxHomeManaged > 0) {
+                homeFragments.push(formatFirefoxHomeReviewValue(home));
+            }
+            if (home.userMessagingControls > 0) {
+                homeFragments.push(formatUserMessagingObjectState(home.userMessaging));
+            }
+
+            const searchFragments = [];
+            if (search.defaultControls > 0) {
+                searchFragments.push(formatSearchDefaultsReviewValue(search));
+            }
+            if (search.hiddenEngines > 0) {
+                searchFragments.push(formatHiddenEnginesReviewValue(search));
+            }
+            if (search.customEngines > 0) {
+                searchFragments.push(formatCustomEnginesReviewValue(search));
+            }
+            if (search.suggestControls > 0) {
+                searchFragments.push(formatSearchSuggestReviewValue(search));
+            }
+
+            const featureFragments = [];
+            if (features.accountsManaged > 0) {
+                featureFragments.push(
+                    features.accountsDisabled
+                        ? t("profiles.wizard_export_guided_features_accounts_off")
+                        : t("profiles.wizard_export_guided_features_accounts_on"),
+                );
+            }
+            if (features.requestedLocales > 0) {
+                featureFragments.push(formatCountText("profiles.wizard_export_guided_features_locales", features.requestedLocales));
+            }
+            if (features.translateManaged > 0) {
+                featureFragments.push(
+                    features.translateEnabled
+                        ? t("profiles.wizard_export_guided_features_translate_on")
+                        : t("profiles.wizard_export_guided_features_translate_off"),
+                );
+            }
+
+            const aiFragments = [];
+            if (features.visualSearchManaged > 0) {
+                aiFragments.push(
+                    features.visualSearchEnabled
+                        ? t("profiles.wizard_export_guided_ai_visual_search_on")
+                        : t("profiles.wizard_export_guided_ai_visual_search_off"),
+                );
+            }
+            if (features.generativeAiControls > 0) {
+                aiFragments.push(formatCountText("profiles.wizard_export_guided_ai_controls", features.generativeAiControls));
+            }
+            if (features.managedAddonControls > 0) {
+                featureFragments.push(
+                    buildCompactStateText([
+                        features.extensionReview.curatedProfiles > 0
+                            ? formatCountText("profiles.wizard_export_guided_features_addons_curated", features.extensionReview.curatedProfiles)
+                            : "",
+                        features.extensionReview.arbitraryRules > 0
+                            ? formatCountText("profiles.wizard_export_guided_features_addons_arbitrary", features.extensionReview.arbitraryRules)
+                            : "",
+                        features.extensionReview.customInstallUrls > 0
+                            ? formatCountText("profiles.wizard_export_guided_features_addons_urls", features.extensionReview.customInstallUrls)
+                            : "",
+                    ].filter(Boolean)),
+                );
+            }
+            if (features.websiteHandlingRules > 0) {
+                featureFragments.push(
+                    buildCompactStateText([
+                        features.websiteReview.blockedSites > 0
+                            ? formatCountText("profiles.wizard_review_blocked_sites_short", features.websiteReview.blockedSites)
+                            : "",
+                        features.websiteReview.exceptions > 0
+                            ? formatCountText("profiles.wizard_review_allowed_exceptions_short", features.websiteReview.exceptions)
+                            : "",
+                        features.websiteReview.handlerRules > 0
+                            ? formatHandlersObjectState(features.websiteReview.handlersSummary)
+                            : "",
+                    ].filter(Boolean)),
+                );
+            }
+            if (features.bookmarkGroups > 0) {
+                featureFragments.push(
+                    buildCompactStateText([
+                        features.bookmarkReview.bookmarkEntries > 0
+                            ? formatCountText("profiles.wizard_review_bookmarks", features.bookmarkReview.bookmarkEntries)
+                            : "",
+                        features.bookmarkReview.managedFolders > 0
+                            ? formatCountText("profiles.wizard_review_bookmark_folders", features.bookmarkReview.managedFolders)
+                            : "",
+                    ].filter(Boolean)),
+                );
+            }
+
+            const privacyFragments = [];
+            if (privacy.configuredPermissionCategories > 0) {
+                privacyFragments.push(formatPermissionsObjectState(privacy.permissionsSummary));
+            }
+            if (privacy.cookieRuleCount > 0) {
+                privacyFragments.push(formatCookiesObjectState(privacy.cookiesSummary));
+            }
+
+            return {
+                networkText: buildHumanSummaryText(networkFragments),
+                homeText: buildHumanSummaryText(homeFragments),
+                searchText: buildHumanSummaryText(searchFragments),
+                featuresText: buildHumanSummaryText(featureFragments),
+                aiText: buildHumanSummaryText(aiFragments),
+                privacyText: buildHumanSummaryText(privacyFragments),
+                networkTone: networkFragments.length ? "active" : "default",
+                homeTone: homeFragments.length ? "active" : "default",
+                searchTone: searchFragments.length ? "active" : "default",
+                featuresTone: featureFragments.length ? "active" : "default",
+                aiTone: aiFragments.length ? "active" : "default",
+                privacyTone: (privacy.lockedPermissionCategories > 0 || privacy.cookiesSummary.state === "strict")
+                    ? "strict"
+                    : (privacyFragments.length ? "active" : "default"),
             };
         }
 
@@ -568,9 +1336,28 @@
 
         function renderPrivacyReviewSummary(parsed) {
             const summary = getPrivacyReviewSummaryData(parsed);
-            setText(wizardPrivacySummaryPermissionsConfiguredEl, summary.configuredPermissionCategories);
-            setText(wizardPrivacySummaryPermissionsLockedEl, summary.lockedPermissionCategories);
-            setText(wizardPrivacySummaryCookiesEl, summary.cookieRuleCount);
+            renderPrivacySectionStatuses(parsed, summary);
+            setSummaryValue(
+                wizardPrivacySummaryPermissionsConfiguredEl,
+                formatPermissionsObjectState(summary.permissionsSummary),
+                summary.permissionsSummary.state === "strict"
+                    ? "strict"
+                    : (summary.configuredPermissionCategories > 0 ? "active" : "default"),
+            );
+            setSummaryValue(
+                wizardPrivacySummaryPermissionsLockedEl,
+                summary.lockedPermissionCategories > 0
+                    ? formatCountLabel("profiles.wizard_review_strict_permission_areas", summary.lockedPermissionCategories)
+                    : t("profiles.wizard_review_default"),
+                summary.lockedPermissionCategories > 0 ? "strict" : "default",
+            );
+            setSummaryValue(
+                wizardPrivacySummaryCookiesEl,
+                formatCookiesObjectState(summary.cookiesSummary),
+                summary.cookiesSummary.state === "strict"
+                    ? "strict"
+                    : (summary.cookieRuleCount > 0 ? "active" : "default"),
+            );
             renderPrivacyReviewJumpButtons(summary);
         }
 
@@ -615,49 +1402,60 @@
 
             const currentId = getCurrentId();
             const currentProfile = getCurrentProfile();
-            let profileState = t("profiles.wizard_export_profile_draft", "Draft only");
+            let profileState = t("profiles.wizard_export_profile_draft");
+            let profileTone = "strict";
             if (currentId && currentProfile?.is_deleted) {
-                profileState = t("profiles.wizard_export_profile_archived", "Archived profile #{id}")
+                profileState = t("profiles.wizard_export_profile_archived")
                     .replace("{id}", String(currentId));
+                profileTone = "attention";
             } else if (currentId) {
-                profileState = t("profiles.wizard_export_profile_saved", "Saved profile #{id}")
+                profileState = t("profiles.wizard_export_profile_saved")
                     .replace("{id}", String(currentId));
+                profileTone = "ready";
             }
 
             const validationTone = getValidationPreviewTone();
             let validationState = "";
+            let validationStateTone = "default";
             if (invalid) {
-                validationState = t("profiles.wizard_export_validation_invalid", "Document syntax needs attention.");
+                validationState = t("profiles.wizard_export_validation_invalid");
+                validationStateTone = "attention";
             } else if (validationTone === "error" || validationTone === "success") {
                 validationState = validationPreviewEl?.textContent || "";
+                validationStateTone = validationTone === "success" ? "ready" : "attention";
             } else {
-                validationState = t("profiles.wizard_export_validation_pending", "Validate before export if you want a fresh API check.");
+                validationState = t("profiles.wizard_export_validation_pending");
             }
 
             let exportState = "";
             let exportReadyCopy = "";
+            let exportTone = "attention";
             if (currentProfile?.is_deleted) {
-                exportState = t("profiles.wizard_export_state_archived", "Archived profiles cannot be exported until restored.");
+                exportState = t("profiles.wizard_export_state_archived");
                 exportReadyCopy = exportState;
             } else if (!currentId) {
-                exportState = t("profiles.wizard_export_state_unsaved_new", "Save this profile before export.");
-                exportReadyCopy = t("profiles.wizard_export_ready_create", "Create and save this profile first, then download JSON or YAML.");
+                exportState = t("profiles.wizard_export_state_unsaved_new");
+                exportReadyCopy = t("profiles.wizard_export_ready_create");
             } else if (invalid) {
-                exportState = t("profiles.wizard_export_state_invalid_dirty", "Fix invalid JSON/YAML before saving. Export links still point to the last saved version.");
+                exportState = t("profiles.wizard_export_state_invalid_dirty");
                 exportReadyCopy = exportState;
             } else if (dirty) {
-                exportState = t("profiles.wizard_export_state_unsaved_existing", "Unsaved changes are not in the export yet. Save first.");
+                exportState = t("profiles.wizard_export_state_unsaved_existing");
                 exportReadyCopy = exportState;
             } else {
-                exportState = t("profiles.wizard_export_state_ready", "Saved version is ready for JSON and YAML download.");
-                exportReadyCopy = t("profiles.wizard_export_ready_saved", "The saved version below matches the editor and is ready for JSON or YAML download.");
+                exportState = t("profiles.wizard_export_state_ready");
+                exportReadyCopy = t("profiles.wizard_export_ready_saved");
+                exportTone = "ready";
             }
 
             return {
                 profileState,
+                profileTone,
                 workspaceState: workspaceSignalEl?.textContent || "",
                 validationState,
+                validationStateTone,
                 exportState,
+                exportTone,
                 exportReadyCopy,
                 policyCount: topLevelKeys.length,
                 preferencesCount: Object.keys(preferences).length,
@@ -671,15 +1469,53 @@
             const resolvedSummary = summary || getFinalExportSummaryData(readWizardSchemaSource().data || {}, false, false);
             const policyIndex = getActiveSchemaPolicyIndex();
 
+            if (kind === "network") {
+                return findSettingsTarget("field:wizard-proxy-mode")
+                    || findNetworkReviewTarget("dns")
+                    || findNetworkReviewTarget("authentication")
+                    || findNetworkReviewTarget("certificates")
+                    || findNetworkReviewTarget("windows_sso");
+            }
+            if (kind === "home") {
+                return findHomeReviewTarget("homepage")
+                    || findHomeReviewTarget("overrides")
+                    || findHomeReviewTarget("firefox_home")
+                    || findHomeReviewTarget("user_messaging");
+            }
+            if (kind === "search") {
+                return findSearchReviewTarget("defaults")
+                    || findSearchReviewTarget("custom")
+                    || findSearchReviewTarget("hidden")
+                    || findSearchReviewTarget("suggest");
+            }
+            if (kind === "features") {
+                return findSettingsTarget("policy:DisableFirefoxAccounts")
+                    || findSettingsTarget("policy:RequestedLocales")
+                    || findSettingsTarget("policy:TranslateEnabled")
+                    || findSettingsTarget("field:wizard-extension-default-mode")
+                    || findSettingsTarget("policy:WebsiteFilter")
+                    || findSettingsTarget("shell-policy:6:ExtensionSettings");
+            }
+            if (kind === "ai") {
+                return findSettingsTarget("policy:GenerativeAI")
+                    || findSettingsTarget("policy:VisualSearchEnabled")
+                    || findSettingsTarget("shell-policy:7:GenerativeAI");
+            }
+            if (kind === "privacy") {
+                return findSettingsTarget("policy:Permissions")
+                    || findSettingsTarget("policy:Cookies")
+                    || findPrivacyReviewTarget("permissions")
+                    || findPrivacyReviewTarget("cookies");
+            }
             if (kind === "raw") {
                 const key = resolvedSummary.rawFallbackKeys[0];
                 const item = key ? policyIndex[key] : null;
-                return item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["7"]?.raw || editorEl);
+                return item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl);
             }
             if (kind === "deprecated") {
                 const key = resolvedSummary.deprecatedKeys[0];
                 const item = key ? policyIndex[key] : null;
-                return item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["7"]?.raw || editorEl);
+                return item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl);
             }
             if (kind === "unknown") {
                 return editorEl || overviewPanelEl;
@@ -688,6 +1524,18 @@
         }
 
         function renderFinalReviewJumpButtons(summary) {
+            [
+                { el: wizardExportSummaryNetworkJumpEl, kind: "network" },
+                { el: wizardExportSummaryHomeJumpEl, kind: "home" },
+                { el: wizardExportSummarySearchJumpEl, kind: "search" },
+                { el: wizardExportSummaryFeaturesJumpEl, kind: "features" },
+                { el: wizardExportSummaryAiJumpEl, kind: "ai" },
+                { el: wizardExportSummaryPrivacyJumpEl, kind: "privacy" },
+            ].forEach(({ el, kind }) => {
+                if (!el) return;
+                el.disabled = !findFinalReviewTarget(kind, summary);
+            });
+
             [
                 { el: wizardExportRawJumpEl, count: summary.rawFallbackKeys.length, kind: "raw" },
                 { el: wizardExportDeprecatedJumpEl, count: summary.deprecatedKeys.length, kind: "deprecated" },
@@ -706,33 +1554,33 @@
             const items = [];
 
             if (currentProfile?.is_deleted) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_archived", "Archived profile") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_archived") });
             } else if (!currentId) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_draft", "Draft only") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_draft") });
             } else {
-                items.push({ tone: "accent", label: t("profiles.wizard_export_check_saved_record", "Saved record exists") });
+                items.push({ tone: "accent", label: t("profiles.wizard_export_check_saved_record") });
             }
 
             if (invalid) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_invalid", "Invalid document") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_invalid") });
             } else {
-                items.push({ tone: "accent", label: t("profiles.wizard_export_check_syntax_ok", "Document parses") });
+                items.push({ tone: "accent", label: t("profiles.wizard_export_check_syntax_ok") });
             }
 
             if (dirty) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_unsaved", "Unsaved edits") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_unsaved") });
             } else {
-                items.push({ tone: "accent", label: t("profiles.wizard_export_check_synced", "Export matches editor") });
+                items.push({ tone: "accent", label: t("profiles.wizard_export_check_synced") });
             }
 
             if (summary.rawFallbackKeys.length > 0) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_raw", "Raw fallback present") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_raw") });
             }
             if (summary.deprecatedKeys.length > 0) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_deprecated", "Deprecated policies present") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_deprecated") });
             }
             if (summary.unknownKeys.length > 0) {
-                items.push({ tone: "warm", label: t("profiles.wizard_export_check_unknown", "Unknown keys present") });
+                items.push({ tone: "warm", label: t("profiles.wizard_export_check_unknown") });
             }
 
             if (
@@ -744,7 +1592,7 @@
                 && summary.deprecatedKeys.length === 0
                 && summary.unknownKeys.length === 0
             ) {
-                items.unshift({ tone: "accent", label: t("profiles.wizard_export_check_ready", "Ready for clean export") });
+                items.unshift({ tone: "accent", label: t("profiles.wizard_export_check_ready") });
             }
 
             wizardExportChecklistEl.innerHTML = items
@@ -759,17 +1607,32 @@
                 ? sourceState.data
                 : (currentRaw && typeof currentRaw === "object" ? currentRaw : {});
             const summary = getFinalExportSummaryData(parsed, dirty, invalid);
+            const guidedSummary = getExportGuidedSummaryData(parsed);
 
-            setText(wizardExportProfileStateEl, summary.profileState);
-            setText(wizardExportWorkspaceStateEl, summary.workspaceState);
-            setText(wizardExportValidationStateEl, summary.validationState);
-            setText(wizardExportReadyStateEl, summary.exportState);
+            setSummaryValue(wizardExportProfileStateEl, summary.profileState, summary.profileTone);
+            setSummaryValue(
+                wizardExportWorkspaceStateEl,
+                summary.workspaceState,
+                dirty ? "strict" : "ready",
+            );
+            setSummaryValue(
+                wizardExportValidationStateEl,
+                summary.validationState,
+                summary.validationStateTone,
+            );
+            setSummaryValue(wizardExportReadyStateEl, summary.exportState, summary.exportTone);
             setText(wizardExportPolicyCountEl, summary.policyCount);
             setText(wizardExportPreferencesCountEl, summary.preferencesCount);
             setText(wizardExportRawCountEl, summary.rawFallbackKeys.length);
             setText(wizardExportDeprecatedCountEl, summary.deprecatedKeys.length);
             setText(wizardExportUnknownCountEl, summary.unknownKeys.length);
             setText(wizardExportReadyCopyEl, summary.exportReadyCopy);
+            setSummaryValue(wizardExportSummaryNetworkEl, guidedSummary.networkText, guidedSummary.networkTone);
+            setSummaryValue(wizardExportSummaryHomeEl, guidedSummary.homeText, guidedSummary.homeTone);
+            setSummaryValue(wizardExportSummarySearchEl, guidedSummary.searchText, guidedSummary.searchTone);
+            setSummaryValue(wizardExportSummaryFeaturesEl, guidedSummary.featuresText, guidedSummary.featuresTone);
+            setSummaryValue(wizardExportSummaryAiEl, guidedSummary.aiText, guidedSummary.aiTone);
+            setSummaryValue(wizardExportSummaryPrivacyEl, guidedSummary.privacyText, guidedSummary.privacyTone);
             renderFinalReviewJumpButtons(summary);
             renderFinalExportChecklist(summary, dirty, invalid);
         }
@@ -787,6 +1650,7 @@
             renderNetworkReviewSummary,
             renderHomeReviewSummary,
             renderSearchReviewSummary,
+            renderAiReviewSummary,
             renderBookmarkReviewSummary,
             renderWebsiteAccessReviewSummary,
             renderPrivacyReviewSummary,

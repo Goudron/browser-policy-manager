@@ -8,6 +8,7 @@
             fromEditorValue,
             formatBooleanSelectValue,
             parseBooleanSelectValue,
+            getDefaultSchemaVersion,
         } = dependencies;
         const {
             statusEl,
@@ -28,33 +29,38 @@
         let libraryStats = { filtered: 0, total: 0 };
         let validationPreviewTone = "neutral";
 
-        let renderExtensionReviewSummaryRef = () => {};
-        let renderManualHomeAndSearchSectionStatusesRef = () => {};
-        let renderNetworkReviewSummaryRef = () => {};
-        let renderHomeReviewSummaryRef = () => {};
-        let renderSearchReviewSummaryRef = () => {};
-        let renderBookmarkReviewSummaryRef = () => {};
-        let renderWebsiteAccessReviewSummaryRef = () => {};
-        let renderPrivacyReviewSummaryRef = () => {};
-        let buildWizardSettingsSearchIndexRef = () => {};
-        let renderWizardSettingsSearchResultsRef = () => {};
-        let setWizardStepRef = () => {};
-        let updateWizardSummaryRef = () => {};
+        let renderExtensionReviewSummaryRef = () => { };
+        let renderManualHomeAndSearchSectionStatusesRef = () => { };
+        let renderNetworkReviewSummaryRef = () => { };
+        let renderHomeReviewSummaryRef = () => { };
+        let renderSearchReviewSummaryRef = () => { };
+        let renderAiReviewSummaryRef = () => { };
+        let renderBookmarkReviewSummaryRef = () => { };
+        let renderWebsiteAccessReviewSummaryRef = () => { };
+        let renderPrivacyReviewSummaryRef = () => { };
+        let buildWizardSettingsSearchIndexRef = () => { };
+        let renderWizardSettingsSearchResultsRef = () => { };
+        let setWizardStepRef = () => { };
+        let updateWizardSummaryRef = () => { };
         let currentSnapshotStateRef = () => ({ dirty: true, invalid: true });
         let saveCurrentRef = async () => false;
+        const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         let readFormStateRef = () => ({
             name: "",
             owner: null,
             description: null,
-            schemaVersion: "esr-140",
+            schemaVersion: defaultSchemaVersion,
         });
 
-        function t(key, fallback) {
-            return localeDict[key] || fallback;
+        function t(key, fallback = "") {
+            if (Object.prototype.hasOwnProperty.call(localeDict, key)) {
+                return localeDict[key];
+            }
+            return "";
         }
 
         function getActiveWizardSchemaVersion() {
-            return documentRef.getElementById("profile-type").value || wizardSchemaEl.value || "esr-140";
+            return documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
         }
 
         function readWizardSchemaSource() {
@@ -189,7 +195,7 @@
         }
 
         function setRenderExtensionReviewSummary(fn) {
-            renderExtensionReviewSummaryRef = fn || (() => {});
+            renderExtensionReviewSummaryRef = fn || (() => { });
         }
 
         function renderManualHomeAndSearchSectionStatuses(...args) {
@@ -197,7 +203,7 @@
         }
 
         function setRenderManualHomeAndSearchSectionStatuses(fn) {
-            renderManualHomeAndSearchSectionStatusesRef = fn || (() => {});
+            renderManualHomeAndSearchSectionStatusesRef = fn || (() => { });
         }
 
         function renderNetworkReviewSummary(...args) {
@@ -205,7 +211,7 @@
         }
 
         function setRenderNetworkReviewSummary(fn) {
-            renderNetworkReviewSummaryRef = fn || (() => {});
+            renderNetworkReviewSummaryRef = fn || (() => { });
         }
 
         function renderHomeReviewSummary(...args) {
@@ -213,7 +219,7 @@
         }
 
         function setRenderHomeReviewSummary(fn) {
-            renderHomeReviewSummaryRef = fn || (() => {});
+            renderHomeReviewSummaryRef = fn || (() => { });
         }
 
         function renderSearchReviewSummary(...args) {
@@ -221,7 +227,15 @@
         }
 
         function setRenderSearchReviewSummary(fn) {
-            renderSearchReviewSummaryRef = fn || (() => {});
+            renderSearchReviewSummaryRef = fn || (() => { });
+        }
+
+        function renderAiReviewSummary(...args) {
+            return renderAiReviewSummaryRef(...args);
+        }
+
+        function setRenderAiReviewSummary(fn) {
+            renderAiReviewSummaryRef = fn || (() => { });
         }
 
         function renderBookmarkReviewSummary(...args) {
@@ -229,7 +243,7 @@
         }
 
         function setRenderBookmarkReviewSummary(fn) {
-            renderBookmarkReviewSummaryRef = fn || (() => {});
+            renderBookmarkReviewSummaryRef = fn || (() => { });
         }
 
         function renderWebsiteAccessReviewSummary(...args) {
@@ -237,7 +251,7 @@
         }
 
         function setRenderWebsiteAccessReviewSummary(fn) {
-            renderWebsiteAccessReviewSummaryRef = fn || (() => {});
+            renderWebsiteAccessReviewSummaryRef = fn || (() => { });
         }
 
         function renderPrivacyReviewSummary(...args) {
@@ -245,7 +259,7 @@
         }
 
         function setRenderPrivacyReviewSummary(fn) {
-            renderPrivacyReviewSummaryRef = fn || (() => {});
+            renderPrivacyReviewSummaryRef = fn || (() => { });
         }
 
         function buildWizardSettingsSearchIndex(...args) {
@@ -253,7 +267,7 @@
         }
 
         function setBuildWizardSettingsSearchIndex(fn) {
-            buildWizardSettingsSearchIndexRef = fn || (() => {});
+            buildWizardSettingsSearchIndexRef = fn || (() => { });
         }
 
         function renderWizardSettingsSearchResults(...args) {
@@ -261,7 +275,7 @@
         }
 
         function setRenderWizardSettingsSearchResults(fn) {
-            renderWizardSettingsSearchResultsRef = fn || (() => {});
+            renderWizardSettingsSearchResultsRef = fn || (() => { });
         }
 
         function setWizardStep(...args) {
@@ -269,7 +283,7 @@
         }
 
         function setSetWizardStep(fn) {
-            setWizardStepRef = fn || (() => {});
+            setWizardStepRef = fn || (() => { });
         }
 
         function updateWizardSummary(...args) {
@@ -277,7 +291,7 @@
         }
 
         function setUpdateWizardSummary(fn) {
-            updateWizardSummaryRef = fn || (() => {});
+            updateWizardSummaryRef = fn || (() => { });
         }
 
         function currentSnapshotState(...args) {
@@ -305,7 +319,7 @@
                 name: "",
                 owner: null,
                 description: null,
-                schemaVersion: "esr-140",
+                schemaVersion: "esr-140.9",
             }));
         }
 
@@ -348,6 +362,8 @@
             setRenderHomeReviewSummary,
             renderSearchReviewSummary,
             setRenderSearchReviewSummary,
+            renderAiReviewSummary,
+            setRenderAiReviewSummary,
             renderBookmarkReviewSummary,
             setRenderBookmarkReviewSummary,
             renderWebsiteAccessReviewSummary,

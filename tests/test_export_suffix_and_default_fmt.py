@@ -11,7 +11,7 @@ def _mk_body(prefix: str = "SFX"):
     return {
         "name": f"{prefix}-{u}",
         "description": "Suffix export",
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "flags": {"DisableTelemetry": True, "DisablePrivateBrowsing": True},
     }
 

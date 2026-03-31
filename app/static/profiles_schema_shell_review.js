@@ -25,9 +25,16 @@
             const blockCount = Array.isArray(currentObject.Block) ? currentObject.Block.length : 0;
             const blockNewRequests = currentObject.BlockNewRequests === true;
             const locked = currentObject.Locked === true;
-            const hasDefault = typeof currentObject.Default === "string" && currentObject.Default.trim().length > 0;
+            const defaultValue = typeof currentObject.Default === "string" ? currentObject.Default.trim() : "";
+            const hasDefault = defaultValue.length > 0;
 
             return {
+                allowCount,
+                blockCount,
+                blockNewRequests,
+                locked,
+                hasDefault,
+                defaultValue,
                 hasRules: allowCount > 0 || blockCount > 0 || blockNewRequests || locked || hasDefault,
                 hasStrictControl: blockNewRequests || locked,
             };
@@ -81,30 +88,30 @@
         function formatBookmarkArrayRowState(policyId, state) {
             if (policyId === "Bookmarks") {
                 if (state === "toolbar") {
-                    return t("profiles.wizard_bookmarks_row_state_toolbar", "Toolbar bookmark");
+                    return t("profiles.wizard_bookmarks_row_state_toolbar");
                 }
                 if (state === "menu") {
-                    return t("profiles.wizard_bookmarks_row_state_menu", "Menu bookmark");
+                    return t("profiles.wizard_bookmarks_row_state_menu");
                 }
                 if (state === "draft") {
-                    return t("profiles.wizard_bookmarks_row_state_draft", "Incomplete bookmark");
+                    return t("profiles.wizard_bookmarks_row_state_draft");
                 }
-                return t("profiles.wizard_bookmarks_row_state_empty", "No bookmark fields yet");
+                return t("profiles.wizard_bookmarks_row_state_empty");
             }
 
             if (state === "children") {
-                return t("profiles.wizard_managed_bookmarks_row_state_children", "Folder with nested children");
+                return t("profiles.wizard_managed_bookmarks_row_state_children");
             }
             if (state === "name_only") {
-                return t("profiles.wizard_managed_bookmarks_row_state_name_only", "Folder name only");
+                return t("profiles.wizard_managed_bookmarks_row_state_name_only");
             }
             if (state === "tree_only") {
-                return t("profiles.wizard_managed_bookmarks_row_state_tree_only", "Children tree only");
+                return t("profiles.wizard_managed_bookmarks_row_state_tree_only");
             }
             if (state === "invalid") {
-                return t("profiles.wizard_managed_bookmarks_row_state_invalid", "Children JSON needs attention");
+                return t("profiles.wizard_managed_bookmarks_row_state_invalid");
             }
-            return t("profiles.wizard_managed_bookmarks_row_state_empty", "No managed folder fields yet");
+            return t("profiles.wizard_managed_bookmarks_row_state_empty");
         }
 
         function renderBookmarkArrayStatuses(card) {
@@ -177,22 +184,33 @@
 
         function formatWebsiteFilterObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_website_filter_state_invalid", "Site filter values need attention");
+                return t("profiles.wizard_website_filter_state_invalid");
             }
             if (summary.state === "configured") {
-                return t("profiles.wizard_website_filter_state_configured", "Blocked: {blocked} • Exceptions: {exceptions}")
-                    .replace("{blocked}", String(summary.blockedCount))
-                    .replace("{exceptions}", String(summary.exceptionCount));
+                const parts = [];
+                if (summary.blockedCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_blocked_sites")
+                            .replace("{count}", String(summary.blockedCount)),
+                    );
+                }
+                if (summary.exceptionCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_allowed_exceptions")
+                            .replace("{count}", String(summary.exceptionCount)),
+                    );
+                }
+                return parts.join(" • ");
             }
             if (summary.blockedCount > 0) {
-                return t("profiles.wizard_website_filter_state_blocked_only", "Blocked sites: {blocked}")
-                    .replace("{blocked}", String(summary.blockedCount));
+                return t("profiles.wizard_review_blocked_sites")
+                    .replace("{count}", String(summary.blockedCount));
             }
             if (summary.exceptionCount > 0) {
-                return t("profiles.wizard_website_filter_state_exceptions_only", "Exceptions only: {exceptions}")
-                    .replace("{exceptions}", String(summary.exceptionCount));
+                return t("profiles.wizard_review_allowed_exceptions")
+                    .replace("{count}", String(summary.exceptionCount));
             }
-            return t("profiles.wizard_website_filter_state_empty", "No site filter rules yet");
+            return t("profiles.wizard_website_filter_state_empty");
         }
 
         function getAuthenticationObjectSummary(entryValue, parseErrors = []) {
@@ -225,6 +243,11 @@
             return {
                 configuredControls,
                 hostRuleCount,
+                spnegoCount,
+                delegatedCount,
+                ntlmCount,
+                allowNonFqdnCount,
+                allowProxiesCount,
                 locked,
                 privateBrowsing,
                 state,
@@ -233,21 +256,49 @@
 
         function formatAuthenticationObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_authentication_state_invalid", "Authentication values need attention");
+                return t("profiles.wizard_authentication_state_invalid");
             }
             if (summary.state === "configured") {
-                let text = t("profiles.wizard_authentication_state_configured", "Controls: {controls} • Host rules: {rules}")
-                    .replace("{controls}", String(summary.configuredControls))
-                    .replace("{rules}", String(summary.hostRuleCount));
+                const parts = [];
+                if (summary.spnegoCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_auth_spnego")
+                            .replace("{count}", String(summary.spnegoCount)),
+                    );
+                }
+                if (summary.delegatedCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_auth_delegated")
+                            .replace("{count}", String(summary.delegatedCount)),
+                    );
+                }
+                if (summary.ntlmCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_auth_ntlm")
+                            .replace("{count}", String(summary.ntlmCount)),
+                    );
+                }
+                if (summary.allowNonFqdnCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_auth_short_hosts")
+                            .replace("{count}", String(summary.allowNonFqdnCount)),
+                    );
+                }
+                if (summary.allowProxiesCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_auth_proxy")
+                            .replace("{count}", String(summary.allowProxiesCount)),
+                    );
+                }
                 if (summary.locked) {
-                    text += ` • ${t("profiles.wizard_authentication_state_locked", "Locked")}`;
+                    parts.push(t("profiles.wizard_review_locked"));
                 }
                 if (summary.privateBrowsing) {
-                    text += ` • ${t("profiles.wizard_authentication_state_private", "Private windows")}`;
+                    parts.push(t("profiles.wizard_review_private_windows"));
                 }
-                return text;
+                return parts.join(" • ");
             }
-            return t("profiles.wizard_authentication_state_empty", "No enterprise authentication rules yet");
+            return t("profiles.wizard_authentication_state_empty");
         }
 
         function getCertificatesObjectSummary(entryValue, parseErrors = []) {
@@ -273,20 +324,23 @@
 
         function formatCertificatesObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_certificates_state_invalid", "Certificate values need attention");
+                return t("profiles.wizard_certificates_state_invalid");
             }
             if (summary.installCount > 0 && summary.importEnterpriseRoots) {
-                return t("profiles.wizard_certificates_state_with_roots", "Installed: {count} • Enterprise roots enabled")
-                    .replace("{count}", String(summary.installCount));
+                return [
+                    t("profiles.wizard_review_certificate_files")
+                        .replace("{count}", String(summary.installCount)),
+                    t("profiles.wizard_review_enterprise_roots"),
+                ].join(" • ");
             }
             if (summary.installCount > 0) {
-                return t("profiles.wizard_certificates_state_installed", "Installed certificates: {count}")
+                return t("profiles.wizard_review_certificate_files")
                     .replace("{count}", String(summary.installCount));
             }
             if (summary.importEnterpriseRoots) {
-                return t("profiles.wizard_certificates_state_roots_only", "Enterprise roots enabled");
+                return t("profiles.wizard_review_enterprise_roots");
             }
-            return t("profiles.wizard_certificates_state_empty", "No managed certificate trust yet");
+            return t("profiles.wizard_certificates_state_empty");
         }
 
         function getDnsOverHttpsObjectSummary(entryValue, parseErrors = []) {
@@ -324,34 +378,34 @@
 
         function formatDnsOverHttpsObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_doh_state_invalid", "DNS-over-HTTPS values need attention");
+                return t("profiles.wizard_doh_state_invalid");
             }
             if (summary.state !== "configured") {
-                return t("profiles.wizard_doh_state_empty", "No DNS-over-HTTPS rules yet");
+                return t("profiles.wizard_doh_state_empty");
             }
 
             const parts = [];
             if (summary.hasEnabled) {
                 parts.push(
                     summary.enabled
-                        ? t("profiles.wizard_doh_state_enabled", "Enabled")
-                        : t("profiles.wizard_doh_state_disabled", "Disabled"),
+                        ? t("profiles.wizard_doh_state_enabled")
+                        : t("profiles.wizard_doh_state_disabled"),
                 );
             }
             if (summary.hasProvider) {
-                parts.push(t("profiles.wizard_doh_state_provider", "Custom provider"));
+                parts.push(t("profiles.wizard_doh_state_provider"));
             }
             if (summary.excludedCount > 0) {
                 parts.push(
-                    t("profiles.wizard_doh_state_excluded", "Excluded: {count}")
+                    t("profiles.wizard_review_excluded_domains")
                         .replace("{count}", String(summary.excludedCount)),
                 );
             }
             if (summary.locked) {
-                parts.push(t("profiles.wizard_doh_state_locked", "Locked"));
+                parts.push(t("profiles.wizard_review_locked"));
             }
             if (summary.fallbackDisabled) {
-                parts.push(t("profiles.wizard_doh_state_no_fallback", "No fallback"));
+                parts.push(t("profiles.wizard_doh_state_no_fallback"));
             }
             return parts.join(" • ");
         }
@@ -394,17 +448,17 @@
 
         function formatUserMessagingObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_user_messaging_state_invalid", "Messaging values need attention");
+                return t("profiles.wizard_user_messaging_state_invalid");
             }
             if (summary.state !== "configured") {
-                return t("profiles.wizard_user_messaging_state_empty", "No messaging controls yet");
+                return t("profiles.wizard_user_messaging_state_empty");
             }
 
-            let text = t("profiles.wizard_user_messaging_state_configured", "Enabled: {enabled} • Hidden: {disabled}")
+            let text = t("profiles.wizard_user_messaging_state_configured")
                 .replace("{enabled}", String(summary.enabledCount))
                 .replace("{disabled}", String(summary.disabledCount));
             if (summary.locked) {
-                text += ` • ${t("profiles.wizard_user_messaging_state_locked", "Locked")}`;
+                text += ` • ${t("profiles.wizard_user_messaging_state_locked")}`;
             }
             return text;
         }
@@ -419,21 +473,35 @@
 
         function formatPermissionsNestedState(summary) {
             if (!summary.hasRules) {
-                return t("profiles.wizard_permissions_nested_state_empty", "No allow/block rules yet");
+                return t("profiles.wizard_permissions_nested_state_empty");
             }
 
-            let text = t("profiles.wizard_permissions_nested_state_configured", "Allow: {allow} • Block: {block}")
-                .replace("{allow}", String(summary.allowCount))
-                .replace("{block}", String(summary.blockCount));
-
+            const parts = [];
             if (summary.hasDefault) {
-                text += ` • ${t("profiles.wizard_permissions_nested_default", "Default: {value}").replace("{value}", String(summary.defaultValue || ""))}`;
+                parts.push(
+                    t("profiles.wizard_permissions_nested_default")
+                        .replace("{value}", String(summary.defaultValue || "")),
+                );
             }
-            if (summary.hasStrictControl) {
-                text += ` • ${t("profiles.wizard_permissions_nested_state_strict", "Strict")}`;
+            if (summary.allowCount > 0) {
+                parts.push(
+                    t("profiles.wizard_review_allowed_sites")
+                        .replace("{count}", String(summary.allowCount)),
+                );
             }
-
-            return text;
+            if (summary.blockCount > 0) {
+                parts.push(
+                    t("profiles.wizard_review_blocked_sites")
+                        .replace("{count}", String(summary.blockCount)),
+                );
+            }
+            if (summary.blockNewRequests) {
+                parts.push(t("profiles.wizard_review_block_new_requests"));
+            }
+            if (summary.locked) {
+                parts.push(t("profiles.wizard_review_locked"));
+            }
+            return parts.join(" • ");
         }
 
         function renderPermissionsNestedStatuses(card) {
@@ -449,21 +517,20 @@
                 const hasParseError = pathHasSchemaParseError(path, parseErrors);
                 const categoryValue = getSchemaNestedValueAtPath(entryValue, path);
                 const categorySummary = hasParseError
-                    ? { hasRules: false, hasDefault: false, defaultValue: "", allowCount: 0, blockCount: 0, hasStrictControl: false }
-                    : (() => {
-                        const currentObject = categoryValue && typeof categoryValue === "object" && !Array.isArray(categoryValue) ? categoryValue : {};
-                        const base = getPermissionCategorySummary(currentObject);
-                        return {
-                            ...base,
-                            allowCount: Array.isArray(currentObject.Allow) ? currentObject.Allow.length : 0,
-                            blockCount: Array.isArray(currentObject.Block) ? currentObject.Block.length : 0,
-                            hasDefault: typeof currentObject.Default === "string" && currentObject.Default.trim().length > 0,
-                            defaultValue: typeof currentObject.Default === "string" ? currentObject.Default.trim() : "",
-                        };
-                    })();
+                    ? {
+                        hasRules: false,
+                        hasDefault: false,
+                        defaultValue: "",
+                        allowCount: 0,
+                        blockCount: 0,
+                        blockNewRequests: false,
+                        locked: false,
+                        hasStrictControl: false,
+                    }
+                    : getPermissionCategorySummary(categoryValue);
 
                 const text = hasParseError
-                    ? t("profiles.wizard_permissions_state_invalid", "Permission values need attention")
+                    ? t("profiles.wizard_permissions_state_invalid")
                     : formatPermissionsNestedState(categorySummary);
                 applySchemaNestedStatus(container, text);
             });
@@ -472,9 +539,9 @@
         function formatHandlersNestedDictionaryState(entryValue) {
             const count = countHandlerRuleBucket(entryValue);
             if (!count) {
-                return t("profiles.wizard_handlers_nested_dictionary_empty", "No entries yet");
+                return t("profiles.wizard_handlers_nested_dictionary_empty");
             }
-            return t("profiles.wizard_handlers_nested_dictionary_configured", "Entries: {count}")
+            return t("profiles.wizard_review_handler_entries")
                 .replace("{count}", String(count));
         }
 
@@ -485,11 +552,11 @@
             const hasRules = Boolean(action || currentObject.ask === true || currentObject.ask === false || handlerCount > 0);
 
             if (!hasRules) {
-                return t("profiles.wizard_handlers_nested_object_empty", "No handler rule yet");
+                return t("profiles.wizard_handlers_nested_object_empty");
             }
 
-            const actionLabel = action || t("profiles.wizard_handlers_nested_action_inherit", "inherit");
-            return t("profiles.wizard_handlers_nested_object_configured", "Action: {action} • Apps: {count}")
+            const actionLabel = action || t("profiles.wizard_handlers_nested_action_inherit");
+            return t("profiles.wizard_review_handler_action")
                 .replace("{action}", actionLabel)
                 .replace("{count}", String(handlerCount));
         }
@@ -497,9 +564,9 @@
         function formatHandlersNestedArrayState(entryValue) {
             const count = Array.isArray(entryValue) ? entryValue.length : 0;
             if (!count) {
-                return t("profiles.wizard_handlers_nested_array_empty", "No helper apps yet");
+                return t("profiles.wizard_handlers_nested_array_empty");
             }
-            return t("profiles.wizard_handlers_nested_array_configured", "Helper apps: {count}")
+            return t("profiles.wizard_review_helper_apps")
                 .replace("{count}", String(count));
         }
 
@@ -520,7 +587,7 @@
                 let text = "";
 
                 if (hasParseError) {
-                    text = t("profiles.wizard_handlers_state_invalid", "Handler values need attention");
+                    text = t("profiles.wizard_handlers_state_invalid");
                 } else if (container.dataset.schemaNestedKind === "nested-dictionary-object") {
                     text = formatHandlersNestedDictionaryState(value);
                 } else if (container.dataset.schemaNestedKind === "nested-array-of-objects") {
@@ -562,26 +629,34 @@
 
         function formatPermissionsObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_permissions_state_invalid", "Permission values need attention");
+                return t("profiles.wizard_permissions_state_invalid");
             }
             if (summary.state === "strict") {
-                return t("profiles.wizard_permissions_state_strict", "Configured: {configured} • Strict: {strict}")
+                return t("profiles.wizard_review_permissions_strict")
                     .replace("{configured}", String(summary.configuredCategories))
                     .replace("{strict}", String(summary.strictCategories));
             }
             if (summary.state === "configured") {
-                return t("profiles.wizard_permissions_state_configured", "Configured categories: {configured}")
+                return t("profiles.wizard_review_permissions_configured")
                     .replace("{configured}", String(summary.configuredCategories));
             }
-            return t("profiles.wizard_permissions_state_empty", "No permission categories configured");
+            return t("profiles.wizard_permissions_state_empty");
         }
 
         function getCookiesObjectSummary(entryValue, parseErrors = []) {
-            const ruleCount = getCookiesReviewCount(entryValue);
             const currentObject = entryValue && typeof entryValue === "object" && !Array.isArray(entryValue) ? entryValue : {};
+            const allowCount = Array.isArray(currentObject.Allow) ? currentObject.Allow.length : 0;
+            const allowSessionCount = Array.isArray(currentObject.AllowSession) ? currentObject.AllowSession.length : 0;
+            const blockCount = Array.isArray(currentObject.Block) ? currentObject.Block.length : 0;
+            const ruleCount = allowCount + allowSessionCount + blockCount;
+            const behavior = typeof currentObject.Behavior === "string" ? currentObject.Behavior.trim() : "";
+            const behaviorPrivateBrowsing = typeof currentObject.BehaviorPrivateBrowsing === "string"
+                ? currentObject.BehaviorPrivateBrowsing.trim()
+                : "";
+            const locked = currentObject.Locked === true;
             const strictMode = currentObject.Locked === true
-                || (typeof currentObject.Behavior === "string" && currentObject.Behavior.trim() && currentObject.Behavior !== "accept")
-                || (typeof currentObject.BehaviorPrivateBrowsing === "string" && currentObject.BehaviorPrivateBrowsing.trim() && currentObject.BehaviorPrivateBrowsing !== "accept");
+                || (behavior && behavior !== "accept")
+                || (behaviorPrivateBrowsing && behaviorPrivateBrowsing !== "accept");
             let state = "empty";
 
             if (parseErrors.length > 0) {
@@ -593,6 +668,12 @@
             }
 
             return {
+                allowCount,
+                allowSessionCount,
+                blockCount,
+                behavior,
+                behaviorPrivateBrowsing,
+                locked,
                 ruleCount,
                 state,
             };
@@ -600,17 +681,34 @@
 
         function formatCookiesObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_cookies_state_invalid", "Cookie values need attention");
+                return t("profiles.wizard_cookies_state_invalid");
             }
-            if (summary.state === "strict") {
-                return t("profiles.wizard_cookies_state_strict", "Cookie rules: {count} • Restricted")
-                    .replace("{count}", String(summary.ruleCount));
+            if (summary.state === "configured" || summary.state === "strict") {
+                const parts = [];
+                if (summary.behavior) {
+                    parts.push(
+                        t("profiles.wizard_permissions_nested_default")
+                            .replace("{value}", String(summary.behavior)),
+                    );
+                }
+                if (summary.behaviorPrivateBrowsing) {
+                    parts.push(
+                        t("profiles.wizard_review_private_windows_default")
+                            .replace("{value}", String(summary.behaviorPrivateBrowsing)),
+                    );
+                }
+                if (summary.ruleCount > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_cookie_exceptions")
+                            .replace("{count}", String(summary.ruleCount)),
+                    );
+                }
+                if (summary.locked) {
+                    parts.push(t("profiles.wizard_review_locked"));
+                }
+                return parts.join(" • ");
             }
-            if (summary.state === "configured") {
-                return t("profiles.wizard_cookies_state_configured", "Cookie rules configured: {count}")
-                    .replace("{count}", String(summary.ruleCount));
-            }
-            return t("profiles.wizard_cookies_state_empty", "No cookie rules yet");
+            return t("profiles.wizard_cookies_state_empty");
         }
 
         function getHandlersObjectSummary(entryValue, parseErrors = []) {
@@ -638,16 +736,31 @@
 
         function formatHandlersObjectState(summary) {
             if (summary.state === "invalid") {
-                return t("profiles.wizard_handlers_state_invalid", "Handler values need attention");
+                return t("profiles.wizard_handlers_state_invalid");
             }
             if (summary.state === "configured") {
-                return t("profiles.wizard_handlers_state_configured", "Mappings: {total} • MIME: {mime} • Schemes: {schemes} • Extensions: {extensions}")
-                    .replace("{total}", String(summary.totalRules))
-                    .replace("{mime}", String(summary.mimeTypeRules))
-                    .replace("{schemes}", String(summary.schemeRules))
-                    .replace("{extensions}", String(summary.extensionRules));
+                const parts = [];
+                if (summary.mimeTypeRules > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_handler_mime")
+                            .replace("{count}", String(summary.mimeTypeRules)),
+                    );
+                }
+                if (summary.schemeRules > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_handler_schemes")
+                            .replace("{count}", String(summary.schemeRules)),
+                    );
+                }
+                if (summary.extensionRules > 0) {
+                    parts.push(
+                        t("profiles.wizard_review_handler_extensions")
+                            .replace("{count}", String(summary.extensionRules)),
+                    );
+                }
+                return parts.join(" • ");
             }
-            return t("profiles.wizard_handlers_state_empty", "No handler mappings yet");
+            return t("profiles.wizard_handlers_state_empty");
         }
 
         function renderWebsiteFilterObjectStatus(card) {
@@ -829,24 +942,24 @@
 
         function formatExtensionSettingsDictionaryRowState(state) {
             if (state === "catalog_url") {
-                return t("profiles.wizard_extension_settings_row_state_catalog_url", "Uses catalog install URL");
+                return t("profiles.wizard_extension_settings_row_state_catalog_url");
             }
             if (state === "custom_url") {
-                return t("profiles.wizard_extension_settings_row_state_custom_url", "Custom install URL");
+                return t("profiles.wizard_extension_settings_row_state_custom_url");
             }
             if (state === "install_url") {
-                return t("profiles.wizard_extension_settings_row_state_install_url", "Install URL rule");
+                return t("profiles.wizard_extension_settings_row_state_install_url");
             }
             if (state === "mode_only") {
-                return t("profiles.wizard_extension_settings_row_state_mode_only", "Mode-only rule");
+                return t("profiles.wizard_extension_settings_row_state_mode_only");
             }
             if (state === "flags_only") {
-                return t("profiles.wizard_extension_settings_row_state_flags_only", "Behavior flags only");
+                return t("profiles.wizard_extension_settings_row_state_flags_only");
             }
             if (state === "configured") {
-                return t("profiles.wizard_extension_settings_row_state_configured", "Rule configured");
+                return t("profiles.wizard_extension_settings_row_state_configured");
             }
-            return t("profiles.wizard_extension_settings_row_state_missing", "No managed fields yet");
+            return t("profiles.wizard_extension_settings_row_state_missing");
         }
 
         function renderExtensionSettingsDictionaryStatuses(card) {
@@ -902,9 +1015,21 @@
         return {
             renderSchemaPolicyReviewState,
             getAuthenticationObjectSummary,
+            formatAuthenticationObjectState,
             getCertificatesObjectSummary,
+            formatCertificatesObjectState,
             getDnsOverHttpsObjectSummary,
+            formatDnsOverHttpsObjectState,
+            getWebsiteFilterObjectSummary,
+            formatWebsiteFilterObjectState,
+            getPermissionsObjectSummary,
+            formatPermissionsObjectState,
+            getCookiesObjectSummary,
+            formatCookiesObjectState,
+            getHandlersObjectSummary,
+            formatHandlersObjectState,
             getUserMessagingObjectSummary,
+            formatUserMessagingObjectState,
         };
     }
 

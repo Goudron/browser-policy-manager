@@ -11,7 +11,7 @@ def _mk(prefix: str = "EXY"):
     return {
         "name": f"{prefix}-{u}",
         "description": "YAML download path",
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "flags": {"DisableTelemetry": True},
     }
 

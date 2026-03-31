@@ -1,20 +1,19 @@
 <div class="app-layout grid grid-cols-1 gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
     <aside class="sidebar-column space-y-4 xl:sticky xl:top-6 xl:self-start">
-        <section id="library-panel" class="panel-card sidebar-card surface-panel rounded-[28px] p-4 shadow-soft fade-up">
+        <section id="library-panel"
+            class="panel-card sidebar-card surface-panel rounded-[28px] p-4 shadow-soft fade-up">
             <div class="compact-sidebar-head">
                 <div>
-                    <div class="section-kicker mb-1" data-i18n="profiles.sidebar_title">Profile library</div>
-                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.sidebar_hint">
-                        Select a profile or start a new draft.
-                    </p>
+                    <div class="section-kicker mb-1" data-i18n="profiles.sidebar_title">{{ tr("profiles.sidebar_title") }}</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.sidebar_hint">{{ tr("profiles.sidebar_hint") }}</p>
                 </div>
                 <div class="flex flex-wrap items-center justify-end gap-2 text-xs font-semibold">
                     <div class="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
-                        <span data-i18n="profiles.library_filtered_short">Filtered</span>
+                        <span data-i18n="profiles.library_filtered_short">{{ tr("profiles.library_filtered_short") }}</span>
                         <strong id="list-summary" class="ml-1">0</strong>
                     </div>
                     <div class="rounded-full bg-emerald-50 px-3 py-1 text-emerald-800">
-                        <span data-i18n="profiles.library_total_short">Library</span>
+                        <span data-i18n="profiles.library_total_short">{{ tr("profiles.library_total_short") }}</span>
                         <strong id="list-total-summary" class="ml-1">0</strong>
                     </div>
                 </div>
@@ -23,23 +22,23 @@
             <div class="mb-4">
                 <button id="refresh"
                     class="button-base ghost-button soft-input inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                    title="Reload" data-i18n-title="profiles.reload">
-                    <span data-i18n="profiles.reload">Reload</span>
+                    title="{{ tr('profiles.reload') }}" data-i18n-title="profiles.reload">
+                    <span data-i18n="profiles.reload">{{ tr("profiles.reload") }}</span>
                 </button>
             </div>
 
             <div class="support-hidden">
-                <input id="search" type="text" placeholder="Search..." data-i18n-placeholder="profiles.search" />
+                <input id="search" type="text" placeholder="{{ tr('profiles.search') }}" data-i18n-placeholder="profiles.search" />
                 <input id="include-deleted" type="checkbox" />
                 <select id="sort">
-                    <option value="updated_at">Updated</option>
-                    <option value="created_at">Created</option>
-                    <option value="name">Name</option>
-                    <option value="id">ID</option>
+                    <option value="updated_at" data-i18n="profiles.sort_updated_at">{{ tr("profiles.sort_updated_at", "Updated") }}</option>
+                    <option value="created_at" data-i18n="profiles.sort_created_at">{{ tr("profiles.sort_created_at", "Created") }}</option>
+                    <option value="name" data-i18n="profiles.sort_name">{{ tr("profiles.sort_name", "Name") }}</option>
+                    <option value="id" data-i18n="profiles.sort_id">{{ tr("profiles.sort_id", "ID") }}</option>
                 </select>
                 <select id="order">
-                    <option value="desc">DESC</option>
-                    <option value="asc">ASC</option>
+                    <option value="desc" data-i18n="profiles.order_desc">{{ tr("profiles.order_desc", "DESC") }}</option>
+                    <option value="asc" data-i18n="profiles.order_asc">{{ tr("profiles.order_asc", "ASC") }}</option>
                 </select>
             </div>
 
@@ -54,61 +53,84 @@
                     <div class="compact-profile-meta">
                         <h2 id="current-name" class="headline-font text-3xl font-semibold tracking-tight text-slate-900"
                             data-i18n="profiles.none_selected">
-                            Nothing selected
+                            {{ tr("profiles.none_selected") }}
                         </h2>
-                        <span id="profile-state-badge"
-                            class="state-chip state-chip--draft"
+                        <span id="profile-state-badge" class="state-chip state-chip--draft"
                             data-i18n="profiles.badge_draft">
-                            Draft
+                            {{ tr("profiles.badge_draft") }}
                         </span>
-                        <span id="workspace-signal"
-                            class="signal-chip signal-chip--saved"
+                        <span id="workspace-signal" class="signal-chip signal-chip--saved"
                             data-i18n="profiles.signal_saved">
-                            All changes saved
+                            {{ tr("profiles.signal_saved") }}
                         </span>
                     </div>
                     <p class="compact-profile-copy" id="current-meta"></p>
+                    <div class="workspace-scope-switch surface-soft-box" id="workspace-scope-switch">
+                        <div class="workspace-scope-copy">
+                            <div class="section-kicker" data-i18n="profiles.workspace_scope_title">{{ tr("profiles.workspace_scope_title") }}</div>
+                            <p class="workspace-scope-body" data-i18n="profiles.workspace_scope_body">{{ tr("profiles.workspace_scope_body") }}</p>
+                        </div>
+                        <div class="workspace-scope-actions">
+                            <button
+                                type="button"
+                                id="workspace-scope-guided"
+                                class="button-base ghost-button workspace-scope-button workspace-scope-button--active"
+                                data-i18n="profiles.workspace_scope_guided">
+                                {{ tr("profiles.workspace_scope_guided") }}
+                            </button>
+                            <button
+                                type="button"
+                                id="workspace-scope-advanced"
+                                class="button-base ghost-button workspace-scope-button"
+                                data-i18n="profiles.workspace_scope_advanced">
+                                {{ tr("profiles.workspace_scope_advanced") }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="support-hidden" aria-live="polite">
                     <div id="workspace-helper">
                         <h3 id="workspace-helper-title" data-i18n="profiles.helper_no_selection_title">
-                            Choose a profile from the library to open it
+                            {{ tr("profiles.helper_no_selection_title") }}
                         </h3>
                         <p id="workspace-helper-copy" data-i18n="profiles.helper_no_selection_body">
-                            Click any profile card on the left. Once opened, its metadata appears here and its browser policies load into the document editor below.
+                            {{ tr("profiles.helper_no_selection_body") }}
                         </p>
                     </div>
-                    <div id="overview-schema">ESR 140</div>
+                    <div id="overview-schema">{{ schema_channels_catalog.default_label }}</div>
                     <div id="overview-mode">JSON</div>
-                    <div id="overview-status">All changes saved</div>
-                    <div id="overview-context">New draft</div>
+                    <div id="overview-status">{{ tr("profiles.signal_saved") }}</div>
+                    <div id="overview-context">{{ tr("profiles.overview_draft") }}</div>
                 </div>
             </div>
         </section>
 
         <div class="content-grid grid gap-4">
-            <section id="details-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <section
+                id="details-panel"
+                data-workspace-scope-panel="advanced"
+                class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
                 <div class="compact-profile-bar">
-                    <label style="grid-column: 1 / -1;">
-                        <div class="field-label mb-1" data-i18n="profiles.name_label">Profile name</div>
-                        <input id="profile-name" type="text"
-                            class="soft-input w-full rounded-2xl px-4 py-3 text-sm"
-                            placeholder="Corporate baseline"
-                            data-i18n-placeholder="profiles.name_placeholder" />
+                    <label class="compact-profile-span-full">
+                        <div class="field-label mb-1" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</div>
+                        <input id="profile-name" type="text" class="soft-input w-full rounded-2xl px-4 py-3 text-sm"
+                            placeholder="{{ tr('profiles.name_placeholder') }}" data-i18n-placeholder="profiles.name_placeholder" />
                         <div id="name-hint" class="mt-2 text-xs text-slate-500" data-i18n="profiles.name_hint">
-                            Choose a unique name for a new profile draft.
+                            {{ tr("profiles.name_hint") }}
                         </div>
                     </label>
                     <label>
-                        <div class="field-label mb-1" data-i18n="profiles.schema_label">Schema</div>
-                        <select id="profile-type" class="soft-input w-full rounded-2xl px-3 py-3 text-sm" title="Schema profile">
-                            <option value="esr-140">ESR 140</option>
-                            <option value="release-148">Release 148</option>
+                        <div class="field-label mb-1" data-i18n="profiles.schema_label">{{ tr("profiles.schema_label") }}</div>
+                        <select id="profile-type" class="soft-input w-full rounded-2xl px-3 py-3 text-sm"
+                            title="{{ tr('profiles.schema_label') }}">
+                            {% for option in schema_channels_catalog.options %}
+                            <option value="{{ option.value }}">{{ option.label }}</option>
+                            {% endfor %}
                         </select>
                     </label>
                     <label>
-                        <div class="field-label mb-1" data-i18n="profiles.mode_label">Editor mode</div>
+                        <div class="field-label mb-1" data-i18n="profiles.mode_label">{{ tr("profiles.mode_label") }}</div>
                         <select id="mode" class="soft-input w-full rounded-2xl px-3 py-3 text-sm">
                             <option value="json" selected>JSON</option>
                             <option value="yaml">YAML</option>
@@ -117,49 +139,70 @@
                     <a id="download-json" href="#" target="_blank"
                         class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                         data-i18n="profiles.download_json">
-                        Download JSON
+                        {{ tr("profiles.download_json") }}
                     </a>
                     <a id="download-yaml" href="#" target="_blank"
                         class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                         data-i18n="profiles.download_yaml">
-                        Download YAML
+                        {{ tr("profiles.download_yaml") }}
+                    </a>
+                    <a id="download-firefox-policies" href="#" target="_blank"
+                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-i18n="profiles.download_firefox_policies_json">
+                        {{ tr("profiles.download_firefox_policies_json") }}
                     </a>
                 </div>
 
                 <div class="support-hidden">
-                    <input id="profile-owner" type="text"
-                        placeholder="ops@example.org"
+                    <input id="profile-owner" type="text" placeholder="{{ tr('profiles.owner_placeholder') }}"
                         data-i18n-placeholder="profiles.owner_placeholder" />
-                    <textarea id="profile-description"
-                        placeholder="Short operational note for this profile"
+                    <textarea id="profile-description" placeholder="{{ tr('profiles.description_placeholder') }}"
                         data-i18n-placeholder="profiles.description_placeholder"></textarea>
                 </div>
             </section>
         </div>
 
-        <section id="editor-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+        <section
+            id="advanced-handoff-panel"
+            data-workspace-scope-panel="guided"
+            class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="editor-header mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <div class="section-kicker mb-2" data-i18n="profiles.advanced_handoff_title">{{ tr("profiles.advanced_handoff_title") }}</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.advanced_handoff_body">{{ tr("profiles.advanced_handoff_body") }}</p>
+                </div>
+                <button
+                    type="button"
+                    class="button-base ghost-button"
+                    data-workspace-scope-target="advanced"
+                    data-i18n="profiles.advanced_handoff_open">
+                    {{ tr("profiles.advanced_handoff_open") }}
+                </button>
+            </div>
+        </section>
+
+        <section
+            id="editor-panel"
+            data-workspace-scope-panel="advanced"
+            class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
             <div class="editor-header mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div>
-                    <div class="section-kicker mb-2" data-i18n="profiles.editor_title_section">Policy document</div>
-                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.editor_section_hint">
-                        Monaco handles JSON or YAML editing with formatting and validation shortcuts.
-                    </p>
+                    <div class="section-kicker mb-2" data-i18n="profiles.editor_title_section">{{ tr("profiles.editor_title_section") }}</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.editor_section_hint">{{ tr("profiles.editor_section_hint") }}</p>
                 </div>
                 <div class="editor-note-box surface-soft-box rounded-[22px] px-4 py-3 text-sm text-slate-600">
-                    <span data-i18n="profiles.editor_note">
-                    One structured editor, one validation route, and direct exports to `/api/export/profiles`.
-                    </span>
+                    <span data-i18n="profiles.editor_note">{{ tr("profiles.editor_note") }}</span>
                 </div>
             </div>
 
             <div id="editor"
-                class="editor-frame h-[56vh] min-h-[440px] w-full overflow-hidden rounded-[28px] border border-slate-200 shadow-inner"></div>
+                class="editor-frame h-[56vh] min-h-[440px] w-full overflow-hidden rounded-[28px] border border-slate-200 shadow-inner">
+            </div>
 
             <div class="mt-4">
-                <div id="status"
-                    aria-live="polite"
+                <div id="status" aria-live="polite"
                     class="status-banner status-banner--info rounded-2xl border px-4 py-3 text-sm">
-                    Workspace ready.
+                    {{ tr("profiles.workspace_ready", "Workspace ready.") }}
                 </div>
             </div>
         </section>

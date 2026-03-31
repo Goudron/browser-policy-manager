@@ -25,7 +25,72 @@
             wizardExtensionInstallEl,
             wizardExtensionLockedEl,
             wizardExtensionUninstallEl,
+            wizardExtensionSectionStatusEl,
+            wizardExtensionFineTuningToggleEl,
+            wizardExtensionFineTuningPanelEl,
+            wizardExtensionMoreRulesToggleEl,
+            wizardExtensionMoreRulesPanelEl,
+            wizardExtensionCuratedStatusEl,
+            wizardExtensionCuratedToggleEl,
+            wizardExtensionCuratedPanelEl,
+            wizardSyncSectionStatusEl,
+            wizardSyncFineTuningToggleEl,
+            wizardSyncFineTuningPanelEl,
+            wizardLanguageSectionStatusEl,
+            wizardAiSectionStatusEl,
+            wizardAiSurfacesSectionStatusEl,
+            wizardAiFineTuningToggleEl,
+            wizardAiFineTuningPanelEl,
+            wizardWebsiteSectionStatusEl,
+            wizardWebsiteFineTuningToggleEl,
+            wizardWebsiteFineTuningPanelEl,
         } = elements;
+        let extensionFineTuningPanelPreference = null;
+        let extensionMoreRulesPanelPreference = null;
+        let curatedPanelPreference = null;
+        const extensionProfileDetailsPreferences = new Map();
+        let syncPanelPreference = null;
+        let aiPanelPreference = null;
+        let websitePanelPreference = null;
+
+        function setText(el, value) {
+            if (el) {
+                el.textContent = String(value);
+            }
+        }
+
+        function countTextareaLines(value) {
+            return linesToArray(value).length;
+        }
+
+        function hasMeaningfulValue(value) {
+            if (typeof value === "boolean" || typeof value === "number") return true;
+            if (typeof value === "string") return value.trim().length > 0;
+            if (Array.isArray(value)) return value.some((entry) => hasMeaningfulValue(entry));
+            if (value && typeof value === "object") return Object.values(value).some((entry) => hasMeaningfulValue(entry));
+            return false;
+        }
+
+        function countConfiguredObjectEntries(value) {
+            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+            return Object.values(currentObject).filter((entry) => hasMeaningfulValue(entry)).length;
+        }
+
+        function countHandlerRuleBucket(bucket) {
+            return bucket && typeof bucket === "object" && !Array.isArray(bucket)
+                ? Object.keys(bucket).filter(Boolean).length
+                : 0;
+        }
+
+        function setPanelExpanded(panelEl, toggleEl, expanded, showLabel, hideLabel) {
+            if (panelEl) {
+                panelEl.hidden = !expanded;
+            }
+            if (toggleEl) {
+                toggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
+                toggleEl.textContent = expanded ? hideLabel : showLabel;
+            }
+        }
 
         function getManagedExtensionField(profileId, field) {
             return managedExtensionFields.find((element) =>
@@ -37,6 +102,34 @@
             return managedExtensionStatusEls.find((element) =>
                 element.dataset.extensionProfileStatus === profileId
             ) || null;
+        }
+
+        function getManagedExtensionCardEl(profileId) {
+            return getManagedExtensionField(profileId, "mode")?.closest("[data-extension-profile-card]") || null;
+        }
+
+        function getManagedExtensionDetailsToggleEl(profileId) {
+            return getManagedExtensionCardEl(profileId)?.querySelector("[data-extension-profile-toggle]") || null;
+        }
+
+        function getManagedExtensionDetailsPanelEl(profileId) {
+            return getManagedExtensionCardEl(profileId)?.querySelector("[data-extension-profile-details-panel]") || null;
+        }
+
+        function formatManagedExtensionModeLabel(mode) {
+            if (mode === "allowed") {
+                return t("profiles.wizard_extension_profile_mode_allowed");
+            }
+            if (mode === "blocked") {
+                return t("profiles.wizard_extension_profile_mode_blocked");
+            }
+            if (mode === "force_installed") {
+                return t("profiles.wizard_extension_profile_mode_force");
+            }
+            if (mode === "normal_installed") {
+                return t("profiles.wizard_extension_profile_mode_normal");
+            }
+            return "";
         }
 
         function getManagedExtensionProfileValues(profile) {
@@ -69,7 +162,7 @@
             );
 
             if (!hasExplicitRule) {
-                return { state: "missing" };
+                return { state: "missing", values };
             }
 
             const usesCatalogUrl = Boolean(
@@ -78,35 +171,390 @@
             );
 
             if (usesCatalogUrl) {
-                return { state: "catalog_url" };
+                return { state: "catalog_url", values };
             }
 
             if (values.effectiveUrl && values.effectiveUrl !== profile.defaultUrl) {
-                return { state: "custom_url" };
+                return { state: "custom_url", values };
             }
 
-            return { state: "configured" };
+            return { state: "configured", values };
         }
 
         function formatManagedExtensionProfileState(profileState) {
+            if (profileState.state === "missing") {
+                return t("profiles.wizard_extension_profile_state_missing");
+            }
+
+            const parts = [];
+            const modeLabel = formatManagedExtensionModeLabel(profileState.values?.mode || "");
+            if (modeLabel) {
+                parts.push(modeLabel);
+            }
             if (profileState.state === "catalog_url") {
-                return t("profiles.wizard_extension_profile_state_catalog_url", "Uses catalog install URL");
+                parts.push(t("profiles.wizard_extension_profile_state_catalog_url"));
+            } else if (profileState.state === "custom_url") {
+                parts.push(t("profiles.wizard_extension_profile_state_custom_url"));
+            } else if (!parts.length) {
+                parts.push(t("profiles.wizard_extension_profile_state_configured"));
             }
-            if (profileState.state === "custom_url") {
-                return t("profiles.wizard_extension_profile_state_custom_url", "Custom install URL");
+            if (profileState.values?.updatesDisabled) {
+                parts.push(t("profiles.wizard_extension_profile_state_updates_disabled"));
             }
-            if (profileState.state === "configured") {
-                return t("profiles.wizard_extension_profile_state_configured", "Configured");
+            if (profileState.values?.privateBrowsing) {
+                parts.push(t("profiles.wizard_extension_profile_state_private_browsing"));
             }
-            return t("profiles.wizard_extension_profile_state_missing", "No explicit rule");
+            return parts.join(" • ");
+        }
+
+        function setManagedExtensionDetailsExpanded(profileId, expanded) {
+            const cardEl = getManagedExtensionCardEl(profileId);
+            const panelEl = getManagedExtensionDetailsPanelEl(profileId);
+            const toggleEl = getManagedExtensionDetailsToggleEl(profileId);
+
+            if (cardEl) {
+                cardEl.dataset.extensionProfileDetailsExpanded = expanded ? "true" : "false";
+            }
+            if (panelEl) {
+                panelEl.hidden = !expanded;
+            }
+            if (toggleEl) {
+                toggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
+                toggleEl.textContent = expanded
+                    ? t("profiles.wizard_extension_profile_details_hide")
+                    : t("profiles.wizard_extension_profile_details_show");
+            }
+        }
+
+        function syncManagedExtensionDetailsVisibility(profile, profileState) {
+            const preferredState = extensionProfileDetailsPreferences.get(profile.id);
+            const hasSecondaryDetails = profileState.state === "custom_url"
+                || profileState.values?.updatesDisabled
+                || profileState.values?.privateBrowsing;
+            const expanded = preferredState === undefined ? hasSecondaryDetails : preferredState;
+
+            setManagedExtensionDetailsExpanded(profile.id, expanded);
+        }
+
+        function formatDefaultModeLabel(defaultMode) {
+            if (defaultMode === "allowed") {
+                return t("profiles.wizard_extensions_mode_allowed");
+            }
+            if (defaultMode === "blocked") {
+                return t("profiles.wizard_extensions_mode_blocked");
+            }
+            return t("profiles.wizard_extensions_mode_inherit");
+        }
+
+        function renderExtensionSectionStatus({ configuredCount = 0, customUrlCount = 0 } = {}) {
+            const defaultMode = wizardExtensionDefaultModeEl?.value.trim() || "";
+            const installCount = countTextareaLines(wizardExtensionInstallEl?.value || "");
+            const lockedCount = countTextareaLines(wizardExtensionLockedEl?.value || "");
+            const uninstallCount = countTextareaLines(wizardExtensionUninstallEl?.value || "");
+            const fragments = [];
+
+            if (defaultMode) {
+                fragments.push(
+                    t("profiles.wizard_extensions_section_state_mode")
+                        .replace("{value}", formatDefaultModeLabel(defaultMode)),
+                );
+            }
+            if (installCount > 0) {
+                fragments.push(
+                    t("profiles.wizard_extensions_section_state_install")
+                        .replace("{count}", String(installCount)),
+                );
+            }
+            if (lockedCount > 0) {
+                fragments.push(
+                    t("profiles.wizard_extensions_section_state_locked")
+                        .replace("{count}", String(lockedCount)),
+                );
+            }
+            if (uninstallCount > 0) {
+                fragments.push(
+                    t("profiles.wizard_extensions_section_state_uninstall")
+                        .replace("{count}", String(uninstallCount)),
+                );
+            }
+            if (configuredCount > 0) {
+                fragments.push(
+                    t("profiles.wizard_extensions_section_state_curated")
+                        .replace("{count}", String(configuredCount)),
+                );
+            }
+
+            setText(
+                wizardExtensionSectionStatusEl,
+                fragments.length
+                    ? fragments.join(" • ")
+                    : t("profiles.wizard_extensions_section_state_empty"),
+            );
+
+            let curatedStatus = t("profiles.wizard_extensions_profiles_empty");
+            if (configuredCount > 0) {
+                curatedStatus = t("profiles.wizard_extensions_profiles_configured")
+                    .replace("{count}", String(configuredCount));
+                if (customUrlCount > 0) {
+                    curatedStatus += ` • ${t("profiles.wizard_extensions_profiles_custom_urls")
+                        .replace("{count}", String(customUrlCount))}`;
+                }
+            }
+            setText(wizardExtensionCuratedStatusEl, curatedStatus);
+
+            setPanelExpanded(
+                wizardExtensionFineTuningPanelEl,
+                wizardExtensionFineTuningToggleEl,
+                extensionFineTuningPanelPreference === null
+                    ? (installCount + lockedCount + uninstallCount + configuredCount > 0)
+                    : extensionFineTuningPanelPreference,
+                t("profiles.wizard_fine_tuning_show"),
+                t("profiles.wizard_fine_tuning_hide"),
+            );
+            setPanelExpanded(
+                wizardExtensionMoreRulesPanelEl,
+                wizardExtensionMoreRulesToggleEl,
+                extensionMoreRulesPanelPreference === null
+                    ? (uninstallCount + configuredCount > 0)
+                    : extensionMoreRulesPanelPreference,
+                t("profiles.wizard_more_rules_show"),
+                t("profiles.wizard_more_rules_hide"),
+            );
+        }
+
+        function setCuratedPanelExpanded(expanded) {
+            if (wizardExtensionCuratedPanelEl) {
+                wizardExtensionCuratedPanelEl.hidden = !expanded;
+            }
+            if (wizardExtensionCuratedToggleEl) {
+                wizardExtensionCuratedToggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
+                wizardExtensionCuratedToggleEl.textContent = expanded
+                    ? t("profiles.wizard_extensions_profiles_hide")
+                    : t("profiles.wizard_extensions_profiles_show");
+            }
+        }
+
+        function syncCuratedPanelVisibility({ configuredCount = 0 } = {}) {
+            const expanded = curatedPanelPreference === null ? configuredCount > 0 : curatedPanelPreference;
+            setCuratedPanelExpanded(expanded);
+        }
+
+        function toggleCuratedPanel() {
+            const currentlyExpanded = wizardExtensionCuratedPanelEl?.hidden === false;
+            curatedPanelPreference = !currentlyExpanded;
+            setCuratedPanelExpanded(curatedPanelPreference);
+        }
+
+        function toggleExtensionFineTuningPanel() {
+            extensionFineTuningPanelPreference = !(wizardExtensionFineTuningPanelEl?.hidden === false);
+            renderManagedExtensionProfileStatuses();
+        }
+
+        function toggleExtensionMoreRulesPanel() {
+            extensionMoreRulesPanelPreference = !(wizardExtensionMoreRulesPanelEl?.hidden === false);
+            renderManagedExtensionProfileStatuses();
+        }
+
+        function getStepSixSummaryData(parsed) {
+            const userMessagingControls = countConfiguredObjectEntries(parsed?.UserMessaging);
+            const requestedLocales = Array.isArray(parsed?.RequestedLocales)
+                ? parsed.RequestedLocales.filter((entry) => typeof entry === "string" && entry.trim()).length
+                : 0;
+            const generativeAiControls = countConfiguredObjectEntries(parsed?.GenerativeAI);
+            const websiteFilter = parsed?.WebsiteFilter && typeof parsed.WebsiteFilter === "object" && !Array.isArray(parsed.WebsiteFilter)
+                ? parsed.WebsiteFilter
+                : {};
+            const handlers = parsed?.Handlers && typeof parsed.Handlers === "object" && !Array.isArray(parsed.Handlers)
+                ? parsed.Handlers
+                : {};
+
+            return {
+                accountsManaged: typeof parsed?.DisableFirefoxAccounts === "boolean",
+                accountsDisabled: parsed?.DisableFirefoxAccounts === true,
+                userMessagingControls,
+                requestedLocales,
+                translateManaged: typeof parsed?.TranslateEnabled === "boolean",
+                translateEnabled: parsed?.TranslateEnabled === true,
+                visualSearchManaged: typeof parsed?.VisualSearchEnabled === "boolean",
+                generativeAiControls,
+                blockedSites: Array.isArray(websiteFilter.Block) ? websiteFilter.Block.length : 0,
+                exceptionSites: Array.isArray(websiteFilter.Exceptions) ? websiteFilter.Exceptions.length : 0,
+                handlerRules: countHandlerRuleBucket(handlers.mimeTypes)
+                    + countHandlerRuleBucket(handlers.schemes)
+                    + countHandlerRuleBucket(handlers.extensions),
+            };
+        }
+
+        function renderStepSixExperience(parsed) {
+            const summary = getStepSixSummaryData(parsed && typeof parsed === "object" ? parsed : {});
+
+            const syncFragments = [];
+            if (summary.accountsManaged) {
+                syncFragments.push(
+                    summary.accountsDisabled
+                        ? t("profiles.wizard_sync_section_state_accounts_disabled")
+                        : t("profiles.wizard_sync_section_state_accounts_enabled"),
+                );
+            }
+            if (summary.userMessagingControls > 0) {
+                syncFragments.push(
+                    t("profiles.wizard_sync_section_state_user_messaging")
+                        .replace("{count}", String(summary.userMessagingControls)),
+                );
+            }
+            setText(
+                wizardSyncSectionStatusEl,
+                syncFragments.length
+                    ? syncFragments.join(" • ")
+                    : t("profiles.wizard_sync_section_state_empty"),
+            );
+
+            const languageFragments = [];
+            if (summary.requestedLocales > 0) {
+                languageFragments.push(
+                    t("profiles.wizard_language_section_state_locales")
+                        .replace("{count}", String(summary.requestedLocales)),
+                );
+            }
+            if (summary.translateManaged) {
+                languageFragments.push(
+                    summary.translateEnabled
+                        ? t("profiles.wizard_language_section_state_translate_enabled")
+                        : t("profiles.wizard_language_section_state_translate_disabled"),
+                );
+            }
+            setText(
+                wizardLanguageSectionStatusEl,
+                languageFragments.length
+                    ? languageFragments.join(" • ")
+                    : t("profiles.wizard_language_section_state_empty"),
+            );
+
+            const websiteFragments = [];
+            if (summary.blockedSites > 0) {
+                websiteFragments.push(
+                    t("profiles.wizard_website_section_state_blocked")
+                        .replace("{count}", String(summary.blockedSites)),
+                );
+            }
+            if (summary.exceptionSites > 0) {
+                websiteFragments.push(
+                    t("profiles.wizard_website_section_state_exceptions")
+                        .replace("{count}", String(summary.exceptionSites)),
+                );
+            }
+            if (summary.handlerRules > 0) {
+                websiteFragments.push(
+                    t("profiles.wizard_website_section_state_handlers")
+                        .replace("{count}", String(summary.handlerRules)),
+                );
+            }
+            setText(
+                wizardWebsiteSectionStatusEl,
+                websiteFragments.length
+                    ? websiteFragments.join(" • ")
+                    : t("profiles.wizard_website_section_state_empty"),
+            );
+
+            const showFineTuning = t("profiles.wizard_fine_tuning_show");
+            const hideFineTuning = t("profiles.wizard_fine_tuning_hide");
+            setPanelExpanded(
+                wizardSyncFineTuningPanelEl,
+                wizardSyncFineTuningToggleEl,
+                syncPanelPreference === null ? summary.userMessagingControls > 0 : syncPanelPreference,
+                showFineTuning,
+                hideFineTuning,
+            );
+            setPanelExpanded(
+                wizardWebsiteFineTuningPanelEl,
+                wizardWebsiteFineTuningToggleEl,
+                websitePanelPreference === null ? (summary.blockedSites + summary.exceptionSites + summary.handlerRules > 0) : websitePanelPreference,
+                showFineTuning,
+                hideFineTuning,
+            );
+        }
+
+        function renderStepSevenAiExperience(parsed) {
+            const summary = getStepSixSummaryData(parsed && typeof parsed === "object" ? parsed : {});
+            const aiFragments = [];
+
+            if (summary.generativeAiControls > 0) {
+                aiFragments.push(
+                    t("profiles.wizard_ai_section_state_controls")
+                        .replace("{count}", String(summary.generativeAiControls)),
+                );
+            }
+            if (summary.visualSearchManaged) {
+                aiFragments.push(
+                    summary.visualSearchEnabled
+                        ? t("profiles.wizard_ai_section_state_visual_search_enabled")
+                        : t("profiles.wizard_ai_section_state_visual_search_disabled"),
+                );
+            }
+
+            setText(
+                wizardAiSectionStatusEl,
+                aiFragments.length
+                    ? aiFragments.join(" • ")
+                    : t("profiles.wizard_ai_section_state_empty"),
+            );
+            setText(
+                wizardAiSurfacesSectionStatusEl,
+                summary.visualSearchManaged
+                    ? (
+                        summary.visualSearchEnabled
+                            ? t("profiles.wizard_ai_surfaces_state_visual_search_on")
+                            : t("profiles.wizard_ai_surfaces_state_visual_search_off")
+                    )
+                    : t("profiles.wizard_ai_surfaces_state_empty"),
+            );
+
+            const showFineTuning = t("profiles.wizard_fine_tuning_show");
+            const hideFineTuning = t("profiles.wizard_fine_tuning_hide");
+            setPanelExpanded(
+                wizardAiFineTuningPanelEl,
+                wizardAiFineTuningToggleEl,
+                aiPanelPreference === null ? summary.visualSearchManaged : aiPanelPreference,
+                showFineTuning,
+                hideFineTuning,
+            );
+        }
+
+        function toggleSectionPanel(panelKey) {
+            if (panelKey === "sync") {
+                syncPanelPreference = !(wizardSyncFineTuningPanelEl?.hidden === false);
+            }
+            if (panelKey === "ai") {
+                aiPanelPreference = !(wizardAiFineTuningPanelEl?.hidden === false);
+            }
+            if (panelKey === "website") {
+                websitePanelPreference = !(wizardWebsiteFineTuningPanelEl?.hidden === false);
+            }
+            const editor = getEditor();
+            if (!editor) return;
+            try {
+                const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
+                const normalized = parsed && typeof parsed === "object" ? parsed : {};
+                renderStepSixExperience(normalized);
+                renderStepSevenAiExperience(normalized);
+            } catch {
+                renderStepSixExperience({});
+                renderStepSevenAiExperience({});
+            }
         }
 
         function renderManagedExtensionProfileStatuses() {
+            let configuredCount = 0;
+            let customUrlCount = 0;
+
             managedExtensionProfiles.forEach((profile) => {
                 const statusEl = getManagedExtensionStatusEl(profile.id);
                 const modeEl = getManagedExtensionField(profile.id, "mode");
                 const cardEl = modeEl?.closest(".wizard-section-group");
                 const profileState = getManagedExtensionProfileState(profile);
+
+                if (profileState.state !== "missing") configuredCount += 1;
+                if (profileState.state === "custom_url") customUrlCount += 1;
 
                 if (statusEl) {
                     statusEl.textContent = formatManagedExtensionProfileState(profileState);
@@ -122,12 +570,22 @@
                     if (profileState.state === "configured") cardEl.classList.add("wizard-search-engine-preset--partial");
                     if (profileState.state === "custom_url") cardEl.classList.add("wizard-search-engine-preset--conflict");
                 }
+                syncManagedExtensionDetailsVisibility(profile, profileState);
             });
+
+            renderExtensionSectionStatus({ configuredCount, customUrlCount });
+            syncCuratedPanelVisibility({ configuredCount, customUrlCount });
         }
 
         function syncFromEditor() {
             const editor = getEditor();
             if (!editor) return;
+            extensionFineTuningPanelPreference = null;
+            extensionMoreRulesPanelPreference = null;
+            curatedPanelPreference = null;
+            syncPanelPreference = null;
+            aiPanelPreference = null;
+            websitePanelPreference = null;
 
             try {
                 const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
@@ -168,6 +626,8 @@
                     if (updatesEl) updatesEl.checked = settings.updates_disabled === true;
                     if (privateEl) privateEl.checked = settings.private_browsing === true;
                 });
+                renderStepSixExperience(normalized);
+                renderStepSevenAiExperience(normalized);
             } catch {
                 wizardExtensionDefaultModeEl.value = "";
                 wizardExtensionInstallEl.value = "";
@@ -185,6 +645,8 @@
                     }
                     element.disabled = true;
                 });
+                renderStepSixExperience({});
+                renderStepSevenAiExperience({});
             }
 
             renderManagedExtensionProfileStatuses();
@@ -297,11 +759,13 @@
 
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
+                renderStepSixExperience(normalized);
+                renderStepSevenAiExperience(normalized);
                 renderManagedExtensionProfileStatuses();
                 renderExtensionReviewSummary(normalized);
-                setStatus(t("profiles.wizard_extensions_applied", "Extension settings updated."), "info");
+                setStatus(t("profiles.wizard_extensions_applied"), "info");
             } catch (e) {
-                setStatus(`Wizard extensions error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_wizard_extensions").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -319,6 +783,45 @@
                 input.addEventListener("input", applyExtensionsFromWizard);
                 input.addEventListener("change", applyExtensionsFromWizard);
             });
+            if (wizardExtensionCuratedToggleEl) {
+                wizardExtensionCuratedToggleEl.addEventListener("click", () => {
+                    toggleCuratedPanel();
+                });
+            }
+            managedExtensionProfiles.forEach((profile) => {
+                const toggleEl = getManagedExtensionDetailsToggleEl(profile.id);
+                if (!toggleEl) return;
+                toggleEl.addEventListener("click", () => {
+                    const nextExpanded = getManagedExtensionDetailsPanelEl(profile.id)?.hidden !== false;
+                    extensionProfileDetailsPreferences.set(profile.id, nextExpanded);
+                    setManagedExtensionDetailsExpanded(profile.id, nextExpanded);
+                });
+            });
+            if (wizardExtensionFineTuningToggleEl) {
+                wizardExtensionFineTuningToggleEl.addEventListener("click", () => {
+                    toggleExtensionFineTuningPanel();
+                });
+            }
+            if (wizardExtensionMoreRulesToggleEl) {
+                wizardExtensionMoreRulesToggleEl.addEventListener("click", () => {
+                    toggleExtensionMoreRulesPanel();
+                });
+            }
+            if (wizardSyncFineTuningToggleEl) {
+                wizardSyncFineTuningToggleEl.addEventListener("click", () => {
+                    toggleSectionPanel("sync");
+                });
+            }
+            if (wizardAiFineTuningToggleEl) {
+                wizardAiFineTuningToggleEl.addEventListener("click", () => {
+                    toggleSectionPanel("ai");
+                });
+            }
+            if (wizardWebsiteFineTuningToggleEl) {
+                wizardWebsiteFineTuningToggleEl.addEventListener("click", () => {
+                    toggleSectionPanel("website");
+                });
+            }
         }
 
         return {

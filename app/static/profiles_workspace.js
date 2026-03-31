@@ -9,6 +9,7 @@
         const {
             t,
             formatSchemaLabel,
+            getDefaultSchemaVersion,
             libraryCountLabel,
             toEditorValue,
             fromEditorValue,
@@ -83,21 +84,23 @@
             wizardExportValidateActionEl,
             wizardExportJsonEl,
             wizardExportYamlEl,
+            wizardExportFirefoxPoliciesEl,
             wizardFinishEl,
         } = elements;
+        const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
 
         function syncWorkspaceOverview() {
-            const schemaVersion = documentRef.getElementById("profile-type").value || "esr-140";
+            const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
             const mode = documentRef.getElementById("mode").value || "json";
             overviewSchemaEl.textContent = formatSchemaLabel(schemaVersion);
             overviewModeEl.textContent = mode.toUpperCase();
 
             if (getCurrentProfile()?.is_deleted) {
-                overviewContextEl.textContent = t("profiles.overview_deleted", "Archived profile");
+                overviewContextEl.textContent = t("profiles.overview_deleted");
             } else if (getCurrentId()) {
-                overviewContextEl.textContent = t("profiles.overview_existing", "Live profile");
+                overviewContextEl.textContent = t("profiles.overview_existing");
             } else {
-                overviewContextEl.textContent = t("profiles.overview_draft", "New draft");
+                overviewContextEl.textContent = t("profiles.overview_draft");
             }
 
             updateWizardSummary();
@@ -175,7 +178,7 @@
 
         function setValidationPreview(message = "", tone = "neutral") {
             setValidationPreviewTone(tone);
-            const nextMessage = message || t("profiles.validation_idle", "Validation feedback will appear here.");
+            const nextMessage = message || t("profiles.validation_idle");
             validationPreviewEl.textContent = nextMessage;
             validationPreviewEl.className = tone === "error"
                 ? "max-w-full text-xs text-red-700"
@@ -197,15 +200,15 @@
         function refreshWorkspaceSignal() {
             const { dirty, invalid } = currentSnapshotState();
             if (invalid) {
-                workspaceSignalEl.textContent = t("profiles.signal_invalid", "Fix invalid JSON/YAML");
+                workspaceSignalEl.textContent = t("profiles.signal_invalid");
                 workspaceSignalEl.className = "signal-chip signal-chip--invalid";
                 overviewStatusEl.className = "text-base font-semibold text-red-700";
             } else if (dirty) {
-                workspaceSignalEl.textContent = t("profiles.signal_dirty", "Unsaved changes");
+                workspaceSignalEl.textContent = t("profiles.signal_dirty");
                 workspaceSignalEl.className = "signal-chip signal-chip--dirty";
                 overviewStatusEl.className = "text-base font-semibold text-amber-800";
             } else {
-                workspaceSignalEl.textContent = t("profiles.signal_saved", "All changes saved");
+                workspaceSignalEl.textContent = t("profiles.signal_saved");
                 workspaceSignalEl.className = "signal-chip signal-chip--saved";
                 overviewStatusEl.className = "text-base font-semibold text-slate-900";
             }
@@ -223,13 +226,14 @@
         function updateActionState() {
             const downloadJson = documentRef.getElementById("download-json");
             const downloadYaml = documentRef.getElementById("download-yaml");
+            const downloadFirefoxPolicies = documentRef.getElementById("download-firefox-policies");
             const { dirty, invalid } = refreshWorkspaceSignal();
             const canFinish = !getIsBusy() && !invalid && (Boolean(getCurrentId()) || Boolean(nameInput.value.trim()));
             const exportAvailable = Boolean(getCurrentId()) && !getCurrentProfile()?.is_deleted;
 
             saveButtonEl.textContent = getCurrentId()
-                ? t("profiles.save", "Save")
-                : t("profiles.create_submit", "Create profile");
+                ? t("profiles.save")
+                : t("profiles.create_submit");
             setButtonDisabled(saveButtonEl, getIsBusy() || invalid || (!dirty && !!getCurrentId()));
             setButtonDisabled(deleteButtonEl, getIsBusy() || !getCurrentId() || !!getCurrentProfile()?.is_deleted);
             setButtonDisabled(hardDeleteButtonEl, getIsBusy() || !getCurrentId());
@@ -249,13 +253,17 @@
             if (!exportAvailable) {
                 downloadJson.classList.add("pointer-events-none", "opacity-50");
                 downloadYaml.classList.add("pointer-events-none", "opacity-50");
+                downloadFirefoxPolicies.classList.add("pointer-events-none", "opacity-50");
                 wizardExportJsonEl.classList.add("pointer-events-none", "opacity-50");
                 wizardExportYamlEl.classList.add("pointer-events-none", "opacity-50");
+                wizardExportFirefoxPoliciesEl.classList.add("pointer-events-none", "opacity-50");
             } else {
                 downloadJson.classList.remove("pointer-events-none", "opacity-50");
                 downloadYaml.classList.remove("pointer-events-none", "opacity-50");
+                downloadFirefoxPolicies.classList.remove("pointer-events-none", "opacity-50");
                 wizardExportJsonEl.classList.remove("pointer-events-none", "opacity-50");
                 wizardExportYamlEl.classList.remove("pointer-events-none", "opacity-50");
+                wizardExportFirefoxPoliciesEl.classList.remove("pointer-events-none", "opacity-50");
             }
 
             renderFinalExportStepSummary(dirty, invalid);
@@ -265,18 +273,23 @@
         function updateDownloadLinks() {
             const jsonLink = documentRef.getElementById("download-json");
             const yamlLink = documentRef.getElementById("download-yaml");
+            const firefoxPoliciesLink = documentRef.getElementById("download-firefox-policies");
             if (!getCurrentId() || getCurrentProfile()?.is_deleted) {
                 jsonLink.href = "#";
                 yamlLink.href = "#";
+                firefoxPoliciesLink.href = "#";
                 wizardExportJsonEl.href = "#";
                 wizardExportYamlEl.href = "#";
+                wizardExportFirefoxPoliciesEl.href = "#";
                 updateActionState();
                 return;
             }
             jsonLink.href = `/api/export/profiles/${getCurrentId()}.json`;
             yamlLink.href = `/api/export/profiles/${getCurrentId()}.yaml`;
+            firefoxPoliciesLink.href = `/api/export/profiles/${getCurrentId()}/firefox/policies.json`;
             wizardExportJsonEl.href = jsonLink.href;
             wizardExportYamlEl.href = yamlLink.href;
+            wizardExportFirefoxPoliciesEl.href = firefoxPoliciesLink.href;
             updateActionState();
         }
 
@@ -284,15 +297,15 @@
             setCurrentProfile(null);
             setCurrentId(null);
             setWizardStarter("blank");
-            currentNameEl.textContent = t("profiles.none_selected", "Nothing selected");
+            currentNameEl.textContent = t("profiles.none_selected");
             currentMetaEl.textContent = message || "";
-            stateBadgeEl.textContent = t("profiles.badge_draft", "Draft");
+            stateBadgeEl.textContent = t("profiles.badge_draft");
             stateBadgeEl.className = "state-chip state-chip--draft";
             nameInput.disabled = false;
-            nameHintEl.textContent = t("profiles.name_hint", "Choose a unique name for a new profile draft.");
+            nameHintEl.textContent = t("profiles.name_hint");
             setWorkspaceHelper(
-                t("profiles.helper_no_selection_title", "Choose a profile from the library to open it"),
-                t("profiles.helper_no_selection_body", "Click any profile card on the left. Once opened, its metadata appears here and its browser policies load into the document editor below."),
+                t("profiles.helper_no_selection_title"),
+                t("profiles.helper_no_selection_body"),
             );
             setValidationPreview();
             syncWizardFieldsFromForm();
@@ -317,28 +330,28 @@
             currentMetaEl.textContent = [
                 `ID ${profile.id}`,
                 formatSchemaLabel(profile.schema_version),
-                `updated ${formatTimestamp(profile.updated_at)}`,
+                t("profiles.meta_updated").replace("{value}", formatTimestamp(profile.updated_at)),
             ].filter(Boolean).join(" • ");
 
             if (profile.is_deleted) {
-                stateBadgeEl.textContent = t("profiles.badge_deleted", "Deleted");
+                stateBadgeEl.textContent = t("profiles.badge_deleted");
                 stateBadgeEl.className = "state-chip state-chip--deleted";
             } else {
-                stateBadgeEl.textContent = t("profiles.badge_active", "Active");
+                stateBadgeEl.textContent = t("profiles.badge_active");
                 stateBadgeEl.className = "state-chip state-chip--active";
             }
 
             setWorkspaceHelper(
-                t("profiles.helper_selected_title", "Profile is open for editing"),
-                t("profiles.helper_selected_body", "Update owner and description here, then edit the Firefox policies in the document editor below and save the result."),
+                t("profiles.helper_selected_title"),
+                t("profiles.helper_selected_body"),
             );
 
             nameInput.value = profile.name || "";
             ownerInput.value = profile.owner || "";
             descriptionInput.value = profile.description || "";
-            documentRef.getElementById("profile-type").value = profile.schema_version === "release-148" ? "release-148" : "esr-140";
+            documentRef.getElementById("profile-type").value = profile.schema_version || defaultSchemaVersion;
             nameInput.disabled = true;
-            nameHintEl.textContent = t("profiles.name_locked", "Profile name is locked after creation.");
+            nameHintEl.textContent = t("profiles.name_locked");
             setValidationPreview();
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
@@ -352,13 +365,13 @@
         async function confirmIfDirty() {
             const { dirty } = currentSnapshotState();
             if (!dirty) return true;
-            return windowRef.confirm(t("profiles.confirm_discard", "Discard unsaved changes?"));
+            return windowRef.confirm(t("profiles.confirm_discard"));
         }
 
         async function resetDraft(skipConfirm = false) {
             const editor = getEditor();
             if (!skipConfirm && !(await confirmIfDirty())) return;
-            const schemaVersion = documentRef.getElementById("profile-type").value || "esr-140";
+            const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
             setCurrentRaw({});
             nameInput.value = "";
             ownerInput.value = "";
@@ -367,8 +380,8 @@
             if (editor) {
                 editor.setValue(toEditorValue({}, documentRef.getElementById("mode").value));
             }
-            setDraftState("Draft ready. Add metadata and flags, then save.");
-            setStatus("Draft ready. Enter a unique name and save when you are ready.", "info");
+            setDraftState(t("profiles.draft_ready_meta"));
+            setStatus(t("profiles.status_draft_ready"), "info");
             setBaselineFromCurrentUi();
             syncWizardNetworkFromEditor();
             syncWizardPoliciesFromEditor();
@@ -386,8 +399,8 @@
                 li.className = "list-empty-illustration rounded-[24px] border border-dashed border-slate-200 px-4 py-6 text-center";
                 li.innerHTML = `
                     <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/80 bg-white/80 text-2xl shadow-sm">+</div>
-                    <div class="text-sm font-semibold text-slate-900">${t("profiles.empty_title", "No profiles in view")}</div>
-                    <div class="mx-auto mt-2 max-w-[240px] text-sm leading-6 text-slate-500">${t("profiles.empty_list", "No profiles match the current filters.")}</div>
+                    <div class="text-sm font-semibold text-slate-900">${t("profiles.empty_title")}</div>
+                    <div class="mx-auto mt-2 max-w-[240px] text-sm leading-6 text-slate-500">${t("profiles.empty_list")}</div>
                 `;
                 listEl.appendChild(li);
                 return;
@@ -409,16 +422,16 @@
                             <span class="profile-list-status ${profile.is_deleted
                                 ? "profile-list-status--deleted"
                                 : "profile-list-status--active"}">
-                                ${profile.is_deleted ? t("profiles.badge_deleted", "Deleted") : t("profiles.badge_active", "Active")}
+                                ${profile.is_deleted ? t("profiles.badge_deleted") : t("profiles.badge_active")}
                             </span>
                         </div>
                         <div class="profile-list-footer">
                             <span class="text-xs text-slate-500">${selected
-                                ? t("profiles.list_selected_hint", "This profile is open in the workspace.")
-                                : t("profiles.list_click_hint", "Click to load this profile into the workspace.")}</span>
+                                ? t("profiles.list_selected_hint")
+                                : t("profiles.list_click_hint")}</span>
                             <span class="profile-open-cta ${selected ? "profile-open-cta--selected" : ""}">${selected
-                                ? t("profiles.list_open_selected", "Editing now")
-                                : t("profiles.list_open", "Open for editing")}</span>
+                                ? t("profiles.list_open_selected")
+                                : t("profiles.list_open")}</span>
                         </div>
                     </button>
                 `;
@@ -431,16 +444,16 @@
 
         async function reloadList() {
             try {
-                setStatus(t("profiles.status_loading_list", "Refreshing profile list..."), "info");
+                setStatus(t("profiles.status_loading_list"), "info");
                 const [items, stats] = await Promise.all([
                     listProfiles(),
                     getProfileLibraryStats(),
                 ]);
                 renderList(items);
                 updateLibrarySummary(stats);
-                setStatus(t("profiles.status_list_ready", "Profile list updated."), "info");
+                setStatus(t("profiles.status_list_ready"), "info");
             } catch (e) {
-                setStatus(`List error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_list").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -465,13 +478,13 @@
                 renderList(items);
                 updateLibrarySummary(stats);
                 documentRef.getElementById("overview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-                setStatus(`Loaded ${profile.name}.`, "success");
+                setStatus(t("profiles.status_profile_loaded").replace("{name}", profile.name), "success");
             } catch (e) {
-                setStatus(`Load error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_load").replace("{detail}", e.message || e), "error");
             }
         }
 
-        function setBusyState(nextBusy, labelKey = null, fallback = "") {
+        function setBusyState(nextBusy, labelKey = null) {
             setIsBusy(nextBusy);
             if (!nextBusy) {
                 updateActionState();
@@ -479,7 +492,7 @@
             }
 
             if (labelKey) {
-                saveButtonEl.textContent = t(labelKey, fallback);
+                saveButtonEl.textContent = t(labelKey);
             }
             setButtonDisabled(saveButtonEl, true);
             setButtonDisabled(deleteButtonEl, true);
@@ -493,14 +506,14 @@
         async function saveCurrent() {
             const editor = getEditor();
             try {
-                setBusyState(true, getCurrentId() ? "profiles.saving" : "profiles.creating", getCurrentId() ? "Saving..." : "Creating...");
+                setBusyState(true, getCurrentId() ? "profiles.saving" : "profiles.creating");
                 const form = readFormState();
                 const mode = documentRef.getElementById("mode").value;
                 const parsedFlags = fromEditorValue(editor.getValue(), mode);
 
                 if (!getCurrentId() && !form.name) {
                     setBusyState(false);
-                    setStatus("Profile name is required to create a draft.", "warn");
+                    setStatus(t("profiles.create_name_required"), "warn");
                     nameInput.focus();
                     return false;
                 }
@@ -516,8 +529,8 @@
                     setCurrentRaw(created.flags || {});
                     await reloadList();
                     await loadProfile(created.id);
-                    setStatus(`Created ${created.name}.`, "success");
-                    setValidationPreview(t("profiles.validation_ready", "Ready to validate or export."), "success");
+                    setStatus(t("profiles.status_profile_created").replace("{name}", created.name), "success");
+                    setValidationPreview(t("profiles.validation_ready"), "success");
                     setBusyState(false);
                     return true;
                 }
@@ -532,11 +545,11 @@
                 setMeta(updated);
                 setBaselineFromCurrentUi();
                 await reloadList();
-                setStatus(`Saved ${updated.name}.`, "success");
-                setValidationPreview(t("profiles.validation_ready", "Ready to validate or export."), "success");
+                setStatus(t("profiles.status_profile_saved").replace("{name}", updated.name), "success");
+                setValidationPreview(t("profiles.validation_ready"), "success");
                 return true;
             } catch (e) {
-                setStatus(`Save error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_save").replace("{detail}", e.message || e), "error");
                 return false;
             } finally {
                 setBusyState(false);
@@ -545,21 +558,21 @@
 
         async function doSoftDelete() {
             if (!getCurrentId()) {
-                setStatus(t("profiles.select_profile_first", "Select a profile first."), "warn");
+                setStatus(t("profiles.select_profile_first"), "warn");
                 return;
             }
-            if (!windowRef.confirm(t("profiles.confirm_soft_delete", "Soft-delete this profile? You can restore it later."))) return;
+            if (!windowRef.confirm(t("profiles.confirm_soft_delete"))) return;
             try {
-                setBusyState(true, "profiles.deleting", "Deleting...");
+                setBusyState(true, "profiles.deleting");
                 await softDeleteProfile(getCurrentId());
                 await reloadList();
                 setCurrentId(null);
                 setCurrentProfile(null);
                 setCurrentRaw({});
                 await resetDraft(true);
-                setStatus(t("profiles.soft_delete_done", "Profile soft-deleted."), "success");
+                setStatus(t("profiles.soft_delete_done"), "success");
             } catch (e) {
-                setStatus(`Delete error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_delete").replace("{detail}", e.message || e), "error");
             } finally {
                 setBusyState(false);
             }
@@ -567,28 +580,21 @@
 
         async function doHardDelete() {
             if (!getCurrentId()) {
-                setStatus(t("profiles.select_profile_first", "Select a profile first."), "warn");
+                setStatus(t("profiles.select_profile_first"), "warn");
                 return;
             }
-            if (!windowRef.confirm(t(
-                "profiles.confirm_hard_delete",
-                "Dangerous operation: this profile will be permanently deleted without recovery. Continue?",
-            ))) return;
+            if (!windowRef.confirm(t("profiles.confirm_hard_delete"))) return;
             try {
-                setBusyState(true, "profiles.deleting", "Deleting...");
-                const deletedProfileName = getCurrentProfile()?.name || currentNameEl.textContent || "";
+                setBusyState(true, "profiles.deleting");
                 await hardDeleteProfile(getCurrentId());
                 await reloadList();
                 setCurrentId(null);
                 setCurrentProfile(null);
                 setCurrentRaw({});
                 await resetDraft(true);
-                const fallback = deletedProfileName
-                    ? `Profile ${deletedProfileName} permanently deleted.`
-                    : "Profile permanently deleted.";
-                setStatus(t("profiles.hard_delete_done", fallback), "success");
+                setStatus(t("profiles.hard_delete_done"), "success");
             } catch (e) {
-                setStatus(`Delete error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_delete").replace("{detail}", e.message || e), "error");
             } finally {
                 setBusyState(false);
             }
@@ -597,11 +603,11 @@
         async function doRestore() {
             const editor = getEditor();
             if (!getCurrentId()) {
-                setStatus(t("profiles.select_profile_first", "Select a profile first."), "warn");
+                setStatus(t("profiles.select_profile_first"), "warn");
                 return;
             }
             try {
-                setBusyState(true, "profiles.restoring", "Restoring...");
+                setBusyState(true, "profiles.restoring");
                 const restored = await restoreProfile(getCurrentId());
                 setCurrentRaw(restored.flags || {});
                 await reloadList();
@@ -612,34 +618,27 @@
                 syncWizardPreferencesFromEditor();
                 syncWizardExtensionsFromEditor();
                 setBaselineFromCurrentUi();
-                setStatus(`Restored ${restored.name}.`, "success");
+                setStatus(t("profiles.status_profile_restored").replace("{name}", restored.name), "success");
             } catch (e) {
-                setStatus(`Restore error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_restore").replace("{detail}", e.message || e), "error");
             } finally {
                 setBusyState(false);
             }
         }
 
         async function doResetLibrary() {
-            if (!windowRef.confirm(t(
-                "profiles.confirm_reset_library",
-                "Dangerous operation: all profiles will be permanently deleted without recovery. Continue?",
-            ))) return;
+            if (!windowRef.confirm(t("profiles.confirm_reset_library"))) return;
             try {
-                setBusyState(true, "profiles.resetting_library", "Resetting library...");
-                const result = await resetProfilesLibrary();
+                setBusyState(true, "profiles.resetting_library");
+                await resetProfilesLibrary();
                 setCurrentId(null);
                 setCurrentProfile(null);
                 setCurrentRaw({});
                 await resetDraft(true);
                 await reloadList();
-                const deletedCount = Number(result?.deleted || 0);
-                const fallback = deletedCount > 0
-                    ? `Profile library reset. Deleted ${deletedCount} profiles.`
-                    : "Profile library reset. No profiles remained in the database.";
-                setStatus(t("profiles.reset_library_done", fallback), "success");
+                setStatus(t("profiles.reset_library_done"), "success");
             } catch (e) {
-                setStatus(`Reset error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_reset").replace("{detail}", e.message || e), "error");
             } finally {
                 setBusyState(false);
             }
@@ -648,19 +647,23 @@
         async function doValidate() {
             const editor = getEditor();
             try {
-                setBusyState(true, "profiles.validating", "Validating...");
+                setBusyState(true, "profiles.validating");
                 const profileKey = documentRef.getElementById("profile-type").value;
                 const parsedFlags = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
                 const res = await validateFlags(profileKey, parsedFlags);
                 if (res.ok) {
-                    setStatus(`Validation OK for ${profileKey}.`, "success");
-                    setValidationPreview(t("profiles.validation_ok", "Validation passed."), "success");
+                    setStatus(t("profiles.status_validation_ok").replace("{schema}", profileKey), "success");
+                    setValidationPreview(t("profiles.validation_ok"), "success");
                 } else {
-                    setStatus(`Validation error: ${res.detail || "invalid"}`, "error");
-                    setValidationPreview(res.detail || t("profiles.validation_failed", "Validation failed."), "error");
+                    setStatus(
+                        t("profiles.error_validation_result")
+                            .replace("{detail}", res.detail || t("profiles.validation_result_invalid")),
+                        "error",
+                    );
+                    setValidationPreview(res.detail || t("profiles.validation_failed"), "error");
                 }
             } catch (e) {
-                setStatus(`Validation failed: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_validation_failed").replace("{detail}", e.message || e), "error");
                 setValidationPreview(e.message || String(e), "error");
             } finally {
                 setBusyState(false);

@@ -19,9 +19,22 @@ def test_get_schema_or_404_loads_supported_profile(monkeypatch):
     sentinel = {"policies": {"DisableTelemetry": {"type": "boolean"}}}
     monkeypatch.setattr(validation_module, "load_policy_schema_for_channel", lambda profile: sentinel)
 
-    result = validation_module._get_schema_or_404("esr-140")
+    result = validation_module._get_schema_or_404("esr-140.9")
 
     assert result is sentinel
+
+
+def test_get_schema_or_404_reports_unavailable_schema(monkeypatch):
+    def _raise_missing(profile: str):
+        raise ValueError("Schema for channel is not available")
+
+    monkeypatch.setattr(validation_module, "load_policy_schema_for_channel", _raise_missing)
+
+    with pytest.raises(HTTPException) as excinfo:
+        validation_module._get_schema_or_404("esr-140.9")
+
+    assert excinfo.value.status_code == 503
+    assert "not available" in str(excinfo.value.detail)
 
 
 @pytest.mark.anyio
@@ -35,7 +48,7 @@ async def test_validate_profile_422_with_empty_issues(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "esr-140",
+            "esr-140.9",
             validation_module.ValidationRequest(document={"DisableTelemetry": True}),
         )
 
@@ -54,7 +67,7 @@ async def test_validate_profile_400_on_unexpected_error(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "release-148",
+            "release-149",
             validation_module.ValidationRequest(document={"DisableTelemetry": True}),
         )
 
@@ -81,7 +94,7 @@ async def test_validate_profile_422_includes_first_issue_message(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "esr-140",
+            "esr-140.9",
             validation_module.ValidationRequest(document={"DisableTelemetry": "nope"}),
         )
 

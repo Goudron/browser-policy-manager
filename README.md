@@ -7,13 +7,13 @@
 ## 🧭 Overview
 
 **Browser Policy Manager (BPM)** provides administrators and security teams with a centralized tool to manage Firefox enterprise policies.  
-It validates, stores, and exports structured configuration profiles compatible with Firefox’s `profiles.json` format.
+It validates, stores, and exports structured configuration profiles and can now emit ready-to-use Firefox `policies.json` documents.
 
 **Author:** Valery Ledovskoy  
-**Version:** `0.4.0-dev`  
+**Version:** `0.5.0-dev`  
 **License:** [MPL-2.0](LICENSE)  
 **Backend:** FastAPI + SQLAlchemy + Alembic  
-**Frontend:** Jinja2 + TailwindCSS + Monaco Editor  
+**Frontend:** Jinja2 + self-hosted utility CSS + self-hosted Monaco Editor bundle  
 **Database:** SQLite (default)  
 **Python:** 3.13
 
@@ -57,6 +57,7 @@ It validates, stores, and exports structured configuration profiles compatible w
 - The Firefox web experience is now schema-driven and split into modular catalogs for general settings, home/startup, privacy, search, sync, starter presets, manual controls, and inline editors for complex policies.
 - Policy UI placement is resolved through a dedicated Firefox policy UI registry with explicit overrides plus safe fallbacks inferred from schema structure.
 - The profile editor page has been decomposed into reusable Jinja partials and modular frontend bundles instead of one monolithic template/script.
+- The `/profiles` frontend now ships with checked-in self-hosted runtime assets, including vendored `js-yaml`, local Monaco bundles/workers, and local bootstrap scripts.
 - Security headers are enabled for HTTP responses.
 
 ---
@@ -103,6 +104,24 @@ mypy app
 pytest --cov=app --cov-branch --cov-report=term-missing
 ```
 
+When `/profiles` vendor assets need a refresh:
+
+```bash
+npm install
+npm run build:monaco
+```
+
+By default, `pytest` excludes the live Firefox suites marked `firefox_live` and
+`firefox_live_amo`, so the standard local and CI test run stays deterministic.
+Run those suites explicitly with `-m firefox_live` or `-m firefox_live_amo`.
+
+Live Firefox policy checks run in an isolated project-local sandbox. Setup notes are in
+[`docs/firefox-live-testing.md`](docs/firefox-live-testing.md).
+That doc now covers both the deterministic `firefox_live` suite and the separate
+AMO-backed `firefox_live_amo` canary for real add-on installation flows.
+GitHub Actions keeps PR CI focused on deterministic lint, typing, tests, coverage,
+and vendored asset checks, while live Firefox coverage runs in separate canary workflows.
+
 ---
 
 ## 🧰 Database & Migrations
@@ -128,18 +147,19 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
 
 | Channel | Version | Status |
 |----------|----------|---------|
-| **ESR** | 140 | ✅ Active |
-| **Release** | 148 | ✅ Current |
+| **ESR** | 140.9 | ✅ Active |
+| **Release** | 149 | ✅ Current |
 | **Beta / Dev** | — | ❌ Not supported |
 
 > BPM currently ships with bundled internal schemas for the supported ESR and Release channels.
-> Mozilla's official `v7.8` release package for Firefox 148 / ESR 140.8 ships docs and platform templates, but not a standalone raw `policies-schema.json`, so BPM keeps a local converted schema pipeline.
+> Mozilla's official `v7.9` release package for Firefox 149 / ESR 140.9 ships docs and platform templates, but not a standalone raw `policies-schema.json`, so BPM keeps a local converted schema pipeline.
 
 ### Schema Tooling
 
 - `tools/convert_policies_from_upstream.py` is now a thin entrypoint over a reusable `tools.convert_policies_from_upstream_lib` package.
 - The conversion pipeline is split into HTML parsing, snippet parsing, inference, semantic hints, schema emission, and CLI layers.
-- Bundled release schema has been advanced from Firefox Release 145 to Release 148.
+- Bundled schema support has been advanced to Firefox Release 149 and Firefox ESR 140.9.
+- The release procedure for the next Firefox schema bump is documented in [`docs/firefox-schema-update-runbook.md`](docs/firefox-schema-update-runbook.md).
 
 ---
 
@@ -159,7 +179,7 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
   - CI runs on push/pull-request to `dev`.  
   - Manual merge to `main` produces a release.  
 - Test coverage goal: **≥ 85%**  
-- Current local suite status: `236 passed`, `100%` line coverage, `100%` branch coverage for `app/`.  
+- Current local suite status: `278 passed`, `22 deselected`, `100%` line coverage, `100%` branch coverage for `app/`.  
 - Code style enforced by:
   ```bash
   ruff check . --fix
@@ -175,7 +195,8 @@ pytest -q -k test_alembic_upgrade_head_on_sqlite_tmp
 - Keep the `profiles` API and web UI aligned around one data model.
 - Expand and refine the schema-driven Firefox workflow in `/profiles`.
 - Continue simplifying schema/version management around bundled ESR/Release schemas.
-- Keep CI quality gates green across `ruff`, `mypy`, and coverage artifact generation.
+- Keep self-hosted frontend assets reproducible and aligned with the checked-in `/profiles` runtime.
+- Keep CI quality gates green across `ruff`, `mypy`, deterministic coverage runs, and artifact checks.
 
 ## 🗺️ Roadmap
 

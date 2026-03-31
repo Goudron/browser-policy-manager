@@ -3,6 +3,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
+from app.core.schema_channels import DEFAULT_RELEASE_SCHEMA_CHANNEL
 from app.services.policy_schema_service import get_policy_definition
 
 _MANUAL_POLICY_GROUPS: list[dict[str, Any]] = [
@@ -136,7 +137,9 @@ _MANUAL_POLICY_GROUPS: list[dict[str, Any]] = [
 ]
 
 
-def get_manual_policy_controls_catalog(schema_version: str = "release-148") -> dict[str, Any]:
+def get_manual_policy_controls_catalog(
+    schema_version: str = DEFAULT_RELEASE_SCHEMA_CHANNEL,
+) -> dict[str, Any]:
     """Return the curated manual policy controls backed by the active schema."""
 
     groups = []

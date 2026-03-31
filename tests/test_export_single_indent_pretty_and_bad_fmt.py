@@ -12,7 +12,7 @@ def _mk(name_prefix: str = "ESI"):
     return {
         "name": f"{name_prefix}-{u}",
         "description": "Single export",
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "flags": {"DisableTelemetry": True, "DisablePrivateBrowsing": True},
     }
 

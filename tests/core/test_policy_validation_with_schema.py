@@ -11,14 +11,14 @@ from app.core.policy_validation import (
 )
 
 
-def _schema(channel: str = "release-148"):
+def _schema(channel: str = "release-149"):
     return load_policy_schema_for_channel(channel)
 
 
 def _issues_for(
     policies: dict[str, object],
     *,
-    channel: str = "release-148",
+    channel: str = "release-149",
 ) -> list[PolicyValidationIssue]:
     with pytest.raises(PolicyValidationError) as excinfo:
         validate_profile_policies_or_raise(policies, _schema(channel))
@@ -47,7 +47,7 @@ def test_release_schema_accepts_valid_profile_with_arrays_and_objects():
 
 def test_validate_profile_payload_helper_accepts_channel_and_policies():
     payload = {
-        "channel": "release-148",
+        "channel": "release-149",
         "name": "Test profile",
         "policies": {
             "DisableAppUpdate": True,
@@ -60,7 +60,7 @@ def test_validate_profile_payload_helper_accepts_channel_and_policies():
 
 def test_validate_profile_payload_helper_rejects_invalid_policies():
     payload = {
-        "channel": "release-148",
+        "channel": "release-149",
         "name": "Test profile",
         "policies": {
             "Proxy": {
@@ -74,14 +74,14 @@ def test_validate_profile_payload_helper_rejects_invalid_policies():
 
 
 def test_release_148_schema_includes_newer_mozilla_policies():
-    schema = _schema("release-148")
+    schema = _schema("release-149")
 
     assert "BrowserDataBackup" in schema["properties"]
     assert "DisableRemoteImprovements" in schema["properties"]
 
 
 def test_esr_140_schema_excludes_policies_added_after_esr_140():
-    schema = _schema("esr-140")
+    schema = _schema("esr-140.9")
 
     assert "BrowserDataBackup" not in schema.get("properties", {})
     assert "DisableRemoteImprovements" not in schema.get("properties", {})

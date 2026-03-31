@@ -113,15 +113,15 @@
 
         function formatPresetStatus(presetState) {
             if (presetState.state === "applied") {
-                return t("profiles.wizard_search_preset_state_applied", "Preset matches current engine");
+                return t("profiles.wizard_search_preset_state_applied");
             }
             if (presetState.state === "partial") {
-                return t("profiles.wizard_search_preset_state_partial", "Preset partially applied");
+                return t("profiles.wizard_search_preset_state_partial");
             }
             if (presetState.state === "conflict") {
-                return t("profiles.wizard_search_preset_state_conflict", "Preset differs from current engine");
+                return t("profiles.wizard_search_preset_state_conflict");
             }
-            return t("profiles.wizard_search_preset_state_missing", "Preset not added yet");
+            return t("profiles.wizard_search_preset_state_missing");
         }
 
         function renderPresetButtonStates() {
@@ -167,16 +167,16 @@
             const hasManagedContent = wizardSearchEngineItemManagedKeys.some((key) => Boolean(values[key]));
             const hasContent = hasManagedContent || hasSeedPayload;
             const missingRequired = [
-                !nameValue ? t("profiles.wizard_search_engine_name_label", "Engine name") : null,
-                !urlValue ? t("profiles.wizard_search_engine_url_label", "Search URL template") : null,
+                !nameValue ? t("profiles.wizard_search_engine_name_label") : null,
+                !urlValue ? t("profiles.wizard_search_engine_url_label") : null,
             ].filter(Boolean);
 
             if (titleEl) {
-                titleEl.textContent = nameValue || `${t("profiles.wizard_search_engine_card_title", "Search engine")} ${index + 1}`;
+                titleEl.textContent = nameValue || `${t("profiles.wizard_search_engine_card_title")} ${index + 1}`;
             }
             if (metaEl) {
                 metaEl.textContent = urlValue
-                    || t("profiles.wizard_search_engine_card_meta", "Writes one item into SearchEngines.Add.");
+                    || t("profiles.wizard_search_engine_card_meta");
             }
             if (summaryEl) {
                 if (!hasContent) {
@@ -187,14 +187,14 @@
                 } else {
                     const summaryParts = [values.Method || "GET"];
                     if (values.Alias) {
-                        summaryParts.push(`${t("profiles.wizard_search_engine_summary_keyword", "keyword")} ${values.Alias}`);
+                        summaryParts.push(`${t("profiles.wizard_search_engine_summary_keyword")} ${values.Alias}`);
                     }
                     if (values.Encoding) summaryParts.push(values.Encoding);
                     if (values.SuggestURLTemplate) {
-                        summaryParts.push(t("profiles.wizard_search_engine_summary_suggest", "suggestions"));
+                        summaryParts.push(t("profiles.wizard_search_engine_summary_suggest"));
                     }
                     if (values.PostData) {
-                        summaryParts.push(t("profiles.wizard_search_engine_summary_post", "POST data"));
+                        summaryParts.push(t("profiles.wizard_search_engine_summary_post"));
                     }
                     summaryEl.textContent = summaryParts.join(" • ");
                 }
@@ -219,25 +219,25 @@
 
         function applyRowTranslations(row) {
             const labels = {
-                Name: t("profiles.wizard_search_engine_name_label", "Engine name"),
-                URLTemplate: t("profiles.wizard_search_engine_url_label", "Search URL template"),
-                Method: t("profiles.wizard_search_engine_method_label", "Request method"),
-                IconURL: t("profiles.wizard_search_engine_icon_label", "Icon URL"),
-                Alias: t("profiles.wizard_search_engine_alias_label", "Alias keyword"),
-                Description: t("profiles.wizard_search_engine_description_label", "Description"),
-                PostData: t("profiles.wizard_search_engine_post_data_label", "POST payload"),
-                SuggestURLTemplate: t("profiles.wizard_search_engine_suggest_label", "Suggestions URL template"),
-                Encoding: t("profiles.wizard_search_engine_encoding_label", "Query encoding"),
+                Name: t("profiles.wizard_search_engine_name_label"),
+                URLTemplate: t("profiles.wizard_search_engine_url_label"),
+                Method: t("profiles.wizard_search_engine_method_label"),
+                IconURL: t("profiles.wizard_search_engine_icon_label"),
+                Alias: t("profiles.wizard_search_engine_alias_label"),
+                Description: t("profiles.wizard_search_engine_description_label"),
+                PostData: t("profiles.wizard_search_engine_post_data_label"),
+                SuggestURLTemplate: t("profiles.wizard_search_engine_suggest_label"),
+                Encoding: t("profiles.wizard_search_engine_encoding_label"),
             };
             const placeholders = {
-                Name: t("profiles.wizard_search_engine_name_placeholder", "Example Search"),
-                URLTemplate: t("profiles.wizard_search_engine_url_placeholder", "https://www.example.org/search?q={searchTerms}"),
-                IconURL: t("profiles.wizard_search_engine_icon_placeholder", "https://www.example.org/favicon.ico"),
-                Alias: t("profiles.wizard_search_engine_alias_placeholder", "example"),
-                Description: t("profiles.wizard_search_engine_description_placeholder", "Internal knowledge base search"),
-                PostData: t("profiles.wizard_search_engine_post_data_placeholder", "q={searchTerms}&source=firefox"),
-                SuggestURLTemplate: t("profiles.wizard_search_engine_suggest_placeholder", "https://www.example.org/suggest?q={searchTerms}"),
-                Encoding: t("profiles.wizard_search_engine_encoding_placeholder", "UTF-8"),
+                Name: t("profiles.wizard_search_engine_name_placeholder"),
+                URLTemplate: t("profiles.wizard_search_engine_url_placeholder"),
+                IconURL: t("profiles.wizard_search_engine_icon_placeholder"),
+                Alias: t("profiles.wizard_search_engine_alias_placeholder"),
+                Description: t("profiles.wizard_search_engine_description_placeholder"),
+                PostData: t("profiles.wizard_search_engine_post_data_placeholder"),
+                SuggestURLTemplate: t("profiles.wizard_search_engine_suggest_placeholder"),
+                Encoding: t("profiles.wizard_search_engine_encoding_placeholder"),
             };
 
             row.querySelectorAll("[data-search-engine-label]").forEach((labelEl) => {
@@ -251,14 +251,14 @@
 
             const methodEl = row.querySelector('[data-search-engine-field="Method"]');
             if (methodEl?.options?.length >= 3) {
-                methodEl.options[0].textContent = t("profiles.wizard_search_engine_method_default", "GET (default)");
-                methodEl.options[1].textContent = t("profiles.wizard_search_engine_method_get", "GET");
-                methodEl.options[2].textContent = t("profiles.wizard_search_engine_method_post", "POST");
+                methodEl.options[0].textContent = t("profiles.wizard_search_engine_method_default");
+                methodEl.options[1].textContent = t("profiles.wizard_search_engine_method_get");
+                methodEl.options[2].textContent = t("profiles.wizard_search_engine_method_post");
             }
 
             const removeButton = row.querySelector("[data-search-engine-remove]");
             if (removeButton) {
-                removeButton.textContent = t("profiles.wizard_search_engine_remove", "Remove");
+                removeButton.textContent = t("profiles.wizard_search_engine_remove");
             }
         }
 
@@ -370,7 +370,7 @@
             if (!preset) return;
 
             appendDraft(preset);
-            setStatus(t("profiles.wizard_search_preset_applied", "Search engine preset added."), "info");
+            setStatus(t("profiles.wizard_search_preset_applied"), "info");
         }
 
         function rerenderForLocale() {

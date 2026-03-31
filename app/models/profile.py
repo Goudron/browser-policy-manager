@@ -7,6 +7,8 @@ from typing import Any
 from sqlalchemy import JSON, DateTime, Integer, String, Text, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from app.core.schema_channels import DEFAULT_SCHEMA_CHANNEL
+
 
 class Base(DeclarativeBase):
     """SQLAlchemy 2.x Declarative base for ORM models."""
@@ -31,7 +33,7 @@ class Profile(Base):
 
     # Schema version stays free-form here; business rules live in validation code.
     schema_version: Mapped[str] = mapped_column(
-        String(50), nullable=False, index=True, default="esr-140"
+        String(50), nullable=False, index=True, default=DEFAULT_SCHEMA_CHANNEL
     )
 
     # Raw Firefox policy payload stored as JSON on the profile entity.

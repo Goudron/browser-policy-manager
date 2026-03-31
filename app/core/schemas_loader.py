@@ -5,23 +5,18 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from app.core.schema_channels import RAW_SCHEMA_DIRS, SCHEMA_FILENAMES
+
 
 class SchemaNotFoundError(RuntimeError):
-    """Raised when a schema file cannot be located in either static or cache."""
+    """Raised when a schema file cannot be located in any configured source."""
 
 
 class UnsupportedProfileError(ValueError):
     """Raised when an unknown profile key is requested."""
 
 
-# Filenames are chosen to match test expectations.
-# Tests check:
-#   - esr-140 -> endswith("firefox-esr140.json")
-#   - release-148 -> endswith("firefox-release.json")
-_PROFILE_FILES: dict[str, str] = {
-    "esr-140": "firefox-esr140.json",
-    "release-148": "firefox-release.json",
-}
+_PROFILE_FILES: dict[str, str] = dict(SCHEMA_FILENAMES)
 
 # Directories relative to this file:
 _THIS_DIR = Path(__file__).resolve().parent
@@ -30,22 +25,17 @@ _STATIC_DIR = _SCHEMAS_DIR / "static"
 _CACHE_DIR = _SCHEMAS_DIR / "cache"
 _MOZILLA_DIR = _SCHEMAS_DIR / "mozilla"
 _POLICIES_DIR = _SCHEMAS_DIR / "policies"
-_RAW_PROFILE_DIRS: dict[str, str] = {
-    "esr-140": "esr140",
-    "release-148": "release148",
-}
-_BUNDLED_POLICY_FILES: dict[str, str] = {
-    "esr-140": "firefox-esr-140.json",
-    "release-148": "firefox-release-148.json",
-}
+_RAW_PROFILE_DIRS: dict[str, str] = dict(RAW_SCHEMA_DIRS)
+
+_BUNDLED_POLICY_FILES: dict[str, str] = dict(SCHEMA_FILENAMES)
 
 
 def available_profiles() -> dict[str, str]:
     """
     Return mapping of supported profile keys to expected filenames (basename).
 
-    Tests call .endswith("<filename>.json") on these values, so we return basenames,
-    not full paths.
+    Tests call `.endswith("<filename>.json")` on these values, so we return
+    basenames, not full paths.
     """
     return dict(_PROFILE_FILES)
 
@@ -124,7 +114,7 @@ def _minimal_schema(title: str) -> dict[str, Any]:
 
 
 @lru_cache(maxsize=16)
-def load_schema(profile: str) -> dict[str, Any]:
+def load_schema(profile: str, *, allow_stub_fallback: bool = False) -> dict[str, Any]:
     """
     Load JSON schema for the given profile key.
 
@@ -133,10 +123,10 @@ def load_schema(profile: str) -> dict[str, Any]:
       2) app/schemas/mozilla/{raw_dir}/policies-schema.json
       3) app/schemas/policies/{bundled_filename}
       4) app/schemas/cache/{filename}
-      5) (fallback) generate a minimal stub schema, write it to cache, return it
+      5) (optional fallback) generate a minimal stub schema, write it to cache, return it
 
-    The fallback keeps tests deterministic and prevents router import failures that
-    would otherwise lead to 404 on /api endpoints.
+    Stub fallback is opt-in so application code does not silently validate against
+    an incomplete schema when bundled assets are missing or packaging regresses.
     """
     if profile not in _PROFILE_FILES:
         raise UnsupportedProfileError(
@@ -163,11 +153,17 @@ def load_schema(profile: str) -> dict[str, Any]:
     if cache_path.exists():
         return _read_json_file(cache_path)
 
-    # Fallback: generate a minimal schema and persist it to cache for reproducibility.
+    if not allow_stub_fallback:
+        raise SchemaNotFoundError(
+            "Schema file not found for "
+            f"profile '{profile}' in static, mozilla raw, bundled, or cache locations"
+        )
+
+    # Optional fallback: generate a minimal schema and persist it to cache for reproducibility.
     title = (
-        "Firefox ESR 140 Policies (stub)"
-        if profile == "esr-140"
-        else "Firefox Release 148 Policies (stub)"
+        "Firefox ESR 140.9 Policies (stub)"
+        if profile.startswith("esr-140.9")
+        else "Firefox Release 149 Policies (stub)"
     )
     stub = _minimal_schema(title)
     _write_json_file(cache_path, stub)

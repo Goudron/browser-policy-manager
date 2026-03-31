@@ -1,7 +1,7 @@
 {% macro render_settings_pills(items, element_id) -%}
 <div id="{{ element_id }}" class="dock-meta">
     {%- for item in items %}
-    <span class="dock-pill" data-i18n="{{ item.label_key }}">{{ item.fallback }}</span>
+    <span class="dock-pill" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.fallback) }}</span>
     {%- endfor %}
 </div>
 {%- endmacro %}
@@ -9,18 +9,18 @@
 {% macro render_settings_docs(filters, targets, element_id) -%}
 <div id="{{ element_id }}" class="wizard-settings-docs surface-soft-box" data-settings-nav>
     <div class="wizard-settings-docs-head">
-        <div class="field-label" data-i18n="profiles.wizard_settings_controls_label">Controls in this area</div>
+        <div class="field-label" data-i18n="profiles.wizard_settings_controls_label">{{ tr("profiles.wizard_settings_controls_label") }}</div>
         <div class="wizard-settings-filters">
-            <button type="button" class="button-base ghost-button wizard-settings-filter is-active" data-settings-filter="all" data-i18n="profiles.wizard_settings_filter_all">All</button>
+            <button type="button" class="button-base ghost-button wizard-settings-filter is-active" data-settings-filter="all" data-i18n="profiles.wizard_settings_filter_all">{{ tr("profiles.wizard_settings_filter_all") }}</button>
             {%- for item in filters %}
-            <button type="button" class="button-base ghost-button wizard-settings-filter" data-settings-filter="{{ item.id }}" data-i18n="{{ item.label_key }}">{{ item.fallback }}</button>
+            <button type="button" class="button-base ghost-button wizard-settings-filter" data-settings-filter="{{ item.id }}" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.fallback) }}</button>
             {%- endfor %}
         </div>
     </div>
     <div class="wizard-settings-targets">
         {%- for item in targets %}
         <button type="button" class="button-base ghost-button wizard-settings-target" data-settings-area-id="{{ item.area_id }}" data-settings-jump-target="{{ item.target }}">
-            <span data-i18n="{{ item.label_key }}">{{ item.fallback }}</span>
+            <span data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.fallback) }}</span>
         </button>
         {%- endfor %}
     </div>
@@ -32,8 +32,8 @@
         {%- if item.control_kind == "enum-select" %}
         <div class="wizard-toggle wizard-toggle--select" data-settings-target="{{ item.target }}">
             <div>
-                <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ item.policy_id }}</div>
-                <div class="wizard-toggle-copy" data-i18n="{{ item.copy_key }}"></div>
+                <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.policy_id) }}</div>
+                <div class="wizard-toggle-copy" data-i18n="{{ item.copy_key }}">{{ tr(item.copy_key) }}</div>
             </div>
             <select class="soft-input" data-policy-select-key="{{ item.policy_id }}">
                 <option value=""></option>
@@ -46,8 +46,8 @@
         <label class="wizard-toggle" data-settings-target="{{ item.target }}">
             <input type="checkbox" data-policy-key="{{ item.policy_id }}" />
             <div>
-                <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ item.policy_id }}</div>
-                <div class="wizard-toggle-copy" data-i18n="{{ item.copy_key }}"></div>
+                <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.policy_id) }}</div>
+                <div class="wizard-toggle-copy" data-i18n="{{ item.copy_key }}">{{ tr(item.copy_key) }}</div>
             </div>
         </label>
         {%- endif %}
@@ -55,40 +55,44 @@
 {%- endmacro %}
 
 {% macro render_wizard_schema_shell(step_id) -%}
-<div class="wizard-section-group wizard-schema-shell" id="wizard-schema-shell-step-{{ step_id }}" data-wizard-shell-step="{{ step_id }}">
+<div
+    class="wizard-section-group wizard-schema-shell"
+    id="wizard-schema-shell-step-{{ step_id }}"
+    data-wizard-shell-step="{{ step_id }}"
+    data-workspace-scope-panel="advanced">
     <div class="wizard-section-heading">
-        <h3 class="wizard-section-title" data-i18n="profiles.wizard_shell_title">Schema-driven coverage for this step</h3>
+        <h3 class="wizard-section-title" data-i18n="profiles.wizard_shell_title">{{ tr("profiles.wizard_shell_title") }}</h3>
         <p class="wizard-section-copy" data-i18n="profiles.wizard_shell_body">
-            This overview combines curated controls with the real Mozilla policy schema, so we can keep the flow guided without hiding advanced policies.
+            {{ tr("profiles.wizard_shell_body") }}
         </p>
     </div>
     <div class="wizard-shell-badges" id="wizard-schema-shell-step-{{ step_id }}-badges"></div>
     <div class="wizard-shell-grid">
         <section class="wizard-shell-card">
             <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_recommended_title">Recommended controls</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_recommended_body">High-value policies we should eventually keep as first-class controls in this step.</p>
+                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_recommended_title">{{ tr("profiles.wizard_shell_recommended_title") }}</h4>
+                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_recommended_body">{{ tr("profiles.wizard_shell_recommended_body") }}</p>
             </div>
             <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-recommended"></div>
         </section>
         <section class="wizard-shell-card">
             <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_additional_title">Additional mapped policies</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_additional_body">Policies already classified into this step, but still better handled as advanced controls.</p>
+                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_additional_title">{{ tr("profiles.wizard_shell_additional_title") }}</h4>
+                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_additional_body">{{ tr("profiles.wizard_shell_additional_body") }}</p>
             </div>
             <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-additional"></div>
         </section>
         <section class="wizard-shell-card">
             <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_preferences_title">Managed Preferences</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_preferences_body">Existing preference sections that already fit this step and can stay alongside policy controls.</p>
+                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_preferences_title">{{ tr("profiles.wizard_shell_preferences_title") }}</h4>
+                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_preferences_body">{{ tr("profiles.wizard_shell_preferences_body") }}</p>
             </div>
             <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-preferences"></div>
         </section>
         <section class="wizard-shell-card">
             <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_raw_title">Raw JSON fallback</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_raw_body">Policies we preserve through the document editor until we build dedicated UI for them.</p>
+                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_raw_title">{{ tr("profiles.wizard_shell_raw_title") }}</h4>
+                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_raw_body">{{ tr("profiles.wizard_shell_raw_body") }}</p>
             </div>
             <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-raw"></div>
         </section>

@@ -41,7 +41,7 @@
                             Status: preset.status,
                             Type: preset.type,
                         });
-                        setStatus(t("profiles.wizard_preferences_preset_applied", "Preference preset added."), "info");
+                        setStatus(t("profiles.wizard_preferences_preset_applied"), "info");
                     });
                     view.presets.appendChild(button);
                 });
@@ -72,7 +72,7 @@
                     `;
                     button.addEventListener("click", () => {
                         stateApi.appendPreferenceBundle(section.id, bundle);
-                        setStatus(t("profiles.wizard_preferences_bundle_applied", "Preference bundle added."), "info");
+                        setStatus(t("profiles.wizard_preferences_bundle_applied"), "info");
                     });
                     view.bundles.appendChild(button);
                 });
@@ -109,7 +109,7 @@
                     `;
                     button.addEventListener("click", () => {
                         stateApi.appendPreferenceDraft(section.id, knownPreference.pref, stateApi.createKnownPreferenceSeed(knownPreference));
-                        setStatus(t("profiles.wizard_preferences_known_applied", "Known preference added."), "info");
+                        setStatus(t("profiles.wizard_preferences_known_applied"), "info");
                     });
                     view.known.appendChild(button);
                 });

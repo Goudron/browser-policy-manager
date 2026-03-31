@@ -57,29 +57,29 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--release-channel",
-        default="release-148",
-        help="Channel string stored in the Release schema (default: release-148).",
+        default="release-149",
+        help="Channel string stored in the Release schema (default: release-149).",
     )
     parser.add_argument(
         "--release-version",
-        default="148.0",
-        help="Version string stored in the Release schema (default: 148.0).",
+        default="149.0",
+        help="Version string stored in the Release schema (default: 149.0).",
     )
     parser.add_argument(
         "--esr-channel",
-        default="esr-140",
-        help="Channel string stored in the ESR schema (default: esr-140).",
+        default="esr-140.9",
+        help="Channel string stored in the ESR schema (default: esr-140.9).",
     )
     parser.add_argument(
         "--esr-version",
-        default="140.8",
-        help="Version string stored in the ESR schema (default: 140.8).",
+        default="140.9",
+        help="Version string stored in the ESR schema (default: 140.9).",
     )
     parser.add_argument(
         "--source-tag",
-        default="mozilla-policy-templates-v7.8",
+        default="mozilla-policy-templates-v7.9",
         help=(
-            "Source tag identifier stored in the schemas (default: mozilla-policy-templates-v7.8). "
+            "Source tag identifier stored in the schemas (default: mozilla-policy-templates-v7.9). "
             "Useful for tracking which upstream snapshot was used."
         ),
     )

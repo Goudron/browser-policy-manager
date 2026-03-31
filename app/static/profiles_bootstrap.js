@@ -16,6 +16,7 @@
                 fromEditorValue: data.fromEditorValue,
                 formatBooleanSelectValue: utils.formatBooleanSelectValue,
                 parseBooleanSelectValue: utils.parseBooleanSelectValue,
+                getDefaultSchemaVersion: utils.getDefaultSchemaVersion,
             },
         });
 

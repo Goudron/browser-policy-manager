@@ -40,13 +40,13 @@
             const stepMeta = wizardSearchSectionSteps[sectionId] || { step: 0, key: "", fallback: "" };
             const stepLabel = t(stepMeta.key, stepMeta.fallback);
             const kindLabelMap = {
-                control: t("profiles.wizard_settings_search_kind_control", "Control"),
-                preference_section: t("profiles.wizard_settings_search_kind_preferences_section", "Preferences section"),
-                preference_preset: t("profiles.wizard_settings_search_kind_preference_preset", "Preference preset"),
-                preference_bundle: t("profiles.wizard_settings_search_kind_preference_bundle", "Preference bundle"),
-                known_preference: t("profiles.wizard_settings_search_kind_known_preference", "Known preference"),
-                search_engine_preset: t("profiles.wizard_settings_search_kind_search_preset", "Search engine preset"),
-                policy_blueprint: t("profiles.wizard_settings_search_kind_policy_blueprint", "Schema policy"),
+                control: t("profiles.wizard_settings_search_kind_control"),
+                preference_section: t("profiles.wizard_settings_search_kind_preferences_section"),
+                preference_preset: t("profiles.wizard_settings_search_kind_preference_preset"),
+                preference_bundle: t("profiles.wizard_settings_search_kind_preference_bundle"),
+                known_preference: t("profiles.wizard_settings_search_kind_known_preference"),
+                search_engine_preset: t("profiles.wizard_settings_search_kind_search_preset"),
+                policy_blueprint: t("profiles.wizard_settings_search_kind_policy_blueprint"),
             };
 
             const searchFields = [
@@ -208,7 +208,7 @@
                         description: t(preset.description_key, engineMeta.Description || ""),
                         target: preset.target,
                         sectionId: "search",
-                        areaLabel: t("profiles.wizard_search_presets_title", "Quick presets"),
+                        areaLabel: t("profiles.wizard_search_presets_title"),
                         kind: "search_engine_preset",
                         keywords: [
                             engineMeta.Name || "",
@@ -237,8 +237,8 @@
                         createSettingsSearchEntry({
                             title: item.label || item.id,
                             description: item.support_level === "fallback"
-                                ? t("profiles.wizard_shell_raw_body", "Policies we preserve through the document editor until we build dedicated UI for them.")
-                                : t("profiles.wizard_shell_additional_body", "Policies already classified into this step, but still better handled as advanced controls."),
+                                ? t("profiles.wizard_shell_raw_body")
+                                : t("profiles.wizard_shell_additional_body"),
                             target: item.target,
                             sectionId: stepMeta.id,
                             areaLabel: item.subsection_label || "",
@@ -330,10 +330,14 @@
                 button.type = "button";
                 button.className = "button-base ghost-button wizard-settings-search-result";
                 button.dataset.settingsSearchTarget = entry.target;
+                button.setAttribute(
+                    "aria-label",
+                    [entry.title, entry.stepLabel, entry.kindLabel, entry.areaLabel].filter(Boolean).join(". "),
+                );
                 button.innerHTML = `
                     <span class="wizard-settings-search-result-top">
                         <span class="wizard-settings-search-result-title">${entry.title}</span>
-                        <span class="wizard-settings-search-result-step">${entry.stepNumber ? `${t("profiles.wizard_settings_search_step", "Step")} ${entry.stepNumber} • ${entry.stepLabel}` : entry.stepLabel}</span>
+                        <span class="wizard-settings-search-result-step">${entry.stepNumber ? `${t("profiles.wizard_settings_search_step")} ${entry.stepNumber} • ${entry.stepLabel}` : entry.stepLabel}</span>
                     </span>
                     <span class="wizard-settings-search-result-meta">${[entry.kindLabel, entry.areaLabel, entry.description].filter(Boolean).join(" • ")}</span>
                 `;

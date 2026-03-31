@@ -16,10 +16,10 @@ def test_wizard_starter_catalog_is_schema_aware():
     )
     assert "DisablePocket" in catalog["managed_policy_keys"]
     assert (
-        catalog["presets"]["basic_corporate"]["policy_values"]["esr-140"]["DisablePocket"]
+        catalog["presets"]["basic_corporate"]["policy_values"]["esr-140.9"]["DisablePocket"]
         is True
     )
-    assert catalog["quick_policy_enabled_values"]["DisablePocket"]["release-148"] is True
+    assert catalog["quick_policy_enabled_values"]["DisablePocket"]["release-149"] is True
     assert "ExtensionSettings" in catalog["managed_policy_keys"]
     assert "WebsiteFilter" in catalog["managed_policy_keys"]
     assert "SanitizeOnShutdown" in catalog["managed_policy_keys"]
@@ -28,7 +28,7 @@ def test_wizard_starter_catalog_is_schema_aware():
 def test_wizard_starter_presets_validate_for_esr_and_release_148():
     catalog = get_wizard_starter_catalog()
 
-    for schema_version in ("esr-140", "release-148"):
+    for schema_version in ("esr-140.9", "release-149"):
         for starter_key in catalog["presets"]:
             document = build_wizard_starter_document(starter_key, schema_version)
             validate_profile_payload_with_schema(
@@ -39,10 +39,10 @@ def test_wizard_starter_presets_validate_for_esr_and_release_148():
                 }
             )
 
-    office_esr = build_wizard_starter_document("basic_corporate", "esr-140")
-    office_release = build_wizard_starter_document("basic_corporate", "release-148")
-    soc_esr = build_wizard_starter_document("soc_hard", "esr-140")
-    soc_release = build_wizard_starter_document("soc_hard", "release-148")
+    office_esr = build_wizard_starter_document("basic_corporate", "esr-140.9")
+    office_release = build_wizard_starter_document("basic_corporate", "release-149")
+    soc_esr = build_wizard_starter_document("soc_hard", "esr-140.9")
+    soc_release = build_wizard_starter_document("soc_hard", "release-149")
 
     assert office_esr["DisablePocket"] is True
     assert office_release["DisablePocket"] is True
@@ -51,9 +51,9 @@ def test_wizard_starter_presets_validate_for_esr_and_release_148():
 
 
 def test_wizard_starter_presets_include_operational_baseline_controls():
-    office = build_wizard_starter_document("basic_corporate", "release-148")
-    kiosk = build_wizard_starter_document("classroom_kiosk", "release-148")
-    soc = build_wizard_starter_document("soc_hard", "release-148")
+    office = build_wizard_starter_document("basic_corporate", "release-149")
+    kiosk = build_wizard_starter_document("classroom_kiosk", "release-149")
+    soc = build_wizard_starter_document("soc_hard", "release-149")
 
     assert office["Certificates"]["ImportEnterpriseRoots"] is True
     assert office["DNSOverHTTPS"] == {"Enabled": False, "Locked": True}
@@ -107,10 +107,10 @@ def test_resolve_schema_enabled_value_uses_definition_type(monkeypatch):
         lambda schema_version, policy_id: definitions[policy_id],
     )
 
-    assert _resolve_schema_enabled_value("Missing", "release-148") is True
-    assert _resolve_schema_enabled_value("ObjectPolicy", "release-148") == {}
-    assert _resolve_schema_enabled_value("ArrayPolicy", "release-148") == []
-    assert _resolve_schema_enabled_value("StringPolicy", "release-148") == ""
-    assert _resolve_schema_enabled_value("NumberPolicy", "release-148") == 1
-    assert _resolve_schema_enabled_value("IntegerPolicy", "release-148") == 1
-    assert _resolve_schema_enabled_value("BooleanPolicy", "release-148") is True
+    assert _resolve_schema_enabled_value("Missing", "release-149") is True
+    assert _resolve_schema_enabled_value("ObjectPolicy", "release-149") == {}
+    assert _resolve_schema_enabled_value("ArrayPolicy", "release-149") == []
+    assert _resolve_schema_enabled_value("StringPolicy", "release-149") == ""
+    assert _resolve_schema_enabled_value("NumberPolicy", "release-149") == 1
+    assert _resolve_schema_enabled_value("IntegerPolicy", "release-149") == 1
+    assert _resolve_schema_enabled_value("BooleanPolicy", "release-149") is True

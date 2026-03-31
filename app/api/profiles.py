@@ -172,14 +172,10 @@ async def _update_profile_core(
         not_found_detail=not_found_detail,
     )
     payload_data = payload.model_dump(exclude_unset=True)
-    normalized_payload = payload
+    normalized_payload_data = dict(payload_data)
     if "flags" in payload_data and payload_data["flags"] is not None:
-        normalized_payload = ProfileUpdate(
-            description=payload.description,
-            schema_version=payload.schema_version,
-            flags={**current.flags, **payload_data["flags"]},
-            owner=payload.owner,
-        )
+        normalized_payload_data["flags"] = {**current.flags, **payload_data["flags"]}
+    normalized_payload = ProfileUpdate.model_validate(normalized_payload_data)
 
     if validate_policies:
         new_schema_version = normalized_payload.schema_version or current.schema_version

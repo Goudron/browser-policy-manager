@@ -11,7 +11,7 @@ def _mk(prefix: str = "QP"):
     return {
         "name": f"{prefix}-{u}",
         "description": "Query-param export path",
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "flags": {"DisableTelemetry": True, "DisablePrivateBrowsing": True},
     }
 
@@ -75,7 +75,7 @@ def test_collection_yaml_queryparam_with_include_deleted_and_filters_for_envelop
         "fmt": "yaml",
         "include_deleted": "true",
         "q": "QPC-",  # substring in name
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "limit": 5,
         "offset": 0,
         "sort": "updated_at",

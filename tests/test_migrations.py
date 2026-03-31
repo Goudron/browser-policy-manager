@@ -8,6 +8,8 @@ from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
 
+CURRENT_HEAD = "20260330_upgrade_profiles_to_firefox149"
+
 
 @pytest.mark.order(1)  # run early, but after environment setup
 def test_alembic_upgrade_head_on_sqlite_tmp(tmp_path: Path):
@@ -44,7 +46,7 @@ def test_alembic_upgrade_head_on_sqlite_tmp(tmp_path: Path):
         assert "deleted_at" in cols
         with engine.connect() as conn:
             version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-        assert version == "20260323_normalize_profiles"
+        assert version == CURRENT_HEAD
     finally:
         engine.dispose()
 
@@ -87,6 +89,14 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
             conn.exec_driver_sql(
                 "INSERT INTO alembic_version (version_num) VALUES ('20251026_add_deleted_at')"
             )
+            conn.exec_driver_sql(
+                """
+                INSERT INTO policies (name, description, schema_version, flags, owner, created_at, updated_at)
+                VALUES
+                    ('legacy-release', NULL, 'release-148', '{}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                    ('legacy-esr', NULL, 'esr-140.8', '{}', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                """
+            )
     finally:
         engine.dispose()
 
@@ -103,6 +113,13 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
         assert "ix_policies_name" not in index_names
         with engine.connect() as conn:
             version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
-        assert version == "20260323_normalize_profiles"
+            schema_versions = conn.execute(
+                text("SELECT name, schema_version FROM profiles ORDER BY name")
+            ).all()
+        assert version == CURRENT_HEAD
+        assert schema_versions == [
+            ("legacy-esr", "esr-140.9"),
+            ("legacy-release", "release-149"),
+        ]
     finally:
         engine.dispose()

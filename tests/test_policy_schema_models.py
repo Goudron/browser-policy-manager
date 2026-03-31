@@ -30,8 +30,8 @@ def test_policy_schema_models_defaults_and_lookup():
         ),
     )
     schema = PolicySchema(
-        channel="release-148",
-        version="148.0",
+        channel="release-149",
+        version="149.0",
         source="test-fixture",
         policies={"Extensions": definition},
         ui_sections=[

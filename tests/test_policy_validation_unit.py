@@ -62,12 +62,22 @@ def test_load_policy_schema_for_channel_uses_shared_loader(monkeypatch):
     sentinel = {"title": "Policies"}
     monkeypatch.setattr(validation, "load_schema", lambda channel: sentinel)
 
-    assert validation.load_policy_schema_for_channel("esr-140") is sentinel
+    assert validation.load_policy_schema_for_channel("esr-140.9") is sentinel
 
 
 def test_load_policy_schema_for_channel_rejects_unknown_channel():
     with pytest.raises(ValueError, match="Unsupported channel"):
         validation.load_policy_schema_for_channel("beta-999")
+
+
+def test_load_policy_schema_for_channel_reports_missing_schema(monkeypatch):
+    def _raise_missing(channel: str):
+        raise validation.SchemaNotFoundError("missing")
+
+    monkeypatch.setattr(validation, "load_schema", _raise_missing)
+
+    with pytest.raises(ValueError, match="Schema for channel 'release-149' is not available"):
+        validation.load_policy_schema_for_channel("release-149")
 
 
 def test_normalize_policy_document_schema_rejects_unknown_top_level_policies():
@@ -152,7 +162,7 @@ def test_validate_profile_payload_with_schema_defaults_channel_and_validates(mon
 
     validation.validate_profile_payload_with_schema({"policies": {"DisableTelemetry": True}})
 
-    assert captured["channel"] == "release-148"
+    assert captured["channel"] == "release-149"
 
 
 def test_validate_profile_payload_with_schema_rejects_non_mapping_policies(monkeypatch):
@@ -163,7 +173,7 @@ def test_validate_profile_payload_with_schema_rejects_non_mapping_policies(monke
     )
 
     with pytest.raises(validation.PolicyValidationError) as excinfo:
-        validation.validate_profile_payload_with_schema({"channel": "esr-140", "policies": [1]})
+        validation.validate_profile_payload_with_schema({"channel": "esr-140.9", "policies": [1]})
 
     assert excinfo.value.issues == [
         validation.PolicyValidationIssue(
@@ -183,13 +193,23 @@ def test_validate_profile_payload_with_schema_passes_explicit_channel_to_loader(
 
     monkeypatch.setattr(validation, "load_policy_schema_for_channel", _fake_load)
 
-    validation.validate_profile_payload_with_schema({"channel": "esr-140", "policies": {}})
+    validation.validate_profile_payload_with_schema({"channel": "esr-140.9", "policies": {}})
 
-    assert captured["channel"] == "esr-140"
+    assert captured["channel"] == "esr-140.9"
 
 
 def test_normalize_policy_document_schema_leaves_non_object_schema_unchanged():
     schema = {"type": "string"}
+
+    assert validation._normalize_policy_document_schema(schema) is schema
+
+
+def test_normalize_policy_document_schema_keeps_already_strict_object_schema():
+    schema = {
+        "type": "object",
+        "properties": {"DisableTelemetry": {"type": "boolean"}},
+        "additionalProperties": False,
+    }
 
     assert validation._normalize_policy_document_schema(schema) is schema
 

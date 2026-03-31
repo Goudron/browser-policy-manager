@@ -44,7 +44,7 @@ def upgrade() -> None:
                 "schema_version",
                 sa.String(length=50),
                 nullable=False,
-                server_default="esr-140",
+                server_default="esr-140.9",
             ),
             # Store flags as TEXT (JSON is serialized by the application).
             sa.Column("flags", sa.Text, nullable=False, server_default="{}"),

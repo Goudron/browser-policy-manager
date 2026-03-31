@@ -94,11 +94,30 @@
             }
 
             if (fieldKind === "string-list") {
+                const listInputs = Array.from(control.querySelectorAll("[data-schema-list-item]"));
+                if (listInputs.length > 0) {
+                    const values = listInputs
+                        .map((input) => String(input.value || "").trim())
+                        .filter(Boolean);
+                    return values.length > 0 ? { ok: true, hasValue: true, value: values } : { ok: true, hasValue: false, value: [] };
+                }
                 const values = textToList(control.value || "");
                 return values.length > 0 ? { ok: true, hasValue: true, value: values } : { ok: true, hasValue: false, value: [] };
             }
 
             if (fieldKind === "true-map") {
+                const listInputs = Array.from(control.querySelectorAll("[data-schema-list-item]"));
+                if (listInputs.length > 0) {
+                    const values = listInputs
+                        .map((input) => String(input.value || "").trim())
+                        .filter(Boolean);
+                    if (values.length === 0) return { ok: true, hasValue: false, value: {} };
+                    return {
+                        ok: true,
+                        hasValue: true,
+                        value: Object.fromEntries(values.map((entry) => [entry, true])),
+                    };
+                }
                 const values = textToList(control.value || "");
                 if (values.length === 0) return { ok: true, hasValue: false, value: {} };
                 return {
@@ -118,7 +137,7 @@
                         ok: false,
                         hasValue: false,
                         value: null,
-                        message: t("profiles.wizard_shell_json_error", "Nested values must be valid JSON."),
+                        message: t("profiles.wizard_shell_json_error"),
                     };
                 }
             }
@@ -132,7 +151,7 @@
                         ok: false,
                         hasValue: false,
                         value: null,
-                        message: t("profiles.wizard_preferences_error_number", "Number values must be valid numeric input."),
+                        message: t("profiles.wizard_preferences_error_number"),
                     };
                 }
                 return { ok: true, hasValue: true, value: numeric };

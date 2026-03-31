@@ -19,9 +19,9 @@ def test_export_collection_yaml_with_filters_and_sorting():
 
     # Seed a few diverse items
     seeds = [
-        _mk_body("ColA", "ops@example.org", "esr-140"),
-        _mk_body("ColB", "sec@example.org", "esr-140"),
-        _mk_body("ColC", "ops@example.org", "esr-140"),
+        _mk_body("ColA", "ops@example.org", "esr-140.9"),
+        _mk_body("ColB", "sec@example.org", "esr-140.9"),
+        _mk_body("ColC", "ops@example.org", "esr-140.9"),
     ]
     for body in seeds:
         r = client.post("/api/profiles", json=body)
@@ -31,7 +31,7 @@ def test_export_collection_yaml_with_filters_and_sorting():
     params = {
         "fmt": "yaml",
         "owner": "ops@example.org",
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "q": "Col",  # substring match in name
         "include_deleted": "false",
         "limit": 2,

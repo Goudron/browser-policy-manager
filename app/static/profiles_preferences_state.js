@@ -176,18 +176,18 @@
 
         function formatPreferenceBundleStatus(bundleState) {
             if (bundleState.state === "applied") {
-                return t("profiles.wizard_preferences_bundle_state_applied", "Already applied");
+                return t("profiles.wizard_preferences_bundle_state_applied");
             }
             if (bundleState.state === "partial") {
-                return t("profiles.wizard_preferences_bundle_state_partial", "Partially applied: {matched}/{total}")
+                return t("profiles.wizard_preferences_bundle_state_partial")
                     .replace("{matched}", String(bundleState.matched))
                     .replace("{total}", String(bundleState.total));
             }
             if (bundleState.state === "conflict") {
-                return t("profiles.wizard_preferences_bundle_state_conflict", "Conflicting values: {conflicts}")
+                return t("profiles.wizard_preferences_bundle_state_conflict")
                     .replace("{conflicts}", String(bundleState.conflicts));
             }
-            return t("profiles.wizard_preferences_bundle_state_missing", "Not applied yet");
+            return t("profiles.wizard_preferences_bundle_state_missing");
         }
 
         function getKnownPreferenceState(knownPreference) {
@@ -215,15 +215,15 @@
 
         function formatKnownPreferenceStatus(knownState) {
             if (knownState.state === "suggested") {
-                return t("profiles.wizard_preferences_known_state_suggested", "Using suggested default");
+                return t("profiles.wizard_preferences_known_state_suggested");
             }
             if (knownState.state === "present") {
-                return t("profiles.wizard_preferences_known_state_present", "Already present");
+                return t("profiles.wizard_preferences_known_state_present");
             }
             if (knownState.state === "overridden") {
-                return t("profiles.wizard_preferences_known_state_overridden", "Overridden manually");
+                return t("profiles.wizard_preferences_known_state_overridden");
             }
-            return t("profiles.wizard_preferences_known_state_missing", "Not added yet");
+            return t("profiles.wizard_preferences_known_state_missing");
         }
 
         function syncPreferenceDraftSnapshotsFromDom() {
@@ -361,7 +361,7 @@
                 if (!hasContent) return;
 
                 if (!values.name) {
-                    errors.push(t("profiles.wizard_preferences_error_name", "Preference key is required."));
+                    errors.push(t("profiles.wizard_preferences_error_name"));
                     return;
                 }
 
@@ -371,7 +371,7 @@
 
                 if (values.status !== "clear") {
                     if (!values.value.trim()) {
-                        errors.push(t("profiles.wizard_preferences_error_value", "Preference value is required unless status is clear."));
+                        errors.push(t("profiles.wizard_preferences_error_value"));
                         return;
                     }
 
@@ -418,10 +418,10 @@
                 setCurrentRaw(normalized);
                 skipPreferenceDraftSyncOnce = true;
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_preferences_applied", "Managed preferences updated."), "info");
+                setStatus(t("profiles.wizard_preferences_applied"), "info");
             } catch (e) {
                 skipPreferenceDraftSyncOnce = false;
-                setStatus(`Wizard preferences error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_wizard_preferences").replace("{detail}", e.message || e), "error");
             }
         }
 

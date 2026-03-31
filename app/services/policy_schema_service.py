@@ -5,6 +5,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
+from app.core.schema_channels import SCHEMA_FILENAMES
 from app.models.policy_schema import PolicyBranch, PolicyDefinition, PolicySchema
 from app.services.firefox_policy_ui_registry import (
     get_policy_ui_sections,
@@ -16,10 +17,7 @@ SCHEMAS_DIR = BASE_DIR / "schemas" / "policies"
 
 
 # Channels we support and their corresponding schema files.
-CHANNEL_TO_FILENAME: dict[str, str] = {
-    "release-148": "firefox-release-148.json",
-    "esr-140": "firefox-esr-140.json",
-}
+CHANNEL_TO_FILENAME: dict[str, str] = dict(SCHEMA_FILENAMES)
 
 
 class UnknownPolicyChannelError(ValueError):

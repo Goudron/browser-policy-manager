@@ -1,5 +1,19 @@
 (() => {
+    function readSchemaChannelsCatalog(documentRef = document) {
+        const element = documentRef.getElementById("schema-channels-catalog");
+        try {
+            return element ? JSON.parse(element.textContent || "{}") : {};
+        } catch {
+            return {};
+        }
+    }
+
     const utils = {
+        getDefaultSchemaVersion(documentRef = document) {
+            const catalog = readSchemaChannelsCatalog(documentRef);
+            return typeof catalog.default_channel === "string" ? catalog.default_channel : "esr-140.9";
+        },
+
         humanizeIdentifier(value) {
             if (typeof value !== "string" || !value) return "";
 
@@ -177,7 +191,9 @@
         },
 
         formatSchemaLabel(value) {
-            return value === "release-148" ? "Release 148" : "ESR 140";
+            const catalog = readSchemaChannelsCatalog();
+            const labels = catalog && typeof catalog.labels === "object" ? catalog.labels : {};
+            return labels[value] || value || utils.getDefaultSchemaVersion();
         },
     };
 

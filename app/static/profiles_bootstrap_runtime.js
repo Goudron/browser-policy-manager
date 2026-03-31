@@ -12,6 +12,7 @@
         const { resolveTheme, resolveBrowserLanguage, updateThemeColorMeta } = platform;
         const { fromEditorValue, toEditorValue } = data;
         const {
+            t,
             setStatus,
             getEditor,
             setEditor,
@@ -86,10 +87,13 @@
                 findNetworkReviewTarget: core.findNetworkReviewTarget,
                 findHomeReviewTarget: core.findHomeReviewTarget,
                 findSearchReviewTarget: core.findSearchReviewTarget,
+                findAiReviewTarget: core.findAiReviewTarget,
                 findExtensionReviewTarget: core.findExtensionReviewTarget,
                 findBookmarkReviewTarget: core.findBookmarkReviewTarget,
                 findWebsiteAccessReviewTarget: core.findWebsiteAccessReviewTarget,
                 findPrivacyReviewTarget: core.findPrivacyReviewTarget,
+                appendSchemaListItem: core.appendSchemaListItem,
+                removeSchemaListItem: core.removeSchemaListItem,
                 appendSchemaArrayItem: core.appendSchemaArrayItem,
                 removeSchemaArrayItem: core.removeSchemaArrayItem,
                 appendSchemaNestedArrayItem: core.appendSchemaNestedArrayItem,
@@ -100,6 +104,7 @@
                 removeSchemaNestedDictionaryEntry: core.removeSchemaNestedDictionaryEntry,
                 currentSnapshotState: core.currentSnapshotState,
                 setStatus,
+                t,
             },
             state: {
                 getEditor,

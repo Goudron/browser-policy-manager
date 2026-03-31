@@ -14,6 +14,7 @@
         const wizardSettingsCatalog = readEmbeddedJson(documentRef, "wizard-settings-catalog");
         const wizardPreferencesCatalog = readEmbeddedJson(documentRef, "wizard-preferences-catalog");
         const wizardSchemaShellCatalog = readEmbeddedJson(documentRef, "wizard-schema-shell-catalog");
+        const schemaChannelsCatalog = readEmbeddedJson(documentRef, "schema-channels-catalog");
 
         const wizardPreferenceSections = Array.isArray(wizardPreferencesCatalog.sections)
             ? wizardPreferencesCatalog.sections
@@ -142,6 +143,10 @@
             wizardSettingsCatalog,
             wizardPreferencesCatalog,
             wizardSchemaShellCatalog,
+            schemaChannelsCatalog,
+            defaultSchemaVersion: typeof schemaChannelsCatalog.default_channel === "string"
+                ? schemaChannelsCatalog.default_channel
+                : "esr-140.9",
             wizardPreferenceSections,
             wizardKnownPreferences,
             wizardKnownPreferenceIndex: Object.fromEntries(
@@ -152,8 +157,9 @@
                 home: { step: 3, key: "profiles.wizard_step_three", fallback: "Home" },
                 search: { step: 4, key: "profiles.wizard_step_four", fallback: "Search" },
                 privacy: { step: 5, key: "profiles.wizard_step_five", fallback: "Privacy & security" },
-                sync: { step: 6, key: "profiles.wizard_step_six", fallback: "Sync and add-ons" },
-                review: { step: 7, key: "profiles.wizard_step_seven", fallback: "Review and export" },
+                sync: { step: 6, key: "profiles.wizard_step_six", fallback: "Accounts and add-ons" },
+                ai: { step: 7, key: "profiles.wizard_step_seven", fallback: "AI and smart features" },
+                review: { step: 8, key: "profiles.wizard_step_eight", fallback: "Review and export" },
             },
             searchEnginePresetCatalog: [
                 {

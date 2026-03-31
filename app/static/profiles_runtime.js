@@ -6,6 +6,7 @@
         state = {},
     }) {
         const {
+            t,
             resolveTheme,
             resolveBrowserLanguage,
             updateThemeColorMeta,
@@ -63,10 +64,13 @@
             findNetworkReviewTarget,
             findHomeReviewTarget,
             findSearchReviewTarget,
+            findAiReviewTarget,
             findExtensionReviewTarget,
             findBookmarkReviewTarget,
             findWebsiteAccessReviewTarget,
             findPrivacyReviewTarget,
+            appendSchemaListItem,
+            removeSchemaListItem,
             appendSchemaArrayItem,
             removeSchemaArrayItem,
             appendSchemaNestedArrayItem,
@@ -92,6 +96,7 @@
 
         const langStorageKey = "bpm-lang-mode";
         const themeStorageKey = "bpm-theme-mode";
+        const workspaceScopeStorageKey = "bpm-workspace-scope";
         const themeMediaQuery = windowRef.matchMedia("(prefers-color-scheme: dark)");
 
         const editorEl = documentRef.getElementById("editor");
@@ -124,6 +129,8 @@
         const wizardSettingsSearchInputEl = documentRef.getElementById("wizard-settings-search-input");
         const wizardSettingsSearchResultsEl = documentRef.getElementById("wizard-settings-search-results");
         const wizardSettingsSearchClearEl = documentRef.getElementById("wizard-settings-search-clear");
+        const workspaceScopeGuidedEl = documentRef.getElementById("workspace-scope-guided");
+        const workspaceScopeAdvancedEl = documentRef.getElementById("workspace-scope-advanced");
         const wizardSearchEngineAddButtonEl = documentRef.getElementById("wizard-search-engine-add");
         const wizardHomepageUrlEl = documentRef.getElementById("wizard-homepage-url");
         const wizardHomepageAdditionalEl = documentRef.getElementById("wizard-homepage-additional");
@@ -158,6 +165,61 @@
         const wizardFirefoxHomeInputs = Array.from(documentRef.querySelectorAll("[data-firefox-home-key]"));
         const wizardFirefoxSuggestInputs = Array.from(documentRef.querySelectorAll("[data-firefox-suggest-key]"));
 
+        function focusElementForA11y(targetEl) {
+            if (!targetEl || typeof targetEl.focus !== "function") return;
+            const needsTabIndex = !targetEl.matches("a[href], button, input, select, textarea, [tabindex]");
+            if (needsTabIndex) {
+                targetEl.setAttribute("tabindex", "-1");
+            }
+            targetEl.focus({ preventScroll: true });
+        }
+
+        function syncContextualA11yLabels() {
+            const actionButtons = Array.from(documentRef.querySelectorAll([
+                "[data-final-review-jump]",
+                "[data-network-review-jump]",
+                "[data-home-review-jump]",
+                "[data-search-review-jump]",
+                "[data-extension-review-jump]",
+                "[data-ai-review-jump]",
+                "[data-bookmark-review-jump]",
+                "[data-website-access-review-jump]",
+                "[data-privacy-review-jump]",
+            ].join(", ")));
+
+            actionButtons.forEach((button) => {
+                const actionText = button.textContent.trim();
+                const keyText = button.closest(".wizard-summary-row")?.querySelector(".wizard-summary-key")?.textContent?.trim() || "";
+                if (actionText && keyText) {
+                    button.setAttribute("aria-label", `${actionText} ${keyText}`);
+                }
+            });
+
+            const disclosureButtons = Array.from(documentRef.querySelectorAll([
+                "#wizard-firefox-home-fine-tuning-toggle",
+                "#wizard-search-defaults-fine-tuning-toggle",
+                "#wizard-search-suggest-fine-tuning-toggle",
+                "#wizard-network-enterprise-fine-tuning-toggle",
+                "#wizard-sync-fine-tuning-toggle",
+                "#wizard-ai-fine-tuning-toggle",
+                "#wizard-extension-fine-tuning-toggle",
+                "#wizard-extension-more-rules-toggle",
+                "#wizard-extension-curated-toggle",
+                "#wizard-website-fine-tuning-toggle",
+                "[data-extension-profile-toggle]",
+            ].join(", ")));
+
+            disclosureButtons.forEach((button) => {
+                const actionText = button.textContent.trim();
+                const cardTitle = button.closest("[data-extension-profile-card]")?.querySelector(".wizard-toggle-title")?.textContent?.trim() || "";
+                const sectionTitle = button.closest(".wizard-section-group")?.querySelector(".wizard-section-title")?.textContent?.trim() || "";
+                const contextText = cardTitle || sectionTitle;
+                if (actionText && contextText) {
+                    button.setAttribute("aria-label", `${actionText} ${contextText}`);
+                }
+            });
+        }
+
         function applyThemeMode(mode, persist = true) {
             const normalizedMode = ["system", "light", "dark"].includes(mode) ? mode : "system";
             const resolvedTheme = resolveTheme(normalizedMode, themeMediaQuery);
@@ -179,9 +241,14 @@
 
         async function loadLocale(lang) {
             try {
-                const res = await windowRef.fetch(`/i18n/${lang}.json`);
-                if (!res.ok) throw new Error(await res.text());
-                const nextLocale = await res.json();
+                let nextLocale = null;
+                if (lang === windowRef.__BPM_INITIAL_LANG__ && windowRef.__BPM_INITIAL_LOCALE__) {
+                    nextLocale = windowRef.__BPM_INITIAL_LOCALE__;
+                } else {
+                    const res = await windowRef.fetch(`/i18n/${lang}.json`);
+                    if (!res.ok) throw new Error(await res.text());
+                    nextLocale = await res.json();
+                }
                 setLocaleDict(nextLocale);
                 setCurrentLang(lang);
                 documentRef.documentElement.lang = lang;
@@ -197,6 +264,10 @@
                 documentRef.querySelectorAll("[data-i18n-title]").forEach((el) => {
                     const key = el.getAttribute("data-i18n-title");
                     if (nextLocale[key]) el.title = nextLocale[key];
+                });
+                documentRef.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n-aria-label");
+                    if (nextLocale[key]) el.setAttribute("aria-label", nextLocale[key]);
                 });
                 renderPreferencePresetButtons();
                 renderPreferenceBundleButtons();
@@ -216,6 +287,11 @@
                 refreshWorkspaceSignal();
                 setWizardStep(getWizardStep());
                 rerenderSearchEngineDraftsForLocale();
+                syncWizardNetworkFromEditor();
+                syncWizardPoliciesFromEditor();
+                syncWizardPreferencesFromEditor();
+                syncWizardExtensionsFromEditor();
+                syncContextualA11yLabels();
             } catch (e) {
                 console.warn("i18n load failed:", e);
             }
@@ -244,6 +320,65 @@
                 setSearchTimer(null);
                 reloadList();
             }, 220));
+        }
+
+        function applyWorkspaceScope(scope, { persist = true, focus = false } = {}) {
+            const normalizedScope = scope === "advanced" ? "advanced" : "guided";
+            documentRef.documentElement.dataset.workspaceScope = normalizedScope;
+
+            [
+                { el: workspaceScopeGuidedEl, value: "guided" },
+                { el: workspaceScopeAdvancedEl, value: "advanced" },
+            ].forEach(({ el, value }) => {
+                if (!el) return;
+                const isActive = normalizedScope === value;
+                el.classList.toggle("workspace-scope-button--active", isActive);
+                el.setAttribute("aria-pressed", isActive ? "true" : "false");
+            });
+
+            if (persist) {
+                windowRef.localStorage.setItem(workspaceScopeStorageKey, normalizedScope);
+            }
+
+            if (normalizedScope === "advanced") {
+                windowRef.requestAnimationFrame(() => {
+                    const editor = getEditor();
+                    if (editor && typeof editor.layout === "function") {
+                        editor.layout();
+                    }
+                });
+            }
+
+            if (!focus) return;
+            const focusTarget = normalizedScope === "advanced"
+                ? (documentRef.getElementById("details-panel") || documentRef.getElementById("editor-panel"))
+                : (documentRef.getElementById("wizard-panel") || documentRef.getElementById("overview-panel"));
+            focusElementForA11y(focusTarget);
+            focusTarget?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        function revealWorkspaceTarget(targetEl) {
+            if (!targetEl) return;
+            if (targetEl.closest('[data-workspace-scope-panel="advanced"]')) {
+                applyWorkspaceScope("advanced");
+            }
+            [
+                ["wizard-firefox-home-fine-tuning-panel", "wizard-firefox-home-fine-tuning-toggle"],
+                ["wizard-search-defaults-fine-tuning-panel", "wizard-search-defaults-fine-tuning-toggle"],
+                ["wizard-search-suggest-fine-tuning-panel", "wizard-search-suggest-fine-tuning-toggle"],
+                ["wizard-extension-fine-tuning-panel", "wizard-extension-fine-tuning-toggle"],
+                ["wizard-extension-more-rules-panel", "wizard-extension-more-rules-toggle"],
+                ["wizard-extension-curated-panel", "wizard-extension-curated-toggle"],
+                ["wizard-sync-fine-tuning-panel", "wizard-sync-fine-tuning-toggle"],
+                ["wizard-ai-fine-tuning-panel", "wizard-ai-fine-tuning-toggle"],
+                ["wizard-website-fine-tuning-panel", "wizard-website-fine-tuning-toggle"],
+                ["wizard-network-enterprise-fine-tuning-panel", "wizard-network-enterprise-fine-tuning-toggle"],
+            ].forEach(([panelId, toggleId]) => {
+                const panelEl = documentRef.getElementById(panelId);
+                if (!panelEl || !targetEl.closest(`#${panelId}`) || panelEl.hidden === false) return;
+                documentRef.getElementById(toggleId)?.click();
+            });
+            revealSettingsTarget(targetEl);
         }
 
         function syncEditorBackedUi() {
@@ -336,7 +471,7 @@
                 if (finalReviewJumpButton) {
                     const targetEl = findFinalReviewTarget(finalReviewJumpButton.dataset.finalReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -345,7 +480,7 @@
                 if (networkReviewJumpButton) {
                     const targetEl = findNetworkReviewTarget(networkReviewJumpButton.dataset.networkReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -354,7 +489,7 @@
                 if (homeReviewJumpButton) {
                     const targetEl = findHomeReviewTarget(homeReviewJumpButton.dataset.homeReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -363,7 +498,16 @@
                 if (searchReviewJumpButton) {
                     const targetEl = findSearchReviewTarget(searchReviewJumpButton.dataset.searchReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
+                    }
+                    return;
+                }
+
+                const aiReviewJumpButton = event.target.closest("[data-ai-review-jump]");
+                if (aiReviewJumpButton) {
+                    const targetEl = findAiReviewTarget(aiReviewJumpButton.dataset.aiReviewJump || "");
+                    if (targetEl) {
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -372,7 +516,7 @@
                 if (extensionReviewJumpButton) {
                     const targetEl = findExtensionReviewTarget(extensionReviewJumpButton.dataset.extensionReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -381,7 +525,7 @@
                 if (bookmarkReviewJumpButton) {
                     const targetEl = findBookmarkReviewTarget(bookmarkReviewJumpButton.dataset.bookmarkReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -390,7 +534,7 @@
                 if (websiteAccessReviewJumpButton) {
                     const targetEl = findWebsiteAccessReviewTarget(websiteAccessReviewJumpButton.dataset.websiteAccessReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -399,8 +543,14 @@
                 if (privacyReviewJumpButton) {
                     const targetEl = findPrivacyReviewTarget(privacyReviewJumpButton.dataset.privacyReviewJump || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
+                    return;
+                }
+
+                const scopeTargetButton = event.target.closest("[data-workspace-scope-target]");
+                if (scopeTargetButton) {
+                    applyWorkspaceScope(scopeTargetButton.dataset.workspaceScopeTarget || "guided", { focus: true });
                     return;
                 }
 
@@ -415,7 +565,7 @@
                 if (jumpButton) {
                     const targetEl = findSettingsTarget(jumpButton.dataset.settingsJumpTarget || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
@@ -424,20 +574,32 @@
                 if (shellJumpButton) {
                     const targetEl = findSettingsTarget(shellJumpButton.dataset.settingsJumpTarget || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
 
                 const shellTargetButton = event.target.closest("[data-wizard-shell-target]");
                 if (shellTargetButton) {
-                    revealSettingsTarget(shellTargetButton);
+                    revealWorkspaceTarget(shellTargetButton);
                     return;
                 }
 
                 const schemaArrayAddButton = event.target.closest("[data-schema-array-add]");
                 if (schemaArrayAddButton) {
                     appendSchemaArrayItem(schemaArrayAddButton.closest("[data-schema-policy-card]"));
+                    return;
+                }
+
+                const schemaListAddButton = event.target.closest("[data-schema-list-add]");
+                if (schemaListAddButton) {
+                    const container = schemaListAddButton.closest("[data-schema-policy-field], [data-schema-nested-field]");
+                    const card = schemaListAddButton.closest("[data-schema-policy-card]");
+                    appendSchemaListItem(container);
+                    if (card) {
+                        renderSchemaPolicyReviewState(card);
+                        applySchemaPolicyFromCard(card);
+                    }
                     return;
                 }
 
@@ -468,6 +630,19 @@
                     const container = schemaNestedArrayRemoveButton.closest('[data-schema-nested-kind="nested-array-of-objects"]');
                     const card = schemaNestedArrayRemoveButton.closest("[data-schema-policy-card]");
                     removeSchemaNestedArrayItem(container, row);
+                    if (card) {
+                        renderSchemaPolicyReviewState(card);
+                        applySchemaPolicyFromCard(card);
+                    }
+                    return;
+                }
+
+                const schemaListRemoveButton = event.target.closest("[data-schema-list-remove]");
+                if (schemaListRemoveButton) {
+                    const row = schemaListRemoveButton.closest("[data-schema-list-row]");
+                    const container = schemaListRemoveButton.closest("[data-schema-policy-field], [data-schema-nested-field]");
+                    const card = schemaListRemoveButton.closest("[data-schema-policy-card]");
+                    removeSchemaListItem(container, row);
                     if (card) {
                         renderSchemaPolicyReviewState(card);
                         applySchemaPolicyFromCard(card);
@@ -519,15 +694,25 @@
                 if (searchResultButton) {
                     const targetEl = findSettingsTarget(searchResultButton.dataset.settingsSearchTarget || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                 }
+            });
+
+            documentRef.addEventListener("click", () => {
+                windowRef.requestAnimationFrame(() => {
+                    syncContextualA11yLabels();
+                });
             });
         }
 
         function start() {
-            windowRef.require(["vs/editor/editor.main"], () => {
-                const monacoRef = windowRef.monaco;
+            const monacoReady = windowRef.__BPM_MONACO_READY__;
+            if (!monacoReady || typeof monacoReady.then !== "function") {
+                throw new Error("Monaco bundle is not ready");
+            }
+
+            monacoReady.then(async (monacoRef) => {
                 const editor = monacoRef.editor.create(editorEl, {
                     value: "{}",
                     language: "json",
@@ -548,9 +733,9 @@
                         const mode = modeSelectEl.value;
                         const parsed = fromEditorValue(editor.getValue(), mode);
                         editor.setValue(toEditorValue(parsed, mode));
-                        setStatus("Editor content formatted.", "success");
+                        setStatus(t("profiles.editor_formatted"), "success");
                     } catch (e) {
-                        setStatus(`Format error: ${e.message || e}`, "error");
+                        setStatus(t("profiles.error_format").replace("{detail}", e.message || e), "error");
                     }
                 });
 
@@ -562,7 +747,7 @@
                     syncWizardFieldsFromForm();
                     syncEditorBackedUi();
                     syncWorkspaceOverview();
-                    setStatus(`Switched editor to ${mode.toUpperCase()}.`, "info");
+                    setStatus(t("profiles.editor_mode_switched").replace("{mode}", mode.toUpperCase()), "info");
                 });
 
                 saveButtonEl.addEventListener("click", saveCurrent);
@@ -649,12 +834,18 @@
                     event.preventDefault();
                     const targetEl = findSettingsTarget(firstMatch.dataset.settingsSearchTarget || "");
                     if (targetEl) {
-                        revealSettingsTarget(targetEl);
+                        revealWorkspaceTarget(targetEl);
                     }
                 });
                 wizardSettingsSearchClearEl?.addEventListener("click", () => {
                     clearWizardSettingsSearch();
                     wizardSettingsSearchInputEl?.focus();
+                });
+                workspaceScopeGuidedEl?.addEventListener("click", () => {
+                    applyWorkspaceScope("guided", { focus: true });
+                });
+                workspaceScopeAdvancedEl?.addEventListener("click", () => {
+                    applyWorkspaceScope("advanced", { focus: true });
                 });
                 wizardSearchEngineAddButtonEl.addEventListener("click", () => {
                     appendSearchEngineDraft();
@@ -682,6 +873,7 @@
                 });
                 wireSchemaEvents();
                 wireDocumentClicks();
+                syncContextualA11yLabels();
 
                 windowRef.addEventListener("keydown", (event) => {
                     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
@@ -700,12 +892,14 @@
                 const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || legacySavedLang || "system";
                 const savedMode = windowRef.localStorage.getItem("bpm-editor-mode") || "json";
                 const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
+                const savedWorkspaceScope = windowRef.localStorage.getItem(workspaceScopeStorageKey) || "guided";
                 langSelectEl.value = savedLangMode;
                 modeSelectEl.value = savedMode;
                 themeSelectEl.value = savedThemeMode;
                 monacoRef.editor.setModelLanguage(editor.getModel(), savedMode === "yaml" ? "yaml" : "json");
                 editor.setValue(toEditorValue({}, savedMode));
                 applyThemeMode(savedThemeMode, false);
+                applyWorkspaceScope(savedWorkspaceScope, { persist: false });
                 syncWizardFieldsFromForm();
                 syncEditorBackedUi();
                 setWizardStep(1);
@@ -723,11 +917,13 @@
                     themeMediaQuery.addListener(handleSystemThemeChange);
                 }
 
+                await applyLanguageMode(savedLangMode, false);
                 resetDraft();
                 reloadList();
-                applyLanguageMode(savedLangMode, false);
                 updateDownloadLinks();
                 syncWorkspaceOverview();
+            }).catch((error) => {
+                setStatus(t("profiles.error_loading").replace("{detail}", error?.message || error), "error");
             });
         }
 

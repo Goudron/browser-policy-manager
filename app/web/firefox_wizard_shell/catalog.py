@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS, get_schema_label
 from app.services.policy_schema_service import load_policy_schema
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 
 from .inline_editors import build_inline_editor
 from .serializer import humanize_identifier, serialize_policy
 
-SUPPORTED_POLICY_CHANNELS = ("esr-140", "release-148")
+SUPPORTED_POLICY_CHANNELS = SUPPORTED_SCHEMA_CHANNELS
 
 WIZARD_SHELL_STEPS: list[dict[str, Any]] = [
     {
@@ -53,8 +54,16 @@ WIZARD_SHELL_STEPS: list[dict[str, Any]] = [
     },
     {
         "step": 7,
-        "id": "review",
+        "id": "ai",
         "title_key": "profiles.wizard_step_seven",
+        "fallback": "AI and smart features",
+        "policy_sections": [],
+        "preference_sections": [],
+    },
+    {
+        "step": 8,
+        "id": "review",
+        "title_key": "profiles.wizard_step_eight",
         "fallback": "Review and export",
         "policy_sections": ["advanced"],
         "preference_sections": [],
@@ -180,4 +189,4 @@ def _build_channel_step_shell(
 
 
 def _format_schema_label(channel: str) -> str:
-    return "Release 148" if channel == "release-148" else "ESR 140"
+    return get_schema_label(channel)

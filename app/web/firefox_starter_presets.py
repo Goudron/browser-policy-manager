@@ -3,9 +3,10 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 from app.services.policy_schema_service import get_policy_definition
 
-SUPPORTED_POLICY_CHANNELS = ("esr-140", "release-148")
+SUPPORTED_POLICY_CHANNELS = SUPPORTED_SCHEMA_CHANNELS
 SCHEMA_ENABLED = "__SCHEMA_ENABLED__"
 
 _LOCKED_ENTERPRISE_HOME: dict[str, Any] = {
@@ -341,7 +342,7 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
             "policy_values": {
                 "default": _resolve_policy_values_for_channel(
                     preset.get("policy_values", {}).get("default", {}),
-                    "release-148",
+                    "release-149",
                 ),
             },
             "homepage": deepcopy(preset.get("homepage", {})),

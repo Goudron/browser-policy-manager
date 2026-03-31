@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.4.0-dev"
+version = "0.5.0-dev"
 description = "Enterprise browser policy manager: FastAPI backend, validation, export, and simple UI."
 readme = "README.md"
 requires-python = ">=3.13"
@@ -52,6 +52,7 @@ dev = [
   "pytest>=8.3.3",
   "pytest-asyncio>=0.24.0",
   "anyio>=4.4.0",
+  "selenium>=4.28.0",
 
   # lint & format & types
   "ruff>=0.6.9",
@@ -113,11 +114,13 @@ module = ["requests.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-addopts = "-q"
+addopts = "-q -m 'not firefox_live and not firefox_live_amo'"
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
   "order: test order marker",
+  "firefox_live: runs live Firefox enterprise-policy tests",
+  "firefox_live_amo: runs live Firefox AMO canary tests",
 ]
 
 [tool.coverage.run]

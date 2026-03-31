@@ -12,6 +12,7 @@ def test_openapi_uses_profiles_surface_for_export_and_crud():
     assert "/api/export/profiles/{profile_id}" in paths
     assert "/api/export/profiles/{profile_id}.json" in paths
     assert "/api/export/profiles/{profile_id}.yaml" in paths
+    assert "/api/export/profiles/{profile_id}/firefox/policies.json" in paths
 
     assert "/api/export/policies" not in paths
     assert "/api/export/{policy_id}/policies.json" not in paths

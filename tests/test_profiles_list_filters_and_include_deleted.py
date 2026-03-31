@@ -18,9 +18,9 @@ def test_list_filters_include_deleted_sort_and_pagination():
     client = make_test_client(app)
 
     # Seed multiple records with different owners/schemas; delete one
-    r1 = client.post("/api/profiles", json=_mk("LF-A", "ops@example.org", "esr-140"))
-    r2 = client.post("/api/profiles", json=_mk("LF-B", "sec@example.org", "esr-140"))
-    r3 = client.post("/api/profiles", json=_mk("LF-C", "ops@example.org", "esr-140"))
+    r1 = client.post("/api/profiles", json=_mk("LF-A", "ops@example.org", "esr-140.9"))
+    r2 = client.post("/api/profiles", json=_mk("LF-B", "sec@example.org", "esr-140.9"))
+    r3 = client.post("/api/profiles", json=_mk("LF-C", "ops@example.org", "esr-140.9"))
     assert r1.status_code == r2.status_code == r3.status_code == 201
     pid_deleted = r2.json()["id"]
     rdel = client.delete(f"/api/profiles/{pid_deleted}")
@@ -43,7 +43,7 @@ def test_list_filters_include_deleted_sort_and_pagination():
         "/api/profiles",
         params={
             "owner": "ops@example.org",
-            "schema_version": "esr-140",
+            "schema_version": "esr-140.9",
             "q": "LF-",
         },
     )

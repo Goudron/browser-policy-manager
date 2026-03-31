@@ -9,7 +9,7 @@ async def test_create_list_get_update_delete(client):
         json={
             "name": "Default",
             "description": "Base profile",
-            "schema_version": "esr-140",
+            "schema_version": "esr-140.9",
             "flags": {"DisableTelemetry": True},
         },
     )
@@ -35,6 +35,11 @@ async def test_create_list_get_update_delete(client):
     r = await client.patch(f"/api/profiles/{pid}", json={"description": "Updated"})
     assert r.status_code == 200
     assert r.json()["description"] == "Updated"
+
+    # Explicit null clears nullable fields instead of silently keeping stale values.
+    r = await client.patch(f"/api/profiles/{pid}", json={"description": None})
+    assert r.status_code == 200
+    assert r.json()["description"] is None
 
     # Delete (soft delete)
     r = await client.delete(f"/api/profiles/{pid}")

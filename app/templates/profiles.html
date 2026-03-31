@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ initial_lang }}">
 
 <head>
     <meta charset="utf-8" />
@@ -7,45 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f6efe4" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <script>
-        (function () {
-            const storageKey = "bpm-theme-mode";
-            const savedMode = localStorage.getItem(storageKey) || "system";
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            const resolvedTheme = savedMode === "system" ? (prefersDark ? "dark" : "light") : savedMode;
-            document.documentElement.dataset.themeMode = savedMode;
-            document.documentElement.dataset.theme = resolvedTheme;
-            const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-            if (metaThemeColor) {
-                metaThemeColor.setAttribute("content", resolvedTheme === "dark" ? "#07111a" : "#f6efe4");
-            }
-        })();
-    </script>
+    <script src="/static/profiles_head_bootstrap.js"></script>
+    <script src="/static/vendor/js-yaml.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    boxShadow: {
-                        panel: "0 28px 80px rgba(15, 23, 42, 0.10)",
-                        soft: "0 18px 48px rgba(15, 23, 42, 0.08)",
-                    },
-                },
-            },
-        };
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-    <script>
-        window.require = { paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs" } };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs/loader.min.js"></script>
-
+    <link rel="stylesheet" href="/static/vendor/profiles_tailwind.css" />
+    <link rel="stylesheet" href="/static/vendor/profiles_monaco.css" />
     <link rel="stylesheet" href="/static/profiles.css" />
 </head>
 
-<body class="app-body min-h-screen">
+<body class="app-body min-h-screen" data-initial-lang="{{ initial_lang }}">
     {% include "profiles/_page_shell.html" %}
+    <template id="profiles-initial-locale">{{ initial_locale | tojson }}</template>
     <script src="/static/profiles_utils.js"></script>
     <script src="/static/profiles_catalogs.js"></script>
     <script src="/static/profiles_dom.js"></script>
@@ -60,6 +32,7 @@
     <script src="/static/profiles_search_engines.js"></script>
     <script src="/static/profiles_network.js"></script>
     <script src="/static/profiles_extensions.js"></script>
+    <script src="/static/vendor/profiles_monaco.js"></script>
     <script src="/static/profiles_schema_shell_value_io.js"></script>
     <script src="/static/profiles_schema_shell_review.js"></script>
     <script src="/static/profiles_schema_shell_actions.js"></script>
@@ -68,6 +41,7 @@
     <script src="/static/profiles_settings_search.js"></script>
     <script src="/static/profiles_wizard_flow.js"></script>
     <script src="/static/profiles_workspace.js"></script>
+    <script src="/static/profiles_page_bootstrap.js"></script>
     <script src="/static/profiles_runtime.js"></script>
     <script src="/static/profiles_bootstrap_core.js"></script>
     <script src="/static/profiles_bootstrap_features.js"></script>

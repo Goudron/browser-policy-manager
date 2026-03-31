@@ -126,13 +126,15 @@ class ProfileService:
         if not entity:
             return None
 
-        if data.description is not None:
+        fields_to_update = data.model_fields_set
+
+        if "description" in fields_to_update:
             entity.description = data.description
-        if data.schema_version is not None:
+        if "schema_version" in fields_to_update and data.schema_version is not None:
             entity.schema_version = data.schema_version
-        if data.flags is not None:
+        if "flags" in fields_to_update and data.flags is not None:
             entity.flags = data.flags
-        if data.owner is not None:
+        if "owner" in fields_to_update:
             entity.owner = data.owner
 
         await session.flush()

@@ -13,7 +13,7 @@ def test_profiles_crud_and_export():
     body = {
         "name": f"Default-{unique}",
         "description": "Base profile",
-        "schema_version": "esr-140",
+        "schema_version": "esr-140.9",
         "flags": {"DisableTelemetry": True, "DisablePrivateBrowsing": True},
     }
 

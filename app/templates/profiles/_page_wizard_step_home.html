@@ -1,202 +1,192 @@
-{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_settings_docs, render_settings_pills, render_wizard_schema_shell %}
+{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_settings_docs, render_settings_pills, render_wizard_schema_shell with context %}
 
 <section class="wizard-panel" id="wizard-step-3">
     {{ render_wizard_schema_shell(3) }}
     <div class="wizard-section-group">
         <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_home_review_title">Home surfaces review</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_home_review_body">
-                Quick totals for homepage settings, first-run overrides, Firefox Home cards, and managed user messaging surfaces.
-            </p>
-        </div>
-        <div class="wizard-summary-list">
-            <div class="wizard-summary-row">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_homepage">Homepage controls active</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-homepage">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-homepage-jump" data-home-review-jump="homepage" data-i18n="profiles.wizard_home_review_open">Open</button>
-            </div>
-            <div class="wizard-summary-row">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_overrides">Startup and override surfaces</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-overrides">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-overrides-jump" data-home-review-jump="overrides" data-i18n="profiles.wizard_home_review_open">Open</button>
-            </div>
-            <div class="wizard-summary-row">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_firefox_home">Firefox Home cards managed</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-firefox-home">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-firefox-home-jump" data-home-review-jump="firefox_home" data-i18n="profiles.wizard_home_review_open">Open</button>
-            </div>
-            <div class="wizard-summary-row">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_user_messaging">User messaging controls active</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-user-messaging">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-user-messaging-jump" data-home-review-jump="user_messaging" data-i18n="profiles.wizard_home_review_open">Open</button>
-            </div>
-        </div>
-    </div>
-    <div class="wizard-section-group">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_homepage_title">Homepage and startup</h3>
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_homepage_title">{{ tr("profiles.wizard_homepage_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_homepage_body">
-                Configure the initial Firefox landing experience and lock it when the profile should stay consistent.
+                {{ tr("profiles.wizard_homepage_body") }}
             </p>
-            <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" id="wizard-homepage-section-status">No homepage overrides yet.</div>
         </div>
-        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">Firefox Settings areas</div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
         {{ render_settings_pills(wizard_settings_sections["home"]["ui_maps"]["homepage"], "wizard-settings-map-homepage") }}
         {{ render_settings_docs(wizard_settings_sections["home"]["ui_maps"]["homepage"], wizard_settings_sections["home"]["ui_docs"]["homepage"], "wizard-settings-docs-homepage") }}
-        <div class="wizard-grid">
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
             <label data-settings-target="field:wizard-homepage-url">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_homepage_url_label">Primary homepage URL</div>
-                <input id="wizard-homepage-url" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_homepage_url_placeholder" placeholder="https://intranet.example.local/" />
+                <div class="field-label mb-1" data-i18n="profiles.wizard_homepage_url_label">{{ tr("profiles.wizard_homepage_url_label") }}</div>
+                <input id="wizard-homepage-url" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_homepage_url_placeholder" placeholder="{{ tr('profiles.wizard_homepage_url_placeholder') }}" />
             </label>
             <label data-settings-target="field:wizard-homepage-start-page">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_homepage_start_label">Startup behavior</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_homepage_start_label">{{ tr("profiles.wizard_homepage_start_label") }}</div>
                 <select id="wizard-homepage-start-page" class="soft-input">
-                    <option value="" data-i18n="profiles.wizard_homepage_start_inherit">Firefox default</option>
-                    <option value="none" data-i18n="profiles.wizard_homepage_start_none">Blank page</option>
-                    <option value="homepage" data-i18n="profiles.wizard_homepage_start_homepage">Open homepage</option>
-                    <option value="previous-session" data-i18n="profiles.wizard_homepage_start_previous">Restore previous session</option>
-                    <option value="homepage-locked" data-i18n="profiles.wizard_homepage_start_locked">Open locked homepage</option>
+                    <option value="" data-i18n="profiles.wizard_homepage_start_inherit">{{ tr("profiles.wizard_homepage_start_inherit") }}</option>
+                    <option value="none" data-i18n="profiles.wizard_homepage_start_none">{{ tr("profiles.wizard_homepage_start_none") }}</option>
+                    <option value="homepage" data-i18n="profiles.wizard_homepage_start_homepage">{{ tr("profiles.wizard_homepage_start_homepage") }}</option>
+                    <option value="previous-session" data-i18n="profiles.wizard_homepage_start_previous">{{ tr("profiles.wizard_homepage_start_previous") }}</option>
+                    <option value="homepage-locked" data-i18n="profiles.wizard_homepage_start_locked">{{ tr("profiles.wizard_homepage_start_locked") }}</option>
                 </select>
             </label>
             <label class="wizard-field-full" data-settings-target="field:wizard-homepage-additional">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_homepage_additional_label">Additional homepage tabs</div>
-                <textarea id="wizard-homepage-additional" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_homepage_additional_placeholder" placeholder="https://example.org"></textarea>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_homepage_additional_label">{{ tr("profiles.wizard_homepage_additional_label") }}</div>
+                <textarea id="wizard-homepage-additional" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_homepage_additional_placeholder" placeholder="{{ tr('profiles.wizard_homepage_additional_placeholder') }}"></textarea>
                 <div class="wizard-input-hint" data-i18n="profiles.wizard_homepage_additional_hint">
-                    One URL per line. These become Homepage.Additional.
+                    {{ tr("profiles.wizard_homepage_additional_hint") }}
                 </div>
             </label>
             <label class="wizard-toggle wizard-field-full" data-settings-target="field:wizard-homepage-locked">
                 <input id="wizard-homepage-locked" type="checkbox" />
                 <div>
-                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_homepage_locked_label">Lock homepage settings</div>
-                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_homepage_locked_copy">Prevents users from changing the homepage configuration in Firefox.</div>
+                    <div class="wizard-toggle-title" data-i18n="profiles.wizard_homepage_locked_label">{{ tr("profiles.wizard_homepage_locked_label") }}</div>
+                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_homepage_locked_copy">{{ tr("profiles.wizard_homepage_locked_copy") }}</div>
                 </div>
             </label>
         </div>
+        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-homepage-section-status" data-i18n="profiles.wizard_homepage_section_state_empty">{{ tr("profiles.wizard_homepage_section_state_empty") }}</div>
     </div>
     <div class="wizard-section-group">
         <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_newtab_title">New tab and update surfaces</h3>
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_newtab_title">{{ tr("profiles.wizard_newtab_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_newtab_body">
-                Tune the new tab page and the extra pages Firefox shows on first run or after an upgrade.
+                {{ tr("profiles.wizard_newtab_body") }}
             </p>
-            <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" id="wizard-home-overrides-section-status">No startup overrides yet.</div>
         </div>
-        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">Firefox Settings areas</div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
         {{ render_settings_pills(wizard_settings_sections["home"]["ui_maps"]["new_tab"], "wizard-settings-map-new-tab") }}
         {{ render_settings_docs(wizard_settings_sections["home"]["ui_maps"]["new_tab"], wizard_settings_sections["home"]["ui_docs"]["new_tab"], "wizard-settings-docs-new-tab") }}
-        <div class="wizard-grid">
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
             <label data-settings-target="field:wizard-new-tab-page">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_newtab_page_label">New tab page</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_newtab_page_label">{{ tr("profiles.wizard_newtab_page_label") }}</div>
                 <select id="wizard-new-tab-page" class="soft-input">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_boolean_enabled">Enabled</option>
-                    <option value="false" data-i18n="profiles.wizard_boolean_disabled">Disabled</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_boolean_enabled">{{ tr("profiles.wizard_boolean_enabled") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_boolean_disabled">{{ tr("profiles.wizard_boolean_disabled") }}</option>
                 </select>
             </label>
             <label data-settings-target="field:wizard-override-first-run">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_override_first_run_label">First-run page override</div>
-                <input id="wizard-override-first-run" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_override_page_placeholder" placeholder="https://intranet.example.local/welcome" />
+                <div class="field-label mb-1" data-i18n="profiles.wizard_override_first_run_label">{{ tr("profiles.wizard_override_first_run_label") }}</div>
+                <input id="wizard-override-first-run" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_override_page_placeholder" placeholder="{{ tr('profiles.wizard_override_page_placeholder') }}" />
                 <div class="wizard-input-hint" data-i18n="profiles.wizard_override_first_run_hint">
-                    Mozilla allows multiple URLs here, separated with a vertical bar.
+                    {{ tr("profiles.wizard_override_first_run_hint") }}
                 </div>
             </label>
             <label data-settings-target="field:wizard-override-post-update">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_override_post_update_label">Post-update page override</div>
-                <input id="wizard-override-post-update" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_override_page_placeholder" placeholder="https://intranet.example.local/whats-new" />
+                <div class="field-label mb-1" data-i18n="profiles.wizard_override_post_update_label">{{ tr("profiles.wizard_override_post_update_label") }}</div>
+                <input id="wizard-override-post-update" type="text" class="soft-input" data-i18n-placeholder="profiles.wizard_override_page_placeholder" placeholder="{{ tr('profiles.wizard_override_page_placeholder') }}" />
             </label>
         </div>
+        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-home-overrides-section-status" data-i18n="profiles.wizard_home_overrides_section_state_empty">{{ tr("profiles.wizard_home_overrides_section_state_empty") }}</div>
     </div>
     <div class="wizard-section-group">
         <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_home_title">Firefox Home cards</h3>
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_home_title">{{ tr("profiles.wizard_firefox_home_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_firefox_home_body">
-                Choose which discovery cards appear on the built-in Firefox Home experience.
+                {{ tr("profiles.wizard_firefox_home_body") }}
             </p>
-            <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" id="wizard-firefox-home-section-status">No Firefox Home card overrides yet.</div>
         </div>
-        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">Firefox Settings areas</div>
+        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
         {{ render_settings_pills(wizard_settings_sections["home"]["ui_maps"]["firefox_home"], "wizard-settings-map-firefox-home") }}
         {{ render_settings_docs(wizard_settings_sections["home"]["ui_maps"]["firefox_home"], wizard_settings_sections["home"]["ui_docs"]["firefox_home"], "wizard-settings-docs-firefox-home") }}
-        <div class="wizard-grid">
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-grid wizard-stage-panel">
             <label data-settings-target="field:firefox-home-search">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_search_label">Search</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_search_label">{{ tr("profiles.wizard_firefox_home_search_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="Search">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label data-settings-target="field:firefox-home-top-sites">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_top_sites_label">Top sites</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_top_sites_label">{{ tr("profiles.wizard_firefox_home_top_sites_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="TopSites">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_top_sites_label">Sponsored top sites</div>
-                <select class="soft-input" data-firefox-home-key="SponsoredTopSites">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_highlights_label">Highlights</div>
-                <select class="soft-input" data-firefox-home-key="Highlights">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label data-settings-target="field:firefox-home-pocket">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_pocket_label">Pocket</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_pocket_label">{{ tr("profiles.wizard_firefox_home_pocket_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="Pocket">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                </select>
+            </label>
+        </div>
+        <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-firefox-home-section-status" data-i18n="profiles.wizard_firefox_home_section_state_empty">{{ tr("profiles.wizard_firefox_home_section_state_empty") }}</div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_home_fine_tuning_body">
+                {{ tr("profiles.wizard_firefox_home_fine_tuning_body") }}
+            </div>
+            <button type="button" id="wizard-firefox-home-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-firefox-home-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-firefox-home-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <label>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_top_sites_label">{{ tr("profiles.wizard_firefox_home_sponsored_top_sites_label") }}</div>
+                <select class="soft-input" data-firefox-home-key="SponsoredTopSites">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_stories_label">Stories</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_highlights_label">{{ tr("profiles.wizard_firefox_home_highlights_label") }}</div>
+                <select class="soft-input" data-firefox-home-key="Highlights">
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                </select>
+            </label>
+            <label>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_stories_label">{{ tr("profiles.wizard_firefox_home_stories_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="Stories">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_pocket_label">Sponsored Pocket</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_pocket_label">{{ tr("profiles.wizard_firefox_home_sponsored_pocket_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="SponsoredPocket">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_stories_label">Sponsored stories</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_stories_label">{{ tr("profiles.wizard_firefox_home_sponsored_stories_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="SponsoredStories">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_snippets_label">Snippets</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_snippets_label">{{ tr("profiles.wizard_firefox_home_snippets_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="Snippets">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">Show</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">Hide</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
                 </select>
             </label>
             <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_locked_label">Layout lock</div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_locked_label">{{ tr("profiles.wizard_firefox_home_locked_label") }}</div>
                 <select class="soft-input" data-firefox-home-key="Locked">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">Firefox default</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_locked_on">Lock layout</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_locked_off">Leave editable</option>
+                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                    <option value="true" data-i18n="profiles.wizard_firefox_home_locked_on">{{ tr("profiles.wizard_firefox_home_locked_on") }}</option>
+                    <option value="false" data-i18n="profiles.wizard_firefox_home_locked_off">{{ tr("profiles.wizard_firefox_home_locked_off") }}</option>
                 </select>
             </label>
             {{ render_manual_policy_controls(wizard_manual_policy_groups["home_surfaces"]["items"]) }}
@@ -204,37 +194,67 @@
     </div>
     <div class="wizard-section-group">
         <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_home_title">Managed Preferences for Home</h3>
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_home_review_title">{{ tr("profiles.wizard_home_review_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_home_review_body">
+                {{ tr("profiles.wizard_home_review_body") }}
+            </p>
+        </div>
+        <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_homepage">{{ tr("profiles.wizard_home_review_homepage") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-homepage">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-homepage-jump" data-home-review-jump="homepage" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_overrides">{{ tr("profiles.wizard_home_review_overrides") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-overrides">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-overrides-jump" data-home-review-jump="overrides" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_firefox_home">{{ tr("profiles.wizard_home_review_firefox_home") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-firefox-home">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-firefox-home-jump" data-home-review-jump="firefox_home" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_user_messaging">{{ tr("profiles.wizard_home_review_user_messaging") }}</span>
+                <span class="wizard-summary-value" id="wizard-home-summary-user-messaging">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-home-summary-user-messaging-jump" data-home-review-jump="user_messaging" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_home_title">{{ tr("profiles.wizard_preferences_home_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_preferences_home_body">
-                Add structured `Preferences` entries for Firefox Home and new tab surfaces.
+                {{ tr("profiles.wizard_preferences_home_body") }}
             </p>
         </div>
         <div class="wizard-section-group" data-preference-section="home" data-settings-target="pref-section:home">
             <div class="wizard-search-engine-head">
                 <div>
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">Quick preference presets</div>
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">{{ tr("profiles.wizard_preferences_presets_title") }}</div>
                     <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_presets_body">
-                        Start from curated entries, then adjust the raw preference key, value, status, and type when needed.
+                        {{ tr("profiles.wizard_preferences_presets_body") }}
                     </div>
                 </div>
-                <button type="button" id="wizard-preferences-home-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">Add preference</button>
+                <button type="button" id="wizard-preferences-home-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">{{ tr("profiles.wizard_preferences_add_button") }}</button>
             </div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">Firefox Settings areas</div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">{{ tr("profiles.wizard_preferences_gui_label") }}</div>
             {{ render_settings_pills(wizard_settings_sections["home"]["preferences"]["gui_groups"], "wizard-preferences-home-groups") }}
             {{ render_settings_docs(wizard_settings_sections["home"]["preferences"]["gui_groups"], wizard_settings_sections["home"]["preferences"]["docs"], "wizard-preferences-home-docs") }}
             <div id="wizard-preferences-home-presets" class="wizard-search-engine-preset-grid"></div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">Quick bundles</div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">{{ tr("profiles.wizard_preferences_bundles_title") }}</div>
             <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_bundles_body">
-                Apply a small, coherent group of related managed preferences at once.
+                {{ tr("profiles.wizard_preferences_bundles_body") }}
             </div>
             <div id="wizard-preferences-home-bundles" class="wizard-search-engine-preset-grid"></div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">Known Firefox preferences</div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">{{ tr("profiles.wizard_preferences_known_title") }}</div>
             <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_known_body">
-                Add a known key with its suggested type and, when safe, a recommended managed default.
+                {{ tr("profiles.wizard_preferences_known_body") }}
             </div>
             <div id="wizard-preferences-home-known" class="wizard-search-engine-preset-grid"></div>
             <div id="wizard-preferences-home-empty" class="wizard-input-hint" data-i18n="profiles.wizard_preferences_empty">
-                No managed preferences in this section yet.
+                {{ tr("profiles.wizard_preferences_empty") }}
             </div>
             <div id="wizard-preferences-home-list" class="wizard-search-engine-list"></div>
         </div>

@@ -46,14 +46,21 @@
             wizardHomepageSectionStatusEl,
             wizardHomeOverridesSectionStatusEl,
             wizardFirefoxHomeSectionStatusEl,
+            wizardFirefoxHomeFineTuningToggleEl,
+            wizardFirefoxHomeFineTuningPanelEl,
             wizardSearchDefaultsSectionStatusEl,
+            wizardSearchDefaultsFineTuningToggleEl,
+            wizardSearchDefaultsFineTuningPanelEl,
             wizardFirefoxSuggestSectionStatusEl,
+            wizardSearchSuggestFineTuningToggleEl,
+            wizardSearchSuggestFineTuningPanelEl,
             wizardNewTabPageEl,
             wizardOverrideFirstRunEl,
             wizardOverridePostUpdateEl,
             wizardFirefoxHomeInputs = [],
             wizardFirefoxSuggestInputs = [],
             wizardProxyModeEl,
+            wizardProxySectionStatusEl,
             wizardProxyLockedEl,
             wizardProxyHttpEl,
             wizardProxySslEl,
@@ -65,6 +72,10 @@
             wizardProxyUseHttpForAllEl,
             wizardProxyAutoLoginEl,
             wizardProxyUseDnsEl,
+            wizardProxyModeGroups = [],
+            wizardNetworkEnterpriseSectionStatusEl,
+            wizardNetworkEnterpriseFineTuningToggleEl,
+            wizardNetworkEnterpriseFineTuningPanelEl,
         } = elements;
 
         const {
@@ -75,11 +86,211 @@
             wizardFirefoxSuggestManagedKeys = [],
             wizardProxyManagedKeys = [],
         } = state;
+        let networkEnterprisePanelPreference = null;
+        let firefoxHomePanelPreference = null;
+        let searchDefaultsPanelPreference = null;
+        let searchSuggestPanelPreference = null;
 
         function setManualSectionStatus(element, text) {
             if (element) {
                 element.textContent = text;
             }
+        }
+
+        function hasMeaningfulValue(value) {
+            if (typeof value === "boolean" || typeof value === "number") return true;
+            if (typeof value === "string") return value.trim().length > 0;
+            if (Array.isArray(value)) return value.some((entry) => hasMeaningfulValue(entry));
+            if (value && typeof value === "object") return Object.values(value).some((entry) => hasMeaningfulValue(entry));
+            return false;
+        }
+
+        function countConfiguredObjectEntries(value) {
+            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+            return Object.values(currentObject).filter((entry) => hasMeaningfulValue(entry)).length;
+        }
+
+        function setPanelExpanded(panelEl, toggleEl, expanded, showLabel, hideLabel) {
+            if (panelEl) {
+                panelEl.hidden = !expanded;
+            }
+            if (toggleEl) {
+                toggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
+                toggleEl.textContent = expanded ? hideLabel : showLabel;
+            }
+        }
+
+        function formatHomepageStartPageLabel(value) {
+            if (value === "none") return t("profiles.wizard_homepage_start_none");
+            if (value === "homepage") return t("profiles.wizard_homepage_start_homepage");
+            if (value === "previous-session") return t("profiles.wizard_homepage_start_previous");
+            if (value === "homepage-locked") return t("profiles.wizard_homepage_start_locked");
+            return value;
+        }
+
+        function formatSearchBarLabel(value) {
+            if (value === "unified") return t("profiles.wizard_search_bar_unified");
+            if (value === "separate") return t("profiles.wizard_search_bar_separate");
+            return value;
+        }
+
+        function buildFirefoxHomeDecisionSummary(firefoxHome) {
+            const visible = [];
+            const hidden = [];
+            [
+                ["Search", t("profiles.wizard_firefox_home_search_label")],
+                ["TopSites", t("profiles.wizard_firefox_home_top_sites_label")],
+                ["Pocket", t("profiles.wizard_firefox_home_pocket_label")],
+            ].forEach(([key, label]) => {
+                if (firefoxHome[key] === true) visible.push(label);
+                if (firefoxHome[key] === false) hidden.push(label);
+            });
+
+            const secondaryCount = [
+                "SponsoredTopSites",
+                "Highlights",
+                "Stories",
+                "SponsoredPocket",
+                "SponsoredStories",
+                "Snippets",
+            ].filter((key) => typeof firefoxHome[key] === "boolean").length;
+            const locked = firefoxHome.Locked === true;
+            const fragments = [];
+
+            if (visible.length) {
+                fragments.push(
+                    t("profiles.wizard_firefox_home_section_state_visible")
+                        .replace("{value}", visible.join(", ")),
+                );
+            }
+            if (hidden.length) {
+                fragments.push(
+                    t("profiles.wizard_firefox_home_section_state_hidden")
+                        .replace("{value}", hidden.join(", ")),
+                );
+            }
+            if (secondaryCount > 0) {
+                fragments.push(
+                    t("profiles.wizard_firefox_home_section_state_more")
+                        .replace("{count}", String(secondaryCount)),
+                );
+            }
+            if (locked) {
+                fragments.push(t("profiles.wizard_firefox_home_section_state_locked"));
+            }
+
+            return { fragments, secondaryCount, locked };
+        }
+
+        function getProxyGroupModes(groupEl) {
+            return String(groupEl?.dataset.proxyModeGroup || "")
+                .split(/\s+/)
+                .map((value) => value.trim())
+                .filter(Boolean);
+        }
+
+        function setProxyGroupVisibility(activeMode, disableAll = false) {
+            wizardProxyModeGroups.forEach((groupEl) => {
+                const groupModes = getProxyGroupModes(groupEl);
+                const isActive = !disableAll && groupModes.includes(activeMode);
+                groupEl.hidden = !isActive;
+                groupEl.setAttribute("aria-hidden", isActive ? "false" : "true");
+                groupEl.querySelectorAll("input, select, textarea, button").forEach((input) => {
+                    input.disabled = disableAll || !isActive;
+                });
+            });
+        }
+
+        function getProxyManualSectionStatus(proxy) {
+            const mode = typeof proxy?.Mode === "string" ? proxy.Mode : "";
+            const endpointCount = [
+                proxy?.HTTPProxy,
+                proxy?.SSLProxy,
+                proxy?.FTPProxy,
+                proxy?.SOCKSProxy,
+            ].filter((value) => typeof value === "string" && value.trim()).length;
+            const passthroughCount = typeof proxy?.Passthrough === "string" && proxy.Passthrough.trim()
+                ? textToList(proxy.Passthrough).length
+                : 0;
+
+            if (!mode) {
+                return t("profiles.wizard_proxy_section_state_empty");
+            }
+            if (mode === "none") {
+                return t("profiles.wizard_proxy_section_state_none");
+            }
+            if (mode === "system") {
+                return t("profiles.wizard_proxy_section_state_system");
+            }
+            if (mode === "autoDetect") {
+                return t("profiles.wizard_proxy_section_state_auto_detect");
+            }
+            if (mode === "autoConfig") {
+                const autoConfigUrl = typeof proxy?.AutoConfigURL === "string" ? proxy.AutoConfigURL.trim() : "";
+                if (!autoConfigUrl) {
+                    return t("profiles.wizard_proxy_section_state_auto_config_missing");
+                }
+                return t("profiles.wizard_proxy_section_state_auto_config_ready");
+            }
+            if (mode === "manual") {
+                if (!endpointCount) {
+                    return t("profiles.wizard_proxy_section_state_manual_missing");
+                }
+                return t("profiles.wizard_proxy_section_state_manual_ready")
+                    .replace("{count}", String(endpointCount))
+                    .replace("{bypass}", String(passthroughCount));
+            }
+            return t("profiles.wizard_proxy_section_state_empty");
+        }
+
+        function renderProxySectionStatus(proxy = {}) {
+            const resolvedProxy = proxy && typeof proxy === "object" && !Array.isArray(proxy) ? proxy : {};
+            setManualSectionStatus(wizardProxySectionStatusEl, getProxyManualSectionStatus(resolvedProxy));
+            setProxyGroupVisibility(typeof resolvedProxy.Mode === "string" ? resolvedProxy.Mode : "", false);
+        }
+
+        function renderNetworkEnterpriseSectionStatus(parsed = {}) {
+            const resolved = parsed && typeof parsed === "object" ? parsed : {};
+            const dnsConfigured = countConfiguredObjectEntries(resolved.DNSOverHTTPS);
+            const authConfigured = countConfiguredObjectEntries(resolved.Authentication);
+            const certificatesConfigured = countConfiguredObjectEntries(resolved.Certificates);
+            const fragments = [];
+
+            if (dnsConfigured > 0) {
+                fragments.push(t("profiles.wizard_network_enterprise_section_state_doh"));
+            }
+            if (typeof resolved.WindowsSSO === "boolean") {
+                fragments.push(t("profiles.wizard_network_enterprise_section_state_windows_sso"));
+            }
+            if (authConfigured > 0) {
+                fragments.push(
+                    t("profiles.wizard_network_enterprise_section_state_authentication")
+                        .replace("{count}", String(authConfigured)),
+                );
+            }
+            if (certificatesConfigured > 0) {
+                fragments.push(
+                    t("profiles.wizard_network_enterprise_section_state_certificates")
+                        .replace("{count}", String(certificatesConfigured)),
+                );
+            }
+
+            setManualSectionStatus(
+                wizardNetworkEnterpriseSectionStatusEl,
+                fragments.length
+                    ? fragments.join(" • ")
+                    : t("profiles.wizard_network_enterprise_section_state_empty"),
+            );
+
+            setPanelExpanded(
+                wizardNetworkEnterpriseFineTuningPanelEl,
+                wizardNetworkEnterpriseFineTuningToggleEl,
+                networkEnterprisePanelPreference === null
+                    ? (authConfigured > 0 || certificatesConfigured > 0)
+                    : networkEnterprisePanelPreference,
+                t("profiles.wizard_fine_tuning_show"),
+                t("profiles.wizard_fine_tuning_hide"),
+            );
         }
 
         function getHomepageManualSectionStatus(parsed) {
@@ -93,71 +304,79 @@
             const requiresUrl = startPage === "homepage" || startPage === "homepage-locked";
 
             if (!url && !additionalCount && !startPage && !locked) {
-                return t("profiles.wizard_homepage_section_state_empty", "No homepage overrides yet.");
+                return t("profiles.wizard_homepage_section_state_empty");
             }
             if (requiresUrl && !url) {
-                return t("profiles.wizard_homepage_section_state_invalid", "Startup expects a homepage URL.");
+                return t("profiles.wizard_homepage_section_state_invalid");
             }
 
             const parts = [];
             if (url) {
-                parts.push(t("profiles.wizard_homepage_section_state_url", "Homepage URL set"));
+                parts.push(t("profiles.wizard_homepage_section_state_url"));
             }
             if (additionalCount > 0) {
                 parts.push(
-                    t("profiles.wizard_homepage_section_state_additional", "Additional tabs: {count}")
+                    t("profiles.wizard_homepage_section_state_additional")
                         .replace("{count}", String(additionalCount)),
                 );
             }
             if (startPage) {
                 parts.push(
-                    t("profiles.wizard_homepage_section_state_start", "Start: {value}")
-                        .replace("{value}", startPage),
+                    t("profiles.wizard_homepage_section_state_start")
+                        .replace("{value}", formatHomepageStartPageLabel(startPage)),
                 );
             }
             if (locked) {
-                parts.push(t("profiles.wizard_homepage_section_state_locked", "Locked"));
+                parts.push(t("profiles.wizard_homepage_section_state_locked"));
             }
             return parts.join(" • ");
         }
 
         function getHomeOverridesManualSectionStatus(parsed) {
-            const overrideCount = (typeof parsed?.NewTabPage === "boolean" ? 1 : 0)
-                + (typeof parsed?.OverrideFirstRunPage === "string" && parsed.OverrideFirstRunPage.trim() ? 1 : 0)
-                + (typeof parsed?.OverridePostUpdatePage === "string" && parsed.OverridePostUpdatePage.trim() ? 1 : 0);
-
-            if (!overrideCount) {
-                return t("profiles.wizard_home_overrides_section_state_empty", "No startup overrides yet.");
+            const parts = [];
+            if (parsed?.NewTabPage === true) {
+                parts.push(t("profiles.wizard_home_overrides_section_state_new_tab_on"));
+            } else if (parsed?.NewTabPage === false) {
+                parts.push(t("profiles.wizard_home_overrides_section_state_new_tab_off"));
             }
-            return t("profiles.wizard_home_overrides_section_state_configured", "Startup overrides active: {count}")
-                .replace("{count}", String(overrideCount));
+            if (typeof parsed?.OverrideFirstRunPage === "string" && parsed.OverrideFirstRunPage.trim()) {
+                parts.push(t("profiles.wizard_home_overrides_section_state_first_run"));
+            }
+            if (typeof parsed?.OverridePostUpdatePage === "string" && parsed.OverridePostUpdatePage.trim()) {
+                parts.push(t("profiles.wizard_home_overrides_section_state_post_update"));
+            }
+
+            if (!parts.length) {
+                return t("profiles.wizard_home_overrides_section_state_empty");
+            }
+            return parts.join(" • ");
         }
 
         function getFirefoxHomeManualSectionStatus(parsed) {
             const firefoxHome = parsed?.FirefoxHome && typeof parsed.FirefoxHome === "object" && !Array.isArray(parsed.FirefoxHome)
                 ? parsed.FirefoxHome
                 : {};
-            let shownCount = 0;
-            let hiddenCount = 0;
+            const { fragments, secondaryCount, locked } = buildFirefoxHomeDecisionSummary(firefoxHome);
 
-            Object.entries(firefoxHome).forEach(([key, value]) => {
-                if (key === "Locked" || typeof value !== "boolean") return;
-                if (value) shownCount += 1;
-                else hiddenCount += 1;
-            });
-
-            const locked = firefoxHome.Locked === true;
-            if (!shownCount && !hiddenCount && !locked) {
-                return t("profiles.wizard_firefox_home_section_state_empty", "No Firefox Home card overrides yet.");
+            if (!fragments.length && !secondaryCount && !locked) {
+                return t("profiles.wizard_firefox_home_section_state_empty");
             }
+            return fragments.join(" • ");
+        }
 
-            let text = t("profiles.wizard_firefox_home_section_state_configured", "Show: {show} • Hide: {hide}")
-                .replace("{show}", String(shownCount))
-                .replace("{hide}", String(hiddenCount));
-            if (locked) {
-                text += ` • ${t("profiles.wizard_firefox_home_section_state_locked", "Locked")}`;
-            }
-            return text;
+        function getFirefoxHomeFineTuningCount(parsed) {
+            const firefoxHome = parsed?.FirefoxHome && typeof parsed.FirefoxHome === "object" && !Array.isArray(parsed.FirefoxHome)
+                ? parsed.FirefoxHome
+                : {};
+            return [
+                "SponsoredTopSites",
+                "Highlights",
+                "Stories",
+                "SponsoredPocket",
+                "SponsoredStories",
+                "Snippets",
+                "Locked",
+            ].filter((key) => typeof firefoxHome[key] === "boolean").length;
         }
 
         function getSearchDefaultsManualSectionStatus(parsed) {
@@ -167,10 +386,10 @@
             const firefoxSuggest = parsed?.FirefoxSuggest && typeof parsed.FirefoxSuggest === "object" && !Array.isArray(parsed.FirefoxSuggest)
                 ? parsed.FirefoxSuggest
                 : {};
-            const defaultCount = (typeof parsed?.SearchBar === "string" && parsed.SearchBar.trim() ? 1 : 0)
-                + (typeof parsed?.SearchSuggestEnabled === "boolean" ? 1 : 0)
-                + (typeof searchEngines.Default === "string" && searchEngines.Default.trim() ? 1 : 0)
-                + (typeof searchEngines.PreventInstalls === "boolean" ? 1 : 0);
+            const searchBarValue = typeof parsed?.SearchBar === "string" ? parsed.SearchBar.trim() : "";
+            const defaultEngine = typeof searchEngines.Default === "string" ? searchEngines.Default.trim() : "";
+            const searchSuggestEnabledValue = typeof parsed?.SearchSuggestEnabled === "boolean" ? parsed.SearchSuggestEnabled : null;
+            const preventInstallsValue = typeof searchEngines.PreventInstalls === "boolean" ? searchEngines.PreventInstalls : null;
             const hiddenCount = Array.isArray(searchEngines.Remove) ? searchEngines.Remove.length : 0;
             const customCount = Array.isArray(searchEngines.Add) ? searchEngines.Add.length : 0;
             const suggestConflict = parsed?.SearchSuggestEnabled === false
@@ -180,51 +399,107 @@
                     || firefoxSuggest.ImproveSuggest === true
                 );
 
-            if (!defaultCount && !hiddenCount && !customCount) {
-                return t("profiles.wizard_search_defaults_section_state_empty", "No search defaults overridden yet.");
+            const parts = [];
+            if (defaultEngine) {
+                parts.push(
+                    t("profiles.wizard_search_defaults_section_state_default_engine")
+                        .replace("{value}", defaultEngine),
+                );
+            }
+            if (searchSuggestEnabledValue === true) {
+                parts.push(t("profiles.wizard_search_defaults_section_state_suggestions_on"));
+            } else if (searchSuggestEnabledValue === false) {
+                parts.push(t("profiles.wizard_search_defaults_section_state_suggestions_off"));
+            }
+            if (searchBarValue) {
+                parts.push(
+                    t("profiles.wizard_search_defaults_section_state_search_bar")
+                        .replace("{value}", formatSearchBarLabel(searchBarValue)),
+                );
+            }
+            if (preventInstallsValue === true) {
+                parts.push(t("profiles.wizard_search_defaults_section_state_installs_blocked"));
+            } else if (preventInstallsValue === false) {
+                parts.push(t("profiles.wizard_search_defaults_section_state_installs_allowed"));
+            }
+            if (hiddenCount > 0) {
+                parts.push(
+                    t("profiles.wizard_search_defaults_section_state_hidden")
+                        .replace("{count}", String(hiddenCount)),
+                );
+            }
+            if (customCount > 0) {
+                parts.push(
+                    t("profiles.wizard_search_defaults_section_state_custom")
+                        .replace("{count}", String(customCount)),
+                );
             }
 
-            let text = t("profiles.wizard_search_defaults_section_state_configured", "Defaults: {defaults} • Hidden: {hidden} • Custom: {custom}")
-                .replace("{defaults}", String(defaultCount))
-                .replace("{hidden}", String(hiddenCount))
-                .replace("{custom}", String(customCount));
+            if (!parts.length) {
+                return t("profiles.wizard_search_defaults_section_state_empty");
+            }
+            let text = parts.join(" • ");
             if (suggestConflict) {
-                text += ` • ${t("profiles.wizard_search_defaults_section_state_conflict", "Search suggestions are off while Firefox Suggest surfaces stay enabled")}`;
+                text += ` • ${t("profiles.wizard_search_defaults_section_state_conflict")}`;
             }
             return text;
+        }
+
+        function getSearchDefaultsFineTuningCount(parsed) {
+            const searchEngines = parsed?.SearchEngines && typeof parsed.SearchEngines === "object" && !Array.isArray(parsed.SearchEngines)
+                ? parsed.SearchEngines
+                : {};
+            return (typeof parsed?.SearchBar === "string" && parsed.SearchBar.trim() ? 1 : 0)
+                + (typeof searchEngines.PreventInstalls === "boolean" ? 1 : 0)
+                + (Array.isArray(searchEngines.Remove) ? searchEngines.Remove.length : 0)
+                + (Array.isArray(searchEngines.Add) ? searchEngines.Add.length : 0);
         }
 
         function getFirefoxSuggestManualSectionStatus(parsed) {
             const firefoxSuggest = parsed?.FirefoxSuggest && typeof parsed.FirefoxSuggest === "object" && !Array.isArray(parsed.FirefoxSuggest)
                 ? parsed.FirefoxSuggest
                 : {};
-            let enabledCount = 0;
-            let disabledCount = 0;
-
-            Object.entries(firefoxSuggest).forEach(([key, value]) => {
-                if (key === "Locked" || typeof value !== "boolean") return;
-                if (value) enabledCount += 1;
-                else disabledCount += 1;
-            });
-
             const locked = firefoxSuggest.Locked === true;
             const webConflict = firefoxSuggest.WebSuggestions === false
                 && (firefoxSuggest.SponsoredSuggestions === true || firefoxSuggest.ImproveSuggest === true);
+            const parts = [];
 
-            if (!enabledCount && !disabledCount && !locked) {
-                return t("profiles.wizard_firefox_suggest_section_state_empty", "No Firefox Suggest overrides yet.");
+            if (firefoxSuggest.WebSuggestions === true) {
+                parts.push(t("profiles.wizard_firefox_suggest_section_state_web_on"));
+            } else if (firefoxSuggest.WebSuggestions === false) {
+                parts.push(t("profiles.wizard_firefox_suggest_section_state_web_off"));
+            }
+            if (firefoxSuggest.SponsoredSuggestions === true) {
+                parts.push(t("profiles.wizard_firefox_suggest_section_state_sponsored_on"));
+            } else if (firefoxSuggest.SponsoredSuggestions === false) {
+                parts.push(t("profiles.wizard_firefox_suggest_section_state_sponsored_off"));
+            }
+            if (firefoxSuggest.ImproveSuggest === true) {
+                parts.push(t("profiles.wizard_firefox_suggest_section_state_improve_on"));
+            } else if (firefoxSuggest.ImproveSuggest === false) {
+                parts.push(t("profiles.wizard_firefox_suggest_section_state_improve_off"));
             }
 
-            let text = t("profiles.wizard_firefox_suggest_section_state_configured", "Enabled: {enabled} • Disabled: {disabled}")
-                .replace("{enabled}", String(enabledCount))
-                .replace("{disabled}", String(disabledCount));
+            if (!parts.length && !locked) {
+                return t("profiles.wizard_firefox_suggest_section_state_empty");
+            }
+            let text = parts.join(" • ");
             if (locked) {
-                text += ` • ${t("profiles.wizard_firefox_suggest_section_state_locked", "Locked")}`;
+                text += `${text ? " • " : ""}${t("profiles.wizard_firefox_suggest_section_state_locked")}`;
             }
             if (webConflict) {
-                text += ` • ${t("profiles.wizard_firefox_suggest_section_state_conflict", "Dependent surfaces need web suggestions")}`;
+                text += ` • ${t("profiles.wizard_firefox_suggest_section_state_conflict")}`;
             }
             return text;
+        }
+
+        function getFirefoxSuggestFineTuningCount(parsed) {
+            const firefoxSuggest = parsed?.FirefoxSuggest && typeof parsed.FirefoxSuggest === "object" && !Array.isArray(parsed.FirefoxSuggest)
+                ? parsed.FirefoxSuggest
+                : {};
+            return ["SponsoredSuggestions", "ImproveSuggest", "Locked"]
+                .filter((key) => typeof firefoxSuggest[key] === "boolean")
+                .length;
         }
 
         function renderManualHomeAndSearchSectionStatuses(parsed) {
@@ -233,11 +508,76 @@
             setManualSectionStatus(wizardFirefoxHomeSectionStatusEl, getFirefoxHomeManualSectionStatus(parsed));
             setManualSectionStatus(wizardSearchDefaultsSectionStatusEl, getSearchDefaultsManualSectionStatus(parsed));
             setManualSectionStatus(wizardFirefoxSuggestSectionStatusEl, getFirefoxSuggestManualSectionStatus(parsed));
+            setPanelExpanded(
+                wizardFirefoxHomeFineTuningPanelEl,
+                wizardFirefoxHomeFineTuningToggleEl,
+                firefoxHomePanelPreference === null
+                    ? getFirefoxHomeFineTuningCount(parsed) > 0
+                    : firefoxHomePanelPreference,
+                t("profiles.wizard_fine_tuning_show"),
+                t("profiles.wizard_fine_tuning_hide"),
+            );
+            setPanelExpanded(
+                wizardSearchDefaultsFineTuningPanelEl,
+                wizardSearchDefaultsFineTuningToggleEl,
+                searchDefaultsPanelPreference === null
+                    ? getSearchDefaultsFineTuningCount(parsed) > 0
+                    : searchDefaultsPanelPreference,
+                t("profiles.wizard_fine_tuning_show"),
+                t("profiles.wizard_fine_tuning_hide"),
+            );
+            setPanelExpanded(
+                wizardSearchSuggestFineTuningPanelEl,
+                wizardSearchSuggestFineTuningToggleEl,
+                searchSuggestPanelPreference === null
+                    ? getFirefoxSuggestFineTuningCount(parsed) > 0
+                    : searchSuggestPanelPreference,
+                t("profiles.wizard_fine_tuning_show"),
+                t("profiles.wizard_fine_tuning_hide"),
+            );
+            renderProxySectionStatus(parsed?.Proxy);
+            renderNetworkEnterpriseSectionStatus(parsed);
+        }
+
+        function toggleNetworkEnterprisePanel() {
+            networkEnterprisePanelPreference = !(wizardNetworkEnterpriseFineTuningPanelEl?.hidden === false);
+            const editor = getEditor();
+            if (!editor) return;
+            try {
+                const parsed = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
+                renderNetworkEnterpriseSectionStatus(parsed && typeof parsed === "object" ? parsed : {});
+            } catch {
+                renderNetworkEnterpriseSectionStatus({});
+            }
+        }
+
+        function toggleHomeAndSearchPanel(panelKey) {
+            if (panelKey === "firefox_home") {
+                firefoxHomePanelPreference = !(wizardFirefoxHomeFineTuningPanelEl?.hidden === false);
+            }
+            if (panelKey === "search_defaults") {
+                searchDefaultsPanelPreference = !(wizardSearchDefaultsFineTuningPanelEl?.hidden === false);
+            }
+            if (panelKey === "search_suggest") {
+                searchSuggestPanelPreference = !(wizardSearchSuggestFineTuningPanelEl?.hidden === false);
+            }
+            const editor = getEditor();
+            if (!editor) return;
+            try {
+                const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
+                renderManualHomeAndSearchSectionStatuses(parsed && typeof parsed === "object" ? parsed : {});
+            } catch {
+                renderManualHomeAndSearchSectionStatuses({});
+            }
         }
 
         function syncFromEditor() {
             const editor = getEditor();
             if (!editor) return;
+            networkEnterprisePanelPreference = null;
+            firefoxHomePanelPreference = null;
+            searchDefaultsPanelPreference = null;
+            searchSuggestPanelPreference = null;
 
             try {
                 const parsed = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
@@ -365,6 +705,7 @@
                 ].forEach((input) => {
                     input.disabled = true;
                 });
+                setProxyGroupVisibility("", true);
                 clearSearchEngineSyncOnce();
                 renderSearchEngineDrafts(true);
                 renderManualHomeAndSearchSectionStatuses({});
@@ -442,16 +783,21 @@
 
                 if (proxyMode) nextProxy.Mode = proxyMode;
                 if (wizardProxyLockedEl.checked) nextProxy.Locked = true;
-                if (proxyHttp) nextProxy.HTTPProxy = proxyHttp;
-                if (proxySsl) nextProxy.SSLProxy = proxySsl;
-                if (proxyFtp) nextProxy.FTPProxy = proxyFtp;
-                if (proxySocks) nextProxy.SOCKSProxy = proxySocks;
-                if (proxyPassthrough.length) nextProxy.Passthrough = proxyPassthrough.join(", ");
-                if (proxyAutoConfig) nextProxy.AutoConfigURL = proxyAutoConfig;
-                if (proxySocksVersion) nextProxy.SOCKSVersion = Number(proxySocksVersion);
-                if (wizardProxyUseHttpForAllEl.checked) nextProxy.UseHTTPProxyForAllProtocols = true;
-                if (wizardProxyAutoLoginEl.checked) nextProxy.AutoLogin = true;
-                if (wizardProxyUseDnsEl.checked) nextProxy.UseProxyForDNS = true;
+                if (proxyMode === "manual") {
+                    if (proxyHttp) nextProxy.HTTPProxy = proxyHttp;
+                    if (proxySsl) nextProxy.SSLProxy = proxySsl;
+                    if (proxyFtp) nextProxy.FTPProxy = proxyFtp;
+                    if (proxySocks) nextProxy.SOCKSProxy = proxySocks;
+                    if (proxyPassthrough.length) nextProxy.Passthrough = proxyPassthrough.join(", ");
+                    if (proxySocksVersion) nextProxy.SOCKSVersion = Number(proxySocksVersion);
+                    if (wizardProxyUseHttpForAllEl.checked) nextProxy.UseHTTPProxyForAllProtocols = true;
+                    if (wizardProxyAutoLoginEl.checked) nextProxy.AutoLogin = true;
+                    if (wizardProxyUseDnsEl.checked) nextProxy.UseProxyForDNS = true;
+                } else if (proxyMode === "autoConfig") {
+                    if (proxyPassthrough.length) nextProxy.Passthrough = proxyPassthrough.join(", ");
+                    if (proxyAutoConfig) nextProxy.AutoConfigURL = proxyAutoConfig;
+                    if (wizardProxyAutoLoginEl.checked) nextProxy.AutoLogin = true;
+                }
 
                 if (Object.keys(nextHomepage).length) {
                     normalized.Homepage = nextHomepage;
@@ -489,11 +835,32 @@
                 renderManualHomeAndSearchSectionStatuses(normalized);
                 renderHomeReviewSummary(normalized);
                 renderSearchReviewSummary(normalized);
-                setStatus(t("profiles.wizard_network_applied", "Landing, search, and proxy settings updated."), "info");
+                setStatus(t("profiles.wizard_network_applied"), "info");
             } catch (e) {
                 clearSearchEngineSyncOnce();
-                setStatus(`Wizard network error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
             }
+        }
+
+        if (wizardNetworkEnterpriseFineTuningToggleEl) {
+            wizardNetworkEnterpriseFineTuningToggleEl.addEventListener("click", () => {
+                toggleNetworkEnterprisePanel();
+            });
+        }
+        if (wizardFirefoxHomeFineTuningToggleEl) {
+            wizardFirefoxHomeFineTuningToggleEl.addEventListener("click", () => {
+                toggleHomeAndSearchPanel("firefox_home");
+            });
+        }
+        if (wizardSearchDefaultsFineTuningToggleEl) {
+            wizardSearchDefaultsFineTuningToggleEl.addEventListener("click", () => {
+                toggleHomeAndSearchPanel("search_defaults");
+            });
+        }
+        if (wizardSearchSuggestFineTuningToggleEl) {
+            wizardSearchSuggestFineTuningToggleEl.addEventListener("click", () => {
+                toggleHomeAndSearchPanel("search_suggest");
+            });
         }
 
         return {

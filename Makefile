@@ -1,4 +1,4 @@
-.PHONY: run dev test coverage fmt lint
+.PHONY: run dev test test-firefox-live setup-firefox-live-browsers coverage fmt lint
 
 PYTEST ?= $(if $(wildcard .venv/bin/pytest),.venv/bin/pytest,pytest)
 
@@ -10,6 +10,12 @@ dev:
 
 test:
 	$(PYTEST)
+
+test-firefox-live:
+	$(PYTEST) -m firefox_live -q
+
+setup-firefox-live-browsers:
+	bash tools/setup_firefox_live_browsers.sh release
 
 coverage:
 	$(PYTEST) --cov=app --cov-branch --cov-report=term-missing --cov-report=xml --cov-report=html

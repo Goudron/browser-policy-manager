@@ -15,7 +15,8 @@ from typing import Any
 from jsonschema import FormatChecker, ValidationError
 from jsonschema.validators import validator_for
 
-from app.core.schemas_loader import UnsupportedProfileError, load_schema
+from app.core.schema_channels import DEFAULT_RELEASE_SCHEMA_CHANNEL
+from app.core.schemas_loader import SchemaNotFoundError, UnsupportedProfileError, load_schema
 
 JsonSchema = dict[str, Any]
 
@@ -46,6 +47,8 @@ def load_policy_schema_for_channel(channel: str) -> JsonSchema:
         return load_schema(channel)
     except UnsupportedProfileError as exc:
         raise ValueError(f"Unsupported channel '{channel}'") from exc
+    except SchemaNotFoundError as exc:
+        raise ValueError(f"Schema for channel '{channel}' is not available") from exc
 
 
 def _normalize_policy_document_schema(schema: JsonSchema) -> JsonSchema:
@@ -151,7 +154,7 @@ def validate_profile_payload_with_schema(payload: dict[str, Any]) -> None:
 
     Expected payload shape (minimal):
         {
-            "channel": "release-148" | "esr-140",
+            "channel": "release-149" | "esr-140.9",
             "policies": {
                 "DisableAppUpdate": true,
                 "HttpAllowlist": ["http://example.org"],
@@ -161,7 +164,7 @@ def validate_profile_payload_with_schema(payload: dict[str, Any]) -> None:
         }
     """
 
-    channel = payload.get("channel") or "release-148"
+    channel = payload.get("channel") or DEFAULT_RELEASE_SCHEMA_CHANNEL
     schema = load_policy_schema_for_channel(channel)
 
     policies = payload.get("policies") or {}

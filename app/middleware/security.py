@@ -8,23 +8,23 @@ class SecurityHeadersMiddleware:
     """Middleware that adds basic HTTP security headers.
 
     Notes:
-        - CSP is permissive enough for CDN-hosted scripts/styles (e.g., Monaco/Tailwind).
-          When moving to self-hosted static assets, CSP can be tightened.
+        - CSP is limited to strict self-hosted assets across the whole app.
+        - Script execution is limited to self-hosted assets; `/profiles`
+          no longer relies on inline executable bootstrapping or Monaco's AMD loader.
         - HSTS is commented out intentionally; enable only in HTTPS environments.
     """
 
     def __init__(self, app: ASGIApp, *, csp: str | None = None) -> None:
         self.app = app
-        # Default CSP allows local and CDN content; adjust as needed.
         self.csp = csp or (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; "
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+            "script-src 'self'; "
+            "style-src 'self'; "
             "img-src 'self' data:; "
-            "font-src 'self' https://cdn.jsdelivr.net; "
+            "font-src 'self'; "
             "connect-src 'self'; "
-            "worker-src 'self' blob:; "
-            "child-src 'self' blob:; "
+            "worker-src 'self'; "
+            "child-src 'self'; "
             "frame-ancestors 'none'; "
             "base-uri 'self'; "
             "form-action 'self'"

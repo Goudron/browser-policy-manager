@@ -84,3 +84,37 @@ def test_create_app_works_when_cors_disabled(monkeypatch):
 
     assert response.status_code == 200
     assert response.headers["x-frame-options"] == "DENY"
+
+
+def test_create_app_uses_self_hosted_csp_without_cdn_allowlist():
+    client = make_test_client(main_module.create_app())
+
+    response = client.get("/profiles")
+    csp = response.headers["content-security-policy"]
+
+    assert response.status_code == 200
+    assert "https://cdn.jsdelivr.net" not in csp
+    assert "https://cdn.tailwindcss.com" not in csp
+    assert "script-src 'self'" in csp
+    assert "'unsafe-eval'" not in csp
+    assert "style-src 'self'" in csp
+    assert "'unsafe-inline'" not in csp
+    assert "font-src 'self'" in csp
+    assert "worker-src 'self'" in csp
+    assert "child-src 'self'" in csp
+    assert "blob:" not in csp
+
+
+def test_create_app_uses_stricter_default_csp_outside_profiles():
+    client = make_test_client(main_module.create_app())
+
+    response = client.get("/")
+    csp = response.headers["content-security-policy"]
+
+    assert response.status_code == 200
+    assert "script-src 'self'" in csp
+    assert "'unsafe-eval'" not in csp
+    assert "'unsafe-inline'" not in csp
+    assert "style-src 'self'" in csp
+    assert "worker-src 'self'" in csp
+    assert "child-src 'self'" in csp

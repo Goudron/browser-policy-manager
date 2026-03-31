@@ -1,25 +1,21 @@
 <section class="wizard-shell surface-panel fade-up" id="wizard-panel">
     <div class="wizard-header">
         <div class="wizard-copy">
-            <div class="section-kicker" data-i18n="profiles.wizard_kicker">Guided setup</div>
-            <h2 class="wizard-title" data-i18n="profiles.wizard_title">Create or edit a profile with a simple step-by-step flow</h2>
-            <p class="wizard-subtitle" data-i18n="profiles.wizard_body">
-                Move through the important setup first, jump freely between steps, and finish as soon as the essentials are ready. Export stays on the last step.
-            </p>
-            <p class="wizard-subtitle" id="wizard-context-copy" data-i18n="profiles.wizard_context_new">
-                You are creating a new profile. Set the essentials first, then jump to any step you need.
-            </p>
+            <div class="section-kicker" data-i18n="profiles.wizard_kicker">{{ tr("profiles.wizard_kicker") }}</div>
+            <h2 class="wizard-title" data-i18n="profiles.wizard_title">{{ tr("profiles.wizard_title") }}</h2>
+            <p class="wizard-subtitle" data-i18n="profiles.wizard_body">{{ tr("profiles.wizard_body") }}</p>
+            <p class="wizard-subtitle" id="wizard-context-copy" data-i18n="profiles.wizard_context_new">{{ tr("profiles.wizard_context_new") }}</p>
         </div>
         <div class="wizard-settings-search-shell surface-soft-box">
             <label class="wizard-settings-search-field" for="wizard-settings-search-input">
-                <span class="field-label" data-i18n="profiles.wizard_settings_search_label">Find a setting</span>
+                <span class="field-label" data-i18n="profiles.wizard_settings_search_label">{{ tr("profiles.wizard_settings_search_label") }}</span>
                 <div class="wizard-settings-search-row">
                     <input
                         id="wizard-settings-search-input"
                         type="search"
                         class="soft-input"
                         data-i18n-placeholder="profiles.wizard_settings_search_placeholder"
-                        placeholder="Search proxy, passwords, HTTPS, DuckDuckGo..."
+                        placeholder="{{ tr('profiles.wizard_settings_search_placeholder') }}"
                         autocomplete="off"
                         spellcheck="false"
                     />
@@ -29,68 +25,33 @@
                         class="button-base ghost-button wizard-settings-search-clear"
                         data-i18n="profiles.wizard_settings_search_clear"
                         hidden>
-                        Clear
+                        {{ tr("profiles.wizard_settings_search_clear") }}
                     </button>
                 </div>
             </label>
-            <div id="wizard-settings-search-meta" class="wizard-input-hint" data-i18n="profiles.wizard_settings_search_hint">
-                Search by control, Firefox Settings area, policy key, preference key, or preset.
-            </div>
+            <div id="wizard-settings-search-meta" class="wizard-input-hint" data-i18n="profiles.wizard_settings_search_hint">{{ tr("profiles.wizard_settings_search_hint") }}</div>
             <div id="wizard-settings-search-results" class="wizard-settings-search-results" hidden></div>
         </div>
-    </div>
+        </div>
 
-    <div class="wizard-layout">
+        <div class="wizard-layout">
         <div class="wizard-stepper" id="wizard-stepper">
-            <button type="button" class="wizard-step wizard-step--active" data-step="1">
+            {% for step in wizard_steps %}
+            <button
+                type="button"
+                class="wizard-step{% if loop.first %} wizard-step--active{% endif %}"
+                data-step="{{ step.step }}"
+                aria-controls="wizard-step-{{ step.step }}"
+                {% if loop.first %}aria-current="step"{% endif %}
+                data-step-progress-key="{{ step.progress_key }}"
+                data-step-progress-fallback="{{ step.progress_fallback }}">
                 <span class="wizard-step-top">
-                    <span class="wizard-step-index">1</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_one">Profile setup</span>
+                    <span class="wizard-step-index">{{ step.step }}</span>
+                    <span class="wizard-step-label" data-i18n="{{ step.label_key }}">{{ tr(step.label_key, step.label_fallback) }}</span>
                 </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_one_copy">Name, schema, editor mode, and initial baseline.</span>
+                <span class="wizard-step-copy" data-i18n="{{ step.copy_key }}">{{ tr(step.copy_key, step.copy_fallback) }}</span>
             </button>
-            <button type="button" class="wizard-step" data-step="2">
-                <span class="wizard-step-top">
-                    <span class="wizard-step-index">2</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_two">General</span>
-                </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_two_copy">Browser behavior, downloads, updates, network access, and general managed preferences.</span>
-            </button>
-            <button type="button" class="wizard-step" data-step="3">
-                <span class="wizard-step-top">
-                    <span class="wizard-step-index">3</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_three">Home</span>
-                </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_three_copy">Homepage, new tab, Firefox Home cards, and Home-related preferences.</span>
-            </button>
-            <button type="button" class="wizard-step" data-step="4">
-                <span class="wizard-step-top">
-                    <span class="wizard-step-index">4</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_four">Search</span>
-                </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_four_copy">Search defaults, Firefox Suggest, managed engines, and search preferences.</span>
-            </button>
-            <button type="button" class="wizard-step" data-step="5">
-                <span class="wizard-step-top">
-                    <span class="wizard-step-index">5</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_five">Privacy & security</span>
-                </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_five_copy">Hardening policies plus privacy and security preferences.</span>
-            </button>
-            <button type="button" class="wizard-step" data-step="6">
-                <span class="wizard-step-top">
-                    <span class="wizard-step-index">6</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_six">Sync and add-ons</span>
-                </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_six_copy">Extensions, integrations, Firefox Accounts controls, and sync-adjacent preferences.</span>
-            </button>
-            <button type="button" class="wizard-step" data-step="7">
-                <span class="wizard-step-top">
-                    <span class="wizard-step-index">7</span>
-                    <span class="wizard-step-label" data-i18n="profiles.wizard_step_seven">Export</span>
-                </span>
-                <span class="wizard-step-copy" data-i18n="profiles.wizard_step_seven_copy">Review compatibility, preserve advanced policies, and download JSON or YAML.</span>
-            </button>
+            {% endfor %}
         </div>
 
         <div class="wizard-content">
@@ -101,6 +62,7 @@
                 {% include "profiles/_page_wizard_step_search.html" %}
                 {% include "profiles/_page_wizard_step_privacy.html" %}
                 {% include "profiles/_page_wizard_step_sync.html" %}
+                {% include "profiles/_page_wizard_step_ai.html" %}
                 {% include "profiles/_page_wizard_step_export.html" %}
                 {% include "profiles/_page_wizard_support.html" %}
             </div>

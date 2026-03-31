@@ -1,0 +1,42 @@
+name: Firefox Live Policy Tests
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  firefox-live:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        channel:
+          - release
+          - esr
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Setup isolated Firefox sandbox
+        run: |
+          bash tools/setup_firefox_live_browsers.sh "${{ matrix.channel }}"
+
+      - name: Run Firefox live tests
+        run: |
+          pytest -q tests/live_firefox/test_policy_activation.py tests/live_firefox/test_policy_behavior.py -m firefox_live -rs

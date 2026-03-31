@@ -14,7 +14,7 @@ def _mk_create_payload() -> ProfileCreate:
     return ProfileCreate(
         name=f"UPD-{u}",
         description="Original description",
-        schema_version="esr-140",
+        schema_version="esr-140.9",
         flags={"DisableTelemetry": True},
         owner="ops@example.org",
     )
@@ -35,7 +35,7 @@ async def test_update_all_mutable_fields_and_read_back():
     # Update with all fields set
     patch = ProfileUpdate(
         description="Changed description",
-        schema_version="release-148",
+        schema_version="release-149",
         flags={"DisableTelemetry": False, "DisablePrivateBrowsing": True},
         owner="sec@example.org",
     )
@@ -45,10 +45,22 @@ async def test_update_all_mutable_fields_and_read_back():
         await session.commit()
         assert updated is not None
         assert updated.description == "Changed description"
-        assert updated.schema_version == "release-148"
+        assert updated.schema_version == "release-149"
         assert updated.flags.get("DisableTelemetry") is False
         assert updated.flags.get("DisablePrivateBrowsing") is True
         assert updated.owner == "sec@example.org"
+        break
+
+    async for session in get_session():
+        cleared = await ProfileService.update(
+            session,
+            profile_id,
+            ProfileUpdate(description=None, owner=None),
+        )
+        await session.commit()
+        assert cleared is not None
+        assert cleared.description is None
+        assert cleared.owner is None
         break
 
     # Update non-existent id → None branch in update()

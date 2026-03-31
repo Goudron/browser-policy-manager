@@ -30,7 +30,7 @@ async def test_service_list_filters_sort_and_pagination_direct():
         for owner in ("ops@example.org", "sec@example.org"):
             for i in range(2):
                 await ProfileService.create(
-                    session, _mk(owner, "esr-140", name_prefix=f"SVC-{i}")
+                    session, _mk(owner, "esr-140.9", name_prefix=f"SVC-{i}")
                 )
         await session.commit()
         break
@@ -42,7 +42,7 @@ async def test_service_list_filters_sort_and_pagination_direct():
             session,
             q=None,
             owner="ops@example.org",
-            schema_version="esr-140",
+            schema_version="esr-140.9",
             sort="name",
             order="asc",
             limit=2,
@@ -56,7 +56,7 @@ async def test_service_list_filters_sort_and_pagination_direct():
             session,
             q=None,
             owner=None,
-            schema_version="esr-140",
+            schema_version="esr-140.9",
             sort="updated_at",
             order="desc",
             limit=1,

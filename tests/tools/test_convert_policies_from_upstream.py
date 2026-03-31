@@ -168,15 +168,15 @@ def test_schema_to_json_schema_emits_raw_json_schema_bundle():
     )
 
     schema = module.schema_to_json_schema(
-        channel="release-148",
-        version="148.0",
+        channel="release-149",
+        version="149.0",
         source="test-fixture",
         policies=[policy],
     )
 
     assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
-    assert schema["x-bpm-channel"] == "release-148"
-    assert schema["x-bpm-version"] == "148.0"
+    assert schema["x-bpm-channel"] == "release-149"
+    assert schema["x-bpm-version"] == "149.0"
     assert schema["x-bpm-source"] == "test-fixture"
     assert schema["properties"]["DisableTelemetry"]["type"] == "boolean"
     assert schema["properties"]["DisableTelemetry"]["x-bpm-description-key"] == "policy.DisableTelemetry"

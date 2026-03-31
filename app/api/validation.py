@@ -10,6 +10,7 @@ from app.core.policy_validation import (
     load_policy_schema_for_channel,
     validate_profile_policies_or_raise,
 )
+from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNEL_SET
 
 router = APIRouter(prefix="/api/validate", tags=["validation"])
 
@@ -27,14 +28,20 @@ class ValidationRequest(BaseModel):
 
 
 # Supported profiles are aligned with the bundled internal policy schemas.
-_SUPPORTED_PROFILES: set[str] = {"esr-140", "release-148"}
+_SUPPORTED_PROFILES: set[str] = set(SUPPORTED_SCHEMA_CHANNEL_SET)
 
 
 def _get_schema_or_404(profile: str) -> dict[str, Any]:
     """Return schema JSON for the given profile or raise 404 if it is unknown."""
     if profile not in _SUPPORTED_PROFILES:
         raise HTTPException(status_code=404, detail=f"Unknown profile '{profile}'")
-    return load_policy_schema_for_channel(profile)
+    try:
+        return load_policy_schema_for_channel(profile)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Schema for profile '{profile}' is not available",
+        ) from exc
 
 
 @router.post("/{profile}")
@@ -43,7 +50,7 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
     Validate a policy document for the given profile.
 
     Request example:
-        POST /api/validate/release-148
+        POST /api/validate/release-149
         {
           "document": {
             "DisableAppUpdate": true,
@@ -52,12 +59,12 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
         }
 
     Successful response:
-        { "ok": true, "profile": "release-148" }
+        { "ok": true, "profile": "release-149" }
 
     Validation error response:
         {
           "ok": false,
-          "profile": "release-148",
+          "profile": "release-149",
           "detail": "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]",
           "error":  "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]"
         }

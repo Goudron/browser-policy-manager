@@ -20,6 +20,44 @@
             renderWizardSchemaNestedDictionaryRow,
         } = helpers;
 
+        function refreshSchemaListRows(container) {
+            const listEl = container?.querySelector("[data-schema-list]");
+            if (!container || !listEl) return;
+
+            const rows = Array.from(listEl.querySelectorAll("[data-schema-list-row]"));
+            if (rows.length === 0) {
+                const emptyLabel = listEl.dataset.schemaListEmptyLabel || t("profiles.wizard_schema_list_empty_entries");
+                listEl.innerHTML = `<div class="wizard-shell-empty" data-schema-list-empty>${escapeHtml(emptyLabel)}</div>`;
+                return;
+            }
+
+            listEl.querySelector("[data-schema-list-empty]")?.remove();
+        }
+
+        function appendSchemaListItem(container) {
+            const listEl = container?.querySelector("[data-schema-list]");
+            if (!container || !listEl) return;
+
+            const disabled = container.querySelector("[data-schema-list-add]")?.disabled ? "disabled" : "";
+            listEl.querySelector("[data-schema-list-empty]")?.remove();
+            listEl.insertAdjacentHTML(
+                "beforeend",
+                `
+                    <div class="wizard-inline-list-row" data-schema-list-row>
+                        <input type="text" class="soft-input" data-schema-list-item value="" ${disabled} />
+                        <button type="button" class="button-base danger-button" data-schema-list-remove ${disabled}>${escapeHtml(t("profiles.wizard_shell_array_remove"))}</button>
+                    </div>
+                `,
+            );
+            refreshSchemaListRows(container);
+        }
+
+        function removeSchemaListItem(container, row) {
+            if (!container || !row) return;
+            row.remove();
+            refreshSchemaListRows(container);
+        }
+
         function refreshSchemaNestedArrayRows(container) {
             const field = {
                 name: container.dataset.schemaNestedField || "",
@@ -31,7 +69,7 @@
 
             const rows = Array.from(listEl.querySelectorAll("[data-schema-nested-array-row]"));
             if (rows.length === 0) {
-                listEl.innerHTML = `<div class="wizard-shell-empty" data-schema-nested-empty>${escapeHtml(t("profiles.wizard_shell_array_empty", "No items yet."))}</div>`;
+                listEl.innerHTML = `<div class="wizard-shell-empty" data-schema-nested-empty>${escapeHtml(t("profiles.wizard_shell_array_empty"))}</div>`;
                 return;
             }
 
@@ -39,7 +77,7 @@
             rows.forEach((row, index) => {
                 row.dataset.schemaNestedArrayIndex = String(index);
                 row.querySelector(".wizard-search-engine-title").textContent = row.querySelector(".wizard-search-engine-title").textContent || `${field.label || field.name || "Item"} ${index + 1}`;
-                row.querySelector(".wizard-search-engine-meta").textContent = `${t("profiles.wizard_shell_array_item_meta", "Array item")} ${index + 1}`;
+                row.querySelector(".wizard-search-engine-meta").textContent = `${t("profiles.wizard_shell_array_item_meta")} ${index + 1}`;
             });
         }
 
@@ -48,13 +86,15 @@
                 name: container.dataset.schemaNestedField || "",
                 label: container.dataset.schemaNestedLabel || "",
                 fields: readSchemaNestedFieldSpecs(container),
+                entryKeyLabel: container.dataset.schemaEntryKeyLabel || "",
+                metaLabel: container.dataset.schemaEntryMetaLabel || "",
             };
             const listEl = container.querySelector("[data-schema-nested-dict-list]");
             if (!listEl) return;
 
             const rows = Array.from(listEl.querySelectorAll("[data-schema-nested-dict-row]"));
             if (rows.length === 0) {
-                listEl.innerHTML = `<div class="wizard-shell-empty" data-schema-nested-empty>${escapeHtml(t("profiles.wizard_shell_dictionary_empty", "No entries yet."))}</div>`;
+                listEl.innerHTML = `<div class="wizard-shell-empty" data-schema-nested-empty>${escapeHtml(t("profiles.wizard_shell_dictionary_empty"))}</div>`;
                 return;
             }
 
@@ -63,7 +103,7 @@
                 row.dataset.schemaNestedDictIndex = String(index);
                 const entryKey = String(row.querySelector("[data-schema-nested-dict-key]")?.value || "").trim();
                 row.querySelector(".wizard-search-engine-title").textContent = entryKey || `${field.label || field.name || "Entry"} ${index + 1}`;
-                row.querySelector(".wizard-search-engine-meta").textContent = `${t("profiles.wizard_shell_dictionary_item_meta", "Dictionary entry")} ${index + 1}`;
+                row.querySelector(".wizard-search-engine-meta").textContent = `${field.metaLabel || t("profiles.wizard_shell_dictionary_item_meta")} ${index + 1}`;
             });
         }
 
@@ -96,6 +136,8 @@
                 name: container.dataset.schemaNestedField || "",
                 label: container.dataset.schemaNestedLabel || "",
                 fields: readSchemaNestedFieldSpecs(container),
+                entryKeyLabel: container.dataset.schemaEntryKeyLabel || "",
+                metaLabel: container.dataset.schemaEntryMetaLabel || "",
             };
             const nextIndex = listEl.querySelectorAll("[data-schema-nested-dict-row]").length;
             listEl.querySelector("[data-schema-nested-empty]")?.remove();
@@ -272,9 +314,9 @@
 
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_schema_policy_applied", "Schema-driven policy updated."), "info");
+                setStatus(t("profiles.wizard_schema_policy_applied"), "info");
             } catch (e) {
-                setStatus(`Schema policy error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_schema_policy").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -294,9 +336,9 @@
                 normalized[policyId] = nextItems;
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_shell_array_item_added", "Array item added."), "info");
+                setStatus(t("profiles.wizard_shell_array_item_added"), "info");
             } catch (e) {
-                setStatus(`Schema array error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_schema_array").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -321,9 +363,9 @@
                 }
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_shell_array_item_removed", "Array item removed."), "info");
+                setStatus(t("profiles.wizard_shell_array_item_removed"), "info");
             } catch (e) {
-                setStatus(`Schema array error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_schema_array").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -352,9 +394,9 @@
                 normalized[policyId] = nextEntries;
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_shell_dictionary_entry_added", "Dictionary entry added."), "info");
+                setStatus(t("profiles.wizard_shell_dictionary_entry_added"), "info");
             } catch (e) {
-                setStatus(`Schema dictionary error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_schema_dictionary").replace("{detail}", e.message || e), "error");
             }
         }
 
@@ -385,13 +427,16 @@
                 }
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
-                setStatus(t("profiles.wizard_shell_dictionary_entry_removed", "Dictionary entry removed."), "info");
+                setStatus(t("profiles.wizard_shell_dictionary_entry_removed"), "info");
             } catch (e) {
-                setStatus(`Schema dictionary error: ${e.message || e}`, "error");
+                setStatus(t("profiles.error_schema_dictionary").replace("{detail}", e.message || e), "error");
             }
         }
 
         return {
+            refreshSchemaListRows,
+            appendSchemaListItem,
+            removeSchemaListItem,
             refreshSchemaNestedArrayRows,
             refreshSchemaNestedDictionaryRows,
             appendSchemaNestedArrayItem,

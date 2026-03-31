@@ -52,8 +52,8 @@
                 return {
                     kind: "select",
                     options: [
-                        { value: true, fallback: t("profiles.wizard_preferences_boolean_true", "true") },
-                        { value: false, fallback: t("profiles.wizard_preferences_boolean_false", "false") },
+                        { value: true, fallback: t("profiles.wizard_preferences_boolean_true") },
+                        { value: false, fallback: t("profiles.wizard_preferences_boolean_false") },
                     ],
                 };
             }
@@ -79,7 +79,7 @@
                 if (selectValue && !allowedValues.has(selectValue)) {
                     options.push({
                         value: selectValue,
-                        fallback: t("profiles.wizard_preferences_value_custom", "Custom: {value}").replace("{value}", selectValue),
+                        fallback: t("profiles.wizard_preferences_value_custom").replace("{value}", selectValue),
                     });
                 }
 
@@ -102,6 +102,59 @@
                 valueInput.disabled = disabled;
                 valueSelect.hidden = true;
                 valueSelect.disabled = true;
+            }
+        }
+
+        function formatPreferenceStatusLabel(status) {
+            const normalizedStatus = String(status || "default").trim() || "default";
+            if (normalizedStatus === "locked") return t("profiles.wizard_preferences_status_locked");
+            if (normalizedStatus === "user") return t("profiles.wizard_preferences_status_user");
+            if (normalizedStatus === "clear") return t("profiles.wizard_preferences_status_clear");
+            return t("profiles.wizard_preferences_status_default");
+        }
+
+        function formatPreferenceTypeLabel(type) {
+            const normalizedType = String(type || "").trim();
+            if (normalizedType === "boolean") return t("profiles.wizard_preferences_type_boolean");
+            if (normalizedType === "number") return t("profiles.wizard_preferences_type_number");
+            if (normalizedType === "string") return t("profiles.wizard_preferences_type_string");
+            return t("profiles.wizard_preferences_type_auto");
+        }
+
+        function localizePreferenceRow(row) {
+            const labels = {
+                name: t("profiles.wizard_preferences_field_name"),
+                status: t("profiles.wizard_preferences_field_status"),
+                type: t("profiles.wizard_preferences_field_type"),
+                value: t("profiles.wizard_preferences_field_value"),
+            };
+
+            row.querySelectorAll("[data-preference-label]").forEach((labelEl) => {
+                const key = labelEl.dataset.preferenceLabel;
+                if (key && labels[key]) {
+                    labelEl.textContent = labels[key];
+                }
+            });
+
+            const removeButton = row.querySelector("[data-preference-remove]");
+            if (removeButton) {
+                removeButton.textContent = t("profiles.wizard_preferences_remove_button");
+            }
+
+            const statusInput = row.querySelector('[data-preference-field="status"]');
+            if (statusInput?.options?.length >= 4) {
+                statusInput.options[0].textContent = t("profiles.wizard_preferences_status_default");
+                statusInput.options[1].textContent = t("profiles.wizard_preferences_status_locked");
+                statusInput.options[2].textContent = t("profiles.wizard_preferences_status_user");
+                statusInput.options[3].textContent = t("profiles.wizard_preferences_status_clear");
+            }
+
+            const typeInput = row.querySelector('[data-preference-field="type"]');
+            if (typeInput?.options?.length >= 4) {
+                typeInput.options[0].textContent = t("profiles.wizard_preferences_type_auto_option");
+                typeInput.options[1].textContent = t("profiles.wizard_preferences_type_boolean");
+                typeInput.options[2].textContent = t("profiles.wizard_preferences_type_number");
+                typeInput.options[3].textContent = t("profiles.wizard_preferences_type_string");
             }
         }
 
@@ -146,25 +199,25 @@
 
             if (valueInput) {
                 valueInput.placeholder = effectiveType === "boolean"
-                    ? t("profiles.wizard_preferences_value_placeholder_boolean", "true")
+                    ? t("profiles.wizard_preferences_value_placeholder_boolean")
                     : effectiveType === "number"
-                        ? t("profiles.wizard_preferences_value_placeholder_number", "2")
-                        : t("profiles.wizard_preferences_value_placeholder_default", "true");
+                        ? t("profiles.wizard_preferences_value_placeholder_number")
+                        : t("profiles.wizard_preferences_value_placeholder_default");
                 valueInput.inputMode = effectiveType === "number" ? "decimal" : "text";
             }
 
             if (hintEl) {
                 if (effectiveStatus === "clear") {
-                    hintEl.textContent = t("profiles.wizard_preferences_hint_clear", "Clear removes the managed value, so no explicit value is needed.");
+                    hintEl.textContent = t("profiles.wizard_preferences_hint_clear");
                 } else if (knownDescription) {
                     const suffix = knownPreference?.can_autofill
-                        ? ` ${t("profiles.wizard_preferences_hint_known", "Known preference with a suggested managed default.")}`
-                        : ` ${t("profiles.wizard_preferences_hint_known_multiple", "Known preference with multiple preset variants. Set status and value explicitly.")}`;
+                        ? ` ${t("profiles.wizard_preferences_hint_known")}`
+                        : ` ${t("profiles.wizard_preferences_hint_known_multiple")}`;
                     hintEl.textContent = `${knownDescription}${suffix}`;
                 } else if (knownPreference?.can_autofill) {
-                    hintEl.textContent = t("profiles.wizard_preferences_hint_known", "Known preference with a suggested managed default.");
+                    hintEl.textContent = t("profiles.wizard_preferences_hint_known");
                 } else if (knownPreference) {
-                    hintEl.textContent = t("profiles.wizard_preferences_hint_known_multiple", "Known preference with multiple preset variants. Set status and value explicitly.");
+                    hintEl.textContent = t("profiles.wizard_preferences_hint_known_multiple");
                 } else {
                     hintEl.textContent = t(
                         "profiles.wizard_preferences_hint_default",
@@ -185,24 +238,35 @@
             const valueRequired = values.status !== "clear" && !values.value.trim();
             const invalid = nameRequired || valueRequired;
 
+            localizePreferenceRow(row);
+
             if (titleEl) {
-                titleEl.textContent = values.name || `${t("profiles.wizard_preferences_card_title", "Preference")} ${index + 1}`;
+                titleEl.textContent = values.name || `${t("profiles.wizard_preferences_card_title")} ${index + 1}`;
             }
             if (metaEl) {
                 metaEl.textContent = values.name
                     ? knownPreference
                         ? `${t(knownPreference.label_key, knownPreference.fallback || values.name)} • ${values.name}`
-                        : `${values.name} -> Preferences`
-                    : t("profiles.wizard_preferences_card_meta", "Writes one item into Preferences.");
+                        : `${values.name} -> ${t("profiles.wizard_preferences_meta_target")}`
+                    : t("profiles.wizard_preferences_card_meta");
             }
             if (summaryEl) {
-                const summaryParts = [values.status || "default", values.type || t("profiles.wizard_preferences_type_auto", "infer")];
+                const summaryParts = [
+                    formatPreferenceStatusLabel(values.status),
+                    formatPreferenceTypeLabel(values.type),
+                ];
                 if (values.status !== "clear" && values.value.trim()) {
                     summaryParts.push(values.value.trim());
                 }
-                summaryEl.textContent = summaryParts.join(" • ");
+                summaryEl.textContent = values.name
+                    ? summaryParts.join(" • ")
+                    : t(
+                        "profiles.wizard_preferences_summary_default",
+                        "Set the preference key, value, status, and optional explicit type.",
+                    );
             }
             if (warningEl) {
+                warningEl.textContent = `${t("profiles.wizard_preferences_error_name")} ${t("profiles.wizard_preferences_error_value")}`;
                 warningEl.hidden = !invalid;
             }
 

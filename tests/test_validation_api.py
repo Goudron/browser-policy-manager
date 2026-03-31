@@ -6,11 +6,11 @@ def _make_client() -> TestClient:
     return make_test_client(make_app())
 
 
-def test_validate_rejects_non_object_release148():
+def test_validate_rejects_non_object_release149():
     client = _make_client()
 
     payload = {"document": 123}
-    response = client.post("/api/validate/release-148", json=payload)
+    response = client.post("/api/validate/release-149", json=payload)
 
     assert response.status_code == 200
     assert response.json()["ok"] is False
@@ -22,7 +22,7 @@ def test_validate_profile_ok_and_fail():
     good = {"document": {"DisableTelemetry": True}}
     bad = {"document": 123}
 
-    for profile in ("esr-140", "release-148"):
+    for profile in ("esr-140.9", "release-149"):
         ok_response = client.post(f"/api/validate/{profile}", json=good)
         assert ok_response.status_code == 200, ok_response.text
         assert ok_response.json() == {"ok": True, "profile": profile}
@@ -37,7 +37,7 @@ def test_validate_profile_ok_and_fail():
 def test_validate_accepts_search_bar_enum_values():
     client = _make_client()
 
-    for profile in ("esr-140", "release-148"):
+    for profile in ("esr-140.9", "release-149"):
         for value in ("unified", "separate"):
             response = client.post(f"/api/validate/{profile}", json={"document": {"SearchBar": value}})
 
@@ -61,7 +61,7 @@ def test_validate_accepts_search_engines_add_payload():
         }
     }
 
-    for profile in ("esr-140", "release-148"):
+    for profile in ("esr-140.9", "release-149"):
         response = client.post(f"/api/validate/{profile}", json={"document": document})
 
         assert response.status_code == 200, response.text
@@ -80,7 +80,7 @@ def test_validate_accepts_preferences_payload():
         }
     }
 
-    for profile in ("esr-140", "release-148"):
+    for profile in ("esr-140.9", "release-149"):
         response = client.post(f"/api/validate/{profile}", json={"document": document})
 
         assert response.status_code == 200, response.text
@@ -91,7 +91,7 @@ def test_validate_rejects_invalid_nested_enum_values():
     client = _make_client()
 
     response = client.post(
-        "/api/validate/release-148",
+        "/api/validate/release-149",
         json={
             "document": {
                 "Proxy": {
@@ -111,7 +111,7 @@ def test_validate_rejects_preferences_type_mismatch():
     client = _make_client()
 
     response = client.post(
-        "/api/validate/release-148",
+        "/api/validate/release-149",
         json={
             "document": {
                 "Preferences": {

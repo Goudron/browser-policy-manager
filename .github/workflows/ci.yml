@@ -33,9 +33,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
 
+      - name: Verify vendored frontend assets
+        run: |
+          test -f app/static/vendor/js-yaml.js
+          test -f app/static/vendor/profiles_tailwind.css
+          test -f app/static/vendor/profiles_monaco.js
+          test -f app/static/vendor/profiles_monaco.css
+          test -f app/static/vendor/monaco-editor.worker.js
+          test -f app/static/vendor/monaco-json.worker.js
+          test -f app/static/vendor/monaco.LICENSE
+
       - name: Ruff
         run: |
           ruff check .
+
+      - name: Guard legacy schema refs
+        run: |
+          ! rg -n \
+            -g '!alembic/versions/20260330_upgrade_profiles_to_firefox149.py' \
+            -g '!.github/workflows/ci.yml' \
+            -g '!tests/test_migrations.py' \
+            -g '!tests/test_no_legacy_schema_refs.py' \
+            'release-148|esr-140\.8|firefox-release-148\.json|firefox-esr-140\.8\.json|firefox-esr140\.json|mozilla-policy-templates-v7\.8|release148' \
+            app tests tools .github README.md
 
       - name: Mypy
         run: |
