@@ -4,8 +4,10 @@ from __future__ import annotations
 import builtins
 
 from sqlalchemy import asc, delete, desc, func, select
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import ColumnElement
+from typing import Any, cast
 
 from app.models.profile import Profile
 from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
@@ -171,10 +173,12 @@ class ProfileService:
         stmt = delete(Profile).where(Profile.id == profile_id)
         result = await session.execute(stmt)
         await session.flush()
-        return bool(result.rowcount)
+        delete_result = cast(CursorResult[Any], result)
+        return bool(delete_result.rowcount)
 
     @staticmethod
     async def hard_delete_all(session: AsyncSession) -> int:
         result = await session.execute(delete(Profile))
         await session.flush()
-        return int(result.rowcount or 0)
+        delete_result = cast(CursorResult[Any], result)
+        return int(delete_result.rowcount or 0)
