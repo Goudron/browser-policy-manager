@@ -4,6 +4,7 @@ from __future__ import annotations
 import importlib
 import importlib.util
 from collections.abc import AsyncIterator
+from pathlib import Path
 from typing import Any, cast
 
 from sqlalchemy import MetaData, create_engine, inspect
@@ -132,6 +133,28 @@ def _to_sync_sqlite_url(url: str) -> str:
     return url.replace("sqlite+aiosqlite://", "sqlite://", 1)
 
 
+def _ensure_sqlite_parent_dir(url: str) -> None:
+    """
+    Create the parent directory for file-based SQLite URLs when needed.
+
+    GitHub Actions runners and fresh local checkouts may not have the relative
+    `./data` directory yet. SQLite won't create missing parent directories on
+    connect, so we do it proactively during engine setup.
+    """
+    if ":memory:" in url:
+        return
+
+    prefix, _, db_path = url.partition(":///")
+    if not db_path or not prefix.startswith("sqlite"):
+        return
+
+    path = Path(db_path)
+    parent = path.parent
+    if str(parent) in ("", "."):
+        return
+    parent.mkdir(parents=True, exist_ok=True)
+
+
 class AsyncSessionAdapter:
     """Async-friendly wrapper around a synchronous SQLAlchemy Session."""
 
@@ -200,6 +223,7 @@ def _upgrade_legacy_sqlite_schema(sync_engine: Engine) -> None:
 
 if _is_sqlite_async_url(_DATABASE_URL):
     _SYNC_DATABASE_URL = _to_sync_sqlite_url(_DATABASE_URL)
+    _ensure_sqlite_parent_dir(_SYNC_DATABASE_URL)
     engine: Any = create_engine(
         _SYNC_DATABASE_URL,
         echo=_DATABASE_ECHO,
