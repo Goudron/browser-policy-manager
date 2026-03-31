@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import asyncio
 import importlib
-from types import SimpleNamespace
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from sqlalchemy import MetaData, create_engine, inspect
