@@ -25,32 +25,119 @@
                 <h3 class="wizard-section-title" data-i18n="profiles.wizard_starter_title">{{ tr("profiles.wizard_starter_title") }}</h3>
                 <p class="wizard-section-copy" data-i18n="profiles.wizard_starter_body">{{ tr("profiles.wizard_starter_body") }}</p>
             </div>
-            <div class="wizard-starter-grid" id="wizard-starter-grid">
-                <button type="button" class="wizard-starter-card wizard-starter-card--active" data-starter-key="blank">
-                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_blank_badge">{{ tr("profiles.wizard_starter_blank_badge") }}</span>
-                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
-                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_blank_copy">{{ tr("profiles.wizard_starter_blank_copy") }}</span>
-                </button>
-                <button type="button" class="wizard-starter-card" data-starter-key="keep_current">
-                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_keep_badge">{{ tr("profiles.wizard_starter_keep_badge") }}</span>
-                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_keep_title">{{ tr("profiles.wizard_starter_keep_title") }}</span>
-                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_keep_copy">{{ tr("profiles.wizard_starter_keep_copy") }}</span>
-                </button>
-                <button type="button" class="wizard-starter-card" data-starter-key="basic_corporate">
-                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_basic_badge">{{ tr("profiles.wizard_starter_basic_badge") }}</span>
-                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_basic_title">{{ tr("profiles.wizard_starter_basic_title") }}</span>
-                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_basic_copy">{{ tr("profiles.wizard_starter_basic_copy") }}</span>
-                </button>
-                <button type="button" class="wizard-starter-card" data-starter-key="classroom_kiosk">
-                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_classroom_badge">{{ tr("profiles.wizard_starter_classroom_badge") }}</span>
-                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_classroom_title">{{ tr("profiles.wizard_starter_classroom_title") }}</span>
-                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_classroom_copy">{{ tr("profiles.wizard_starter_classroom_copy") }}</span>
-                </button>
-                <button type="button" class="wizard-starter-card" data-starter-key="soc_hard">
-                    <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_soc_badge">{{ tr("profiles.wizard_starter_soc_badge") }}</span>
-                    <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_soc_title">{{ tr("profiles.wizard_starter_soc_title") }}</span>
-                    <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_soc_copy">{{ tr("profiles.wizard_starter_soc_copy") }}</span>
-                </button>
+            <div class="wizard-baseline-stack" id="wizard-starter-grid">
+                <div class="wizard-baseline-group wizard-baseline-group--scenario">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_scenarios_title">{{ tr("profiles.wizard_scenarios_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_scenarios_body">{{ tr("profiles.wizard_scenarios_body") }}</div>
+                    </div>
+                    <div class="wizard-scenario-grid">
+                        <button type="button" class="wizard-starter-card wizard-scenario-card" data-scenario-key="corporate_default">
+                            <span class="wizard-starter-badge wizard-starter-badge--recommended" data-i18n="profiles.wizard_scenario_corporate_badge">{{ tr("profiles.wizard_scenario_corporate_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_scenario_corporate_title">{{ tr("profiles.wizard_scenario_corporate_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_scenario_corporate_body">{{ tr("profiles.wizard_scenario_corporate_body") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-scenario-card" data-scenario-key="shared_devices">
+                            <span class="wizard-starter-badge" data-i18n="profiles.wizard_scenario_shared_badge">{{ tr("profiles.wizard_scenario_shared_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_scenario_shared_title">{{ tr("profiles.wizard_scenario_shared_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_scenario_shared_body">{{ tr("profiles.wizard_scenario_shared_body") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-scenario-card" data-scenario-key="hardened">
+                            <span class="wizard-starter-badge" data-i18n="profiles.wizard_scenario_hardened_badge">{{ tr("profiles.wizard_scenario_hardened_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_scenario_hardened_title">{{ tr("profiles.wizard_scenario_hardened_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_scenario_hardened_body">{{ tr("profiles.wizard_scenario_hardened_body") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-scenario-card" data-scenario-key="extension_rollout">
+                            <span class="wizard-starter-badge" data-i18n="profiles.wizard_scenario_addons_badge">{{ tr("profiles.wizard_scenario_addons_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_scenario_addons_title">{{ tr("profiles.wizard_scenario_addons_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_scenario_addons_body">{{ tr("profiles.wizard_scenario_addons_body") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-scenario-card wizard-starter-card--active" data-scenario-key="targeted_edits">
+                            <span class="wizard-starter-badge" data-i18n="profiles.wizard_scenario_targeted_badge">{{ tr("profiles.wizard_scenario_targeted_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_scenario_targeted_title">{{ tr("profiles.wizard_scenario_targeted_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_scenario_targeted_body">{{ tr("profiles.wizard_scenario_targeted_body") }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="wizard-baseline-summary wizard-subsection-card wizard-subsection-card--soft">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_scenario_summary_title">{{ tr("profiles.wizard_scenario_summary_title") }}</div>
+                        <div class="wizard-input-hint" id="wizard-scenario-summary-copy" data-i18n="profiles.wizard_scenario_summary_body">{{ tr("profiles.wizard_scenario_summary_body") }}</div>
+                    </div>
+                    <div class="wizard-baseline-summary-list" id="wizard-scenario-summary-list"></div>
+                </div>
+                <div class="wizard-baseline-summary wizard-subsection-card wizard-subsection-card--soft wizard-workflow-card" aria-labelledby="wizard-shared-device-workflow-copy">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_shared_device_workflow_title">{{ tr("profiles.wizard_shared_device_workflow_title") }}</div>
+                        <div class="wizard-input-hint wizard-workflow-copy" id="wizard-shared-device-workflow-copy" role="status" aria-live="polite" data-i18n="profiles.wizard_shared_device_workflow_body">{{ tr("profiles.wizard_shared_device_workflow_body") }}</div>
+                    </div>
+                    <div class="wizard-export-plan-list wizard-workflow-list" id="wizard-shared-device-workflow-list" role="list"></div>
+                </div>
+                <div class="wizard-baseline-summary wizard-subsection-card wizard-subsection-card--soft wizard-workflow-card" id="wizard-clone-handoff-panel" aria-labelledby="wizard-clone-handoff-copy" hidden>
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.clone_handoff_title">{{ tr("profiles.clone_handoff_title") }}</div>
+                        <div class="wizard-input-hint wizard-workflow-copy" id="wizard-clone-handoff-copy" role="status" aria-live="polite" data-i18n="profiles.clone_handoff_body">{{ tr("profiles.clone_handoff_body") }}</div>
+                    </div>
+                    <div class="wizard-export-plan-list wizard-workflow-list" id="wizard-clone-handoff-list" role="list"></div>
+                </div>
+                <div class="wizard-baseline-group wizard-baseline-group--recommended">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_baseline_recommended_title">{{ tr("profiles.wizard_baseline_recommended_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_baseline_recommended_body">{{ tr("profiles.wizard_baseline_recommended_body") }}</div>
+                    </div>
+                    <div class="wizard-starter-grid wizard-starter-grid--recommended">
+                        <button type="button" class="wizard-starter-card wizard-starter-card--recommended" data-starter-key="basic_corporate">
+                            <span class="wizard-starter-badge wizard-starter-badge--recommended" data-i18n="profiles.wizard_baseline_recommended_badge">{{ tr("profiles.wizard_baseline_recommended_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_basic_title">{{ tr("profiles.wizard_starter_basic_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_basic_copy">{{ tr("profiles.wizard_starter_basic_copy") }}</span>
+                            <span class="wizard-starter-note" data-i18n="profiles.wizard_starter_basic_note">{{ tr("profiles.wizard_starter_basic_note") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-starter-card--recommended" data-starter-key="classroom_kiosk">
+                            <span class="wizard-starter-badge wizard-starter-badge--recommended" data-i18n="profiles.wizard_baseline_recommended_shared_badge">{{ tr("profiles.wizard_baseline_recommended_shared_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_classroom_title">{{ tr("profiles.wizard_starter_classroom_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_classroom_copy">{{ tr("profiles.wizard_starter_classroom_copy") }}</span>
+                            <span class="wizard-starter-note" data-i18n="profiles.wizard_starter_classroom_note">{{ tr("profiles.wizard_starter_classroom_note") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-starter-card--recommended" data-starter-key="soc_hard">
+                            <span class="wizard-starter-badge wizard-starter-badge--recommended" data-i18n="profiles.wizard_baseline_recommended_hard_badge">{{ tr("profiles.wizard_baseline_recommended_hard_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_soc_title">{{ tr("profiles.wizard_starter_soc_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_soc_copy">{{ tr("profiles.wizard_starter_soc_copy") }}</span>
+                            <span class="wizard-starter-note" data-i18n="profiles.wizard_starter_soc_note">{{ tr("profiles.wizard_starter_soc_note") }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="wizard-baseline-summary wizard-subsection-card wizard-subsection-card--soft">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_baseline_summary_title">{{ tr("profiles.wizard_baseline_summary_title") }}</div>
+                        <div class="wizard-input-hint" id="wizard-baseline-summary-copy" data-i18n="profiles.wizard_baseline_summary_body">{{ tr("profiles.wizard_baseline_summary_body") }}</div>
+                    </div>
+                    <div class="wizard-baseline-summary-list" id="wizard-baseline-summary-list"></div>
+                </div>
+                <div class="wizard-baseline-summary wizard-subsection-card wizard-subsection-card--soft">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_baseline_preview_title">{{ tr("profiles.wizard_baseline_preview_title") }}</div>
+                        <div class="wizard-input-hint" id="wizard-baseline-preview-copy" data-i18n="profiles.wizard_baseline_preview_body">{{ tr("profiles.wizard_baseline_preview_body") }}</div>
+                    </div>
+                    <div class="wizard-baseline-summary-list" id="wizard-baseline-preview-list"></div>
+                </div>
+                <div class="wizard-baseline-group wizard-baseline-group--secondary">
+                    <div class="wizard-baseline-group-head">
+                        <div class="field-label" data-i18n="profiles.wizard_baseline_secondary_title">{{ tr("profiles.wizard_baseline_secondary_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_baseline_secondary_body">{{ tr("profiles.wizard_baseline_secondary_body") }}</div>
+                    </div>
+                    <div class="wizard-starter-grid wizard-starter-grid--secondary">
+                        <button type="button" class="wizard-starter-card wizard-starter-card--active wizard-starter-card--secondary" data-starter-key="blank">
+                            <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_blank_badge">{{ tr("profiles.wizard_starter_blank_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_blank_copy">{{ tr("profiles.wizard_starter_blank_copy") }}</span>
+                        </button>
+                        <button type="button" class="wizard-starter-card wizard-starter-card--secondary" data-starter-key="keep_current">
+                            <span class="wizard-starter-badge" data-i18n="profiles.wizard_starter_keep_badge">{{ tr("profiles.wizard_starter_keep_badge") }}</span>
+                            <span class="wizard-starter-title" data-i18n="profiles.wizard_starter_keep_title">{{ tr("profiles.wizard_starter_keep_title") }}</span>
+                            <span class="wizard-starter-copy" data-i18n="profiles.wizard_starter_keep_copy">{{ tr("profiles.wizard_starter_keep_copy") }}</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -85,6 +85,10 @@
             wizardPrivacySummaryPermissionsConfiguredEl,
             wizardPrivacySummaryPermissionsLockedEl,
             wizardPrivacySummaryCookiesEl,
+            wizardPrivacySummaryUserDataEl,
+            wizardPrivacySummaryCleanupEl,
+            wizardPrivacySummaryUserDataJumpEl,
+            wizardPrivacySummaryCleanupJumpEl,
             wizardPrivacySummaryPermissionsConfiguredJumpEl,
             wizardPrivacySummaryPermissionsLockedJumpEl,
             wizardPrivacySummaryCookiesJumpEl,
@@ -105,6 +109,15 @@
             wizardExportUnknownJumpEl,
             wizardExportReadyCopyEl,
             wizardExportChecklistEl,
+            wizardExportNextStepsEl,
+            wizardExportReadyNowEl,
+            wizardExportIncludedNowEl,
+            wizardExportMissingNowEl,
+            wizardExportReviewNowEl,
+            wizardExportDrilldownEl,
+            wizardExportDownloadHintEl,
+            wizardExportBaselineCopyEl,
+            wizardExportBaselineListEl,
             wizardExportSummaryNetworkEl,
             wizardExportSummaryHomeEl,
             wizardExportSummarySearchEl,
@@ -117,19 +130,42 @@
             wizardExportSummaryFeaturesJumpEl,
             wizardExportSummaryAiJumpEl,
             wizardExportSummaryPrivacyJumpEl,
+            wizardExportShareableTextEl,
+            wizardExportShareableCopyEl,
+            wizardExportShareableStatusEl,
             editorEl,
             overviewPanelEl,
+            wizardSummaryNameEl,
+            wizardSummarySchemaEl,
+            wizardSummaryStarterEl,
+            wizardSummaryDerivedEl,
         } = elements;
 
         const getCurrentId = state.getCurrentId || (() => null);
         const getCurrentProfile = state.getCurrentProfile || (() => null);
+        const getCloneSourceProfile = state.getCloneSourceProfile || (() => null);
+        const getLifecycleSessionNote = state.getLifecycleSessionNote || (() => null);
         const getCurrentRaw = state.getCurrentRaw || (() => ({}));
         const getValidationPreviewTone = state.getValidationPreviewTone || (() => "neutral");
+        const getWizardStarter = state.getWizardStarter || (() => "blank");
+        const getBaselineSummary = state.getBaselineSummary || (() => ({ copy: "", items: [] }));
         const workspaceSignalEl = state.workspaceSignalEl || null;
 
         function setText(el, value) {
             if (el) {
                 el.textContent = String(value);
+            }
+        }
+
+        function formatLifecycleTimestamp(value) {
+            if (!value) return "";
+            try {
+                return new Intl.DateTimeFormat(documentRef.documentElement.lang || undefined, {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                }).format(new Date(value));
+            } catch {
+                return String(value);
             }
         }
 
@@ -164,6 +200,16 @@
             setSummaryTone(el, tone);
         }
 
+        function setHintValue(el, value, tone = "") {
+            setText(el, value);
+            if (!el) return;
+            if (!tone) {
+                delete el.dataset.summaryTone;
+                return;
+            }
+            el.dataset.summaryTone = tone;
+        }
+
         function hasMeaningfulValue(value) {
             if (typeof value === "boolean" || typeof value === "number") return true;
             if (typeof value === "string") return value.trim().length > 0;
@@ -187,8 +233,88 @@
                 : t("profiles.wizard_export_guided_empty");
         }
 
+        function buildShareableGuidedSummaryText({
+            exportSummary,
+            guidedSummary,
+            baselineSummary,
+        }) {
+            const profileName = wizardSummaryNameEl?.textContent?.trim()
+                || documentRef.getElementById("profile-name")?.value?.trim()
+                || t("profiles.wizard_export_shareable_profile_fallback");
+            const schemaLabel = wizardSummarySchemaEl?.textContent?.trim() || "";
+            const starterLabel = wizardSummaryStarterEl?.textContent?.trim() || "";
+            const derivedLabel = wizardSummaryDerivedEl?.textContent?.trim() || "";
+            const currentProfile = getCurrentProfile();
+            const lifecycleSessionNote = getLifecycleSessionNote();
+            const lines = [
+                t("profiles.wizard_export_shareable_heading"),
+                `${t("profiles.wizard_export_shareable_profile_label")}: ${profileName}`,
+            ];
+
+            if (schemaLabel) {
+                lines.push(`${t("profiles.wizard_export_shareable_schema_label")}: ${schemaLabel}`);
+            }
+            if (starterLabel) {
+                lines.push(`${t("profiles.wizard_export_shareable_starter_label")}: ${starterLabel}`);
+            }
+            if (derivedLabel || getCloneSourceProfile()?.name) {
+                lines.push(`${t("profiles.wizard_summary_derived")}: ${derivedLabel || t("profiles.wizard_summary_derived_value").replace("{name}", getCloneSourceProfile().name)}`);
+            }
+            if (currentProfile?.created_at) {
+                lines.push(`${t("profiles.lifecycle_item_created")}: ${formatLifecycleTimestamp(currentProfile.created_at)}`);
+            }
+            if (currentProfile?.updated_at) {
+                lines.push(`${t("profiles.lifecycle_item_saved")}: ${formatLifecycleTimestamp(currentProfile.updated_at)}`);
+            }
+            if (currentProfile?.is_deleted) {
+                lines.push(`${t("profiles.lifecycle_item_state")}: ${t("profiles.lifecycle_item_state_archived")}`);
+            } else if (getCurrentId()) {
+                lines.push(`${t("profiles.lifecycle_item_state")}: ${t("profiles.lifecycle_item_state_saved")}`);
+            } else if (getCloneSourceProfile()?.name) {
+                lines.push(`${t("profiles.lifecycle_item_state")}: ${t("profiles.lifecycle_item_state_clone_draft")}`);
+            }
+            if (lifecycleSessionNote?.type === "restored" && lifecycleSessionNote.profileId === getCurrentId()) {
+                lines.push(`${t("profiles.lifecycle_item_recent")}: ${formatLifecycleTimestamp(lifecycleSessionNote.at)}`);
+            }
+
+            lines.push(`${t("profiles.wizard_export_shareable_state_label")}: ${exportSummary.exportState}`);
+
+            const baselineItems = Array.isArray(baselineSummary.items) ? baselineSummary.items.filter(Boolean) : [];
+            if (baselineItems.length) {
+                lines.push("");
+                lines.push(t("profiles.wizard_export_baseline_summary_title"));
+                baselineItems.forEach((item) => {
+                    lines.push(`- ${item}`);
+                });
+            }
+
+            const guidedSections = [
+                [t("profiles.wizard_export_guided_network"), guidedSummary.networkText, guidedSummary.networkTone],
+                [t("profiles.wizard_export_guided_home"), guidedSummary.homeText, guidedSummary.homeTone],
+                [t("profiles.wizard_export_guided_search"), guidedSummary.searchText, guidedSummary.searchTone],
+                [t("profiles.wizard_export_guided_features"), guidedSummary.featuresText, guidedSummary.featuresTone],
+                [t("profiles.wizard_export_guided_ai"), guidedSummary.aiText, guidedSummary.aiTone],
+                [t("profiles.wizard_export_guided_privacy"), guidedSummary.privacyText, guidedSummary.privacyTone],
+            ].filter(([, text, tone]) => Boolean(text) && tone !== "default");
+
+            lines.push("");
+            lines.push(t("profiles.wizard_export_shareable_notice_title"));
+            if (guidedSections.length) {
+                guidedSections.forEach(([label, text]) => {
+                    lines.push(`- ${label}: ${text}`);
+                });
+            } else {
+                lines.push(`- ${t("profiles.wizard_export_shareable_notice_empty")}`);
+            }
+
+            lines.push("");
+            lines.push(`${t("profiles.wizard_export_shareable_handoff_label")}: ${exportSummary.downloadHint}`);
+
+            return lines.join("\n");
+        }
+
         function buildCompactStateText(fragments, emptyKey = "profiles.wizard_review_default") {
-            return fragments.length ? fragments.join(" • ") : t(emptyKey);
+            return fragments.length ? fragments.join(" • ") : t(emptyKey, "Using defaults");
         }
 
         function formatCountLabel(key, count) {
@@ -1019,6 +1145,23 @@
                 configuredPermissionCategories,
                 lockedPermissionCategories,
                 cookieRuleCount: getCookiesReviewCount(parsed?.Cookies),
+                reducedDataCollection: parsed?.DisableTelemetry === true || parsed?.DisableFirefoxStudies === true,
+                privateBrowsingDisabled: parsed?.DisablePrivateBrowsing === true,
+                passwordFlowTightened: parsed?.OfferToSaveLogins === false || parsed?.PasswordManagerEnabled === false,
+                lockdownControls: [
+                    parsed?.BlockAboutConfig === true,
+                    parsed?.BlockAboutProfiles === true,
+                    parsed?.DisableDeveloperTools === true,
+                    parsed?.DisableBuiltinPDFViewer === true,
+                    typeof parsed?.HttpsOnlyMode === "string" && parsed.HttpsOnlyMode.trim().length > 0,
+                ].filter(Boolean).length,
+                shutdownCleanupEnabled: Boolean(
+                    parsed?.SanitizeOnShutdown
+                    && (
+                        parsed.SanitizeOnShutdown === true
+                        || (typeof parsed.SanitizeOnShutdown === "object" && Object.keys(parsed.SanitizeOnShutdown).length > 0)
+                    )
+                ),
                 permissionsSummary,
                 cookiesSummary,
             };
@@ -1281,6 +1424,21 @@
             }
 
             const privacyFragments = [];
+            if (privacy.reducedDataCollection) {
+                privacyFragments.push(t("profiles.wizard_export_guided_privacy_data_collection"));
+            }
+            if (privacy.privateBrowsingDisabled) {
+                privacyFragments.push(t("profiles.wizard_export_guided_privacy_private_browsing_off"));
+            }
+            if (privacy.passwordFlowTightened) {
+                privacyFragments.push(t("profiles.wizard_export_guided_privacy_passwords_tightened"));
+            }
+            if (privacy.lockdownControls > 0) {
+                privacyFragments.push(formatCountText("profiles.wizard_export_guided_privacy_lockdown", privacy.lockdownControls));
+            }
+            if (privacy.shutdownCleanupEnabled) {
+                privacyFragments.push(t("profiles.wizard_export_guided_privacy_shutdown_cleanup"));
+            }
             if (privacy.configuredPermissionCategories > 0) {
                 privacyFragments.push(formatPermissionsObjectState(privacy.permissionsSummary));
             }
@@ -1300,7 +1458,13 @@
                 searchTone: searchFragments.length ? "active" : "default",
                 featuresTone: featureFragments.length ? "active" : "default",
                 aiTone: aiFragments.length ? "active" : "default",
-                privacyTone: (privacy.lockedPermissionCategories > 0 || privacy.cookiesSummary.state === "strict")
+                privacyTone: (
+                    privacy.lockedPermissionCategories > 0
+                    || privacy.cookiesSummary.state === "strict"
+                    || privacy.lockdownControls > 0
+                    || privacy.shutdownCleanupEnabled
+                    || privacy.privateBrowsingDisabled
+                )
                     ? "strict"
                     : (privacyFragments.length ? "active" : "default"),
             };
@@ -1310,6 +1474,13 @@
             const permissionsCardEl = documentRef.querySelector('[data-schema-policy-id="Permissions"][data-schema-policy-kind="object-card"]');
             const cookiesCardEl = documentRef.querySelector('[data-schema-policy-id="Cookies"][data-schema-policy-kind="object-card"]');
 
+            if (kind === "user-data") {
+                return documentRef.getElementById("wizard-privacy-user-data-presets")
+                    || documentRef.getElementById("wizard-privacy-fine-tuning-toggle");
+            }
+            if (kind === "cleanup") {
+                return documentRef.getElementById("wizard-cleanup-presets");
+            }
             if (kind === "permissions") {
                 return permissionsCardEl
                     || documentRef.querySelector('[data-wizard-shell-policy-id="Permissions"]')
@@ -1325,6 +1496,16 @@
 
         function renderPrivacyReviewJumpButtons(summary) {
             [
+                {
+                    el: wizardPrivacySummaryUserDataJumpEl,
+                    count: summary.reducedDataCollection || summary.privateBrowsingDisabled || summary.passwordFlowTightened ? 1 : 0,
+                    kind: "user-data",
+                },
+                {
+                    el: wizardPrivacySummaryCleanupJumpEl,
+                    count: summary.shutdownCleanupEnabled ? 1 : 0,
+                    kind: "cleanup",
+                },
                 { el: wizardPrivacySummaryPermissionsConfiguredJumpEl, count: summary.configuredPermissionCategories, kind: "permissions" },
                 { el: wizardPrivacySummaryPermissionsLockedJumpEl, count: summary.lockedPermissionCategories, kind: "permissions" },
                 { el: wizardPrivacySummaryCookiesJumpEl, count: summary.cookieRuleCount, kind: "cookies" },
@@ -1337,6 +1518,26 @@
         function renderPrivacyReviewSummary(parsed) {
             const summary = getPrivacyReviewSummaryData(parsed);
             renderPrivacySectionStatuses(parsed, summary);
+            setSummaryValue(
+                wizardPrivacySummaryUserDataEl,
+                buildCompactStateText([
+                    summary.reducedDataCollection ? t("profiles.wizard_export_guided_privacy_data_collection") : "",
+                    summary.privateBrowsingDisabled ? t("profiles.wizard_export_guided_privacy_private_browsing_off") : "",
+                    summary.passwordFlowTightened ? t("profiles.wizard_export_guided_privacy_passwords_tightened") : "",
+                ].filter(Boolean)) || t("profiles.wizard_review_default"),
+                summary.privateBrowsingDisabled || summary.passwordFlowTightened
+                    ? "strict"
+                    : (summary.reducedDataCollection ? "active" : "default"),
+            );
+            setSummaryValue(
+                wizardPrivacySummaryCleanupEl,
+                summary.shutdownCleanupEnabled
+                    ? (summary.lockdownControls > 0
+                        ? t("profiles.wizard_cleanup_section_state_strict")
+                        : t("profiles.wizard_cleanup_section_state_shared"))
+                    : t("profiles.wizard_review_default"),
+                summary.shutdownCleanupEnabled ? "strict" : "default",
+            );
             setSummaryValue(
                 wizardPrivacySummaryPermissionsConfiguredEl,
                 formatPermissionsObjectState(summary.permissionsSummary),
@@ -1430,22 +1631,32 @@
             let exportState = "";
             let exportReadyCopy = "";
             let exportTone = "attention";
+            let downloadHint = "";
+            let downloadHintTone = "strict";
             if (currentProfile?.is_deleted) {
                 exportState = t("profiles.wizard_export_state_archived");
                 exportReadyCopy = exportState;
+                downloadHint = t("profiles.wizard_export_download_hint_archived");
+                downloadHintTone = "attention";
             } else if (!currentId) {
                 exportState = t("profiles.wizard_export_state_unsaved_new");
                 exportReadyCopy = t("profiles.wizard_export_ready_create");
+                downloadHint = t("profiles.wizard_export_download_hint_unsaved_new");
             } else if (invalid) {
                 exportState = t("profiles.wizard_export_state_invalid_dirty");
                 exportReadyCopy = exportState;
+                downloadHint = t("profiles.wizard_export_download_hint_invalid_dirty");
+                downloadHintTone = "attention";
             } else if (dirty) {
                 exportState = t("profiles.wizard_export_state_unsaved_existing");
                 exportReadyCopy = exportState;
+                downloadHint = t("profiles.wizard_export_download_hint_unsaved_existing");
             } else {
                 exportState = t("profiles.wizard_export_state_ready");
                 exportReadyCopy = t("profiles.wizard_export_ready_saved");
                 exportTone = "ready";
+                downloadHint = t("profiles.wizard_export_download_hint_ready");
+                downloadHintTone = "ready";
             }
 
             return {
@@ -1457,6 +1668,8 @@
                 exportState,
                 exportTone,
                 exportReadyCopy,
+                downloadHint,
+                downloadHintTone,
                 policyCount: topLevelKeys.length,
                 preferencesCount: Object.keys(preferences).length,
                 rawFallbackKeys,
@@ -1465,62 +1678,120 @@
             };
         }
 
-        function findFinalReviewTarget(kind, summary = null) {
-            const resolvedSummary = summary || getFinalExportSummaryData(readWizardSchemaSource().data || {}, false, false);
+        function buildFinalReviewAdvancedContext(kind, keys, policyIndex) {
+            const normalizedKeys = Array.isArray(keys)
+                ? keys.filter((key) => typeof key === "string" && key.trim())
+                : [];
+            if (!normalizedKeys.length) {
+                return null;
+            }
+
+            const items = normalizedKeys.slice(0, 2).map((key) => policyIndex[key]?.label || key);
+            let title = t("profiles.wizard_export_drilldown_title");
+            if (kind === "unknown" && normalizedKeys.length === 1) {
+                title = t("profiles.wizard_export_drilldown_unknown_title")
+                    .replace("{label}", normalizedKeys[0]);
+            } else if (kind === "deprecated" && normalizedKeys.length === 1) {
+                title = t("profiles.wizard_export_drilldown_deprecated_title")
+                    .replace("{label}", policyIndex[normalizedKeys[0]]?.label || normalizedKeys[0]);
+            } else if (kind === "raw" && normalizedKeys.length === 1) {
+                title = t("profiles.wizard_export_drilldown_raw_title")
+                    .replace("{label}", policyIndex[normalizedKeys[0]]?.label || normalizedKeys[0]);
+            }
+
+            return {
+                step: 8,
+                stepTitle: title,
+                items,
+                remaining: Math.max(0, normalizedKeys.length - items.length),
+            };
+        }
+
+        function getFinalReviewSelection(kind, options = {}) {
+            const resolvedSummary = options.summary
+                || getFinalExportSummaryData(readWizardSchemaSource().data || {}, false, false);
             const policyIndex = getActiveSchemaPolicyIndex();
 
             if (kind === "network") {
-                return findSettingsTarget("field:wizard-proxy-mode")
+                return {
+                    target: findSettingsTarget("field:wizard-proxy-mode")
                     || findNetworkReviewTarget("dns")
                     || findNetworkReviewTarget("authentication")
                     || findNetworkReviewTarget("certificates")
-                    || findNetworkReviewTarget("windows_sso");
+                    || findNetworkReviewTarget("windows_sso"),
+                };
             }
             if (kind === "home") {
-                return findHomeReviewTarget("homepage")
+                return {
+                    target: findHomeReviewTarget("homepage")
                     || findHomeReviewTarget("overrides")
                     || findHomeReviewTarget("firefox_home")
-                    || findHomeReviewTarget("user_messaging");
+                    || findHomeReviewTarget("user_messaging"),
+                };
             }
             if (kind === "search") {
-                return findSearchReviewTarget("defaults")
+                return {
+                    target: findSearchReviewTarget("defaults")
                     || findSearchReviewTarget("custom")
                     || findSearchReviewTarget("hidden")
-                    || findSearchReviewTarget("suggest");
+                    || findSearchReviewTarget("suggest"),
+                };
             }
             if (kind === "features") {
-                return findSettingsTarget("policy:DisableFirefoxAccounts")
+                return {
+                    target: findSettingsTarget("policy:DisableFirefoxAccounts")
                     || findSettingsTarget("policy:RequestedLocales")
                     || findSettingsTarget("policy:TranslateEnabled")
                     || findSettingsTarget("field:wizard-extension-default-mode")
                     || findSettingsTarget("policy:WebsiteFilter")
-                    || findSettingsTarget("shell-policy:6:ExtensionSettings");
+                    || findSettingsTarget("shell-policy:6:ExtensionSettings"),
+                };
             }
             if (kind === "ai") {
-                return findSettingsTarget("policy:GenerativeAI")
+                return {
+                    target: findSettingsTarget("policy:GenerativeAI")
                     || findSettingsTarget("policy:VisualSearchEnabled")
-                    || findSettingsTarget("shell-policy:7:GenerativeAI");
+                    || findSettingsTarget("shell-policy:7:GenerativeAI"),
+                };
             }
             if (kind === "privacy") {
-                return findSettingsTarget("policy:Permissions")
+                return {
+                    target: findSettingsTarget("policy:Permissions")
                     || findSettingsTarget("policy:Cookies")
                     || findPrivacyReviewTarget("permissions")
-                    || findPrivacyReviewTarget("cookies");
+                    || findPrivacyReviewTarget("cookies"),
+                };
             }
             if (kind === "raw") {
-                const key = resolvedSummary.rawFallbackKeys[0];
+                const keys = options.key ? [options.key] : resolvedSummary.rawFallbackKeys;
+                const key = keys[0];
                 const item = key ? policyIndex[key] : null;
-                return item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl);
+                return {
+                    target: item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl),
+                    context: buildFinalReviewAdvancedContext("raw", keys, policyIndex),
+                };
             }
             if (kind === "deprecated") {
-                const key = resolvedSummary.deprecatedKeys[0];
+                const keys = options.key ? [options.key] : resolvedSummary.deprecatedKeys;
+                const key = keys[0];
                 const item = key ? policyIndex[key] : null;
-                return item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl);
+                return {
+                    target: item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl),
+                    context: buildFinalReviewAdvancedContext("deprecated", keys, policyIndex),
+                };
             }
             if (kind === "unknown") {
-                return editorEl || overviewPanelEl;
+                const keys = options.key ? [options.key] : resolvedSummary.unknownKeys;
+                return {
+                    target: editorEl || overviewPanelEl,
+                    context: buildFinalReviewAdvancedContext("unknown", keys, policyIndex),
+                };
             }
-            return null;
+            return { target: null, context: null };
+        }
+
+        function findFinalReviewTarget(kind, summary = null, options = {}) {
+            return getFinalReviewSelection(kind, { ...options, summary }).target;
         }
 
         function renderFinalReviewJumpButtons(summary) {
@@ -1600,6 +1871,300 @@
                 .join("");
         }
 
+        function renderExportPlanItems(container, items, emptyLabel, emptyTone = "ready") {
+            if (!container) return;
+            const resolvedItems = items.length
+                ? items
+                : [{ tone: emptyTone, label: emptyLabel }];
+            container.innerHTML = resolvedItems.map((item) => {
+                const attributes = [];
+                if (item.action?.kind === "assist") {
+                    attributes.push(`data-export-assist-action="${escapeHtml(item.action.value)}"`);
+                } else if (item.action?.kind === "scope") {
+                    attributes.push(`data-workspace-scope-target="${escapeHtml(item.action.value)}"`);
+                } else if (item.action?.kind === "jump") {
+                    attributes.push(`data-final-review-jump="${escapeHtml(item.action.value)}"`);
+                    if (item.action.key) {
+                        attributes.push(`data-final-review-key="${escapeHtml(item.action.key)}"`);
+                    }
+                }
+                const buttonHtml = item.action
+                    ? `<button type="button" class="button-base ghost-button wizard-export-plan-action" ${attributes.join(" ")}>${escapeHtml(item.action.label)}</button>`
+                    : "";
+                return `<div class="wizard-export-plan-item" data-plan-tone="${escapeHtml(item.tone || "default")}"><div class="wizard-export-plan-copy">${escapeHtml(item.label)}</div>${buttonHtml}</div>`;
+            }).join("");
+        }
+
+        function renderExportDrilldownItems(container, items, emptyLabel) {
+            if (!container) return;
+            const resolvedItems = items.length
+                ? items
+                : [{ tone: "ready", title: emptyLabel, body: "" }];
+            container.innerHTML = resolvedItems.map((item) => {
+                const attributes = [];
+                if (item.action?.kind === "jump") {
+                    attributes.push(`data-final-review-jump="${escapeHtml(item.action.value)}"`);
+                    if (item.action.key) {
+                        attributes.push(`data-final-review-key="${escapeHtml(item.action.key)}"`);
+                    }
+                } else if (item.action?.kind === "scope") {
+                    attributes.push(`data-workspace-scope-target="${escapeHtml(item.action.value)}"`);
+                }
+                const buttonHtml = item.action
+                    ? `<button type="button" class="button-base ghost-button wizard-export-plan-action" ${attributes.join(" ")}>${escapeHtml(item.action.label)}</button>`
+                    : "";
+                return `<div class="wizard-export-plan-item wizard-export-drilldown-item" data-plan-tone="${escapeHtml(item.tone || "default")}"><div class="wizard-export-plan-copy"><div class="wizard-export-drilldown-title">${escapeHtml(item.title || "")}</div>${item.body ? `<div class="wizard-export-drilldown-body">${escapeHtml(item.body)}</div>` : ""}</div>${buttonHtml}</div>`;
+            }).join("");
+        }
+
+        function renderFinalExportActionPlan(summary, dirty, invalid) {
+            const currentId = getCurrentId();
+            const currentProfile = getCurrentProfile();
+            const nextSteps = [];
+            const readyNow = [];
+
+            if (currentProfile?.is_deleted) {
+                nextSteps.push({
+                    tone: "attention",
+                    label: t("profiles.wizard_export_plan_restore_profile"),
+                    action: { kind: "assist", value: "restore", label: t("profiles.restore") },
+                });
+            } else if (!currentId) {
+                nextSteps.push({
+                    tone: "strict",
+                    label: t("profiles.wizard_export_plan_save_first"),
+                    action: { kind: "assist", value: "save", label: t("profiles.create_submit") },
+                });
+            } else if (dirty && !invalid) {
+                nextSteps.push({
+                    tone: "strict",
+                    label: t("profiles.wizard_export_plan_save_latest"),
+                    action: { kind: "assist", value: "save", label: t("profiles.save") },
+                });
+            }
+
+            if (invalid) {
+                nextSteps.push({
+                    tone: "attention",
+                    label: t("profiles.wizard_export_plan_fix_current_file"),
+                    action: { kind: "scope", value: "advanced", label: t("profiles.advanced_handoff_open") },
+                });
+            } else if (summary.validationStateTone !== "ready") {
+                nextSteps.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_plan_validate_once_more"),
+                    action: { kind: "assist", value: "validate", label: t("profiles.validate") },
+                });
+            }
+
+            if (summary.rawFallbackKeys.length > 0) {
+                nextSteps.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_plan_review_raw")
+                        .replace("{count}", String(summary.rawFallbackKeys.length)),
+                    action: { kind: "jump", value: "raw", label: t("profiles.wizard_export_open") },
+                });
+            }
+            if (summary.deprecatedKeys.length > 0) {
+                nextSteps.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_plan_review_deprecated")
+                        .replace("{count}", String(summary.deprecatedKeys.length)),
+                    action: { kind: "jump", value: "deprecated", label: t("profiles.wizard_export_open") },
+                });
+            }
+            if (summary.unknownKeys.length > 0) {
+                nextSteps.push({
+                    tone: "attention",
+                    label: t("profiles.wizard_export_plan_review_unknown")
+                        .replace("{count}", String(summary.unknownKeys.length)),
+                    action: { kind: "jump", value: "unknown", label: t("profiles.wizard_export_open") },
+                });
+            }
+
+            if (currentId && !currentProfile?.is_deleted) {
+                readyNow.push({ tone: "ready", label: t("profiles.wizard_export_check_saved_record") });
+            }
+            if (!invalid) {
+                readyNow.push({ tone: "ready", label: t("profiles.wizard_export_check_syntax_ok") });
+            }
+            if (currentId && !dirty && !currentProfile?.is_deleted) {
+                readyNow.push({ tone: "ready", label: t("profiles.wizard_export_check_synced") });
+            }
+            if (
+                currentId
+                && !currentProfile?.is_deleted
+                && !dirty
+                && !invalid
+                && summary.rawFallbackKeys.length === 0
+                && summary.deprecatedKeys.length === 0
+                && summary.unknownKeys.length === 0
+            ) {
+                readyNow.unshift({ tone: "ready", label: t("profiles.wizard_export_check_ready") });
+            }
+
+            renderExportPlanItems(
+                wizardExportNextStepsEl,
+                nextSteps,
+                t("profiles.wizard_export_next_steps_clear"),
+                "ready",
+            );
+            renderExportPlanItems(
+                wizardExportReadyNowEl,
+                readyNow,
+                t("profiles.wizard_export_ready_now_empty"),
+                "default",
+            );
+        }
+
+        function renderFinalExportExplainability(summary, dirty, invalid) {
+            const currentId = getCurrentId();
+            const currentProfile = getCurrentProfile();
+            const includedNow = [];
+            const missingNow = [];
+            const reviewNow = [];
+            const drilldown = [];
+            const policyIndex = getActiveSchemaPolicyIndex();
+
+            if (currentId && !currentProfile?.is_deleted) {
+                includedNow.push({
+                    tone: dirty || invalid ? "active" : "ready",
+                    label: dirty || invalid
+                        ? t("profiles.wizard_export_included_saved_previous")
+                        : t("profiles.wizard_export_included_saved_latest"),
+                });
+                includedNow.push({
+                    tone: "default",
+                    label: t("profiles.wizard_export_included_counts")
+                        .replace("{policies}", String(summary.policyCount))
+                        .replace("{preferences}", String(summary.preferencesCount)),
+                });
+            }
+
+            if (summary.rawFallbackKeys.length > 0) {
+                includedNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_included_raw")
+                        .replace("{count}", String(summary.rawFallbackKeys.length)),
+                });
+                reviewNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_review_raw")
+                        .replace("{count}", String(summary.rawFallbackKeys.length)),
+                    action: { kind: "jump", value: "raw", label: t("profiles.wizard_export_open") },
+                });
+                summary.rawFallbackKeys.slice(0, 3).forEach((key) => {
+                    const item = policyIndex[key];
+                    drilldown.push({
+                        tone: "active",
+                        title: t("profiles.wizard_export_drilldown_raw_title")
+                            .replace("{label}", item?.label || key),
+                        body: t("profiles.wizard_export_drilldown_raw_body"),
+                        action: { kind: "jump", value: "raw", key, label: t("profiles.wizard_export_open") },
+                    });
+                });
+            }
+            if (summary.deprecatedKeys.length > 0) {
+                includedNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_included_deprecated")
+                        .replace("{count}", String(summary.deprecatedKeys.length)),
+                });
+                reviewNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_review_deprecated")
+                        .replace("{count}", String(summary.deprecatedKeys.length)),
+                    action: { kind: "jump", value: "deprecated", label: t("profiles.wizard_export_open") },
+                });
+                summary.deprecatedKeys.slice(0, 3).forEach((key) => {
+                    const item = policyIndex[key];
+                    drilldown.push({
+                        tone: "strict",
+                        title: t("profiles.wizard_export_drilldown_deprecated_title")
+                            .replace("{label}", item?.label || key),
+                        body: t("profiles.wizard_export_drilldown_deprecated_body"),
+                        action: { kind: "jump", value: "deprecated", key, label: t("profiles.wizard_export_open") },
+                    });
+                });
+            }
+            if (summary.unknownKeys.length > 0) {
+                includedNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_included_unknown")
+                        .replace("{count}", String(summary.unknownKeys.length)),
+                });
+                reviewNow.push({
+                    tone: "attention",
+                    label: t("profiles.wizard_export_review_unknown")
+                        .replace("{count}", String(summary.unknownKeys.length)),
+                    action: { kind: "jump", value: "unknown", label: t("profiles.wizard_export_open") },
+                });
+                summary.unknownKeys.slice(0, 3).forEach((key) => {
+                    drilldown.push({
+                        tone: "attention",
+                        title: t("profiles.wizard_export_drilldown_unknown_title")
+                            .replace("{label}", key),
+                        body: t("profiles.wizard_export_drilldown_unknown_body"),
+                        action: { kind: "jump", value: "unknown", key, label: t("profiles.wizard_export_open") },
+                    });
+                });
+            }
+
+            if (currentProfile?.is_deleted) {
+                missingNow.push({
+                    tone: "attention",
+                    label: t("profiles.wizard_export_missing_archived"),
+                    action: { kind: "assist", value: "restore", label: t("profiles.restore") },
+                });
+            } else if (!currentId) {
+                missingNow.push({
+                    tone: "strict",
+                    label: t("profiles.wizard_export_missing_unsaved_new"),
+                    action: { kind: "assist", value: "save", label: t("profiles.create_submit") },
+                });
+            }
+
+            if (dirty && currentId && !currentProfile?.is_deleted) {
+                missingNow.push({
+                    tone: "strict",
+                    label: t("profiles.wizard_export_missing_unsaved_existing"),
+                    action: { kind: "assist", value: "save", label: t("profiles.save") },
+                });
+            }
+
+            if (invalid && !currentProfile?.is_deleted) {
+                missingNow.push({
+                    tone: "attention",
+                    label: t("profiles.wizard_export_missing_invalid"),
+                    action: { kind: "scope", value: "advanced", label: t("profiles.advanced_handoff_open") },
+                });
+            }
+
+            renderExportPlanItems(
+                wizardExportIncludedNowEl,
+                includedNow,
+                t("profiles.wizard_export_included_empty"),
+                "default",
+            );
+            renderExportPlanItems(
+                wizardExportMissingNowEl,
+                missingNow,
+                t("profiles.wizard_export_missing_empty"),
+                "ready",
+            );
+            renderExportPlanItems(
+                wizardExportReviewNowEl,
+                reviewNow,
+                t("profiles.wizard_export_review_empty"),
+                "ready",
+            );
+            renderExportDrilldownItems(
+                wizardExportDrilldownEl,
+                drilldown,
+                t("profiles.wizard_export_drilldown_empty"),
+            );
+        }
+
         function renderFinalExportStepSummary(dirty, invalid) {
             const sourceState = readWizardSchemaSource();
             const currentRaw = getCurrentRaw();
@@ -1608,6 +2173,7 @@
                 : (currentRaw && typeof currentRaw === "object" ? currentRaw : {});
             const summary = getFinalExportSummaryData(parsed, dirty, invalid);
             const guidedSummary = getExportGuidedSummaryData(parsed);
+            const baselineSummary = getBaselineSummary(getWizardStarter());
 
             setSummaryValue(wizardExportProfileStateEl, summary.profileState, summary.profileTone);
             setSummaryValue(
@@ -1627,14 +2193,38 @@
             setText(wizardExportDeprecatedCountEl, summary.deprecatedKeys.length);
             setText(wizardExportUnknownCountEl, summary.unknownKeys.length);
             setText(wizardExportReadyCopyEl, summary.exportReadyCopy);
+            setHintValue(wizardExportDownloadHintEl, summary.downloadHint, summary.downloadHintTone);
+            setText(wizardExportBaselineCopyEl, baselineSummary.copy || "");
+            if (wizardExportBaselineListEl) {
+                wizardExportBaselineListEl.innerHTML = (Array.isArray(baselineSummary.items) ? baselineSummary.items : [])
+                    .map((item) => `<div class="wizard-baseline-summary-item">${escapeHtml(item)}</div>`)
+                    .join("");
+            }
             setSummaryValue(wizardExportSummaryNetworkEl, guidedSummary.networkText, guidedSummary.networkTone);
             setSummaryValue(wizardExportSummaryHomeEl, guidedSummary.homeText, guidedSummary.homeTone);
             setSummaryValue(wizardExportSummarySearchEl, guidedSummary.searchText, guidedSummary.searchTone);
             setSummaryValue(wizardExportSummaryFeaturesEl, guidedSummary.featuresText, guidedSummary.featuresTone);
             setSummaryValue(wizardExportSummaryAiEl, guidedSummary.aiText, guidedSummary.aiTone);
             setSummaryValue(wizardExportSummaryPrivacyEl, guidedSummary.privacyText, guidedSummary.privacyTone);
+            if (wizardExportShareableTextEl) {
+                wizardExportShareableTextEl.value = buildShareableGuidedSummaryText({
+                    exportSummary: summary,
+                    guidedSummary,
+                    baselineSummary,
+                });
+            }
+            setHintValue(
+                wizardExportShareableStatusEl,
+                t("profiles.wizard_export_shareable_status_ready"),
+                summary.exportTone === "ready" ? "ready" : "active",
+            );
+            if (wizardExportShareableCopyEl) {
+                wizardExportShareableCopyEl.disabled = !(wizardExportShareableTextEl?.value || "").trim();
+            }
             renderFinalReviewJumpButtons(summary);
             renderFinalExportChecklist(summary, dirty, invalid);
+            renderFinalExportActionPlan(summary, dirty, invalid);
+            renderFinalExportExplainability(summary, dirty, invalid);
         }
 
         return {
@@ -1646,6 +2236,7 @@
             findWebsiteAccessReviewTarget,
             findPrivacyReviewTarget,
             findFinalReviewTarget,
+            getFinalReviewSelection,
             renderExtensionReviewSummary,
             renderNetworkReviewSummary,
             renderHomeReviewSummary,

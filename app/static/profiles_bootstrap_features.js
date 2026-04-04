@@ -190,6 +190,7 @@
             },
             dependencies: {
                 t,
+                cloneJsonValue,
                 linesToArray,
                 textToList,
                 formatBooleanSelectValue,

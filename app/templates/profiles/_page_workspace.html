@@ -1,34 +1,42 @@
-<div class="app-layout grid grid-cols-1 gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
-    <aside class="sidebar-column space-y-4 xl:sticky xl:top-6 xl:self-start">
+<div class="app-layout">
+    <main class="workspace-column space-y-4">
         <section id="library-panel"
-            class="panel-card sidebar-card surface-panel rounded-[28px] p-4 shadow-soft fade-up">
-            <div class="compact-sidebar-head">
-                <div>
-                    <div class="section-kicker mb-1" data-i18n="profiles.sidebar_title">{{ tr("profiles.sidebar_title") }}</div>
+            class="panel-card surface-panel library-panel-shell rounded-[30px] p-4 shadow-soft fade-up md:p-5">
+            <div class="library-panel-head">
+                <div class="library-panel-intro">
+                    <div class="section-kicker" data-i18n="profiles.sidebar_title">{{ tr("profiles.sidebar_title") }}</div>
                     <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.sidebar_hint">{{ tr("profiles.sidebar_hint") }}</p>
                 </div>
-                <div class="flex flex-wrap items-center justify-end gap-2 text-xs font-semibold">
+                <div class="library-panel-badges flex flex-wrap items-center justify-end gap-2 text-xs font-semibold">
                     <div class="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
                         <span data-i18n="profiles.library_filtered_short">{{ tr("profiles.library_filtered_short") }}</span>
-                        <strong id="list-summary" class="ml-1">0</strong>
+                        <strong id="list-summary" class="ml-1" aria-hidden="true"></strong>
                     </div>
                     <div class="rounded-full bg-emerald-50 px-3 py-1 text-emerald-800">
                         <span data-i18n="profiles.library_total_short">{{ tr("profiles.library_total_short") }}</span>
-                        <strong id="list-total-summary" class="ml-1">0</strong>
+                        <strong id="list-total-summary" class="ml-1" aria-hidden="true"></strong>
                     </div>
                 </div>
             </div>
 
-            <div class="mb-4">
+            <div class="library-panel-toolbar">
+                <label class="library-search-field" for="search">
+                    <span class="library-search-label" data-i18n="profiles.search_name">{{ tr("profiles.search_name", "Search by profile name") }}</span>
+                    <input
+                        id="search"
+                        type="text"
+                        class="soft-input library-search-input"
+                        placeholder="{{ tr('profiles.search_name') }}"
+                        data-i18n-placeholder="profiles.search_name" />
+                </label>
                 <button id="refresh"
-                    class="button-base ghost-button soft-input inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                     title="{{ tr('profiles.reload') }}" data-i18n-title="profiles.reload">
                     <span data-i18n="profiles.reload">{{ tr("profiles.reload") }}</span>
                 </button>
             </div>
 
             <div class="support-hidden">
-                <input id="search" type="text" placeholder="{{ tr('profiles.search') }}" data-i18n-placeholder="profiles.search" />
                 <input id="include-deleted" type="checkbox" />
                 <select id="sort">
                     <option value="updated_at" data-i18n="profiles.sort_updated_at">{{ tr("profiles.sort_updated_at", "Updated") }}</option>
@@ -42,11 +50,17 @@
                 </select>
             </div>
 
-            <ul id="list" class="max-h-[calc(100vh-18rem)] space-y-2 overflow-y-auto pr-1"></ul>
+            <div class="library-table-shell">
+                <div class="library-table-head" aria-hidden="true">
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_profile">{{ tr("profiles.library_column_profile", "Profile") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_schema">{{ tr("profiles.library_column_schema", "Schema") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_updated">{{ tr("profiles.library_column_updated", "Updated") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_status">{{ tr("profiles.library_column_status", "Status") }}</div>
+                    <div class="library-table-head-cell library-table-head-cell--actions" data-i18n="profiles.library_column_actions">{{ tr("profiles.library_column_actions", "Actions") }}</div>
+                </div>
+                <ul id="list" class="library-table" role="list"></ul>
+            </div>
         </section>
-    </aside>
-
-    <main class="workspace-column space-y-4">
         <section id="overview-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
             <div class="compact-editor-grid">
                 <div>
@@ -65,6 +79,17 @@
                         </span>
                     </div>
                     <p class="compact-profile-copy" id="current-meta"></p>
+                    <p class="compact-profile-copy" id="profile-derived-note" role="status" aria-live="polite" hidden></p>
+                    <div class="surface-soft-box profile-clone-handoff-panel" id="profile-clone-handoff-panel" aria-labelledby="profile-clone-handoff-copy" hidden>
+                        <div class="section-kicker" data-i18n="profiles.clone_handoff_title">{{ tr("profiles.clone_handoff_title") }}</div>
+                        <p class="profile-clone-handoff-copy" id="profile-clone-handoff-copy" role="status" aria-live="polite" data-i18n="profiles.clone_handoff_body">{{ tr("profiles.clone_handoff_body") }}</p>
+                        <div class="wizard-export-plan-list" id="profile-clone-handoff-list" role="list"></div>
+                    </div>
+                    <div class="surface-soft-box profile-lifecycle-panel" id="profile-lifecycle-panel" aria-labelledby="profile-lifecycle-copy">
+                        <div class="section-kicker" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</div>
+                        <p class="profile-lifecycle-copy" id="profile-lifecycle-copy" role="status" aria-live="polite" data-i18n="profiles.lifecycle_review_body">{{ tr("profiles.lifecycle_review_body") }}</p>
+                        <div class="wizard-export-plan-list" id="profile-lifecycle-list" role="list"></div>
+                    </div>
                     <div class="workspace-scope-switch surface-soft-box" id="workspace-scope-switch">
                         <div class="workspace-scope-copy">
                             <div class="section-kicker" data-i18n="profiles.workspace_scope_title">{{ tr("profiles.workspace_scope_title") }}</div>
@@ -86,6 +111,23 @@
                                 {{ tr("profiles.workspace_scope_advanced") }}
                             </button>
                         </div>
+                        <div class="workspace-scope-summary surface-soft-box" id="workspace-scope-summary">
+                            <div class="section-kicker" data-i18n="profiles.workspace_scope_current_label">{{ tr("profiles.workspace_scope_current_label") }}</div>
+                            <div class="workspace-scope-summary-title" id="workspace-scope-summary-title" data-i18n="profiles.workspace_scope_current_guided_title">{{ tr("profiles.workspace_scope_current_guided_title") }}</div>
+                            <p class="workspace-scope-summary-copy" id="workspace-scope-summary-copy" data-i18n="profiles.workspace_scope_current_guided_copy">{{ tr("profiles.workspace_scope_current_guided_copy") }}</p>
+                        </div>
+                        <div class="workspace-scope-mode-grid">
+                            <div class="workspace-scope-mode-card workspace-scope-mode-card--active" id="workspace-scope-guided-card">
+                                <div class="section-kicker" data-i18n="profiles.workspace_scope_guided">{{ tr("profiles.workspace_scope_guided") }}</div>
+                                <div class="workspace-scope-mode-title" data-i18n="profiles.workspace_scope_guided_title">{{ tr("profiles.workspace_scope_guided_title") }}</div>
+                                <p class="workspace-scope-mode-copy" data-i18n="profiles.workspace_scope_guided_copy">{{ tr("profiles.workspace_scope_guided_copy") }}</p>
+                            </div>
+                            <div class="workspace-scope-mode-card" id="workspace-scope-advanced-card">
+                                <div class="section-kicker" data-i18n="profiles.workspace_scope_advanced">{{ tr("profiles.workspace_scope_advanced") }}</div>
+                                <div class="workspace-scope-mode-title" data-i18n="profiles.workspace_scope_advanced_title">{{ tr("profiles.workspace_scope_advanced_title") }}</div>
+                                <p class="workspace-scope-mode-copy" data-i18n="profiles.workspace_scope_advanced_copy">{{ tr("profiles.workspace_scope_advanced_copy") }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -106,11 +148,158 @@
             </div>
         </section>
 
+        <section id="compare-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="editor-header mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <div class="section-kicker mb-2" data-i18n="profiles.compare_title">{{ tr("profiles.compare_title") }}</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.compare_body">{{ tr("profiles.compare_body") }}</p>
+                </div>
+                <button
+                    type="button"
+                    id="compare-clear"
+                    class="button-base ghost-button"
+                    hidden
+                    data-i18n="profiles.compare_clear">
+                    {{ tr("profiles.compare_clear") }}
+                </button>
+            </div>
+
+            <div id="compare-empty" class="compare-empty surface-soft-box">
+                <div class="section-kicker" data-i18n="profiles.compare_empty_title">{{ tr("profiles.compare_empty_title") }}</div>
+                <p class="compare-empty-copy" id="compare-empty-copy" role="status" aria-live="polite" data-i18n="profiles.compare_empty_body">{{ tr("profiles.compare_empty_body") }}</p>
+            </div>
+
+            <div id="compare-active" hidden>
+                <div class="compare-targets-grid">
+                    <div class="compare-target-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_current_title">{{ tr("profiles.compare_current_title") }}</div>
+                        <div class="compare-target-name" id="compare-current-name"></div>
+                        <p class="compare-target-copy" id="compare-current-copy"></p>
+                    </div>
+                    <div class="compare-target-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_other_title">{{ tr("profiles.compare_other_title") }}</div>
+                        <div class="compare-target-name" id="compare-other-name"></div>
+                        <p class="compare-target-copy" id="compare-other-copy"></p>
+                    </div>
+                </div>
+
+                <div class="compare-summary-grid">
+                    <div class="compare-summary-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_summary_metadata">{{ tr("profiles.compare_summary_metadata") }}</div>
+                        <div class="compare-summary-value" id="compare-metadata-count">0</div>
+                    </div>
+                    <div class="compare-summary-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_summary_policies">{{ tr("profiles.compare_summary_policies") }}</div>
+                        <div class="compare-summary-value" id="compare-policy-count">0</div>
+                    </div>
+                    <div class="compare-summary-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_summary_preferences">{{ tr("profiles.compare_summary_preferences") }}</div>
+                        <div class="compare-summary-value" id="compare-preference-count">0</div>
+                    </div>
+                </div>
+
+                <div class="compare-changes surface-soft-box">
+                    <div class="section-kicker" data-i18n="profiles.compare_changes_title">{{ tr("profiles.compare_changes_title") }}</div>
+                    <p class="compare-changes-copy" id="compare-changes-copy" role="status" aria-live="polite" data-i18n="profiles.compare_changes_body">{{ tr("profiles.compare_changes_body") }}</p>
+                    <ul id="compare-changes-list" class="compare-changes-list" role="list"></ul>
+                </div>
+                <div class="compare-changes surface-soft-box">
+                    <div class="section-kicker" data-i18n="profiles.compare_guided_areas_title">{{ tr("profiles.compare_guided_areas_title") }}</div>
+                    <p class="compare-changes-copy" id="compare-guided-areas-copy" role="status" aria-live="polite" data-i18n="profiles.compare_guided_areas_body">{{ tr("profiles.compare_guided_areas_body") }}</p>
+                    <ul id="compare-guided-areas-list" class="compare-changes-list" role="list"></ul>
+                </div>
+            </div>
+        </section>
+
         <div class="content-grid grid gap-4">
+            <section
+                id="advanced-context-panel"
+                data-workspace-scope-panel="advanced"
+                class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+                <div class="editor-header mb-0 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                        <div class="section-kicker mb-2" id="advanced-context-kicker" data-i18n="profiles.advanced_context_title">{{ tr("profiles.advanced_context_title") }}</div>
+                        <h3 id="advanced-context-step" class="text-lg font-semibold text-slate-900" data-i18n="profiles.workspace_scope_advanced">{{ tr("profiles.workspace_scope_advanced") }}</h3>
+                        <p id="advanced-context-copy" class="text-sm leading-6 text-slate-600" role="status" aria-live="polite" data-i18n="profiles.advanced_context_body">{{ tr("profiles.advanced_context_body") }}</p>
+                    </div>
+                    <button
+                        type="button"
+                        id="advanced-context-return"
+                        class="button-base ghost-button"
+                        hidden
+                        data-i18n="profiles.advanced_context_return">
+                        {{ tr("profiles.advanced_context_return") }}
+                    </button>
+                </div>
+                <ul id="advanced-context-list" class="advanced-context-list" role="list" hidden></ul>
+                <div id="advanced-context-empty" class="advanced-context-empty surface-soft-box">
+                    <div class="section-kicker" data-i18n="profiles.advanced_context_empty_title">{{ tr("profiles.advanced_context_empty_title") }}</div>
+                    <p class="advanced-context-empty-copy" data-i18n="profiles.advanced_context_empty_body">{{ tr("profiles.advanced_context_empty_body") }}</p>
+                    <div class="advanced-context-actions">
+                        <button
+                            type="button"
+                            class="button-base ghost-button"
+                            data-advanced-start-action="details"
+                            data-i18n="profiles.advanced_context_action_details">
+                            {{ tr("profiles.advanced_context_action_details") }}
+                        </button>
+                        <button
+                            type="button"
+                            class="button-base ghost-button"
+                            data-advanced-start-action="editor"
+                            data-i18n="profiles.advanced_context_action_editor">
+                            {{ tr("profiles.advanced_context_action_editor") }}
+                        </button>
+                        <button
+                            type="button"
+                            class="button-base ghost-button"
+                            data-advanced-start-action="validate"
+                            data-i18n="profiles.advanced_context_action_validate">
+                            {{ tr("profiles.advanced_context_action_validate") }}
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <section
                 id="details-panel"
                 data-workspace-scope-panel="advanced"
                 class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+                <div class="advanced-utility-header">
+                    <div>
+                        <div class="section-kicker mb-2" data-i18n="profiles.advanced_utility_title">{{ tr("profiles.advanced_utility_title") }}</div>
+                        <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.advanced_utility_body">{{ tr("profiles.advanced_utility_body") }}</p>
+                    </div>
+                    <div class="advanced-utility-grid">
+                        <button
+                            type="button"
+                            id="advanced-utility-details"
+                            class="button-base ghost-button advanced-utility-card advanced-utility-card--active"
+                            data-advanced-start-action="details">
+                            <span class="advanced-utility-kicker" data-i18n="profiles.advanced_utility_details_kicker">{{ tr("profiles.advanced_utility_details_kicker") }}</span>
+                            <span class="advanced-utility-label" data-i18n="profiles.advanced_utility_details_title">{{ tr("profiles.advanced_utility_details_title") }}</span>
+                            <span class="advanced-utility-copy" data-i18n="profiles.advanced_utility_details_body">{{ tr("profiles.advanced_utility_details_body") }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            id="advanced-utility-editor"
+                            class="button-base ghost-button advanced-utility-card"
+                            data-advanced-start-action="editor">
+                            <span class="advanced-utility-kicker" data-i18n="profiles.advanced_utility_editor_kicker">{{ tr("profiles.advanced_utility_editor_kicker") }}</span>
+                            <span class="advanced-utility-label" data-i18n="profiles.advanced_utility_editor_title">{{ tr("profiles.advanced_utility_editor_title") }}</span>
+                            <span class="advanced-utility-copy" data-i18n="profiles.advanced_utility_editor_body">{{ tr("profiles.advanced_utility_editor_body") }}</span>
+                        </button>
+                        <button
+                            type="button"
+                            id="advanced-utility-validate"
+                            class="button-base ghost-button advanced-utility-card"
+                            data-advanced-start-action="validate">
+                            <span class="advanced-utility-kicker" data-i18n="profiles.advanced_utility_validate_kicker">{{ tr("profiles.advanced_utility_validate_kicker") }}</span>
+                            <span class="advanced-utility-label" data-i18n="profiles.advanced_utility_validate_title">{{ tr("profiles.advanced_utility_validate_title") }}</span>
+                            <span class="advanced-utility-copy" data-i18n="profiles.advanced_utility_validate_body">{{ tr("profiles.advanced_utility_validate_body") }}</span>
+                        </button>
+                    </div>
+                </div>
                 <div class="compact-profile-bar">
                     <label class="compact-profile-span-full">
                         <div class="field-label mb-1" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</div>
@@ -136,21 +325,29 @@
                             <option value="yaml">YAML</option>
                         </select>
                     </label>
-                    <a id="download-json" href="#" target="_blank"
-                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                        data-i18n="profiles.download_json">
-                        {{ tr("profiles.download_json") }}
-                    </a>
-                    <a id="download-yaml" href="#" target="_blank"
-                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                        data-i18n="profiles.download_yaml">
-                        {{ tr("profiles.download_yaml") }}
-                    </a>
-                    <a id="download-firefox-policies" href="#" target="_blank"
-                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                        data-i18n="profiles.download_firefox_policies_json">
-                        {{ tr("profiles.download_firefox_policies_json") }}
-                    </a>
+                </div>
+                <div class="advanced-download-strip surface-soft-box" id="advanced-download-strip">
+                    <div>
+                        <div class="section-kicker mb-1" data-i18n="profiles.advanced_downloads_title">{{ tr("profiles.advanced_downloads_title") }}</div>
+                        <p class="advanced-download-copy" data-i18n="profiles.advanced_downloads_body">{{ tr("profiles.advanced_downloads_body") }}</p>
+                    </div>
+                    <div class="advanced-download-actions">
+                        <a id="download-json" href="#" target="_blank"
+                            class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            data-i18n="profiles.download_json">
+                            {{ tr("profiles.download_json") }}
+                        </a>
+                        <a id="download-yaml" href="#" target="_blank"
+                            class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            data-i18n="profiles.download_yaml">
+                            {{ tr("profiles.download_yaml") }}
+                        </a>
+                        <a id="download-firefox-policies" href="#" target="_blank"
+                            class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                            data-i18n="profiles.download_firefox_policies_json">
+                            {{ tr("profiles.download_firefox_policies_json") }}
+                        </a>
+                    </div>
                 </div>
 
                 <div class="support-hidden">
@@ -192,6 +389,21 @@
                 </div>
                 <div class="editor-note-box surface-soft-box rounded-[22px] px-4 py-3 text-sm text-slate-600">
                     <span data-i18n="profiles.editor_note">{{ tr("profiles.editor_note") }}</span>
+                </div>
+            </div>
+
+            <div class="advanced-review-strip surface-soft-box" id="advanced-review-strip">
+                <div class="advanced-review-card">
+                    <div class="section-kicker" data-i18n="profiles.advanced_review_save_title">{{ tr("profiles.advanced_review_save_title") }}</div>
+                    <div class="advanced-review-value" id="advanced-review-save-state" data-i18n="profiles.signal_saved">{{ tr("profiles.signal_saved") }}</div>
+                </div>
+                <div class="advanced-review-card">
+                    <div class="section-kicker" data-i18n="profiles.advanced_review_validation_title">{{ tr("profiles.advanced_review_validation_title") }}</div>
+                    <div class="advanced-review-value" id="advanced-review-validation-state" data-i18n="profiles.validation_idle">{{ tr("profiles.validation_idle") }}</div>
+                </div>
+                <div class="advanced-review-card">
+                    <div class="section-kicker" data-i18n="profiles.advanced_review_download_title">{{ tr("profiles.advanced_review_download_title") }}</div>
+                    <div class="advanced-review-value" id="advanced-review-download-state" data-i18n="profiles.wizard_export_download_hint_unsaved_new">{{ tr("profiles.wizard_export_download_hint_unsaved_new") }}</div>
                 </div>
             </div>
 

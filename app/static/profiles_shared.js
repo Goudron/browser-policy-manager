@@ -25,6 +25,8 @@
         let localeDict = {};
         let searchTimer = null;
         let baselineSnapshot = null;
+        let cloneSourceProfile = null;
+        let lifecycleSessionNote = null;
         let isBusy = false;
         let libraryStats = { filtered: 0, total: 0 };
         let validationPreviewTone = "neutral";
@@ -56,7 +58,7 @@
             if (Object.prototype.hasOwnProperty.call(localeDict, key)) {
                 return localeDict[key];
             }
-            return "";
+            return fallback;
         }
 
         function getActiveWizardSchemaVersion() {
@@ -164,6 +166,22 @@
 
         function setBaselineSnapshot(value) {
             baselineSnapshot = value;
+        }
+
+        function getCloneSourceProfile() {
+            return cloneSourceProfile;
+        }
+
+        function setCloneSourceProfile(value) {
+            cloneSourceProfile = value;
+        }
+
+        function getLifecycleSessionNote() {
+            return lifecycleSessionNote;
+        }
+
+        function setLifecycleSessionNote(value) {
+            lifecycleSessionNote = value;
         }
 
         function getIsBusy() {
@@ -346,6 +364,10 @@
             setSearchTimer,
             getBaselineSnapshot,
             setBaselineSnapshot,
+            getCloneSourceProfile,
+            setCloneSourceProfile,
+            getLifecycleSessionNote,
+            setLifecycleSessionNote,
             getIsBusy,
             setIsBusy,
             getLibraryStats,

@@ -1,109 +1,45 @@
 <header class="compact-toolbar surface-panel fade-up mb-4">
     <div class="compact-toolbar-main">
-        <div class="section-kicker" data-i18n="profiles.kicker">{{ tr("profiles.kicker") }}</div>
-        <h1 class="compact-toolbar-title headline-font text-slate-900" data-i18n="profiles.title">{{ tr("profiles.title") }}</h1>
+        <div class="compact-toolbar-brand">
+            <div class="compact-toolbar-section" data-i18n="profiles.title">{{ tr("profiles.title") }}</div>
+        </div>
+        <h1 class="compact-toolbar-title text-slate-900">Browser Policy Manager</h1>
         <p class="compact-toolbar-subtitle" data-i18n="profiles.subtitle">
             {{ tr("profiles.subtitle") }}
         </p>
     </div>
 
-    <div class="compact-toolbar-actions">
-        <div class="compact-counter">
-            <strong id="workspace-profile-count">0</strong>
-            <span id="workspace-profile-label">{{ tr("profiles.library_total_short") }}</span>
+    <div class="compact-toolbar-side">
+        <div class="compact-counter compact-counter--pending">
+            <strong id="workspace-profile-count" aria-hidden="true"></strong>
+            <div class="compact-counter-meta">
+                <span class="compact-counter-label" data-i18n="profiles.nav_library">{{ tr("profiles.nav_library") }}</span>
+                <span id="workspace-profile-label" aria-hidden="true"></span>
+            </div>
         </div>
-        <label class="compact-toolbar-control">
-            <span class="compact-toolbar-copy">
-                <strong data-i18n="profiles.locale_label">{{ tr("profiles.locale_label") }}</strong>
-                <span data-i18n="profiles.locale_hint">{{ tr("profiles.locale_hint") }}</span>
-            </span>
-            <select id="lang" class="soft-input rounded-xl px-3 py-2 text-sm">
-                <option value="system" selected data-i18n="profiles.locale_system">{{ tr("profiles.locale_system") }}</option>
-                <option value="en" data-i18n="profiles.locale_option_en">{{ tr("profiles.locale_option_en", "English") }}</option>
-                <option value="ru" data-i18n="profiles.locale_option_ru">{{ tr("profiles.locale_option_ru", "Русский") }}</option>
-            </select>
-        </label>
-        <label class="compact-toolbar-control">
-            <span class="compact-toolbar-copy">
-                <strong data-i18n="profiles.theme_label">{{ tr("profiles.theme_label") }}</strong>
-                <span data-i18n="profiles.theme_hint">{{ tr("profiles.theme_hint") }}</span>
-            </span>
-            <select id="theme" class="soft-input rounded-xl px-3 py-2 text-sm">
-                <option value="system" selected data-i18n="profiles.theme_system">{{ tr("profiles.theme_system") }}</option>
-                <option value="light" data-i18n="profiles.theme_light">{{ tr("profiles.theme_light") }}</option>
-                <option value="dark" data-i18n="profiles.theme_dark">{{ tr("profiles.theme_dark") }}</option>
-            </select>
-        </label>
-        <button id="new-profile"
-            class="button-base primary-button inline-flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
-            data-i18n="profiles.create">
-            {{ tr("profiles.create") }}
-        </button>
+        <div class="compact-toolbar-actions">
+            <label class="compact-toolbar-control">
+                <span class="compact-toolbar-copy">
+                    <strong data-i18n="profiles.locale_label">{{ tr("profiles.locale_label") }}</strong>
+                    <span data-i18n="profiles.locale_hint">{{ tr("profiles.locale_hint") }}</span>
+                </span>
+                <select id="lang" class="soft-input rounded-xl px-3 py-2 text-sm">
+                    <option value="system" selected data-i18n="profiles.locale_system">{{ tr("profiles.locale_system") }}</option>
+                    <option value="en" data-i18n="profiles.locale_option_en">{{ tr("profiles.locale_option_en", "English") }}</option>
+                    <option value="ru" data-i18n="profiles.locale_option_ru">{{ tr("profiles.locale_option_ru", "Русский") }}</option>
+                </select>
+            </label>
+            <label class="compact-toolbar-control">
+                <span class="compact-toolbar-copy">
+                    <strong data-i18n="profiles.theme_label">{{ tr("profiles.theme_label") }}</strong>
+                    <span data-i18n="profiles.theme_hint">{{ tr("profiles.theme_hint") }}</span>
+                </span>
+                <select id="theme" class="soft-input rounded-xl px-3 py-2 text-sm">
+                    <option value="system" selected data-i18n="profiles.theme_system">{{ tr("profiles.theme_system") }}</option>
+                    <option value="light" data-i18n="profiles.theme_light">{{ tr("profiles.theme_light") }}</option>
+                    <option value="dark" data-i18n="profiles.theme_dark">{{ tr("profiles.theme_dark") }}</option>
+                </select>
+            </label>
+        </div>
     </div>
 </header>
-
-<section class="workspace-dock surface-panel fade-up" id="command-deck">
-    <div class="dock-summary">
-        <div class="section-kicker" data-i18n="profiles.actions_title">{{ tr("profiles.actions_title") }}</div>
-        <h2 class="dock-title" data-i18n="profiles.editor_title">{{ tr("profiles.editor_title") }}</h2>
-        <p class="dock-copy" data-i18n="profiles.actions_hint">{{ tr("profiles.actions_hint") }}</p>
-        <div class="dock-meta">
-            <span class="dock-pill">
-                <span data-i18n="profiles.dock_shortcut_label">{{ tr("profiles.dock_shortcut_label") }}</span>
-                <strong data-i18n="profiles.shortcut_hint">{{ tr("profiles.shortcut_hint") }}</strong>
-            </span>
-            <span class="dock-pill">
-                <span data-i18n="profiles.dock_status_label">{{ tr("profiles.dock_status_label") }}</span>
-                <strong id="dock-status-text" data-i18n="profiles.signal_saved">{{ tr("profiles.signal_saved") }}</strong>
-            </span>
-        </div>
-    </div>
-
-    <div class="dock-actions">
-        <div class="dock-actions-grid">
-            <button id="validate"
-                class="button-base ghost-button soft-input flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                data-i18n="profiles.validate">
-                {{ tr("profiles.validate") }}
-            </button>
-            <button id="format"
-                class="button-base ghost-button soft-input flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                data-i18n="profiles.format">
-                {{ tr("profiles.format") }}
-            </button>
-            <button id="save"
-                class="button-base primary-button flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
-                data-i18n="profiles.save">
-                {{ tr("profiles.save") }}
-            </button>
-        </div>
-
-        <div class="dock-secondary-grid">
-            <button id="soft-delete"
-                class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
-                data-i18n="profiles.soft_delete">
-                {{ tr("profiles.soft_delete") }}
-            </button>
-            <button id="hard-delete"
-                class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
-                data-i18n="profiles.hard_delete">
-                {{ tr("profiles.hard_delete") }}
-            </button>
-            <button id="restore"
-                class="button-base restore-button flex w-full items-center justify-center rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
-                data-i18n="profiles.restore">
-                {{ tr("profiles.restore") }}
-            </button>
-        </div>
-        <button id="reset-library"
-            class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
-            data-i18n="profiles.reset_library">
-            {{ tr("profiles.reset_library") }}
-        </button>
-
-        <div class="dock-feedback surface-soft-box">
-            <div class="section-kicker" data-i18n="profiles.status_title">{{ tr("profiles.status_title") }}</div>
-            <div id="validation-preview" aria-live="polite" class="max-w-full text-xs text-slate-500"></div>
-        </div>
-    </div>
-</section>

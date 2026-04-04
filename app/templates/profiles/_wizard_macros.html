@@ -56,6 +56,10 @@
 
 {% macro render_wizard_schema_shell(step_id) -%}
 <div
+    class="wizard-guided-coverage surface-soft-box"
+    id="wizard-guided-coverage-step-{{ step_id }}">
+</div>
+<div
     class="wizard-section-group wizard-schema-shell"
     id="wizard-schema-shell-step-{{ step_id }}"
     data-wizard-shell-step="{{ step_id }}"
@@ -66,6 +70,7 @@
             {{ tr("profiles.wizard_shell_body") }}
         </p>
     </div>
+    <div class="wizard-shell-coverage surface-soft-box" id="wizard-schema-shell-step-{{ step_id }}-coverage"></div>
     <div class="wizard-shell-badges" id="wizard-schema-shell-step-{{ step_id }}-badges"></div>
     <div class="wizard-shell-grid">
         <section class="wizard-shell-card">

@@ -11,16 +11,57 @@
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_ai_availability_title">{{ tr("profiles.wizard_ai_availability_title") }}</div>
         </div>
         <div class="wizard-input-hint" data-i18n="profiles.wizard_ai_availability_body">{{ tr("profiles.wizard_ai_availability_body") }}</div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_ai_focus_hint">{{ tr("profiles.wizard_ai_focus_hint") }}</div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-ai-focus-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-focus-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_focus_defaults_title">{{ tr("profiles.wizard_ai_focus_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_focus_defaults_copy">{{ tr("profiles.wizard_ai_focus_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-focus-preset="availability">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_focus_availability_title">{{ tr("profiles.wizard_ai_focus_availability_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_focus_availability_copy">{{ tr("profiles.wizard_ai_focus_availability_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-focus-preset="surfaces">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_focus_surfaces_title">{{ tr("profiles.wizard_ai_focus_surfaces_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_focus_surfaces_copy">{{ tr("profiles.wizard_ai_focus_surfaces_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-focus-preset="mixed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_focus_mixed_title">{{ tr("profiles.wizard_ai_focus_mixed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_focus_mixed_copy">{{ tr("profiles.wizard_ai_focus_mixed_copy") }}</span>
+            </button>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <div id="wizard-generative-ai-card" class="wizard-field-full" data-settings-target="policy:GenerativeAI"></div>
         </div>
         <div id="wizard-ai-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_ai_section_state_empty">
             {{ tr("profiles.wizard_ai_section_state_empty") }}
         </div>
+        <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--soft wizard-field-full wizard-workflow-card" id="wizard-ai-governance-workflow">
+            <div class="wizard-section-heading">
+                <h4 class="wizard-section-title" data-i18n="profiles.wizard_ai_governance_title">{{ tr("profiles.wizard_ai_governance_title") }}</h4>
+                <p class="wizard-section-copy wizard-workflow-copy" id="wizard-ai-governance-copy" data-i18n="profiles.wizard_ai_governance_body">{{ tr("profiles.wizard_ai_governance_body") }}</p>
+            </div>
+            <ul class="wizard-checklist wizard-workflow-list" id="wizard-ai-governance-list"></ul>
+        </div>
         <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--soft wizard-field-full">
             <div class="wizard-section-heading">
                 <h4 class="wizard-section-title" data-i18n="profiles.wizard_ai_providers_title">{{ tr("profiles.wizard_ai_providers_title") }}</h4>
                 <p class="wizard-section-copy" data-i18n="profiles.wizard_ai_providers_body">{{ tr("profiles.wizard_ai_providers_body") }}</p>
+            </div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_ai_providers_focus_hint">{{ tr("profiles.wizard_ai_providers_focus_hint") }}</div>
+            <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-ai-providers-presets">
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-providers-preset="defaults">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_providers_preset_defaults_title">{{ tr("profiles.wizard_ai_providers_preset_defaults_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_providers_preset_defaults_copy">{{ tr("profiles.wizard_ai_providers_preset_defaults_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-providers-preset="providers">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_providers_preset_providers_title">{{ tr("profiles.wizard_ai_providers_preset_providers_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_providers_preset_providers_copy">{{ tr("profiles.wizard_ai_providers_preset_providers_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-ai-providers-preset="mixed">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_ai_providers_preset_mixed_title">{{ tr("profiles.wizard_ai_providers_preset_mixed_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_ai_providers_preset_mixed_copy">{{ tr("profiles.wizard_ai_providers_preset_mixed_copy") }}</span>
+                </button>
             </div>
             <div id="wizard-ai-providers-section-anchor"></div>
             <div id="wizard-ai-providers-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_ai_providers_state_empty">
@@ -30,6 +71,7 @@
                 <div class="wizard-input-hint" data-i18n="profiles.wizard_ai_providers_hint">{{ tr("profiles.wizard_ai_providers_hint") }}</div>
                 <button
                     type="button"
+                    id="wizard-ai-providers-open-advanced"
                     class="button-base ghost-button"
                     data-workspace-scope-target="advanced"
                     data-i18n="profiles.advanced_handoff_open">

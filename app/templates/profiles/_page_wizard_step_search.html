@@ -15,6 +15,29 @@
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
+        <div class="wizard-input-stack wizard-stage-panel">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_search_focus_hint">
+                {{ tr("profiles.wizard_search_focus_hint") }}
+            </div>
+            <div class="wizard-search-engine-preset-grid" id="wizard-search-defaults-presets">
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="defaults">
+                    <span data-i18n="profiles.wizard_search_defaults_preset_defaults_title">{{ tr("profiles.wizard_search_defaults_preset_defaults_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_defaults_copy">{{ tr("profiles.wizard_search_defaults_preset_defaults_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="managed_default">
+                    <span data-i18n="profiles.wizard_search_defaults_preset_managed_default_title">{{ tr("profiles.wizard_search_defaults_preset_managed_default_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_managed_default_copy">{{ tr("profiles.wizard_search_defaults_preset_managed_default_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="custom_engines">
+                    <span data-i18n="profiles.wizard_search_defaults_preset_custom_engines_title">{{ tr("profiles.wizard_search_defaults_preset_custom_engines_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_custom_engines_copy">{{ tr("profiles.wizard_search_defaults_preset_custom_engines_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="restricted">
+                    <span data-i18n="profiles.wizard_search_defaults_preset_restricted_title">{{ tr("profiles.wizard_search_defaults_preset_restricted_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_restricted_copy">{{ tr("profiles.wizard_search_defaults_preset_restricted_copy") }}</span>
+                </button>
+            </div>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <label data-settings-target="field:wizard-search-suggest">
                 <div class="field-label mb-1" data-i18n="profiles.wizard_search_suggest_label">{{ tr("profiles.wizard_search_suggest_label") }}</div>
@@ -169,6 +192,29 @@
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
+        <div class="wizard-input-stack wizard-stage-panel">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_suggest_focus_hint">
+                {{ tr("profiles.wizard_firefox_suggest_focus_hint") }}
+            </div>
+            <div class="wizard-search-engine-preset-grid" id="wizard-firefox-suggest-presets">
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="defaults">
+                    <span data-i18n="profiles.wizard_firefox_suggest_preset_defaults_title">{{ tr("profiles.wizard_firefox_suggest_preset_defaults_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_defaults_copy">{{ tr("profiles.wizard_firefox_suggest_preset_defaults_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="private">
+                    <span data-i18n="profiles.wizard_firefox_suggest_preset_private_title">{{ tr("profiles.wizard_firefox_suggest_preset_private_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_private_copy">{{ tr("profiles.wizard_firefox_suggest_preset_private_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="managed">
+                    <span data-i18n="profiles.wizard_firefox_suggest_preset_managed_title">{{ tr("profiles.wizard_firefox_suggest_preset_managed_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_managed_copy">{{ tr("profiles.wizard_firefox_suggest_preset_managed_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="locked_down">
+                    <span data-i18n="profiles.wizard_firefox_suggest_preset_locked_down_title">{{ tr("profiles.wizard_firefox_suggest_preset_locked_down_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_locked_down_copy">{{ tr("profiles.wizard_firefox_suggest_preset_locked_down_copy") }}</span>
+                </button>
+            </div>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <label data-settings-target="field:firefox-suggest-web">
                 <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_suggest_web_label">{{ tr("profiles.wizard_firefox_suggest_web_label") }}</div>
@@ -215,6 +261,15 @@
                 </select>
             </label>
         </div>
+    </div>
+    <div class="wizard-section-group wizard-workflow-card">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_search_surfaces_workflow_title">{{ tr("profiles.wizard_search_surfaces_workflow_title") }}</h3>
+            <p class="wizard-section-copy wizard-workflow-copy" id="wizard-search-surfaces-workflow-copy" data-i18n="profiles.wizard_search_surfaces_workflow_body">
+                {{ tr("profiles.wizard_search_surfaces_workflow_body") }}
+            </p>
+        </div>
+        <div class="wizard-export-plan wizard-workflow-list" id="wizard-search-surfaces-workflow-list"></div>
     </div>
     <div class="wizard-section-group">
         <div class="wizard-section-heading">

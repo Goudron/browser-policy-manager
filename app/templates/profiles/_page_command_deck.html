@@ -1,0 +1,84 @@
+<section class="workspace-dock surface-panel fade-up" id="command-deck">
+    <div class="dock-summary">
+        <div class="section-kicker" data-i18n="profiles.actions_title">{{ tr("profiles.actions_title") }}</div>
+        <h2 class="dock-title" data-i18n="profiles.editor_title">{{ tr("profiles.editor_title") }}</h2>
+        <p class="dock-copy" data-i18n="profiles.actions_hint">{{ tr("profiles.actions_hint") }}</p>
+        <div class="dock-state-summary surface-soft-box" id="dock-state-summary">
+            <div class="section-kicker" data-i18n="profiles.dock_state_kicker">{{ tr("profiles.dock_state_kicker") }}</div>
+            <div class="dock-state-title" id="dock-state-title" data-i18n="profiles.dock_state_empty_title">{{ tr("profiles.dock_state_empty_title") }}</div>
+            <p class="dock-state-copy" id="dock-state-copy" data-i18n="profiles.selection_empty_status">{{ tr("profiles.selection_empty_status") }}</p>
+        </div>
+        <div class="dock-meta">
+            <span class="dock-pill">
+                <span data-i18n="profiles.dock_shortcut_label">{{ tr("profiles.dock_shortcut_label") }}</span>
+                <strong data-i18n="profiles.shortcut_hint">{{ tr("profiles.shortcut_hint") }}</strong>
+            </span>
+            <span class="dock-pill">
+                <span data-i18n="profiles.dock_status_label">{{ tr("profiles.dock_status_label") }}</span>
+                <strong id="dock-status-text" data-i18n="profiles.signal_saved">{{ tr("profiles.signal_saved") }}</strong>
+            </span>
+        </div>
+    </div>
+
+    <div class="dock-actions">
+        <div class="dock-action-group">
+            <div class="section-kicker" data-i18n="profiles.dock_group_primary">{{ tr("profiles.dock_group_primary") }}</div>
+            <div class="dock-actions-grid dock-actions-grid--primary">
+                <button id="save"
+                    class="button-base primary-button dock-action-save flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
+                    data-i18n="profiles.save">
+                    {{ tr("profiles.save") }}
+                </button>
+                <button id="validate"
+                    class="button-base ghost-button dock-action-validate flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    data-i18n="profiles.validate">
+                    {{ tr("profiles.validate") }}
+                </button>
+            </div>
+        </div>
+
+        <div class="dock-action-group dock-action-group--utility">
+            <div class="section-kicker" data-i18n="profiles.dock_group_utility">{{ tr("profiles.dock_group_utility") }}</div>
+            <div class="dock-actions-grid dock-actions-grid--utility">
+            <button id="format"
+                class="button-base ghost-button dock-action-format soft-input flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                data-i18n="profiles.format">
+                {{ tr("profiles.format") }}
+            </button>
+            </div>
+        </div>
+
+        <div class="dock-action-group dock-action-group--lifecycle">
+            <div class="section-kicker" data-i18n="profiles.dock_group_lifecycle">{{ tr("profiles.dock_group_lifecycle") }}</div>
+            <div class="dock-secondary-grid">
+                <button id="restore"
+                    class="button-base restore-button flex w-full items-center justify-center rounded-2xl border border-emerald-300 bg-white px-4 py-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
+                    data-i18n="profiles.restore">
+                    {{ tr("profiles.restore") }}
+                </button>
+                <button id="soft-delete"
+                    class="button-base danger-button flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
+                    data-i18n="profiles.soft_delete">
+                    {{ tr("profiles.soft_delete") }}
+                </button>
+            </div>
+            <div class="dock-actions-grid dock-actions-grid--risk">
+                <button id="hard-delete"
+                    class="button-base danger-button dock-action-risk flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
+                    data-i18n="profiles.hard_delete">
+                    {{ tr("profiles.hard_delete") }}
+                </button>
+                <button id="reset-library"
+                    class="button-base danger-button dock-action-risk flex w-full items-center justify-center rounded-2xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-700 hover:bg-red-50"
+                    data-i18n="profiles.reset_library">
+                    {{ tr("profiles.reset_library") }}
+                </button>
+            </div>
+        </div>
+
+        <div class="dock-feedback surface-soft-box">
+            <div class="section-kicker" data-i18n="profiles.status_title">{{ tr("profiles.status_title") }}</div>
+            <div id="validation-preview" aria-live="polite" class="max-w-full text-xs text-slate-500"></div>
+        </div>
+    </div>
+</section>

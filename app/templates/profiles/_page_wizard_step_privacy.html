@@ -4,6 +4,90 @@
     {{ render_wizard_schema_shell(5) }}
     <div class="wizard-section-group">
         <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_hardening_title">{{ tr("profiles.wizard_hardening_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_hardening_body">
+                {{ tr("profiles.wizard_hardening_body") }}
+            </p>
+        </div>
+        <div class="wizard-toolbar-row wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_privacy_strictness_label">{{ tr("profiles.wizard_privacy_strictness_label") }}</div>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_hardening_hint">
+            {{ tr("profiles.wizard_hardening_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-hardening-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-hardening-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_hardening_preset_defaults_title">{{ tr("profiles.wizard_hardening_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_hardening_preset_defaults_copy">{{ tr("profiles.wizard_hardening_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-hardening-preset="balanced">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_hardening_preset_balanced_title">{{ tr("profiles.wizard_hardening_preset_balanced_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_hardening_preset_balanced_copy">{{ tr("profiles.wizard_hardening_preset_balanced_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-hardening-preset="strict">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_hardening_preset_strict_title">{{ tr("profiles.wizard_hardening_preset_strict_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_hardening_preset_strict_copy">{{ tr("profiles.wizard_hardening_preset_strict_copy") }}</span>
+            </button>
+        </div>
+        <div id="wizard-hardening-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_hardening_section_state_empty">
+            {{ tr("profiles.wizard_hardening_section_state_empty") }}
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_cleanup_title">{{ tr("profiles.wizard_cleanup_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_cleanup_body">
+                {{ tr("profiles.wizard_cleanup_body") }}
+            </p>
+        </div>
+        <div class="wizard-toolbar-row wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_privacy_strictness_label">{{ tr("profiles.wizard_privacy_strictness_label") }}</div>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_cleanup_hint">
+            {{ tr("profiles.wizard_cleanup_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-cleanup-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_cleanup_preset_defaults_title">{{ tr("profiles.wizard_cleanup_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_cleanup_preset_defaults_copy">{{ tr("profiles.wizard_cleanup_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="shared">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_cleanup_preset_shared_title">{{ tr("profiles.wizard_cleanup_preset_shared_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_cleanup_preset_shared_copy">{{ tr("profiles.wizard_cleanup_preset_shared_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="strict">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_cleanup_preset_strict_title">{{ tr("profiles.wizard_cleanup_preset_strict_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_cleanup_preset_strict_copy">{{ tr("profiles.wizard_cleanup_preset_strict_copy") }}</span>
+            </button>
+        </div>
+        <div id="wizard-cleanup-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_cleanup_section_state_empty">
+            {{ tr("profiles.wizard_cleanup_section_state_empty") }}
+        </div>
+    </div>
+    <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--soft wizard-workflow-card" id="wizard-hardening-governance-workflow">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_hardening_governance_title">{{ tr("profiles.wizard_hardening_governance_title") }}</h3>
+            <p class="wizard-section-copy wizard-workflow-copy" id="wizard-hardening-governance-copy" data-i18n="profiles.wizard_hardening_governance_body">
+                {{ tr("profiles.wizard_hardening_governance_body") }}
+            </p>
+        </div>
+        <ul class="wizard-checklist wizard-workflow-list" id="wizard-hardening-governance-list"></ul>
+        <div class="wizard-next-actions">
+            <button type="button" id="wizard-hardening-next-posture" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_hardening_posture">{{ tr("profiles.wizard_next_action_hardening_posture") }}</button>
+            <button type="button" id="wizard-hardening-next-cleanup" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_hardening_cleanup">{{ tr("profiles.wizard_next_action_hardening_cleanup") }}</button>
+            <button type="button" id="wizard-hardening-next-sites" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_hardening_sites">{{ tr("profiles.wizard_next_action_hardening_sites") }}</button>
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar wizard-workflow-actions">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_hardening_governance_handoff">
+                {{ tr("profiles.wizard_hardening_governance_handoff") }}
+            </div>
+            <button type="button" id="wizard-hardening-governance-open-advanced" class="button-base ghost-button" data-i18n="profiles.wizard_hardening_governance_open_advanced">
+                {{ tr("profiles.wizard_hardening_governance_open_advanced") }}
+            </button>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_group_privacy_title">{{ tr("profiles.wizard_group_privacy_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_group_privacy_copy">
                 {{ tr("profiles.wizard_group_privacy_copy") }}
@@ -13,16 +97,37 @@
         {{ render_settings_pills(wizard_settings_sections["privacy"]["ui_maps"]["privacy"], "wizard-settings-map-privacy") }}
         {{ render_settings_docs(wizard_settings_sections["privacy"]["ui_maps"]["privacy"], wizard_settings_sections["privacy"]["ui_docs"]["privacy"], "wizard-settings-docs-privacy") }}
         <div class="wizard-toolbar-row wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_group_privacy_hint">
-                {{ tr("profiles.wizard_group_privacy_hint") }}
-            </div>
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_privacy_strictness_label">{{ tr("profiles.wizard_privacy_strictness_label") }}</div>
         </div>
-        <div class="wizard-policy-grid wizard-stage-panel" id="wizard-policy-grid">
-            {{ render_manual_policy_controls(wizard_manual_policy_groups["privacy_user_data"]["items"]) }}
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_group_privacy_hint">
+            {{ tr("profiles.wizard_group_privacy_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-privacy-user-data-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-privacy-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_privacy_preset_defaults_title">{{ tr("profiles.wizard_privacy_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_privacy_preset_defaults_copy">{{ tr("profiles.wizard_privacy_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-privacy-preset="signals">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_privacy_preset_signals_title">{{ tr("profiles.wizard_privacy_preset_signals_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_privacy_preset_signals_copy">{{ tr("profiles.wizard_privacy_preset_signals_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-privacy-preset="strict">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_privacy_preset_strict_title">{{ tr("profiles.wizard_privacy_preset_strict_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_privacy_preset_strict_copy">{{ tr("profiles.wizard_privacy_preset_strict_copy") }}</span>
+            </button>
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-privacy-user-data-section-status" data-i18n="profiles.wizard_privacy_section_state_empty">
             {{ tr("profiles.wizard_privacy_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_privacy_fine_tuning_body">{{ tr("profiles.wizard_privacy_fine_tuning_body") }}</div>
+            <button type="button" id="wizard-privacy-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-privacy-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-policy-grid wizard-fine-tuning-panel" id="wizard-privacy-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            {{ render_manual_policy_controls(wizard_manual_policy_groups["privacy_user_data"]["items"]) }}
         </div>
     </div>
     <div class="wizard-section-group">
@@ -36,16 +141,37 @@
         {{ render_settings_pills(wizard_settings_sections["privacy"]["ui_maps"]["lockdown"], "wizard-settings-map-lockdown") }}
         {{ render_settings_docs(wizard_settings_sections["privacy"]["ui_maps"]["lockdown"], wizard_settings_sections["privacy"]["ui_docs"]["lockdown"], "wizard-settings-docs-lockdown") }}
         <div class="wizard-toolbar-row wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_group_lockdown_hint">
-                {{ tr("profiles.wizard_group_lockdown_hint") }}
-            </div>
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_privacy_strictness_label">{{ tr("profiles.wizard_privacy_strictness_label") }}</div>
         </div>
-        <div class="wizard-policy-grid wizard-stage-panel">
-            {{ render_manual_policy_controls(wizard_manual_policy_groups["privacy_lockdown"]["items"]) }}
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_group_lockdown_hint">
+            {{ tr("profiles.wizard_group_lockdown_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-lockdown-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-lockdown-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_lockdown_preset_defaults_title">{{ tr("profiles.wizard_lockdown_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_lockdown_preset_defaults_copy">{{ tr("profiles.wizard_lockdown_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-lockdown-preset="balanced">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_lockdown_preset_balanced_title">{{ tr("profiles.wizard_lockdown_preset_balanced_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_lockdown_preset_balanced_copy">{{ tr("profiles.wizard_lockdown_preset_balanced_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-lockdown-preset="strict">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_lockdown_preset_strict_title">{{ tr("profiles.wizard_lockdown_preset_strict_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_lockdown_preset_strict_copy">{{ tr("profiles.wizard_lockdown_preset_strict_copy") }}</span>
+            </button>
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-lockdown-section-status" data-i18n="profiles.wizard_lockdown_section_state_empty">
             {{ tr("profiles.wizard_lockdown_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_lockdown_fine_tuning_body">{{ tr("profiles.wizard_lockdown_fine_tuning_body") }}</div>
+            <button type="button" id="wizard-lockdown-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-lockdown-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-policy-grid wizard-fine-tuning-panel" id="wizard-lockdown-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            {{ render_manual_policy_controls(wizard_manual_policy_groups["privacy_lockdown"]["items"]) }}
         </div>
     </div>
     <div class="wizard-section-group">
@@ -56,17 +182,38 @@
             </p>
         </div>
         <div class="wizard-toolbar-row wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_privacy_site_controls_hint">
-                {{ tr("profiles.wizard_privacy_site_controls_hint") }}
-            </div>
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_privacy_strictness_label">{{ tr("profiles.wizard_privacy_strictness_label") }}</div>
         </div>
-        <div class="wizard-grid wizard-stage-panel">
-            <div id="wizard-permissions-card" class="wizard-field-full" data-settings-target="policy:Permissions"></div>
-            <div id="wizard-cookies-card" class="wizard-field-full" data-settings-target="policy:Cookies"></div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_privacy_site_controls_hint">
+            {{ tr("profiles.wizard_privacy_site_controls_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-site-data-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-site-data-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_site_data_preset_defaults_title">{{ tr("profiles.wizard_site_data_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_site_data_preset_defaults_copy">{{ tr("profiles.wizard_site_data_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-site-data-preset="balanced">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_site_data_preset_balanced_title">{{ tr("profiles.wizard_site_data_preset_balanced_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_site_data_preset_balanced_copy">{{ tr("profiles.wizard_site_data_preset_balanced_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-site-data-preset="strict">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_site_data_preset_strict_title">{{ tr("profiles.wizard_site_data_preset_strict_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_site_data_preset_strict_copy">{{ tr("profiles.wizard_site_data_preset_strict_copy") }}</span>
+            </button>
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-privacy-site-section-status" data-i18n="profiles.wizard_privacy_site_section_state_empty">
             {{ tr("profiles.wizard_privacy_site_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_site_data_fine_tuning_body">{{ tr("profiles.wizard_site_data_fine_tuning_body") }}</div>
+            <button type="button" id="wizard-site-data-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-site-data-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
+                {{ tr("profiles.wizard_fine_tuning_show") }}
+            </button>
+        </div>
+        <div class="wizard-grid wizard-fine-tuning-panel wizard-fine-tuning-panel--nested" id="wizard-site-data-fine-tuning-panel" hidden>
+            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
+            <div id="wizard-permissions-card" class="wizard-field-full" data-settings-target="policy:Permissions"></div>
+            <div id="wizard-cookies-card" class="wizard-field-full" data-settings-target="policy:Cookies"></div>
         </div>
     </div>
     <div class="wizard-section-group">
@@ -77,6 +224,16 @@
             </p>
         </div>
         <div class="wizard-summary-list wizard-summary-list--cards">
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_privacy_review_user_data">{{ tr("profiles.wizard_privacy_review_user_data") }}</span>
+                <span class="wizard-summary-value" id="wizard-privacy-summary-user-data">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-privacy-summary-user-data-jump" data-privacy-review-jump="user-data" data-i18n="profiles.wizard_privacy_review_open">{{ tr("profiles.wizard_privacy_review_open") }}</button>
+            </div>
+            <div class="wizard-summary-row wizard-summary-row--decision">
+                <span class="wizard-summary-key" data-i18n="profiles.wizard_privacy_review_cleanup">{{ tr("profiles.wizard_privacy_review_cleanup") }}</span>
+                <span class="wizard-summary-value" id="wizard-privacy-summary-cleanup">0</span>
+                <button type="button" class="button-base ghost-button" id="wizard-privacy-summary-cleanup-jump" data-privacy-review-jump="cleanup" data-i18n="profiles.wizard_privacy_review_open">{{ tr("profiles.wizard_privacy_review_open") }}</button>
+            </div>
             <div class="wizard-summary-row wizard-summary-row--decision">
                 <span class="wizard-summary-key" data-i18n="profiles.wizard_privacy_review_permissions_configured">{{ tr("profiles.wizard_privacy_review_permissions_configured") }}</span>
                 <span class="wizard-summary-value" id="wizard-privacy-summary-permissions-configured">0</span>

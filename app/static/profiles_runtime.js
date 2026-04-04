@@ -44,10 +44,16 @@
             doValidate,
             reloadList,
             finishWizard,
+            applyScenarioPreset,
             applyStarterPreset,
+            undoCurrentStepChanges,
+            resetCurrentStepToBaseline,
+            setPreviewStarter,
+            clearPreviewStarter,
             clearWizardSettingsSearch,
             findSettingsTarget,
             revealSettingsTarget,
+            getFinalReviewSelection,
             appendSearchEngineDraft,
             applySearchEnginePreset,
             bindAddButtonListeners,
@@ -98,6 +104,12 @@
         const themeStorageKey = "bpm-theme-mode";
         const workspaceScopeStorageKey = "bpm-workspace-scope";
         const themeMediaQuery = windowRef.matchMedia("(prefers-color-scheme: dark)");
+        let localeRequestId = 0;
+        let wizardConditionalVisibilityBound = false;
+        let documentClicksBound = false;
+        let jumpButtonsBound = false;
+        let wizardNavBound = false;
+        let lastAdvancedReturnTriggerEl = null;
 
         const editorEl = documentRef.getElementById("editor");
         const formatButtonEl = documentRef.getElementById("format");
@@ -129,8 +141,15 @@
         const wizardSettingsSearchInputEl = documentRef.getElementById("wizard-settings-search-input");
         const wizardSettingsSearchResultsEl = documentRef.getElementById("wizard-settings-search-results");
         const wizardSettingsSearchClearEl = documentRef.getElementById("wizard-settings-search-clear");
+        const wizardStepUndoEl = documentRef.getElementById("wizard-step-undo");
+        const wizardStepResetEl = documentRef.getElementById("wizard-step-reset");
         const workspaceScopeGuidedEl = documentRef.getElementById("workspace-scope-guided");
         const workspaceScopeAdvancedEl = documentRef.getElementById("workspace-scope-advanced");
+        const workspaceScopeSummaryEl = documentRef.getElementById("workspace-scope-summary");
+        const workspaceScopeSummaryTitleEl = documentRef.getElementById("workspace-scope-summary-title");
+        const workspaceScopeSummaryCopyEl = documentRef.getElementById("workspace-scope-summary-copy");
+        const workspaceScopeGuidedCardEl = documentRef.getElementById("workspace-scope-guided-card");
+        const workspaceScopeAdvancedCardEl = documentRef.getElementById("workspace-scope-advanced-card");
         const wizardSearchEngineAddButtonEl = documentRef.getElementById("wizard-search-engine-add");
         const wizardHomepageUrlEl = documentRef.getElementById("wizard-homepage-url");
         const wizardHomepageAdditionalEl = documentRef.getElementById("wizard-homepage-additional");
@@ -158,12 +177,40 @@
         const wizardProxyUseDnsEl = documentRef.getElementById("wizard-proxy-use-dns");
 
         const wizardStepButtons = Array.from(documentRef.querySelectorAll(".wizard-step"));
+        const wizardScenarioButtons = Array.from(documentRef.querySelectorAll("[data-scenario-key]"));
         const wizardStarterButtons = Array.from(documentRef.querySelectorAll("[data-starter-key]"));
         const wizardPolicyInputs = Array.from(documentRef.querySelectorAll("[data-policy-key]"));
         const wizardPolicySelectInputs = Array.from(documentRef.querySelectorAll("[data-policy-select-key]"));
         const wizardSearchEnginePresetButtons = Array.from(documentRef.querySelectorAll("[data-search-engine-preset]"));
         const wizardFirefoxHomeInputs = Array.from(documentRef.querySelectorAll("[data-firefox-home-key]"));
         const wizardFirefoxSuggestInputs = Array.from(documentRef.querySelectorAll("[data-firefox-suggest-key]"));
+        const wizardProxyModeGroups = Array.from(documentRef.querySelectorAll("[data-proxy-mode-group]"));
+        const advancedContextStepEl = documentRef.getElementById("advanced-context-step");
+        const advancedContextCopyEl = documentRef.getElementById("advanced-context-copy");
+        const advancedContextListEl = documentRef.getElementById("advanced-context-list");
+        const advancedContextReturnEl = documentRef.getElementById("advanced-context-return");
+        const advancedContextEmptyEl = documentRef.getElementById("advanced-context-empty");
+        const wizardExportShareableTextEl = documentRef.getElementById("wizard-export-shareable-text");
+        const wizardExportShareableStatusEl = documentRef.getElementById("wizard-export-shareable-status");
+        let advancedHandoffContext = null;
+
+        function getDisclosurePanelPairs() {
+            return [
+                ["wizard-firefox-home-fine-tuning-panel", "wizard-firefox-home-fine-tuning-toggle"],
+                ["wizard-search-defaults-fine-tuning-panel", "wizard-search-defaults-fine-tuning-toggle"],
+                ["wizard-search-suggest-fine-tuning-panel", "wizard-search-suggest-fine-tuning-toggle"],
+                ["wizard-privacy-fine-tuning-panel", "wizard-privacy-fine-tuning-toggle"],
+                ["wizard-lockdown-fine-tuning-panel", "wizard-lockdown-fine-tuning-toggle"],
+                ["wizard-site-data-fine-tuning-panel", "wizard-site-data-fine-tuning-toggle"],
+                ["wizard-extension-fine-tuning-panel", "wizard-extension-fine-tuning-toggle"],
+                ["wizard-extension-more-rules-panel", "wizard-extension-more-rules-toggle"],
+                ["wizard-extension-curated-panel", "wizard-extension-curated-toggle"],
+                ["wizard-sync-fine-tuning-panel", "wizard-sync-fine-tuning-toggle"],
+                ["wizard-ai-fine-tuning-panel", "wizard-ai-fine-tuning-toggle"],
+                ["wizard-website-fine-tuning-panel", "wizard-website-fine-tuning-toggle"],
+                ["wizard-network-enterprise-fine-tuning-panel", "wizard-network-enterprise-fine-tuning-toggle"],
+            ];
+        }
 
         function focusElementForA11y(targetEl) {
             if (!targetEl || typeof targetEl.focus !== "function") return;
@@ -175,6 +222,60 @@
         }
 
         function syncContextualA11yLabels() {
+            documentRef.querySelectorAll(".wizard-stage-status, .wizard-search-engine-preset-status").forEach((el) => {
+                el.setAttribute("role", "status");
+                el.setAttribute("aria-live", "polite");
+            });
+
+            documentRef.querySelectorAll([
+                "#profile-derived-note",
+                "#profile-clone-handoff-copy",
+                "#profile-lifecycle-copy",
+                "#compare-empty-copy",
+                "#compare-changes-copy",
+                "#compare-guided-areas-copy",
+                "#advanced-context-copy",
+                "#wizard-clone-handoff-copy",
+                "#wizard-shared-device-workflow-copy",
+                "#wizard-step-memory-copy",
+            ].join(", ")).forEach((el) => {
+                el.setAttribute("role", "status");
+                el.setAttribute("aria-live", "polite");
+            });
+
+            documentRef.querySelectorAll([
+                "#profile-clone-handoff-list",
+                "#profile-lifecycle-list",
+                "#compare-changes-list",
+                "#compare-guided-areas-list",
+                "#advanced-context-list",
+                "#wizard-clone-handoff-list",
+                "#wizard-shared-device-workflow-list",
+            ].join(", ")).forEach((el) => {
+                el.setAttribute("role", "list");
+            });
+
+            wizardStepButtons.forEach((button) => {
+                const stepIndex = button.querySelector(".wizard-step-index")?.textContent?.trim() || "";
+                const labelText = button.querySelector(".wizard-step-label")?.textContent?.trim() || "";
+                const copyText = button.querySelector(".wizard-step-copy")?.textContent?.trim() || "";
+                const labelParts = [stepIndex, labelText, copyText].filter(Boolean);
+                if (labelParts.length) {
+                    button.setAttribute("aria-label", labelParts.join(". "));
+                }
+            });
+
+            [...wizardScenarioButtons, ...wizardStarterButtons].forEach((button) => {
+                const badgeText = button.querySelector(".wizard-starter-badge")?.textContent?.trim() || "";
+                const titleText = button.querySelector(".wizard-starter-title")?.textContent?.trim() || "";
+                const copyText = button.querySelector(".wizard-starter-copy")?.textContent?.trim() || "";
+                const noteText = button.querySelector(".wizard-starter-note")?.textContent?.trim() || "";
+                const labelParts = [badgeText, titleText, copyText, noteText].filter(Boolean);
+                if (labelParts.length) {
+                    button.setAttribute("aria-label", labelParts.join(". "));
+                }
+            });
+
             const actionButtons = Array.from(documentRef.querySelectorAll([
                 "[data-final-review-jump]",
                 "[data-network-review-jump]",
@@ -190,8 +291,39 @@
             actionButtons.forEach((button) => {
                 const actionText = button.textContent.trim();
                 const keyText = button.closest(".wizard-summary-row")?.querySelector(".wizard-summary-key")?.textContent?.trim() || "";
+                const valueEl = button.closest(".wizard-summary-row")?.querySelector(".wizard-summary-value[id]");
                 if (actionText && keyText) {
                     button.setAttribute("aria-label", `${actionText} ${keyText}`);
+                }
+                if (valueEl?.id) {
+                    button.setAttribute("aria-describedby", valueEl.id);
+                }
+            });
+
+            const contextualActionButtons = Array.from(documentRef.querySelectorAll([
+                "[data-step-memory-jump]",
+                "[data-clone-handoff-step]",
+                "[data-clone-handoff-compare]",
+                "[data-export-assist-action]",
+                "[data-workspace-scope-target]",
+            ].join(", ")));
+
+            contextualActionButtons.forEach((button) => {
+                const actionText = button.textContent.trim();
+                const itemCopy = button.closest(".wizard-export-plan-item, .wizard-step-memory-item")
+                    ?.querySelector(".wizard-export-plan-copy, .wizard-step-memory-item-copy")
+                    ?.textContent?.trim() || "";
+                const itemTitle = button.closest(".wizard-step-memory-item")
+                    ?.querySelector(".wizard-step-memory-item-title")
+                    ?.textContent?.trim() || "";
+                const contextText = [itemTitle, itemCopy].filter(Boolean).join(". ");
+                const copyEl = button.closest(".profile-clone-handoff-panel, .profile-lifecycle-panel, .wizard-workflow-card, .wizard-step-actions")
+                    ?.querySelector("#profile-clone-handoff-copy, #profile-lifecycle-copy, #wizard-clone-handoff-copy, #wizard-shared-device-workflow-copy, #wizard-step-memory-copy");
+                if (actionText && contextText) {
+                    button.setAttribute("aria-label", `${actionText}. ${contextText}`);
+                }
+                if (copyEl?.id) {
+                    button.setAttribute("aria-describedby", copyEl.id);
                 }
             });
 
@@ -199,6 +331,9 @@
                 "#wizard-firefox-home-fine-tuning-toggle",
                 "#wizard-search-defaults-fine-tuning-toggle",
                 "#wizard-search-suggest-fine-tuning-toggle",
+                "#wizard-privacy-fine-tuning-toggle",
+                "#wizard-lockdown-fine-tuning-toggle",
+                "#wizard-site-data-fine-tuning-toggle",
                 "#wizard-network-enterprise-fine-tuning-toggle",
                 "#wizard-sync-fine-tuning-toggle",
                 "#wizard-ai-fine-tuning-toggle",
@@ -214,10 +349,211 @@
                 const cardTitle = button.closest("[data-extension-profile-card]")?.querySelector(".wizard-toggle-title")?.textContent?.trim() || "";
                 const sectionTitle = button.closest(".wizard-section-group")?.querySelector(".wizard-section-title")?.textContent?.trim() || "";
                 const contextText = cardTitle || sectionTitle;
+                const statusEl = button.closest(".wizard-section-group")?.querySelector(".wizard-stage-status[id], .wizard-search-engine-preset-status[id]");
                 if (actionText && contextText) {
                     button.setAttribute("aria-label", `${actionText} ${contextText}`);
                 }
+                if (statusEl?.id) {
+                    button.setAttribute("aria-describedby", statusEl.id);
+                }
             });
+
+            const presetButtons = Array.from(documentRef.querySelectorAll(".wizard-search-engine-preset"));
+            presetButtons.forEach((button) => {
+                const titleText = button.querySelector(".wizard-search-engine-title")?.textContent?.trim() || "";
+                const copyText = button.querySelector(".wizard-search-engine-preset-copy")?.textContent?.trim() || "";
+                const sectionTitle = button.closest(".wizard-section-group")?.querySelector(".wizard-section-title")?.textContent?.trim() || "";
+                const statusEl = button.closest(".wizard-section-group")?.querySelector(".wizard-stage-status[id], .wizard-search-engine-preset-status[id]");
+                const statusText = statusEl?.textContent?.trim() || "";
+                const labelParts = [titleText, copyText, sectionTitle, statusText].filter(Boolean);
+                if (labelParts.length) {
+                    button.setAttribute("aria-label", labelParts.join(". "));
+                }
+                if (statusEl?.id) {
+                    button.setAttribute("aria-describedby", statusEl.id);
+                }
+            });
+        }
+
+        function getCompositeButtons(containerEl) {
+            if (!containerEl) return [];
+            if (containerEl.matches(".wizard-stepper")) {
+                return Array.from(containerEl.querySelectorAll(".wizard-step"));
+            }
+            if (containerEl.matches(".wizard-scenario-grid")) {
+                return Array.from(containerEl.querySelectorAll("[data-scenario-key]"));
+            }
+            if (containerEl.matches(".wizard-starter-grid")) {
+                return Array.from(containerEl.querySelectorAll("[data-starter-key]"));
+            }
+            if (containerEl.matches(".wizard-search-engine-preset-grid")) {
+                return Array.from(containerEl.querySelectorAll(".wizard-search-engine-preset"));
+            }
+            return [];
+        }
+
+        function wireCompositeButtonNavigation() {
+            documentRef.addEventListener("keydown", (event) => {
+                if (event.defaultPrevented) return;
+                const supportedKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
+                if (!supportedKeys.includes(event.key)) return;
+
+                const activeButton = event.target?.closest([
+                    ".wizard-step",
+                    ".wizard-starter-card",
+                    ".wizard-search-engine-preset",
+                ].join(", "));
+                if (!activeButton) return;
+
+                const containerEl = activeButton.closest([
+                    ".wizard-stepper",
+                    ".wizard-scenario-grid",
+                    ".wizard-starter-grid",
+                    ".wizard-search-engine-preset-grid",
+                ].join(", "));
+                const buttons = getCompositeButtons(containerEl).filter((button) =>
+                    !button.disabled && button.closest("[hidden]") === null
+                );
+                if (buttons.length <= 1) return;
+
+                const currentIndex = buttons.indexOf(activeButton);
+                if (currentIndex < 0) return;
+
+                let nextIndex = currentIndex;
+                if (event.key === "Home") {
+                    nextIndex = 0;
+                } else if (event.key === "End") {
+                    nextIndex = buttons.length - 1;
+                } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                    nextIndex = (currentIndex + 1) % buttons.length;
+                } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                    nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                }
+
+                if (nextIndex === currentIndex) return;
+                event.preventDefault();
+                focusElementForA11y(buttons[nextIndex]);
+            });
+        }
+
+        function getWizardStepLabel(stepNumber) {
+            if (!stepNumber) return "";
+            return documentRef
+                .querySelector(`.wizard-step[data-step="${stepNumber}"] .wizard-step-label`)
+                ?.textContent
+                ?.trim() || "";
+        }
+
+        function parseGuidedCoverageItems(value) {
+            if (!value) return [];
+            try {
+                const parsed = JSON.parse(value);
+                return Array.isArray(parsed)
+                    ? parsed.filter((item) => typeof item === "string" && item.trim())
+                    : [];
+            } catch (_error) {
+                return [];
+            }
+        }
+
+        function buildAdvancedHandoffContext(stepNumber, options = {}) {
+            const normalizedStep = Number(stepNumber);
+            if (Number.isNaN(normalizedStep) || normalizedStep <= 0) {
+                return null;
+            }
+
+            return {
+                step: normalizedStep,
+                title: options.stepTitle || getWizardStepLabel(normalizedStep),
+                items: Array.isArray(options.items) ? options.items.filter(Boolean).slice(0, 2) : [],
+                remaining: Math.max(0, Number(options.remaining) || 0),
+            };
+        }
+
+        function readGuidedCoverageContext(stepNumber) {
+            const actionButton = documentRef.querySelector(`[data-guided-coverage-open-step="${stepNumber}"]`);
+            if (!actionButton) {
+                return buildAdvancedHandoffContext(stepNumber);
+            }
+
+            return buildAdvancedHandoffContext(stepNumber, {
+                stepTitle: actionButton.dataset.guidedCoverageStepTitle || "",
+                items: parseGuidedCoverageItems(actionButton.dataset.guidedCoverageItems || ""),
+                remaining: Number(actionButton.dataset.guidedCoverageRemaining || 0),
+            });
+        }
+
+        function renderAdvancedHandoffContext() {
+            if (!advancedContextStepEl || !advancedContextCopyEl || !advancedContextListEl || !advancedContextReturnEl) return;
+
+            if (!advancedHandoffContext) {
+                advancedContextStepEl.textContent = t("profiles.workspace_scope_advanced");
+                advancedContextStepEl.setAttribute("data-i18n", "profiles.workspace_scope_advanced");
+                advancedContextCopyEl.textContent = t("profiles.advanced_context_body");
+                advancedContextCopyEl.setAttribute("data-i18n", "profiles.advanced_context_body");
+                advancedContextListEl.innerHTML = "";
+                advancedContextListEl.hidden = true;
+                advancedContextReturnEl.hidden = true;
+                advancedContextReturnEl.dataset.advancedReturnStep = "";
+                if (advancedContextEmptyEl) {
+                    advancedContextEmptyEl.hidden = false;
+                }
+                return;
+            }
+
+            const title = advancedHandoffContext.title || t("profiles.workspace_scope_advanced");
+            advancedContextStepEl.textContent = title;
+            advancedContextStepEl.removeAttribute("data-i18n");
+            advancedContextCopyEl.textContent = t("profiles.advanced_context_from_step").replace("{step}", title);
+            advancedContextCopyEl.removeAttribute("data-i18n");
+
+            const listItems = advancedHandoffContext.items.slice();
+            if (advancedHandoffContext.remaining > 0) {
+                listItems.push(
+                    t("profiles.advanced_context_more").replace("{count}", String(advancedHandoffContext.remaining)),
+                );
+            }
+
+            advancedContextListEl.innerHTML = listItems
+                .map((item) => `<li class="advanced-context-item">${item}</li>`)
+                .join("");
+            advancedContextListEl.hidden = listItems.length <= 0;
+            advancedContextReturnEl.hidden = false;
+            advancedContextReturnEl.dataset.advancedReturnStep = String(advancedHandoffContext.step);
+            if (advancedContextEmptyEl) {
+                advancedContextEmptyEl.hidden = true;
+            }
+        }
+
+        function setAdvancedHandoffContext(context) {
+            advancedHandoffContext = context;
+            renderAdvancedHandoffContext();
+        }
+
+        function resolveFinalReviewSelectionFromButton(button) {
+            if (!button) return { target: null, context: null };
+            const jumpKind = button.dataset.finalReviewJump || "";
+            const jumpKey = button.dataset.finalReviewKey || "";
+            if (typeof getFinalReviewSelection === "function") {
+                return getFinalReviewSelection(jumpKind, jumpKey ? { key: jumpKey } : {});
+            }
+            return {
+                target: findFinalReviewTarget(jumpKind),
+                context: null,
+            };
+        }
+
+        function applyAdvancedContextForFinalReviewSelection(selection) {
+            if (!selection?.context) return;
+            const targetEl = selection.target;
+            const targetsAdvanced = targetEl?.closest?.('[data-workspace-scope-panel="advanced"]')
+                || targetEl === editorEl;
+            if (!targetsAdvanced) return;
+            setAdvancedHandoffContext(buildAdvancedHandoffContext(selection.context.step, {
+                stepTitle: selection.context.stepTitle || "",
+                items: Array.isArray(selection.context.items) ? selection.context.items : [],
+                remaining: Number(selection.context.remaining) || 0,
+            }));
         }
 
         function applyThemeMode(mode, persist = true) {
@@ -239,7 +575,34 @@
             }
         }
 
-        async function loadLocale(lang) {
+        async function loadLocale(lang, requestId = 0) {
+            function applyLocaleText(nextLocale) {
+                documentRef.querySelectorAll("[data-i18n]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n");
+                    if (key && nextLocale[key]) el.textContent = nextLocale[key];
+                });
+                documentRef.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n-placeholder");
+                    if (key && nextLocale[key]) el.placeholder = nextLocale[key];
+                });
+                documentRef.querySelectorAll("[data-i18n-title]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n-title");
+                    if (key && nextLocale[key]) el.title = nextLocale[key];
+                });
+                documentRef.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+                    const key = el.getAttribute("data-i18n-aria-label");
+                    if (key && nextLocale[key]) el.setAttribute("aria-label", nextLocale[key]);
+                });
+            }
+
+            function guardLocaleStep(label, fn) {
+                try {
+                    fn();
+                } catch (error) {
+                    console.warn(`i18n step failed: ${label}`, error);
+                }
+            }
+
             try {
                 let nextLocale = null;
                 if (lang === windowRef.__BPM_INITIAL_LANG__ && windowRef.__BPM_INITIAL_LOCALE__) {
@@ -249,49 +612,39 @@
                     if (!res.ok) throw new Error(await res.text());
                     nextLocale = await res.json();
                 }
+                if (requestId && requestId !== localeRequestId) return;
                 setLocaleDict(nextLocale);
                 setCurrentLang(lang);
                 documentRef.documentElement.lang = lang;
+                windowRef.__BPM_INITIAL_LANG__ = lang;
+                windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;
 
-                documentRef.querySelectorAll("[data-i18n]").forEach((el) => {
-                    const key = el.getAttribute("data-i18n");
-                    if (nextLocale[key]) el.textContent = nextLocale[key];
+                applyLocaleText(nextLocale);
+                guardLocaleStep("renderPreferencePresetButtons", () => renderPreferencePresetButtons());
+                guardLocaleStep("renderPreferenceBundleButtons", () => renderPreferenceBundleButtons());
+                guardLocaleStep("renderKnownPreferenceButtons", () => renderKnownPreferenceButtons());
+                guardLocaleStep("renderKnownPreferenceOptions", () => renderKnownPreferenceOptions());
+                guardLocaleStep("renderWizardSchemaShell", () => renderWizardSchemaShell());
+                guardLocaleStep("buildWizardSettingsSearchIndex", () => buildWizardSettingsSearchIndex());
+                guardLocaleStep("renderWizardSettingsSearchResults", () => renderWizardSettingsSearchResults());
+                guardLocaleStep("workspaceLocaleRefresh", () => {
+                    if (getCurrentProfile()) {
+                        setMeta(getCurrentProfile());
+                    } else {
+                        setDraftState();
+                    }
+                    updateLibrarySummary(getLibraryStats());
+                    syncWorkspaceOverview();
+                    refreshWorkspaceSignal();
+                    setWizardStep(getWizardStep());
+                    rerenderSearchEngineDraftsForLocale();
+                    syncWizardNetworkFromEditor();
+                    syncWizardPoliciesFromEditor();
+                    syncWizardPreferencesFromEditor();
+                    syncWizardExtensionsFromEditor();
+                    renderAdvancedHandoffContext();
+                    syncContextualA11yLabels();
                 });
-                documentRef.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-                    const key = el.getAttribute("data-i18n-placeholder");
-                    if (nextLocale[key]) el.placeholder = nextLocale[key];
-                });
-                documentRef.querySelectorAll("[data-i18n-title]").forEach((el) => {
-                    const key = el.getAttribute("data-i18n-title");
-                    if (nextLocale[key]) el.title = nextLocale[key];
-                });
-                documentRef.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
-                    const key = el.getAttribute("data-i18n-aria-label");
-                    if (nextLocale[key]) el.setAttribute("aria-label", nextLocale[key]);
-                });
-                renderPreferencePresetButtons();
-                renderPreferenceBundleButtons();
-                renderKnownPreferenceButtons();
-                renderKnownPreferenceOptions();
-                renderWizardSchemaShell();
-                buildWizardSettingsSearchIndex();
-                renderWizardSettingsSearchResults();
-
-                if (getCurrentProfile()) {
-                    setMeta(getCurrentProfile());
-                } else {
-                    setDraftState();
-                }
-                updateLibrarySummary(getLibraryStats());
-                syncWorkspaceOverview();
-                refreshWorkspaceSignal();
-                setWizardStep(getWizardStep());
-                rerenderSearchEngineDraftsForLocale();
-                syncWizardNetworkFromEditor();
-                syncWizardPoliciesFromEditor();
-                syncWizardPreferencesFromEditor();
-                syncWizardExtensionsFromEditor();
-                syncContextualA11yLabels();
             } catch (e) {
                 console.warn("i18n load failed:", e);
             }
@@ -302,6 +655,7 @@
             const resolvedLanguage = normalizedMode === "system"
                 ? resolveBrowserLanguage(windowRef.navigator)
                 : normalizedMode;
+            const requestId = ++localeRequestId;
 
             documentRef.documentElement.dataset.langMode = normalizedMode;
             langSelectEl.value = normalizedMode;
@@ -310,7 +664,8 @@
                 windowRef.localStorage.setItem(langStorageKey, normalizedMode);
             }
 
-            await loadLocale(resolvedLanguage);
+            await loadLocale(resolvedLanguage, requestId);
+            await reloadList();
         }
 
         function debounceReload() {
@@ -325,6 +680,9 @@
         function applyWorkspaceScope(scope, { persist = true, focus = false } = {}) {
             const normalizedScope = scope === "advanced" ? "advanced" : "guided";
             documentRef.documentElement.dataset.workspaceScope = normalizedScope;
+            if (workspaceScopeSummaryEl) {
+                workspaceScopeSummaryEl.dataset.workspaceScopeState = normalizedScope;
+            }
 
             [
                 { el: workspaceScopeGuidedEl, value: "guided" },
@@ -335,6 +693,27 @@
                 el.classList.toggle("workspace-scope-button--active", isActive);
                 el.setAttribute("aria-pressed", isActive ? "true" : "false");
             });
+            [
+                { el: workspaceScopeGuidedCardEl, value: "guided" },
+                { el: workspaceScopeAdvancedCardEl, value: "advanced" },
+            ].forEach(({ el, value }) => {
+                if (!el) return;
+                el.classList.toggle("workspace-scope-mode-card--active", normalizedScope === value);
+            });
+            if (workspaceScopeSummaryTitleEl) {
+                const titleKey = normalizedScope === "advanced"
+                    ? "profiles.workspace_scope_current_advanced_title"
+                    : "profiles.workspace_scope_current_guided_title";
+                workspaceScopeSummaryTitleEl.textContent = t(titleKey);
+                workspaceScopeSummaryTitleEl.setAttribute("data-i18n", titleKey);
+            }
+            if (workspaceScopeSummaryCopyEl) {
+                const copyKey = normalizedScope === "advanced"
+                    ? "profiles.workspace_scope_current_advanced_copy"
+                    : "profiles.workspace_scope_current_guided_copy";
+                workspaceScopeSummaryCopyEl.textContent = t(copyKey);
+                workspaceScopeSummaryCopyEl.setAttribute("data-i18n", copyKey);
+            }
 
             if (persist) {
                 windowRef.localStorage.setItem(workspaceScopeStorageKey, normalizedScope);
@@ -359,26 +738,70 @@
 
         function revealWorkspaceTarget(targetEl) {
             if (!targetEl) return;
+
+            const panel = targetEl.closest(".wizard-panel");
+            if (panel?.id?.startsWith("wizard-step-")) {
+                const nextStep = Number(panel.id.replace("wizard-step-", ""));
+                if (!Number.isNaN(nextStep)) {
+                    setWizardStep(nextStep);
+                }
+            }
+
             if (targetEl.closest('[data-workspace-scope-panel="advanced"]')) {
                 applyWorkspaceScope("advanced");
             }
-            [
-                ["wizard-firefox-home-fine-tuning-panel", "wizard-firefox-home-fine-tuning-toggle"],
-                ["wizard-search-defaults-fine-tuning-panel", "wizard-search-defaults-fine-tuning-toggle"],
-                ["wizard-search-suggest-fine-tuning-panel", "wizard-search-suggest-fine-tuning-toggle"],
-                ["wizard-extension-fine-tuning-panel", "wizard-extension-fine-tuning-toggle"],
-                ["wizard-extension-more-rules-panel", "wizard-extension-more-rules-toggle"],
-                ["wizard-extension-curated-panel", "wizard-extension-curated-toggle"],
-                ["wizard-sync-fine-tuning-panel", "wizard-sync-fine-tuning-toggle"],
-                ["wizard-ai-fine-tuning-panel", "wizard-ai-fine-tuning-toggle"],
-                ["wizard-website-fine-tuning-panel", "wizard-website-fine-tuning-toggle"],
-                ["wizard-network-enterprise-fine-tuning-panel", "wizard-network-enterprise-fine-tuning-toggle"],
-            ].forEach(([panelId, toggleId]) => {
+            getDisclosurePanelPairs().forEach(([panelId, toggleId]) => {
                 const panelEl = documentRef.getElementById(panelId);
                 if (!panelEl || !targetEl.closest(`#${panelId}`) || panelEl.hidden === false) return;
                 documentRef.getElementById(toggleId)?.click();
             });
-            revealSettingsTarget(targetEl);
+            windowRef.requestAnimationFrame(() => {
+                windowRef.requestAnimationFrame(() => {
+                    targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                    targetEl.classList.add("settings-target-highlight");
+                    windowRef.setTimeout(() => {
+                        targetEl.classList.remove("settings-target-highlight");
+                    }, 1800);
+
+                    const focusTarget = targetEl.matches("input, select, textarea, button")
+                        ? targetEl
+                        : targetEl.querySelector("input, select, textarea, button");
+                    focusElementForA11y(focusTarget || targetEl);
+                });
+            });
+        }
+
+        async function copyTextToClipboard(value) {
+            const text = String(value || "");
+            if (!text.trim()) return false;
+            if (windowRef.navigator?.clipboard?.writeText) {
+                try {
+                    await windowRef.navigator.clipboard.writeText(text);
+                    return true;
+                } catch (_error) {
+                    // Fall back to document copy below.
+                }
+            }
+
+            const helperEl = documentRef.createElement("textarea");
+            helperEl.value = text;
+            helperEl.setAttribute("readonly", "readonly");
+            helperEl.setAttribute("aria-hidden", "true");
+            helperEl.style.position = "fixed";
+            helperEl.style.opacity = "0";
+            helperEl.style.pointerEvents = "none";
+            documentRef.body.appendChild(helperEl);
+            helperEl.focus();
+            helperEl.select();
+            helperEl.setSelectionRange(0, helperEl.value.length);
+            let copied = false;
+            try {
+                copied = Boolean(documentRef.execCommand("copy"));
+            } catch (_error) {
+                copied = false;
+            }
+            helperEl.remove();
+            return copied;
         }
 
         function syncEditorBackedUi() {
@@ -386,6 +809,97 @@
             syncWizardPoliciesFromEditor();
             syncWizardPreferencesFromEditor();
             syncWizardExtensionsFromEditor();
+        }
+
+        function syncProxyModeGroupsFromWizard() {
+            const activeMode = typeof wizardProxyModeEl?.value === "string"
+                ? wizardProxyModeEl.value.trim()
+                : "";
+
+            wizardProxyModeGroups.forEach((groupEl) => {
+                const supportedModes = String(groupEl?.dataset.proxyModeGroup || "")
+                    .split(/\s+/)
+                    .map((value) => value.trim())
+                    .filter(Boolean);
+                const isActive = Boolean(activeMode) && supportedModes.includes(activeMode);
+                groupEl.hidden = !isActive;
+                groupEl.setAttribute("aria-hidden", isActive ? "false" : "true");
+                groupEl.querySelectorAll("input, select, textarea, button").forEach((input) => {
+                    input.disabled = !isActive;
+                });
+            });
+        }
+
+        function syncProxyStatusFromWizard() {
+            const statusEl = documentRef.getElementById("wizard-proxy-section-status");
+            if (!statusEl) return;
+
+            const mode = typeof wizardProxyModeEl?.value === "string"
+                ? wizardProxyModeEl.value.trim()
+                : "";
+            const hasManualEndpoint = [
+                wizardProxyHttpEl?.value,
+                wizardProxySslEl?.value,
+                wizardProxyFtpEl?.value,
+                wizardProxySocksEl?.value,
+            ].some((value) => typeof value === "string" && value.trim());
+            const autoConfigUrl = typeof wizardProxyAutoConfigUrlEl?.value === "string"
+                ? wizardProxyAutoConfigUrlEl.value.trim()
+                : "";
+
+            if (!mode) {
+                statusEl.textContent = t("profiles.wizard_proxy_section_state_empty");
+                return;
+            }
+            if (mode === "none") {
+                statusEl.textContent = t("profiles.wizard_proxy_section_state_none");
+                return;
+            }
+            if (mode === "system") {
+                statusEl.textContent = t("profiles.wizard_proxy_section_state_system");
+                return;
+            }
+            if (mode === "autoDetect") {
+                statusEl.textContent = t("profiles.wizard_proxy_section_state_auto_detect");
+                return;
+            }
+            if (mode === "autoConfig") {
+                statusEl.textContent = autoConfigUrl
+                    ? t("profiles.wizard_proxy_section_state_auto_config_ready")
+                    : t("profiles.wizard_proxy_section_state_auto_config_missing");
+                return;
+            }
+            if (mode === "manual") {
+                statusEl.textContent = hasManualEndpoint
+                    ? t("profiles.wizard_proxy_section_state_manual_ready")
+                    : t("profiles.wizard_proxy_section_state_manual_missing");
+            }
+        }
+
+        function syncProxyWizardUi() {
+            syncProxyModeGroupsFromWizard();
+            syncProxyStatusFromWizard();
+        }
+
+        function syncSchemaBranchCardFromDom(cardEl) {
+            if (!cardEl) return;
+            const branchModeEl = cardEl.querySelector("[data-schema-branch-mode]");
+            const activeMode = typeof branchModeEl?.value === "string" ? branchModeEl.value.trim() : "";
+            cardEl.querySelectorAll("[data-schema-branch-section]").forEach((sectionEl) => {
+                const sectionMode = String(sectionEl.dataset.schemaBranchSection || "").trim();
+                const isActive = Boolean(activeMode) && sectionMode === activeMode;
+                sectionEl.hidden = !isActive;
+                sectionEl.setAttribute("aria-hidden", isActive ? "false" : "true");
+                sectionEl.querySelectorAll("input, select, textarea, button").forEach((input) => {
+                    input.disabled = !isActive;
+                });
+            });
+        }
+
+        function syncAllSchemaBranchCardsFromDom() {
+            documentRef.querySelectorAll("[data-schema-policy-kind='branch']").forEach((cardEl) => {
+                syncSchemaBranchCardFromDom(cardEl);
+            });
         }
 
         function wireNetworkControls() {
@@ -416,10 +930,13 @@
                 wizardProxyUseDnsEl,
                 ...wizardFirefoxHomeInputs,
                 ...wizardFirefoxSuggestInputs,
-            ].forEach((input) => {
+            ].filter(Boolean).forEach((input) => {
                 input.addEventListener("input", applyNetworkFromWizard);
                 input.addEventListener("change", applyNetworkFromWizard);
             });
+
+            wizardProxyModeEl?.addEventListener("input", syncProxyWizardUi);
+            wizardProxyModeEl?.addEventListener("change", syncProxyWizardUi);
         }
 
         function wireSchemaEvents() {
@@ -453,7 +970,35 @@
             });
         }
 
+        function wireWizardConditionalVisibility() {
+            if (wizardConditionalVisibilityBound) return;
+            wizardConditionalVisibilityBound = true;
+
+            const handleProxyModeChange = (event) => {
+                const target = event.target;
+                if (!target || target.id !== "wizard-proxy-mode") return;
+                syncProxyWizardUi();
+                if (getEditor()) {
+                    applyNetworkFromWizard();
+                }
+            };
+
+            const handleSchemaBranchModeChange = (event) => {
+                const target = event.target;
+                if (!target || !target.matches("[data-schema-branch-mode]")) return;
+                syncSchemaBranchCardFromDom(target.closest("[data-schema-policy-card]"));
+            };
+
+            documentRef.addEventListener("input", handleProxyModeChange);
+            documentRef.addEventListener("change", handleProxyModeChange);
+            documentRef.addEventListener("input", handleSchemaBranchModeChange);
+            documentRef.addEventListener("change", handleSchemaBranchModeChange);
+        }
+
         function wireDocumentClicks() {
+            if (documentClicksBound) return;
+            documentClicksBound = true;
+
             documentRef.addEventListener("click", (event) => {
                 const exportSaveActionButton = event.target.closest("#wizard-export-save-action");
                 if (exportSaveActionButton) {
@@ -467,10 +1012,50 @@
                     return;
                 }
 
+                const exportAssistButton = event.target.closest("[data-export-assist-action]");
+                if (exportAssistButton) {
+                    const action = exportAssistButton.dataset.exportAssistAction || "";
+                    if (action === "save") {
+                        saveButtonEl.click();
+                    } else if (action === "validate") {
+                        validateButtonEl.click();
+                    } else if (action === "restore") {
+                        restoreButtonEl.click();
+                    }
+                    return;
+                }
+
+                const shareableCopyButton = event.target.closest("#wizard-export-shareable-copy");
+                if (shareableCopyButton) {
+                    copyTextToClipboard(wizardExportShareableTextEl?.value || "").then((copied) => {
+                        if (wizardExportShareableStatusEl) {
+                            wizardExportShareableStatusEl.textContent = copied
+                                ? t("profiles.wizard_export_shareable_status_copied")
+                                : t("profiles.wizard_export_shareable_status_failed");
+                            wizardExportShareableStatusEl.removeAttribute("data-i18n");
+                            wizardExportShareableStatusEl.dataset.summaryTone = copied ? "ready" : "attention";
+                        }
+                        setStatus(
+                            copied
+                                ? t("profiles.status_shareable_summary_copied")
+                                : t("profiles.wizard_export_shareable_status_failed"),
+                            copied ? "success" : "error",
+                        );
+                    });
+                    return;
+                }
+
                 const finalReviewJumpButton = event.target.closest("[data-final-review-jump]");
                 if (finalReviewJumpButton) {
-                    const targetEl = findFinalReviewTarget(finalReviewJumpButton.dataset.finalReviewJump || "");
+                    const jumpKind = finalReviewJumpButton.dataset.finalReviewJump || "";
+                    const selection = resolveFinalReviewSelectionFromButton(finalReviewJumpButton);
+                    const targetEl = selection.target
+                        || resolveJumpTargetFallback("final", jumpKind);
                     if (targetEl) {
+                        if (targetEl.closest?.('[data-workspace-scope-panel="advanced"]') || targetEl === editorEl) {
+                            lastAdvancedReturnTriggerEl = finalReviewJumpButton;
+                        }
+                        applyAdvancedContextForFinalReviewSelection(selection);
                         revealWorkspaceTarget(targetEl);
                     }
                     return;
@@ -478,7 +1063,9 @@
 
                 const networkReviewJumpButton = event.target.closest("[data-network-review-jump]");
                 if (networkReviewJumpButton) {
-                    const targetEl = findNetworkReviewTarget(networkReviewJumpButton.dataset.networkReviewJump || "");
+                    const jumpKind = networkReviewJumpButton.dataset.networkReviewJump || "";
+                    const targetEl = findNetworkReviewTarget(jumpKind)
+                        || resolveJumpTargetFallback("final", "network");
                     if (targetEl) {
                         revealWorkspaceTarget(targetEl);
                     }
@@ -487,7 +1074,9 @@
 
                 const homeReviewJumpButton = event.target.closest("[data-home-review-jump]");
                 if (homeReviewJumpButton) {
-                    const targetEl = findHomeReviewTarget(homeReviewJumpButton.dataset.homeReviewJump || "");
+                    const jumpKind = homeReviewJumpButton.dataset.homeReviewJump || "";
+                    const targetEl = findHomeReviewTarget(jumpKind)
+                        || resolveJumpTargetFallback("final", "home");
                     if (targetEl) {
                         revealWorkspaceTarget(targetEl);
                     }
@@ -496,7 +1085,9 @@
 
                 const searchReviewJumpButton = event.target.closest("[data-search-review-jump]");
                 if (searchReviewJumpButton) {
-                    const targetEl = findSearchReviewTarget(searchReviewJumpButton.dataset.searchReviewJump || "");
+                    const jumpKind = searchReviewJumpButton.dataset.searchReviewJump || "";
+                    const targetEl = findSearchReviewTarget(jumpKind)
+                        || resolveJumpTargetFallback("search", jumpKind);
                     if (targetEl) {
                         revealWorkspaceTarget(targetEl);
                     }
@@ -505,7 +1096,9 @@
 
                 const aiReviewJumpButton = event.target.closest("[data-ai-review-jump]");
                 if (aiReviewJumpButton) {
-                    const targetEl = findAiReviewTarget(aiReviewJumpButton.dataset.aiReviewJump || "");
+                    const jumpKind = aiReviewJumpButton.dataset.aiReviewJump || "";
+                    const targetEl = findAiReviewTarget(jumpKind)
+                        || resolveJumpTargetFallback("ai", jumpKind);
                     if (targetEl) {
                         revealWorkspaceTarget(targetEl);
                     }
@@ -532,7 +1125,9 @@
 
                 const websiteAccessReviewJumpButton = event.target.closest("[data-website-access-review-jump]");
                 if (websiteAccessReviewJumpButton) {
-                    const targetEl = findWebsiteAccessReviewTarget(websiteAccessReviewJumpButton.dataset.websiteAccessReviewJump || "");
+                    const jumpKind = websiteAccessReviewJumpButton.dataset.websiteAccessReviewJump || "";
+                    const targetEl = findWebsiteAccessReviewTarget(jumpKind)
+                        || resolveJumpTargetFallback("website", jumpKind);
                     if (targetEl) {
                         revealWorkspaceTarget(targetEl);
                     }
@@ -541,16 +1136,94 @@
 
                 const privacyReviewJumpButton = event.target.closest("[data-privacy-review-jump]");
                 if (privacyReviewJumpButton) {
-                    const targetEl = findPrivacyReviewTarget(privacyReviewJumpButton.dataset.privacyReviewJump || "");
+                    const jumpKind = privacyReviewJumpButton.dataset.privacyReviewJump || "";
+                    const targetEl = findPrivacyReviewTarget(jumpKind)
+                        || resolveJumpTargetFallback("privacy", jumpKind);
                     if (targetEl) {
                         revealWorkspaceTarget(targetEl);
                     }
                     return;
                 }
 
+                const stepMemoryJumpButton = event.target.closest("[data-step-memory-jump]");
+                if (stepMemoryJumpButton) {
+                    const nextStep = Number(stepMemoryJumpButton.dataset.stepMemoryJump || "");
+                    if (!Number.isNaN(nextStep) && nextStep > 0) {
+                        setWizardStep(nextStep);
+                        const targetEl = documentRef.getElementById(`wizard-step-${nextStep}`);
+                        if (targetEl) {
+                            revealWorkspaceTarget(targetEl);
+                        }
+                    }
+                    return;
+                }
+
                 const scopeTargetButton = event.target.closest("[data-workspace-scope-target]");
                 if (scopeTargetButton) {
+                    if ((scopeTargetButton.dataset.workspaceScopeTarget || "guided") === "advanced") {
+                        lastAdvancedReturnTriggerEl = scopeTargetButton;
+                        setAdvancedHandoffContext(readGuidedCoverageContext(getWizardStep()));
+                    }
                     applyWorkspaceScope(scopeTargetButton.dataset.workspaceScopeTarget || "guided", { focus: true });
+                    return;
+                }
+
+                const guidedCoverageButton = event.target.closest("[data-guided-coverage-open-step]");
+                if (guidedCoverageButton) {
+                    const step = guidedCoverageButton.dataset.guidedCoverageOpenStep || "";
+                    lastAdvancedReturnTriggerEl = guidedCoverageButton;
+                    setAdvancedHandoffContext(readGuidedCoverageContext(step));
+                    const targetEl = documentRef.getElementById(`wizard-schema-shell-step-${step}`);
+                    if (targetEl) {
+                        revealWorkspaceTarget(targetEl);
+                    } else {
+                        applyWorkspaceScope("advanced", { focus: true });
+                    }
+                    return;
+                }
+
+                const advancedStartActionButton = event.target.closest("[data-advanced-start-action]");
+                if (advancedStartActionButton) {
+                    const action = advancedStartActionButton.dataset.advancedStartAction || "";
+                    if (action === "details") {
+                        applyWorkspaceScope("advanced", { focus: true });
+                        const targetEl = documentRef.getElementById("details-panel");
+                        if (targetEl) {
+                            targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                            focusElementForA11y(targetEl);
+                        }
+                    } else if (action === "editor") {
+                        applyWorkspaceScope("advanced", { focus: true });
+                        const targetEl = documentRef.getElementById("editor-panel");
+                        if (targetEl) {
+                            targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                            focusElementForA11y(targetEl);
+                        }
+                    } else if (action === "validate") {
+                        validateButtonEl.click();
+                    }
+                    return;
+                }
+
+                if (event.target.closest("#advanced-context-return")) {
+                    const step = Number(advancedContextReturnEl?.dataset.advancedReturnStep || 0);
+                    if (step > 0) {
+                        setWizardStep(step);
+                        applyWorkspaceScope("guided", { focus: true });
+                        const targetEl = documentRef.getElementById(`wizard-step-${step}`);
+                        if (targetEl) {
+                            windowRef.requestAnimationFrame(() => {
+                                targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                                if (lastAdvancedReturnTriggerEl && documentRef.contains(lastAdvancedReturnTriggerEl)) {
+                                    focusElementForA11y(lastAdvancedReturnTriggerEl);
+                                } else {
+                                    focusElementForA11y(targetEl);
+                                }
+                            });
+                        }
+                    } else {
+                        applyWorkspaceScope("guided", { focus: true });
+                    }
                     return;
                 }
 
@@ -706,10 +1379,275 @@
             });
         }
 
+        function resolveJumpTargetFallback(group, kind) {
+            const first = (...selectors) => {
+                for (const selector of selectors) {
+                    const match = documentRef.querySelector(selector);
+                    if (match) return match;
+                }
+                return null;
+            };
+
+            if (group === "final") {
+                if (kind === "network") {
+                    return first(
+                        '[data-settings-target="field:wizard-proxy-mode"]',
+                        '#wizard-dns-over-https-card',
+                        '#wizard-authentication-card',
+                        '#wizard-certificates-card',
+                        '#wizard-windows-sso-card',
+                    );
+                }
+                if (kind === "home") {
+                    return first(
+                        '[data-settings-target="field:wizard-homepage-url"]',
+                        '[data-settings-target="field:wizard-override-first-run"]',
+                        '[data-settings-target="field:firefox-home-search"]',
+                        '#wizard-user-messaging-card',
+                    );
+                }
+                if (kind === "search") {
+                    return first(
+                        '[data-settings-target="field:wizard-search-default-engine"]',
+                        '[data-settings-target="field:wizard-search-remove"]',
+                        '[data-settings-target="field:firefox-suggest-web"]',
+                    );
+                }
+                if (kind === "features") {
+                    return first(
+                        '[data-settings-target="policy:RequestedLocales"]',
+                        '[data-settings-target="policy:TranslateEnabled"]',
+                        '[data-settings-target="field:wizard-extension-default-mode"]',
+                        '[data-settings-target="policy:WebsiteFilter"]',
+                    );
+                }
+                if (kind === "ai") {
+                    return first(
+                        '[data-settings-target="policy:VisualSearchEnabled"]',
+                        '[data-settings-target="policy:GenerativeAI"]',
+                    );
+                }
+                if (kind === "privacy") {
+                    return first(
+                        '[data-settings-target="policy:Permissions"]',
+                        '[data-settings-target="policy:Cookies"]',
+                    );
+                }
+            }
+
+            if (group === "search") {
+                if (kind === "defaults") {
+                    return first('[data-settings-target="field:wizard-search-default-engine"]');
+                }
+                if (kind === "hidden") {
+                    return first('[data-settings-target="field:wizard-search-remove"]');
+                }
+                if (kind === "suggest") {
+                    return first('[data-settings-target="field:firefox-suggest-web"]');
+                }
+            }
+
+            if (group === "privacy") {
+                if (kind === "permissions") {
+                    return first('[data-settings-target="policy:Permissions"]');
+                }
+                if (kind === "cookies") {
+                    return first('[data-settings-target="policy:Cookies"]');
+                }
+            }
+
+            if (group === "website") {
+                if (kind === "blocked_sites" || kind === "exceptions") {
+                    return first('[data-settings-target="policy:WebsiteFilter"]');
+                }
+                if (kind === "handlers") {
+                    return first('[data-settings-target="policy:Handlers"]', '[data-settings-target="shell-policy:6:Handlers"]');
+                }
+            }
+
+            if (group === "ai") {
+                if (kind === "visual_search") {
+                    return first('[data-settings-target="policy:VisualSearchEnabled"]');
+                }
+                if (kind === "generative_ai") {
+                    return first('[data-settings-target="policy:GenerativeAI"]');
+                }
+            }
+
+            return null;
+        }
+
+        function bindJumpButtons() {
+            if (jumpButtonsBound) return;
+            jumpButtonsBound = true;
+
+            const bind = (selector, resolveTarget) => {
+                documentRef.querySelectorAll(selector).forEach((button) => {
+                    button.addEventListener("click", (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const targetEl = resolveTarget(button);
+                        if (targetEl) {
+                            revealWorkspaceTarget(targetEl);
+                        }
+                    });
+                });
+            };
+
+            const bindDirectJump = (buttonId, targetSelector) => {
+                const button = documentRef.getElementById(buttonId);
+                if (!button) return;
+                button.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const targetEl = documentRef.querySelector(targetSelector);
+                    if (targetEl) {
+                        revealWorkspaceTarget(targetEl);
+                    }
+                });
+            };
+
+            bind("[data-final-review-jump]", (button) =>
+                resolveFinalReviewSelectionFromButton(button).target
+                || resolveJumpTargetFallback("final", button.dataset.finalReviewJump || ""),
+            );
+            bind("[data-network-review-jump]", (button) =>
+                findNetworkReviewTarget(button.dataset.networkReviewJump || ""),
+            );
+            bind("[data-home-review-jump]", (button) =>
+                findHomeReviewTarget(button.dataset.homeReviewJump || ""),
+            );
+            bind("[data-search-review-jump]", (button) =>
+                findSearchReviewTarget(button.dataset.searchReviewJump || "")
+                || resolveJumpTargetFallback("search", button.dataset.searchReviewJump || ""),
+            );
+            bind("[data-ai-review-jump]", (button) =>
+                findAiReviewTarget(button.dataset.aiReviewJump || "")
+                || resolveJumpTargetFallback("ai", button.dataset.aiReviewJump || ""),
+            );
+            bind("[data-extension-review-jump]", (button) =>
+                findExtensionReviewTarget(button.dataset.extensionReviewJump || ""),
+            );
+            bind("[data-bookmark-review-jump]", (button) =>
+                findBookmarkReviewTarget(button.dataset.bookmarkReviewJump || ""),
+            );
+            bind("[data-website-access-review-jump]", (button) =>
+                findWebsiteAccessReviewTarget(button.dataset.websiteAccessReviewJump || "")
+                || resolveJumpTargetFallback("website", button.dataset.websiteAccessReviewJump || ""),
+            );
+            bind("[data-privacy-review-jump]", (button) =>
+                findPrivacyReviewTarget(button.dataset.privacyReviewJump || "")
+                || resolveJumpTargetFallback("privacy", button.dataset.privacyReviewJump || ""),
+            );
+
+            bindDirectJump("wizard-export-summary-network-jump", '[data-settings-target="field:wizard-proxy-mode"]');
+            bindDirectJump("wizard-export-summary-home-jump", '[data-settings-target="field:wizard-homepage-url"]');
+            bindDirectJump("wizard-export-summary-search-jump", '[data-settings-target="field:wizard-search-default-engine"]');
+            bindDirectJump("wizard-export-summary-features-jump", '[data-settings-target="policy:RequestedLocales"]');
+            bindDirectJump("wizard-export-summary-ai-jump", '[data-settings-target="policy:VisualSearchEnabled"]');
+            bindDirectJump("wizard-export-summary-privacy-jump", '[data-settings-target="policy:Permissions"]');
+            bindDirectJump("wizard-hardening-next-posture", "#wizard-hardening-presets");
+            bindDirectJump("wizard-hardening-next-cleanup", "#wizard-cleanup-presets");
+            bindDirectJump("wizard-hardening-next-sites", "#wizard-site-data-presets");
+            bindDirectJump("wizard-extension-next-rollout", "#wizard-extension-rollout-presets");
+            bindDirectJump("wizard-extension-next-curated", "#wizard-extension-curated-section");
+            bindDirectJump("wizard-extension-next-fine-tuning", "#wizard-extension-fine-tuning-toggle");
+            bindDirectJump("wizard-website-next-filter", '[data-settings-target="policy:WebsiteFilter"]');
+            bindDirectJump("wizard-website-next-handlers", '[data-settings-target="policy:Handlers"]');
+            bindDirectJump("wizard-website-next-fine-tuning", "#wizard-website-fine-tuning-toggle");
+        }
+
+        function wireDisclosureEscape() {
+            documentRef.addEventListener("keydown", (event) => {
+                if (event.key !== "Escape" || event.defaultPrevented) return;
+
+                const activeEl = documentRef.activeElement;
+                const openPair = getDisclosurePanelPairs().find(([panelId]) => {
+                    const panelEl = documentRef.getElementById(panelId);
+                    return panelEl && panelEl.hidden === false && activeEl && panelEl.contains(activeEl);
+                });
+                if (!openPair) return;
+
+                const [panelId, toggleId] = openPair;
+                const panelEl = documentRef.getElementById(panelId);
+                const toggleEl = documentRef.getElementById(toggleId);
+                if (!panelEl || !toggleEl) return;
+
+                event.preventDefault();
+                toggleEl.click();
+                windowRef.requestAnimationFrame(() => {
+                    focusElementForA11y(toggleEl);
+                });
+            });
+        }
+
+        function bindCoreControls() {
+            langSelectEl?.addEventListener("change", async (event) => {
+                await applyLanguageMode(event.target.value);
+            });
+            themeSelectEl?.addEventListener("change", (event) => {
+                applyThemeMode(event.target.value);
+            });
+            refreshButtonEl?.addEventListener("click", reloadList);
+            searchInputEl?.addEventListener("input", debounceReload);
+            sortSelectEl?.addEventListener("change", reloadList);
+            orderSelectEl?.addEventListener("change", reloadList);
+            includeDeletedEl?.addEventListener("change", reloadList);
+        }
+
+        function bindWizardNavigation() {
+            if (wizardNavBound) return;
+            wizardNavBound = true;
+
+            wizardStepButtons.forEach((button) => {
+                button.addEventListener("click", () => setWizardStep(button.dataset.step));
+            });
+            wizardPrevEl?.addEventListener("click", () => setWizardStep(getWizardStep() - 1));
+            wizardNextEl?.addEventListener("click", () => {
+                setWizardStep(getWizardStep() + 1);
+            });
+            wizardFinishEl?.addEventListener("click", finishWizard);
+            wizardStepUndoEl?.addEventListener("click", () => {
+                undoCurrentStepChanges();
+            });
+            wizardStepResetEl?.addEventListener("click", () => {
+                resetCurrentStepToBaseline();
+            });
+        }
+
+        async function initializeShellState() {
+            const legacySavedLang = windowRef.localStorage.getItem("bpm-lang");
+            const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || legacySavedLang || "system";
+            const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
+            const savedWorkspaceScope = windowRef.localStorage.getItem(workspaceScopeStorageKey) || "guided";
+
+            if (langSelectEl) {
+                langSelectEl.value = savedLangMode;
+            }
+            if (themeSelectEl) {
+                themeSelectEl.value = savedThemeMode;
+            }
+
+            applyThemeMode(savedThemeMode, false);
+            applyWorkspaceScope(savedWorkspaceScope, { persist: false });
+            await applyLanguageMode(savedLangMode, false);
+        }
+
         function start() {
+            // Keep the library usable even if Monaco initialization is slow or fails.
+            bindCoreControls();
+            bindWizardNavigation();
+            wireWizardConditionalVisibility();
+            wireDocumentClicks();
+            syncProxyWizardUi();
+            initializeShellState().catch((error) => {
+                console.warn("shell initialization failed", error);
+            });
+
             const monacoReady = windowRef.__BPM_MONACO_READY__;
             if (!monacoReady || typeof monacoReady.then !== "function") {
-                throw new Error("Monaco bundle is not ready");
+                setStatus(t("profiles.error_loading").replace("{detail}", "Monaco bundle is not ready"), "error");
+                return;
             }
 
             monacoReady.then(async (monacoRef) => {
@@ -727,6 +1665,16 @@
                     theme: documentRef.documentElement.dataset.theme === "dark" ? "vs-dark" : "vs",
                 });
                 setEditor(editor);
+
+                const savedMode = windowRef.localStorage.getItem("bpm-editor-mode") || "json";
+
+                modeSelectEl.value = savedMode;
+                monacoRef.editor.setModelLanguage(editor.getModel(), savedMode === "yaml" ? "yaml" : "json");
+                editor.setValue(toEditorValue({}, savedMode));
+                syncProxyWizardUi();
+                syncWizardFieldsFromForm();
+                syncEditorBackedUi();
+                setWizardStep(1);
 
                 formatButtonEl.addEventListener("click", () => {
                     try {
@@ -746,29 +1694,18 @@
                     editor.setValue(toEditorValue(getCurrentRaw(), mode));
                     syncWizardFieldsFromForm();
                     syncEditorBackedUi();
+                    syncAllSchemaBranchCardsFromDom();
                     syncWorkspaceOverview();
                     setStatus(t("profiles.editor_mode_switched").replace("{mode}", mode.toUpperCase()), "info");
                 });
 
                 saveButtonEl.addEventListener("click", saveCurrent);
-                newProfileButtonEl.addEventListener("click", resetDraft);
+                newProfileButtonEl?.addEventListener("click", resetDraft);
                 softDeleteButtonEl.addEventListener("click", doSoftDelete);
                 hardDeleteButtonEl.addEventListener("click", doHardDelete);
                 restoreButtonEl.addEventListener("click", doRestore);
                 resetLibraryButtonEl.addEventListener("click", doResetLibrary);
                 validateButtonEl.addEventListener("click", doValidate);
-                refreshButtonEl.addEventListener("click", reloadList);
-
-                langSelectEl.addEventListener("change", async (event) => {
-                    await applyLanguageMode(event.target.value);
-                });
-                themeSelectEl.addEventListener("change", (event) => {
-                    applyThemeMode(event.target.value);
-                });
-                searchInputEl.addEventListener("input", debounceReload);
-                sortSelectEl.addEventListener("change", reloadList);
-                orderSelectEl.addEventListener("change", reloadList);
-                includeDeletedEl.addEventListener("change", reloadList);
                 nameInput.addEventListener("input", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
@@ -789,17 +1726,10 @@
                     setValidationPreview();
                     syncEditorBackedUi();
                     renderWizardSchemaShell();
+                    syncAllSchemaBranchCardsFromDom();
                     updateActionState();
                 });
 
-                wizardStepButtons.forEach((button) => {
-                    button.addEventListener("click", () => setWizardStep(button.dataset.step));
-                });
-                wizardPrevEl.addEventListener("click", () => setWizardStep(getWizardStep() - 1));
-                wizardNextEl.addEventListener("click", () => {
-                    setWizardStep(getWizardStep() + 1);
-                });
-                wizardFinishEl.addEventListener("click", finishWizard);
                 wizardNameEl.addEventListener("input", () => {
                     nameInput.value = wizardNameEl.value;
                     updateActionState();
@@ -814,10 +1744,43 @@
                     modeSelectEl.dispatchEvent(new windowRef.Event("change"));
                     updateActionState();
                 });
+                wizardScenarioButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        applyScenarioPreset(button.dataset.scenarioKey);
+                    });
+                    button.addEventListener("mouseenter", () => {
+                        setPreviewStarter(button.dataset.scenarioKey ? ({
+                            shared_devices: "classroom_kiosk",
+                            hardened: "soc_hard",
+                            extension_rollout: "basic_corporate",
+                            targeted_edits: getCurrentProfile()?.id ? "keep_current" : "blank",
+                            corporate_default: "basic_corporate",
+                        }[button.dataset.scenarioKey] || "basic_corporate") : "basic_corporate");
+                    });
+                    button.addEventListener("focus", () => {
+                        setPreviewStarter(button.dataset.scenarioKey ? ({
+                            shared_devices: "classroom_kiosk",
+                            hardened: "soc_hard",
+                            extension_rollout: "basic_corporate",
+                            targeted_edits: getCurrentProfile()?.id ? "keep_current" : "blank",
+                            corporate_default: "basic_corporate",
+                        }[button.dataset.scenarioKey] || "basic_corporate") : "basic_corporate");
+                    });
+                    button.addEventListener("mouseleave", clearPreviewStarter);
+                    button.addEventListener("blur", clearPreviewStarter);
+                });
                 wizardStarterButtons.forEach((button) => {
                     button.addEventListener("click", () => {
                         applyStarterPreset(button.dataset.starterKey);
                     });
+                    button.addEventListener("mouseenter", () => {
+                        setPreviewStarter(button.dataset.starterKey);
+                    });
+                    button.addEventListener("focus", () => {
+                        setPreviewStarter(button.dataset.starterKey);
+                    });
+                    button.addEventListener("mouseleave", clearPreviewStarter);
+                    button.addEventListener("blur", clearPreviewStarter);
                 });
                 wizardSettingsSearchInputEl?.addEventListener("input", () => {
                     renderWizardSettingsSearchResults();
@@ -842,9 +1805,11 @@
                     wizardSettingsSearchInputEl?.focus();
                 });
                 workspaceScopeGuidedEl?.addEventListener("click", () => {
+                    setAdvancedHandoffContext(null);
                     applyWorkspaceScope("guided", { focus: true });
                 });
                 workspaceScopeAdvancedEl?.addEventListener("click", () => {
+                    setAdvancedHandoffContext(null);
                     applyWorkspaceScope("advanced", { focus: true });
                 });
                 wizardSearchEngineAddButtonEl.addEventListener("click", () => {
@@ -857,6 +1822,16 @@
                 });
                 bindAddButtonListeners();
                 wireNetworkControls();
+                wireWizardConditionalVisibility();
+                wireCompositeButtonNavigation();
+                wireDisclosureEscape();
+                bindJumpButtons();
+                if (wizardProxyModeEl) {
+                    wizardProxyModeEl.oninput = syncProxyWizardUi;
+                    wizardProxyModeEl.onchange = syncProxyWizardUi;
+                }
+                syncProxyWizardUi();
+                syncAllSchemaBranchCardsFromDom();
                 wizardPolicyInputs.forEach((input) => {
                     input.addEventListener("change", () => {
                         applyQuickPolicyFromWizard(input.dataset.policyKey, input.checked);
@@ -869,10 +1844,13 @@
                 });
                 bindExtensionInputListeners(applyExtensionsFromWizard);
                 documentRef.querySelectorAll("[data-settings-nav]").forEach((navEl) => {
-                    applySettingsFilter(navEl, "all");
+                    try {
+                        applySettingsFilter(navEl, "all");
+                    } catch (error) {
+                        console.warn("settings filter init failed", error);
+                    }
                 });
                 wireSchemaEvents();
-                wireDocumentClicks();
                 syncContextualA11yLabels();
 
                 windowRef.addEventListener("keydown", (event) => {
@@ -888,22 +1866,6 @@
                     event.returnValue = "";
                 });
 
-                const legacySavedLang = windowRef.localStorage.getItem("bpm-lang");
-                const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || legacySavedLang || "system";
-                const savedMode = windowRef.localStorage.getItem("bpm-editor-mode") || "json";
-                const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
-                const savedWorkspaceScope = windowRef.localStorage.getItem(workspaceScopeStorageKey) || "guided";
-                langSelectEl.value = savedLangMode;
-                modeSelectEl.value = savedMode;
-                themeSelectEl.value = savedThemeMode;
-                monacoRef.editor.setModelLanguage(editor.getModel(), savedMode === "yaml" ? "yaml" : "json");
-                editor.setValue(toEditorValue({}, savedMode));
-                applyThemeMode(savedThemeMode, false);
-                applyWorkspaceScope(savedWorkspaceScope, { persist: false });
-                syncWizardFieldsFromForm();
-                syncEditorBackedUi();
-                setWizardStep(1);
-
                 const handleSystemThemeChange = () => {
                     const activeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
                     if (activeMode === "system") {
@@ -917,7 +1879,6 @@
                     themeMediaQuery.addListener(handleSystemThemeChange);
                 }
 
-                await applyLanguageMode(savedLangMode, false);
                 resetDraft();
                 reloadList();
                 updateDownloadLinks();

@@ -595,6 +595,13 @@
                     compatibility: { total: 0, mapped: 0, raw_fallback: 0, deprecated: 0 },
                 };
 
+                renderWizardGuidedCoverage(
+                    view.guidedCoverage,
+                    stepMeta,
+                    stepData.compatibility || {},
+                    stepData.raw_fallback || [],
+                );
+                renderWizardSchemaShellCoverage(view.coverage, stepData.compatibility || {});
                 renderWizardSchemaShellBadges(view.badges, schemaVersion, stepData.compatibility || {});
                 renderWizardSchemaShellPolicyBucket(
                     view.recommended,
@@ -731,6 +738,96 @@
                 .join("");
         }
 
+        function renderWizardSchemaShellCoverage(container, compatibility) {
+            if (!container) return;
+
+            const total = compatibility.total || 0;
+            const mapped = compatibility.mapped || 0;
+            const rawFallback = compatibility.raw_fallback || 0;
+
+            let message = "";
+            if (total <= 0) {
+                message = t("profiles.wizard_shell_coverage_empty");
+            } else if (rawFallback <= 0) {
+                message = t("profiles.wizard_shell_coverage_full")
+                    .replace("{mapped}", String(mapped))
+                    .replace("{total}", String(total));
+            } else {
+                message = t("profiles.wizard_shell_coverage_partial")
+                    .replace("{mapped}", String(mapped))
+                    .replace("{total}", String(total))
+                    .replace("{advanced}", String(rawFallback));
+            }
+
+            container.textContent = message;
+        }
+
+        function renderWizardGuidedCoverage(container, stepMeta, compatibility, rawFallbackItems = []) {
+            if (!container) return;
+
+            const stepNumber = stepMeta?.step || "";
+            const stepTitle = stepMeta?.title_key
+                ? t(stepMeta.title_key, stepMeta.fallback || "")
+                : "";
+            const total = compatibility.total || 0;
+            const mapped = compatibility.mapped || 0;
+            const rawFallback = compatibility.raw_fallback || 0;
+
+            let message = "";
+            let showAdvancedAction = false;
+            if (total <= 0) {
+                message = t("profiles.wizard_guided_coverage_empty");
+                showAdvancedAction = true;
+            } else if (rawFallback <= 0) {
+                message = t("profiles.wizard_guided_coverage_full")
+                    .replace("{mapped}", String(mapped))
+                    .replace("{total}", String(total));
+            } else {
+                message = t("profiles.wizard_guided_coverage_partial")
+                    .replace("{mapped}", String(mapped))
+                    .replace("{total}", String(total))
+                    .replace("{advanced}", String(rawFallback));
+                showAdvancedAction = true;
+            }
+
+            let details = "";
+            let highlighted = [];
+            let remaining = 0;
+            if (showAdvancedAction && Array.isArray(rawFallbackItems) && rawFallbackItems.length > 0) {
+                highlighted = rawFallbackItems
+                    .slice(0, 2)
+                    .map((item) => item?.label)
+                    .filter(Boolean);
+                remaining = Math.max(0, rawFallbackItems.length - highlighted.length);
+                if (highlighted.length > 0) {
+                    details = remaining > 0
+                        ? t("profiles.wizard_guided_coverage_examples_more")
+                            .replace("{items}", highlighted.join(", "))
+                            .replace("{remaining}", String(remaining))
+                        : t("profiles.wizard_guided_coverage_examples")
+                            .replace("{items}", highlighted.join(", "));
+                }
+            }
+
+            container.innerHTML = `
+                <div class="wizard-guided-coverage-copy">${escapeHtml(message)}</div>
+                ${details ? `<div class="wizard-guided-coverage-details">${escapeHtml(details)}</div>` : ""}
+                ${showAdvancedAction ? `
+                    <button
+                        type="button"
+                        class="button-base ghost-button wizard-guided-coverage-action"
+                        data-guided-coverage-open-step="${escapeHtml(String(stepNumber || ""))}"
+                        data-guided-coverage-step-title="${escapeHtml(stepTitle)}"
+                        data-guided-coverage-items='${escapeHtml(JSON.stringify(highlighted))}'
+                        data-guided-coverage-remaining="${escapeHtml(String(remaining))}">
+                        ${escapeHtml(t("profiles.wizard_guided_coverage_open"))}
+                    </button>
+                ` : ""}
+            `;
+            container.classList.toggle("wizard-guided-coverage--partial", rawFallback > 0);
+            container.classList.toggle("wizard-guided-coverage--full", total > 0 && rawFallback <= 0);
+        }
+
         function renderWizardSchemaShellPolicyBucket(container, items, emptyMessage, sourceData = {}, disabled = false) {
             if (!container) return;
 
@@ -746,15 +843,9 @@
                     }
 
                     const tags = Array.isArray(item.tags) && item.tags.length > 0
-                        ? `<div class="wizard-shell-item-tags">${item.tags.slice(0, 3).map((tag) => `<span class="wizard-shell-item-tag">${escapeHtml(humanizeIdentifier(tag))}</span>`).join("")}</div>`
+                        ? `<div class="wizard-shell-item-tags">${item.tags.slice(0, 3).map((tag) => `<span class="wizard-shell-item-tag">${escapeHtml(getShellTagLabel(tag))}</span>`).join("")}</div>`
                         : "";
-                    const metaParts = [
-                        item.subsection_label || humanizeIdentifier(item.subsection || ""),
-                        humanizeIdentifier(item.widget || ""),
-                        item.complexity === "basic"
-                            ? t("profiles.wizard_shell_meta_basic")
-                            : t("profiles.wizard_shell_meta_advanced"),
-                    ].filter(Boolean);
+                    const metaParts = getShellMetaParts(item);
 
                     return `
                         <button
@@ -763,7 +854,7 @@
                             data-wizard-shell-target="policy"
                             data-wizard-shell-policy-id="${escapeHtml(item.id || "")}"
                             data-settings-target="${escapeHtml(item.target || "")}">
-                            <span class="wizard-shell-item-title">${escapeHtml(item.label || item.id || "")}</span>
+                            <span class="wizard-shell-item-title">${escapeHtml(getShellPolicyLabel(item))}</span>
                             <span class="wizard-shell-item-meta">${escapeHtml(metaParts.join(" • "))}</span>
                             ${tags}
                         </button>
@@ -778,13 +869,8 @@
 
         function renderWizardSchemaInlineEditor(item, currentValue, disabled) {
             const inlineEditor = item.inline_editor || {};
-            const metaParts = [
-                item.subsection_label || humanizeIdentifier(item.subsection || ""),
-                humanizeIdentifier(item.widget || ""),
-                item.complexity === "basic"
-                    ? t("profiles.wizard_shell_meta_basic")
-                    : t("profiles.wizard_shell_meta_advanced"),
-            ].filter(Boolean);
+            const metaParts = getShellMetaParts(item);
+            const policyLabel = getShellPolicyLabel(item);
             const disabledAttr = disabled ? "disabled" : "";
             const currentObject = currentValue && typeof currentValue === "object" && !Array.isArray(currentValue) ? currentValue : {};
             const unsupportedNotice = inlineEditor.unsupported_field_count > 0
@@ -805,7 +891,7 @@
                         data-schema-policy-kind="boolean-select"
                         data-settings-target="${escapeHtml(item.target || "")}">
                         <div>
-                            <div class="wizard-shell-card-title">${escapeHtml(item.label || item.id || "")}</div>
+                            <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
                             <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
                         </div>
                         <label>
@@ -837,7 +923,7 @@
                         data-schema-branch-object-managed-fields="${escapeHtml(((objectBranch?.managed_fields) || []).join(","))}"
                         data-settings-target="${escapeHtml(item.target || "")}">
                         <div>
-                            <div class="wizard-shell-card-title">${escapeHtml(item.label || item.id || "")}</div>
+                            <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
                             <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
                         </div>
                         <label>
@@ -880,7 +966,7 @@
                         data-settings-target="${escapeHtml(item.target || "")}">
                         <div class="wizard-search-engine-head">
                             <div>
-                                <div class="wizard-shell-card-title">${escapeHtml(item.label || item.id || "")}</div>
+                                <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
                                 <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
                             </div>
                             <button type="button" class="button-base ghost-button" data-schema-array-add ${disabledAttr}>${escapeHtml(t("profiles.wizard_shell_array_add"))}</button>
@@ -909,7 +995,7 @@
                         data-settings-target="${escapeHtml(item.target || "")}">
                         <div class="wizard-search-engine-head">
                             <div>
-                                <div class="wizard-shell-card-title">${escapeHtml(item.label || item.id || "")}</div>
+                                <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
                                 <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
                             </div>
                             <button type="button" class="button-base ghost-button" data-schema-dict-add ${disabledAttr}>${escapeHtml(t("profiles.wizard_shell_dictionary_add"))}</button>
@@ -937,7 +1023,7 @@
                     data-schema-managed-fields="${escapeHtml((inlineEditor.managed_fields || []).join(","))}"
                     data-settings-target="${escapeHtml(item.target || "")}">
                     <div>
-                        <div class="wizard-shell-card-title">${escapeHtml(item.label || item.id || "")}</div>
+                        <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
                         <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
                         ${["Authentication", "Certificates", "Cookies", "DNSOverHTTPS", "Handlers", "Permissions", "UserMessaging", "WebsiteFilter"].includes(item.id) ? `<div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-schema-object-status></div>` : ""}
                     </div>
@@ -1392,6 +1478,47 @@
                 renderWizardSchemaNestedDictionaryRow,
             },
         });
+
+        function toSnakeCase(value = "") {
+            return String(value)
+                .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+                .replace(/[-:\s]+/g, "_")
+                .toLowerCase();
+        }
+
+        function getShellPolicyLabel(item) {
+            const policyId = String(item?.id || "").trim();
+            if (!policyId) return "";
+            return t(`profiles.shell_policy_${toSnakeCase(policyId)}`, item?.label || policyId);
+        }
+
+        function getShellSubsectionLabel(subsection) {
+            const normalized = String(subsection || "").trim();
+            if (!normalized) return "";
+            return t(`profiles.wizard_shell_subsection_${normalized}`, humanizeIdentifier(normalized));
+        }
+
+        function getShellWidgetLabel(widget) {
+            const normalized = String(widget || "").trim();
+            if (!normalized) return "";
+            return t(`profiles.wizard_shell_widget_${normalized}`, humanizeIdentifier(normalized));
+        }
+
+        function getShellTagLabel(tag) {
+            const normalized = String(tag || "").trim();
+            if (!normalized) return "";
+            return t(`profiles.wizard_shell_tag_${normalized}`, humanizeIdentifier(normalized));
+        }
+
+        function getShellMetaParts(item) {
+            return [
+                getShellSubsectionLabel(item?.subsection_label || item?.subsection || ""),
+                getShellWidgetLabel(item?.widget || ""),
+                item?.complexity === "basic"
+                    ? t("profiles.wizard_shell_meta_basic")
+                    : t("profiles.wizard_shell_meta_advanced"),
+            ].filter(Boolean);
+        }
 
         function renderWizardSchemaShellPreferenceBucket(container, items, emptyMessage) {
             if (!container) return;

@@ -29,11 +29,27 @@ class SecurityHeadersMiddleware:
             "base-uri 'self'; "
             "form-action 'self'"
         )
+        self.profiles_csp = (
+            "default-src 'self'; "
+            "script-src 'self'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:; "
+            "font-src 'self'; "
+            "connect-src 'self'; "
+            "worker-src 'self'; "
+            "child-src 'self'; "
+            "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self'"
+        )
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
+
+        path = scope.get("path", "")
+        csp_value = self.profiles_csp if path == "/profiles" else self.csp
 
         async def send_with_security_headers(message: Message) -> None:
             if message["type"] == "http.response.start":
@@ -50,7 +66,7 @@ class SecurityHeadersMiddleware:
                 self._append_if_missing(
                     headers,
                     b"content-security-policy",
-                    self.csp.encode("utf-8"),
+                    csp_value.encode("utf-8"),
                 )
             await send(message)
 

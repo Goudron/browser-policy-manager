@@ -57,6 +57,20 @@
 <datalist id="wizard-preferences-known-list"></datalist>
 <div class="wizard-nav">
     <div class="text-sm text-slate-500" id="wizard-progress-text" role="status" aria-live="polite" data-i18n="{{ wizard_steps[0].progress_key }}">{{ tr(wizard_steps[0].progress_key, wizard_steps[0].progress_fallback) }}</div>
+    <div class="wizard-step-actions" id="wizard-step-actions">
+        <div class="wizard-step-actions-copy" id="wizard-step-actions-copy" data-i18n="profiles.wizard_step_actions_idle">
+            {{ tr("profiles.wizard_step_actions_idle") }}
+        </div>
+        <div class="wizard-step-actions-buttons">
+            <button type="button" id="wizard-step-undo" class="button-base ghost-button" data-i18n="profiles.wizard_step_undo">{{ tr("profiles.wizard_step_undo") }}</button>
+            <button type="button" id="wizard-step-reset" class="button-base ghost-button" data-i18n="profiles.wizard_step_reset">{{ tr("profiles.wizard_step_reset") }}</button>
+        </div>
+        <div class="wizard-step-memory" id="wizard-step-memory">
+            <div class="wizard-step-memory-title" data-i18n="profiles.wizard_step_memory_title">{{ tr("profiles.wizard_step_memory_title") }}</div>
+            <div class="wizard-step-memory-copy" id="wizard-step-memory-copy" data-i18n="profiles.wizard_step_memory_empty">{{ tr("profiles.wizard_step_memory_empty") }}</div>
+            <div class="wizard-step-memory-list" id="wizard-step-memory-list"></div>
+        </div>
+    </div>
     <div class="wizard-nav-actions">
         <button type="button" id="wizard-prev" class="button-base ghost-button" data-i18n="profiles.wizard_prev">{{ tr("profiles.wizard_prev") }}</button>
         <button type="button" id="wizard-next" class="button-base ghost-button" data-i18n="profiles.wizard_next">{{ tr("profiles.wizard_next") }}</button>
