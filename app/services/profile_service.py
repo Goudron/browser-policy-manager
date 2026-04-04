@@ -22,6 +22,16 @@ class ProfileService:
     # --- helpers ---
 
     @staticmethod
+    def _matches_name_query(name: str | None, query: str | None) -> bool:
+        if not query:
+            return True
+        candidate = (name or "").casefold()
+        needle = query.strip().casefold()
+        if not needle:
+            return True
+        return needle in candidate
+
+    @staticmethod
     def _sort_clause(field: SortField, order: SortOrder) -> ColumnElement:
         field_map = {
             "created_at": Profile.created_at,
@@ -52,19 +62,21 @@ class ProfileService:
         if not include_deleted:
             stmt = stmt.where(Profile.deleted_at.is_(None))
 
-        if q:
-            like = f"%{q.strip()}%"
-            stmt = stmt.where((Profile.name.ilike(like)) | (Profile.description.ilike(like)))
-
         if owner:
             stmt = stmt.where(Profile.owner == owner)
 
         if schema_version:
             stmt = stmt.where(Profile.schema_version == schema_version)
 
-        stmt = stmt.order_by(ProfileService._sort_clause(sort, order)).limit(limit).offset(offset)
+        stmt = stmt.order_by(ProfileService._sort_clause(sort, order))
         res = await session.scalars(stmt)
         items = list(res)
+        if q:
+            items = [
+                item for item in items
+                if ProfileService._matches_name_query(item.name, q)
+            ]
+        items = items[offset: offset + limit]
         return [ProfileRead.model_validate(x) for x in items]
 
     @staticmethod
@@ -87,22 +99,29 @@ class ProfileService:
         schema_version: str | None = None,
         include_deleted: bool = False,
     ) -> int:
-        stmt = select(func.count()).select_from(Profile)
+        filters: builtins.list[ColumnElement[bool]] = []
 
         if not include_deleted:
-            stmt = stmt.where(Profile.deleted_at.is_(None))
-
-        if q:
-            like = f"%{q.strip()}%"
-            stmt = stmt.where((Profile.name.ilike(like)) | (Profile.description.ilike(like)))
+            filters.append(Profile.deleted_at.is_(None))
 
         if owner:
-            stmt = stmt.where(Profile.owner == owner)
+            filters.append(Profile.owner == owner)
 
         if schema_version:
-            stmt = stmt.where(Profile.schema_version == schema_version)
+            filters.append(Profile.schema_version == schema_version)
 
-        return int(await session.scalar(stmt) or 0)
+        stmt = select(func.count()).select_from(Profile)
+        if filters:
+            stmt = stmt.where(*filters)
+
+        if not q:
+            return int(await session.scalar(stmt) or 0)
+
+        rows_stmt = select(Profile)
+        if filters:
+            rows_stmt = rows_stmt.where(*filters)
+        rows = await session.scalars(rows_stmt)
+        return sum(1 for item in rows if ProfileService._matches_name_query(item.name, q))
 
     @staticmethod
     async def create(session: AsyncSession, data: ProfileCreate) -> ProfileRead:

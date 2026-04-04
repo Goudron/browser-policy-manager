@@ -52,6 +52,18 @@ def test_sqlite_url_helpers():
     assert db_module._to_sync_sqlite_url("sqlite+aiosqlite:///./bpm.db") == "sqlite:///./bpm.db"
 
 
+def test_normalize_database_url_keeps_empty_sqlite_path():
+    assert db_module._normalize_database_url("sqlite:///") == "sqlite:///"
+
+
+def test_normalize_database_url_resolves_bare_relative_sqlite_path(monkeypatch, tmp_path: Path):
+    monkeypatch.setattr(db_module._settings, "ROOT_DIR", tmp_path)
+
+    normalized = db_module._normalize_database_url("sqlite:///data/app.db")
+
+    assert normalized == f"sqlite:///{(tmp_path / 'data' / 'app.db').resolve()}"
+
+
 def test_ensure_sqlite_parent_dir_skips_memory_and_non_sqlite_urls(tmp_path: Path):
     memory_target = tmp_path / "memory-parent"
     nonsqlite_target = tmp_path / "postgres-parent"

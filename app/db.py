@@ -115,9 +115,35 @@ def get_metadata() -> MetaData:
 
 # Settings
 _settings = get_settings()
+
+
+def _normalize_database_url(url: str) -> str:
+    """
+    Resolve some file-based SQLite URLs against the project root.
+
+    Explicit relative paths such as `./data/bpm.db` should remain untouched so
+    local bootstrap expectations and tests can observe the configured URL as-is.
+    We only normalize bare relative paths that do not already declare their
+    filesystem intent.
+    """
+    if not url.startswith(("sqlite+aiosqlite:///", "sqlite:///")) or ":memory:" in url:
+        return url
+
+    prefix, _, raw_path = url.partition(":///")
+    if not raw_path:
+        return url
+
+    path = Path(raw_path)
+    if path.is_absolute() or raw_path.startswith(("./", "../")):
+        return url
+
+    resolved_path = (_settings.ROOT_DIR / path).resolve()
+    return f"{prefix}:///{resolved_path}"
+
+
 _DATABASE_URL: str = cast(
     str,
-    _settings.DATABASE_URL,
+    _normalize_database_url(_settings.DATABASE_URL),
 )
 _DATABASE_ECHO: bool = cast(
     bool,

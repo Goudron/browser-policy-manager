@@ -84,6 +84,7 @@
                 renderSchemaPolicyReviewState: core.renderSchemaPolicyReviewState,
                 applySchemaPolicyFromCard: core.applySchemaPolicyFromCard,
                 findFinalReviewTarget: core.findFinalReviewTarget,
+                getFinalReviewSelection: core.getFinalReviewSelection,
                 findNetworkReviewTarget: core.findNetworkReviewTarget,
                 findHomeReviewTarget: core.findHomeReviewTarget,
                 findSearchReviewTarget: core.findSearchReviewTarget,

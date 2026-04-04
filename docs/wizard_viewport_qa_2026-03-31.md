@@ -48,3 +48,65 @@ Date: `2026-03-31`
 
 3. The redesigned stepper and card layout survive `1366x768` without collapsing into cramped multi-column noise.
    The main issue there is vertical prioritization, not broken layout.
+
+## Follow-up pass
+
+Date: `2026-04-03`
+
+### Retested viewports
+
+- `390x844`
+- `412x915`
+- `1366x768`
+
+### Method
+
+- Ran the local app in uvicorn on `127.0.0.1:8766`.
+- Captured fresh headless Chromium screenshots for the current `/profiles` page.
+- Compared the first-screen landing behavior before and after a layout change that moved the command deck below guided setup.
+
+### Fixed during follow-up
+
+1. Guided setup no longer starts below the fold on the tested mobile and small-desktop widths.
+   Cause:
+   The command deck sat above the wizard in the primary page flow, so the first screen was consumed by global actions before the user reached the guided setup they came to use.
+   Fix:
+   Moved the command deck below the wizard in [app/templates/profiles/_page_shell.html](/home/valery/Projects/browser-policy-manager/app/templates/profiles/_page_shell.html) by extracting it into [app/templates/profiles/_page_command_deck.html](/home/valery/Projects/browser-policy-manager/app/templates/profiles/_page_command_deck.html).
+   Impact:
+   At `390x844`, `412x915`, and `1366x768`, the guided wizard title, search, and/or first step controls now appear on the first screen.
+
+### Remaining findings after follow-up
+
+1. Mobile still arrives on a dense first screen, even though it now lands in the right place.
+   The wizard is visible immediately, which is the important win, but the top toolbar plus locale/theme controls still take a noticeable amount of vertical space before the first step body breathes.
+
+2. The first stepper row is now visible on mobile, but it remains horizontally scrollable and visually heavy.
+   This is acceptable for now and much better than hiding the wizard completely, but it is still a candidate for future rhythm polish if we want an even faster first interaction.
+
+### Positive findings from follow-up
+
+1. The most important landing issue is resolved.
+   Guided setup is now clearly the primary path on both mobile and `1366x768`, instead of being pushed behind the command deck.
+
+2. The new ordering does not introduce obvious layout regressions.
+   Header, wizard, command deck, and workspace still stack cleanly, and the command deck remains easy to find just below the guided flow.
+
+## Regression Pack
+
+Date: `2026-04-04`
+
+To reduce the chance of silently regressing the landing behavior again, the project now treats the following as viewport regression invariants:
+
+1. `#wizard-panel` must appear in the primary page flow before `#command-deck`.
+   This preserves the guided-first landing order that was restored in the `2026-04-03` follow-up.
+
+2. The wizard search and the first guided step must appear before the command deck in rendered HTML.
+   This is a structural proxy for the practical UX rule that guided setup should remain the first meaningful interactive area on narrow and small-desktop screens.
+
+3. Mobile and narrow-screen QA still uses the same reference widths:
+   - `390x844`
+   - `412x915`
+   - `1366x768`
+
+4. Static regression checks intentionally protect layout order and guided-first visibility assumptions, not pixel-perfect screenshots.
+   This keeps the regression pack stable while still defending the highest-value viewport decisions from the redesign and post-roadmap polish work.

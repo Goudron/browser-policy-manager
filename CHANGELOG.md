@@ -2,41 +2,44 @@
 
 ## Unreleased
 
-Build target: `0.5.0-dev`
+Build target: `0.6.0-dev`
 
 ### Added
-- Introduced a schema-driven Firefox policy editing experience for `/profiles` with modular catalogs for guided settings, starter presets, manual policy controls, preferences, and schema-shell editing.
-- Added a dedicated `firefox_policy_ui_registry` service layer to map policy schemas into UI sections, widgets, tags, and fallback placement metadata.
-- Added modular frontend bundles and Jinja partials for the profiles page instead of one monolithic template/script pair.
-- Added a reusable `tools.convert_policies_from_upstream_lib` package to split the schema conversion pipeline into parser, inference, semantic hint, emission, and CLI modules.
-- Added targeted tests for Firefox UI registry inference, preferences, starter presets, wizard shell behavior, settings catalog builders, and manual policy controls.
-- Added Firefox-ready `policies.json` export wiring plus regression coverage for browser-consumable policy documents.
-- Added checked-in self-hosted `/profiles` vendor assets, including vendored `js-yaml`, Monaco bundles/workers, and local bootstrap scripts.
-- Added dedicated GitHub Actions workflows for live Firefox coverage and a separate AMO-backed canary path.
+- Completed the guided profile-wizard redesign and the follow-up polish stream.
+- Added scenario-first setup, recommended baselines, preset diff previews, and shared-device workflow guidance.
+- Added step-level undo/reset and cross-step recent-changes memory.
+- Added targeted guided-to-advanced handoff, advanced drill-down review, and stronger export explainability.
+- Added compare-by-guided-area, clone-and-adjust, lifecycle review, and shareable guided summaries.
+- Added workflow and governance layers across high-value Firefox enterprise clusters.
+- Added advanced-only boundary and coverage-priority project registers in `docs/`.
+- Added viewport regression coverage for guided-first landing assumptions.
+- Added targeted tests for the remaining SQLite URL normalization branches in [`app/db.py`](app/db.py).
 
 ### Changed
-- Consolidated the application around the canonical `/api/profiles` CRUD API.
-- Removed the old `/api/policies` compatibility layer from the app.
-- Updated supported bundled schema versions to ESR 140.9 and Release 149.
-- Switched the web UI to use the canonical profiles API end-to-end.
-- Added mounted web functionality for `/profiles`, `/i18n/{locale}.json`, and `/favicon.ico`.
-- Enabled security headers in the running application through middleware.
-- Refactored Firefox schema loading and policy metadata handling around the new UI registry and richer policy schema models.
-- Reworked the test suite to use a shared sync client helper, narrower HTTP assertions, and decomposed large scenario files into smaller, more focused tests.
-- Raised automated coverage for `app/` to `100%`, including branch coverage.
-- Moved the main GitHub PR CI back to deterministic quality gates only, keeping live-browser coverage in separate canary workflows.
-- Shifted the `/profiles` runtime away from CDN assumptions and toward reproducible checked-in frontend assets and local build tooling.
+- Moved the project from `0.5.0-dev` to `0.6.0-dev`.
+- Expanded guided coverage across shared-device, trust/auth, extensions governance, privacy hardening, upkeep, site access, home/search, language, and AI surfaces.
+- Aligned guided mode, `Advanced document`, review, export, compare, lifecycle, and clone flows around one canonical profile model.
+- Updated the profiles shell so guided setup remains the primary path on mobile and narrow screens.
+- Reworked the profile library into a wider table-style workspace surface with a sticky header, search, stronger dark-theme actions, and clearer primary/secondary row actions.
+- Consolidated runtime behavior around one active application database at `data/bpm.db` and reseeded the default workspace with the two canonical starter profiles.
+- Cleaned up English and Russian UI copy, removed mixed anglicisms from RU, and standardized the term `Техдокумент`.
+- Updated the roadmap and UX docs to reflect the completed roadmap, PB backlog, and post-roadmap backlog.
+- Raised non-live coverage for `app/` to `100%`.
 
 ### Fixed
-- Resolved bootstrap/config issues around environment variable handling and DB settings.
-- Stabilized SQLite execution in the current environment with the project-specific session adapter path.
-- Fixed template loading paths for the web UI.
-- Eliminated hangs caused by security/static response interaction by moving security headers to ASGI middleware.
-- Aligned documentation and test naming with the current `profiles` architecture.
-- Fixed CI quality-gate failures caused by Ruff and Mypy issues in the new Firefox UI and schema tooling modules.
-- Restored successful coverage artifact generation in GitHub Actions by ensuring the lint/type/test pipeline completes end-to-end.
-- Prevented flaky PR failures caused by coupling standard CI to environment-sensitive live Firefox checks.
-- Closed the gap where CI could install Python dependencies but still miss required checked-in frontend runtime assets.
+- Fixed remaining RU terminology drift where `Технический документ` still appeared instead of `Техдокумент`.
+- Fixed frontend bootstrap regressions that blocked locale switching, theme switching, step navigation, and initial profile-library rendering after the guided redesign.
+- Fixed multiple dark-theme surface leaks across review, lifecycle, advanced, and guided summary cards, plus improved low-contrast helper copy in dark mode.
+- Fixed the profile library data source so test artifacts and legacy fallback databases no longer repopulate the UI with stray `SVC-*` profiles.
+- Fixed first-load library action labels and review badges so they remain visible before a manual locale switch.
+- Fixed spacing and footer-layout regressions around wizard navigation actions and the `License Mozilla Public License 2.0` footer copy.
+- Fixed advanced-document lower-section layout so right-column guidance no longer overflows off-screen.
+- Fixed wizard step-title alignment for wrapped Russian labels and updated step five to the browser-native RU wording `Приватность и защита`.
+- Fixed export-step rendering so `Shareable summary`/`Выжимка для передачи` now populates and copies correctly on step 8.
+- Fixed schema-shell guided coverage rendering by removing a `ReferenceError` that interrupted locale refreshes and downstream wizard review updates.
+- Fixed accessibility gaps in compare, clone handoff, lifecycle, export, disclosure, and review/jump flows.
+- Fixed viewport regression risk by locking in guided-first shell ordering.
+- Fixed remaining SQLite URL normalization edge cases with explicit regression tests.
 
 ## Sprint F (2025-10-26)
 

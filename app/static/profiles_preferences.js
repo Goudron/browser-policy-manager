@@ -24,6 +24,7 @@
 
         const wizardPreferenceRowTemplateEl = documentRef.getElementById("wizard-preference-row-template");
         const wizardPreferencesKnownListEl = documentRef.getElementById("wizard-preferences-known-list");
+        const generalPreferencesFocusButtons = Array.from(documentRef.querySelectorAll("[data-general-preferences-focus]"));
         const wizardPreferenceViews = Object.fromEntries(
             wizardPreferenceSections.map((section) => [
                 section.id,
@@ -87,6 +88,53 @@
 
         preferenceState.connectViews({
             renderPreferenceDrafts: preferenceViews.renderPreferenceDrafts,
+        });
+
+        function revealPreferenceFocus(kind) {
+            const generalView = wizardPreferenceViews.general || {};
+            const docsEl = documentRef.getElementById("wizard-preferences-general-docs");
+            const clickFilter = (filterId) => {
+                docsEl?.querySelector(`[data-settings-filter="${filterId}"]`)?.click();
+            };
+            let targetEl = null;
+
+            if (kind === "startup") {
+                clickFilter("startup");
+                targetEl = generalView.presets?.querySelector('[data-preference-preset="restore_session"]')
+                    || generalView.presets?.querySelector('[data-preference-preset="open_homepage"]');
+            } else if (kind === "downloads") {
+                clickFilter("downloads");
+                targetEl = generalView.presets?.querySelector('[data-preference-preset="download_prompt"]')
+                    || generalView.presets?.querySelector('[data-preference-preset="download_dir"]');
+            } else if (kind === "behavior") {
+                targetEl = generalView.presets?.querySelector('[data-preference-preset="smooth_scroll"]')
+                    || generalView.presets?.querySelector('[data-preference-preset="spellcheck_multiline"]')
+                    || generalView.known?.querySelector('[data-known-preference="general.autoScroll"]');
+            } else if (kind === "manual") {
+                targetEl = generalView.known || generalView.list || generalView.presets;
+            }
+
+            if (!targetEl) return;
+            targetEl.scrollIntoView?.({ behavior: "smooth", block: "center" });
+            targetEl.classList.add("settings-target-highlight");
+            window.setTimeout(() => {
+                targetEl.classList.remove("settings-target-highlight");
+            }, 1800);
+            const focusTarget = targetEl.matches("button, input, select, textarea, [tabindex]")
+                ? targetEl
+                : targetEl.querySelector("button, input, select, textarea, [tabindex]");
+            if (focusTarget?.focus) {
+                if (focusTarget === targetEl && !targetEl.hasAttribute("tabindex")) {
+                    targetEl.setAttribute("tabindex", "-1");
+                }
+                focusTarget.focus({ preventScroll: true });
+            }
+        }
+
+        generalPreferencesFocusButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                revealPreferenceFocus(button.dataset.generalPreferencesFocus || "manual");
+            });
         });
 
         return {

@@ -17,9 +17,17 @@
 
     function libraryCountLabel(count, currentLang) {
         if (currentLang === "ru") {
-            return count === 1 ? "профиль в библиотеке" : "профилей в библиотеке";
+            const mod10 = count % 10;
+            const mod100 = count % 100;
+            if (mod10 === 1 && mod100 !== 11) {
+                return "Профиль в библиотеке";
+            }
+            if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+                return "Профиля в библиотеке";
+            }
+            return "Профилей в библиотеке";
         }
-        return count === 1 ? "profile in library" : "profiles in library";
+        return count === 1 ? "Profile in library" : "Profiles in library";
     }
 
     window.BPMProfilesPlatform = {

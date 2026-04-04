@@ -35,6 +35,17 @@ def _load_locale_catalog(locale: str) -> dict[str, str]:
     return json.loads(locale_path.read_text(encoding="utf-8"))
 
 
+@cache
+def _resolve_profiles_asset_version() -> str:
+    latest_mtime = 0
+    for root in (settings.STATIC_DIR, settings.TEMPLATES_DIR):
+        for path in root.rglob("*"):
+            if not path.is_file():
+                continue
+            latest_mtime = max(latest_mtime, int(path.stat().st_mtime))
+    return str(latest_mtime or settings.APP_VERSION)
+
+
 def _resolve_request_locale(request: Request) -> str:
     supported = tuple(settings.SUPPORTED_LOCALES)
     header = request.headers.get("accept-language", "")
@@ -87,6 +98,7 @@ async def profiles_page(request: Request) -> HTMLResponse:
         "profiles.html",
         {
             "title": "Profiles — Browser Policy Manager",
+            "asset_version": _resolve_profiles_asset_version(),
             "footer_year_range": footer_year_range,
             "wizard_settings_catalog": wizard_settings_catalog,
             "wizard_preferences_catalog": wizard_preferences_catalog,

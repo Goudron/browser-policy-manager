@@ -4,6 +4,22 @@
         elements = {},
         dependencies = {},
     }) {
+        const windowRef = documentRef.defaultView || window;
+        function readEmbeddedInitialLocale() {
+            const payloadEl = documentRef.getElementById("profiles-initial-locale");
+            const payloadText = (payloadEl?.tagName || "").toUpperCase() === "TEMPLATE"
+                ? (payloadEl?.innerHTML ? payloadEl.innerHTML.trim() : "")
+                : (payloadEl?.textContent ? payloadEl.textContent.trim() : "");
+            if (!payloadText) {
+                return {};
+            }
+            try {
+                const parsed = JSON.parse(payloadText);
+                return parsed && typeof parsed === "object" ? parsed : {};
+            } catch {
+                return {};
+            }
+        }
         const {
             fromEditorValue,
             formatBooleanSelectValue,
@@ -21,10 +37,25 @@
         let currentId = null;
         let currentProfile = null;
         let currentRaw = {};
-        let currentLang = "en";
-        let localeDict = {};
+        const initialLang = typeof windowRef.__BPM_INITIAL_LANG__ === "string" && windowRef.__BPM_INITIAL_LANG__
+            ? windowRef.__BPM_INITIAL_LANG__
+            : (documentRef.documentElement.lang || "en");
+        const bootLocale = windowRef.__BPM_INITIAL_LOCALE__ && typeof windowRef.__BPM_INITIAL_LOCALE__ === "object"
+            ? windowRef.__BPM_INITIAL_LOCALE__
+            : {};
+        const initialLocale = Object.keys(bootLocale).length > 0
+            ? bootLocale
+            : readEmbeddedInitialLocale();
+
+        windowRef.__BPM_INITIAL_LANG__ = initialLang;
+        windowRef.__BPM_INITIAL_LOCALE__ = initialLocale;
+
+        let currentLang = initialLang;
+        let localeDict = initialLocale;
         let searchTimer = null;
         let baselineSnapshot = null;
+        let cloneSourceProfile = null;
+        let lifecycleSessionNote = null;
         let isBusy = false;
         let libraryStats = { filtered: 0, total: 0 };
         let validationPreviewTone = "neutral";
@@ -56,7 +87,11 @@
             if (Object.prototype.hasOwnProperty.call(localeDict, key)) {
                 return localeDict[key];
             }
-            return "";
+            const bootLocale = windowRef.__BPM_INITIAL_LOCALE__;
+            if (bootLocale && Object.prototype.hasOwnProperty.call(bootLocale, key)) {
+                return bootLocale[key];
+            }
+            return fallback;
         }
 
         function getActiveWizardSchemaVersion() {
@@ -143,11 +178,11 @@
         }
 
         function setCurrentLang(value) {
-            currentLang = value;
+            currentLang = value || "en";
         }
 
         function setLocaleDict(value) {
-            localeDict = value;
+            localeDict = value && typeof value === "object" ? value : {};
         }
 
         function getSearchTimer() {
@@ -164,6 +199,22 @@
 
         function setBaselineSnapshot(value) {
             baselineSnapshot = value;
+        }
+
+        function getCloneSourceProfile() {
+            return cloneSourceProfile;
+        }
+
+        function setCloneSourceProfile(value) {
+            cloneSourceProfile = value;
+        }
+
+        function getLifecycleSessionNote() {
+            return lifecycleSessionNote;
+        }
+
+        function setLifecycleSessionNote(value) {
+            lifecycleSessionNote = value;
         }
 
         function getIsBusy() {
@@ -346,6 +397,10 @@
             setSearchTimer,
             getBaselineSnapshot,
             setBaselineSnapshot,
+            getCloneSourceProfile,
+            setCloneSourceProfile,
+            getLifecycleSessionNote,
+            setLifecycleSessionNote,
             getIsBusy,
             setIsBusy,
             getLibraryStats,

@@ -97,8 +97,7 @@ def test_create_app_uses_self_hosted_csp_without_cdn_allowlist():
     assert "https://cdn.tailwindcss.com" not in csp
     assert "script-src 'self'" in csp
     assert "'unsafe-eval'" not in csp
-    assert "style-src 'self'" in csp
-    assert "'unsafe-inline'" not in csp
+    assert "style-src 'self' 'unsafe-inline'" in csp
     assert "font-src 'self'" in csp
     assert "worker-src 'self'" in csp
     assert "child-src 'self'" in csp

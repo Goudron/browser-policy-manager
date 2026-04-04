@@ -15,6 +15,27 @@
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_sync_focus_hint">
+            {{ tr("profiles.wizard_sync_focus_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-sync-focus-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-sync-focus-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_sync_focus_defaults_title">{{ tr("profiles.wizard_sync_focus_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_sync_focus_defaults_copy">{{ tr("profiles.wizard_sync_focus_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-sync-focus-preset="accounts">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_sync_focus_accounts_title">{{ tr("profiles.wizard_sync_focus_accounts_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_sync_focus_accounts_copy">{{ tr("profiles.wizard_sync_focus_accounts_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-sync-focus-preset="guidance">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_sync_focus_guidance_title">{{ tr("profiles.wizard_sync_focus_guidance_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_sync_focus_guidance_copy">{{ tr("profiles.wizard_sync_focus_guidance_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-sync-focus-preset="managed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_sync_focus_managed_title">{{ tr("profiles.wizard_sync_focus_managed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_sync_focus_managed_copy">{{ tr("profiles.wizard_sync_focus_managed_copy") }}</span>
+            </button>
+        </div>
         <div class="wizard-policy-grid wizard-stage-panel">
             {{ render_manual_policy_controls(wizard_manual_policy_groups["sync_accounts"]["items"]) }}
         </div>
@@ -81,12 +102,45 @@
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_language_focus_hint">
+            {{ tr("profiles.wizard_language_focus_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-language-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-language-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_language_preset_defaults_title">{{ tr("profiles.wizard_language_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_language_preset_defaults_copy">{{ tr("profiles.wizard_language_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-language-preset="locales">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_language_preset_locales_title">{{ tr("profiles.wizard_language_preset_locales_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_language_preset_locales_copy">{{ tr("profiles.wizard_language_preset_locales_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-language-preset="translation_off">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_language_preset_translation_off_title">{{ tr("profiles.wizard_language_preset_translation_off_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_language_preset_translation_off_copy">{{ tr("profiles.wizard_language_preset_translation_off_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-language-preset="managed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_language_preset_managed_title">{{ tr("profiles.wizard_language_preset_managed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_language_preset_managed_copy">{{ tr("profiles.wizard_language_preset_managed_copy") }}</span>
+            </button>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <div id="wizard-requested-locales-card" data-settings-target="policy:RequestedLocales"></div>
             <div id="wizard-translate-enabled-card" data-settings-target="policy:TranslateEnabled"></div>
         </div>
         <div id="wizard-language-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_language_section_state_empty">
             {{ tr("profiles.wizard_language_section_state_empty") }}
+        </div>
+        <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--soft wizard-workflow-card" id="wizard-language-governance-workflow">
+            <div class="wizard-section-heading">
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_language_governance_title">{{ tr("profiles.wizard_language_governance_title") }}</h3>
+                <p class="wizard-section-copy wizard-workflow-copy" id="wizard-language-governance-copy" data-i18n="profiles.wizard_language_governance_body">
+                    {{ tr("profiles.wizard_language_governance_body") }}
+                </p>
+            </div>
+            <ul class="wizard-checklist wizard-workflow-list" id="wizard-language-governance-list"></ul>
+        </div>
+        <div id="wizard-language-ai-handoff" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_language_ai_handoff_skip">
+            {{ tr("profiles.wizard_language_ai_handoff_skip") }}
         </div>
     </div>
     <div class="wizard-section-group">
@@ -99,6 +153,51 @@
         <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
         {{ render_settings_pills(wizard_settings_sections["sync"]["ui_maps"]["extensions"], "wizard-settings-map-extensions") }}
         {{ render_settings_docs(wizard_settings_sections["sync"]["ui_maps"]["extensions"], wizard_settings_sections["sync"]["ui_docs"]["extensions"], "wizard-settings-docs-extensions") }}
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_rollout_hint">
+            {{ tr("profiles.wizard_extensions_rollout_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-extension-rollout-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-rollout-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_preset_defaults_title">{{ tr("profiles.wizard_extensions_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_preset_defaults_copy">{{ tr("profiles.wizard_extensions_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-rollout-preset="open">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_preset_open_title">{{ tr("profiles.wizard_extensions_preset_open_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_preset_open_copy">{{ tr("profiles.wizard_extensions_preset_open_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-rollout-preset="blocked">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_preset_blocked_title">{{ tr("profiles.wizard_extensions_preset_blocked_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_preset_blocked_copy">{{ tr("profiles.wizard_extensions_preset_blocked_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-rollout-preset="managed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_preset_managed_title">{{ tr("profiles.wizard_extensions_preset_managed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_preset_managed_copy">{{ tr("profiles.wizard_extensions_preset_managed_copy") }}</span>
+            </button>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_focus_hint">
+            {{ tr("profiles.wizard_extensions_focus_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-extension-focus-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-focus-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_focus_defaults_title">{{ tr("profiles.wizard_extensions_focus_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_focus_defaults_copy">{{ tr("profiles.wizard_extensions_focus_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-focus-preset="known">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_focus_known_title">{{ tr("profiles.wizard_extensions_focus_known_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_focus_known_copy">{{ tr("profiles.wizard_extensions_focus_known_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-focus-preset="rules">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_focus_rules_title">{{ tr("profiles.wizard_extensions_focus_rules_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_focus_rules_copy">{{ tr("profiles.wizard_extensions_focus_rules_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-extension-focus-preset="mixed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_extensions_focus_mixed_title">{{ tr("profiles.wizard_extensions_focus_mixed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_extensions_focus_mixed_copy">{{ tr("profiles.wizard_extensions_focus_mixed_copy") }}</span>
+            </button>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
             <label data-settings-target="field:wizard-extension-default-mode">
@@ -113,6 +212,28 @@
                 </div>
             </label>
         </div>
+        <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--soft wizard-workflow-card" id="wizard-extension-governance-workflow">
+            <div class="wizard-section-heading">
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_governance_title">{{ tr("profiles.wizard_extensions_governance_title") }}</h3>
+                <p class="wizard-section-copy wizard-workflow-copy" id="wizard-extension-governance-copy" data-i18n="profiles.wizard_extensions_governance_body">
+                    {{ tr("profiles.wizard_extensions_governance_body") }}
+                </p>
+            </div>
+            <ul class="wizard-checklist wizard-workflow-list" id="wizard-extension-governance-list"></ul>
+            <div class="wizard-next-actions">
+                <button type="button" id="wizard-extension-next-rollout" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_extensions_rollout">{{ tr("profiles.wizard_next_action_extensions_rollout") }}</button>
+                <button type="button" id="wizard-extension-next-curated" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_extensions_curated">{{ tr("profiles.wizard_next_action_extensions_curated") }}</button>
+                <button type="button" id="wizard-extension-next-fine-tuning" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_extensions_fine_tuning">{{ tr("profiles.wizard_next_action_extensions_fine_tuning") }}</button>
+            </div>
+            <div class="wizard-toolbar-row wizard-fine-tuning-bar wizard-workflow-actions">
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_governance_handoff">
+                    {{ tr("profiles.wizard_extensions_governance_handoff") }}
+                </div>
+                <button type="button" id="wizard-extension-governance-open-advanced" class="button-base ghost-button" data-i18n="profiles.wizard_extensions_governance_open_advanced">
+                    {{ tr("profiles.wizard_extensions_governance_open_advanced") }}
+                </button>
+            </div>
+        </div>
         <div id="wizard-extension-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_extensions_section_state_empty">
             {{ tr("profiles.wizard_extensions_section_state_empty") }}
         </div>
@@ -126,20 +247,40 @@
         </div>
         <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-extension-fine-tuning-panel" hidden>
             <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
-            <label data-settings-target="field:wizard-extension-install">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_install_label">{{ tr("profiles.wizard_extensions_install_label") }}</div>
-                <textarea id="wizard-extension-install" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_install_placeholder" placeholder="{{ tr('profiles.wizard_extensions_install_placeholder') }}"></textarea>
-                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_install_hint">
-                    {{ tr("profiles.wizard_extensions_install_hint") }}
+            <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--compact" data-settings-target="field:wizard-extension-install">
+                <div class="wizard-extension-rule-head">
+                    <div class="wizard-input-stack">
+                        <div class="field-label" data-i18n="profiles.wizard_extensions_install_label">{{ tr("profiles.wizard_extensions_install_label") }}</div>
+                        <div id="wizard-extension-install-summary" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-i18n="profiles.wizard_extensions_rule_empty">{{ tr("profiles.wizard_extensions_rule_empty") }}</div>
+                    </div>
+                    <button type="button" id="wizard-extension-install-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-extension-install-panel" data-i18n="profiles.wizard_extension_rule_show">
+                        {{ tr("profiles.wizard_extension_rule_show") }}
+                    </button>
                 </div>
-            </label>
-            <label data-settings-target="field:wizard-extension-locked">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_locked_label">{{ tr("profiles.wizard_extensions_locked_label") }}</div>
-                <textarea id="wizard-extension-locked" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_locked_placeholder" placeholder="{{ tr('profiles.wizard_extensions_locked_placeholder') }}"></textarea>
-                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_locked_hint">
-                    {{ tr("profiles.wizard_extensions_locked_hint") }}
+                <div id="wizard-extension-install-panel" class="wizard-extension-rule-panel" hidden>
+                    <textarea id="wizard-extension-install" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_install_placeholder" placeholder="{{ tr('profiles.wizard_extensions_install_placeholder') }}"></textarea>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_install_hint">
+                        {{ tr("profiles.wizard_extensions_install_hint") }}
+                    </div>
                 </div>
-            </label>
+            </div>
+            <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--compact" data-settings-target="field:wizard-extension-locked">
+                <div class="wizard-extension-rule-head">
+                    <div class="wizard-input-stack">
+                        <div class="field-label" data-i18n="profiles.wizard_extensions_locked_label">{{ tr("profiles.wizard_extensions_locked_label") }}</div>
+                        <div id="wizard-extension-locked-summary" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-i18n="profiles.wizard_extensions_rule_empty">{{ tr("profiles.wizard_extensions_rule_empty") }}</div>
+                    </div>
+                    <button type="button" id="wizard-extension-locked-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-extension-locked-panel" data-i18n="profiles.wizard_extension_rule_show">
+                        {{ tr("profiles.wizard_extension_rule_show") }}
+                    </button>
+                </div>
+                <div id="wizard-extension-locked-panel" class="wizard-extension-rule-panel" hidden>
+                    <textarea id="wizard-extension-locked" class="soft-input" rows="5" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_locked_placeholder" placeholder="{{ tr('profiles.wizard_extensions_locked_placeholder') }}"></textarea>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_locked_hint">
+                        {{ tr("profiles.wizard_extensions_locked_hint") }}
+                    </div>
+                </div>
+            </div>
             <div class="wizard-toolbar-row wizard-fine-tuning-bar wizard-field-full">
                 <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_more_rules_body">
                     {{ tr("profiles.wizard_extensions_more_rules_body") }}
@@ -150,13 +291,23 @@
             </div>
             <div class="wizard-grid wizard-field-full wizard-fine-tuning-panel wizard-fine-tuning-panel--nested" id="wizard-extension-more-rules-panel" hidden>
             <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_more_rules_label">{{ tr("profiles.wizard_more_rules_label") }}</div>
-            <label class="wizard-field-full" data-settings-target="field:wizard-extension-uninstall">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_extensions_uninstall_label">{{ tr("profiles.wizard_extensions_uninstall_label") }}</div>
-                <textarea id="wizard-extension-uninstall" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_uninstall_placeholder" placeholder="{{ tr('profiles.wizard_extensions_uninstall_placeholder') }}"></textarea>
-                <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_uninstall_hint">
-                    {{ tr("profiles.wizard_extensions_uninstall_hint") }}
+            <div class="wizard-section-group wizard-field-full wizard-subsection-card wizard-subsection-card--compact" data-settings-target="field:wizard-extension-uninstall">
+                <div class="wizard-extension-rule-head">
+                    <div class="wizard-input-stack">
+                        <div class="field-label" data-i18n="profiles.wizard_extensions_uninstall_label">{{ tr("profiles.wizard_extensions_uninstall_label") }}</div>
+                        <div id="wizard-extension-uninstall-summary" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-i18n="profiles.wizard_extensions_rule_empty">{{ tr("profiles.wizard_extensions_rule_empty") }}</div>
+                    </div>
+                    <button type="button" id="wizard-extension-uninstall-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-extension-uninstall-panel" data-i18n="profiles.wizard_extension_rule_show">
+                        {{ tr("profiles.wizard_extension_rule_show") }}
+                    </button>
                 </div>
-            </label>
+                <div id="wizard-extension-uninstall-panel" class="wizard-extension-rule-panel" hidden>
+                    <textarea id="wizard-extension-uninstall" class="soft-input" rows="4" spellcheck="false" data-i18n-placeholder="profiles.wizard_extensions_uninstall_placeholder" placeholder="{{ tr('profiles.wizard_extensions_uninstall_placeholder') }}"></textarea>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_extensions_uninstall_hint">
+                        {{ tr("profiles.wizard_extensions_uninstall_hint") }}
+                    </div>
+                </div>
+            </div>
             <div class="wizard-section-group wizard-field-full wizard-subsection-card wizard-subsection-card--soft" id="wizard-extension-curated-section">
                 <div class="wizard-section-heading">
                     <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_profiles_title">{{ tr("profiles.wizard_extensions_profiles_title") }}</h3>
@@ -181,12 +332,7 @@
                         <div class="wizard-input-hint">uBlock0@raymondhill.net</div>
                         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="uBlock0@raymondhill.net" data-i18n="profiles.wizard_extension_profile_state_missing">{{ tr("profiles.wizard_extension_profile_state_missing") }}</div>
                     </div>
-                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="uBlock0@raymondhill.net" aria-expanded="false" aria-controls="wizard-extension-profile-details-ublock" data-i18n="profiles.wizard_extension_profile_details_show">
-                        {{ tr("profiles.wizard_extension_profile_details_show") }}
-                    </button>
-                </div>
-                <div class="wizard-extension-profile-main">
-                    <label class="wizard-input-stack">
+                    <label class="wizard-input-stack wizard-extension-profile-mode">
                         <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">{{ tr("profiles.wizard_extension_profile_mode_label") }}</div>
                         <select class="soft-input" data-extension-profile="uBlock0@raymondhill.net" data-extension-field="mode">
                             <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">{{ tr("profiles.wizard_extension_profile_mode_inherit") }}</option>
@@ -196,6 +342,9 @@
                             <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">{{ tr("profiles.wizard_extension_profile_mode_normal") }}</option>
                         </select>
                     </label>
+                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="uBlock0@raymondhill.net" aria-expanded="false" aria-controls="wizard-extension-profile-details-ublock" data-i18n="profiles.wizard_extension_profile_details_show">
+                        {{ tr("profiles.wizard_extension_profile_details_show") }}
+                    </button>
                 </div>
                 <div class="wizard-grid wizard-extension-profile-details" id="wizard-extension-profile-details-ublock" data-extension-profile-details-panel="uBlock0@raymondhill.net" hidden>
                     <label class="wizard-input-stack wizard-field-full">
@@ -225,12 +374,7 @@
                         <div class="wizard-input-hint">adguardadblocker@adguard.com</div>
                         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="adguardadblocker@adguard.com" data-i18n="profiles.wizard_extension_profile_state_missing">{{ tr("profiles.wizard_extension_profile_state_missing") }}</div>
                     </div>
-                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="adguardadblocker@adguard.com" aria-expanded="false" aria-controls="wizard-extension-profile-details-adguard" data-i18n="profiles.wizard_extension_profile_details_show">
-                        {{ tr("profiles.wizard_extension_profile_details_show") }}
-                    </button>
-                </div>
-                <div class="wizard-extension-profile-main">
-                    <label class="wizard-input-stack">
+                    <label class="wizard-input-stack wizard-extension-profile-mode">
                         <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">{{ tr("profiles.wizard_extension_profile_mode_label") }}</div>
                         <select class="soft-input" data-extension-profile="adguardadblocker@adguard.com" data-extension-field="mode">
                             <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">{{ tr("profiles.wizard_extension_profile_mode_inherit") }}</option>
@@ -240,6 +384,9 @@
                             <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">{{ tr("profiles.wizard_extension_profile_mode_normal") }}</option>
                         </select>
                     </label>
+                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="adguardadblocker@adguard.com" aria-expanded="false" aria-controls="wizard-extension-profile-details-adguard" data-i18n="profiles.wizard_extension_profile_details_show">
+                        {{ tr("profiles.wizard_extension_profile_details_show") }}
+                    </button>
                 </div>
                 <div class="wizard-grid wizard-extension-profile-details" id="wizard-extension-profile-details-adguard" data-extension-profile-details-panel="adguardadblocker@adguard.com" hidden>
                     <label class="wizard-input-stack wizard-field-full">
@@ -269,12 +416,7 @@
                         <div class="wizard-input-hint">https-everywhere@eff.org</div>
                         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status" data-extension-profile-status="https-everywhere@eff.org" data-i18n="profiles.wizard_extension_profile_state_missing">{{ tr("profiles.wizard_extension_profile_state_missing") }}</div>
                     </div>
-                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="https-everywhere@eff.org" aria-expanded="false" aria-controls="wizard-extension-profile-details-https-everywhere" data-i18n="profiles.wizard_extension_profile_details_show">
-                        {{ tr("profiles.wizard_extension_profile_details_show") }}
-                    </button>
-                </div>
-                <div class="wizard-extension-profile-main">
-                    <label class="wizard-input-stack">
+                    <label class="wizard-input-stack wizard-extension-profile-mode">
                         <div class="field-label" data-i18n="profiles.wizard_extension_profile_mode_label">{{ tr("profiles.wizard_extension_profile_mode_label") }}</div>
                         <select class="soft-input" data-extension-profile="https-everywhere@eff.org" data-extension-field="mode">
                             <option value="" data-i18n="profiles.wizard_extension_profile_mode_inherit">{{ tr("profiles.wizard_extension_profile_mode_inherit") }}</option>
@@ -284,6 +426,9 @@
                             <option value="normal_installed" data-i18n="profiles.wizard_extension_profile_mode_normal">{{ tr("profiles.wizard_extension_profile_mode_normal") }}</option>
                         </select>
                     </label>
+                    <button type="button" class="button-base ghost-button" data-extension-profile-toggle="https-everywhere@eff.org" aria-expanded="false" aria-controls="wizard-extension-profile-details-https-everywhere" data-i18n="profiles.wizard_extension_profile_details_show">
+                        {{ tr("profiles.wizard_extension_profile_details_show") }}
+                    </button>
                 </div>
                 <div class="wizard-grid wizard-extension-profile-details" id="wizard-extension-profile-details-https-everywhere" data-extension-profile-details-panel="https-everywhere@eff.org" hidden>
                     <label class="wizard-input-stack wizard-field-full">
@@ -337,6 +482,49 @@
     </div>
     <div class="wizard-section-group">
         <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_bookmarks_focus_title">{{ tr("profiles.wizard_bookmarks_focus_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_bookmarks_focus_body">
+                {{ tr("profiles.wizard_bookmarks_focus_body") }}
+            </p>
+        </div>
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_bookmarks_focus_hint">
+            {{ tr("profiles.wizard_bookmarks_focus_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-bookmarks-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-bookmarks-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_bookmarks_preset_defaults_title">{{ tr("profiles.wizard_bookmarks_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_bookmarks_preset_defaults_copy">{{ tr("profiles.wizard_bookmarks_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-bookmarks-preset="links">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_bookmarks_preset_links_title">{{ tr("profiles.wizard_bookmarks_preset_links_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_bookmarks_preset_links_copy">{{ tr("profiles.wizard_bookmarks_preset_links_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-bookmarks-preset="folders">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_bookmarks_preset_folders_title">{{ tr("profiles.wizard_bookmarks_preset_folders_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_bookmarks_preset_folders_copy">{{ tr("profiles.wizard_bookmarks_preset_folders_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-bookmarks-preset="mixed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_bookmarks_preset_mixed_title">{{ tr("profiles.wizard_bookmarks_preset_mixed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_bookmarks_preset_mixed_copy">{{ tr("profiles.wizard_bookmarks_preset_mixed_copy") }}</span>
+            </button>
+        </div>
+        <div id="wizard-bookmarks-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_bookmarks_section_state_empty">
+            {{ tr("profiles.wizard_bookmarks_section_state_empty") }}
+        </div>
+        <div class="wizard-toolbar-row wizard-fine-tuning-bar">
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_bookmarks_open_body">
+                {{ tr("profiles.wizard_bookmarks_open_body") }}
+            </div>
+            <button type="button" id="wizard-bookmarks-open-advanced" class="button-base ghost-button" data-i18n="profiles.wizard_bookmarks_open_action">
+                {{ tr("profiles.wizard_bookmarks_open_action") }}
+            </button>
+        </div>
+    </div>
+    <div class="wizard-section-group">
+        <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_behavior_title">{{ tr("profiles.wizard_website_behavior_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_website_behavior_body">
                 {{ tr("profiles.wizard_website_behavior_body") }}
@@ -345,11 +533,85 @@
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_website_handlers_hint">
+            {{ tr("profiles.wizard_website_handlers_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-website-filter-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-filter-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_filter_preset_defaults_title">{{ tr("profiles.wizard_website_filter_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_filter_preset_defaults_copy">{{ tr("profiles.wizard_website_filter_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-filter-preset="blocked">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_filter_preset_blocked_title">{{ tr("profiles.wizard_website_filter_preset_blocked_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_filter_preset_blocked_copy">{{ tr("profiles.wizard_website_filter_preset_blocked_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-filter-preset="exceptions">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_filter_preset_exceptions_title">{{ tr("profiles.wizard_website_filter_preset_exceptions_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_filter_preset_exceptions_copy">{{ tr("profiles.wizard_website_filter_preset_exceptions_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-filter-preset="mixed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_filter_preset_mixed_title">{{ tr("profiles.wizard_website_filter_preset_mixed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_filter_preset_mixed_copy">{{ tr("profiles.wizard_website_filter_preset_mixed_copy") }}</span>
+            </button>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_website_filter_shared_hint">
+            {{ tr("profiles.wizard_website_filter_shared_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-website-filter-shared-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-filter-shared-preset="allow_only">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_filter_shared_preset_allow_only_title">{{ tr("profiles.wizard_website_filter_shared_preset_allow_only_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_filter_shared_preset_allow_only_copy">{{ tr("profiles.wizard_website_filter_shared_preset_allow_only_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-filter-shared-preset="block_some">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_filter_shared_preset_block_some_title">{{ tr("profiles.wizard_website_filter_shared_preset_block_some_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_filter_shared_preset_block_some_copy">{{ tr("profiles.wizard_website_filter_shared_preset_block_some_copy") }}</span>
+            </button>
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-website-handlers-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-handlers-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_handlers_preset_defaults_title">{{ tr("profiles.wizard_website_handlers_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_handlers_preset_defaults_copy">{{ tr("profiles.wizard_website_handlers_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-handlers-preset="files">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_handlers_preset_files_title">{{ tr("profiles.wizard_website_handlers_preset_files_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_handlers_preset_files_copy">{{ tr("profiles.wizard_website_handlers_preset_files_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-handlers-preset="protocols">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_handlers_preset_protocols_title">{{ tr("profiles.wizard_website_handlers_preset_protocols_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_handlers_preset_protocols_copy">{{ tr("profiles.wizard_website_handlers_preset_protocols_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-website-handlers-preset="both">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_website_handlers_preset_both_title">{{ tr("profiles.wizard_website_handlers_preset_both_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_website_handlers_preset_both_copy">{{ tr("profiles.wizard_website_handlers_preset_both_copy") }}</span>
+            </button>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <div id="wizard-website-filter-card" class="wizard-field-full" data-settings-target="policy:WebsiteFilter"></div>
         </div>
         <div id="wizard-website-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_website_section_state_empty">
             {{ tr("profiles.wizard_website_section_state_empty") }}
+        </div>
+        <div class="wizard-section-group wizard-subsection-card wizard-subsection-card--soft wizard-workflow-card" id="wizard-website-governance-workflow">
+            <div class="wizard-section-heading">
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_governance_title">{{ tr("profiles.wizard_website_governance_title") }}</h3>
+                <p class="wizard-section-copy wizard-workflow-copy" id="wizard-website-governance-copy" data-i18n="profiles.wizard_website_governance_body">
+                    {{ tr("profiles.wizard_website_governance_body") }}
+                </p>
+            </div>
+            <ul class="wizard-checklist wizard-workflow-list" id="wizard-website-governance-list"></ul>
+            <div class="wizard-next-actions">
+                <button type="button" id="wizard-website-next-filter" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_website_filter">{{ tr("profiles.wizard_next_action_website_filter") }}</button>
+                <button type="button" id="wizard-website-next-handlers" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_website_handlers">{{ tr("profiles.wizard_next_action_website_handlers") }}</button>
+                <button type="button" id="wizard-website-next-fine-tuning" class="button-base ghost-button" data-i18n="profiles.wizard_next_action_website_fine_tuning">{{ tr("profiles.wizard_next_action_website_fine_tuning") }}</button>
+            </div>
+            <div class="wizard-toolbar-row wizard-fine-tuning-bar wizard-workflow-actions">
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_website_governance_handoff">
+                    {{ tr("profiles.wizard_website_governance_handoff") }}
+                </div>
+                <button type="button" id="wizard-website-governance-open-advanced" class="button-base ghost-button" data-i18n="profiles.wizard_website_governance_open_advanced">
+                    {{ tr("profiles.wizard_website_governance_open_advanced") }}
+                </button>
+            </div>
         </div>
         <div class="wizard-toolbar-row wizard-fine-tuning-bar">
             <div class="wizard-input-hint" data-i18n="profiles.wizard_website_fine_tuning_body">

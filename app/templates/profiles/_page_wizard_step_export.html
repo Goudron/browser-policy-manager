@@ -57,8 +57,31 @@
                     <button type="button" class="button-base ghost-button" id="wizard-export-unknown-jump" data-final-review-jump="unknown" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
                 </div>
             </div>
+            <div class="wizard-export-plan-group">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_export_boundary_register_title">{{ tr("profiles.wizard_export_boundary_register_title") }}</div>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_export_boundary_register_body">{{ tr("profiles.wizard_export_boundary_register_body") }}</div>
+                <div class="wizard-export-plan-list" id="wizard-export-boundary-register">
+                    <div class="wizard-export-plan-item" data-plan-tone="default">
+                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_preferences">{{ tr("profiles.wizard_export_boundary_register_item_preferences") }}</div>
+                    </div>
+                    <div class="wizard-export-plan-item" data-plan-tone="default">
+                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_tls">{{ tr("profiles.wizard_export_boundary_register_item_tls") }}</div>
+                    </div>
+                    <div class="wizard-export-plan-item" data-plan-tone="default">
+                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_ai">{{ tr("profiles.wizard_export_boundary_register_item_ai") }}</div>
+                    </div>
+                    <div class="wizard-export-plan-item" data-plan-tone="default">
+                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_objects">{{ tr("profiles.wizard_export_boundary_register_item_objects") }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-export-plan-group">
+                <div class="field-label mb-1" data-i18n="profiles.wizard_export_drilldown_title">{{ tr("profiles.wizard_export_drilldown_title") }}</div>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_export_drilldown_body">{{ tr("profiles.wizard_export_drilldown_body") }}</div>
+                <div class="wizard-export-plan-list" id="wizard-export-drilldown" aria-live="polite"></div>
+            </div>
         </div>
-        <div class="wizard-actions-card">
+        <div class="wizard-actions-card" id="wizard-export-ready-card">
             <div class="section-kicker" data-i18n="profiles.wizard_export_ready_title">{{ tr("profiles.wizard_export_ready_title") }}</div>
             <p class="wizard-subtitle" id="wizard-export-ready-copy" data-i18n="profiles.wizard_export_ready_body">{{ tr("profiles.wizard_export_ready_body") }}</p>
             <button
@@ -69,6 +92,33 @@
                 {{ tr("profiles.advanced_handoff_open") }}
             </button>
             <div class="wizard-shell-badges" id="wizard-export-checklist" aria-live="polite"></div>
+            <div class="wizard-export-plan">
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_next_steps_title">{{ tr("profiles.wizard_export_next_steps_title") }}</div>
+                    <div class="wizard-export-plan-list" id="wizard-export-next-steps" aria-live="polite"></div>
+                </div>
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_ready_now_title">{{ tr("profiles.wizard_export_ready_now_title") }}</div>
+                    <div class="wizard-export-plan-list" id="wizard-export-ready-now" aria-live="polite"></div>
+                </div>
+            </div>
+            <div class="wizard-export-explainability">
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_included_title">{{ tr("profiles.wizard_export_included_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_included_body">{{ tr("profiles.wizard_export_included_body") }}</div>
+                    <div class="wizard-export-plan-list" id="wizard-export-included-now" aria-live="polite"></div>
+                </div>
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_missing_title">{{ tr("profiles.wizard_export_missing_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_missing_body">{{ tr("profiles.wizard_export_missing_body") }}</div>
+                    <div class="wizard-export-plan-list" id="wizard-export-missing-now" aria-live="polite"></div>
+                </div>
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_review_title">{{ tr("profiles.wizard_export_review_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_review_body">{{ tr("profiles.wizard_export_review_body") }}</div>
+                    <div class="wizard-export-plan-list" id="wizard-export-review-now" aria-live="polite"></div>
+                </div>
+            </div>
             <div class="field-label mb-1" data-i18n="profiles.wizard_export_basics_title">{{ tr("profiles.wizard_export_basics_title") }}</div>
             <div class="wizard-summary-list">
                 <div class="wizard-summary-row">
@@ -82,6 +132,20 @@
                 <div class="wizard-summary-row">
                     <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_starter">{{ tr("profiles.wizard_summary_starter") }}</span>
                     <span class="wizard-summary-value" id="wizard-summary-starter" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
+                </div>
+                <div class="wizard-summary-row" id="wizard-summary-derived-row" hidden>
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_derived">{{ tr("profiles.wizard_summary_derived") }}</span>
+                    <span class="wizard-summary-value wizard-summary-value--left" id="wizard-summary-derived"></span>
+                </div>
+                <div class="wizard-summary-row wizard-summary-row--stacked">
+                    <span class="wizard-summary-key" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</span>
+                    <span class="wizard-summary-value wizard-summary-value--left" data-i18n="profiles.wizard_lifecycle_summary_body">{{ tr("profiles.wizard_lifecycle_summary_body") }}</span>
+                    <div class="wizard-baseline-summary-list" id="wizard-summary-lifecycle-list"></div>
+                </div>
+                <div class="wizard-summary-row wizard-summary-row--stacked">
+                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_baseline_summary_title">{{ tr("profiles.wizard_export_baseline_summary_title") }}</span>
+                    <span class="wizard-summary-value wizard-summary-value--left" id="wizard-export-baseline-copy" data-i18n="profiles.wizard_export_baseline_summary_body">{{ tr("profiles.wizard_export_baseline_summary_body") }}</span>
+                    <div class="wizard-baseline-summary-list" id="wizard-export-baseline-list"></div>
                 </div>
                 <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
                     <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_mode">{{ tr("profiles.wizard_summary_mode") }}</span>
@@ -130,6 +194,28 @@
                     <button type="button" class="button-base ghost-button" id="wizard-export-summary-privacy-jump" data-final-review-jump="privacy" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
                 </div>
             </div>
+            <div class="field-label mb-1" data-i18n="profiles.wizard_export_shareable_title">{{ tr("profiles.wizard_export_shareable_title") }}</div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_export_shareable_body">{{ tr("profiles.wizard_export_shareable_body") }}</div>
+            <div class="wizard-shareable-summary-card">
+                <textarea
+                    id="wizard-export-shareable-text"
+                    class="wizard-shareable-summary-textarea soft-input"
+                    rows="12"
+                    readonly
+                    aria-label="{{ tr('profiles.wizard_export_shareable_title') }}"></textarea>
+                <div class="wizard-shareable-summary-actions">
+                    <button
+                        type="button"
+                        class="button-base ghost-button"
+                        id="wizard-export-shareable-copy"
+                        data-i18n="profiles.wizard_export_shareable_copy">
+                        {{ tr("profiles.wizard_export_shareable_copy") }}
+                    </button>
+                    <div class="wizard-shareable-summary-status wizard-input-hint" id="wizard-export-shareable-status" data-i18n="profiles.wizard_export_shareable_status_ready">
+                        {{ tr("profiles.wizard_export_shareable_status_ready") }}
+                    </div>
+                </div>
+            </div>
             <div class="dock-actions-grid">
                 <a id="wizard-export-json" href="#"
                     class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
@@ -146,6 +232,9 @@
                     data-i18n="profiles.download_firefox_policies_json">
                     {{ tr("profiles.download_firefox_policies_json") }}
                 </a>
+            </div>
+            <div class="wizard-export-download-hint" id="wizard-export-download-hint" data-i18n="profiles.wizard_export_download_hint_unsaved_new">
+                {{ tr("profiles.wizard_export_download_hint_unsaved_new") }}
             </div>
         </div>
     </div>

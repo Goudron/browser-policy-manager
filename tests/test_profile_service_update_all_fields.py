@@ -3,8 +3,11 @@ from __future__ import annotations
 import uuid
 
 import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
 
-from app.db import get_session, init_db
+from app.db import AsyncSessionAdapter
+from app.models.profile import Base
 from app.schemas.profile import ProfileCreate, ProfileUpdate
 from app.services.profile_service import ProfileService
 
@@ -20,19 +23,26 @@ def _mk_create_payload() -> ProfileCreate:
     )
 
 
+@pytest.fixture
+def service_session() -> AsyncSessionAdapter:
+    engine = create_engine("sqlite:///:memory:", echo=False, future=True)
+    SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
+    Base.metadata.create_all(bind=engine)
+    session: Session = SessionLocal()
+    try:
+        yield AsyncSessionAdapter(session)
+    finally:
+        session.close()
+        engine.dispose()
+
+
 @pytest.mark.anyio
-async def test_update_all_mutable_fields_and_read_back():
+async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSessionAdapter):
     """Hit all field assignments in ProfileService.update (desc/schema/flags/owner)."""
-    await init_db()
+    created = await ProfileService.create(service_session, _mk_create_payload())
+    await service_session.commit()
+    profile_id = created.id
 
-    # Create initial entity
-    async for session in get_session():
-        created = await ProfileService.create(session, _mk_create_payload())
-        await session.commit()
-        profile_id = created.id
-        break
-
-    # Update with all fields set
     patch = ProfileUpdate(
         description="Changed description",
         schema_version="release-149",
@@ -40,92 +50,62 @@ async def test_update_all_mutable_fields_and_read_back():
         owner="sec@example.org",
     )
 
-    async for session in get_session():
-        updated = await ProfileService.update(session, profile_id, patch)
-        await session.commit()
-        assert updated is not None
-        assert updated.description == "Changed description"
-        assert updated.schema_version == "release-149"
-        assert updated.flags.get("DisableTelemetry") is False
-        assert updated.flags.get("DisablePrivateBrowsing") is True
-        assert updated.owner == "sec@example.org"
-        break
+    updated = await ProfileService.update(service_session, profile_id, patch)
+    await service_session.commit()
+    assert updated is not None
+    assert updated.description == "Changed description"
+    assert updated.schema_version == "release-149"
+    assert updated.flags.get("DisableTelemetry") is False
+    assert updated.flags.get("DisablePrivateBrowsing") is True
+    assert updated.owner == "sec@example.org"
 
-    async for session in get_session():
-        cleared = await ProfileService.update(
-            session,
-            profile_id,
-            ProfileUpdate(description=None, owner=None),
-        )
-        await session.commit()
-        assert cleared is not None
-        assert cleared.description is None
-        assert cleared.owner is None
-        break
+    cleared = await ProfileService.update(
+        service_session,
+        profile_id,
+        ProfileUpdate(description=None, owner=None),
+    )
+    await service_session.commit()
+    assert cleared is not None
+    assert cleared.description is None
+    assert cleared.owner is None
 
-    # Update non-existent id → None branch in update()
-    async for session in get_session():
-        missing = await ProfileService.update(session, 9_999_999, patch)
-        assert missing is None
-        break
+    missing = await ProfileService.update(service_session, 9_999_999, patch)
+    assert missing is None
 
-    # Soft-delete and verify get(include_deleted=False) hides it, True returns it
-    async for session in get_session():
-        ok = await ProfileService.soft_delete(session, profile_id)
-        await session.commit()
-        assert ok is True
-        break
+    ok = await ProfileService.soft_delete(service_session, profile_id)
+    await service_session.commit()
+    assert ok is True
 
-    async for session in get_session():
-        hidden = await ProfileService.get(session, profile_id, include_deleted=False)
-        shown = await ProfileService.get(session, profile_id, include_deleted=True)
-        assert hidden is None and shown is not None
-        break
+    hidden = await ProfileService.get(service_session, profile_id, include_deleted=False)
+    shown = await ProfileService.get(service_session, profile_id, include_deleted=True)
+    assert hidden is None and shown is not None
 
-    # Restore should succeed once, then second restore returns None branch
-    async for session in get_session():
-        restored = await ProfileService.restore(session, profile_id)
-        await session.commit()
-        assert restored is not None
-        break
+    restored = await ProfileService.restore(service_session, profile_id)
+    await service_session.commit()
+    assert restored is not None
 
-    async for session in get_session():
-        restored_again = await ProfileService.restore(session, profile_id)
-        assert restored_again is None
-        break
+    restored_again = await ProfileService.restore(service_session, profile_id)
+    assert restored_again is None
 
-    # Hard-delete should remove the row entirely, then repeated call returns False
-    async for session in get_session():
-        deleted = await ProfileService.hard_delete(session, profile_id)
-        await session.commit()
-        assert deleted is True
-        break
+    deleted = await ProfileService.hard_delete(service_session, profile_id)
+    await service_session.commit()
+    assert deleted is True
 
-    async for session in get_session():
-        missing = await ProfileService.get(session, profile_id, include_deleted=True)
-        deleted_again = await ProfileService.hard_delete(session, profile_id)
-        assert missing is None
-        assert deleted_again is False
-        break
+    missing = await ProfileService.get(service_session, profile_id, include_deleted=True)
+    deleted_again = await ProfileService.hard_delete(service_session, profile_id)
+    assert missing is None
+    assert deleted_again is False
 
 
 @pytest.mark.anyio
-async def test_hard_delete_all_profiles_resets_library():
-    await init_db()
+async def test_hard_delete_all_profiles_resets_library(service_session: AsyncSessionAdapter):
+    await ProfileService.create(service_session, _mk_create_payload())
+    await ProfileService.create(service_session, _mk_create_payload())
+    await service_session.commit()
 
-    async for session in get_session():
-        await ProfileService.create(session, _mk_create_payload())
-        await ProfileService.create(session, _mk_create_payload())
-        await session.commit()
-        break
+    deleted = await ProfileService.hard_delete_all(service_session)
+    await service_session.commit()
+    assert deleted >= 2
 
-    async for session in get_session():
-        deleted = await ProfileService.hard_delete_all(session)
-        await session.commit()
-        assert deleted >= 2
-        break
-
-    async for session in get_session():
-        items = await ProfileService.list(session, include_deleted=True, limit=500)
-        assert items == []
-        break
+    items = await ProfileService.list(service_session, include_deleted=True, limit=500)
+    assert items == []

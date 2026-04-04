@@ -12,6 +12,44 @@
         <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
         {{ render_settings_pills(wizard_settings_sections["general"]["ui_maps"]["policy"], "wizard-settings-map-general") }}
         {{ render_settings_docs(wizard_settings_sections["general"]["ui_maps"]["policy"], wizard_settings_sections["general"]["ui_docs"]["policy"], "wizard-settings-docs-general") }}
+        <div class="wizard-stage-bar">
+            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+        </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_general_policy_focus_hint">
+            {{ tr("profiles.wizard_general_policy_focus_hint") }}
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-general-policy-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-policy-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_general_policy_preset_defaults_title">{{ tr("profiles.wizard_general_policy_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_general_policy_preset_defaults_copy">{{ tr("profiles.wizard_general_policy_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-policy-preset="updates">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_general_policy_preset_updates_title">{{ tr("profiles.wizard_general_policy_preset_updates_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_general_policy_preset_updates_copy">{{ tr("profiles.wizard_general_policy_preset_updates_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-policy-preset="browser_prompt">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_general_policy_preset_browser_prompt_title">{{ tr("profiles.wizard_general_policy_preset_browser_prompt_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_general_policy_preset_browser_prompt_copy">{{ tr("profiles.wizard_general_policy_preset_browser_prompt_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-policy-preset="downloads">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_general_policy_preset_downloads_title">{{ tr("profiles.wizard_general_policy_preset_downloads_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_general_policy_preset_downloads_copy">{{ tr("profiles.wizard_general_policy_preset_downloads_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-policy-preset="managed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_general_policy_preset_managed_title">{{ tr("profiles.wizard_general_policy_preset_managed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_general_policy_preset_managed_copy">{{ tr("profiles.wizard_general_policy_preset_managed_copy") }}</span>
+            </button>
+        </div>
+        <div id="wizard-general-policy-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_general_policy_section_state_empty">
+            {{ tr("profiles.wizard_general_policy_section_state_empty") }}
+        </div>
+        <div class="wizard-stage-panel wizard-workflow-card">
+            <div class="field-label" data-i18n="profiles.wizard_upkeep_governance_title">{{ tr("profiles.wizard_upkeep_governance_title") }}</div>
+            <div class="wizard-input-hint wizard-workflow-copy" id="wizard-upkeep-governance-copy" data-i18n="profiles.wizard_upkeep_governance_body">
+                {{ tr("profiles.wizard_upkeep_governance_body") }}
+            </div>
+            <div class="wizard-export-plan-list wizard-workflow-list" id="wizard-upkeep-governance-list"></div>
+        </div>
         <div class="wizard-policy-grid">
             {{ render_manual_policy_controls(wizard_manual_policy_groups["general_browser_behavior"]["items"]) }}
         </div>
@@ -28,6 +66,31 @@
         {{ render_settings_docs(wizard_settings_sections["general"]["ui_maps"]["proxy"], wizard_settings_sections["general"]["ui_docs"]["proxy"], "wizard-settings-docs-proxy") }}
         <div class="wizard-grid wizard-stage-panel">
             <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+            <div class="wizard-input-hint wizard-field-full" data-i18n="profiles.wizard_proxy_preset_hint">
+                {{ tr("profiles.wizard_proxy_preset_hint") }}
+            </div>
+            <div class="wizard-search-engine-preset-grid wizard-stage-panel wizard-field-full" id="wizard-proxy-presets">
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-proxy-preset="defaults">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_proxy_preset_defaults_title">{{ tr("profiles.wizard_proxy_preset_defaults_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_proxy_preset_defaults_copy">{{ tr("profiles.wizard_proxy_preset_defaults_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-proxy-preset="none">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_proxy_preset_none_title">{{ tr("profiles.wizard_proxy_preset_none_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_proxy_preset_none_copy">{{ tr("profiles.wizard_proxy_preset_none_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-proxy-preset="system">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_proxy_preset_system_title">{{ tr("profiles.wizard_proxy_preset_system_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_proxy_preset_system_copy">{{ tr("profiles.wizard_proxy_preset_system_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-proxy-preset="autoConfig">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_proxy_preset_pac_title">{{ tr("profiles.wizard_proxy_preset_pac_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_proxy_preset_pac_copy">{{ tr("profiles.wizard_proxy_preset_pac_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-proxy-preset="manual">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_proxy_preset_manual_title">{{ tr("profiles.wizard_proxy_preset_manual_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_proxy_preset_manual_copy">{{ tr("profiles.wizard_proxy_preset_manual_copy") }}</span>
+                </button>
+            </div>
             <label data-settings-target="field:wizard-proxy-mode">
                 <div class="field-label mb-1" data-i18n="profiles.wizard_proxy_mode_label">{{ tr("profiles.wizard_proxy_mode_label") }}</div>
                 <select id="wizard-proxy-mode" class="soft-input">
@@ -124,6 +187,34 @@
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
+        <div class="wizard-input-hint" data-i18n="profiles.wizard_network_enterprise_hint">
+            {{ tr("profiles.wizard_network_enterprise_hint") }}
+        </div>
+        <div class="wizard-stage-panel wizard-workflow-card">
+            <div class="field-label" data-i18n="profiles.wizard_trust_auth_workflow_title">{{ tr("profiles.wizard_trust_auth_workflow_title") }}</div>
+            <div class="wizard-input-hint wizard-workflow-copy" id="wizard-trust-auth-workflow-copy" data-i18n="profiles.wizard_trust_auth_workflow_body">
+                {{ tr("profiles.wizard_trust_auth_workflow_body") }}
+            </div>
+            <div class="wizard-export-plan-list wizard-workflow-list" id="wizard-trust-auth-workflow-list"></div>
+        </div>
+        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-network-enterprise-presets">
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-network-enterprise-preset="defaults">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_network_enterprise_preset_defaults_title">{{ tr("profiles.wizard_network_enterprise_preset_defaults_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_network_enterprise_preset_defaults_copy">{{ tr("profiles.wizard_network_enterprise_preset_defaults_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-network-enterprise-preset="sso">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_network_enterprise_preset_sso_title">{{ tr("profiles.wizard_network_enterprise_preset_sso_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_network_enterprise_preset_sso_copy">{{ tr("profiles.wizard_network_enterprise_preset_sso_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-network-enterprise-preset="roots">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_network_enterprise_preset_roots_title">{{ tr("profiles.wizard_network_enterprise_preset_roots_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_network_enterprise_preset_roots_copy">{{ tr("profiles.wizard_network_enterprise_preset_roots_copy") }}</span>
+            </button>
+            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-network-enterprise-preset="managed">
+                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_network_enterprise_preset_managed_title">{{ tr("profiles.wizard_network_enterprise_preset_managed_title") }}</span>
+                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_network_enterprise_preset_managed_copy">{{ tr("profiles.wizard_network_enterprise_preset_managed_copy") }}</span>
+            </button>
+        </div>
         <div class="wizard-grid wizard-stage-panel">
             <div id="wizard-dns-over-https-card" data-settings-target="policy:DNSOverHTTPS"></div>
             <div id="wizard-windows-sso-card" data-settings-target="policy:WindowsSSO"></div>
@@ -183,6 +274,30 @@
             </p>
         </div>
         <div class="wizard-section-group" data-preference-section="general" data-settings-target="pref-section:general">
+            <div class="wizard-stage-bar">
+                <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
+            </div>
+            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_general_focus_hint">
+                {{ tr("profiles.wizard_preferences_general_focus_hint") }}
+            </div>
+            <div id="wizard-preferences-general-focus" class="wizard-search-engine-preset-grid wizard-stage-panel">
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-preferences-focus="startup">
+                    <span data-i18n="profiles.wizard_preferences_general_focus_startup_title">{{ tr("profiles.wizard_preferences_general_focus_startup_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_preferences_general_focus_startup_copy">{{ tr("profiles.wizard_preferences_general_focus_startup_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-preferences-focus="downloads">
+                    <span data-i18n="profiles.wizard_preferences_general_focus_downloads_title">{{ tr("profiles.wizard_preferences_general_focus_downloads_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_preferences_general_focus_downloads_copy">{{ tr("profiles.wizard_preferences_general_focus_downloads_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-preferences-focus="behavior">
+                    <span data-i18n="profiles.wizard_preferences_general_focus_behavior_title">{{ tr("profiles.wizard_preferences_general_focus_behavior_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_preferences_general_focus_behavior_copy">{{ tr("profiles.wizard_preferences_general_focus_behavior_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-general-preferences-focus="manual">
+                    <span data-i18n="profiles.wizard_preferences_general_focus_manual_title">{{ tr("profiles.wizard_preferences_general_focus_manual_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_preferences_general_focus_manual_copy">{{ tr("profiles.wizard_preferences_general_focus_manual_copy") }}</span>
+                </button>
+            </div>
             <div class="wizard-search-engine-head">
                 <div>
                     <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">{{ tr("profiles.wizard_preferences_presets_title") }}</div>
