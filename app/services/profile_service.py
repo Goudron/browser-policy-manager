@@ -99,7 +99,7 @@ class ProfileService:
         schema_version: str | None = None,
         include_deleted: bool = False,
     ) -> int:
-        filters = []
+        filters: builtins.list[ColumnElement[bool]] = []
 
         if not include_deleted:
             filters.append(Profile.deleted_at.is_(None))
