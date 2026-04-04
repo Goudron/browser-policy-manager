@@ -1640,7 +1640,7 @@
             wireWizardConditionalVisibility();
             wireDocumentClicks();
             syncProxyWizardUi();
-            initializeShellState().catch((error) => {
+            const shellReady = initializeShellState().catch((error) => {
                 console.warn("shell initialization failed", error);
             });
 
@@ -1651,6 +1651,7 @@
             }
 
             monacoReady.then(async (monacoRef) => {
+                await shellReady;
                 const editor = monacoRef.editor.create(editorEl, {
                     value: "{}",
                     language: "json",

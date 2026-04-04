@@ -1625,7 +1625,7 @@ def test_profiles_page_uses_local_bootstrap_assets_without_inline_scripts():
     assert response.status_code == 200
     assert '<script src="/static/profiles_head_bootstrap.js?v=' in response.text
     assert '<script src="/static/profiles_page_bootstrap.js?v=' in response.text
-    assert 'id="profiles-initial-locale"' in response.text
+    assert '<script id="profiles-initial-locale" type="application/json">' in response.text
     assert "<script>" not in response.text
     assert "window.__BPM_INITIAL_LANG__ =" not in response.text
     assert "window.__BPM_INITIAL_LOCALE__ =" not in response.text

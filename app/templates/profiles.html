@@ -17,7 +17,7 @@
 
 <body class="app-body min-h-screen" data-initial-lang="{{ initial_lang }}">
     {% include "profiles/_page_shell.html" %}
-    <template id="profiles-initial-locale">{{ initial_locale | tojson }}</template>
+    <script id="profiles-initial-locale" type="application/json">{{ initial_locale | tojson }}</script>
     <script src="/static/profiles_utils.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_catalogs.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_dom.js?v={{ asset_version }}"></script>
