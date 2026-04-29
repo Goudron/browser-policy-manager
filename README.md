@@ -23,7 +23,7 @@ Today the project provides:
 **Backend:** FastAPI + SQLAlchemy + Alembic  
 **Frontend:** Jinja2 + self-hosted CSS/JS + self-hosted Monaco Editor bundle  
 **Database:** SQLite by default  
-**Python:** 3.13
+**Python:** 3.14
 
 ---
 

@@ -1,14 +1,37 @@
 # Dependency Refresh Backlog
 
 Date: `2026-04-29`
+Status: `completed`
 
 ## Goal
 
-Capture the dependency-refresh follow-up that was intentionally deferred from the current `0.7.0`
-cycle.
+Capture the dependency-refresh follow-up that was intentionally deferred from the `0.7.0`
+cycle, then record the outcome once the maintenance pass is complete.
 
-This note records the current stack snapshot, which packages already look stale, which ones appear safe
-to update in a low-risk batch, and which ones should wait for a dedicated compatibility pass.
+This note now records both the original analysis and the implemented refresh results.
+
+## Final outcome
+
+Completed in this maintenance cycle:
+
+- low-risk dependency refresh batch
+- framework/test-stack refresh batch
+- Python runtime uplift from `3.13` to `3.14`
+- `pyproject.toml`, README, and GitHub Actions workflow alignment with the new runtime baseline
+
+Validated successfully on the refreshed stack:
+
+- `./.venv/bin/ruff check .`
+- `./.venv/bin/mypy app`
+- `./.venv/bin/pytest -m 'not firefox_live and not firefox_live_amo'`
+- full `app/` coverage pass at `100%`
+- local Chromium UI audit on the rebuilt Python `3.14` environment
+
+Environment note:
+
+- deterministic Firefox live tests still require an unrestricted environment because the suite binds local
+  sockets for `geckodriver` and temporary HTTP fixtures; a sandboxed rerun on Python `3.14` failed with
+  socket-permission errors rather than product regressions.
 
 ## Current state
 
@@ -110,6 +133,8 @@ For now, Monaco should only be refreshed together with:
 
 ### Phase 1: low-risk maintenance batch
 
+Status: completed
+
 Perform one dependency refresh pass for:
 
 - `uvicorn`
@@ -130,6 +155,8 @@ Validation:
 
 ### Phase 2: framework and typing stack refresh
 
+Status: completed
+
 Run a dedicated compatibility pass for:
 
 - `fastapi`
@@ -147,6 +174,8 @@ Validation:
 
 ### Phase 3: reproducibility hardening
 
+Status: still open as a separate follow-up
+
 The repository currently relies on open-ended lower bounds such as `>=`.
 
 Follow-up work should decide whether to:
@@ -156,6 +185,80 @@ Follow-up work should decide whether to:
 
 This is important because a clean environment created later may not match the currently tested local
 stack.
+
+## Separate task: Python runtime upgrade
+
+This should stay separate from the ordinary dependency-refresh batches above.
+
+### Why it is a separate task
+
+Updating the Python interpreter is not just "one more package bump":
+
+- it changes the runtime for the FastAPI app itself;
+- it can affect SQLite and DB-adjacent behavior;
+- it changes the toolchain used by `mypy`, `ruff`, `pytest`, and packaging;
+- it can affect Selenium/live-browser helpers and local build steps;
+- it usually requires CI and local environment alignment.
+
+At the time of the initial analysis:
+
+- the local machine has `Python 3.13.7`;
+- the newest stable Python release is `3.14.4`;
+- Python `3.15` exists only as an alpha/development line and should not be used for this task.
+
+### Goal
+
+Upgrade the project runtime baseline from Python `3.13` to Python `3.14`, after a dedicated validation
+pass.
+
+### Proposed scope
+
+1. Install Python `3.14.x` on the target development machine and any CI runners used by the project.
+2. Recreate the project virtual environment on Python `3.14`.
+3. Reinstall project dependencies from the refreshed dependency set.
+4. Update project metadata if needed:
+   - `pyproject.toml`
+   - CI workflow Python versions
+   - any setup or contributor docs that mention the supported local runtime
+5. Re-run the main validation stack on Python `3.14`.
+
+### Required validation
+
+Minimum expected validation for the Python runtime upgrade:
+
+- `./.venv/bin/ruff check .`
+- `./.venv/bin/mypy app`
+- `./.venv/bin/pytest -m 'not firefox_live and not firefox_live_amo'`
+- full coverage pass for `app/`
+- local Chromium UI audit
+- deterministic live Firefox sanity check
+
+If CI pins a Python version explicitly, CI should also be updated and verified in the same task.
+
+### Things to check carefully
+
+- `sqlalchemy` / `alembic` / `aiosqlite` behavior on the new interpreter
+- schema-loading and validation flows
+- import/export contract behavior for Firefox `policies.json`
+- local Selenium helpers and browser-driver startup
+- tooling behavior for `mypy`, `ruff`, and `pytest-asyncio`
+- any packaging or editable-install differences under Python `3.14`
+
+### Definition of done
+
+- the project installs cleanly in a fresh Python `3.14` virtual environment
+- the main non-live test suite passes on Python `3.14`
+- static checks pass on Python `3.14`
+- local browser-based sanity checks pass on Python `3.14`
+- repository docs and CI reflect the new runtime baseline
+
+Completion note:
+
+- completed with local Python `3.14.4` installed under `~/.local/python-3.14.4`
+- project `.venv` rebuilt on `Python 3.14.4`
+- repository metadata and GitHub Actions updated to `3.14`
+- Chromium browser-level sanity passed on the rebuilt environment
+- deterministic Firefox live rerun remains environment-sensitive because sandboxed socket binding is blocked
 
 ## Definition of done for the later task
 
