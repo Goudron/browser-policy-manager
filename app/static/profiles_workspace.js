@@ -13,10 +13,12 @@
             libraryCountLabel,
             toEditorValue,
             fromEditorValue,
+            parseEditorPolicyDocument,
             listProfiles,
             getProfileLibraryStats,
             getProfile,
             createProfile,
+            importFirefoxPoliciesJson,
             patchProfile,
             softDeleteProfile,
             hardDeleteProfile,
@@ -29,6 +31,9 @@
             syncWizardFieldsFromForm,
             updateWizardContext,
             setWizardStarter,
+            setWizardComplianceLayer,
+            setWizardComplianceSnapshot,
+            getWizardComplianceMergeInfo,
             markWizardBaselineSnapshot,
             renderCurrentStepActions,
             syncWizardNetworkFromEditor,
@@ -91,6 +96,9 @@
             profileCloneHandoffListEl,
             profileLifecycleCopyEl,
             profileLifecycleListEl,
+            profileCompliancePanelEl,
+            profileComplianceCopyEl,
+            profileComplianceListEl,
             stateBadgeEl,
             workspaceProfileCountEl,
             workspaceSignalEl,
@@ -102,6 +110,9 @@
             resetLibraryButtonEl,
             validateButtonEl,
             refreshButtonEl,
+            importFirefoxPoliciesButtonEl,
+            importFirefoxPoliciesFileEl,
+            importFirefoxPoliciesStatusEl,
             overviewSchemaEl,
             overviewModeEl,
             overviewStatusEl,
@@ -110,11 +121,15 @@
             dockStateSummaryEl,
             dockStateTitleEl,
             dockStateCopyEl,
+            saveConflictPanelEl,
+            saveConflictCopyEl,
+            saveConflictMetaEl,
+            saveConflictReloadEl,
+            saveConflictSaveCopyEl,
+            saveConflictOverwriteEl,
             wizardExportSaveActionEl,
             wizardExportValidateActionEl,
             wizardExportReadyCardEl,
-            wizardExportJsonEl,
-            wizardExportYamlEl,
             wizardExportFirefoxPoliciesEl,
             advancedReviewStripEl,
             advancedReviewSaveStateEl,
@@ -130,6 +145,22 @@
         const commandDeckEl = documentRef.getElementById("command-deck");
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         let compareProfileState = null;
+        let saveConflictState = null;
+
+        function setImportStatus(message, tone = "info") {
+            if (!importFirefoxPoliciesStatusEl) return;
+            importFirefoxPoliciesStatusEl.textContent = message;
+            importFirefoxPoliciesStatusEl.dataset.statusTone = tone;
+        }
+
+        function inferImportProfileName(file) {
+            const rawName = file?.name || "policies.json";
+            const withoutExtension = rawName.replace(/\.json$/i, "").trim();
+            if (!withoutExtension || withoutExtension.toLowerCase() === "policies") {
+                return t("profiles.import_firefox_policies_default_name");
+            }
+            return withoutExtension;
+        }
 
         function setSelectionUiState(nextState) {
             [overviewPanelEl, commandDeckEl].forEach((el) => {
@@ -483,6 +514,88 @@
             };
         }
 
+        function buildExpectedRevisionPayload() {
+            const revision = Number(getCurrentProfile()?.revision);
+            if (!Number.isInteger(revision) || revision < 1) return {};
+            return { expected_revision: revision };
+        }
+
+        function isRevisionConflictError(error) {
+            return Number(error?.status) === 409;
+        }
+
+        function clearSaveConflictState() {
+            saveConflictState = null;
+            if (saveConflictPanelEl) {
+                saveConflictPanelEl.hidden = true;
+            }
+            if (saveConflictMetaEl) {
+                saveConflictMetaEl.textContent = "";
+            }
+        }
+
+        function showSaveConflictState(error) {
+            const profileId = Number(error?.detail?.profile_id || getCurrentId() || 0);
+            const currentRevision = Number(error?.detail?.current_revision || 0);
+            const expectedRevision = Number(error?.detail?.expected_revision || 0);
+            saveConflictState = {
+                profileId: Number.isInteger(profileId) && profileId > 0 ? profileId : getCurrentId(),
+                currentRevision: Number.isInteger(currentRevision) && currentRevision > 0 ? currentRevision : null,
+                expectedRevision: Number.isInteger(expectedRevision) && expectedRevision > 0 ? expectedRevision : null,
+            };
+
+            const message = t("profiles.status_revision_conflict");
+            if (saveConflictPanelEl) {
+                saveConflictPanelEl.hidden = false;
+            }
+            if (saveConflictCopyEl) {
+                saveConflictCopyEl.textContent = t("profiles.conflict_body");
+            }
+            if (saveConflictMetaEl) {
+                saveConflictMetaEl.textContent = saveConflictState.currentRevision && saveConflictState.expectedRevision
+                    ? t("profiles.conflict_revision_detail")
+                        .replace("{current}", String(saveConflictState.currentRevision))
+                        .replace("{expected}", String(saveConflictState.expectedRevision))
+                    : "";
+            }
+            setStatus(message, "error");
+            setValidationPreview(message, "error");
+        }
+
+        function buildUpdatePayload(form, parsedFlags, compliancePayload, options = {}) {
+            const { includeExpectedRevision = true } = options;
+            return {
+                description: form.description,
+                owner: form.owner,
+                schema_version: form.schemaVersion,
+                flags: parsedFlags,
+                compliance: compliancePayload,
+                ...(includeExpectedRevision ? buildExpectedRevisionPayload() : {}),
+            };
+        }
+
+        function buildCreatePayload(form, parsedFlags, compliancePayload, options = {}) {
+            const { name = form.name } = options;
+            return {
+                name,
+                description: form.description,
+                owner: form.owner,
+                schema_version: form.schemaVersion,
+                flags: parsedFlags,
+                compliance: compliancePayload,
+            };
+        }
+
+        function buildConflictCopyName(form) {
+            const sourceName = form.name || getCurrentProfile()?.name || t("profiles.conflict_copy_source_fallback");
+            const revision = saveConflictState?.expectedRevision || getCurrentProfile()?.revision || "";
+            const stamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+            return t("profiles.conflict_copy_name")
+                .replace("{name}", sourceName)
+                .replace("{revision}", String(revision || "?"))
+                .replace("{time}", stamp);
+        }
+
         function hasComparableBase() {
             return Boolean(getCurrentId());
         }
@@ -626,6 +739,7 @@
                 "OfferToSaveLoginsDefault",
                 "SanitizeOnShutdown",
                 "HttpsOnlyMode",
+                "IPProtectionAvailable",
             ].includes(policyKey)) return "step_five";
             if ([
                 "DisableFirefoxAccounts",
@@ -640,7 +754,7 @@
                 "ManagedBookmarks",
                 "GoToIntranetSiteForSingleWordEntryInAddressBar",
             ].includes(policyKey)) return "step_six";
-            if (["GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_seven";
+            if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_seven";
             return "step_two";
         }
 
@@ -891,14 +1005,24 @@
         }
 
         function setButtonDisabled(el, disabled) {
+            if (!el) return;
             el.disabled = disabled;
             el.classList.toggle("pointer-events-none", disabled);
             el.classList.toggle("opacity-50", disabled);
         }
 
+        function setLinkUnavailable(el, unavailable) {
+            if (!el) return;
+            el.classList.toggle("pointer-events-none", unavailable);
+            el.classList.toggle("opacity-50", unavailable);
+        }
+
+        function setLinkHref(el, href) {
+            if (!el) return;
+            el.href = href;
+        }
+
         function updateActionState() {
-            const downloadJson = documentRef.getElementById("download-json");
-            const downloadYaml = documentRef.getElementById("download-yaml");
             const downloadFirefoxPolicies = documentRef.getElementById("download-firefox-policies");
             const { dirty, invalid } = refreshWorkspaceSignal();
             const canFinish = !getIsBusy() && !invalid && (Boolean(getCurrentId()) || Boolean(nameInput.value.trim()));
@@ -915,6 +1039,9 @@
             setButtonDisabled(resetLibraryButtonEl, getIsBusy());
             setButtonDisabled(validateButtonEl, getIsBusy() || invalid);
             setButtonDisabled(refreshButtonEl, getIsBusy());
+            if (importFirefoxPoliciesButtonEl) {
+                setButtonDisabled(importFirefoxPoliciesButtonEl, getIsBusy());
+            }
             setButtonDisabled(wizardFinishEl, !canFinish);
             if (wizardExportSaveActionEl) {
                 wizardExportSaveActionEl.textContent = saveButtonEl.textContent;
@@ -948,19 +1075,11 @@
             renderComparePanel();
 
             if (!exportAvailable) {
-                downloadJson.classList.add("pointer-events-none", "opacity-50");
-                downloadYaml.classList.add("pointer-events-none", "opacity-50");
-                downloadFirefoxPolicies.classList.add("pointer-events-none", "opacity-50");
-                wizardExportJsonEl.classList.add("pointer-events-none", "opacity-50");
-                wizardExportYamlEl.classList.add("pointer-events-none", "opacity-50");
-                wizardExportFirefoxPoliciesEl.classList.add("pointer-events-none", "opacity-50");
+                setLinkUnavailable(downloadFirefoxPolicies, true);
+                setLinkUnavailable(wizardExportFirefoxPoliciesEl, true);
             } else {
-                downloadJson.classList.remove("pointer-events-none", "opacity-50");
-                downloadYaml.classList.remove("pointer-events-none", "opacity-50");
-                downloadFirefoxPolicies.classList.remove("pointer-events-none", "opacity-50");
-                wizardExportJsonEl.classList.remove("pointer-events-none", "opacity-50");
-                wizardExportYamlEl.classList.remove("pointer-events-none", "opacity-50");
-                wizardExportFirefoxPoliciesEl.classList.remove("pointer-events-none", "opacity-50");
+                setLinkUnavailable(downloadFirefoxPolicies, false);
+                setLinkUnavailable(wizardExportFirefoxPoliciesEl, false);
             }
 
             renderFinalExportStepSummary(dirty, invalid);
@@ -969,32 +1088,25 @@
         }
 
         function updateDownloadLinks() {
-            const jsonLink = documentRef.getElementById("download-json");
-            const yamlLink = documentRef.getElementById("download-yaml");
             const firefoxPoliciesLink = documentRef.getElementById("download-firefox-policies");
             if (!getCurrentId() || getCurrentProfile()?.is_deleted) {
-                jsonLink.href = "#";
-                yamlLink.href = "#";
-                firefoxPoliciesLink.href = "#";
-                wizardExportJsonEl.href = "#";
-                wizardExportYamlEl.href = "#";
-                wizardExportFirefoxPoliciesEl.href = "#";
+                setLinkHref(firefoxPoliciesLink, "#");
+                setLinkHref(wizardExportFirefoxPoliciesEl, "#");
                 updateActionState();
                 return;
             }
-            jsonLink.href = `/api/export/profiles/${getCurrentId()}.json`;
-            yamlLink.href = `/api/export/profiles/${getCurrentId()}.yaml`;
-            firefoxPoliciesLink.href = `/api/export/profiles/${getCurrentId()}/firefox/policies.json`;
-            wizardExportJsonEl.href = jsonLink.href;
-            wizardExportYamlEl.href = yamlLink.href;
-            wizardExportFirefoxPoliciesEl.href = firefoxPoliciesLink.href;
+            const firefoxPoliciesHref = `/api/export/profiles/${getCurrentId()}/firefox/policies.json`;
+            setLinkHref(firefoxPoliciesLink, firefoxPoliciesHref);
+            setLinkHref(wizardExportFirefoxPoliciesEl, firefoxPoliciesHref);
             updateActionState();
         }
 
         function setDraftState(message, options = {}) {
             const { preserveCloneSource = false } = options;
+            clearSaveConflictState();
             setCurrentProfile(null);
             setCurrentId(null);
+            setWizardComplianceSnapshot(null);
             if (!preserveCloneSource) {
                 setCloneSourceProfile(null);
             }
@@ -1011,6 +1123,9 @@
                 t("profiles.helper_no_selection_body"),
             );
             setValidationPreview(message ? t("profiles.status_draft_ready") : t("profiles.selection_empty_status"));
+            if (profileCompliancePanelEl) {
+                profileCompliancePanelEl.hidden = true;
+            }
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
             updateDownloadLinks();
@@ -1021,14 +1136,64 @@
             renderList(getLibraryStats().items || []);
         }
 
+        function formatComplianceLayerLabel(layer) {
+            if (layer === "cis_l1") return t("profiles.wizard_cis_l1_title");
+            if (layer === "cis_l2") return t("profiles.wizard_cis_l2_title");
+            return t("profiles.wizard_cis_none_title");
+        }
+
+        function renderProfileComplianceSummary(profile) {
+            if (!profileCompliancePanelEl || !profileComplianceCopyEl || !profileComplianceListEl) return;
+            const compliance = profile?.compliance;
+            if (!compliance || !compliance.layer || compliance.layer === "none") {
+                profileCompliancePanelEl.hidden = true;
+                profileComplianceListEl.innerHTML = "";
+                return;
+            }
+
+            const decisions = Array.isArray(compliance.decisions) ? compliance.decisions : [];
+            const raisedCount = decisions.filter((decision) =>
+                decision.decision === "added_from_cis" || decision.decision === "cis_replaced_base",
+            ).length;
+            const manualCount = decisions.filter((decision) => decision.review_required).length;
+            const exceptionCount = decisions.filter((decision) =>
+                Boolean(decision.exception_note || decision.exceptionNote),
+            ).length;
+
+            const levelLabel = formatComplianceLayerLabel(compliance.layer);
+            const version = compliance.benchmark_version || compliance.benchmarkVersion || "";
+            const items = [
+                t("profiles.compliance_summary_level").replace("{level}", levelLabel),
+            ];
+            if (version) {
+                items.push(t("profiles.compliance_summary_version").replace("{version}", version));
+            }
+            items.push(t("profiles.compliance_summary_raised").replace("{count}", String(raisedCount)));
+            items.push(t("profiles.compliance_summary_manual").replace("{count}", String(manualCount)));
+            items.push(t("profiles.compliance_summary_exceptions").replace("{count}", String(exceptionCount)));
+
+            profileComplianceCopyEl.textContent = t("profiles.compliance_summary_body");
+            profileComplianceListEl.innerHTML = items
+                .map((item) => `<div class="wizard-baseline-summary-item">${item}</div>`)
+                .join("");
+            profileCompliancePanelEl.hidden = false;
+        }
+
         function setMeta(profile) {
+            clearSaveConflictState();
             setCurrentProfile(profile);
             if (!profile) {
                 setDraftState();
                 return;
             }
 
-            setWizardStarter("keep_current");
+            setWizardStarter("keep_current", { preserveComplianceLayer: true });
+            setWizardComplianceSnapshot(profile.compliance || null);
+            if (profile?.compliance?.layer) {
+                setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
+            } else {
+                setWizardComplianceLayer("none", { skipApply: true, allowKeepCurrent: true });
+            }
 
             currentNameEl.textContent = profile.name;
             currentMetaEl.textContent = [
@@ -1056,6 +1221,7 @@
             nameInput.disabled = true;
             nameHintEl.textContent = t("profiles.name_locked");
             setValidationPreview(t("profiles.selection_active_status"), "success");
+            renderProfileComplianceSummary(profile);
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
             updateDownloadLinks();
@@ -1103,6 +1269,7 @@
                 schema_version: sourceProfile?.schema_version || defaultSchemaVersion,
                 is_deleted: sourceProfile?.is_deleted === true,
             });
+            setWizardComplianceSnapshot(sourceProfile?.compliance || null);
             setLifecycleSessionNote(null);
             setCurrentProfile(null);
             setCurrentId(null);
@@ -1122,6 +1289,7 @@
                 t("profiles.helper_clone_body"),
             );
             setValidationPreview(t("profiles.status_draft_ready"));
+            renderProfileComplianceSummary(sourceProfile);
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
             updateDownloadLinks();
@@ -1142,7 +1310,7 @@
                 const li = documentRef.createElement("li");
                 li.className = "list-empty-illustration rounded-[24px] border border-dashed border-slate-200 px-4 py-6 text-center";
                 li.innerHTML = `
-                    <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/80 bg-white/80 text-2xl shadow-sm">+</div>
+                    <div class="list-empty-illustration-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/80 bg-white/80 text-2xl shadow-sm">+</div>
                     <div class="text-sm font-semibold text-slate-900">${t("profiles.empty_title")}</div>
                     <div class="mx-auto mt-2 max-w-[240px] text-sm leading-6 text-slate-500">${t("profiles.empty_list")}</div>
                 `;
@@ -1167,12 +1335,13 @@
                 const statusLabel = profile.is_deleted
                     ? t("profiles.badge_deleted")
                     : t("profiles.badge_active");
+                const editHref = `/profiles/${profile.id}/edit`;
                 li.innerHTML = `
                     <div class="library-row-grid profile-list-button ${selected ? "profile-list-button--selected" : ""}">
                         <div class="library-row-primary">
-                            <button type="button" class="library-row-title-button">
-                                ${profile.name}
-                            </button>
+                            <a class="library-row-title-button" href="${editHref}">
+                                ${escapeHtml(profile.name)}
+                            </a>
                         </div>
 
                         <div class="library-row-meta">
@@ -1192,9 +1361,9 @@
                         </div>
 
                         <div class="library-row-actions">
-                            <button type="button" class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}">
+                            <a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}">
                                 ${openLabel}
-                            </button>
+                            </a>
                             ${canCompare ? `
                                 <button
                                     type="button"
@@ -1214,12 +1383,6 @@
                         </div>
                     </div>
                 `;
-                li.querySelector(".library-row-title-button")?.addEventListener("click", async () => {
-                    await loadProfile(profile.id);
-                });
-                li.querySelector(".library-row-open-button")?.addEventListener("click", async () => {
-                    await loadProfile(profile.id);
-                });
                 const compareButton = li.querySelector("[data-compare-profile-id]");
                 compareButton?.addEventListener("click", async () => {
                     await compareWithProfile(profile.id);
@@ -1248,10 +1411,10 @@
         }
 
         async function loadProfile(id, options = {}) {
-            const { keepCloneSource = false } = options;
+            const { keepCloneSource = false, skipConfirm = false } = options;
             const editor = getEditor();
             try {
-                if (!(await confirmIfDirty())) return;
+                if (!skipConfirm && !(await confirmIfDirty())) return;
                 const profile = await getProfile(id);
                 if (compareProfileState?.profile?.id === id) {
                     compareProfileState = null;
@@ -1293,6 +1456,11 @@
                 setCurrentRaw(flags);
                 editor.setValue(toEditorValue(flags, documentRef.getElementById("mode").value));
                 setCloneDraftState(profile);
+                if (profile?.compliance?.layer) {
+                    setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
+                } else {
+                    setWizardComplianceLayer("none", { skipApply: true, allowKeepCurrent: true });
+                }
                 setBaselineFromCurrentUi();
                 setWizardStep(1);
                 nameInput.focus();
@@ -1321,15 +1489,32 @@
             setButtonDisabled(resetLibraryButtonEl, true);
             setButtonDisabled(validateButtonEl, true);
             setButtonDisabled(refreshButtonEl, true);
+            if (importFirefoxPoliciesButtonEl) {
+                setButtonDisabled(importFirefoxPoliciesButtonEl, true);
+            }
         }
 
-        async function saveCurrent() {
+        async function saveCurrent(options = {}) {
+            const { overwriteRevision = false } = options;
             const editor = getEditor();
             try {
                 setBusyState(true, getCurrentId() ? "profiles.saving" : "profiles.creating");
                 const form = readFormState();
                 const mode = documentRef.getElementById("mode").value;
                 const parsedFlags = fromEditorValue(editor.getValue(), mode);
+                const complianceInfo = typeof getWizardComplianceMergeInfo === "function"
+                    ? getWizardComplianceMergeInfo()
+                    : { layer: "none" };
+                const compliancePayload = complianceInfo.layer && complianceInfo.layer !== "none"
+                    ? {
+                        framework: "cis",
+                        benchmark_id: complianceInfo.benchmark_id || "cis-firefox-esr-gpo",
+                        benchmark_version: complianceInfo.benchmark_version || "1.0.0",
+                        layer: complianceInfo.layer,
+                        summary: complianceInfo.summary || {},
+                        decisions: complianceInfo.decisions || [],
+                    }
+                    : null;
 
                 if (!getCurrentId() && !form.name) {
                     setBusyState(false);
@@ -1339,35 +1524,82 @@
                 }
 
                 if (!getCurrentId()) {
-                const created = await createProfile({
-                        name: form.name,
-                        description: form.description,
-                        owner: form.owner,
-                        schema_version: form.schemaVersion,
-                        flags: parsedFlags,
-                });
+                    const created = await createProfile(buildCreatePayload(form, parsedFlags, compliancePayload));
                     setLifecycleSessionNote(null);
                     setCurrentRaw(created.flags || {});
                     await reloadList();
                     await loadProfile(created.id, { keepCloneSource: Boolean(getCloneSourceProfile()?.name) });
+                    clearSaveConflictState();
                     setStatus(t("profiles.status_profile_created").replace("{name}", created.name), "success");
                     setValidationPreview(t("profiles.validation_ready"), "success");
                     setBusyState(false);
                     return true;
                 }
 
-                const updated = await patchProfile(getCurrentId(), {
-                    description: form.description,
-                    owner: form.owner,
-                    schema_version: form.schemaVersion,
-                    flags: parsedFlags,
-                });
+                const updated = await patchProfile(
+                    getCurrentId(),
+                    buildUpdatePayload(form, parsedFlags, compliancePayload, {
+                        includeExpectedRevision: !overwriteRevision,
+                    }),
+                );
                 setLifecycleSessionNote(null);
                 setCurrentRaw(updated.flags || {});
                 setMeta(updated);
                 setBaselineFromCurrentUi();
                 await reloadList();
+                clearSaveConflictState();
                 setStatus(t("profiles.status_profile_saved").replace("{name}", updated.name), "success");
+                setValidationPreview(t("profiles.validation_ready"), "success");
+                return true;
+            } catch (e) {
+                if (isRevisionConflictError(e)) {
+                    showSaveConflictState(e);
+                    return false;
+                }
+                setStatus(t("profiles.error_save").replace("{detail}", e.message || e), "error");
+                return false;
+            } finally {
+                setBusyState(false);
+            }
+        }
+
+        async function saveConflictAsCopy() {
+            const editor = getEditor();
+            if (!saveConflictState?.profileId && !getCurrentId()) {
+                setStatus(t("profiles.select_profile_first"), "warn");
+                return false;
+            }
+
+            try {
+                setBusyState(true, "profiles.creating");
+                const form = readFormState();
+                const mode = documentRef.getElementById("mode").value;
+                const parsedFlags = fromEditorValue(editor.getValue(), mode);
+                const complianceInfo = typeof getWizardComplianceMergeInfo === "function"
+                    ? getWizardComplianceMergeInfo()
+                    : { layer: "none" };
+                const compliancePayload = complianceInfo.layer && complianceInfo.layer !== "none"
+                    ? {
+                        framework: "cis",
+                        benchmark_id: complianceInfo.benchmark_id || "cis-firefox-esr-gpo",
+                        benchmark_version: complianceInfo.benchmark_version || "1.0.0",
+                        layer: complianceInfo.layer,
+                        summary: complianceInfo.summary || {},
+                        decisions: complianceInfo.decisions || [],
+                    }
+                    : null;
+                const copyName = buildConflictCopyName(form);
+                const created = await createProfile(
+                    buildCreatePayload(form, parsedFlags, compliancePayload, { name: copyName }),
+                );
+
+                setCloneSourceProfile(null);
+                setLifecycleSessionNote(null);
+                setCurrentRaw(created.flags || {});
+                await reloadList();
+                await loadProfile(created.id, { skipConfirm: true });
+                clearSaveConflictState();
+                setStatus(t("profiles.conflict_copy_created").replace("{name}", created.name), "success");
                 setValidationPreview(t("profiles.validation_ready"), "success");
                 return true;
             } catch (e) {
@@ -1476,8 +1708,11 @@
             try {
                 setBusyState(true, "profiles.validating");
                 const profileKey = documentRef.getElementById("profile-type").value;
-                const parsedFlags = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
-                const res = await validateFlags(profileKey, parsedFlags);
+                const document = parseEditorPolicyDocument(
+                    editor.getValue(),
+                    documentRef.getElementById("mode").value,
+                );
+                const res = await validateFlags(profileKey, document);
                 if (res.ok) {
                     setStatus(t("profiles.status_validation_ok").replace("{schema}", profileKey), "success");
                     setValidationPreview(t("profiles.validation_ok"), "success");
@@ -1497,8 +1732,96 @@
             }
         }
 
+        async function doImportFirefoxPoliciesJson(file) {
+            if (!file) {
+                setImportStatus(t("profiles.import_firefox_policies_ready"));
+                return null;
+            }
+            if (!(await confirmIfDirty())) {
+                setImportStatus(t("profiles.import_firefox_policies_cancelled"), "warn");
+                return null;
+            }
+
+            try {
+                setBusyState(true, "profiles.importing_firefox_policies");
+                setImportStatus(
+                    t("profiles.import_firefox_policies_reading").replace("{name}", file.name || "policies.json"),
+                    "info",
+                );
+
+                const rawText = await file.text();
+                let document;
+                try {
+                    document = JSON.parse(rawText);
+                } catch (parseError) {
+                    throw new Error(
+                        t("profiles.error_import_firefox_policies_parse")
+                            .replace("{detail}", parseError.message || parseError),
+                    );
+                }
+
+                const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
+                const imported = await importFirefoxPoliciesJson({
+                    name: inferImportProfileName(file),
+                    description: t("profiles.import_firefox_policies_description")
+                        .replace("{name}", file.name || "policies.json"),
+                    schema_version: schemaVersion,
+                    document,
+                });
+
+                setCloneSourceProfile(null);
+                setLifecycleSessionNote(null);
+                setImportStatus(
+                    t("profiles.status_import_firefox_policies_done").replace("{name}", imported.name),
+                    "success",
+                );
+                await reloadList();
+                await loadProfile(imported.id, { skipConfirm: true });
+                setStatus(
+                    t("profiles.status_import_firefox_policies_done").replace("{name}", imported.name),
+                    "success",
+                );
+                setValidationPreview(t("profiles.validation_ready"), "success");
+                return imported;
+            } catch (e) {
+                const message = e.message || String(e);
+                setImportStatus(
+                    t("profiles.error_import_firefox_policies").replace("{detail}", message),
+                    "error",
+                );
+                setStatus(
+                    t("profiles.error_import_firefox_policies").replace("{detail}", message),
+                    "error",
+                );
+                return null;
+            } finally {
+                if (importFirefoxPoliciesFileEl) {
+                    importFirefoxPoliciesFileEl.value = "";
+                }
+                setBusyState(false);
+            }
+        }
+
         compareClearEl?.addEventListener("click", () => {
             clearCompareProfile();
+        });
+
+        saveConflictReloadEl?.addEventListener("click", async () => {
+            const profileId = saveConflictState?.profileId || getCurrentId();
+            if (!profileId) return;
+            await loadProfile(profileId, { skipConfirm: true });
+            clearSaveConflictState();
+            setStatus(t("profiles.conflict_reloaded"), "success");
+        });
+
+        saveConflictSaveCopyEl?.addEventListener("click", async () => {
+            await saveConflictAsCopy();
+        });
+
+        saveConflictOverwriteEl?.addEventListener("click", async () => {
+            if (!getCurrentId()) return;
+            if (!windowRef.confirm(t("profiles.conflict_overwrite_confirm"))) return;
+            await saveCurrent({ overwriteRevision: true });
         });
 
         [profileCloneHandoffListEl, wizardCloneHandoffListEl].forEach((listEl) => {
@@ -1538,15 +1861,18 @@
             reloadList,
             loadProfile,
             readFormState,
+            buildCreatePayload,
             buildSnapshot,
             buildProfileSnapshot,
             buildCompareDiff,
             saveCurrent,
+            saveConflictAsCopy,
             doSoftDelete,
             doHardDelete,
             doRestore,
             doResetLibrary,
             doValidate,
+            doImportFirefoxPoliciesJson,
         };
     }
 

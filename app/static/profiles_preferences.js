@@ -35,6 +35,7 @@
                     bundles: documentRef.getElementById(`wizard-preferences-${section.id}-bundles`),
                     known: documentRef.getElementById(`wizard-preferences-${section.id}-known`),
                     add: documentRef.getElementById(`wizard-preferences-${section.id}-add`),
+                    count: documentRef.getElementById(`wizard-preferences-${section.id}-count`),
                 },
             ]),
         );
@@ -92,18 +93,12 @@
 
         function revealPreferenceFocus(kind) {
             const generalView = wizardPreferenceViews.general || {};
-            const docsEl = documentRef.getElementById("wizard-preferences-general-docs");
-            const clickFilter = (filterId) => {
-                docsEl?.querySelector(`[data-settings-filter="${filterId}"]`)?.click();
-            };
             let targetEl = null;
 
             if (kind === "startup") {
-                clickFilter("startup");
                 targetEl = generalView.presets?.querySelector('[data-preference-preset="restore_session"]')
                     || generalView.presets?.querySelector('[data-preference-preset="open_homepage"]');
             } else if (kind === "downloads") {
-                clickFilter("downloads");
                 targetEl = generalView.presets?.querySelector('[data-preference-preset="download_prompt"]')
                     || generalView.presets?.querySelector('[data-preference-preset="download_dir"]');
             } else if (kind === "behavior") {

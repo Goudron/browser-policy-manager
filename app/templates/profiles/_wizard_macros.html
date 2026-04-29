@@ -1,30 +1,39 @@
-{% macro render_settings_pills(items, element_id) -%}
-<div id="{{ element_id }}" class="dock-meta">
-    {%- for item in items %}
-    <span class="dock-pill" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.fallback) }}</span>
-    {%- endfor %}
+{% macro render_wizard_disclosure(title_key, body_key, panel_id, default_open=false, title_fallback="Details", body_fallback="") -%}
+<div class="wizard-disclosure" data-wizard-disclosure>
+    <div class="wizard-disclosure-head">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" data-i18n="{{ title_key }}">{{ tr(title_key, title_fallback) }}</h3>
+            <p class="wizard-section-copy" data-i18n="{{ body_key }}">
+                {{ tr(body_key, body_fallback) }}
+            </p>
+        </div>
+        <button
+            type="button"
+            class="button-base ghost-button wizard-disclosure-toggle"
+            data-wizard-disclosure-toggle
+            data-wizard-disclosure-show-key="profiles.wizard_disclosure_show"
+            data-wizard-disclosure-hide-key="profiles.wizard_disclosure_hide"
+            aria-expanded="{{ 'true' if default_open else 'false' }}"
+            aria-controls="{{ panel_id }}">
+            {{ tr("profiles.wizard_disclosure_hide" if default_open else "profiles.wizard_disclosure_show") }}
+        </button>
+    </div>
+    <div class="wizard-disclosure-panel" id="{{ panel_id }}" {% if not default_open %}hidden{% endif %}>
+        {{ caller() }}
+    </div>
 </div>
 {%- endmacro %}
 
-{% macro render_settings_docs(filters, targets, element_id) -%}
-<div id="{{ element_id }}" class="wizard-settings-docs surface-soft-box" data-settings-nav>
-    <div class="wizard-settings-docs-head">
-        <div class="field-label" data-i18n="profiles.wizard_settings_controls_label">{{ tr("profiles.wizard_settings_controls_label") }}</div>
-        <div class="wizard-settings-filters">
-            <button type="button" class="button-base ghost-button wizard-settings-filter is-active" data-settings-filter="all" data-i18n="profiles.wizard_settings_filter_all">{{ tr("profiles.wizard_settings_filter_all") }}</button>
-            {%- for item in filters %}
-            <button type="button" class="button-base ghost-button wizard-settings-filter" data-settings-filter="{{ item.id }}" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.fallback) }}</button>
-            {%- endfor %}
-        </div>
-    </div>
-    <div class="wizard-settings-targets">
-        {%- for item in targets %}
-        <button type="button" class="button-base ghost-button wizard-settings-target" data-settings-area-id="{{ item.area_id }}" data-settings-jump-target="{{ item.target }}">
-            <span data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.fallback) }}</span>
-        </button>
-        {%- endfor %}
-    </div>
-</div>
+{% macro render_doc_placeholder(doc_id, title_key, body_key) -%}
+<a
+    href="#docs-{{ doc_id }}"
+    class="wizard-doc-placeholder"
+    data-doc-placeholder="{{ doc_id }}"
+    aria-disabled="true">
+    <span class="wizard-doc-placeholder-title" data-i18n="{{ title_key }}">{{ tr(title_key) }}</span>
+    <span class="wizard-doc-placeholder-copy" data-i18n="{{ body_key }}">{{ tr(body_key) }}</span>
+    <span class="wizard-doc-placeholder-status" data-i18n="profiles.docs_placeholder_status">{{ tr("profiles.docs_placeholder_status") }}</span>
+</a>
 {%- endmacro %}
 
 {% macro render_manual_policy_controls(items) -%}
@@ -54,53 +63,58 @@
     {%- endfor %}
 {%- endmacro %}
 
+{% macro render_outcome_policy_group(title_key, body_key, marker, items) -%}
+<section class="wizard-outcome-group wizard-field-full" data-privacy-outcome-group="{{ marker }}">
+    <div class="wizard-outcome-group__head">
+        <h4 class="wizard-outcome-group__title" data-i18n="{{ title_key }}">{{ tr(title_key) }}</h4>
+        <p class="wizard-outcome-group__body" data-i18n="{{ body_key }}">{{ tr(body_key) }}</p>
+    </div>
+    <div class="wizard-outcome-group__controls">
+        {{ render_manual_policy_controls(items) }}
+    </div>
+</section>
+{%- endmacro %}
+
 {% macro render_wizard_schema_shell(step_id) -%}
-<div
-    class="wizard-guided-coverage surface-soft-box"
-    id="wizard-guided-coverage-step-{{ step_id }}">
-</div>
 <div
     class="wizard-section-group wizard-schema-shell"
     id="wizard-schema-shell-step-{{ step_id }}"
     data-wizard-shell-step="{{ step_id }}"
     data-workspace-scope-panel="advanced">
-    <div class="wizard-section-heading">
-        <h3 class="wizard-section-title" data-i18n="profiles.wizard_shell_title">{{ tr("profiles.wizard_shell_title") }}</h3>
-        <p class="wizard-section-copy" data-i18n="profiles.wizard_shell_body">
-            {{ tr("profiles.wizard_shell_body") }}
-        </p>
-    </div>
-    <div class="wizard-shell-coverage surface-soft-box" id="wizard-schema-shell-step-{{ step_id }}-coverage"></div>
-    <div class="wizard-shell-badges" id="wizard-schema-shell-step-{{ step_id }}-badges"></div>
-    <div class="wizard-shell-grid">
-        <section class="wizard-shell-card">
-            <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_recommended_title">{{ tr("profiles.wizard_shell_recommended_title") }}</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_recommended_body">{{ tr("profiles.wizard_shell_recommended_body") }}</p>
-            </div>
-            <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-recommended"></div>
-        </section>
-        <section class="wizard-shell-card">
-            <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_additional_title">{{ tr("profiles.wizard_shell_additional_title") }}</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_additional_body">{{ tr("profiles.wizard_shell_additional_body") }}</p>
-            </div>
-            <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-additional"></div>
-        </section>
-        <section class="wizard-shell-card">
-            <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_preferences_title">{{ tr("profiles.wizard_shell_preferences_title") }}</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_preferences_body">{{ tr("profiles.wizard_shell_preferences_body") }}</p>
-            </div>
-            <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-preferences"></div>
-        </section>
-        <section class="wizard-shell-card">
-            <div>
-                <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_raw_title">{{ tr("profiles.wizard_shell_raw_title") }}</h4>
-                <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_raw_body">{{ tr("profiles.wizard_shell_raw_body") }}</p>
-            </div>
-            <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-raw"></div>
-        </section>
-    </div>
+    {% call render_wizard_disclosure("profiles.wizard_shell_title", "profiles.wizard_shell_body", "wizard-schema-shell-step-" ~ step_id ~ "-details") %}
+        {{ render_doc_placeholder("guided-schema-shell", "profiles.docs_placeholder_policy_title", "profiles.docs_placeholder_policy_body") }}
+        <div class="wizard-shell-coverage surface-soft-box" id="wizard-schema-shell-step-{{ step_id }}-coverage"></div>
+        <div class="wizard-shell-badges" id="wizard-schema-shell-step-{{ step_id }}-badges"></div>
+        <div class="wizard-shell-grid">
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_recommended_title">{{ tr("profiles.wizard_shell_recommended_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_recommended_body">{{ tr("profiles.wizard_shell_recommended_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-recommended"></div>
+            </section>
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_additional_title">{{ tr("profiles.wizard_shell_additional_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_additional_body">{{ tr("profiles.wizard_shell_additional_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-additional"></div>
+            </section>
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_preferences_title">{{ tr("profiles.wizard_shell_preferences_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_preferences_body">{{ tr("profiles.wizard_shell_preferences_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-preferences"></div>
+            </section>
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_raw_title">{{ tr("profiles.wizard_shell_raw_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_raw_body">{{ tr("profiles.wizard_shell_raw_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="wizard-schema-shell-step-{{ step_id }}-raw"></div>
+            </section>
+        </div>
+    {% endcall %}
 </div>
 {%- endmacro %}

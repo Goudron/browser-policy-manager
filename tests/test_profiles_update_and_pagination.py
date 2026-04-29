@@ -32,12 +32,15 @@ def test_update_and_pagination_and_ordering_like():
 
     # Update (PATCH) description and flags
     pid = created_ids[0]
+    current_revision = client.get(f"/api/profiles/{pid}").json()["revision"]
     patch = {
         "description": "Updated desc",
         "flags": {"DisableTelemetry": False, "DisablePrivateBrowsing": True},
+        "expected_revision": current_revision,
     }
     r_upd = client.patch(f"/api/profiles/{pid}", json=patch)
     assert r_upd.status_code == 200, r_upd.text
+    assert r_upd.json()["revision"] == current_revision + 1
 
     # Read back and verify was updated
     r_get = client.get(f"/api/profiles/{pid}")
@@ -49,3 +52,63 @@ def test_update_and_pagination_and_ordering_like():
     )  # accept either if PATCH returns 204-but-updated
     # Flags must at least be a dict; implementation may store/serialize slightly differently
     assert isinstance(obj.get("flags"), dict)
+
+
+def test_patch_profile_rejects_stale_expected_revision_without_mutation():
+    client = make_test_client(app)
+    created = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name_prefix="RevisionConflict"),
+    )
+    assert created.status_code == 201, created.text
+    profile = created.json()
+    profile_id = profile["id"]
+
+    first_update = client.patch(
+        f"/api/profiles/{profile_id}",
+        json={
+            "description": "Fresh update",
+            "expected_revision": profile["revision"],
+        },
+    )
+    assert first_update.status_code == 200, first_update.text
+    assert first_update.json()["revision"] == profile["revision"] + 1
+
+    stale_update = client.patch(
+        f"/api/profiles/{profile_id}",
+        json={
+            "description": "Stale update should not persist",
+            "expected_revision": profile["revision"],
+        },
+    )
+    assert stale_update.status_code == 409, stale_update.text
+    assert stale_update.json()["detail"] == {
+        "message": "Profile has been modified since it was loaded",
+        "profile_id": profile_id,
+        "current_revision": profile["revision"] + 1,
+        "expected_revision": profile["revision"],
+    }
+
+    after_conflict = client.get(f"/api/profiles/{profile_id}")
+    assert after_conflict.status_code == 200, after_conflict.text
+    assert after_conflict.json()["description"] == "Fresh update"
+    assert after_conflict.json()["revision"] == profile["revision"] + 1
+
+
+def test_patch_profile_can_clear_compliance_metadata():
+    client = make_test_client(app)
+    payload = build_profile_payload(name_prefix="ComplianceClear")
+    payload["compliance"] = {"framework": "cis", "layer": "cis_l1"}
+    created = client.post(
+        "/api/profiles",
+        json=payload,
+    )
+    assert created.status_code == 201, created.text
+
+    response = client.patch(
+        f"/api/profiles/{created.json()['id']}",
+        json={"compliance": None},
+    )
+
+    assert response.status_code == 200, response.text
+    assert response.json()["compliance"] is None

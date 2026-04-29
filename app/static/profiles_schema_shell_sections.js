@@ -41,6 +41,8 @@
             wizardCertificatesCardEl,
             wizardRequestedLocalesCardEl,
             wizardTranslateEnabledCardEl,
+            wizardIpProtectionAvailableCardEl,
+            wizardAiControlsCardEl,
             wizardVisualSearchEnabledCardEl,
             wizardGenerativeAiCardEl,
             wizardUserMessagingCardEl,
@@ -595,12 +597,6 @@
                     compatibility: { total: 0, mapped: 0, raw_fallback: 0, deprecated: 0 },
                 };
 
-                renderWizardGuidedCoverage(
-                    view.guidedCoverage,
-                    stepMeta,
-                    stepData.compatibility || {},
-                    stepData.raw_fallback || [],
-                );
                 renderWizardSchemaShellCoverage(view.coverage, stepData.compatibility || {});
                 renderWizardSchemaShellBadges(view.badges, schemaVersion, stepData.compatibility || {});
                 renderWizardSchemaShellPolicyBucket(
@@ -660,12 +656,37 @@
             return null;
         }
 
-        function renderMountedSchemaPolicy(container, item, sourceData = {}, disabled = false) {
+        function renderMountedSchemaPolicyUnavailable(container, policyId) {
+            if (!container) return;
+
+            const isAiPolicy = ["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyId);
+            if (!isAiPolicy) {
+                container.innerHTML = "";
+                container.hidden = true;
+                return;
+            }
+
+            container.hidden = false;
+            container.innerHTML = `
+                <div
+                    class="wizard-shell-card"
+                    data-schema-policy-card
+                    data-schema-policy-id="${escapeHtml(policyId || "")}"
+                    data-schema-policy-kind="unsupported"
+                    data-settings-target="policy:${escapeHtml(policyId || "")}">
+                    <div>
+                        <div class="wizard-shell-card-title">${escapeHtml(humanizeIdentifier(policyId || ""))}</div>
+                        <div class="wizard-shell-card-copy">${escapeHtml(t("profiles.wizard_ai_policy_unavailable"))}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMountedSchemaPolicy(container, item, sourceData = {}, disabled = false, policyId = "") {
             if (!container) return;
 
             if (!item?.inline_editor) {
-                container.innerHTML = "";
-                container.hidden = true;
+                renderMountedSchemaPolicyUnavailable(container, policyId);
                 return;
             }
 
@@ -684,6 +705,8 @@
                 { el: wizardCertificatesCardEl, policyId: "Certificates", step: 2 },
                 { el: wizardRequestedLocalesCardEl, policyId: "RequestedLocales", step: 6 },
                 { el: wizardTranslateEnabledCardEl, policyId: "TranslateEnabled", step: 6 },
+                { el: wizardIpProtectionAvailableCardEl, policyId: "IPProtectionAvailable", step: 5 },
+                { el: wizardAiControlsCardEl, policyId: "AIControls", step: 7 },
                 { el: wizardVisualSearchEnabledCardEl, policyId: "VisualSearchEnabled", step: 7 },
                 { el: wizardGenerativeAiCardEl, policyId: "GenerativeAI", step: 7 },
                 { el: wizardUserMessagingCardEl, policyId: "UserMessaging", step: 6 },
@@ -700,6 +723,7 @@
                         || getWizardSchemaPolicyItem(policyId, resolvedChannelData),
                     sourceData,
                     disabled,
+                    policyId,
                 );
             });
 
@@ -760,72 +784,6 @@
             }
 
             container.textContent = message;
-        }
-
-        function renderWizardGuidedCoverage(container, stepMeta, compatibility, rawFallbackItems = []) {
-            if (!container) return;
-
-            const stepNumber = stepMeta?.step || "";
-            const stepTitle = stepMeta?.title_key
-                ? t(stepMeta.title_key, stepMeta.fallback || "")
-                : "";
-            const total = compatibility.total || 0;
-            const mapped = compatibility.mapped || 0;
-            const rawFallback = compatibility.raw_fallback || 0;
-
-            let message = "";
-            let showAdvancedAction = false;
-            if (total <= 0) {
-                message = t("profiles.wizard_guided_coverage_empty");
-                showAdvancedAction = true;
-            } else if (rawFallback <= 0) {
-                message = t("profiles.wizard_guided_coverage_full")
-                    .replace("{mapped}", String(mapped))
-                    .replace("{total}", String(total));
-            } else {
-                message = t("profiles.wizard_guided_coverage_partial")
-                    .replace("{mapped}", String(mapped))
-                    .replace("{total}", String(total))
-                    .replace("{advanced}", String(rawFallback));
-                showAdvancedAction = true;
-            }
-
-            let details = "";
-            let highlighted = [];
-            let remaining = 0;
-            if (showAdvancedAction && Array.isArray(rawFallbackItems) && rawFallbackItems.length > 0) {
-                highlighted = rawFallbackItems
-                    .slice(0, 2)
-                    .map((item) => item?.label)
-                    .filter(Boolean);
-                remaining = Math.max(0, rawFallbackItems.length - highlighted.length);
-                if (highlighted.length > 0) {
-                    details = remaining > 0
-                        ? t("profiles.wizard_guided_coverage_examples_more")
-                            .replace("{items}", highlighted.join(", "))
-                            .replace("{remaining}", String(remaining))
-                        : t("profiles.wizard_guided_coverage_examples")
-                            .replace("{items}", highlighted.join(", "));
-                }
-            }
-
-            container.innerHTML = `
-                <div class="wizard-guided-coverage-copy">${escapeHtml(message)}</div>
-                ${details ? `<div class="wizard-guided-coverage-details">${escapeHtml(details)}</div>` : ""}
-                ${showAdvancedAction ? `
-                    <button
-                        type="button"
-                        class="button-base ghost-button wizard-guided-coverage-action"
-                        data-guided-coverage-open-step="${escapeHtml(String(stepNumber || ""))}"
-                        data-guided-coverage-step-title="${escapeHtml(stepTitle)}"
-                        data-guided-coverage-items='${escapeHtml(JSON.stringify(highlighted))}'
-                        data-guided-coverage-remaining="${escapeHtml(String(remaining))}">
-                        ${escapeHtml(t("profiles.wizard_guided_coverage_open"))}
-                    </button>
-                ` : ""}
-            `;
-            container.classList.toggle("wizard-guided-coverage--partial", rawFallback > 0);
-            container.classList.toggle("wizard-guided-coverage--full", total > 0 && rawFallback <= 0);
         }
 
         function renderWizardSchemaShellPolicyBucket(container, items, emptyMessage, sourceData = {}, disabled = false) {

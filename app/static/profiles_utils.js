@@ -11,7 +11,7 @@
     const utils = {
         getDefaultSchemaVersion(documentRef = document) {
             const catalog = readSchemaChannelsCatalog(documentRef);
-            return typeof catalog.default_channel === "string" ? catalog.default_channel : "esr-140.9";
+            return typeof catalog.default_channel === "string" ? catalog.default_channel : "esr-140.10";
         },
 
         humanizeIdentifier(value) {

@@ -57,7 +57,7 @@ WIZARD_SHELL_STEPS: list[dict[str, Any]] = [
         "id": "ai",
         "title_key": "profiles.wizard_step_seven",
         "fallback": "AI and smart features",
-        "policy_sections": [],
+        "policy_sections": ["ai_smart"],
         "preference_sections": [],
     },
     {

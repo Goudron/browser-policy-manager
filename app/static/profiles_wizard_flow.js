@@ -30,6 +30,9 @@
 
         const {
             starterPresets = {},
+            complianceLayers = {},
+            complianceMergedPresets = {},
+            complianceMetadata = {},
             starterManagedKeys = [],
             wizardHomepageManagedKeys = [],
             wizardProxyManagedKeys = [],
@@ -56,6 +59,7 @@
             wizardPanels = [],
             wizardScenarioButtons = [],
             wizardStarterButtons = [],
+            wizardCisLayerButtons = [],
             wizardStepMemoryCopyEl,
             wizardStepMemoryListEl,
             wizardPrevEl,
@@ -65,6 +69,7 @@
             wizardSummaryNameEl,
             wizardSummarySchemaEl,
             wizardSummaryStarterEl,
+            wizardSummaryCisEl,
             wizardSummaryDerivedRowEl,
             wizardSummaryDerivedEl,
             wizardSummaryModeEl,
@@ -77,11 +82,12 @@
         const wizardTotalSteps = wizardPanels.length;
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         let wizardStep = 1;
-        let wizardScenario = "targeted_edits";
-        let wizardStarter = "blank";
+        let wizardScenario = "corporate_default";
+        let wizardStarter = "basic_corporate";
+        let wizardComplianceLayer = "none";
+        let wizardComplianceSnapshot = null;
+        const wizardComplianceNotes = new Map();
         let wizardPreviewStarter = null;
-        let privacyFineTuningPreference = null;
-        let lockdownFineTuningPreference = null;
         let siteDataFineTuningPreference = null;
         let wizardBaselineSnapshot = null;
         const stepEntrySnapshots = {};
@@ -127,6 +133,7 @@
                 "SanitizeOnShutdown",
                 "Permissions",
                 "Cookies",
+                "IPProtectionAvailable",
             ],
             6: [
                 "DisableFirefoxAccounts",
@@ -142,6 +149,7 @@
                 "ManagedBookmarks",
             ],
             7: [
+                "AIControls",
                 "GenerativeAI",
                 "VisualSearchEnabled",
             ],
@@ -168,35 +176,6 @@
             "DisableBuiltinPDFViewer",
             "HttpsOnlyMode",
         ];
-        const privacyPresets = {
-            defaults: {},
-            signals: {
-                DisableTelemetry: true,
-                DisableFirefoxStudies: true,
-            },
-            strict: {
-                DisableTelemetry: true,
-                DisableFirefoxStudies: true,
-                DisablePrivateBrowsing: true,
-                OfferToSaveLogins: false,
-                PasswordManagerEnabled: false,
-            },
-        };
-        const lockdownPresets = {
-            defaults: {},
-            balanced: {
-                BlockAboutConfig: true,
-                DisableDeveloperTools: true,
-                HttpsOnlyMode: "enabled",
-            },
-            strict: {
-                BlockAboutConfig: true,
-                BlockAboutProfiles: true,
-                DisableDeveloperTools: true,
-                DisableBuiltinPDFViewer: true,
-                HttpsOnlyMode: "force_enabled",
-            },
-        };
         const hardeningManagedPolicyKeys = [
             ...privacyManagedPolicyKeys,
             ...lockdownManagedPolicyKeys,
@@ -255,19 +234,6 @@
                 },
             },
         };
-        const hardeningGovernanceSignals = [
-            "DisableTelemetry",
-            "DisableFirefoxStudies",
-            "DisablePrivateBrowsing",
-            "OfferToSaveLogins",
-            "PasswordManagerEnabled",
-            "BlockAboutConfig",
-            "BlockAboutProfiles",
-            "DisableDeveloperTools",
-            "DisableBuiltinPDFViewer",
-            "HttpsOnlyMode",
-            "SanitizeOnShutdown",
-        ];
         const siteDataManagedKeys = ["Permissions", "Cookies"];
         const siteDataPresets = {
             defaults: {},
@@ -361,6 +327,7 @@
                     },
                     flags: cloneJsonValue(fromEditorValue(editor.getValue(), getCurrentMode()), {}),
                     wizardStarter,
+                    wizardComplianceLayer,
                     wizardScenario,
                 };
             } catch {
@@ -382,6 +349,7 @@
                     },
                     flags: cloneJsonValue(parsed.flags, {}),
                     wizardStarter: wizardBaselineSnapshot?.wizardStarter || (getCurrentId() ? "keep_current" : "blank"),
+                    wizardComplianceLayer: wizardBaselineSnapshot?.wizardComplianceLayer || "none",
                     wizardScenario: wizardBaselineSnapshot?.wizardScenario || inferScenarioFromStarter(
                         wizardBaselineSnapshot?.wizardStarter || (getCurrentId() ? "keep_current" : "blank"),
                     ),
@@ -423,6 +391,7 @@
                     form: snapshot.form || {},
                     flags: snapshot.flags || {},
                     wizardStarter: snapshot.wizardStarter || "blank",
+                    wizardComplianceLayer: snapshot.wizardComplianceLayer || "none",
                     wizardScenario: snapshot.wizardScenario || inferScenarioFromStarter(snapshot.wizardStarter || "blank"),
                 };
             }
@@ -496,6 +465,7 @@
                     },
                     flags: cloneJsonValue(sourceSnapshot.flags, {}),
                     wizardStarter: sourceSnapshot.wizardStarter || "blank",
+                    wizardComplianceLayer: sourceSnapshot.wizardComplianceLayer || "none",
                     wizardScenario: sourceSnapshot.wizardScenario || inferScenarioFromStarter(sourceSnapshot.wizardStarter || "blank"),
                 };
             }
@@ -516,6 +486,7 @@
                 form: { ...currentSnapshot.form },
                 flags: nextFlags,
                 wizardStarter: currentSnapshot.wizardStarter,
+                wizardComplianceLayer: currentSnapshot.wizardComplianceLayer,
                 wizardScenario: currentSnapshot.wizardScenario,
             };
         }
@@ -543,6 +514,7 @@
             if (snapshot.wizardStarter) {
                 setWizardStarter(snapshot.wizardStarter, { preserveScenario: true });
             }
+            setWizardComplianceLayer(snapshot.wizardComplianceLayer || "none", { skipApply: true });
             if (snapshot.wizardScenario) {
                 setWizardScenario(snapshot.wizardScenario);
             }
@@ -683,6 +655,90 @@
                 soc_hard: t("profiles.wizard_starter_soc_label"),
             };
             return starterLabels[key] || starterLabels.blank;
+        }
+
+        function formatWizardComplianceLabel(key) {
+            const layer = complianceLayers[key] || complianceLayers.none || {};
+            if (layer.label_key) {
+                return t(layer.label_key);
+            }
+            return t("profiles.wizard_cis_none_title");
+        }
+
+        function getMergedStarterPolicyValues(starterKey, schemaVersion, complianceLayerKey = wizardComplianceLayer) {
+            const starterVariants = complianceMergedPresets?.[starterKey] || {};
+            const layerVariants = starterVariants[complianceLayerKey] || starterVariants.none || {};
+            const schemaVariant = layerVariants[schemaVersion] || layerVariants.default;
+            if (schemaVariant?.policy_values && typeof schemaVariant.policy_values === "object") {
+                return cloneJsonValue(schemaVariant.policy_values, {}) || {};
+            }
+            return null;
+        }
+
+        function getMergedStarterSummary(starterKey, schemaVersion, complianceLayerKey = wizardComplianceLayer) {
+            const starterVariants = complianceMergedPresets?.[starterKey] || {};
+            const layerVariants = starterVariants[complianceLayerKey] || {};
+            return layerVariants[schemaVersion]?.summary || {};
+        }
+
+        function getMergedStarterDecisions(starterKey, schemaVersion, complianceLayerKey = wizardComplianceLayer) {
+            const starterVariants = complianceMergedPresets?.[starterKey] || {};
+            const layerVariants = starterVariants[complianceLayerKey] || {};
+            const decisions = layerVariants[schemaVersion]?.decisions;
+            return Array.isArray(decisions) ? cloneJsonValue(decisions, []) || [] : [];
+        }
+
+        function getCisDecisionNoteKey(decision) {
+            const path = Array.isArray(decision?.path) ? decision.path : [];
+            if (path.length) return String(path[0]);
+            const recommendationIds = Array.isArray(decision?.recommendation_ids)
+                ? decision.recommendation_ids.filter(Boolean)
+                : [];
+            if (recommendationIds.length) return `cis:${recommendationIds[0]}`;
+            if (decision?.decision) return `cis:${decision.decision}`;
+            return "";
+        }
+
+        function seedWizardComplianceNotes(decisions) {
+            if (!Array.isArray(decisions)) return;
+            decisions.forEach((decision) => {
+                const key = getCisDecisionNoteKey(decision);
+                if (!key) return;
+                const note = decision?.exception_note || decision?.exceptionNote;
+                if (note) {
+                    wizardComplianceNotes.set(key, String(note));
+                }
+            });
+        }
+
+        function getWizardComplianceMergeInfo() {
+            const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
+            const resolvedSnapshot = wizardStarter === "keep_current"
+                && wizardComplianceSnapshot
+                && typeof wizardComplianceSnapshot === "object"
+                && wizardComplianceSnapshot.layer === wizardComplianceLayer
+                ? wizardComplianceSnapshot
+                : null;
+            const baseDecisions = wizardComplianceLayer === "none"
+                ? []
+                : (resolvedSnapshot?.decisions || getMergedStarterDecisions(wizardStarter, schemaVersion));
+            const decisions = Array.isArray(baseDecisions)
+                ? baseDecisions.map((decision) => {
+                    const key = getCisDecisionNoteKey(decision);
+                    if (!key) return decision;
+                    const note = wizardComplianceNotes.get(key) || decision?.exception_note || decision?.exceptionNote;
+                    return note ? { ...decision, exception_note: note } : decision;
+                })
+                : [];
+            return {
+                layer: wizardComplianceLayer,
+                label: formatWizardComplianceLabel(wizardComplianceLayer),
+                benchmark_id: resolvedSnapshot?.benchmark_id || complianceMetadata.benchmark_id,
+                benchmark_version: resolvedSnapshot?.benchmark_version || complianceMetadata.upstream_version,
+                benchmark_name: complianceMetadata.upstream_name,
+                summary: resolvedSnapshot?.summary || getMergedStarterSummary(wizardStarter, schemaVersion),
+                decisions,
+            };
         }
 
         function resolveScenarioStarter(scenarioKey) {
@@ -866,12 +922,23 @@
             );
         }
 
-        function buildStarterPreviewTarget(current, starterKey, schemaVersion) {
+        function buildStarterPreviewTarget(current, starterKey, schemaVersion, complianceLayerKey = wizardComplianceLayer) {
             const normalized = current && typeof current === "object" && !Array.isArray(current)
                 ? cloneJsonValue(current, {}) || {}
                 : {};
 
             if (starterKey === "keep_current") {
+                return normalized;
+            }
+
+            const mergedPolicyValues = getMergedStarterPolicyValues(starterKey, schemaVersion, complianceLayerKey);
+            if (mergedPolicyValues) {
+                starterManagedKeys.forEach((key) => {
+                    delete normalized[key];
+                });
+                for (const [key, value] of Object.entries(mergedPolicyValues)) {
+                    normalized[key] = cloneJsonValue(value, value);
+                }
                 return normalized;
             }
 
@@ -944,6 +1011,7 @@
 
             const previewStarter = starterPresets[wizardPreviewStarter] !== undefined ? wizardPreviewStarter : wizardStarter;
             const previewLabel = formatWizardStarterLabel(previewStarter);
+            const previewComplianceLabel = formatWizardComplianceLabel(wizardComplianceLayer);
             const editor = getEditor();
             if (!editor) {
                 wizardBaselinePreviewCopyEl.textContent = t("profiles.wizard_baseline_preview_body");
@@ -1027,16 +1095,24 @@
             });
 
             if (previewItems.length) {
-                wizardBaselinePreviewCopyEl.textContent = t("profiles.wizard_baseline_preview_selected")
-                    .replace("{label}", previewLabel);
+                const previewCopyKey = wizardComplianceLayer === "none"
+                    ? "profiles.wizard_baseline_preview_selected"
+                    : "profiles.wizard_baseline_preview_selected_with_cis";
+                wizardBaselinePreviewCopyEl.textContent = t(previewCopyKey)
+                    .replace("{label}", previewLabel)
+                    .replace("{cis}", previewComplianceLabel);
                 wizardBaselinePreviewListEl.innerHTML = previewItems.slice(0, 5)
                     .map((item) => `<div class="wizard-baseline-summary-item">${item}</div>`)
                     .join("");
                 return;
             }
 
-            wizardBaselinePreviewCopyEl.textContent = t("profiles.wizard_baseline_preview_no_major_changes")
-                .replace("{label}", previewLabel);
+            const noChangesKey = wizardComplianceLayer === "none"
+                ? "profiles.wizard_baseline_preview_no_major_changes"
+                : "profiles.wizard_baseline_preview_no_major_changes_with_cis";
+            wizardBaselinePreviewCopyEl.textContent = t(noChangesKey)
+                .replace("{label}", previewLabel)
+                .replace("{cis}", previewComplianceLabel);
             wizardBaselinePreviewListEl.innerHTML = `<div class="wizard-baseline-summary-item">${t("profiles.wizard_baseline_preview_same")}</div>`;
         }
 
@@ -1057,15 +1133,22 @@
         function formatBaselineSummary(starterKey) {
             const preset = starterPresets[starterKey] || {};
             const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
-            const policyValues = {
-                ...(cloneJsonValue(preset.policy_values?.default, {}) || {}),
-                ...(cloneJsonValue(preset.policy_values?.[schemaVersion], {}) || {}),
-            };
-            const homepage = cloneJsonValue(preset.homepage, {}) || {};
-            const proxy = cloneJsonValue(preset.proxy, {}) || {};
+            const mergedPolicyValues = getMergedStarterPolicyValues(starterKey, schemaVersion) || {};
+            const policyValues = Object.keys(mergedPolicyValues).length
+                ? mergedPolicyValues
+                : {
+                    ...(cloneJsonValue(preset.policy_values?.default, {}) || {}),
+                    ...(cloneJsonValue(preset.policy_values?.[schemaVersion], {}) || {}),
+                };
+            const homepage = Object.keys(mergedPolicyValues).length
+                ? cloneJsonValue(mergedPolicyValues.Homepage, {}) || {}
+                : cloneJsonValue(preset.homepage, {}) || {};
+            const proxy = Object.keys(mergedPolicyValues).length
+                ? cloneJsonValue(mergedPolicyValues.Proxy, {}) || {}
+                : cloneJsonValue(preset.proxy, {}) || {};
             const items = [];
 
-            if (starterKey === "blank") {
+            if (starterKey === "blank" && wizardComplianceLayer === "none") {
                 return {
                     copy: t("profiles.wizard_baseline_summary_blank"),
                     items: [
@@ -1104,11 +1187,26 @@
             if (policyValues.HttpsOnlyMode || policyValues.SanitizeOnShutdown || policyValues.DisableDeveloperTools) {
                 items.push(t("profiles.wizard_baseline_summary_hardening"));
             }
+            if (wizardComplianceLayer !== "none") {
+                const mergeSummary = getMergedStarterSummary(starterKey, schemaVersion);
+                const added = Number(mergeSummary.added_from_cis || 0);
+                const replaced = Number(mergeSummary.cis_replaced_base || 0);
+                const review = Number(mergeSummary.review_required || 0);
+                items.push(t("profiles.wizard_baseline_summary_cis")
+                    .replace("{level}", formatWizardComplianceLabel(wizardComplianceLayer))
+                    .replace("{count}", `${added + replaced}`));
+                if (review > 0) {
+                    items.push(t("profiles.wizard_baseline_summary_cis_review").replace("{count}", `${review}`));
+                }
+            }
 
             return {
-                copy: t("profiles.wizard_baseline_summary_selected")
-                    .replace("{label}", formatWizardStarterLabel(starterKey)),
-                items: items.slice(0, 4),
+                copy: t(wizardComplianceLayer === "none"
+                    ? "profiles.wizard_baseline_summary_selected"
+                    : "profiles.wizard_baseline_summary_selected_with_cis")
+                    .replace("{label}", formatWizardStarterLabel(starterKey))
+                    .replace("{cis}", formatWizardComplianceLabel(wizardComplianceLayer)),
+                items: items.slice(0, 6),
             };
         }
 
@@ -1128,6 +1226,13 @@
                 const isPreview = button.dataset.starterKey === wizardPreviewStarter && wizardPreviewStarter !== wizardStarter;
                 button.classList.toggle("wizard-starter-card--active", isActive);
                 button.classList.toggle("wizard-starter-card--preview", isPreview);
+                button.setAttribute("aria-pressed", isActive ? "true" : "false");
+            });
+            wizardCisLayerButtons.forEach((button) => {
+                const isActive = button.dataset.cisLayerKey === wizardComplianceLayer;
+                const isDisabled = wizardStarter === "keep_current" && button.dataset.cisLayerKey !== "none";
+                button.classList.toggle("wizard-starter-card--active", isActive);
+                button.disabled = isDisabled;
                 button.setAttribute("aria-pressed", isActive ? "true" : "false");
             });
             updateWizardScenarioUi();
@@ -1218,39 +1323,6 @@
             statusEl.textContent = t("profiles.wizard_hardening_section_state_empty");
         }
 
-        function syncPrivacyPresetUi(parsed = {}) {
-            const privacyButtons = Array.from(documentRef.querySelectorAll("[data-privacy-preset]"));
-            const lockdownButtons = Array.from(documentRef.querySelectorAll("[data-lockdown-preset]"));
-            const privacyPanelEl = documentRef.getElementById("wizard-privacy-fine-tuning-panel");
-            const privacyToggleEl = documentRef.getElementById("wizard-privacy-fine-tuning-toggle");
-            const lockdownPanelEl = documentRef.getElementById("wizard-lockdown-fine-tuning-panel");
-            const lockdownToggleEl = documentRef.getElementById("wizard-lockdown-fine-tuning-toggle");
-
-            const activePrivacyPreset = Object.entries(privacyPresets).find(([, presetValues]) =>
-                matchesPolicyPreset(parsed, privacyManagedPolicyKeys, presetValues)
-            )?.[0] || "";
-            const activeLockdownPreset = Object.entries(lockdownPresets).find(([, presetValues]) =>
-                matchesPolicyPreset(parsed, lockdownManagedPolicyKeys, presetValues)
-            )?.[0] || "";
-
-            renderPresetButtonState(privacyButtons, activePrivacyPreset);
-            renderPresetButtonState(lockdownButtons, activeLockdownPreset);
-
-            const privacyHasCustomConfig = privacyManagedPolicyKeys.some((key) => hasMeaningfulValue(parsed[key])) && !activePrivacyPreset;
-            const lockdownHasCustomConfig = lockdownManagedPolicyKeys.some((key) => hasMeaningfulValue(parsed[key])) && !activeLockdownPreset;
-
-            setPanelExpanded(
-                privacyPanelEl,
-                privacyToggleEl,
-                privacyFineTuningPreference === null ? privacyHasCustomConfig : privacyFineTuningPreference,
-            );
-            setPanelExpanded(
-                lockdownPanelEl,
-                lockdownToggleEl,
-                lockdownFineTuningPreference === null ? lockdownHasCustomConfig : lockdownFineTuningPreference,
-            );
-        }
-
         function syncCleanupPresetUi(parsed = {}) {
             const cleanupButtons = Array.from(documentRef.querySelectorAll("[data-cleanup-preset]"));
             const statusEl = documentRef.getElementById("wizard-cleanup-section-status");
@@ -1295,89 +1367,50 @@
             );
         }
 
-        function countObjectEntries(value) {
-            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-            return Object.keys(currentObject).filter((key) => hasMeaningfulValue(currentObject[key])).length;
-        }
-
-        function renderHardeningGovernanceWorkflow(parsed = {}) {
-            const copyEl = documentRef.getElementById("wizard-hardening-governance-copy");
-            const listEl = documentRef.getElementById("wizard-hardening-governance-list");
-            if (!copyEl || !listEl) return;
-
-            const hardeningPreset = Object.entries(hardeningPresets).find(([, presetValues]) =>
-                matchesPolicyPreset(parsed, hardeningManagedPolicyKeys, presetValues)
-            )?.[0] || "";
-            const cleanupPreset = Object.entries(cleanupPresets).find(([, presetValues]) =>
-                matchesPolicyPreset(parsed, cleanupManagedPolicyKeys, presetValues)
-            )?.[0] || "";
-            const sitePreset = Object.entries(siteDataPresets).find(([, presetValues]) =>
-                matchesPolicyPreset(parsed, siteDataManagedKeys, presetValues)
-            )?.[0] || "";
-            const deeperPrivacyCount = countObjectEntries(parsed.Permissions) + countObjectEntries(parsed.Cookies);
-            const customHardeningCount = hardeningGovernanceSignals.reduce((count, key) => (
-                hasMeaningfulValue(parsed[key]) ? count + 1 : count
-            ), 0);
-
-            const items = [
-                hardeningPreset
-                    ? t("profiles.wizard_hardening_governance_item_posture_ready")
-                        .replace("{value}", t(`profiles.wizard_hardening_preset_${hardeningPreset}_title`))
-                    : t("profiles.wizard_hardening_governance_item_posture_needed"),
-                cleanupPreset
-                    ? t("profiles.wizard_hardening_governance_item_cleanup_ready")
-                        .replace("{value}", t(`profiles.wizard_cleanup_preset_${cleanupPreset}_title`))
-                    : t("profiles.wizard_hardening_governance_item_cleanup_needed"),
-                sitePreset || deeperPrivacyCount > 0
-                    ? t("profiles.wizard_hardening_governance_item_sites_ready")
-                        .replace("{count}", String(deeperPrivacyCount || 1))
-                    : t("profiles.wizard_hardening_governance_item_sites_optional"),
-                customHardeningCount > 0 && !hardeningPreset
-                    ? t("profiles.wizard_hardening_governance_item_deeper_ready")
-                        .replace("{count}", String(customHardeningCount))
-                    : t("profiles.wizard_hardening_governance_item_deeper_optional"),
-            ];
-
-            copyEl.textContent = hardeningPreset || cleanupPreset || sitePreset || customHardeningCount > 0
-                ? t("profiles.wizard_hardening_governance_active")
-                : t("profiles.wizard_hardening_governance_body");
-            listEl.innerHTML = "";
-            items.forEach((item) => {
-                const li = documentRef.createElement("li");
-                li.className = "wizard-checklist-item";
-                li.textContent = item;
-                listEl.appendChild(li);
-            });
-        }
-
-        function openHardeningGovernanceAdvanced() {
-            const advancedButton = documentRef.getElementById("workspace-scope-advanced");
-            advancedButton?.click();
-            window.setTimeout(() => {
-                const targetEl = documentRef.querySelector('#wizard-step-5 [data-settings-target="policy:SanitizeOnShutdown"]')
-                    || documentRef.getElementById("wizard-preferences-privacy-docs")
-                    || documentRef.getElementById("wizard-step-5");
-                if (!targetEl) return;
-                targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-                targetEl.classList.add("settings-target-highlight");
-                window.setTimeout(() => {
-                    targetEl.classList.remove("settings-target-highlight");
-                }, 1800);
-                const focusTarget = targetEl.matches("input, select, textarea, button, [tabindex]")
-                    ? targetEl
-                    : targetEl.querySelector("input, select, textarea, button, [tabindex]");
-                focusTarget?.focus?.({ preventScroll: true });
-            }, 140);
-        }
-
         function setWizardStarter(nextStarter, options = {}) {
             wizardStarter = starterPresets[nextStarter] !== undefined ? nextStarter : "blank";
             wizardPreviewStarter = null;
+            if (wizardStarter === "keep_current" && !options.preserveComplianceLayer) {
+                wizardComplianceLayer = "none";
+            }
             if (!options.preserveScenario) {
                 wizardScenario = inferScenarioFromStarter(wizardStarter);
             }
             updateWizardStarterUi();
             updateWizardSummary();
+        }
+
+        function setWizardComplianceLayer(nextLayer, options = {}) {
+            wizardComplianceLayer = complianceLayers[nextLayer] !== undefined ? nextLayer : "none";
+            if (wizardStarter === "keep_current" && wizardComplianceLayer !== "none" && !options.allowKeepCurrent) {
+                wizardComplianceLayer = "none";
+            }
+            updateWizardStarterUi();
+            updateWizardSummary();
+            if (!options.skipApply && wizardStarter !== "keep_current") {
+                applyStarterPreset(wizardStarter, { preserveScenario: true, preserveComplianceLayer: true });
+            }
+        }
+
+        function setWizardComplianceSnapshot(nextSnapshot) {
+            if (nextSnapshot && typeof nextSnapshot === "object") {
+                wizardComplianceSnapshot = cloneJsonValue(nextSnapshot, {}) || {};
+                wizardComplianceNotes.clear();
+                seedWizardComplianceNotes(wizardComplianceSnapshot.decisions);
+            } else {
+                wizardComplianceSnapshot = null;
+                wizardComplianceNotes.clear();
+            }
+        }
+
+        function setWizardComplianceDecisionNote(decisionKey, note) {
+            if (!decisionKey) return;
+            const normalized = (note || "").trim();
+            if (!normalized) {
+                wizardComplianceNotes.delete(decisionKey);
+                return;
+            }
+            wizardComplianceNotes.set(decisionKey, normalized);
         }
 
         function setWizardScenario(nextScenario) {
@@ -1421,14 +1454,9 @@
                 const schemaVersion = documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
                 const parsed = fromEditorValue(editor.getValue(), mode);
                 const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
-                const nextHomepage = {
-                    ...(normalized.Homepage && typeof normalized.Homepage === "object" ? normalized.Homepage : {}),
-                };
-                const nextProxy = {
-                    ...(normalized.Proxy && typeof normalized.Proxy === "object" ? normalized.Proxy : {}),
-                };
                 const presetConfig = starterPresets[starterKey] || {};
-                const starterPolicyValues = {
+                const mergedPolicyValues = getMergedStarterPolicyValues(starterKey, schemaVersion);
+                const starterPolicyValues = mergedPolicyValues || {
                     ...(cloneJsonValue(presetConfig.policy_values?.default, {}) || {}),
                     ...(cloneJsonValue(presetConfig.policy_values?.[schemaVersion], {}) || {}),
                 };
@@ -1436,32 +1464,30 @@
                 starterManagedKeys.forEach((key) => {
                     delete normalized[key];
                 });
-                wizardHomepageManagedKeys.forEach((key) => delete nextHomepage[key]);
-                wizardProxyManagedKeys.forEach((key) => delete nextProxy[key]);
 
                 for (const [key, value] of Object.entries(starterPolicyValues)) {
                     normalized[key] = cloneJsonValue(value, value);
                 }
 
-                Object.assign(nextHomepage, cloneJsonValue(presetConfig.homepage, {}) || {});
-                Object.assign(nextProxy, cloneJsonValue(presetConfig.proxy, {}) || {});
-
-                if (Object.keys(nextHomepage).length) {
-                    normalized.Homepage = nextHomepage;
-                } else {
-                    delete normalized.Homepage;
-                }
-
-                if (Object.keys(nextProxy).length) {
-                    normalized.Proxy = nextProxy;
-                } else {
-                    delete normalized.Proxy;
+                if (!mergedPolicyValues) {
+                    const nextHomepage = {};
+                    const nextProxy = {};
+                    Object.assign(nextHomepage, cloneJsonValue(presetConfig.homepage, {}) || {});
+                    Object.assign(nextProxy, cloneJsonValue(presetConfig.proxy, {}) || {});
+                    if (Object.keys(nextHomepage).length) {
+                        normalized.Homepage = nextHomepage;
+                    }
+                    if (Object.keys(nextProxy).length) {
+                        normalized.Proxy = nextProxy;
+                    }
                 }
 
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setWizardStarter(starterKey, options);
-                setStatus(t("profiles.wizard_starter_applied"), "info");
+                setStatus(t(wizardComplianceLayer === "none"
+                    ? "profiles.wizard_starter_applied"
+                    : "profiles.wizard_starter_applied_with_cis"), "info");
             } catch (e) {
                 setStatus(t("profiles.error_wizard_starter").replace("{detail}", e.message || e), "error");
             }
@@ -1525,6 +1551,9 @@
             wizardSummaryNameEl.textContent = form.name || "—";
             wizardSummarySchemaEl.textContent = formatSchemaLabel(form.schemaVersion || defaultSchemaVersion);
             wizardSummaryStarterEl.textContent = formatWizardStarterLabel(wizardStarter);
+            if (wizardSummaryCisEl) {
+                wizardSummaryCisEl.textContent = formatWizardComplianceLabel(wizardComplianceLayer);
+            }
             if (wizardSummaryDerivedRowEl && wizardSummaryDerivedEl) {
                 const cloneSource = getCloneSourceProfile();
                 if (cloneSource?.name) {
@@ -1561,9 +1590,7 @@
                 });
                 syncHardeningPresetUi(normalized);
                 syncCleanupPresetUi(normalized);
-                syncPrivacyPresetUi(normalized);
                 syncSiteDataPresetUi(normalized);
-                renderHardeningGovernanceWorkflow(normalized);
                 renderSharedDeviceWorkflow(normalized);
             } catch {
                 wizardPolicyInputs.forEach((input) => {
@@ -1576,9 +1603,7 @@
                 });
                 syncHardeningPresetUi({});
                 syncCleanupPresetUi({});
-                syncPrivacyPresetUi({});
                 syncSiteDataPresetUi({});
-                renderHardeningGovernanceWorkflow({});
                 renderSharedDeviceWorkflow({});
             }
 
@@ -1738,30 +1763,6 @@
                 applyPolicyPreset(cleanupManagedPolicyKeys, cleanupPresets[presetKey] || {});
             });
         });
-        Array.from(documentRef.querySelectorAll("[data-privacy-preset]")).forEach((button) => {
-            button.addEventListener("click", () => {
-                const presetKey = button.dataset.privacyPreset || "defaults";
-                applyPolicyPreset(privacyManagedPolicyKeys, privacyPresets[presetKey] || {});
-            });
-        });
-        Array.from(documentRef.querySelectorAll("[data-lockdown-preset]")).forEach((button) => {
-            button.addEventListener("click", () => {
-                const presetKey = button.dataset.lockdownPreset || "defaults";
-                applyPolicyPreset(lockdownManagedPolicyKeys, lockdownPresets[presetKey] || {});
-            });
-        });
-        documentRef.getElementById("wizard-privacy-fine-tuning-toggle")?.addEventListener("click", () => {
-            const panelEl = documentRef.getElementById("wizard-privacy-fine-tuning-panel");
-            const nextExpanded = panelEl?.hidden !== false;
-            privacyFineTuningPreference = nextExpanded;
-            setPanelExpanded(panelEl, documentRef.getElementById("wizard-privacy-fine-tuning-toggle"), nextExpanded);
-        });
-        documentRef.getElementById("wizard-lockdown-fine-tuning-toggle")?.addEventListener("click", () => {
-            const panelEl = documentRef.getElementById("wizard-lockdown-fine-tuning-panel");
-            const nextExpanded = panelEl?.hidden !== false;
-            lockdownFineTuningPreference = nextExpanded;
-            setPanelExpanded(panelEl, documentRef.getElementById("wizard-lockdown-fine-tuning-toggle"), nextExpanded);
-        });
         Array.from(documentRef.querySelectorAll("[data-site-data-preset]")).forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.siteDataPreset || "defaults";
@@ -1774,11 +1775,12 @@
             siteDataFineTuningPreference = nextExpanded;
             setPanelExpanded(panelEl, documentRef.getElementById("wizard-site-data-fine-tuning-toggle"), nextExpanded);
         });
-        documentRef.getElementById("wizard-hardening-governance-open-advanced")?.addEventListener("click", openHardeningGovernanceAdvanced);
-
         return {
             updateWizardContext,
             setWizardStarter,
+            setWizardComplianceLayer,
+            setWizardComplianceSnapshot,
+            setWizardComplianceDecisionNote,
             setWizardScenario,
             setPreviewStarter,
             clearPreviewStarter,
@@ -1786,6 +1788,8 @@
             applyStarterPreset,
             getWizardScenario: () => wizardScenario,
             getWizardStarter: () => wizardStarter,
+            getWizardComplianceLayer: () => wizardComplianceLayer,
+            getWizardComplianceMergeInfo,
             getBaselineSummary: () => formatBaselineSummary(wizardStarter),
             syncWizardFieldsFromForm,
             updateWizardSummary,

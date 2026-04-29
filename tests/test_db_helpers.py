@@ -260,6 +260,7 @@ def test_upgrade_legacy_sqlite_schema_skips_deleted_at_when_already_present(tmp_
         inspector = inspect(engine)
         columns = {column["name"] for column in inspector.get_columns("profiles")}
         assert "deleted_at" in columns
+        assert "revision" in columns
     finally:
         engine.dispose()
 

@@ -40,10 +40,16 @@ UI_SECTIONS = [
         order=70,
     ),
     PolicyUiSection(
+        id="ai_smart",
+        title_key="profiles.wizard_step_seven",
+        fallback="AI and smart features",
+        order=80,
+    ),
+    PolicyUiSection(
         id="advanced",
         title_key="profiles.wizard_section_advanced",
         fallback="Advanced and unmapped policies",
-        order=80,
+        order=90,
     ),
 ]
 

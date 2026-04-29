@@ -42,10 +42,12 @@
             doRestore,
             doResetLibrary,
             doValidate,
+            doImportFirefoxPoliciesJson,
             reloadList,
             finishWizard,
             applyScenarioPreset,
             applyStarterPreset,
+            setWizardComplianceLayer,
             undoCurrentStepChanges,
             resetCurrentStepToBaseline,
             setPreviewStarter,
@@ -122,6 +124,8 @@
         const resetLibraryButtonEl = documentRef.getElementById("reset-library");
         const validateButtonEl = documentRef.getElementById("validate");
         const refreshButtonEl = documentRef.getElementById("refresh");
+        const importFirefoxPoliciesButtonEl = documentRef.getElementById("import-firefox-policies");
+        const importFirefoxPoliciesFileEl = documentRef.getElementById("import-firefox-policies-file");
         const langSelectEl = documentRef.getElementById("lang");
         const themeSelectEl = documentRef.getElementById("theme");
         const searchInputEl = documentRef.getElementById("search");
@@ -179,6 +183,7 @@
         const wizardStepButtons = Array.from(documentRef.querySelectorAll(".wizard-step"));
         const wizardScenarioButtons = Array.from(documentRef.querySelectorAll("[data-scenario-key]"));
         const wizardStarterButtons = Array.from(documentRef.querySelectorAll("[data-starter-key]"));
+        const wizardCisLayerButtons = Array.from(documentRef.querySelectorAll("[data-cis-layer-key]"));
         const wizardPolicyInputs = Array.from(documentRef.querySelectorAll("[data-policy-key]"));
         const wizardPolicySelectInputs = Array.from(documentRef.querySelectorAll("[data-policy-select-key]"));
         const wizardSearchEnginePresetButtons = Array.from(documentRef.querySelectorAll("[data-search-engine-preset]"));
@@ -199,14 +204,10 @@
                 ["wizard-firefox-home-fine-tuning-panel", "wizard-firefox-home-fine-tuning-toggle"],
                 ["wizard-search-defaults-fine-tuning-panel", "wizard-search-defaults-fine-tuning-toggle"],
                 ["wizard-search-suggest-fine-tuning-panel", "wizard-search-suggest-fine-tuning-toggle"],
-                ["wizard-privacy-fine-tuning-panel", "wizard-privacy-fine-tuning-toggle"],
-                ["wizard-lockdown-fine-tuning-panel", "wizard-lockdown-fine-tuning-toggle"],
                 ["wizard-site-data-fine-tuning-panel", "wizard-site-data-fine-tuning-toggle"],
                 ["wizard-extension-fine-tuning-panel", "wizard-extension-fine-tuning-toggle"],
-                ["wizard-extension-more-rules-panel", "wizard-extension-more-rules-toggle"],
                 ["wizard-extension-curated-panel", "wizard-extension-curated-toggle"],
                 ["wizard-sync-fine-tuning-panel", "wizard-sync-fine-tuning-toggle"],
-                ["wizard-ai-fine-tuning-panel", "wizard-ai-fine-tuning-toggle"],
                 ["wizard-website-fine-tuning-panel", "wizard-website-fine-tuning-toggle"],
                 ["wizard-network-enterprise-fine-tuning-panel", "wizard-network-enterprise-fine-tuning-toggle"],
             ];
@@ -331,14 +332,10 @@
                 "#wizard-firefox-home-fine-tuning-toggle",
                 "#wizard-search-defaults-fine-tuning-toggle",
                 "#wizard-search-suggest-fine-tuning-toggle",
-                "#wizard-privacy-fine-tuning-toggle",
-                "#wizard-lockdown-fine-tuning-toggle",
                 "#wizard-site-data-fine-tuning-toggle",
                 "#wizard-network-enterprise-fine-tuning-toggle",
                 "#wizard-sync-fine-tuning-toggle",
-                "#wizard-ai-fine-tuning-toggle",
                 "#wizard-extension-fine-tuning-toggle",
-                "#wizard-extension-more-rules-toggle",
                 "#wizard-extension-curated-toggle",
                 "#wizard-website-fine-tuning-toggle",
                 "[data-extension-profile-toggle]",
@@ -444,18 +441,6 @@
                 ?.trim() || "";
         }
 
-        function parseGuidedCoverageItems(value) {
-            if (!value) return [];
-            try {
-                const parsed = JSON.parse(value);
-                return Array.isArray(parsed)
-                    ? parsed.filter((item) => typeof item === "string" && item.trim())
-                    : [];
-            } catch (_error) {
-                return [];
-            }
-        }
-
         function buildAdvancedHandoffContext(stepNumber, options = {}) {
             const normalizedStep = Number(stepNumber);
             if (Number.isNaN(normalizedStep) || normalizedStep <= 0) {
@@ -468,19 +453,6 @@
                 items: Array.isArray(options.items) ? options.items.filter(Boolean).slice(0, 2) : [],
                 remaining: Math.max(0, Number(options.remaining) || 0),
             };
-        }
-
-        function readGuidedCoverageContext(stepNumber) {
-            const actionButton = documentRef.querySelector(`[data-guided-coverage-open-step="${stepNumber}"]`);
-            if (!actionButton) {
-                return buildAdvancedHandoffContext(stepNumber);
-            }
-
-            return buildAdvancedHandoffContext(stepNumber, {
-                stepTitle: actionButton.dataset.guidedCoverageStepTitle || "",
-                items: parseGuidedCoverageItems(actionButton.dataset.guidedCoverageItems || ""),
-                remaining: Number(actionButton.dataset.guidedCoverageRemaining || 0),
-            });
         }
 
         function renderAdvancedHandoffContext() {
@@ -748,7 +720,20 @@
             }
 
             if (targetEl.closest('[data-workspace-scope-panel="advanced"]')) {
+                if (openAdvancedRouteFromVisual(null, deriveAdvancedFocusTarget(targetEl))) return;
                 applyWorkspaceScope("advanced");
+            }
+            const homeSurfaceGroup = targetEl.closest("[data-home-surface-group]");
+            if (homeSurfaceGroup?.dataset.homeSurfaceCollapsed === "true") {
+                homeSurfaceGroup.querySelector("[data-home-surface-toggle]")?.click();
+            }
+            const disclosurePanel = targetEl.closest(".wizard-disclosure-panel");
+            if (disclosurePanel?.hidden) {
+                documentRef.querySelector(`[data-wizard-disclosure-toggle][aria-controls="${disclosurePanel.id}"]`)?.click();
+            }
+            const detailsPanel = targetEl.closest("details");
+            if (detailsPanel && !detailsPanel.open) {
+                detailsPanel.open = true;
             }
             getDisclosurePanelPairs().forEach(([panelId, toggleId]) => {
                 const panelEl = documentRef.getElementById(panelId);
@@ -995,11 +980,40 @@
             documentRef.addEventListener("change", handleSchemaBranchModeChange);
         }
 
+        function isGuardedProfileRouteHref(anchorEl) {
+            const href = anchorEl?.getAttribute?.("href") || "";
+            if (!href || href.startsWith("#")) return false;
+            if (anchorEl.target && anchorEl.target !== "_self") return false;
+            try {
+                const url = new URL(href, windowRef.location.origin);
+                if (url.origin !== windowRef.location.origin) return false;
+                return url.pathname === "/profiles" || url.pathname.startsWith("/profiles/");
+            } catch {
+                return false;
+            }
+        }
+
+        function confirmRouteNavigationIfDirty() {
+            if (!currentSnapshotState().dirty) return true;
+            return windowRef.confirm(t("profiles.confirm_discard"));
+        }
+
+        function guardProfileRouteNavigation(event) {
+            const anchorEl = event.target.closest?.("a[href]");
+            if (!anchorEl || !isGuardedProfileRouteHref(anchorEl)) return false;
+            if (confirmRouteNavigationIfDirty()) return false;
+            event.preventDefault();
+            event.stopPropagation();
+            return true;
+        }
+
         function wireDocumentClicks() {
             if (documentClicksBound) return;
             documentClicksBound = true;
 
             documentRef.addEventListener("click", (event) => {
+                if (guardProfileRouteNavigation(event)) return;
+
                 const exportSaveActionButton = event.target.closest("#wizard-export-save-action");
                 if (exportSaveActionButton) {
                     saveButtonEl.click();
@@ -1161,24 +1175,11 @@
                 const scopeTargetButton = event.target.closest("[data-workspace-scope-target]");
                 if (scopeTargetButton) {
                     if ((scopeTargetButton.dataset.workspaceScopeTarget || "guided") === "advanced") {
+                        if (openAdvancedRouteFromVisual(event, scopeTargetButton.dataset.advancedFocusTarget || "context")) return;
                         lastAdvancedReturnTriggerEl = scopeTargetButton;
-                        setAdvancedHandoffContext(readGuidedCoverageContext(getWizardStep()));
+                        setAdvancedHandoffContext(buildAdvancedHandoffContext(getWizardStep()));
                     }
                     applyWorkspaceScope(scopeTargetButton.dataset.workspaceScopeTarget || "guided", { focus: true });
-                    return;
-                }
-
-                const guidedCoverageButton = event.target.closest("[data-guided-coverage-open-step]");
-                if (guidedCoverageButton) {
-                    const step = guidedCoverageButton.dataset.guidedCoverageOpenStep || "";
-                    lastAdvancedReturnTriggerEl = guidedCoverageButton;
-                    setAdvancedHandoffContext(readGuidedCoverageContext(step));
-                    const targetEl = documentRef.getElementById(`wizard-schema-shell-step-${step}`);
-                    if (targetEl) {
-                        revealWorkspaceTarget(targetEl);
-                    } else {
-                        applyWorkspaceScope("advanced", { focus: true });
-                    }
                     return;
                 }
 
@@ -1186,6 +1187,7 @@
                 if (advancedStartActionButton) {
                     const action = advancedStartActionButton.dataset.advancedStartAction || "";
                     if (action === "details") {
+                        if (openAdvancedRouteFromVisual(event, "details")) return;
                         applyWorkspaceScope("advanced", { focus: true });
                         const targetEl = documentRef.getElementById("details-panel");
                         if (targetEl) {
@@ -1193,6 +1195,7 @@
                             focusElementForA11y(targetEl);
                         }
                     } else if (action === "editor") {
+                        if (openAdvancedRouteFromVisual(event, "editor")) return;
                         applyWorkspaceScope("advanced", { focus: true });
                         const targetEl = documentRef.getElementById("editor-panel");
                         if (targetEl) {
@@ -1423,12 +1426,14 @@
                 }
                 if (kind === "ai") {
                     return first(
+                        '[data-settings-target="policy:AIControls"]',
                         '[data-settings-target="policy:VisualSearchEnabled"]',
                         '[data-settings-target="policy:GenerativeAI"]',
                     );
                 }
                 if (kind === "privacy") {
                     return first(
+                        '[data-settings-target="policy:IPProtectionAvailable"]',
                         '[data-settings-target="policy:Permissions"]',
                         '[data-settings-target="policy:Cookies"]',
                     );
@@ -1466,11 +1471,14 @@
             }
 
             if (group === "ai") {
+                if (kind === "feature_controls") {
+                    return first('[data-settings-target="policy:AIControls"]', '[data-settings-target="policy:GenerativeAI"]');
+                }
                 if (kind === "visual_search") {
                     return first('[data-settings-target="policy:VisualSearchEnabled"]');
                 }
                 if (kind === "generative_ai") {
-                    return first('[data-settings-target="policy:GenerativeAI"]');
+                    return first('[data-settings-target="policy:AIControls"]', '[data-settings-target="policy:GenerativeAI"]');
                 }
             }
 
@@ -1544,12 +1552,9 @@
             bindDirectJump("wizard-export-summary-home-jump", '[data-settings-target="field:wizard-homepage-url"]');
             bindDirectJump("wizard-export-summary-search-jump", '[data-settings-target="field:wizard-search-default-engine"]');
             bindDirectJump("wizard-export-summary-features-jump", '[data-settings-target="policy:RequestedLocales"]');
-            bindDirectJump("wizard-export-summary-ai-jump", '[data-settings-target="policy:VisualSearchEnabled"]');
+            bindDirectJump("wizard-export-summary-ai-jump", '[data-settings-target="policy:AIControls"]', '[data-settings-target="policy:VisualSearchEnabled"]');
             bindDirectJump("wizard-export-summary-privacy-jump", '[data-settings-target="policy:Permissions"]');
-            bindDirectJump("wizard-hardening-next-posture", "#wizard-hardening-presets");
-            bindDirectJump("wizard-hardening-next-cleanup", "#wizard-cleanup-presets");
-            bindDirectJump("wizard-hardening-next-sites", "#wizard-site-data-presets");
-            bindDirectJump("wizard-extension-next-rollout", "#wizard-extension-rollout-presets");
+            bindDirectJump("wizard-extension-next-rollout", "#wizard-extension-governance-presets");
             bindDirectJump("wizard-extension-next-curated", "#wizard-extension-curated-section");
             bindDirectJump("wizard-extension-next-fine-tuning", "#wizard-extension-fine-tuning-toggle");
             bindDirectJump("wizard-website-next-filter", '[data-settings-target="policy:WebsiteFilter"]');
@@ -1599,12 +1604,26 @@
             if (wizardNavBound) return;
             wizardNavBound = true;
 
+            function scrollWizardStepToTop(stepNumber) {
+                const targetEl = documentRef.getElementById(`wizard-step-${Number(stepNumber)}`);
+                if (!targetEl) return;
+                windowRef.requestAnimationFrame(() => {
+                    targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                    focusElementForA11y(targetEl);
+                });
+            }
+
+            function navigateWizardStep(nextStep) {
+                setWizardStep(nextStep);
+                scrollWizardStepToTop(getWizardStep());
+            }
+
             wizardStepButtons.forEach((button) => {
-                button.addEventListener("click", () => setWizardStep(button.dataset.step));
+                button.addEventListener("click", () => navigateWizardStep(button.dataset.step));
             });
-            wizardPrevEl?.addEventListener("click", () => setWizardStep(getWizardStep() - 1));
+            wizardPrevEl?.addEventListener("click", () => navigateWizardStep(getWizardStep() - 1));
             wizardNextEl?.addEventListener("click", () => {
-                setWizardStep(getWizardStep() + 1);
+                navigateWizardStep(getWizardStep() + 1);
             });
             wizardFinishEl?.addEventListener("click", finishWizard);
             wizardStepUndoEl?.addEventListener("click", () => {
@@ -1620,6 +1639,10 @@
             const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || legacySavedLang || "system";
             const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
             const savedWorkspaceScope = windowRef.localStorage.getItem(workspaceScopeStorageKey) || "guided";
+            const routeMode = readProfilesRouteContext().routeMode;
+            const initialWorkspaceScope = routeMode === "advanced" ? "advanced" : (
+                savedWorkspaceScope === "advanced" ? "guided" : savedWorkspaceScope
+            );
 
             if (langSelectEl) {
                 langSelectEl.value = savedLangMode;
@@ -1629,8 +1652,98 @@
             }
 
             applyThemeMode(savedThemeMode, false);
-            applyWorkspaceScope(savedWorkspaceScope, { persist: false });
+            applyWorkspaceScope(initialWorkspaceScope, { persist: false });
             await applyLanguageMode(savedLangMode, false);
+        }
+
+        function readProfilesRouteContext() {
+            const bodyEl = documentRef.body;
+            const routeMode = bodyEl?.dataset.profilesRouteMode || "library";
+            const rawProfileId = bodyEl?.dataset.editingProfileId || "";
+            const profileId = Number(rawProfileId);
+            return {
+                routeMode,
+                editingProfileId: Number.isInteger(profileId) && profileId > 0 ? profileId : null,
+                returnUrl: bodyEl?.dataset.advancedReturnUrl || "",
+                focusTarget: bodyEl?.dataset.advancedFocusTarget || "",
+            };
+        }
+
+        function buildAdvancedRouteHref(profileId, focusTarget = "") {
+            if (!profileId) return "";
+            const href = new URL(`/profiles/${profileId}/advanced`, windowRef.location.origin);
+            href.searchParams.set("return", `/profiles/${profileId}/edit`);
+            if (focusTarget) {
+                href.searchParams.set("focus", focusTarget);
+            }
+            return `${href.pathname}${href.search}`;
+        }
+
+        function getAdvancedRouteHref(focusTarget = "") {
+            const { editingProfileId } = readProfilesRouteContext();
+            const profileId = editingProfileId || getCurrentProfile()?.id || null;
+            return buildAdvancedRouteHref(profileId, focusTarget);
+        }
+
+        function deriveAdvancedFocusTarget(targetEl, fallback = "") {
+            if (!targetEl) return fallback;
+            const settingsTarget = targetEl.closest?.("[data-settings-target]")?.dataset.settingsTarget || "";
+            if (settingsTarget) return settingsTarget;
+            if (targetEl === editorEl || targetEl.id === "editor" || targetEl.id === "editor-panel") return "editor";
+            if (targetEl.id === "details-panel") return "details";
+            if (targetEl.id === "advanced-download-strip") return "download";
+            if (targetEl.id === "advanced-context-panel") return "context";
+            if (targetEl.id) return targetEl.id;
+            return targetEl.closest?.("[id]")?.id || fallback;
+        }
+
+        function openAdvancedRouteFromVisual(event = null, focusTarget = "") {
+            const { routeMode } = readProfilesRouteContext();
+            if (routeMode === "advanced") return false;
+            event?.preventDefault?.();
+            const href = getAdvancedRouteHref(focusTarget);
+            if (!href) {
+                setStatus(t("profiles.wizard_export_plan_save_first"), "warn");
+                return true;
+            }
+            if (!confirmRouteNavigationIfDirty()) {
+                return true;
+            }
+            windowRef.location.assign(href);
+            return true;
+        }
+
+        function resolveAdvancedFocusTarget(focusTarget) {
+            const target = String(focusTarget || "").trim();
+            if (!target) return null;
+            if (target === "editor") return documentRef.getElementById("editor-panel") || editorEl;
+            if (target === "details") return documentRef.getElementById("details-panel");
+            if (target === "download") return documentRef.getElementById("advanced-download-strip");
+            if (target === "context") return documentRef.getElementById("advanced-context-panel");
+            return findSettingsTarget(target) || documentRef.getElementById(target) || null;
+        }
+
+        function applyAdvancedFocusTarget(focusTarget) {
+            const targetEl = resolveAdvancedFocusTarget(focusTarget);
+            if (!targetEl) return;
+            revealWorkspaceTarget(targetEl);
+        }
+
+        async function bootstrapProfileRouteState() {
+            const { routeMode, editingProfileId, focusTarget } = readProfilesRouteContext();
+            if ((routeMode === "edit" || routeMode === "advanced") && editingProfileId) {
+                await resetDraft(true);
+                await loadProfile(editingProfileId, { skipConfirm: true });
+                if (routeMode === "advanced") {
+                    setAdvancedHandoffContext(null);
+                    applyWorkspaceScope("advanced", { focus: true, persist: false });
+                    applyAdvancedFocusTarget(focusTarget);
+                }
+                return;
+            }
+
+            await resetDraft(true);
+            await reloadList();
         }
 
         function start() {
@@ -1667,10 +1780,12 @@
                 });
                 setEditor(editor);
 
-                const savedMode = windowRef.localStorage.getItem("bpm-editor-mode") || "json";
+                const savedMode = "json";
+                let activeEditorMode = savedMode;
 
                 modeSelectEl.value = savedMode;
-                monacoRef.editor.setModelLanguage(editor.getModel(), savedMode === "yaml" ? "yaml" : "json");
+                windowRef.localStorage.setItem("bpm-editor-mode", savedMode);
+                monacoRef.editor.setModelLanguage(editor.getModel(), "json");
                 editor.setValue(toEditorValue({}, savedMode));
                 syncProxyWizardUi();
                 syncWizardFieldsFromForm();
@@ -1690,9 +1805,16 @@
 
                 modeSelectEl.addEventListener("change", (event) => {
                     const mode = event.target.value;
+                    let currentFlags = getCurrentRaw();
+                    try {
+                        currentFlags = fromEditorValue(editor.getValue(), activeEditorMode);
+                    } catch {
+                        currentFlags = getCurrentRaw();
+                    }
                     windowRef.localStorage.setItem("bpm-editor-mode", mode);
                     monacoRef.editor.setModelLanguage(editor.getModel(), mode === "yaml" ? "yaml" : "json");
-                    editor.setValue(toEditorValue(getCurrentRaw(), mode));
+                    editor.setValue(toEditorValue(currentFlags, mode));
+                    activeEditorMode = mode;
                     syncWizardFieldsFromForm();
                     syncEditorBackedUi();
                     syncAllSchemaBranchCardsFromDom();
@@ -1707,6 +1829,13 @@
                 restoreButtonEl.addEventListener("click", doRestore);
                 resetLibraryButtonEl.addEventListener("click", doResetLibrary);
                 validateButtonEl.addEventListener("click", doValidate);
+                importFirefoxPoliciesButtonEl?.addEventListener("click", () => {
+                    importFirefoxPoliciesFileEl?.click();
+                });
+                importFirefoxPoliciesFileEl?.addEventListener("change", async (event) => {
+                    const file = event.target.files?.[0] || null;
+                    await doImportFirefoxPoliciesJson?.(file);
+                });
                 nameInput.addEventListener("input", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
@@ -1783,6 +1912,11 @@
                     button.addEventListener("mouseleave", clearPreviewStarter);
                     button.addEventListener("blur", clearPreviewStarter);
                 });
+                wizardCisLayerButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        setWizardComplianceLayer(button.dataset.cisLayerKey);
+                    });
+                });
                 wizardSettingsSearchInputEl?.addEventListener("input", () => {
                     renderWizardSettingsSearchResults();
                 });
@@ -1809,7 +1943,8 @@
                     setAdvancedHandoffContext(null);
                     applyWorkspaceScope("guided", { focus: true });
                 });
-                workspaceScopeAdvancedEl?.addEventListener("click", () => {
+                workspaceScopeAdvancedEl?.addEventListener("click", (event) => {
+                    if (openAdvancedRouteFromVisual(event, "context")) return;
                     setAdvancedHandoffContext(null);
                     applyWorkspaceScope("advanced", { focus: true });
                 });
@@ -1880,8 +2015,7 @@
                     themeMediaQuery.addListener(handleSystemThemeChange);
                 }
 
-                resetDraft();
-                reloadList();
+                await bootstrapProfileRouteState();
                 updateDownloadLinks();
                 syncWorkspaceOverview();
             }).catch((error) => {

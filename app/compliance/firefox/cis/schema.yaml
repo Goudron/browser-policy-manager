@@ -1,0 +1,42 @@
+allowed_values:
+  mapping_status:
+    - mapped
+    - preference_mapped
+    - manual
+    - not_applicable
+    - needs_research
+    - deprecated_or_removed
+  assessment:
+    - automated
+    - manual
+    - unknown
+  target_kind:
+    - policy
+    - preference
+    - manual
+    - unsupported
+  confidence:
+    - high
+    - medium
+    - low
+
+required_recommendation_fields:
+  - id
+  - title
+  - level
+  - assessment
+  - category
+  - mapping_status
+
+required_mapping_fields:
+  - recommendation_id
+  - status
+  - confidence
+
+notes:
+  - Level must be 1 or 2.
+  - Policy target paths must be non-empty lists.
+  - Preference targets must identify a preference key.
+  - Every recommendation must have a mapping row, even when the status is needs_research.
+  - The initial dataset may be empty while official CIS PDF curation is pending.
+

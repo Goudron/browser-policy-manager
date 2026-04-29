@@ -138,6 +138,10 @@
                 view.add.disabled = disabled;
                 const sectionDrafts = stateApi.getDrafts().filter((draft) => draft.section === section.id);
                 view.empty.hidden = sectionDrafts.length > 0;
+                if (view.count) {
+                    view.count.textContent = t("profiles.wizard_preferences_handoff_count")
+                        .replace("{count}", String(sectionDrafts.length));
+                }
 
                 sectionDrafts.forEach((draft, index) => {
                     const fragment = wizardPreferenceRowTemplateEl.content.cloneNode(true);

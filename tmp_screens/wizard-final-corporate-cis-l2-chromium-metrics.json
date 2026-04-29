@@ -1,0 +1,324 @@
+[
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "document": {
+      "scrollWidth": 1351,
+      "clientWidth": 1351,
+      "scrollHeight": 10365
+    },
+    "horizontalOverflow": false,
+    "overflowNodes": [],
+    "activeStepVisible": true,
+    "step8": {
+      "width": 1303,
+      "height": 4939,
+      "top": 0
+    },
+    "guidedSummary": {
+      "width": 1231,
+      "columns": 1,
+      "visibleGroups": 5,
+      "groups": [
+        {
+          "id": "wizard-export-guided-group-network",
+          "width": 1246,
+          "height": 154,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-home",
+          "width": 1246,
+          "height": 179,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-search",
+          "width": 1246,
+          "height": 154,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-privacy",
+          "width": 1246,
+          "height": 179,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-features",
+          "width": 1246,
+          "height": 154,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-ai",
+          "width": 0,
+          "height": 0,
+          "hidden": true
+        }
+      ]
+    },
+    "readyCard": {
+      "width": 1269,
+      "height": 317,
+      "top": 230
+    },
+    "sections": [
+      {
+        "id": "wizard-export-section-ready",
+        "width": 1284,
+        "height": 930,
+        "top": 179
+      },
+      {
+        "id": "wizard-export-section-changes",
+        "width": 1284,
+        "height": 2612,
+        "top": 1131
+      },
+      {
+        "id": "wizard-export-section-technical",
+        "width": 1284,
+        "height": 1156,
+        "top": 3765
+      }
+    ],
+    "cisDetailsOpen": false,
+    "shareDetailsOpen": false,
+    "screenshots": {
+      "viewport": "tmp_screens/wizard-final-corporate-cis-l2-desktop-1366x768.png",
+      "full": "tmp_screens/wizard-final-corporate-cis-l2-desktop-1366x768-full.png"
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "document": {
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 15588
+    },
+    "horizontalOverflow": false,
+    "overflowNodes": [
+      {
+        "tag": "button",
+        "id": "",
+        "cls": "wizard-step",
+        "left": 339,
+        "right": 487,
+        "width": 148,
+        "text": "3 Home & startup Homepage, startup pages, new tabs, Firefox Home, and related us"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-top",
+        "left": 352,
+        "right": 474,
+        "width": 122,
+        "text": "3 Home & startup"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-label",
+        "left": 386,
+        "right": 474,
+        "width": 88,
+        "text": "Home & startup"
+      },
+      {
+        "tag": "button",
+        "id": "",
+        "cls": "wizard-step",
+        "left": 495,
+        "right": 643,
+        "width": 148,
+        "text": "4 Search & navigation Default search, managed engines, suggestions, and address "
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-top",
+        "left": 508,
+        "right": 630,
+        "width": 122,
+        "text": "4 Search & navigation"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-index",
+        "left": 508,
+        "right": 532,
+        "width": 24,
+        "text": "4"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-label",
+        "left": 542,
+        "right": 630,
+        "width": 88,
+        "text": "Search & navigation"
+      },
+      {
+        "tag": "button",
+        "id": "",
+        "cls": "wizard-step",
+        "left": 651,
+        "right": 799,
+        "width": 148,
+        "text": "5 Privacy & security Site permissions, cookies, privacy defaults, and safer brow"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-top",
+        "left": 664,
+        "right": 786,
+        "width": 122,
+        "text": "5 Privacy & security"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-index",
+        "left": 664,
+        "right": 688,
+        "width": 24,
+        "text": "5"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-label",
+        "left": 698,
+        "right": 786,
+        "width": 88,
+        "text": "Privacy & security"
+      },
+      {
+        "tag": "button",
+        "id": "",
+        "cls": "wizard-step",
+        "left": 807,
+        "right": 955,
+        "width": 148,
+        "text": "6 Accounts, languages, add-ons & sites Mozilla account sign-in, browser language"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-top",
+        "left": 820,
+        "right": 942,
+        "width": 122,
+        "text": "6 Accounts, languages, add-ons & sites"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-index",
+        "left": 820,
+        "right": 844,
+        "width": 24,
+        "text": "6"
+      },
+      {
+        "tag": "span",
+        "id": "",
+        "cls": "wizard-step-label",
+        "left": 854,
+        "right": 942,
+        "width": 88,
+        "text": "Accounts, languages, add-ons & sites"
+      }
+    ],
+    "activeStepVisible": true,
+    "step8": {
+      "width": 362,
+      "height": 7313,
+      "top": 143
+    },
+    "guidedSummary": {
+      "width": 302,
+      "columns": 1,
+      "visibleGroups": 5,
+      "groups": [
+        {
+          "id": "wizard-export-guided-group-network",
+          "width": 302,
+          "height": 175,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-home",
+          "width": 302,
+          "height": 268,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-search",
+          "width": 302,
+          "height": 221,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-privacy",
+          "width": 302,
+          "height": 315,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-features",
+          "width": 302,
+          "height": 175,
+          "hidden": false
+        },
+        {
+          "id": "wizard-export-guided-group-ai",
+          "width": 0,
+          "height": 0,
+          "hidden": true
+        }
+      ]
+    },
+    "readyCard": {
+      "width": 328,
+      "height": 689,
+      "top": 430
+    },
+    "sections": [
+      {
+        "id": "wizard-export-section-ready",
+        "width": 328,
+        "height": 1491,
+        "top": 383
+      },
+      {
+        "id": "wizard-export-section-changes",
+        "width": 328,
+        "height": 3569,
+        "top": 1895
+      },
+      {
+        "id": "wizard-export-section-technical",
+        "width": 328,
+        "height": 1952,
+        "top": 5487
+      }
+    ],
+    "cisDetailsOpen": false,
+    "shareDetailsOpen": false,
+    "screenshots": {
+      "viewport": "tmp_screens/wizard-final-corporate-cis-l2-mobile-390x844.png",
+      "full": "tmp_screens/wizard-final-corporate-cis-l2-mobile-390x844-full.png"
+    }
+  }
+]

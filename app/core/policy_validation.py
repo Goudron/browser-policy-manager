@@ -154,7 +154,7 @@ def validate_profile_payload_with_schema(payload: dict[str, Any]) -> None:
 
     Expected payload shape (minimal):
         {
-            "channel": "release-149" | "esr-140.9",
+            "channel": "release-150" | "esr-140.10",
             "policies": {
                 "DisableAppUpdate": true,
                 "HttpAllowlist": ["http://example.org"],

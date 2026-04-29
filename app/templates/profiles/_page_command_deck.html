@@ -8,6 +8,34 @@
             <div class="dock-state-title" id="dock-state-title" data-i18n="profiles.dock_state_empty_title">{{ tr("profiles.dock_state_empty_title") }}</div>
             <p class="dock-state-copy" id="dock-state-copy" data-i18n="profiles.selection_empty_status">{{ tr("profiles.selection_empty_status") }}</p>
         </div>
+        <div class="save-conflict-panel surface-soft-box" id="save-conflict-panel" role="alert" aria-live="assertive" hidden>
+            <div class="section-kicker" data-i18n="profiles.conflict_title">{{ tr("profiles.conflict_title") }}</div>
+            <p class="save-conflict-copy" id="save-conflict-copy" data-i18n="profiles.conflict_body">{{ tr("profiles.conflict_body") }}</p>
+            <p class="save-conflict-meta" id="save-conflict-meta"></p>
+            <div class="save-conflict-actions">
+                <button
+                    type="button"
+                    id="save-conflict-reload"
+                    class="button-base ghost-button"
+                    data-i18n="profiles.conflict_reload_latest">
+                    {{ tr("profiles.conflict_reload_latest") }}
+                </button>
+                <button
+                    type="button"
+                    id="save-conflict-save-copy"
+                    class="button-base ghost-button"
+                    data-i18n="profiles.conflict_save_as_copy">
+                    {{ tr("profiles.conflict_save_as_copy") }}
+                </button>
+                <button
+                    type="button"
+                    id="save-conflict-overwrite"
+                    class="button-base danger-button"
+                    data-i18n="profiles.conflict_overwrite">
+                    {{ tr("profiles.conflict_overwrite") }}
+                </button>
+            </div>
+        </div>
         <div class="dock-meta">
             <span class="dock-pill">
                 <span data-i18n="profiles.dock_shortcut_label">{{ tr("profiles.dock_shortcut_label") }}</span>

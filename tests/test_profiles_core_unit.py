@@ -29,8 +29,9 @@ def _profile_read(**overrides):
         "id": 1,
         "name": "Profile",
         "description": "Base",
-        "schema_version": "esr-140.9",
+        "schema_version": "esr-140.10",
         "flags": {"DisableTelemetry": True},
+        "revision": 1,
         "owner": "qa",
         "created_at": datetime(2026, 1, 1),
         "updated_at": datetime(2026, 1, 2),
@@ -52,7 +53,7 @@ def test_validate_profile_policies_or_422_returns_early_without_flags(monkeypatc
 
     profiles_module._validate_profile_policies_or_422(
         name="Empty",
-        schema_version="esr-140.9",
+        schema_version="esr-140.10",
         flags={},
     )
 
@@ -76,7 +77,7 @@ def test_validate_profile_policies_or_422_returns_422_with_issues(monkeypatch):
     with pytest.raises(HTTPException) as excinfo:
         profiles_module._validate_profile_policies_or_422(
             name="Broken",
-            schema_version="esr-140.9",
+            schema_version="esr-140.10",
             flags={"DisableTelemetry": "bad"},
         )
 
@@ -94,7 +95,7 @@ def test_validate_profile_policies_or_422_returns_400_on_unexpected_error(monkey
     with pytest.raises(HTTPException) as excinfo:
         profiles_module._validate_profile_policies_or_422(
             name="Broken",
-            schema_version="esr-140.9",
+            schema_version="esr-140.10",
             flags={"DisableTelemetry": True},
         )
 
@@ -105,7 +106,7 @@ def test_validate_profile_policies_or_422_returns_400_on_unexpected_error(monkey
 @pytest.mark.anyio
 async def test_create_profile_core_skips_validation_when_disabled(monkeypatch):
     session = _FakeSession()
-    payload = ProfileCreate(name="Created", description="ok", schema_version="esr-140.9", flags={})
+    payload = ProfileCreate(name="Created", description="ok", schema_version="esr-140.10", flags={})
     created = _profile_read(name="Created", description="ok")
     called = {"validated": False}
 
@@ -135,7 +136,7 @@ async def test_create_profile_core_skips_validation_when_disabled(monkeypatch):
 @pytest.mark.anyio
 async def test_create_profile_core_rolls_back_on_integrity_error(monkeypatch):
     session = _FakeSession()
-    payload = ProfileCreate(name="Dup", description=None, schema_version="esr-140.9", flags={})
+    payload = ProfileCreate(name="Dup", description=None, schema_version="esr-140.10", flags={})
 
     async def _raise_integrity(_session, _payload):
         raise IntegrityError("insert", {"name": "Dup"}, Exception("duplicate"))
@@ -185,6 +186,41 @@ async def test_update_profile_core_merges_flags_and_skips_validation_when_disabl
     }
     assert "schema_version" not in captured["payload"].model_fields_set
     assert session.commits == 1
+
+
+@pytest.mark.anyio
+async def test_update_profile_core_rejects_stale_expected_revision(monkeypatch):
+    session = _FakeSession()
+    current = _profile_read(revision=3)
+    called = {"updated": False}
+
+    async def _fake_get(*args, **kwargs):
+        return current
+
+    async def _fake_update(*args, **kwargs):
+        called["updated"] = True
+        return current
+
+    monkeypatch.setattr(profiles_module, "_get_profile_or_404_core", _fake_get)
+    monkeypatch.setattr(profiles_module.ProfileService, "update", _fake_update)
+
+    with pytest.raises(HTTPException) as excinfo:
+        await profiles_module._update_profile_core(
+            5,
+            ProfileUpdate(description="Stale", expected_revision=2),
+            session,
+            validate_policies=False,
+        )
+
+    assert excinfo.value.status_code == 409
+    assert excinfo.value.detail == {
+        "message": "Profile has been modified since it was loaded",
+        "profile_id": 5,
+        "current_revision": 3,
+        "expected_revision": 2,
+    }
+    assert called["updated"] is False
+    assert session.commits == 0
 
 
 @pytest.mark.anyio

@@ -11,7 +11,7 @@ def _mk(prefix: str = "ERR"):
     return {
         "name": f"{prefix}-{u}",
         "description": "Error branches",
-        "schema_version": "esr-140.9",
+        "schema_version": "esr-140.10",
         "flags": {"DisableTelemetry": True},
     }
 

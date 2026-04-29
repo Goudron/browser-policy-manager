@@ -1,0 +1,20 @@
+manual_review_paths:
+  AppAutoUpdate:
+    reason: Update governance may be handled by enterprise patch management.
+  BackgroundAppUpdate:
+    reason: Update governance may be handled by enterprise patch management.
+  DisableAppUpdate:
+    reason: Update governance may be handled by enterprise patch management.
+  DisableSystemAddonUpdate:
+    reason: Update governance may be handled by enterprise patch management.
+  Proxy.Mode:
+    reason: Proxy mode is environment-specific and may enforce enterprise traffic routing.
+  Proxy.Locked:
+    reason: Proxy lock is environment-specific and should preserve the selected routing model.
+  SanitizeOnShutdown.Sessions:
+    reason: CIS preserves forensic evidence, while some hardened scenarios intentionally clear session data.
+  SanitizeOnShutdown.History:
+    reason: CIS preserves forensic evidence, while some hardened scenarios intentionally clear history.
+  SanitizeOnShutdown.FormData:
+    reason: CIS preserves forensic evidence, while some hardened scenarios intentionally clear form data.
+

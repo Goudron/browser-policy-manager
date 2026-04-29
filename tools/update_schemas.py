@@ -8,8 +8,8 @@ it tries historical raw-schema locations and refreshes the local cache only if
 such a file is actually available upstream.
 
 Examples:
-    python tools/update_schemas.py --version esr1409
-    python tools/update_schemas.py --version release149
+    python tools/update_schemas.py --version esr14010
+    python tools/update_schemas.py --version release150
     python tools/update_schemas.py --all
 """
 
@@ -42,7 +42,7 @@ def _load_schema_manager_class():
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Update cached Mozilla policy schemas")
     g = p.add_mutually_exclusive_group(required=True)
-    g.add_argument("--version", choices=["esr1409", "release149"], help="Target schema version")
+    g.add_argument("--version", choices=["esr14010", "release150"], help="Target schema version")
     g.add_argument("--all", action="store_true", help="Update all supported versions")
     p.add_argument("--force", action="store_true", help="Force re-download even if cache exists")
     return p.parse_args()
@@ -53,7 +53,7 @@ def main() -> int:
     schema_manager_cls = _load_schema_manager_class()
     manager = schema_manager_cls()
 
-    keys = ["esr1409", "release149"] if args.all else [args.version]
+    keys = ["esr14010", "release150"] if args.all else [args.version]
 
     exit_code = 0
     for key in keys:

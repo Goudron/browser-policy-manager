@@ -370,7 +370,7 @@
                 name: "",
                 owner: null,
                 description: null,
-                schemaVersion: "esr-140.9",
+                schemaVersion: "esr-140.10",
             }));
         }
 

@@ -1,37 +1,111 @@
 (() => {
-    function toEditorValue(obj, mode) {
-        if (mode === "yaml") {
-            return window.jsyaml.dump(obj || {}, {
-                skipInvalid: true,
-                sortKeys: false,
-            });
-        }
-        return JSON.stringify(obj || {}, null, 2);
+    function isPlainObject(value) {
+        return Boolean(value) && typeof value === "object" && !Array.isArray(value);
     }
 
-    function fromEditorValue(text, mode) {
+    function toFirefoxPoliciesDocument(flagsObj) {
+        if (isPlainObject(flagsObj) && isPlainObject(flagsObj.policies)) {
+            return { policies: flagsObj.policies };
+        }
+        return { policies: isPlainObject(flagsObj) ? flagsObj : {} };
+    }
+
+    function toInternalFlags(documentObj) {
+        if (documentObj === null || documentObj === undefined) return {};
+        if (!isPlainObject(documentObj)) {
+            throw new Error("Expected policies.json root object");
+        }
+        if (!Object.prototype.hasOwnProperty.call(documentObj, "policies")) {
+            return documentObj;
+        }
+        if (!isPlainObject(documentObj.policies)) {
+            throw new Error("Expected policies to be an object");
+        }
+        return documentObj.policies;
+    }
+
+    function parseEditorPolicyDocument(text, mode) {
+        const parsed = fromSerializedEditorValue(text, mode);
+        return toFirefoxPoliciesDocument(toInternalFlags(parsed));
+    }
+
+    function getPolicyValue(flagsObj, policyKey) {
+        const flags = toInternalFlags(flagsObj);
+        return flags[policyKey];
+    }
+
+    function setPolicyValue(flagsObj, policyKey, value) {
+        const flags = { ...toInternalFlags(flagsObj) };
+        if (value === undefined) {
+            delete flags[policyKey];
+        } else {
+            flags[policyKey] = value;
+        }
+        return flags;
+    }
+
+    function fromSerializedEditorValue(text, mode) {
         if (!text || !text.trim()) return {};
         return mode === "yaml" ? window.jsyaml.load(text) : JSON.parse(text);
     }
 
-    async function readError(res) {
+    function toEditorValue(obj, mode) {
+        const documentObj = toFirefoxPoliciesDocument(obj);
+        if (mode === "yaml") {
+            return window.jsyaml.dump(documentObj, {
+                skipInvalid: true,
+                sortKeys: false,
+            });
+        }
+        return JSON.stringify(documentObj, null, 2);
+    }
+
+    function fromEditorValue(text, mode) {
+        return toInternalFlags(fromSerializedEditorValue(text, mode));
+    }
+
+    async function readErrorPayload(res) {
         const raw = await res.text();
         try {
             const parsed = JSON.parse(raw);
             const issues = parsed.detail?.issues;
             if (Array.isArray(issues) && issues.length) {
-                return issues
-                    .slice(0, 3)
-                    .map((issue) => `${issue.policy || "document"}: ${issue.message}`)
-                    .join(" • ");
+                return {
+                    message: issues
+                        .slice(0, 3)
+                        .map((issue) => `${issue.policy || "document"}: ${issue.message}`)
+                        .join(" • "),
+                    detail: parsed.detail,
+                    raw,
+                };
             }
-            if (typeof parsed.detail === "string") return parsed.detail;
-            if (parsed.detail?.message) return parsed.detail.message;
-            if (parsed.message) return parsed.message;
-            return raw;
+            if (typeof parsed.detail === "string") {
+                return { message: parsed.detail, detail: parsed.detail, raw };
+            }
+            if (parsed.detail?.message) {
+                return { message: parsed.detail.message, detail: parsed.detail, raw };
+            }
+            if (parsed.message) {
+                return { message: parsed.message, detail: parsed.detail, raw };
+            }
+            return { message: raw, detail: parsed.detail, raw };
         } catch {
-            return raw;
+            return { message: raw, detail: null, raw };
         }
+    }
+
+    async function readError(res) {
+        const payload = await readErrorPayload(res);
+        return payload.message;
+    }
+
+    async function profileRequestError(res) {
+        const payload = await readErrorPayload(res);
+        const error = new Error(payload.message);
+        error.status = res.status;
+        error.detail = payload.detail;
+        error.payload = payload;
+        return error;
     }
 
     function readProfileListFilters(documentRef) {
@@ -81,13 +155,23 @@
         return await res.json();
     }
 
+    async function importFirefoxPoliciesJson(body, fetchImpl = fetch) {
+        const res = await fetchImpl("/api/profiles/import/firefox/policies.json", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+        if (!res.ok) throw new Error(await readError(res));
+        return await res.json();
+    }
+
     async function patchProfile(id, payload, fetchImpl = fetch) {
         const res = await fetchImpl(`/api/profiles/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
         });
-        if (!res.ok) throw new Error(await readError(res));
+        if (!res.ok) throw await profileRequestError(res);
         return await res.json();
     }
 
@@ -126,11 +210,18 @@
     window.BPMProfilesData = {
         toEditorValue,
         fromEditorValue,
+        parseEditorPolicyDocument,
+        toInternalFlags,
+        toFirefoxPoliciesDocument,
+        getPolicyValue,
+        setPolicyValue,
         readError,
+        profileRequestError,
         listProfiles,
         getProfileLibraryStats,
         getProfile,
         createProfile,
+        importFirefoxPoliciesJson,
         patchProfile,
         softDeleteProfile,
         hardDeleteProfile,

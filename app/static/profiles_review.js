@@ -82,19 +82,18 @@
             wizardWebsiteAccessSummaryBlockedJumpEl,
             wizardWebsiteAccessSummaryExceptionsJumpEl,
             wizardWebsiteAccessSummaryHandlersJumpEl,
-            wizardPrivacySummaryPermissionsConfiguredEl,
-            wizardPrivacySummaryPermissionsLockedEl,
+            wizardPrivacySummaryPermissionsEl,
             wizardPrivacySummaryCookiesEl,
             wizardPrivacySummaryUserDataEl,
             wizardPrivacySummaryCleanupEl,
             wizardPrivacySummaryUserDataJumpEl,
             wizardPrivacySummaryCleanupJumpEl,
-            wizardPrivacySummaryPermissionsConfiguredJumpEl,
-            wizardPrivacySummaryPermissionsLockedJumpEl,
+            wizardPrivacySummaryPermissionsJumpEl,
             wizardPrivacySummaryCookiesJumpEl,
             wizardPrivacyUserDataSectionStatusEl,
             wizardLockdownSectionStatusEl,
             wizardPrivacySiteSectionStatusEl,
+            wizardPrivacyVpnSectionStatusEl,
             wizardExportProfileStateEl,
             wizardExportWorkspaceStateEl,
             wizardExportValidationStateEl,
@@ -107,6 +106,13 @@
             wizardExportRawJumpEl,
             wizardExportDeprecatedJumpEl,
             wizardExportUnknownJumpEl,
+            wizardExportTechnicalAlertsEl,
+            wizardExportRawSummaryJumpEl,
+            wizardExportDeprecatedSummaryJumpEl,
+            wizardExportUnknownSummaryJumpEl,
+            wizardExportRawSummaryCountEl,
+            wizardExportDeprecatedSummaryCountEl,
+            wizardExportUnknownSummaryCountEl,
             wizardExportReadyCopyEl,
             wizardExportChecklistEl,
             wizardExportNextStepsEl,
@@ -118,6 +124,12 @@
             wizardExportDownloadHintEl,
             wizardExportBaselineCopyEl,
             wizardExportBaselineListEl,
+            wizardCisFinalSummaryEl,
+            wizardCisExceptionsCountEl,
+            wizardCisExceptionsReasonsGroupEl,
+            wizardCisExceptionsReasonsEl,
+            wizardCisExceptionsDetailsEl,
+            wizardCisExceptionsListEl,
             wizardExportSummaryNetworkEl,
             wizardExportSummaryHomeEl,
             wizardExportSummarySearchEl,
@@ -138,6 +150,7 @@
             wizardSummaryNameEl,
             wizardSummarySchemaEl,
             wizardSummaryStarterEl,
+            wizardSummaryCisEl,
             wizardSummaryDerivedEl,
         } = elements;
 
@@ -148,6 +161,13 @@
         const getCurrentRaw = state.getCurrentRaw || (() => ({}));
         const getValidationPreviewTone = state.getValidationPreviewTone || (() => "neutral");
         const getWizardStarter = state.getWizardStarter || (() => "blank");
+        const getWizardComplianceMergeInfo = state.getWizardComplianceMergeInfo || (() => ({
+            layer: "none",
+            label: "",
+            summary: {},
+            decisions: [],
+        }));
+        const setWizardComplianceDecisionNote = state.setWizardComplianceDecisionNote || (() => {});
         const getBaselineSummary = state.getBaselineSummary || (() => ({ copy: "", items: [] }));
         const workspaceSignalEl = state.workspaceSignalEl || null;
 
@@ -243,6 +263,7 @@
                 || t("profiles.wizard_export_shareable_profile_fallback");
             const schemaLabel = wizardSummarySchemaEl?.textContent?.trim() || "";
             const starterLabel = wizardSummaryStarterEl?.textContent?.trim() || "";
+            const cisLabel = wizardSummaryCisEl?.textContent?.trim() || "";
             const derivedLabel = wizardSummaryDerivedEl?.textContent?.trim() || "";
             const currentProfile = getCurrentProfile();
             const lifecycleSessionNote = getLifecycleSessionNote();
@@ -256,6 +277,9 @@
             }
             if (starterLabel) {
                 lines.push(`${t("profiles.wizard_export_shareable_starter_label")}: ${starterLabel}`);
+            }
+            if (cisLabel) {
+                lines.push(`${t("profiles.wizard_export_shareable_cis_label")}: ${cisLabel}`);
             }
             if (derivedLabel || getCloneSourceProfile()?.name) {
                 lines.push(`${t("profiles.wizard_summary_derived")}: ${derivedLabel || t("profiles.wizard_summary_derived_value").replace("{name}", getCloneSourceProfile().name)}`);
@@ -1023,10 +1047,14 @@
         }
 
         function getAiReviewSummaryData(parsed) {
+            const aiControls = parsed?.AIControls && typeof parsed.AIControls === "object" && !Array.isArray(parsed.AIControls)
+                ? parsed.AIControls
+                : {};
             const generativeAi = parsed?.GenerativeAI && typeof parsed.GenerativeAI === "object" && !Array.isArray(parsed.GenerativeAI)
                 ? parsed.GenerativeAI
                 : {};
             return {
+                aiControlsManaged: countConfiguredObjectEntries(aiControls),
                 generativeAiControls: countConfiguredObjectEntries(generativeAi),
                 visualSearchManaged: typeof parsed?.VisualSearchEnabled === "boolean",
                 visualSearchEnabled: parsed?.VisualSearchEnabled === true,
@@ -1034,13 +1062,17 @@
         }
 
         function findAiReviewTarget(kind) {
+            const aiControlsCardEl = documentRef.querySelector('[data-schema-policy-id="AIControls"][data-schema-policy-kind="object-card"]');
             const generativeAiCardEl = documentRef.querySelector('[data-schema-policy-id="GenerativeAI"][data-schema-policy-kind="object-card"]');
             const visualSearchCardEl = documentRef.querySelector('[data-schema-policy-id="VisualSearchEnabled"][data-schema-policy-kind="boolean-card"]')
                 || documentRef.querySelector('[data-schema-policy-id="VisualSearchEnabled"][data-schema-policy-kind="object-card"]');
 
             if (kind === "availability") {
-                return generativeAiCardEl
+                return aiControlsCardEl
+                    || generativeAiCardEl
+                    || findSettingsTarget("policy:AIControls")
                     || findSettingsTarget("policy:GenerativeAI")
+                    || findSettingsTarget("shell-policy:7:AIControls")
                     || findSettingsTarget("shell-policy:7:GenerativeAI");
             }
             if (kind === "providers") {
@@ -1058,7 +1090,7 @@
 
         function renderAiReviewJumpButtons(summary) {
             [
-                { el: wizardAiSummaryAvailabilityJumpEl, enabled: summary.generativeAiControls > 0, kind: "availability" },
+                { el: wizardAiSummaryAvailabilityJumpEl, enabled: summary.aiControlsManaged > 0 || summary.generativeAiControls > 0, kind: "availability" },
                 { el: wizardAiSummaryProvidersJumpEl, enabled: true, kind: "providers" },
                 { el: wizardAiSummarySurfacesJumpEl, enabled: summary.visualSearchManaged, kind: "surfaces" },
             ].forEach(({ el, enabled, kind }) => {
@@ -1072,10 +1104,12 @@
 
             setSummaryValue(
                 wizardAiSummaryAvailabilityEl,
-                summary.generativeAiControls > 0
-                    ? formatCountLabel("profiles.wizard_ai_review_availability_state", summary.generativeAiControls)
-                    : t("profiles.wizard_review_default"),
-                summary.generativeAiControls > 0 ? "active" : "default",
+                summary.aiControlsManaged > 0
+                    ? formatCountLabel("profiles.wizard_ai_review_feature_controls_state", summary.aiControlsManaged)
+                    : (summary.generativeAiControls > 0
+                        ? formatCountLabel("profiles.wizard_ai_review_availability_state", summary.generativeAiControls)
+                        : t("profiles.wizard_review_default")),
+                summary.aiControlsManaged > 0 || summary.generativeAiControls > 0 ? "active" : "default",
             );
             setSummaryValue(
                 wizardAiSummaryProvidersEl,
@@ -1145,6 +1179,8 @@
                 configuredPermissionCategories,
                 lockedPermissionCategories,
                 cookieRuleCount: getCookiesReviewCount(parsed?.Cookies),
+                ipProtectionManaged: typeof parsed?.IPProtectionAvailable === "boolean",
+                ipProtectionAvailable: parsed?.IPProtectionAvailable === true,
                 reducedDataCollection: parsed?.DisableTelemetry === true || parsed?.DisableFirefoxStudies === true,
                 privateBrowsingDisabled: parsed?.DisablePrivateBrowsing === true,
                 passwordFlowTightened: parsed?.OfferToSaveLogins === false || parsed?.PasswordManagerEnabled === false,
@@ -1247,10 +1283,20 @@
                 : t("profiles.wizard_privacy_site_section_state_empty");
         }
 
+        function getPrivacyVpnSectionStatus(summary) {
+            if (!summary.ipProtectionManaged) {
+                return t("profiles.wizard_privacy_vpn_section_state_empty");
+            }
+            return summary.ipProtectionAvailable
+                ? t("profiles.wizard_privacy_vpn_section_state_available")
+                : t("profiles.wizard_privacy_vpn_section_state_hidden");
+        }
+
         function renderPrivacySectionStatuses(parsed, summary) {
             setText(wizardPrivacyUserDataSectionStatusEl, getPrivacyUserDataSectionStatus(parsed));
             setText(wizardLockdownSectionStatusEl, getLockdownSectionStatus(parsed));
             setText(wizardPrivacySiteSectionStatusEl, getPrivacySiteSectionStatus(summary));
+            setText(wizardPrivacyVpnSectionStatusEl, getPrivacyVpnSectionStatus(summary));
         }
 
         function getFeatureReviewSummaryData(parsed) {
@@ -1278,6 +1324,7 @@
                 translateEnabled: parsed?.TranslateEnabled === true,
                 visualSearchManaged: typeof parsed?.VisualSearchEnabled === "boolean" ? 1 : 0,
                 visualSearchEnabled: parsed?.VisualSearchEnabled === true,
+                aiControlsManaged: countConfiguredObjectEntries(parsed?.AIControls),
                 generativeAiControls: countConfiguredObjectEntries(generativeAi),
                 extensionReview,
                 managedAddonControls: (Array.isArray(extensions.Install) ? extensions.Install.length : 0)
@@ -1377,7 +1424,9 @@
                         : t("profiles.wizard_export_guided_ai_visual_search_off"),
                 );
             }
-            if (features.generativeAiControls > 0) {
+            if (features.aiControlsManaged > 0) {
+                aiFragments.push(formatCountText("profiles.wizard_export_guided_ai_feature_controls", features.aiControlsManaged));
+            } else if (features.generativeAiControls > 0) {
                 aiFragments.push(formatCountText("profiles.wizard_export_guided_ai_controls", features.generativeAiControls));
             }
             if (features.managedAddonControls > 0) {
@@ -1445,6 +1494,13 @@
             if (privacy.cookieRuleCount > 0) {
                 privacyFragments.push(formatCookiesObjectState(privacy.cookiesSummary));
             }
+            if (privacy.ipProtectionManaged) {
+                privacyFragments.push(
+                    privacy.ipProtectionAvailable
+                        ? t("profiles.wizard_export_guided_privacy_vpn_available")
+                        : t("profiles.wizard_export_guided_privacy_vpn_hidden"),
+                );
+            }
 
             return {
                 networkText: buildHumanSummaryText(networkFragments),
@@ -1506,8 +1562,11 @@
                     count: summary.shutdownCleanupEnabled ? 1 : 0,
                     kind: "cleanup",
                 },
-                { el: wizardPrivacySummaryPermissionsConfiguredJumpEl, count: summary.configuredPermissionCategories, kind: "permissions" },
-                { el: wizardPrivacySummaryPermissionsLockedJumpEl, count: summary.lockedPermissionCategories, kind: "permissions" },
+                {
+                    el: wizardPrivacySummaryPermissionsJumpEl,
+                    count: summary.configuredPermissionCategories + summary.lockedPermissionCategories,
+                    kind: "permissions",
+                },
                 { el: wizardPrivacySummaryCookiesJumpEl, count: summary.cookieRuleCount, kind: "cookies" },
             ].forEach(({ el, count, kind }) => {
                 if (!el) return;
@@ -1539,18 +1598,15 @@
                 summary.shutdownCleanupEnabled ? "strict" : "default",
             );
             setSummaryValue(
-                wizardPrivacySummaryPermissionsConfiguredEl,
-                formatPermissionsObjectState(summary.permissionsSummary),
-                summary.permissionsSummary.state === "strict"
+                wizardPrivacySummaryPermissionsEl,
+                summary.configuredPermissionCategories > 0 || summary.lockedPermissionCategories > 0
+                    ? t("profiles.wizard_privacy_review_permissions_subcounts")
+                        .replace("{configured}", String(summary.configuredPermissionCategories))
+                        .replace("{locked}", String(summary.lockedPermissionCategories))
+                    : t("profiles.wizard_review_default"),
+                summary.lockedPermissionCategories > 0
                     ? "strict"
                     : (summary.configuredPermissionCategories > 0 ? "active" : "default"),
-            );
-            setSummaryValue(
-                wizardPrivacySummaryPermissionsLockedEl,
-                summary.lockedPermissionCategories > 0
-                    ? formatCountLabel("profiles.wizard_review_strict_permission_areas", summary.lockedPermissionCategories)
-                    : t("profiles.wizard_review_default"),
-                summary.lockedPermissionCategories > 0 ? "strict" : "default",
             );
             setSummaryValue(
                 wizardPrivacySummaryCookiesEl,
@@ -1707,10 +1763,271 @@
             };
         }
 
+        function formatCisDecisionPath(decision) {
+            const path = Array.isArray(decision?.path) ? decision.path : [];
+            return path.join(".");
+        }
+
+        function getCisDecisionPolicyKey(decision) {
+            const path = Array.isArray(decision?.path) ? decision.path : [];
+            if (path[0] === "Preferences") {
+                return "Preferences";
+            }
+            return path[0] || "";
+        }
+
+        function getCisDecisionNoteKey(decision) {
+            const policyKey = getCisDecisionPolicyKey(decision);
+            if (policyKey) return policyKey;
+            const recommendationIds = Array.isArray(decision?.recommendation_ids)
+                ? decision.recommendation_ids.filter(Boolean)
+                : [];
+            if (recommendationIds.length) return `cis:${recommendationIds[0]}`;
+            if (decision?.decision) return `cis:${decision.decision}`;
+            return "";
+        }
+
+        function buildCisDecisionTitle(decision) {
+            const pathLabel = formatCisDecisionPath(decision) || t("profiles.wizard_cis_review_unknown_path");
+            if (decision.review_required) {
+                return t("profiles.wizard_cis_review_manual_title").replace("{path}", pathLabel);
+            }
+            if (decision.decision === "cis_replaced_base") {
+                return t("profiles.wizard_cis_review_raised_title").replace("{path}", pathLabel);
+            }
+            if (decision.decision === "added_from_cis") {
+                return t("profiles.wizard_cis_review_added_title").replace("{path}", pathLabel);
+            }
+            if (decision.decision === "kept_base_stricter") {
+                return t("profiles.wizard_cis_review_base_stricter_title").replace("{path}", pathLabel);
+            }
+            if (decision.decision === "already_satisfied") {
+                return t("profiles.wizard_cis_review_satisfied_title").replace("{path}", pathLabel);
+            }
+            return t("profiles.wizard_cis_review_decision_title").replace("{path}", pathLabel);
+        }
+
+        function buildCisDecisionBody(decision) {
+            const recommendationIds = Array.isArray(decision?.recommendation_ids)
+                ? decision.recommendation_ids.filter(Boolean)
+                : [];
+            const source = recommendationIds.length
+                ? t("profiles.wizard_cis_review_recommendations").replace("{ids}", recommendationIds.slice(0, 3).join(", "))
+                : t("profiles.wizard_cis_review_recommendations_empty");
+            const reason = decision?.reason || t("profiles.wizard_cis_review_reason_empty");
+            return `${source} ${reason}`;
+        }
+
+        function countCisDecisions(summary, decisions, keys, fallbackFilter = null) {
+            const resolvedSummary = summary && typeof summary === "object" ? summary : {};
+            const resolvedKeys = Array.isArray(keys) ? keys : [keys];
+            const summaryCount = resolvedKeys.reduce((total, key) => total + Number(resolvedSummary[key] || 0), 0);
+            if (summaryCount > 0 || !fallbackFilter) {
+                return summaryCount;
+            }
+            return decisions.filter(fallbackFilter).length;
+        }
+
+        function renderCisFinalSummary(complianceInfo) {
+            if (!wizardCisFinalSummaryEl) return;
+            const layer = complianceInfo?.layer || "none";
+            const decisions = Array.isArray(complianceInfo?.decisions) ? complianceInfo.decisions : [];
+            const summary = complianceInfo?.summary && typeof complianceInfo.summary === "object"
+                ? complianceInfo.summary
+                : {};
+
+            if (!layer || layer === "none") {
+                wizardCisFinalSummaryEl.innerHTML = `
+                    <div class="wizard-export-plan-item" data-plan-tone="default">
+                        <div class="wizard-export-plan-copy">${escapeHtml(t("profiles.wizard_cis_final_summary_empty"))}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const appliedCount = countCisDecisions(
+                summary,
+                decisions,
+                ["added_from_cis", "cis_replaced_base"],
+                (decision) => decision.decision === "added_from_cis" || decision.decision === "cis_replaced_base",
+            );
+            const satisfiedCount = countCisDecisions(
+                summary,
+                decisions,
+                "already_satisfied",
+                (decision) => decision.decision === "already_satisfied",
+            );
+            const keptBaselineCount = countCisDecisions(
+                summary,
+                decisions,
+                ["kept_base_stricter", "kept_base_only"],
+                (decision) => decision.decision === "kept_base_stricter" || decision.decision === "kept_base_only",
+            );
+            const manualReviewCount = countCisDecisions(
+                summary,
+                decisions,
+                "review_required",
+                (decision) => decision.review_required,
+            );
+            const totalCount = decisions.length
+                || Object.entries(summary)
+                    .filter(([key]) => key !== "review_required")
+                    .reduce((total, [, value]) => total + Number(value || 0), 0);
+            const layerLabel = complianceInfo?.label || t("profiles.wizard_cis_l1_title");
+
+            const items = [
+                {
+                    count: appliedCount,
+                    label: t("profiles.wizard_cis_final_summary_applied"),
+                    tone: appliedCount > 0 ? "active" : "default",
+                },
+                {
+                    count: satisfiedCount,
+                    label: t("profiles.wizard_cis_final_summary_satisfied"),
+                    tone: satisfiedCount > 0 ? "ready" : "default",
+                },
+                {
+                    count: keptBaselineCount,
+                    label: t("profiles.wizard_cis_final_summary_kept"),
+                    tone: keptBaselineCount > 0 ? "ready" : "default",
+                },
+                {
+                    count: manualReviewCount,
+                    label: t("profiles.wizard_cis_final_summary_manual"),
+                    tone: manualReviewCount > 0 ? "attention" : "ready",
+                },
+            ];
+
+            wizardCisFinalSummaryEl.innerHTML = `
+                <div class="wizard-export-plan-item wizard-cis-final-summary-head" data-plan-tone="${manualReviewCount > 0 ? "active" : "ready"}">
+                    <div class="wizard-export-plan-copy">
+                        ${escapeHtml(t("profiles.wizard_cis_final_summary_layer")
+                            .replace("{level}", layerLabel)
+                            .replace("{count}", String(totalCount)))}
+                    </div>
+                </div>
+                <div class="wizard-cis-final-summary-grid">
+                    ${items.map((item) => `
+                        <div class="wizard-export-plan-item wizard-cis-final-summary-item" data-plan-tone="${escapeHtml(item.tone)}">
+                            <div class="wizard-export-plan-copy">
+                                <strong>${escapeHtml(String(item.count))}</strong>
+                                <span>${escapeHtml(item.label)}</span>
+                            </div>
+                        </div>
+                    `).join("")}
+                </div>
+            `;
+        }
+
+        function renderCisExceptionNotes(decisions) {
+            if (!wizardCisExceptionsListEl) return;
+            const items = Array.isArray(decisions) ? decisions : [];
+            wizardCisExceptionsListEl.innerHTML = "";
+            setText(
+                wizardCisExceptionsCountEl,
+                items.length
+                    ? t("profiles.wizard_cis_exceptions_count").replace("{count}", String(items.length))
+                    : t("profiles.wizard_cis_exceptions_count_empty"),
+            );
+            if (wizardCisExceptionsCountEl) {
+                if (items.length) {
+                    wizardCisExceptionsCountEl.removeAttribute("data-i18n");
+                } else {
+                    wizardCisExceptionsCountEl.dataset.i18n = "profiles.wizard_cis_exceptions_count_empty";
+                }
+            }
+            if (wizardCisExceptionsDetailsEl) {
+                wizardCisExceptionsDetailsEl.hidden = !items.length;
+                if (!items.length) {
+                    wizardCisExceptionsDetailsEl.open = false;
+                }
+            }
+            if (wizardCisExceptionsReasonsGroupEl) {
+                wizardCisExceptionsReasonsGroupEl.hidden = !items.length;
+            }
+            if (wizardCisExceptionsReasonsEl) {
+                wizardCisExceptionsReasonsEl.innerHTML = items.slice(0, 3)
+                    .map((decision) => `
+                        <div class="wizard-export-plan-item" data-plan-tone="active">
+                            <div class="wizard-export-plan-copy">
+                                <strong>${escapeHtml(buildCisDecisionTitle(decision))}</strong>
+                                <span>${escapeHtml(buildCisDecisionBody(decision))}</span>
+                            </div>
+                        </div>
+                    `)
+                    .join("");
+            }
+            if (!items.length) {
+                wizardCisExceptionsListEl.innerHTML = `
+                    <div class="wizard-summary-row wizard-summary-row--stacked">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_cis_exceptions_empty">
+                            ${t("profiles.wizard_cis_exceptions_empty")}
+                        </span>
+                    </div>
+                `;
+                return;
+            }
+            items.forEach((decision) => {
+                const decisionKey = getCisDecisionNoteKey(decision);
+                const title = buildCisDecisionTitle(decision);
+                const body = buildCisDecisionBody(decision);
+                const noteValue = decision?.exception_note || decision?.exceptionNote || "";
+                const row = documentRef.createElement("div");
+                row.className = "wizard-summary-row wizard-summary-row--stacked wizard-summary-row--decision";
+                row.innerHTML = `
+                    <span class="wizard-summary-key">${escapeHtml(title)}</span>
+                    <span class="wizard-summary-value wizard-summary-value--left">${escapeHtml(body)}</span>
+                    <label class="wizard-summary-value wizard-summary-value--left wizard-cis-note-label" data-i18n="profiles.wizard_cis_exceptions_note_label">
+                        ${t("profiles.wizard_cis_exceptions_note_label")}
+                    </label>
+                    <textarea
+                        class="soft-input wizard-cis-note-textarea"
+                        rows="3"
+                        placeholder="${escapeHtml(t("profiles.wizard_cis_exceptions_note_placeholder"))}"
+                        ${decisionKey ? "" : "disabled"}>${escapeHtml(noteValue)}</textarea>
+                `;
+                const textarea = row.querySelector("textarea");
+                if (textarea && decisionKey) {
+                    textarea.addEventListener("input", () => {
+                        setWizardComplianceDecisionNote(decisionKey, textarea.value);
+                    });
+                }
+                wizardCisExceptionsListEl.appendChild(row);
+            });
+        }
+
+        function buildCisAdvancedContext(decision) {
+            const policyKey = getCisDecisionPolicyKey(decision);
+            const items = [formatCisDecisionPath(decision)].filter(Boolean);
+            return {
+                step: 8,
+                stepTitle: t("profiles.wizard_cis_review_context_title").replace("{path}", policyKey || "CIS"),
+                items,
+                remaining: 0,
+            };
+        }
+
         function getFinalReviewSelection(kind, options = {}) {
             const resolvedSummary = options.summary
                 || getFinalExportSummaryData(readWizardSchemaSource().data || {}, false, false);
             const policyIndex = getActiveSchemaPolicyIndex();
+            if (kind === "cis") {
+                const policyKey = options.key || "";
+                const complianceInfo = getWizardComplianceMergeInfo();
+                const decision = options.decision || (Array.isArray(complianceInfo.decisions)
+                    ? complianceInfo.decisions.find((entry) => getCisDecisionPolicyKey(entry) === policyKey)
+                    : null);
+                return {
+                    target: policyKey
+                        ? (
+                            findSettingsTarget(`policy:${policyKey}`)
+                            || findSettingsTarget(`shell-policy:8:${policyKey}`)
+                            || editorEl
+                        )
+                        : (editorEl || overviewPanelEl),
+                    context: decision ? buildCisAdvancedContext(decision) : null,
+                };
+            }
 
             if (kind === "network") {
                 return {
@@ -1811,10 +2128,43 @@
                 { el: wizardExportRawJumpEl, count: summary.rawFallbackKeys.length, kind: "raw" },
                 { el: wizardExportDeprecatedJumpEl, count: summary.deprecatedKeys.length, kind: "deprecated" },
                 { el: wizardExportUnknownJumpEl, count: summary.unknownKeys.length, kind: "unknown" },
+                { el: wizardExportRawSummaryJumpEl, count: summary.rawFallbackKeys.length, kind: "raw" },
+                { el: wizardExportDeprecatedSummaryJumpEl, count: summary.deprecatedKeys.length, kind: "deprecated" },
+                { el: wizardExportUnknownSummaryJumpEl, count: summary.unknownKeys.length, kind: "unknown" },
             ].forEach(({ el, count, kind }) => {
                 if (!el) return;
                 el.disabled = !count || !findFinalReviewTarget(kind, summary);
             });
+        }
+
+        function renderFinalExportTechnicalAlerts(summary) {
+            const items = [
+                {
+                    buttonEl: wizardExportRawSummaryJumpEl,
+                    countEl: wizardExportRawSummaryCountEl,
+                    count: summary.rawFallbackKeys.length,
+                },
+                {
+                    buttonEl: wizardExportDeprecatedSummaryJumpEl,
+                    countEl: wizardExportDeprecatedSummaryCountEl,
+                    count: summary.deprecatedKeys.length,
+                },
+                {
+                    buttonEl: wizardExportUnknownSummaryJumpEl,
+                    countEl: wizardExportUnknownSummaryCountEl,
+                    count: summary.unknownKeys.length,
+                },
+            ];
+            const visibleCount = items.reduce((total, { buttonEl, countEl, count }) => {
+                setText(countEl, count);
+                if (buttonEl) {
+                    buttonEl.hidden = count <= 0;
+                }
+                return total + (count > 0 ? 1 : 0);
+            }, 0);
+            if (wizardExportTechnicalAlertsEl) {
+                wizardExportTechnicalAlertsEl.hidden = visibleCount <= 0;
+            }
         }
 
         function renderFinalExportChecklist(summary, dirty, invalid) {
@@ -2025,6 +2375,16 @@
             const reviewNow = [];
             const drilldown = [];
             const policyIndex = getActiveSchemaPolicyIndex();
+            const complianceInfo = getWizardComplianceMergeInfo();
+            const complianceDecisions = Array.isArray(complianceInfo.decisions)
+                ? complianceInfo.decisions
+                : [];
+            const manualCisDecisions = complianceDecisions.filter((decision) => decision.review_required);
+            const raisedCisDecisions = complianceDecisions.filter((decision) =>
+                decision.decision === "added_from_cis" || decision.decision === "cis_replaced_base"
+            );
+            renderCisFinalSummary(complianceInfo);
+            renderCisExceptionNotes(manualCisDecisions);
 
             if (currentId && !currentProfile?.is_deleted) {
                 includedNow.push({
@@ -2106,6 +2466,44 @@
                             .replace("{label}", key),
                         body: t("profiles.wizard_export_drilldown_unknown_body"),
                         action: { kind: "jump", value: "unknown", key, label: t("profiles.wizard_export_open") },
+                    });
+                });
+            }
+
+            if (complianceInfo.layer && complianceInfo.layer !== "none") {
+                includedNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_included_cis")
+                        .replace("{level}", complianceInfo.label || t("profiles.wizard_cis_l1_title"))
+                        .replace("{count}", String(raisedCisDecisions.length)),
+                });
+            }
+
+            if (manualCisDecisions.length > 0) {
+                reviewNow.push({
+                    tone: "active",
+                    label: t("profiles.wizard_export_review_cis_manual")
+                        .replace("{count}", String(manualCisDecisions.length)),
+                    action: {
+                        kind: "jump",
+                        value: "cis",
+                        key: getCisDecisionPolicyKey(manualCisDecisions[0]),
+                        label: t("profiles.wizard_export_open"),
+                        decision: manualCisDecisions[0],
+                    },
+                });
+                manualCisDecisions.slice(0, 5).forEach((decision) => {
+                    drilldown.push({
+                        tone: "active",
+                        title: buildCisDecisionTitle(decision),
+                        body: buildCisDecisionBody(decision),
+                        action: {
+                            kind: "jump",
+                            value: "cis",
+                            key: getCisDecisionPolicyKey(decision),
+                            label: t("profiles.wizard_export_open"),
+                            decision,
+                        },
                     });
                 });
             }
@@ -2194,6 +2592,7 @@
             setText(wizardExportUnknownCountEl, summary.unknownKeys.length);
             setText(wizardExportReadyCopyEl, summary.exportReadyCopy);
             setHintValue(wizardExportDownloadHintEl, summary.downloadHint, summary.downloadHintTone);
+            renderFinalExportTechnicalAlerts(summary);
             setText(wizardExportBaselineCopyEl, baselineSummary.copy || "");
             if (wizardExportBaselineListEl) {
                 wizardExportBaselineListEl.innerHTML = (Array.isArray(baselineSummary.items) ? baselineSummary.items : [])
@@ -2232,6 +2631,7 @@
             findNetworkReviewTarget,
             findHomeReviewTarget,
             findSearchReviewTarget,
+            findAiReviewTarget,
             findBookmarkReviewTarget,
             findWebsiteAccessReviewTarget,
             findPrivacyReviewTarget,

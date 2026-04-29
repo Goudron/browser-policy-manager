@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="{{ initial_lang }}">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6efe4" />
+    <link rel="icon" href="/favicon.ico?v={{ asset_version }}" sizes="any" />
+    <script src="/static/profiles_head_bootstrap.js?v={{ asset_version }}"></script>
+    <script src="/static/vendor/js-yaml.js?v={{ asset_version }}"></script>
+
+    <link rel="stylesheet" href="/static/vendor/profiles_tailwind.css?v={{ asset_version }}" />
+    <link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v={{ asset_version }}" />
+    <link rel="stylesheet" href="/static/profiles.css?v={{ asset_version }}" />
+</head>
+
+<body class="app-body min-h-screen"
+    data-initial-lang="{{ initial_lang }}"
+    data-profiles-route-mode="{{ profiles_route_mode }}"
+    data-profiles-template-kind="{{ profiles_template_kind }}"
+    {% if return_url %}data-advanced-return-url="{{ return_url }}"{% endif %}
+    {% if focus_target %}data-advanced-focus-target="{{ focus_target }}"{% endif %}
+    {% if editing_profile_id is not none %}data-editing-profile-id="{{ editing_profile_id }}"{% endif %}>
+    {% include profiles_shell_template %}
+    <script id="profiles-initial-locale" type="application/json">{{ initial_locale | tojson }}</script>
+    <script src="/static/profiles_utils.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_catalogs.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_dom.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_shared.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_platform.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_data.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_review.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_preferences_rows.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_preferences_state.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_preferences_views.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_preferences.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_search_engines.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_network.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_extensions.js?v={{ asset_version }}"></script>
+    <script src="/static/vendor/profiles_monaco.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_schema_shell_value_io.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_schema_shell_review.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_schema_shell_actions.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_schema_shell_sections.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_schema_shell.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_settings_search.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_wizard_flow.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_workspace.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_page_bootstrap.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_runtime.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_bootstrap_core.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_bootstrap_features.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_bootstrap_runtime.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_bootstrap_sections.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_bootstrap.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles.js?v={{ asset_version }}"></script>
+</body>
+
+</html>

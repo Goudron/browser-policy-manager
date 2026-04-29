@@ -2,6 +2,9 @@
 
 These tests run against a real Firefox binary without touching your everyday browser profile.
 
+They validate the live Firefox runtime behavior of exported `policies.json` documents. They do
+not drive the BPM `/profiles` UI, wizard flow, or Chromium product audit path.
+
 ## Isolation model
 
 - Firefox runs in `headless` mode by default.
@@ -29,6 +32,10 @@ Linux helper:
 ```bash
 bash tools/setup_firefox_live_browsers.sh release
 ```
+
+The helper downloads the latest Linux Firefox Release build into `.bpm-test-browsers/` and prints
+the installed Firefox and geckodriver versions at the end. For the current BPM release channel, the
+expected target is Firefox `150.x`.
 
 Then run:
 
@@ -64,6 +71,13 @@ This currently verifies that Firefox can force-install `uBlock Origin` from AMO 
 - `DisableAppUpdate`: Firefox hides managed update controls in `about:preferences`.
 - `Proxy`: Firefox routes real HTTP traffic through a managed proxy and updates proxy prefs.
 - `Certificates.Install`: Firefox trusts a managed CA and successfully opens a local HTTPS page that otherwise fails certificate validation.
+
+These scenarios intentionally focus on the Firefox policy engine itself:
+
+- the harness renders a canonical `policies.json`
+- writes it into the isolated Firefox sandbox
+- launches real Firefox with Selenium
+- verifies either live browser behavior or runtime Firefox state
 
 ## Current AMO scenario
 

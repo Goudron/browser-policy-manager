@@ -8,9 +8,11 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 UPSTREAM_HTML_PATH = BASE_DIR / "data" / "upstream" / "policy-templates" / "policy-templates.html"
 
 SCHEMAS_DIR = BASE_DIR / "app" / "schemas" / "policies"
-RELEASE_SCHEMA_PATH = SCHEMAS_DIR / "firefox-release-149.json"
-ESR_SCHEMA_PATH = SCHEMAS_DIR / "firefox-esr-140.9.json"
-LINUX_POLICIES_PATH = BASE_DIR / "data" / "upstream" / "policy-templates" / "v7.9" / "linux-policies.json"
+RELEASE_SCHEMA_PATH = SCHEMAS_DIR / "firefox-release-150.json"
+ESR_SCHEMA_PATH = SCHEMAS_DIR / "firefox-esr-140.10.json"
+LINUX_POLICIES_PATH = (
+    BASE_DIR / "data" / "upstream" / "policy-templates" / "v7.10" / "linux-policies.json"
+)
 
 ENUM_WRAPPER_KEY = "__bpm_enum__"
 SCALAR_TYPES = {"boolean", "integer", "number", "string"}

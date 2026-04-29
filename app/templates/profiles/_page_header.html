@@ -3,7 +3,10 @@
         <div class="compact-toolbar-brand">
             <div class="compact-toolbar-section" data-i18n="profiles.title">{{ tr("profiles.title") }}</div>
         </div>
-        <h1 class="compact-toolbar-title text-slate-900">Browser Policy Manager</h1>
+        <h1 class="compact-toolbar-title text-slate-900">
+            {{ app_name }}
+            <span class="compact-toolbar-version">v{{ app_version }}</span>
+        </h1>
         <p class="compact-toolbar-subtitle" data-i18n="profiles.subtitle">
             {{ tr("profiles.subtitle") }}
         </p>

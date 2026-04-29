@@ -8,22 +8,22 @@ Use it when BPM needs to move from one supported Firefox Release / ESR pair to t
 
 Collect these four values first:
 
-1. Mozilla `policy-templates` tag, for example `v7.9`.
-2. Firefox Release version, for example `149.0`.
-3. Firefox ESR version, for example `140.9`.
-4. BPM channel strings, for example `release-149` and `esr-140.9`.
+1. Mozilla `policy-templates` tag, for example `v7.10`.
+2. Firefox Release version, for example `150.0`.
+3. Firefox ESR version, for example `140.10`.
+4. BPM channel strings, for example `release-150` and `esr-140.10`.
 
 Keep one mapping table for the whole change:
 
 | Field | Example |
 |---|---|
-| Mozilla source tag | `mozilla-policy-templates-v7.9` |
-| Release channel | `release-149` |
-| Release version | `149.0` |
-| Release file | `app/schemas/policies/firefox-release-149.json` |
-| ESR channel | `esr-140.9` |
-| ESR version | `140.9` |
-| ESR file | `app/schemas/policies/firefox-esr-140.9.json` |
+| Mozilla source tag | `mozilla-policy-templates-v7.10` |
+| Release channel | `release-150` |
+| Release version | `150.0` |
+| Release file | `app/schemas/policies/firefox-release-150.json` |
+| ESR channel | `esr-140.10` |
+| ESR version | `140.10` |
+| ESR file | `app/schemas/policies/firefox-esr-140.10.json` |
 
 If this table is not clear up front, stop and resolve it first. Most migration mistakes come from mixing versions from two different upstream snapshots.
 
@@ -106,14 +106,14 @@ Example:
 ```bash
 python tools/convert_policies_from_upstream.py \
   --input data/upstream/policy-templates/policy-templates.html \
-  --linux-policies-input data/upstream/policy-templates/v7.9/linux-policies.json \
-  --release-channel release-149 \
-  --release-version 149.0 \
-  --release-output app/schemas/policies/firefox-release-149.json \
-  --esr-channel esr-140.9 \
-  --esr-version 140.9 \
-  --esr-output app/schemas/policies/firefox-esr-140.9.json \
-  --source-tag mozilla-policy-templates-v7.9
+  --linux-policies-input data/upstream/policy-templates/v7.10/linux-policies.json \
+  --release-channel release-150 \
+  --release-version 150.0 \
+  --release-output app/schemas/policies/firefox-release-150.json \
+  --esr-channel esr-140.10 \
+  --esr-version 140.10 \
+  --esr-output app/schemas/policies/firefox-esr-140.10.json \
+  --source-tag mozilla-policy-templates-v7.10
 ```
 
 Then remove the previous bundled schema files from `app/schemas/policies/`.
@@ -125,14 +125,14 @@ Do not keep the old Release / ESR files around unless the product explicitly sup
 Check the metadata directly in the JSON files:
 
 ```bash
-jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' \
-  app/schemas/policies/firefox-release-149.json
+  jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' \
+  app/schemas/policies/firefox-release-150.json
 
 jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' \
-  app/schemas/policies/firefox-esr-140.9.json
+  app/schemas/policies/firefox-esr-140.10.json
 
 jq '.properties.ExtensionSettings.additionalProperties.properties.allowed_types.items.enum' \
-  app/schemas/policies/firefox-release-149.json
+  app/schemas/policies/firefox-release-150.json
 ```
 
 Minimum expectations:

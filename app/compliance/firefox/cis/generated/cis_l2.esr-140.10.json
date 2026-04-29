@@ -1,0 +1,182 @@
+{
+  "benchmark_id": "cis-firefox-esr-gpo",
+  "level": 2,
+  "policies": {
+    "AppAutoUpdate": true,
+    "Authentication": {
+      "NTLM": []
+    },
+    "BackgroundAppUpdate": true,
+    "Cookies": {
+      "Behavior": "reject-tracker-and-partition-foreign",
+      "BehaviorPrivateBrowsing": "reject-tracker-and-partition-foreign"
+    },
+    "DisableAppUpdate": false,
+    "DisableDeveloperTools": true,
+    "DisableFeedbackCommands": true,
+    "DisableFirefoxAccounts": true,
+    "DisableFirefoxStudies": true,
+    "DisableForgetButton": true,
+    "DisableFormHistory": true,
+    "DisablePocket": true,
+    "DisablePrivateBrowsing": true,
+    "DisableSystemAddonUpdate": false,
+    "DisableTelemetry": true,
+    "DisabledCiphers": {
+      "TLS_RSA_WITH_3DES_EDE_CBC_SHA": true
+    },
+    "EnableTrackingProtection": {
+      "Cryptomining": true,
+      "EmailTracking": true,
+      "Fingerprinting": true,
+      "Locked": true,
+      "Value": true
+    },
+    "EncryptedMediaExtensions": {
+      "Locked": true
+    },
+    "ExtensionUpdate": true,
+    "InstallAddonsPermission": {
+      "Default": false
+    },
+    "NetworkPrediction": false,
+    "NewTabPage": false,
+    "OfferToSaveLogins": false,
+    "PasswordManagerEnabled": false,
+    "Permissions": {
+      "Location": {
+        "BlockNewRequests": true,
+        "Locked": true
+      }
+    },
+    "PopupBlocking": {
+      "Default": true,
+      "Locked": true
+    },
+    "Preferences": {
+      "browser.safebrowsing.malware.enabled": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "browser.safebrowsing.phishing.enabled": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "browser.search.update": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "dom.allow_scripts_to_close_windows": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": false
+      },
+      "dom.disable_window_flip": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "dom.disable_window_move_resize": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "extensions.blocklist.enabled": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "media.peerconnection.enabled": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": false
+      },
+      "network.IDN_show_punycode": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      },
+      "security.mixed_content.block_active_content": {
+        "Status": "locked",
+        "Type": "boolean",
+        "Value": true
+      }
+    },
+    "Proxy": {
+      "Locked": true,
+      "Mode": "none"
+    },
+    "SSLVersionMax": "tls1.3",
+    "SSLVersionMin": "tls1.2",
+    "SanitizeOnShutdown": {
+      "FormData": false,
+      "History": false,
+      "Locked": true,
+      "Sessions": false
+    },
+    "SearchSuggestEnabled": false,
+    "UserMessaging": {
+      "ExtensionRecommendations": false
+    }
+  },
+  "recommendation_ids": [
+    "1.1.1.1",
+    "1.1.2.1",
+    "1.1.5.1",
+    "1.1.5.2",
+    "1.1.5.4",
+    "1.1.5.5",
+    "1.1.6.1",
+    "1.1.6.2",
+    "1.1.7.1",
+    "1.1.9.1",
+    "1.1.10.1",
+    "1.1.15.3.1",
+    "1.1.15.3.2",
+    "1.1.17.1",
+    "1.1.17.2",
+    "1.1.18.1",
+    "1.1.18.2",
+    "1.1.18.3",
+    "1.1.18.4",
+    "1.1.18.5",
+    "1.1.18.6",
+    "1.1.18.7",
+    "1.1.18.8",
+    "1.1.18.9",
+    "1.1.18.10",
+    "1.1.19.1",
+    "1.1.19.2",
+    "1.1.20.1",
+    "1.1.22.1",
+    "1.1.22.2",
+    "1.1.22.3",
+    "1.1.22.4",
+    "1.1.22.5",
+    "1.1.23.1",
+    "1.1.24",
+    "1.1.25",
+    "1.1.26",
+    "1.1.27",
+    "1.1.28",
+    "1.1.29",
+    "1.1.30",
+    "1.1.31",
+    "1.1.32",
+    "1.1.33",
+    "1.1.34",
+    "1.1.35",
+    "1.1.36",
+    "1.1.37",
+    "1.1.38",
+    "1.1.39",
+    "1.1.40",
+    "1.1.41",
+    "1.1.42"
+  ],
+  "schema_channel": "esr-140.10",
+  "upstream_version": "1.0.0"
+}

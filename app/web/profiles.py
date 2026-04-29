@@ -7,13 +7,17 @@ import json
 from datetime import UTC, datetime
 from functools import cache
 from pathlib import Path
+from urllib.parse import quote
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.core.schema_channels import build_schema_channels_catalog
+from app.db import get_session
+from app.services.profile_service import ProfileService
 from app.web.firefox_manual_policy_controls import get_manual_policy_controls_catalog
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_settings_catalog import get_wizard_settings_catalog
@@ -77,9 +81,16 @@ def _resolve_request_locale(request: Request) -> str:
     return weighted_locales[0][1]
 
 
-@router.get("/profiles", response_class=HTMLResponse)
-async def profiles_page(request: Request) -> HTMLResponse:
-    """Render the main Profiles editor page."""
+def _build_profiles_page_context(
+    request: Request,
+    *,
+    title: str,
+    route_mode: str,
+    editing_profile_id: int | None = None,
+    return_url: str | None = None,
+    focus_target: str | None = None,
+    advanced_href: str | None = None,
+) -> dict[str, object]:
     current_year = datetime.now(UTC).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
     wizard_settings_catalog = get_wizard_settings_catalog()
@@ -93,22 +104,141 @@ async def profiles_page(request: Request) -> HTMLResponse:
             return value
         return fallback
 
+    return {
+        "title": title,
+        "app_name": settings.APP_NAME,
+        "app_version": settings.APP_VERSION,
+        "asset_version": _resolve_profiles_asset_version(),
+        "footer_year_range": footer_year_range,
+        "profiles_route_mode": route_mode,
+        "editing_profile_id": editing_profile_id,
+        "return_url": return_url,
+        "focus_target": focus_target,
+        "advanced_href": advanced_href,
+        "wizard_settings_catalog": wizard_settings_catalog,
+        "wizard_preferences_catalog": wizard_preferences_catalog,
+        "wizard_manual_policy_controls": get_manual_policy_controls_catalog(),
+        "wizard_starter_catalog": get_wizard_starter_catalog(),
+        "wizard_steps": get_wizard_steps(),
+        "wizard_schema_shell_catalog": get_wizard_schema_shell_catalog(wizard_preferences_catalog),
+        "schema_channels_catalog": build_schema_channels_catalog(),
+        "initial_lang": initial_lang,
+        "initial_locale": initial_locale,
+        "tr": tr,
+    }
+
+
+def _resolve_safe_profiles_return_url(raw_return_url: str | None) -> str | None:
+    if not raw_return_url:
+        return None
+    if not raw_return_url.startswith("/profiles"):
+        return None
+    if raw_return_url.startswith("//") or "://" in raw_return_url:
+        return None
+    return raw_return_url
+
+
+def _resolve_focus_target(raw_focus_target: str | None) -> str | None:
+    if not raw_focus_target:
+        return None
+    focus_target = raw_focus_target.strip()
+    if not focus_target or len(focus_target) > 160:
+        return None
+    return focus_target
+
+
+def _build_profile_advanced_href(
+    profile_id: int,
+    *,
+    return_url: str | None = None,
+    focus_target: str | None = None,
+) -> str:
+    params: list[str] = []
+    if return_url:
+        params.append(f"return={quote(return_url, safe='/')}")
+    if focus_target:
+        params.append(f"focus={quote(focus_target, safe=':-_')}")
+    suffix = f"?{'&'.join(params)}" if params else ""
+    return f"/profiles/{profile_id}/advanced{suffix}"
+
+
+@router.get("/profiles", response_class=HTMLResponse)
+async def profiles_page(request: Request) -> HTMLResponse:
+    """Render the profile library page."""
     return templates.TemplateResponse(
         request,
-        "profiles.html",
-        {
-            "title": "Profiles — Browser Policy Manager",
-            "asset_version": _resolve_profiles_asset_version(),
-            "footer_year_range": footer_year_range,
-            "wizard_settings_catalog": wizard_settings_catalog,
-            "wizard_preferences_catalog": wizard_preferences_catalog,
-            "wizard_manual_policy_controls": get_manual_policy_controls_catalog(),
-            "wizard_starter_catalog": get_wizard_starter_catalog(),
-            "wizard_steps": get_wizard_steps(),
-            "wizard_schema_shell_catalog": get_wizard_schema_shell_catalog(wizard_preferences_catalog),
-            "schema_channels_catalog": build_schema_channels_catalog(),
-            "initial_lang": initial_lang,
-            "initial_locale": initial_locale,
-            "tr": tr,
-        },
+        "profiles_library.html",
+        _build_profiles_page_context(
+            request,
+            title=f"Profile library — {settings.APP_NAME}",
+            route_mode="library",
+        ),
+    )
+
+
+@router.get("/profiles/new", response_class=HTMLResponse)
+async def profiles_new_page(request: Request) -> HTMLResponse:
+    """Render the visual wizard shell for a new profile draft."""
+    return templates.TemplateResponse(
+        request,
+        "profiles_editor.html",
+        _build_profiles_page_context(
+            request,
+            title=f"New profile draft — {settings.APP_NAME}",
+            route_mode="new",
+        ),
+    )
+
+
+@router.get("/profiles/{profile_id}/edit", response_class=HTMLResponse)
+async def profiles_edit_page(
+    request: Request,
+    profile_id: int,
+    session: AsyncSession = Depends(get_session),
+) -> HTMLResponse:
+    """Render the visual wizard shell for an existing profile."""
+    profile = await ProfileService.get(session, profile_id)
+    if profile is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
+
+    return templates.TemplateResponse(
+        request,
+        "profiles_editor.html",
+        _build_profiles_page_context(
+            request,
+            title=f"{profile.name} — Profile editor — {settings.APP_NAME}",
+            route_mode="edit",
+            editing_profile_id=profile_id,
+            advanced_href=_build_profile_advanced_href(
+                profile_id,
+                return_url=f"/profiles/{profile_id}/edit",
+            ),
+        ),
+    )
+
+
+@router.get("/profiles/{profile_id}/advanced", response_class=HTMLResponse)
+async def profiles_advanced_page(
+    request: Request,
+    profile_id: int,
+    session: AsyncSession = Depends(get_session),
+) -> HTMLResponse:
+    """Render the advanced policy document editor for an existing profile."""
+    profile = await ProfileService.get(session, profile_id)
+    if profile is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
+    return_url = _resolve_safe_profiles_return_url(request.query_params.get("return"))
+    focus_target = _resolve_focus_target(request.query_params.get("focus"))
+
+    return templates.TemplateResponse(
+        request,
+        "profiles_advanced.html",
+        _build_profiles_page_context(
+            request,
+            title=f"{profile.name} — Advanced editor — {settings.APP_NAME}",
+            route_mode="advanced",
+            editing_profile_id=profile_id,
+            return_url=return_url,
+            focus_target=focus_target,
+        ),
     )

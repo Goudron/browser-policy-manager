@@ -1,0 +1,736 @@
+benchmark:
+  id: cis-firefox-esr-gpo
+  upstream_name: CIS Mozilla Firefox ESR GPO Benchmark
+  upstream_version: 1.0.0
+  release_date: '2024-07-19'
+  source_url: https://www.cisecurity.org/benchmark/mozilla_firefox
+  source_pdf: source_materials/CIS_Mozilla_Firefox_ESR_GPO_Benchmark_v1.0.0.pdf
+  official_source_status: imported
+  curation_status: initial_recommendation_skeleton_complete
+  tested_by_cis_against: Mozilla Firefox 115.10 ESR on Windows 11 Release 23H2
+recommendations:
+- id: 1.1.1.1
+  title: Ensure 'Allow add-on installs from websites' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: addons
+  source_section: 1.1.1.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\InstallAddonsPermission:Default
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.2.1
+  title: Ensure 'NTLM' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: authentication
+  source_section: 1.1.2.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Authentication\NTLM:1
+    registry_type: absent
+    value: null
+  mapping_status: mapped
+  notes:
+    source_note: CIS audit states the setting is effective when this registry value does not exist.
+- id: 1.1.5.1
+  title: Ensure 'Active Logins' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: sanitize_on_shutdown
+  source_section: 1.1.5.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\SanitizeOnShutdown:Sessions
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.5.2
+  title: Ensure 'Browsing History' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: sanitize_on_shutdown
+  source_section: 1.1.5.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\SanitizeOnShutdown:History
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.5.3
+  title: Ensure 'Download History' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: sanitize_on_shutdown
+  source_section: 1.1.5.3
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\SanitizeOnShutdown:Downloads
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: needs_research
+  notes:
+    mapping_note: CIS GPO uses SanitizeOnShutdown:Downloads, but current Mozilla policy schemas do not expose a Downloads
+      member under SanitizeOnShutdown.
+- id: 1.1.5.4
+  title: Ensure 'Form & Search History' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: sanitize_on_shutdown
+  source_section: 1.1.5.4
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\SanitizeOnShutdown:FormData
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.5.5
+  title: Ensure 'Locked' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: sanitize_on_shutdown
+  source_section: 1.1.5.5
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\SanitizeOnShutdown:Locked
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.6.1
+  title: 'Ensure ''Cookie Behavior'' is set to ''Enabled: Reject cookies for known trackers and partition third-party cookies'''
+  level: 1
+  assessment: automated
+  scored: true
+  category: cookies
+  source_section: 1.1.6.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Cookies:Behavior
+    registry_type: REG_SZ
+    value: reject-tracker-and-partition-foreign
+  mapping_status: mapped
+- id: 1.1.6.2
+  title: 'Ensure ''Cookie Behavior in private browsing'' is set to ''Enabled: Reject cookies for known trackers and partition
+    third-party cookies'''
+  level: 1
+  assessment: automated
+  scored: true
+  category: cookies
+  source_section: 1.1.6.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Cookies:BehaviorPrivateBrowsing
+    registry_type: REG_SZ
+    value: reject-tracker-and-partition-foreign
+  mapping_status: mapped
+- id: 1.1.7.1
+  title: Ensure 'TLS_RSA_WITH_3DES_EDE_CBC_SHA' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: disabled_ciphers
+  source_section: 1.1.7.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\DisabledCiphers:TLS_RSA_WITH_3DES_EDE_CBC_SHA
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.9.1
+  title: Ensure 'Lock Encrypted Media Extensions' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: encrypted_media_extensions
+  source_section: 1.1.9.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EncryptedMediaExtensions:Locked
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.10.1
+  title: Ensure 'Extension Update' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: extensions
+  source_section: 1.1.10.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:ExtensionUpdate
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.12.1
+  title: Ensure 'Activate Flash on websites' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: flash
+  source_section: 1.1.12.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\FlashPlugin:Default
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: deprecated_or_removed
+  notes:
+    mapping_note: FlashPlugin policy is not present in supported Firefox ESR 140.10 or Release 150 schemas.
+- id: 1.1.15.3.1
+  title: Ensure 'Block new requests asking to access location' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: permissions_location
+  source_section: 1.1.15.3.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Permissions\Location:BlockNewRequests
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.15.3.2
+  title: Ensure 'Do not allow preferences to be changed' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: permissions_location
+  source_section: 1.1.15.3.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Permissions\Location:Locked
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.17.1
+  title: Ensure 'Block pop-ups from websites' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: popups
+  source_section: 1.1.17.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\PopupBlocking:Default
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.17.2
+  title: Ensure 'Do not allow preferences to be changed' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: popups
+  source_section: 1.1.17.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\PopupBlocking:Locked
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.18.1
+  title: Ensure 'browser.safebrowsing.malware.enabled' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:browser.safebrowsing.malware.enabled
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.2
+  title: Ensure 'browser.safebrowsing.phishing.enabled' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:browser.safebrowsing.phishing.enabled
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.3
+  title: Ensure 'browser.search.update' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.3
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:browser.search.update
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.4
+  title: Ensure 'dom.allow_scripts_to_close_windows' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.4
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:dom.allow_scripts_to_close_windows
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: preference_mapped
+- id: 1.1.18.5
+  title: Ensure 'dom.disable_window_flip' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.5
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:dom.disable_window_flip
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.6
+  title: Ensure 'dom.disable_window_move_resize' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.6
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:dom.disable_window_move_resize
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.7
+  title: Ensure 'extensions.blocklist.enabled' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.7
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:extensions.blocklist.enabled
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.8
+  title: Ensure 'media.peerconnection.enabled' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.8
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:media.peerconnection.enabled
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: preference_mapped
+- id: 1.1.18.9
+  title: Ensure 'network.IDN_show_punycode' is set to 'Enabled'
+  level: 2
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.9
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:network.IDN_show_punycode
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.18.10
+  title: Ensure 'security.mixed_content.block_active_content' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: preferences_deprecated
+  source_section: 1.1.18.10
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Preferences:security.mixed_content.block_active_content
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: preference_mapped
+- id: 1.1.19.1
+  title: 'Ensure ''Connection Type'' is set to ''Enabled: No Proxy'''
+  level: 1
+  assessment: automated
+  scored: true
+  category: proxy
+  source_section: 1.1.19.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\Proxy:Mode
+    registry_type: REG_SZ
+    value: none
+  mapping_status: mapped
+- id: 1.1.19.2
+  title: Ensure 'Do not allow proxy settings to be changed' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: proxy
+  source_section: 1.1.19.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EnableTrackingProtection:Locked
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+  notes:
+    source_note: CIS registry line appears inconsistent with the remediation path; mapping targets Proxy.Locked.
+- id: 1.1.20.1
+  title: Ensure 'Search Suggestions' is set to 'Disabled'
+  level: 2
+  assessment: automated
+  scored: true
+  category: search
+  source_section: 1.1.20.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:SearchSuggestEnabled
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.22.1
+  title: Ensure 'Cryptomining' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: tracking_protection
+  source_section: 1.1.22.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EnableTrackingProtection:Cryptomining
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.22.2
+  title: Ensure 'Do not allow tracking protection preferences to be changed' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: tracking_protection
+  source_section: 1.1.22.2
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EnableTrackingProtection:Locked
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.22.3
+  title: Ensure 'Email Tracking' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: tracking_protection
+  source_section: 1.1.22.3
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EnableTrackingProtection:EmailTracking
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.22.4
+  title: Ensure 'Enabled' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: tracking_protection
+  source_section: 1.1.22.4
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EnableTrackingProtection:Value
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.22.5
+  title: Ensure 'Fingerprinting' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: tracking_protection
+  source_section: 1.1.22.5
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\EnableTrackingProtection:Fingerprinting
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.23.1
+  title: Ensure 'Extension Recommendations' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: user_messaging
+  source_section: 1.1.23.1
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox\UserMessaging:ExtensionRecommendations
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.24
+  title: Ensure 'Application Autoupdate' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: updates
+  source_section: 1.1.24
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:AppAutoUpdate
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.25
+  title: Ensure 'Background updater' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: updates
+  source_section: 1.1.25
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:BackgroundAppUpdate
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.26
+  title: Ensure 'Disable Developer Tools' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: browser_hardening
+  source_section: 1.1.26
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableDeveloperTools
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.27
+  title: Ensure 'Disable Feedback Commands' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: browser_hardening
+  source_section: 1.1.27
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableFeedbackCommands
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.28
+  title: Ensure 'Disable Firefox Accounts' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: accounts
+  source_section: 1.1.28
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableFirefoxAccounts
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.29
+  title: Ensure 'Disable Firefox Studies' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: privacy
+  source_section: 1.1.29
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableFirefoxStudies
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.30
+  title: Ensure 'Disable Forget Button' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: privacy
+  source_section: 1.1.30
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableForgetButton
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.31
+  title: Ensure 'Disable Form History' is set to 'Enabled'
+  level: 2
+  assessment: automated
+  scored: true
+  category: privacy
+  source_section: 1.1.31
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableFormHistory
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.32
+  title: Ensure 'Disable Pocket' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: privacy
+  source_section: 1.1.32
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisablePocket
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.33
+  title: Ensure 'Disable Private Browsing' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: privacy
+  source_section: 1.1.33
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisablePrivateBrowsing
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.34
+  title: Ensure 'Disable System Addon Updates' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: updates
+  source_section: 1.1.34
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableSystemAddonUpdate
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.35
+  title: Ensure 'Disable Telemetry' is set to 'Enabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: privacy
+  source_section: 1.1.35
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableTelemetry
+    registry_type: REG_DWORD
+    value: 1
+  mapping_status: mapped
+- id: 1.1.36
+  title: Ensure 'Disable Update' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: updates
+  source_section: 1.1.36
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:DisableAppUpdate
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.37
+  title: 'Ensure ''Maximum SSL version enabled'' is set to ''Enabled: TLS 1.3'''
+  level: 1
+  assessment: automated
+  scored: true
+  category: tls
+  source_section: 1.1.37
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:SSLVersionMax
+    registry_type: REG_SZ
+    value: tls1.3
+  mapping_status: mapped
+- id: 1.1.38
+  title: 'Ensure ''Minimum SSL version enabled'' is set to ''Enabled: TLS 1.2'''
+  level: 1
+  assessment: automated
+  scored: true
+  category: tls
+  source_section: 1.1.38
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:SSLVersionMin
+    registry_type: REG_SZ
+    value: tls1.2
+  mapping_status: mapped
+- id: 1.1.39
+  title: Ensure 'Network Prediction' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: network
+  source_section: 1.1.39
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:NetworkPrediction
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.40
+  title: Ensure 'New Tab Page' is set to 'Disabled'
+  level: 2
+  assessment: automated
+  scored: true
+  category: home
+  source_section: 1.1.40
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:NewTabPage
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.41
+  title: Ensure 'Offer to save logins' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: passwords
+  source_section: 1.1.41
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:OfferToSaveLogins
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped
+- id: 1.1.42
+  title: Ensure 'Password Manager' is set to 'Disabled'
+  level: 1
+  assessment: automated
+  scored: true
+  category: passwords
+  source_section: 1.1.42
+  expected_state:
+    kind: gpo_registry
+    registry_path: HKLM\SOFTWARE\Policies\Mozilla\Firefox:PasswordManagerEnabled
+    registry_type: REG_DWORD
+    value: 0
+  mapping_status: mapped

@@ -1,0 +1,27 @@
+benchmarks:
+- id: cis-firefox-esr-gpo
+  upstream_name: CIS Mozilla Firefox ESR GPO Benchmark
+  upstream_version: 1.0.0
+  product: Mozilla Firefox
+  product_family: Desktop Software
+  benchmark_page_url: https://www.cisecurity.org/benchmark/mozilla_firefox
+  public_versions_page_url: https://www.cisecurity.org/cis-benchmarks
+  release_window: 2024-07
+  exact_release_date: '2024-07-19'
+  exact_release_date_status: confirmed_from_official_pdf
+  official_update_article_url: https://portal.cisecurity.org/insights/articles/cis-benchmarks-august-2024-update
+  official_source_required: true
+  official_source_status: imported
+  source_license: CC-BY-NC-SA-4.0
+  source_terms_url: https://www.cisecurity.org/terms-of-use-for-non-member-cis-products
+  source_license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+  imported_at: 2026-04-12
+  source_file: firefox_esr_gpo_1_0_0.yaml
+  mapping_file: mappings.yaml
+  notes:
+  - Public CIS page lists Mozilla Firefox ESR GPO (1.0.0) as the current enterprise/GPO benchmark line.
+  - CIS August 2024 update lists this benchmark as newly released last month, so release window is July 2024.
+  - Initial recommendation data must be curated from an official CIS download, not from third-party mirrors.
+  official_source_pdf: source_materials/CIS_Mozilla_Firefox_ESR_GPO_Benchmark_v1.0.0.pdf
+  source_pdf_pages: 143
+  tested_by_cis_against: Mozilla Firefox 115.10 ESR on Windows 11 Release 23H2

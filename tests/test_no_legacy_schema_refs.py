@@ -7,18 +7,25 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_PATHS = {
     "alembic/versions/20260330_upgrade_profiles_to_firefox149.py",
+    "alembic/versions/20260423_upgrade_profiles_to_firefox150.py",
     "tests/test_migrations.py",
     "tests/test_no_legacy_schema_refs.py",
     ".github/workflows/ci.yml",
 }
 BANNED_TOKENS = (
     "release-148",
+    "release-149",
     "esr-140.8",
+    "esr-140.9",
     "firefox-release-148.json",
+    "firefox-release-149.json",
     "firefox-esr-140.8.json",
+    "firefox-esr-140.9.json",
     "firefox-esr140.json",
     "mozilla-policy-templates-v7.8",
+    "mozilla-policy-templates-v7.9",
     "release148",
+    "release149",
 )
 
 

@@ -31,6 +31,9 @@
                 : [],
             quickPolicyEnabledValues: wizardStarterCatalog.quick_policy_enabled_values || {},
             starterPresets: wizardStarterCatalog.presets || {},
+            complianceLayers: wizardStarterCatalog.compliance_layers || {},
+            complianceMergedPresets: wizardStarterCatalog.compliance_merged_presets || {},
+            complianceMetadata: wizardStarterCatalog.compliance_metadata || {},
             starterManagedKeys: Array.isArray(wizardStarterCatalog.managed_policy_keys)
                 ? wizardStarterCatalog.managed_policy_keys
                 : [],
@@ -80,7 +83,6 @@
                 "Description",
                 "PostData",
                 "SuggestURLTemplate",
-                "Encoding",
             ],
             searchEnginePresets: {
                 docs_portal: {
@@ -89,7 +91,6 @@
                     Method: "GET",
                     Alias: "docs",
                     Description: "Managed search for internal documentation",
-                    Encoding: "UTF-8",
                 },
                 ticket_queue: {
                     Name: "Ticket Queue",
@@ -97,7 +98,6 @@
                     Method: "GET",
                     Alias: "ticket",
                     Description: "Managed search for helpdesk and issue tracking",
-                    Encoding: "UTF-8",
                 },
                 wiki_portal: {
                     Name: "Wiki Portal",
@@ -105,7 +105,6 @@
                     Method: "GET",
                     Alias: "wiki",
                     Description: "Managed search for internal wiki content",
-                    Encoding: "UTF-8",
                 },
                 duckduckgo: {
                     Name: "DuckDuckGo",
@@ -113,7 +112,6 @@
                     Method: "GET",
                     Alias: "ddg",
                     Description: "DuckDuckGo web search",
-                    Encoding: "UTF-8",
                 },
             },
             wizardFirefoxHomeManagedKeys: [
@@ -146,7 +144,7 @@
             schemaChannelsCatalog,
             defaultSchemaVersion: typeof schemaChannelsCatalog.default_channel === "string"
                 ? schemaChannelsCatalog.default_channel
-                : "esr-140.9",
+                : "esr-140.10",
             wizardPreferenceSections,
             wizardKnownPreferences,
             wizardKnownPreferenceIndex: Object.fromEntries(

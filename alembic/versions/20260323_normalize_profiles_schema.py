@@ -116,6 +116,7 @@ def upgrade() -> None:
         _run_sqlite_ddl(bind, "ALTER TABLE policies ADD COLUMN deleted_at DATETIME")
         _run_sqlite_ddl(bind, "ALTER TABLE policies RENAME TO profiles")
         _run_sqlite_ddl(bind, "ALTER TABLE profiles ADD COLUMN deleted_at DATETIME")
+        _run_sqlite_ddl(bind, "ALTER TABLE profiles ADD COLUMN revision INTEGER NOT NULL DEFAULT 1")
         for index_name in LEGACY_INDEXES:
             _run_sqlite_ddl(bind, f"DROP INDEX IF EXISTS {index_name}")
         for ddl in SQLITE_CURRENT_INDEX_DDL:
@@ -137,6 +138,12 @@ def upgrade() -> None:
     if not _has_column(NEW_TABLE, "deleted_at"):
         with op.batch_alter_table(NEW_TABLE) as batch_op:
             batch_op.add_column(sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True))
+
+    if not _has_column(NEW_TABLE, "revision"):
+        with op.batch_alter_table(NEW_TABLE) as batch_op:
+            batch_op.add_column(
+                sa.Column("revision", sa.Integer(), nullable=False, server_default="1")
+            )
 
     for index_name in LEGACY_INDEXES:
         if index_name in _index_names(NEW_TABLE):

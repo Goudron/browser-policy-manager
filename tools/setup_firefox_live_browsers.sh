@@ -33,10 +33,17 @@ curl -fL \
 tar -xzf "${TARGET_DIR}/geckodriver/geckodriver.tar.gz" -C "${TARGET_DIR}/geckodriver"
 chmod +x "${TARGET_DIR}/geckodriver/geckodriver"
 
+FIREFOX_VERSION="$("${TARGET_DIR}/firefox/firefox/firefox" --version)"
+GECKODRIVER_INSTALLED_VERSION="$("${TARGET_DIR}/geckodriver/geckodriver" --version | head -n 1)"
+
 cat <<EOF
 
 Live Firefox test binaries are ready in:
   ${TARGET_DIR}
+
+Installed versions:
+  ${FIREFOX_VERSION}
+  ${GECKODRIVER_INSTALLED_VERSION}
 
 The test harness will find them automatically, so you can run:
   .venv/bin/pytest -m firefox_live -q

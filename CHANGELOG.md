@@ -2,44 +2,36 @@
 
 ## Unreleased
 
-Build target: `0.6.0-dev`
+Build target: `0.7.0`
 
 ### Added
-- Completed the guided profile-wizard redesign and the follow-up polish stream.
-- Added scenario-first setup, recommended baselines, preset diff previews, and shared-device workflow guidance.
-- Added step-level undo/reset and cross-step recent-changes memory.
-- Added targeted guided-to-advanced handoff, advanced drill-down review, and stronger export explainability.
-- Added compare-by-guided-area, clone-and-adjust, lifecycle review, and shareable guided summaries.
-- Added workflow and governance layers across high-value Firefox enterprise clusters.
-- Added advanced-only boundary and coverage-priority project registers in `docs/`.
-- Added viewport regression coverage for guided-first landing assumptions.
-- Added targeted tests for the remaining SQLite URL normalization branches in [`app/db.py`](app/db.py).
+- Added Firefox `policies.json` import as a first-class product workflow, including API support, validation, and profile-library import controls.
+- Added dedicated profile workspace routes for library, visual editor, and advanced editor flows instead of treating `/profiles` as one combined surface.
+- Added CIS Firefox compliance data, mappings, generated hardening layers, merge logic, tooling, and regression coverage.
+- Added schema support for Firefox `release-150` and `esr-140.10`, plus migration coverage for stored profile schema versions.
+- Added a local Chromium UI audit script and artifact/report flow for guided, advanced, layout, theme, and localization QA.
+- Added explicit live Firefox setup guidance and version reporting for the isolated Selenium harness.
 
 ### Changed
-- Moved the project from `0.5.0-dev` to `0.6.0-dev`.
-- Expanded guided coverage across shared-device, trust/auth, extensions governance, privacy hardening, upkeep, site access, home/search, language, and AI surfaces.
-- Aligned guided mode, `Advanced document`, review, export, compare, lifecycle, and clone flows around one canonical profile model.
-- Updated the profiles shell so guided setup remains the primary path on mobile and narrow screens.
-- Reworked the profile library into a wider table-style workspace surface with a sticky header, search, stronger dark-theme actions, and clearer primary/secondary row actions.
-- Consolidated runtime behavior around one active application database at `data/bpm.db` and reseeded the default workspace with the two canonical starter profiles.
-- Cleaned up English and Russian UI copy, removed mixed anglicisms from RU, and standardized the term `Техдокумент`.
-- Updated the roadmap and UX docs to reflect the completed roadmap, PB backlog, and post-roadmap backlog.
+- Moved the project from `0.6.0-dev` to `0.7.0`.
+- Promoted Firefox Enterprise `policies.json` to the main user-facing import/export contract and removed internal JSON/YAML handoff routes from the primary product surface.
+- Reworked `/profiles` into a library-first workspace and moved editing into dedicated visual and advanced routes.
+- Expanded guided coverage across shared-device, trust/auth, extensions governance, privacy hardening, upkeep, site access, home/search, language, AI, and compliance-aware surfaces.
+- Aligned guided mode, advanced editing, validation, export, compare, lifecycle, and clone flows around one canonical profile model.
+- Updated English and Russian product copy, route titles, and advanced-workflow terminology to match the current split workspace.
+- Refreshed schema-update, live-testing, migration, and workspace backlog documentation to match the current repository shape.
 - Raised non-live coverage for `app/` to `100%`.
 
 ### Fixed
-- Fixed remaining RU terminology drift where `Технический документ` still appeared instead of `Техдокумент`.
-- Fixed frontend bootstrap regressions that blocked locale switching, theme switching, step navigation, and initial profile-library rendering after the guided redesign.
-- Fixed multiple dark-theme surface leaks across review, lifecycle, advanced, and guided summary cards, plus improved low-contrast helper copy in dark mode.
-- Fixed the profile library data source so test artifacts and legacy fallback databases no longer repopulate the UI with stray `SVC-*` profiles.
-- Fixed first-load library action labels and review badges so they remain visible before a manual locale switch.
-- Fixed spacing and footer-layout regressions around wizard navigation actions and the `License Mozilla Public License 2.0` footer copy.
-- Fixed advanced-document lower-section layout so right-column guidance no longer overflows off-screen.
-- Fixed wizard step-title alignment for wrapped Russian labels and updated step five to the browser-native RU wording `Приватность и защита`.
-- Fixed export-step rendering so `Shareable summary`/`Выжимка для передачи` now populates and copies correctly on step 8.
-- Fixed schema-shell guided coverage rendering by removing a `ReferenceError` that interrupted locale refreshes and downstream wizard review updates.
-- Fixed accessibility gaps in compare, clone handoff, lifecycle, export, disclosure, and review/jump flows.
-- Fixed viewport regression risk by locking in guided-first shell ordering.
+- Fixed route-context and frontend bootstrap regressions that affected locale switching, theme switching, step navigation, profile loading, and split-workspace rendering.
+- Fixed multiple guided wizard bugs found during Chromium QA, including AI-step behavior, preset application, language switching, advanced handoff, export-step readiness, and `SearchEngines` document generation.
+- Fixed dark-theme surface leaks, desktop/mobile overflow issues, and narrow-viewport regressions across library, guided, review, and advanced surfaces.
+- Fixed profile-library state, labels, and rendering glitches that could surface stale fixtures, untranslated action copy, or inconsistent badges on first load.
+- Fixed remaining advanced-workflow terminology drift where older `Advanced document` / `Техдокумент` copy still appeared.
 - Fixed remaining SQLite URL normalization edge cases with explicit regression tests.
+
+### Notes
+- This release exposed architectural coupling across the library, guided editor, advanced editor, export/review surfaces, and shared frontend runtime. Those follow-up architecture issues are planned for `0.7.5-dev`.
 
 ## Sprint F (2025-10-26)
 

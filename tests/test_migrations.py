@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
 
-CURRENT_HEAD = "20260330_upgrade_profiles_to_firefox149"
+CURRENT_HEAD = "20260423_upgrade_profiles_to_firefox150"
 
 
 @pytest.mark.order(1)  # run early, but after environment setup
@@ -44,6 +44,7 @@ def test_alembic_upgrade_head_on_sqlite_tmp(tmp_path: Path):
         assert "policies" not in insp.get_table_names()
         cols = {c["name"] for c in insp.get_columns("profiles")}
         assert "deleted_at" in cols
+        assert "revision" in cols
         with engine.connect() as conn:
             version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
         assert version == CURRENT_HEAD
@@ -107,6 +108,8 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
         insp = inspect(engine)
         assert "profiles" in insp.get_table_names()
         assert "policies" not in insp.get_table_names()
+        columns = {column["name"] for column in insp.get_columns("profiles")}
+        assert "revision" in columns
         index_names = {idx["name"] for idx in insp.get_indexes("profiles")}
         assert "ix_profiles_name" in index_names
         assert "ix_profiles_deleted_at" in index_names
@@ -118,8 +121,8 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
             ).all()
         assert version == CURRENT_HEAD
         assert schema_versions == [
-            ("legacy-esr", "esr-140.9"),
-            ("legacy-release", "release-149"),
+            ("legacy-esr", "esr-140.10"),
+            ("legacy-release", "release-150"),
         ]
     finally:
         engine.dispose()

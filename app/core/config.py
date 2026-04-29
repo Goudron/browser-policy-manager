@@ -12,10 +12,21 @@ Sprint G additions:
 
 from __future__ import annotations
 
+import tomllib
 from functools import lru_cache
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def _read_project_version() -> str:
+    pyproject_path = Path(__file__).resolve().parents[2] / "pyproject.toml"
+    try:
+        data = tomllib.loads(pyproject_path.read_text(encoding="utf-8"))
+        version = data.get("project", {}).get("version")
+    except (OSError, tomllib.TOMLDecodeError):
+        version = None
+    return version if isinstance(version, str) and version else "0.0.0-dev"
 
 
 class Settings(BaseSettings):
@@ -28,7 +39,7 @@ class Settings(BaseSettings):
     # Core application info
     # -------------------------------------------------------------------------
     APP_NAME: str = "Browser Policy Manager"
-    APP_VERSION: str = "0.4.0-dev"
+    APP_VERSION: str = _read_project_version()
     DEBUG: bool = False
 
     # -------------------------------------------------------------------------

@@ -7,7 +7,7 @@ import pytest
 from app.services import policy_schema_service as service
 
 
-def _write_schema(path, *, channel: str = "release-149") -> None:
+def _write_schema(path, *, channel: str = "release-150") -> None:
     payload = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Release Policies 149.0",
@@ -27,7 +27,7 @@ def _write_schema(path, *, channel: str = "release-149") -> None:
     path.write_text(json.dumps(payload), encoding="utf-8")
 
 
-def _write_custom_schema(path, properties: dict[str, object], *, channel: str = "release-149") -> None:
+def _write_custom_schema(path, properties: dict[str, object], *, channel: str = "release-150") -> None:
     payload = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Release Policies 149.0",
@@ -49,21 +49,21 @@ def test_get_schema_path_unknown_channel_raises():
 def test_get_schema_path_missing_file_raises(tmp_path, monkeypatch):
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
     with pytest.raises(FileNotFoundError):
-        service._get_schema_path("release-149")
+        service._get_schema_path("release-150")
 
 
 def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
-    release_file = tmp_path / "firefox-release-149.json"
+    release_file = tmp_path / "firefox-release-150.json"
     _write_schema(release_file)
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
     service.load_policy_schema.cache_clear()
 
-    schema = service.load_policy_schema("release-149")
-    definition = service.get_policy_definition("release-149", "DisableTelemetry")
-    missing = service.get_policy_definition("release-149", "NoSuchPolicy")
+    schema = service.load_policy_schema("release-150")
+    definition = service.get_policy_definition("release-150", "DisableTelemetry")
+    missing = service.get_policy_definition("release-150", "NoSuchPolicy")
 
-    assert schema.channel == "release-149"
+    assert schema.channel == "release-150"
     assert definition is not None
     assert definition.id == "DisableTelemetry"
     assert missing is None
@@ -76,7 +76,7 @@ def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
                 "title": "Release Policies 148.1",
                 "type": "object",
                 "additionalProperties": False,
-                "x-bpm-channel": "release-149",
+                "x-bpm-channel": "release-150",
                 "x-bpm-version": "148.1",
                 "x-bpm-source": "updated-fixture",
                 "properties": {},
@@ -84,20 +84,20 @@ def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    cached = service.load_policy_schema("release-149")
+    cached = service.load_policy_schema("release-150")
     assert cached.version == "149.0"
 
     service.load_policy_schema.cache_clear()
 
 
 def test_load_policy_schema_attaches_ui_metadata(tmp_path, monkeypatch):
-    release_file = tmp_path / "firefox-release-149.json"
+    release_file = tmp_path / "firefox-release-150.json"
     _write_schema(release_file)
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
     service.load_policy_schema.cache_clear()
 
-    schema = service.load_policy_schema("release-149")
+    schema = service.load_policy_schema("release-150")
     definition = schema.get_policy("DisableTelemetry")
 
     assert schema.ui_sections
@@ -112,7 +112,7 @@ def test_load_policy_schema_attaches_ui_metadata(tmp_path, monkeypatch):
 
 
 def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch):
-    release_file = tmp_path / "firefox-release-149.json"
+    release_file = tmp_path / "firefox-release-150.json"
     _write_custom_schema(
         release_file,
         {
@@ -130,7 +130,7 @@ def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
     service.load_policy_schema.cache_clear()
 
-    definition = service.load_policy_schema("release-149").get_policy("CustomPortal")
+    definition = service.load_policy_schema("release-150").get_policy("CustomPortal")
 
     assert definition is not None
     assert definition.ui is not None
@@ -145,7 +145,7 @@ def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch
 
 def test_real_policy_schemas_expose_ui_metadata_for_every_policy():
     service.load_policy_schema.cache_clear()
-    section_ids = {section.id for section in service.load_policy_schema("release-149").ui_sections}
+    section_ids = {section.id for section in service.load_policy_schema("release-150").ui_sections}
 
     for channel in service.CHANNEL_TO_FILENAME:
         schema = service.load_policy_schema(channel)
@@ -158,7 +158,7 @@ def test_real_policy_schemas_expose_ui_metadata_for_every_policy():
 
 def test_real_policy_schemas_expose_expected_widgets_and_sections():
     service.load_policy_schema.cache_clear()
-    schema = service.load_policy_schema("release-149")
+    schema = service.load_policy_schema("release-150")
 
     assert schema.get_policy("Proxy").ui.widget == "object-card"
     assert schema.get_policy("Proxy").ui.section == "network_access"
@@ -172,7 +172,7 @@ def test_real_policy_schemas_expose_expected_widgets_and_sections():
 
 def test_real_policy_schemas_capture_nested_map_and_branch_metadata():
     service.load_policy_schema.cache_clear()
-    schema = service.load_policy_schema("release-149")
+    schema = service.load_policy_schema("release-150")
 
     authentication = schema.get_policy("Authentication")
     sanitize = schema.get_policy("SanitizeOnShutdown")
@@ -199,7 +199,7 @@ def test_real_policy_schemas_capture_nested_map_and_branch_metadata():
 
 def test_real_policy_schemas_capture_array_item_metadata():
     service.load_policy_schema.cache_clear()
-    schema = service.load_policy_schema("release-149")
+    schema = service.load_policy_schema("release-150")
 
     bookmarks = schema.get_policy("Bookmarks")
     managed_bookmarks = schema.get_policy("ManagedBookmarks")
@@ -217,7 +217,7 @@ def test_real_policy_schemas_capture_array_item_metadata():
 
 def test_real_policy_schemas_capture_definition_additional_properties_schema():
     service.load_policy_schema.cache_clear()
-    schema = service.load_policy_schema("release-149")
+    schema = service.load_policy_schema("release-150")
 
     extension_settings = schema.get_policy("ExtensionSettings")
 

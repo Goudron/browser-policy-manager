@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib
+import tomllib
+from pathlib import Path
 
 
 def test_settings_ignore_unprefixed_debug_env(monkeypatch):
@@ -13,6 +15,26 @@ def test_settings_ignore_unprefixed_debug_env(monkeypatch):
     settings = config_module.Settings()
 
     assert settings.DEBUG is False
+
+
+def test_settings_version_matches_pyproject():
+    from app.core import config as config_module
+
+    pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
+    settings = config_module.Settings()
+
+    assert settings.APP_VERSION == pyproject["project"]["version"]
+
+
+def test_project_version_falls_back_when_pyproject_cannot_be_read(monkeypatch):
+    from app.core import config as config_module
+
+    def _raise_os_error(*args, **kwargs):
+        raise OSError("no pyproject")
+
+    monkeypatch.setattr(config_module.Path, "read_text", _raise_os_error)
+
+    assert config_module._read_project_version() == "0.0.0-dev"
 
 
 def test_db_module_uses_prefixed_database_settings(monkeypatch):
