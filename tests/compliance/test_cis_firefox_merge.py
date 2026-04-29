@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from app.compliance.firefox.cis.generation import build_cis_layer
+from app.compliance.firefox.cis.generation import GeneratedCisLayer, build_cis_layer
 from app.compliance.firefox.cis.merge import (
     _load_manual_review_rules,
     _load_target_metadata,
@@ -8,7 +8,6 @@ from app.compliance.firefox.cis.merge import (
     _target_effective_path,
     merge_base_with_cis_layer,
 )
-from app.compliance.firefox.cis.generation import GeneratedCisLayer
 from app.core.policy_validation import (
     load_policy_schema_for_channel,
     validate_profile_policies_or_raise,

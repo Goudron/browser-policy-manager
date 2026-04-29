@@ -2613,6 +2613,7 @@ def test_profile_workspace_routes_smoke_dom_contracts():
     assert library_response.status_code == 200
     assert new_response.status_code == 200
     assert edit_response.status_code == 200
+    assert advanced_response.status_code == 200
 
     assert_contains_all(
         library_response.text,
@@ -2844,7 +2845,7 @@ def test_profile_advanced_route_renders_return_and_focus_context():
     assert response.status_code == 200
     assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in response.text
     assert 'data-advanced-focus-target="policy:DisableTelemetry"' in response.text
-    assert f'id="advanced-return-link"' in response.text
+    assert 'id="advanced-return-link"' in response.text
     assert f'href="/profiles/{profile_id}/edit"' in response.text
     assert 'id="advanced-return-link"' not in unsafe_response.text
 

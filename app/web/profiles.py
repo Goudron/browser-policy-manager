@@ -7,6 +7,7 @@ import json
 from datetime import UTC, datetime
 from functools import cache
 from pathlib import Path
+from typing import Annotated
 from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -194,7 +195,7 @@ async def profiles_new_page(request: Request) -> HTMLResponse:
 async def profiles_edit_page(
     request: Request,
     profile_id: int,
-    session: AsyncSession = Depends(get_session),
+    session: Annotated[AsyncSession, Depends(get_session)],
 ) -> HTMLResponse:
     """Render the visual wizard shell for an existing profile."""
     profile = await ProfileService.get(session, profile_id)
@@ -221,7 +222,7 @@ async def profiles_edit_page(
 async def profiles_advanced_page(
     request: Request,
     profile_id: int,
-    session: AsyncSession = Depends(get_session),
+    session: Annotated[AsyncSession, Depends(get_session)],
 ) -> HTMLResponse:
     """Render the advanced policy document editor for an existing profile."""
     profile = await ProfileService.get(session, profile_id)

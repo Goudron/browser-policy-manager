@@ -87,8 +87,8 @@ def _diff_mapping(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
     for field in ("status", "confidence"):
         if a.get(field) != b.get(field):
             changes[field] = {"from": a.get(field), "to": b.get(field)}
-    a_targets = sorted((_target_signature(t) for t in a.get("targets") or []))
-    b_targets = sorted((_target_signature(t) for t in b.get("targets") or []))
+    a_targets = sorted(_target_signature(t) for t in a.get("targets") or [])
+    b_targets = sorted(_target_signature(t) for t in b.get("targets") or [])
     if a_targets != b_targets:
         changes["targets"] = {
             "from": len(a_targets),

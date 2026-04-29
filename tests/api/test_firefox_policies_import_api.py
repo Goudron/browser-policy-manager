@@ -3,10 +3,12 @@ from __future__ import annotations
 import json
 
 import pytest
-from fastapi import status
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
-from app.api.profiles import _read_firefox_policies_import_request, _validate_import_request_payload
+from app.api.profiles import (
+    _read_firefox_policies_import_request,
+    _validate_import_request_payload,
+)
 from tests.support import make_test_client
 
 

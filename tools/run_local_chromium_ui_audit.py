@@ -37,7 +37,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_ROOT = REPO_ROOT / "artifacts" / "local_chromium_ui_audit"
 DEFAULT_CHROMIUM = "/snap/bin/chromium"
@@ -496,8 +495,8 @@ class UiAuditRunner:
         driver = webdriver.Chrome(service=service, options=options)
         driver.set_window_size(width, height)
         driver.set_page_load_timeout(WAIT_SECONDS)
-        setattr(driver, "_bpm_browser_process", browser_process)
-        setattr(driver, "_bpm_browser_profile_dir", browser_profile_dir)
+        driver._bpm_browser_process = browser_process
+        driver._bpm_browser_profile_dir = browser_profile_dir
         return driver
 
     def launch_chromium(
@@ -542,7 +541,7 @@ class UiAuditRunner:
             stderr=subprocess.STDOUT,
             text=True,
         )
-        setattr(process, "_bpm_log_file", log_file)
+        process._bpm_log_file = log_file
         return process
 
     def wait_for_debugger(self, debug_port: int) -> None:

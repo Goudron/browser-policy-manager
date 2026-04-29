@@ -9,12 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tools.run_local_chromium_ui_audit import UiAuditRunner, ViewportRun, maybe_start_server, pick_free_port
-
 
 class DebugArgs:
     base_url = None
-    port = pick_free_port()
+    port = None
     output_dir = str(Path("artifacts/local_chromium_ui_audit/debug_language"))
     chromium_binary = "/snap/bin/chromium"
     chromedriver_binary = "/snap/bin/chromium.chromedriver"
@@ -23,7 +21,15 @@ class DebugArgs:
 
 
 def main() -> int:
+    from tools.run_local_chromium_ui_audit import (
+        UiAuditRunner,
+        ViewportRun,
+        maybe_start_server,
+        pick_free_port,
+    )
+
     args = DebugArgs()
+    args.port = pick_free_port()
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     with maybe_start_server(args, output_dir):
