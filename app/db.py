@@ -239,6 +239,10 @@ def _upgrade_legacy_sqlite_schema(sync_engine: Engine) -> None:
         columns = {column["name"] for column in inspector.get_columns(_CURRENT_PROFILE_TABLE)}
         if "deleted_at" not in columns:
             conn.exec_driver_sql("ALTER TABLE profiles ADD COLUMN deleted_at DATETIME")
+        if "compliance" not in columns:
+            conn.exec_driver_sql("ALTER TABLE profiles ADD COLUMN compliance JSON")
+        if "revision" not in columns:
+            conn.exec_driver_sql("ALTER TABLE profiles ADD COLUMN revision INTEGER NOT NULL DEFAULT 1")
 
         for index_name in _LEGACY_PROFILE_INDEXES:
             conn.exec_driver_sql(f"DROP INDEX IF EXISTS {index_name}")

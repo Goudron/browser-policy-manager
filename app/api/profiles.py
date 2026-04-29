@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,11 +12,176 @@ from app.core.policy_validation import (
     PolicyValidationError,
     validate_profile_payload_with_schema,
 )
+from app.core.schema_channels import DEFAULT_SCHEMA_CHANNEL
 from app.db import get_session
 from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
+from app.services.firefox_policy_import import (
+    FirefoxPoliciesDocumentValidationError,
+    FirefoxPoliciesImportError,
+    validate_firefox_policies_document,
+)
 from app.services.profile_service import ProfileService
 
 router = APIRouter(prefix="/api/profiles", tags=["profiles"])
+
+FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE: dict[str, Any] = {
+    "name": "Workstation baseline",
+    "description": "Imported from Firefox policies.json",
+    "schema_version": DEFAULT_SCHEMA_CHANNEL,
+    "document": {
+        "policies": {
+            "DisableTelemetry": True,
+            "Preferences": {
+                "browser.tabs.warnOnClose": {
+                    "Value": True,
+                    "Status": "locked",
+                }
+            },
+        }
+    },
+}
+
+
+class FirefoxPoliciesJsonImportRequest(BaseModel):
+    """Create a profile from a Firefox Enterprise policies.json document."""
+
+    name: str = Field(..., max_length=255, description="Library profile name to create.")
+    description: str | None = Field(
+        default=None,
+        description="Optional library profile description.",
+    )
+    schema_version: str = Field(
+        default=DEFAULT_SCHEMA_CHANNEL,
+        max_length=50,
+        description="Firefox policy schema channel used to validate the imported document.",
+    )
+    document: Any = Field(
+        ...,
+        description=(
+            "Full Firefox Enterprise policies.json document. "
+            "The value must be an object with a top-level policies object."
+        ),
+    )
+    compliance: dict[str, Any] | None = Field(
+        default=None,
+        description="Optional internal compliance metadata to attach to the created profile.",
+    )
+    owner: str | None = Field(
+        default=None,
+        max_length=255,
+        description="Optional profile owner metadata.",
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE
+        }
+    )
+
+
+def _decode_json_document(raw: bytes | str, *, source: str) -> Any:
+    text = raw.decode("utf-8") if isinstance(raw, bytes) else raw
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "message": f"Invalid JSON in {source}",
+                "error": str(exc),
+            },
+        ) from exc
+
+
+def _validate_import_request_payload(data: dict[str, Any]) -> FirefoxPoliciesJsonImportRequest:
+    try:
+        return FirefoxPoliciesJsonImportRequest.model_validate(data)
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=exc.errors(),
+        ) from exc
+
+
+async def _read_firefox_policies_import_request(
+    request: Request,
+) -> FirefoxPoliciesJsonImportRequest:
+    content_type = request.headers.get("content-type", "").lower()
+    if content_type.startswith("multipart/form-data"):
+        form = await request.form()
+        upload = form.get("file") or form.get("document")
+        if upload is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "message": "Firefox policies.json import failed",
+                    "error": "Multipart import requires a file field",
+                },
+            )
+
+        if hasattr(upload, "read"):
+            raw_document = await upload.read()
+        elif isinstance(upload, str):
+            raw_document = upload
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "message": "Firefox policies.json import failed",
+                    "error": "Unsupported multipart document field",
+                },
+            )
+
+        compliance: dict[str, Any] | None = None
+        raw_compliance = form.get("compliance")
+        if isinstance(raw_compliance, str) and raw_compliance.strip():
+            parsed_compliance = _decode_json_document(raw_compliance, source="compliance")
+            if not isinstance(parsed_compliance, dict):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail={
+                        "message": "Firefox policies.json import failed",
+                        "error": "Multipart compliance field must be a JSON object",
+                    },
+                )
+            compliance = parsed_compliance
+
+        name = form.get("name")
+        if not isinstance(name, str) or not name.strip():
+            filename = getattr(upload, "filename", "") or ""
+            name = filename.removesuffix(".json").strip() or "Imported policies.json"
+
+        return _validate_import_request_payload(
+            {
+                "name": name,
+                "description": form.get("description") or None,
+                "schema_version": form.get("schema_version") or DEFAULT_SCHEMA_CHANNEL,
+                "document": _decode_json_document(raw_document, source="policies.json"),
+                "compliance": compliance,
+                "owner": form.get("owner") or None,
+            }
+        )
+
+    if content_type.startswith("application/json"):
+        try:
+            data = await request.json()
+        except json.JSONDecodeError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "message": "Invalid JSON in request body",
+                    "error": str(exc),
+                },
+            ) from exc
+        return _validate_import_request_payload(data)
+
+    raise HTTPException(
+        status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+        detail={
+            "message": "Unsupported import content type",
+            "error": "Use application/json or multipart/form-data",
+        },
+    )
 
 
 def _validate_profile_policies_or_422(
@@ -172,9 +339,22 @@ async def _update_profile_core(
         not_found_detail=not_found_detail,
     )
     payload_data = payload.model_dump(exclude_unset=True)
+    expected_revision = payload_data.pop("expected_revision", None)
+    if expected_revision is not None and expected_revision != current.revision:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={
+                "message": "Profile has been modified since it was loaded",
+                "profile_id": profile_id,
+                "current_revision": current.revision,
+                "expected_revision": expected_revision,
+            },
+        )
     normalized_payload_data = dict(payload_data)
     if "flags" in payload_data and payload_data["flags"] is not None:
         normalized_payload_data["flags"] = {**current.flags, **payload_data["flags"]}
+    if "compliance" in payload_data:
+        normalized_payload_data["compliance"] = payload_data["compliance"]
     normalized_payload = ProfileUpdate.model_validate(normalized_payload_data)
 
     if validate_policies:
@@ -312,6 +492,132 @@ async def create_profile(
         payload,
         session,
         validate_policies=True,
+    )
+
+
+@router.post(
+    "/import/firefox/policies.json",
+    response_model=ProfileRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Import Firefox policies.json",
+    description=(
+        "Create a library profile from a full Firefox Enterprise policies.json document. "
+        "The document is validated before the profile is created. Accepts either an "
+        "application/json body or multipart/form-data with a file field."
+    ),
+    openapi_extra={
+        "requestBody": {
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["name", "document"],
+                        "properties": {
+                            "name": {"type": "string", "maxLength": 255},
+                            "description": {"type": "string", "nullable": True},
+                            "schema_version": {"type": "string", "default": DEFAULT_SCHEMA_CHANNEL},
+                            "document": {
+                                "type": "object",
+                                "description": "Full Firefox policies.json document.",
+                                "properties": {
+                                    "policies": {"type": "object"},
+                                },
+                                "required": ["policies"],
+                            },
+                            "compliance": {"type": "object", "nullable": True},
+                            "owner": {"type": "string", "nullable": True, "maxLength": 255},
+                        },
+                        "example": FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE,
+                    },
+                },
+                "multipart/form-data": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["file"],
+                        "properties": {
+                            "file": {
+                                "type": "string",
+                                "format": "binary",
+                                "description": "Firefox policies.json file.",
+                            },
+                            "name": {"type": "string", "maxLength": 255},
+                            "schema_version": {"type": "string", "default": DEFAULT_SCHEMA_CHANNEL},
+                            "description": {"type": "string"},
+                            "owner": {"type": "string", "maxLength": 255},
+                            "compliance": {
+                                "type": "string",
+                                "description": "Optional JSON object with compliance metadata.",
+                            },
+                        },
+                    }
+                },
+            },
+            "required": True,
+        }
+    },
+)
+async def import_firefox_policies_json(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ProfileRead:
+    """Create a profile from a canonical Firefox enterprise policies.json payload."""
+    payload = await _read_firefox_policies_import_request(request)
+    try:
+        flags = validate_firefox_policies_document(
+            payload.document,
+            payload.schema_version,
+        )
+    except FirefoxPoliciesImportError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "message": "Firefox policies.json import failed",
+                "issues": [
+                    {
+                        "policy": None,
+                        "path": issue.path,
+                        "message": issue.message,
+                    }
+                    for issue in exc.issues
+                ],
+            },
+        ) from exc
+    except FirefoxPoliciesDocumentValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail={
+                "message": "Policy validation failed",
+                "issues": [
+                    {
+                        "policy": issue.policy,
+                        "path": issue.path,
+                        "message": issue.message,
+                    }
+                    for issue in exc.issues
+                ],
+            },
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "message": "Profile validation failed",
+                "error": str(exc),
+            },
+        ) from exc
+
+    return await _create_profile_core(
+        ProfileCreate(
+            name=payload.name,
+            description=payload.description,
+            schema_version=payload.schema_version,
+            flags=flags,
+            compliance=payload.compliance,
+            owner=payload.owner,
+        ),
+        session,
+        validate_policies=False,
+        conflict_detail="Profile with this name already exists",
     )
 
 

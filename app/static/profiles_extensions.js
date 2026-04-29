@@ -16,6 +16,7 @@
             setStatus,
             renderExtensionReviewSummary,
             updateWizardSummary,
+            getActiveWizardSchemaVersion,
         } = dependencies;
         const getEditor = state.getEditor || (() => null);
         const setCurrentRaw = state.setCurrentRaw || (() => {});
@@ -38,8 +39,6 @@
             wizardExtensionSectionStatusEl,
             wizardExtensionFineTuningToggleEl,
             wizardExtensionFineTuningPanelEl,
-            wizardExtensionMoreRulesToggleEl,
-            wizardExtensionMoreRulesPanelEl,
             wizardExtensionCuratedStatusEl,
             wizardExtensionCuratedToggleEl,
             wizardExtensionCuratedPanelEl,
@@ -48,47 +47,43 @@
             wizardSyncFineTuningPanelEl,
             wizardBookmarksSectionStatusEl,
             wizardBookmarksOpenAdvancedEl,
+            wizardBookmarksConfiguredActionsEl,
+            wizardBookmarksLinksJumpEl,
+            wizardBookmarksFoldersJumpEl,
+            wizardBookmarksNestedJumpEl,
             wizardLanguageSectionStatusEl,
-            wizardLanguageGovernanceCopyEl,
-            wizardLanguageGovernanceListEl,
             wizardLanguageAiHandoffEl,
+            wizardAiEsrcEmptyStateEl,
+            wizardAiPostureBarEl,
+            wizardAiPostureBodyEl,
+            wizardAiPosturePresetsEl,
+            wizardAiPolicyControlsEl,
+            wizardAiProvidersHandoffEl,
             wizardAiSectionStatusEl,
+            wizardAiControlsCardEl,
+            wizardGenerativeAiCardEl,
+            wizardVisualSearchEnabledCardEl,
             wizardAiGovernanceCopyEl,
-            wizardAiGovernanceListEl,
             wizardAiProvidersOpenAdvancedEl,
-            wizardAiSurfacesSectionStatusEl,
-            wizardAiFineTuningToggleEl,
-            wizardAiFineTuningPanelEl,
             wizardWebsiteSectionStatusEl,
             wizardWebsiteFineTuningToggleEl,
             wizardWebsiteFineTuningPanelEl,
         } = elements;
         let extensionFineTuningPanelPreference = null;
-        let extensionMoreRulesPanelPreference = null;
         let extensionInstallPanelPreference = null;
         let extensionLockedPanelPreference = null;
         let extensionUninstallPanelPreference = null;
         let curatedPanelPreference = null;
         const extensionProfileDetailsPreferences = new Map();
         let syncPanelPreference = null;
-        let aiPanelPreference = null;
         let websitePanelPreference = null;
-        const extensionRolloutPresetButtons = Array.from(document.querySelectorAll("[data-extension-rollout-preset]"));
-        const extensionFocusPresetButtons = Array.from(document.querySelectorAll("[data-extension-focus-preset]"));
-        const aiFocusPresetButtons = Array.from(document.querySelectorAll("[data-ai-focus-preset]"));
-        const aiProvidersPresetButtons = Array.from(document.querySelectorAll("[data-ai-providers-preset]"));
+        const extensionGovernancePresetButtons = Array.from(document.querySelectorAll("[data-extension-governance-preset]"));
+        const aiPosturePresetButtons = Array.from(document.querySelectorAll("[data-ai-posture-preset]"));
         const syncFocusPresetButtons = Array.from(documentRef.querySelectorAll("[data-sync-focus-preset]"));
-        const bookmarksPresetButtons = Array.from(documentRef.querySelectorAll("[data-bookmarks-preset]"));
         const languagePresetButtons = Array.from(documentRef.querySelectorAll("[data-language-preset]"));
-        const websiteFilterPresetButtons = Array.from(documentRef.querySelectorAll("[data-website-filter-preset]"));
-        const websiteFilterSharedPresetButtons = Array.from(documentRef.querySelectorAll("[data-website-filter-shared-preset]"));
-        const websiteHandlersPresetButtons = Array.from(documentRef.querySelectorAll("[data-website-handlers-preset]"));
-        const extensionGovernanceCopyEl = document.getElementById("wizard-extension-governance-copy");
-        const extensionGovernanceListEl = document.getElementById("wizard-extension-governance-list");
-        const extensionGovernanceOpenAdvancedEl = document.getElementById("wizard-extension-governance-open-advanced");
-        const websiteGovernanceCopyEl = document.getElementById("wizard-website-governance-copy");
-        const websiteGovernanceListEl = document.getElementById("wizard-website-governance-list");
-        const websiteGovernanceOpenAdvancedEl = document.getElementById("wizard-website-governance-open-advanced");
+        const websiteAccessPostureButtons = Array.from(documentRef.querySelectorAll("[data-website-access-posture]"));
+        const websiteAccessHandlerButtons = Array.from(documentRef.querySelectorAll("[data-website-access-handlers]"));
+        const aiProvidersSectionStatusEl = document.getElementById("wizard-ai-providers-section-status");
 
         function setText(el, value) {
             if (el) {
@@ -117,6 +112,10 @@
             return bucket && typeof bucket === "object" && !Array.isArray(bucket)
                 ? Object.keys(bucket).filter(Boolean).length
                 : 0;
+        }
+
+        function isReleaseAiWizardAvailable() {
+            return getActiveWizardSchemaVersion() === "release-150";
         }
 
         function setPanelExpanded(panelEl, toggleEl, expanded, showLabel, hideLabel) {
@@ -305,26 +304,25 @@
             return t("profiles.wizard_extensions_mode_inherit");
         }
 
-        function resolveExtensionRolloutPreset({
+        function resolveExtensionGovernancePreset({
             defaultMode = "",
             installCount = 0,
             lockedCount = 0,
             uninstallCount = 0,
             configuredCount = 0,
         } = {}) {
-            const managedCount = installCount + lockedCount + uninstallCount + configuredCount;
+            const rulesCount = installCount + lockedCount + uninstallCount;
+            if (configuredCount > 0 && rulesCount > 0) return "mixed";
+            if (configuredCount > 0) return "curated";
+            if (rulesCount > 0) return "managed";
             if (defaultMode === "allowed") return "open";
-            if (defaultMode === "blocked" && managedCount > 0) return "managed";
             if (defaultMode === "blocked") return "blocked";
-            if (!defaultMode && managedCount === 0) return "defaults";
             return "";
         }
 
-        function applyExtensionRolloutPreset(presetKey) {
+        function applyExtensionGovernancePreset(presetKey) {
             if (!wizardExtensionDefaultModeEl) return;
-            if (presetKey === "defaults") {
-                wizardExtensionDefaultModeEl.value = "";
-            } else if (presetKey === "open") {
+            if (presetKey === "open") {
                 wizardExtensionDefaultModeEl.value = "allowed";
             } else {
                 wizardExtensionDefaultModeEl.value = "blocked";
@@ -333,118 +331,15 @@
             if (presetKey === "managed") {
                 extensionFineTuningPanelPreference = true;
                 extensionInstallPanelPreference = true;
+            } else if (presetKey === "curated") {
+                extensionFineTuningPanelPreference = true;
+                curatedPanelPreference = true;
+            } else if (presetKey === "mixed") {
+                extensionFineTuningPanelPreference = true;
+                extensionInstallPanelPreference = true;
                 curatedPanelPreference = true;
             }
             applyFromWizard();
-        }
-
-        function resolveExtensionFocusPreset({
-            installCount = 0,
-            lockedCount = 0,
-            uninstallCount = 0,
-            configuredCount = 0,
-        } = {}) {
-            const rulesCount = installCount + lockedCount + uninstallCount;
-            if (configuredCount > 0 && rulesCount > 0) return "mixed";
-            if (configuredCount > 0) return "known";
-            if (rulesCount > 0) return "rules";
-            return "defaults";
-        }
-
-        function countInstallAddonsPermissionEntries(value) {
-            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-            return Object.keys(currentObject).filter((key) => {
-                const entry = currentObject[key];
-                return Boolean(key) && hasMeaningfulValue(entry);
-            }).length;
-        }
-
-        function getExtensionGovernanceSummary(parsed) {
-            const normalized = parsed && typeof parsed === "object" ? parsed : {};
-            const extensions = normalized.Extensions && typeof normalized.Extensions === "object" ? normalized.Extensions : {};
-            const extensionSettings = normalized.ExtensionSettings && typeof normalized.ExtensionSettings === "object"
-                ? normalized.ExtensionSettings
-                : {};
-            const installPermissionCount = countInstallAddonsPermissionEntries(normalized.InstallAddonsPermission);
-            const curatedIds = new Set(managedExtensionProfiles.map((profile) => profile.id));
-            const defaultSettings = extensionSettings["*"] && typeof extensionSettings["*"] === "object"
-                ? extensionSettings["*"]
-                : {};
-
-            let arbitraryRules = 0;
-            Object.entries(extensionSettings).forEach(([entryKey, entryValue]) => {
-                if (!entryValue || typeof entryValue !== "object" || Array.isArray(entryValue) || !Object.keys(entryValue).length) {
-                    return;
-                }
-                if (entryKey !== "*" && !curatedIds.has(entryKey)) {
-                    arbitraryRules += 1;
-                }
-            });
-
-            const curatedCount = managedExtensionProfiles.reduce((count, profile) => {
-                const profileSettings = extensionSettings[profile.id];
-                return profileSettings && typeof profileSettings === "object" && !Array.isArray(profileSettings) && Object.keys(profileSettings).length
-                    ? count + 1
-                    : count;
-            }, 0);
-
-            return {
-                defaultMode: typeof defaultSettings.installation_mode === "string" ? defaultSettings.installation_mode : "",
-                installCount: Array.isArray(extensions.Install) ? extensions.Install.length : 0,
-                lockedCount: Array.isArray(extensions.Locked) ? extensions.Locked.length : 0,
-                uninstallCount: Array.isArray(extensions.Uninstall) ? extensions.Uninstall.length : 0,
-                curatedCount,
-                installPermissionCount,
-                arbitraryRules,
-            };
-        }
-
-        function renderExtensionGovernanceWorkflow(parsed) {
-            if (!extensionGovernanceListEl || !extensionGovernanceCopyEl) return;
-            const summary = getExtensionGovernanceSummary(parsed);
-            const rolloutCount = summary.installCount + summary.curatedCount;
-            const deeperCount = summary.installPermissionCount + summary.arbitraryRules;
-            const items = [
-                summary.defaultMode
-                    ? t("profiles.wizard_extensions_governance_item_posture_ready")
-                        .replace("{value}", formatDefaultModeLabel(summary.defaultMode))
-                    : t("profiles.wizard_extensions_governance_item_posture_needed"),
-                rolloutCount > 0
-                    ? t("profiles.wizard_extensions_governance_item_rollout_ready")
-                        .replace("{count}", String(rolloutCount))
-                    : t("profiles.wizard_extensions_governance_item_rollout_needed"),
-                deeperCount > 0
-                    ? t("profiles.wizard_extensions_governance_item_deeper_ready")
-                        .replace("{count}", String(deeperCount))
-                    : t("profiles.wizard_extensions_governance_item_deeper_optional"),
-            ];
-
-            extensionGovernanceCopyEl.textContent = summary.defaultMode || rolloutCount > 0 || deeperCount > 0
-                ? t("profiles.wizard_extensions_governance_active")
-                : t("profiles.wizard_extensions_governance_body");
-            extensionGovernanceListEl.innerHTML = "";
-            items.forEach((item) => {
-                const li = document.createElement("li");
-                li.className = "wizard-checklist-item";
-                li.textContent = item;
-                extensionGovernanceListEl.appendChild(li);
-            });
-        }
-
-        function openExtensionGovernanceAdvanced() {
-            const advancedButton = document.getElementById("workspace-scope-advanced");
-            advancedButton?.click();
-            window.setTimeout(() => {
-                const targetEl = document.getElementById("wizard-install-addons-permission-card")
-                    || document.getElementById("wizard-extension-settings-card");
-                if (!targetEl) return;
-                targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-                targetEl.classList.add("settings-target-highlight");
-                window.setTimeout(() => {
-                    targetEl.classList.remove("settings-target-highlight");
-                }, 1800);
-                focusTargetForA11y(targetEl);
-            }, 140);
         }
 
         function revealExtensionArea(kind) {
@@ -474,15 +369,7 @@
                 targetEl = wizardExtensionInstallEl?.closest(".wizard-subsection-card") || wizardExtensionInstallEl;
             } else if (kind === "mixed") {
                 curatedPanelPreference = true;
-                extensionMoreRulesPanelPreference = true;
                 setCuratedPanelExpanded(true);
-                setPanelExpanded(
-                    wizardExtensionMoreRulesPanelEl,
-                    wizardExtensionMoreRulesToggleEl,
-                    true,
-                    t("profiles.wizard_more_rules_show"),
-                    t("profiles.wizard_more_rules_hide"),
-                );
                 targetEl = document.getElementById("wizard-extension-curated-section")
                     || wizardExtensionInstallEl?.closest(".wizard-subsection-card");
             }
@@ -535,25 +422,15 @@
             }
 
             renderPresetButtonState(
-                extensionRolloutPresetButtons,
-                resolveExtensionRolloutPreset({
+                extensionGovernancePresetButtons,
+                resolveExtensionGovernancePreset({
                     defaultMode,
                     installCount,
                     lockedCount,
                     uninstallCount,
                     configuredCount,
                 }),
-                "extensionRolloutPreset",
-            );
-            renderPresetButtonState(
-                extensionFocusPresetButtons,
-                resolveExtensionFocusPreset({
-                    installCount,
-                    lockedCount,
-                    uninstallCount,
-                    configuredCount,
-                }),
-                "extensionFocusPreset",
+                "extensionGovernancePreset",
             );
 
             setText(
@@ -601,15 +478,6 @@
                     : extensionFineTuningPanelPreference,
                 t("profiles.wizard_fine_tuning_show"),
                 t("profiles.wizard_fine_tuning_hide"),
-            );
-            setPanelExpanded(
-                wizardExtensionMoreRulesPanelEl,
-                wizardExtensionMoreRulesToggleEl,
-                extensionMoreRulesPanelPreference === null
-                    ? (uninstallCount + configuredCount > 0)
-                    : extensionMoreRulesPanelPreference,
-                t("profiles.wizard_more_rules_show"),
-                t("profiles.wizard_more_rules_hide"),
             );
             setPanelExpanded(
                 wizardExtensionInstallPanelEl,
@@ -662,11 +530,6 @@
             renderManagedExtensionProfileStatuses();
         }
 
-        function toggleExtensionMoreRulesPanel() {
-            extensionMoreRulesPanelPreference = !(wizardExtensionMoreRulesPanelEl?.hidden === false);
-            renderManagedExtensionProfileStatuses();
-        }
-
         function getStepSixSummaryData(parsed) {
             const bookmarkEntries = Array.isArray(parsed?.Bookmarks)
                 ? parsed.Bookmarks.filter((item) => item && typeof item === "object" && !Array.isArray(item) && Object.keys(item).length > 0)
@@ -680,6 +543,13 @@
                 ? parsed.RequestedLocales.filter((entry) => typeof entry === "string" && entry.trim()).length
                 : 0;
             const generativeAiControls = countConfiguredObjectEntries(parsed?.GenerativeAI);
+            const aiControls = parsed?.AIControls && typeof parsed.AIControls === "object" && !Array.isArray(parsed.AIControls)
+                ? parsed.AIControls
+                : {};
+            const aiControlsManaged = countConfiguredObjectEntries(aiControls);
+            const aiDefaultControl = aiControls.Default && typeof aiControls.Default === "object" && !Array.isArray(aiControls.Default)
+                ? aiControls.Default
+                : {};
             const websiteFilter = parsed?.WebsiteFilter && typeof parsed.WebsiteFilter === "object" && !Array.isArray(parsed.WebsiteFilter)
                 ? parsed.WebsiteFilter
                 : {};
@@ -695,6 +565,11 @@
                 translateManaged: typeof parsed?.TranslateEnabled === "boolean",
                 translateEnabled: parsed?.TranslateEnabled === true,
                 visualSearchManaged: typeof parsed?.VisualSearchEnabled === "boolean",
+                visualSearchEnabled: parsed?.VisualSearchEnabled === true,
+                aiControlsManaged,
+                aiDefaultBlocked: aiDefaultControl.Value === "blocked",
+                aiDefaultAvailable: aiDefaultControl.Value === "available",
+                aiDefaultLocked: aiDefaultControl.Locked === true,
                 generativeAiControls,
                 bookmarkEntries: bookmarkEntries.length,
                 managedBookmarkFolders: managedFolders.length,
@@ -708,59 +583,90 @@
             };
         }
 
-        function renderWebsiteGovernanceWorkflow(summary) {
-            if (!websiteGovernanceCopyEl || !websiteGovernanceListEl) return;
-
-            const hasSiteRules = summary.blockedSites > 0 || summary.exceptionSites > 0;
-            const handlerRules = summary.handlerMimeRules + summary.handlerSchemeRules + summary.handlerExtensionRules;
-            const hasManagedWebsitePosture = hasSiteRules || handlerRules > 0 || summary.intranetSingleWordManaged;
-            const items = [
-                hasSiteRules
-                    ? t("profiles.wizard_website_governance_item_sites_ready")
-                        .replace("{count}", String(summary.blockedSites + summary.exceptionSites))
-                    : (hasManagedWebsitePosture
-                        ? t("profiles.wizard_website_governance_item_sites_needed")
-                        : t("profiles.wizard_website_governance_item_sites_optional")),
-                handlerRules > 0
-                    ? t("profiles.wizard_website_governance_item_handlers_ready")
-                        .replace("{count}", String(handlerRules))
-                    : (hasManagedWebsitePosture
-                        ? t("profiles.wizard_website_governance_item_handlers_needed")
-                        : t("profiles.wizard_website_governance_item_handlers_optional")),
-                summary.intranetSingleWordManaged
-                    ? t("profiles.wizard_website_governance_item_intranet_ready")
-                    : (hasManagedWebsitePosture
-                        ? t("profiles.wizard_website_governance_item_intranet_optional")
-                        : t("profiles.wizard_website_governance_item_intranet_later")),
-            ];
-
-            websiteGovernanceCopyEl.textContent = hasManagedWebsitePosture
-                ? t("profiles.wizard_website_governance_active")
-                : t("profiles.wizard_website_governance_body");
-            websiteGovernanceListEl.innerHTML = "";
-            items.forEach((item) => {
-                const li = document.createElement("li");
-                li.className = "wizard-checklist-item";
-                li.textContent = item;
-                websiteGovernanceListEl.appendChild(li);
-            });
+        function hasUsableAiControlsCard() {
+            return !isAiPolicyUnsupported(wizardAiControlsCardEl);
         }
 
-        function openWebsiteGovernanceAdvanced() {
-            const advancedButton = document.getElementById("workspace-scope-advanced");
-            advancedButton?.click();
-            window.setTimeout(() => {
-                const targetEl = document.querySelector('[data-settings-target="policy:GoToIntranetSiteForSingleWordEntryInAddressBar"]')
-                    || document.getElementById("wizard-website-filter-card")
-                    || document.getElementById("wizard-handlers-card");
-                if (!targetEl) return;
-                targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-                targetEl.classList.add("settings-target-highlight");
-                window.setTimeout(() => {
-                    targetEl.classList.remove("settings-target-highlight");
-                }, 1800);
-                focusTargetForA11y(targetEl);
-            }, 140);
+        function hasUsableGenerativeAiCard() {
+            return !isAiPolicyUnsupported(wizardGenerativeAiCardEl);
+        }
+
+        function buildAiControlsValue(presetKey) {
+            if (presetKey === "disable") {
+                return {
+                    Default: {
+                        Value: "blocked",
+                        Locked: true,
+                    },
+                };
+            }
+            if (presetKey === "availability") {
+                return {
+                    Default: {
+                        Value: "available",
+                        Locked: true,
+                    },
+                };
+            }
+            if (presetKey === "mixed") {
+                return {
+                    Default: {
+                        Value: "available",
+                        Locked: true,
+                    },
+                    SidebarChatbot: {
+                        Value: "blocked",
+                        Locked: true,
+                    },
+                    SmartWindow: {
+                        Value: "blocked",
+                        Locked: true,
+                    },
+                };
+            }
+            return null;
+        }
+
+        function buildLegacyGenerativeAiValue(presetKey) {
+            if (presetKey === "disable") {
+                return {
+                    Enabled: false,
+                    Chatbot: false,
+                    LinkPreviews: false,
+                    TabGroups: false,
+                    Locked: true,
+                };
+            }
+            if (presetKey === "availability") {
+                return {
+                    Enabled: true,
+                    Locked: true,
+                };
+            }
+            if (presetKey === "mixed") {
+                return {
+                    Enabled: true,
+                    Chatbot: true,
+                    LinkPreviews: true,
+                    TabGroups: true,
+                    Locked: true,
+                };
+            }
+            return null;
+        }
+
+        function resolveAiPosturePreset(summary) {
+            const managedAiControls = summary.aiControlsManaged > 0 || summary.generativeAiControls > 0;
+            if ((summary.aiDefaultBlocked || summary.generativeAiControls > 0) && summary.visualSearchManaged && !summary.visualSearchEnabled) {
+                return "disable";
+            }
+            if (managedAiControls && summary.visualSearchManaged) {
+                return "mixed";
+            }
+            if (managedAiControls) {
+                return "availability";
+            }
+            return "defaults";
         }
 
         function resolveWebsiteHandlersPreset(summary) {
@@ -773,10 +679,10 @@
             return "defaults";
         }
 
-        function resolveWebsiteFilterPreset(summary) {
+        function resolveWebsiteAccessPosture(summary) {
             if (summary.blockedSites > 0 && summary.exceptionSites > 0) return "mixed";
-            if (summary.blockedSites > 0) return "blocked";
-            if (summary.exceptionSites > 0) return "exceptions";
+            if (summary.blockedSites > 0) return "block_some";
+            if (summary.exceptionSites > 0) return "allow_only";
             return "defaults";
         }
 
@@ -784,13 +690,6 @@
             if (summary.accountsManaged && summary.userMessagingControls > 0) return "managed";
             if (summary.userMessagingControls > 0) return "guidance";
             if (summary.accountsManaged) return "accounts";
-            return "defaults";
-        }
-
-        function resolveBookmarksPreset(summary) {
-            if (summary.bookmarkEntries > 0 && summary.managedBookmarkFolders > 0) return "mixed";
-            if (summary.bookmarkEntries > 0) return "links";
-            if (summary.managedBookmarkFolders > 0 || summary.nestedBookmarkFolders > 0) return "folders";
             return "defaults";
         }
 
@@ -807,6 +706,118 @@
             return "defaults";
         }
 
+        function applyLanguagePreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const existingLocales = Array.isArray(parsed?.RequestedLocales)
+                    ? parsed.RequestedLocales.filter((entry) => typeof entry === "string" && entry.trim())
+                    : [];
+
+                delete normalized.RequestedLocales;
+                delete normalized.TranslateEnabled;
+
+                if (presetKey === "locales") {
+                    normalized.RequestedLocales = existingLocales.length ? existingLocales : ["en-US", "ru"];
+                } else if (presetKey === "translation_off") {
+                    normalized.TranslateEnabled = false;
+                } else if (presetKey === "managed") {
+                    normalized.RequestedLocales = existingLocales.length ? existingLocales : ["en-US", "ru"];
+                    normalized.TranslateEnabled = true;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderStepSixWorkspace(normalized);
+                updateWizardSummary();
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
+            }
+        }
+
+        function applyWebsiteAccessPosturePreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const nextWebsiteFilter = {};
+
+                if (presetKey === "block_some") {
+                    nextWebsiteFilter.Block = ["https://blocked.example.test"];
+                } else if (presetKey === "allow_only") {
+                    nextWebsiteFilter.Exceptions = ["https://allowed.example.test"];
+                } else if (presetKey === "mixed") {
+                    nextWebsiteFilter.Block = ["https://blocked.example.test"];
+                    nextWebsiteFilter.Exceptions = ["https://allowed.example.test"];
+                }
+
+                if (Object.keys(nextWebsiteFilter).length) {
+                    normalized.WebsiteFilter = nextWebsiteFilter;
+                } else {
+                    delete normalized.WebsiteFilter;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderStepSixWorkspace(normalized);
+                updateWizardSummary();
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
+            }
+        }
+
+        function applyWebsiteHandlersPreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const nextHandlers = {};
+
+                if (presetKey === "mime_types") {
+                    nextHandlers.mimeTypes = {
+                        "application/pdf": { action: "saveToDisk" },
+                    };
+                } else if (presetKey === "protocols") {
+                    nextHandlers.schemes = {
+                        mailto: { action: "useSystemDefault" },
+                    };
+                } else if (presetKey === "mixed") {
+                    nextHandlers.mimeTypes = {
+                        "application/pdf": { action: "saveToDisk" },
+                    };
+                    nextHandlers.schemes = {
+                        mailto: { action: "useSystemDefault" },
+                    };
+                }
+
+                if (Object.keys(nextHandlers).length) {
+                    normalized.Handlers = nextHandlers;
+                } else {
+                    delete normalized.Handlers;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderStepSixWorkspace(normalized);
+                updateWizardSummary();
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
+            }
+        }
+
         function revealLanguageTarget(kind) {
             const targetEl = kind === "translate"
                 ? documentRef.getElementById("wizard-translate-enabled-card")
@@ -818,46 +829,6 @@
                 targetEl.classList.remove("settings-target-highlight");
             }, 1800);
             targetEl.querySelector("input, select, textarea, button")?.focus?.({ preventScroll: true });
-        }
-
-        function renderLanguageGovernanceWorkflow(summary) {
-            if (!wizardLanguageGovernanceCopyEl || !wizardLanguageGovernanceListEl) return;
-
-            const hasManagedLanguagePosture = summary.requestedLocales > 0 || summary.translateManaged;
-            const hasCoordinatedLanguageMix = summary.requestedLocales > 0 && summary.translateManaged;
-            const items = [
-                summary.requestedLocales > 0
-                    ? t("profiles.wizard_language_governance_item_locales_ready")
-                        .replace("{count}", String(summary.requestedLocales))
-                    : (hasManagedLanguagePosture
-                        ? t("profiles.wizard_language_governance_item_locales_needed")
-                        : t("profiles.wizard_language_governance_item_locales_optional")),
-                summary.translateManaged
-                    ? (
-                        summary.translateEnabled
-                            ? t("profiles.wizard_language_governance_item_translation_enabled")
-                            : t("profiles.wizard_language_governance_item_translation_disabled")
-                    )
-                    : (hasManagedLanguagePosture
-                        ? t("profiles.wizard_language_governance_item_translation_needed")
-                        : t("profiles.wizard_language_governance_item_translation_optional")),
-                hasCoordinatedLanguageMix
-                    ? t("profiles.wizard_language_governance_item_mix_ready")
-                    : (hasManagedLanguagePosture
-                        ? t("profiles.wizard_language_governance_item_mix_optional")
-                        : t("profiles.wizard_language_governance_item_mix_later")),
-            ];
-
-            wizardLanguageGovernanceCopyEl.textContent = hasManagedLanguagePosture
-                ? t("profiles.wizard_language_governance_active")
-                : t("profiles.wizard_language_governance_body");
-            wizardLanguageGovernanceListEl.innerHTML = "";
-            items.forEach((item) => {
-                const li = document.createElement("li");
-                li.className = "wizard-checklist-item";
-                li.textContent = item;
-                wizardLanguageGovernanceListEl.appendChild(li);
-            });
         }
 
         function revealHandlersCard() {
@@ -938,9 +909,31 @@
                 jumpButton.click();
                 return;
             }
-            if (!wizardBookmarksSectionStatusEl) return;
-            wizardBookmarksSectionStatusEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            focusTargetForA11y(wizardBookmarksSectionStatusEl);
+            openBookmarksAdvanced(kind);
+        }
+
+        function openBookmarksAdvanced(kind = "links") {
+            const advancedButton = documentRef.getElementById("workspace-scope-advanced");
+            advancedButton?.click();
+            window.setTimeout(() => {
+                const wantsManaged = kind === "folders" || kind === "mixed" || kind === "nested";
+                const targetEl = wantsManaged
+                    ? (
+                        documentRef.querySelector('[data-schema-policy-id="ManagedBookmarks"][data-schema-policy-kind="array-of-objects"]')
+                        || documentRef.querySelector('[data-settings-target="shell-policy:6:ManagedBookmarks"]')
+                    )
+                    : (
+                        documentRef.querySelector('[data-schema-policy-id="Bookmarks"][data-schema-policy-kind="array-of-objects"]')
+                        || documentRef.querySelector('[data-settings-target="shell-policy:6:Bookmarks"]')
+                    );
+                if (!targetEl) return;
+                targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                targetEl.classList.add("settings-target-highlight");
+                window.setTimeout(() => {
+                    targetEl.classList.remove("settings-target-highlight");
+                }, 1800);
+                focusTargetForA11y(targetEl);
+            }, 140);
         }
 
         function renderStepSixExperience(parsed) {
@@ -997,11 +990,19 @@
                     ? bookmarkFragments.join(" • ")
                     : t("profiles.wizard_bookmarks_section_state_empty"),
             );
-            renderPresetButtonState(
-                bookmarksPresetButtons,
-                resolveBookmarksPreset(summary),
-                "bookmarksPreset",
-            );
+            const hasConfiguredBookmarks = summary.bookmarkEntries + summary.managedBookmarkFolders + summary.nestedBookmarkFolders > 0;
+            if (wizardBookmarksConfiguredActionsEl) {
+                wizardBookmarksConfiguredActionsEl.hidden = !hasConfiguredBookmarks;
+            }
+            [
+                { el: wizardBookmarksLinksJumpEl, count: summary.bookmarkEntries },
+                { el: wizardBookmarksFoldersJumpEl, count: summary.managedBookmarkFolders },
+                { el: wizardBookmarksNestedJumpEl, count: summary.nestedBookmarkFolders },
+            ].forEach(({ el, count }) => {
+                if (!el) return;
+                el.hidden = count <= 0;
+                el.disabled = count <= 0;
+            });
 
             const languageFragments = [];
             if (summary.requestedLocales > 0) {
@@ -1038,8 +1039,6 @@
                 resolveLanguagePreset(summary),
                 "languagePreset",
             );
-            renderLanguageGovernanceWorkflow(summary);
-
             const websiteFragments = [];
             const handlerRules = summary.handlerMimeRules + summary.handlerSchemeRules + summary.handlerExtensionRules;
             if (summary.blockedSites > 0) {
@@ -1061,14 +1060,14 @@
                 );
             }
             renderPresetButtonState(
-                websiteFilterPresetButtons,
-                resolveWebsiteFilterPreset(summary),
-                "websiteFilterPreset",
+                websiteAccessPostureButtons,
+                resolveWebsiteAccessPosture(summary),
+                "websiteAccessPosture",
             );
             renderPresetButtonState(
-                websiteHandlersPresetButtons,
+                websiteAccessHandlerButtons,
                 resolveWebsiteHandlersPreset(summary),
-                "websiteHandlersPreset",
+                "websiteAccessHandlers",
             );
             setText(
                 wizardWebsiteSectionStatusEl,
@@ -1076,8 +1075,6 @@
                     ? websiteFragments.join(" • ")
                     : t("profiles.wizard_website_section_state_empty"),
             );
-            renderWebsiteGovernanceWorkflow(summary);
-
             const showFineTuning = t("profiles.wizard_fine_tuning_show");
             const hideFineTuning = t("profiles.wizard_fine_tuning_hide");
             setPanelExpanded(
@@ -1098,13 +1095,44 @@
 
         function renderStepSevenAiExperience(parsed) {
             const summary = getStepSixSummaryData(parsed && typeof parsed === "object" ? parsed : {});
-            const generativeAi = parsed?.GenerativeAI && typeof parsed.GenerativeAI === "object" && !Array.isArray(parsed.GenerativeAI)
-                ? parsed.GenerativeAI
-                : {};
-            const providerLikeKeys = Object.keys(generativeAi).filter((key) => /provider|model|service|engine/i.test(String(key)));
+            const releaseAiAvailable = isReleaseAiWizardAvailable();
             const aiFragments = [];
 
-            if (summary.generativeAiControls > 0) {
+            if (wizardAiEsrcEmptyStateEl) {
+                wizardAiEsrcEmptyStateEl.hidden = releaseAiAvailable;
+            }
+            if (wizardAiPostureBarEl) {
+                wizardAiPostureBarEl.hidden = !releaseAiAvailable;
+            }
+            if (wizardAiPostureBodyEl) {
+                wizardAiPostureBodyEl.hidden = !releaseAiAvailable;
+            }
+            if (wizardAiPosturePresetsEl) {
+                wizardAiPosturePresetsEl.hidden = !releaseAiAvailable;
+            }
+            if (wizardAiPolicyControlsEl) {
+                wizardAiPolicyControlsEl.hidden = !releaseAiAvailable;
+            }
+            if (wizardAiProvidersHandoffEl) {
+                wizardAiProvidersHandoffEl.hidden = !releaseAiAvailable;
+            }
+
+            if (!releaseAiAvailable) {
+                setText(wizardAiSectionStatusEl, t("profiles.wizard_ai_esr_state"));
+                setText(aiProvidersSectionStatusEl, t("profiles.wizard_ai_esr_state"));
+                if (wizardAiGovernanceCopyEl) {
+                    wizardAiGovernanceCopyEl.textContent = t("profiles.wizard_ai_esr_body");
+                }
+                renderPresetButtonState(aiPosturePresetButtons, null, "aiPosturePreset");
+                return;
+            }
+
+            if (summary.aiControlsManaged > 0) {
+                aiFragments.push(
+                    t("profiles.wizard_ai_section_state_feature_controls")
+                        .replace("{count}", String(summary.aiControlsManaged)),
+                );
+            } else if (summary.generativeAiControls > 0) {
                 aiFragments.push(
                     t("profiles.wizard_ai_section_state_controls")
                         .replace("{count}", String(summary.generativeAiControls)),
@@ -1125,96 +1153,96 @@
                     : t("profiles.wizard_ai_section_state_empty"),
             );
             renderPresetButtonState(
-                aiFocusPresetButtons,
-                summary.generativeAiControls > 0 && summary.visualSearchManaged
-                    ? "mixed"
-                    : (summary.generativeAiControls > 0 ? "availability" : (summary.visualSearchManaged ? "surfaces" : "defaults")),
-                "aiFocusPreset",
+                aiPosturePresetButtons,
+                resolveAiPosturePreset(summary),
+                "aiPosturePreset",
             );
             setText(
-                wizardAiSurfacesSectionStatusEl,
-                summary.visualSearchManaged
-                    ? (
-                        summary.visualSearchEnabled
-                            ? t("profiles.wizard_ai_surfaces_state_visual_search_on")
-                            : t("profiles.wizard_ai_surfaces_state_visual_search_off")
-                    )
-                    : t("profiles.wizard_ai_surfaces_state_empty"),
+                aiProvidersSectionStatusEl,
+                t("profiles.wizard_ai_providers_state_empty"),
             );
-            renderPresetButtonState(
-                aiProvidersPresetButtons,
-                providerLikeKeys.length > 0
-                    ? (summary.generativeAiControls > providerLikeKeys.length ? "mixed" : "providers")
-                    : "defaults",
-                "aiProvidersPreset",
-            );
-            if (wizardAiGovernanceCopyEl && wizardAiGovernanceListEl) {
-                const hasManagedAiPosture = summary.generativeAiControls > 0 || summary.visualSearchManaged || providerLikeKeys.length > 0;
-                const hasCoordinatedAiMix = (summary.generativeAiControls > 0 && summary.visualSearchManaged)
-                    || (providerLikeKeys.length > 0 && (summary.generativeAiControls > providerLikeKeys.length || summary.visualSearchManaged));
+            if (wizardAiGovernanceCopyEl) {
+                const hasManagedAiPosture = summary.aiControlsManaged > 0 || summary.generativeAiControls > 0 || summary.visualSearchManaged;
                 wizardAiGovernanceCopyEl.textContent = hasManagedAiPosture
-                    ? t("profiles.wizard_ai_governance_active")
-                    : t("profiles.wizard_ai_governance_body");
-                wizardAiGovernanceListEl.innerHTML = "";
-                [
-                    summary.generativeAiControls > 0
-                        ? t("profiles.wizard_ai_governance_item_availability_ready").replace("{count}", String(summary.generativeAiControls))
-                        : (hasManagedAiPosture
-                            ? t("profiles.wizard_ai_governance_item_availability_needed")
-                            : t("profiles.wizard_ai_governance_item_availability_optional")),
-                    summary.visualSearchManaged
-                        ? (summary.visualSearchEnabled
-                            ? t("profiles.wizard_ai_governance_item_surfaces_enabled")
-                            : t("profiles.wizard_ai_governance_item_surfaces_disabled"))
-                        : (hasManagedAiPosture
-                            ? t("profiles.wizard_ai_governance_item_surfaces_needed")
-                            : t("profiles.wizard_ai_governance_item_surfaces_optional")),
-                    providerLikeKeys.length > 0
-                        ? t("profiles.wizard_ai_governance_item_provider_handoff_ready").replace("{count}", String(providerLikeKeys.length))
-                        : (hasCoordinatedAiMix
-                            ? t("profiles.wizard_ai_governance_item_provider_handoff_optional")
-                            : t("profiles.wizard_ai_governance_item_provider_handoff_later")),
-                ].forEach((item) => {
-                    const li = document.createElement("li");
-                    li.className = "wizard-checklist-item";
-                    li.textContent = item;
-                    wizardAiGovernanceListEl.appendChild(li);
-                });
+                    ? t("profiles.wizard_ai_controls_active")
+                    : t("profiles.wizard_ai_controls_body");
+            }
+        }
+
+        function isAiPolicyUnsupported(policyCardEl) {
+            const cardEl = policyCardEl?.matches?.("[data-schema-policy-card]")
+                ? policyCardEl
+                : policyCardEl?.querySelector("[data-schema-policy-card]");
+            return cardEl?.dataset?.schemaPolicyKind === "unsupported";
+        }
+
+        function applyAiPosturePreset(presetKey) {
+            if (presetKey === "providers") {
+                revealAiProvidersTarget("providers");
+                return;
             }
 
-            const showFineTuning = t("profiles.wizard_fine_tuning_show");
-            const hideFineTuning = t("profiles.wizard_fine_tuning_hide");
-            setPanelExpanded(
-                wizardAiFineTuningPanelEl,
-                wizardAiFineTuningToggleEl,
-                aiPanelPreference === null ? summary.visualSearchManaged : aiPanelPreference,
-                showFineTuning,
-                hideFineTuning,
-            );
+            const editor = getEditor();
+            if (!editor) return;
+
+            if (presetKey !== "defaults" && !hasUsableAiControlsCard() && !hasUsableGenerativeAiCard()) {
+                revealAiTarget(presetKey === "mixed" ? "mixed" : "availability");
+                setStatus(t("profiles.wizard_ai_policy_unavailable"), "info");
+                return;
+            }
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+
+                if (presetKey === "defaults") {
+                    delete normalized.AIControls;
+                    delete normalized.GenerativeAI;
+                    delete normalized.VisualSearchEnabled;
+                } else {
+                    if (hasUsableAiControlsCard()) {
+                        normalized.AIControls = buildAiControlsValue(presetKey);
+                        delete normalized.GenerativeAI;
+                    } else if (hasUsableGenerativeAiCard()) {
+                        normalized.GenerativeAI = buildLegacyGenerativeAiValue(presetKey);
+                    }
+
+                    if (presetKey === "disable" || presetKey === "mixed") {
+                        normalized.VisualSearchEnabled = false;
+                    } else if (presetKey === "availability") {
+                        delete normalized.VisualSearchEnabled;
+                    }
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderStepSixExperience(normalized);
+                renderStepSevenAiExperience(normalized);
+                updateWizardSummary();
+                setStatus(t("profiles.wizard_ai_applied"), "info");
+                if (presetKey !== "defaults") {
+                    revealAiTarget(presetKey === "mixed" ? "mixed" : "availability");
+                }
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_policy").replace("{detail}", e.message || e), "error");
+            }
         }
 
         function revealAiTarget(kind) {
-            if (kind === "surfaces" || kind === "mixed") {
-                aiPanelPreference = true;
-                setPanelExpanded(
-                    wizardAiFineTuningPanelEl,
-                    wizardAiFineTuningToggleEl,
-                    true,
-                    t("profiles.wizard_fine_tuning_show"),
-                    t("profiles.wizard_fine_tuning_hide"),
-                );
-            }
-
             let targetEl = null;
-            if (kind === "availability") {
-                targetEl = wizardGenerativeAiCardEl;
+            if (kind === "availability" || kind === "disable") {
+                targetEl = wizardAiControlsCardEl
+                    || wizardGenerativeAiCardEl;
+            } else if (kind === "providers") {
+                revealAiProvidersTarget("providers");
+                return;
             } else if (kind === "surfaces") {
-                targetEl = wizardVisualSearchEnabledCardEl
-                    || document.getElementById("wizard-ai-surfaces-section-status");
+                targetEl = wizardVisualSearchEnabledCardEl;
             } else if (kind === "mixed") {
-                targetEl = wizardGenerativeAiCardEl
-                    || wizardVisualSearchEnabledCardEl
-                    || document.getElementById("wizard-ai-surfaces-section-status");
+                targetEl = wizardAiControlsCardEl
+                    || wizardGenerativeAiCardEl
+                    || wizardVisualSearchEnabledCardEl;
             }
             if (!targetEl) return;
             targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1244,9 +1272,6 @@
             if (panelKey === "sync") {
                 syncPanelPreference = !(wizardSyncFineTuningPanelEl?.hidden === false);
             }
-            if (panelKey === "ai") {
-                aiPanelPreference = !(wizardAiFineTuningPanelEl?.hidden === false);
-            }
             if (panelKey === "website") {
                 websitePanelPreference = !(wizardWebsiteFineTuningPanelEl?.hidden === false);
             }
@@ -1256,11 +1281,9 @@
                 const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
                 const normalized = parsed && typeof parsed === "object" ? parsed : {};
                 renderStepSixExperience(normalized);
-                renderExtensionGovernanceWorkflow(normalized);
                 renderStepSevenAiExperience(normalized);
             } catch {
                 renderStepSixExperience({});
-                renderExtensionGovernanceWorkflow({});
                 renderStepSevenAiExperience({});
             }
         }
@@ -1303,13 +1326,11 @@
             const editor = getEditor();
             if (!editor) return;
             extensionFineTuningPanelPreference = null;
-            extensionMoreRulesPanelPreference = null;
             extensionInstallPanelPreference = null;
             extensionLockedPanelPreference = null;
             extensionUninstallPanelPreference = null;
             curatedPanelPreference = null;
             syncPanelPreference = null;
-            aiPanelPreference = null;
             websitePanelPreference = null;
 
             try {
@@ -1485,7 +1506,6 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 renderStepSixExperience(normalized);
-                renderExtensionGovernanceWorkflow(normalized);
                 renderStepSevenAiExperience(normalized);
                 renderManagedExtensionProfileStatuses();
                 renderExtensionReviewSummary(normalized);
@@ -1546,19 +1566,9 @@
                     toggleExtensionFineTuningPanel();
                 });
             }
-            if (wizardExtensionMoreRulesToggleEl) {
-                wizardExtensionMoreRulesToggleEl.addEventListener("click", () => {
-                    toggleExtensionMoreRulesPanel();
-                });
-            }
             if (wizardSyncFineTuningToggleEl) {
                 wizardSyncFineTuningToggleEl.addEventListener("click", () => {
                     toggleSectionPanel("sync");
-                });
-            }
-            if (wizardAiFineTuningToggleEl) {
-                wizardAiFineTuningToggleEl.addEventListener("click", () => {
-                    toggleSectionPanel("ai");
                 });
             }
             if (wizardWebsiteFineTuningToggleEl) {
@@ -1566,80 +1576,70 @@
                     toggleSectionPanel("website");
                 });
             }
-            websiteHandlersPresetButtons.forEach((button) => {
+            websiteAccessHandlerButtons.forEach((button) => {
                 button.addEventListener("click", () => {
-                    revealHandlersCard();
-                });
-            });
-            websiteFilterPresetButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    if ((button.dataset.websiteFilterPreset || "defaults") !== "defaults") {
-                        revealWebsiteFilterCard();
+                    applyWebsiteHandlersPreset(button.dataset.websiteAccessHandlers || "defaults");
+                    if ((button.dataset.websiteAccessHandlers || "defaults") !== "defaults") {
+                        revealHandlersCard();
                     }
                 });
             });
-            websiteFilterSharedPresetButtons.forEach((button) => {
+            websiteAccessPostureButtons.forEach((button) => {
                 button.addEventListener("click", () => {
-                    revealWebsiteFilterCard();
+                    applyWebsiteAccessPosturePreset(button.dataset.websiteAccessPosture || "defaults");
+                    if ((button.dataset.websiteAccessPosture || "defaults") !== "defaults") {
+                        revealWebsiteFilterCard();
+                    }
                 });
-            });
-            websiteGovernanceOpenAdvancedEl?.addEventListener("click", () => {
-                openWebsiteGovernanceAdvanced();
             });
             syncFocusPresetButtons.forEach((button) => {
                 button.addEventListener("click", () => {
                     revealSyncFocus(button.dataset.syncFocusPreset || "defaults");
                 });
             });
-            bookmarksPresetButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    revealBookmarksFocus(button.dataset.bookmarksPreset || "defaults");
-                });
-            });
             wizardBookmarksOpenAdvancedEl?.addEventListener("click", () => {
                 const editor = getEditor();
                 if (!editor) {
-                    revealBookmarksFocus("links");
+                    openBookmarksAdvanced("links");
                     return;
                 }
                 try {
                     const parsed = fromEditorValue(editor.getValue(), document.getElementById("mode").value);
                     const summary = getStepSixSummaryData(parsed && typeof parsed === "object" ? parsed : {});
-                    revealBookmarksFocus(resolveBookmarksPreset(summary));
+                    if (summary.bookmarkEntries > 0) {
+                        revealBookmarksFocus("links");
+                    } else if (summary.managedBookmarkFolders > 0 || summary.nestedBookmarkFolders > 0) {
+                        revealBookmarksFocus("folders");
+                    } else {
+                        openBookmarksAdvanced("links");
+                    }
                 } catch {
-                    revealBookmarksFocus("links");
+                    openBookmarksAdvanced("links");
                 }
             });
-            extensionRolloutPresetButtons.forEach((button) => {
+            extensionGovernancePresetButtons.forEach((button) => {
                 button.addEventListener("click", () => {
-                    applyExtensionRolloutPreset(button.dataset.extensionRolloutPreset || "defaults");
-                });
-            });
-            extensionFocusPresetButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const presetKey = button.dataset.extensionFocusPreset || "defaults";
-                    if (presetKey !== "defaults") {
-                        revealExtensionArea(presetKey);
+                    const presetKey = button.dataset.extensionGovernancePreset || "open";
+                    applyExtensionGovernancePreset(presetKey);
+                    if (presetKey === "managed") {
+                        revealExtensionArea("rules");
+                    } else if (presetKey === "curated") {
+                        revealExtensionArea("known");
+                    } else if (presetKey === "mixed") {
+                        revealExtensionArea("mixed");
                     }
                 });
             });
-            aiFocusPresetButtons.forEach((button) => {
+            aiPosturePresetButtons.forEach((button) => {
                 button.addEventListener("click", () => {
-                    const presetKey = button.dataset.aiFocusPreset || "defaults";
-                    if (presetKey !== "defaults") {
-                        revealAiTarget(presetKey);
-                    }
-                });
-            });
-            aiProvidersPresetButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const presetKey = button.dataset.aiProvidersPreset || "defaults";
-                    revealAiProvidersTarget(presetKey);
+                    const presetKey = button.dataset.aiPosturePreset || "defaults";
+                    applyAiPosturePreset(presetKey);
                 });
             });
             languagePresetButtons.forEach((button) => {
                 button.addEventListener("click", () => {
                     const presetKey = button.dataset.languagePreset || "defaults";
+                    applyLanguagePreset(presetKey);
                     if (presetKey === "translation_off") {
                         revealLanguageTarget("translate");
                         return;
@@ -1647,7 +1647,6 @@
                     revealLanguageTarget("locales");
                 });
             });
-            extensionGovernanceOpenAdvancedEl?.addEventListener("click", openExtensionGovernanceAdvanced);
         }
 
         return {

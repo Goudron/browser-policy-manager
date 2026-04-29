@@ -48,13 +48,9 @@
             wizardHomepageSectionStatusEl,
             wizardHomeOverridesSectionStatusEl,
             wizardFirefoxHomeSectionStatusEl,
-            wizardHomeSurfacesWorkflowCopyEl,
-            wizardHomeSurfacesWorkflowListEl,
             wizardFirefoxHomeFineTuningToggleEl,
             wizardFirefoxHomeFineTuningPanelEl,
             wizardSearchDefaultsSectionStatusEl,
-            wizardSearchSurfacesWorkflowCopyEl,
-            wizardSearchSurfacesWorkflowListEl,
             wizardSearchDefaultsFineTuningToggleEl,
             wizardSearchDefaultsFineTuningPanelEl,
             wizardFirefoxSuggestSectionStatusEl,
@@ -67,8 +63,6 @@
             wizardFirefoxHomeInputs = [],
             wizardFirefoxSuggestInputs = [],
             wizardGeneralPolicySectionStatusEl,
-            wizardUpkeepGovernanceCopyEl,
-            wizardUpkeepGovernanceListEl,
             wizardGeneralPolicyPresetButtons = [],
             wizardProxyModeEl,
             wizardProxySectionStatusEl,
@@ -84,8 +78,6 @@
             wizardProxyAutoLoginEl,
             wizardProxyUseDnsEl,
             wizardProxyModeGroups = [],
-            wizardTrustAuthWorkflowCopyEl,
-            wizardTrustAuthWorkflowListEl,
             wizardNetworkEnterpriseSectionStatusEl,
             wizardNetworkEnterpriseFineTuningToggleEl,
             wizardNetworkEnterpriseFineTuningPanelEl,
@@ -111,6 +103,34 @@
         const searchDefaultsPresetButtons = Array.from(wizardSearchDefaultsPresetButtons);
         const firefoxSuggestPresetButtons = Array.from(wizardFirefoxSuggestPresetButtons);
         const generalPolicyPresetButtons = Array.from(wizardGeneralPolicyPresetButtons);
+        const generalPolicyManagedKeys = [
+            "DisableAppUpdate",
+            "DisableSystemAddonUpdate",
+            "AppAutoUpdate",
+            "DontCheckDefaultBrowser",
+            "PromptForDownloadLocation",
+        ];
+        const generalPolicyPresets = {
+            defaults: {},
+            updates: {
+                DisableAppUpdate: true,
+                DisableSystemAddonUpdate: true,
+                AppAutoUpdate: false,
+            },
+            browser_prompt: {
+                DontCheckDefaultBrowser: true,
+            },
+            downloads: {
+                PromptForDownloadLocation: true,
+            },
+            managed: {
+                DisableAppUpdate: true,
+                DisableSystemAddonUpdate: true,
+                AppAutoUpdate: false,
+                DontCheckDefaultBrowser: true,
+                PromptForDownloadLocation: true,
+            },
+        };
         const networkEnterpriseManagedKeys = ["WindowsSSO", "Certificates"];
         const networkEnterprisePresets = {
             defaults: {},
@@ -264,199 +284,38 @@
             return "defaults";
         }
 
-        function renderUpkeepGovernanceWorkflow(parsed = {}) {
-            if (!wizardUpkeepGovernanceCopyEl || !wizardUpkeepGovernanceListEl) return;
+        function applyGeneralPolicyPreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
 
-            const resolved = parsed && typeof parsed === "object" ? parsed : {};
-            const updateCount = (resolved.DisableAppUpdate === true ? 1 : 0)
-                + (resolved.DisableSystemAddonUpdate === true ? 1 : 0)
-                + (typeof resolved.AppAutoUpdate === "boolean" ? 1 : 0);
-            const hasBrowserPrompt = resolved.DontCheckDefaultBrowser === true;
-            const hasDownloads = resolved.PromptForDownloadLocation === true;
-            const activePreset = resolveGeneralPolicyPreset(resolved);
-            const hasManagedUpkeep = updateCount > 0 || hasBrowserPrompt || hasDownloads;
-            const hasDeeperOperationalMix = activePreset === "managed"
-                || resolved.DisableSystemAddonUpdate === true
-                || typeof resolved.AppAutoUpdate === "boolean";
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const presetValues = generalPolicyPresets[presetKey] || {};
 
-            wizardUpkeepGovernanceCopyEl.textContent = hasManagedUpkeep
-                ? t("profiles.wizard_upkeep_governance_active")
-                : t("profiles.wizard_upkeep_governance_body");
+                generalPolicyManagedKeys.forEach((key) => {
+                    delete normalized[key];
+                });
+                Object.entries(presetValues).forEach(([key, value]) => {
+                    normalized[key] = cloneJsonValue(value, value);
+                });
 
-            const items = [
-                {
-                    title: t("profiles.wizard_upkeep_governance_item_updates"),
-                    copy: updateCount > 0
-                        ? t("profiles.wizard_upkeep_governance_item_updates_ready").replace("{count}", String(updateCount))
-                        : (hasManagedUpkeep
-                            ? t("profiles.wizard_upkeep_governance_item_updates_needed")
-                            : t("profiles.wizard_upkeep_governance_item_updates_optional")),
-                    tone: updateCount > 0 ? "ready" : (hasManagedUpkeep ? "strict" : "default"),
-                    target: "policy:DisableAppUpdate",
-                },
-                {
-                    title: t("profiles.wizard_upkeep_governance_item_prompts"),
-                    copy: hasBrowserPrompt
-                        ? t("profiles.wizard_upkeep_governance_item_prompts_ready")
-                        : (hasManagedUpkeep
-                            ? t("profiles.wizard_upkeep_governance_item_prompts_needed")
-                            : t("profiles.wizard_upkeep_governance_item_prompts_optional")),
-                    tone: hasBrowserPrompt ? "ready" : (hasManagedUpkeep ? "strict" : "default"),
-                    target: "policy:DontCheckDefaultBrowser",
-                },
-                {
-                    title: t("profiles.wizard_upkeep_governance_item_downloads"),
-                    copy: hasDownloads
-                        ? t("profiles.wizard_upkeep_governance_item_downloads_ready")
-                        : (hasManagedUpkeep
-                            ? t("profiles.wizard_upkeep_governance_item_downloads_needed")
-                            : t("profiles.wizard_upkeep_governance_item_downloads_optional")),
-                    tone: hasDownloads ? "ready" : (hasManagedUpkeep ? "strict" : "default"),
-                    target: "policy:PromptForDownloadLocation",
-                },
-                {
-                    title: t("profiles.wizard_upkeep_governance_item_mix"),
-                    copy: hasDeeperOperationalMix
-                        ? t("profiles.wizard_upkeep_governance_item_mix_ready")
-                        : (hasManagedUpkeep
-                            ? t("profiles.wizard_upkeep_governance_item_mix_optional")
-                            : t("profiles.wizard_upkeep_governance_item_mix_later")),
-                    tone: hasDeeperOperationalMix ? "ready" : (hasManagedUpkeep ? "default" : "default"),
-                    target: "policy:DisableSystemAddonUpdate",
-                },
-            ];
-
-            wizardUpkeepGovernanceListEl.replaceChildren(
-                ...items.map((item) => {
-                    const rowEl = documentRef.createElement("div");
-                    rowEl.className = "wizard-export-plan-item";
-                    rowEl.dataset.planTone = item.tone;
-
-                    const copyEl = documentRef.createElement("div");
-                    copyEl.className = "wizard-export-plan-copy";
-                    const titleEl = documentRef.createElement("div");
-                    titleEl.textContent = item.title;
-                    const bodyEl = documentRef.createElement("div");
-                    bodyEl.className = "wizard-input-hint";
-                    bodyEl.textContent = item.copy;
-                    copyEl.append(titleEl, bodyEl);
-
-                    const actionEl = documentRef.createElement("button");
-                    actionEl.type = "button";
-                    actionEl.className = "button-base ghost-button wizard-export-plan-action";
-                    actionEl.dataset.settingsJumpTarget = item.target;
-                    actionEl.textContent = t("profiles.wizard_export_open");
-
-                    rowEl.append(copyEl, actionEl);
-                    return rowEl;
-                }),
-            );
-        }
-
-        function renderHomeSurfacesWorkflow(parsed = {}) {
-            if (!wizardHomeSurfacesWorkflowCopyEl || !wizardHomeSurfacesWorkflowListEl) return;
-
-            const resolved = parsed && typeof parsed === "object" ? parsed : {};
-            const homepage = resolved.Homepage && typeof resolved.Homepage === "object" && !Array.isArray(resolved.Homepage)
-                ? resolved.Homepage
-                : {};
-            const firefoxHome = resolved.FirefoxHome && typeof resolved.FirefoxHome === "object" && !Array.isArray(resolved.FirefoxHome)
-                ? resolved.FirefoxHome
-                : {};
-            const homepageConfigured = Boolean(
-                (typeof homepage.URL === "string" && homepage.URL.trim())
-                || (Array.isArray(homepage.Additional) && homepage.Additional.length)
-                || (typeof homepage.StartPage === "string" && homepage.StartPage.trim())
-                || homepage.Locked === true
-            );
-            const landingOverridesConfigured = Boolean(
-                typeof resolved.NewTabPage === "boolean"
-                || (typeof resolved.OverrideFirstRunPage === "string" && resolved.OverrideFirstRunPage.trim())
-                || (typeof resolved.OverridePostUpdatePage === "string" && resolved.OverridePostUpdatePage.trim())
-            );
-            const firefoxHomeConfigured = Object.values(firefoxHome).some((value) => typeof value === "boolean");
-            const activeHomePreset = resolveHomepagePreset(resolved);
-            const activeOverridesPreset = resolveHomeOverridesPreset(resolved);
-            const activeFirefoxHomePreset = resolveFirefoxHomePreset(resolved);
-            const hasManagedHomeExperience = homepageConfigured || landingOverridesConfigured || firefoxHomeConfigured;
-            const hasCoordinatedLandingMix = [
-                activeHomePreset,
-                activeOverridesPreset,
-                activeFirefoxHomePreset,
-            ].filter((value) => value && value !== "defaults").length >= 2;
-
-            wizardHomeSurfacesWorkflowCopyEl.textContent = hasManagedHomeExperience
-                ? t("profiles.wizard_home_surfaces_workflow_active")
-                : t("profiles.wizard_home_surfaces_workflow_body");
-
-            const items = [
-                {
-                    title: t("profiles.wizard_home_surfaces_workflow_item_homepage"),
-                    copy: homepageConfigured
-                        ? t("profiles.wizard_home_surfaces_workflow_item_homepage_ready")
-                        : (hasManagedHomeExperience
-                            ? t("profiles.wizard_home_surfaces_workflow_item_homepage_needed")
-                            : t("profiles.wizard_home_surfaces_workflow_item_homepage_optional")),
-                    tone: homepageConfigured ? "ready" : (hasManagedHomeExperience ? "strict" : "default"),
-                    target: "field:wizard-homepage-url",
-                },
-                {
-                    title: t("profiles.wizard_home_surfaces_workflow_item_landing"),
-                    copy: landingOverridesConfigured
-                        ? t("profiles.wizard_home_surfaces_workflow_item_landing_ready")
-                        : (hasManagedHomeExperience
-                            ? t("profiles.wizard_home_surfaces_workflow_item_landing_needed")
-                            : t("profiles.wizard_home_surfaces_workflow_item_landing_optional")),
-                    tone: landingOverridesConfigured ? "ready" : (hasManagedHomeExperience ? "strict" : "default"),
-                    target: "field:wizard-new-tab-page",
-                },
-                {
-                    title: t("profiles.wizard_home_surfaces_workflow_item_cards"),
-                    copy: firefoxHomeConfigured
-                        ? t("profiles.wizard_home_surfaces_workflow_item_cards_ready")
-                        : (hasManagedHomeExperience
-                            ? t("profiles.wizard_home_surfaces_workflow_item_cards_needed")
-                            : t("profiles.wizard_home_surfaces_workflow_item_cards_optional")),
-                    tone: firefoxHomeConfigured ? "ready" : (hasManagedHomeExperience ? "strict" : "default"),
-                    target: "field:firefox-home-search",
-                },
-                {
-                    title: t("profiles.wizard_home_surfaces_workflow_item_mix"),
-                    copy: hasCoordinatedLandingMix
-                        ? t("profiles.wizard_home_surfaces_workflow_item_mix_ready")
-                        : (hasManagedHomeExperience
-                            ? t("profiles.wizard_home_surfaces_workflow_item_mix_optional")
-                            : t("profiles.wizard_home_surfaces_workflow_item_mix_later")),
-                    tone: hasCoordinatedLandingMix ? "ready" : "default",
-                    target: "field:wizard-override-first-run",
-                },
-            ];
-
-            wizardHomeSurfacesWorkflowListEl.replaceChildren(
-                ...items.map((item) => {
-                    const rowEl = documentRef.createElement("div");
-                    rowEl.className = "wizard-export-plan-item";
-                    rowEl.dataset.planTone = item.tone;
-
-                    const copyEl = documentRef.createElement("div");
-                    copyEl.className = "wizard-export-plan-copy";
-                    const titleEl = documentRef.createElement("div");
-                    titleEl.textContent = item.title;
-                    const bodyEl = documentRef.createElement("div");
-                    bodyEl.className = "wizard-input-hint";
-                    bodyEl.textContent = item.copy;
-                    copyEl.append(titleEl, bodyEl);
-
-                    const actionEl = documentRef.createElement("button");
-                    actionEl.type = "button";
-                    actionEl.className = "button-base ghost-button wizard-export-plan-action";
-                    actionEl.dataset.settingsJumpTarget = item.target;
-                    actionEl.textContent = t("profiles.wizard_export_open");
-
-                    rowEl.append(copyEl, actionEl);
-                    return rowEl;
-                }),
-            );
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                setManualSectionStatus(
+                    wizardGeneralPolicySectionStatusEl,
+                    getGeneralPolicySectionStatus(normalized),
+                );
+                renderPresetButtonState(
+                    generalPolicyPresetButtons,
+                    resolveGeneralPolicyPreset(normalized),
+                    "generalPolicyPreset",
+                );
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
+            }
         }
 
         function buildFirefoxHomeDecisionSummary(firefoxHome) {
@@ -610,7 +469,7 @@
                 const mode = typeof resolvedProxy.Mode === "string" ? resolvedProxy.Mode : "";
                 return Object.prototype.hasOwnProperty.call(proxyPresets, mode) ? mode : "";
             })();
-            renderPresetButtonState(proxyPresetButtons, activeProxyPreset);
+            renderPresetButtonState(proxyPresetButtons, activeProxyPreset, "proxyPreset");
             setManualSectionStatus(wizardProxySectionStatusEl, getProxyManualSectionStatus(resolvedProxy));
             setProxyGroupVisibility(typeof resolvedProxy.Mode === "string" ? resolvedProxy.Mode : "", false);
         }
@@ -741,107 +600,6 @@
             );
         }
 
-        function renderTrustAuthWorkflow(parsed = {}) {
-            if (!wizardTrustAuthWorkflowCopyEl || !wizardTrustAuthWorkflowListEl) return;
-
-            const resolved = parsed && typeof parsed === "object" ? parsed : {};
-            const authentication = resolved.Authentication && typeof resolved.Authentication === "object" && !Array.isArray(resolved.Authentication)
-                ? resolved.Authentication
-                : {};
-            const certificates = resolved.Certificates && typeof resolved.Certificates === "object" && !Array.isArray(resolved.Certificates)
-                ? resolved.Certificates
-                : {};
-            const trustedHostRuleCount = [
-                Array.isArray(authentication.SPNEGO) ? authentication.SPNEGO.length : 0,
-                Array.isArray(authentication.Delegated) ? authentication.Delegated.length : 0,
-                Array.isArray(authentication.NTLM) ? authentication.NTLM.length : 0,
-                authentication.AllowNonFQDN === true ? 1 : 0,
-                authentication.AllowProxies === true ? 1 : 0,
-            ].reduce((sum, count) => sum + count, 0);
-            const signInPostureManaged = resolved.WindowsSSO === true
-                || authentication.Locked === true
-                || authentication.PrivateBrowsing === true;
-            const enterpriseRootsEnabled = certificates.ImportEnterpriseRoots === true;
-            const certificateFileCount = Array.isArray(certificates.Install) ? certificates.Install.length : 0;
-            const hasEnterpriseFootprint = signInPostureManaged
-                || trustedHostRuleCount > 0
-                || enterpriseRootsEnabled
-                || certificateFileCount > 0;
-
-            wizardTrustAuthWorkflowCopyEl.textContent = hasEnterpriseFootprint
-                ? t("profiles.wizard_trust_auth_workflow_active")
-                : t("profiles.wizard_trust_auth_workflow_body");
-
-            const items = [
-                {
-                    title: t("profiles.wizard_trust_auth_workflow_signin"),
-                    copy: signInPostureManaged
-                        ? t("profiles.wizard_trust_auth_workflow_signin_ready")
-                        : (hasEnterpriseFootprint
-                            ? t("profiles.wizard_trust_auth_workflow_signin_needed")
-                            : t("profiles.wizard_trust_auth_workflow_signin_optional")),
-                    tone: signInPostureManaged ? "ready" : (hasEnterpriseFootprint ? "strict" : "default"),
-                    target: "policy:WindowsSSO",
-                },
-                {
-                    title: t("profiles.wizard_trust_auth_workflow_hosts"),
-                    copy: trustedHostRuleCount > 0
-                        ? t("profiles.wizard_trust_auth_workflow_hosts_ready").replace("{count}", String(trustedHostRuleCount))
-                        : (hasEnterpriseFootprint
-                            ? t("profiles.wizard_trust_auth_workflow_hosts_needed")
-                            : t("profiles.wizard_trust_auth_workflow_hosts_optional")),
-                    tone: trustedHostRuleCount > 0 ? "ready" : (hasEnterpriseFootprint ? "strict" : "default"),
-                    target: "policy:Authentication",
-                },
-                {
-                    title: t("profiles.wizard_trust_auth_workflow_roots"),
-                    copy: enterpriseRootsEnabled
-                        ? t("profiles.wizard_trust_auth_workflow_roots_ready")
-                        : (hasEnterpriseFootprint
-                            ? t("profiles.wizard_trust_auth_workflow_roots_needed")
-                            : t("profiles.wizard_trust_auth_workflow_roots_optional")),
-                    tone: enterpriseRootsEnabled ? "ready" : (hasEnterpriseFootprint ? "strict" : "default"),
-                    target: "policy:Certificates",
-                },
-                {
-                    title: t("profiles.wizard_trust_auth_workflow_files"),
-                    copy: certificateFileCount > 0
-                        ? t("profiles.wizard_trust_auth_workflow_files_ready").replace("{count}", String(certificateFileCount))
-                        : (hasEnterpriseFootprint
-                            ? t("profiles.wizard_trust_auth_workflow_files_needed")
-                            : t("profiles.wizard_trust_auth_workflow_files_optional")),
-                    tone: certificateFileCount > 0 ? "ready" : (hasEnterpriseFootprint ? "strict" : "default"),
-                    target: "policy:Certificates",
-                },
-            ];
-
-            wizardTrustAuthWorkflowListEl.replaceChildren(
-                ...items.map((item) => {
-                    const rowEl = documentRef.createElement("div");
-                    rowEl.className = "wizard-export-plan-item";
-                    rowEl.dataset.planTone = item.tone;
-
-                    const copyEl = documentRef.createElement("div");
-                    copyEl.className = "wizard-export-plan-copy";
-                    const titleEl = documentRef.createElement("div");
-                    titleEl.textContent = item.title;
-                    const bodyEl = documentRef.createElement("div");
-                    bodyEl.className = "wizard-input-hint";
-                    bodyEl.textContent = item.copy;
-                    copyEl.append(titleEl, bodyEl);
-
-                    const actionEl = documentRef.createElement("button");
-                    actionEl.type = "button";
-                    actionEl.className = "button-base ghost-button wizard-export-plan-action";
-                    actionEl.dataset.settingsJumpTarget = item.target;
-                    actionEl.textContent = t("profiles.wizard_export_open");
-
-                    rowEl.append(copyEl, actionEl);
-                    return rowEl;
-                }),
-            );
-        }
-
         function applyNetworkEnterprisePreset(presetKey) {
             const editor = getEditor();
             if (!editor) return;
@@ -862,7 +620,6 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 renderNetworkEnterpriseSectionStatus(normalized);
-                renderTrustAuthWorkflow(normalized);
                 setStatus(t("profiles.wizard_policy_applied"), "info");
             } catch (e) {
                 setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
@@ -943,6 +700,56 @@
             return "defaults";
         }
 
+        function resolveHomepageSharedPreset(parsed) {
+            const homepage = parsed?.Homepage && typeof parsed.Homepage === "object" && !Array.isArray(parsed.Homepage)
+                ? parsed.Homepage
+                : {};
+            const startPage = typeof homepage.StartPage === "string" ? homepage.StartPage.trim() : "";
+            const locked = homepage.Locked === true || startPage === "homepage-locked";
+
+            if (startPage === "previous-session") return "return_session";
+            if (locked) return "portal_locked";
+            return "";
+        }
+
+        function applyHomepagePreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const currentHomepage = parsed?.Homepage && typeof parsed.Homepage === "object" && !Array.isArray(parsed.Homepage)
+                    ? cloneJsonValue(parsed.Homepage, {}) || {}
+                    : {};
+                const nextHomepage = { ...currentHomepage };
+
+                if (presetKey === "defaults") {
+                    delete normalized.Homepage;
+                } else {
+                    if (presetKey === "portal") {
+                        nextHomepage.StartPage = "homepage";
+                        delete nextHomepage.Locked;
+                    } else if (presetKey === "session" || presetKey === "return_session") {
+                        nextHomepage.StartPage = "previous-session";
+                        delete nextHomepage.Locked;
+                    } else if (presetKey === "locked" || presetKey === "portal_locked") {
+                        nextHomepage.StartPage = "homepage-locked";
+                        nextHomepage.Locked = true;
+                    }
+                    normalized.Homepage = nextHomepage;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderManualHomeAndSearchSectionStatuses(normalized);
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
+            }
+        }
+
         function resolveHomeOverridesPreset(parsed) {
             const hasNewTab = typeof parsed?.NewTabPage === "boolean";
             const hasFirstRun = typeof parsed?.OverrideFirstRunPage === "string" && parsed.OverrideFirstRunPage.trim();
@@ -952,6 +759,40 @@
             if (hasFirstRun || hasPostUpdate) return "first_run";
             if (hasNewTab) return "new_tab";
             return "defaults";
+        }
+
+        function applyHomeOverridesPreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const currentFirstRun = typeof parsed?.OverrideFirstRunPage === "string" && parsed.OverrideFirstRunPage.trim()
+                    ? parsed.OverrideFirstRunPage.trim()
+                    : "https://example.test/first-run";
+
+                delete normalized.NewTabPage;
+                delete normalized.OverrideFirstRunPage;
+                delete normalized.OverridePostUpdatePage;
+
+                if (presetKey === "new_tab") {
+                    normalized.NewTabPage = true;
+                } else if (presetKey === "first_run") {
+                    normalized.OverrideFirstRunPage = currentFirstRun;
+                } else if (presetKey === "managed") {
+                    normalized.NewTabPage = true;
+                    normalized.OverrideFirstRunPage = currentFirstRun;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderManualHomeAndSearchSectionStatuses(normalized);
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
+            }
         }
 
         function resolveSearchDefaultsPreset(parsed) {
@@ -967,6 +808,53 @@
             if (customCount > 0) return "custom_engines";
             if (hiddenCount > 0 || installsBlocked) return "restricted";
             return "managed_default";
+        }
+
+        function applySearchDefaultsPreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const currentSearchEngines = parsed?.SearchEngines && typeof parsed.SearchEngines === "object" && !Array.isArray(parsed.SearchEngines)
+                    ? cloneJsonValue(parsed.SearchEngines, {}) || {}
+                    : {};
+                const nextSearchEngines = { ...currentSearchEngines };
+
+                delete nextSearchEngines.Default;
+                delete nextSearchEngines.Add;
+                delete nextSearchEngines.Remove;
+                delete nextSearchEngines.PreventInstalls;
+
+                if (presetKey === "managed_default") {
+                    nextSearchEngines.Default = currentSearchEngines.Default || "DuckDuckGo";
+                } else if (presetKey === "custom_engines") {
+                    nextSearchEngines.Add = Array.isArray(currentSearchEngines.Add) && currentSearchEngines.Add.length
+                        ? currentSearchEngines.Add
+                        : [{
+                            Name: "Custom engine",
+                            URLTemplate: "https://example.test/search?q={searchTerms}",
+                            Alias: "custom",
+                        }];
+                } else if (presetKey === "restricted") {
+                    nextSearchEngines.PreventInstalls = true;
+                }
+
+                if (Object.keys(nextSearchEngines).length) {
+                    normalized.SearchEngines = nextSearchEngines;
+                } else {
+                    delete normalized.SearchEngines;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderManualHomeAndSearchSectionStatuses(normalized);
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
+            }
         }
 
         function resolveFirefoxSuggestPreset(parsed) {
@@ -986,9 +874,50 @@
             return "managed";
         }
 
+        function applyFirefoxSuggestPreset(presetKey) {
+            const editor = getEditor();
+            if (!editor) return;
+
+            try {
+                const mode = documentRef.getElementById("mode").value;
+                const parsed = fromEditorValue(editor.getValue(), mode);
+                const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
+                const nextFirefoxSuggest = {};
+
+                if (presetKey === "private") {
+                    nextFirefoxSuggest.WebSuggestions = false;
+                } else if (presetKey === "managed") {
+                    nextFirefoxSuggest.WebSuggestions = true;
+                    nextFirefoxSuggest.SponsoredSuggestions = false;
+                } else if (presetKey === "locked_down") {
+                    nextFirefoxSuggest.WebSuggestions = false;
+                    nextFirefoxSuggest.SponsoredSuggestions = false;
+                    nextFirefoxSuggest.ImproveSuggest = false;
+                    nextFirefoxSuggest.Locked = true;
+                }
+
+                if (Object.keys(nextFirefoxSuggest).length) {
+                    normalized.FirefoxSuggest = nextFirefoxSuggest;
+                } else {
+                    delete normalized.FirefoxSuggest;
+                }
+
+                setCurrentRaw(normalized);
+                editor.setValue(toEditorValue(normalized, mode));
+                renderManualHomeAndSearchSectionStatuses(normalized);
+                setStatus(t("profiles.wizard_policy_applied"), "info");
+            } catch (e) {
+                setStatus(t("profiles.error_wizard_network").replace("{detail}", e.message || e), "error");
+            }
+        }
+
         function revealHomeField(targetSelector) {
             const targetEl = documentRef.querySelector(targetSelector);
             if (!targetEl) return;
+            const disclosurePanel = targetEl.closest(".wizard-disclosure-panel");
+            if (disclosurePanel?.hidden) {
+                documentRef.querySelector(`[data-wizard-disclosure-toggle][aria-controls="${disclosurePanel.id}"]`)?.click();
+            }
             targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
             targetEl.classList.add("settings-target-highlight");
             window.setTimeout(() => {
@@ -1169,112 +1098,11 @@
                 .length;
         }
 
-        function renderSearchSurfacesWorkflow(parsed = {}) {
-            if (!wizardSearchSurfacesWorkflowCopyEl || !wizardSearchSurfacesWorkflowListEl) return;
-
-            const resolved = parsed && typeof parsed === "object" ? parsed : {};
-            const searchEngines = resolved.SearchEngines && typeof resolved.SearchEngines === "object" && !Array.isArray(resolved.SearchEngines)
-                ? resolved.SearchEngines
-                : {};
-            const firefoxSuggest = resolved.FirefoxSuggest && typeof resolved.FirefoxSuggest === "object" && !Array.isArray(resolved.FirefoxSuggest)
-                ? resolved.FirefoxSuggest
-                : {};
-            const searchDefaultsConfigured = Boolean(
-                (typeof searchEngines.Default === "string" && searchEngines.Default.trim())
-                || typeof resolved.SearchSuggestEnabled === "boolean"
-                || (typeof resolved.SearchBar === "string" && resolved.SearchBar.trim())
-            );
-            const managedEnginesConfigured = Boolean(
-                (Array.isArray(searchEngines.Add) && searchEngines.Add.length)
-                || (Array.isArray(searchEngines.Remove) && searchEngines.Remove.length)
-                || typeof searchEngines.PreventInstalls === "boolean"
-            );
-            const firefoxSuggestConfigured = Object.values(firefoxSuggest).some((value) => typeof value === "boolean");
-            const activeSearchDefaultsPreset = resolveSearchDefaultsPreset(resolved);
-            const activeFirefoxSuggestPreset = resolveFirefoxSuggestPreset(resolved);
-            const hasManagedSearchExperience = searchDefaultsConfigured || managedEnginesConfigured || firefoxSuggestConfigured;
-            const hasCoordinatedSearchMix = [activeSearchDefaultsPreset, activeFirefoxSuggestPreset]
-                .filter((value) => value && value !== "defaults").length >= 2;
-
-            wizardSearchSurfacesWorkflowCopyEl.textContent = hasManagedSearchExperience
-                ? t("profiles.wizard_search_surfaces_workflow_active")
-                : t("profiles.wizard_search_surfaces_workflow_body");
-
-            const items = [
-                {
-                    title: t("profiles.wizard_search_surfaces_workflow_item_defaults"),
-                    copy: searchDefaultsConfigured
-                        ? t("profiles.wizard_search_surfaces_workflow_item_defaults_ready")
-                        : (hasManagedSearchExperience
-                            ? t("profiles.wizard_search_surfaces_workflow_item_defaults_needed")
-                            : t("profiles.wizard_search_surfaces_workflow_item_defaults_optional")),
-                    tone: searchDefaultsConfigured ? "ready" : (hasManagedSearchExperience ? "strict" : "default"),
-                    target: "field:wizard-search-default-engine",
-                },
-                {
-                    title: t("profiles.wizard_search_surfaces_workflow_item_engines"),
-                    copy: managedEnginesConfigured
-                        ? t("profiles.wizard_search_surfaces_workflow_item_engines_ready")
-                        : (hasManagedSearchExperience
-                            ? t("profiles.wizard_search_surfaces_workflow_item_engines_needed")
-                            : t("profiles.wizard_search_surfaces_workflow_item_engines_optional")),
-                    tone: managedEnginesConfigured ? "ready" : (hasManagedSearchExperience ? "strict" : "default"),
-                    target: "field:wizard-search-default-engine",
-                },
-                {
-                    title: t("profiles.wizard_search_surfaces_workflow_item_suggest"),
-                    copy: firefoxSuggestConfigured
-                        ? t("profiles.wizard_search_surfaces_workflow_item_suggest_ready")
-                        : (hasManagedSearchExperience
-                            ? t("profiles.wizard_search_surfaces_workflow_item_suggest_needed")
-                            : t("profiles.wizard_search_surfaces_workflow_item_suggest_optional")),
-                    tone: firefoxSuggestConfigured ? "ready" : (hasManagedSearchExperience ? "strict" : "default"),
-                    target: "field:firefox-suggest-web",
-                },
-                {
-                    title: t("profiles.wizard_search_surfaces_workflow_item_mix"),
-                    copy: hasCoordinatedSearchMix
-                        ? t("profiles.wizard_search_surfaces_workflow_item_mix_ready")
-                        : (hasManagedSearchExperience
-                            ? t("profiles.wizard_search_surfaces_workflow_item_mix_optional")
-                            : t("profiles.wizard_search_surfaces_workflow_item_mix_later")),
-                    tone: hasCoordinatedSearchMix ? "ready" : "default",
-                    target: "field:wizard-search-suggest",
-                },
-            ];
-
-            wizardSearchSurfacesWorkflowListEl.replaceChildren(
-                ...items.map((item) => {
-                    const rowEl = documentRef.createElement("div");
-                    rowEl.className = "wizard-export-plan-item";
-                    rowEl.dataset.planTone = item.tone;
-
-                    const copyEl = documentRef.createElement("div");
-                    copyEl.className = "wizard-export-plan-copy";
-                    const titleEl = documentRef.createElement("div");
-                    titleEl.textContent = item.title;
-                    const bodyEl = documentRef.createElement("div");
-                    bodyEl.className = "wizard-input-hint";
-                    bodyEl.textContent = item.copy;
-                    copyEl.append(titleEl, bodyEl);
-
-                    const actionEl = documentRef.createElement("button");
-                    actionEl.type = "button";
-                    actionEl.className = "button-base ghost-button wizard-export-plan-action";
-                    actionEl.dataset.settingsJumpTarget = item.target;
-                    actionEl.textContent = t("profiles.wizard_export_open");
-
-                    rowEl.append(copyEl, actionEl);
-                    return rowEl;
-                }),
-            );
-        }
-
         function renderManualHomeAndSearchSectionStatuses(parsed) {
             renderPresetButtonState(generalPolicyPresetButtons, resolveGeneralPolicyPreset(parsed), "generalPolicyPreset");
             setManualSectionStatus(wizardGeneralPolicySectionStatusEl, getGeneralPolicySectionStatus(parsed));
-            renderUpkeepGovernanceWorkflow(parsed);
             renderPresetButtonState(homepagePresetButtons, resolveHomepagePreset(parsed), "homepagePreset");
+            renderPresetButtonState(homepageSharedPresetButtons, resolveHomepageSharedPreset(parsed), "homepageSharedPreset");
             renderPresetButtonState(homeOverridesPresetButtons, resolveHomeOverridesPreset(parsed), "homeOverridesPreset");
             renderPresetButtonState(firefoxHomePresetButtons, resolveFirefoxHomePreset(parsed), "firefoxHomePreset");
             renderPresetButtonState(searchDefaultsPresetButtons, resolveSearchDefaultsPreset(parsed), "searchDefaultsPreset");
@@ -1284,8 +1112,6 @@
             setManualSectionStatus(wizardFirefoxHomeSectionStatusEl, getFirefoxHomeManualSectionStatus(parsed));
             setManualSectionStatus(wizardSearchDefaultsSectionStatusEl, getSearchDefaultsManualSectionStatus(parsed));
             setManualSectionStatus(wizardFirefoxSuggestSectionStatusEl, getFirefoxSuggestManualSectionStatus(parsed));
-            renderHomeSurfacesWorkflow(parsed);
-            renderSearchSurfacesWorkflow(parsed);
             setPanelExpanded(
                 wizardFirefoxHomeFineTuningPanelEl,
                 wizardFirefoxHomeFineTuningToggleEl,
@@ -1315,7 +1141,6 @@
             );
             renderProxySectionStatus(parsed?.Proxy);
             renderNetworkEnterpriseSectionStatus(parsed);
-            renderTrustAuthWorkflow(parsed);
         }
 
         function toggleNetworkEnterprisePanel() {
@@ -1325,10 +1150,8 @@
             try {
                 const parsed = fromEditorValue(editor.getValue(), documentRef.getElementById("mode").value);
                 renderNetworkEnterpriseSectionStatus(parsed && typeof parsed === "object" ? parsed : {});
-                renderTrustAuthWorkflow(parsed && typeof parsed === "object" ? parsed : {});
             } catch {
                 renderNetworkEnterpriseSectionStatus({});
-                renderTrustAuthWorkflow({});
             }
         }
 
@@ -1639,6 +1462,7 @@
         homepagePresetButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.homepagePreset || "defaults";
+                applyHomepagePreset(presetKey);
                 if (presetKey === "session") {
                     revealHomeField('[data-settings-target="field:wizard-homepage-start-page"]');
                     return;
@@ -1649,6 +1473,7 @@
         homepageSharedPresetButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.homepageSharedPreset || "portal_locked";
+                applyHomepagePreset(presetKey);
                 if (presetKey === "return_session") {
                     revealHomeField('[data-settings-target="field:wizard-homepage-start-page"]');
                     return;
@@ -1659,6 +1484,7 @@
         homeOverridesPresetButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.homeOverridesPreset || "defaults";
+                applyHomeOverridesPreset(presetKey);
                 if (presetKey === "new_tab") {
                     revealHomeField('[data-settings-target="field:wizard-new-tab-page"]');
                     return;
@@ -1682,16 +1508,13 @@
         searchDefaultsPresetButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.searchDefaultsPreset || "defaults";
+                applySearchDefaultsPreset(presetKey);
                 if (presetKey === "managed_default") {
                     revealSearchField('[data-settings-target="field:wizard-search-default-engine"]');
                     return;
                 }
                 if (presetKey === "custom_engines") {
-                    revealSearchField("#wizard-search-engine-list", {
-                        expandPanel: true,
-                        toggleEl: wizardSearchDefaultsFineTuningToggleEl,
-                        panelEl: wizardSearchDefaultsFineTuningPanelEl,
-                    });
+                    revealSearchField("#wizard-step-4-managed-engines");
                     return;
                 }
                 if (presetKey === "restricted") {
@@ -1708,6 +1531,7 @@
         firefoxSuggestPresetButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.firefoxSuggestPreset || "defaults";
+                applyFirefoxSuggestPreset(presetKey);
                 if (presetKey === "locked_down") {
                     revealSearchField('[data-settings-target="field:firefox-suggest-locked"]', {
                         expandPanel: true,
@@ -1722,6 +1546,7 @@
         generalPolicyPresetButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 const presetKey = button.dataset.generalPolicyPreset || "defaults";
+                applyGeneralPolicyPreset(presetKey);
                 if (presetKey === "updates") {
                     revealSearchField('[data-settings-target="policy:DisableAppUpdate"]');
                     return;

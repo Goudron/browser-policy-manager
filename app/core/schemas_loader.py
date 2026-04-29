@@ -161,9 +161,9 @@ def load_schema(profile: str, *, allow_stub_fallback: bool = False) -> dict[str,
 
     # Optional fallback: generate a minimal schema and persist it to cache for reproducibility.
     title = (
-        "Firefox ESR 140.9 Policies (stub)"
-        if profile.startswith("esr-140.9")
-        else "Firefox Release 149 Policies (stub)"
+        "Firefox ESR 140.10 Policies (stub)"
+        if profile.startswith("esr-140.10")
+        else "Firefox Release 150 Policies (stub)"
     )
     stub = _minimal_schema(title)
     _write_json_file(cache_path, stub)

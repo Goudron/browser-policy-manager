@@ -82,6 +82,11 @@ pytestdebug.log
 *.tar.gz
 *.orig
 *.rej
+/artifacts/
+/tmp_screens/
+
+# Official source PDFs are local curation inputs; commit derived YAML metadata instead.
+/app/compliance/firefox/cis/source_materials/*.pdf
 
 # -----------------------------------------------------------------------------
 # Database files (local dev/test artifacts)

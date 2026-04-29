@@ -3,11 +3,36 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
+from app.compliance.firefox.cis.generation import build_cis_layer
+from app.compliance.firefox.cis.merge import merge_base_with_cis_layer
+from app.compliance.firefox.cis.validation import BASE_DIR as CIS_BASE_DIR
+from app.compliance.firefox.cis.validation import load_yaml_file
 from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 from app.services.policy_schema_service import get_policy_definition
 
 SUPPORTED_POLICY_CHANNELS = SUPPORTED_SCHEMA_CHANNELS
 SCHEMA_ENABLED = "__SCHEMA_ENABLED__"
+
+CIS_LAYER_NONE = "none"
+CIS_LAYER_LEVEL_1 = "cis_l1"
+CIS_LAYER_LEVEL_2 = "cis_l2"
+CIS_LAYER_OPTIONS: dict[str, dict[str, Any]] = {
+    CIS_LAYER_NONE: {
+        "level": None,
+        "label_key": "profiles.wizard_cis_none_title",
+        "summary_key": "profiles.wizard_cis_none_summary",
+    },
+    CIS_LAYER_LEVEL_1: {
+        "level": 1,
+        "label_key": "profiles.wizard_cis_l1_title",
+        "summary_key": "profiles.wizard_cis_l1_summary",
+    },
+    CIS_LAYER_LEVEL_2: {
+        "level": 2,
+        "label_key": "profiles.wizard_cis_l2_title",
+        "summary_key": "profiles.wizard_cis_l2_summary",
+    },
+}
 
 _LOCKED_ENTERPRISE_HOME: dict[str, Any] = {
     "Search": True,
@@ -55,6 +80,14 @@ _BLOCK_ALL_EXTENSIONS: dict[str, Any] = {
     "*": {
         "installation_mode": "blocked",
     }
+}
+
+_CLASSROOM_KIOSK_EXTENSIONS: dict[str, Any] = {
+    **_BLOCK_ALL_EXTENSIONS,
+    "uBlock0@raymondhill.net": {
+        "installation_mode": "force_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi",
+    },
 }
 
 _LOCKED_POPUP_BLOCKING: dict[str, Any] = {
@@ -134,7 +167,7 @@ _STARTER_PRESETS: dict[str, dict[str, Any]] = {
                 "DisableProfileImport": True,
                 "DisableProfileRefresh": True,
                 "PromptForDownloadLocation": True,
-                "ExtensionSettings": _BLOCK_ALL_EXTENSIONS,
+                "ExtensionSettings": _CLASSROOM_KIOSK_EXTENSIONS,
                 "FirefoxHome": _LOCKED_ENTERPRISE_HOME,
                 "FirefoxSuggest": _LOCKED_NO_SUGGEST,
                 "UserMessaging": _LOCKED_NO_USER_MESSAGING,
@@ -304,6 +337,10 @@ def _collect_managed_policy_keys() -> list[str]:
     for preset in _STARTER_PRESETS.values():
         for policy_values in preset.get("policy_values", {}).values():
             keys.update(policy_values.keys())
+    for schema_version in SUPPORTED_POLICY_CHANNELS:
+        for level in (1, 2):
+            keys.update(build_cis_layer(level, schema_version).policies.keys())
+    keys.update({"Homepage", "Proxy"})
     return sorted(keys)
 
 
@@ -342,7 +379,7 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
             "policy_values": {
                 "default": _resolve_policy_values_for_channel(
                     preset.get("policy_values", {}).get("default", {}),
-                    "release-149",
+                    "release-150",
                 ),
             },
             "homepage": deepcopy(preset.get("homepage", {})),
@@ -361,6 +398,7 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
             )
         resolved_presets[preset_key] = resolved_preset
 
+    compliance_presets = _build_compliance_presets()
     quick_policy_enabled_values = {
         "DisablePocket": {
             schema_version: _resolve_schema_enabled_value("DisablePocket", schema_version)
@@ -371,6 +409,9 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
     return {
         "managed_policy_keys": _collect_managed_policy_keys(),
         "presets": resolved_presets,
+        "compliance_layers": deepcopy(CIS_LAYER_OPTIONS),
+        "compliance_merged_presets": compliance_presets,
+        "compliance_metadata": _load_cis_benchmark_metadata(),
         "quick_policy_enabled_values": quick_policy_enabled_values,
     }
 
@@ -402,3 +443,70 @@ def build_wizard_starter_document(
         document["Proxy"] = proxy
 
     return document
+
+
+def _build_compliance_presets() -> dict[str, dict[str, dict[str, Any]]]:
+    presets: dict[str, dict[str, dict[str, Any]]] = {}
+    cis_layers = {
+        (schema_version, level): build_cis_layer(level, schema_version)
+        for schema_version in SUPPORTED_POLICY_CHANNELS
+        for level in (1, 2)
+    }
+
+    for starter_key in _STARTER_PRESETS:
+        layer_variants: dict[str, dict[str, Any]] = {}
+        for layer_key, layer_config in CIS_LAYER_OPTIONS.items():
+            schema_variants: dict[str, Any] = {}
+            for schema_version in SUPPORTED_POLICY_CHANNELS:
+                base_document = build_wizard_starter_document(starter_key, schema_version)
+                if layer_key == CIS_LAYER_NONE or starter_key == "keep_current":
+                    schema_variants[schema_version] = {
+                        "policy_values": deepcopy(base_document),
+                        "summary": {},
+                        "review_required": 0,
+                    }
+                    continue
+
+                cis_layer = cis_layers[(schema_version, int(layer_config["level"]))]
+                merge_result = merge_base_with_cis_layer(
+                    base_document,
+                    cis_layer,
+                    base_label=starter_key,
+                    cis_label=layer_key,
+                )
+                schema_variants[schema_version] = {
+                    "policy_values": merge_result.effective_policies,
+                    "summary": merge_result.summary,
+                    "decisions": [
+                        {
+                            "path": decision.to_dict()["path"],
+                            "decision": decision.decision,
+                            "selected_source": decision.selected_source,
+                            "recommendation_ids": list(decision.recommendation_ids),
+                            "review_required": decision.review_required,
+                            "reason": decision.reason,
+                        }
+                        for decision in merge_result.decisions
+                    ],
+                    "review_required": merge_result.summary.get("review_required", 0),
+                }
+            layer_variants[layer_key] = schema_variants
+        presets[starter_key] = layer_variants
+
+    return presets
+
+
+def _load_cis_benchmark_metadata() -> dict[str, Any]:
+    sources = load_yaml_file(CIS_BASE_DIR / "sources.yaml")
+    benchmarks = sources.get("benchmarks", [])
+    if not isinstance(benchmarks, list) or not benchmarks:
+        return {}
+    benchmark = benchmarks[0] if isinstance(benchmarks[0], dict) else {}
+    return {
+        "benchmark_id": benchmark.get("id"),
+        "upstream_name": benchmark.get("upstream_name"),
+        "upstream_version": benchmark.get("upstream_version"),
+        "exact_release_date": benchmark.get("exact_release_date"),
+        "source_license": benchmark.get("source_license"),
+        "source_terms_url": benchmark.get("source_terms_url"),
+    }

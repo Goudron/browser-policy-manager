@@ -144,6 +144,20 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "recommended": True,
         "tags": ["search", "suggest"],
     },
+    "GenerativeAI": {
+        "section": "ai_smart",
+        "subsection": "availability",
+        "complexity": "basic",
+        "recommended": True,
+        "tags": ["ai", "smart-features"],
+    },
+    "AIControls": {
+        "section": "ai_smart",
+        "subsection": "availability",
+        "complexity": "basic",
+        "recommended": True,
+        "tags": ["ai", "smart-features", "feature-controls"],
+    },
     "Homepage": {
         "section": "home_startup",
         "subsection": "homepage",
@@ -181,6 +195,12 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "subsection": "network_privacy",
         "complexity": "advanced",
         "tags": ["privacy", "network"],
+    },
+    "IPProtectionAvailable": {
+        "section": "privacy_security",
+        "subsection": "network_privacy",
+        "complexity": "basic",
+        "tags": ["privacy", "network", "vpn"],
     },
     "OfferToSaveLogins": {
         "section": "privacy_security",
@@ -268,6 +288,13 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "complexity": "advanced",
         "recommended": True,
         "tags": ["messaging", "surfaces"],
+    },
+    "VisualSearchEnabled": {
+        "section": "ai_smart",
+        "subsection": "surfaces",
+        "complexity": "basic",
+        "recommended": True,
+        "tags": ["ai", "visual-search", "smart-features"],
     },
     "WebsiteFilter": {
         "section": "extensions_integrations",

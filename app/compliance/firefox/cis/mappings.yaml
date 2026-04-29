@@ -1,0 +1,826 @@
+benchmark_id: cis-firefox-esr-gpo
+upstream_version: 1.0.0
+official_source_status: imported
+mappings:
+- recommendation_id: 1.1.1.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - InstallAddonsPermission
+    - Default
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.2.1
+  status: mapped
+  confidence: medium
+  targets:
+  - kind: policy
+    path:
+    - Authentication
+    - NTLM
+    value: []
+    merge_rule: empty_allowlist_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Enterprise policy represents allowed NTLM origins as a list; an empty list allows none.
+    review_note: Confirm runtime behavior for an explicitly empty NTLM allowlist.
+- recommendation_id: 1.1.5.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SanitizeOnShutdown
+    - Sessions
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.5.2
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SanitizeOnShutdown
+    - History
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.5.3
+  status: needs_research
+  confidence: medium
+  targets: []
+  notes:
+    mapping_reason: CIS GPO uses SanitizeOnShutdown:Downloads, but current Mozilla policy schemas do not expose an equivalent
+      Downloads member.
+    review_note: Research whether a preference-level equivalent is required or whether History covers download history in
+      current Firefox behavior.
+- recommendation_id: 1.1.5.4
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SanitizeOnShutdown
+    - FormData
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.5.5
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SanitizeOnShutdown
+    - Locked
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.6.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - Cookies
+    - Behavior
+    value: reject-tracker-and-partition-foreign
+    merge_rule: cookie_behavior_rank
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.6.2
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - Cookies
+    - BehaviorPrivateBrowsing
+    value: reject-tracker-and-partition-foreign
+    merge_rule: cookie_behavior_rank
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.7.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisabledCiphers
+    - TLS_RSA_WITH_3DES_EDE_CBC_SHA
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.9.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - EncryptedMediaExtensions
+    - Locked
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.10.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - ExtensionUpdate
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.12.1
+  status: deprecated_or_removed
+  confidence: high
+  targets: []
+  notes:
+    mapping_reason: FlashPlugin policy is absent from supported Firefox schemas and Flash support is obsolete.
+    review_note: Keep the CIS recommendation in source data for traceability, but do not generate a modern Firefox policy
+      target.
+- recommendation_id: 1.1.15.3.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - Permissions
+    - Location
+    - BlockNewRequests
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.15.3.2
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - Permissions
+    - Location
+    - Locked
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.17.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - PopupBlocking
+    - Default
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.17.2
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - PopupBlocking
+    - Locked
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.18.1
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - browser.safebrowsing.malware.enabled
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.2
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - browser.safebrowsing.phishing.enabled
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.3
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - browser.search.update
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.4
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - dom.allow_scripts_to_close_windows
+    value:
+      Value: false
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.5
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - dom.disable_window_flip
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.6
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - dom.disable_window_move_resize
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.7
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - extensions.blocklist.enabled
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.8
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - media.peerconnection.enabled
+    value:
+      Value: false
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.9
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - network.IDN_show_punycode
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.18.10
+  status: preference_mapped
+  confidence: high
+  targets:
+  - kind: preference
+    path:
+    - security.mixed_content.block_active_content
+    value:
+      Value: true
+      Status: locked
+      Type: boolean
+    merge_rule: preference_locked_value
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped through Firefox Preferences policy because CIS marks this GPO section as deprecated.
+- recommendation_id: 1.1.19.1
+  status: mapped
+  confidence: medium
+  targets:
+  - kind: policy
+    path:
+    - Proxy
+    - Mode
+    value: none
+    merge_rule: proxy_mode_rank
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+    review_note: Operational environments may require a proxy; merge engine should treat this as an operational conflict.
+- recommendation_id: 1.1.19.2
+  status: mapped
+  confidence: medium
+  targets:
+  - kind: policy
+    path:
+    - Proxy
+    - Locked
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Mapped to Proxy.Locked based on CIS remediation path.
+    review_note: CIS audit registry path appears to reference EnableTrackingProtection:Locked; verify against ADMX template.
+- recommendation_id: 1.1.20.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SearchSuggestEnabled
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.22.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - EnableTrackingProtection
+    - Cryptomining
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.22.2
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - EnableTrackingProtection
+    - Locked
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.22.3
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - EnableTrackingProtection
+    - EmailTracking
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.22.4
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - EnableTrackingProtection
+    - Value
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.22.5
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - EnableTrackingProtection
+    - Fingerprinting
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.23.1
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - UserMessaging
+    - ExtensionRecommendations
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.24
+  status: mapped
+  confidence: medium
+  targets:
+  - kind: policy
+    path:
+    - AppAutoUpdate
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+    review_note: Existing BPM base presets may disable updates for controlled deployment; merge engine must compare this as
+      update-governance, not a simple hardening boolean.
+- recommendation_id: 1.1.25
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - BackgroundAppUpdate
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.26
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableDeveloperTools
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.27
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableFeedbackCommands
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.28
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableFirefoxAccounts
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.29
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableFirefoxStudies
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.30
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableForgetButton
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.31
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableFormHistory
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.32
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisablePocket
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.33
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisablePrivateBrowsing
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.34
+  status: mapped
+  confidence: medium
+  targets:
+  - kind: policy
+    path:
+    - DisableSystemAddonUpdate
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+    review_note: Existing BPM base presets disable system add-on updates; merge engine must treat CIS update enablement as
+      update-governance, not always stricter.
+- recommendation_id: 1.1.35
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - DisableTelemetry
+    value: true
+    merge_rule: boolean_true_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.36
+  status: mapped
+  confidence: medium
+  targets:
+  - kind: policy
+    path:
+    - DisableAppUpdate
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+    review_note: Existing BPM base presets may disable app updates for controlled deployment; merge engine must treat this
+      as update-governance, not always stricter.
+- recommendation_id: 1.1.37
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SSLVersionMax
+    value: tls1.3
+    merge_rule: tls_version_max_rank
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.38
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - SSLVersionMin
+    value: tls1.2
+    merge_rule: tls_version_min_rank
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.39
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - NetworkPrediction
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.40
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - NewTabPage
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.41
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - OfferToSaveLogins
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.
+- recommendation_id: 1.1.42
+  status: mapped
+  confidence: high
+  targets:
+  - kind: policy
+    path:
+    - PasswordManagerEnabled
+    value: false
+    merge_rule: boolean_false_is_stricter
+    schema_channels:
+      esr-140.10: valid
+      release-150: valid
+  notes:
+    mapping_reason: Direct Firefox Enterprise Policy equivalent.

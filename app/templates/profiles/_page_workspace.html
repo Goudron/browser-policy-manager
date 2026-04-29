@@ -1,3 +1,5 @@
+{% from "profiles/_wizard_macros.html" import render_doc_placeholder with context %}
+
 <div class="app-layout">
     <main class="workspace-column space-y-4">
         <section id="library-panel"
@@ -34,6 +36,34 @@
                     title="{{ tr('profiles.reload') }}" data-i18n-title="profiles.reload">
                     <span data-i18n="profiles.reload">{{ tr("profiles.reload") }}</span>
                 </button>
+                <a id="create-profile-link"
+                    href="/profiles/new"
+                    class="button-base primary-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium"
+                    title="{{ tr('profiles.create') }}"
+                    data-i18n-title="profiles.create">
+                    <span data-i18n="profiles.create">{{ tr("profiles.create") }}</span>
+                </a>
+                <button id="import-firefox-policies"
+                    type="button"
+                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    title="{{ tr('profiles.import_firefox_policies_json') }}"
+                    data-i18n-title="profiles.import_firefox_policies_json"
+                    aria-describedby="import-firefox-policies-status">
+                    <span data-i18n="profiles.import_firefox_policies_json">{{ tr("profiles.import_firefox_policies_json") }}</span>
+                </button>
+                <input
+                    id="import-firefox-policies-file"
+                    class="support-hidden"
+                    type="file"
+                    accept=".json,application/json"
+                    aria-label="{{ tr('profiles.import_firefox_policies_json') }}" />
+            </div>
+            <div
+                id="import-firefox-policies-status"
+                class="support-hidden"
+                aria-live="polite"
+                data-i18n="profiles.import_firefox_policies_ready">
+                {{ tr("profiles.import_firefox_policies_ready") }}
             </div>
 
             <div class="support-hidden">
@@ -89,6 +119,11 @@
                         <div class="section-kicker" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</div>
                         <p class="profile-lifecycle-copy" id="profile-lifecycle-copy" role="status" aria-live="polite" data-i18n="profiles.lifecycle_review_body">{{ tr("profiles.lifecycle_review_body") }}</p>
                         <div class="wizard-export-plan-list" id="profile-lifecycle-list" role="list"></div>
+                    </div>
+                    <div class="surface-soft-box profile-compliance-panel" id="profile-compliance-panel" aria-labelledby="profile-compliance-copy" hidden>
+                        <div class="section-kicker" data-i18n="profiles.compliance_summary_title">{{ tr("profiles.compliance_summary_title") }}</div>
+                        <p class="profile-compliance-copy" id="profile-compliance-copy" role="status" aria-live="polite" data-i18n="profiles.compliance_summary_body">{{ tr("profiles.compliance_summary_body") }}</p>
+                        <div class="wizard-export-plan-list" id="profile-compliance-list" role="list"></div>
                     </div>
                     <div class="workspace-scope-switch surface-soft-box" id="workspace-scope-switch">
                         <div class="workspace-scope-copy">
@@ -211,7 +246,7 @@
             </div>
         </section>
 
-        <div class="content-grid grid gap-4">
+        <div class="content-grid grid gap-4{% if profiles_template_kind != 'advanced' %} support-hidden{% endif %}">
             <section
                 id="advanced-context-panel"
                 data-workspace-scope-panel="advanced"
@@ -230,6 +265,15 @@
                         data-i18n="profiles.advanced_context_return">
                         {{ tr("profiles.advanced_context_return") }}
                     </button>
+                    {% if return_url %}
+                    <a
+                        id="advanced-return-link"
+                        href="{{ return_url }}"
+                        class="button-base ghost-button"
+                        data-i18n="profiles.advanced_context_return">
+                        {{ tr("profiles.advanced_context_return") }}
+                    </a>
+                    {% endif %}
                 </div>
                 <ul id="advanced-context-list" class="advanced-context-list" role="list" hidden></ul>
                 <div id="advanced-context-empty" class="advanced-context-empty surface-soft-box">
@@ -318,13 +362,7 @@
                             {% endfor %}
                         </select>
                     </label>
-                    <label>
-                        <div class="field-label mb-1" data-i18n="profiles.mode_label">{{ tr("profiles.mode_label") }}</div>
-                        <select id="mode" class="soft-input w-full rounded-2xl px-3 py-3 text-sm">
-                            <option value="json" selected>JSON</option>
-                            <option value="yaml">YAML</option>
-                        </select>
-                    </label>
+                    <input id="mode" type="hidden" value="json" />
                 </div>
                 <div class="advanced-download-strip surface-soft-box" id="advanced-download-strip">
                     <div>
@@ -332,16 +370,6 @@
                         <p class="advanced-download-copy" data-i18n="profiles.advanced_downloads_body">{{ tr("profiles.advanced_downloads_body") }}</p>
                     </div>
                     <div class="advanced-download-actions">
-                        <a id="download-json" href="#" target="_blank"
-                            class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                            data-i18n="profiles.download_json">
-                            {{ tr("profiles.download_json") }}
-                        </a>
-                        <a id="download-yaml" href="#" target="_blank"
-                            class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                            data-i18n="profiles.download_yaml">
-                            {{ tr("profiles.download_yaml") }}
-                        </a>
                         <a id="download-firefox-policies" href="#" target="_blank"
                             class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                             data-i18n="profiles.download_firefox_policies_json">
@@ -367,14 +395,26 @@
                 <div>
                     <div class="section-kicker mb-2" data-i18n="profiles.advanced_handoff_title">{{ tr("profiles.advanced_handoff_title") }}</div>
                     <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.advanced_handoff_body">{{ tr("profiles.advanced_handoff_body") }}</p>
+                    {{ render_doc_placeholder("advanced-editor", "profiles.docs_placeholder_advanced_title", "profiles.docs_placeholder_advanced_body") }}
                 </div>
+                {% if advanced_href %}
+                <a
+                    id="advanced-handoff-open"
+                    href="{{ advanced_href }}"
+                    class="button-base ghost-button"
+                    data-i18n="profiles.advanced_handoff_open">
+                    {{ tr("profiles.advanced_handoff_open") }}
+                </a>
+                {% else %}
                 <button
                     type="button"
+                    id="advanced-handoff-open"
                     class="button-base ghost-button"
-                    data-workspace-scope-target="advanced"
+                    disabled
                     data-i18n="profiles.advanced_handoff_open">
                     {{ tr("profiles.advanced_handoff_open") }}
                 </button>
+                {% endif %}
             </div>
         </section>
 

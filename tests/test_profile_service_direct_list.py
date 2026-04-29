@@ -42,7 +42,7 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     for owner in ("ops@example.org", "sec@example.org"):
         for i in range(2):
             await ProfileService.create(
-                service_session, _mk(owner, "esr-140.9", name_prefix=f"SVC-{i}")
+                service_session, _mk(owner, "esr-140.10", name_prefix=f"SVC-{i}")
             )
     await service_session.commit()
 
@@ -50,7 +50,7 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
         service_session,
         q=None,
         owner="ops@example.org",
-        schema_version="esr-140.9",
+        schema_version="esr-140.10",
         sort="name",
         order="asc",
         limit=2,
@@ -63,7 +63,7 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
         service_session,
         q=None,
         owner=None,
-        schema_version="esr-140.9",
+        schema_version="esr-140.10",
         sort="updated_at",
         order="desc",
         limit=1,
@@ -83,6 +83,13 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     )
     assert isinstance(items3, list)
 
+    filtered_count = await ProfileService.count(
+        service_session,
+        owner="ops@example.org",
+        schema_version="esr-140.10",
+    )
+    assert filtered_count == 2
+
 
 @pytest.mark.anyio
 async def test_service_list_name_query_is_case_insensitive_for_cyrillic(service_session: AsyncSessionAdapter):
@@ -91,7 +98,7 @@ async def test_service_list_name_query_is_case_insensitive_for_cyrillic(service_
         ProfileCreate(
             name="Базовый Корпоративный Профиль",
             description="Unicode search",
-            schema_version="esr-140.9",
+            schema_version="esr-140.10",
             flags={"DisableTelemetry": True},
             owner="ops@example.org",
         ),
@@ -118,7 +125,7 @@ async def test_service_list_name_query_treats_empty_and_whitespace_as_no_filter(
         ProfileCreate(
             name="Базовый Корпоративный Профиль",
             description="Whitespace query",
-            schema_version="esr-140.9",
+            schema_version="esr-140.10",
             flags={"DisableTelemetry": True},
             owner="ops@example.org",
         ),

@@ -5,18 +5,22 @@ from typing import Any
 from .serializer import humanize_identifier
 
 INLINE_EDITOR_POLICY_IDS = {
+    "AIControls",
     "Authentication",
     "Bookmarks",
     "Certificates",
     "Cookies",
     "DNSOverHTTPS",
     "ExtensionSettings",
+    "GenerativeAI",
     "Handlers",
+    "IPProtectionAvailable",
     "InstallAddonsPermission",
     "ManagedBookmarks",
     "Permissions",
     "SanitizeOnShutdown",
     "UserMessaging",
+    "VisualSearchEnabled",
     "WebsiteFilter",
     "WindowsSSO",
 }

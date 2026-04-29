@@ -11,7 +11,7 @@ def _make_profile_payload() -> dict:
     return {
         "name": f"E2E-{unique}",
         "description": "End-to-end lifecycle profile",
-        "schema_version": "esr-140.9",
+        "schema_version": "esr-140.10",
         "owner": "ops@example.org",
         "flags": {
             "DisableTelemetry": True,
@@ -59,25 +59,21 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
 
     # Validate the updated profile payload via the public validation endpoint.
     validate_after = client.post(
-        "/api/validate/esr-140.9",
+        "/api/validate/esr-140.10",
         json={"document": updated["flags"]},
     )
     assert validate_after.status_code == 200, validate_after.text
     assert validate_after.json()["ok"] is True
 
-    # Export the current profile via both public export entry points.
-    export_json = client.get(f"/api/export/profiles/{profile_id}?fmt=json")
-    assert export_json.status_code == 200, export_json.text
-    export_json_body = export_json.json()
-    assert export_json_body["id"] == profile_id
-    assert export_json_body["name"] == payload["name"]
-    assert export_json_body["is_deleted"] is False
-    assert export_json_body["flags"]["DisableTelemetry"] is False
-
-    export_yaml = client.get(f"/api/export/profiles/{profile_id}.yaml")
-    assert export_yaml.status_code == 200, export_yaml.text
-    assert "DisableTelemetry" in export_yaml.text
-    assert "DisablePrivateBrowsing" in export_yaml.text
+    # Export the current profile as Firefox policies.json.
+    export_firefox = client.get(f"/api/export/profiles/{profile_id}/firefox/policies.json")
+    assert export_firefox.status_code == 200, export_firefox.text
+    assert export_firefox.json() == {
+        "policies": {
+            "DisableTelemetry": False,
+            "DisablePrivateBrowsing": True,
+        }
+    }
 
     # Soft-delete the profile and ensure normal reads/exports hide it.
     delete_response = client.delete(f"/api/profiles/{profile_id}")
@@ -86,14 +82,14 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     get_deleted = client.get(f"/api/profiles/{profile_id}")
     assert get_deleted.status_code == 404
 
-    export_hidden = client.get(f"/api/export/profiles/{profile_id}?fmt=json")
+    export_hidden = client.get(f"/api/export/profiles/{profile_id}/firefox/policies.json")
     assert export_hidden.status_code == 404
 
     export_deleted = client.get(
-        f"/api/export/profiles/{profile_id}?fmt=json&include_deleted=true"
+        f"/api/export/profiles/{profile_id}/firefox/policies.json?include_deleted=true"
     )
     assert export_deleted.status_code == 200, export_deleted.text
-    assert export_deleted.json()["is_deleted"] is True
+    assert export_deleted.json()["policies"]["DisablePrivateBrowsing"] is True
 
     # Restore and verify the profile becomes active again.
     restore_response = client.post(f"/api/profiles/{profile_id}/restore")
@@ -108,12 +104,8 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     assert restored_profile["is_deleted"] is False
     assert restored_profile["owner"] == "sec@example.org"
 
-    # Final collection export confirms the restored profile participates in the
-    # canonical export surface.
-    collection_export = client.get(
-        "/api/export/profiles",
-        params={"q": payload["name"], "limit": 5, "offset": 0},
-    )
-    assert collection_export.status_code == 200, collection_export.text
-    items = collection_export.json()["items"]
+    # Final list read confirms the restored profile participates in the library.
+    list_response = client.get("/api/profiles", params={"q": payload["name"]})
+    assert list_response.status_code == 200, list_response.text
+    items = list_response.json()
     assert any(item["id"] == profile_id and item["is_deleted"] is False for item in items)

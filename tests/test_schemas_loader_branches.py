@@ -24,9 +24,9 @@ def test_json_helpers_round_trip(tmp_path):
 
 
 def test_minimal_schema_contains_expected_defaults():
-    schema = loader._minimal_schema("Firefox ESR 140.9 Policies (stub)")
+    schema = loader._minimal_schema("Firefox ESR 140.10 Policies (stub)")
 
-    assert schema["title"] == "Firefox ESR 140.9 Policies (stub)"
+    assert schema["title"] == "Firefox ESR 140.10 Policies (stub)"
     assert schema["type"] == "object"
     assert schema["properties"]["DisableTelemetry"]["type"] == "boolean"
     assert schema["properties"]["DisablePrivateBrowsing"]["type"] == "boolean"
@@ -37,7 +37,7 @@ def test_load_schema_prefers_static_file_over_cache(tmp_path, monkeypatch):
     cache_dir = tmp_path / "cache"
     mozilla_dir = tmp_path / "mozilla"
     policies_dir = tmp_path / "policies"
-    filename = loader.available_profiles()["esr-140.9"]
+    filename = loader.available_profiles()["esr-140.10"]
     static_payload = {"title": "static", "source": "static"}
     cache_payload = {"title": "cache", "source": "cache"}
 
@@ -49,7 +49,7 @@ def test_load_schema_prefers_static_file_over_cache(tmp_path, monkeypatch):
     monkeypatch.setattr(loader, "_MOZILLA_DIR", mozilla_dir)
     monkeypatch.setattr(loader, "_POLICIES_DIR", policies_dir)
 
-    assert loader.load_schema("esr-140.9") == static_payload
+    assert loader.load_schema("esr-140.10") == static_payload
 
 
 def test_load_schema_prefers_raw_mozilla_schema_over_legacy_cache(tmp_path, monkeypatch):
@@ -57,19 +57,19 @@ def test_load_schema_prefers_raw_mozilla_schema_over_legacy_cache(tmp_path, monk
     cache_dir = tmp_path / "cache"
     mozilla_dir = tmp_path / "mozilla"
     policies_dir = tmp_path / "policies"
-    cache_filename = loader.available_profiles()["release-149"]
+    cache_filename = loader.available_profiles()["release-150"]
     mozilla_payload = {"title": "raw", "source": "mozilla"}
     cache_payload = {"title": "cache", "source": "cache"}
 
     loader._write_json_file(cache_dir / cache_filename, cache_payload)
-    loader._write_json_file(mozilla_dir / "release149" / "policies-schema.json", mozilla_payload)
+    loader._write_json_file(mozilla_dir / "release150" / "policies-schema.json", mozilla_payload)
 
     monkeypatch.setattr(loader, "_STATIC_DIR", static_dir)
     monkeypatch.setattr(loader, "_CACHE_DIR", cache_dir)
     monkeypatch.setattr(loader, "_MOZILLA_DIR", mozilla_dir)
     monkeypatch.setattr(loader, "_POLICIES_DIR", policies_dir)
 
-    assert loader.load_schema("release-149") == mozilla_payload
+    assert loader.load_schema("release-150") == mozilla_payload
 
 
 def test_load_schema_uses_cache_when_static_missing(tmp_path, monkeypatch):
@@ -77,7 +77,7 @@ def test_load_schema_uses_cache_when_static_missing(tmp_path, monkeypatch):
     cache_dir = tmp_path / "cache"
     mozilla_dir = tmp_path / "mozilla"
     policies_dir = tmp_path / "policies"
-    filename = loader.available_profiles()["release-149"]
+    filename = loader.available_profiles()["release-150"]
     cache_payload = {"title": "cache-only", "source": "cache"}
 
     loader._write_json_file(cache_dir / filename, cache_payload)
@@ -87,14 +87,14 @@ def test_load_schema_uses_cache_when_static_missing(tmp_path, monkeypatch):
     monkeypatch.setattr(loader, "_MOZILLA_DIR", mozilla_dir)
     monkeypatch.setattr(loader, "_POLICIES_DIR", policies_dir)
 
-    assert loader.load_schema("release-149") == cache_payload
+    assert loader.load_schema("release-150") == cache_payload
 
 
 @pytest.mark.parametrize(
     ("profile", "expected_title"),
     [
-        ("esr-140.9", "Firefox ESR 140.9 Policies (stub)"),
-        ("release-149", "Firefox Release 149 Policies (stub)"),
+        ("esr-140.10", "Firefox ESR 140.10 Policies (stub)"),
+        ("release-150", "Firefox Release 150 Policies (stub)"),
     ],
 )
 def test_load_schema_generates_and_persists_stub_when_missing_when_explicitly_allowed(
@@ -137,7 +137,7 @@ def test_load_schema_raises_when_every_source_is_missing_and_stub_fallback_is_di
     monkeypatch.setattr(loader, "_POLICIES_DIR", policies_dir)
 
     with pytest.raises(loader.SchemaNotFoundError, match="Schema file not found"):
-        loader.load_schema("release-149")
+        loader.load_schema("release-150")
 
 
 def test_normalize_schema_moves_array_enum_to_items():
@@ -186,10 +186,10 @@ def test_load_schema_reads_bundled_raw_json_schema(tmp_path, monkeypatch):
     policies_dir = tmp_path / "policies"
     bundled_schema = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "title": "Release 149 Policies",
+        "title": "Release 150 Policies",
         "type": "object",
         "additionalProperties": False,
-        "x-bpm-channel": "release-149",
+        "x-bpm-channel": "release-150",
         "x-bpm-version": "149.0",
         "x-bpm-source": "fixture",
         "properties": {
@@ -218,7 +218,7 @@ def test_load_schema_reads_bundled_raw_json_schema(tmp_path, monkeypatch):
     }
 
     loader._write_json_file(
-        policies_dir / "firefox-release-149.json",
+        policies_dir / "firefox-release-150.json",
         bundled_schema,
     )
 
@@ -227,7 +227,7 @@ def test_load_schema_reads_bundled_raw_json_schema(tmp_path, monkeypatch):
     monkeypatch.setattr(loader, "_MOZILLA_DIR", mozilla_dir)
     monkeypatch.setattr(loader, "_POLICIES_DIR", policies_dir)
 
-    schema = loader.load_schema("release-149")
+    schema = loader.load_schema("release-150")
 
     assert schema["type"] == "object"
     assert schema["additionalProperties"] is False

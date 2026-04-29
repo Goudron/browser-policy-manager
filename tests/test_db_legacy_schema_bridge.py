@@ -40,6 +40,7 @@ def test_legacy_sqlite_schema_is_renamed_and_completed(tmp_path: Path):
 
         columns = {column["name"] for column in inspector.get_columns("profiles")}
         assert "deleted_at" in columns
+        assert "revision" in columns
 
         index_names = {index["name"] for index in inspector.get_indexes("profiles")}
         assert "ix_profiles_name" in index_names

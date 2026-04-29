@@ -1,241 +1,324 @@
-{% from "profiles/_wizard_macros.html" import render_wizard_schema_shell with context %}
+{% from "profiles/_wizard_macros.html" import render_doc_placeholder, render_wizard_schema_shell with context %}
 
 <section class="wizard-panel" id="wizard-step-8">
-    {{ render_wizard_schema_shell(8) }}
-    <div class="wizard-review">
-        <div class="wizard-summary-card">
-            <div class="section-kicker" data-i18n="profiles.wizard_export_title">{{ tr("profiles.wizard_export_title") }}</div>
-            <p class="wizard-subtitle" data-i18n="profiles.wizard_export_review_body">{{ tr("profiles.wizard_export_review_body") }}</p>
-            <div class="wizard-summary-list">
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_profile_state">{{ tr("profiles.wizard_export_profile_state") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-profile-state" data-i18n="profiles.wizard_export_profile_draft">{{ tr("profiles.wizard_export_profile_draft") }}</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_workspace_state">{{ tr("profiles.wizard_export_workspace_state") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-workspace-state" data-i18n="profiles.signal_saved">{{ tr("profiles.signal_saved") }}</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_validation_state">{{ tr("profiles.wizard_export_validation_state") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-validation-state" data-i18n="profiles.wizard_export_validation_pending">{{ tr("profiles.wizard_export_validation_pending") }}</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_ready_state">{{ tr("profiles.wizard_export_ready_state") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-ready-state" data-i18n="profiles.wizard_export_state_unsaved_new">{{ tr("profiles.wizard_export_state_unsaved_new") }}</span>
-                </div>
+    <div class="wizard-review wizard-export-sections">
+        <section class="wizard-export-section" id="wizard-export-section-ready" aria-labelledby="wizard-export-section-ready-title">
+            <div class="wizard-export-section-heading">
+                <div class="section-kicker" id="wizard-export-section-ready-title" data-i18n="profiles.wizard_export_section_ready_title">{{ tr("profiles.wizard_export_section_ready_title") }}</div>
+                <p class="wizard-subtitle" data-i18n="profiles.wizard_export_section_ready_body">{{ tr("profiles.wizard_export_section_ready_body") }}</p>
             </div>
-            <div class="dock-actions-grid">
-                <button type="button" id="wizard-export-save-action" class="button-base ghost-button" data-i18n="profiles.save">{{ tr("profiles.save") }}</button>
-                <button type="button" id="wizard-export-validate-action" class="button-base ghost-button" data-i18n="profiles.validate">{{ tr("profiles.validate") }}</button>
+            <div class="wizard-actions-card wizard-export-primary-card" id="wizard-export-ready-card">
+                <div class="wizard-export-primary-head">
+                    <div>
+                        <div class="section-kicker" data-i18n="profiles.wizard_export_title">{{ tr("profiles.wizard_export_title") }}</div>
+                        <p class="wizard-subtitle" id="wizard-export-ready-copy" data-i18n="profiles.wizard_export_ready_body">{{ tr("profiles.wizard_export_ready_body") }}</p>
+                    </div>
+                    <div class="wizard-export-technical-alerts" id="wizard-export-technical-alerts" aria-live="polite" hidden>
+                        <button type="button" class="button-base ghost-button wizard-export-technical-alert" id="wizard-export-raw-summary-jump" data-final-review-jump="raw" hidden>
+                            <span data-i18n="profiles.wizard_export_raw_count">{{ tr("profiles.wizard_export_raw_count") }}</span>
+                            <strong id="wizard-export-raw-summary-count">0</strong>
+                        </button>
+                        <button type="button" class="button-base ghost-button wizard-export-technical-alert" id="wizard-export-deprecated-summary-jump" data-final-review-jump="deprecated" hidden>
+                            <span data-i18n="profiles.wizard_export_deprecated_count">{{ tr("profiles.wizard_export_deprecated_count") }}</span>
+                            <strong id="wizard-export-deprecated-summary-count">0</strong>
+                        </button>
+                        <button type="button" class="button-base ghost-button wizard-export-technical-alert" id="wizard-export-unknown-summary-jump" data-final-review-jump="unknown" hidden>
+                            <span data-i18n="profiles.wizard_export_unknown_count">{{ tr("profiles.wizard_export_unknown_count") }}</span>
+                            <strong id="wizard-export-unknown-summary-count">0</strong>
+                        </button>
+                    </div>
+                </div>
+                <div class="wizard-export-primary-grid">
+                    <div class="wizard-summary-list wizard-export-readiness-list">
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_profile_state">{{ tr("profiles.wizard_export_profile_state") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-profile-state" data-i18n="profiles.wizard_export_profile_draft">{{ tr("profiles.wizard_export_profile_draft") }}</span>
+                        </div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_workspace_state">{{ tr("profiles.wizard_export_workspace_state") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-workspace-state" data-i18n="profiles.signal_saved">{{ tr("profiles.signal_saved") }}</span>
+                        </div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_validation_state">{{ tr("profiles.wizard_export_validation_state") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-validation-state" data-i18n="profiles.wizard_export_validation_pending">{{ tr("profiles.wizard_export_validation_pending") }}</span>
+                        </div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_ready_state">{{ tr("profiles.wizard_export_ready_state") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-ready-state" data-i18n="profiles.wizard_export_state_unsaved_new">{{ tr("profiles.wizard_export_state_unsaved_new") }}</span>
+                        </div>
+                    </div>
+                    <div class="wizard-export-primary-actions">
+                        <div class="dock-actions-grid">
+                            <button type="button" id="wizard-export-save-action" class="button-base ghost-button" data-i18n="profiles.save">{{ tr("profiles.save") }}</button>
+                            <button type="button" id="wizard-export-validate-action" class="button-base ghost-button" data-i18n="profiles.validate">{{ tr("profiles.validate") }}</button>
+                            <a id="wizard-export-firefox-policies" href="#"
+                                class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                                data-i18n="profiles.download_firefox_policies_json">
+                                {{ tr("profiles.download_firefox_policies_json") }}
+                            </a>
+                        </div>
+                        <div class="wizard-export-download-hint" id="wizard-export-download-hint" data-i18n="profiles.wizard_export_download_hint_unsaved_new">
+                            {{ tr("profiles.wizard_export_download_hint_unsaved_new") }}
+                        </div>
+                        {% if advanced_href %}
+                        <a
+                            href="{{ advanced_href }}&focus=download"
+                            class="button-base ghost-button"
+                            data-i18n="profiles.advanced_handoff_open">
+                            {{ tr("profiles.advanced_handoff_open") }}
+                        </a>
+                        {% else %}
+                        <button
+                            type="button"
+                            class="button-base ghost-button"
+                            disabled
+                            data-i18n="profiles.advanced_handoff_open">
+                            {{ tr("profiles.advanced_handoff_open") }}
+                        </button>
+                        {% endif %}
+                    </div>
+                    <div class="wizard-export-final-checklist" id="wizard-export-final-checklist">
+                        <div class="wizard-export-plan-group">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_export_next_steps_title">{{ tr("profiles.wizard_export_next_steps_title") }}</div>
+                            <div class="wizard-export-plan-list" id="wizard-export-next-steps" aria-live="polite"></div>
+                        </div>
+                        <div class="wizard-export-plan-group">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_export_ready_now_title">{{ tr("profiles.wizard_export_ready_now_title") }}</div>
+                            <div class="wizard-export-plan-list" id="wizard-export-ready-now" aria-live="polite"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wizard-shell-badges" id="wizard-export-checklist" aria-live="polite"></div>
             </div>
-        </div>
-        <div class="wizard-summary-card" data-workspace-scope-panel="advanced" data-advanced-compatibility-panel>
-            <div class="section-kicker" data-i18n="profiles.wizard_export_compatibility_title">{{ tr("profiles.wizard_export_compatibility_title") }}</div>
-            <p class="wizard-subtitle" data-i18n="profiles.wizard_export_compatibility_body">{{ tr("profiles.wizard_export_compatibility_body") }}</p>
-            <div class="wizard-summary-list">
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_policy_count">{{ tr("profiles.wizard_export_policy_count") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-policy-count">0</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_preferences_count">{{ tr("profiles.wizard_export_preferences_count") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-preferences-count">0</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_raw_count">{{ tr("profiles.wizard_export_raw_count") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-raw-count">0</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-raw-jump" data-final-review-jump="raw" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_deprecated_count">{{ tr("profiles.wizard_export_deprecated_count") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-deprecated-count">0</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-deprecated-jump" data-final-review-jump="deprecated" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_unknown_count">{{ tr("profiles.wizard_export_unknown_count") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-unknown-count">0</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-unknown-jump" data-final-review-jump="unknown" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
+        </section>
+
+        <section class="wizard-export-section" id="wizard-export-section-changes" aria-labelledby="wizard-export-section-changes-title">
+            <div class="wizard-export-section-heading">
+                <div class="section-kicker" id="wizard-export-section-changes-title" data-i18n="profiles.wizard_export_section_changes_title">{{ tr("profiles.wizard_export_section_changes_title") }}</div>
+                <p class="wizard-subtitle" data-i18n="profiles.wizard_export_section_changes_body">{{ tr("profiles.wizard_export_section_changes_body") }}</p>
             </div>
-            <div class="wizard-export-plan-group">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_export_boundary_register_title">{{ tr("profiles.wizard_export_boundary_register_title") }}</div>
-                <div class="wizard-input-hint" data-i18n="profiles.wizard_export_boundary_register_body">{{ tr("profiles.wizard_export_boundary_register_body") }}</div>
-                <div class="wizard-export-plan-list" id="wizard-export-boundary-register">
+            <div class="wizard-actions-card wizard-export-outcome-card">
+                <div class="wizard-export-explainability">
+                    <div class="wizard-export-plan-group">
+                        <div class="field-label mb-1" data-i18n="profiles.wizard_export_included_title">{{ tr("profiles.wizard_export_included_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_export_included_body">{{ tr("profiles.wizard_export_included_body") }}</div>
+                        <div class="wizard-export-plan-list" id="wizard-export-included-now" aria-live="polite"></div>
+                    </div>
+                    <div class="wizard-export-plan-group">
+                        <div class="field-label mb-1" data-i18n="profiles.wizard_export_missing_title">{{ tr("profiles.wizard_export_missing_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_export_missing_body">{{ tr("profiles.wizard_export_missing_body") }}</div>
+                        <div class="wizard-export-plan-list" id="wizard-export-missing-now" aria-live="polite"></div>
+                    </div>
+                    <div class="wizard-export-plan-group">
+                        <div class="field-label mb-1" data-i18n="profiles.wizard_export_review_title">{{ tr("profiles.wizard_export_review_title") }}</div>
+                        <div class="wizard-input-hint" data-i18n="profiles.wizard_export_review_body">{{ tr("profiles.wizard_export_review_body") }}</div>
+                        <div class="wizard-export-plan-list" id="wizard-export-review-now" aria-live="polite"></div>
+                    </div>
+                </div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_export_basics_title">{{ tr("profiles.wizard_export_basics_title") }}</div>
+                <div class="wizard-summary-list">
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-name">-</span>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_schema">{{ tr("profiles.wizard_summary_schema") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-schema">{{ schema_channels_catalog.default_label }}</span>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_starter">{{ tr("profiles.wizard_summary_starter") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-starter" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_cis">{{ tr("profiles.wizard_summary_cis") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-cis" data-i18n="profiles.wizard_cis_none_title">{{ tr("profiles.wizard_cis_none_title") }}</span>
+                    </div>
+                    <div class="wizard-summary-row" id="wizard-summary-derived-row" hidden>
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_derived">{{ tr("profiles.wizard_summary_derived") }}</span>
+                        <span class="wizard-summary-value wizard-summary-value--left" id="wizard-summary-derived"></span>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--stacked">
+                        <span class="wizard-summary-key" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</span>
+                        <span class="wizard-summary-value wizard-summary-value--left" data-i18n="profiles.wizard_lifecycle_summary_body">{{ tr("profiles.wizard_lifecycle_summary_body") }}</span>
+                        <div class="wizard-baseline-summary-list" id="wizard-summary-lifecycle-list"></div>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--stacked">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_baseline_summary_title">{{ tr("profiles.wizard_export_baseline_summary_title") }}</span>
+                        <span class="wizard-summary-value wizard-summary-value--left" id="wizard-export-baseline-copy" data-i18n="profiles.wizard_export_baseline_summary_body">{{ tr("profiles.wizard_export_baseline_summary_body") }}</span>
+                        <div class="wizard-baseline-summary-list" id="wizard-export-baseline-list"></div>
+                    </div>
+                </div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_export_guided_summary_title">{{ tr("profiles.wizard_export_guided_summary_title") }}</div>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_export_guided_summary_body">{{ tr("profiles.wizard_export_guided_summary_body") }}</div>
+                <div class="wizard-summary-list wizard-summary-list--cards wizard-export-guided-groups" id="wizard-export-guided-summary-list">
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-network">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_two">{{ tr("profiles.wizard_step_two") }}</div>
+                        <div class="wizard-summary-row wizard-summary-row--decision">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_network">{{ tr("profiles.wizard_export_guided_network") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-summary-network" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
+                            <button type="button" class="button-base ghost-button" id="wizard-export-summary-network-jump" data-final-review-jump="network" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                        </div>
+                    </div>
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-home">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_three">{{ tr("profiles.wizard_step_three") }}</div>
+                        <div class="wizard-summary-row wizard-summary-row--decision">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_home">{{ tr("profiles.wizard_export_guided_home") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-summary-home" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
+                            <button type="button" class="button-base ghost-button" id="wizard-export-summary-home-jump" data-final-review-jump="home" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                        </div>
+                    </div>
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-search">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_four">{{ tr("profiles.wizard_step_four") }}</div>
+                        <div class="wizard-summary-row wizard-summary-row--decision">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_search">{{ tr("profiles.wizard_export_guided_search") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-summary-search" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
+                            <button type="button" class="button-base ghost-button" id="wizard-export-summary-search-jump" data-final-review-jump="search" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                        </div>
+                    </div>
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-privacy">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_five">{{ tr("profiles.wizard_step_five") }}</div>
+                        <div class="wizard-summary-row wizard-summary-row--decision">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_privacy">{{ tr("profiles.wizard_export_guided_privacy") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-summary-privacy" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
+                            <button type="button" class="button-base ghost-button" id="wizard-export-summary-privacy-jump" data-final-review-jump="privacy" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                        </div>
+                    </div>
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-features">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_six">{{ tr("profiles.wizard_step_six") }}</div>
+                        <div class="wizard-summary-row wizard-summary-row--decision">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_features">{{ tr("profiles.wizard_export_guided_features") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-summary-features" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
+                            <button type="button" class="button-base ghost-button" id="wizard-export-summary-features-jump" data-final-review-jump="features" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                        </div>
+                    </div>
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-ai">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_seven">{{ tr("profiles.wizard_step_seven") }}</div>
+                        <div class="wizard-summary-row wizard-summary-row--decision">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_ai">{{ tr("profiles.wizard_export_guided_ai") }}</span>
+                            <span class="wizard-summary-value" id="wizard-export-summary-ai" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
+                            <button type="button" class="button-base ghost-button" id="wizard-export-summary-ai-jump" data-final-review-jump="ai" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_cis_final_summary_title">{{ tr("profiles.wizard_cis_final_summary_title") }}</div>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_cis_final_summary_body">{{ tr("profiles.wizard_cis_final_summary_body") }}</div>
+                <div class="wizard-cis-final-summary" id="wizard-cis-final-summary" aria-live="polite"></div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_cis_exceptions_title">{{ tr("profiles.wizard_cis_exceptions_title") }}</div>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_cis_exceptions_body">{{ tr("profiles.wizard_cis_exceptions_body") }}</div>
+                <div class="wizard-cis-exceptions-summary">
                     <div class="wizard-export-plan-item" data-plan-tone="default">
-                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_preferences">{{ tr("profiles.wizard_export_boundary_register_item_preferences") }}</div>
+                        <div class="wizard-export-plan-copy" id="wizard-cis-exceptions-count" data-i18n="profiles.wizard_cis_exceptions_count_empty">{{ tr("profiles.wizard_cis_exceptions_count_empty") }}</div>
                     </div>
-                    <div class="wizard-export-plan-item" data-plan-tone="default">
-                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_tls">{{ tr("profiles.wizard_export_boundary_register_item_tls") }}</div>
+                    <div class="wizard-export-plan-group" id="wizard-cis-exceptions-reasons-group" hidden>
+                        <div class="field-label mb-1" data-i18n="profiles.wizard_cis_exceptions_top_reasons_title">{{ tr("profiles.wizard_cis_exceptions_top_reasons_title") }}</div>
+                        <div class="wizard-export-plan-list" id="wizard-cis-exceptions-reasons"></div>
                     </div>
-                    <div class="wizard-export-plan-item" data-plan-tone="default">
-                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_ai">{{ tr("profiles.wizard_export_boundary_register_item_ai") }}</div>
+                    <details class="wizard-cis-exceptions-details" id="wizard-cis-exceptions-details" hidden>
+                        <summary class="button-base ghost-button" data-i18n="profiles.wizard_cis_exceptions_show_full">{{ tr("profiles.wizard_cis_exceptions_show_full") }}</summary>
+                        <div class="wizard-summary-list" id="wizard-cis-exceptions-list"></div>
+                    </details>
+                </div>
+                <div class="field-label mb-1" data-i18n="profiles.wizard_export_shareable_title">{{ tr("profiles.wizard_export_shareable_title") }}</div>
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_export_shareable_body">{{ tr("profiles.wizard_export_shareable_body") }}</div>
+                <div class="wizard-shareable-summary-card">
+                    <details class="wizard-shareable-summary-details" id="wizard-export-shareable-details">
+                        <summary class="button-base ghost-button" id="wizard-export-shareable-generate" data-i18n="profiles.wizard_export_shareable_generate">
+                            {{ tr("profiles.wizard_export_shareable_generate") }}
+                        </summary>
+                        <textarea
+                            id="wizard-export-shareable-text"
+                            class="wizard-shareable-summary-textarea soft-input"
+                            rows="12"
+                            readonly
+                            aria-label="{{ tr('profiles.wizard_export_shareable_title') }}"></textarea>
+                        <div class="wizard-shareable-summary-actions">
+                            <button
+                                type="button"
+                                class="button-base ghost-button"
+                                id="wizard-export-shareable-copy"
+                                data-i18n="profiles.wizard_export_shareable_copy">
+                                {{ tr("profiles.wizard_export_shareable_copy") }}
+                            </button>
+                            <div class="wizard-shareable-summary-status wizard-input-hint" id="wizard-export-shareable-status" data-i18n="profiles.wizard_export_shareable_status_ready">
+                                {{ tr("profiles.wizard_export_shareable_status_ready") }}
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section class="wizard-export-section" id="wizard-export-section-technical" aria-labelledby="wizard-export-section-technical-title">
+            <div class="wizard-export-section-heading">
+                <div class="section-kicker" id="wizard-export-section-technical-title" data-i18n="profiles.wizard_export_section_technical_title">{{ tr("profiles.wizard_export_section_technical_title") }}</div>
+                <p class="wizard-subtitle" data-i18n="profiles.wizard_export_section_technical_body">{{ tr("profiles.wizard_export_section_technical_body") }}</p>
+            </div>
+            {{ render_wizard_schema_shell(8) }}
+            <div class="wizard-summary-card" data-advanced-compatibility-panel>
+                <div class="section-kicker" data-i18n="profiles.wizard_export_compatibility_title">{{ tr("profiles.wizard_export_compatibility_title") }}</div>
+                <p class="wizard-subtitle" data-i18n="profiles.wizard_export_compatibility_body">{{ tr("profiles.wizard_export_compatibility_body") }}</p>
+                <div class="wizard-summary-list">
+                    <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_mode">{{ tr("profiles.wizard_summary_mode") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-mode">JSON</span>
                     </div>
-                    <div class="wizard-export-plan-item" data-plan-tone="default">
-                        <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_objects">{{ tr("profiles.wizard_export_boundary_register_item_objects") }}</div>
+                    <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_policies">{{ tr("profiles.wizard_summary_policies") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-policies">0</span>
                     </div>
-                </div>
-            </div>
-            <div class="wizard-export-plan-group">
-                <div class="field-label mb-1" data-i18n="profiles.wizard_export_drilldown_title">{{ tr("profiles.wizard_export_drilldown_title") }}</div>
-                <div class="wizard-input-hint" data-i18n="profiles.wizard_export_drilldown_body">{{ tr("profiles.wizard_export_drilldown_body") }}</div>
-                <div class="wizard-export-plan-list" id="wizard-export-drilldown" aria-live="polite"></div>
-            </div>
-        </div>
-        <div class="wizard-actions-card" id="wizard-export-ready-card">
-            <div class="section-kicker" data-i18n="profiles.wizard_export_ready_title">{{ tr("profiles.wizard_export_ready_title") }}</div>
-            <p class="wizard-subtitle" id="wizard-export-ready-copy" data-i18n="profiles.wizard_export_ready_body">{{ tr("profiles.wizard_export_ready_body") }}</p>
-            <button
-                type="button"
-                class="button-base ghost-button"
-                data-workspace-scope-target="advanced"
-                data-i18n="profiles.advanced_handoff_open">
-                {{ tr("profiles.advanced_handoff_open") }}
-            </button>
-            <div class="wizard-shell-badges" id="wizard-export-checklist" aria-live="polite"></div>
-            <div class="wizard-export-plan">
-                <div class="wizard-export-plan-group">
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_next_steps_title">{{ tr("profiles.wizard_export_next_steps_title") }}</div>
-                    <div class="wizard-export-plan-list" id="wizard-export-next-steps" aria-live="polite"></div>
-                </div>
-                <div class="wizard-export-plan-group">
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_ready_now_title">{{ tr("profiles.wizard_export_ready_now_title") }}</div>
-                    <div class="wizard-export-plan-list" id="wizard-export-ready-now" aria-live="polite"></div>
-                </div>
-            </div>
-            <div class="wizard-export-explainability">
-                <div class="wizard-export-plan-group">
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_included_title">{{ tr("profiles.wizard_export_included_title") }}</div>
-                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_included_body">{{ tr("profiles.wizard_export_included_body") }}</div>
-                    <div class="wizard-export-plan-list" id="wizard-export-included-now" aria-live="polite"></div>
-                </div>
-                <div class="wizard-export-plan-group">
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_missing_title">{{ tr("profiles.wizard_export_missing_title") }}</div>
-                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_missing_body">{{ tr("profiles.wizard_export_missing_body") }}</div>
-                    <div class="wizard-export-plan-list" id="wizard-export-missing-now" aria-live="polite"></div>
-                </div>
-                <div class="wizard-export-plan-group">
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_review_title">{{ tr("profiles.wizard_export_review_title") }}</div>
-                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_review_body">{{ tr("profiles.wizard_export_review_body") }}</div>
-                    <div class="wizard-export-plan-list" id="wizard-export-review-now" aria-live="polite"></div>
-                </div>
-            </div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_export_basics_title">{{ tr("profiles.wizard_export_basics_title") }}</div>
-            <div class="wizard-summary-list">
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</span>
-                    <span class="wizard-summary-value" id="wizard-summary-name">-</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_schema">{{ tr("profiles.wizard_summary_schema") }}</span>
-                    <span class="wizard-summary-value" id="wizard-summary-schema">{{ schema_channels_catalog.default_label }}</span>
-                </div>
-                <div class="wizard-summary-row">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_starter">{{ tr("profiles.wizard_summary_starter") }}</span>
-                    <span class="wizard-summary-value" id="wizard-summary-starter" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
-                </div>
-                <div class="wizard-summary-row" id="wizard-summary-derived-row" hidden>
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_derived">{{ tr("profiles.wizard_summary_derived") }}</span>
-                    <span class="wizard-summary-value wizard-summary-value--left" id="wizard-summary-derived"></span>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--stacked">
-                    <span class="wizard-summary-key" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</span>
-                    <span class="wizard-summary-value wizard-summary-value--left" data-i18n="profiles.wizard_lifecycle_summary_body">{{ tr("profiles.wizard_lifecycle_summary_body") }}</span>
-                    <div class="wizard-baseline-summary-list" id="wizard-summary-lifecycle-list"></div>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--stacked">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_baseline_summary_title">{{ tr("profiles.wizard_export_baseline_summary_title") }}</span>
-                    <span class="wizard-summary-value wizard-summary-value--left" id="wizard-export-baseline-copy" data-i18n="profiles.wizard_export_baseline_summary_body">{{ tr("profiles.wizard_export_baseline_summary_body") }}</span>
-                    <div class="wizard-baseline-summary-list" id="wizard-export-baseline-list"></div>
-                </div>
-                <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_mode">{{ tr("profiles.wizard_summary_mode") }}</span>
-                    <span class="wizard-summary-value" id="wizard-summary-mode">JSON</span>
-                </div>
-                <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_policies">{{ tr("profiles.wizard_summary_policies") }}</span>
-                    <span class="wizard-summary-value" id="wizard-summary-policies">0</span>
-                </div>
-                <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_extensions">{{ tr("profiles.wizard_summary_extensions") }}</span>
-                    <span class="wizard-summary-value" id="wizard-summary-extensions">0</span>
-                </div>
-            </div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_export_guided_summary_title">{{ tr("profiles.wizard_export_guided_summary_title") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_export_guided_summary_body">{{ tr("profiles.wizard_export_guided_summary_body") }}</div>
-            <div class="wizard-summary-list wizard-summary-list--cards">
-                <div class="wizard-summary-row wizard-summary-row--decision">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_network">{{ tr("profiles.wizard_export_guided_network") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-summary-network" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-summary-network-jump" data-final-review-jump="network" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--decision">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_home">{{ tr("profiles.wizard_export_guided_home") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-summary-home" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-summary-home-jump" data-final-review-jump="home" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--decision">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_search">{{ tr("profiles.wizard_export_guided_search") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-summary-search" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-summary-search-jump" data-final-review-jump="search" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--decision">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_features">{{ tr("profiles.wizard_export_guided_features") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-summary-features" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-summary-features-jump" data-final-review-jump="features" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--decision">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_ai">{{ tr("profiles.wizard_export_guided_ai") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-summary-ai" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-summary-ai-jump" data-final-review-jump="ai" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-                <div class="wizard-summary-row wizard-summary-row--decision">
-                    <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_privacy">{{ tr("profiles.wizard_export_guided_privacy") }}</span>
-                    <span class="wizard-summary-value" id="wizard-export-summary-privacy" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
-                    <button type="button" class="button-base ghost-button" id="wizard-export-summary-privacy-jump" data-final-review-jump="privacy" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
-                </div>
-            </div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_export_shareable_title">{{ tr("profiles.wizard_export_shareable_title") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_export_shareable_body">{{ tr("profiles.wizard_export_shareable_body") }}</div>
-            <div class="wizard-shareable-summary-card">
-                <textarea
-                    id="wizard-export-shareable-text"
-                    class="wizard-shareable-summary-textarea soft-input"
-                    rows="12"
-                    readonly
-                    aria-label="{{ tr('profiles.wizard_export_shareable_title') }}"></textarea>
-                <div class="wizard-shareable-summary-actions">
-                    <button
-                        type="button"
-                        class="button-base ghost-button"
-                        id="wizard-export-shareable-copy"
-                        data-i18n="profiles.wizard_export_shareable_copy">
-                        {{ tr("profiles.wizard_export_shareable_copy") }}
-                    </button>
-                    <div class="wizard-shareable-summary-status wizard-input-hint" id="wizard-export-shareable-status" data-i18n="profiles.wizard_export_shareable_status_ready">
-                        {{ tr("profiles.wizard_export_shareable_status_ready") }}
+                    <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_extensions">{{ tr("profiles.wizard_summary_extensions") }}</span>
+                        <span class="wizard-summary-value" id="wizard-summary-extensions">0</span>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_policy_count">{{ tr("profiles.wizard_export_policy_count") }}</span>
+                        <span class="wizard-summary-value" id="wizard-export-policy-count">0</span>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_preferences_count">{{ tr("profiles.wizard_export_preferences_count") }}</span>
+                        <span class="wizard-summary-value" id="wizard-export-preferences-count">0</span>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_raw_count">{{ tr("profiles.wizard_export_raw_count") }}</span>
+                        <span class="wizard-summary-value" id="wizard-export-raw-count">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-export-raw-jump" data-final-review-jump="raw" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_deprecated_count">{{ tr("profiles.wizard_export_deprecated_count") }}</span>
+                        <span class="wizard-summary-value" id="wizard-export-deprecated-count">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-export-deprecated-jump" data-final-review-jump="deprecated" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_unknown_count">{{ tr("profiles.wizard_export_unknown_count") }}</span>
+                        <span class="wizard-summary-value" id="wizard-export-unknown-count">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-export-unknown-jump" data-final-review-jump="unknown" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
                     </div>
                 </div>
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_boundary_register_title">{{ tr("profiles.wizard_export_boundary_register_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_boundary_register_body">{{ tr("profiles.wizard_export_boundary_register_body") }}</div>
+                    {{ render_doc_placeholder("policy-boundaries", "profiles.docs_placeholder_boundaries_title", "profiles.docs_placeholder_boundaries_body") }}
+                    <div class="wizard-export-plan-list" id="wizard-export-boundary-register">
+                        <div class="wizard-export-plan-item" data-plan-tone="default">
+                            <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_preferences">{{ tr("profiles.wizard_export_boundary_register_item_preferences") }}</div>
+                        </div>
+                        <div class="wizard-export-plan-item" data-plan-tone="default">
+                            <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_tls">{{ tr("profiles.wizard_export_boundary_register_item_tls") }}</div>
+                        </div>
+                        <div class="wizard-export-plan-item" data-plan-tone="default">
+                            <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_ai">{{ tr("profiles.wizard_export_boundary_register_item_ai") }}</div>
+                        </div>
+                        <div class="wizard-export-plan-item" data-plan-tone="default">
+                            <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_objects">{{ tr("profiles.wizard_export_boundary_register_item_objects") }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wizard-export-plan-group">
+                    <div class="field-label mb-1" data-i18n="profiles.wizard_export_drilldown_title">{{ tr("profiles.wizard_export_drilldown_title") }}</div>
+                    <div class="wizard-input-hint" data-i18n="profiles.wizard_export_drilldown_body">{{ tr("profiles.wizard_export_drilldown_body") }}</div>
+                    <div class="wizard-export-plan-list" id="wizard-export-drilldown" aria-live="polite"></div>
+                </div>
             </div>
-            <div class="dock-actions-grid">
-                <a id="wizard-export-json" href="#"
-                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                    data-i18n="profiles.download_json">
-                    {{ tr("profiles.download_json") }}
-                </a>
-                <a id="wizard-export-yaml" href="#"
-                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                    data-i18n="profiles.download_yaml">
-                    {{ tr("profiles.download_yaml") }}
-                </a>
-                <a id="wizard-export-firefox-policies" href="#"
-                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-                    data-i18n="profiles.download_firefox_policies_json">
-                    {{ tr("profiles.download_firefox_policies_json") }}
-                </a>
-            </div>
-            <div class="wizard-export-download-hint" id="wizard-export-download-hint" data-i18n="profiles.wizard_export_download_hint_unsaved_new">
-                {{ tr("profiles.wizard_export_download_hint_unsaved_new") }}
-            </div>
-        </div>
+        </section>
     </div>
 </section>

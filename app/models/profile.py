@@ -39,6 +39,12 @@ class Profile(Base):
     # Raw Firefox policy payload stored as JSON on the profile entity.
     flags: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
 
+    # Optional compliance metadata (e.g., CIS overlay decisions).
+    compliance: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+
+    # Optimistic concurrency token for safe multi-tab editing.
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, default=1, server_default="1")
+
     owner: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
 
     created_at: Mapped[datetime] = mapped_column(

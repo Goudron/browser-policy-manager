@@ -29,12 +29,12 @@ def fake_fetcher_factory(payload: dict, status: int = 200):
 
 def test_compute_cache_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"))
-    p_esr = manager.compute_cache_path("esr1409")
-    p_rel = manager.compute_cache_path("release149")
+    p_esr = manager.compute_cache_path("esr14010")
+    p_rel = manager.compute_cache_path("release150")
 
     assert p_esr.name == "policies-schema.json"
-    assert p_esr.parent.name == "esr1409"
-    assert p_rel.parent.name == "release149"
+    assert p_esr.parent.name == "esr14010"
+    assert p_rel.parent.name == "release150"
 
 
 def test_load_writes_cache_and_reads(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
@@ -50,11 +50,11 @@ def test_load_writes_cache_and_reads(tmp_path: Path, monkeypatch: pytest.MonkeyP
     )
 
     # Act: load (no cache present yet -> triggers download)
-    result = manager.load("esr1409", force_refresh=False)
+    result = manager.load("esr14010", force_refresh=False)
 
     # Assert: got the payload back and file exists
     assert result["title"] == "Policies"
-    cache_file = manager.compute_cache_path("esr1409")
+    cache_file = manager.compute_cache_path("esr14010")
     assert cache_file.exists()
     # File content matches
     on_disk = json.loads(cache_file.read_text(encoding="utf-8"))
@@ -66,7 +66,7 @@ def test_load_falls_back_to_cache_on_network_error(tmp_path: Path, monkeypatch: 
     initial_payload = {"title": "CachedPolicies"}
     ok_fetcher = fake_fetcher_factory(initial_payload)
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=ok_fetcher)
-    assert manager.load("release149")["title"] == "CachedPolicies"
+    assert manager.load("release150")["title"] == "CachedPolicies"
 
     # Now simulate network failure
     def failing_fetcher(_url: str, _timeout: int):
@@ -74,4 +74,4 @@ def test_load_falls_back_to_cache_on_network_error(tmp_path: Path, monkeypatch: 
 
     manager_fail = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=failing_fetcher)
     # Should fall back to cache and still return the cached payload
-    assert manager_fail.load("release149")["title"] == "CachedPolicies"
+    assert manager_fail.load("release150")["title"] == "CachedPolicies"

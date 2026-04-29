@@ -130,6 +130,7 @@ class ProfileService:
             description=data.description,
             schema_version=data.schema_version,
             flags=data.flags,
+            compliance=data.compliance,
             owner=data.owner,
         )
         session.add(entity)
@@ -155,9 +156,12 @@ class ProfileService:
             entity.schema_version = data.schema_version
         if "flags" in fields_to_update and data.flags is not None:
             entity.flags = data.flags
+        if "compliance" in fields_to_update:
+            entity.compliance = data.compliance
         if "owner" in fields_to_update:
             entity.owner = data.owner
 
+        entity.revision += 1
         await session.flush()
         await session.refresh(entity)
         return ProfileRead.model_validate(entity)

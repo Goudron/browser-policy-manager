@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.core.policy_validation import (
     PolicyValidationError,
@@ -11,6 +11,11 @@ from app.core.policy_validation import (
     validate_profile_policies_or_raise,
 )
 from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNEL_SET
+from app.services.firefox_policy_import import (
+    FirefoxPoliciesDocumentValidationError,
+    FirefoxPoliciesImportError,
+    validate_firefox_policies_document,
+)
 
 router = APIRouter(prefix="/api/validate", tags=["validation"])
 
@@ -18,13 +23,21 @@ router = APIRouter(prefix="/api/validate", tags=["validation"])
 class ValidationRequest(BaseModel):
     """Request body for policy validation endpoints."""
 
-    # The document to validate. Expected to be a mapping of policy_id -> value,
-    # for example:
-    # {
-    #   "DisableAppUpdate": true,
-    #   "HttpAllowlist": ["http://example.org"],
-    # }
-    document: Any
+    document: Any = Field(
+        ...,
+        description=(
+            "Firefox policies.json document to validate. A plain policy mapping "
+            "is still accepted for internal compatibility."
+        ),
+        examples=[
+            {
+                "policies": {
+                    "DisableAppUpdate": True,
+                    "HttpAllowlist": ["http://example.org"],
+                }
+            }
+        ],
+    )
 
 
 # Supported profiles are aligned with the bundled internal policy schemas.
@@ -50,21 +63,23 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
     Validate a policy document for the given profile.
 
     Request example:
-        POST /api/validate/release-149
+        POST /api/validate/release-150
         {
           "document": {
-            "DisableAppUpdate": true,
-            "HttpAllowlist": ["http://example.org"]
+            "policies": {
+              "DisableAppUpdate": true,
+              "HttpAllowlist": ["http://example.org"]
+            }
           }
         }
 
     Successful response:
-        { "ok": true, "profile": "release-149" }
+        { "ok": true, "profile": "release-150" }
 
     Validation error response:
         {
           "ok": false,
-          "profile": "release-149",
+          "profile": "release-150",
           "detail": "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]",
           "error":  "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]"
         }
@@ -79,6 +94,44 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
             "profile": profile,
             "detail": message,
             "error": message,
+        }
+
+    if "policies" in document:
+        try:
+            validate_firefox_policies_document(document, profile)
+        except FirefoxPoliciesImportError as exc:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "Firefox policies.json validation failed",
+                    "issues": [
+                        {
+                            "policy": None,
+                            "path": issue.path,
+                            "message": issue.message,
+                        }
+                        for issue in exc.issues
+                    ],
+                },
+            ) from exc
+        except FirefoxPoliciesDocumentValidationError as exc:
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "message": "Policy validation failed",
+                    "issues": [
+                        {
+                            "policy": issue.policy,
+                            "path": issue.path,
+                            "message": issue.message,
+                        }
+                        for issue in exc.issues
+                    ],
+                },
+            ) from exc
+        return {
+            "ok": True,
+            "profile": profile,
         }
 
     try:

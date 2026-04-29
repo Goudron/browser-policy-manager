@@ -70,3 +70,24 @@ def test_export_firefox_policies_json_returns_404_for_missing_profile():
 
     response = client.get("/api/export/profiles/999999/firefox/policies.json")
     assert response.status_code == 404
+
+
+def test_internal_json_yaml_export_routes_are_removed():
+    client = make_test_client(app)
+
+    create_response = client.post("/api/profiles", json=_mk_profile_body())
+    assert create_response.status_code == 201, create_response.text
+    profile_id = create_response.json()["id"]
+
+    legacy_paths = [
+        "/api/export/profiles",
+        f"/api/export/profiles/{profile_id}",
+        f"/api/export/profiles/{profile_id}?fmt=json",
+        f"/api/export/profiles/{profile_id}?fmt=yaml",
+        f"/api/export/profiles/{profile_id}.json",
+        f"/api/export/profiles/{profile_id}.yaml",
+    ]
+
+    for path in legacy_paths:
+        response = client.get(path)
+        assert response.status_code == 404, path

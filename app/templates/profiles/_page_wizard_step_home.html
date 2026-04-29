@@ -1,53 +1,56 @@
-{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_settings_docs, render_settings_pills, render_wizard_schema_shell with context %}
+{% from "profiles/_wizard_macros.html" import render_manual_policy_controls, render_wizard_disclosure with context %}
 
 <section class="wizard-panel" id="wizard-step-3">
-    {{ render_wizard_schema_shell(3) }}
-    <div class="wizard-section-group">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_homepage_title">{{ tr("profiles.wizard_homepage_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_homepage_body">
-                {{ tr("profiles.wizard_homepage_body") }}
-            </p>
+    <div class="wizard-section-group wizard-home-surface-group" id="wizard-home-surface-startup" data-home-surface-group="startup">
+        <div class="wizard-section-heading wizard-home-surface-head">
+            <div>
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_homepage_title">{{ tr("profiles.wizard_homepage_title") }}</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_homepage_body">
+                    {{ tr("profiles.wizard_homepage_body") }}
+                </p>
+            </div>
+            <button type="button" class="button-base ghost-button wizard-home-surface-toggle" data-home-surface-toggle="startup" aria-expanded="true" data-i18n="profiles.wizard_home_surface_active">{{ tr("profiles.wizard_home_surface_active") }}</button>
         </div>
-        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
-        {{ render_settings_pills(wizard_settings_sections["home"]["ui_maps"]["homepage"], "wizard-settings-map-homepage") }}
-        {{ render_settings_docs(wizard_settings_sections["home"]["ui_maps"]["homepage"], wizard_settings_sections["home"]["ui_docs"]["homepage"], "wizard-settings-docs-homepage") }}
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
         <div class="wizard-input-hint" data-i18n="profiles.wizard_homepage_focus_hint">
             {{ tr("profiles.wizard_homepage_focus_hint") }}
         </div>
-        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-homepage-presets">
-            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="defaults">
-                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_defaults_title">{{ tr("profiles.wizard_homepage_preset_defaults_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_defaults_copy">{{ tr("profiles.wizard_homepage_preset_defaults_copy") }}</span>
-            </button>
-            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="portal">
-                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_portal_title">{{ tr("profiles.wizard_homepage_preset_portal_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_portal_copy">{{ tr("profiles.wizard_homepage_preset_portal_copy") }}</span>
-            </button>
-            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="session">
-                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_session_title">{{ tr("profiles.wizard_homepage_preset_session_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_session_copy">{{ tr("profiles.wizard_homepage_preset_session_copy") }}</span>
-            </button>
-            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="locked">
-                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_locked_title">{{ tr("profiles.wizard_homepage_preset_locked_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_locked_copy">{{ tr("profiles.wizard_homepage_preset_locked_copy") }}</span>
-            </button>
-        </div>
-        <div class="wizard-input-hint" data-i18n="profiles.wizard_homepage_shared_hint">
-            {{ tr("profiles.wizard_homepage_shared_hint") }}
-        </div>
-        <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-homepage-shared-presets">
-            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-shared-preset="portal_locked">
-                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_shared_preset_portal_title">{{ tr("profiles.wizard_homepage_shared_preset_portal_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_shared_preset_portal_copy">{{ tr("profiles.wizard_homepage_shared_preset_portal_copy") }}</span>
-            </button>
-            <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-shared-preset="return_session">
-                <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_shared_preset_session_title">{{ tr("profiles.wizard_homepage_shared_preset_session_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_shared_preset_session_copy">{{ tr("profiles.wizard_homepage_shared_preset_session_copy") }}</span>
-            </button>
+        <div class="wizard-homepage-startup-choice wizard-stage-panel">
+            <div class="wizard-search-engine-preset-grid" id="wizard-homepage-presets">
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="defaults">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_defaults_title">{{ tr("profiles.wizard_homepage_preset_defaults_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_defaults_copy">{{ tr("profiles.wizard_homepage_preset_defaults_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="portal">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_portal_title">{{ tr("profiles.wizard_homepage_preset_portal_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_portal_copy">{{ tr("profiles.wizard_homepage_preset_portal_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="session">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_session_title">{{ tr("profiles.wizard_homepage_preset_session_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_session_copy">{{ tr("profiles.wizard_homepage_preset_session_copy") }}</span>
+                </button>
+                <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="locked">
+                    <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_locked_title">{{ tr("profiles.wizard_homepage_preset_locked_title") }}</span>
+                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_locked_copy">{{ tr("profiles.wizard_homepage_preset_locked_copy") }}</span>
+                </button>
+            </div>
+            <div class="wizard-homepage-shared-recommendations">
+                <div class="wizard-input-hint" data-i18n="profiles.wizard_homepage_shared_hint">
+                    {{ tr("profiles.wizard_homepage_shared_hint") }}
+                </div>
+                <div class="wizard-homepage-shared-actions" id="wizard-homepage-shared-presets">
+                    <button type="button" class="button-base ghost-button wizard-search-engine-preset wizard-homepage-shared-action" data-homepage-shared-preset="portal_locked">
+                        <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_shared_preset_portal_title">{{ tr("profiles.wizard_homepage_shared_preset_portal_title") }}</span>
+                        <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_shared_preset_portal_copy">{{ tr("profiles.wizard_homepage_shared_preset_portal_copy") }}</span>
+                    </button>
+                    <button type="button" class="button-base ghost-button wizard-search-engine-preset wizard-homepage-shared-action" data-homepage-shared-preset="return_session">
+                        <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_shared_preset_session_title">{{ tr("profiles.wizard_homepage_shared_preset_session_title") }}</span>
+                        <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_shared_preset_session_copy">{{ tr("profiles.wizard_homepage_shared_preset_session_copy") }}</span>
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="wizard-grid wizard-stage-panel">
             <label data-settings-target="field:wizard-homepage-url">
@@ -81,16 +84,16 @@
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-homepage-section-status" data-i18n="profiles.wizard_homepage_section_state_empty">{{ tr("profiles.wizard_homepage_section_state_empty") }}</div>
     </div>
-    <div class="wizard-section-group">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_newtab_title">{{ tr("profiles.wizard_newtab_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_newtab_body">
-                {{ tr("profiles.wizard_newtab_body") }}
-            </p>
+    <div class="wizard-section-group wizard-home-surface-group" id="wizard-home-surface-new-tab" data-home-surface-group="new_tab" data-home-surface-collapsed="true">
+        <div class="wizard-section-heading wizard-home-surface-head">
+            <div>
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_newtab_title">{{ tr("profiles.wizard_newtab_title") }}</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_newtab_body">
+                    {{ tr("profiles.wizard_newtab_body") }}
+                </p>
+            </div>
+            <button type="button" class="button-base ghost-button wizard-home-surface-toggle" data-home-surface-toggle="new_tab" aria-expanded="false" data-i18n="profiles.wizard_home_surface_open">{{ tr("profiles.wizard_home_surface_open") }}</button>
         </div>
-        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
-        {{ render_settings_pills(wizard_settings_sections["home"]["ui_maps"]["new_tab"], "wizard-settings-map-new-tab") }}
-        {{ render_settings_docs(wizard_settings_sections["home"]["ui_maps"]["new_tab"], wizard_settings_sections["home"]["ui_docs"]["new_tab"], "wizard-settings-docs-new-tab") }}
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
@@ -138,16 +141,16 @@
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-home-overrides-section-status" data-i18n="profiles.wizard_home_overrides_section_state_empty">{{ tr("profiles.wizard_home_overrides_section_state_empty") }}</div>
     </div>
-    <div class="wizard-section-group">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_home_title">{{ tr("profiles.wizard_firefox_home_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_firefox_home_body">
-                {{ tr("profiles.wizard_firefox_home_body") }}
-            </p>
+    <div class="wizard-section-group wizard-home-surface-group" id="wizard-home-surface-firefox-home" data-home-surface-group="firefox_home" data-home-surface-collapsed="true">
+        <div class="wizard-section-heading wizard-home-surface-head">
+            <div>
+                <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_home_title">{{ tr("profiles.wizard_firefox_home_title") }}</h3>
+                <p class="wizard-section-copy" data-i18n="profiles.wizard_firefox_home_body">
+                    {{ tr("profiles.wizard_firefox_home_body") }}
+                </p>
+            </div>
+            <button type="button" class="button-base ghost-button wizard-home-surface-toggle" data-home-surface-toggle="firefox_home" aria-expanded="false" data-i18n="profiles.wizard_home_surface_open">{{ tr("profiles.wizard_home_surface_open") }}</button>
         </div>
-        <div class="field-label mb-1" data-i18n="profiles.wizard_settings_map_label">{{ tr("profiles.wizard_settings_map_label") }}</div>
-        {{ render_settings_pills(wizard_settings_sections["home"]["ui_maps"]["firefox_home"], "wizard-settings-map-firefox-home") }}
-        {{ render_settings_docs(wizard_settings_sections["home"]["ui_maps"]["firefox_home"], wizard_settings_sections["home"]["ui_docs"]["firefox_home"], "wizard-settings-docs-firefox-home") }}
         <div class="wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
@@ -209,139 +212,79 @@
         </div>
         <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-firefox-home-fine-tuning-panel" hidden>
             <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_top_sites_label">{{ tr("profiles.wizard_firefox_home_sponsored_top_sites_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="SponsoredTopSites">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_highlights_label">{{ tr("profiles.wizard_firefox_home_highlights_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="Highlights">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_stories_label">{{ tr("profiles.wizard_firefox_home_stories_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="Stories">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_pocket_label">{{ tr("profiles.wizard_firefox_home_sponsored_pocket_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="SponsoredPocket">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_stories_label">{{ tr("profiles.wizard_firefox_home_sponsored_stories_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="SponsoredStories">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_snippets_label">{{ tr("profiles.wizard_firefox_home_snippets_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="Snippets">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
-                </select>
-            </label>
-            <label>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_locked_label">{{ tr("profiles.wizard_firefox_home_locked_label") }}</div>
-                <select class="soft-input" data-firefox-home-key="Locked">
-                    <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
-                    <option value="true" data-i18n="profiles.wizard_firefox_home_locked_on">{{ tr("profiles.wizard_firefox_home_locked_on") }}</option>
-                    <option value="false" data-i18n="profiles.wizard_firefox_home_locked_off">{{ tr("profiles.wizard_firefox_home_locked_off") }}</option>
-                </select>
-            </label>
-            {{ render_manual_policy_controls(wizard_manual_policy_groups["home_surfaces"]["items"]) }}
-        </div>
-    </div>
-    <div class="wizard-section-group wizard-workflow-card">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_home_surfaces_workflow_title">{{ tr("profiles.wizard_home_surfaces_workflow_title") }}</h3>
-            <p class="wizard-section-copy wizard-workflow-copy" id="wizard-home-surfaces-workflow-copy" data-i18n="profiles.wizard_home_surfaces_workflow_body">
-                {{ tr("profiles.wizard_home_surfaces_workflow_body") }}
-            </p>
-        </div>
-        <div class="wizard-export-plan wizard-workflow-list" id="wizard-home-surfaces-workflow-list"></div>
-    </div>
-    <div class="wizard-section-group">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_home_review_title">{{ tr("profiles.wizard_home_review_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_home_review_body">
-                {{ tr("profiles.wizard_home_review_body") }}
-            </p>
-        </div>
-        <div class="wizard-summary-list wizard-summary-list--cards">
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_homepage">{{ tr("profiles.wizard_home_review_homepage") }}</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-homepage">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-homepage-jump" data-home-review-jump="homepage" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
-            </div>
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_overrides">{{ tr("profiles.wizard_home_review_overrides") }}</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-overrides">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-overrides-jump" data-home-review-jump="overrides" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
-            </div>
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_firefox_home">{{ tr("profiles.wizard_home_review_firefox_home") }}</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-firefox-home">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-firefox-home-jump" data-home-review-jump="firefox_home" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
-            </div>
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_user_messaging">{{ tr("profiles.wizard_home_review_user_messaging") }}</span>
-                <span class="wizard-summary-value" id="wizard-home-summary-user-messaging">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-home-summary-user-messaging-jump" data-home-review-jump="user_messaging" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
-            </div>
-        </div>
-    </div>
-    <div class="wizard-section-group" data-workspace-scope-panel="advanced">
-        <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_preferences_home_title">{{ tr("profiles.wizard_preferences_home_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_preferences_home_body">
-                {{ tr("profiles.wizard_preferences_home_body") }}
-            </p>
-        </div>
-        <div class="wizard-section-group" data-preference-section="home" data-settings-target="pref-section:home">
-            <div class="wizard-search-engine-head">
-                <div>
-                    <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_presets_title">{{ tr("profiles.wizard_preferences_presets_title") }}</div>
-                    <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_presets_body">
-                        {{ tr("profiles.wizard_preferences_presets_body") }}
+            <div class="wizard-field-full">
+                {% call render_wizard_disclosure("profiles.wizard_firefox_home_recommendations_title", "profiles.wizard_firefox_home_recommendations_body", "wizard-firefox-home-recommendations-panel") %}
+                    <div class="wizard-grid">
+                        <label data-settings-target="field:firefox-home-sponsored-top-sites">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_top_sites_label">{{ tr("profiles.wizard_firefox_home_sponsored_top_sites_label") }}</div>
+                            <select class="soft-input" data-firefox-home-key="SponsoredTopSites">
+                                <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                                <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                                <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                            </select>
+                        </label>
+                        <label data-settings-target="field:firefox-home-highlights">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_highlights_label">{{ tr("profiles.wizard_firefox_home_highlights_label") }}</div>
+                            <select class="soft-input" data-firefox-home-key="Highlights">
+                                <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                                <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                                <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                            </select>
+                        </label>
+                        <label data-settings-target="field:firefox-home-stories">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_stories_label">{{ tr("profiles.wizard_firefox_home_stories_label") }}</div>
+                            <select class="soft-input" data-firefox-home-key="Stories">
+                                <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                                <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                                <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                            </select>
+                        </label>
+                        <label data-settings-target="field:firefox-home-sponsored-pocket">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_pocket_label">{{ tr("profiles.wizard_firefox_home_sponsored_pocket_label") }}</div>
+                            <select class="soft-input" data-firefox-home-key="SponsoredPocket">
+                                <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                                <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                                <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                            </select>
+                        </label>
+                        <label data-settings-target="field:firefox-home-sponsored-stories">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_sponsored_stories_label">{{ tr("profiles.wizard_firefox_home_sponsored_stories_label") }}</div>
+                            <select class="soft-input" data-firefox-home-key="SponsoredStories">
+                                <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                                <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                                <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                            </select>
+                        </label>
                     </div>
-                </div>
-                <button type="button" id="wizard-preferences-home-add" class="button-base ghost-button" data-i18n="profiles.wizard_preferences_add_button">{{ tr("profiles.wizard_preferences_add_button") }}</button>
+                {% endcall %}
             </div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_gui_label">{{ tr("profiles.wizard_preferences_gui_label") }}</div>
-            {{ render_settings_pills(wizard_settings_sections["home"]["preferences"]["gui_groups"], "wizard-preferences-home-groups") }}
-            {{ render_settings_docs(wizard_settings_sections["home"]["preferences"]["gui_groups"], wizard_settings_sections["home"]["preferences"]["docs"], "wizard-preferences-home-docs") }}
-            <div id="wizard-preferences-home-presets" class="wizard-search-engine-preset-grid"></div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_bundles_title">{{ tr("profiles.wizard_preferences_bundles_title") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_bundles_body">
-                {{ tr("profiles.wizard_preferences_bundles_body") }}
+            <div class="wizard-field-full">
+                {% call render_wizard_disclosure("profiles.wizard_firefox_home_snippets_group_title", "profiles.wizard_firefox_home_snippets_group_body", "wizard-firefox-home-snippets-panel") %}
+                    <label data-settings-target="field:firefox-home-snippets">
+                        <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_snippets_label">{{ tr("profiles.wizard_firefox_home_snippets_label") }}</div>
+                        <select class="soft-input" data-firefox-home-key="Snippets">
+                            <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                            <option value="true" data-i18n="profiles.wizard_firefox_home_show">{{ tr("profiles.wizard_firefox_home_show") }}</option>
+                            <option value="false" data-i18n="profiles.wizard_firefox_home_hide">{{ tr("profiles.wizard_firefox_home_hide") }}</option>
+                        </select>
+                    </label>
+                {% endcall %}
             </div>
-            <div id="wizard-preferences-home-bundles" class="wizard-search-engine-preset-grid"></div>
-            <div class="field-label mb-1" data-i18n="profiles.wizard_preferences_known_title">{{ tr("profiles.wizard_preferences_known_title") }}</div>
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_preferences_known_body">
-                {{ tr("profiles.wizard_preferences_known_body") }}
+            <div class="wizard-field-full">
+                {% call render_wizard_disclosure("profiles.wizard_firefox_home_layout_group_title", "profiles.wizard_firefox_home_layout_group_body", "wizard-firefox-home-layout-panel") %}
+                    <div class="wizard-grid">
+                        <label data-settings-target="field:firefox-home-locked">
+                            <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_home_locked_label">{{ tr("profiles.wizard_firefox_home_locked_label") }}</div>
+                            <select class="soft-input" data-firefox-home-key="Locked">
+                                <option value="" data-i18n="profiles.wizard_boolean_inherit">{{ tr("profiles.wizard_boolean_inherit") }}</option>
+                                <option value="true" data-i18n="profiles.wizard_firefox_home_locked_on">{{ tr("profiles.wizard_firefox_home_locked_on") }}</option>
+                                <option value="false" data-i18n="profiles.wizard_firefox_home_locked_off">{{ tr("profiles.wizard_firefox_home_locked_off") }}</option>
+                            </select>
+                        </label>
+                        {{ render_manual_policy_controls(wizard_manual_policy_groups["home_surfaces"]["items"]) }}
+                    </div>
+                {% endcall %}
             </div>
-            <div id="wizard-preferences-home-known" class="wizard-search-engine-preset-grid"></div>
-            <div id="wizard-preferences-home-empty" class="wizard-input-hint" data-i18n="profiles.wizard_preferences_empty">
-                {{ tr("profiles.wizard_preferences_empty") }}
-            </div>
-            <div id="wizard-preferences-home-list" class="wizard-search-engine-list"></div>
         </div>
     </div>
 </section>

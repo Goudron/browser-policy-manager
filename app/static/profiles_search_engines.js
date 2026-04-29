@@ -50,7 +50,6 @@
                 Description: read("Description"),
                 PostData: read("PostData"),
                 SuggestURLTemplate: read("SuggestURLTemplate"),
-                Encoding: read("Encoding"),
             };
         }
 
@@ -139,6 +138,7 @@
                 if (presetState.state === "applied") button.classList.add("wizard-search-engine-preset--applied");
                 if (presetState.state === "partial") button.classList.add("wizard-search-engine-preset--partial");
                 if (presetState.state === "conflict") button.classList.add("wizard-search-engine-preset--conflict");
+                button.setAttribute("aria-pressed", presetState.state === "applied" ? "true" : "false");
 
                 if (!statusEl) {
                     statusEl = documentRef.createElement("span");
@@ -153,6 +153,11 @@
         function setRowValue(row, field, value) {
             const input = row.querySelector(`[data-search-engine-field="${field}"]`);
             if (input) input.value = typeof value === "string" ? value : "";
+        }
+
+        function shouldOpenAdvancedFields(values) {
+            return ["Method", "IconURL", "SuggestURLTemplate", "Description", "PostData"]
+                .some((field) => Boolean(values[field]));
         }
 
         function updateRowPresentation(row, index) {
@@ -189,7 +194,6 @@
                     if (values.Alias) {
                         summaryParts.push(`${t("profiles.wizard_search_engine_summary_keyword")} ${values.Alias}`);
                     }
-                    if (values.Encoding) summaryParts.push(values.Encoding);
                     if (values.SuggestURLTemplate) {
                         summaryParts.push(t("profiles.wizard_search_engine_summary_suggest"));
                     }
@@ -227,7 +231,6 @@
                 Description: t("profiles.wizard_search_engine_description_label"),
                 PostData: t("profiles.wizard_search_engine_post_data_label"),
                 SuggestURLTemplate: t("profiles.wizard_search_engine_suggest_label"),
-                Encoding: t("profiles.wizard_search_engine_encoding_label"),
             };
             const placeholders = {
                 Name: t("profiles.wizard_search_engine_name_placeholder"),
@@ -237,7 +240,6 @@
                 Description: t("profiles.wizard_search_engine_description_placeholder"),
                 PostData: t("profiles.wizard_search_engine_post_data_placeholder"),
                 SuggestURLTemplate: t("profiles.wizard_search_engine_suggest_placeholder"),
-                Encoding: t("profiles.wizard_search_engine_encoding_placeholder"),
             };
 
             row.querySelectorAll("[data-search-engine-label]").forEach((labelEl) => {
@@ -259,6 +261,15 @@
             const removeButton = row.querySelector("[data-search-engine-remove]");
             if (removeButton) {
                 removeButton.textContent = t("profiles.wizard_search_engine_remove");
+            }
+
+            const advancedTitleEl = row.querySelector("[data-search-engine-advanced-title]");
+            if (advancedTitleEl) {
+                advancedTitleEl.textContent = t("profiles.wizard_search_engine_advanced_title");
+            }
+            const advancedBodyEl = row.querySelector("[data-search-engine-advanced-body]");
+            if (advancedBodyEl) {
+                advancedBodyEl.textContent = t("profiles.wizard_search_engine_advanced_body");
             }
         }
 
@@ -285,7 +296,10 @@
                 setRowValue(row, "Description", source.Description);
                 setRowValue(row, "PostData", source.PostData);
                 setRowValue(row, "SuggestURLTemplate", source.SuggestURLTemplate);
-                setRowValue(row, "Encoding", source.Encoding);
+                const advancedFieldsEl = row.querySelector("[data-search-engine-advanced]");
+                if (advancedFieldsEl) {
+                    advancedFieldsEl.open = shouldOpenAdvancedFields(readManagedFieldsFromRow(row));
+                }
                 applyRowTranslations(row);
                 updateRowPresentation(row, index);
 
@@ -349,7 +363,6 @@
                     if (values.Description) nextItem.Description = values.Description;
                     if (values.PostData) nextItem.PostData = values.PostData;
                     if (values.SuggestURLTemplate) nextItem.SuggestURLTemplate = values.SuggestURLTemplate;
-                    if (values.Encoding) nextItem.Encoding = values.Encoding;
 
                     return Object.keys(nextItem).length ? nextItem : null;
                 })
