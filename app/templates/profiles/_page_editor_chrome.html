@@ -1,0 +1,182 @@
+{% set initial_profile = editing_profile_initial if editing_profile_initial else none %}
+{% set has_initial_profile = initial_profile and initial_profile.id is not none %}
+{% set initial_schema_value = (initial_profile.schema_version if has_initial_profile and initial_profile.schema_version else editing_profile_schema_version) or schema_channels_catalog.default_value %}
+{% set initial_schema_label = schema_channels_catalog.default_label %}
+{% for option in schema_channels_catalog.options %}
+    {% if option.value == initial_schema_value %}
+        {% set initial_schema_label = option.label %}
+    {% endif %}
+{% endfor %}
+<section id="overview-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+    <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+            <div class="min-w-0">
+                {% if profiles_route_mode == "settings" %}
+                <div class="section-kicker" data-i18n="profiles.editor_chrome_settings_link">{{ tr("profiles.editor_chrome_settings_link") }}</div>
+                {% elif profiles_route_mode == "json" %}
+                <div class="section-kicker" data-i18n="profiles.editor_chrome_json_link">{{ tr("profiles.editor_chrome_json_link") }}</div>
+                {% else %}
+                <div class="section-kicker" data-i18n="profiles.workspace_scope_guided">{{ tr("profiles.workspace_scope_guided") }}</div>
+                {% endif %}
+                <div class="compact-profile-meta mt-2">
+                    <h2 id="current-name" class="headline-font text-3xl font-semibold tracking-tight text-slate-900"
+                        {% if not has_initial_profile %}data-i18n="profiles.none_selected"{% endif %}>
+                        {{ initial_profile.name if has_initial_profile else tr("profiles.none_selected") }}
+                    </h2>
+                    <span id="profile-state-badge" class="state-chip {% if has_initial_profile %}{% if initial_profile.is_deleted %}state-chip--deleted{% else %}state-chip--active{% endif %}{% else %}state-chip--draft{% endif %}"
+                        {% if has_initial_profile %}
+                            {% if initial_profile.is_deleted %}data-i18n="profiles.badge_deleted"{% else %}data-i18n="profiles.badge_active"{% endif %}
+                        {% else %}
+                            data-i18n="profiles.badge_draft"
+                        {% endif %}>
+                        {% if has_initial_profile %}
+                            {{ tr("profiles.badge_deleted") if initial_profile.is_deleted else tr("profiles.badge_active") }}
+                        {% else %}
+                            {{ tr("profiles.badge_draft") }}
+                        {% endif %}
+                    </span>
+                    <span id="workspace-signal" class="signal-chip signal-chip--saved"
+                        data-i18n="profiles.signal_saved">
+                        {{ tr("profiles.signal_saved") }}
+                    </span>
+                </div>
+                <p class="compact-profile-copy mt-3" id="current-meta">
+                    {% if has_initial_profile %}
+                        ID {{ initial_profile.id }} • {{ initial_schema_label }} • {{ tr("profiles.meta_updated").replace("{value}", initial_profile.updated_at or "—") }}
+                    {% endif %}
+                </p>
+                <p class="compact-profile-copy" id="profile-derived-note" role="status" aria-live="polite" hidden></p>
+            </div>
+
+            <div class="flex w-full flex-col gap-3 sm:max-w-[360px] sm:flex-row xl:w-auto">
+                <button id="save"
+                    class="button-base primary-button flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-semibold shadow-lg shadow-emerald-900/10"
+                    {% if has_initial_profile %}data-i18n="profiles.save"{% else %}data-i18n="profiles.create_submit"{% endif %}>
+                    {{ tr("profiles.save") if has_initial_profile else tr("profiles.create_submit") }}
+                </button>
+                <button id="validate"
+                    class="button-base ghost-button flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    data-i18n="profiles.validate">
+                    {{ tr("profiles.validate") }}
+                </button>
+                {% if profiles_route_mode == "json" %}
+                <button id="format"
+                    class="button-base ghost-button flex w-full items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    data-i18n="profiles.format">
+                    {{ tr("profiles.format") }}
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="grid gap-4 xl:grid-cols-[minmax(0,2.25fr)_minmax(0,1.1fr)]">
+            <div class="surface-soft-box rounded-[26px] p-4">
+                <div class="grid gap-4 md:grid-cols-2">
+                    <label>
+                        <div class="field-label mb-1" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</div>
+                        <input id="profile-name" type="text" class="soft-input w-full rounded-2xl px-4 py-3 text-sm"
+                            placeholder="{{ tr('profiles.name_placeholder') }}" data-i18n-placeholder="profiles.name_placeholder" value="{{ initial_profile.name if has_initial_profile else '' }}" {% if has_initial_profile %}disabled{% endif %} />
+                        <div id="name-hint" class="mt-2 text-xs text-slate-500" {% if has_initial_profile %}data-i18n="profiles.name_locked"{% else %}data-i18n="profiles.name_hint"{% endif %}>
+                            {{ tr("profiles.name_locked") if has_initial_profile else tr("profiles.name_hint") }}
+                        </div>
+                    </label>
+                    <label>
+                        <div class="field-label mb-1" data-i18n="profiles.schema_label">{{ tr("profiles.schema_label") }}</div>
+                        <select id="profile-type" class="soft-input w-full rounded-2xl px-3 py-3 text-sm"
+                            title="{{ tr('profiles.schema_label') }}">
+                            {% for option in schema_channels_catalog.options %}
+                            <option value="{{ option.value }}" {% if option.value == initial_schema_value %}selected{% endif %}>{{ option.label }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+
+                <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    <div class="theme-subcard rounded-[22px] px-4 py-3">
+                        <div class="section-kicker" data-i18n="profiles.editor_chrome_profile_id">{{ tr("profiles.editor_chrome_profile_id") }}</div>
+                        <div id="editor-profile-id" class="mt-2 text-sm font-semibold text-slate-900" {% if not has_initial_profile %}data-i18n="profiles.badge_draft"{% endif %}>{{ ("#" ~ initial_profile.id) if has_initial_profile else tr("profiles.badge_draft") }}</div>
+                    </div>
+                    <div class="theme-subcard rounded-[22px] px-4 py-3">
+                        <div class="section-kicker" data-i18n="profiles.wizard_export_shareable_schema_label">{{ tr("profiles.wizard_export_shareable_schema_label") }}</div>
+                        <div id="overview-schema" class="mt-2 text-sm font-semibold text-slate-900">{{ initial_schema_label }}</div>
+                    </div>
+                    <div class="theme-subcard rounded-[22px] px-4 py-3">
+                        <div class="section-kicker" data-i18n="profiles.editor_chrome_validation">{{ tr("profiles.editor_chrome_validation") }}</div>
+                        <div id="validation-preview" aria-live="polite" class="mt-2 text-sm text-slate-500" data-i18n="profiles.validation_idle">{{ tr("profiles.validation_idle") }}</div>
+                    </div>
+                    <div class="theme-subcard rounded-[22px] px-4 py-3">
+                        <div class="section-kicker" data-i18n="profiles.editor_chrome_context">{{ tr("profiles.editor_chrome_context") }}</div>
+                        <div id="overview-context" class="mt-2 text-sm font-semibold text-slate-900" {% if has_initial_profile %}{% if initial_profile.is_deleted %}data-i18n="profiles.overview_deleted"{% else %}data-i18n="profiles.overview_existing"{% endif %}{% else %}data-i18n="profiles.overview_draft"{% endif %}>{{ tr("profiles.overview_deleted") if has_initial_profile and initial_profile.is_deleted else (tr("profiles.overview_existing") if has_initial_profile else tr("profiles.overview_draft")) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="surface-soft-box rounded-[26px] p-4">
+                <div class="section-kicker" data-i18n="profiles.editor_chrome_modes_title">{{ tr("profiles.editor_chrome_modes_title") }}</div>
+                <p class="mt-2 text-sm leading-6 text-slate-600" data-i18n="profiles.editor_chrome_modes_body">{{ tr("profiles.editor_chrome_modes_body") }}</p>
+                <div class="mt-4 grid gap-2">
+                    <a
+                        id="editor-mode-guided"
+                        href="{% if editing_profile_id is not none %}/profiles/{{ editing_profile_id }}/edit{% if include_deleted %}?include_deleted=true{% endif %}{% else %}/profiles/new{% endif %}"
+                        target="_blank"
+                        rel="noopener"
+                        class="button-base ghost-button inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                        <span data-i18n="profiles.workspace_scope_guided">{{ tr("profiles.workspace_scope_guided") }}</span>
+                    </a>
+                    <a
+                        id="editor-mode-settings"
+                        href="{% if editing_profile_id is not none %}{{ settings_href or ('/profiles/' ~ editing_profile_id ~ '/settings') }}{% else %}#{% endif %}"
+                        target="_blank"
+                        rel="noopener"
+                        {% if editing_profile_id is none %}title="{{ tr('profiles.editor_chrome_save_first') }}"{% endif %}
+                        {% if editing_profile_id is none %}aria-disabled="true"{% endif %}
+                        class="button-base ghost-button inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50{% if editing_profile_id is none %} pointer-events-none opacity-50{% endif %}">
+                        <span data-i18n="profiles.editor_chrome_settings_link">{{ tr("profiles.editor_chrome_settings_link") }}</span>
+                    </a>
+                    <a
+                        id="editor-mode-json"
+                        href="{% if editing_profile_id is not none %}{{ json_href or ('/profiles/' ~ editing_profile_id ~ '/json?focus=editor') }}{% else %}#{% endif %}"
+                        target="_blank"
+                        rel="noopener"
+                        {% if editing_profile_id is none %}title="{{ tr('profiles.editor_chrome_save_first') }}"{% endif %}
+                        {% if editing_profile_id is none %}aria-disabled="true"{% endif %}
+                        class="button-base ghost-button inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50{% if editing_profile_id is none %} pointer-events-none opacity-50{% endif %}">
+                        <span data-i18n="profiles.editor_chrome_json_link">{{ tr("profiles.editor_chrome_json_link") }}</span>
+                    </a>
+                </div>
+                <p id="editor-mode-links-hint" role="status" aria-live="polite" class="mt-3 text-xs leading-5 text-slate-500{% if editing_profile_id is not none %} support-hidden{% endif %}" data-i18n="profiles.editor_chrome_save_first">{{ tr("profiles.editor_chrome_save_first") }}</p>
+            </div>
+        </div>
+
+        <div class="grid gap-4 xl:grid-cols-3">
+            <div class="surface-soft-box profile-clone-handoff-panel" id="profile-clone-handoff-panel" aria-labelledby="profile-clone-handoff-copy" hidden>
+                <div class="section-kicker" data-i18n="profiles.clone_handoff_title">{{ tr("profiles.clone_handoff_title") }}</div>
+                <p class="profile-clone-handoff-copy" id="profile-clone-handoff-copy" role="status" aria-live="polite" data-i18n="profiles.clone_handoff_body">{{ tr("profiles.clone_handoff_body") }}</p>
+                <div class="wizard-export-plan-list" id="profile-clone-handoff-list" role="list"></div>
+            </div>
+            <div class="surface-soft-box profile-lifecycle-panel" id="profile-lifecycle-panel" aria-labelledby="profile-lifecycle-copy">
+                <div class="section-kicker" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</div>
+                <p class="profile-lifecycle-copy" id="profile-lifecycle-copy" role="status" aria-live="polite" data-i18n="profiles.lifecycle_review_body">{{ tr("profiles.lifecycle_review_body") }}</p>
+                <div class="wizard-export-plan-list" id="profile-lifecycle-list" role="list"></div>
+            </div>
+            <div class="surface-soft-box profile-compliance-panel" id="profile-compliance-panel" aria-labelledby="profile-compliance-copy" hidden>
+                <div class="section-kicker" data-i18n="profiles.compliance_summary_title">{{ tr("profiles.compliance_summary_title") }}</div>
+                <p class="profile-compliance-copy" id="profile-compliance-copy" role="status" aria-live="polite" data-i18n="profiles.compliance_summary_body">{{ tr("profiles.compliance_summary_body") }}</p>
+                <div class="wizard-export-plan-list" id="profile-compliance-list" role="list"></div>
+            </div>
+        </div>
+
+            <div class="support-hidden" aria-live="polite">
+            <div id="workspace-helper">
+                <h3 id="workspace-helper-title" {% if has_initial_profile %}data-i18n="profiles.helper_selected_title"{% else %}data-i18n="profiles.helper_no_selection_title"{% endif %}>
+                    {{ tr("profiles.helper_selected_title") if has_initial_profile else tr("profiles.helper_no_selection_title") }}
+                </h3>
+                <p id="workspace-helper-copy" {% if has_initial_profile %}data-i18n="profiles.helper_selected_body"{% else %}data-i18n="profiles.helper_no_selection_body"{% endif %}>
+                    {{ tr("profiles.helper_selected_body") if has_initial_profile else tr("profiles.helper_no_selection_body") }}
+                </p>
+            </div>
+            <div id="overview-mode">JSON</div>
+            <input id="mode" type="hidden" value="json" />
+        </div>
+    </div>
+</section>

@@ -11,7 +11,7 @@ from typing import Annotated
 from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -88,14 +88,20 @@ def _build_profiles_page_context(
     title: str,
     route_mode: str,
     editing_profile_id: int | None = None,
+    editing_profile_schema_version: str | None = None,
+    editing_profile_initial: dict[str, object] | None = None,
+    include_deleted: bool = False,
     return_url: str | None = None,
     focus_target: str | None = None,
     advanced_href: str | None = None,
+    settings_href: str | None = None,
+    json_href: str | None = None,
 ) -> dict[str, object]:
     current_year = datetime.now(UTC).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
     wizard_settings_catalog = get_wizard_settings_catalog()
     wizard_preferences_catalog = get_wizard_preferences_catalog(wizard_settings_catalog)
+    wizard_schema_shell_catalog = get_wizard_schema_shell_catalog(wizard_preferences_catalog)
     initial_lang = _resolve_request_locale(request)
     initial_locale = _load_locale_catalog(initial_lang)
 
@@ -113,15 +119,30 @@ def _build_profiles_page_context(
         "footer_year_range": footer_year_range,
         "profiles_route_mode": route_mode,
         "editing_profile_id": editing_profile_id,
+        "editing_profile_schema_version": editing_profile_schema_version,
+        "editing_profile_initial": editing_profile_initial,
+        "include_deleted": include_deleted,
         "return_url": return_url,
         "focus_target": focus_target,
         "advanced_href": advanced_href,
+        "settings_href": settings_href,
+        "json_href": json_href,
         "wizard_settings_catalog": wizard_settings_catalog,
         "wizard_preferences_catalog": wizard_preferences_catalog,
+        "wizard_preferences_sections_by_id": {
+            section["id"]: section
+            for section in wizard_preferences_catalog.get("sections", [])
+            if isinstance(section, dict) and section.get("id")
+        },
         "wizard_manual_policy_controls": get_manual_policy_controls_catalog(),
         "wizard_starter_catalog": get_wizard_starter_catalog(),
         "wizard_steps": get_wizard_steps(),
-        "wizard_schema_shell_catalog": get_wizard_schema_shell_catalog(wizard_preferences_catalog),
+        "wizard_schema_shell_catalog": wizard_schema_shell_catalog,
+        "settings_shell_step_to_open": _resolve_settings_shell_focus_step(
+            focus_target,
+            editing_profile_schema_version,
+            wizard_schema_shell_catalog,
+        ),
         "schema_channels_catalog": build_schema_channels_catalog(),
         "initial_lang": initial_lang,
         "initial_locale": initial_locale,
@@ -148,19 +169,174 @@ def _resolve_focus_target(raw_focus_target: str | None) -> str | None:
     return focus_target
 
 
+def _resolve_include_deleted_flag(raw_include_deleted: str | None) -> bool:
+    if raw_include_deleted is None:
+        return False
+    return raw_include_deleted.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _resolve_settings_shell_focus_step(
+    focus_target: str | None,
+    schema_version: str | None,
+    wizard_schema_shell_catalog: dict[str, object] | None = None,
+) -> int | None:
+    normalized_focus = (focus_target or "").strip()
+    if not normalized_focus:
+        return None
+    if normalized_focus == "settings-schema-shell-step-8":
+        return 8
+    if normalized_focus.startswith("shell-policy:"):
+        parts = normalized_focus.split(":", 2)
+        if len(parts) >= 3:
+            try:
+                return int(parts[1])
+            except ValueError:
+                return None
+    if (
+        normalized_focus in {"raw", "deprecated", "unknown"}
+        or normalized_focus.startswith("raw:")
+        or normalized_focus.startswith("deprecated:")
+        or normalized_focus.startswith("unknown:")
+    ):
+        return 8
+    if not normalized_focus.startswith("policy:") or not schema_version:
+        return None
+
+    policy_id = normalized_focus.split(":", 1)[1].strip()
+    if not policy_id:
+        return None
+
+    shell_catalog = wizard_schema_shell_catalog or get_wizard_schema_shell_catalog(
+        get_wizard_preferences_catalog(get_wizard_settings_catalog())
+    )
+    channels = shell_catalog.get("channels", {})
+    if not isinstance(channels, dict):
+        return None
+    channel_data = channels.get(schema_version, {})
+    if not isinstance(channel_data, dict):
+        return None
+    channel_steps = channel_data.get("steps", {})
+    if not isinstance(channel_steps, dict):
+        return None
+    for step_key, step_data in channel_steps.items():
+        if not isinstance(step_data, dict):
+            continue
+        items = [
+            *(step_data.get("recommended") or []),
+            *(step_data.get("additional") or []),
+            *(step_data.get("raw_fallback") or []),
+        ]
+        if any(item.get("id") == policy_id for item in items if isinstance(item, dict)):
+            try:
+                return int(step_key)
+            except (TypeError, ValueError):
+                return None
+    return None
+
+
+def _resolve_json_focus_target_from_settings_focus(
+    focus_target: str | None,
+) -> str | None:
+    if not focus_target:
+        return None
+    normalized_focus = focus_target.strip()
+    if not normalized_focus:
+        return None
+    if normalized_focus.startswith("policy:"):
+        return normalized_focus
+    if normalized_focus == "settings-schema-shell-step-8":
+        return "raw"
+    return None
+
+
+def _resolve_settings_focus_target_from_json_focus(
+    focus_target: str | None,
+) -> str | None:
+    if not focus_target:
+        return None
+    normalized_focus = focus_target.strip()
+    if not normalized_focus or normalized_focus == "editor":
+        return None
+    if normalized_focus.startswith("policy:"):
+        return normalized_focus
+    if (
+        normalized_focus in {"details", "download", "context", "raw", "deprecated", "unknown"}
+        or normalized_focus.startswith("raw:")
+        or normalized_focus.startswith("deprecated:")
+        or normalized_focus.startswith("unknown:")
+    ):
+        return "settings-schema-shell-step-8"
+    return normalized_focus
+
+
+def _build_profile_json_href(
+    profile_id: int,
+    *,
+    return_url: str | None = None,
+    focus_target: str | None = None,
+    include_deleted: bool = False,
+) -> str:
+    params: list[str] = []
+    if include_deleted:
+        params.append("include_deleted=true")
+    if return_url:
+        params.append(f"return={quote(return_url, safe='/')}")
+    if focus_target:
+        params.append(f"focus={quote(focus_target, safe=':-_')}")
+    suffix = f"?{'&'.join(params)}" if params else ""
+    return f"/profiles/{profile_id}/json{suffix}"
+
+
 def _build_profile_advanced_href(
     profile_id: int,
     *,
     return_url: str | None = None,
     focus_target: str | None = None,
+    include_deleted: bool = False,
 ) -> str:
+    """Compatibility builder kept temporarily while `/advanced` redirects to `/json`."""
     params: list[str] = []
+    if include_deleted:
+        params.append("include_deleted=true")
     if return_url:
         params.append(f"return={quote(return_url, safe='/')}")
     if focus_target:
         params.append(f"focus={quote(focus_target, safe=':-_')}")
     suffix = f"?{'&'.join(params)}" if params else ""
     return f"/profiles/{profile_id}/advanced{suffix}"
+
+
+def _build_profile_settings_href(
+    profile_id: int,
+    *,
+    return_url: str | None = None,
+    focus_target: str | None = None,
+    include_deleted: bool = False,
+) -> str:
+    params: list[str] = []
+    if include_deleted:
+        params.append("include_deleted=true")
+    if return_url:
+        params.append(f"return={quote(return_url, safe='/')}")
+    if focus_target:
+        params.append(f"focus={quote(focus_target, safe=':-_')}")
+    suffix = f"?{'&'.join(params)}" if params else ""
+    return f"/profiles/{profile_id}/settings{suffix}"
+
+
+def _build_profile_route_path(
+    profile_id: int,
+    mode: str,
+    *,
+    include_deleted: bool = False,
+) -> str:
+    if mode == "settings":
+        base_path = f"/profiles/{profile_id}/settings"
+    elif mode == "json":
+        base_path = f"/profiles/{profile_id}/json"
+    else:
+        base_path = f"/profiles/{profile_id}/edit"
+    return f"{base_path}?include_deleted=true" if include_deleted else base_path
 
 
 @router.get("/profiles", response_class=HTMLResponse)
@@ -171,7 +347,7 @@ async def profiles_page(request: Request) -> HTMLResponse:
         "profiles_library.html",
         _build_profiles_page_context(
             request,
-            title=f"Profile library — {settings.APP_NAME}",
+            title=f"Library — {settings.APP_NAME}",
             route_mode="library",
         ),
     )
@@ -185,7 +361,7 @@ async def profiles_new_page(request: Request) -> HTMLResponse:
         "profiles_editor.html",
         _build_profiles_page_context(
             request,
-            title=f"New profile draft — {settings.APP_NAME}",
+            title=f"New profile draft — Guided editor — {settings.APP_NAME}",
             route_mode="new",
         ),
     )
@@ -198,21 +374,122 @@ async def profiles_edit_page(
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> HTMLResponse:
     """Render the visual wizard shell for an existing profile."""
-    profile = await ProfileService.get(session, profile_id)
+    include_deleted = _resolve_include_deleted_flag(request.query_params.get("include_deleted"))
+    profile = await ProfileService.get(session, profile_id, include_deleted=include_deleted)
     if profile is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
+    current_route = _build_profile_route_path(profile_id, "edit", include_deleted=include_deleted)
 
     return templates.TemplateResponse(
         request,
         "profiles_editor.html",
         _build_profiles_page_context(
             request,
-            title=f"{profile.name} — Profile editor — {settings.APP_NAME}",
+            title=f"{profile.name} — Guided editor — {settings.APP_NAME}",
             route_mode="edit",
             editing_profile_id=profile_id,
-            advanced_href=_build_profile_advanced_href(
+            editing_profile_schema_version=profile.schema_version,
+            editing_profile_initial=profile.model_dump(mode="json"),
+            include_deleted=include_deleted,
+            settings_href=_build_profile_settings_href(
                 profile_id,
-                return_url=f"/profiles/{profile_id}/edit",
+                return_url=current_route,
+                include_deleted=include_deleted,
+            ),
+            json_href=_build_profile_json_href(
+                profile_id,
+                return_url=current_route,
+                focus_target="editor",
+                include_deleted=include_deleted,
+            ),
+        ),
+    )
+
+
+@router.get("/profiles/{profile_id}/settings", response_class=HTMLResponse)
+async def profiles_settings_page(
+    request: Request,
+    profile_id: int,
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> HTMLResponse:
+    """Render the advanced settings shell for an existing profile."""
+    include_deleted = _resolve_include_deleted_flag(request.query_params.get("include_deleted"))
+    profile = await ProfileService.get(session, profile_id, include_deleted=include_deleted)
+    if profile is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
+    return_url = _resolve_safe_profiles_return_url(request.query_params.get("return"))
+    focus_target = _resolve_focus_target(request.query_params.get("focus"))
+    current_route = _build_profile_route_path(profile_id, "settings", include_deleted=include_deleted)
+
+    return templates.TemplateResponse(
+        request,
+        "profiles_settings.html",
+        _build_profiles_page_context(
+            request,
+            title=f"{profile.name} — Advanced settings — {settings.APP_NAME}",
+            route_mode="settings",
+            editing_profile_id=profile_id,
+            editing_profile_schema_version=profile.schema_version,
+            editing_profile_initial=profile.model_dump(mode="json"),
+            include_deleted=include_deleted,
+            return_url=return_url,
+            focus_target=focus_target,
+            settings_href=_build_profile_settings_href(
+                profile_id,
+                return_url=return_url,
+                focus_target=focus_target,
+                include_deleted=include_deleted,
+            ),
+            json_href=_build_profile_json_href(
+                profile_id,
+                return_url=current_route,
+                focus_target=_resolve_json_focus_target_from_settings_focus(focus_target)
+                or "editor",
+                include_deleted=include_deleted,
+            ),
+        ),
+    )
+
+
+@router.get("/profiles/{profile_id}/json", response_class=HTMLResponse)
+async def profiles_json_page(
+    request: Request,
+    profile_id: int,
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> HTMLResponse:
+    """Render the JSON policy document editor for an existing profile."""
+    include_deleted = _resolve_include_deleted_flag(request.query_params.get("include_deleted"))
+    profile = await ProfileService.get(session, profile_id, include_deleted=include_deleted)
+    if profile is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
+    return_url = _resolve_safe_profiles_return_url(request.query_params.get("return"))
+    focus_target = _resolve_focus_target(request.query_params.get("focus"))
+    current_route = _build_profile_route_path(profile_id, "json", include_deleted=include_deleted)
+
+    return templates.TemplateResponse(
+        request,
+        "profiles_json.html",
+        _build_profiles_page_context(
+            request,
+            title=f"{profile.name} — JSON editor — {settings.APP_NAME}",
+            route_mode="json",
+            editing_profile_id=profile_id,
+            editing_profile_schema_version=profile.schema_version,
+            editing_profile_initial=profile.model_dump(mode="json"),
+            include_deleted=include_deleted,
+            return_url=return_url,
+            focus_target=focus_target,
+            settings_href=_build_profile_settings_href(
+                profile_id,
+                return_url=current_route,
+                focus_target=_resolve_settings_focus_target_from_json_focus(focus_target),
+                include_deleted=include_deleted,
+            ),
+            json_href=_build_profile_json_href(
+                profile_id,
+                return_url=current_route,
+                focus_target="editor",
+                include_deleted=include_deleted,
             ),
         ),
     )
@@ -223,23 +500,17 @@ async def profiles_advanced_page(
     request: Request,
     profile_id: int,
     session: Annotated[AsyncSession, Depends(get_session)],
-) -> HTMLResponse:
-    """Render the advanced policy document editor for an existing profile."""
-    profile = await ProfileService.get(session, profile_id)
+) -> RedirectResponse:
+    """Compatibility route that redirects the old advanced editor URL to `/json`."""
+    include_deleted = _resolve_include_deleted_flag(request.query_params.get("include_deleted"))
+    profile = await ProfileService.get(session, profile_id, include_deleted=include_deleted)
     if profile is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
-    return_url = _resolve_safe_profiles_return_url(request.query_params.get("return"))
-    focus_target = _resolve_focus_target(request.query_params.get("focus"))
 
-    return templates.TemplateResponse(
-        request,
-        "profiles_advanced.html",
-        _build_profiles_page_context(
-            request,
-            title=f"{profile.name} — Advanced editor — {settings.APP_NAME}",
-            route_mode="advanced",
-            editing_profile_id=profile_id,
-            return_url=return_url,
-            focus_target=focus_target,
-        ),
+    redirect_href = _build_profile_json_href(
+        profile_id,
+        return_url=_resolve_safe_profiles_return_url(request.query_params.get("return")),
+        focus_target=_resolve_focus_target(request.query_params.get("focus")),
+        include_deleted=include_deleted,
     )
+    return RedirectResponse(url=redirect_href, status_code=status.HTTP_307_TEMPORARY_REDIRECT)

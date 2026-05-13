@@ -2084,7 +2084,9 @@
                 const key = keys[0];
                 const item = key ? policyIndex[key] : null;
                 return {
-                    target: item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl),
+                    target: (item?.target ? findSettingsTarget(item.target) : null)
+                        || wizardSchemaShellViews["8"]?.raw
+                        || editorEl,
                     context: buildFinalReviewAdvancedContext("raw", keys, policyIndex),
                 };
             }
@@ -2093,7 +2095,9 @@
                 const key = keys[0];
                 const item = key ? policyIndex[key] : null;
                 return {
-                    target: item?.target ? findSettingsTarget(item.target) : (wizardSchemaShellViews["8"]?.raw || editorEl),
+                    target: (item?.target ? findSettingsTarget(item.target) : null)
+                        || wizardSchemaShellViews["8"]?.raw
+                        || editorEl,
                     context: buildFinalReviewAdvancedContext("deprecated", keys, policyIndex),
                 };
             }
@@ -2138,20 +2142,34 @@
         }
 
         function renderFinalExportTechnicalAlerts(summary) {
+            const technicalAlertsContainerEl = documentRef.getElementById("wizard-export-technical-alerts")
+                || wizardExportTechnicalAlertsEl;
+            const rawSummaryJumpEl = documentRef.getElementById("wizard-export-raw-summary-jump")
+                || wizardExportRawSummaryJumpEl;
+            const deprecatedSummaryJumpEl = documentRef.getElementById("wizard-export-deprecated-summary-jump")
+                || wizardExportDeprecatedSummaryJumpEl;
+            const unknownSummaryJumpEl = documentRef.getElementById("wizard-export-unknown-summary-jump")
+                || wizardExportUnknownSummaryJumpEl;
+            const rawSummaryCountEl = documentRef.getElementById("wizard-export-raw-summary-count")
+                || wizardExportRawSummaryCountEl;
+            const deprecatedSummaryCountEl = documentRef.getElementById("wizard-export-deprecated-summary-count")
+                || wizardExportDeprecatedSummaryCountEl;
+            const unknownSummaryCountEl = documentRef.getElementById("wizard-export-unknown-summary-count")
+                || wizardExportUnknownSummaryCountEl;
             const items = [
                 {
-                    buttonEl: wizardExportRawSummaryJumpEl,
-                    countEl: wizardExportRawSummaryCountEl,
+                    buttonEl: rawSummaryJumpEl,
+                    countEl: rawSummaryCountEl,
                     count: summary.rawFallbackKeys.length,
                 },
                 {
-                    buttonEl: wizardExportDeprecatedSummaryJumpEl,
-                    countEl: wizardExportDeprecatedSummaryCountEl,
+                    buttonEl: deprecatedSummaryJumpEl,
+                    countEl: deprecatedSummaryCountEl,
                     count: summary.deprecatedKeys.length,
                 },
                 {
-                    buttonEl: wizardExportUnknownSummaryJumpEl,
-                    countEl: wizardExportUnknownSummaryCountEl,
+                    buttonEl: unknownSummaryJumpEl,
+                    countEl: unknownSummaryCountEl,
                     count: summary.unknownKeys.length,
                 },
             ];
@@ -2162,8 +2180,8 @@
                 }
                 return total + (count > 0 ? 1 : 0);
             }, 0);
-            if (wizardExportTechnicalAlertsEl) {
-                wizardExportTechnicalAlertsEl.hidden = visibleCount <= 0;
+            if (technicalAlertsContainerEl) {
+                technicalAlertsContainerEl.hidden = visibleCount <= 0;
             }
         }
 

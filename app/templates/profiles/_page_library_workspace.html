@@ -1,0 +1,158 @@
+<div class="app-layout">
+    <main class="workspace-column space-y-4">
+        <section id="library-panel"
+            class="panel-card surface-panel library-panel-shell rounded-[30px] p-4 shadow-soft fade-up md:p-5">
+            <div class="library-panel-head">
+                <div class="library-panel-intro">
+                    <div class="section-kicker" data-i18n="profiles.sidebar_title">{{ tr("profiles.sidebar_title") }}</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.sidebar_hint">{{ tr("profiles.sidebar_hint") }}</p>
+                </div>
+                <div class="library-panel-badges flex flex-wrap items-center justify-end gap-2 text-xs font-semibold">
+                    <div class="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
+                        <span data-i18n="profiles.library_filtered_short">{{ tr("profiles.library_filtered_short") }}</span>
+                        <strong id="list-summary" class="ml-1" aria-hidden="true"></strong>
+                    </div>
+                    <div class="rounded-full bg-emerald-50 px-3 py-1 text-emerald-800">
+                        <span data-i18n="profiles.library_total_short">{{ tr("profiles.library_total_short") }}</span>
+                        <strong id="list-total-summary" class="ml-1" aria-hidden="true"></strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="library-panel-toolbar">
+                <label class="library-search-field" for="search">
+                    <span class="library-search-label" data-i18n="profiles.search_name">{{ tr("profiles.search_name", "Search by profile name") }}</span>
+                    <input
+                        id="search"
+                        type="text"
+                        class="soft-input library-search-input"
+                        placeholder="{{ tr('profiles.search_name') }}"
+                        data-i18n-placeholder="profiles.search_name" />
+                </label>
+                <button id="refresh"
+                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    title="{{ tr('profiles.reload') }}" data-i18n-title="profiles.reload">
+                    <span data-i18n="profiles.reload">{{ tr("profiles.reload") }}</span>
+                </button>
+                <a id="create-profile-link"
+                    href="/profiles/new"
+                    target="_blank"
+                    rel="noopener"
+                    class="button-base primary-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium"
+                    title="{{ tr('profiles.create') }}"
+                    data-i18n-title="profiles.create">
+                    <span data-i18n="profiles.create">{{ tr("profiles.create") }}</span>
+                </a>
+                <button id="import-firefox-policies"
+                    type="button"
+                    class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                    title="{{ tr('profiles.import_firefox_policies_json') }}"
+                    data-i18n-title="profiles.import_firefox_policies_json"
+                    aria-describedby="import-firefox-policies-status">
+                    <span data-i18n="profiles.import_firefox_policies_json">{{ tr("profiles.import_firefox_policies_json") }}</span>
+                </button>
+                <input
+                    id="import-firefox-policies-file"
+                    class="support-hidden"
+                    type="file"
+                    accept=".json,application/json"
+                    aria-label="{{ tr('profiles.import_firefox_policies_json') }}" />
+            </div>
+            <div
+                id="import-firefox-policies-status"
+                class="support-hidden"
+                aria-live="polite"
+                data-i18n="profiles.import_firefox_policies_ready">
+                {{ tr("profiles.import_firefox_policies_ready") }}
+            </div>
+
+            <div class="support-hidden">
+                <input id="include-deleted" type="checkbox" />
+                <select id="sort">
+                    <option value="updated_at" data-i18n="profiles.sort_updated_at">{{ tr("profiles.sort_updated_at", "Updated") }}</option>
+                    <option value="created_at" data-i18n="profiles.sort_created_at">{{ tr("profiles.sort_created_at", "Created") }}</option>
+                    <option value="name" data-i18n="profiles.sort_name">{{ tr("profiles.sort_name", "Name") }}</option>
+                    <option value="id" data-i18n="profiles.sort_id">{{ tr("profiles.sort_id", "ID") }}</option>
+                </select>
+                <select id="order">
+                    <option value="desc" data-i18n="profiles.order_desc">{{ tr("profiles.order_desc", "DESC") }}</option>
+                    <option value="asc" data-i18n="profiles.order_asc">{{ tr("profiles.order_asc", "ASC") }}</option>
+                </select>
+            </div>
+
+            <div class="library-table-shell">
+                <div class="library-table-head" aria-hidden="true">
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_profile">{{ tr("profiles.library_column_profile", "Profile") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_schema">{{ tr("profiles.library_column_schema", "Schema") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_updated">{{ tr("profiles.library_column_updated", "Updated") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_status">{{ tr("profiles.library_column_status", "Status") }}</div>
+                    <div class="library-table-head-cell library-table-head-cell--actions" data-i18n="profiles.library_column_actions">{{ tr("profiles.library_column_actions", "Actions") }}</div>
+                </div>
+                <ul id="list" class="library-table" role="list"></ul>
+            </div>
+        </section>
+
+        <section id="compare-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="editor-header mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <div class="section-kicker mb-2" data-i18n="profiles.compare_title">{{ tr("profiles.compare_title") }}</div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.compare_body">{{ tr("profiles.compare_body") }}</p>
+                </div>
+                <button
+                    type="button"
+                    id="compare-clear"
+                    class="button-base ghost-button"
+                    hidden
+                    data-i18n="profiles.compare_clear">
+                    {{ tr("profiles.compare_clear") }}
+                </button>
+            </div>
+
+            <div id="compare-empty" class="compare-empty surface-soft-box">
+                <div class="section-kicker" data-i18n="profiles.compare_empty_title">{{ tr("profiles.compare_empty_title") }}</div>
+                <p class="compare-empty-copy" id="compare-empty-copy" role="status" aria-live="polite" data-i18n="profiles.compare_empty_body">{{ tr("profiles.compare_empty_body") }}</p>
+            </div>
+
+            <div id="compare-active" hidden>
+                <div class="compare-targets-grid">
+                    <div class="compare-target-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_current_title">{{ tr("profiles.compare_current_title") }}</div>
+                        <div class="compare-target-name" id="compare-current-name"></div>
+                        <p class="compare-target-copy" id="compare-current-copy"></p>
+                    </div>
+                    <div class="compare-target-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_other_title">{{ tr("profiles.compare_other_title") }}</div>
+                        <div class="compare-target-name" id="compare-other-name"></div>
+                        <p class="compare-target-copy" id="compare-other-copy"></p>
+                    </div>
+                </div>
+
+                <div class="compare-summary-grid">
+                    <div class="compare-summary-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_summary_metadata">{{ tr("profiles.compare_summary_metadata") }}</div>
+                        <div class="compare-summary-value" id="compare-metadata-count">0</div>
+                    </div>
+                    <div class="compare-summary-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_summary_policies">{{ tr("profiles.compare_summary_policies") }}</div>
+                        <div class="compare-summary-value" id="compare-policy-count">0</div>
+                    </div>
+                    <div class="compare-summary-card surface-soft-box">
+                        <div class="section-kicker" data-i18n="profiles.compare_summary_preferences">{{ tr("profiles.compare_summary_preferences") }}</div>
+                        <div class="compare-summary-value" id="compare-preference-count">0</div>
+                    </div>
+                </div>
+
+                <div class="compare-changes surface-soft-box">
+                    <div class="section-kicker" data-i18n="profiles.compare_changes_title">{{ tr("profiles.compare_changes_title") }}</div>
+                    <p class="compare-changes-copy" id="compare-changes-copy" role="status" aria-live="polite" data-i18n="profiles.compare_changes_body">{{ tr("profiles.compare_changes_body") }}</p>
+                    <ul id="compare-changes-list" class="compare-changes-list" role="list"></ul>
+                </div>
+                <div class="compare-changes surface-soft-box">
+                    <div class="section-kicker" data-i18n="profiles.compare_guided_areas_title">{{ tr("profiles.compare_guided_areas_title") }}</div>
+                    <p class="compare-changes-copy" id="compare-guided-areas-copy" role="status" aria-live="polite" data-i18n="profiles.compare_guided_areas_body">{{ tr("profiles.compare_guided_areas_body") }}</p>
+                    <ul id="compare-guided-areas-list" class="compare-changes-list" role="list"></ul>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>

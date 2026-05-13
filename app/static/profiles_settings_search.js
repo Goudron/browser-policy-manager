@@ -9,6 +9,7 @@
         searchEnginePresetCatalog = [],
         searchEnginePresets = {},
         wizardSchemaShellCatalog = {},
+        settingsTargetAliases = {},
     }) {
         const {
             t,
@@ -27,6 +28,39 @@
         } = elements;
 
         let wizardSettingsSearchIndex = [];
+        let shellPolicyTargetByLegacyTarget = {};
+
+        function buildShellPolicyTargetIndex() {
+            const schemaVersion = getActiveWizardSchemaVersion();
+            const shellSteps = Array.isArray(wizardSchemaShellCatalog.steps) ? wizardSchemaShellCatalog.steps : [];
+            const channelData = wizardSchemaShellCatalog.channels?.[schemaVersion];
+            const targetIndex = {};
+
+            shellSteps.forEach((stepMeta) => {
+                const stepData = channelData?.steps?.[String(stepMeta.step)] || {};
+                [
+                    ...(Array.isArray(stepData.recommended) ? stepData.recommended : []),
+                    ...(Array.isArray(stepData.additional) ? stepData.additional : []),
+                    ...(Array.isArray(stepData.raw_fallback) ? stepData.raw_fallback : []),
+                ].forEach((item) => {
+                    if (!item?.id || !item?.target) return;
+                    targetIndex[`policy:${item.id}`] = item.target;
+                });
+            });
+
+            shellPolicyTargetByLegacyTarget = targetIndex;
+        }
+
+        function resolveTargetAlias(target) {
+            const normalizedTarget = String(target || "").trim();
+            if (!normalizedTarget) return "";
+            if (Object.keys(shellPolicyTargetByLegacyTarget).length === 0) {
+                buildShellPolicyTargetIndex();
+            }
+            return settingsTargetAliases[normalizedTarget]
+                || shellPolicyTargetByLegacyTarget[normalizedTarget]
+                || normalizedTarget;
+        }
 
         function createSettingsSearchEntry({
             title = "",
@@ -77,6 +111,7 @@
         function buildIndex() {
             const sections = Array.isArray(wizardSettingsCatalog.sections) ? wizardSettingsCatalog.sections : [];
             const entries = [];
+            buildShellPolicyTargetIndex();
 
             sections.forEach((section) => {
                 const preferenceSection = section.preferences && typeof section.preferences === "object"
@@ -96,7 +131,7 @@
                             createSettingsSearchEntry({
                                 title: t(item.label_key, item.fallback),
                                 description: areas[item.area_id] || "",
-                                target: item.target,
+                                target: resolveTargetAlias(item.target),
                                 sectionId: section.id,
                                 areaLabel: areas[item.area_id] || "",
                                 kind: "control",
@@ -117,13 +152,13 @@
                     const sectionBody = t(preferenceSection.body_key, preferenceSection.id);
 
                     entries.push(
-                        createSettingsSearchEntry({
-                            title: sectionTitle,
-                            description: sectionBody,
-                            target: `pref-section:${preferenceSection.id}`,
-                            sectionId: section.id,
-                            areaLabel: sectionTitle,
-                            kind: "preference_section",
+                            createSettingsSearchEntry({
+                                title: sectionTitle,
+                                description: sectionBody,
+                                target: resolveTargetAlias(`pref-section:${preferenceSection.id}`),
+                                sectionId: section.id,
+                                areaLabel: sectionTitle,
+                                kind: "preference_section",
                             keywords: [
                                 ...(preferenceSection.prefixes || []),
                                 ...Object.values(guiGroups),
@@ -141,7 +176,7 @@
                             createSettingsSearchEntry({
                                 title: t(item.label_key, item.fallback),
                                 description: t(preset.description_key, preset.pref || ""),
-                                target: item.target,
+                                target: resolveTargetAlias(item.target),
                                 sectionId: section.id,
                                 areaLabel: guiGroups[item.area_id] || "",
                                 kind: "preference_preset",
@@ -161,7 +196,7 @@
                             createSettingsSearchEntry({
                                 title: t(bundle.label_key, bundle.id),
                                 description: t(bundle.description_key, bundle.id),
-                                target: `preference-bundle:${bundle.id}`,
+                                target: resolveTargetAlias(`preference-bundle:${bundle.id}`),
                                 sectionId: section.id,
                                 areaLabel: guiGroups[bundle.area_id] || sectionTitle,
                                 kind: "preference_bundle",
@@ -184,7 +219,7 @@
                                         || knownPreference.fallback
                                         || knownPreference.pref,
                                 ),
-                                target: `pref-section:${preferenceSection.id}`,
+                                target: resolveTargetAlias(`pref-section:${preferenceSection.id}`),
                                 sectionId: section.id,
                                 areaLabel: sectionTitle,
                                 kind: "known_preference",
@@ -206,7 +241,7 @@
                     createSettingsSearchEntry({
                         title: t(preset.title_key, preset.id),
                         description: t(preset.description_key, engineMeta.Description || ""),
-                        target: preset.target,
+                        target: resolveTargetAlias(preset.target),
                         sectionId: "search",
                         areaLabel: t("profiles.wizard_search_presets_title"),
                         kind: "search_engine_preset",
@@ -239,7 +274,7 @@
                             description: item.support_level === "fallback"
                                 ? t("profiles.wizard_shell_raw_body")
                                 : t("profiles.wizard_shell_additional_body"),
-                            target: item.target,
+                            target: resolveTargetAlias(item.target),
                             sectionId: stepMeta.id,
                             areaLabel: item.subsection_label || "",
                             kind: "policy_blueprint",
@@ -352,7 +387,10 @@
         }
 
         function findTarget(targetKey) {
-            return documentRef.querySelector(`[data-settings-target="${targetKey}"]`);
+            const normalizedTarget = String(targetKey || "").trim();
+            if (!normalizedTarget) return null;
+            return documentRef.querySelector(`[data-settings-target="${normalizedTarget}"]`)
+                || documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`);
         }
 
         function revealTarget(targetEl) {
@@ -389,6 +427,22 @@
                 button.hidden = !matches;
             });
         }
+
+        wizardSettingsSearchInputEl?.addEventListener("input", () => {
+            renderResults();
+        });
+        wizardSettingsSearchInputEl?.addEventListener("search", () => {
+            renderResults();
+        });
+        wizardSettingsSearchInputEl?.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                clear();
+            }
+        });
+        wizardSettingsSearchClearEl?.addEventListener("click", () => {
+            clear();
+            wizardSettingsSearchInputEl?.focus();
+        });
 
         return {
             buildIndex,

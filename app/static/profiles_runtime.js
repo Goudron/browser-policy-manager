@@ -10,6 +10,7 @@
             resolveTheme,
             resolveBrowserLanguage,
             updateThemeColorMeta,
+            syncThemeSensitiveControls,
             fromEditorValue,
             toEditorValue,
             renderPreferencePresetButtons,
@@ -35,6 +36,7 @@
             syncWizardExtensionsFromEditor,
             setValidationPreview,
             updateActionState,
+            setBaselineFromCurrentUi,
             saveCurrent,
             resetDraft,
             doSoftDelete,
@@ -104,7 +106,6 @@
 
         const langStorageKey = "bpm-lang-mode";
         const themeStorageKey = "bpm-theme-mode";
-        const workspaceScopeStorageKey = "bpm-workspace-scope";
         const themeMediaQuery = windowRef.matchMedia("(prefers-color-scheme: dark)");
         let localeRequestId = 0;
         let wizardConditionalVisibilityBound = false;
@@ -147,13 +148,6 @@
         const wizardSettingsSearchClearEl = documentRef.getElementById("wizard-settings-search-clear");
         const wizardStepUndoEl = documentRef.getElementById("wizard-step-undo");
         const wizardStepResetEl = documentRef.getElementById("wizard-step-reset");
-        const workspaceScopeGuidedEl = documentRef.getElementById("workspace-scope-guided");
-        const workspaceScopeAdvancedEl = documentRef.getElementById("workspace-scope-advanced");
-        const workspaceScopeSummaryEl = documentRef.getElementById("workspace-scope-summary");
-        const workspaceScopeSummaryTitleEl = documentRef.getElementById("workspace-scope-summary-title");
-        const workspaceScopeSummaryCopyEl = documentRef.getElementById("workspace-scope-summary-copy");
-        const workspaceScopeGuidedCardEl = documentRef.getElementById("workspace-scope-guided-card");
-        const workspaceScopeAdvancedCardEl = documentRef.getElementById("workspace-scope-advanced-card");
         const wizardSearchEngineAddButtonEl = documentRef.getElementById("wizard-search-engine-add");
         const wizardHomepageUrlEl = documentRef.getElementById("wizard-homepage-url");
         const wizardHomepageAdditionalEl = documentRef.getElementById("wizard-homepage-additional");
@@ -220,6 +214,49 @@
                 targetEl.setAttribute("tabindex", "-1");
             }
             targetEl.focus({ preventScroll: true });
+        }
+
+        function setWizardDisclosureExpanded(panelEl, expanded) {
+            if (!panelEl) return;
+            panelEl.hidden = !expanded;
+            const toggleEl = panelEl.id
+                ? documentRef.querySelector(`[data-wizard-disclosure-toggle][aria-controls="${panelEl.id}"]`)
+                : null;
+            if (!toggleEl) return;
+            toggleEl.setAttribute("aria-expanded", expanded ? "true" : "false");
+            const key = expanded
+                ? toggleEl.dataset.wizardDisclosureHideKey
+                : toggleEl.dataset.wizardDisclosureShowKey;
+            const fallback = expanded
+                ? toggleEl.dataset.wizardDisclosureHide
+                : toggleEl.dataset.wizardDisclosureShow;
+            toggleEl.textContent = t(key, fallback || toggleEl.textContent || "");
+        }
+
+        function isWorkspaceTargetVisible(targetEl) {
+            if (!targetEl || !targetEl.isConnected) return false;
+            if (targetEl.hidden) return false;
+            if (targetEl.closest("[hidden]")) return false;
+            if (targetEl.closest(".wizard-disclosure-panel[hidden]")) return false;
+            return targetEl.getClientRects().length > 0;
+        }
+
+        function expandLongListForTarget(targetEl) {
+            const longListEl = targetEl?.closest?.('[data-wizard-long-list-ready="true"]');
+            if (!longListEl) return;
+            longListEl.dataset.wizardLongListExpanded = "true";
+            Array.from(longListEl.children).forEach((childEl) => {
+                if (!(childEl instanceof HTMLElement)) return;
+                if (childEl.dataset.wizardLongListHidden === "true" || childEl.hidden) {
+                    childEl.hidden = false;
+                    delete childEl.dataset.wizardLongListHidden;
+                }
+            });
+            const toggleEl = longListEl.nextElementSibling?.querySelector?.(".wizard-long-list-toggle");
+            if (toggleEl instanceof HTMLElement) {
+                toggleEl.hidden = false;
+                toggleEl.setAttribute("aria-expanded", "true");
+            }
         }
 
         function syncContextualA11yLabels() {
@@ -536,6 +573,7 @@
             documentRef.documentElement.dataset.theme = resolvedTheme;
             themeSelectEl.value = normalizedMode;
             updateThemeColorMeta(documentRef, resolvedTheme);
+            syncThemeSensitiveControls?.(documentRef, resolvedTheme);
 
             if (persist) {
                 windowRef.localStorage.setItem(themeStorageKey, normalizedMode);
@@ -543,7 +581,7 @@
 
             const editor = getEditor();
             if (editor && windowRef.monaco) {
-                windowRef.monaco.editor.setTheme(resolvedTheme === "dark" ? "vs-dark" : "vs");
+                windowRef.monaco.editor.setTheme(getMonacoThemeName(resolvedTheme));
             }
         }
 
@@ -649,65 +687,6 @@
             }, 220));
         }
 
-        function applyWorkspaceScope(scope, { persist = true, focus = false } = {}) {
-            const normalizedScope = scope === "advanced" ? "advanced" : "guided";
-            documentRef.documentElement.dataset.workspaceScope = normalizedScope;
-            if (workspaceScopeSummaryEl) {
-                workspaceScopeSummaryEl.dataset.workspaceScopeState = normalizedScope;
-            }
-
-            [
-                { el: workspaceScopeGuidedEl, value: "guided" },
-                { el: workspaceScopeAdvancedEl, value: "advanced" },
-            ].forEach(({ el, value }) => {
-                if (!el) return;
-                const isActive = normalizedScope === value;
-                el.classList.toggle("workspace-scope-button--active", isActive);
-                el.setAttribute("aria-pressed", isActive ? "true" : "false");
-            });
-            [
-                { el: workspaceScopeGuidedCardEl, value: "guided" },
-                { el: workspaceScopeAdvancedCardEl, value: "advanced" },
-            ].forEach(({ el, value }) => {
-                if (!el) return;
-                el.classList.toggle("workspace-scope-mode-card--active", normalizedScope === value);
-            });
-            if (workspaceScopeSummaryTitleEl) {
-                const titleKey = normalizedScope === "advanced"
-                    ? "profiles.workspace_scope_current_advanced_title"
-                    : "profiles.workspace_scope_current_guided_title";
-                workspaceScopeSummaryTitleEl.textContent = t(titleKey);
-                workspaceScopeSummaryTitleEl.setAttribute("data-i18n", titleKey);
-            }
-            if (workspaceScopeSummaryCopyEl) {
-                const copyKey = normalizedScope === "advanced"
-                    ? "profiles.workspace_scope_current_advanced_copy"
-                    : "profiles.workspace_scope_current_guided_copy";
-                workspaceScopeSummaryCopyEl.textContent = t(copyKey);
-                workspaceScopeSummaryCopyEl.setAttribute("data-i18n", copyKey);
-            }
-
-            if (persist) {
-                windowRef.localStorage.setItem(workspaceScopeStorageKey, normalizedScope);
-            }
-
-            if (normalizedScope === "advanced") {
-                windowRef.requestAnimationFrame(() => {
-                    const editor = getEditor();
-                    if (editor && typeof editor.layout === "function") {
-                        editor.layout();
-                    }
-                });
-            }
-
-            if (!focus) return;
-            const focusTarget = normalizedScope === "advanced"
-                ? (documentRef.getElementById("details-panel") || documentRef.getElementById("editor-panel"))
-                : (documentRef.getElementById("wizard-panel") || documentRef.getElementById("overview-panel"));
-            focusElementForA11y(focusTarget);
-            focusTarget?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-
         function revealWorkspaceTarget(targetEl) {
             if (!targetEl) return;
 
@@ -721,7 +700,6 @@
 
             if (targetEl.closest('[data-workspace-scope-panel="advanced"]')) {
                 if (openAdvancedRouteFromVisual(null, deriveAdvancedFocusTarget(targetEl))) return;
-                applyWorkspaceScope("advanced");
             }
             const homeSurfaceGroup = targetEl.closest("[data-home-surface-group]");
             if (homeSurfaceGroup?.dataset.homeSurfaceCollapsed === "true") {
@@ -729,16 +707,21 @@
             }
             const disclosurePanel = targetEl.closest(".wizard-disclosure-panel");
             if (disclosurePanel?.hidden) {
-                documentRef.querySelector(`[data-wizard-disclosure-toggle][aria-controls="${disclosurePanel.id}"]`)?.click();
+                setWizardDisclosureExpanded(disclosurePanel, true);
             }
             const detailsPanel = targetEl.closest("details");
             if (detailsPanel && !detailsPanel.open) {
                 detailsPanel.open = true;
             }
+            expandLongListForTarget(targetEl);
             getDisclosurePanelPairs().forEach(([panelId, toggleId]) => {
                 const panelEl = documentRef.getElementById(panelId);
                 if (!panelEl || !targetEl.closest(`#${panelId}`) || panelEl.hidden === false) return;
-                documentRef.getElementById(toggleId)?.click();
+                panelEl.hidden = false;
+                const toggleEl = documentRef.getElementById(toggleId);
+                if (toggleEl) {
+                    toggleEl.setAttribute("aria-expanded", "true");
+                }
             });
             windowRef.requestAnimationFrame(() => {
                 windowRef.requestAnimationFrame(() => {
@@ -983,7 +966,6 @@
         function isGuardedProfileRouteHref(anchorEl) {
             const href = anchorEl?.getAttribute?.("href") || "";
             if (!href || href.startsWith("#")) return false;
-            if (anchorEl.target && anchorEl.target !== "_self") return false;
             try {
                 const url = new URL(href, windowRef.location.origin);
                 if (url.origin !== windowRef.location.origin) return false;
@@ -991,6 +973,14 @@
             } catch {
                 return false;
             }
+        }
+
+        function isCrossTabProfileRouteIntent(event, anchorEl) {
+            if (anchorEl?.target && anchorEl.target !== "_self") return true;
+            if (!event) return false;
+            if (event.metaKey || event.ctrlKey || event.shiftKey) return true;
+            if (typeof event.button === "number" && event.button !== 0) return true;
+            return false;
         }
 
         function confirmRouteNavigationIfDirty() {
@@ -1001,6 +991,7 @@
         function guardProfileRouteNavigation(event) {
             const anchorEl = event.target.closest?.("a[href]");
             if (!anchorEl || !isGuardedProfileRouteHref(anchorEl)) return false;
+            if (isCrossTabProfileRouteIntent(event, anchorEl)) return false;
             if (confirmRouteNavigationIfDirty()) return false;
             event.preventDefault();
             event.stopPropagation();
@@ -1062,9 +1053,18 @@
                 const finalReviewJumpButton = event.target.closest("[data-final-review-jump]");
                 if (finalReviewJumpButton) {
                     const jumpKind = finalReviewJumpButton.dataset.finalReviewJump || "";
+                    const jumpKey = finalReviewJumpButton.dataset.finalReviewKey || "";
                     const selection = resolveFinalReviewSelectionFromButton(finalReviewJumpButton);
+                    const semanticFocusTarget = jumpKey ? `${jumpKind}:${jumpKey}` : jumpKind;
                     const targetEl = selection.target
                         || resolveJumpTargetFallback("final", jumpKind);
+                    if (jumpKind === "unknown") {
+                        lastAdvancedReturnTriggerEl = finalReviewJumpButton;
+                        applyAdvancedContextForFinalReviewSelection(selection);
+                        if (openAdvancedRouteFromVisual(event, semanticFocusTarget)) {
+                            return;
+                        }
+                    }
                     if (targetEl) {
                         if (targetEl.closest?.('[data-workspace-scope-panel="advanced"]') || targetEl === editorEl) {
                             lastAdvancedReturnTriggerEl = finalReviewJumpButton;
@@ -1175,11 +1175,10 @@
                 const scopeTargetButton = event.target.closest("[data-workspace-scope-target]");
                 if (scopeTargetButton) {
                     if ((scopeTargetButton.dataset.workspaceScopeTarget || "guided") === "advanced") {
-                        if (openAdvancedRouteFromVisual(event, scopeTargetButton.dataset.advancedFocusTarget || "context")) return;
                         lastAdvancedReturnTriggerEl = scopeTargetButton;
                         setAdvancedHandoffContext(buildAdvancedHandoffContext(getWizardStep()));
+                        if (openAdvancedRouteFromVisual(event, scopeTargetButton.dataset.advancedFocusTarget || "context")) return;
                     }
-                    applyWorkspaceScope(scopeTargetButton.dataset.workspaceScopeTarget || "guided", { focus: true });
                     return;
                 }
 
@@ -1188,7 +1187,6 @@
                     const action = advancedStartActionButton.dataset.advancedStartAction || "";
                     if (action === "details") {
                         if (openAdvancedRouteFromVisual(event, "details")) return;
-                        applyWorkspaceScope("advanced", { focus: true });
                         const targetEl = documentRef.getElementById("details-panel");
                         if (targetEl) {
                             targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1196,7 +1194,6 @@
                         }
                     } else if (action === "editor") {
                         if (openAdvancedRouteFromVisual(event, "editor")) return;
-                        applyWorkspaceScope("advanced", { focus: true });
                         const targetEl = documentRef.getElementById("editor-panel");
                         if (targetEl) {
                             targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1212,7 +1209,6 @@
                     const step = Number(advancedContextReturnEl?.dataset.advancedReturnStep || 0);
                     if (step > 0) {
                         setWizardStep(step);
-                        applyWorkspaceScope("guided", { focus: true });
                         const targetEl = documentRef.getElementById(`wizard-step-${step}`);
                         if (targetEl) {
                             windowRef.requestAnimationFrame(() => {
@@ -1224,8 +1220,6 @@
                                 }
                             });
                         }
-                    } else {
-                        applyWorkspaceScope("guided", { focus: true });
                     }
                     return;
                 }
@@ -1638,11 +1632,6 @@
             const legacySavedLang = windowRef.localStorage.getItem("bpm-lang");
             const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || legacySavedLang || "system";
             const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
-            const savedWorkspaceScope = windowRef.localStorage.getItem(workspaceScopeStorageKey) || "guided";
-            const routeMode = readProfilesRouteContext().routeMode;
-            const initialWorkspaceScope = routeMode === "advanced" ? "advanced" : (
-                savedWorkspaceScope === "advanced" ? "guided" : savedWorkspaceScope
-            );
 
             if (langSelectEl) {
                 langSelectEl.value = savedLangMode;
@@ -1652,7 +1641,6 @@
             }
 
             applyThemeMode(savedThemeMode, false);
-            applyWorkspaceScope(initialWorkspaceScope, { persist: false });
             await applyLanguageMode(savedLangMode, false);
         }
 
@@ -1664,19 +1652,94 @@
             return {
                 routeMode,
                 editingProfileId: Number.isInteger(profileId) && profileId > 0 ? profileId : null,
+                includeDeleted: bodyEl?.dataset.includeDeleted === "true",
                 returnUrl: bodyEl?.dataset.advancedReturnUrl || "",
                 focusTarget: bodyEl?.dataset.advancedFocusTarget || "",
             };
         }
 
-        function buildAdvancedRouteHref(profileId, focusTarget = "") {
+        function buildProfileRoutePath(profileId, modeKey, includeDeleted = false) {
             if (!profileId) return "";
-            const href = new URL(`/profiles/${profileId}/advanced`, windowRef.location.origin);
-            href.searchParams.set("return", `/profiles/${profileId}/edit`);
-            if (focusTarget) {
-                href.searchParams.set("focus", focusTarget);
+            let basePath = "";
+            if (modeKey === "guided") {
+                basePath = `/profiles/${profileId}/edit`;
+            } else if (modeKey === "settings") {
+                basePath = `/profiles/${profileId}/settings`;
+            } else if (modeKey === "json") {
+                basePath = `/profiles/${profileId}/json`;
+            }
+            if (!basePath) return "";
+            return includeDeleted ? `${basePath}?include_deleted=true` : basePath;
+        }
+
+        function buildEditorReturnPath(profileId, routeMode, includeDeleted = false) {
+            if (!profileId) return "";
+            if (routeMode === "settings") {
+                return buildProfileRoutePath(profileId, "settings", includeDeleted);
+            }
+            if (routeMode === "json") {
+                return buildProfileRoutePath(profileId, "json", includeDeleted);
+            }
+            return buildProfileRoutePath(profileId, "guided", includeDeleted);
+        }
+
+        function normalizeSettingsFocusTarget(focusTarget) {
+            const normalizedTarget = String(focusTarget || "").trim();
+            if (!normalizedTarget) return "";
+            if (normalizedTarget === "details" || normalizedTarget === "context") {
+                return "settings-panel";
+            }
+            if (normalizedTarget === "download") {
+                return "settings-schema-shell-step-8";
+            }
+            if (
+                normalizedTarget === "raw"
+                || normalizedTarget === "deprecated"
+                || normalizedTarget === "unknown"
+                || normalizedTarget.startsWith("raw:")
+                || normalizedTarget.startsWith("deprecated:")
+                || normalizedTarget.startsWith("unknown:")
+            ) {
+                return "settings-schema-shell-step-8";
+            }
+            return normalizedTarget;
+        }
+
+        function normalizeJsonFocusTarget(focusTarget) {
+            const normalizedTarget = String(focusTarget || "").trim();
+            if (!normalizedTarget) return "editor";
+            if (normalizedTarget === "settings-schema-shell-step-8") return "raw";
+            return normalizedTarget;
+        }
+
+        function buildSettingsRouteHref(profileId, focusTarget = "") {
+            if (!profileId) return "";
+            const { routeMode, includeDeleted } = readProfilesRouteContext();
+            const href = new URL(buildProfileRoutePath(profileId, "settings", includeDeleted), windowRef.location.origin);
+            href.searchParams.set("return", buildEditorReturnPath(profileId, routeMode, includeDeleted));
+            const normalizedFocusTarget = normalizeSettingsFocusTarget(focusTarget);
+            if (normalizedFocusTarget) {
+                href.searchParams.set("focus", normalizedFocusTarget);
             }
             return `${href.pathname}${href.search}`;
+        }
+
+        function buildAdvancedRouteHref(profileId, focusTarget = "") {
+            if (!profileId) return "";
+            const { routeMode, includeDeleted } = readProfilesRouteContext();
+            const href = new URL(buildProfileRoutePath(profileId, "json", includeDeleted), windowRef.location.origin);
+            href.searchParams.set("return", buildEditorReturnPath(profileId, routeMode, includeDeleted));
+            const normalizedFocusTarget = normalizeJsonFocusTarget(focusTarget);
+            if (normalizedFocusTarget) {
+                href.searchParams.set("focus", normalizedFocusTarget);
+            }
+            return `${href.pathname}${href.search}`;
+        }
+
+        function getSettingsRouteHref(focusTarget = "") {
+            const { editingProfileId } = readProfilesRouteContext();
+            const profileId = editingProfileId || getCurrentProfile()?.id || null;
+            return buildSettingsRouteHref(profileId, focusTarget);
         }
 
         function getAdvancedRouteHref(focusTarget = "") {
@@ -1685,11 +1748,61 @@
             return buildAdvancedRouteHref(profileId, focusTarget);
         }
 
+        function parseJsonFocusTarget(focusTarget) {
+            const normalizedTarget = normalizeJsonFocusTarget(focusTarget);
+            if (!normalizedTarget) return null;
+            if (normalizedTarget === "download") {
+                return { surface: "download", policyKey: "" };
+            }
+            if (
+                normalizedTarget === "editor"
+                || normalizedTarget === "details"
+                || normalizedTarget === "context"
+            ) {
+                return { surface: "editor", policyKey: "" };
+            }
+
+            const semanticMatch = /^(policy|raw|deprecated|unknown)(?::(.+))?$/.exec(normalizedTarget);
+            if (!semanticMatch) return null;
+            return {
+                surface: semanticMatch[1] === "policy" ? "editor" : semanticMatch[1],
+                policyKey: String(semanticMatch[2] || "").trim(),
+            };
+        }
+
+        function findJsonPolicyLine(editorInstance, policyKey) {
+            if (!editorInstance?.getValue || !policyKey) return null;
+            const source = String(editorInstance.getValue() || "");
+            if (!source) return null;
+            const escapedPolicyKey = policyKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const match = new RegExp(`(^|\\n)\\s*"${escapedPolicyKey}"\\s*:`, "m").exec(source);
+            if (!match) return null;
+            return source.slice(0, match.index).split("\n").length;
+        }
+
+        function applyJsonEditorFocusTarget(focusTarget) {
+            const routeMode = documentRef.body?.dataset.profilesRouteMode || "";
+            if (routeMode !== "json") return;
+
+            const parsedTarget = parseJsonFocusTarget(focusTarget);
+            if (!parsedTarget || parsedTarget.surface === "download") return;
+
+            const editorInstance = getEditor();
+            if (!editorInstance) return;
+
+            const lineNumber = findJsonPolicyLine(editorInstance, parsedTarget.policyKey) || 1;
+            editorInstance.focus?.();
+            editorInstance.setPosition?.({ lineNumber, column: 1 });
+            editorInstance.revealLineInCenter?.(lineNumber);
+            editorInstance.revealPositionInCenter?.({ lineNumber, column: 1 });
+        }
+
         function deriveAdvancedFocusTarget(targetEl, fallback = "") {
             if (!targetEl) return fallback;
             const settingsTarget = targetEl.closest?.("[data-settings-target]")?.dataset.settingsTarget || "";
             if (settingsTarget) return settingsTarget;
             if (targetEl === editorEl || targetEl.id === "editor" || targetEl.id === "editor-panel") return "editor";
+            if (targetEl.id === "download-firefox-policies") return "download";
             if (targetEl.id === "details-panel") return "details";
             if (targetEl.id === "advanced-download-strip") return "download";
             if (targetEl.id === "advanced-context-panel") return "context";
@@ -1699,44 +1812,251 @@
 
         function openAdvancedRouteFromVisual(event = null, focusTarget = "") {
             const { routeMode } = readProfilesRouteContext();
-            if (routeMode === "advanced") return false;
+            if (routeMode === "json") return false;
             event?.preventDefault?.();
-            const href = getAdvancedRouteHref(focusTarget);
+            const normalizedFocusTarget = String(focusTarget || "").trim();
+            const openJsonRoute = normalizedFocusTarget === "editor"
+                || normalizedFocusTarget === "unknown"
+                || normalizedFocusTarget.startsWith("unknown:");
+            const href = openJsonRoute
+                ? getAdvancedRouteHref(normalizedFocusTarget || "editor")
+                : getSettingsRouteHref(normalizedFocusTarget);
             if (!href) {
                 setStatus(t("profiles.wizard_export_plan_save_first"), "warn");
                 return true;
             }
-            if (!confirmRouteNavigationIfDirty()) {
-                return true;
+            const advancedWindow = windowRef.open(href, "_blank", "noopener");
+            if (advancedWindow) {
+                advancedWindow.opener = null;
             }
-            windowRef.location.assign(href);
             return true;
         }
 
         function resolveAdvancedFocusTarget(focusTarget) {
             const target = String(focusTarget || "").trim();
             if (!target) return null;
+            const routeMode = documentRef.body?.dataset.profilesRouteMode || "";
+            const policyId = target.startsWith("policy:")
+                ? target.slice("policy:".length).trim()
+                : "";
+            const jsonTarget = routeMode === "json" ? parseJsonFocusTarget(target) : null;
+            if (jsonTarget) {
+                if (jsonTarget.surface === "download") {
+                    return documentRef.getElementById("download-firefox-policies")
+                        || documentRef.getElementById("editor-panel")
+                        || editorEl;
+                }
+                return documentRef.getElementById("editor-panel") || editorEl;
+            }
+            if (target === "settings-panel") return documentRef.getElementById("settings-panel");
+            if (target === "settings-schema-shell-step-8") return documentRef.getElementById("settings-schema-shell-step-8");
             if (target === "editor") return documentRef.getElementById("editor-panel") || editorEl;
-            if (target === "details") return documentRef.getElementById("details-panel");
-            if (target === "download") return documentRef.getElementById("advanced-download-strip");
-            if (target === "context") return documentRef.getElementById("advanced-context-panel");
-            return findSettingsTarget(target) || documentRef.getElementById(target) || null;
+            if (target === "details" || target === "context") {
+                return documentRef.getElementById("editor-panel") || editorEl;
+            }
+            if (target === "download") {
+                return documentRef.getElementById("download-firefox-policies")
+                    || documentRef.getElementById("editor-panel")
+                    || editorEl;
+            }
+            return findSettingsTarget(target)
+                || (policyId ? documentRef.querySelector(`[data-wizard-shell-policy-id="${policyId}"]`) : null)
+                || documentRef.getElementById(target)
+                || null;
         }
 
-        function applyAdvancedFocusTarget(focusTarget) {
+        function applyAdvancedFocusTarget(focusTarget, attemptsLeft = 24) {
             const targetEl = resolveAdvancedFocusTarget(focusTarget);
-            if (!targetEl) return;
+            if (!targetEl) {
+                if (attemptsLeft > 1) {
+                    windowRef.setTimeout(() => {
+                        applyAdvancedFocusTarget(focusTarget, attemptsLeft - 1);
+                    }, 150);
+                }
+                return;
+            }
             revealWorkspaceTarget(targetEl);
+            applyJsonEditorFocusTarget(focusTarget);
+            if (attemptsLeft > 1 && !isWorkspaceTargetVisible(targetEl)) {
+                windowRef.setTimeout(() => {
+                    applyAdvancedFocusTarget(focusTarget, attemptsLeft - 1);
+                }, 150);
+            }
+        }
+
+        function createHeadlessEditorAdapter(initialValue = "{}") {
+            let value = String(initialValue ?? "");
+            let language = "json";
+            const listeners = new Set();
+            const model = {
+                getValue() {
+                    return value;
+                },
+                setValue(nextValue) {
+                    value = String(nextValue ?? "");
+                    listeners.forEach((listener) => listener({}));
+                },
+                onDidChangeContent(listener) {
+                    listeners.add(listener);
+                    return {
+                        dispose() {
+                            listeners.delete(listener);
+                        },
+                    };
+                },
+                getLanguageId() {
+                    return language;
+                },
+                _setLanguage(nextLanguage) {
+                    language = String(nextLanguage || "json");
+                },
+                dispose() {
+                    listeners.clear();
+                },
+            };
+            return {
+                getValue() {
+                    return model.getValue();
+                },
+                setValue(value) {
+                    model.setValue(String(value ?? ""));
+                },
+                getModel() {
+                    return model;
+                },
+                onDidChangeModelContent(listener) {
+                    return model.onDidChangeContent(listener);
+                },
+                layout() {},
+                dispose() {
+                    model.dispose();
+                },
+            };
+        }
+
+        function setEditorModelLanguage(monacoRef, editorInstance, language) {
+            if (!editorInstance?.getModel) return;
+            const model = editorInstance.getModel();
+            if (monacoRef?.editor?.setModelLanguage) {
+                monacoRef.editor.setModelLanguage(model, language);
+                return;
+            }
+            if (typeof model?._setLanguage === "function") {
+                model._setLanguage(language);
+            }
+        }
+
+        function getMonacoThemeName(resolvedTheme) {
+            return resolvedTheme === "dark" ? "bpm-vs-dark" : "bpm-vs-light";
+        }
+
+        function ensureMonacoThemes(monacoRef) {
+            if (!monacoRef?.editor?.defineTheme) return;
+
+            monacoRef.editor.defineTheme("bpm-vs-light", {
+                base: "vs",
+                inherit: true,
+                rules: [
+                    { token: "string.key.json", foreground: "0f4c81" },
+                    { token: "string.value.json", foreground: "a16207" },
+                    { token: "string", foreground: "a16207" },
+                    { token: "number", foreground: "7c3aed" },
+                    { token: "keyword", foreground: "0f766e" },
+                    { token: "keyword.json", foreground: "0f766e" },
+                    { token: "delimiter.bracket", foreground: "334155" },
+                    { token: "delimiter.array", foreground: "334155" },
+                    { token: "delimiter.comma", foreground: "64748b" },
+                ],
+                colors: {
+                    "editor.background": "#f8fafc",
+                    "editor.foreground": "#122033",
+                    "editor.lineHighlightBackground": "#e2e8f066",
+                    "editor.selectionBackground": "#14b8a626",
+                    "editor.inactiveSelectionBackground": "#cbd5e166",
+                    "editorCursor.foreground": "#0f766e",
+                    "editorWhitespace.foreground": "#cbd5e180",
+                    "editorIndentGuide.background1": "#dbe3ee",
+                    "editorIndentGuide.activeBackground1": "#14b8a670",
+                    "editorLineNumber.foreground": "#94a3b8",
+                    "editorLineNumber.activeForeground": "#122033",
+                    "editorLineNumber.dimmedForeground": "#cbd5e1",
+                    "editorGutter.background": "#f8fafc",
+                    "editorBracketHighlight.foreground1": "#0f766e",
+                    "editorBracketHighlight.foreground2": "#7c3aed",
+                    "editorBracketHighlight.foreground3": "#2563eb",
+                    "scrollbar.shadow": "#ffffff00",
+                    "scrollbarSlider.background": "#94a3b899",
+                    "scrollbarSlider.hoverBackground": "#64748bcc",
+                    "scrollbarSlider.activeBackground": "#334155dd",
+                },
+            });
+
+            monacoRef.editor.defineTheme("bpm-vs-dark", {
+                base: "vs-dark",
+                inherit: true,
+                rules: [
+                    { token: "string.key.json", foreground: "7dd3fc" },
+                    { token: "string.value.json", foreground: "fbbf24" },
+                    { token: "string", foreground: "fbbf24" },
+                    { token: "number", foreground: "c084fc" },
+                    { token: "keyword", foreground: "34d399" },
+                    { token: "keyword.json", foreground: "34d399" },
+                    { token: "delimiter.bracket", foreground: "e2e8f0" },
+                    { token: "delimiter.array", foreground: "e2e8f0" },
+                    { token: "delimiter.comma", foreground: "94a3b8" },
+                ],
+                colors: {
+                    "editor.background": "#0b1324",
+                    "editor.foreground": "#e2e8f0",
+                    "editor.lineHighlightBackground": "#1e293b66",
+                    "editor.selectionBackground": "#14b8a633",
+                    "editor.inactiveSelectionBackground": "#33415588",
+                    "editorCursor.foreground": "#5eead4",
+                    "editorWhitespace.foreground": "#334155bb",
+                    "editorIndentGuide.background1": "#1f2937",
+                    "editorIndentGuide.activeBackground1": "#2dd4bf88",
+                    "editorLineNumber.foreground": "#64748b",
+                    "editorLineNumber.activeForeground": "#f8fafc",
+                    "editorLineNumber.dimmedForeground": "#475569",
+                    "editorGutter.background": "#0b1324",
+                    "editorBracketHighlight.foreground1": "#2dd4bf",
+                    "editorBracketHighlight.foreground2": "#c084fc",
+                    "editorBracketHighlight.foreground3": "#7dd3fc",
+                    "scrollbar.shadow": "#02061700",
+                    "scrollbarSlider.background": "#64748baa",
+                    "scrollbarSlider.hoverBackground": "#94a3b8cc",
+                    "scrollbarSlider.activeBackground": "#cbd5e1dd",
+                },
+            });
         }
 
         async function bootstrapProfileRouteState() {
             const { routeMode, editingProfileId, focusTarget } = readProfilesRouteContext();
-            if ((routeMode === "edit" || routeMode === "advanced") && editingProfileId) {
+            if ((routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId) {
+                const hydratedProfile = getCurrentProfile();
+                if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId) {
+                    setMeta(hydratedProfile);
+                    const editor = getEditor();
+                    if (editor) {
+                        editor.setValue(
+                            toEditorValue(
+                                getCurrentRaw() && typeof getCurrentRaw() === "object" ? getCurrentRaw() : {},
+                                documentRef.getElementById("mode").value,
+                            ),
+                        );
+                    }
+                    setBaselineFromCurrentUi();
+                    setStatus(t("profiles.status_profile_loaded").replace("{name}", hydratedProfile.name), "success");
+                    if (routeMode === "settings" || routeMode === "json") {
+                        setAdvancedHandoffContext(null);
+                        applyAdvancedFocusTarget(focusTarget);
+                    }
+                    return;
+                }
                 await resetDraft(true);
-                await loadProfile(editingProfileId, { skipConfirm: true });
-                if (routeMode === "advanced") {
+                await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });
+                if (routeMode === "settings" || routeMode === "json") {
                     setAdvancedHandoffContext(null);
-                    applyWorkspaceScope("advanced", { focus: true, persist: false });
                     applyAdvancedFocusTarget(focusTarget);
                 }
                 return;
@@ -1757,42 +2077,78 @@
                 console.warn("shell initialization failed", error);
             });
 
+            const templateKind = documentRef.body?.dataset.profilesTemplateKind || "";
+            const needsEditorRuntime = templateKind === "editor" || templateKind === "settings" || templateKind === "json";
+            if (!editorEl && !needsEditorRuntime) {
+                return;
+            }
+
             const monacoReady = windowRef.__BPM_MONACO_READY__;
-            if (!monacoReady || typeof monacoReady.then !== "function") {
+            if (editorEl && (!monacoReady || typeof monacoReady.then !== "function")) {
                 setStatus(t("profiles.error_loading").replace("{detail}", "Monaco bundle is not ready"), "error");
                 return;
             }
 
-            monacoReady.then(async (monacoRef) => {
+            Promise.resolve(editorEl ? monacoReady : null).then(async (monacoRef) => {
                 await shellReady;
-                const editor = monacoRef.editor.create(editorEl, {
-                    value: "{}",
-                    language: "json",
-                    automaticLayout: true,
-                    minimap: { enabled: false },
-                    fontSize: 14,
-                    lineHeight: 22,
-                    padding: { top: 18, bottom: 18 },
-                    smoothScrolling: true,
-                    roundedSelection: true,
-                    scrollBeyondLastLine: false,
-                    theme: documentRef.documentElement.dataset.theme === "dark" ? "vs-dark" : "vs",
-                });
+                ensureMonacoThemes(monacoRef);
+                const editor = editorEl
+                    ? monacoRef.editor.create(editorEl, {
+                        value: "{}",
+                        language: "json",
+                        automaticLayout: true,
+                        minimap: { enabled: false },
+                        fontSize: 15,
+                        lineHeight: 24,
+                        lineNumbers: "on",
+                        lineNumbersMinChars: 4,
+                        lineDecorationsWidth: 18,
+                        glyphMargin: false,
+                        fixedOverflowWidgets: true,
+                        renderLineHighlight: "line",
+                        renderWhitespace: "selection",
+                        scrollbar: {
+                            vertical: "visible",
+                            horizontal: "auto",
+                            verticalScrollbarSize: 12,
+                            horizontalScrollbarSize: 12,
+                            alwaysConsumeMouseWheel: false,
+                            useShadows: false,
+                        },
+                        overviewRulerBorder: false,
+                        overviewRulerLanes: 0,
+                        hideCursorInOverviewRuler: true,
+                        fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace",
+                        fontLigatures: false,
+                        padding: { top: 14, bottom: 14 },
+                        smoothScrolling: true,
+                        roundedSelection: true,
+                        scrollBeyondLastLine: false,
+                        theme: getMonacoThemeName(documentRef.documentElement.dataset.theme),
+                    })
+                    : createHeadlessEditorAdapter("{}");
                 setEditor(editor);
 
                 const savedMode = "json";
                 let activeEditorMode = savedMode;
+                const bootstrapSchemaVersion = documentRef.body?.dataset?.editingProfileSchemaVersion || "";
 
                 modeSelectEl.value = savedMode;
                 windowRef.localStorage.setItem("bpm-editor-mode", savedMode);
-                monacoRef.editor.setModelLanguage(editor.getModel(), "json");
+                if (bootstrapSchemaVersion && profileTypeEl) {
+                    profileTypeEl.value = bootstrapSchemaVersion;
+                }
+                if (bootstrapSchemaVersion && wizardSchemaEl) {
+                    wizardSchemaEl.value = bootstrapSchemaVersion;
+                }
+                setEditorModelLanguage(monacoRef, editor, "json");
                 editor.setValue(toEditorValue({}, savedMode));
                 syncProxyWizardUi();
                 syncWizardFieldsFromForm();
                 syncEditorBackedUi();
                 setWizardStep(1);
 
-                formatButtonEl.addEventListener("click", () => {
+                formatButtonEl?.addEventListener("click", () => {
                     try {
                         const mode = modeSelectEl.value;
                         const parsed = fromEditorValue(editor.getValue(), mode);
@@ -1812,7 +2168,7 @@
                         currentFlags = getCurrentRaw();
                     }
                     windowRef.localStorage.setItem("bpm-editor-mode", mode);
-                    monacoRef.editor.setModelLanguage(editor.getModel(), mode === "yaml" ? "yaml" : "json");
+                    setEditorModelLanguage(monacoRef, editor, mode === "yaml" ? "yaml" : "json");
                     editor.setValue(toEditorValue(currentFlags, mode));
                     activeEditorMode = mode;
                     syncWizardFieldsFromForm();
@@ -1824,10 +2180,10 @@
 
                 saveButtonEl.addEventListener("click", saveCurrent);
                 newProfileButtonEl?.addEventListener("click", resetDraft);
-                softDeleteButtonEl.addEventListener("click", doSoftDelete);
-                hardDeleteButtonEl.addEventListener("click", doHardDelete);
-                restoreButtonEl.addEventListener("click", doRestore);
-                resetLibraryButtonEl.addEventListener("click", doResetLibrary);
+                softDeleteButtonEl?.addEventListener("click", doSoftDelete);
+                hardDeleteButtonEl?.addEventListener("click", doHardDelete);
+                restoreButtonEl?.addEventListener("click", doRestore);
+                resetLibraryButtonEl?.addEventListener("click", doResetLibrary);
                 validateButtonEl.addEventListener("click", doValidate);
                 importFirefoxPoliciesButtonEl?.addEventListener("click", () => {
                     importFirefoxPoliciesFileEl?.click();
@@ -1836,19 +2192,19 @@
                     const file = event.target.files?.[0] || null;
                     await doImportFirefoxPoliciesJson?.(file);
                 });
-                nameInput.addEventListener("input", () => {
+                nameInput?.addEventListener("input", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });
-                ownerInput.addEventListener("input", () => {
+                ownerInput?.addEventListener("input", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });
-                descriptionInput.addEventListener("input", () => {
+                descriptionInput?.addEventListener("input", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });
-                profileTypeEl.addEventListener("change", () => {
+                profileTypeEl?.addEventListener("change", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });
@@ -1860,16 +2216,20 @@
                     updateActionState();
                 });
 
-                wizardNameEl.addEventListener("input", () => {
-                    nameInput.value = wizardNameEl.value;
+                wizardNameEl?.addEventListener("input", () => {
+                    if (nameInput) {
+                        nameInput.value = wizardNameEl.value;
+                    }
                     updateActionState();
                 });
-                wizardSchemaEl.addEventListener("change", () => {
-                    profileTypeEl.value = wizardSchemaEl.value;
+                wizardSchemaEl?.addEventListener("change", () => {
+                    if (profileTypeEl) {
+                        profileTypeEl.value = wizardSchemaEl.value;
+                    }
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });
-                wizardModeEl.addEventListener("change", () => {
+                wizardModeEl?.addEventListener("change", () => {
                     modeSelectEl.value = wizardModeEl.value;
                     modeSelectEl.dispatchEvent(new windowRef.Event("change"));
                     updateActionState();
@@ -1918,6 +2278,9 @@
                     });
                 });
                 wizardSettingsSearchInputEl?.addEventListener("input", () => {
+                    if (wizardSettingsSearchClearEl) {
+                        wizardSettingsSearchClearEl.hidden = !(wizardSettingsSearchInputEl.value || "").trim();
+                    }
                     renderWizardSettingsSearchResults();
                 });
                 wizardSettingsSearchInputEl?.addEventListener("keydown", (event) => {
@@ -1936,19 +2299,16 @@
                     }
                 });
                 wizardSettingsSearchClearEl?.addEventListener("click", () => {
+                    if (wizardSettingsSearchInputEl) {
+                        wizardSettingsSearchInputEl.value = "";
+                    }
+                    if (wizardSettingsSearchClearEl) {
+                        wizardSettingsSearchClearEl.hidden = true;
+                    }
                     clearWizardSettingsSearch();
                     wizardSettingsSearchInputEl?.focus();
                 });
-                workspaceScopeGuidedEl?.addEventListener("click", () => {
-                    setAdvancedHandoffContext(null);
-                    applyWorkspaceScope("guided", { focus: true });
-                });
-                workspaceScopeAdvancedEl?.addEventListener("click", (event) => {
-                    if (openAdvancedRouteFromVisual(event, "context")) return;
-                    setAdvancedHandoffContext(null);
-                    applyWorkspaceScope("advanced", { focus: true });
-                });
-                wizardSearchEngineAddButtonEl.addEventListener("click", () => {
+                wizardSearchEngineAddButtonEl?.addEventListener("click", () => {
                     appendSearchEngineDraft();
                 });
                 wizardSearchEnginePresetButtons.forEach((button) => {

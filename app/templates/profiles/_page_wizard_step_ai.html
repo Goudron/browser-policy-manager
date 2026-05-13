@@ -75,10 +75,12 @@
                         {{ tr("profiles.wizard_ai_providers_state_empty") }}
                     </div>
                 </div>
-                {% if advanced_href %}
+                {% if settings_href %}
                 <a
                     id="wizard-ai-providers-open-advanced"
-                    href="{{ advanced_href }}&focus=policy:GenerativeAI"
+                    href="{{ settings_href }}&focus=policy:GenerativeAI"
+                    target="_blank"
+                    rel="noopener"
                     class="button-base ghost-button"
                     data-i18n="profiles.advanced_handoff_open">
                     {{ tr("profiles.advanced_handoff_open") }}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -9,7 +10,9 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api import export, health, profiles, validation
 from app.core.config import get_settings
+from app.db import get_session, init_db
 from app.middleware.security import SecurityHeadersMiddleware
+from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
 from app.web import profiles as web_profiles
 
 # Local settings instance for this module.
@@ -29,9 +32,29 @@ def create_app() -> FastAPI:
 
     It wires core middleware and includes all API routers.
     """
+    async def _run_startup_profile_normalization() -> None:
+        await init_db()
+        session_dependency = app.dependency_overrides.get(get_session, get_session)
+        session_generator = session_dependency()
+        session = await session_generator.__anext__()
+        try:
+            await normalize_legacy_profile_schema_versions(session)
+            await session.commit()
+        finally:
+            try:
+                await session_generator.__anext__()
+            except StopAsyncIteration:
+                pass
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        await _run_startup_profile_normalization()
+        yield
+
     app = FastAPI(
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
+        lifespan=lifespan,
     )
 
     app.add_middleware(SecurityHeadersMiddleware)

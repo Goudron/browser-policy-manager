@@ -1178,6 +1178,34 @@
         function syncFromEditor() {
             const editor = getEditor();
             if (!editor) return;
+            if (
+                !wizardHomepageUrlEl
+                || !wizardHomepageAdditionalEl
+                || !wizardHomepageStartPageEl
+                || !wizardHomepageLockedEl
+                || !wizardSearchBarEl
+                || !wizardSearchSuggestEl
+                || !wizardSearchDefaultEngineEl
+                || !wizardSearchPreventInstallsEl
+                || !wizardSearchRemoveEl
+                || !wizardNewTabPageEl
+                || !wizardOverrideFirstRunEl
+                || !wizardOverridePostUpdateEl
+                || !wizardProxyModeEl
+                || !wizardProxyLockedEl
+                || !wizardProxyHttpEl
+                || !wizardProxySslEl
+                || !wizardProxyFtpEl
+                || !wizardProxySocksEl
+                || !wizardProxySocksVersionEl
+                || !wizardProxyPassthroughEl
+                || !wizardProxyAutoConfigUrlEl
+                || !wizardProxyUseHttpForAllEl
+                || !wizardProxyAutoLoginEl
+                || !wizardProxyUseDnsEl
+            ) {
+                return;
+            }
             networkEnterprisePanelPreference = null;
             firefoxHomePanelPreference = null;
             searchDefaultsPanelPreference = null;
@@ -1228,6 +1256,7 @@
                     ...wizardFirefoxHomeInputs,
                     ...wizardFirefoxSuggestInputs,
                 ].forEach((input) => {
+                    if (!input) return;
                     input.disabled = false;
                 });
 
@@ -1307,6 +1336,7 @@
                     ...wizardFirefoxHomeInputs,
                     ...wizardFirefoxSuggestInputs,
                 ].forEach((input) => {
+                    if (!input) return;
                     input.disabled = true;
                 });
                 setProxyGroupVisibility("", true);

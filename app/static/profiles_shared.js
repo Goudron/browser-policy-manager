@@ -20,6 +20,21 @@
                 return {};
             }
         }
+        function readEmbeddedInitialProfile() {
+            const payloadEl = documentRef.getElementById("profiles-initial-profile");
+            const payloadText = (payloadEl?.tagName || "").toUpperCase() === "TEMPLATE"
+                ? (payloadEl?.innerHTML ? payloadEl.innerHTML.trim() : "")
+                : (payloadEl?.textContent ? payloadEl.textContent.trim() : "");
+            if (!payloadText) {
+                return null;
+            }
+            try {
+                const parsed = JSON.parse(payloadText);
+                return parsed && typeof parsed === "object" ? parsed : null;
+            } catch {
+                return null;
+            }
+        }
         const {
             fromEditorValue,
             formatBooleanSelectValue,
@@ -33,10 +48,15 @@
             wizardSchemaEl,
         } = elements;
 
+        const initialProfile = windowRef.__BPM_INITIAL_PROFILE__ && typeof windowRef.__BPM_INITIAL_PROFILE__ === "object"
+            ? windowRef.__BPM_INITIAL_PROFILE__
+            : readEmbeddedInitialProfile();
         let editor = null;
-        let currentId = null;
-        let currentProfile = null;
-        let currentRaw = {};
+        let currentId = Number.isInteger(initialProfile?.id) ? initialProfile.id : null;
+        let currentProfile = initialProfile;
+        let currentRaw = initialProfile?.flags && typeof initialProfile.flags === "object"
+            ? initialProfile.flags
+            : {};
         const initialLang = typeof windowRef.__BPM_INITIAL_LANG__ === "string" && windowRef.__BPM_INITIAL_LANG__
             ? windowRef.__BPM_INITIAL_LANG__
             : (documentRef.documentElement.lang || "en");
@@ -49,6 +69,7 @@
 
         windowRef.__BPM_INITIAL_LANG__ = initialLang;
         windowRef.__BPM_INITIAL_LOCALE__ = initialLocale;
+        windowRef.__BPM_INITIAL_PROFILE__ = initialProfile;
 
         let currentLang = initialLang;
         let localeDict = initialLocale;
@@ -95,7 +116,11 @@
         }
 
         function getActiveWizardSchemaVersion() {
-            return documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;
+            return documentRef.getElementById("profile-type")?.value
+                || wizardSchemaEl?.value
+                || currentProfile?.schema_version
+                || currentProfile?.schemaVersion
+                || defaultSchemaVersion;
         }
 
         function readWizardSchemaSource() {
@@ -110,12 +135,17 @@
         }
 
         function setWorkspaceHelper(title, body) {
-            workspaceHelperTitleEl.textContent = title;
-            workspaceHelperCopyEl.textContent = body;
+            if (workspaceHelperTitleEl) {
+                workspaceHelperTitleEl.textContent = title;
+            }
+            if (workspaceHelperCopyEl) {
+                workspaceHelperCopyEl.textContent = body;
+            }
         }
 
         function syncBooleanSelectGroup(inputs, source, keyAttr) {
             inputs.forEach((input) => {
+                if (!input) return;
                 input.disabled = false;
                 input.value = formatBooleanSelectValue(source?.[input.dataset[keyAttr]]);
             });
@@ -123,6 +153,7 @@
 
         function applyBooleanSelectGroup(inputs, target, keyAttr) {
             inputs.forEach((input) => {
+                if (!input) return;
                 const key = input.dataset[keyAttr];
                 const nextValue = parseBooleanSelectValue(input.value);
                 if (!key || nextValue === null) return;
@@ -137,6 +168,7 @@
                 error: "status-banner status-banner--error rounded-2xl border px-4 py-3 text-sm",
                 warn: "status-banner status-banner--warn rounded-2xl border px-4 py-3 text-sm",
             };
+            if (!statusEl) return;
             statusEl.className = classes[tone] || classes.info;
             statusEl.textContent = msg;
         }

@@ -49,7 +49,8 @@ class SecurityHeadersMiddleware:
             return
 
         path = scope.get("path", "")
-        csp_value = self.profiles_csp if path == "/profiles" else self.csp
+        is_profiles_ui_route = path == "/profiles" or path.startswith("/profiles/")
+        csp_value = self.profiles_csp if is_profiles_ui_route else self.csp
 
         async def send_with_security_headers(message: Message) -> None:
             if message["type"] == "http.response.start":

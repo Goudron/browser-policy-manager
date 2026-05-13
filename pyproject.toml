@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.7.0"
+version = "0.7.5"
 description = "Enterprise browser policy manager: FastAPI backend, validation, export, and simple UI."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -119,11 +119,12 @@ module = ["requests.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-addopts = "-q -m 'not firefox_live and not firefox_live_amo'"
+addopts = "-q -m 'not firefox_live and not firefox_live_amo and not browser_ui'"
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
   "order: test order marker",
+  "browser_ui: runs Chromium-based browser UI regression tests",
   "firefox_live: runs live Firefox enterprise-policy tests",
   "firefox_live_amo: runs live Firefox AMO canary tests",
 ]

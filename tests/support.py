@@ -1,11 +1,20 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
+import socket
+import tempfile
+import threading
+import time
 import uuid
 from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import httpx
+import requests
+import uvicorn
 from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -148,3 +157,108 @@ def assert_contains_all(text: str, snippets: Iterable[str]) -> None:
 def assert_has_keys(mapping: Mapping[str, Any], keys: Iterable[str]) -> None:
     missing = [key for key in keys if key not in mapping]
     assert not missing, f"Missing expected keys: {missing[:10]}"
+
+
+def pick_free_port(host: str = "127.0.0.1") -> int:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.bind((host, 0))
+        return int(sock.getsockname()[1])
+
+
+@dataclass
+class TestAppServerHandle:
+    base_url: str
+    session_factory: Any
+
+
+@contextlib.contextmanager
+def run_test_app_server_handle(
+    *,
+    host: str = "127.0.0.1",
+    log_level: str = "warning",
+    startup_timeout: float = 20.0,
+):
+    """
+    Run a fresh app instance behind a local uvicorn server for browser tests.
+
+    This variant also exposes the sync SQLAlchemy session factory so tests can
+    seed legacy or otherwise non-API-representable data directly into the
+    temporary browser-test database.
+    """
+
+    from app.main import create_app
+
+    app = create_app()
+    with tempfile.TemporaryDirectory(prefix="bpm-ui-server-") as tmp_dir:
+        db_path = Path(tmp_dir) / "bpm-ui.db"
+        engine = create_engine(
+            f"sqlite:///{db_path}",
+            echo=False,
+            future=True,
+            connect_args={"check_same_thread": False},
+        )
+        testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
+        Base.metadata.create_all(bind=engine)
+
+        async def override_get_session():
+            session = testing_session_factory()
+            try:
+                yield AsyncSessionAdapter(session)
+            finally:
+                session.close()
+
+        app.dependency_overrides[get_session] = override_get_session
+        port = pick_free_port(host)
+        config = uvicorn.Config(app=app, host=host, port=port, log_level=log_level)
+        server = uvicorn.Server(config)
+        thread = threading.Thread(target=server.run, daemon=True)
+        thread.start()
+
+        base_url = f"http://{host}:{port}"
+        deadline = time.time() + startup_timeout
+        last_error: str | None = None
+
+        try:
+            while time.time() < deadline:
+                try:
+                    response = requests.get(f"{base_url}/i18n/en.json", timeout=2)
+                    if response.status_code == 200:
+                        break
+                    last_error = f"probe returned {response.status_code}"
+                except requests.RequestException as exc:
+                    last_error = str(exc)
+                time.sleep(0.2)
+            else:
+                raise RuntimeError(f"Timed out waiting for test app server at {base_url}: {last_error}")
+
+            yield TestAppServerHandle(
+                base_url=base_url,
+                session_factory=testing_session_factory,
+            )
+        finally:
+            server.should_exit = True
+            thread.join(timeout=10)
+            app.dependency_overrides.pop(get_session, None)
+            engine.dispose()
+
+
+@contextlib.contextmanager
+def run_test_app_server(
+    *,
+    host: str = "127.0.0.1",
+    log_level: str = "warning",
+    startup_timeout: float = 20.0,
+):
+    """
+    Run a fresh app instance behind a local uvicorn server for browser tests.
+
+    The server uses a temporary SQLite database and request-scoped sessions so
+    multi-tab browser regressions can exercise the real HTTP surface safely.
+    """
+
+    with run_test_app_server_handle(
+        host=host,
+        log_level=log_level,
+        startup_timeout=startup_timeout,
+    ) as handle:
+        yield handle.base_url

@@ -4,8 +4,11 @@
   "isort.interpreter": [
     "${workspaceFolder}/.venv/bin/python"
   ],
+  "terminal.integrated.persistentSessionReviveProcess": false,
   "editor.formatOnSave": true,
   "python.analysis.autoImportCompletions": true,
+  "gitlens.gitkraken.cli.integration.enabled": false,
+  "gitlens.gitkraken.cli.insiders.enabled": false,
   "files.associations": {
     "*.html": "jinja-html",
     "*.jinja": "jinja-html",

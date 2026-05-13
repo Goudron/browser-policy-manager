@@ -466,6 +466,7 @@
             searchEnginePresetCatalog,
             searchEnginePresets,
             wizardSchemaShellCatalog,
+            settingsTargetAliases: catalogs.settingsTargetAliases || {},
         });
         setBuildWizardSettingsSearchIndex(settingsSearch.buildIndex);
         setRenderWizardSettingsSearchResults(settingsSearch.renderResults);

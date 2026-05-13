@@ -1,0 +1,210 @@
+{% from "profiles/_wizard_macros.html" import render_settings_schema_shell with context %}
+
+<div class="app-layout">
+    <main class="workspace-column space-y-4">
+        <div class="support-hidden">
+            <input id="profile-owner" type="text" placeholder="{{ tr('profiles.owner_placeholder') }}"
+                data-i18n-placeholder="profiles.owner_placeholder" />
+            <textarea id="profile-description" placeholder="{{ tr('profiles.description_placeholder') }}"
+                data-i18n-placeholder="profiles.description_placeholder"></textarea>
+        </div>
+
+        <section id="settings-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="flex flex-col gap-5">
+                <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                        <div class="section-kicker" data-i18n="profiles.workspace_scope_advanced">{{ tr("profiles.workspace_scope_advanced") }}</div>
+                        <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900"
+                            data-i18n="profiles.settings_route_title">
+                            {{ tr("profiles.settings_route_title", "Advanced settings catalog") }}
+                        </h2>
+                        <p class="mt-3 text-sm leading-6 text-slate-600"
+                            data-i18n="profiles.settings_route_body">
+                            {{ tr("profiles.settings_route_body", "Search mapped controls and apply advanced policy changes without opening the JSON editor.") }}
+                        </p>
+                    </div>
+                    {% if return_url %}
+                    <a
+                        id="settings-return-link"
+                        href="{{ return_url }}"
+                        class="button-base ghost-button"
+                        data-i18n="profiles.advanced_context_return">
+                        {{ tr("profiles.advanced_context_return") }}
+                    </a>
+                    {% endif %}
+                </div>
+
+                <div class="wizard-settings-search-shell surface-soft-box">
+                    <label class="wizard-settings-search-field" for="wizard-settings-search-input">
+                        <span class="field-label" data-i18n="profiles.settings_search_label">
+                            {{ tr("profiles.settings_search_label", "Search advanced controls") }}
+                        </span>
+                        <div class="wizard-settings-search-row">
+                            <input
+                                id="wizard-settings-search-input"
+                                type="search"
+                                class="soft-input"
+                                data-i18n-placeholder="profiles.settings_search_placeholder"
+                                placeholder="{{ tr('profiles.settings_search_placeholder', 'Search by control, policy key, preference, or settings area') }}"
+                                autocomplete="off"
+                                spellcheck="false"
+                            />
+                            <button
+                                type="button"
+                                id="wizard-settings-search-clear"
+                                class="button-base ghost-button wizard-settings-search-clear"
+                                data-i18n="profiles.wizard_settings_search_clear"
+                                hidden>
+                                {{ tr("profiles.wizard_settings_search_clear") }}
+                            </button>
+                        </div>
+                    </label>
+                    <div id="wizard-settings-search-meta" class="wizard-input-hint"
+                        data-i18n="profiles.settings_search_hint">
+                        {{ tr("profiles.settings_search_hint", "Search the advanced settings catalog by policy, preference, or mapped Firefox area.") }}
+                    </div>
+                    <div id="wizard-settings-search-results" class="wizard-settings-search-results" hidden></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid gap-4">
+            {% for step in wizard_steps if step.step > 1 %}
+            {% set settings_section = wizard_settings_sections.get(step.id) %}
+            {% set preference_section = wizard_preferences_sections.get(step.id) %}
+            <section
+                id="settings-section-{{ step.step }}"
+                class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+                <div class="mb-4">
+                    <h3 class="mt-2 text-xl font-semibold tracking-tight text-slate-900"
+                        data-i18n="{{ step.label_key }}">
+                        {{ tr(step.label_key, step.label_fallback) }}
+                    </h3>
+                    <p class="mt-2 text-sm leading-6 text-slate-600"
+                        data-i18n="{{ step.copy_key }}">
+                        {{ tr(step.copy_key, step.copy_fallback) }}
+                    </p>
+                </div>
+
+                {% if settings_section %}
+                <div class="mb-4 grid gap-4 xl:grid-cols-2">
+                    {% for map_id, areas in settings_section.ui_maps.items() %}
+                    <section class="surface-soft-box rounded-[26px] p-4" data-settings-nav>
+                        <div class="section-kicker" data-i18n="profiles.settings_map_title">{{ tr("profiles.settings_map_title", "Mapped controls") }}</div>
+                        <p class="mt-2 text-sm leading-6 text-slate-600" data-i18n="profiles.settings_map_body">
+                            {{ tr("profiles.settings_map_body", "Use these clusters to jump straight to the advanced controls that cover this area.") }}
+                        </p>
+                        {% if areas %}
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <button
+                                type="button"
+                                class="button-base ghost-button wizard-search-engine-preset"
+                                data-settings-filter="all">
+                                <span data-i18n="profiles.settings_map_all">{{ tr("profiles.settings_map_all", "All") }}</span>
+                            </button>
+                            {% for area in areas %}
+                            <button
+                                type="button"
+                                class="button-base ghost-button wizard-search-engine-preset"
+                                data-settings-filter="{{ area.id }}">
+                                <span data-i18n="{{ area.label_key }}">{{ tr(area.label_key, area.fallback) }}</span>
+                            </button>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="mt-4 grid gap-2">
+                            {% for doc in settings_section.ui_docs.get(map_id, []) %}
+                            <button
+                                type="button"
+                                class="button-base ghost-button wizard-search-engine-preset text-left"
+                                data-settings-jump-target="{{ doc.target }}"
+                                data-settings-area-id="{{ doc.area_id }}">
+                                <span data-i18n="{{ doc.label_key }}">{{ tr(doc.label_key, doc.fallback) }}</span>
+                                <span class="wizard-search-engine-preset-copy">
+                                    {% for area in areas if area.id == doc.area_id %}
+                                    <span data-i18n="{{ area.label_key }}">{{ tr(area.label_key, area.fallback) }}</span>
+                                    {% endfor %}
+                                </span>
+                            </button>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {{ render_settings_schema_shell(step.step, default_open=settings_shell_step_to_open == step.step) }}
+
+                {% if preference_section %}
+                <section
+                    id="settings-preferences-{{ preference_section.id }}"
+                    class="mt-4 surface-soft-box rounded-[26px] p-4"
+                    data-settings-target="pref-section:{{ preference_section.id }}">
+                    <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                        <div>
+                            <div class="section-kicker" data-i18n="profiles.settings_preferences_title">{{ tr("profiles.settings_preferences_title", "Managed preferences") }}</div>
+                            <h4 class="mt-2 text-lg font-semibold text-slate-900" data-i18n="{{ preference_section.title_key }}">
+                                {{ tr(preference_section.title_key, preference_section.id) }}
+                            </h4>
+                            <p class="mt-2 text-sm leading-6 text-slate-600" data-i18n="{{ preference_section.body_key }}">
+                                {{ tr(preference_section.body_key, preference_section.id) }}
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            id="wizard-preferences-{{ preference_section.id }}-add"
+                            class="button-base ghost-button">
+                            <span data-i18n="profiles.settings_preferences_add">{{ tr("profiles.settings_preferences_add", "Add preference") }}</span>
+                        </button>
+                    </div>
+
+                    <div class="mt-3 text-xs leading-5 text-slate-500"
+                        id="wizard-preferences-{{ preference_section.id }}-count">
+                        0
+                    </div>
+
+                    <div class="mt-4 grid gap-4 xl:grid-cols-2">
+                        {% if preference_section.presets %}
+                        <section class="theme-subcard rounded-[22px] px-4 py-4">
+                            <div class="section-kicker" data-i18n="profiles.settings_preferences_presets">{{ tr("profiles.settings_preferences_presets", "Recommended presets") }}</div>
+                            <div id="wizard-preferences-{{ preference_section.id }}-presets" class="mt-3 wizard-search-engine-preset-grid"></div>
+                        </section>
+                        {% endif %}
+
+                        {% if preference_section.bundles %}
+                        <section class="theme-subcard rounded-[22px] px-4 py-4">
+                            <div class="section-kicker" data-i18n="profiles.settings_preferences_bundles">{{ tr("profiles.settings_preferences_bundles", "Bundles") }}</div>
+                            <div id="wizard-preferences-{{ preference_section.id }}-bundles" class="mt-3 wizard-search-engine-preset-grid"></div>
+                        </section>
+                        {% endif %}
+
+                        {% if preference_section.known_preferences %}
+                        <section class="theme-subcard rounded-[22px] px-4 py-4">
+                            <div class="section-kicker" data-i18n="profiles.settings_preferences_known">{{ tr("profiles.settings_preferences_known", "Known preferences") }}</div>
+                            <div id="wizard-preferences-{{ preference_section.id }}-known" class="mt-3 wizard-search-engine-preset-grid"></div>
+                        </section>
+                        {% endif %}
+
+                        <section class="theme-subcard rounded-[22px] px-4 py-4 xl:col-span-2">
+                            <div class="section-kicker" data-i18n="profiles.settings_preferences_manual">{{ tr("profiles.settings_preferences_manual", "Manual entries") }}</div>
+                            <div
+                                id="wizard-preferences-{{ preference_section.id }}-empty"
+                                class="mt-3 text-sm leading-6 text-slate-500"
+                                data-i18n="profiles.settings_preferences_empty">
+                                {{ tr("profiles.settings_preferences_empty", "No managed preferences have been added in this section yet.") }}
+                            </div>
+                            <div id="wizard-preferences-{{ preference_section.id }}-list" class="mt-4 wizard-search-engine-list"></div>
+                        </section>
+                    </div>
+                </section>
+                {% endif %}
+            </section>
+            {% endfor %}
+        </div>
+
+        <div class="support-hidden" aria-live="polite">
+            <div id="overview-status">{{ tr("profiles.signal_saved") }}</div>
+            <div id="status">{{ tr("profiles.workspace_ready", "Workspace ready.") }}</div>
+        </div>
+    </main>
+</div>

@@ -6,6 +6,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
 
     return [
         {
+            "id": "start",
             "step": 1,
             "label_key": "profiles.wizard_step_one",
             "label_fallback": "Start",
@@ -15,6 +16,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 1 of 8: start",
         },
         {
+            "id": "general",
             "step": 2,
             "label_key": "profiles.wizard_step_two",
             "label_fallback": "Network & browser basics",
@@ -24,6 +26,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 2 of 8: Network & browser basics",
         },
         {
+            "id": "home",
             "step": 3,
             "label_key": "profiles.wizard_step_three",
             "label_fallback": "Home & startup",
@@ -33,6 +36,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 3 of 8: Home & startup",
         },
         {
+            "id": "search",
             "step": 4,
             "label_key": "profiles.wizard_step_four",
             "label_fallback": "Search & navigation",
@@ -42,6 +46,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 4 of 8: Search & navigation",
         },
         {
+            "id": "privacy",
             "step": 5,
             "label_key": "profiles.wizard_step_five",
             "label_fallback": "Privacy & security",
@@ -51,6 +56,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 5 of 8: Privacy & security",
         },
         {
+            "id": "sync",
             "step": 6,
             "label_key": "profiles.wizard_step_six",
             "label_fallback": "Accounts, languages, add-ons & sites",
@@ -60,6 +66,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 6 of 8: Accounts, languages, add-ons & sites",
         },
         {
+            "id": "ai",
             "step": 7,
             "label_key": "profiles.wizard_step_seven",
             "label_fallback": "AI & smart features",
@@ -69,6 +76,7 @@ def get_wizard_steps() -> list[dict[str, object]]:
             "progress_fallback": "Step 7 of 8: AI & smart features",
         },
         {
+            "id": "review",
             "step": 8,
             "label_key": "profiles.wizard_step_eight",
             "label_fallback": "Review & export",

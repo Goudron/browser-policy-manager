@@ -9,7 +9,7 @@
         core = {},
         features = {},
     }) {
-        const { resolveTheme, resolveBrowserLanguage, updateThemeColorMeta } = platform;
+        const { resolveTheme, resolveBrowserLanguage, updateThemeColorMeta, syncThemeSensitiveControls } = platform;
         const { fromEditorValue, toEditorValue } = data;
         const {
             t,
@@ -33,6 +33,7 @@
                 resolveTheme,
                 resolveBrowserLanguage,
                 updateThemeColorMeta,
+                syncThemeSensitiveControls,
                 fromEditorValue,
                 toEditorValue,
                 renderPreferencePresetButtons: features.renderPreferencePresetButtons,
@@ -58,6 +59,7 @@
                 syncWizardExtensionsFromEditor: core.syncWizardExtensionsFromEditor,
                 setValidationPreview: core.setValidationPreview,
                 updateActionState: core.updateActionState,
+                setBaselineFromCurrentUi: core.setBaselineFromCurrentUi,
                 saveCurrent: core.saveCurrent,
                 resetDraft: core.resetDraft,
                 doSoftDelete: core.doSoftDelete,
