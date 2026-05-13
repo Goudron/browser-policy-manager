@@ -118,3 +118,46 @@
     {% endcall %}
 </div>
 {%- endmacro %}
+
+{% macro render_settings_schema_shell(step_id, default_open=false) -%}
+<div
+    class="wizard-section-group wizard-schema-shell"
+    id="settings-schema-shell-step-{{ step_id }}"
+    data-settings-shell-step="{{ step_id }}">
+    {% call render_wizard_disclosure("profiles.wizard_shell_title", "profiles.wizard_shell_body", "settings-schema-shell-step-" ~ step_id ~ "-details", default_open=default_open) %}
+        {{ render_doc_placeholder("guided-schema-shell", "profiles.docs_placeholder_policy_title", "profiles.docs_placeholder_policy_body") }}
+        <div class="wizard-shell-coverage surface-soft-box" id="settings-schema-shell-step-{{ step_id }}-coverage"></div>
+        <div class="wizard-shell-badges" id="settings-schema-shell-step-{{ step_id }}-badges"></div>
+        <div class="wizard-shell-grid">
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_recommended_title">{{ tr("profiles.wizard_shell_recommended_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_recommended_body">{{ tr("profiles.wizard_shell_recommended_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="settings-schema-shell-step-{{ step_id }}-recommended"></div>
+            </section>
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_additional_title">{{ tr("profiles.wizard_shell_additional_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_additional_body">{{ tr("profiles.wizard_shell_additional_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="settings-schema-shell-step-{{ step_id }}-additional"></div>
+            </section>
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_preferences_title">{{ tr("profiles.wizard_shell_preferences_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_preferences_body">{{ tr("profiles.wizard_shell_preferences_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="settings-schema-shell-step-{{ step_id }}-preferences"></div>
+            </section>
+            <section class="wizard-shell-card">
+                <div>
+                    <h4 class="wizard-shell-card-title" data-i18n="profiles.wizard_shell_raw_title">{{ tr("profiles.wizard_shell_raw_title") }}</h4>
+                    <p class="wizard-shell-card-copy" data-i18n="profiles.wizard_shell_raw_body">{{ tr("profiles.wizard_shell_raw_body") }}</p>
+                </div>
+                <div class="wizard-shell-list" id="settings-schema-shell-step-{{ step_id }}-raw"></div>
+            </section>
+        </div>
+    {% endcall %}
+</div>
+{%- endmacro %}

@@ -1,0 +1,14 @@
+{% set wizard_settings_sections = wizard_settings_catalog.sections_by_id %}
+{% set wizard_manual_policy_groups = wizard_manual_policy_controls.groups_by_id %}
+
+<div class="app-shell mx-auto max-w-[1520px] px-4 py-4 md:px-6 md:py-6">
+    {% include "profiles/_page_header.html" %}
+    {% include "profiles/_page_editor_chrome.html" %}
+    {% include "profiles/_page_wizard.html" %}
+    {% include "profiles/_page_command_deck.html" %}
+    {% include "profiles/_page_workspace.html" %}
+    {% include "profiles/_page_footer.html" %}
+</div>
+
+{% include "profiles/_page_legacy_markers.html" %}
+{% include "profiles/_page_catalog_scripts.html" %}

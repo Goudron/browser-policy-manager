@@ -24,17 +24,6 @@ UI_SHELL_TOKENS = (
     'id="profile-lifecycle-panel"',
     'id="profile-lifecycle-copy"',
     'id="profile-lifecycle-list"',
-    'id="compare-panel"',
-    'id="compare-clear"',
-    'id="compare-empty"',
-    'id="compare-active"',
-    'id="compare-current-name"',
-    'id="compare-other-name"',
-    'id="compare-changes-list"',
-    'id="compare-guided-areas-copy"',
-    'id="compare-guided-areas-list" class="compare-changes-list" role="list"',
-    'id="list-summary"',
-    'id="list-total-summary"',
     'id="wizard-settings-search-input"',
     'id="wizard-settings-search-results"',
     'id="wizard-settings-catalog"',
@@ -45,8 +34,6 @@ UI_SHELL_TOKENS = (
     'id="wizard-step-actions-copy"',
     'id="wizard-step-undo"',
     'id="wizard-step-reset"',
-    'id="hard-delete"',
-    'id="reset-library"',
     'data-starter-key="basic_corporate"',
     'data-starter-key="basic_corporate" aria-pressed="true"',
     'data-starter-key="classroom_kiosk"',
@@ -212,17 +199,14 @@ UI_SHELL_TOKENS = (
     'data-policy-key="DisableFirefoxAccounts"',
     'data-policy-key="BlockAboutProfiles"',
     'data-policy-key="DisableAppUpdate"',
-    'id="editor"',
     'id="save"',
     'id="validate"',
-    'id="download-firefox-policies"',
     'id="workspace-signal"',
     "/api/profiles",
     "/api/export/profiles",
     "/api/validate/",
     "/i18n/${lang}.json",
     "resolveBrowserLanguage",
-    "Ctrl/Cmd+S to save",
 )
 
 UI_LOCALE_KEYS = (
@@ -382,9 +366,6 @@ UI_LOCALE_KEYS = (
 )
 
 P2_3_UX_REGRESSION_TOKENS = (
-    'id="advanced-handoff-panel"',
-    'id="advanced-context-panel"',
-    'id="advanced-context-return"',
     'id="wizard-hardening-section-status"',
     'data-hardening-cleanup-subchoice',
     'data-hardening-subposture-menu="cleanup"',
@@ -536,25 +517,24 @@ def test_profiles_ui_shell_exposes_recent_ux_regression_hooks():
 def test_profiles_ui_shell_keeps_guided_first_viewport_order_contract():
     client = make_test_client(app)
 
-    page = client.get("/profiles")
+    page = client.get("/profiles/new")
     assert page.status_code == 200, page.text
     html = page.text
 
     wizard_index = html.index('id="wizard-panel"')
-    command_deck_index = html.index('id="command-deck"')
     overview_index = html.index('id="overview-panel"')
     search_index = html.index('id="wizard-settings-search-input"')
     first_step_index = html.index('id="wizard-step-1"')
 
-    assert wizard_index < command_deck_index < overview_index
-    assert wizard_index < search_index < command_deck_index
-    assert wizard_index < first_step_index < command_deck_index
+    assert overview_index < wizard_index
+    assert wizard_index < search_index
+    assert wizard_index < first_step_index
 
 
 def test_profiles_ui_shell_keeps_export_actions_before_technical_catalog():
     client = make_test_client(app)
 
-    page = client.get("/profiles")
+    page = client.get("/profiles/new")
     assert page.status_code == 200, page.text
     html = page.text
 
@@ -592,7 +572,7 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
     assert_has_keys(locale_en_json, P2_3_LOCALE_KEYS)
     assert_has_keys(locale_ru_json, P2_3_LOCALE_KEYS)
 
-    assert locale_en_json["profiles.advanced_context_title"] == "Continue in Advanced editor"
+    assert locale_en_json["profiles.advanced_context_title"] == "Continue in Advanced settings"
     assert locale_en_json["profiles.wizard_export_baseline_summary_title"] == "Baseline guardrails"
     assert locale_en_json["profiles.wizard_export_shareable_title"] == "Shareable summary"
     assert locale_en_json["profiles.wizard_export_shareable_generate"] == (
@@ -601,7 +581,7 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
     assert locale_en_json["profiles.wizard_export_included_title"] == (
         "Included in the policies.json you download now"
     )
-    assert locale_ru_json["profiles.advanced_context_title"] == "Продолжение в расширенном редакторе"
+    assert locale_ru_json["profiles.advanced_context_title"] == "Продолжение в расширенных настройках"
     assert locale_ru_json["profiles.advanced_context_return"] == "Вернуться к этому шагу"
     assert locale_ru_json["profiles.wizard_export_shareable_title"] == "Выжимка для передачи"
     assert locale_ru_json["profiles.wizard_export_shareable_generate"] == (
@@ -662,10 +642,11 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
 
     assert 'schemaVersion: "esr-140.10"' in shared_source
     assert "function getActiveWizardSchemaVersion()" in shared_source
-    assert (
-        'return documentRef.getElementById("profile-type").value || wizardSchemaEl.value || defaultSchemaVersion;'
-        in shared_source
-    )
+    assert 'return documentRef.getElementById("profile-type")?.value' in shared_source
+    assert "|| wizardSchemaEl?.value" in shared_source
+    assert "|| currentProfile?.schema_version" in shared_source
+    assert "|| currentProfile?.schemaVersion" in shared_source
+    assert "|| defaultSchemaVersion;" in shared_source
     assert 'wizardAiEsrcEmptyStateEl: byId("wizard-ai-esr-empty-state")' in dom_source
     assert 'wizardAiPosturePresetsEl: byId("wizard-ai-posture-presets")' in dom_source
     assert 'wizardAiPolicyControlsEl: byId("wizard-ai-policy-controls")' in dom_source
@@ -977,7 +958,7 @@ def test_profiles_ui_locale_catalog_exposes_post_roadmap_review_and_history_copy
     assert locale_ru_json["profiles.wizard_step_memory_open"] == "Открыть шаг"
     assert locale_ru_json["profiles.wizard_step_memory_current"] == "Вы уже здесь"
     assert locale_ru_json["profiles.wizard_export_drilldown_raw_title"] == (
-        "Только для расширенного редактора: {label}"
+        "Только для расширенных настроек: {label}"
     )
 
 
@@ -1197,8 +1178,8 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     )
 
     assert "const editHref = `/profiles/${profile.id}/edit`;" in workspace_source
-    assert '<a class="library-row-title-button" href="${editHref}">' in workspace_source
-    assert "await loadProfile(editingProfileId, { skipConfirm: true });" in runtime_source
+    assert '<a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">' in workspace_source
+    assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in runtime_source
     assert "editor.setValue(toEditorValue(getCurrentRaw(), documentRef.getElementById(\"mode\").value));" in workspace_source
     assert "syncWizardNetworkFromEditor();" in workspace_source
     assert "const homepageUrl = wizardHomepageUrlEl.value.trim();" in network_source
@@ -1210,7 +1191,7 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     assert f'data-editing-profile-id="{profile_id}"' in edit_response.text
     assert 'data-profiles-route-mode="edit"' in edit_response.text
     assert 'data-profiles-template-kind="editor"' in edit_response.text
-    assert f"<title>{payload['name']} — Profile editor — Browser Policy Manager</title>" in edit_response.text
+    assert f"<title>{payload['name']} — Guided editor — Browser Policy Manager</title>" in edit_response.text
 
     next_flags = {
         **created["flags"],
@@ -1240,11 +1221,11 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     assert export_response.json()["policies"]["Homepage"]["URL"] == updated_homepage
 
 
-def test_visual_and_advanced_same_profile_regression_can_save_without_conflict():
+def test_visual_and_json_same_profile_regression_can_save_without_conflict():
     client = make_test_client(app)
     payload = {
-        "name": f"Visual Advanced Browser-{uuid.uuid4().hex[:8]}",
-        "description": "Shared visual and advanced route regression",
+        "name": f"Visual JSON Browser-{uuid.uuid4().hex[:8]}",
+        "description": "Shared visual and JSON route regression",
         "owner": "platform@example.org",
         "schema_version": "release-150",
         "flags": {
@@ -1272,9 +1253,10 @@ def test_visual_and_advanced_same_profile_regression_can_save_without_conflict()
         root / "app" / "static" / "profiles_bootstrap_core.js"
     ).read_text(encoding="utf-8")
 
-    assert '(routeMode === "edit" || routeMode === "advanced") && editingProfileId' in runtime_source
-    assert "await loadProfile(editingProfileId, { skipConfirm: true });" in runtime_source
-    assert 'applyWorkspaceScope("advanced", { focus: true, persist: false });' in runtime_source
+    assert '(routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId' in runtime_source
+    assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in runtime_source
+    assert "setAdvancedHandoffContext(null);" in runtime_source
+    assert "applyAdvancedFocusTarget(focusTarget);" in runtime_source
     assert "saveButtonEl.addEventListener(\"click\", saveCurrent);" in runtime_source
     assert "saveCurrent();" in runtime_source
     assert "setSaveCurrent(workspace.saveCurrent);" in bootstrap_source
@@ -1285,7 +1267,7 @@ def test_visual_and_advanced_same_profile_regression_can_save_without_conflict()
     assert f'data-editing-profile-id="{profile_id}"' in visual_response.text
     assert 'data-profiles-route-mode="edit"' in visual_response.text
     assert 'data-profiles-template-kind="editor"' in visual_response.text
-    assert f'href="/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit"' in visual_response.text
+    assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in visual_response.text
 
     visual_flags = {
         **created["flags"],
@@ -1309,36 +1291,36 @@ def test_visual_and_advanced_same_profile_regression_can_save_without_conflict()
     assert visual_saved["revision"] == created["revision"] + 1
     assert visual_saved["flags"]["Homepage"]["URL"] == "https://portal.example.local/visual/"
 
-    advanced_response = client.get(
-        f"/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit&focus=editor"
+    json_response = client.get(
+        f"/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&focus=editor"
     )
-    assert advanced_response.status_code == 200, advanced_response.text
-    assert f'data-editing-profile-id="{profile_id}"' in advanced_response.text
-    assert 'data-profiles-route-mode="advanced"' in advanced_response.text
-    assert 'data-profiles-template-kind="advanced"' in advanced_response.text
-    assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in advanced_response.text
-    assert 'data-advanced-focus-target="editor"' in advanced_response.text
-    assert f"<title>{payload['name']} — Advanced editor — Browser Policy Manager</title>" in advanced_response.text
+    assert json_response.status_code == 200, json_response.text
+    assert f'data-editing-profile-id="{profile_id}"' in json_response.text
+    assert 'data-profiles-route-mode="json"' in json_response.text
+    assert 'data-profiles-template-kind="json"' in json_response.text
+    assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in json_response.text
+    assert 'data-advanced-focus-target="editor"' in json_response.text
+    assert f"<title>{payload['name']} — JSON editor — Browser Policy Manager</title>" in json_response.text
 
-    advanced_flags = {
+    json_flags = {
         **visual_saved["flags"],
         "DisableFirefoxStudies": True,
     }
-    advanced_save_response = client.patch(
+    json_save_response = client.patch(
         f"/api/profiles/{profile_id}",
         json={
-            "description": "Saved from advanced editor route",
+            "description": "Saved from JSON editor route",
             "owner": payload["owner"],
             "schema_version": payload["schema_version"],
-            "flags": advanced_flags,
+            "flags": json_flags,
             "expected_revision": visual_saved["revision"],
         },
     )
-    assert advanced_save_response.status_code == 200, advanced_save_response.text
-    advanced_saved = advanced_save_response.json()
-    assert advanced_saved["revision"] == visual_saved["revision"] + 1
-    assert advanced_saved["flags"]["Homepage"]["URL"] == "https://portal.example.local/visual/"
-    assert advanced_saved["flags"]["DisableFirefoxStudies"] is True
+    assert json_save_response.status_code == 200, json_save_response.text
+    json_saved = json_save_response.json()
+    assert json_saved["revision"] == visual_saved["revision"] + 1
+    assert json_saved["flags"]["Homepage"]["URL"] == "https://portal.example.local/visual/"
+    assert json_saved["flags"]["DisableFirefoxStudies"] is True
 
     export_response = client.get(f"/api/export/profiles/{profile_id}/firefox/policies.json")
     assert export_response.status_code == 200, export_response.text

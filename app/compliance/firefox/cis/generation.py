@@ -66,9 +66,11 @@ def build_cis_layer(
     mappings = mappings_doc.get("mappings", [])
 
     included_ids = {
-        recommendation["id"]
+        recommendation_id
         for recommendation in recommendations
-        if isinstance(recommendation, dict) and recommendation.get("level") in set(range(1, level + 1))
+        if isinstance(recommendation, dict)
+        and recommendation.get("level") in set(range(1, level + 1))
+        and isinstance((recommendation_id := recommendation.get("id")), str)
     }
     mappings_by_id = {
         mapping.get("recommendation_id"): mapping

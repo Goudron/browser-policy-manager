@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from types import SimpleNamespace
 
+from bs4 import BeautifulSoup
 from fastapi.responses import HTMLResponse
 from starlette.requests import Request
 
@@ -14,8 +15,8 @@ from tests.support import assert_contains_all, build_profile_payload, make_test_
 
 PROFILES_PAGE_EDITOR_TOKENS = (
     "Browser profile manager",
-    "Profile library",
-    "Advanced profile document",
+    "Library",
+    "JSON editor",
     'id="list-summary"',
     'id="list-total-summary"',
     'id="import-firefox-policies"',
@@ -43,14 +44,6 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-settings-catalog"',
     'id="wizard-manual-policy-controls"',
     'id="wizard-schema-shell-catalog"',
-    'id="workspace-scope-guided"',
-    'id="workspace-scope-advanced"',
-    'id="workspace-scope-summary"',
-    'id="workspace-scope-summary-title"',
-    'id="workspace-scope-summary-copy"',
-    'id="workspace-scope-guided-card"',
-    'id="workspace-scope-advanced-card"',
-    'id="advanced-handoff-panel"',
     'id="wizard-schema"',
     'id="wizard-mode"',
     'id="wizard-finish"',
@@ -389,26 +382,6 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     'id="wizard-export-firefox-policies"',
     'id="wizard-export-download-hint"',
     'id="wizard-export-ready-card"',
-    'id="dock-state-summary"',
-    'id="dock-state-title"',
-    'id="dock-state-copy"',
-    'id="advanced-context-panel"',
-    'id="advanced-context-step"',
-    'id="advanced-context-copy"',
-    'id="advanced-context-list"',
-    'id="advanced-context-empty"',
-    'id="advanced-context-return"',
-    'data-advanced-start-action="details"',
-    'data-advanced-start-action="editor"',
-    'data-advanced-start-action="validate"',
-    'id="advanced-utility-details"',
-    'id="advanced-utility-editor"',
-    'id="advanced-utility-validate"',
-    'id="advanced-download-strip"',
-    'id="advanced-review-strip"',
-    'id="advanced-review-save-state"',
-    'id="advanced-review-validation-state"',
-    'id="advanced-review-download-state"',
     'data-extension-profile="uBlock0@raymondhill.net"',
     'data-extension-profile="adguardadblocker@adguard.com"',
     'data-extension-profile="https-everywhere@eff.org"',
@@ -420,8 +393,8 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
 )
 
 PROFILES_PAGE_GUIDED_UX_REGRESSION_TOKENS = (
-    "Guided setup",
-    "Advanced editor",
+    "Guided editor",
+    "Advanced settings",
     "Save, validate, download",
     "Download policies.json",
     "Latest edits",
@@ -457,7 +430,29 @@ PROFILES_PAGE_FOOTER_TOKENS = (
 
 def _profiles_page_response():
     client = make_test_client(app)
-    return client.get("/profiles")
+    return client.get("/profiles/new")
+
+
+def test_theme_safe_surface_cards_and_dark_white_override_contract():
+    css = Path("app/static/profiles.css").read_text(encoding="utf-8")
+    editor_template = Path("app/templates/profiles/_page_editor_chrome.html").read_text(encoding="utf-8")
+    settings_template = Path("app/templates/profiles/_page_settings_workspace.html").read_text(encoding="utf-8")
+
+    assert ".theme-subcard {" in css
+    assert 'html[data-theme="dark"] .theme-subcard,' in css
+    assert 'html[data-theme="dark"] [class~="bg-white/80"]' in css
+    assert 'html[data-theme="dark"] [class~="border-white/70"]' in css
+    assert 'html[data-theme="dark"] [class~="border-slate-200"]' in css
+    assert 'html[data-theme="dark"] [class~="decoration-slate-300"]' in css
+    assert 'html[data-theme="dark"] [class~="hover:text-slate-900"]:hover' in css
+    assert ".wizard-search-engine-preset:hover {" in css
+    assert "background: rgba(255, 255, 255, 0.86);" in css
+    assert "appearance: none;" in css
+    assert "color-scheme: light;" in css
+    assert "color-scheme: dark;" in css
+    assert 'url("data:image/svg+xml,' in css
+    assert editor_template.count("theme-subcard") >= 4
+    assert settings_template.count("theme-subcard") >= 4
 
 
 def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
@@ -471,7 +466,12 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.locale_option_en"] == "English"
     assert locale_json["profiles.locale_option_ru"] == "Russian"
     assert locale_json["profiles.docs_placeholder_status"] == "Docs placeholder"
-    assert locale_json["profiles.docs_placeholder_advanced_title"] == "Advanced editor guide"
+    assert locale_json["profiles.editor_chrome_title"] == "Guided editor"
+    assert locale_json["profiles.editor_chrome_profile_id"] == "Profile ID"
+    assert locale_json["profiles.editor_chrome_validation"] == "Validation"
+    assert locale_json["profiles.editor_chrome_modes_title"] == "Open another mode"
+    assert locale_json["profiles.editor_chrome_settings_link"] == "Advanced settings"
+    assert locale_json["profiles.editor_chrome_json_link"] == "JSON editor"
     assert locale_json["profiles.docs_placeholder_policy_title"] == "Policy reference"
     assert locale_json["profiles.docs_placeholder_boundaries_title"] == "Boundary notes"
     assert locale_json["profiles.wizard_context_existing"].startswith("You are editing")
@@ -482,28 +482,28 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_step_six"] == "Accounts, languages, add-ons & sites"
     assert locale_json["profiles.wizard_step_seven"] == "AI & smart features"
     assert locale_json["profiles.wizard_step_eight"] == "Review & export"
-    assert locale_json["profiles.workspace_scope_guided"] == "Guided setup"
-    assert locale_json["profiles.workspace_scope_advanced"] == "Advanced editor"
+    assert locale_json["profiles.workspace_scope_guided"] == "Guided editor"
+    assert locale_json["profiles.workspace_scope_advanced"] == "Advanced settings"
     assert locale_json["profiles.workspace_scope_current_label"] == "Current mode"
     assert locale_json["profiles.workspace_scope_guided_title"] == (
         "Best for most profile work"
     )
     assert locale_json["profiles.workspace_scope_advanced_title"] == (
-        "Only when guided setup is not enough"
+        "Only when Guided editor is not enough"
     )
-    assert locale_json["profiles.advanced_context_title"] == "Continue in Advanced editor"
+    assert locale_json["profiles.advanced_context_title"] == "Continue in Advanced settings"
     assert locale_json["profiles.advanced_context_return"] == "Back to this guided step"
     assert locale_json["profiles.advanced_context_empty_title"] == (
         "Starting here without a step handoff?"
     )
     assert locale_json["profiles.advanced_context_action_editor"] == "Open full policies.json"
-    assert locale_json["profiles.advanced_utility_title"] == "Advanced workflow"
+    assert locale_json["profiles.advanced_utility_title"] == "Advanced settings workflow"
     assert locale_json["profiles.advanced_utility_editor_body"] == (
         "Use the full Firefox policies.json when you already know the lower-level keys you need to manage."
     )
     assert locale_json["profiles.advanced_downloads_title"] == "Download policies.json"
     assert locale_json["profiles.editor_section_hint"] == (
-        "Edit the full Firefox policies.json document here when guided setup is not enough."
+        "Edit the full Firefox policies.json document here when Guided editor and Advanced settings are not enough."
     )
     assert locale_json["profiles.advanced_review_save_title"] == "Latest edits"
     assert locale_json["profiles.advanced_review_download_title"] == "Ready to download"
@@ -585,12 +585,12 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_settings_map_label"] == "Firefox Settings areas"
     assert locale_json["profiles.wizard_settings_covered_title"] == "Settings covered"
-    assert locale_json["profiles.wizard_preferences_covered_title"] == "Advanced preference coverage"
+    assert locale_json["profiles.wizard_preferences_covered_title"] == "Advanced settings preference coverage"
     assert locale_json["profiles.wizard_preferences_general_handoff_title"] == (
-        "Advanced General preferences"
+        "Advanced settings for General preferences"
     )
     assert locale_json["profiles.wizard_preferences_search_handoff_title"] == (
-        "Advanced Search preferences"
+        "Advanced settings for Search preferences"
     )
     assert locale_json["profiles.wizard_preferences_handoff_count"] == "{count} configured"
     assert locale_json["profiles.wizard_settings_controls_label"] == "What you can change here"
@@ -619,10 +619,12 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_disclosure_hide"] == "Hide details"
     assert locale_json["profiles.wizard_review_filter_changed"] == "Changed"
     assert locale_json["profiles.wizard_review_filter_attention"] == "Needs attention"
-    assert locale_json["profiles.wizard_review_filter_advanced"] == "Advanced-only"
+    assert locale_json["profiles.wizard_review_filter_advanced"] == "Advanced settings only"
     assert locale_json["profiles.wizard_review_filter_all"] == "All"
     assert locale_json["profiles.wizard_review_empty_changed"] == "No changed items here yet."
-    assert locale_json["profiles.wizard_review_empty_advanced"] == "No advanced-only items here right now."
+    assert locale_json["profiles.wizard_review_empty_advanced"] == (
+        "No advanced settings items are listed here right now."
+    )
     assert locale_json["profiles.wizard_long_list_show_all"] == "Show all {count}"
     assert locale_json["profiles.wizard_long_list_show_fewer"] == "Show fewer"
     assert locale_json["profiles.wizard_shell_badge_raw"] == "Raw fallback"
@@ -1062,7 +1064,12 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.locale_option_en"] == "Английский"
     assert locale_json["profiles.locale_option_ru"] == "Русский"
     assert locale_json["profiles.docs_placeholder_status"] == "Место для документации"
-    assert locale_json["profiles.docs_placeholder_advanced_title"] == "Руководство по расширенному редактору"
+    assert locale_json["profiles.editor_chrome_title"] == "Пошаговый редактор"
+    assert locale_json["profiles.editor_chrome_profile_id"] == "ID профиля"
+    assert locale_json["profiles.editor_chrome_validation"] == "Проверка"
+    assert locale_json["profiles.editor_chrome_modes_title"] == "Открыть другой режим"
+    assert locale_json["profiles.editor_chrome_settings_link"] == "Расширенные настройки"
+    assert locale_json["profiles.editor_chrome_json_link"] == "JSON-редактор"
     assert locale_json["profiles.docs_placeholder_policy_title"] == "Справочник политик"
     assert locale_json["profiles.docs_placeholder_boundaries_title"] == "Границы мастера"
     assert locale_json["profiles.wizard_step_one"] == "Старт"
@@ -1072,16 +1079,16 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_step_six"] == "Аккаунты, языки, дополнения и сайты"
     assert locale_json["profiles.wizard_step_seven"] == "ИИ и умные функции"
     assert locale_json["profiles.wizard_step_eight"] == "Проверка и выгрузка"
-    assert locale_json["profiles.workspace_scope_guided"] == "Пошаговая настройка"
-    assert locale_json["profiles.workspace_scope_advanced"] == "Расширенный редактор"
+    assert locale_json["profiles.workspace_scope_guided"] == "Пошаговый редактор"
+    assert locale_json["profiles.workspace_scope_advanced"] == "Расширенные настройки"
     assert locale_json["profiles.workspace_scope_current_label"] == "Текущий режим"
     assert locale_json["profiles.workspace_scope_guided_title"] == (
         "Лучший путь для большей части работы"
     )
     assert locale_json["profiles.workspace_scope_advanced_title"] == (
-        "Только когда Пошаговой настройки уже недостаточно"
+        "Только когда Пошагового редактора уже недостаточно"
     )
-    assert locale_json["profiles.advanced_context_title"] == "Продолжение в расширенном редакторе"
+    assert locale_json["profiles.advanced_context_title"] == "Продолжение в расширенных настройках"
     assert locale_json["profiles.advanced_context_return"] == "Вернуться к этому шагу"
     assert locale_json["profiles.advanced_context_empty_title"] == (
         "Открыли это место без перехода из шага?"
@@ -1090,14 +1097,14 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Открыть полный policies.json"
     )
     assert locale_json["profiles.advanced_utility_title"] == (
-        "Работа в расширенном редакторе"
+        "Работа в расширенных настройках"
     )
     assert locale_json["profiles.advanced_utility_editor_body"] == (
         "Используйте полный Firefox policies.json, когда уже знаете, какими низкоуровневыми ключами нужно управлять."
     )
     assert locale_json["profiles.advanced_downloads_title"] == "Скачать policies.json"
     assert locale_json["profiles.editor_section_hint"] == (
-        "Редактируйте здесь полный Firefox policies.json, когда Пошаговой настройки уже недостаточно."
+        "Редактируйте здесь полный Firefox policies.json, когда Пошагового редактора и расширенных настроек уже недостаточно."
     )
     assert locale_json["profiles.advanced_review_save_title"] == "Последние правки"
     assert locale_json["profiles.advanced_review_download_title"] == (
@@ -1195,12 +1202,12 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_settings_map_label"] == "Разделы настроек Firefox"
     assert locale_json["profiles.wizard_settings_covered_title"] == "Покрытые настройки"
-    assert locale_json["profiles.wizard_preferences_covered_title"] == "Покрытие расширенных параметров"
+    assert locale_json["profiles.wizard_preferences_covered_title"] == "Покрытие параметров в расширенных настройках"
     assert locale_json["profiles.wizard_preferences_general_handoff_title"] == (
-        "Расширенные параметры раздела «Основные»"
+        "Расширенные настройки для раздела «Основные»"
     )
     assert locale_json["profiles.wizard_preferences_search_handoff_title"] == (
-        "Расширенные параметры поиска"
+        "Расширенные настройки поиска"
     )
     assert locale_json["profiles.wizard_preferences_handoff_count"] == "Настроено: {count}"
     assert locale_json["profiles.wizard_settings_controls_label"] == "Что можно изменить здесь"
@@ -1237,10 +1244,12 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_disclosure_hide"] == "Скрыть детали"
     assert locale_json["profiles.wizard_review_filter_changed"] == "Изменённые"
     assert locale_json["profiles.wizard_review_filter_attention"] == "Требуют внимания"
-    assert locale_json["profiles.wizard_review_filter_advanced"] == "Только расширенный редактор"
+    assert locale_json["profiles.wizard_review_filter_advanced"] == "Только расширенные настройки"
     assert locale_json["profiles.wizard_review_filter_all"] == "Все"
     assert locale_json["profiles.wizard_review_empty_changed"] == "Здесь пока нет изменённых пунктов."
-    assert locale_json["profiles.wizard_review_empty_advanced"] == "Сейчас здесь нет пунктов только для расширенного редактора."
+    assert locale_json["profiles.wizard_review_empty_advanced"] == (
+        "Сейчас здесь нет пунктов только для расширенных настроек."
+    )
     assert locale_json["profiles.wizard_long_list_show_all"] == "Показать все: {count}"
     assert locale_json["profiles.wizard_long_list_show_fewer"] == "Свернуть"
     assert locale_json["profiles.wizard_shell_badge_raw"] == "Через резервный JSON-блок"
@@ -1660,7 +1669,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_step_memory_open"] == "Открыть шаг"
     assert locale_json["profiles.wizard_step_memory_current"] == "Вы уже здесь"
     assert locale_json["profiles.wizard_export_boundary_register_title"] == (
-        "Что сознательно остаётся в расширенном редакторе"
+        "Что сознательно остаётся в расширенных настройках"
     )
     assert locale_json["profiles.wizard_export_drilldown_title"] == (
         "Детальный технический разбор"
@@ -1727,9 +1736,23 @@ def test_profiles_page_renders_editor_shell():
 
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
-    assert 'data-profiles-route-mode="library"' in response.text
-    assert 'data-profiles-template-kind="library"' in response.text
-    assert_contains_all(response.text, PROFILES_PAGE_EDITOR_TOKENS)
+    assert 'data-profiles-route-mode="new"' in response.text
+    assert 'data-profiles-template-kind="editor"' in response.text
+    assert_contains_all(
+        response.text,
+        (
+            "Browser Policy Manager",
+            "Guided editor",
+            "Advanced settings",
+            "JSON editor",
+            'id="overview-panel"',
+            'id="wizard-panel"',
+            'id="profile-name"',
+            'id="profile-type"',
+            'id="save"',
+            'id="validate"',
+        ),
+    )
     assert 'id="download-json"' not in response.text
     assert 'id="download-yaml"' not in response.text
     assert 'id="wizard-export-json"' not in response.text
@@ -1737,13 +1760,16 @@ def test_profiles_page_renders_editor_shell():
 
 
 def test_firefox_policies_import_and_final_export_ui_contract():
-    response = _profiles_page_response()
+    client = make_test_client(app)
+    library_response = client.get("/profiles")
+    editor_response = _profiles_page_response()
 
-    assert response.status_code == 200
-    assert 'id="import-firefox-policies"' in response.text
-    assert 'id="import-firefox-policies-file"' in response.text
-    assert 'accept=".json,application/json"' in response.text
-    assert 'id="wizard-export-firefox-policies"' in response.text
+    assert library_response.status_code == 200
+    assert editor_response.status_code == 200
+    assert 'id="import-firefox-policies"' in library_response.text
+    assert 'id="import-firefox-policies-file"' in library_response.text
+    assert 'accept=".json,application/json"' in library_response.text
+    assert 'id="wizard-export-firefox-policies"' in editor_response.text
 
     removed_export_controls = (
         'id="download-json"',
@@ -1756,9 +1782,9 @@ def test_firefox_policies_import_and_final_export_ui_contract():
         "Скачать файлы",
     )
     for token in removed_export_controls:
-        assert token not in response.text
+        assert token not in library_response.text
+        assert token not in editor_response.text
 
-    client = make_test_client(app)
     en_catalog = client.get("/i18n/en.json").json()
     ru_catalog = client.get("/i18n/ru.json").json()
     assert en_catalog["profiles.wizard_export_ready_title"] == "Download policies.json"
@@ -1934,7 +1960,8 @@ def test_default_wizard_path_does_not_render_settings_map_blocks():
     assert "function renderResults()" in settings_search_source
     assert "function findTarget(targetKey)" in settings_search_source
     assert "button.dataset.settingsSearchTarget = entry.target;" in settings_search_source
-    assert 'documentRef.querySelector(`[data-settings-target="${targetKey}"]`)' in settings_search_source
+    assert 'documentRef.querySelector(`[data-settings-target="${normalizedTarget}"]`)' in settings_search_source
+    assert 'documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`)' in settings_search_source
 
 
 def test_setup_step_defaults_to_corporate_baseline_and_active_preset_states():
@@ -2372,6 +2399,100 @@ def test_profiles_page_uses_local_bootstrap_assets_without_inline_scripts():
     assert "window.__BPM_INITIAL_LOCALE__ =" not in response.text
 
 
+def test_existing_profile_routes_embed_initial_profile_payload():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(
+            name="Initial Profile Embed Contract",
+            schema_version="release-150",
+            flags={"DisableTelemetry": True},
+        ),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/{profile_id}/edit")
+
+    assert response.status_code == 200
+    assert '<script id="profiles-initial-profile" type="application/json">' in response.text
+    assert '"name": "Initial Profile Embed Contract"' in response.text
+    assert '"schema_version": "release-150"' in response.text
+    assert '"DisableTelemetry": true' in response.text
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    assert soup.find(id="current-name").get_text(strip=True) == "Initial Profile Embed Contract"
+    assert soup.find(id="save").get_text(strip=True) == "Save"
+    assert soup.find(id="profile-name").get("value") == "Initial Profile Embed Contract"
+    assert soup.find(id="editor-profile-id").get_text(strip=True).startswith("#")
+
+
+def test_profiles_library_page_uses_library_only_assets():
+    client = make_test_client(app)
+
+    response = client.get("/profiles")
+
+    assert response.status_code == 200
+    assert '<script src="/static/profiles_head_bootstrap.js?v=' in response.text
+    assert '<script src="/static/profiles_utils.js?v=' in response.text
+    assert '<script src="/static/profiles_shared.js?v=' in response.text
+    assert '<script src="/static/profiles_platform.js?v=' in response.text
+    assert '<script src="/static/profiles_data.js?v=' in response.text
+    assert '<script src="/static/profiles_library_bootstrap.js?v=' in response.text
+    assert '<script src="/static/profiles_library.js?v=' in response.text
+    assert 'id="schema-channels-catalog"' in response.text
+    assert '<script src="/static/vendor/js-yaml.js?v=' not in response.text
+    assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in response.text
+    assert '<script src="/static/vendor/profiles_monaco.js?v=' not in response.text
+    assert '<script src="/static/profiles_catalogs.js?v=' not in response.text
+    assert '<script src="/static/profiles_page_bootstrap.js?v=' not in response.text
+    assert '<script src="/static/profiles_runtime.js?v=' not in response.text
+    assert '<script src="/static/profiles_bootstrap.js?v=' not in response.text
+    assert '<script src="/static/profiles_guided.js?v=' not in response.text
+    assert '<script src="/static/profiles_settings.js?v=' not in response.text
+    assert '<script src="/static/profiles_advanced.js?v=' not in response.text
+    assert '<script src="/static/profiles.js?v=' not in response.text
+    assert 'id="wizard-starter-catalog"' not in response.text
+    assert 'id="wizard-settings-catalog"' not in response.text
+    assert 'id="wizard-preferences-catalog"' not in response.text
+    assert 'id="wizard-manual-policy-controls"' not in response.text
+    assert 'id="wizard-schema-shell-catalog"' not in response.text
+
+
+def test_profiles_editor_modes_use_mode_specific_entrypoints():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Mode Entrypoint Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    guided_response = client.get("/profiles/new")
+    settings_response = client.get(f"/profiles/{profile_id}/settings")
+    json_response = client.get(f"/profiles/{profile_id}/json")
+    advanced_response = client.get(f"/profiles/{profile_id}/advanced")
+
+    assert guided_response.status_code == 200
+    assert settings_response.status_code == 200
+    assert json_response.status_code == 200
+    assert advanced_response.status_code == 307
+    assert '<script src="/static/profiles_guided.js?v=' in guided_response.text
+    assert '<script src="/static/profiles_advanced.js?v=' not in guided_response.text
+    assert '<script src="/static/profiles_settings.js?v=' not in guided_response.text
+    assert '<script src="/static/profiles_library.js?v=' not in guided_response.text
+    assert '<script src="/static/profiles.js?v=' not in guided_response.text
+    assert '<script src="/static/profiles_settings.js?v=' in settings_response.text
+    assert '<script src="/static/profiles_guided.js?v=' not in settings_response.text
+    assert '<script src="/static/profiles_advanced.js?v=' not in settings_response.text
+    assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in settings_response.text
+    assert '<script src="/static/vendor/profiles_monaco.js?v=' not in settings_response.text
+    assert '<script src="/static/profiles_json.js?v=' in json_response.text
+    assert '<script src="/static/profiles_guided.js?v=' not in json_response.text
+    assert '<script src="/static/profiles_settings.js?v=' not in json_response.text
+    assert '<script src="/static/profiles_library.js?v=' not in json_response.text
+    assert '<script src="/static/profiles.js?v=' not in json_response.text
+    assert advanced_response.headers["location"] == f"/profiles/{profile_id}/json"
+
+
 def test_profiles_page_uses_request_locale_for_initial_render():
     client = make_test_client(app)
 
@@ -2382,9 +2503,11 @@ def test_profiles_page_uses_request_locale_for_initial_render():
 
     assert response.status_code == 200
     assert '<html lang="ru">' in response.text
-    assert "Пошаговый мастер" in response.text
+    assert "Библиотека" in response.text
     assert "Менеджер профилей браузера" in response.text
-    assert "Поисковик" in response.text
+    assert "Поиск по имени профиля" in response.text
+    assert "Сравнение двух профилей" in response.text
+    assert "Пошаговый мастер" not in response.text
     assert "Search engine" not in response.text
     assert "Engine name" not in response.text
     assert "Search URL template" not in response.text
@@ -2512,6 +2635,43 @@ def test_static_vendor_monaco_assets_exist():
     assert "Microsoft Corporation" in license_path.read_text(encoding="utf-8")
 
 
+def test_json_editor_runtime_uses_profile_loaded_status_and_custom_monaco_theme_contract():
+    root = Path(__file__).resolve().parents[1]
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
+        encoding="utf-8"
+    )
+    workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
+        encoding="utf-8"
+    )
+    css_source = (root / "app" / "static" / "profiles.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'function getMonacoThemeName(resolvedTheme)' in runtime_source
+    assert 'monacoRef.editor.defineTheme("bpm-vs-light"' in runtime_source
+    assert 'monacoRef.editor.defineTheme("bpm-vs-dark"' in runtime_source
+    assert 'windowRef.monaco.editor.setTheme(getMonacoThemeName(resolvedTheme));' in runtime_source
+    assert 'lineNumbersMinChars: 4' in runtime_source
+    assert 'lineDecorationsWidth: 18' in runtime_source
+    assert 'vertical: "visible"' in runtime_source
+    assert 'horizontal: "auto"' in runtime_source
+    assert (
+        'fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace"'
+        in runtime_source
+    )
+    assert 'await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });' in runtime_source
+    assert (
+        'setStatus(t("profiles.status_profile_loaded").replace("{name}", hydratedProfile.name), "success");'
+        in runtime_source
+    )
+    assert "const { announceStatus = hasLibrarySurface } = options;" in workspace_source
+    assert "syncLibrary = hasLibrarySurface" in workspace_source
+    assert "announceLoaded = true" in workspace_source
+    assert '.editor-frame .monaco-editor .margin-view-overlays .line-numbers {' in css_source
+    assert '.editor-frame .monaco-scrollable-element > .scrollbar.vertical {' in css_source
+    assert '.editor-frame .monaco-scrollable-element > .scrollbar > .slider {' in css_source
+
+
 def test_static_vendor_tailwind_replacement_asset_exists():
     asset_path = (
         Path(__file__).resolve().parents[1] / "app" / "static" / "vendor" / "profiles_tailwind.css"
@@ -2528,9 +2688,19 @@ def test_static_profiles_bootstrap_assets_exist():
     static_root = Path(__file__).resolve().parents[1] / "app" / "static"
     head_bootstrap = static_root / "profiles_head_bootstrap.js"
     page_bootstrap = static_root / "profiles_page_bootstrap.js"
+    library_bootstrap = static_root / "profiles_library_bootstrap.js"
+    library_entry = static_root / "profiles_library.js"
+    guided_entry = static_root / "profiles_guided.js"
+    settings_entry = static_root / "profiles_settings.js"
+    json_entry = static_root / "profiles_json.js"
 
     assert head_bootstrap.is_file()
     assert page_bootstrap.is_file()
+    assert library_bootstrap.is_file()
+    assert library_entry.is_file()
+    assert guided_entry.is_file()
+    assert settings_entry.is_file()
+    assert json_entry.is_file()
     assert 'window.__BPM_INITIAL_LOCALE__ = JSON.parse(payloadText);' in page_bootstrap.read_text(encoding="utf-8")
 
 
@@ -2543,6 +2713,8 @@ def test_web_profiles_module_wires_templates_and_route():
     assert any(route.path == "/profiles" for route in reloaded.router.routes)
     assert any(route.path == "/profiles/new" for route in reloaded.router.routes)
     assert any(route.path == "/profiles/{profile_id}/edit" for route in reloaded.router.routes)
+    assert any(route.path == "/profiles/{profile_id}/settings" for route in reloaded.router.routes)
+    assert any(route.path == "/profiles/{profile_id}/json" for route in reloaded.router.routes)
     assert any(route.path == "/profiles/{profile_id}/advanced" for route in reloaded.router.routes)
 
 
@@ -2556,37 +2728,80 @@ def test_profile_editor_routes_render_wizard_shells():
 
     new_response = client.get("/profiles/new")
     edit_response = client.get(f"/profiles/{profile_id}/edit")
+    settings_response = client.get(f"/profiles/{profile_id}/settings")
+    json_response = client.get(f"/profiles/{profile_id}/json")
     advanced_response = client.get(f"/profiles/{profile_id}/advanced")
     missing_response = client.get("/profiles/999999/edit")
+    missing_settings_response = client.get("/profiles/999999/settings")
+    missing_json_response = client.get("/profiles/999999/json")
     missing_advanced_response = client.get("/profiles/999999/advanced")
 
     assert new_response.status_code == 200
     assert edit_response.status_code == 200
-    assert advanced_response.status_code == 200
+    assert settings_response.status_code == 200
+    assert json_response.status_code == 200
+    assert advanced_response.status_code == 307
     assert missing_response.status_code == 404
+    assert missing_settings_response.status_code == 404
+    assert missing_json_response.status_code == 404
     assert missing_advanced_response.status_code == 404
-    assert "<title>New profile draft — Browser Policy Manager</title>" in new_response.text
+    assert "<title>New profile draft — Guided editor — Browser Policy Manager</title>" in new_response.text
     assert (
-        "<title>Route Skeleton Profile — Profile editor — Browser Policy Manager</title>"
+        "<title>Route Skeleton Profile — Guided editor — Browser Policy Manager</title>"
         in edit_response.text
     )
     assert (
-        "<title>Route Skeleton Profile — Advanced editor — Browser Policy Manager</title>"
-        in advanced_response.text
+        "<title>Route Skeleton Profile — Advanced settings — Browser Policy Manager</title>"
+        in settings_response.text
     )
+    assert "<title>Route Skeleton Profile — JSON editor — Browser Policy Manager</title>" in json_response.text
     assert 'data-profiles-route-mode="new"' in new_response.text
     assert 'data-profiles-route-mode="edit"' in edit_response.text
-    assert 'data-profiles-route-mode="advanced"' in advanced_response.text
+    assert 'data-profiles-route-mode="settings"' in settings_response.text
+    assert 'data-profiles-route-mode="json"' in json_response.text
     assert 'data-profiles-template-kind="editor"' in new_response.text
     assert 'data-profiles-template-kind="editor"' in edit_response.text
-    assert 'data-profiles-template-kind="advanced"' in advanced_response.text
+    assert 'data-profiles-template-kind="settings"' in settings_response.text
+    assert 'data-profiles-template-kind="json"' in json_response.text
     assert f'data-editing-profile-id="{profile_id}"' in edit_response.text
-    assert f'data-editing-profile-id="{profile_id}"' in advanced_response.text
-    assert_contains_all(new_response.text, ('id="wizard-panel"', 'id="wizard-schema"'))
-    assert_contains_all(edit_response.text, ('id="wizard-panel"', 'id="wizard-schema"'))
+    assert f'data-editing-profile-id="{profile_id}"' in settings_response.text
+    assert f'data-editing-profile-id="{profile_id}"' in json_response.text
+    assert_contains_all(new_response.text, ('id="wizard-panel"', 'id="wizard-schema"', 'id="editor-mode-settings"'))
+    assert_contains_all(edit_response.text, ('id="wizard-panel"', 'id="wizard-schema"', 'id="editor-mode-settings"'))
+    assert 'id="format"' not in new_response.text
+    assert 'id="format"' not in edit_response.text
     assert_contains_all(
-        advanced_response.text,
+        settings_response.text,
         (
+            'id="settings-panel"',
+            'id="wizard-settings-search-input"',
+            'id="settings-schema-shell-step-2"',
+            'data-settings-nav',
+            'id="settings-preferences-general"',
+            'id="wizard-preferences-general-presets"',
+            'id="editor-mode-guided"',
+            'id="editor-mode-settings"',
+            'id="editor-mode-json"',
+            'id="save"',
+            'id="validate"',
+        ),
+    )
+    assert 'id="wizard-panel"' not in settings_response.text
+    assert 'id="editor-panel"' not in settings_response.text
+    assert 'id="editor"' not in settings_response.text
+    assert 'id="format"' not in settings_response.text
+    assert 'id="editor-panel"' not in new_response.text
+    assert 'id="editor-panel"' not in edit_response.text
+    assert 'id="editor"' not in new_response.text
+    assert 'id="editor"' not in edit_response.text
+    assert 'id="details-panel"' not in new_response.text
+    assert 'id="details-panel"' not in edit_response.text
+    assert_contains_all(
+        json_response.text,
+        (
+            'id="editor-mode-guided"',
+            'id="editor-mode-settings"',
+            'id="editor-mode-json"',
             'id="editor-panel"',
             'id="editor"',
             'id="save"',
@@ -2595,6 +2810,13 @@ def test_profile_editor_routes_render_wizard_shells():
             'id="download-firefox-policies"',
         ),
     )
+    assert 'id="wizard-panel"' not in json_response.text
+    assert 'id="settings-panel"' not in json_response.text
+    assert 'id="details-panel"' not in json_response.text
+    assert 'id="advanced-context-panel"' not in json_response.text
+    assert 'id="advanced-download-strip"' not in json_response.text
+    assert 'id="advanced-review-strip"' not in json_response.text
+    assert advanced_response.headers["location"] == f"/profiles/{profile_id}/json"
 
 
 def test_profile_workspace_routes_smoke_dom_contracts():
@@ -2608,12 +2830,16 @@ def test_profile_workspace_routes_smoke_dom_contracts():
     library_response = client.get("/profiles")
     new_response = client.get("/profiles/new")
     edit_response = client.get(f"/profiles/{profile_id}/edit")
+    settings_response = client.get(f"/profiles/{profile_id}/settings")
+    json_response = client.get(f"/profiles/{profile_id}/json")
     advanced_response = client.get(f"/profiles/{profile_id}/advanced")
 
     assert library_response.status_code == 200
     assert new_response.status_code == 200
     assert edit_response.status_code == 200
-    assert advanced_response.status_code == 200
+    assert settings_response.status_code == 200
+    assert json_response.status_code == 200
+    assert advanced_response.status_code == 307
 
     assert_contains_all(
         library_response.text,
@@ -2629,6 +2855,16 @@ def test_profile_workspace_routes_smoke_dom_contracts():
         ),
     )
     assert 'data-editing-profile-id="' not in library_response.text
+    assert 'id="overview-panel"' not in library_response.text
+    assert 'id="current-name"' not in library_response.text
+    assert 'id="profile-state-badge"' not in library_response.text
+    assert 'id="workspace-signal"' not in library_response.text
+    assert 'id="profile-clone-handoff-panel"' not in library_response.text
+    assert 'id="profile-lifecycle-panel"' not in library_response.text
+    assert 'id="profile-compliance-panel"' not in library_response.text
+    assert 'id="wizard-panel"' not in library_response.text
+    assert 'id="command-deck"' not in library_response.text
+    assert 'id="editor-panel"' not in library_response.text
 
     for response, route_mode in ((new_response, "new"), (edit_response, "edit")):
         assert_contains_all(
@@ -2639,11 +2875,153 @@ def test_profile_workspace_routes_smoke_dom_contracts():
                 'id="wizard-panel"',
                 'id="wizard-schema"',
                 'id="wizard-starter-catalog"',
-                'id="command-deck"',
+                'id="editor-mode-settings"',
             ),
         )
+        assert 'id="library-panel"' not in response.text
+        assert 'id="search"' not in response.text
+        assert 'id="create-profile-link"' not in response.text
+        assert 'id="list"' not in response.text
+        assert 'id="compare-panel"' not in response.text
+        assert 'id="details-panel"' not in response.text
+        assert 'id="editor-panel"' not in response.text
+        assert 'id="editor"' not in response.text
 
     assert f'data-editing-profile-id="{profile_id}"' in edit_response.text
+    assert_contains_all(
+        settings_response.text,
+        (
+            'data-profiles-route-mode="settings"',
+            'data-profiles-template-kind="settings"',
+            'id="settings-panel"',
+            'id="wizard-settings-search-input"',
+            'id="settings-schema-shell-step-2"',
+            'data-settings-nav',
+            'id="settings-preferences-general"',
+            'id="wizard-preferences-general-presets"',
+            'id="save"',
+            'id="validate"',
+        ),
+    )
+    assert 'id="wizard-panel"' not in settings_response.text
+    assert 'id="editor-panel"' not in settings_response.text
+    assert 'id="editor"' not in settings_response.text
+    assert_contains_all(
+        json_response.text,
+        (
+            'data-profiles-route-mode="json"',
+            'data-profiles-template-kind="json"',
+            'id="save"',
+            'id="validate"',
+            'id="format"',
+            'id="editor-panel"',
+            'id="editor"',
+            'id="download-firefox-policies"',
+        ),
+    )
+    assert 'id="wizard-panel"' not in json_response.text
+    assert 'id="settings-panel"' not in json_response.text
+    assert 'id="details-panel"' not in json_response.text
+    assert 'id="advanced-context-panel"' not in json_response.text
+    assert 'id="advanced-download-strip"' not in json_response.text
+    assert 'id="advanced-review-strip"' not in json_response.text
+    assert advanced_response.headers["location"] == f"/profiles/{profile_id}/json"
+
+
+def test_profile_editor_modes_explicitly_exclude_unrelated_ui_surfaces():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Mode Absence Contract Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    library_response = client.get("/profiles")
+    guided_response = client.get(f"/profiles/{profile_id}/edit")
+    settings_response = client.get(f"/profiles/{profile_id}/settings")
+    json_response = client.get(f"/profiles/{profile_id}/json")
+
+    for token in (
+        'id="wizard-panel"',
+        'id="settings-panel"',
+        'id="editor-panel"',
+        'id="editor"',
+        'id="download-firefox-policies"',
+    ):
+        assert token not in library_response.text
+
+    for token in (
+        'id="library-panel"',
+        'id="search"',
+        'id="compare-panel"',
+        'id="settings-panel"',
+        'id="editor-panel"',
+        'id="editor"',
+        'id="download-firefox-policies"',
+        'id="format"',
+    ):
+        assert token not in guided_response.text
+
+    for token in (
+        'id="library-panel"',
+        'id="compare-panel"',
+        'id="wizard-panel"',
+        'id="wizard-step-actions"',
+        'id="editor-panel"',
+        'id="editor"',
+        'id="download-firefox-policies"',
+        'id="format"',
+    ):
+        assert token not in settings_response.text
+
+    for token in (
+        'id="library-panel"',
+        'id="compare-panel"',
+        'id="wizard-panel"',
+        'id="settings-panel"',
+        'id="wizard-settings-search-input"',
+        'id="settings-preferences-general"',
+        'id="wizard-preferences-general-presets"',
+        'id="advanced-context-panel"',
+        'id="advanced-download-strip"',
+        'id="advanced-review-strip"',
+    ):
+        assert token not in json_response.text
+
+
+def test_shared_editor_chrome_dom_contract_is_present_across_editor_modes():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Shared Editor Chrome Contract Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    guided_response = client.get(f"/profiles/{profile_id}/edit")
+    settings_response = client.get(f"/profiles/{profile_id}/settings")
+    json_response = client.get(f"/profiles/{profile_id}/json")
+
+    shared_tokens = (
+        'id="overview-panel"',
+        'id="current-name"',
+        'id="profile-state-badge"',
+        'id="workspace-signal"',
+        'id="save"',
+        'id="validate"',
+        'id="profile-name"',
+        'id="profile-type"',
+        'id="editor-profile-id"',
+        'id="overview-schema"',
+        'id="validation-preview"',
+        'id="overview-context"',
+        'id="editor-mode-guided"',
+        'id="editor-mode-settings"',
+        'id="editor-mode-json"',
+    )
+
+    for response in (guided_response, settings_response, json_response):
+        assert response.status_code == 200
+        assert_contains_all(response.text, shared_tokens)
 
 
 def test_visual_editor_routes_hide_inline_advanced_surface():
@@ -2656,23 +3034,172 @@ def test_visual_editor_routes_hide_inline_advanced_surface():
 
     new_response = client.get("/profiles/new")
     edit_response = client.get(f"/profiles/{profile_id}/edit")
+    settings_response = client.get(f"/profiles/{profile_id}/settings")
+    json_response = client.get(f"/profiles/{profile_id}/json")
     advanced_response = client.get(f"/profiles/{profile_id}/advanced")
 
-    assert 'class="content-grid grid gap-4 support-hidden"' in new_response.text
-    assert 'class="content-grid grid gap-4 support-hidden"' in edit_response.text
-    assert 'class="content-grid grid gap-4 support-hidden"' not in advanced_response.text
-    assert f'href="/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit"' in edit_response.text
+    assert 'class="content-grid grid gap-4 support-hidden"' not in new_response.text
+    assert 'class="content-grid grid gap-4 support-hidden"' not in edit_response.text
+    assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in edit_response.text
+    assert f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit"' in edit_response.text
+    assert 'id="settings-panel"' in settings_response.text
+    assert 'data-settings-runtime-backing' not in settings_response.text
+    assert 'id="wizard-panel"' not in settings_response.text
+    assert 'id="details-panel"' not in settings_response.text
+    assert 'id="editor-panel"' not in settings_response.text
+    assert 'id="editor"' not in settings_response.text
+    assert 'id="details-panel"' not in new_response.text
+    assert 'id="details-panel"' not in edit_response.text
+    assert 'id="editor-panel"' not in new_response.text
+    assert 'id="editor-panel"' not in edit_response.text
+    assert 'id="editor"' not in new_response.text
+    assert 'id="editor"' not in edit_response.text
     assert_contains_all(
-        advanced_response.text,
+        json_response.text,
         (
-            'data-profiles-route-mode="advanced"',
-            'data-profiles-template-kind="advanced"',
-            'id="details-panel"',
+            'data-profiles-route-mode="json"',
+            'data-profiles-template-kind="json"',
             'id="editor-panel"',
-            'id="advanced-download-strip"',
-            'id="advanced-review-strip"',
+            'id="download-firefox-policies"',
         ),
     )
+    assert 'id="wizard-panel"' not in json_response.text
+    assert 'id="settings-panel"' not in json_response.text
+    assert 'id="details-panel"' not in json_response.text
+    assert 'id="advanced-context-panel"' not in json_response.text
+    assert 'id="advanced-download-strip"' not in json_response.text
+    assert 'id="advanced-review-strip"' not in json_response.text
+    assert advanced_response.headers["location"] == f"/profiles/{profile_id}/json"
+
+
+def test_deleted_profile_routes_require_include_deleted_and_preserve_archived_chrome():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Archived Route Profile", schema_version="release-150"),
+    )
+    profile_id = create_response.json()["id"]
+    delete_response = client.delete(f"/api/profiles/{profile_id}")
+    assert delete_response.status_code == 204
+
+    hidden_response = client.get(f"/profiles/{profile_id}/edit")
+    archived_response = client.get(f"/profiles/{profile_id}/edit?include_deleted=true")
+    archived_settings_response = client.get(f"/profiles/{profile_id}/settings?include_deleted=true")
+    archived_json_response = client.get(f"/profiles/{profile_id}/json?include_deleted=true")
+
+    assert hidden_response.status_code == 404
+    assert archived_response.status_code == 200
+    assert archived_settings_response.status_code == 200
+    assert archived_json_response.status_code == 200
+    assert 'data-include-deleted="true"' in archived_response.text
+    assert 'data-i18n="profiles.badge_deleted"' in archived_response.text
+    assert 'href="/profiles/' + str(profile_id) + '/edit?include_deleted=true"' in archived_response.text
+    assert (
+        f'href="/profiles/{profile_id}/settings?include_deleted=true&amp;return=/profiles/{profile_id}/edit%3Finclude_deleted%3Dtrue"'
+        in archived_response.text
+    )
+    assert (
+        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;return=/profiles/{profile_id}/edit%3Finclude_deleted%3Dtrue&amp;focus=editor"'
+        in archived_response.text
+    )
+
+    archived_soup = BeautifulSoup(archived_response.text, "html.parser")
+    assert archived_soup.find(id="current-name").get_text(strip=True) == "Archived Route Profile"
+    assert archived_soup.find(id="profile-state-badge").get_text(strip=True) == "Deleted"
+    assert archived_soup.find(id="overview-context").get_text(strip=True) == "Archived profile"
+
+    restore_response = client.post(f"/api/profiles/{profile_id}/restore")
+    assert restore_response.status_code == 200
+    restored_response = client.get(f"/profiles/{profile_id}/edit")
+    assert restored_response.status_code == 200
+    restored_soup = BeautifulSoup(restored_response.text, "html.parser")
+    assert restored_soup.find(id="profile-state-badge").get_text(strip=True) == "Active"
+    assert restored_soup.find(id="overview-context").get_text(strip=True) == "Saved profile"
+
+
+def test_guided_wizard_step_seven_stays_inside_wizard_panels_and_step_six_surfaces():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-150"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/{profile_id}/edit")
+    assert response.status_code == 200
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    wizard_panels = soup.find("div", class_="wizard-panels")
+    step_six = soup.find(id="wizard-step-6")
+    step_seven = soup.find(id="wizard-step-7")
+    bookmarks = soup.find(id="wizard-step-6-bookmarks")
+    websites = soup.find(id="wizard-step-6-websites")
+
+    assert wizard_panels is not None
+    assert step_six is not None
+    assert step_seven is not None
+    assert bookmarks is not None
+    assert websites is not None
+    assert step_six in wizard_panels.find_all("section", recursive=False)
+    assert step_seven in wizard_panels.find_all("section", recursive=False)
+    assert bookmarks in step_six.descendants
+    assert websites in step_six.descendants
+    assert step_seven not in step_six.descendants
+
+
+def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subsections():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-150"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/{profile_id}/edit")
+    assert response.status_code == 200
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    wizard_panels = soup.find("div", class_="wizard-panels")
+    assert wizard_panels is not None
+
+    direct_panel_ids = [
+        child.get("id")
+        for child in wizard_panels.find_all(recursive=False)
+        if getattr(child, "name", None) == "section" and child.get("id", "").startswith("wizard-step-")
+    ]
+    assert direct_panel_ids == [f"wizard-step-{step}" for step in range(1, 9)]
+
+    step_expected_descendants = {
+        1: ("wizard-name", "wizard-schema", "wizard-starter-grid"),
+        2: ("wizard-step-2-basics", "wizard-step-2-proxy", "wizard-step-2-trust", "wizard-step-2-review"),
+        3: ("wizard-home-surface-startup", "wizard-home-surface-new-tab", "wizard-home-surface-firefox-home"),
+        4: ("wizard-step-4-default-search", "wizard-step-4-managed-engines", "wizard-step-4-suggestions"),
+        5: ("wizard-hardening-presets", "wizard-cleanup-presets", "wizard-site-data-presets"),
+        6: ("wizard-step-6-accounts", "wizard-step-6-language", "wizard-step-6-extensions", "wizard-step-6-bookmarks", "wizard-step-6-websites"),
+        7: ("wizard-ai-posture-presets", "wizard-ai-policy-controls", "wizard-ai-providers-handoff"),
+        8: ("wizard-export-ready-card", "wizard-export-summary-ai", "wizard-export-summary-features"),
+    }
+
+    top_level_panels = {
+        step: soup.find(id=f"wizard-step-{step}")
+        for step in range(1, 9)
+    }
+    for step, panel in top_level_panels.items():
+        assert panel is not None
+        assert panel.parent is wizard_panels
+        for descendant_id in step_expected_descendants[step]:
+            descendant = soup.find(id=descendant_id)
+            assert descendant is not None
+            assert descendant in panel.descendants
+
+    for step, panel in top_level_panels.items():
+        other_step_prefixes = tuple(f"wizard-step-{other}-" for other in range(1, 9) if other != step)
+        leaking_ids = [
+            descendant.get("id")
+            for descendant in panel.find_all(attrs={"id": True})
+            if descendant.get("id", "").startswith(other_step_prefixes)
+        ]
+        assert leaking_ids == [], f"Unexpected cross-step ids inside wizard-step-{step}: {leaking_ids}"
 
 
 def test_profiles_page_uses_single_year_footer_for_2025(monkeypatch):
@@ -2709,7 +3236,7 @@ def test_profiles_page_uses_single_year_footer_for_2025(monkeypatch):
 
     assert response.status_code == 200
     assert captured["name"] == "profiles_library.html"
-    assert captured["context"]["title"] == "Profile library — Browser Policy Manager"
+    assert captured["context"]["title"] == "Library — Browser Policy Manager"
     assert captured["context"]["profiles_route_mode"] == "library"
     assert captured["context"]["editing_profile_id"] is None
     assert captured["context"]["app_name"] == "Browser Policy Manager"
@@ -2729,8 +3256,22 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
     reloaded = importlib.reload(web_profiles)
     captured: dict[str, object] = {}
 
+    class FakeProfile(SimpleNamespace):
+        def model_dump(self, mode="python"):
+            return {
+                "id": self.id,
+                "name": self.name,
+                "schema_version": self.schema_version,
+                "flags": self.flags,
+            }
+
     async def fake_get(session, profile_id, include_deleted=False):
-        return SimpleNamespace(id=profile_id, name="Template Split Profile")
+        return FakeProfile(
+            id=profile_id,
+            name="Template Split Profile",
+            schema_version="release-150",
+            flags={"DisableTelemetry": True},
+        )
 
     def fake_template_response(request, name, context):
         captured["request"] = request
@@ -2757,16 +3298,37 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
     assert captured["name"] == "profiles_editor.html"
     assert captured["context"]["profiles_route_mode"] == "edit"
     assert captured["context"]["editing_profile_id"] == 7
+    assert captured["context"]["editing_profile_schema_version"] == "release-150"
+    assert captured["context"]["editing_profile_initial"] == {
+        "id": 7,
+        "name": "Template Split Profile",
+        "schema_version": "release-150",
+        "flags": {"DisableTelemetry": True},
+    }
 
 
-def test_profile_advanced_route_uses_advanced_template(monkeypatch):
+def test_profile_settings_route_uses_settings_template(monkeypatch):
     import app.web.profiles as web_profiles
 
     reloaded = importlib.reload(web_profiles)
     captured: dict[str, object] = {}
 
+    class FakeProfile(SimpleNamespace):
+        def model_dump(self, mode="python"):
+            return {
+                "id": self.id,
+                "name": self.name,
+                "schema_version": self.schema_version,
+                "flags": self.flags,
+            }
+
     async def fake_get(session, profile_id, include_deleted=False):
-        return SimpleNamespace(id=profile_id, name="Advanced Split Profile")
+        return FakeProfile(
+            id=profile_id,
+            name="Settings Split Profile",
+            schema_version="esr-140.10",
+            flags={"DisableTelemetry": True},
+        )
 
     def fake_template_response(request, name, context):
         captured["request"] = request
@@ -2781,6 +3343,117 @@ def test_profile_advanced_route_uses_advanced_template(monkeypatch):
         {
             "type": "http",
             "method": "GET",
+            "path": "/profiles/8/settings",
+            "headers": [],
+            "query_string": b"return=/profiles/8/edit&focus=policy:DisableTelemetry",
+        }
+    )
+
+    response = asyncio.run(reloaded.profiles_settings_page(request, 8, SimpleNamespace()))
+
+    assert response.status_code == 200
+    assert captured["name"] == "profiles_settings.html"
+    assert captured["context"]["title"] == (
+        "Settings Split Profile — Advanced settings — Browser Policy Manager"
+    )
+    assert captured["context"]["profiles_route_mode"] == "settings"
+    assert captured["context"]["editing_profile_id"] == 8
+    assert captured["context"]["editing_profile_schema_version"] == "esr-140.10"
+    assert captured["context"]["editing_profile_initial"] == {
+        "id": 8,
+        "name": "Settings Split Profile",
+        "schema_version": "esr-140.10",
+        "flags": {"DisableTelemetry": True},
+    }
+    assert captured["context"]["return_url"] == "/profiles/8/edit"
+    assert captured["context"]["focus_target"] == "policy:DisableTelemetry"
+    assert captured["context"]["settings_href"] == (
+        "/profiles/8/settings?return=/profiles/8/edit&focus=policy:DisableTelemetry"
+    )
+    assert captured["context"]["json_href"] == (
+        "/profiles/8/json?return=/profiles/8/settings&focus=policy:DisableTelemetry"
+    )
+
+
+def test_profile_json_route_uses_json_template(monkeypatch):
+    import app.web.profiles as web_profiles
+
+    reloaded = importlib.reload(web_profiles)
+    captured: dict[str, object] = {}
+
+    class FakeProfile(SimpleNamespace):
+        def model_dump(self, mode="python"):
+            return {
+                "id": self.id,
+                "name": self.name,
+                "schema_version": self.schema_version,
+                "flags": self.flags,
+            }
+
+    async def fake_get(session, profile_id, include_deleted=False):
+        return FakeProfile(
+            id=profile_id,
+            name="JSON Split Profile",
+            schema_version="release-150",
+            flags={"DisableTelemetry": True},
+        )
+
+    def fake_template_response(request, name, context):
+        captured["request"] = request
+        captured["name"] = name
+        captured["context"] = context
+        return HTMLResponse("ok")
+
+    monkeypatch.setattr(reloaded.ProfileService, "get", fake_get)
+    monkeypatch.setattr(reloaded.templates, "TemplateResponse", fake_template_response)
+
+    request = Request(
+        {
+            "type": "http",
+            "method": "GET",
+            "path": "/profiles/8/json",
+            "headers": [],
+            "query_string": b"return=/profiles/8/edit&focus=policy:DisableTelemetry",
+        }
+    )
+
+    response = asyncio.run(reloaded.profiles_json_page(request, 8, SimpleNamespace()))
+
+    assert response.status_code == 200
+    assert captured["name"] == "profiles_json.html"
+    assert captured["context"]["title"] == (
+        "JSON Split Profile — JSON editor — Browser Policy Manager"
+    )
+    assert captured["context"]["profiles_route_mode"] == "json"
+    assert captured["context"]["editing_profile_id"] == 8
+    assert captured["context"]["editing_profile_schema_version"] == "release-150"
+    assert captured["context"]["editing_profile_initial"] == {
+        "id": 8,
+        "name": "JSON Split Profile",
+        "schema_version": "release-150",
+        "flags": {"DisableTelemetry": True},
+    }
+    assert captured["context"]["return_url"] == "/profiles/8/edit"
+    assert captured["context"]["focus_target"] == "policy:DisableTelemetry"
+    assert captured["context"]["settings_href"] == (
+        "/profiles/8/settings?return=/profiles/8/json&focus=policy:DisableTelemetry"
+    )
+
+
+def test_profile_advanced_route_redirects_to_json(monkeypatch):
+    import app.web.profiles as web_profiles
+
+    reloaded = importlib.reload(web_profiles)
+
+    async def fake_get(session, profile_id, include_deleted=False):
+        return SimpleNamespace(id=profile_id, name="Redirect Split Profile")
+
+    monkeypatch.setattr(reloaded.ProfileService, "get", fake_get)
+
+    request = Request(
+        {
+            "type": "http",
+            "method": "GET",
             "path": "/profiles/8/advanced",
             "headers": [],
             "query_string": b"return=/profiles/8/edit&focus=policy:DisableTelemetry",
@@ -2789,15 +3462,10 @@ def test_profile_advanced_route_uses_advanced_template(monkeypatch):
 
     response = asyncio.run(reloaded.profiles_advanced_page(request, 8, SimpleNamespace()))
 
-    assert response.status_code == 200
-    assert captured["name"] == "profiles_advanced.html"
-    assert captured["context"]["title"] == (
-        "Advanced Split Profile — Advanced editor — Browser Policy Manager"
+    assert response.status_code == 307
+    assert response.headers["location"] == (
+        "/profiles/8/json?return=/profiles/8/edit&focus=policy:DisableTelemetry"
     )
-    assert captured["context"]["profiles_route_mode"] == "advanced"
-    assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["return_url"] == "/profiles/8/edit"
-    assert captured["context"]["focus_target"] == "policy:DisableTelemetry"
 
 
 def test_profile_editor_route_context_bootstraps_frontend_state():
@@ -2809,25 +3477,25 @@ def test_profile_editor_route_context_bootstraps_frontend_state():
     assert "bodyEl?.dataset.profilesRouteMode" in source
     assert "bodyEl?.dataset.editingProfileId" in source
     assert "async function bootstrapProfileRouteState()" in source
-    assert '(routeMode === "edit" || routeMode === "advanced") && editingProfileId' in source
-    assert "await loadProfile(editingProfileId, { skipConfirm: true });" in source
+    assert '(routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId' in source
+    assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in source
     assert "await resetDraft(true);" in source
     assert "await reloadList();" in source
 
 
-def test_profile_advanced_route_context_bootstraps_advanced_scope():
+def test_profile_json_route_context_bootstraps_focus():
     source = (
         Path(__file__).resolve().parents[1] / "app" / "static" / "profiles_runtime.js"
     ).read_text(encoding="utf-8")
 
-    assert 'routeMode === "advanced"' in source
-    assert "await loadProfile(editingProfileId, { skipConfirm: true });" in source
+    assert 'routeMode === "json"' in source
+    assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in source
     assert "setAdvancedHandoffContext(null);" in source
-    assert 'applyWorkspaceScope("advanced", { focus: true, persist: false });' in source
     assert "applyAdvancedFocusTarget(focusTarget);" in source
+    assert 'const savedWorkspaceScope = windowRef.localStorage.getItem(workspaceScopeStorageKey)' not in source
 
 
-def test_profile_advanced_route_renders_return_and_focus_context():
+def test_profile_json_route_renders_return_and_focus_context():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
@@ -2836,7 +3504,7 @@ def test_profile_advanced_route_renders_return_and_focus_context():
     profile_id = create_response.json()["id"]
 
     response = client.get(
-        f"/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit&focus=policy:DisableTelemetry"
+        f"/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&focus=policy:DisableTelemetry"
     )
     unsafe_response = client.get(
         f"/profiles/{profile_id}/advanced?return=https://example.com/phish&focus=policy:DisableTelemetry"
@@ -2847,7 +3515,119 @@ def test_profile_advanced_route_renders_return_and_focus_context():
     assert 'data-advanced-focus-target="policy:DisableTelemetry"' in response.text
     assert 'id="advanced-return-link"' in response.text
     assert f'href="/profiles/{profile_id}/edit"' in response.text
-    assert 'id="advanced-return-link"' not in unsafe_response.text
+    assert unsafe_response.status_code == 307
+    assert unsafe_response.headers["location"] == f"/profiles/{profile_id}/json?focus=policy:DisableTelemetry"
+
+
+def test_archived_profile_handoff_routes_preserve_include_deleted_return_context():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-150"),
+    )
+    profile_id = create_response.json()["id"]
+    assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
+
+    settings_response = client.get(
+        f"/profiles/{profile_id}/settings?include_deleted=true&return=/profiles/{profile_id}/edit%3Finclude_deleted%3Dtrue&focus=policy:DisableTelemetry"
+    )
+    json_response = client.get(
+        f"/profiles/{profile_id}/json?include_deleted=true&return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&focus=raw"
+    )
+
+    assert settings_response.status_code == 200
+    assert json_response.status_code == 200
+    assert 'data-include-deleted="true"' in settings_response.text
+    assert f'data-advanced-return-url="/profiles/{profile_id}/edit?include_deleted=true"' in settings_response.text
+    assert (
+        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&amp;focus=policy:DisableTelemetry"'
+        in settings_response.text
+    )
+    assert 'data-include-deleted="true"' in json_response.text
+    assert f'data-advanced-return-url="/profiles/{profile_id}/settings?include_deleted=true"' in json_response.text
+    assert f'href="/profiles/{profile_id}/settings?include_deleted=true&amp;return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue&amp;focus=settings-schema-shell-step-8"' in json_response.text
+    assert f'href="/profiles/{profile_id}/settings?include_deleted=true"' in json_response.text
+
+
+def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-150"),
+    )
+    profile_id = create_response.json()["id"]
+    assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
+
+    settings_policy_response = client.get(
+        f"/profiles/{profile_id}/settings?include_deleted=true&return=/profiles/{profile_id}/edit%3Finclude_deleted%3Dtrue&focus=policy:DisableTelemetry"
+    )
+    json_raw_response = client.get(
+        f"/profiles/{profile_id}/json?include_deleted=true&return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&focus=raw"
+    )
+    json_deprecated_response = client.get(
+        f"/profiles/{profile_id}/json?include_deleted=true&return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&focus=deprecated:LegacyPolicy"
+    )
+    json_unknown_response = client.get(
+        f"/profiles/{profile_id}/json?include_deleted=true&return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&focus=unknown:FuturePolicy"
+    )
+
+    assert settings_policy_response.status_code == 200
+    assert json_raw_response.status_code == 200
+    assert json_deprecated_response.status_code == 200
+    assert json_unknown_response.status_code == 200
+
+    assert (
+        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&amp;focus=policy:DisableTelemetry"'
+        in settings_policy_response.text
+    )
+    assert 'id="settings-schema-shell-step-5-details"' in settings_policy_response.text
+    assert 'aria-controls="settings-schema-shell-step-5-details"' in settings_policy_response.text
+    assert 'aria-expanded="true"' in settings_policy_response.text
+    assert (
+        f'href="/profiles/{profile_id}/settings?include_deleted=true&amp;return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue&amp;focus=settings-schema-shell-step-8"'
+        in json_raw_response.text
+    )
+    assert (
+        f'href="/profiles/{profile_id}/settings?include_deleted=true&amp;return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue&amp;focus=settings-schema-shell-step-8"'
+        in json_deprecated_response.text
+    )
+    assert (
+        f'href="/profiles/{profile_id}/settings?include_deleted=true&amp;return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue&amp;focus=settings-schema-shell-step-8"'
+        in json_unknown_response.text
+    )
+    assert 'data-advanced-focus-target="raw"' in json_raw_response.text
+    assert 'data-advanced-focus-target="deprecated:LegacyPolicy"' in json_deprecated_response.text
+    assert 'data-advanced-focus-target="unknown:FuturePolicy"' in json_unknown_response.text
+
+
+def test_active_profile_semantic_focus_routes_preopen_expected_settings_shell():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-150"),
+    )
+    profile_id = create_response.json()["id"]
+
+    settings_policy_response = client.get(
+        f"/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit&focus=policy:DisableTelemetry"
+    )
+    json_raw_response = client.get(
+        f"/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&focus=raw"
+    )
+
+    assert settings_policy_response.status_code == 200
+    assert json_raw_response.status_code == 200
+    assert (
+        f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&amp;focus=policy:DisableTelemetry"'
+        in settings_policy_response.text
+    )
+    assert 'id="settings-schema-shell-step-5-details"' in settings_policy_response.text
+    assert 'aria-controls="settings-schema-shell-step-5-details"' in settings_policy_response.text
+    assert 'aria-expanded="true"' in settings_policy_response.text
+    assert (
+        f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/json&amp;focus=settings-schema-shell-step-8"'
+        in json_raw_response.text
+    )
 
 
 def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href():
@@ -2868,7 +3648,150 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert web_profiles._resolve_focus_target("  policy:DisableTelemetry  ") == (
         "policy:DisableTelemetry"
     )
+    assert web_profiles._resolve_json_focus_target_from_settings_focus(
+        "settings-schema-shell-step-8"
+    ) == "raw"
+    assert web_profiles._resolve_json_focus_target_from_settings_focus(
+        "policy:DisableTelemetry"
+    ) == "policy:DisableTelemetry"
+    assert web_profiles._resolve_settings_focus_target_from_json_focus("raw") == (
+        "settings-schema-shell-step-8"
+    )
+    assert web_profiles._resolve_settings_focus_target_from_json_focus(
+        "deprecated:LegacyPolicy"
+    ) == "settings-schema-shell-step-8"
+    assert web_profiles._resolve_settings_focus_target_from_json_focus(
+        "policy:DisableTelemetry"
+    ) == "policy:DisableTelemetry"
+    shell_catalog = web_profiles.get_wizard_schema_shell_catalog(
+        web_profiles.get_wizard_preferences_catalog(web_profiles.get_wizard_settings_catalog())
+    )
+    assert web_profiles._resolve_settings_shell_focus_step(
+        "policy:DisableTelemetry",
+        "release-150",
+        shell_catalog,
+    ) == 5
+    assert web_profiles._resolve_settings_shell_focus_step(
+        "deprecated:LegacyPolicy",
+        "release-150",
+        shell_catalog,
+    ) == 8
+    assert web_profiles._resolve_settings_shell_focus_step(
+        "shell-policy:8:DisableProfileRefresh",
+        "release-150",
+        shell_catalog,
+    ) == 8
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "shell-policy:not-a-step:DisableTelemetry",
+            "release-150",
+            shell_catalog,
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "shell-policy:8",
+            "release-150",
+            shell_catalog,
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:   ",
+            "release-150",
+            shell_catalog,
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:DefinitelyNotInTheCatalog",
+            "release-150",
+            shell_catalog,
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:MatchedPolicy",
+            "release-150",
+            {
+                "channels": {
+                    "release-150": {
+                        "steps": {
+                            "not-a-step": {
+                                "recommended": [{"id": "MatchedPolicy"}],
+                            }
+                        }
+                    }
+                }
+            },
+        )
+        is None
+    )
+    assert web_profiles._resolve_json_focus_target_from_settings_focus("   ") is None
+    assert web_profiles._resolve_json_focus_target_from_settings_focus("custom-target") is None
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:MatchedPolicy",
+            "release-150",
+            {"channels": []},
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:MatchedPolicy",
+            "release-150",
+            {"channels": {"release-150": []}},
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:MatchedPolicy",
+            "release-150",
+            {"channels": {"release-150": {"steps": []}}},
+        )
+        is None
+    )
+    assert (
+        web_profiles._resolve_settings_shell_focus_step(
+            "policy:MatchedPolicy",
+            "release-150",
+            {
+                "channels": {
+                    "release-150": {
+                        "steps": {
+                            "5": ["not-a-dict"],
+                        }
+                    }
+                }
+            },
+        )
+        is None
+    )
+    assert web_profiles._resolve_settings_focus_target_from_json_focus("custom-target") == (
+        "custom-target"
+    )
 
+    assert web_profiles._build_profile_json_href(
+        8,
+        focus_target="policy:DisableTelemetry",
+    ) == "/profiles/8/json?focus=policy:DisableTelemetry"
+    assert web_profiles._build_profile_json_href(
+        8,
+        return_url="/profiles/8/edit",
+        focus_target="policy:DisableTelemetry",
+    ) == "/profiles/8/json?return=/profiles/8/edit&focus=policy:DisableTelemetry"
+    assert web_profiles._build_profile_json_href(
+        8,
+        return_url="/profiles/8/edit?include_deleted=true",
+        focus_target="deprecated:LegacyPolicy",
+        include_deleted=True,
+    ) == "/profiles/8/json?include_deleted=true&return=/profiles/8/edit%3Finclude_deleted%3Dtrue&focus=deprecated:LegacyPolicy"
     assert web_profiles._build_profile_advanced_href(
         8,
         focus_target="policy:DisableTelemetry",
@@ -2878,9 +3801,29 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
         return_url="/profiles/8/edit",
         focus_target="policy:DisableTelemetry",
     ) == "/profiles/8/advanced?return=/profiles/8/edit&focus=policy:DisableTelemetry"
+    assert web_profiles._build_profile_advanced_href(
+        8,
+        return_url="/profiles/8/edit",
+    ) == "/profiles/8/advanced?return=/profiles/8/edit"
+    assert web_profiles._build_profile_advanced_href(
+        8,
+        focus_target="policy:DisableTelemetry",
+        include_deleted=True,
+    ) == "/profiles/8/advanced?include_deleted=true&focus=policy:DisableTelemetry"
+    assert web_profiles._build_profile_settings_href(
+        8,
+        return_url="/profiles/8/edit",
+        focus_target="policy:DisableTelemetry",
+    ) == "/profiles/8/settings?return=/profiles/8/edit&focus=policy:DisableTelemetry"
+    assert web_profiles._build_profile_settings_href(
+        8,
+        return_url="/profiles/8/json?include_deleted=true",
+        focus_target="settings-schema-shell-step-8",
+        include_deleted=True,
+    ) == "/profiles/8/settings?include_deleted=true&return=/profiles/8/json%3Finclude_deleted%3Dtrue&focus=settings-schema-shell-step-8"
 
 
-def test_profile_advanced_route_regression_contract():
+def test_profile_json_route_regression_contract():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
@@ -2888,36 +3831,45 @@ def test_profile_advanced_route_regression_contract():
     )
     profile_id = create_response.json()["id"]
 
-    advanced_response = client.get(
-        f"/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit&focus=editor"
+    json_response = client.get(
+        f"/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&focus=editor"
     )
     visual_response = client.get(f"/profiles/{profile_id}/edit")
 
-    assert advanced_response.status_code == 200
-    assert "<title>Advanced Regression Profile — Advanced editor — Browser Policy Manager</title>" in advanced_response.text
-    assert 'data-profiles-route-mode="advanced"' in advanced_response.text
-    assert 'data-profiles-template-kind="advanced"' in advanced_response.text
-    assert f'data-editing-profile-id="{profile_id}"' in advanced_response.text
-    assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in advanced_response.text
-    assert 'data-advanced-focus-target="editor"' in advanced_response.text
+    assert json_response.status_code == 200
+    assert "<title>Advanced Regression Profile — JSON editor — Browser Policy Manager</title>" in json_response.text
+    assert 'data-profiles-route-mode="json"' in json_response.text
+    assert 'data-profiles-template-kind="json"' in json_response.text
+    assert f'data-editing-profile-id="{profile_id}"' in json_response.text
+    assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in json_response.text
+    assert 'data-advanced-focus-target="editor"' in json_response.text
     assert_contains_all(
-        advanced_response.text,
+        json_response.text,
         (
-            'id="command-deck"',
             'id="save"',
             'id="validate"',
             'id="format"',
-            'id="details-panel"',
             'id="editor-panel"',
             'id="editor"',
             'id="download-firefox-policies"',
-            'id="advanced-review-strip"',
         ),
     )
+    assert 'id="wizard-panel"' not in json_response.text
+    assert 'id="settings-panel"' not in json_response.text
+    assert 'id="details-panel"' not in json_response.text
+    assert 'id="advanced-context-panel"' not in json_response.text
+    assert 'id="advanced-download-strip"' not in json_response.text
+    assert 'id="advanced-review-strip"' not in json_response.text
 
     assert visual_response.status_code == 200
     assert 'data-profiles-template-kind="editor"' in visual_response.text
-    assert 'class="content-grid grid gap-4 support-hidden"' in visual_response.text
+    assert 'id="editor-mode-settings"' in visual_response.text
+    assert 'id="details-panel"' not in visual_response.text
+    assert 'id="editor-panel"' not in visual_response.text
+    assert 'id="editor"' not in visual_response.text
+    assert 'id="workspace-scope-panel"' not in visual_response.text
+    assert 'id="workspace-scope-guided"' not in visual_response.text
+    assert 'id="workspace-scope-advanced"' not in visual_response.text
 
 
 def test_visual_advanced_actions_route_to_advanced_destination():
@@ -2925,18 +3877,230 @@ def test_visual_advanced_actions_route_to_advanced_destination():
         Path(__file__).resolve().parents[1] / "app" / "static" / "profiles_runtime.js"
     ).read_text(encoding="utf-8")
 
+    assert "function buildProfileRoutePath(profileId, modeKey, includeDeleted = false)" in source
+    assert 'basePath = `/profiles/${profileId}/settings`;' in source
+    assert 'basePath = `/profiles/${profileId}/json`;' in source
+    assert "function buildEditorReturnPath(profileId, routeMode, includeDeleted = false)" in source
+    assert 'if (routeMode === "settings") {' in source
+    assert 'if (routeMode === "json") {' in source
+    assert "function normalizeSettingsFocusTarget(focusTarget)" in source
+    assert 'return "settings-panel";' in source
+    assert 'return "settings-schema-shell-step-8";' in source
+    assert 'normalizedTarget === "raw"' in source
+    assert 'normalizedTarget.startsWith("deprecated:")' in source
+    assert "function normalizeJsonFocusTarget(focusTarget)" in source
+    assert 'if (normalizedTarget === "settings-schema-shell-step-8") return "raw";' in source
+    assert "function buildSettingsRouteHref(profileId, focusTarget = \"\")" in source
+    assert 'href.searchParams.set("return", buildEditorReturnPath(profileId, routeMode, includeDeleted));' in source
+    assert "const normalizedFocusTarget = normalizeSettingsFocusTarget(focusTarget);" in source
+    assert 'href.searchParams.set("focus", normalizedFocusTarget);' in source
+    assert "function getSettingsRouteHref(focusTarget = \"\")" in source
     assert "function buildAdvancedRouteHref(profileId, focusTarget = \"\")" in source
+    assert "const normalizedFocusTarget = normalizeJsonFocusTarget(focusTarget);" in source
     assert "function getAdvancedRouteHref(focusTarget = \"\")" in source
+    assert "function parseJsonFocusTarget(focusTarget)" in source
+    assert "function applyJsonEditorFocusTarget(focusTarget)" in source
+    assert 'const jsonTarget = routeMode === "json" ? parseJsonFocusTarget(target) : null;' in source
     assert "function deriveAdvancedFocusTarget(targetEl, fallback = \"\")" in source
     assert "function openAdvancedRouteFromVisual(event = null, focusTarget = \"\")" in source
-    assert "href.searchParams.set(\"return\", `/profiles/${profileId}/edit`);" in source
-    assert 'href.searchParams.set("focus", focusTarget);' in source
-    assert 'if (routeMode === "advanced") return false;' in source
-    assert "if (!confirmRouteNavigationIfDirty())" in source
-    assert 'windowRef.location.assign(href);' in source
+    assert 'if (routeMode === "json") return false;' in source
+    assert 'const openJsonRoute = normalizedFocusTarget === "editor"' in source
+    assert '|| normalizedFocusTarget === "unknown"' in source
+    assert '|| normalizedFocusTarget.startsWith("unknown:");' in source
+    assert 'getAdvancedRouteHref(normalizedFocusTarget || "editor")' in source
+    assert "getSettingsRouteHref(normalizedFocusTarget)" in source
+    assert 'const advancedWindow = windowRef.open(href, "_blank", "noopener");' in source
+    assert "advancedWindow.opener = null;" in source
     assert "function resolveAdvancedFocusTarget(focusTarget)" in source
-    assert "return findSettingsTarget(target) || documentRef.getElementById(target) || null;" in source
-    assert 'savedWorkspaceScope === "advanced" ? "guided" : savedWorkspaceScope' in source
+    assert 'if (target === "settings-panel") return documentRef.getElementById("settings-panel");' in source
+    assert 'if (target === "settings-schema-shell-step-8") return documentRef.getElementById("settings-schema-shell-step-8");' in source
+    assert "return findSettingsTarget(target)" in source
+    assert 'documentRef.querySelector(`[data-wizard-shell-policy-id="${policyId}"]`)' in source
+    assert "|| documentRef.getElementById(target)" in source
+    assert "bpm-workspace-scope" not in source
+
+
+def test_export_technical_alert_strip_has_direct_dom_refresh_contract():
+    root = Path(__file__).resolve().parents[1]
+    export_template = (
+        root / "app" / "templates" / "profiles" / "_page_wizard_step_export.html"
+    ).read_text(encoding="utf-8")
+    review_source = (root / "app" / "static" / "profiles_review.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'id="wizard-export-technical-alerts"' in export_template
+    assert 'id="wizard-export-raw-summary-jump"' in export_template
+    assert 'id="wizard-export-deprecated-summary-jump"' in export_template
+    assert 'id="wizard-export-unknown-summary-jump"' in export_template
+    assert 'id="wizard-export-raw-summary-count"' in export_template
+    assert 'id="wizard-export-deprecated-summary-count"' in export_template
+    assert 'id="wizard-export-unknown-summary-count"' in export_template
+    assert "function renderFinalExportTechnicalAlerts(summary)" in review_source
+    assert 'documentRef.getElementById("wizard-export-technical-alerts")' in review_source
+    assert 'documentRef.getElementById("wizard-export-raw-summary-jump")' in review_source
+    assert 'documentRef.getElementById("wizard-export-deprecated-summary-jump")' in review_source
+    assert 'documentRef.getElementById("wizard-export-unknown-summary-jump")' in review_source
+    assert 'documentRef.getElementById("wizard-export-raw-summary-count")' in review_source
+    assert 'documentRef.getElementById("wizard-export-deprecated-summary-count")' in review_source
+    assert 'documentRef.getElementById("wizard-export-unknown-summary-count")' in review_source
+    assert "technicalAlertsContainerEl.hidden = visibleCount <= 0;" in review_source
+
+
+def test_unknown_export_review_jump_routes_to_json_contract():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles_runtime.js"
+    ).read_text(encoding="utf-8")
+
+    assert 'if (jumpKind === "unknown") {' in source
+    assert 'const semanticFocusTarget = jumpKey ? `${jumpKind}:${jumpKey}` : jumpKind;' in source
+    assert "applyAdvancedContextForFinalReviewSelection(selection);" in source
+    assert "if (openAdvancedRouteFromVisual(event, semanticFocusTarget)) {" in source
+    assert 'const openJsonRoute = normalizedFocusTarget === "editor"' in source
+    assert '|| normalizedFocusTarget === "unknown"' in source
+    assert '|| normalizedFocusTarget.startsWith("unknown:");' in source
+    assert '? getAdvancedRouteHref(normalizedFocusTarget || "editor")' in source
+    assert ': getSettingsRouteHref(normalizedFocusTarget);' in source
+    assert 'const jumpKey = finalReviewJumpButton.dataset.finalReviewKey || "";' in source
+
+
+def test_library_table_resets_list_spacing_contract():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles.css"
+    ).read_text(encoding="utf-8")
+
+    library_table_block_start = source.index(".library-table {")
+    library_table_block_end = source.index("}", library_table_block_start)
+    library_table_block = source[library_table_block_start:library_table_block_end]
+
+    assert "display: grid;" in library_table_block
+    assert "gap: 10px;" in library_table_block
+    assert "margin: 0;" in library_table_block
+    assert "padding: 0;" in library_table_block
+
+
+def test_library_table_head_and_rows_share_column_contract():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles.css"
+    ).read_text(encoding="utf-8")
+
+    assert "--library-table-columns:" in source
+    assert "--library-table-columns-compact:" in source
+    assert "grid-template-columns: var(--library-table-columns);" in source
+    assert "grid-template-columns: var(--library-table-columns-compact);" in source
+
+
+def test_library_title_button_uses_wrapping_width_contract():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles.css"
+    ).read_text(encoding="utf-8")
+
+    block_start = source.index(".library-row-title-button {")
+    block_end = source.index("}", block_start)
+    block = source[block_start:block_end]
+
+    assert "width: 100%;" in block
+    assert "max-width: 100%;" in block
+    assert "min-width: 0;" in block
+    assert "width: fit-content;" not in block
+
+
+def test_library_row_button_uses_border_box_contract():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles.css"
+    ).read_text(encoding="utf-8")
+
+    block_start = source.index(".profile-list-button {")
+    block_end = source.index("}", block_start)
+    block = source[block_start:block_end]
+
+    assert "box-sizing: border-box;" in block
+    assert "width: 100%;" in block
+
+
+def test_library_action_buttons_use_border_box_contract():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles.css"
+    ).read_text(encoding="utf-8")
+
+    block_start = source.index(".library-row-actions .button-base {")
+    block_end = source.index("}", block_start)
+    block = source[block_start:block_end]
+
+    assert "box-sizing: border-box;" in block
+    assert "width: 100%;" in block
+
+
+def test_library_compare_contract_persists_last_opened_profile_across_tabs():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles_library_bootstrap.js"
+    ).read_text(encoding="utf-8")
+
+    assert 'const compareBaseStorageKey = "bpm-library-compare-base";' in source
+    assert "let compareProfileState = null;" in source
+    assert "function readStoredCompareBase()" in source
+    assert "function persistCompareBaseProfile(profile, snapshot = null)" in source
+    assert "function renderComparePanel()" in source
+    assert "function getComparableBaseId()" in source
+    assert "windowRef.__BPM_LIBRARY_ITEMS__ = Array.isArray(items) ? items : [];" in source
+    assert "await compareWithProfile(profile.id);" in source
+    assert 'windowRef.localStorage?.setItem(compareBaseStorageKey, JSON.stringify({' in source
+    assert "function refreshCompareBaselineUi()" in source
+    assert 'windowRef.addEventListener?.("storage", (event) => {' in source
+    assert "if (event.key !== compareBaseStorageKey) return;" in source
+    assert 'windowRef.addEventListener?.("focus", refreshCompareBaselineUi);' in source
+    assert 'documentRef.addEventListener?.("visibilitychange", () => {' in source
+
+
+def test_compare_diff_recurses_into_missing_object_branches_contract():
+    root = Path(__file__).resolve().parents[1]
+    library_source = (root / "app" / "static" / "profiles_library_bootstrap.js").read_text(
+        encoding="utf-8"
+    )
+    workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
+        encoding="utf-8"
+    )
+
+    for source in (library_source, workspace_source):
+        assert "if (isPlainObject(normalizedBase) || isPlainObject(normalizedOther)) {" in source
+        assert "const baseObject = isPlainObject(normalizedBase) ? normalizedBase : {};" in source
+        assert "const otherObject = isPlainObject(normalizedOther) ? normalizedOther : {};" in source
+        assert "collectDiffPaths(baseObject[key], otherObject[key], [...path, key], changes);" in source
+
+
+def test_profile_runtime_and_wizard_bootstrap_guard_optional_inputs_contract():
+    root = Path(__file__).resolve().parents[1]
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
+        encoding="utf-8"
+    )
+    shared_source = (root / "app" / "static" / "profiles_shared.js").read_text(
+        encoding="utf-8"
+    )
+    network_source = (root / "app" / "static" / "profiles_network.js").read_text(
+        encoding="utf-8"
+    )
+    extension_source = (root / "app" / "static" / "profiles_extensions.js").read_text(
+        encoding="utf-8"
+    )
+    wizard_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'nameInput?.addEventListener("input", () => {' in runtime_source
+    assert 'ownerInput?.addEventListener("input", () => {' in runtime_source
+    assert 'descriptionInput?.addEventListener("input", () => {' in runtime_source
+    assert 'profileTypeEl?.addEventListener("change", () => {' in runtime_source
+    assert "if (nameInput) {" in runtime_source
+    assert "if (profileTypeEl) {" in runtime_source
+
+    assert "if (!input) return;" in shared_source
+    assert "if (!input) return;" in network_source
+    assert "!wizardHomepageUrlEl" in network_source
+    assert "!wizardProxyUseDnsEl" in network_source
+    assert "managedExtensionFields.filter(Boolean).forEach((input) => {" in extension_source
+    assert "].filter(Boolean).forEach((input) => {" in extension_source
+    assert "if (wizardNameEl && nameInput) {" in wizard_source
+    assert "const profileTypeInput = documentRef.getElementById(\"profile-type\");" in wizard_source
 
 
 def test_profile_route_navigation_warns_when_editor_is_dirty():
@@ -2946,12 +4110,16 @@ def test_profile_route_navigation_warns_when_editor_is_dirty():
 
     assert "function isGuardedProfileRouteHref(anchorEl)" in source
     assert 'href.startsWith("#")' in source
-    assert 'anchorEl.target && anchorEl.target !== "_self"' in source
     assert 'url.pathname === "/profiles" || url.pathname.startsWith("/profiles/")' in source
+    assert "function isCrossTabProfileRouteIntent(event, anchorEl)" in source
+    assert 'anchorEl?.target && anchorEl.target !== "_self"' in source
+    assert "if (event.metaKey || event.ctrlKey || event.shiftKey) return true;" in source
+    assert 'if (typeof event.button === "number" && event.button !== 0) return true;' in source
     assert "function confirmRouteNavigationIfDirty()" in source
     assert "if (!currentSnapshotState().dirty) return true;" in source
     assert 'windowRef.confirm(t("profiles.confirm_discard"))' in source
     assert "function guardProfileRouteNavigation(event)" in source
+    assert "if (isCrossTabProfileRouteIntent(event, anchorEl)) return false;" in source
     assert "event.preventDefault();" in source
     assert "event.stopPropagation();" in source
     assert "if (guardProfileRouteNavigation(event)) return;" in source
@@ -2969,8 +4137,104 @@ def test_guided_advanced_handoffs_use_route_links_with_focus():
 
     assert 'data-workspace-scope-target="advanced"' not in ai_template
     assert 'data-workspace-scope-target="advanced"' not in export_template
-    assert 'href="{{ advanced_href }}&focus=policy:GenerativeAI"' in ai_template
-    assert 'href="{{ advanced_href }}&focus=download"' in export_template
+    assert 'href="{{ settings_href }}&focus=policy:GenerativeAI"' in ai_template
+    assert 'target="_blank"' in ai_template
+    assert 'rel="noopener"' in ai_template
+    assert 'href="{{ settings_href }}&focus=settings-schema-shell-step-8"' in export_template
+    assert 'target="_blank"' in export_template
+    assert 'rel="noopener"' in export_template
+
+
+def test_editor_mode_links_preserve_route_aware_returns_and_settings_focus():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles_workspace.js"
+    ).read_text(encoding="utf-8")
+
+    assert "function normalizeSettingsModeFocusTarget(focusTarget)" in source
+    assert "function normalizeJsonModeFocusTarget(focusTarget)" in source
+    assert "function isJsonModeFocusTarget(focusTarget)" in source
+    assert 'const returnPath = routeMode === "settings"' in source
+    assert '`/profiles/${currentId}/settings${includeDeleted ? `?${includeDeletedSuffix}` : ""}`' in source
+    assert '`/profiles/${currentId}/json${includeDeleted ? `?${includeDeletedSuffix}` : ""}`' in source
+    assert '`/profiles/${currentId}/edit${includeDeleted ? `?${includeDeletedSuffix}` : ""}`' in source
+    assert 'const settingsFocusTarget = normalizeSettingsModeFocusTarget(advancedFocusTarget);' in source
+    assert 'return `/profiles/${currentId}/settings?${params.join("&")}`;' in source
+    assert 'const jsonFocusTarget = normalizeJsonModeFocusTarget(advancedFocusTarget);' in source
+    assert 'return `/profiles/${currentId}/json?${params.join("&")}`;' in source
+    assert 'const advancedMode = routeMode === "settings"' in source
+    assert 'active: routeMode === "settings" || (routeMode === "json" && advancedMode === "settings")' in source
+    assert 'el.setAttribute("title", t("profiles.editor_chrome_save_first"));' in source
+    assert 'el.removeAttribute("title");' in source
+
+
+def test_unsaved_guided_route_explicitly_disables_settings_and_json_handoffs():
+    client = make_test_client(app)
+    response = client.get("/profiles/new")
+
+    assert response.status_code == 200
+    assert 'id="editor-mode-settings"' in response.text
+    assert 'id="editor-mode-json"' in response.text
+    assert response.text.count('aria-disabled="true"') >= 2
+    assert response.text.count('title="Save the profile first to open advanced settings or JSON in a separate tab."') >= 2
+    assert 'id="editor-mode-links-hint"' in response.text
+    assert 'role="status"' in response.text
+    assert 'Save the profile first to open advanced settings or JSON in a separate tab.' in response.text
+
+
+def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Saved Handoff Availability Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/{profile_id}/edit")
+
+    assert response.status_code == 200
+    assert f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit"' in response.text
+    assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in response.text
+    assert 'title="Save the profile first to open advanced settings or JSON in a separate tab."' not in response.text
+    assert 'id="editor-mode-links-hint"' in response.text
+    assert 'support-hidden' in response.text
+
+
+def test_profile_settings_route_preserves_step8_json_handoff():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="JSON Step 8 Handoff Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(
+        f"/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit&focus=settings-schema-shell-step-8"
+    )
+
+    assert response.status_code == 200
+    assert (
+        f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&amp;focus=raw"'
+        in response.text
+    )
+
+
+def test_profile_json_route_maps_semantic_focus_back_to_settings():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="JSON Semantic Focus Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(
+        f"/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&focus=deprecated:LegacyPolicy"
+    )
+
+    assert response.status_code == 200
+    assert (
+        f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/json&amp;focus=settings-schema-shell-step-8"'
+        in response.text
+    )
 
 
 def test_ai_step_locales_describe_esr_empty_state():
@@ -2993,9 +4257,6 @@ def test_documentation_placeholders_are_stable_and_optional():
     macro_source = (
         root / "app" / "templates" / "profiles" / "_wizard_macros.html"
     ).read_text(encoding="utf-8")
-    workspace_template = (
-        root / "app" / "templates" / "profiles" / "_page_workspace.html"
-    ).read_text(encoding="utf-8")
     export_template = (
         root / "app" / "templates" / "profiles" / "_page_wizard_step_export.html"
     ).read_text(encoding="utf-8")
@@ -3007,13 +4268,10 @@ def test_documentation_placeholders_are_stable_and_optional():
     assert 'data-doc-placeholder="{{ doc_id }}"' in macro_source
     assert 'aria-disabled="true"' in macro_source
     assert 'href="#docs-{{ doc_id }}"' in macro_source
-    assert 'render_doc_placeholder("advanced-editor"' in workspace_template
     assert 'render_doc_placeholder("policy-boundaries"' in export_template
     assert 'render_doc_placeholder("guided-schema-shell"' in macro_source
     assert ".wizard-doc-placeholder" in css_source
-    assert 'data-doc-placeholder="advanced-editor"' in response.text
     assert 'data-doc-placeholder="policy-boundaries"' in response.text
-    assert 'href="#docs-advanced-editor"' in response.text
     assert 'href="#docs-policy-boundaries"' in response.text
 
 
@@ -3043,7 +4301,7 @@ def test_profile_library_narrow_viewport_contract():
         encoding="utf-8"
     )
     template = (
-        root / "app" / "templates" / "profiles" / "_page_workspace.html"
+        root / "app" / "templates" / "profiles" / "_page_library_workspace.html"
     ).read_text(encoding="utf-8")
 
     assert "@media (max-width: 560px)" in css_source
@@ -3068,17 +4326,11 @@ def test_visual_editor_narrow_viewport_contract():
     css_source = (root / "app" / "static" / "profiles.css").read_text(
         encoding="utf-8"
     )
-    command_deck = (
-        root / "app" / "templates" / "profiles" / "_page_command_deck.html"
-    ).read_text(encoding="utf-8")
     workspace_template = (
         root / "app" / "templates" / "profiles" / "_page_workspace.html"
     ).read_text(encoding="utf-8")
 
     assert "@media (max-width: 560px)" in css_source
-    assert ".workspace-dock" in css_source
-    assert ".dock-actions-grid--primary" in css_source
-    assert ".dock-actions .button-base" in css_source
     assert ".wizard-header" in css_source
     assert ".wizard-settings-search-row" in css_source
     assert ".wizard-layout" in css_source
@@ -3087,16 +4339,31 @@ def test_visual_editor_narrow_viewport_contract():
     assert ".wizard-panel" in css_source
     assert "overflow-wrap: anywhere;" in css_source
     assert ".wizard-nav-actions" in css_source
-    assert "#advanced-handoff-panel .editor-header" in css_source
-    assert "#advanced-handoff-open" in css_source
-    assert 'id="save"' in command_deck
-    assert 'id="validate"' in command_deck
-    assert 'id="advanced-handoff-open"' in workspace_template
+    assert 'id="editor-mode-settings"' not in workspace_template
+    assert 'id="workspace-scope-panel"' not in workspace_template
+
+
+def test_settings_workspace_hides_guided_step_numbers_and_centers_mapped_controls():
+    root = Path(__file__).resolve().parents[1]
+    settings_workspace = (
+        root / "app" / "templates" / "profiles" / "_page_settings_workspace.html"
+    ).read_text(encoding="utf-8")
+    css_source = (root / "app" / "static" / "profiles.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert '<div class="section-kicker">{{ step.step }}</div>' not in settings_workspace
+    assert ".wizard-search-engine-preset {" in css_source
+    assert ".button-base.wizard-search-engine-preset {" in css_source
+    assert "display: flex;" in css_source
+    assert "flex-direction: column;" in css_source
+    assert "align-items: flex-start;" in css_source
+    assert "justify-content: center;" in css_source
 
 
 def test_profile_library_actions_use_editor_route_links():
     root = Path(__file__).resolve().parents[1]
-    template = (root / "app" / "templates" / "profiles" / "_page_workspace.html").read_text(
+    template = (root / "app" / "templates" / "profiles" / "_page_library_workspace.html").read_text(
         encoding="utf-8"
     )
     workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
@@ -3105,10 +4372,12 @@ def test_profile_library_actions_use_editor_route_links():
 
     assert 'id="create-profile-link"' in template
     assert 'href="/profiles/new"' in template
+    assert 'target="_blank"' in template
+    assert 'rel="noopener"' in template
     assert 'const editHref = `/profiles/${profile.id}/edit`;' in workspace_source
-    assert '<a class="library-row-title-button" href="${editHref}">' in workspace_source
+    assert '<a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">' in workspace_source
     assert (
-        '<a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}">'
+        '<a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}" target="_blank" rel="noopener">'
         in workspace_source
     )
     assert "loadProfile(profile.id)" not in workspace_source
@@ -3149,15 +4418,89 @@ def test_advanced_editor_save_uses_revision_token_contract():
         encoding="utf-8"
     )
 
-    assert '(routeMode === "edit" || routeMode === "advanced") && editingProfileId' in runtime_source
-    assert "await loadProfile(editingProfileId, { skipConfirm: true });" in runtime_source
-    assert 'applyWorkspaceScope("advanced", { focus: true, persist: false });' in runtime_source
+    assert '(routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId' in runtime_source
+    assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in runtime_source
+    assert "setAdvancedHandoffContext(null);" in runtime_source
+    assert "applyAdvancedFocusTarget(focusTarget);" in runtime_source
     assert "saveButtonEl.addEventListener(\"click\", saveCurrent);" in runtime_source
     assert "saveCurrent();" in runtime_source
     assert "setSaveCurrent(workspace.saveCurrent);" in bootstrap_source
     assert "const revision = Number(getCurrentProfile()?.revision);" in workspace_source
     assert "includeExpectedRevision ? buildExpectedRevisionPayload() : {}" in workspace_source
     assert "if (isRevisionConflictError(e))" in workspace_source
+
+
+def test_guided_route_no_longer_exposes_workspace_scope_switch_contract():
+    root = Path(__file__).resolve().parents[1]
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
+        encoding="utf-8"
+    )
+    workspace_template = (
+        root / "app" / "templates" / "profiles" / "_page_workspace.html"
+    ).read_text(encoding="utf-8")
+    css_source = (root / "app" / "static" / "profiles.css").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'id="workspace-scope-guided"' not in workspace_template
+    assert 'id="workspace-scope-advanced"' not in workspace_template
+    assert 'id="workspace-scope-summary"' not in workspace_template
+    assert "bpm-workspace-scope" not in runtime_source
+    assert "applyWorkspaceScope(" not in runtime_source
+    assert 'body[data-profiles-template-kind="editor"] [data-workspace-scope-panel="advanced"]' in css_source
+    assert 'body[data-profiles-template-kind="advanced"] [data-workspace-scope-panel="guided"]' in css_source
+
+
+def test_guided_route_uses_headless_editor_contract_without_monaco_surface():
+    root = Path(__file__).resolve().parents[1]
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
+        encoding="utf-8"
+    )
+    workspace_template = (
+        root / "app" / "templates" / "profiles" / "_page_workspace.html"
+    ).read_text(encoding="utf-8")
+
+    assert "function createHeadlessEditorAdapter(initialValue = \"{}\")" in runtime_source
+    assert 'const needsEditorRuntime = templateKind === "editor" || templateKind === "settings" || templateKind === "json";' in runtime_source
+    assert 'if (!editorEl && !needsEditorRuntime) {' in runtime_source
+    assert ': createHeadlessEditorAdapter("{}");' in runtime_source
+    assert "{% if profiles_template_kind == 'editor' %}" in workspace_template
+
+
+def test_settings_route_uses_visible_catalog_sections_without_hidden_wizard_backing():
+    root = Path(__file__).resolve().parents[1]
+    settings_shell = (
+        root / "app" / "templates" / "profiles" / "_settings_shell.html"
+    ).read_text(encoding="utf-8")
+    settings_workspace = (
+        root / "app" / "templates" / "profiles" / "_page_settings_workspace.html"
+    ).read_text(encoding="utf-8")
+    settings_search_source = (
+        root / "app" / "static" / "profiles_settings_search.js"
+    ).read_text(encoding="utf-8")
+    catalogs_source = (root / "app" / "static" / "profiles_catalogs.js").read_text(
+        encoding="utf-8"
+    )
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
+        encoding="utf-8"
+    )
+    wizard_flow_source = (
+        root / "app" / "static" / "profiles_wizard_flow.js"
+    ).read_text(encoding="utf-8")
+
+    assert '_page_settings_preference_support.html' in settings_shell
+    assert '_page_settings_wizard_backing.html' not in settings_shell
+    assert 'data-settings-nav' in settings_workspace
+    assert 'data-settings-jump-target="{{ doc.target }}"' in settings_workspace
+    assert 'data-settings-target="pref-section:{{ preference_section.id }}"' in settings_workspace
+    assert 'id="wizard-preferences-{{ preference_section.id }}-presets"' in settings_workspace
+    assert "settingsTargetAliases" in catalogs_source
+    assert "function resolveTargetAlias(target)" in settings_search_source
+    assert 'shellPolicyTargetByLegacyTarget[normalizedTarget]' in settings_search_source
+    assert 'documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`)' in settings_search_source
+    assert 'wizardSearchEngineAddButtonEl?.addEventListener("click"' in runtime_source
+    assert "if (!hasWizardUi) {" in wizard_flow_source
+    assert "wizardSummaryNameEl && (wizardSummaryNameEl.textContent = form.name || \"—\");" in wizard_flow_source
 
 
 def test_shared_save_conflict_ui_contract():
@@ -3186,6 +4529,28 @@ def test_shared_save_conflict_ui_contract():
     assert "saveConflictOverwriteEl?.addEventListener(\"click\"" in workspace_source
     assert "await saveCurrent({ overwriteRevision: true });" in workspace_source
     assert "buildUpdatePayload(form, parsedFlags, compliancePayload" in workspace_source
+
+
+def test_json_editor_chrome_exposes_format_action_without_command_deck():
+    root = Path(__file__).resolve().parents[1]
+    editor_chrome = (
+        root / "app" / "templates" / "profiles" / "_page_editor_chrome.html"
+    ).read_text(encoding="utf-8")
+    command_deck = (
+        root / "app" / "templates" / "profiles" / "_page_command_deck.html"
+    ).read_text(encoding="utf-8")
+    runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert '{% if profiles_route_mode == "json" %}' in editor_chrome
+    assert 'id="format"' in editor_chrome
+    assert 'id="command-deck"' not in command_deck
+    assert 'formatButtonEl?.addEventListener("click", () => {' in runtime_source
+    assert 'softDeleteButtonEl?.addEventListener("click", doSoftDelete);' in runtime_source
+    assert 'hardDeleteButtonEl?.addEventListener("click", doHardDelete);' in runtime_source
+    assert 'restoreButtonEl?.addEventListener("click", doRestore);' in runtime_source
+    assert 'resetLibraryButtonEl?.addEventListener("click", doResetLibrary);' in runtime_source
 
 
 def test_conflict_save_as_copy_creates_new_profile_contract():
@@ -3218,13 +4583,12 @@ def test_profile_routes_use_specific_page_titles():
     edit_response = client.get(f"/profiles/{profile_id}/edit")
     advanced_response = client.get(f"/profiles/{profile_id}/advanced")
 
-    assert "<title>Profile library — Browser Policy Manager</title>" in library_response.text
-    assert "<title>New profile draft — Browser Policy Manager</title>" in new_response.text
+    assert "<title>Library — Browser Policy Manager</title>" in library_response.text
+    assert "<title>New profile draft — Guided editor — Browser Policy Manager</title>" in new_response.text
     assert (
-        "<title>Finance Laptop Baseline — Profile editor — Browser Policy Manager</title>"
+        "<title>Finance Laptop Baseline — Guided editor — Browser Policy Manager</title>"
         in edit_response.text
     )
     assert (
-        "<title>Finance Laptop Baseline — Advanced editor — Browser Policy Manager</title>"
-        in advanced_response.text
+        advanced_response.headers["location"] == f"/profiles/{profile_id}/json"
     )

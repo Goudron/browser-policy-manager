@@ -90,6 +90,11 @@
             nameHintEl,
             currentNameEl,
             currentMetaEl,
+            editorProfileIdEl,
+            editorModeGuidedEl,
+            editorModeSettingsEl,
+            editorModeJsonEl,
+            editorModeLinksHintEl,
             profileDerivedNoteEl,
             profileCloneHandoffPanelEl,
             profileCloneHandoffCopyEl,
@@ -143,9 +148,52 @@
         } = elements;
         const overviewPanelEl = documentRef.getElementById("overview-panel");
         const commandDeckEl = documentRef.getElementById("command-deck");
+        const routeMode = documentRef.body?.dataset.profilesRouteMode || "new";
+        const advancedFocusTarget = documentRef.body?.dataset.advancedFocusTarget || "";
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
+        const compareBaseStorageKey = "bpm-library-compare-base";
         let compareProfileState = null;
         let saveConflictState = null;
+
+        function normalizeSettingsModeFocusTarget(focusTarget) {
+            const normalizedTarget = String(focusTarget || "").trim();
+            if (!normalizedTarget || normalizedTarget === "editor") return "";
+            if (
+                normalizedTarget === "raw"
+                || normalizedTarget === "deprecated"
+                || normalizedTarget === "unknown"
+                || normalizedTarget.startsWith("raw:")
+                || normalizedTarget.startsWith("deprecated:")
+                || normalizedTarget.startsWith("unknown:")
+            ) {
+                return "settings-schema-shell-step-8";
+            }
+            return normalizedTarget;
+        }
+
+        function normalizeJsonModeFocusTarget(focusTarget) {
+            const normalizedTarget = String(focusTarget || "").trim();
+            if (!normalizedTarget) return "editor";
+            if (normalizedTarget === "settings-schema-shell-step-8") return "raw";
+            if (
+                normalizedTarget === "editor"
+                || normalizedTarget.startsWith("policy:")
+                || normalizedTarget === "raw"
+                || normalizedTarget === "deprecated"
+                || normalizedTarget === "unknown"
+                || normalizedTarget.startsWith("raw:")
+                || normalizedTarget.startsWith("deprecated:")
+                || normalizedTarget.startsWith("unknown:")
+            ) {
+                return normalizedTarget;
+            }
+            return "editor";
+        }
+
+        function isJsonModeFocusTarget(focusTarget) {
+            return normalizeJsonModeFocusTarget(focusTarget) !== "editor"
+                || String(focusTarget || "").trim() === "editor";
+        }
 
         function setImportStatus(message, tone = "info") {
             if (!importFirefoxPoliciesStatusEl) return;
@@ -183,6 +231,114 @@
             if (!sourceProfile?.name) return "";
             return t("profiles.clone_source_value")
                 .replace("{name}", sourceProfile.name);
+        }
+
+        function normalizeCompareBaseSnapshot(snapshot, fallbackProfile = null) {
+            const source = snapshot && typeof snapshot === "object" ? snapshot : {};
+            const fallback = fallbackProfile && typeof fallbackProfile === "object" ? fallbackProfile : {};
+            const profileId = Number(source.id ?? fallback.id ?? 0);
+            if (!Number.isInteger(profileId) || profileId <= 0) return null;
+            return {
+                id: profileId,
+                name: source.name || fallback.name || "",
+                owner: source.owner ?? fallback.owner ?? null,
+                description: source.description ?? fallback.description ?? null,
+                schemaVersion: source.schemaVersion || source.schema_version || fallback.schema_version || defaultSchemaVersion,
+                flags: source.flags && typeof source.flags === "object" ? source.flags : {},
+            };
+        }
+
+        function normalizeCompareBaseProfile(profile, fallbackSnapshot = null) {
+            const source = profile && typeof profile === "object" ? profile : {};
+            const fallback = fallbackSnapshot && typeof fallbackSnapshot === "object" ? fallbackSnapshot : {};
+            const profileId = Number(source.id ?? fallback.id ?? 0);
+            if (!Number.isInteger(profileId) || profileId <= 0) return null;
+            return {
+                id: profileId,
+                name: source.name || fallback.name || "",
+                owner: source.owner ?? fallback.owner ?? null,
+                description: source.description ?? fallback.description ?? null,
+                schema_version: source.schema_version || source.schemaVersion || fallback.schemaVersion || defaultSchemaVersion,
+                is_deleted: source.is_deleted === true,
+                updated_at: source.updated_at || null,
+            };
+        }
+
+        function readStoredCompareBase() {
+            try {
+                const payloadText = windowRef.localStorage?.getItem(compareBaseStorageKey) || "";
+                if (!payloadText) return null;
+                const parsed = JSON.parse(payloadText);
+                const snapshot = normalizeCompareBaseSnapshot(parsed?.snapshot, parsed?.profile);
+                const profile = normalizeCompareBaseProfile(parsed?.profile, snapshot);
+                if (!snapshot || !profile) return null;
+                return { profile, snapshot };
+            } catch {
+                return null;
+            }
+        }
+
+        function writeStoredCompareBase(profile, snapshot = null) {
+            const normalizedSnapshot = normalizeCompareBaseSnapshot(snapshot, profile);
+            const normalizedProfile = normalizeCompareBaseProfile(profile, normalizedSnapshot);
+            if (!normalizedSnapshot || !normalizedProfile) return;
+            try {
+                windowRef.localStorage?.setItem(compareBaseStorageKey, JSON.stringify({
+                    profile: normalizedProfile,
+                    snapshot: normalizedSnapshot,
+                }));
+            } catch {
+                // Ignore storage write failures so compare never blocks the editor flow.
+            }
+        }
+
+        function clearStoredCompareBase(profileId = null) {
+            try {
+                if (!windowRef.localStorage) return;
+                if (!profileId) {
+                    windowRef.localStorage.removeItem(compareBaseStorageKey);
+                    return;
+                }
+                const storedBase = readStoredCompareBase();
+                if (storedBase?.profile?.id === profileId) {
+                    windowRef.localStorage.removeItem(compareBaseStorageKey);
+                }
+            } catch {
+                // Ignore storage cleanup failures.
+            }
+        }
+
+        function persistCompareBaseProfile(profile, snapshot = null) {
+            const normalizedProfile = normalizeCompareBaseProfile(profile, snapshot);
+            if (!normalizedProfile?.id) return;
+            const normalizedSnapshot = normalizeCompareBaseSnapshot(snapshot, normalizedProfile)
+                || buildProfileSnapshot(profile);
+            if (!normalizedSnapshot) return;
+            writeStoredCompareBase(normalizedProfile, normalizedSnapshot);
+            if (compareProfileState?.profile?.id === normalizedProfile.id) {
+                compareProfileState = null;
+            }
+        }
+
+        function getComparableBaseState() {
+            if (getCurrentId()) {
+                return {
+                    source: "current",
+                    profile: normalizeCompareBaseProfile(getCurrentProfile(), buildProfileSnapshot(getCurrentProfile())),
+                    snapshot: buildSnapshot(),
+                };
+            }
+            const storedBase = readStoredCompareBase();
+            if (!storedBase?.profile?.id || !storedBase?.snapshot) return null;
+            return {
+                source: "stored",
+                profile: storedBase.profile,
+                snapshot: storedBase.snapshot,
+            };
+        }
+
+        function getComparableBaseId() {
+            return getCurrentId() || readStoredCompareBase()?.profile?.id || null;
         }
 
         function renderCloneContext() {
@@ -458,10 +614,16 @@
             } else {
                 overviewContextEl.textContent = t("profiles.overview_draft");
             }
+            if (editorProfileIdEl) {
+                editorProfileIdEl.textContent = getCurrentId()
+                    ? `#${getCurrentId()}`
+                    : t("profiles.badge_draft");
+            }
 
             renderCloneContext();
             renderCloneHandoffPanel();
             renderLifecycleReview();
+            refreshEditorModeLinks();
             updateWizardSummary();
         }
 
@@ -597,7 +759,7 @@
         }
 
         function hasComparableBase() {
-            return Boolean(getCurrentId());
+            return Boolean(getComparableBaseId());
         }
 
         function buildSnapshot() {
@@ -632,13 +794,15 @@
             const normalizedBase = normalizeValue(baseValue);
             const normalizedOther = normalizeValue(otherValue);
 
-            if (isPlainObject(normalizedBase) && isPlainObject(normalizedOther)) {
+            if (isPlainObject(normalizedBase) || isPlainObject(normalizedOther)) {
+                const baseObject = isPlainObject(normalizedBase) ? normalizedBase : {};
+                const otherObject = isPlainObject(normalizedOther) ? normalizedOther : {};
                 const keys = Array.from(new Set([
-                    ...Object.keys(normalizedBase),
-                    ...Object.keys(normalizedOther),
+                    ...Object.keys(baseObject),
+                    ...Object.keys(otherObject),
                 ])).sort();
                 keys.forEach((key) => {
-                    collectDiffPaths(normalizedBase[key], normalizedOther[key], [...path, key], changes);
+                    collectDiffPaths(baseObject[key], otherObject[key], [...path, key], changes);
                 });
                 return changes;
             }
@@ -799,9 +963,33 @@
         }
 
         function renderComparePanel() {
-            if (!compareEmptyEl || !compareActiveEl || !compareEmptyCopyEl) return;
+            if (
+                !compareEmptyEl
+                || !compareActiveEl
+                || !compareEmptyCopyEl
+                || !compareClearEl
+                || !compareCurrentNameEl
+                || !compareCurrentCopyEl
+                || !compareOtherNameEl
+                || !compareOtherCopyEl
+                || !compareMetadataCountEl
+                || !comparePolicyCountEl
+                || !comparePreferenceCountEl
+                || !compareChangesCopyEl
+                || !compareChangesListEl
+                || !compareGuidedAreasCopyEl
+                || !compareGuidedAreasListEl
+            ) return;
 
-            if (!hasComparableBase()) {
+            const comparableBaseState = (() => {
+                try {
+                    return getComparableBaseState();
+                } catch {
+                    return null;
+                }
+            })();
+
+            if (!comparableBaseState) {
                 compareEmptyEl.hidden = false;
                 compareActiveEl.hidden = true;
                 compareClearEl.hidden = true;
@@ -817,10 +1005,8 @@
                 return;
             }
 
-            let currentSnapshot = null;
-            try {
-                currentSnapshot = buildSnapshot();
-            } catch {
+            const currentSnapshot = comparableBaseState.snapshot;
+            if (!currentSnapshot) {
                 compareEmptyEl.hidden = false;
                 compareActiveEl.hidden = true;
                 compareClearEl.hidden = true;
@@ -833,7 +1019,7 @@
             compareActiveEl.hidden = false;
             compareClearEl.hidden = false;
             compareCurrentNameEl.textContent = currentSnapshot.name || t("profiles.compare_current_draft");
-            compareCurrentCopyEl.textContent = getCurrentId()
+            compareCurrentCopyEl.textContent = comparableBaseState.profile?.id
                 ? t("profiles.compare_current_saved_copy").replace("{schema}", formatSchemaLabel(currentSnapshot.schemaVersion))
                 : t("profiles.compare_current_draft_copy").replace("{schema}", formatSchemaLabel(currentSnapshot.schemaVersion));
             compareOtherNameEl.textContent = compareProfileState.profile.name || t("profiles.none_selected");
@@ -968,16 +1154,24 @@
             const total = Number(stats?.total || 0);
             const nextStats = { ...getLibraryStats(), filtered, total };
             setLibraryStats(nextStats);
-            listSummaryEl.textContent = `${filtered}`;
-            listSummaryEl.removeAttribute("aria-hidden");
-            listTotalSummaryEl.textContent = `${total}`;
-            listTotalSummaryEl.removeAttribute("aria-hidden");
-            workspaceProfileCountEl.textContent = `${total}`;
-            workspaceProfileCountEl.removeAttribute("aria-hidden");
+            if (listSummaryEl) {
+                listSummaryEl.textContent = `${filtered}`;
+                listSummaryEl.removeAttribute("aria-hidden");
+            }
+            if (listTotalSummaryEl) {
+                listTotalSummaryEl.textContent = `${total}`;
+                listTotalSummaryEl.removeAttribute("aria-hidden");
+            }
+            if (workspaceProfileCountEl) {
+                workspaceProfileCountEl.textContent = `${total}`;
+                workspaceProfileCountEl.removeAttribute("aria-hidden");
+            }
             const workspaceProfileLabelEl = documentRef.getElementById("workspace-profile-label");
-            workspaceProfileLabelEl.textContent = libraryCountLabel(total, getCurrentLang());
-            workspaceProfileLabelEl.removeAttribute("aria-hidden");
-            workspaceProfileCountEl.closest(".compact-counter")?.classList.remove("compact-counter--pending");
+            if (workspaceProfileLabelEl) {
+                workspaceProfileLabelEl.textContent = libraryCountLabel(total, getCurrentLang());
+                workspaceProfileLabelEl.removeAttribute("aria-hidden");
+            }
+            workspaceProfileCountEl?.closest(".compact-counter")?.classList.remove("compact-counter--pending");
         }
 
         function refreshWorkspaceSignal() {
@@ -996,7 +1190,9 @@
                 overviewStatusEl.className = "text-base font-semibold text-slate-900";
             }
             overviewStatusEl.textContent = workspaceSignalEl.textContent;
-            dockStatusTextEl.textContent = workspaceSignalEl.textContent;
+            if (dockStatusTextEl) {
+                dockStatusTextEl.textContent = workspaceSignalEl.textContent;
+            }
             if (advancedReviewSaveStateEl) {
                 advancedReviewSaveStateEl.textContent = workspaceSignalEl.textContent;
                 advancedReviewSaveStateEl.dataset.reviewTone = invalid ? "error" : (dirty ? "warn" : "success");
@@ -1020,6 +1216,94 @@
         function setLinkHref(el, href) {
             if (!el) return;
             el.href = href;
+        }
+
+        function setEditorModeLinkState(el, { href = "#", available = true, active = false } = {}) {
+            if (!el) return;
+            el.href = href || "#";
+            el.setAttribute("aria-disabled", available ? "false" : "true");
+            if (available) {
+                el.removeAttribute("title");
+            } else {
+                el.setAttribute("title", t("profiles.editor_chrome_save_first"));
+            }
+            if (active) {
+                el.setAttribute("aria-current", "page");
+            } else {
+                el.removeAttribute("aria-current");
+            }
+            el.classList.toggle("pointer-events-none", !available);
+            el.classList.toggle("opacity-50", !available);
+            el.classList.toggle("primary-button", active);
+            el.classList.toggle("ghost-button", !active);
+            el.classList.toggle("text-white", active);
+            el.classList.toggle("text-slate-700", !active);
+        }
+
+        function buildEditorModeHref(modeKey) {
+            const currentId = getCurrentId();
+            const includeDeleted = getCurrentProfile()?.is_deleted === true
+                || documentRef.body?.dataset.includeDeleted === "true";
+            const includeDeletedSuffix = includeDeleted ? "include_deleted=true" : "";
+            if (modeKey === "guided") {
+                if (!currentId) return "/profiles/new";
+                return includeDeleted
+                    ? `/profiles/${currentId}/edit?${includeDeletedSuffix}`
+                    : `/profiles/${currentId}/edit`;
+            }
+            if (!currentId) return null;
+            const returnPath = routeMode === "settings"
+                ? `/profiles/${currentId}/settings${includeDeleted ? `?${includeDeletedSuffix}` : ""}`
+                : (routeMode === "json"
+                    ? `/profiles/${currentId}/json${includeDeleted ? `?${includeDeletedSuffix}` : ""}`
+                    : `/profiles/${currentId}/edit${includeDeleted ? `?${includeDeletedSuffix}` : ""}`);
+            if (modeKey === "settings") {
+                const settingsFocusTarget = normalizeSettingsModeFocusTarget(advancedFocusTarget);
+                const params = [];
+                if (includeDeleted) {
+                    params.push(includeDeletedSuffix);
+                }
+                params.push(`return=${encodeURIComponent(returnPath)}`);
+                if (settingsFocusTarget) {
+                    params.push(`focus=${encodeURIComponent(settingsFocusTarget)}`);
+                }
+                return `/profiles/${currentId}/settings?${params.join("&")}`;
+            }
+            const jsonFocusTarget = normalizeJsonModeFocusTarget(advancedFocusTarget);
+            const params = [];
+            if (includeDeleted) {
+                params.push(includeDeletedSuffix);
+            }
+            params.push(`return=${encodeURIComponent(returnPath)}`);
+            params.push(`focus=${encodeURIComponent(jsonFocusTarget)}`);
+            return `/profiles/${currentId}/json?${params.join("&")}`;
+        }
+
+        function refreshEditorModeLinks() {
+            const hasSavedProfile = Boolean(getCurrentId());
+            const guidedActive = routeMode === "new" || routeMode === "edit";
+            const advancedMode = routeMode === "settings"
+                ? "settings"
+                : (isJsonModeFocusTarget(advancedFocusTarget) ? "json" : "settings");
+
+            setEditorModeLinkState(editorModeGuidedEl, {
+                href: buildEditorModeHref("guided"),
+                available: true,
+                active: guidedActive,
+            });
+            setEditorModeLinkState(editorModeSettingsEl, {
+                href: buildEditorModeHref("settings"),
+                available: hasSavedProfile,
+                active: routeMode === "settings" || (routeMode === "json" && advancedMode === "settings"),
+            });
+            setEditorModeLinkState(editorModeJsonEl, {
+                href: buildEditorModeHref("json"),
+                available: hasSavedProfile,
+                active: routeMode === "json" && advancedMode === "json",
+            });
+            if (editorModeLinksHintEl) {
+                editorModeLinksHintEl.classList.toggle("support-hidden", hasSavedProfile);
+            }
         }
 
         function updateActionState() {
@@ -1187,13 +1471,7 @@
                 return;
             }
 
-            setWizardStarter("keep_current", { preserveComplianceLayer: true });
-            setWizardComplianceSnapshot(profile.compliance || null);
-            if (profile?.compliance?.layer) {
-                setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
-            } else {
-                setWizardComplianceLayer("none", { skipApply: true, allowKeepCurrent: true });
-            }
+            persistCompareBaseProfile(profile, buildProfileSnapshot(profile));
 
             currentNameEl.textContent = profile.name;
             currentMetaEl.textContent = [
@@ -1221,6 +1499,15 @@
             nameInput.disabled = true;
             nameHintEl.textContent = t("profiles.name_locked");
             setValidationPreview(t("profiles.selection_active_status"), "success");
+
+            setWizardStarter("keep_current", { preserveComplianceLayer: true });
+            setWizardComplianceSnapshot(profile.compliance || null);
+            if (profile?.compliance?.layer) {
+                setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
+            } else {
+                setWizardComplianceLayer("none", { skipApply: true, allowKeepCurrent: true });
+            }
+
             renderProfileComplianceSummary(profile);
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
@@ -1229,6 +1516,7 @@
             syncWizardNetworkFromEditor();
             syncWizardPreferencesFromEditor();
             syncWizardExtensionsFromEditor();
+            updateActionState();
         }
 
         async function confirmIfDirty() {
@@ -1304,6 +1592,7 @@
         function renderList(items) {
             const nextStats = { ...getLibraryStats(), items: Array.isArray(items) ? items : [] };
             setLibraryStats(nextStats);
+            if (!listEl) return;
             listEl.innerHTML = "";
 
             if (!items.length) {
@@ -1321,7 +1610,7 @@
             for (const profile of items) {
                 const li = documentRef.createElement("li");
                 li.className = "library-table-row";
-                const selected = profile.id === getCurrentId();
+                const selected = profile.id === getComparableBaseId();
                 const canCompare = hasComparableBase() && !selected;
                 const compareActive = compareProfileState?.profile?.id === profile.id;
                 const canClone = Boolean(profile?.id);
@@ -1339,7 +1628,7 @@
                 li.innerHTML = `
                     <div class="library-row-grid profile-list-button ${selected ? "profile-list-button--selected" : ""}">
                         <div class="library-row-primary">
-                            <a class="library-row-title-button" href="${editHref}">
+                            <a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">
                                 ${escapeHtml(profile.name)}
                             </a>
                         </div>
@@ -1361,7 +1650,7 @@
                         </div>
 
                         <div class="library-row-actions">
-                            <a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}">
+                            <a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}" target="_blank" rel="noopener">
                                 ${openLabel}
                             </a>
                             ${canCompare ? `
@@ -1387,6 +1676,20 @@
                 compareButton?.addEventListener("click", async () => {
                     await compareWithProfile(profile.id);
                 });
+                const openButton = li.querySelector(".library-row-open-button");
+                openButton?.addEventListener("click", () => {
+                    void (async () => {
+                        try {
+                            const comparableProfile = profile?.flags && typeof profile.flags === "object"
+                                ? profile
+                                : await getProfile(profile.id);
+                            persistCompareBaseProfile(comparableProfile, buildProfileSnapshot(comparableProfile));
+                            refreshCompareBaselineUi();
+                        } catch {
+                            // Ignore compare baseline prefetch failures and keep the navigation flow intact.
+                        }
+                    })();
+                });
                 const cloneButton = li.querySelector("[data-clone-profile-id]");
                 cloneButton?.addEventListener("click", async () => {
                     await cloneFromProfile(profile.id);
@@ -1395,23 +1698,41 @@
             }
         }
 
-        async function reloadList() {
+        const hasLibrarySurface = Boolean(
+            listEl
+            || listSummaryEl
+            || listTotalSummaryEl
+            || workspaceProfileCountEl
+            || refreshButtonEl,
+        );
+
+        async function reloadList(options = {}) {
+            const { announceStatus = hasLibrarySurface } = options;
             try {
-                setStatus(t("profiles.status_loading_list"), "info");
+                if (announceStatus) {
+                    setStatus(t("profiles.status_loading_list"), "info");
+                }
                 const [items, stats] = await Promise.all([
                     listProfiles(),
                     getProfileLibraryStats(),
                 ]);
                 renderList(items);
                 updateLibrarySummary(stats);
-                setStatus(t("profiles.status_list_ready"), "info");
+                if (announceStatus) {
+                    setStatus(t("profiles.status_list_ready"), "info");
+                }
             } catch (e) {
                 setStatus(t("profiles.error_list").replace("{detail}", e.message || e), "error");
             }
         }
 
         async function loadProfile(id, options = {}) {
-            const { keepCloneSource = false, skipConfirm = false } = options;
+            const {
+                keepCloneSource = false,
+                skipConfirm = false,
+                syncLibrary = hasLibrarySurface,
+                announceLoaded = true,
+            } = options;
             const editor = getEditor();
             try {
                 if (!skipConfirm && !(await confirmIfDirty())) return;
@@ -1431,14 +1752,18 @@
                 syncWizardPreferencesFromEditor();
                 syncWizardExtensionsFromEditor();
                 setBaselineFromCurrentUi();
-                const [items, stats] = await Promise.all([
-                    listProfiles(),
-                    getProfileLibraryStats(),
-                ]);
-                renderList(items);
-                updateLibrarySummary(stats);
-                documentRef.getElementById("overview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-                setStatus(t("profiles.status_profile_loaded").replace("{name}", profile.name), "success");
+                if (syncLibrary) {
+                    const [items, stats] = await Promise.all([
+                        listProfiles(),
+                        getProfileLibraryStats(),
+                    ]);
+                    renderList(items);
+                    updateLibrarySummary(stats);
+                }
+                documentRef.getElementById("overview-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                if (announceLoaded) {
+                    setStatus(t("profiles.status_profile_loaded").replace("{name}", profile.name), "success");
+                }
             } catch (e) {
                 setStatus(t("profiles.error_load").replace("{detail}", e.message || e), "error");
             }
@@ -1618,12 +1943,26 @@
             if (!windowRef.confirm(t("profiles.confirm_soft_delete"))) return;
             try {
                 setBusyState(true, "profiles.deleting");
+                const currentProfile = getCurrentProfile();
+                const archivedProfile = {
+                    ...(currentProfile && typeof currentProfile === "object" ? currentProfile : {}),
+                    id: getCurrentId(),
+                    name: currentProfile?.name || nameInput.value.trim() || t("profiles.none_selected"),
+                    owner: currentProfile?.owner || ownerInput.value.trim() || null,
+                    description: currentProfile?.description || descriptionInput.value.trim() || null,
+                    schema_version: currentProfile?.schema_version
+                        || documentRef.getElementById("profile-type").value
+                        || defaultSchemaVersion,
+                    flags: getCurrentRaw() && typeof getCurrentRaw() === "object" ? getCurrentRaw() : {},
+                    updated_at: new Date().toISOString(),
+                    deleted_at: new Date().toISOString(),
+                    is_deleted: true,
+                };
                 await softDeleteProfile(getCurrentId());
                 await reloadList();
-                setCurrentId(null);
-                setCurrentProfile(null);
-                setCurrentRaw({});
-                await resetDraft(true);
+                setCurrentRaw(archivedProfile.flags || {});
+                setMeta(archivedProfile);
+                setBaselineFromCurrentUi();
                 setStatus(t("profiles.soft_delete_done"), "success");
             } catch (e) {
                 setStatus(t("profiles.error_delete").replace("{detail}", e.message || e), "error");
@@ -1640,7 +1979,9 @@
             if (!windowRef.confirm(t("profiles.confirm_hard_delete"))) return;
             try {
                 setBusyState(true, "profiles.deleting");
-                await hardDeleteProfile(getCurrentId());
+                const deletedProfileId = getCurrentId();
+                await hardDeleteProfile(deletedProfileId);
+                clearStoredCompareBase(deletedProfileId);
                 await reloadList();
                 setCurrentId(null);
                 setCurrentProfile(null);
@@ -1844,6 +2185,25 @@
                     }
                 }
             });
+        });
+
+        function refreshCompareBaselineUi() {
+            if (compareProfileState?.profile?.id === getComparableBaseId()) {
+                compareProfileState = null;
+            }
+            renderComparePanel();
+            renderList(getLibraryStats().items || []);
+        }
+
+        windowRef.addEventListener?.("storage", (event) => {
+            if (event.key !== compareBaseStorageKey) return;
+            refreshCompareBaselineUi();
+        });
+        windowRef.addEventListener?.("focus", refreshCompareBaselineUi);
+        documentRef.addEventListener?.("visibilitychange", () => {
+            if (documentRef.visibilityState === "visible") {
+                refreshCompareBaselineUi();
+            }
         });
 
         return {

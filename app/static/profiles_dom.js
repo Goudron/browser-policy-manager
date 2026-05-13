@@ -3,17 +3,21 @@
         const byId = (id) => documentRef.getElementById(id);
         const all = (selector) => Array.from(documentRef.querySelectorAll(selector));
         const catalogs = window.BPMProfilesCatalogs.read(documentRef);
+        const templateKind = documentRef.body?.dataset.profilesTemplateKind || "";
+        const schemaShellPrefix = templateKind === "settings"
+            ? "settings-schema-shell-step-"
+            : "wizard-schema-shell-step-";
 
         const wizardSchemaShellViews = Object.fromEntries(
             (Array.isArray(catalogs.wizardSchemaShellCatalog.steps) ? catalogs.wizardSchemaShellCatalog.steps : []).map((step) => [
                 String(step.step),
                 {
-                    coverage: byId(`wizard-schema-shell-step-${step.step}-coverage`),
-                    badges: byId(`wizard-schema-shell-step-${step.step}-badges`),
-                    recommended: byId(`wizard-schema-shell-step-${step.step}-recommended`),
-                    additional: byId(`wizard-schema-shell-step-${step.step}-additional`),
-                    preferences: byId(`wizard-schema-shell-step-${step.step}-preferences`),
-                    raw: byId(`wizard-schema-shell-step-${step.step}-raw`),
+                    coverage: byId(`${schemaShellPrefix}${step.step}-coverage`),
+                    badges: byId(`${schemaShellPrefix}${step.step}-badges`),
+                    recommended: byId(`${schemaShellPrefix}${step.step}-recommended`),
+                    additional: byId(`${schemaShellPrefix}${step.step}-additional`),
+                    preferences: byId(`${schemaShellPrefix}${step.step}-preferences`),
+                    raw: byId(`${schemaShellPrefix}${step.step}-raw`),
                 },
             ]),
         );
@@ -30,6 +34,11 @@
                 nameHintEl: byId("name-hint"),
                 currentNameEl: byId("current-name"),
                 currentMetaEl: byId("current-meta"),
+                editorProfileIdEl: byId("editor-profile-id"),
+                editorModeGuidedEl: byId("editor-mode-guided"),
+                editorModeSettingsEl: byId("editor-mode-settings"),
+                editorModeJsonEl: byId("editor-mode-json"),
+                editorModeLinksHintEl: byId("editor-mode-links-hint"),
                 profileDerivedNoteEl: byId("profile-derived-note"),
                 profileCloneHandoffPanelEl: byId("profile-clone-handoff-panel"),
                 profileCloneHandoffCopyEl: byId("profile-clone-handoff-copy"),

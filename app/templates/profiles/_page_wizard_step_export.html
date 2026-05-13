@@ -60,9 +60,11 @@
                         <div class="wizard-export-download-hint" id="wizard-export-download-hint" data-i18n="profiles.wizard_export_download_hint_unsaved_new">
                             {{ tr("profiles.wizard_export_download_hint_unsaved_new") }}
                         </div>
-                        {% if advanced_href %}
+                        {% if settings_href %}
                         <a
-                            href="{{ advanced_href }}&focus=download"
+                            href="{{ settings_href }}&focus=settings-schema-shell-step-8"
+                            target="_blank"
+                            rel="noopener"
                             class="button-base ghost-button"
                             data-i18n="profiles.advanced_handoff_open">
                             {{ tr("profiles.advanced_handoff_open") }}

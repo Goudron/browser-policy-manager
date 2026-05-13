@@ -104,6 +104,28 @@ def test_create_app_uses_self_hosted_csp_without_cdn_allowlist():
     assert "blob:" not in csp
 
 
+def test_create_app_uses_profiles_csp_for_nested_profiles_routes():
+    client = make_test_client(main_module.create_app())
+
+    create_response = client.post(
+        "/api/profiles",
+        json={
+            "name": "CSP nested route profile",
+            "schema_version": "release-150",
+            "flags": {"DisableTelemetry": True},
+        },
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/{profile_id}/json")
+    csp = response.headers["content-security-policy"]
+
+    assert response.status_code == 200
+    assert "script-src 'self'" in csp
+    assert "style-src 'self' 'unsafe-inline'" in csp
+    assert "worker-src 'self'" in csp
+
+
 def test_create_app_uses_stricter_default_csp_outside_profiles():
     client = make_test_client(main_module.create_app())
 

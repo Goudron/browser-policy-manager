@@ -100,6 +100,24 @@ def test_cis_generation_skips_unmapped_and_unsupported_targets(tmp_path) -> None
     assert layer.policies == {}
 
 
+def test_cis_generation_skips_recommendations_without_string_ids(tmp_path) -> None:
+    from tests.compliance.test_cis_firefox_sources import _mapping, _write_fixture
+
+    _write_fixture(
+        tmp_path,
+        recommendations=[
+            {"id": 101, "level": 1, "title": "Numeric id should be ignored"},
+            {"level": 1, "title": "Missing id should be ignored"},
+        ],
+        mappings=[_mapping("1.1.1")],
+    )
+
+    layer = build_cis_layer(1, "release-150", base_dir=tmp_path)
+
+    assert layer.recommendation_ids == ()
+    assert layer.policies == {}
+
+
 def test_apply_target_rejects_unsupported_kind_and_bad_paths() -> None:
     import pytest
 

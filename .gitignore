@@ -29,7 +29,8 @@ build/
 # IDE / editors
 # -----------------------------------------------------------------------------
 .codex
-.vscode/
+.vscode/*
+!.vscode/settings.json
 .idea/
 *.swp
 *.swo

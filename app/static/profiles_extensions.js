@@ -913,27 +913,38 @@
         }
 
         function openBookmarksAdvanced(kind = "links") {
-            const advancedButton = documentRef.getElementById("workspace-scope-advanced");
-            advancedButton?.click();
-            window.setTimeout(() => {
-                const wantsManaged = kind === "folders" || kind === "mixed" || kind === "nested";
-                const targetEl = wantsManaged
-                    ? (
-                        documentRef.querySelector('[data-schema-policy-id="ManagedBookmarks"][data-schema-policy-kind="array-of-objects"]')
-                        || documentRef.querySelector('[data-settings-target="shell-policy:6:ManagedBookmarks"]')
-                    )
-                    : (
-                        documentRef.querySelector('[data-schema-policy-id="Bookmarks"][data-schema-policy-kind="array-of-objects"]')
-                        || documentRef.querySelector('[data-settings-target="shell-policy:6:Bookmarks"]')
-                    );
-                if (!targetEl) return;
-                targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-                targetEl.classList.add("settings-target-highlight");
-                window.setTimeout(() => {
-                    targetEl.classList.remove("settings-target-highlight");
-                }, 1800);
-                focusTargetForA11y(targetEl);
-            }, 140);
+            const advancedLink = documentRef.getElementById("editor-mode-settings");
+            const advancedHref = advancedLink?.getAttribute("href") || "";
+            if (
+                !advancedLink
+                || advancedLink.getAttribute("aria-disabled") === "true"
+                || advancedLink.matches("button[disabled]")
+                || !advancedHref
+                || advancedHref === "#"
+            ) {
+                return;
+            }
+
+            const wantsManaged = kind === "folders" || kind === "mixed" || kind === "nested";
+            const focusTarget = wantsManaged
+                ? "shell-policy:6:ManagedBookmarks"
+                : "shell-policy:6:Bookmarks";
+
+            try {
+                const nextUrl = new URL(advancedHref, window.location.origin);
+                nextUrl.searchParams.set("focus", focusTarget);
+                const advancedWindow = window.open(
+                    `${nextUrl.pathname}${nextUrl.search}`,
+                    "_blank",
+                    "noopener",
+                );
+                if (advancedWindow) {
+                    advancedWindow.opener = null;
+                }
+                return;
+            } catch {
+                advancedLink.click();
+            }
         }
 
         function renderStepSixExperience(parsed) {
@@ -1196,6 +1207,10 @@
                 const parsed = fromEditorValue(editor.getValue(), mode);
                 const normalized = parsed && typeof parsed === "object" ? { ...parsed } : {};
 
+                // Reflect the chosen posture immediately so the guided step reacts
+                // even before the editor round-trip finishes.
+                renderPresetButtonState(aiPosturePresetButtons, presetKey, "aiPosturePreset");
+
                 if (presetKey === "defaults") {
                     delete normalized.AIControls;
                     delete normalized.GenerativeAI;
@@ -1325,6 +1340,14 @@
         function syncFromEditor() {
             const editor = getEditor();
             if (!editor) return;
+            if (
+                !wizardExtensionDefaultModeEl
+                || !wizardExtensionInstallEl
+                || !wizardExtensionLockedEl
+                || !wizardExtensionUninstallEl
+            ) {
+                return;
+            }
             extensionFineTuningPanelPreference = null;
             extensionInstallPanelPreference = null;
             extensionLockedPanelPreference = null;
@@ -1516,7 +1539,7 @@
         }
 
         function bindInputListeners(applyExtensionsFromWizard) {
-            managedExtensionFields.forEach((input) => {
+            managedExtensionFields.filter(Boolean).forEach((input) => {
                 input.addEventListener("input", applyExtensionsFromWizard);
                 input.addEventListener("change", applyExtensionsFromWizard);
             });
@@ -1525,7 +1548,7 @@
                 wizardExtensionInstallEl,
                 wizardExtensionLockedEl,
                 wizardExtensionUninstallEl,
-            ].forEach((input) => {
+            ].filter(Boolean).forEach((input) => {
                 input.addEventListener("input", applyExtensionsFromWizard);
                 input.addEventListener("change", applyExtensionsFromWizard);
             });

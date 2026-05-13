@@ -41,13 +41,48 @@ def test_wizard_schema_shell_catalog_exposes_inline_editor_specs_for_phase_three
         catalog["channels"]["release-150"]["steps"]["2"]["recommended"]
         + catalog["channels"]["release-150"]["steps"]["2"]["additional"]
     )
-    step_three_items = catalog["channels"]["release-150"]["steps"]["3"]["recommended"]
+    step_three_items = (
+        catalog["channels"]["release-150"]["steps"]["3"]["recommended"]
+        + catalog["channels"]["release-150"]["steps"]["3"]["additional"]
+        + catalog["channels"]["release-150"]["steps"]["3"]["raw_fallback"]
+    )
+    step_four_items = (
+        catalog["channels"]["release-150"]["steps"]["4"]["recommended"]
+        + catalog["channels"]["release-150"]["steps"]["4"]["additional"]
+    )
     step_six_items = catalog["channels"]["release-150"]["steps"]["6"]["recommended"]
 
-    by_id = {item["id"]: item for item in step_two_items + step_three_items + step_six_items}
+    by_id = {
+        item["id"]: item
+        for item in step_two_items + step_three_items + step_four_items + step_six_items
+    }
 
     assert by_id["WindowsSSO"]["inline_editor"]["kind"] == "boolean-select"
+    assert by_id["AppAutoUpdate"]["inline_editor"]["kind"] == "boolean-select"
+    assert by_id["DisableAppUpdate"]["inline_editor"]["kind"] == "boolean-select"
+    assert by_id["DisableSystemAddonUpdate"]["inline_editor"]["kind"] == "boolean-select"
+    assert by_id["DontCheckDefaultBrowser"]["inline_editor"]["kind"] == "boolean-select"
+    assert by_id["PromptForDownloadLocation"]["inline_editor"]["kind"] == "boolean-select"
     assert by_id["DNSOverHTTPS"]["inline_editor"]["kind"] == "object-card"
+    assert by_id["Proxy"]["inline_editor"]["kind"] == "object-card"
+    assert {field["name"] for field in by_id["Proxy"]["inline_editor"]["fields"]} >= {
+        "Mode",
+        "Locked",
+        "HTTPProxy",
+        "Passthrough",
+        "AutoConfigURL",
+    }
+    assert by_id["Homepage"]["inline_editor"]["kind"] == "object-card"
+    assert {field["name"] for field in by_id["Homepage"]["inline_editor"]["fields"]} >= {
+        "StartPage",
+        "URL",
+        "Locked",
+        "Additional",
+    }
+    assert by_id["FirefoxHome"]["inline_editor"]["kind"] == "object-card"
+    assert by_id["FirefoxSuggest"]["inline_editor"]["kind"] == "object-card"
+    assert by_id["SearchEngines"]["inline_editor"]["kind"] == "object-card"
+    assert by_id["NewTabPage"]["inline_editor"]["kind"] == "boolean-select"
     assert {field["name"] for field in by_id["DNSOverHTTPS"]["inline_editor"]["fields"]} >= {
         "Enabled",
         "ProviderURL",

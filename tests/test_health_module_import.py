@@ -27,7 +27,7 @@ def test_health_module_import_and_handlers():
 
     for name in dir(health):
         obj = getattr(health, name)
-        if inspect.isfunction(obj) or asyncio.iscoroutinefunction(obj):
+        if inspect.isfunction(obj) or inspect.iscoroutinefunction(obj):
             try:
                 result = obj()  # type: ignore[misc]
             except TypeError:

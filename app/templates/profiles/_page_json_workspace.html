@@ -1,0 +1,66 @@
+<div class="app-layout">
+    <main class="workspace-column space-y-4">
+        <div class="support-hidden">
+            <input
+                id="profile-owner"
+                type="text"
+                placeholder="{{ tr('profiles.owner_placeholder') }}"
+                data-i18n-placeholder="profiles.owner_placeholder" />
+            <textarea
+                id="profile-description"
+                placeholder="{{ tr('profiles.description_placeholder') }}"
+                data-i18n-placeholder="profiles.description_placeholder"></textarea>
+        </div>
+
+        <section id="editor-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+            <div class="editor-header mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <div class="section-kicker mb-2" data-i18n="profiles.editor_title_section">
+                        {{ tr("profiles.editor_title_section") }}
+                    </div>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.editor_section_hint">
+                        {{ tr("profiles.editor_section_hint") }}
+                    </p>
+                </div>
+                <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+                    {% if return_url %}
+                    <a
+                        id="advanced-return-link"
+                        href="{{ return_url }}"
+                        class="button-base ghost-button">
+                        {{ tr("profiles.advanced_context_return") }}
+                    </a>
+                    {% endif %}
+                    <a
+                        id="download-firefox-policies"
+                        href="#"
+                        target="_blank"
+                        class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-i18n="profiles.download_firefox_policies_json">
+                        {{ tr("profiles.download_firefox_policies_json") }}
+                    </a>
+                </div>
+            </div>
+
+            <div
+                id="editor"
+                class="editor-frame h-[56vh] min-h-[440px] w-full overflow-hidden rounded-[28px] border border-slate-200 shadow-inner">
+            </div>
+
+            <div class="mt-4">
+                <div
+                    id="status"
+                    aria-live="polite"
+                    class="status-banner status-banner--info rounded-2xl border px-4 py-3 text-sm">
+                    {{ tr("profiles.workspace_ready", "Workspace ready.") }}
+                </div>
+            </div>
+        </section>
+
+        <div class="support-hidden" aria-live="polite">
+            <div id="overview-status">{{ tr("profiles.signal_saved") }}</div>
+            <div id="overview-mode">JSON</div>
+            <input id="mode" type="hidden" value="json" />
+        </div>
+    </main>
+</div>
