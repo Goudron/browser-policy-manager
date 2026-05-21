@@ -168,14 +168,14 @@ def test_schema_to_json_schema_emits_raw_json_schema_bundle():
     )
 
     schema = module.schema_to_json_schema(
-        channel="release-150",
+        channel="release-151",
         version="149.0",
         source="test-fixture",
         policies=[policy],
     )
 
     assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
-    assert schema["x-bpm-channel"] == "release-150"
+    assert schema["x-bpm-channel"] == "release-151"
     assert schema["x-bpm-version"] == "149.0"
     assert schema["x-bpm-source"] == "test-fixture"
     assert schema["properties"]["DisableTelemetry"]["type"] == "boolean"
@@ -472,6 +472,34 @@ def test_build_schema_policy_applies_property_table_hints_for_dynamic_extension_
     ]
     assert entry_schema["properties"]["default_area"]["enum"] == ["navbar", "menupanel"]
     assert entry_schema["properties"]["private_browsing"]["type"] == "boolean"
+    assert entry_schema["properties"]["update_url"]["type"] == "string"
+
+
+def test_add_missing_linux_example_entries_adds_new_release_only_policies():
+    module = _load_module()
+
+    entries = [
+        module.UpstreamPolicyEntry(
+            name="DisableTelemetry",
+            policy_key="DisableTelemetry",
+            description="Disable telemetry",
+            compatibility="Compatibility: Firefox 60",
+            section_text="",
+            policies_json_snippet='{"policies":{"DisableTelemetry":true}}',
+        )
+    ]
+
+    augmented = module.add_missing_linux_example_entries(
+        entries,
+        {
+            "DisableTelemetry": True,
+            "XSLTEnabled": True,
+        },
+    )
+
+    by_key = {entry.policy_key: entry for entry in augmented}
+    assert set(by_key) == {"DisableTelemetry", "XSLTEnabled"}
+    assert by_key["XSLTEnabled"].compatibility == "Compatibility: Firefox 151.0"
 
 
 def test_build_schema_policy_applies_numeric_bounds_from_property_descriptions():

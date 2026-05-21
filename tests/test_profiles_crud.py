@@ -9,7 +9,7 @@ async def test_create_list_get_update_delete(client):
         json={
             "name": "Default",
             "description": "Base profile",
-            "schema_version": "esr-140.10",
+            "schema_version": "esr-140.11",
             "flags": {"DisableTelemetry": True},
         },
     )

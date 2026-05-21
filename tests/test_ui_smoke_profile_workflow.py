@@ -492,7 +492,7 @@ def _make_payload() -> dict:
     return {
         "name": f"UI-{unique}",
         "description": "UI smoke lifecycle profile",
-        "schema_version": "esr-140.10",
+        "schema_version": "esr-140.11",
         "owner": "ops@example.org",
         "flags": {
             "DisableTelemetry": True,
@@ -620,7 +620,7 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
         "name": f"ESR AI Empty State-{uuid.uuid4().hex[:8]}",
         "description": "ESR AI empty-state regression",
         "owner": "desktop@example.org",
-        "schema_version": "esr-140.10",
+        "schema_version": "esr-140.11",
         "flags": {
             "DisableTelemetry": True,
         },
@@ -648,7 +648,7 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
         root / "app" / "static" / "profiles_bootstrap_core.js"
     ).read_text(encoding="utf-8")
 
-    assert 'schemaVersion: "esr-140.10"' in shared_source
+    assert 'schemaVersion: "esr-140.11"' in shared_source
     assert "function getActiveWizardSchemaVersion()" in shared_source
     assert 'return documentRef.getElementById("profile-type")?.value' in shared_source
     assert "|| wizardSchemaEl?.value" in shared_source
@@ -682,7 +682,7 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
         "name": f"Release AI Controls-{uuid.uuid4().hex[:8]}",
         "description": "Release AI controls regression",
         "owner": "desktop@example.org",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
             "AIControls": {
@@ -710,7 +710,7 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
     assert 'data-settings-target="policy:VisualSearchEnabled"' in edit_page.text
 
     validate_response = client.post(
-        "/api/validate/release-150",
+        "/api/validate/release-151",
         json={"document": payload["flags"]},
     )
     assert validate_response.status_code == 200, validate_response.text
@@ -765,9 +765,9 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
 
     payload = {
         "name": f"Release Guided AI VPN-{uuid.uuid4().hex[:8]}",
-        "description": "Firefox 150 guided AI and VPN regression",
+        "description": "Firefox 151 guided AI and VPN regression",
         "owner": "desktop@example.org",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
             "IPProtectionAvailable": False,
@@ -790,7 +790,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     }
 
     validate_response = client.post(
-        "/api/validate/release-150",
+        "/api/validate/release-151",
         json={"document": payload["flags"]},
     )
     assert validate_response.status_code == 200, validate_response.text
@@ -799,7 +799,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     create_response = client.post("/api/profiles", json=payload)
     assert create_response.status_code == 201, create_response.text
     created = create_response.json()
-    assert created["schema_version"] == "release-150"
+    assert created["schema_version"] == "release-151"
 
     edit_page = client.get(f"/profiles/{created['id']}/edit")
     assert edit_page.status_code == 200, edit_page.text
@@ -827,15 +827,25 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
 
     assert 'id="wizard-privacy-vpn-section-status"' in privacy_template
     assert 'id="wizard-ip-protection-available-card"' in privacy_template
+    assert 'id="wizard-local-network-access-card"' in privacy_template
     assert 'data-settings-target="policy:IPProtectionAvailable"' in privacy_template
+    assert 'data-settings-target="policy:LocalNetworkAccess"' in privacy_template
     assert "ipProtectionManaged: typeof parsed?.IPProtectionAvailable === \"boolean\"" in review_source
     assert "ipProtectionAvailable: parsed?.IPProtectionAvailable === true" in review_source
     assert 'findSettingsTarget("policy:AIControls")' in review_source
     assert '[data-settings-target="policy:IPProtectionAvailable"]' in runtime_source
     assert '[data-settings-target="policy:AIControls"]' in runtime_source
+    assert 'wizardLocalNetworkAccessCardEl' in (
+        root / "app" / "static" / "profiles_schema_shell_sections.js"
+    ).read_text(encoding="utf-8")
     assert '"IPProtectionAvailable",' in workspace_source
+    assert '"LocalNetworkAccess",' in workspace_source
+    assert '"XSLTEnabled",' in workspace_source
     assert 'if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_five";' in workspace_source
     assert '"IPProtectionAvailable",' in flow_source
+    assert '"LocalNetworkAccess",' in flow_source
+    assert '"XSLTEnabled",' in flow_source
+    assert 'const siteDataManagedKeys = ["Permissions", "Cookies", "LocalNetworkAccess"];' in flow_source
     assert '"AIControls",' in flow_source
 
     update_flags = {
@@ -1124,7 +1134,7 @@ def test_create_corporate_cis_l2_browser_regression_can_download_policies_json()
     assert "buildCreatePayload(form, parsedFlags, compliancePayload)" in workspace_source
     assert "setLinkHref(wizardExportFirefoxPoliciesEl, firefoxPoliciesHref);" in workspace_source
 
-    schema_version = "release-150"
+    schema_version = "release-151"
     catalog = get_wizard_starter_catalog()
     merged = catalog["compliance_merged_presets"]["basic_corporate"]["cis_l2"][
         schema_version
@@ -1191,7 +1201,7 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
         "name": f"Library Editor Browser-{uuid.uuid4().hex[:8]}",
         "description": "Created before opening from the library",
         "owner": "desktop@example.org",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
@@ -1284,7 +1294,7 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
         "name": f"Visual JSON Browser-{uuid.uuid4().hex[:8]}",
         "description": "Shared visual and JSON route regression",
         "owner": "platform@example.org",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
@@ -1393,7 +1403,7 @@ def test_stale_save_conflict_browser_regression_does_not_overwrite_profile():
         "name": f"Stale Save Browser-{uuid.uuid4().hex[:8]}",
         "description": "Initial shared tab state",
         "owner": "secops@example.org",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
@@ -1510,7 +1520,7 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
         "name": original_name,
         "description": "Initial shared tab state",
         "owner": "secops@example.org",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {

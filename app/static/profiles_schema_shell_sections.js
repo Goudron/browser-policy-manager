@@ -50,6 +50,7 @@
             wizardHandlersCardEl,
             wizardPermissionsCardEl,
             wizardCookiesCardEl,
+            wizardLocalNetworkAccessCardEl,
             wizardInstallAddonsPermissionCardEl,
             wizardExtensionSettingsCardEl,
         } = elements;
@@ -714,6 +715,7 @@
                 { el: wizardHandlersCardEl, policyId: "Handlers", step: 4 },
                 { el: wizardPermissionsCardEl, policyId: "Permissions", step: 3 },
                 { el: wizardCookiesCardEl, policyId: "Cookies", step: 3 },
+                { el: wizardLocalNetworkAccessCardEl, policyId: "LocalNetworkAccess", step: 3 },
                 { el: wizardInstallAddonsPermissionCardEl, policyId: "InstallAddonsPermission", step: 4 },
                 { el: wizardExtensionSettingsCardEl, policyId: "ExtensionSettings", step: 4 },
             ].forEach(({ el, policyId, step }) => {

@@ -12,7 +12,7 @@ def test_create_profile_invalid_policies_returns_422():
     """
     payload = {
         "name": "Invalid profile",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {
             # HttpAllowlist currently accepts arbitrary strings, so we use an
             # invalid item type that still reaches schema validation.

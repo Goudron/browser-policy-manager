@@ -636,7 +636,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_upkeep_governance_title"] == "Browser upkeep workflow"
     assert locale_json["profiles.wizard_home_surfaces_workflow_title"] == "Home and startup workflow"
     assert locale_json["profiles.wizard_language_governance_title"] == "Language governance workflow"
-    assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 150 AI policy controls"
+    assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 151 AI policy controls"
     assert locale_json["profiles.wizard_general_policy_section_state_download_prompt_on"] == (
         "Ask where to save downloads"
     )
@@ -1724,7 +1724,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_language_governance_title"] == (
         "Сценарий управления языком"
     )
-    assert locale_json["profiles.wizard_ai_controls_title"] == "Политики ИИ Firefox 150"
+    assert locale_json["profiles.wizard_ai_controls_title"] == "Политики ИИ Firefox 151"
     assert locale_json["profiles.wizard_search_surfaces_workflow_title"] == (
         "Сценарий поискового опыта"
     )
@@ -2510,7 +2510,7 @@ def test_existing_profile_routes_embed_initial_profile_payload():
         "/api/profiles",
         json=build_profile_payload(
             name="Initial Profile Embed Contract",
-            schema_version="release-150",
+            schema_version="release-151",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -2521,7 +2521,7 @@ def test_existing_profile_routes_embed_initial_profile_payload():
     assert response.status_code == 200
     assert '<script id="profiles-initial-profile" type="application/json">' in response.text
     assert '"name": "Initial Profile Embed Contract"' in response.text
-    assert '"schema_version": "release-150"' in response.text
+    assert '"schema_version": "release-151"' in response.text
     assert '"DisableTelemetry": true' in response.text
 
     soup = BeautifulSoup(response.text, "html.parser")
@@ -3273,7 +3273,7 @@ def test_deleted_profile_routes_require_include_deleted_and_preserve_archived_ch
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Route Profile", schema_version="release-150"),
+        json=build_profile_payload(name="Archived Route Profile", schema_version="release-151"),
     )
     profile_id = create_response.json()["id"]
     delete_response = client.delete(f"/api/profiles/{profile_id}")
@@ -3318,7 +3318,7 @@ def test_guided_wizard_ai_step_stays_separate_from_users_addons_sites_step():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-150"),
+        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-151"),
     )
     profile_id = create_response.json()["id"]
 
@@ -3348,7 +3348,7 @@ def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subse
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-150"),
+        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-151"),
     )
     profile_id = create_response.json()["id"]
 
@@ -3427,6 +3427,15 @@ def test_profiles_page_uses_single_year_footer_for_2025(monkeypatch):
 
     monkeypatch.setattr(reloaded, "datetime", FrozenDateTime)
     monkeypatch.setattr(reloaded.templates, "TemplateResponse", fake_template_response)
+    monkeypatch.setattr(
+        reloaded,
+        "normalize_legacy_profile_schema_versions",
+        lambda session: _noop_async(),
+    )
+
+    class FakeSession:
+        async def commit(self):
+            return None
 
     request = Request(
         {
@@ -3438,7 +3447,7 @@ def test_profiles_page_uses_single_year_footer_for_2025(monkeypatch):
         }
     )
 
-    response = asyncio.run(reloaded.profiles_page(request))
+    response = asyncio.run(reloaded.profiles_page(request, FakeSession()))
 
     assert response.status_code == 200
     assert captured["name"] == "profiles_library.html"
@@ -3454,6 +3463,53 @@ def test_profiles_page_uses_single_year_footer_for_2025(monkeypatch):
     assert "wizard_manual_policy_controls" in captured["context"]
     assert "wizard_starter_catalog" in captured["context"]
     assert "wizard_schema_shell_catalog" in captured["context"]
+
+
+async def _noop_async():
+    return None
+
+
+def test_profiles_library_route_normalizes_schema_versions_before_render(monkeypatch):
+    import app.web.profiles as web_profiles
+
+    captured: dict[str, object] = {}
+    events: list[str] = []
+
+    class FakeSession:
+        async def commit(self):
+            events.append("commit")
+
+    async def fake_normalize(session):
+        captured["session"] = session
+        events.append("normalize")
+
+    def fake_template_response(request, name, context):
+        captured["request"] = request
+        captured["name"] = name
+        captured["context"] = context
+        events.append("render")
+        return HTMLResponse("ok")
+
+    monkeypatch.setattr(web_profiles, "normalize_legacy_profile_schema_versions", fake_normalize)
+    monkeypatch.setattr(web_profiles.templates, "TemplateResponse", fake_template_response)
+
+    request = Request(
+        {
+            "type": "http",
+            "method": "GET",
+            "path": "/profiles",
+            "headers": [],
+            "query_string": b"",
+        }
+    )
+    session = FakeSession()
+
+    response = asyncio.run(web_profiles.profiles_page(request, session))
+
+    assert response.status_code == 200
+    assert captured["session"] is session
+    assert captured["name"] == "profiles_library.html"
+    assert events == ["normalize", "commit", "render"]
 
 
 def test_profile_editor_routes_use_editor_template(monkeypatch):
@@ -3475,7 +3531,7 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="Template Split Profile",
-            schema_version="release-150",
+            schema_version="release-151",
             flags={"DisableTelemetry": True},
         )
 
@@ -3504,11 +3560,11 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
     assert captured["name"] == "profiles_editor.html"
     assert captured["context"]["profiles_route_mode"] == "edit"
     assert captured["context"]["editing_profile_id"] == 7
-    assert captured["context"]["editing_profile_schema_version"] == "release-150"
+    assert captured["context"]["editing_profile_schema_version"] == "release-151"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 7,
         "name": "Template Split Profile",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {"DisableTelemetry": True},
     }
 
@@ -3532,7 +3588,7 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="Settings Split Profile",
-            schema_version="esr-140.10",
+            schema_version="esr-140.11",
             flags={"DisableTelemetry": True},
         )
 
@@ -3564,11 +3620,11 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
     )
     assert captured["context"]["profiles_route_mode"] == "settings"
     assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["editing_profile_schema_version"] == "esr-140.10"
+    assert captured["context"]["editing_profile_schema_version"] == "esr-140.11"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 8,
         "name": "Settings Split Profile",
-        "schema_version": "esr-140.10",
+        "schema_version": "esr-140.11",
         "flags": {"DisableTelemetry": True},
     }
     assert captured["context"]["return_url"] == "/profiles/8/edit"
@@ -3600,7 +3656,7 @@ def test_profile_json_route_uses_json_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="JSON Split Profile",
-            schema_version="release-150",
+            schema_version="release-151",
             flags={"DisableTelemetry": True},
         )
 
@@ -3632,11 +3688,11 @@ def test_profile_json_route_uses_json_template(monkeypatch):
     )
     assert captured["context"]["profiles_route_mode"] == "json"
     assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["editing_profile_schema_version"] == "release-150"
+    assert captured["context"]["editing_profile_schema_version"] == "release-151"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 8,
         "name": "JSON Split Profile",
-        "schema_version": "release-150",
+        "schema_version": "release-151",
         "flags": {"DisableTelemetry": True},
     }
     assert captured["context"]["return_url"] == "/profiles/8/edit"
@@ -3729,7 +3785,7 @@ def test_archived_profile_handoff_routes_preserve_include_deleted_return_context
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-150"),
+        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-151"),
     )
     profile_id = create_response.json()["id"]
     assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
@@ -3759,7 +3815,7 @@ def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-150"),
+        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-151"),
     )
     profile_id = create_response.json()["id"]
     assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
@@ -3810,7 +3866,7 @@ def test_active_profile_semantic_focus_routes_preopen_expected_settings_shell():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-150"),
+        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-151"),
     )
     profile_id = create_response.json()["id"]
 
@@ -3875,23 +3931,28 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     )
     assert web_profiles._resolve_settings_shell_focus_step(
         "policy:DisableTelemetry",
-        "release-150",
+        "release-151",
+        shell_catalog,
+    ) == 5
+    assert web_profiles._resolve_settings_shell_focus_step(
+        "policy:LocalNetworkAccess",
+        "release-151",
         shell_catalog,
     ) == 5
     assert web_profiles._resolve_settings_shell_focus_step(
         "deprecated:LegacyPolicy",
-        "release-150",
+        "release-151",
         shell_catalog,
     ) == 8
     assert web_profiles._resolve_settings_shell_focus_step(
         "shell-policy:8:DisableProfileRefresh",
-        "release-150",
+        "release-151",
         shell_catalog,
     ) == 8
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "shell-policy:not-a-step:DisableTelemetry",
-            "release-150",
+            "release-151",
             shell_catalog,
         )
         is None
@@ -3899,7 +3960,7 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "shell-policy:8",
-            "release-150",
+            "release-151",
             shell_catalog,
         )
         is None
@@ -3907,7 +3968,7 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:   ",
-            "release-150",
+            "release-151",
             shell_catalog,
         )
         is None
@@ -3915,7 +3976,7 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:DefinitelyNotInTheCatalog",
-            "release-150",
+            "release-151",
             shell_catalog,
         )
         is None
@@ -3923,10 +3984,10 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-150",
+            "release-151",
             {
                 "channels": {
-                    "release-150": {
+                    "release-151": {
                         "steps": {
                             "not-a-step": {
                                 "recommended": [{"id": "MatchedPolicy"}],
@@ -3943,7 +4004,7 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-150",
+            "release-151",
             {"channels": []},
         )
         is None
@@ -3951,26 +4012,26 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-150",
-            {"channels": {"release-150": []}},
+            "release-151",
+            {"channels": {"release-151": []}},
         )
         is None
     )
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-150",
-            {"channels": {"release-150": {"steps": []}}},
+            "release-151",
+            {"channels": {"release-151": {"steps": []}}},
         )
         is None
     )
     assert (
         web_profiles._resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-150",
+            "release-151",
             {
                 "channels": {
-                    "release-150": {
+                    "release-151": {
                         "steps": {
                             "5": ["not-a-dict"],
                         }

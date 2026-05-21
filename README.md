@@ -6,7 +6,7 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.7.6`<br>
+**Version:** `0.7.7`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
@@ -33,7 +33,7 @@ creates a profile ID.
 - Version-aware validation against bundled Firefox policy schemas.
 - Guided editor for common administrator and security-team scenarios.
 - Dedicated AI and smart browser features step for schema versions that support those policies.
-- Schema-aware ESR/Release behavior, including ESR 140.10 handling for unsupported AI settings.
+- Schema-aware ESR/Release behavior, including ESR 140.11 handling for unsupported AI settings.
 - All settings catalog for full visual inspection and policy editing outside the guided flow.
 - JSON editor backed by the locally bundled Monaco editor.
 - CIS Firefox hardening assets, starter presets, generated layers, and merge logic.
@@ -43,14 +43,14 @@ creates a profile ID.
 
 | Channel | Schema key | Status |
 |---|---|---|
-| Firefox ESR 140.10 | `esr-140.10` | Active |
-| Firefox Release 150 | `release-150` | Active |
+| Firefox ESR 140.11 | `esr-140.11` | Active |
+| Firefox Release 151 | `release-151` | Active |
 
 Bundled schema files live in `app/schemas/policies/`.
 
 The selected schema controls validation, imported-profile normalization, available UI controls,
-and schema-specific behavior. For example, Firefox ESR 140.10 does not expose supported AI policy
-fields in the UI, while Firefox Release 150 exposes the current AI controls.
+and schema-specific behavior. For example, Firefox ESR 140.11 does not expose supported AI policy
+fields in the UI, while Firefox Release 151 exposes the current AI controls.
 
 ## Web Routes
 
@@ -118,7 +118,7 @@ JSON import example:
 {
   "name": "Workstation baseline",
   "description": "Imported Firefox deployment policy",
-  "schema_version": "esr-140.10",
+  "schema_version": "esr-140.11",
   "document": {
     "policies": {
       "DisableTelemetry": true,
@@ -165,7 +165,7 @@ sections, starter presets, compliance-aware baselines, and focused controls for 
 administration tasks. It intentionally stays smaller than a full schema mirror.
 
 The AI and smart browser features step remains a dedicated guided step. It shows current Firefox
-Release AI controls where the selected schema supports them. For ESR 140.10, the step clearly
+Release AI controls where the selected schema supports them. For ESR 140.11, the step clearly
 states that the schema does not support AI settings and does not render unsupported controls.
 
 ### All Settings

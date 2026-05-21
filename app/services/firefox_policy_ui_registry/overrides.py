@@ -202,6 +202,13 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "complexity": "basic",
         "tags": ["privacy", "network", "vpn"],
     },
+    "LocalNetworkAccess": {
+        "section": "privacy_security",
+        "subsection": "network_privacy",
+        "complexity": "advanced",
+        "recommended": True,
+        "tags": ["privacy", "network", "local-network"],
+    },
     "OfferToSaveLogins": {
         "section": "privacy_security",
         "subsection": "passwords",
@@ -308,6 +315,12 @@ POLICY_UI_OVERRIDES: dict[str, dict[str, Any]] = {
         "subsection": "authentication",
         "complexity": "advanced",
         "tags": ["authentication", "sso"],
+    },
+    "XSLTEnabled": {
+        "section": "privacy_security",
+        "subsection": "security",
+        "complexity": "advanced",
+        "tags": ["security", "web-compatibility"],
     },
     "Authentication": {
         "section": "network_access",

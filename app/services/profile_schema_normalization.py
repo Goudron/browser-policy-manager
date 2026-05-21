@@ -16,11 +16,15 @@ from app.models.profile import Profile
 logger = logging.getLogger(__name__)
 
 LEGACY_ESR_140_9 = f"esr-140.{9}"
+LEGACY_ESR_140_10 = f"esr-140.{10}"
 LEGACY_RELEASE_149 = f"release-{149}"
+LEGACY_RELEASE_150 = f"release-{150}"
 
 LEGACY_SCHEMA_VERSION_MAP: dict[str, str] = {
-    LEGACY_ESR_140_9: "esr-140.10",
-    LEGACY_RELEASE_149: "release-150",
+    LEGACY_ESR_140_9: "esr-140.11",
+    LEGACY_ESR_140_10: "esr-140.11",
+    LEGACY_RELEASE_149: "release-151",
+    LEGACY_RELEASE_150: "release-151",
 }
 
 

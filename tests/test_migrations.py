@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
 
-CURRENT_HEAD = "20260423_upgrade_profiles_to_firefox150"
+CURRENT_HEAD = "20260521_upgrade_profiles_to_firefox151"
 
 
 @pytest.mark.order(1)  # run early, but after environment setup
@@ -121,8 +121,8 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
             ).all()
         assert version == CURRENT_HEAD
         assert schema_versions == [
-            ("legacy-esr", "esr-140.10"),
-            ("legacy-release", "release-150"),
+            ("legacy-esr", "esr-140.11"),
+            ("legacy-release", "release-151"),
         ]
     finally:
         engine.dispose()

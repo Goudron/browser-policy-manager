@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.7.7
+
+### Added
+- Added bundled Firefox policy schemas for Firefox Release 151 and Firefox ESR 140.11.
+- Added profile schema migration and runtime library normalization so profiles stored on Firefox Release 149/150 or ESR 140.9/140.10 are upgraded to the current supported schema channels when the library opens.
+- Added UI coverage for new Firefox 151 policies, including `LocalNetworkAccess` in the guided privacy/site-data flow and `XSLTEnabled` in the Privacy/Security settings catalog.
+- Added schema-bump runbook steps for profile normalization, UI impact review, README version checks, and starter-preset review.
+
+### Changed
+- Moved the project from `0.7.6` to `0.7.7`.
+- Updated the supported schema documentation, product header copy, schema labels, examples, CI guards, and generated CIS Firefox layers to Firefox Release 151 / ESR 140.11.
+- Refreshed Mozilla policy conversion logic for the 7.11 policy template release, including handling for new Linux-example-only policy entries and `ExtensionSettings.update_url` metadata.
+- Reviewed starter presets against the new policy docs and kept their defaults unchanged where new policies could surprise intranet, local-device, or compatibility workflows.
+
+### Quality
+- Kept `mypy app`, `ruff check .`, and fast pytest with branch coverage green.
+- Confirmed non-live `app/` coverage remains at `100%`.
+
 ## 0.7.6
 
 ### Added

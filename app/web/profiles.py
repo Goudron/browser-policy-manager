@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.core.schema_channels import build_schema_channels_catalog
 from app.db import get_session
+from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
 from app.services.profile_service import ProfileService
 from app.web.firefox_all_settings_categories import get_all_settings_category_catalog
 from app.web.firefox_manual_policy_controls import get_manual_policy_controls_catalog
@@ -355,8 +356,13 @@ def _build_profile_route_path(
 
 
 @router.get("/profiles", response_class=HTMLResponse)
-async def profiles_page(request: Request) -> HTMLResponse:
+async def profiles_page(
+    request: Request,
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> HTMLResponse:
     """Render the profile library page."""
+    await normalize_legacy_profile_schema_versions(session)
+    await session.commit()
     return templates.TemplateResponse(
         request,
         "profiles_library.html",

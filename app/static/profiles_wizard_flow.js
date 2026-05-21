@@ -131,6 +131,8 @@
                 "Permissions",
                 "Cookies",
                 "IPProtectionAvailable",
+                "LocalNetworkAccess",
+                "XSLTEnabled",
             ],
             4: [
                 "DisableFirefoxAccounts",
@@ -229,7 +231,7 @@
                 },
             },
         };
-        const siteDataManagedKeys = ["Permissions", "Cookies"];
+        const siteDataManagedKeys = ["Permissions", "Cookies", "LocalNetworkAccess"];
         const siteDataPresets = {
             defaults: {},
             balanced: {
