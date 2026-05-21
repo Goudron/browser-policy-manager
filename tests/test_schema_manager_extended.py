@@ -15,10 +15,10 @@ from app.schemas.schema_manager import (
 
 
 def test_schema_version_refs_and_invalid_key():
-    assert SchemaVersion.from_key("firefox-esr14010") is SchemaVersion.ESR14010
-    assert SchemaVersion.from_key("firefox-release150") is SchemaVersion.RELEASE150
-    assert SchemaVersion.ESR14010.cache_subdir == "esr14010"
-    assert "main" in SchemaVersion.RELEASE150.refs
+    assert SchemaVersion.from_key("firefox-esr14011") is SchemaVersion.ESR14011
+    assert SchemaVersion.from_key("firefox-release151") is SchemaVersion.RELEASE151
+    assert SchemaVersion.ESR14011.cache_subdir == "esr14011"
+    assert "main" in SchemaVersion.RELEASE151.refs
 
     with pytest.raises(ValueError):
         SchemaVersion.from_key("beta999")
@@ -29,7 +29,7 @@ def test_load_raises_not_found_without_cache(tmp_path, monkeypatch):
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=lambda url, timeout: (503, b""))
 
     with pytest.raises(SchemaNotFoundError):
-        manager.load("esr14010")
+        manager.load("esr14011")
 
 
 def test_read_json_invalid_content_raises(tmp_path):
@@ -45,9 +45,9 @@ def test_update_cache_returns_schema_meta(tmp_path):
     content = json.dumps(payload).encode("utf-8")
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=lambda url, timeout: (200, content))
 
-    meta = manager.update_cache("release150")
+    meta = manager.update_cache("release151")
 
-    assert meta.version is SchemaVersion.RELEASE150
+    assert meta.version is SchemaVersion.RELEASE151
     assert meta.cache_path.exists()
     assert meta.source_url.endswith("policies-schema.json")
     assert meta.sha256
@@ -58,18 +58,18 @@ def test_download_and_cache_raises_download_error_when_all_candidates_fail(tmp_p
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=lambda url, timeout: (404, b""))
 
     with pytest.raises(SchemaDownloadError):
-        manager.update_cache("esr14010")
+        manager.update_cache("esr14011")
 
 
 def test_load_force_refresh_falls_back_to_existing_cache_on_download_error(tmp_path, monkeypatch):
     monkeypatch.setattr("app.schemas.schema_manager.DEFAULT_RETRY", 0)
     cache_dir = tmp_path / "cache"
     manager = SchemaManager(cache_dir=str(cache_dir), fetcher=lambda url, timeout: (200, b'{"title":"cached"}'))
-    assert manager.load("release150")["title"] == "cached"
+    assert manager.load("release151")["title"] == "cached"
 
     failing = SchemaManager(cache_dir=str(cache_dir), fetcher=lambda url, timeout: (503, b""))
 
-    assert failing.load("release150", force_refresh=True)["title"] == "cached"
+    assert failing.load("release151", force_refresh=True)["title"] == "cached"
 
 
 def test_download_and_cache_continues_after_fetch_exception(tmp_path, monkeypatch):
@@ -85,7 +85,7 @@ def test_download_and_cache_continues_after_fetch_exception(tmp_path, monkeypatc
 
     manager = SchemaManager(cache_dir=str(tmp_path / "cache"), fetcher=_fetcher)
 
-    meta = manager.update_cache("esr14010")
+    meta = manager.update_cache("esr14011")
 
     assert meta.cache_path.exists()
     assert json.loads(meta.cache_path.read_text(encoding="utf-8"))["title"] == "Recovered"
@@ -116,10 +116,10 @@ def test_normalize_schema_for_internal_use_adds_meta(monkeypatch):
     monkeypatch.setattr("app.schemas.schema_manager.time.time", lambda: 1234567890)
     original = {"title": "Policies"}
 
-    normalized = normalize_schema_for_internal_use(original, SchemaVersion.ESR14010)
+    normalized = normalize_schema_for_internal_use(original, SchemaVersion.ESR14011)
 
     assert normalized["title"] == "Policies"
-    assert normalized["$meta"]["bpm_source_version"] == "esr14010"
+    assert normalized["$meta"]["bpm_source_version"] == "esr14011"
     assert normalized["$meta"]["bpm_generated_at"] == 1234567890
 
 

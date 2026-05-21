@@ -110,7 +110,7 @@ def test_parse_firefox_policies_document_rejects_internal_bpm_profile_shape():
         parse_firefox_policies_document(
             {
                 "name": "Internal BPM profile",
-                "schema_version": "release-150",
+                "schema_version": "release-151",
                 "flags": {"DisableTelemetry": True},
             }
         )
@@ -156,7 +156,7 @@ def test_parse_firefox_policies_document_rejects_extra_top_level_keys():
 def test_validate_firefox_policies_document_returns_flags_for_valid_document():
     flags = validate_firefox_policies_document(
         {"policies": {"DisableTelemetry": True}},
-        "release-150",
+        "release-151",
     )
 
     assert flags == {"DisableTelemetry": True}
@@ -172,7 +172,7 @@ def test_validate_firefox_policies_document_prefixes_schema_issue_paths():
                     }
                 }
             },
-            "release-150",
+            "release-151",
         )
 
     assert excinfo.value.issues
@@ -185,7 +185,7 @@ def test_validate_firefox_policies_document_keeps_structural_errors_separate():
     with pytest.raises(FirefoxPoliciesImportError) as excinfo:
         validate_firefox_policies_document(
             {"flags": {"DisableTelemetry": True}},
-            "release-150",
+            "release-151",
         )
 
     assert FirefoxPoliciesImportIssue(

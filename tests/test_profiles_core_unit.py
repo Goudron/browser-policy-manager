@@ -29,7 +29,7 @@ def _profile_read(**overrides):
         "id": 1,
         "name": "Profile",
         "description": "Base",
-        "schema_version": "esr-140.10",
+        "schema_version": "esr-140.11",
         "flags": {"DisableTelemetry": True},
         "revision": 1,
         "owner": "qa",
@@ -53,7 +53,7 @@ def test_validate_profile_policies_or_422_returns_early_without_flags(monkeypatc
 
     profiles_module._validate_profile_policies_or_422(
         name="Empty",
-        schema_version="esr-140.10",
+        schema_version="esr-140.11",
         flags={},
     )
 
@@ -77,7 +77,7 @@ def test_validate_profile_policies_or_422_returns_422_with_issues(monkeypatch):
     with pytest.raises(HTTPException) as excinfo:
         profiles_module._validate_profile_policies_or_422(
             name="Broken",
-            schema_version="esr-140.10",
+            schema_version="esr-140.11",
             flags={"DisableTelemetry": "bad"},
         )
 
@@ -95,7 +95,7 @@ def test_validate_profile_policies_or_422_returns_400_on_unexpected_error(monkey
     with pytest.raises(HTTPException) as excinfo:
         profiles_module._validate_profile_policies_or_422(
             name="Broken",
-            schema_version="esr-140.10",
+            schema_version="esr-140.11",
             flags={"DisableTelemetry": True},
         )
 
@@ -106,7 +106,7 @@ def test_validate_profile_policies_or_422_returns_400_on_unexpected_error(monkey
 @pytest.mark.anyio
 async def test_create_profile_core_skips_validation_when_disabled(monkeypatch):
     session = _FakeSession()
-    payload = ProfileCreate(name="Created", description="ok", schema_version="esr-140.10", flags={})
+    payload = ProfileCreate(name="Created", description="ok", schema_version="esr-140.11", flags={})
     created = _profile_read(name="Created", description="ok")
     called = {"validated": False}
 
@@ -136,7 +136,7 @@ async def test_create_profile_core_skips_validation_when_disabled(monkeypatch):
 @pytest.mark.anyio
 async def test_create_profile_core_rolls_back_on_integrity_error(monkeypatch):
     session = _FakeSession()
-    payload = ProfileCreate(name="Dup", description=None, schema_version="esr-140.10", flags={})
+    payload = ProfileCreate(name="Dup", description=None, schema_version="esr-140.11", flags={})
 
     async def _raise_integrity(_session, _payload):
         raise IntegrityError("insert", {"name": "Dup"}, Exception("duplicate"))

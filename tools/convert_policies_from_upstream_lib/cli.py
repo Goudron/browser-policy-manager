@@ -13,6 +13,7 @@ from .common import (
     SchemaPolicyDefinition,
 )
 from .conversion import (
+    add_missing_linux_example_entries,
     build_schema_policy,
     convert_upstream_html_to_policies,
     filter_policies_for_target_version,
@@ -57,29 +58,29 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--release-channel",
-        default="release-150",
-        help="Channel string stored in the Release schema (default: release-150).",
+        default="release-151",
+        help="Channel string stored in the Release schema (default: release-151).",
     )
     parser.add_argument(
         "--release-version",
-        default="150.0",
-        help="Version string stored in the Release schema (default: 150.0).",
+        default="151.0",
+        help="Version string stored in the Release schema (default: 151.0).",
     )
     parser.add_argument(
         "--esr-channel",
-        default="esr-140.10",
-        help="Channel string stored in the ESR schema (default: esr-140.10).",
+        default="esr-140.11",
+        help="Channel string stored in the ESR schema (default: esr-140.11).",
     )
     parser.add_argument(
         "--esr-version",
-        default="140.10",
-        help="Version string stored in the ESR schema (default: 140.10).",
+        default="140.11",
+        help="Version string stored in the ESR schema (default: 140.11).",
     )
     parser.add_argument(
         "--source-tag",
-        default="mozilla-policy-templates-v7.10",
+        default="mozilla-policy-templates-v7.11",
         help=(
-            "Source tag identifier stored in the schemas (default: mozilla-policy-templates-v7.10). "
+            "Source tag identifier stored in the schemas (default: mozilla-policy-templates-v7.11). "
             "Useful for tracking which upstream snapshot was used."
         ),
     )
@@ -89,8 +90,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    upstream_entries = convert_upstream_html_to_policies(args.input)
     linux_policy_examples = load_linux_policy_examples(args.linux_policies_input)
+    upstream_entries = add_missing_linux_example_entries(
+        convert_upstream_html_to_policies(args.input),
+        linux_policy_examples,
+    )
 
     schema_policies: list[SchemaPolicyDefinition] = [
         build_schema_policy(entry, linux_policy_examples=linux_policy_examples)

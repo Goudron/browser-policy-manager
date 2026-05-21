@@ -52,8 +52,8 @@ def test_cis_coverage_report_counts_current_dataset() -> None:
     }
     assert benchmark["by_level"] == {"L1": 51, "L2": 4}
     assert benchmark["schema_compatibility"] == {
-        "esr-140.10:valid": 53,
-        "release-150:valid": 53,
+        "esr-140.11:valid": 53,
+        "release-151:valid": 53,
     }
 
 
@@ -573,7 +573,7 @@ def test_cis_validation_and_coverage_formatters_include_errors_warnings_and_empt
                     "by_recommendation_status": {"mapped": 1},
                     "by_mapping_status": {"mapped": 1},
                     "by_level": {"L1": 1},
-                    "schema_compatibility": {"release-150:valid": 1},
+                    "schema_compatibility": {"release-151:valid": 1},
                 }
             ],
             "warnings": [],
@@ -626,7 +626,7 @@ def test_cis_coverage_report_counts_statuses(tmp_path: Path) -> None:
     assert benchmark["by_recommendation_status"] == {"manual": 1, "mapped": 1}
     assert benchmark["by_mapping_status"] == {"manual": 1, "mapped": 1}
     assert benchmark["by_level"] == {"L1": 1, "L2": 1}
-    assert benchmark["schema_compatibility"] == {"esr-140.10:valid": 1, "release-150:valid": 1}
+    assert benchmark["schema_compatibility"] == {"esr-140.11:valid": 1, "release-151:valid": 1}
 
 
 def _write_fixture(
@@ -711,8 +711,8 @@ def _mapping(
                 "path": ["DisableTelemetry"],
                 "value": True,
                 "schema_channels": {
-                    "esr-140.10": "valid",
-                    "release-150": "valid",
+                    "esr-140.11": "valid",
+                    "release-151": "valid",
                 },
             }
         ]

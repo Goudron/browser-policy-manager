@@ -907,6 +907,8 @@
                 "SanitizeOnShutdown",
                 "HttpsOnlyMode",
                 "IPProtectionAvailable",
+                "LocalNetworkAccess",
+                "XSLTEnabled",
             ].includes(policyKey)) return "step_three";
             if ([
                 "DisableFirefoxAccounts",

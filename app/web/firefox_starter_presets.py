@@ -379,7 +379,7 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
             "policy_values": {
                 "default": _resolve_policy_values_for_channel(
                     preset.get("policy_values", {}).get("default", {}),
-                    "release-150",
+                    "release-151",
                 ),
             },
             "homepage": deepcopy(preset.get("homepage", {})),

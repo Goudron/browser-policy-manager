@@ -368,6 +368,7 @@
                 wizardHandlersCardEl: byId("wizard-handlers-card"),
                 wizardPermissionsCardEl: byId("wizard-permissions-card"),
                 wizardCookiesCardEl: byId("wizard-cookies-card"),
+                wizardLocalNetworkAccessCardEl: byId("wizard-local-network-access-card"),
                 wizardInstallAddonsPermissionCardEl: byId("wizard-install-addons-permission-card"),
                 wizardExtensionSettingsCardEl: byId("wizard-extension-settings-card"),
             },

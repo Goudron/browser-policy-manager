@@ -75,6 +75,23 @@ def _apply_handlers_semantic_hints(node: dict[str, Any]) -> None:
     _walk_handler_scope(node)
 
 
+def _apply_extension_settings_semantic_hints(node: dict[str, Any]) -> None:
+    additional_properties = node.get("additional_properties_schema")
+    if not isinstance(additional_properties, dict):
+        return
+
+    properties = additional_properties.setdefault("properties", {})
+    if not isinstance(properties, dict):
+        return
+
+    properties.setdefault(
+        "update_url",
+        {
+            "type": "string",
+        },
+    )
+
+
 def _apply_semantic_hints(entry: UpstreamPolicyEntry, node: dict[str, Any]) -> None:
     if entry.name == "SearchEngines":
         _apply_search_engines_semantic_hints(node)
@@ -84,3 +101,5 @@ def _apply_semantic_hints(entry: UpstreamPolicyEntry, node: dict[str, Any]) -> N
         _apply_permissions_semantic_hints(node)
     elif entry.name == "Handlers":
         _apply_handlers_semantic_hints(node)
+    elif entry.name == "ExtensionSettings":
+        _apply_extension_settings_semantic_hints(node)

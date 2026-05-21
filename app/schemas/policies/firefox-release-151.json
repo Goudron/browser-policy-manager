@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Release 150 Policies 150.0",
+  "title": "Release 151 Policies 151.0",
   "type": "object",
   "additionalProperties": false,
-  "x-bpm-channel": "release-150",
-  "x-bpm-version": "150.0",
-  "x-bpm-source": "mozilla-policy-templates-v7.10",
+  "x-bpm-channel": "release-151",
+  "x-bpm-version": "151.0",
+  "x-bpm-source": "mozilla-policy-templates-v7.11",
   "properties": {
     "3rdparty": {
       "type": "object",
@@ -1139,6 +1139,9 @@
           },
           "private_browsing": {
             "type": "boolean"
+          },
+          "update_url": {
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2497,6 +2500,50 @@
       "x-bpm-id": "WindowsSSO",
       "x-bpm-description-key": "policy.WindowsSSO",
       "x-bpm-min-version": "91.0"
+    },
+    "LocalNetworkAccess": {
+      "type": "object",
+      "properties": {
+        "Enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "BlockTrackers": {
+          "type": "boolean",
+          "default": true
+        },
+        "EnablePrompting": {
+          "type": "boolean",
+          "default": true
+        },
+        "SkipDomains": {
+          "type": "array",
+          "default": [
+            "intranet.company.com",
+            "*.devices.local",
+            "admin-portal.enterprise.com",
+            "*.corp.internal"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "Locked": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "x-bpm-id": "LocalNetworkAccess",
+      "x-bpm-description-key": "policy.LocalNetworkAccess",
+      "x-bpm-min-version": "151.0"
+    },
+    "XSLTEnabled": {
+      "type": "boolean",
+      "default": true,
+      "x-bpm-id": "XSLTEnabled",
+      "x-bpm-description-key": "policy.XSLTEnabled",
+      "x-bpm-min-version": "151.0"
     }
   }
 }

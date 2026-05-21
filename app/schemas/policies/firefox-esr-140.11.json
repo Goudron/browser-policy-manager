@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Esr 140.10 Policies 140.10",
+  "title": "Esr 140.11 Policies 140.11",
   "type": "object",
   "additionalProperties": false,
-  "x-bpm-channel": "esr-140.10",
-  "x-bpm-version": "140.10",
-  "x-bpm-source": "mozilla-policy-templates-v7.10",
+  "x-bpm-channel": "esr-140.11",
+  "x-bpm-version": "140.11",
+  "x-bpm-source": "mozilla-policy-templates-v7.11",
   "properties": {
     "3rdparty": {
       "type": "object",
@@ -994,6 +994,9 @@
           },
           "private_browsing": {
             "type": "boolean"
+          },
+          "update_url": {
+            "type": "string"
           }
         },
         "additionalProperties": false

@@ -580,8 +580,8 @@ class UiAuditRunner:
         driver.execute_script(
             """
             const profileTypeEl = document.getElementById("profile-type");
-            if (profileTypeEl && Array.from(profileTypeEl.options).some((option) => option.value === "release-150")) {
-                profileTypeEl.value = "release-150";
+            if (profileTypeEl && Array.from(profileTypeEl.options).some((option) => option.value === "release-151")) {
+                profileTypeEl.value = "release-151";
                 profileTypeEl.dispatchEvent(new Event("change", { bubbles: true }));
             }
             """,
@@ -1085,7 +1085,7 @@ class UiAuditRunner:
             "name": ui_state.get("profileName") or self.profile_name,
             "owner": ui_state.get("profileOwner") or self.profile_owner,
             "description": ui_state.get("profileDescription") or self.profile_description,
-            "schema_version": ui_state.get("profileType") or "release-150",
+            "schema_version": ui_state.get("profileType") or "release-151",
             "flags": flags_payload,
         }
         response = requests.post(

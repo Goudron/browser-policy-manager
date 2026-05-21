@@ -63,7 +63,7 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
     Validate a policy document for the given profile.
 
     Request example:
-        POST /api/validate/release-150
+        POST /api/validate/release-151
         {
           "document": {
             "policies": {
@@ -74,12 +74,12 @@ async def validate_profile(profile: str, payload: ValidationRequest) -> dict[str
         }
 
     Successful response:
-        { "ok": true, "profile": "release-150" }
+        { "ok": true, "profile": "release-151" }
 
     Validation error response:
         {
           "ok": false,
-          "profile": "release-150",
+          "profile": "release-151",
           "detail": "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]",
           "error":  "HttpAllowlist: Value 'http://evil.example' is not allowed; expected one of [...]"
         }

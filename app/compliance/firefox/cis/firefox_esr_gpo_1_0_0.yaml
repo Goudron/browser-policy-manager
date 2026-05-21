@@ -185,7 +185,7 @@ recommendations:
     value: 0
   mapping_status: deprecated_or_removed
   notes:
-    mapping_note: FlashPlugin policy is not present in supported Firefox ESR 140.10 or Release 150 schemas.
+    mapping_note: FlashPlugin policy is not present in supported Firefox ESR 140.11 or Release 151 schemas.
 - id: 1.1.15.3.1
   title: Ensure 'Block new requests asking to access location' is set to 'Enabled'
   level: 1

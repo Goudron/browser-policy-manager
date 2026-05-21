@@ -11,5 +11,5 @@ def test_readme_documents_firefox_policies_contract_and_schema_choice():
     assert "`GET /api/export/profiles/{id}/firefox/policies.json`" in readme
     assert "Choose the Firefox schema channel before import." in readme
     assert "The selected `schema_version` controls" in readme
-    assert '"schema_version": "esr-140.10"' in readme
+    assert '"schema_version": "esr-140.11"' in readme
     assert '"policies": {' in readme

@@ -508,7 +508,7 @@ def test_json_editor_browser_regression_saves_validates_and_exports_full_documen
         name="JSON Editor Browser Profile",
         description="JSON editor browser regression",
         owner="json-editor@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "DisablePrivateBrowsing": True,
@@ -595,7 +595,7 @@ def test_theme_toggle_browser_regression_keeps_surface_cards_consistent_across_l
         name="Theme Surface Contract Profile",
         description="Created by the theme browser regression path",
         owner="theme@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
     )
 
     with run_test_app_server() as base_url:
@@ -803,7 +803,7 @@ def test_all_settings_manager_browser_regression_persists_policy_preference_and_
         name="All Settings Manager Browser Profile",
         description="All settings browser regression",
         owner="all-settings@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={"DisableTelemetry": True},
     )
 
@@ -974,7 +974,7 @@ def test_compact_toolbar_browser_regression_stays_inside_narrow_viewport():
         name="Narrow Header Contract Profile",
         description="Created by the narrow header browser regression path",
         owner="narrow-header@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
     )
 
     with run_test_app_server() as base_url:
@@ -1265,7 +1265,7 @@ def test_library_layout_browser_regression_keeps_actions_visible_in_ru_with_long
         name="Очень длинный корпоративный профиль для проверки ширины библиотеки и кнопки открытия",
         description="Long-name library layout regression",
         owner="layout@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
     )
 
     with run_test_app_server() as base_url:
@@ -1356,7 +1356,7 @@ def test_library_mobile_cards_browser_regression_show_key_metadata_without_overf
         name="Mobile library profile with a readable working title",
         description="Mobile card note",
         owner="mobile-library@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
     )
 
     with run_test_app_server() as base_url:
@@ -1399,7 +1399,7 @@ def test_library_mobile_cards_browser_regression_show_key_metadata_without_overf
             assert "Mobile library profile with a readable working title" in body_text
             assert "mobile-library@example.org" in body_text
             assert "Mobile card note" in body_text
-            assert "Release 150" in body_text
+            assert "Release 151" in body_text
             assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1
             assert metrics["headDisplay"] == "none"
             assert metrics["rowAreas"] == '"primary" "context" "facts" "actions"'
@@ -1569,10 +1569,10 @@ def test_library_import_browser_regression_shows_visible_feedback_and_creates_pr
                 lambda current_driver: current_driver.find_element(
                     by.By.ID,
                     "import-firefox-policies-status",
-                ).text.strip() == "Imported new profile workstation-baseline. Schema: ESR 140.10. Validation: Passed."
+                ).text.strip() == "Imported new profile workstation-baseline. Schema: ESR 140.11. Validation: Passed."
             )
             assert driver.find_element(by.By.ID, "status").text.strip() == (
-                "Imported new profile workstation-baseline. Schema: ESR 140.10. Validation: Passed."
+                "Imported new profile workstation-baseline. Schema: ESR 140.11. Validation: Passed."
             )
             wait.until(
                 lambda current_driver: current_driver.find_element(
@@ -1710,7 +1710,7 @@ def test_primary_modes_browser_regression_stay_russian_and_fit_viewport_in_ru():
         name="Профиль для полного русского QA-прохода",
         description="Russian primary modes QA",
         owner="ru-qa@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "Homepage": {
@@ -1818,7 +1818,7 @@ def test_responsive_ui_acceptance_covers_ru_library_actions_and_ai_schema_split(
         name="RU Responsive Release Profile",
         description="Release profile for responsive acceptance",
         owner="responsive-release@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "AIControls": {
@@ -1834,7 +1834,7 @@ def test_responsive_ui_acceptance_covers_ru_library_actions_and_ai_schema_split(
         name="RU Responsive ESR Profile",
         description="ESR profile for responsive acceptance",
         owner="responsive-esr@example.org",
-        schema_version="esr-140.10",
+        schema_version="esr-140.11",
         flags={"DisableTelemetry": True},
     )
 
@@ -1920,7 +1920,7 @@ def test_responsive_ui_acceptance_covers_ru_library_actions_and_ai_schema_split(
             _wait_for_selector_visibility(wait, driver, "#wizard-ai-esr-empty-state", False)
             _wait_for_selector_visibility(wait, driver, "#wizard-ai-policy-controls", True)
             release_ai_text = driver.find_element(by.By.ID, "wizard-step-5").text
-            assert "Политики ИИ Firefox 150" in release_ai_text
+            assert "Политики ИИ Firefox 151" in release_ai_text
             assert "Настройки генеративного ИИ" in release_ai_text
             assert "GenerativeAI" not in release_ai_text
             assert "AIControls" not in release_ai_text
@@ -1941,7 +1941,7 @@ def test_responsive_ui_acceptance_covers_ru_library_actions_and_ai_schema_split(
             _wait_for_selector_visibility(wait, driver, "#wizard-ai-release-content", False)
             esr_ai_text = driver.find_element(by.By.ID, "wizard-step-5").text
             assert "Эта схема не поддерживает настройки ИИ" in esr_ai_text
-            assert "Политики ИИ Firefox 150" not in esr_ai_text
+            assert "Политики ИИ Firefox 151" not in esr_ai_text
             assert "Настройки генеративного ИИ" not in esr_ai_text
         finally:
             _close_chromium_driver(driver)
@@ -2025,8 +2025,8 @@ def test_library_compare_browser_regression_reports_expected_counts_and_guided_a
             assert "browser.search.suggest.enabled" in guided_areas_text
             assert "DisableTelemetry" in guided_areas_text
 
-            assert "Schema: ESR 140.10." in driver.find_element(by.By.ID, "compare-current-copy").text
-            assert "Schema: ESR 140.10." in driver.find_element(by.By.ID, "compare-other-copy").text
+            assert "Schema: ESR 140.11." in driver.find_element(by.By.ID, "compare-current-copy").text
+            assert "Schema: ESR 140.11." in driver.find_element(by.By.ID, "compare-other-copy").text
 
         finally:
             _close_chromium_driver(driver)
@@ -2111,8 +2111,8 @@ def test_release_150_profile_browser_regression_loads_cleanly_in_guided_and_json
 
     payload = build_profile_payload(
         name="Corporate 150 Browser Regression",
-        description="Release 150 profile should load cleanly in guided and json modes",
-        schema_version="release-150",
+        description="Release 151 profile should load cleanly in guided and json modes",
+        schema_version="release-151",
         flags={
             "AppAutoUpdate": False,
             "DisableAppUpdate": True,
@@ -2566,7 +2566,7 @@ def test_archived_profile_chrome_browser_regression_keeps_deleted_and_restored_s
         name="Archived Chrome Browser Profile",
         description="Archived editor chrome browser regression",
         owner="archived@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
     )
 
     with run_test_app_server() as base_url:
@@ -2706,7 +2706,7 @@ def test_archived_profile_semantic_focus_browser_regression_preserves_route_awar
         name="Archived Semantic Focus Browser Profile",
         description="Archived semantic focus browser regression",
         owner="archived-focus@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "Homepage": {
@@ -2843,7 +2843,7 @@ def test_archived_profile_semantic_focus_browser_regression_reveals_expected_sur
         name="Archived Semantic Surface Browser Profile",
         description="Archived semantic surface browser regression",
         owner="archived-surface@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "Homepage": {
@@ -2962,7 +2962,7 @@ def test_active_profile_semantic_focus_browser_regression_reveals_expected_surfa
         name="Active Semantic Surface Browser Profile",
         description="Active semantic surface browser regression",
         owner="active-surface@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "Homepage": {
@@ -3112,7 +3112,7 @@ def test_export_review_jumps_browser_regression_open_expected_surfaces_for_activ
         name="Review Jump Browser Profile",
         description="Review jump browser regression",
         owner="review-jumps@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "DisableProfileRefresh": True,
@@ -3315,7 +3315,7 @@ def test_export_review_unknown_jump_browser_regression_opens_json_for_active_and
         name="Unknown Jump Browser Profile",
         description="Unknown jump browser regression",
         owner="unknown-jumps@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "GenerativeAI": {"Enabled": False},
@@ -3454,7 +3454,7 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
         name="Guided Workflow Browser Profile",
         description="Chromium guided workflow regression",
         owner="workflow@example.org",
-        schema_version="release-150",
+        schema_version="release-151",
         flags={
             "DisableTelemetry": True,
             "Homepage": {

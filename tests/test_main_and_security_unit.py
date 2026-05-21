@@ -111,7 +111,7 @@ def test_create_app_uses_profiles_csp_for_nested_profiles_routes():
         "/api/profiles",
         json={
             "name": "CSP nested route profile",
-            "schema_version": "release-150",
+            "schema_version": "release-151",
             "flags": {"DisableTelemetry": True},
         },
     )

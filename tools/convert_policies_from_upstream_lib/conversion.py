@@ -258,6 +258,42 @@ def convert_upstream_html_to_policies(html_path) -> list[UpstreamPolicyEntry]:
     return _merge_variant_entries(result)
 
 
+def add_missing_linux_example_entries(
+    entries: list[UpstreamPolicyEntry],
+    linux_policy_examples: dict[str, Any],
+) -> list[UpstreamPolicyEntry]:
+    """Add policies present in the official example file but absent from legacy docs HTML."""
+    existing_keys = {entry.policy_key for entry in entries}
+    augmented = list(entries)
+
+    for policy_key in linux_policy_examples:
+        if policy_key in existing_keys:
+            continue
+        augmented.append(
+            UpstreamPolicyEntry(
+                name=policy_key,
+                policy_key=policy_key,
+                description=f"Firefox policy {policy_key}.",
+                compatibility=f"Compatibility: Firefox {_min_version_for_policy_key(policy_key) or '1.0'}",
+                section_text=None,
+                policies_json_snippet=None,
+                property_descriptions={},
+            )
+        )
+
+    return _merge_variant_entries(augmented)
+
+
+def _min_version_for_policy_key(policy_key: str) -> str | None:
+    release_only_v151 = {
+        "LocalNetworkAccess",
+        "XSLTEnabled",
+    }
+    if policy_key in release_only_v151:
+        return "151.0"
+    return None
+
+
 def _merge_variant_entries(entries: list[UpstreamPolicyEntry]) -> list[UpstreamPolicyEntry]:
     grouped: dict[str, list[UpstreamPolicyEntry]] = {}
     for entry in entries:

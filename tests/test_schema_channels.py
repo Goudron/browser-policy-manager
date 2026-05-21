@@ -12,16 +12,16 @@ from app.core.schema_channels import (
 
 
 def test_schema_channels_constants_are_consistent():
-    assert SUPPORTED_SCHEMA_CHANNELS == ("esr-140.10", "release-150")
-    assert SUPPORTED_SCHEMA_CHANNEL_SET == {"esr-140.10", "release-150"}
-    assert DEFAULT_SCHEMA_CHANNEL == "esr-140.10"
-    assert DEFAULT_RELEASE_SCHEMA_CHANNEL == "release-150"
-    assert SCHEMA_LABELS["esr-140.10"] == "ESR 140.10"
-    assert SCHEMA_LABELS["release-150"] == "Release 150"
-    assert SCHEMA_FILENAMES["esr-140.10"] == "firefox-esr-140.10.json"
-    assert SCHEMA_FILENAMES["release-150"] == "firefox-release-150.json"
-    assert RAW_SCHEMA_DIRS["esr-140.10"] == "esr14010"
-    assert RAW_SCHEMA_DIRS["release-150"] == "release150"
+    assert SUPPORTED_SCHEMA_CHANNELS == ("esr-140.11", "release-151")
+    assert SUPPORTED_SCHEMA_CHANNEL_SET == {"esr-140.11", "release-151"}
+    assert DEFAULT_SCHEMA_CHANNEL == "esr-140.11"
+    assert DEFAULT_RELEASE_SCHEMA_CHANNEL == "release-151"
+    assert SCHEMA_LABELS["esr-140.11"] == "ESR 140.11"
+    assert SCHEMA_LABELS["release-151"] == "Release 151"
+    assert SCHEMA_FILENAMES["esr-140.11"] == "firefox-esr-140.11.json"
+    assert SCHEMA_FILENAMES["release-151"] == "firefox-release-151.json"
+    assert RAW_SCHEMA_DIRS["esr-140.11"] == "esr14011"
+    assert RAW_SCHEMA_DIRS["release-151"] == "release151"
 
 
 def test_schema_channels_catalog_matches_constants():
@@ -30,10 +30,10 @@ def test_schema_channels_catalog_matches_constants():
     assert catalog["supported_channels"] == list(SUPPORTED_SCHEMA_CHANNELS)
     assert catalog["default_channel"] == DEFAULT_SCHEMA_CHANNEL
     assert catalog["default_release_channel"] == DEFAULT_RELEASE_SCHEMA_CHANNEL
-    assert catalog["default_label"] == "ESR 140.10"
+    assert catalog["default_label"] == "ESR 140.11"
     assert catalog["labels"] == SCHEMA_LABELS
     assert catalog["options"] == [
-        {"value": "esr-140.10", "label": "ESR 140.10"},
-        {"value": "release-150", "label": "Release 150"},
+        {"value": "esr-140.11", "label": "ESR 140.11"},
+        {"value": "release-151", "label": "Release 151"},
     ]
-    assert get_schema_label("release-150") == "Release 150"
+    assert get_schema_label("release-151") == "Release 151"

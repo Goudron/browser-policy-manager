@@ -12,7 +12,7 @@ def test_manual_policy_controls_catalog_exposes_quick_policy_keys_and_groups():
 
 
 def test_manual_policy_controls_catalog_uses_schema_enum_for_https_only_mode():
-    catalog = get_manual_policy_controls_catalog("release-150")
+    catalog = get_manual_policy_controls_catalog("release-151")
     lockdown_items = catalog["groups_by_id"]["privacy_lockdown"]["items"]
     https_only = next(item for item in lockdown_items if item["policy_id"] == "HttpsOnlyMode")
 

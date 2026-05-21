@@ -98,7 +98,7 @@ def build_profile_payload(
     *,
     name_prefix: str = "Profile",
     description: str = "Test profile",
-    schema_version: str = "esr-140.10",
+    schema_version: str = "esr-140.11",
     flags: dict[str, Any] | None = None,
     owner: str | None = None,
     name: str | None = None,
