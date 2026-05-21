@@ -42,3 +42,9 @@ def test_profiles_crud_and_export():
             "DisablePrivateBrowsing": True,
         }
     }
+
+    # Download mode sends the same deployment document as an attachment.
+    r_download = client.get(f"/api/export/profiles/{pid}/firefox/policies.json?download=1")
+    assert r_download.status_code == 200
+    assert r_download.headers["content-disposition"] == f'attachment; filename="profile-{pid}-policies.json"'
+    assert r_download.json() == r.json()

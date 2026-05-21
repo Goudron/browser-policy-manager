@@ -1544,7 +1544,7 @@
                     return;
                 }
                 if (presetKey === "custom_engines") {
-                    revealSearchField("#wizard-step-4-managed-engines");
+                    revealSearchField("#wizard-step-2-managed-engines");
                     return;
                 }
                 if (presetKey === "restricted") {

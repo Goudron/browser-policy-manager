@@ -1,6 +1,26 @@
 {% from "profiles/_wizard_macros.html" import render_manual_policy_controls with context %}
 
 <section class="wizard-panel" id="wizard-step-2">
+    <nav class="wizard-step-map" aria-labelledby="wizard-browser-defaults-map-title">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" id="wizard-browser-defaults-map-title" data-i18n="profiles.wizard_browser_defaults_map_title">{{ tr("profiles.wizard_browser_defaults_map_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_browser_defaults_map_body">
+                {{ tr("profiles.wizard_browser_defaults_map_body") }}
+            </p>
+        </div>
+        <div class="wizard-step-map-grid">
+            <a href="#wizard-step-2-basics" class="wizard-step-map-link" data-i18n="profiles.wizard_step_two_index_basics">{{ tr("profiles.wizard_step_two_index_basics") }}</a>
+            <a href="#wizard-step-2-proxy" class="wizard-step-map-link" data-i18n="profiles.wizard_step_two_index_proxy">{{ tr("profiles.wizard_step_two_index_proxy") }}</a>
+            <a href="#wizard-step-2-trust" class="wizard-step-map-link" data-i18n="profiles.wizard_step_two_index_trust">{{ tr("profiles.wizard_step_two_index_trust") }}</a>
+            <a href="#wizard-home-surface-startup" class="wizard-step-map-link" data-i18n="profiles.wizard_homepage_title">{{ tr("profiles.wizard_homepage_title") }}</a>
+            <a href="#wizard-home-surface-new-tab" class="wizard-step-map-link" data-i18n="profiles.wizard_newtab_title">{{ tr("profiles.wizard_newtab_title") }}</a>
+            <a href="#wizard-home-surface-firefox-home" class="wizard-step-map-link" data-i18n="profiles.wizard_firefox_home_title">{{ tr("profiles.wizard_firefox_home_title") }}</a>
+            <a href="#wizard-step-2-default-search" class="wizard-step-map-link" data-i18n="profiles.wizard_search_title">{{ tr("profiles.wizard_search_title") }}</a>
+            <a href="#wizard-step-2-managed-engines" class="wizard-step-map-link" data-i18n="profiles.wizard_step_four_index_engines">{{ tr("profiles.wizard_step_four_index_engines") }}</a>
+            <a href="#wizard-step-2-suggestions" class="wizard-step-map-link" data-i18n="profiles.wizard_firefox_suggest_title">{{ tr("profiles.wizard_firefox_suggest_title") }}</a>
+            <a href="#wizard-step-2-review" class="wizard-step-map-link" data-i18n="profiles.wizard_browser_defaults_review_title">{{ tr("profiles.wizard_browser_defaults_review_title") }}</a>
+        </div>
+    </nav>
     <div class="wizard-section-group" id="wizard-step-2-basics">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_general_policy_title">{{ tr("profiles.wizard_general_policy_title") }}</h3>
@@ -203,34 +223,86 @@
             <div id="wizard-certificates-card" class="wizard-field-full" data-settings-target="policy:Certificates"></div>
         </div>
     </div>
+    {% include "profiles/_page_wizard_step_home.html" %}
+    {% include "profiles/_page_wizard_step_search.html" %}
     <div class="wizard-section-group" id="wizard-step-2-review">
         <div class="wizard-section-heading">
-            <h3 class="wizard-section-title" data-i18n="profiles.wizard_network_review_title">{{ tr("profiles.wizard_network_review_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_network_review_body">
-                {{ tr("profiles.wizard_network_review_body") }}
+            <h3 class="wizard-section-title" data-i18n="profiles.wizard_browser_defaults_review_title">{{ tr("profiles.wizard_browser_defaults_review_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_browser_defaults_review_body">
+                {{ tr("profiles.wizard_browser_defaults_review_body") }}
             </p>
         </div>
-        <div class="wizard-summary-list wizard-summary-list--cards">
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_authentication">{{ tr("profiles.wizard_network_review_authentication") }}</span>
-                <span class="wizard-summary-value" id="wizard-network-summary-authentication">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-network-summary-authentication-jump" data-network-review-jump="authentication" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
-            </div>
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_certificates">{{ tr("profiles.wizard_network_review_certificates") }}</span>
-                <span class="wizard-summary-value" id="wizard-network-summary-certificates">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-network-summary-certificates-jump" data-network-review-jump="certificates" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
-            </div>
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_dns">{{ tr("profiles.wizard_network_review_dns") }}</span>
-                <span class="wizard-summary-value" id="wizard-network-summary-dns">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-network-summary-dns-jump" data-network-review-jump="dns" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
-            </div>
-            <div class="wizard-summary-row wizard-summary-row--decision">
-                <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_windows_sso">{{ tr("profiles.wizard_network_review_windows_sso") }}</span>
-                <span class="wizard-summary-value" id="wizard-network-summary-windows-sso">0</span>
-                <button type="button" class="button-base ghost-button" id="wizard-network-summary-windows-sso-jump" data-network-review-jump="windows_sso" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
-            </div>
+        <div class="wizard-browser-defaults-review-grid">
+            <section class="wizard-local-review-group">
+                <h4 class="wizard-local-review-title" data-i18n="profiles.wizard_network_review_title">{{ tr("profiles.wizard_network_review_title") }}</h4>
+                <div class="wizard-summary-list wizard-summary-list--cards">
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_authentication">{{ tr("profiles.wizard_network_review_authentication") }}</span>
+                        <span class="wizard-summary-value" id="wizard-network-summary-authentication">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-network-summary-authentication-jump" data-network-review-jump="authentication" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_certificates">{{ tr("profiles.wizard_network_review_certificates") }}</span>
+                        <span class="wizard-summary-value" id="wizard-network-summary-certificates">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-network-summary-certificates-jump" data-network-review-jump="certificates" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_dns">{{ tr("profiles.wizard_network_review_dns") }}</span>
+                        <span class="wizard-summary-value" id="wizard-network-summary-dns">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-network-summary-dns-jump" data-network-review-jump="dns" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_network_review_windows_sso">{{ tr("profiles.wizard_network_review_windows_sso") }}</span>
+                        <span class="wizard-summary-value" id="wizard-network-summary-windows-sso">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-network-summary-windows-sso-jump" data-network-review-jump="windows_sso" data-i18n="profiles.wizard_network_review_open">{{ tr("profiles.wizard_network_review_open") }}</button>
+                    </div>
+                </div>
+            </section>
+            <section class="wizard-local-review-group">
+                <h4 class="wizard-local-review-title" data-i18n="profiles.wizard_home_review_title">{{ tr("profiles.wizard_home_review_title") }}</h4>
+                <div class="wizard-summary-list wizard-summary-list--cards">
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_homepage">{{ tr("profiles.wizard_home_review_homepage") }}</span>
+                        <span class="wizard-summary-value" id="wizard-home-summary-homepage">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-home-summary-homepage-jump" data-home-review-jump="homepage" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_overrides">{{ tr("profiles.wizard_home_review_overrides") }}</span>
+                        <span class="wizard-summary-value" id="wizard-home-summary-overrides">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-home-summary-overrides-jump" data-home-review-jump="overrides" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_home_review_firefox_home">{{ tr("profiles.wizard_home_review_firefox_home") }}</span>
+                        <span class="wizard-summary-value" id="wizard-home-summary-firefox-home">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-home-summary-firefox-home-jump" data-home-review-jump="firefox_home" data-i18n="profiles.wizard_home_review_open">{{ tr("profiles.wizard_home_review_open") }}</button>
+                    </div>
+                </div>
+            </section>
+            <section class="wizard-local-review-group">
+                <h4 class="wizard-local-review-title" data-i18n="profiles.wizard_search_review_title">{{ tr("profiles.wizard_search_review_title") }}</h4>
+                <div class="wizard-summary-list wizard-summary-list--cards">
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_defaults">{{ tr("profiles.wizard_search_review_defaults") }}</span>
+                        <span class="wizard-summary-value" id="wizard-search-summary-defaults">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-search-summary-defaults-jump" data-search-review-jump="defaults" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_hidden">{{ tr("profiles.wizard_search_review_hidden") }}</span>
+                        <span class="wizard-summary-value" id="wizard-search-summary-hidden">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-search-summary-hidden-jump" data-search-review-jump="hidden" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_custom">{{ tr("profiles.wizard_search_review_custom") }}</span>
+                        <span class="wizard-summary-value" id="wizard-search-summary-custom">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-search-summary-custom-jump" data-search-review-jump="custom" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+                    </div>
+                    <div class="wizard-summary-row wizard-summary-row--decision">
+                        <span class="wizard-summary-key" data-i18n="profiles.wizard_search_review_suggest">{{ tr("profiles.wizard_search_review_suggest") }}</span>
+                        <span class="wizard-summary-value" id="wizard-search-summary-suggest">0</span>
+                        <button type="button" class="button-base ghost-button" id="wizard-search-summary-suggest-jump" data-search-review-jump="suggest" data-i18n="profiles.wizard_search_review_open">{{ tr("profiles.wizard_search_review_open") }}</button>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 </section>

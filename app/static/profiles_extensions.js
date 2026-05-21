@@ -54,17 +54,16 @@
             wizardLanguageSectionStatusEl,
             wizardLanguageAiHandoffEl,
             wizardAiEsrcEmptyStateEl,
+            wizardAiReleaseContentEl,
             wizardAiPostureBarEl,
             wizardAiPostureBodyEl,
             wizardAiPosturePresetsEl,
             wizardAiPolicyControlsEl,
-            wizardAiProvidersHandoffEl,
             wizardAiSectionStatusEl,
             wizardAiControlsCardEl,
             wizardGenerativeAiCardEl,
             wizardVisualSearchEnabledCardEl,
             wizardAiGovernanceCopyEl,
-            wizardAiProvidersOpenAdvancedEl,
             wizardWebsiteSectionStatusEl,
             wizardWebsiteFineTuningToggleEl,
             wizardWebsiteFineTuningPanelEl,
@@ -83,7 +82,6 @@
         const languagePresetButtons = Array.from(documentRef.querySelectorAll("[data-language-preset]"));
         const websiteAccessPostureButtons = Array.from(documentRef.querySelectorAll("[data-website-access-posture]"));
         const websiteAccessHandlerButtons = Array.from(documentRef.querySelectorAll("[data-website-access-handlers]"));
-        const aiProvidersSectionStatusEl = document.getElementById("wizard-ai-providers-section-status");
 
         function setText(el, value) {
             if (el) {
@@ -114,8 +112,10 @@
                 : 0;
         }
 
-        function isReleaseAiWizardAvailable() {
-            return getActiveWizardSchemaVersion() === "release-150";
+        function isAiWizardAvailable() {
+            return hasUsableAiControlsCard()
+                || hasUsableGenerativeAiCard()
+                || hasUsableAiPolicyCard(wizardVisualSearchEnabledCardEl);
         }
 
         function setPanelExpanded(panelEl, toggleEl, expanded, showLabel, hideLabel) {
@@ -584,11 +584,11 @@
         }
 
         function hasUsableAiControlsCard() {
-            return !isAiPolicyUnsupported(wizardAiControlsCardEl);
+            return hasUsableAiPolicyCard(wizardAiControlsCardEl);
         }
 
         function hasUsableGenerativeAiCard() {
-            return !isAiPolicyUnsupported(wizardGenerativeAiCardEl);
+            return hasUsableAiPolicyCard(wizardGenerativeAiCardEl);
         }
 
         function buildAiControlsValue(presetKey) {
@@ -627,7 +627,7 @@
             return null;
         }
 
-        function buildLegacyGenerativeAiValue(presetKey) {
+        function buildGenerativeAiValue(presetKey) {
             if (presetKey === "disable") {
                 return {
                     Enabled: false,
@@ -887,7 +887,7 @@
             }
 
             const accountTarget = documentRef.querySelector('[data-policy-key="DisableFirefoxAccounts"]')
-                || documentRef.querySelector("#wizard-step-6 [data-policy-key]")
+                || documentRef.querySelector("#wizard-step-4 [data-policy-key]")
                 || wizardSyncSectionStatusEl;
             if (!accountTarget) return;
             accountTarget.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -927,8 +927,8 @@
 
             const wantsManaged = kind === "folders" || kind === "mixed" || kind === "nested";
             const focusTarget = wantsManaged
-                ? "shell-policy:6:ManagedBookmarks"
-                : "shell-policy:6:Bookmarks";
+                ? "shell-policy:4:ManagedBookmarks"
+                : "shell-policy:4:Bookmarks";
 
             try {
                 const nextUrl = new URL(advancedHref, window.location.origin);
@@ -1106,11 +1106,14 @@
 
         function renderStepSevenAiExperience(parsed) {
             const summary = getStepSixSummaryData(parsed && typeof parsed === "object" ? parsed : {});
-            const releaseAiAvailable = isReleaseAiWizardAvailable();
+            const releaseAiAvailable = isAiWizardAvailable();
             const aiFragments = [];
 
             if (wizardAiEsrcEmptyStateEl) {
                 wizardAiEsrcEmptyStateEl.hidden = releaseAiAvailable;
+            }
+            if (wizardAiReleaseContentEl) {
+                wizardAiReleaseContentEl.hidden = !releaseAiAvailable;
             }
             if (wizardAiPostureBarEl) {
                 wizardAiPostureBarEl.hidden = !releaseAiAvailable;
@@ -1124,13 +1127,8 @@
             if (wizardAiPolicyControlsEl) {
                 wizardAiPolicyControlsEl.hidden = !releaseAiAvailable;
             }
-            if (wizardAiProvidersHandoffEl) {
-                wizardAiProvidersHandoffEl.hidden = !releaseAiAvailable;
-            }
-
             if (!releaseAiAvailable) {
                 setText(wizardAiSectionStatusEl, t("profiles.wizard_ai_esr_state"));
-                setText(aiProvidersSectionStatusEl, t("profiles.wizard_ai_esr_state"));
                 if (wizardAiGovernanceCopyEl) {
                     wizardAiGovernanceCopyEl.textContent = t("profiles.wizard_ai_esr_body");
                 }
@@ -1168,10 +1166,6 @@
                 resolveAiPosturePreset(summary),
                 "aiPosturePreset",
             );
-            setText(
-                aiProvidersSectionStatusEl,
-                t("profiles.wizard_ai_providers_state_empty"),
-            );
             if (wizardAiGovernanceCopyEl) {
                 const hasManagedAiPosture = summary.aiControlsManaged > 0 || summary.generativeAiControls > 0 || summary.visualSearchManaged;
                 wizardAiGovernanceCopyEl.textContent = hasManagedAiPosture
@@ -1187,12 +1181,14 @@
             return cardEl?.dataset?.schemaPolicyKind === "unsupported";
         }
 
-        function applyAiPosturePreset(presetKey) {
-            if (presetKey === "providers") {
-                revealAiProvidersTarget("providers");
-                return;
-            }
+        function hasUsableAiPolicyCard(policyCardEl) {
+            const cardEl = policyCardEl?.matches?.("[data-schema-policy-card]")
+                ? policyCardEl
+                : policyCardEl?.querySelector("[data-schema-policy-card]");
+            return Boolean(cardEl) && cardEl.dataset.schemaPolicyKind !== "unsupported";
+        }
 
+        function applyAiPosturePreset(presetKey) {
             const editor = getEditor();
             if (!editor) return;
 
@@ -1220,7 +1216,7 @@
                         normalized.AIControls = buildAiControlsValue(presetKey);
                         delete normalized.GenerativeAI;
                     } else if (hasUsableGenerativeAiCard()) {
-                        normalized.GenerativeAI = buildLegacyGenerativeAiValue(presetKey);
+                        normalized.GenerativeAI = buildGenerativeAiValue(presetKey);
                     }
 
                     if (presetKey === "disable" || presetKey === "mixed") {
@@ -1249,30 +1245,12 @@
             if (kind === "availability" || kind === "disable") {
                 targetEl = wizardAiControlsCardEl
                     || wizardGenerativeAiCardEl;
-            } else if (kind === "providers") {
-                revealAiProvidersTarget("providers");
-                return;
             } else if (kind === "surfaces") {
                 targetEl = wizardVisualSearchEnabledCardEl;
             } else if (kind === "mixed") {
                 targetEl = wizardAiControlsCardEl
                     || wizardGenerativeAiCardEl
                     || wizardVisualSearchEnabledCardEl;
-            }
-            if (!targetEl) return;
-            targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
-            targetEl.classList.add("settings-target-highlight");
-            window.setTimeout(() => {
-                targetEl.classList.remove("settings-target-highlight");
-            }, 1800);
-            focusTargetForA11y(targetEl);
-        }
-
-        function revealAiProvidersTarget(kind) {
-            const targetEl = document.getElementById("wizard-ai-providers-section-status");
-            if (kind === "providers" || kind === "mixed") {
-                wizardAiProvidersOpenAdvancedEl?.click();
-                return;
             }
             if (!targetEl) return;
             targetEl.scrollIntoView({ behavior: "smooth", block: "center" });

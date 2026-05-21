@@ -1,95 +1,116 @@
 # Browser Policy Manager
 
-Browser Policy Manager is a FastAPI application for managing Firefox enterprise policy profiles.
-It combines a profile library, a guided editor, an advanced settings surface, and a raw JSON editor
-on top of one canonical profile model.
+Browser Policy Manager (BPM) is a FastAPI application for building, reviewing, validating,
+and exporting Firefox Enterprise policy profiles.
 
-The project is aimed at administrators and security teams who need to create, review, validate,
-compare, import, and export deployable Firefox Enterprise `policies.json` documents without being
-forced into raw JSON for every workflow.
+It is designed for system administrators and security teams who need a practical daily tool
+for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.7.5`  
-**License:** [MPL-2.0](LICENSE)  
+**Version:** `0.7.6`<br>
+**License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
-## What the project provides
+## Product Scope
 
-- A database-backed profile library with create, update, archive, restore, and hard-delete flows.
-- A guided editor for scenario-first profile authoring.
-- A searchable advanced settings surface for policy-level editing without living in raw JSON.
-- A dedicated JSON editor for direct `policies.json` work.
-- Version-aware validation against bundled Firefox policy schemas.
+BPM manages one canonical profile model and exposes it through four dedicated UI surfaces:
+
+| Surface | Purpose |
+|---|---|
+| Profile library | Manage saved profiles, lifecycle state, schema channel, validation status, duplication, export, and editor entry points. |
+| Guided editor | Build common Firefox policy profiles through a shorter task-first workflow. |
+| All settings | Search and edit the full visual catalog of supported schema-backed controls. |
+| JSON editor | Edit the complete Firefox Enterprise `policies.json` document directly. |
+
+The UI is route-based rather than a single hidden-panel workspace. Saved profiles can be opened
+in different modes in separate tabs. Unsaved drafts stay in the guided editor until the first save
+creates a profile ID.
+
+## Main Capabilities
+
+- Database-backed Firefox policy profile library.
+- Create, edit, duplicate, archive, restore, hard-delete, import, and export workflows.
 - Firefox Enterprise `policies.json` import and export at the product boundary.
-- CIS Firefox hardening layers and starter presets for common profile baselines.
-- English and Russian UI catalogs served directly by the app.
+- Version-aware validation against bundled Firefox policy schemas.
+- Guided editor for common administrator and security-team scenarios.
+- Dedicated AI and smart browser features step for schema versions that support those policies.
+- Schema-aware ESR/Release behavior, including ESR 140.10 handling for unsupported AI settings.
+- All settings catalog for full visual inspection and policy editing outside the guided flow.
+- JSON editor backed by the locally bundled Monaco editor.
+- CIS Firefox hardening assets, starter presets, generated layers, and merge logic.
+- English primary UI with Russian localization.
 
-## Current web routes
+## Supported Firefox Schemas
+
+| Channel | Schema key | Status |
+|---|---|---|
+| Firefox ESR 140.10 | `esr-140.10` | Active |
+| Firefox Release 150 | `release-150` | Active |
+
+Bundled schema files live in `app/schemas/policies/`.
+
+The selected schema controls validation, imported-profile normalization, available UI controls,
+and schema-specific behavior. For example, Firefox ESR 140.10 does not expose supported AI policy
+fields in the UI, while Firefox Release 150 exposes the current AI controls.
+
+## Web Routes
 
 | Route | Purpose |
 |---|---|
-| `GET /` | JSON root endpoint with app status and version |
-| `GET /profiles` | Profile library |
-| `GET /profiles/new` | Guided editor for a new unsaved draft |
-| `GET /profiles/{id}/edit` | Guided editor for an existing profile |
-| `GET /profiles/{id}/settings` | Advanced settings editor |
-| `GET /profiles/{id}/json` | Raw JSON editor |
-| `GET /profiles/{id}/advanced` | Compatibility redirect to `/profiles/{id}/json` |
-| `GET /i18n/{locale}.json` | Localization catalogs |
-| `GET /health` | Liveness probe |
-| `GET /health/ready` | Readiness probe |
+| `GET /` | JSON root endpoint with app status and version. |
+| `GET /profiles` | Profile library. |
+| `GET /profiles/new` | Guided editor for a new draft. |
+| `GET /profiles/{id}/edit` | Guided editor for an existing profile. |
+| `GET /profiles/{id}/settings` | All settings catalog for an existing profile. |
+| `GET /profiles/{id}/json` | JSON editor for an existing profile. |
+| `GET /profiles/{id}/advanced` | Compatibility redirect to `/profiles/{id}/json`. |
+| `GET /i18n/{locale}.json` | Localization catalog. |
+| `GET /health` | Liveness probe. |
+| `GET /health/ready` | Readiness probe. |
 
-The UI is split into four product modes:
-
-- `Library`
-- `Guided editor`
-- `Advanced settings`
-- `JSON editor`
-
-Cross-mode navigation is new-tab-first for saved profiles. Unsaved drafts stay on `/profiles/new`
-until the first save creates a real profile ID.
-
-## Current API surface
+## API Surface
 
 ### Profiles
 
 | Endpoint | Purpose |
 |---|---|
-| `GET /api/profiles` | List profiles with filtering, sorting, and pagination |
-| `GET /api/profiles/stats` | Get library counts |
-| `GET /api/profiles/{id}` | Fetch one profile |
-| `POST /api/profiles` | Create a profile |
-| `PATCH /api/profiles/{id}` | Update a profile |
-| `DELETE /api/profiles/{id}` | Archive a profile |
-| `POST /api/profiles/{id}/restore` | Restore an archived profile |
-| `DELETE /api/profiles/{id}/hard` | Permanently delete a profile |
-| `DELETE /api/profiles/reset` | Hard-delete the whole profile library |
+| `GET /api/profiles` | List profiles with filtering, sorting, and pagination. |
+| `GET /api/profiles/stats` | Get profile-library counts. |
+| `GET /api/profiles/{id}` | Fetch one profile. |
+| `POST /api/profiles` | Create a profile. |
+| `PATCH /api/profiles/{id}` | Update a profile. |
+| `DELETE /api/profiles/{id}` | Archive a profile. |
+| `POST /api/profiles/{id}/restore` | Restore an archived profile. |
+| `DELETE /api/profiles/{id}/hard` | Permanently delete a profile. |
+| `DELETE /api/profiles/reset` | Permanently clear the profile library. |
 
-### Firefox import, export, and validation
+### Firefox Import, Export, And Validation
 
 | Endpoint | Purpose |
 |---|---|
-| `POST /api/profiles/import/firefox/policies.json` | Import a Firefox Enterprise `policies.json` document into the library |
-| `GET /api/export/profiles/{id}/firefox/policies.json` | Export a profile as Firefox Enterprise `policies.json` |
-| `POST /api/validate/{profile}` | Validate a document against a supported schema channel |
+| `POST /api/profiles/import/firefox/policies.json` | Import a Firefox Enterprise `policies.json` document. |
+| `GET /api/export/profiles/{id}/firefox/policies.json` | Export a profile as Firefox Enterprise `policies.json`. |
+| `POST /api/validate/{profile}` | Validate a profile document against a supported schema channel. |
 
-## Firefox `policies.json` contract
+## Firefox `policies.json` Contract
 
 BPM imports and exports the Firefox Enterprise `policies.json` shape at product boundaries.
-Internally, profiles are stored in BPM's own normalized model, but deployment handoff is always
-through Firefox's public document format.
-
-Canonical endpoints:
-
-- import: `POST /api/profiles/import/firefox/policies.json`
-- export: `GET /api/export/profiles/{id}/firefox/policies.json`
+Internally, profiles are stored in BPM's normalized model so the library, guided editor,
+All settings, JSON editor, validation, and export flows can work on the same source of truth.
 
 Choose the Firefox schema channel before import. The selected `schema_version` controls how the
 document is validated and how the imported profile is normalized for editing.
 
-Currently supported schema channels:
+Import endpoint:
 
-- `esr-140.10`
-- `release-150`
+```text
+POST /api/profiles/import/firefox/policies.json
+```
+
+Export endpoint:
+
+```text
+GET /api/export/profiles/{id}/firefox/policies.json
+```
 
 JSON import example:
 
@@ -126,51 +147,74 @@ Export example:
 }
 ```
 
-For the migration and breaking-change notes around this contract, see
+For migration and breaking-change notes around this contract, see
 [`docs/firefox_policies_json_migration_notes_2026-04-14.md`](docs/firefox_policies_json_migration_notes_2026-04-14.md).
 
-## Supported Firefox schema versions
+## UI Modes
 
-| Channel | Status |
-|---|---|
-| `esr-140.10` | Active |
-| `release-150` | Active |
+### Profile Library
 
-Bundled schema files currently live under `app/schemas/policies/`.
+The library is the operational home for saved profiles. It supports profile search and filtering,
+schema and lifecycle visibility, validation state, duplication, import, export, archive/restore,
+and direct entry into the guided editor, All settings, or JSON editor.
 
-Schema maintenance references:
+### Guided Editor
 
-- [`docs/firefox-schema-update-runbook.md`](docs/firefox-schema-update-runbook.md)
-- [`docs/firefox_policies_json_migration_notes_2026-04-14.md`](docs/firefox_policies_json_migration_notes_2026-04-14.md)
+The guided editor is the recommended starting point for most profile work. It uses scenario-first
+sections, starter presets, compliance-aware baselines, and focused controls for common Firefox
+administration tasks. It intentionally stays smaller than a full schema mirror.
 
-## Guided editing and compliance
+The AI and smart browser features step remains a dedicated guided step. It shows current Firefox
+Release AI controls where the selected schema supports them. For ESR 140.10, the step clearly
+states that the schema does not support AI settings and does not render unsupported controls.
 
-The guided editor is built around scenario-first authoring rather than a raw schema mirror.
-The current product surface includes:
+### All Settings
 
-- starter presets such as blank, basic corporate, classroom kiosk, and SOC hardening
-- guided coverage for enterprise browser areas like homepage/search, extensions, privacy,
-  updates, certificates, authentication, site access, language, and AI-related controls
-- save and validate flows shared with the other editor modes
-- explicit handoff into advanced settings or JSON when a task no longer fits guided editing
+All settings is the full visual manager for schema-backed configuration. It provides search,
+category navigation, guided-coverage markers, lower-level preference controls, and raw/unmapped
+fallback handling for values that do not yet have a richer visual editor.
 
-The repository also contains CIS Firefox compliance assets and merge logic for combining starter
-profiles with hardening layers. Relevant references:
+Use All settings when a profile needs complete inspection or detailed changes beyond the guided
+workflow.
 
-- [`docs/cis_firefox_update_runbook_2026-04-13.md`](docs/cis_firefox_update_runbook_2026-04-13.md)
-- [`docs/cis_firefox_benchmark_feature_analysis_2026-04-12.md`](docs/cis_firefox_benchmark_feature_analysis_2026-04-12.md)
+### JSON Editor
 
-## Architecture notes
+The JSON editor is the direct `policies.json` editing surface. It is useful for exact document
+review, troubleshooting, migration checks, and values that are easier to handle as raw JSON.
 
-- FastAPI application with SQLAlchemy models and Alembic migrations.
-- SQLite is the default database via `sqlite+aiosqlite:///./data/bpm.db`.
-- Optional PostgreSQL drivers are included through the `postgres` extra.
-- Profiles UI assets are self-hosted under `app/static/`.
-- Monaco is bundled locally rather than pulled from a CDN.
-- Security headers are applied by middleware with a route-aware CSP for `/profiles`.
-- Legacy stored schema versions are normalized on application startup.
+## Localization
 
-## Quick start
+The primary project and UI language is English.
+
+Russian localization is included and maintained as a first-class locale. Russian UI terminology
+should follow Mozilla Pontoon and SUMO style where applicable, including terms such as
+`Аккаунт Mozilla` and `куки`. English text should not appear in the Russian UI unless it is a
+brand name, policy key, product identifier, API term, or another intentionally untranslated value.
+
+Localization catalogs are served from:
+
+```text
+GET /i18n/{locale}.json
+```
+
+Currently supported locales:
+
+- `en`
+- `ru`
+
+## Architecture
+
+- FastAPI application with Jinja templates.
+- SQLAlchemy models with Alembic migrations.
+- SQLite default database at `sqlite+aiosqlite:///./data/bpm.db`.
+- Optional PostgreSQL support through the `postgres` extra.
+- Self-hosted frontend assets under `app/static/`.
+- Locally bundled Monaco editor for the JSON surface.
+- Route-aware security headers and CSP middleware.
+- Startup normalization for legacy stored schema versions.
+- Bundled Firefox policy schemas under `app/schemas/policies/`.
+
+## Quick Start
 
 ```bash
 python -m venv .venv
@@ -183,9 +227,9 @@ uvicorn app.main:app --reload
 Open:
 
 - API root: <http://127.0.0.1:8000/>
-- Profiles UI: <http://127.0.0.1:8000/profiles>
+- Profile library: <http://127.0.0.1:8000/profiles>
 
-## Development commands
+## Development Commands
 
 Quality checks:
 
@@ -215,9 +259,9 @@ npm install
 npm run build:monaco
 ```
 
-## Testing notes
+## Testing
 
-Default test runs exclude the heavy browser-driven suites through project pytest settings:
+Default test runs exclude heavy browser-driven suites through project pytest settings:
 
 - `browser_ui`
 - `firefox_live`
@@ -232,8 +276,7 @@ pytest -m firefox_live_amo
 ```
 
 Live Firefox policy checks validate Firefox runtime behavior for exported `policies.json`
-artifacts rather than the `/profiles` browser UI. See
-[`docs/firefox-live-testing.md`](docs/firefox-live-testing.md).
+artifacts rather than the `/profiles` browser UI.
 
 For local Chromium-based UI verification:
 
@@ -243,25 +286,20 @@ For local Chromium-based UI verification:
 
 That audit writes reports and screenshots under `artifacts/local_chromium_ui_audit/`.
 
-## Project layout
+## Project Layout
 
 | Path | Purpose |
 |---|---|
-| `app/api/` | REST API routes |
-| `app/web/` | HTML route handlers and UI catalogs |
-| `app/static/` | Self-hosted frontend assets |
-| `app/templates/` | Jinja templates |
-| `app/schemas/` | Bundled policy schemas and schema helpers |
-| `app/services/` | Import, export, normalization, and profile services |
-| `alembic/` | Database migrations |
-| `docs/` | Runbooks, migration notes, and product backlogs |
-| `tools/` | Local build, audit, and maintenance scripts |
-
-## Localization
-
-- Default locale: English
-- Additional locale: Russian
-- Catalog route: `/i18n/{locale}.json`
+| `app/api/` | REST API routes. |
+| `app/web/` | HTML route handlers and UI catalogs. |
+| `app/static/` | Self-hosted frontend assets. |
+| `app/templates/` | Jinja templates. |
+| `app/schemas/` | Bundled policy schemas and schema helpers. |
+| `app/services/` | Import, export, normalization, validation, and profile services. |
+| `alembic/` | Database migrations. |
+| `docs/` | Runbooks, migration notes, and project planning notes. |
+| `tools/` | Local build, audit, conversion, and maintenance scripts. |
+| `tests/` | Unit, API, web, browser UI, and live Firefox regression tests. |
 
 ## License
 
@@ -269,8 +307,8 @@ This project is licensed under the [MPL-2.0](LICENSE).
 
 ## Author
 
-**Valery Ledovskoy**  
-📧 [valery@ledovskoy.com](mailto:valery@ledovskoy.com)  
+**Valery Ledovskoy**<br>
+📧 [valery@ledovskoy.com](mailto:valery@ledovskoy.com)<br>
 Only emails with `[BPM]` in the subject line are reviewed.
 
 © 2025-2026 • Released under [Mozilla Public License 2.0](LICENSE)

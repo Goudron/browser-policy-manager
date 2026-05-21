@@ -118,49 +118,53 @@ async def _read_firefox_policies_import_request(
                     "error": "Multipart import requires a file field",
                 },
             )
-
-        if hasattr(upload, "read"):
-            raw_document = await upload.read()
-        elif isinstance(upload, str):
-            raw_document = upload
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail={
-                    "message": "Firefox policies.json import failed",
-                    "error": "Unsupported multipart document field",
-                },
-            )
-
-        compliance: dict[str, Any] | None = None
-        raw_compliance = form.get("compliance")
-        if isinstance(raw_compliance, str) and raw_compliance.strip():
-            parsed_compliance = _decode_json_document(raw_compliance, source="compliance")
-            if not isinstance(parsed_compliance, dict):
+        try:
+            if hasattr(upload, "read"):
+                raw_document = await upload.read()
+            elif isinstance(upload, str):
+                raw_document = upload
+            else:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail={
                         "message": "Firefox policies.json import failed",
-                        "error": "Multipart compliance field must be a JSON object",
+                        "error": "Unsupported multipart document field",
                     },
                 )
-            compliance = parsed_compliance
 
-        name = form.get("name")
-        if not isinstance(name, str) or not name.strip():
-            filename = getattr(upload, "filename", "") or ""
-            name = filename.removesuffix(".json").strip() or "Imported policies.json"
+            compliance: dict[str, Any] | None = None
+            raw_compliance = form.get("compliance")
+            if isinstance(raw_compliance, str) and raw_compliance.strip():
+                parsed_compliance = _decode_json_document(raw_compliance, source="compliance")
+                if not isinstance(parsed_compliance, dict):
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail={
+                            "message": "Firefox policies.json import failed",
+                            "error": "Multipart compliance field must be a JSON object",
+                        },
+                    )
+                compliance = parsed_compliance
 
-        return _validate_import_request_payload(
-            {
-                "name": name,
-                "description": form.get("description") or None,
-                "schema_version": form.get("schema_version") or DEFAULT_SCHEMA_CHANNEL,
-                "document": _decode_json_document(raw_document, source="policies.json"),
-                "compliance": compliance,
-                "owner": form.get("owner") or None,
-            }
-        )
+            name = form.get("name")
+            if not isinstance(name, str) or not name.strip():
+                filename = getattr(upload, "filename", "") or ""
+                name = filename.removesuffix(".json").strip() or "Imported policies.json"
+
+            return _validate_import_request_payload(
+                {
+                    "name": name,
+                    "description": form.get("description") or None,
+                    "schema_version": form.get("schema_version") or DEFAULT_SCHEMA_CHANNEL,
+                    "document": _decode_json_document(raw_document, source="policies.json"),
+                    "compliance": compliance,
+                    "owner": form.get("owner") or None,
+                }
+            )
+        finally:
+            close = getattr(upload, "close", None)
+            if callable(close):
+                await close()
 
     if content_type.startswith("application/json"):
         try:
@@ -239,6 +243,8 @@ async def _list_profiles_core(
     q: str | None = None,
     owner: str | None = None,
     schema_version: str | None = None,
+    validation_state: str | None = None,
+    lifecycle: str = "active",
     include_deleted: bool = False,
     limit: int = 50,
     offset: int = 0,
@@ -250,6 +256,8 @@ async def _list_profiles_core(
         q=q,
         owner=owner,
         schema_version=schema_version,
+        validation_state=validation_state,
+        lifecycle=lifecycle,
         include_deleted=include_deleted,
         limit=limit,
         offset=offset,
@@ -264,6 +272,8 @@ async def _profile_library_stats_core(
     q: str | None = None,
     owner: str | None = None,
     schema_version: str | None = None,
+    validation_state: str | None = None,
+    lifecycle: str = "active",
     include_deleted: bool = False,
 ) -> dict[str, int]:
     filtered = await ProfileService.count(
@@ -271,12 +281,16 @@ async def _profile_library_stats_core(
         q=q,
         owner=owner,
         schema_version=schema_version,
+        validation_state=validation_state,
+        lifecycle=lifecycle,
         include_deleted=include_deleted,
     )
     total = await ProfileService.count(
         session,
         owner=owner,
         schema_version=schema_version,
+        validation_state=validation_state,
+        lifecycle=lifecycle,
         include_deleted=include_deleted,
     )
     return {
@@ -351,8 +365,6 @@ async def _update_profile_core(
             },
         )
     normalized_payload_data = dict(payload_data)
-    if "flags" in payload_data and payload_data["flags"] is not None:
-        normalized_payload_data["flags"] = {**current.flags, **payload_data["flags"]}
     if "compliance" in payload_data:
         normalized_payload_data["compliance"] = payload_data["compliance"]
     normalized_payload = ProfileUpdate.model_validate(normalized_payload_data)
@@ -427,10 +439,15 @@ async def list_profiles(
     q: str | None = Query(None, description="Substring filter for profile name/description"),
     owner: str | None = Query(None, description="Filter by owner"),
     schema_version: str | None = Query(None, description="Filter by schema_version (channel)"),
+    validation_state: str | None = Query(
+        None,
+        description="Filter by validation state: valid/invalid/not_validated",
+    ),
+    lifecycle: str = Query("active", description="Lifecycle filter: active/archived/all"),
     include_deleted: bool = Query(False, description="Include soft‑deleted profiles"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    sort: str = Query("updated_at", description="Sort field: created_at/updated_at/name/id"),
+    sort: str = Query("updated_at", description="Sort field: created_at/updated_at/name/schema_version/id"),
     order: str = Query("desc", description="Sort order: asc/desc"),
 ) -> list[ProfileRead]:
     return await _list_profiles_core(
@@ -438,6 +455,8 @@ async def list_profiles(
         q=q,
         owner=owner,
         schema_version=schema_version,
+        validation_state=validation_state,
+        lifecycle=lifecycle,
         include_deleted=include_deleted,
         limit=limit,
         offset=offset,
@@ -452,6 +471,11 @@ async def profile_library_stats(
     q: str | None = Query(None, description="Substring filter for profile name/description"),
     owner: str | None = Query(None, description="Filter by owner"),
     schema_version: str | None = Query(None, description="Filter by schema_version (channel)"),
+    validation_state: str | None = Query(
+        None,
+        description="Filter by validation state: valid/invalid/not_validated",
+    ),
+    lifecycle: str = Query("active", description="Lifecycle filter: active/archived/all"),
     include_deleted: bool = Query(False, description="Include soft-deleted profiles"),
 ) -> dict[str, int]:
     return await _profile_library_stats_core(
@@ -459,6 +483,8 @@ async def profile_library_stats(
         q=q,
         owner=owner,
         schema_version=schema_version,
+        validation_state=validation_state,
+        lifecycle=lifecycle,
         include_deleted=include_deleted,
     )
 
@@ -474,8 +500,9 @@ async def reset_profiles_library(
 async def get_profile(
     profile_id: int,
     session: AsyncSession = Depends(get_session),
+    include_deleted: bool = Query(False, description="Include soft-deleted profile"),
 ) -> ProfileRead:
-    return await _get_profile_or_404_core(profile_id, session)
+    return await _get_profile_or_404_core(profile_id, session, include_deleted=include_deleted)
 
 
 @router.post(

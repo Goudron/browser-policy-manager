@@ -41,7 +41,7 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     assert created["name"] == payload["name"]
     assert created["is_deleted"] is False
 
-    # Update metadata and flags, relying on PATCH merge semantics for flags.
+    # Update metadata and flags. PATCH replaces flags so UI removals persist.
     patch_payload = {
         "description": "Updated in lifecycle flow",
         "owner": "sec@example.org",
@@ -54,8 +54,9 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     updated = updated_response.json()
     assert updated["description"] == "Updated in lifecycle flow"
     assert updated["owner"] == "sec@example.org"
-    assert updated["flags"]["DisableTelemetry"] is False
-    assert updated["flags"]["DisablePrivateBrowsing"] is True
+    assert updated["flags"] == {
+        "DisableTelemetry": False,
+    }
 
     # Validate the updated profile payload via the public validation endpoint.
     validate_after = client.post(
@@ -71,7 +72,6 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     assert export_firefox.json() == {
         "policies": {
             "DisableTelemetry": False,
-            "DisablePrivateBrowsing": True,
         }
     }
 
@@ -89,7 +89,11 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
         f"/api/export/profiles/{profile_id}/firefox/policies.json?include_deleted=true"
     )
     assert export_deleted.status_code == 200, export_deleted.text
-    assert export_deleted.json()["policies"]["DisablePrivateBrowsing"] is True
+    assert export_deleted.json() == {
+        "policies": {
+            "DisableTelemetry": False,
+        }
+    }
 
     # Restore and verify the profile becomes active again.
     restore_response = client.post(f"/api/profiles/{profile_id}/restore")

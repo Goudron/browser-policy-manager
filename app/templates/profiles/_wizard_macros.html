@@ -24,18 +24,6 @@
 </div>
 {%- endmacro %}
 
-{% macro render_doc_placeholder(doc_id, title_key, body_key) -%}
-<a
-    href="#docs-{{ doc_id }}"
-    class="wizard-doc-placeholder"
-    data-doc-placeholder="{{ doc_id }}"
-    aria-disabled="true">
-    <span class="wizard-doc-placeholder-title" data-i18n="{{ title_key }}">{{ tr(title_key) }}</span>
-    <span class="wizard-doc-placeholder-copy" data-i18n="{{ body_key }}">{{ tr(body_key) }}</span>
-    <span class="wizard-doc-placeholder-status" data-i18n="profiles.docs_placeholder_status">{{ tr("profiles.docs_placeholder_status") }}</span>
-</a>
-{%- endmacro %}
-
 {% macro render_manual_policy_controls(items) -%}
     {%- for item in items %}
         {%- if item.control_kind == "enum-select" %}
@@ -82,7 +70,6 @@
     data-wizard-shell-step="{{ step_id }}"
     data-workspace-scope-panel="advanced">
     {% call render_wizard_disclosure("profiles.wizard_shell_title", "profiles.wizard_shell_body", "wizard-schema-shell-step-" ~ step_id ~ "-details") %}
-        {{ render_doc_placeholder("guided-schema-shell", "profiles.docs_placeholder_policy_title", "profiles.docs_placeholder_policy_body") }}
         <div class="wizard-shell-coverage surface-soft-box" id="wizard-schema-shell-step-{{ step_id }}-coverage"></div>
         <div class="wizard-shell-badges" id="wizard-schema-shell-step-{{ step_id }}-badges"></div>
         <div class="wizard-shell-grid">
@@ -125,7 +112,6 @@
     id="settings-schema-shell-step-{{ step_id }}"
     data-settings-shell-step="{{ step_id }}">
     {% call render_wizard_disclosure("profiles.wizard_shell_title", "profiles.wizard_shell_body", "settings-schema-shell-step-" ~ step_id ~ "-details", default_open=default_open) %}
-        {{ render_doc_placeholder("guided-schema-shell", "profiles.docs_placeholder_policy_title", "profiles.docs_placeholder_policy_body") }}
         <div class="wizard-shell-coverage surface-soft-box" id="settings-schema-shell-step-{{ step_id }}-coverage"></div>
         <div class="wizard-shell-badges" id="settings-schema-shell-step-{{ step_id }}-badges"></div>
         <div class="wizard-shell-grid">

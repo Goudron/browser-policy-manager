@@ -39,6 +39,7 @@ class ProfileRead(ProfileBase):
     updated_at: datetime
     deleted_at: datetime | None = None
     is_deleted: bool
+    validation_state: str = "not_validated"
 
     # Pydantic v2 style config (replaces deprecated class Config)
     model_config = ConfigDict(from_attributes=True)

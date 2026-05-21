@@ -19,6 +19,7 @@ from app.core.config import get_settings
 from app.core.schema_channels import build_schema_channels_catalog
 from app.db import get_session
 from app.services.profile_service import ProfileService
+from app.web.firefox_all_settings_categories import get_all_settings_category_catalog
 from app.web.firefox_manual_policy_controls import get_manual_policy_controls_catalog
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_settings_catalog import get_wizard_settings_catalog
@@ -96,12 +97,14 @@ def _build_profiles_page_context(
     advanced_href: str | None = None,
     settings_href: str | None = None,
     json_href: str | None = None,
+    clone_source_id: int | None = None,
 ) -> dict[str, object]:
     current_year = datetime.now(UTC).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
     wizard_settings_catalog = get_wizard_settings_catalog()
     wizard_preferences_catalog = get_wizard_preferences_catalog(wizard_settings_catalog)
     wizard_schema_shell_catalog = get_wizard_schema_shell_catalog(wizard_preferences_catalog)
+    all_settings_category_catalog = get_all_settings_category_catalog()
     initial_lang = _resolve_request_locale(request)
     initial_locale = _load_locale_catalog(initial_lang)
 
@@ -127,6 +130,7 @@ def _build_profiles_page_context(
         "advanced_href": advanced_href,
         "settings_href": settings_href,
         "json_href": json_href,
+        "clone_source_id": clone_source_id,
         "wizard_settings_catalog": wizard_settings_catalog,
         "wizard_preferences_catalog": wizard_preferences_catalog,
         "wizard_preferences_sections_by_id": {
@@ -138,6 +142,7 @@ def _build_profiles_page_context(
         "wizard_starter_catalog": get_wizard_starter_catalog(),
         "wizard_steps": get_wizard_steps(),
         "wizard_schema_shell_catalog": wizard_schema_shell_catalog,
+        "all_settings_category_catalog": all_settings_category_catalog,
         "settings_shell_step_to_open": _resolve_settings_shell_focus_step(
             focus_target,
             editing_profile_schema_version,
@@ -173,6 +178,16 @@ def _resolve_include_deleted_flag(raw_include_deleted: str | None) -> bool:
     if raw_include_deleted is None:
         return False
     return raw_include_deleted.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _resolve_positive_int(raw_value: str | None) -> int | None:
+    if raw_value is None:
+        return None
+    try:
+        value = int(raw_value)
+    except ValueError:
+        return None
+    return value if value > 0 else None
 
 
 def _resolve_settings_shell_focus_step(
@@ -356,6 +371,8 @@ async def profiles_page(request: Request) -> HTMLResponse:
 @router.get("/profiles/new", response_class=HTMLResponse)
 async def profiles_new_page(request: Request) -> HTMLResponse:
     """Render the visual wizard shell for a new profile draft."""
+    clone_source_id = _resolve_positive_int(request.query_params.get("clone_from"))
+    include_deleted = _resolve_include_deleted_flag(request.query_params.get("include_deleted"))
     return templates.TemplateResponse(
         request,
         "profiles_editor.html",
@@ -363,6 +380,8 @@ async def profiles_new_page(request: Request) -> HTMLResponse:
             request,
             title=f"New profile draft — Guided editor — {settings.APP_NAME}",
             route_mode="new",
+            include_deleted=include_deleted,
+            clone_source_id=clone_source_id,
         ),
     )
 
@@ -379,6 +398,7 @@ async def profiles_edit_page(
     if profile is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
     current_route = _build_profile_route_path(profile_id, "edit", include_deleted=include_deleted)
+    duplicate_requested = request.query_params.get("duplicate", "").strip().lower() in {"1", "true", "yes", "on"}
 
     return templates.TemplateResponse(
         request,
@@ -402,6 +422,7 @@ async def profiles_edit_page(
                 focus_target="editor",
                 include_deleted=include_deleted,
             ),
+            clone_source_id=profile_id if duplicate_requested else None,
         ),
     )
 
@@ -412,7 +433,7 @@ async def profiles_settings_page(
     profile_id: int,
     session: Annotated[AsyncSession, Depends(get_session)],
 ) -> HTMLResponse:
-    """Render the advanced settings shell for an existing profile."""
+    """Render the All settings shell for an existing profile."""
     include_deleted = _resolve_include_deleted_flag(request.query_params.get("include_deleted"))
     profile = await ProfileService.get(session, profile_id, include_deleted=include_deleted)
     if profile is None:
@@ -426,7 +447,7 @@ async def profiles_settings_page(
         "profiles_settings.html",
         _build_profiles_page_context(
             request,
-            title=f"{profile.name} — Advanced settings — {settings.APP_NAME}",
+            title=f"{profile.name} — All settings — {settings.APP_NAME}",
             route_mode="settings",
             editing_profile_id=profile_id,
             editing_profile_schema_version=profile.schema_version,

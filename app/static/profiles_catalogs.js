@@ -14,6 +14,7 @@
         const wizardSettingsCatalog = readEmbeddedJson(documentRef, "wizard-settings-catalog");
         const wizardPreferencesCatalog = readEmbeddedJson(documentRef, "wizard-preferences-catalog");
         const wizardSchemaShellCatalog = readEmbeddedJson(documentRef, "wizard-schema-shell-catalog");
+        const allSettingsCategoryCatalog = readEmbeddedJson(documentRef, "all-settings-category-catalog");
         const schemaChannelsCatalog = readEmbeddedJson(documentRef, "schema-channels-catalog");
 
         const wizardPreferenceSections = Array.isArray(wizardPreferencesCatalog.sections)
@@ -46,17 +47,16 @@
                 "field:wizard-search-prevent-installs": "shell-policy:4:SearchEngines",
                 "field:wizard-search-remove": "shell-policy:4:SearchEngines",
                 "field:wizard-search-bar": "shell-policy:4:SearchBar",
-                "field:wizard-search-suggest": "shell-policy:4:FirefoxSuggest",
+                "field:wizard-search-suggest": "shell-policy:4:SearchSuggestEnabled",
                 "field:firefox-suggest-web": "shell-policy:4:FirefoxSuggest",
                 "field:firefox-suggest-sponsored": "shell-policy:4:FirefoxSuggest",
                 "field:firefox-suggest-improve": "shell-policy:4:FirefoxSuggest",
                 "field:firefox-suggest-locked": "shell-policy:4:FirefoxSuggest",
-                "field:wizard-extension-default-mode": "shell-policy:6:ExtensionSettings",
-                "field:wizard-extension-install": "shell-policy:6:ExtensionSettings",
-                "field:wizard-extension-locked": "shell-policy:6:ExtensionSettings",
-                "field:wizard-extension-uninstall": "shell-policy:6:ExtensionSettings",
-                "field:extension-profile-ublock": "shell-policy:6:ExtensionSettings",
-                "search-engine-preset:docs_portal": "shell-policy:4:SearchEngines",
+                "field:wizard-extension-default-mode": "shell-policy:4:ExtensionSettings",
+                "field:wizard-extension-install": "shell-policy:4:ExtensionSettings",
+                "field:wizard-extension-locked": "shell-policy:4:ExtensionSettings",
+                "field:wizard-extension-uninstall": "shell-policy:4:ExtensionSettings",
+                "field:extension-profile-ublock": "shell-policy:4:ExtensionSettings",
                 "search-engine-preset:ticket_queue": "shell-policy:4:SearchEngines",
                 "search-engine-preset:wiki_portal": "shell-policy:4:SearchEngines",
                 "search-engine-preset:duckduckgo": "shell-policy:4:SearchEngines",
@@ -120,13 +120,6 @@
                 "SuggestURLTemplate",
             ],
             searchEnginePresets: {
-                docs_portal: {
-                    Name: "Docs Portal",
-                    URLTemplate: "https://docs.example.local/search?q={searchTerms}",
-                    Method: "GET",
-                    Alias: "docs",
-                    Description: "Managed search for internal documentation",
-                },
                 ticket_queue: {
                     Name: "Ticket Queue",
                     URLTemplate: "https://tickets.example.local/search?q={searchTerms}",
@@ -176,6 +169,7 @@
             wizardSettingsCatalog,
             wizardPreferencesCatalog,
             wizardSchemaShellCatalog,
+            allSettingsCategoryCatalog,
             schemaChannelsCatalog,
             defaultSchemaVersion: typeof schemaChannelsCatalog.default_channel === "string"
                 ? schemaChannelsCatalog.default_channel
@@ -186,21 +180,15 @@
                 wizardKnownPreferences.map((entry) => [entry.pref, entry]),
             ),
             wizardSearchSectionSteps: {
-                general: { step: 2, key: "profiles.wizard_step_two", fallback: "General" },
-                home: { step: 3, key: "profiles.wizard_step_three", fallback: "Home" },
-                search: { step: 4, key: "profiles.wizard_step_four", fallback: "Search" },
-                privacy: { step: 5, key: "profiles.wizard_step_five", fallback: "Privacy & security" },
-                sync: { step: 6, key: "profiles.wizard_step_six", fallback: "Accounts and add-ons" },
-                ai: { step: 7, key: "profiles.wizard_step_seven", fallback: "AI and smart features" },
-                review: { step: 8, key: "profiles.wizard_step_eight", fallback: "Review and export" },
+                general: { step: 2, key: "profiles.wizard_step_two", fallback: "Browser access & defaults" },
+                home: { step: 2, key: "profiles.wizard_step_two", fallback: "Browser access & defaults" },
+                search: { step: 2, key: "profiles.wizard_step_two", fallback: "Browser access & defaults" },
+                privacy: { step: 3, key: "profiles.wizard_step_three", fallback: "Security & privacy" },
+                sync: { step: 4, key: "profiles.wizard_step_four", fallback: "Users, add-ons & sites" },
+                ai: { step: 5, key: "profiles.wizard_step_five", fallback: "AI & smart features" },
+                review: { step: 6, key: "profiles.wizard_step_six", fallback: "Review & export" },
             },
             searchEnginePresetCatalog: [
-                {
-                    id: "docs_portal",
-                    title_key: "profiles.wizard_search_preset_docs_title",
-                    description_key: "profiles.wizard_search_preset_docs_copy",
-                    target: "search-engine-preset:docs_portal",
-                },
                 {
                     id: "ticket_queue",
                     title_key: "profiles.wizard_search_preset_ticket_title",

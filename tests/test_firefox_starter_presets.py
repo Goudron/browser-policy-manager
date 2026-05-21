@@ -99,7 +99,7 @@ def test_wizard_starter_presets_include_operational_baseline_controls():
     assert office["FirefoxSuggest"]["WebSuggestions"] is False
     assert office["Homepage"]["Additional"] == [
         "https://helpdesk.example.local/",
-        "https://docs.example.local/",
+        "https://kb.example.local/",
     ]
     assert office["PopupBlocking"]["Locked"] is True
     assert office["Proxy"]["Locked"] is True

@@ -13,6 +13,7 @@
             formatSchemaLabel,
             getDefaultSchemaVersion,
             renderWizardSchemaShell,
+            renderAllSettingsList,
             buildWizardSettingsSearchIndex,
             renderWizardSettingsSearchResults,
             currentSnapshotState,
@@ -105,21 +106,17 @@
                 "Authentication",
                 "Certificates",
                 "DNSOverHTTPS",
-            ],
-            3: [
                 "Homepage",
                 "NewTabPage",
                 "OverrideFirstRunPage",
                 "OverridePostUpdatePage",
                 "FirefoxHome",
-            ],
-            4: [
                 "SearchBar",
                 "SearchSuggestEnabled",
                 "SearchEngines",
                 "FirefoxSuggest",
             ],
-            5: [
+            3: [
                 "DisableTelemetry",
                 "DisableFirefoxStudies",
                 "DisablePrivateBrowsing",
@@ -135,7 +132,7 @@
                 "Cookies",
                 "IPProtectionAvailable",
             ],
-            6: [
+            4: [
                 "DisableFirefoxAccounts",
                 "UserMessaging",
                 "RequestedLocales",
@@ -148,18 +145,16 @@
                 "Bookmarks",
                 "ManagedBookmarks",
             ],
-            7: [
+            5: [
                 "AIControls",
                 "GenerativeAI",
                 "VisualSearchEnabled",
             ],
         };
         const stepPreferenceSections = {
-            2: ["general"],
-            3: ["home"],
-            4: ["search"],
-            5: ["privacy"],
-            6: ["sync"],
+            2: ["general", "home", "search"],
+            3: ["privacy"],
+            4: ["sync"],
         };
 
         const privacyManagedPolicyKeys = [
@@ -344,12 +339,10 @@
         function getRecentChangeSummary(stepNumber) {
             const summaryMap = {
                 1: t("profiles.wizard_step_memory_step_setup"),
-                2: t("profiles.wizard_step_memory_step_network"),
-                3: t("profiles.wizard_step_memory_step_home"),
-                4: t("profiles.wizard_step_memory_step_search"),
-                5: t("profiles.wizard_step_memory_step_privacy"),
-                6: t("profiles.wizard_step_memory_step_features"),
-                7: t("profiles.wizard_step_memory_step_ai"),
+                2: t("profiles.wizard_step_memory_step_browser"),
+                3: t("profiles.wizard_step_memory_step_privacy"),
+                4: t("profiles.wizard_step_memory_step_features"),
+                5: t("profiles.wizard_step_memory_step_ai"),
             };
             return summaryMap[Number(stepNumber)] || t("profiles.wizard_step_memory_step_generic");
         }
@@ -575,20 +568,21 @@
             const baselineSnapshot = wizardBaselineSnapshot || parseBaselineProfileSnapshot();
             const currentSnapshot = captureWizardUiSnapshot();
             if (baselineSnapshot && currentSnapshot) {
-                [1, 2, 3, 4, 5, 6, 7].forEach((stepNumber) => {
-                    const changed = snapshotsDifferForStep(currentSnapshot, baselineSnapshot, stepNumber);
-                    if (changed) {
-                        const existing = recentStepChanges.get(stepNumber);
-                        recentStepChanges.set(stepNumber, {
-                            step: stepNumber,
-                            title: getWizardStepLabel(stepNumber),
-                            summary: getRecentChangeSummary(stepNumber),
-                            sequence: existing?.sequence || (++recentChangeSequence),
-                        });
-                    } else {
-                        recentStepChanges.delete(stepNumber);
-                    }
-                });
+                Array.from({ length: Math.max(0, wizardTotalSteps - 1) }, (_, index) => index + 1)
+                    .forEach((stepNumber) => {
+                        const changed = snapshotsDifferForStep(currentSnapshot, baselineSnapshot, stepNumber);
+                        if (changed) {
+                            const existing = recentStepChanges.get(stepNumber);
+                            recentStepChanges.set(stepNumber, {
+                                step: stepNumber,
+                                title: getWizardStepLabel(stepNumber),
+                                summary: getRecentChangeSummary(stepNumber),
+                                sequence: existing?.sequence || (++recentChangeSequence),
+                            });
+                        } else {
+                            recentStepChanges.delete(stepNumber);
+                        }
+                    });
             } else {
                 recentStepChanges.clear();
             }
@@ -1345,7 +1339,7 @@
             return cloneJsonValue(aiPosturePresets[presetKey]?.AIControls, null);
         }
 
-        function buildLegacyGenerativeAiValue(presetKey) {
+        function buildGenerativeAiValue(presetKey) {
             if (presetKey === "disable") {
                 return {
                     Enabled: false,
@@ -1425,7 +1419,6 @@
         function syncAiPresetUi(parsed = {}) {
             const aiButtons = Array.from(documentRef.querySelectorAll("[data-ai-posture-preset]"));
             const aiStatusEl = documentRef.getElementById("wizard-ai-section-status");
-            const aiProvidersStatusEl = documentRef.getElementById("wizard-ai-providers-section-status");
             const aiGovernanceCopyEl = documentRef.getElementById("wizard-ai-governance-copy");
             const summary = summarizeAiPosture(parsed);
             const activePreset = resolveAiPosturePreset(summary);
@@ -1457,9 +1450,6 @@
                     ? aiFragments.join(" • ")
                     : t("profiles.wizard_ai_section_state_empty");
             }
-            if (aiProvidersStatusEl) {
-                aiProvidersStatusEl.textContent = t("profiles.wizard_ai_providers_state_empty");
-            }
             if (aiGovernanceCopyEl) {
                 const hasManagedAiPosture = summary.aiControlsManaged > 0 || summary.generativeAiControls > 0 || summary.visualSearchManaged;
                 aiGovernanceCopyEl.textContent = hasManagedAiPosture
@@ -1490,7 +1480,7 @@
                     if (hasUsableAiControlsCard()) {
                         normalized.AIControls = buildAiControlsValue(presetKey);
                     } else if (hasUsableGenerativeAiCard()) {
-                        normalized.GenerativeAI = buildLegacyGenerativeAiValue(presetKey);
+                        normalized.GenerativeAI = buildGenerativeAiValue(presetKey);
                     }
 
                     if (presetKey === "disable" || presetKey === "mixed") {
@@ -1716,6 +1706,7 @@
                 wizardModeEl.value = documentRef.getElementById("mode").value || "json";
             }
             renderWizardSchemaShell();
+            renderAllSettingsList();
             buildWizardSettingsSearchIndex();
             renderWizardSettingsSearchResults();
             if (wizardContextCopyEl) {
@@ -1944,7 +1935,7 @@
             wizardNextEl.textContent = t("profiles.wizard_next");
 
             const progressKey = activeStepButton?.dataset?.stepProgressKey || "profiles.wizard_progress_one";
-            const progressFallback = activeStepButton?.dataset?.stepProgressFallback || "Step 1 of 8: start";
+            const progressFallback = activeStepButton?.dataset?.stepProgressFallback || "Step 1 of 6: Profile & baseline";
             wizardProgressTextEl.textContent = t(progressKey, progressFallback);
             updateWizardSummary();
             if (wizardStep === wizardTotalSteps && typeof renderFinalExportStepSummary === "function") {
@@ -1981,7 +1972,7 @@
                 if (!saved) return;
             }
 
-            setWizardStep(7);
+            setWizardStep(6);
         }
 
         Array.from(documentRef.querySelectorAll("[data-hardening-preset]")).forEach((button) => {

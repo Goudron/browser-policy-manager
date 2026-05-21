@@ -178,6 +178,27 @@ def _click_selector(driver, wait, selector: str) -> None:
     pytest.fail(f"Could not click selector {selector} without hitting a stale element")
 
 
+def _select_library_compare_pair(driver, wait, by, ec, first_id: int, second_id: int) -> None:
+    first_selector = f'[data-compare-profile-id="{first_id}"]'
+    second_selector = f'[data-compare-profile-id="{second_id}"]'
+    stale_exception = pytest.importorskip("selenium.common.exceptions").StaleElementReferenceException
+
+    first_button = wait.until(ec.element_to_be_clickable((by.By.CSS_SELECTOR, first_selector)))
+    _safe_click(driver, first_button)
+
+    def button_text_is(selector: str, expected: str) -> bool:
+        try:
+            return driver.find_element(by.By.CSS_SELECTOR, selector).text.strip() == expected
+        except stale_exception:
+            return False
+
+    wait.until(
+        lambda current_driver: button_text_is(second_selector, "Select second")
+    )
+    second_button = wait.until(ec.element_to_be_clickable((by.By.CSS_SELECTOR, second_selector)))
+    _safe_click(driver, second_button)
+
+
 def _selector_is_visible(driver, selector: str) -> bool:
     return bool(
         driver.execute_script(
@@ -242,7 +263,7 @@ def _open_wizard_step(driver, wait, by, step_number: int) -> None:
         lambda current_driver: current_driver.find_element(
             by.By.ID, f"wizard-step-{step_number}"
         ).get_attribute("aria-hidden")
-        == "false"
+        != "true"
     )
 
 
@@ -327,17 +348,6 @@ def _parse_grid_template_columns(template_value: str) -> list[float]:
             except ValueError:
                 continue
     return values
-
-
-def _collect_browser_issue(issues: list[str], label: str, callback) -> None:
-    try:
-        callback()
-    except Exception as exc:
-        detail = str(exc).strip()
-        if not detail or detail == "Message:":
-            detail = exc.__class__.__name__
-        issues.append(f"{label}: {detail}")
-
 
 def _set_theme(driver, wait, ui, *, theme: str) -> None:
     select = ui.Select(wait.until(lambda current_driver: current_driver.find_element("id", "theme")))
@@ -431,6 +441,7 @@ def test_opening_modes_in_new_tabs_preserves_source_context():
             edit_handle = _switch_to_new_window(driver, wait, library_handles)
             wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
             wait.until(lambda current_driver: urlparse(current_driver.current_url).path == f"/profiles/{profile_id}/edit")
+            _wait_for_selector_disabled(wait, driver, "#save", True)
 
             step_three_button = wait.until(
                 ec.element_to_be_clickable((by.By.CSS_SELECTOR, '.wizard-step[data-step="3"]'))
@@ -488,6 +499,93 @@ def test_opening_modes_in_new_tabs_preserves_source_context():
             _close_chromium_driver(driver)
 
 
+def test_json_editor_browser_regression_saves_validates_and_exports_full_document():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    payload = build_profile_payload(
+        name="JSON Editor Browser Profile",
+        description="JSON editor browser regression",
+        owner="json-editor@example.org",
+        schema_version="release-150",
+        flags={
+            "DisableTelemetry": True,
+            "DisablePrivateBrowsing": True,
+        },
+    )
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile = create_response.json()
+        profile_id = profile["id"]
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&focus=editor")
+            wait.until(ec.presence_of_element_located((by.By.ID, "editor-panel")))
+            wait.until(ec.presence_of_element_located((by.By.ID, "editor")))
+            wait.until(ec.presence_of_element_located((by.By.ID, "download-firefox-policies")))
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    "return Boolean(window.monaco?.editor?.getModels?.().length);"
+                )
+            )
+            assert driver.find_element(by.By.ID, "advanced-return-link").text.strip() == "Back to previous mode"
+            download_link = driver.find_element(by.By.ID, "download-firefox-policies")
+            assert download_link.get_attribute("rel") == "noopener"
+            assert download_link.get_attribute("href").endswith(
+                f"/api/export/profiles/{profile_id}/firefox/policies.json"
+            )
+            _wait_for_selector_disabled(wait, driver, "#save", True)
+
+            next_document = {
+                "policies": {
+                    "DisableTelemetry": False,
+                    "DisableFirefoxStudies": True,
+                }
+            }
+            driver.execute_script(
+                """
+                const model = window.monaco.editor.getModels()[0];
+                model.setValue(JSON.stringify(arguments[0], null, 2));
+                """,
+                next_document,
+            )
+            _wait_for_selector_disabled(wait, driver, "#save", False)
+            _click_selector(driver, wait, "#validate")
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "validation-preview",
+                ).text.strip() != "Validation results will appear here."
+            )
+            validation_preview_text = driver.find_element(by.By.ID, "validation-preview").text.strip()
+            assert "passed" in validation_preview_text.lower(), validation_preview_text
+            _click_selector(driver, wait, "#save")
+            _wait_for_selector_disabled(wait, driver, "#save", True)
+
+            saved_response = requests.get(f"{base_url}/api/profiles/{profile_id}", timeout=10)
+            assert saved_response.status_code == 200, saved_response.text
+            saved_flags = saved_response.json()["flags"]
+            assert saved_flags == {
+                "DisableTelemetry": False,
+                "DisableFirefoxStudies": True,
+            }
+
+            export_response = requests.get(
+                f"{base_url}/api/export/profiles/{profile_id}/firefox/policies.json",
+                timeout=10,
+            )
+            assert export_response.status_code == 200, export_response.text
+            assert export_response.json() == next_document
+        finally:
+            _close_chromium_driver(driver)
+
+
 def test_theme_toggle_browser_regression_keeps_surface_cards_consistent_across_light_and_dark():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
@@ -511,7 +609,7 @@ def test_theme_toggle_browser_regression_keeps_surface_cards_consistent_across_l
         try:
             driver.get(f"{base_url}/profiles/{profile_id}/settings")
             wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
-            wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, "#overview-panel .theme-subcard")))
+            wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, "#overview-panel .editor-chrome-status-item")))
             wait.until(
                 ec.presence_of_element_located(
                     (by.By.CSS_SELECTOR, "#wizard-preferences-general-presets .wizard-search-engine-preset")
@@ -527,7 +625,7 @@ def test_theme_toggle_browser_regression_keeps_surface_cards_consistent_across_l
             )
 
             _set_theme(driver, wait, ui, theme="light")
-            light_overview = _surface_luma(driver, "#overview-panel .theme-subcard")
+            light_overview = _surface_luma(driver, "#overview-panel .editor-chrome-status-item")
             light_preferences = _surface_luma(driver, "#settings-preferences-general .theme-subcard")
 
             assert light_overview > 170
@@ -568,7 +666,7 @@ def test_theme_toggle_browser_regression_keeps_surface_cards_consistent_across_l
             assert "16px" in light_select["bgSize"]
 
             _set_theme(driver, wait, ui, theme="dark")
-            dark_overview = _surface_luma(driver, "#overview-panel .theme-subcard")
+            dark_overview = _surface_luma(driver, "#overview-panel .editor-chrome-status-item")
             dark_preferences = _surface_luma(driver, "#settings-preferences-general .theme-subcard")
 
             assert dark_overview < 90
@@ -694,6 +792,253 @@ def test_theme_toggle_browser_regression_keeps_surface_cards_consistent_across_l
             _close_chromium_driver(driver)
 
 
+def test_all_settings_manager_browser_regression_persists_policy_preference_and_removal():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    from app.models.profile import Profile
+
+    payload = build_profile_payload(
+        name="All Settings Manager Browser Profile",
+        description="All settings browser regression",
+        owner="all-settings@example.org",
+        schema_version="release-150",
+        flags={"DisableTelemetry": True},
+    )
+
+    with run_test_app_server_handle() as server:
+        base_url = server.base_url
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        with server.session_factory() as session:
+            profile = session.get(Profile, profile_id)
+            assert profile is not None
+            profile.flags = {
+                **(profile.flags or {}),
+                "FuturePolicy": {"Enabled": True},
+            }
+            session.commit()
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/settings")
+            wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
+            wait.until(ec.presence_of_element_located((by.By.ID, "all-settings-list")))
+            wait.until(
+                ec.presence_of_element_located((
+                    by.By.CSS_SELECTOR,
+                    '#all-settings-list [data-settings-entry-id="NewTabPage"]',
+                ))
+            )
+
+            _click_selector(driver, wait, '#all-settings-list [data-settings-entry-id="NewTabPage"]')
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "NewTabPage"
+            )
+            new_tab_page_select = wait.until(
+                ec.presence_of_element_located((
+                    by.By.CSS_SELECTOR,
+                    '#all-settings-detail-panel [data-schema-policy-field="__value__"]',
+                ))
+            )
+            ui.Select(new_tab_page_select).select_by_value("true")
+            _wait_for_selector_disabled(wait, driver, "#save", False)
+
+            _safe_click(driver, driver.find_element(by.By.ID, "all-settings-add-preference"))
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "__new_preference__"
+            )
+            new_pref_name = driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-pref-name]",
+            )
+            new_pref_name.clear()
+            new_pref_name.send_keys("browser.test.allSettingsSaved")
+            new_pref_type = driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-pref-type]",
+            )
+            ui.Select(new_pref_type).select_by_value("boolean")
+            new_pref_value = driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-pref-value-select]",
+            )
+            ui.Select(new_pref_value).select_by_value("true")
+            _safe_click(
+                driver,
+                driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    "#all-settings-detail-panel [data-settings-detail-apply-preference]",
+                ),
+            )
+            wait.until(
+                ec.presence_of_element_located((
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-entry-id="browser.test.allSettingsSaved"]',
+                ))
+            )
+
+            settings_search = wait.until(
+                ec.presence_of_element_located((by.By.ID, "wizard-settings-search-input"))
+            )
+            settings_search.clear()
+            settings_search.send_keys("allSettingsSaved")
+            search_result_selector = (
+                '#wizard-settings-search-results '
+                '[data-settings-search-target="all-settings-entry:preference:browser.test.allSettingsSaved"]'
+            )
+            wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, search_result_selector)))
+            _click_selector(driver, wait, search_result_selector)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "browser.test.allSettingsSaved"
+            )
+
+            unknown_review_button = wait.until(
+                ec.presence_of_element_located((
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-review-filter="unknown"]',
+                ))
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-review-filter="unknown"]',
+                ).get_attribute("data-settings-review-count")
+                == "1"
+            )
+            _safe_click(driver, unknown_review_button)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "FuturePolicy"
+            )
+            _safe_click(
+                driver,
+                driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    "#all-settings-detail-panel [data-settings-detail-remove]",
+                ),
+            )
+            wait.until(
+                lambda current_driver: len(current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-entry-id="FuturePolicy"]',
+                )) == 0
+            )
+
+            _wait_for_selector_disabled(wait, driver, "#validate", False)
+            _click_selector(driver, wait, "#validate")
+            _wait_for_selector_disabled(wait, driver, "#save", False)
+            _click_selector(driver, wait, "#save")
+            _wait_for_selector_disabled(wait, driver, "#save", True)
+
+            saved_profile_response = requests.get(f"{base_url}/api/profiles/{profile_id}", timeout=10)
+            assert saved_profile_response.status_code == 200, saved_profile_response.text
+            saved_flags = saved_profile_response.json()["flags"]
+            assert saved_flags["NewTabPage"] is True
+            assert saved_flags["Preferences"]["browser.test.allSettingsSaved"] == {
+                "Status": "default",
+                "Value": True,
+                "Type": "boolean",
+            }
+            assert "FuturePolicy" not in saved_flags
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_compact_toolbar_browser_regression_stays_inside_narrow_viewport():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    payload = build_profile_payload(
+        name="Narrow Header Contract Profile",
+        description="Created by the narrow header browser regression path",
+        owner="narrow-header@example.org",
+        schema_version="release-150",
+    )
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        driver.set_window_size(390, 1200)
+
+        try:
+            for path, ready_selector in [
+                ("/profiles", "#library-panel"),
+                (f"/profiles/{profile_id}/edit", "#wizard-panel"),
+                (f"/profiles/{profile_id}/settings", "#settings-panel"),
+                (f"/profiles/{profile_id}/json", "#editor-panel"),
+            ]:
+                driver.get(f"{base_url}{path}")
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ".compact-toolbar")))
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+
+                metrics = driver.execute_script(
+                    """
+                    const viewportWidth = document.documentElement.clientWidth;
+                    const selectors = [
+                      ".compact-toolbar",
+                      ".compact-toolbar-main",
+                      ".compact-toolbar-side",
+                      ".compact-toolbar-actions",
+                      ".compact-toolbar-control",
+                      ".compact-counter",
+                    ];
+                    const offenders = [];
+                    for (const selector of selectors) {
+                      for (const el of document.querySelectorAll(selector)) {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.left < -1 || rect.right > viewportWidth + 1) {
+                          offenders.push({
+                            selector,
+                            left: Math.round(rect.left),
+                            right: Math.round(rect.right),
+                            viewportWidth,
+                            text: (el.textContent || "").trim().replace(/\\s+/g, " ").slice(0, 80),
+                          });
+                        }
+                      }
+                    }
+                    const toolbar = document.querySelector(".compact-toolbar");
+                    return {
+                      viewportWidth,
+                      toolbarScrollWidth: toolbar.scrollWidth,
+                      toolbarClientWidth: toolbar.clientWidth,
+                      offenders,
+                    };
+                    """
+                )
+
+                assert metrics["toolbarScrollWidth"] <= metrics["toolbarClientWidth"] + 1, metrics
+                assert metrics["offenders"] == [], metrics
+        finally:
+            _close_chromium_driver(driver)
+
+
 def test_library_summary_browser_regression_covers_zero_many_filter_and_ru_label():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
@@ -724,6 +1069,11 @@ def test_library_summary_browser_regression_covers_zero_many_filter_and_ru_label
             list_summary = wait.until(ec.presence_of_element_located((by.By.ID, "list-summary")))
             list_total_summary = wait.until(ec.presence_of_element_located((by.By.ID, "list-total-summary")))
             library_search = wait.until(ec.presence_of_element_located((by.By.ID, "search")))
+            schema_filter = wait.until(ec.presence_of_element_located((by.By.ID, "library-schema-filter")))
+            lifecycle_filter = wait.until(ec.presence_of_element_located((by.By.ID, "library-lifecycle-filter")))
+            validation_filter = wait.until(ec.presence_of_element_located((by.By.ID, "library-validation-filter")))
+            sort_select = wait.until(ec.presence_of_element_located((by.By.ID, "sort")))
+            order_select = wait.until(ec.presence_of_element_located((by.By.ID, "order")))
             refresh_button = wait.until(ec.element_to_be_clickable((by.By.ID, "refresh")))
 
             wait.until(lambda current_driver: library_counter.text.strip() == "0")
@@ -733,6 +1083,11 @@ def test_library_summary_browser_regression_covers_zero_many_filter_and_ru_label
             wait.until(lambda current_driver: "No profiles to show" in current_driver.find_element(by.By.TAG_NAME, "body").text)
             assert library_counter.is_displayed()
             assert library_counter_label.text.strip() == "Profiles in library"
+            assert schema_filter.is_displayed()
+            assert lifecycle_filter.is_displayed()
+            assert validation_filter.is_displayed()
+            assert sort_select.is_displayed()
+            assert order_select.is_displayed()
 
             create_alpha = requests.post(f"{base_url}/api/profiles", json=payload_alpha, timeout=10)
             assert create_alpha.status_code == 201, create_alpha.text
@@ -756,6 +1111,36 @@ def test_library_summary_browser_regression_covers_zero_many_filter_and_ru_label
                 )
             )
             assert library_counter_label.text.strip() == "Profiles in library"
+
+            driver.execute_script(
+                """
+                const sort = document.getElementById('sort');
+                sort.value = 'name';
+                sort.dispatchEvent(new Event('change', { bubbles: true }));
+                const order = document.getElementById('order');
+                order.value = 'asc';
+                order.dispatchEvent(new Event('change', { bubbles: true }));
+                """
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    ".library-row-title-button",
+                )[0].text.strip() == "Library Alpha Profile"
+            )
+            driver.execute_script(
+                """
+                const order = document.getElementById('order');
+                order.value = 'desc';
+                order.dispatchEvent(new Event('change', { bubbles: true }));
+                """
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    ".library-row-title-button",
+                )[0].text.strip() == "Library Beta Profile"
+            )
 
             library_search.clear()
             library_search.send_keys("Alpha")
@@ -794,6 +1179,83 @@ def test_library_summary_browser_regression_covers_zero_many_filter_and_ru_label
             _close_chromium_driver(driver)
 
 
+def test_library_validation_browser_regression_surfaces_not_validated_profiles():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    validated_payload = build_profile_payload(
+        name="Validated library profile",
+        description="Profile with managed rules",
+    )
+    not_validated_payload = build_profile_payload(
+        name="Empty library profile",
+        description="Profile without managed rules",
+    )
+    not_validated_payload["flags"] = {}
+
+    with run_test_app_server() as base_url:
+        validated_response = requests.post(f"{base_url}/api/profiles", json=validated_payload, timeout=10)
+        not_validated_response = requests.post(
+            f"{base_url}/api/profiles",
+            json=not_validated_payload,
+            timeout=10,
+        )
+        assert validated_response.status_code == 201, validated_response.text
+        assert not_validated_response.status_code == 201, not_validated_response.text
+        validated_id = validated_response.json()["id"]
+        not_validated_id = not_validated_response.json()["id"]
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{not_validated_id}/edit"]')
+                )
+            )
+            wait.until(
+                lambda current_driver: "Not validated" in current_driver.find_element(
+                    by.By.XPATH,
+                    f'//a[@href="/profiles/{not_validated_id}/edit"]/ancestor::div[contains(@class,"library-row-grid")]',
+                ).text
+            )
+            not_validated_row = driver.find_element(
+                by.By.XPATH,
+                f'//a[@href="/profiles/{not_validated_id}/edit"]/ancestor::div[contains(@class,"library-row-grid")]',
+            )
+            assert "Not validated" in not_validated_row.text
+            assert not_validated_row.find_element(
+                by.By.CSS_SELECTOR,
+                ".profile-list-status--not-validated",
+            )
+
+            validation_filter = driver.find_element(by.By.ID, "library-validation-filter")
+            driver.execute_script(
+                """
+                const select = arguments[0];
+                select.value = 'not_validated';
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                """,
+                validation_filter,
+            )
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{not_validated_id}/edit"]')
+                )
+            )
+            wait.until(
+                lambda current_driver: not current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    f'a.library-row-open-button[href="/profiles/{validated_id}/edit"]',
+                )
+            )
+        finally:
+            _close_chromium_driver(driver)
+
+
 def test_library_layout_browser_regression_keeps_actions_visible_in_ru_with_long_names():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
@@ -826,6 +1288,7 @@ def test_library_layout_browser_regression_keeps_actions_visible_in_ru_with_long
             table_shell = wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ".library-table-shell")))
             table_head = wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ".library-table-head")))
             row_grid = wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ".library-row-grid")))
+            row_context = wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ".library-row-context")))
             open_button = wait.until(
                 ec.presence_of_element_located(
                     (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]')
@@ -838,6 +1301,12 @@ def test_library_layout_browser_regression_keeps_actions_visible_in_ru_with_long
                     f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]',
                 ).text.strip() == "Открыть профиль"
             )
+            open_button = wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]')
+                )
+            )
+            row_context = wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ".library-row-context")))
 
             layout_probe = driver.execute_script(
                 """
@@ -862,19 +1331,279 @@ def test_library_layout_browser_regression_keeps_actions_visible_in_ru_with_long
             assert layout_probe["shellScrollWidth"] <= layout_probe["shellClientWidth"] + 8
             head_columns = _parse_grid_template_columns(layout_probe["headColumns"])
             row_columns = _parse_grid_template_columns(layout_probe["rowColumns"])
-            assert len(head_columns) == len(row_columns) == 5
+            assert len(head_columns) == len(row_columns) == 6
             assert all(abs(head - row) <= 1.0 for head, row in zip(head_columns, row_columns, strict=True))
             assert layout_probe["buttonFitsHorizontally"] is True
             assert layout_probe["buttonVisibleWidth"] > 120
+            table_shell = driver.find_element(by.By.CSS_SELECTOR, ".library-table-shell")
+            table_head = driver.find_element(by.By.CSS_SELECTOR, ".library-table-head")
+            row_grid = driver.find_element(by.By.CSS_SELECTOR, ".library-row-grid")
             assert table_shell.is_displayed()
             assert table_head.is_displayed()
             assert row_grid.is_displayed()
+            assert row_context.text.splitlines() == ["layout@example.org", "Long-name library layout regression"]
             assert open_button.is_displayed()
         finally:
             _close_chromium_driver(driver)
 
 
-def test_library_compare_browser_regression_uses_last_opened_profile_as_baseline():
+def test_library_mobile_cards_browser_regression_show_key_metadata_without_overflow():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    payload = build_profile_payload(
+        name="Mobile library profile with a readable working title",
+        description="Mobile card note",
+        owner="mobile-library@example.org",
+        schema_version="release-150",
+    )
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        driver.set_window_size(390, 1200)
+
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]')
+                )
+            )
+
+            metrics = driver.execute_script(
+                """
+                const viewportWidth = document.documentElement.clientWidth;
+                const row = document.querySelector('.library-row-grid');
+                const facts = document.querySelector('.library-row-facts');
+                const head = document.querySelector('.library-table-head');
+                const rowStyle = window.getComputedStyle(row);
+                const factsStyle = window.getComputedStyle(facts);
+                return {
+                  documentWidth: document.documentElement.scrollWidth,
+                  viewportWidth,
+                  rowAreas: rowStyle.gridTemplateAreas,
+                  factsDisplay: factsStyle.display,
+                  factsColumns: factsStyle.gridTemplateColumns,
+                  headDisplay: window.getComputedStyle(head).display,
+                };
+                """
+            )
+
+            body_text = driver.find_element(by.By.TAG_NAME, "body").text
+            assert "Mobile library profile with a readable working title" in body_text
+            assert "mobile-library@example.org" in body_text
+            assert "Mobile card note" in body_text
+            assert "Release 150" in body_text
+            assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1
+            assert metrics["headDisplay"] == "none"
+            assert metrics["rowAreas"] == '"primary" "context" "facts" "actions"'
+            assert metrics["factsDisplay"] == "grid"
+            assert len(_parse_grid_template_columns(metrics["factsColumns"])) == 2
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_library_row_action_set_browser_regression_exposes_direct_workflows():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    active_payload = build_profile_payload(
+        name="Action Set Active Profile",
+        description="Active action set profile",
+        owner="actions-active@example.org",
+    )
+    archived_payload = build_profile_payload(
+        name="Action Set Archived Profile",
+        description="Archived action set profile",
+        owner="actions-archived@example.org",
+    )
+
+    with run_test_app_server() as base_url:
+        active_response = requests.post(f"{base_url}/api/profiles", json=active_payload, timeout=10)
+        archived_response = requests.post(f"{base_url}/api/profiles", json=archived_payload, timeout=10)
+        assert active_response.status_code == 201, active_response.text
+        assert archived_response.status_code == 201, archived_response.text
+        active_id = active_response.json()["id"]
+        archived_id = archived_response.json()["id"]
+        deleted_response = requests.delete(f"{base_url}/api/profiles/{archived_id}", timeout=10)
+        assert deleted_response.status_code == 204, deleted_response.text
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{active_id}/edit"]')
+                )
+            )
+            active_row = driver.find_element(
+                by.By.XPATH,
+                f'//a[@href="/profiles/{active_id}/edit"]/ancestor::div[contains(@class,"library-row-grid")]',
+            )
+            assert active_row.find_element(by.By.LINK_TEXT, "All settings").get_attribute("href").endswith(
+                f"/profiles/{active_id}/settings"
+            )
+            assert active_row.find_element(by.By.LINK_TEXT, "JSON").get_attribute("href").endswith(
+                f"/profiles/{active_id}/json"
+            )
+            duplicate_href = active_row.find_element(by.By.LINK_TEXT, "Duplicate").get_attribute("href")
+            assert duplicate_href.endswith(
+                f"/profiles/new?clone_from={active_id}"
+            )
+            assert active_row.find_element(by.By.LINK_TEXT, "Export").get_attribute("href").endswith(
+                f"/api/export/profiles/{active_id}/firefox/policies.json?download=1"
+            )
+            assert active_row.find_element(by.By.LINK_TEXT, "Export").get_attribute("download") == ""
+
+            driver.get(duplicate_href)
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            wait.until(
+                lambda current_driver: current_driver.find_element(by.By.ID, "profile-state-badge").text.strip() == "DRAFT"
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(by.By.ID, "current-name").text.strip().endswith("(copy)")
+            )
+
+            driver.get(f"{base_url}/profiles")
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{active_id}/edit"]')
+                )
+            )
+            active_row = driver.find_element(
+                by.By.XPATH,
+                f'//a[@href="/profiles/{active_id}/edit"]/ancestor::div[contains(@class,"library-row-grid")]',
+            )
+            archive_button = active_row.find_element(by.By.XPATH, './/button[normalize-space()="Archive profile"]')
+
+            driver.execute_script("window.confirm = () => true;")
+            _safe_click(driver, archive_button)
+            wait.until(
+                lambda current_driver: "Profile Action Set Active Profile archived."
+                in current_driver.find_element(by.By.ID, "status").text
+            )
+            wait.until(
+                lambda current_driver: not current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    f'a.library-row-open-button[href="/profiles/{active_id}/edit"]',
+                )
+            )
+
+            lifecycle_filter = driver.find_element(by.By.ID, "library-lifecycle-filter")
+            driver.execute_script(
+                """
+                const select = arguments[0];
+                select.value = 'archived';
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                """,
+                lifecycle_filter,
+            )
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{archived_id}/edit"]')
+                )
+            )
+            archived_row = driver.find_element(
+                by.By.XPATH,
+                f'//a[@href="/profiles/{archived_id}/edit"]/ancestor::div[contains(@class,"library-row-grid")]',
+            )
+            assert archived_row.find_element(by.By.XPATH, './/button[normalize-space()="Restore profile"]')
+            assert archived_row.find_element(
+                by.By.XPATH,
+                './/*[contains(@class,"library-row-secondary-action--disabled") and normalize-space()="Export"]',
+            ).get_attribute("aria-disabled") == "true"
+
+            restore_button = archived_row.find_element(by.By.XPATH, './/button[normalize-space()="Restore profile"]')
+            _safe_click(driver, restore_button)
+            wait.until(
+                lambda current_driver: "Profile Action Set Archived Profile restored."
+                in current_driver.find_element(by.By.ID, "status").text
+            )
+            wait.until(
+                lambda current_driver: not current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    f'a.library-row-open-button[href="/profiles/{archived_id}/edit"]',
+                )
+            )
+
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_library_import_browser_regression_shows_visible_feedback_and_creates_profile():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    with run_test_app_server() as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.get(f"{base_url}/profiles")
+            status = wait.until(ec.visibility_of_element_located((by.By.ID, "import-firefox-policies-status")))
+            assert "Import creates a new profile" in status.text
+
+            driver.execute_script(
+                """
+                const input = document.getElementById('import-firefox-policies-file');
+                const payload = JSON.stringify({ policies: { DisableTelemetry: true } });
+                const file = new File([payload], 'workstation-baseline.json', { type: 'application/json' });
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+                """
+            )
+
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "import-firefox-policies-status",
+                ).text.strip() == "Imported new profile workstation-baseline. Schema: ESR 140.10. Validation: Passed."
+            )
+            assert driver.find_element(by.By.ID, "status").text.strip() == (
+                "Imported new profile workstation-baseline. Schema: ESR 140.10. Validation: Passed."
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "import-firefox-policies",
+                ).get_attribute("aria-busy") == "false"
+            )
+            assert driver.find_element(by.By.LINK_TEXT, "workstation-baseline")
+
+            driver.execute_script(
+                """
+                const input = document.getElementById('import-firefox-policies-file');
+                const file = new File(['{"policies":'], 'broken.json', { type: 'application/json' });
+                const transfer = new DataTransfer();
+                transfer.items.add(file);
+                input.files = transfer.files;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+                """
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "import-firefox-policies-status",
+                ).text.startswith("Import error: Invalid JSON:")
+            )
+            assert driver.find_element(by.By.ID, "import-firefox-policies").is_enabled()
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_library_compare_browser_regression_selects_two_profiles_directly():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
     ui = pytest.importorskip("selenium.webdriver.support.ui")
@@ -911,35 +1640,43 @@ def test_library_compare_browser_regression_uses_last_opened_profile_as_baseline
                     (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{base_profile_id}/edit"]')
                 )
             )
-            assert not driver.find_elements(
-                by.By.CSS_SELECTOR,
-                f'[data-compare-profile-id="{other_profile_id}"]',
-            )
-
-            library_handle = driver.current_window_handle
-            library_handles = set(driver.window_handles)
-            baseline_open_button = wait.until(
-                ec.element_to_be_clickable(
-                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{base_profile_id}/edit"]')
-                )
-            )
-            _safe_click(driver, baseline_open_button)
-
-            edit_handle = _switch_to_new_window(driver, wait, library_handles)
-            wait.until(lambda current_driver: urlparse(current_driver.current_url).path == f"/profiles/{base_profile_id}/edit")
-            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
-
-            driver.switch_to.window(library_handle)
-            wait.until(
-                lambda current_driver: current_driver.find_elements(
-                    by.By.CSS_SELECTOR,
-                    f'[data-compare-profile-id="{other_profile_id}"]',
-                )
-            )
-            assert not driver.find_elements(
+            assert driver.find_element(
                 by.By.CSS_SELECTOR,
                 f'[data-compare-profile-id="{base_profile_id}"]',
+            ).text.strip() == "Select first"
+            assert driver.find_element(
+                by.By.CSS_SELECTOR,
+                f'[data-compare-profile-id="{other_profile_id}"]',
+            ).text.strip() == "Select first"
+
+            baseline_compare_button = wait.until(
+                ec.element_to_be_clickable(
+                    (by.By.CSS_SELECTOR, f'[data-compare-profile-id="{base_profile_id}"]')
+                )
             )
+            _safe_click(driver, baseline_compare_button)
+
+            stale_exception = pytest.importorskip("selenium.common.exceptions").StaleElementReferenceException
+
+            def compare_button_text_is(selector: str, expected: str) -> bool:
+                try:
+                    return driver.find_element(by.By.CSS_SELECTOR, selector).text.strip() == expected
+                except stale_exception:
+                    return False
+
+            wait.until(
+                lambda current_driver: compare_button_text_is(
+                    f'[data-compare-profile-id="{base_profile_id}"]',
+                    "First selected",
+                )
+            )
+            wait.until(
+                lambda current_driver: compare_button_text_is(
+                    f'[data-compare-profile-id="{other_profile_id}"]',
+                    "Select second",
+                )
+            )
+            assert "First profile selected" in driver.find_element(by.By.ID, "compare-empty-copy").text
 
             compare_button = wait.until(
                 ec.element_to_be_clickable(
@@ -960,8 +1697,252 @@ def test_library_compare_browser_regression_uses_last_opened_profile_as_baseline
             assert driver.find_element(by.By.ID, "compare-clear").is_displayed()
             assert "Release" not in driver.find_element(by.By.ID, "compare-current-copy").text
             assert driver.find_element(by.By.ID, "compare-policy-count").text.strip().isdigit()
+        finally:
+            _close_chromium_driver(driver)
 
-            driver.switch_to.window(edit_handle)
+
+def test_primary_modes_browser_regression_stay_russian_and_fit_viewport_in_ru():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    payload = build_profile_payload(
+        name="Профиль для полного русского QA-прохода",
+        description="Russian primary modes QA",
+        owner="ru-qa@example.org",
+        schema_version="release-150",
+        flags={
+            "DisableTelemetry": True,
+            "Homepage": {
+                "URL": "https://portal.example.local/",
+                "Locked": True,
+                "StartPage": "homepage-locked",
+            },
+        },
+    )
+    forbidden_fragments = (
+        "Browser Profile Manager",
+        "Profile library",
+        "Guided editor",
+        "All settings catalog",
+        "Search all controls",
+        "Firefox Account",
+        "Advanced settings",
+    )
+
+    def assert_ru_surface_is_clean(driver, expected_fragments: tuple[str, ...]) -> None:
+        body_text = driver.find_element(by.By.TAG_NAME, "body").text
+        for fragment in expected_fragments:
+            assert fragment in body_text
+        for fragment in forbidden_fragments:
+            assert fragment not in body_text
+        layout_probe = driver.execute_script(
+            """
+            return {
+              documentWidth: document.documentElement.scrollWidth,
+              viewportWidth: window.innerWidth,
+            };
+            """
+        )
+        assert layout_probe["documentWidth"] <= layout_probe["viewportWidth"] + 1
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]')
+                )
+            )
+            _set_locale(driver, wait, ui, locale="ru", expected_text="МЕНЕДЖЕР ПРОФИЛЕЙ БРАУЗЕРА")
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]',
+                ).text.strip() == "Открыть профиль"
+            )
+            assert_ru_surface_is_clean(
+                driver,
+                ("Профиль для полного русского QA-прохода", "Открыть профиль"),
+            )
+
+            driver.get(f"{base_url}/profiles/{profile_id}/edit")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            wait.until(
+                lambda current_driver: "Пошаговый редактор"
+                in current_driver.find_element(by.By.TAG_NAME, "body").text
+            )
+            assert_ru_surface_is_clean(
+                driver,
+                ("Пошаговый редактор", "Пользователи, дополнения и сайты"),
+            )
+
+            driver.get(f"{base_url}/profiles/{profile_id}/settings")
+            wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
+            wait.until(
+                lambda current_driver: "Каталог всех настроек"
+                in current_driver.find_element(by.By.TAG_NAME, "body").text
+            )
+            assert_ru_surface_is_clean(
+                driver,
+                ("Каталог всех настроек", "Аккаунт Mozilla"),
+            )
+
+            driver.get(f"{base_url}/profiles/{profile_id}/json")
+            wait.until(ec.presence_of_element_located((by.By.ID, "editor-panel")))
+            wait.until(
+                lambda current_driver: "JSON-редактор"
+                in current_driver.find_element(by.By.TAG_NAME, "body").text
+            )
+            assert_ru_surface_is_clean(
+                driver,
+                ("JSON-редактор", "Скачать Firefox policies.json"),
+            )
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_responsive_ui_acceptance_covers_ru_library_actions_and_ai_schema_split():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    release_payload = build_profile_payload(
+        name="RU Responsive Release Profile",
+        description="Release profile for responsive acceptance",
+        owner="responsive-release@example.org",
+        schema_version="release-150",
+        flags={
+            "DisableTelemetry": True,
+            "AIControls": {
+                "Default": {
+                    "Value": "blocked",
+                    "Locked": True,
+                }
+            },
+            "VisualSearchEnabled": False,
+        },
+    )
+    esr_payload = build_profile_payload(
+        name="RU Responsive ESR Profile",
+        description="ESR profile for responsive acceptance",
+        owner="responsive-esr@example.org",
+        schema_version="esr-140.10",
+        flags={"DisableTelemetry": True},
+    )
+
+    def assert_document_fits_viewport(driver) -> None:
+        metrics = driver.execute_script(
+            """
+            return {
+              documentWidth: document.documentElement.scrollWidth,
+              viewportWidth: window.innerWidth,
+            };
+            """
+        )
+        assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1, metrics
+
+    def assert_library_action_buttons_fit(driver) -> None:
+        offenders = driver.execute_script(
+            """
+            return Array.from(document.querySelectorAll(".library-row-actions .button-base"))
+              .map((el) => {
+                const rect = el.getBoundingClientRect();
+                return {
+                  text: (el.textContent || "").trim().replace(/\\s+/g, " "),
+                  width: rect.width,
+                  scrollWidth: el.scrollWidth,
+                  height: rect.height,
+                  scrollHeight: el.scrollHeight,
+                };
+              })
+              .filter((entry) => (
+                entry.scrollWidth > Math.ceil(entry.width) + 1
+                || entry.scrollHeight > Math.ceil(entry.height) + 1
+              ));
+            """
+        )
+        assert offenders == []
+
+    with run_test_app_server() as base_url:
+        release_response = requests.post(f"{base_url}/api/profiles", json=release_payload, timeout=10)
+        assert release_response.status_code == 201, release_response.text
+        release_profile_id = release_response.json()["id"]
+        esr_response = requests.post(f"{base_url}/api/profiles", json=esr_payload, timeout=10)
+        assert esr_response.status_code == 201, esr_response.text
+        esr_profile_id = esr_response.json()["id"]
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            driver.set_window_size(1440, 1500)
+            driver.get(f"{base_url}/profiles")
+            wait.until(
+                ec.presence_of_element_located(
+                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{release_profile_id}/edit"]')
+                )
+            )
+            _set_locale(driver, wait, ui, locale="ru", expected_text="МЕНЕДЖЕР ПРОФИЛЕЙ БРАУЗЕРА")
+            wait.until(
+                lambda current_driver: "Все настройки"
+                in current_driver.find_element(by.By.ID, "list").text
+            )
+            assert_document_fits_viewport(driver)
+            assert_library_action_buttons_fit(driver)
+
+            driver.set_window_size(390, 1200)
+            wait.until(lambda current_driver: current_driver.execute_script("return window.innerWidth") <= 390)
+            assert_document_fits_viewport(driver)
+            assert_library_action_buttons_fit(driver)
+
+            for route, ready_selector in (
+                (f"/profiles/{release_profile_id}/edit", "#wizard-panel"),
+                (f"/profiles/{release_profile_id}/settings", "#settings-panel"),
+                (f"/profiles/{release_profile_id}/json", "#editor-panel"),
+            ):
+                driver.get(f"{base_url}{route}")
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+                assert_document_fits_viewport(driver)
+
+            driver.set_window_size(1440, 1500)
+            driver.get(f"{base_url}/profiles/{release_profile_id}/edit")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            _open_wizard_step(driver, wait, by, 5)
+            _wait_for_selector_visibility(wait, driver, "#wizard-ai-release-content", True)
+            _wait_for_selector_visibility(wait, driver, "#wizard-ai-esr-empty-state", False)
+            _wait_for_selector_visibility(wait, driver, "#wizard-ai-policy-controls", True)
+            release_ai_text = driver.find_element(by.By.ID, "wizard-step-5").text
+            assert "Политики ИИ Firefox 150" in release_ai_text
+            assert "Настройки генеративного ИИ" in release_ai_text
+            assert "GenerativeAI" not in release_ai_text
+            assert "AIControls" not in release_ai_text
+            assert "Enabled" not in release_ai_text
+            assert "Chatbot" not in release_ai_text
+            assert "LinkPreviews" not in release_ai_text
+            assert "TabGroups" not in release_ai_text
+            assert "Устарев" not in release_ai_text
+            assert "поставщик" not in release_ai_text.lower()
+            assert "поставщиков" not in release_ai_text.lower()
+            assert "нет полей" not in release_ai_text.lower()
+            assert not driver.find_elements(by.By.ID, "wizard-ai-providers-handoff")
+
+            driver.get(f"{base_url}/profiles/{esr_profile_id}/edit")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            _open_wizard_step(driver, wait, by, 5)
+            _wait_for_selector_visibility(wait, driver, "#wizard-ai-esr-empty-state", True)
+            _wait_for_selector_visibility(wait, driver, "#wizard-ai-release-content", False)
+            esr_ai_text = driver.find_element(by.By.ID, "wizard-step-5").text
+            assert "Эта схема не поддерживает настройки ИИ" in esr_ai_text
+            assert "Политики ИИ Firefox 150" not in esr_ai_text
+            assert "Настройки генеративного ИИ" not in esr_ai_text
         finally:
             _close_chromium_driver(driver)
 
@@ -1012,25 +1993,7 @@ def test_library_compare_browser_regression_reports_expected_counts_and_guided_a
         try:
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "list")))
-            library_handle = driver.current_window_handle
-            library_handles = set(driver.window_handles)
-            baseline_open_button = wait.until(
-                ec.element_to_be_clickable(
-                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{base_profile_id}/edit"]')
-                )
-            )
-            _safe_click(driver, baseline_open_button)
-
-            edit_handle = _switch_to_new_window(driver, wait, library_handles)
-            wait.until(lambda current_driver: urlparse(current_driver.current_url).path == f"/profiles/{base_profile_id}/edit")
-            driver.switch_to.window(library_handle)
-
-            compare_button = wait.until(
-                ec.element_to_be_clickable(
-                    (by.By.CSS_SELECTOR, f'[data-compare-profile-id="{other_profile_id}"]')
-                )
-            )
-            _safe_click(driver, compare_button)
+            _select_library_compare_pair(driver, wait, by, ec, base_profile_id, other_profile_id)
 
             wait.until(lambda current_driver: _selector_is_visible(current_driver, "#compare-active"))
             wait.until(
@@ -1057,15 +2020,14 @@ def test_library_compare_browser_regression_reports_expected_counts_and_guided_a
             assert "browser.search.suggest.enabled" in compare_changes_text
 
             guided_areas_text = driver.find_element(by.By.ID, "compare-guided-areas-list").text
-            assert "Search and navigation" in guided_areas_text
-            assert "Privacy and safety" in guided_areas_text
+            assert "Browser access and defaults" in guided_areas_text
+            assert "Security and privacy" in guided_areas_text
             assert "browser.search.suggest.enabled" in guided_areas_text
             assert "DisableTelemetry" in guided_areas_text
 
             assert "Schema: ESR 140.10." in driver.find_element(by.By.ID, "compare-current-copy").text
             assert "Schema: ESR 140.10." in driver.find_element(by.By.ID, "compare-other-copy").text
 
-            driver.switch_to.window(edit_handle)
         finally:
             _close_chromium_driver(driver)
 
@@ -1115,25 +2077,7 @@ def test_library_compare_browser_regression_keeps_metadata_only_diffs_free_of_po
         try:
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "list")))
-            library_handle = driver.current_window_handle
-            library_handles = set(driver.window_handles)
-            baseline_open_button = wait.until(
-                ec.element_to_be_clickable(
-                    (by.By.CSS_SELECTOR, f'a.library-row-open-button[href="/profiles/{base_profile_id}/edit"]')
-                )
-            )
-            _safe_click(driver, baseline_open_button)
-
-            edit_handle = _switch_to_new_window(driver, wait, library_handles)
-            wait.until(lambda current_driver: urlparse(current_driver.current_url).path == f"/profiles/{base_profile_id}/edit")
-            driver.switch_to.window(library_handle)
-
-            compare_button = wait.until(
-                ec.element_to_be_clickable(
-                    (by.By.CSS_SELECTOR, f'[data-compare-profile-id="{other_profile_id}"]')
-                )
-            )
-            _safe_click(driver, compare_button)
+            _select_library_compare_pair(driver, wait, by, ec, base_profile_id, other_profile_id)
 
             wait.until(lambda current_driver: _selector_is_visible(current_driver, "#compare-active"))
             wait.until(
@@ -1152,11 +2096,10 @@ def test_library_compare_browser_regression_keeps_metadata_only_diffs_free_of_po
             assert "browser.search.suggest.enabled" not in compare_changes_text
 
             guided_areas_text = driver.find_element(by.By.ID, "compare-guided-areas-list").text
-            assert "Start" in guided_areas_text
-            assert "Search and navigation" not in guided_areas_text
-            assert "Privacy and safety" not in guided_areas_text
+            assert "Profile and baseline" in guided_areas_text
+            assert "Browser access and defaults" not in guided_areas_text
+            assert "Security and privacy" not in guided_areas_text
 
-            driver.switch_to.window(edit_handle)
         finally:
             _close_chromium_driver(driver)
 
@@ -1237,7 +2180,7 @@ def test_release_150_profile_browser_regression_loads_cleanly_in_guided_and_json
                 "URL": "https://intranet.example.local/",
                 "Additional": [
                     "https://helpdesk.example.local/",
-                    "https://docs.example.local/",
+                    "https://kb.example.local/",
                 ],
                 "Locked": True,
                 "StartPage": "homepage-locked",
@@ -1262,7 +2205,10 @@ def test_release_150_profile_browser_regression_loads_cleanly_in_guided_and_json
             wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
             workspace_signal = wait.until(ec.presence_of_element_located((by.By.ID, "workspace-signal")))
             status_banner = wait.until(ec.presence_of_element_located((by.By.ID, "status")))
-            wait.until(lambda current_driver: workspace_signal.text.strip() != "")
+            wait.until(
+                lambda current_driver: "signal-chip--invalid"
+                not in current_driver.find_element(by.By.ID, "workspace-signal").get_attribute("class")
+            )
 
             assert "signal-chip--invalid" not in workspace_signal.get_attribute("class")
             assert "error" not in status_banner.get_attribute("class")
@@ -1368,7 +2314,6 @@ def test_library_counter_browser_regression_covers_plural_forms_and_delete_resto
         try:
             driver.get(f"{base_url}/profiles")
             library_counter = wait.until(ec.presence_of_element_located((by.By.ID, "workspace-profile-count")))
-            library_counter_label = wait.until(ec.presence_of_element_located((by.By.ID, "workspace-profile-label")))
             list_summary = wait.until(ec.presence_of_element_located((by.By.ID, "list-summary")))
             list_total_summary = wait.until(ec.presence_of_element_located((by.By.ID, "list-total-summary")))
             refresh_button = wait.until(ec.element_to_be_clickable((by.By.ID, "refresh")))
@@ -1392,12 +2337,22 @@ def test_library_counter_browser_regression_covers_plural_forms_and_delete_resto
                 wait.until(lambda current_driver: library_counter.text.strip() == str(total))
                 wait.until(lambda current_driver: list_summary.text.strip() == str(total))
                 wait.until(lambda current_driver: list_total_summary.text.strip() == str(total))
-                assert library_counter_label.text.strip() == label_en
+                wait.until(
+                    lambda current_driver: current_driver.find_element(
+                        by.By.ID,
+                        "workspace-profile-label",
+                    ).text.strip() == label_en
+                )
                 _set_locale(driver, wait, ui, locale="ru", expected_text="МЕНЕДЖЕР ПРОФИЛЕЙ БРАУЗЕРА")
                 wait.until(lambda current_driver: library_counter.text.strip() == str(total))
                 wait.until(lambda current_driver: list_summary.text.strip() == str(total))
                 wait.until(lambda current_driver: list_total_summary.text.strip() == str(total))
-                assert library_counter_label.text.strip() == label_ru
+                wait.until(
+                    lambda current_driver: current_driver.find_element(
+                        by.By.ID,
+                        "workspace-profile-label",
+                    ).text.strip() == label_ru
+                )
                 _set_locale(driver, wait, ui, locale="en", expected_text="BROWSER PROFILE MANAGER")
                 wait.until(lambda current_driver: library_counter.text.strip() == str(total))
 
@@ -2206,9 +3161,7 @@ def test_export_review_jumps_browser_regression_open_expected_surfaces_for_activ
                     == state
                 )
 
-                open_wizard_step_with_retry(driver, wait, 8)
-                wait.until(ec.element_to_be_clickable((by.By.ID, "wizard-export-validate-action")))
-                _click_selector(driver, wait, "#wizard-export-validate-action")
+                open_wizard_step_with_retry(driver, wait, 6)
                 wait.until(
                     lambda current_driver: current_driver.find_element(
                         by.By.ID, "wizard-export-next-steps"
@@ -2259,7 +3212,7 @@ def test_export_review_jumps_browser_regression_open_expected_surfaces_for_activ
                 _click_selector(driver, wait, "#wizard-export-summary-ai-jump")
                 wait.until(
                     lambda current_driver: current_driver.find_element(
-                        by.By.CSS_SELECTOR, '.wizard-step[data-step="7"]'
+                        by.By.CSS_SELECTOR, '.wizard-step[data-step="5"]'
                     ).get_attribute("aria-current")
                     == "step"
                 )
@@ -2271,7 +3224,7 @@ def test_export_review_jumps_browser_regression_open_expected_surfaces_for_activ
                     message="AI review jump should reveal the guided AI controls",
                 )
 
-                open_wizard_step_with_retry(driver, wait, 8)
+                open_wizard_step_with_retry(driver, wait, 6)
                 wait.until(ec.element_to_be_clickable((by.By.ID, "wizard-export-raw-jump")))
                 previous_handles = set(driver.window_handles)
                 _click_selector(driver, wait, "#wizard-export-raw-jump")
@@ -2416,9 +3369,7 @@ def test_export_review_unknown_jump_browser_regression_opens_json_for_active_and
                     == state
                 )
 
-                open_wizard_step_with_retry(driver, wait, 8)
-                wait.until(ec.element_to_be_clickable((by.By.ID, "wizard-export-validate-action")))
-                _click_selector(driver, wait, "#wizard-export-validate-action")
+                open_wizard_step_with_retry(driver, wait, 6)
                 wait.until(
                     lambda current_driver: current_driver.find_element(
                         by.By.ID, "wizard-export-next-steps"
@@ -2497,6 +3448,8 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
     ui = pytest.importorskip("selenium.webdriver.support.ui")
 
+    from app.models.profile import Profile
+
     payload = build_profile_payload(
         name="Guided Workflow Browser Profile",
         description="Chromium guided workflow regression",
@@ -2536,11 +3489,11 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 "#wizard-general-policy-presets",
                 "#wizard-proxy-presets",
                 "#wizard-network-enterprise-presets",
+                "#wizard-home-surface-startup",
+                "#wizard-search-defaults-presets",
             ),
             "hidden": (
                 "#wizard-starter-grid",
-                "#wizard-homepage-url",
-                "#wizard-search-default-engine",
                 "#wizard-hardening-presets",
                 "#wizard-sync-focus-presets",
                 "#wizard-ai-posture-presets",
@@ -2549,47 +3502,18 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
         },
         3: {
             "visible": (
-                "#wizard-home-surface-startup",
-                "#wizard-home-surface-new-tab",
-                "#wizard-home-surface-firefox-home",
+                "#wizard-hardening-presets",
+                "#wizard-cleanup-presets",
+                "#wizard-site-data-presets",
             ),
             "hidden": (
                 "#wizard-proxy-presets",
-                "#wizard-search-default-engine",
-                "#wizard-hardening-presets",
                 "#wizard-sync-focus-presets",
                 "#wizard-ai-posture-presets",
                 "#wizard-export-ready-card",
             ),
         },
         4: {
-            "visible": (
-                "#wizard-search-defaults-presets",
-                "#wizard-search-engine-add",
-                "#wizard-firefox-suggest-presets",
-            ),
-            "hidden": (
-                "#wizard-homepage-url",
-                "#wizard-hardening-presets",
-                "#wizard-sync-focus-presets",
-                "#wizard-ai-posture-presets",
-                "#wizard-export-ready-card",
-            ),
-        },
-        5: {
-            "visible": (
-                "#wizard-hardening-presets",
-                "#wizard-cleanup-presets",
-                "#wizard-site-data-presets",
-            ),
-            "hidden": (
-                "#wizard-search-default-engine",
-                "#wizard-sync-focus-presets",
-                "#wizard-ai-posture-presets",
-                "#wizard-export-ready-card",
-            ),
-        },
-        6: {
             "visible": (
                 "#wizard-sync-focus-presets",
                 "#wizard-language-presets",
@@ -2598,17 +3522,17 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 "#wizard-website-access-posture",
             ),
             "hidden": (
+                "#wizard-homepage-url",
                 "#wizard-hardening-presets",
                 "#wizard-ai-posture-presets",
                 "#wizard-export-ready-card",
-                "#wizard-homepage-url",
             ),
         },
-        7: {
+        5: {
             "visible": (
                 "#wizard-ai-posture-presets",
                 "#wizard-ai-policy-controls",
-                "#wizard-ai-providers-handoff",
+                "#wizard-visual-search-enabled-card",
             ),
             "hidden": (
                 "#wizard-sync-focus-presets",
@@ -2619,7 +3543,7 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 "#wizard-hardening-presets",
             ),
         },
-        8: {
+        6: {
             "visible": (
                 "#wizard-export-ready-card",
                 "#wizard-export-save-action",
@@ -2627,18 +3551,27 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 "#wizard-export-next-steps",
             ),
             "hidden": (
+                "#wizard-hardening-presets",
                 "#wizard-ai-posture-presets",
                 "#wizard-sync-focus-presets",
-                "#wizard-hardening-presets",
                 "#wizard-homepage-url",
             ),
         },
     }
 
-    with run_test_app_server() as base_url:
+    with run_test_app_server_handle() as server:
+        base_url = server.base_url
         create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
         assert create_response.status_code == 201, create_response.text
         profile_id = create_response.json()["id"]
+        with server.session_factory() as session:
+            profile = session.get(Profile, profile_id)
+            assert profile is not None
+            profile.flags = {
+                **(profile.flags or {}),
+                "FuturePolicy": {"Enabled": True},
+            }
+            session.commit()
 
         driver = _build_chromium_driver()
         wait = ui.WebDriverWait(driver, 20)
@@ -2650,13 +3583,21 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
             library_search.send_keys(payload["name"])
             library_handles = set(driver.window_handles)
             open_button_selector = f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]'
-            wait.until(ec.element_to_be_clickable((by.By.CSS_SELECTOR, open_button_selector)))
+            wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, open_button_selector)))
             _click_selector(driver, wait, open_button_selector)
             _switch_to_new_window(driver, wait, library_handles)
             wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
             wait.until(
                 lambda current_driver: urlparse(current_driver.current_url).path
                 == f"/profiles/{profile_id}/edit"
+            )
+            wait.until(
+                ec.presence_of_element_located((by.By.CSS_SELECTOR, "[data-wizard-review-filters]"))
+            )
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    "return document.body.dataset.wizardNavigationReady === 'true';"
+                )
             )
 
             for step_number, expectations in step_expectations.items():
@@ -2688,8 +3629,6 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 toggle_selector="#wizard-network-enterprise-fine-tuning-toggle",
                 panel_selector="#wizard-network-enterprise-fine-tuning-panel",
             )
-
-            _open_wizard_step(driver, wait, by, 3)
             wait.until(ec.element_to_be_clickable((by.By.CSS_SELECTOR, '[data-home-surface-toggle="firefox_home"]')))
             _click_selector(driver, wait, '[data-home-surface-toggle="firefox_home"]')
             wait.until(
@@ -2699,8 +3638,6 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 == "true"
             )
             _wait_for_selector_visibility(wait, driver, "#wizard-firefox-home-presets", True)
-
-            _open_wizard_step(driver, wait, by, 4)
             _toggle_panel(
                 driver,
                 wait,
@@ -2708,7 +3645,7 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 panel_selector="#wizard-search-defaults-fine-tuning-panel",
             )
 
-            _open_wizard_step(driver, wait, by, 5)
+            _open_wizard_step(driver, wait, by, 3)
             _toggle_panel(
                 driver,
                 wait,
@@ -2716,7 +3653,7 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 panel_selector="#wizard-site-data-fine-tuning-panel",
             )
 
-            _open_wizard_step(driver, wait, by, 6)
+            _open_wizard_step(driver, wait, by, 4)
             _toggle_panel(
                 driver,
                 wait,
@@ -2743,20 +3680,21 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
             )
             _wait_for_selector_visibility(wait, driver, "#wizard-extension-profile-details-ublock", True)
 
-            _open_wizard_step(driver, wait, by, 7)
+            _open_wizard_step(driver, wait, by, 5)
             wait.until(ec.element_to_be_clickable((by.By.CSS_SELECTOR, '[data-ai-posture-preset="disable"]')))
             _click_selector(driver, wait, '[data-ai-posture-preset="disable"]')
             wait.until(
                 lambda current_driver: _selector_is_visible(current_driver, "#wizard-ai-policy-controls")
             )
-            ai_handoff_link = wait.until(
-                ec.presence_of_element_located((by.By.ID, "wizard-ai-providers-open-advanced"))
+            wait.until(
+                lambda current_driver: _selector_is_visible(
+                    current_driver,
+                    "#wizard-visual-search-enabled-card",
+                )
             )
-            ai_handoff_href = ai_handoff_link.get_attribute("href") or ""
-            assert f"/profiles/{profile_id}/settings" in ai_handoff_href
-            assert "focus=policy%3AGenerativeAI" in ai_handoff_href or "focus=policy:GenerativeAI" in ai_handoff_href
+            assert not driver.find_elements(by.By.ID, "wizard-ai-providers-open-advanced")
 
-            _open_wizard_step(driver, wait, by, 8)
+            _open_wizard_step(driver, wait, by, 6)
             wait.until(ec.element_to_be_clickable((by.By.ID, "wizard-export-validate-action")))
             _click_selector(driver, wait, "#wizard-export-validate-action")
             wait.until(
@@ -2776,11 +3714,11 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
                 == "step"
             )
             _wait_for_selector_visibility(wait, driver, "#wizard-general-policy-presets", True)
-            _open_wizard_step(driver, wait, by, 8)
+            _open_wizard_step(driver, wait, by, 6)
 
             _set_locale(driver, wait, ui, locale="ru", expected_text="Пошаговый редактор")
             wait.until(
-                lambda current_driver: "Аккаунты, языки, дополнения и сайты"
+                lambda current_driver: "Пользователи, дополнения и сайты"
                 in current_driver.find_element(by.By.TAG_NAME, "body").text
             )
             assert "Firefox Account" not in driver.find_element(by.By.TAG_NAME, "body").text
@@ -2794,7 +3732,7 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
             settings_handle = _switch_to_new_window(driver, wait, edit_handles)
             wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
             wait.until(
-                lambda current_driver: "Каталог расширенных настроек"
+                lambda current_driver: "Каталог всех настроек"
                 in current_driver.find_element(by.By.TAG_NAME, "body").text
             )
             wait.until(
@@ -2806,17 +3744,307 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
             settings_search_label = wait.until(
                 ec.presence_of_element_located((by.By.CSS_SELECTOR, '[data-i18n="profiles.settings_search_label"]'))
             )
-            assert "Каталог расширенных настроек" in settings_body_text
-            assert settings_search_label.text.strip().lower() == "поиск по расширенным настройкам"
+            settings_list = wait.until(ec.presence_of_element_located((by.By.ID, "all-settings-list")))
+            wait.until(
+                lambda current_driver: len(
+                    current_driver.find_elements(
+                        by.By.CSS_SELECTOR,
+                        '#all-settings-list [data-settings-entry-kind="policy"]',
+                    )
+                ) > 0
+            )
+            disable_telemetry_row = settings_list.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="DisableTelemetry"]',
+            )
+            startup_preference_row = settings_list.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="browser.startup.page"]',
+            )
+            assert "Каталог всех настроек" in settings_body_text
+            assert settings_search_label.text.strip().lower() == "поиск по всем настройкам"
             assert "Аккаунт Mozilla" in settings_body_text
-            assert "Advanced settings catalog" not in settings_body_text
-            assert "Search advanced controls" not in settings_body_text
+            assert "All settings catalog" not in settings_body_text
+            assert "Search all controls" not in settings_body_text
             assert "Firefox Account" not in settings_body_text
+            assert disable_telemetry_row.get_attribute("data-settings-entry-state") == "configured"
+            assert startup_preference_row.get_attribute("data-settings-entry-kind") == "preference"
+            assert driver.find_element(by.By.ID, "all-settings-list-summary").text.strip()
+            review_actions = wait.until(ec.presence_of_element_located((by.By.ID, "all-settings-review-actions")))
+            unknown_review_button = review_actions.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-review-filter="unknown"]',
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-review-filter="unknown"]',
+                ).get_attribute("data-settings-review-count")
+                == "1"
+            )
+            assert "Импортированные неизвестные ключи" in driver.find_element(by.By.TAG_NAME, "body").text
+            _safe_click(driver, unknown_review_button)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-list-filter="unknown"]',
+                ).get_attribute("aria-pressed")
+                == "true"
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "FuturePolicy"
+            )
+            future_policy_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="FuturePolicy"]',
+            )
+            assert future_policy_row.get_attribute("data-settings-entry-unknown") == "true"
+            assert future_policy_row.get_attribute("data-settings-entry-state") == "configured"
+            _safe_click(driver, driver.find_element(by.By.CSS_SELECTOR, '[data-settings-list-filter="all"]'))
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-list-filter="all"]',
+                ).get_attribute("aria-pressed")
+                == "true"
+            )
+
+            new_tab_page_row = settings_list.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="NewTabPage"]',
+            )
+            _safe_click(driver, new_tab_page_row)
+            detail_panel = wait.until(
+                ec.presence_of_element_located((by.By.ID, "all-settings-detail-panel"))
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "NewTabPage"
+            )
+            new_tab_page_select = detail_panel.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-schema-policy-field="__value__"]',
+            )
+            assert new_tab_page_select.get_attribute("value") == ""
+            ui.Select(new_tab_page_select).select_by_value("true")
+            wait.until(
+                lambda current_driver: "true"
+                in current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).text
+            )
+
+            search_suggest_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="SearchSuggestEnabled"]',
+            )
+            _safe_click(driver, search_suggest_row)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "SearchSuggestEnabled"
+            )
+            assert driver.find_element(
+                by.By.CSS_SELECTOR,
+                '#all-settings-detail-panel [data-schema-policy-kind="boolean-select"]',
+            ).is_displayed()
+
+            startup_preference_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="browser.startup.page"]',
+            )
+            _safe_click(driver, startup_preference_row)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "browser.startup.page"
+            )
+            assert driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-apply-preference]",
+            ).is_displayed()
+
+            add_preference_button = driver.find_element(by.By.ID, "all-settings-add-preference")
+            _safe_click(driver, add_preference_button)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "__new_preference__"
+            )
+            new_pref_name = driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-pref-name]",
+            )
+            new_pref_name.clear()
+            new_pref_name.send_keys("browser.test.allSettingsAdded")
+            new_pref_type = driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-pref-type]",
+            )
+            ui.Select(new_pref_type).select_by_value("boolean")
+            new_pref_value = driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-pref-value-select]",
+            )
+            ui.Select(new_pref_value).select_by_value("true")
+            _safe_click(
+                driver,
+                driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    "#all-settings-detail-panel [data-settings-detail-apply-preference]",
+                ),
+            )
+            wait.until(
+                ec.presence_of_element_located((
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-entry-id="browser.test.allSettingsAdded"]',
+                ))
+            )
+            added_preference_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="browser.test.allSettingsAdded"]',
+            )
+            assert added_preference_row.get_attribute("data-settings-entry-kind") == "preference"
+            assert added_preference_row.get_attribute("data-settings-entry-state") == "configured"
+            _safe_click(driver, added_preference_row)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "browser.test.allSettingsAdded"
+            )
+            _safe_click(
+                driver,
+                driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    "#all-settings-detail-panel [data-settings-detail-remove]",
+                ),
+            )
+            wait.until(
+                lambda current_driver: len(current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-entry-id="browser.test.allSettingsAdded"]',
+                )) == 0
+            )
+
+            configured_filter = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-list-filter="configured"]',
+            )
+            available_filter = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-list-filter="available"]',
+            )
+            _safe_click(driver, configured_filter)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-list-filter="configured"]',
+                ).get_attribute("aria-pressed")
+                == "true"
+            )
+            configured_disable_telemetry_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="DisableTelemetry"]',
+            )
+            configured_startup_preference_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="browser.startup.page"]',
+            )
+            assert not configured_disable_telemetry_row.get_attribute("hidden")
+            assert configured_startup_preference_row.get_attribute("hidden")
+
+            _safe_click(driver, available_filter)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-list-filter="available"]',
+                ).get_attribute("aria-pressed")
+                == "true"
+            )
+            available_disable_telemetry_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="DisableTelemetry"]',
+            )
+            available_startup_preference_row = driver.find_element(
+                by.By.CSS_SELECTOR,
+                '[data-settings-entry-id="browser.startup.page"]',
+            )
+            assert available_disable_telemetry_row.get_attribute("hidden")
+            assert not available_startup_preference_row.get_attribute("hidden")
+            assert "Показано:" in driver.find_element(by.By.ID, "all-settings-list-summary").text
 
             settings_search = wait.until(
                 ec.presence_of_element_located((by.By.ID, "wizard-settings-search-input"))
             )
             settings_search.clear()
+            settings_search.send_keys("FuturePolicy")
+            wait.until(
+                ec.presence_of_element_located((
+                    by.By.CSS_SELECTOR,
+                    '#wizard-settings-search-results [data-settings-search-target="all-settings-entry:policy:FuturePolicy"]',
+                ))
+            )
+            _safe_click(
+                driver,
+                driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    '#wizard-settings-search-results [data-settings-search-target="all-settings-entry:policy:FuturePolicy"]',
+                ),
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID,
+                    "all-settings-detail-panel",
+                ).get_attribute("data-settings-detail-id")
+                == "FuturePolicy"
+            )
+            _safe_click(
+                driver,
+                driver.find_element(
+                    by.By.CSS_SELECTOR,
+                    "#all-settings-detail-panel [data-settings-detail-remove]",
+                ),
+            )
+            wait.until(
+                lambda current_driver: len(current_driver.find_elements(
+                    by.By.CSS_SELECTOR,
+                    '[data-settings-entry-id="FuturePolicy"]',
+                )) == 0
+            )
+            _wait_for_selector_disabled(wait, driver, "#validate", False)
+            _click_selector(driver, wait, "#validate")
+            _wait_for_selector_disabled(wait, driver, "#save", False)
+            _click_selector(driver, wait, "#save")
+            _wait_for_selector_disabled(wait, driver, "#save", True)
+            saved_profile_response = requests.get(f"{base_url}/api/profiles/{profile_id}", timeout=10)
+            assert saved_profile_response.status_code == 200, saved_profile_response.text
+            saved_flags = saved_profile_response.json()["flags"]
+            assert saved_flags["NewTabPage"] is True
+            assert "FuturePolicy" not in saved_flags
+            clear_search_button = wait.until(ec.presence_of_element_located((by.By.ID, "wizard-settings-search-clear")))
+            _safe_click(driver, clear_search_button)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID, "wizard-settings-search-input"
+                ).get_attribute("value")
+                == ""
+            )
             settings_search.send_keys("mozilla")
             wait.until(
                 lambda current_driver: current_driver.find_element(
@@ -2829,174 +4057,5 @@ def test_guided_profile_workflow_browser_regression_covers_step_scope_buttons_an
 
             driver.switch_to.window(settings_handle)
             assert urlparse(driver.current_url).path == f"/profiles/{profile_id}/settings"
-        finally:
-            _close_chromium_driver(driver)
-
-
-def test_guided_profile_workflow_browser_bug_hunt_reports_multiple_regressions():
-    by = pytest.importorskip("selenium.webdriver.common.by")
-    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
-    ui = pytest.importorskip("selenium.webdriver.support.ui")
-
-    payload = build_profile_payload(
-        name="Guided Workflow Browser Bug Hunt Profile",
-        description="Chromium guided workflow bug hunt",
-        owner="bug-hunt@example.org",
-        schema_version="release-150",
-        flags={
-            "DisableTelemetry": True,
-            "Homepage": {
-                "URL": "https://portal.example.local/",
-                "Locked": True,
-                "StartPage": "homepage-locked",
-            },
-        },
-    )
-
-    issues: list[str] = []
-
-    with run_test_app_server() as base_url:
-        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
-        assert create_response.status_code == 201, create_response.text
-        profile_id = create_response.json()["id"]
-
-        driver = _build_chromium_driver()
-        wait = ui.WebDriverWait(driver, 20)
-        short_wait = ui.WebDriverWait(driver, 6)
-
-        try:
-            driver.get(f"{base_url}/profiles")
-            library_search = wait.until(ec.presence_of_element_located((by.By.ID, "search")))
-            library_search.clear()
-            library_search.send_keys(payload["name"])
-            open_button_selector = f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]'
-            wait.until(ec.element_to_be_clickable((by.By.CSS_SELECTOR, open_button_selector)))
-            library_handles = set(driver.window_handles)
-            _click_selector(driver, wait, open_button_selector)
-            _switch_to_new_window(driver, wait, library_handles)
-            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
-
-            def check_step_three_firefox_home_toggle() -> None:
-                _open_wizard_step(driver, wait, by, 3)
-                _click_selector(driver, wait, '[data-home-surface-toggle="firefox_home"]')
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(
-                        by.By.CSS_SELECTOR, '[data-home-surface-toggle="firefox_home"]'
-                    ).get_attribute("aria-expanded") == "true"
-                )
-                _click_selector(driver, wait, "#wizard-firefox-home-fine-tuning-toggle")
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(
-                        by.By.ID, "wizard-firefox-home-fine-tuning-toggle"
-                    ).get_attribute("aria-expanded") == "true"
-                )
-                _wait_for_selector_visibility(short_wait, driver, "#wizard-firefox-home-fine-tuning-panel", True)
-
-            def check_step_five_site_data_toggle() -> None:
-                _open_wizard_step(driver, wait, by, 5)
-                _click_selector(driver, wait, "#wizard-site-data-fine-tuning-toggle")
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(
-                        by.By.ID, "wizard-site-data-fine-tuning-toggle"
-                    ).get_attribute("aria-expanded") == "true"
-                )
-                _wait_for_selector_visibility(short_wait, driver, "#wizard-site-data-fine-tuning-panel", True)
-                _wait_for_selector_visibility(short_wait, driver, "#wizard-permissions-card", True)
-                _wait_for_selector_visibility(short_wait, driver, "#wizard-cookies-card", True)
-
-            def check_step_seven_ai_disable_button_state() -> None:
-                _open_wizard_step(driver, wait, by, 7)
-                _click_selector(driver, wait, '[data-ai-posture-preset="disable"]')
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(
-                        by.By.CSS_SELECTOR, '[data-ai-posture-preset="disable"]'
-                    ).get_attribute("aria-pressed") == "true"
-                )
-
-            def check_step_eight_validate_result() -> None:
-                _open_wizard_step(driver, wait, by, 8)
-                _click_selector(driver, wait, "#wizard-export-validate-action")
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(by.By.ID, "validation-preview").text.strip()
-                    == "Validation passed."
-                )
-
-            def check_ru_settings_copy_and_clear_button() -> None:
-                _set_locale(driver, wait, ui, locale="ru", expected_text="Пошаговый редактор")
-                edit_handles = set(driver.window_handles)
-                _click_selector(driver, wait, "#editor-mode-settings")
-                settings_handle = _switch_to_new_window(driver, wait, edit_handles)
-                wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
-
-                settings_title = wait.until(
-                    ec.presence_of_element_located((by.By.CSS_SELECTOR, '[data-i18n="profiles.settings_route_title"]'))
-                )
-                settings_search_label = wait.until(
-                    ec.presence_of_element_located((by.By.CSS_SELECTOR, '[data-i18n="profiles.settings_search_label"]'))
-                )
-
-                assert settings_title.text.strip().lower() == "каталог расширенных настроек"
-                assert settings_search_label.text.strip().lower() == "поиск по расширенным настройкам"
-
-                body_text = driver.find_element(by.By.TAG_NAME, "body").text
-                forbidden_fragments = (
-                    "Advanced settings catalog",
-                    "Search advanced controls",
-                    "Firefox Account",
-                )
-                for fragment in forbidden_fragments:
-                    assert fragment not in body_text, f"found unexpected English fragment: {fragment}"
-
-                settings_search = wait.until(ec.presence_of_element_located((by.By.ID, "wizard-settings-search-input")))
-                settings_search.clear()
-                settings_search.send_keys("mozilla")
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(
-                        by.By.ID, "wizard-settings-search-input"
-                    ).get_attribute("value") == "mozilla"
-                )
-                clear_button = wait.until(ec.presence_of_element_located((by.By.ID, "wizard-settings-search-clear")))
-                short_wait.until(
-                    lambda current_driver: _selector_is_visible(current_driver, "#wizard-settings-search-clear")
-                )
-                assert clear_button.text.strip().lower() == "очистить"
-                _click_selector(driver, wait, "#wizard-settings-search-clear")
-                short_wait.until(
-                    lambda current_driver: current_driver.find_element(
-                        by.By.ID, "wizard-settings-search-input"
-                    ).get_attribute("value") == ""
-                )
-
-                driver.switch_to.window(settings_handle)
-                assert urlparse(driver.current_url).path == f"/profiles/{profile_id}/settings"
-
-            _collect_browser_issue(
-                issues,
-                "step 3 firefox home fine-tuning should expand and reveal its controls",
-                check_step_three_firefox_home_toggle,
-            )
-            _collect_browser_issue(
-                issues,
-                "step 5 site-data fine-tuning should expand and keep cookies/permissions cards visible",
-                check_step_five_site_data_toggle,
-            )
-            _collect_browser_issue(
-                issues,
-                "step 7 AI disable preset should become visibly selected",
-                check_step_seven_ai_disable_button_state,
-            )
-            _collect_browser_issue(
-                issues,
-                "step 8 validate action should report a successful validation result",
-                check_step_eight_validate_result,
-            )
-            _collect_browser_issue(
-                issues,
-                "RU advanced settings should stay localized and clear-button should fully work",
-                check_ru_settings_copy_and_clear_button,
-            )
-
-            if issues:
-                pytest.fail("Chromium bug hunt found the following regressions:\n- " + "\n- ".join(issues))
         finally:
             _close_chromium_driver(driver)

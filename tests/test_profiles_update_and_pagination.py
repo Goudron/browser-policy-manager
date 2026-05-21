@@ -112,3 +112,33 @@ def test_patch_profile_can_clear_compliance_metadata():
 
     assert response.status_code == 200, response.text
     assert response.json()["compliance"] is None
+
+
+def test_patch_profile_replaces_flags_so_ui_deletions_persist():
+    client = make_test_client(app)
+    created = client.post(
+        "/api/profiles",
+        json=build_profile_payload(
+            name_prefix="ReplaceFlags",
+            flags={
+                "DisableTelemetry": True,
+                "DisablePrivateBrowsing": True,
+            },
+        ),
+    )
+    assert created.status_code == 201, created.text
+    profile = created.json()
+
+    updated = client.patch(
+        f"/api/profiles/{profile['id']}",
+        json={
+            "flags": {"DisableTelemetry": False},
+            "expected_revision": profile["revision"],
+        },
+    )
+    assert updated.status_code == 200, updated.text
+    assert updated.json()["flags"] == {"DisableTelemetry": False}
+
+    fresh = client.get(f"/api/profiles/{profile['id']}")
+    assert fresh.status_code == 200, fresh.text
+    assert fresh.json()["flags"] == {"DisableTelemetry": False}

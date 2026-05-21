@@ -18,6 +18,7 @@
             renderKnownPreferenceButtons,
             renderKnownPreferenceOptions,
             renderWizardSchemaShell,
+            renderAllSettingsList,
             buildWizardSettingsSearchIndex,
             renderWizardSettingsSearchResults,
             setMeta,
@@ -46,6 +47,7 @@
             doValidate,
             doImportFirefoxPoliciesJson,
             reloadList,
+            cloneFromProfile,
             finishWizard,
             applyScenarioPreset,
             applyStarterPreset,
@@ -635,6 +637,7 @@
                 guardLocaleStep("renderKnownPreferenceButtons", () => renderKnownPreferenceButtons());
                 guardLocaleStep("renderKnownPreferenceOptions", () => renderKnownPreferenceOptions());
                 guardLocaleStep("renderWizardSchemaShell", () => renderWizardSchemaShell());
+                guardLocaleStep("renderAllSettingsList", () => renderAllSettingsList());
                 guardLocaleStep("buildWizardSettingsSearchIndex", () => buildWizardSettingsSearchIndex());
                 guardLocaleStep("renderWizardSettingsSearchResults", () => renderWizardSettingsSearchResults());
                 guardLocaleStep("workspaceLocaleRefresh", () => {
@@ -1460,7 +1463,7 @@
                     return first('[data-settings-target="policy:WebsiteFilter"]');
                 }
                 if (kind === "handlers") {
-                    return first('[data-settings-target="policy:Handlers"]', '[data-settings-target="shell-policy:6:Handlers"]');
+                    return first('[data-settings-target="policy:Handlers"]', '[data-settings-target="shell-policy:4:Handlers"]');
                 }
             }
 
@@ -1626,6 +1629,9 @@
             wizardStepResetEl?.addEventListener("click", () => {
                 resetCurrentStepToBaseline();
             });
+            if (documentRef.body) {
+                documentRef.body.dataset.wizardNavigationReady = "true";
+            }
         }
 
         async function initializeShellState() {
@@ -1649,9 +1655,12 @@
             const routeMode = bodyEl?.dataset.profilesRouteMode || "library";
             const rawProfileId = bodyEl?.dataset.editingProfileId || "";
             const profileId = Number(rawProfileId);
+            const rawCloneSourceId = bodyEl?.dataset.cloneSourceId || "";
+            const cloneSourceId = Number(rawCloneSourceId);
             return {
                 routeMode,
                 editingProfileId: Number.isInteger(profileId) && profileId > 0 ? profileId : null,
+                cloneSourceId: Number.isInteger(cloneSourceId) && cloneSourceId > 0 ? cloneSourceId : null,
                 includeDeleted: bodyEl?.dataset.includeDeleted === "true",
                 returnUrl: bodyEl?.dataset.advancedReturnUrl || "",
                 focusTarget: bodyEl?.dataset.advancedFocusTarget || "",
@@ -2031,7 +2040,7 @@
         }
 
         async function bootstrapProfileRouteState() {
-            const { routeMode, editingProfileId, focusTarget } = readProfilesRouteContext();
+            const { routeMode, editingProfileId, cloneSourceId, focusTarget } = readProfilesRouteContext();
             if ((routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId) {
                 const hydratedProfile = getCurrentProfile();
                 if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId) {
@@ -2047,6 +2056,10 @@
                     }
                     setBaselineFromCurrentUi();
                     setStatus(t("profiles.status_profile_loaded").replace("{name}", hydratedProfile.name), "success");
+                    if (routeMode === "edit" && cloneSourceId === editingProfileId) {
+                        await cloneFromProfile(editingProfileId);
+                        return;
+                    }
                     if (routeMode === "settings" || routeMode === "json") {
                         setAdvancedHandoffContext(null);
                         applyAdvancedFocusTarget(focusTarget);
@@ -2055,10 +2068,20 @@
                 }
                 await resetDraft(true);
                 await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });
+                if (routeMode === "edit" && cloneSourceId === editingProfileId) {
+                    await cloneFromProfile(editingProfileId);
+                    return;
+                }
                 if (routeMode === "settings" || routeMode === "json") {
                     setAdvancedHandoffContext(null);
                     applyAdvancedFocusTarget(focusTarget);
                 }
+                return;
+            }
+
+            if (routeMode === "new" && cloneSourceId) {
+                await resetDraft(true);
+                await cloneFromProfile(cloneSourceId, { includeDeleted: readProfilesRouteContext().includeDeleted });
                 return;
             }
 
@@ -2212,6 +2235,9 @@
                     setValidationPreview();
                     syncEditorBackedUi();
                     renderWizardSchemaShell();
+                    renderAllSettingsList();
+                    buildWizardSettingsSearchIndex();
+                    renderWizardSettingsSearchResults();
                     syncAllSchemaBranchCardsFromDom();
                     updateActionState();
                 });

@@ -129,6 +129,20 @@ def test_profile_library_stats_reports_filtered_and_total():
     assert stats_with_deleted.json()["filtered"] >= 2
     assert stats_with_deleted.json()["total"] >= stats_with_deleted.json()["filtered"]
 
+    stats_archived = client.get(
+        "/api/profiles/stats",
+        params={"q": unique, "lifecycle": "archived"},
+    )
+    assert stats_archived.status_code == 200, stats_archived.text
+    assert stats_archived.json()["filtered"] == 1
+
+    stats_valid = client.get(
+        "/api/profiles/stats",
+        params={"q": unique, "validation_state": "valid", "lifecycle": "all"},
+    )
+    assert stats_valid.status_code == 200, stats_valid.text
+    assert stats_valid.json()["filtered"] >= 2
+
     cleanup_first = client.delete(f"/api/profiles/{first_id}/hard")
     cleanup_second = client.delete(f"/api/profiles/{second_id}/hard")
     assert cleanup_first.status_code == 204

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.7.6
+
+### Added
+- Added a more complete profile-library manager with clearer search, schema, validation, lifecycle, duplicate, export, and editor-entry actions.
+- Added a schema-aware All settings catalog for full visual policy inspection and editing beyond the guided path.
+
+### Changed
+- Moved the project from `0.7.5` to `0.7.6`.
+- Reworked the guided editor into a shorter task-first workflow while keeping AI and smart browser features as a standalone step.
+- Decoupled All settings from the guided editor and made Release/ESR behavior explicit, including unsupported AI settings on ESR 140.10.
+- Refined English and Russian UI localization, removed future-documentation placeholders, and updated the README for the current product shape.
+
+### Fixed
+- Fixed Russian layout issues where profile-library action buttons could overflow.
+- Fixed outdated AI-step wording, stale provider-handoff messaging, and terminology drift around All settings and JSON editing.
+- Fixed browser UI regressions around mode separation, search, schema-aware rendering, and editor navigation.
+
+### Quality
+- Refreshed regression coverage and completed full non-browser plus browser UI passes for the UI/UX release candidate.
+
 ## 0.7.5
 
 ### Added

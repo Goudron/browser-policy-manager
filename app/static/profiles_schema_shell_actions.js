@@ -172,6 +172,27 @@
                     } else {
                         normalized[policyId] = nextValue;
                     }
+                } else if (policyKind === "enum-select" || policyKind === "text") {
+                    const input = card.querySelector('[data-schema-policy-field="__value__"]');
+                    const nextValue = String(input?.value || "").trim();
+                    if (!nextValue) {
+                        delete normalized[policyId];
+                    } else {
+                        normalized[policyId] = nextValue;
+                    }
+                } else if (policyKind === "number") {
+                    const input = card.querySelector('[data-schema-policy-field="__value__"]');
+                    const rawValue = String(input?.value || "").trim();
+                    if (!rawValue) {
+                        delete normalized[policyId];
+                    } else {
+                        const nextValue = Number(rawValue);
+                        if (!Number.isFinite(nextValue)) {
+                            setStatus(t("profiles.wizard_shell_number_error"), "warn");
+                            return;
+                        }
+                        normalized[policyId] = nextValue;
+                    }
                 } else if (policyKind === "dictionary-object") {
                     const rows = Array.from(card.querySelectorAll("[data-schema-dict-row]"));
                     const nextEntries = {};

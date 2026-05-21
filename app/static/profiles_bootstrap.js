@@ -2,7 +2,7 @@
     const WIZARD_REVIEW_FILTERS = [
         { value: "changed", key: "profiles.wizard_review_filter_changed", fallback: "Changed" },
         { value: "attention", key: "profiles.wizard_review_filter_attention", fallback: "Needs attention" },
-        { value: "advanced", key: "profiles.wizard_review_filter_advanced", fallback: "Advanced-only" },
+        { value: "advanced", key: "profiles.wizard_review_filter_advanced", fallback: "Outside Guided editor" },
         { value: "all", key: "profiles.wizard_review_filter_all", fallback: "All" },
     ];
     const WIZARD_LONG_LIST_LIMIT = 5;
@@ -199,7 +199,7 @@
             const labels = {
                 changed: ["profiles.wizard_review_empty_changed", "No changed items here yet."],
                 attention: ["profiles.wizard_review_empty_attention", "Nothing needs attention here right now."],
-                advanced: ["profiles.wizard_review_empty_advanced", "No advanced-only items here right now."],
+                advanced: ["profiles.wizard_review_empty_advanced", "No items outside Guided editor are listed here right now."],
                 all: ["profiles.wizard_review_empty_all", "No review rows here yet."],
             };
             const [key, fallback] = labels[filterValue] || labels.changed;

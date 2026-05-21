@@ -1,7 +1,37 @@
 {% from "profiles/_wizard_macros.html" import render_manual_policy_controls with context %}
 
-<section class="wizard-panel" id="wizard-step-6">
-    <div class="wizard-section-group" id="wizard-step-6-accounts">
+<section class="wizard-panel" id="wizard-step-4">
+    <nav class="wizard-local-index" aria-labelledby="wizard-user-environment-map-title">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" id="wizard-user-environment-map-title" data-i18n="profiles.wizard_user_environment_map_title">{{ tr("profiles.wizard_user_environment_map_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_user_environment_map_body">
+                {{ tr("profiles.wizard_user_environment_map_body") }}
+            </p>
+        </div>
+        <div class="wizard-local-index-grid wizard-local-index-grid--five">
+            <a href="#wizard-step-4-accounts" class="wizard-local-index-link">
+                <span data-i18n="profiles.wizard_user_environment_map_accounts">{{ tr("profiles.wizard_user_environment_map_accounts") }}</span>
+                <span data-i18n="profiles.wizard_user_environment_map_accounts_count">{{ tr("profiles.wizard_user_environment_map_accounts_count") }}</span>
+            </a>
+            <a href="#wizard-step-4-language" class="wizard-local-index-link">
+                <span data-i18n="profiles.wizard_user_environment_map_language">{{ tr("profiles.wizard_user_environment_map_language") }}</span>
+                <span data-i18n="profiles.wizard_user_environment_map_language_count">{{ tr("profiles.wizard_user_environment_map_language_count") }}</span>
+            </a>
+            <a href="#wizard-step-4-extensions" class="wizard-local-index-link">
+                <span data-i18n="profiles.wizard_user_environment_map_extensions">{{ tr("profiles.wizard_user_environment_map_extensions") }}</span>
+                <span data-i18n="profiles.wizard_user_environment_map_extensions_count">{{ tr("profiles.wizard_user_environment_map_extensions_count") }}</span>
+            </a>
+            <a href="#wizard-step-4-bookmarks" class="wizard-local-index-link">
+                <span data-i18n="profiles.wizard_user_environment_map_bookmarks">{{ tr("profiles.wizard_user_environment_map_bookmarks") }}</span>
+                <span data-i18n="profiles.wizard_user_environment_map_bookmarks_count">{{ tr("profiles.wizard_user_environment_map_bookmarks_count") }}</span>
+            </a>
+            <a href="#wizard-step-4-websites" class="wizard-local-index-link">
+                <span data-i18n="profiles.wizard_user_environment_map_websites">{{ tr("profiles.wizard_user_environment_map_websites") }}</span>
+                <span data-i18n="profiles.wizard_user_environment_map_websites_count">{{ tr("profiles.wizard_user_environment_map_websites_count") }}</span>
+            </a>
+        </div>
+    </nav>
+    <div class="wizard-section-group" id="wizard-step-4-accounts">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_sync_title">{{ tr("profiles.wizard_sync_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_sync_body">
@@ -51,7 +81,7 @@
             <div id="wizard-user-messaging-card" class="wizard-field-full" data-settings-target="policy:UserMessaging"></div>
         </div>
     </div>
-    <div class="wizard-section-group" id="wizard-step-6-language">
+    <div class="wizard-section-group" id="wizard-step-4-language">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_language_translation_title">{{ tr("profiles.wizard_language_translation_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_language_translation_body">
@@ -93,7 +123,7 @@
             {{ tr("profiles.wizard_language_ai_handoff_skip") }}
         </div>
     </div>
-    <div class="wizard-section-group" id="wizard-step-6-extensions">
+    <div class="wizard-section-group" id="wizard-step-4-extensions">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_extensions_title">{{ tr("profiles.wizard_extensions_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_extensions_body">
@@ -352,7 +382,7 @@
             </div>
         </div>
     </div>
-    <div class="wizard-section-group" id="wizard-step-6-bookmarks">
+    <div class="wizard-section-group" id="wizard-step-4-bookmarks">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_bookmarks_focus_title">{{ tr("profiles.wizard_bookmarks_focus_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_bookmarks_focus_body">
@@ -378,7 +408,7 @@
             </div>
         </div>
     </div>
-    <div class="wizard-section-group" id="wizard-step-6-websites">
+    <div class="wizard-section-group" id="wizard-step-4-websites">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_website_behavior_title">{{ tr("profiles.wizard_website_behavior_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_website_behavior_body">

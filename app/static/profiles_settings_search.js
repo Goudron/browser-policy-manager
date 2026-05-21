@@ -13,12 +13,16 @@
     }) {
         const {
             t,
+            escapeHtml,
             humanizeIdentifier,
             normalizeSearchText,
             getActiveWizardSchemaVersion,
             setWizardStep,
+            getAllSettingsSearchEntries,
+            findAllSettingsEntryTarget,
         } = dependencies;
         const getCurrentLang = state.getCurrentLang || (() => "en");
+        const isAllSettingsRoute = documentRef.body?.dataset.profilesTemplateKind === "settings";
 
         const {
             wizardSettingsSearchInputEl,
@@ -28,7 +32,7 @@
         } = elements;
 
         let wizardSettingsSearchIndex = [];
-        let shellPolicyTargetByLegacyTarget = {};
+        let shellPolicyTargetByAlias = {};
 
         function buildShellPolicyTargetIndex() {
             const schemaVersion = getActiveWizardSchemaVersion();
@@ -48,17 +52,17 @@
                 });
             });
 
-            shellPolicyTargetByLegacyTarget = targetIndex;
+            shellPolicyTargetByAlias = targetIndex;
         }
 
         function resolveTargetAlias(target) {
             const normalizedTarget = String(target || "").trim();
             if (!normalizedTarget) return "";
-            if (Object.keys(shellPolicyTargetByLegacyTarget).length === 0) {
+            if (Object.keys(shellPolicyTargetByAlias).length === 0) {
                 buildShellPolicyTargetIndex();
             }
             return settingsTargetAliases[normalizedTarget]
-                || shellPolicyTargetByLegacyTarget[normalizedTarget]
+                || shellPolicyTargetByAlias[normalizedTarget]
                 || normalizedTarget;
         }
 
@@ -81,6 +85,8 @@
                 known_preference: t("profiles.wizard_settings_search_kind_known_preference"),
                 search_engine_preset: t("profiles.wizard_settings_search_kind_search_preset"),
                 policy_blueprint: t("profiles.wizard_settings_search_kind_policy_blueprint"),
+                all_settings_policy: t("profiles.wizard_settings_search_kind_all_settings_policy"),
+                all_settings_preference: t("profiles.wizard_settings_search_kind_all_settings_preference"),
             };
 
             const searchFields = [
@@ -108,9 +114,55 @@
             };
         }
 
+        function currentStateLabel(entry) {
+            return entry?.configured
+                ? t("profiles.settings_list_state_configured")
+                : t("profiles.settings_list_state_available");
+        }
+
+        function buildAllSettingsInventoryEntries() {
+            return (Array.isArray(getAllSettingsSearchEntries?.()) ? getAllSettingsSearchEntries() : [])
+                .map((entry) => {
+                    const stateLabel = currentStateLabel(entry);
+                    const reviewFlags = [
+                        entry.guided ? t("profiles.settings_filter_guided_covered") : t("profiles.settings_filter_all_settings_only"),
+                        entry.invalid ? t("profiles.settings_filter_invalid") : "",
+                        entry.deprecated ? t("profiles.settings_filter_deprecated") : "",
+                        entry.rawFallback ? t("profiles.settings_filter_raw") : "",
+                        entry.unknown ? t("profiles.settings_filter_unknown") : "",
+                    ].filter(Boolean);
+                    const valueLabel = entry.configured
+                        ? entry.value
+                        : t("profiles.settings_list_value_not_configured");
+
+                    return createSettingsSearchEntry({
+                        title: entry.label || entry.id,
+                        description: [stateLabel, valueLabel].filter(Boolean).join(" • "),
+                        target: `all-settings-entry:${entry.kind}:${entry.id}`,
+                        sectionId: entry.categoryId || "",
+                        areaLabel: entry.categoryLabel || "",
+                        kind: entry.kind === "preference"
+                            ? "all_settings_preference"
+                            : "all_settings_policy",
+                        keywords: [
+                            entry.id || "",
+                            entry.label || "",
+                            entry.kind || "",
+                            entry.kindLabel || "",
+                            entry.categoryId || "",
+                            entry.categoryLabel || "",
+                            stateLabel,
+                            valueLabel,
+                            entry.target || "",
+                            ...reviewFlags,
+                        ],
+                    });
+                });
+        }
+
         function buildIndex() {
             const sections = Array.isArray(wizardSettingsCatalog.sections) ? wizardSettingsCatalog.sections : [];
-            const entries = [];
+            const entries = buildAllSettingsInventoryEntries();
             buildShellPolicyTargetIndex();
 
             sections.forEach((section) => {
@@ -118,7 +170,7 @@
                     ? section.preferences
                     : null;
 
-                Object.entries(section.ui_docs || {}).forEach(([mapId, docs]) => {
+                Object.entries(section.ui_controls || {}).forEach(([mapId, controls]) => {
                     const areas = Object.fromEntries(
                         ((section.ui_maps && section.ui_maps[mapId]) || []).map((item) => [
                             item.id,
@@ -126,7 +178,7 @@
                         ]),
                     );
 
-                    (docs || []).forEach((item) => {
+                    (controls || []).forEach((item) => {
                         entries.push(
                             createSettingsSearchEntry({
                                 title: t(item.label_key, item.fallback),
@@ -169,7 +221,7 @@
                     const presetsById = Object.fromEntries(
                         (preferenceSection.presets || []).map((preset) => [preset.id, preset]),
                     );
-                    (preferenceSection.docs || []).forEach((item) => {
+                    (preferenceSection.controls || []).forEach((item) => {
                         const presetId = String(item.target || "").replace("preference-preset:", "");
                         const preset = presetsById[presetId] || {};
                         entries.push(
@@ -329,22 +381,28 @@
 
             const trimmedQuery = query.trim();
             if (!trimmedQuery) {
-                wizardSettingsSearchMetaEl.textContent = t(
-                    "profiles.wizard_settings_search_hint",
-                    "Search by control, Firefox Settings area, policy key, preference key, or preset.",
-                );
+                wizardSettingsSearchMetaEl.textContent = isAllSettingsRoute
+                    ? t("profiles.settings_search_hint")
+                    : t("profiles.wizard_settings_search_hint");
                 return;
             }
 
             if (matches.length === 0) {
-                wizardSettingsSearchMetaEl.textContent = t(
-                    "profiles.wizard_settings_search_empty",
-                    "No matching settings found in the wizard.",
-                );
+                wizardSettingsSearchMetaEl.textContent = isAllSettingsRoute
+                    ? t("profiles.settings_search_empty")
+                    : t("profiles.wizard_settings_search_empty");
                 return;
             }
 
             const single = matches.length === 1;
+            if (isAllSettingsRoute) {
+                wizardSettingsSearchMetaEl.textContent = t(
+                    single
+                        ? "profiles.settings_search_match_one"
+                        : "profiles.settings_search_match_many",
+                ).replace("{count}", String(matches.length));
+                return;
+            }
             wizardSettingsSearchMetaEl.textContent = getCurrentLang() === "ru"
                 ? `${matches.length} ${single ? "совпадение" : "совпадений"} в мастере.`
                 : `${matches.length} ${single ? "match" : "matches"} in the wizard.`;
@@ -354,6 +412,7 @@
             if (!wizardSettingsSearchInputEl || !wizardSettingsSearchResultsEl || !wizardSettingsSearchClearEl) return;
 
             const query = wizardSettingsSearchInputEl.value || "";
+            buildIndex();
             const matches = findMatches(query);
             wizardSettingsSearchResultsEl.innerHTML = "";
             wizardSettingsSearchResultsEl.hidden = !query.trim() || matches.length === 0;
@@ -371,10 +430,10 @@
                 );
                 button.innerHTML = `
                     <span class="wizard-settings-search-result-top">
-                        <span class="wizard-settings-search-result-title">${entry.title}</span>
-                        <span class="wizard-settings-search-result-step">${entry.stepNumber ? `${t("profiles.wizard_settings_search_step")} ${entry.stepNumber} • ${entry.stepLabel}` : entry.stepLabel}</span>
+                        <span class="wizard-settings-search-result-title">${escapeHtml(entry.title)}</span>
+                        <span class="wizard-settings-search-result-step">${escapeHtml(entry.stepNumber ? `${t("profiles.wizard_settings_search_step")} ${entry.stepNumber} • ${entry.stepLabel}` : entry.stepLabel)}</span>
                     </span>
-                    <span class="wizard-settings-search-result-meta">${[entry.kindLabel, entry.areaLabel, entry.description].filter(Boolean).join(" • ")}</span>
+                    <span class="wizard-settings-search-result-meta">${escapeHtml([entry.kindLabel, entry.areaLabel, entry.description].filter(Boolean).join(" • "))}</span>
                 `;
                 wizardSettingsSearchResultsEl.appendChild(button);
             });
@@ -389,6 +448,9 @@
         function findTarget(targetKey) {
             const normalizedTarget = String(targetKey || "").trim();
             if (!normalizedTarget) return null;
+            if (normalizedTarget.startsWith("all-settings-entry:")) {
+                return findAllSettingsEntryTarget?.(normalizedTarget) || null;
+            }
             return documentRef.querySelector(`[data-settings-target="${normalizedTarget}"]`)
                 || documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`);
         }

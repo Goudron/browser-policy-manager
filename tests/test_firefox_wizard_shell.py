@@ -21,6 +21,9 @@ def test_wizard_schema_shell_catalog_groups_real_policies_into_step_buckets():
 
     assert "Proxy" in general_recommended
     assert "Authentication" in general_recommended
+    assert next(item for item in release_general["recommended"] if item["id"] == "Proxy")[
+        "section_id"
+    ] == "network_access"
     assert "SearchEngines" in search_recommended
     assert release_general["preferences"][0]["id"] == "general"
     assert release_review["compatibility"]["raw_fallback"] >= 1
@@ -90,6 +93,49 @@ def test_wizard_schema_shell_catalog_exposes_inline_editor_specs_for_phase_three
     }
     assert by_id["UserMessaging"]["inline_editor"]["kind"] == "object-card"
     assert by_id["WebsiteFilter"]["inline_editor"]["kind"] == "object-card"
+
+
+def test_wizard_schema_shell_catalog_exposes_visual_editors_for_guided_scalar_policies():
+    catalog = get_wizard_schema_shell_catalog()
+    release_items = {
+        item["id"]: item
+        for step in catalog["channels"]["release-150"]["steps"].values()
+        for bucket in ("recommended", "additional", "raw_fallback")
+        for item in step[bucket]
+    }
+
+    expected_kinds = {
+        "BlockAboutConfig": "boolean-select",
+        "BlockAboutProfiles": "boolean-select",
+        "DisableBuiltinPDFViewer": "boolean-select",
+        "DisableDeveloperTools": "boolean-select",
+        "DisableFirefoxAccounts": "boolean-select",
+        "DisableFirefoxStudies": "boolean-select",
+        "DisablePocket": "boolean-select",
+        "DisablePrivateBrowsing": "boolean-select",
+        "DisableTelemetry": "boolean-select",
+        "HttpsOnlyMode": "enum-select",
+        "OfferToSaveLogins": "boolean-select",
+        "OverrideFirstRunPage": "text",
+        "OverridePostUpdatePage": "text",
+        "PasswordManagerEnabled": "boolean-select",
+        "RequestedLocales": "text",
+        "SearchBar": "enum-select",
+        "SearchSuggestEnabled": "boolean-select",
+        "TranslateEnabled": "boolean-select",
+    }
+
+    assert {
+        policy_id: release_items[policy_id]["inline_editor"]["kind"]
+        for policy_id in expected_kinds
+    } == expected_kinds
+    assert release_items["SearchBar"]["inline_editor"]["enum"] == ["unified", "separate"]
+    assert release_items["HttpsOnlyMode"]["inline_editor"]["enum"] == [
+        "allowed",
+        "disallowed",
+        "enabled",
+        "force_enabled",
+    ]
 
 
 def test_wizard_schema_shell_catalog_exposes_complex_inline_editor_specs_for_phase_five():
@@ -212,6 +258,7 @@ def test_wizard_schema_shell_catalog_exposes_dictionary_inline_editor_specs_for_
     assert next(field for field in extension_settings["fields"] if field["name"] == "allowed_types") == {
         "name": "allowed_types",
         "label": "allowed types",
+        "label_key": "profiles.schema_field_allowed_types",
         "kind": "string-list",
         "required": False,
         "enum": ["extension", "theme", "dictionary", "locale", "sitepermission"],
@@ -261,7 +308,13 @@ def test_wizard_schema_shell_catalog_exposes_ai_inline_editors_on_step_seven():
         "TabGroups",
         "Locked",
     }
-    assert next(field for field in generative_ai["fields"] if field["name"] == "Enabled")["kind"] == "boolean-select"
+    enabled_field = next(field for field in generative_ai["fields"] if field["name"] == "Enabled")
+    chatbot_field = next(field for field in generative_ai["fields"] if field["name"] == "Chatbot")
+    tab_groups_field = next(field for field in generative_ai["fields"] if field["name"] == "TabGroups")
+    assert enabled_field["kind"] == "boolean-select"
+    assert enabled_field["label_key"] == "profiles.schema_field_enabled"
+    assert chatbot_field["label_key"] == "profiles.schema_field_chatbot"
+    assert tab_groups_field["label_key"] == "profiles.schema_field_tab_groups"
 
     assert visual_search["kind"] == "boolean-select"
 
