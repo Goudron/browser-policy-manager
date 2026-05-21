@@ -23,6 +23,10 @@
             parseBooleanSelectValue,
             formatSearchBarSelectValue,
             parseSearchBarSelectValue,
+            serializePreferenceValue,
+            serializePreferenceSelectValue,
+            parsePreferenceValue,
+            normalizePreferenceName,
             getDefaultSchemaVersion,
             formatSchemaLabel,
         } = utils;
@@ -69,6 +73,8 @@
             setLibraryStats,
             getValidationPreviewTone,
             setValidationPreviewTone,
+            getValidationIssues,
+            setValidationIssues,
             renderExtensionReviewSummary,
             setRenderExtensionReviewSummary,
             renderManualHomeAndSearchSectionStatuses,
@@ -106,10 +112,12 @@
             managedExtensionProfiles,
             wizardExtensionManagedKeys,
             wizardSettingsCatalog,
+            wizardPreferencesCatalog,
             wizardSearchSectionSteps,
             searchEnginePresetCatalog,
             searchEnginePresets,
             wizardSchemaShellCatalog,
+            allSettingsCategoryCatalog,
             starterPresets,
             complianceLayers,
             complianceMergedPresets,
@@ -142,8 +150,17 @@
             wizardExtensionCuratedPanelEl,
             wizardRequestedLocalesCardEl,
             wizardTranslateEnabledCardEl,
+            wizardLanguageAiHandoffEl,
+            wizardAiEsrcEmptyStateEl,
+            wizardAiReleaseContentEl,
+            wizardAiPostureBarEl,
+            wizardAiPostureBodyEl,
+            wizardAiPosturePresetsEl,
+            wizardAiPolicyControlsEl,
+            wizardAiControlsCardEl,
             wizardVisualSearchEnabledCardEl,
             wizardGenerativeAiCardEl,
+            wizardAiGovernanceCopyEl,
             wizardUserMessagingCardEl,
             wizardSyncSectionStatusEl,
             wizardSyncFineTuningToggleEl,
@@ -169,6 +186,14 @@
             wizardSettingsSearchMetaEl,
             wizardSettingsSearchResultsEl,
             wizardSettingsSearchClearEl,
+            allSettingsListSummaryEl,
+            allSettingsReviewSummaryEl,
+            allSettingsReviewActionsEl,
+            allSettingsListEl,
+            allSettingsListEmptyEl,
+            allSettingsDetailPanelEl,
+            allSettingsAddPreferenceEl,
+            allSettingsFilterButtons,
             nameInput,
             wizardContextCopyEl,
             wizardNameEl,
@@ -287,10 +312,8 @@
             wizardBookmarkSummaryFoldersJumpEl,
             wizardBookmarkSummaryNestedJumpEl,
             wizardAiSummaryAvailabilityEl,
-            wizardAiSummaryProvidersEl,
             wizardAiSummarySurfacesEl,
             wizardAiSummaryAvailabilityJumpEl,
-            wizardAiSummaryProvidersJumpEl,
             wizardAiSummarySurfacesJumpEl,
             wizardWebsiteAccessSummaryBlockedEl,
             wizardWebsiteAccessSummaryExceptionsEl,
@@ -369,9 +392,18 @@
                 wizardBookmarksFoldersJumpEl,
                 wizardBookmarksNestedJumpEl,
                 wizardLanguageSectionStatusEl,
+                wizardLanguageAiHandoffEl,
+                wizardAiEsrcEmptyStateEl,
+                wizardAiReleaseContentEl,
+                wizardAiPostureBarEl,
+                wizardAiPostureBodyEl,
+                wizardAiPosturePresetsEl,
+                wizardAiPolicyControlsEl,
                 wizardAiSectionStatusEl,
+                wizardAiControlsCardEl,
                 wizardGenerativeAiCardEl,
                 wizardVisualSearchEnabledCardEl,
+                wizardAiGovernanceCopyEl,
                 wizardWebsiteSectionStatusEl,
                 wizardWebsiteFineTuningToggleEl,
                 wizardWebsiteFineTuningPanelEl,
@@ -443,6 +475,58 @@
             wizardSchemaShellViews,
         });
 
+        let handleAllSettingsDocumentChange = () => {};
+        const allSettingsDetail = window.BPMProfilesAllSettingsDetail.create({
+            documentRef,
+            elements: {
+                allSettingsDetailPanelEl,
+                allSettingsAddPreferenceEl,
+            },
+            dependencies: {
+                t,
+                escapeHtml,
+                normalizePreferenceName,
+                serializePreferenceValue,
+                serializePreferenceSelectValue,
+                parsePreferenceValue,
+                fromEditorValue,
+                toEditorValue,
+                readWizardSchemaSource: () => readWizardSchemaSource(),
+                renderSchemaPolicyEditorCard: (...args) => schemaShell.renderSchemaPolicyEditorCard(...args),
+                renderSchemaPolicyReviewState: (...args) => schemaShell.renderSchemaPolicyReviewState(...args),
+                onDocumentChange: (...args) => handleAllSettingsDocumentChange(...args),
+                setStatus: (...args) => setStatus(...args),
+            },
+            state: {
+                getEditor,
+                setCurrentRaw,
+            },
+            wizardPreferencesCatalog,
+        });
+
+        const allSettingsList = window.BPMProfilesAllSettingsList.create({
+            documentRef,
+            elements: {
+                allSettingsListSummaryEl,
+                allSettingsReviewSummaryEl,
+                allSettingsReviewActionsEl,
+                allSettingsListEl,
+                allSettingsListEmptyEl,
+                allSettingsFilterButtons,
+            },
+            dependencies: {
+                t,
+                escapeHtml,
+                getActiveWizardSchemaVersion: () => getActiveWizardSchemaVersion(),
+                readWizardSchemaSource: () => readWizardSchemaSource(),
+                getValidationIssues: () => getValidationIssues(),
+                onSelectionChange: (entry) => allSettingsDetail.render(entry),
+            },
+            allSettingsCategoryCatalog,
+            wizardPreferencesCatalog,
+            wizardSchemaShellCatalog,
+        });
+
         const settingsSearch = window.BPMProfilesSettingsSearch.create({
             documentRef,
             elements: {
@@ -453,10 +537,13 @@
             },
             dependencies: {
                 t,
+                escapeHtml,
                 humanizeIdentifier,
                 normalizeSearchText,
                 getActiveWizardSchemaVersion: () => getActiveWizardSchemaVersion(),
                 setWizardStep: (step) => setWizardStep(step),
+                getAllSettingsSearchEntries: () => allSettingsList.getSearchEntries(),
+                findAllSettingsEntryTarget: (target) => allSettingsList.findTarget(target),
             },
             state: {
                 getCurrentLang,
@@ -519,6 +606,7 @@
                 formatSchemaLabel,
                 getDefaultSchemaVersion,
                 renderWizardSchemaShell: () => schemaShell.renderWizardSchemaShell(),
+                renderAllSettingsList: () => allSettingsList.render(),
                 buildWizardSettingsSearchIndex: () => buildWizardSettingsSearchIndex(),
                 renderWizardSettingsSearchResults: () => renderWizardSettingsSearchResults(),
                 currentSnapshotState: () => currentSnapshotState(),
@@ -646,6 +734,7 @@
                 syncWizardPoliciesFromEditor: () => wizardFlow.syncWizardPoliciesFromEditor(),
                 setWizardStep: (step) => wizardFlow.setWizardStep(step),
                 getWizardStep: () => wizardFlow.getWizardStep(),
+                renderAllSettingsList: () => allSettingsList.render(),
                 setStatus: (...args) => setStatus(...args),
             },
             state: {
@@ -668,11 +757,19 @@
                 getLibraryStats,
                 setLibraryStats,
                 setValidationPreviewTone,
+                setValidationIssues,
             },
         });
         setCurrentSnapshotState(workspace.currentSnapshotState);
         setSaveCurrent(workspace.saveCurrent);
         setReadFormState(workspace.readFormState);
+        handleAllSettingsDocumentChange = () => {
+            schemaShell.renderWizardSchemaShell();
+            allSettingsList.render();
+            settingsSearch.buildIndex();
+            settingsSearch.renderResults();
+            workspace.updateActionState();
+        };
 
         review = window.BPMProfilesReview.create({
             documentRef,
@@ -717,10 +814,8 @@
                 wizardBookmarkSummaryFoldersJumpEl,
                 wizardBookmarkSummaryNestedJumpEl,
                 wizardAiSummaryAvailabilityEl,
-                wizardAiSummaryProvidersEl,
                 wizardAiSummarySurfacesEl,
                 wizardAiSummaryAvailabilityJumpEl,
-                wizardAiSummaryProvidersJumpEl,
                 wizardAiSummarySurfacesJumpEl,
                 wizardWebsiteAccessSummaryBlockedEl,
                 wizardWebsiteAccessSummaryExceptionsEl,
@@ -835,6 +930,7 @@
         const coreApi = {
             ...extensions,
             ...schemaShell,
+            renderAllSettingsList: allSettingsList.render,
             buildWizardSettingsSearchIndex: settingsSearch.buildIndex,
             renderWizardSettingsSearchResults: settingsSearch.renderResults,
             clearWizardSettingsSearch: settingsSearch.clear,

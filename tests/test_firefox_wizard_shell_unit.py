@@ -29,10 +29,25 @@ def test_humanize_identifier_handles_empty_and_delimiter_only_boundaries():
     assert serializer.humanize_identifier("_ProxyMode:") == "Proxy Mode"
 
 
-def test_build_inline_editor_returns_none_for_non_object_supported_policy():
+def test_build_inline_editor_supports_simple_string_policy():
     definition = PolicyDefinition(id="Cookies", type="string", ui=_ui())
 
-    assert inline_editors.build_inline_editor(definition) is None
+    assert inline_editors.build_inline_editor(definition) == {
+        "kind": "text",
+        "enum": [],
+        "managed_fields": [],
+    }
+
+
+def test_build_inline_editor_supports_number_policy_and_rejects_plain_array():
+    number_definition = PolicyDefinition(id="Proxy", type="integer", ui=_ui())
+    plain_array_definition = PolicyDefinition(id="Bookmarks", type="array", ui=_ui())
+
+    assert inline_editors.build_inline_editor(number_definition) == {
+        "kind": "number",
+        "managed_fields": [],
+    }
+    assert inline_editors.build_inline_editor(plain_array_definition) is None
 
 
 def test_build_inline_editor_counts_unsupported_fields_and_returns_none_without_supported_fields():

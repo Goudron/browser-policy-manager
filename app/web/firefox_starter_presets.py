@@ -142,7 +142,7 @@ _STARTER_PRESETS: dict[str, dict[str, Any]] = {
             "URL": "https://intranet.example.local/",
             "Additional": [
                 "https://helpdesk.example.local/",
-                "https://docs.example.local/",
+                "https://kb.example.local/",
             ],
             "Locked": True,
             "StartPage": "homepage-locked",

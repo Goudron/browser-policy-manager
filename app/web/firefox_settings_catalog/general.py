@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .builders import chip, doc_target, known_pref, pref_doc, preset, value_option
+from .builders import chip, control_target, known_pref, pref_control, preset, value_option
 
 
 def get_general_section() -> dict[str, Any]:
@@ -19,21 +19,21 @@ def get_general_section() -> dict[str, Any]:
                 chip("network", "profiles.wizard_settings_general_network", "Network Settings"),
             ],
         },
-        "ui_docs": {
+        "ui_controls": {
             "policy": [
-                doc_target("startup", "field:wizard-homepage-start-page", "profiles.wizard_homepage_start_label", "Startup behavior"),
-                doc_target("default_browser", "policy:DontCheckDefaultBrowser", "profiles.policy_default_browser", "Skip default browser checks"),
-                doc_target("downloads", "policy:PromptForDownloadLocation", "profiles.policy_prompt_downloads", "Always ask for download location"),
-                doc_target("updates", "policy:DisableAppUpdate", "profiles.policy_disable_app_update", "Disable app update"),
-                doc_target("updates", "policy:DisableSystemAddonUpdate", "profiles.policy_disable_system_addon_update", "Disable system add-on updates"),
-                doc_target("updates", "policy:AppAutoUpdate", "profiles.policy_app_auto_update", "Enable app auto update"),
+                control_target("startup", "field:wizard-homepage-start-page", "profiles.wizard_homepage_start_label", "Startup behavior"),
+                control_target("default_browser", "policy:DontCheckDefaultBrowser", "profiles.policy_default_browser", "Skip default browser checks"),
+                control_target("downloads", "policy:PromptForDownloadLocation", "profiles.policy_prompt_downloads", "Always ask for download location"),
+                control_target("updates", "policy:DisableAppUpdate", "profiles.policy_disable_app_update", "Disable app update"),
+                control_target("updates", "policy:DisableSystemAddonUpdate", "profiles.policy_disable_system_addon_update", "Disable system add-on updates"),
+                control_target("updates", "policy:AppAutoUpdate", "profiles.policy_app_auto_update", "Enable app auto update"),
             ],
             "proxy": [
-                doc_target("network", "field:wizard-proxy-mode", "profiles.wizard_proxy_mode_label", "Proxy mode"),
-                doc_target("network", "field:wizard-proxy-auto-config-url", "profiles.wizard_proxy_auto_config_label", "Auto-config URL"),
-                doc_target("network", "field:wizard-proxy-http", "profiles.wizard_proxy_http_label", "HTTP proxy"),
-                doc_target("network", "field:wizard-proxy-passthrough", "profiles.wizard_proxy_passthrough_label", "Bypass proxy for"),
-                doc_target("network", "field:wizard-proxy-locked", "profiles.wizard_proxy_locked_label", "Lock proxy settings"),
+                control_target("network", "field:wizard-proxy-mode", "profiles.wizard_proxy_mode_label", "Proxy mode"),
+                control_target("network", "field:wizard-proxy-auto-config-url", "profiles.wizard_proxy_auto_config_label", "Auto-config URL"),
+                control_target("network", "field:wizard-proxy-http", "profiles.wizard_proxy_http_label", "HTTP proxy"),
+                control_target("network", "field:wizard-proxy-passthrough", "profiles.wizard_proxy_passthrough_label", "Bypass proxy for"),
+                control_target("network", "field:wizard-proxy-locked", "profiles.wizard_proxy_locked_label", "Lock proxy settings"),
             ],
         },
         "preferences": {
@@ -49,15 +49,15 @@ def get_general_section() -> dict[str, Any]:
                 chip("network", "profiles.wizard_preferences_group_general_network", "Network Settings"),
                 chip("updates", "profiles.wizard_preferences_group_general_updates", "Updates"),
             ],
-            "docs": [
-                pref_doc("startup", "restore_session", "profiles.wizard_preferences_preset_restore_session_title", "Restore previous session"),
-                pref_doc("startup", "open_homepage", "profiles.wizard_preferences_preset_open_homepage_title", "Open homepage on startup"),
-                pref_doc("tabs", "warn_on_close", "profiles.wizard_preferences_preset_warn_on_close_title", "Warn before closing many tabs"),
-                pref_doc("tabs", "last_tab_stays_open", "profiles.wizard_preferences_preset_last_tab_stays_open_title", "Keep window open after the last tab"),
-                pref_doc("downloads", "download_dir", "profiles.wizard_preferences_preset_download_dir_title", "Use default download folder"),
-                pref_doc("downloads", "download_prompt", "profiles.wizard_preferences_preset_download_prompt_title", "Always ask where to save files"),
-                pref_doc("applications", "smooth_scroll", "profiles.wizard_preferences_preset_smooth_scroll_title", "Smooth scrolling"),
-                pref_doc("language", "spellcheck_multiline", "profiles.wizard_preferences_preset_spellcheck_multiline_title", "Spellcheck multiline fields"),
+            "controls": [
+                pref_control("startup", "restore_session", "profiles.wizard_preferences_preset_restore_session_title", "Restore previous session"),
+                pref_control("startup", "open_homepage", "profiles.wizard_preferences_preset_open_homepage_title", "Open homepage on startup"),
+                pref_control("tabs", "warn_on_close", "profiles.wizard_preferences_preset_warn_on_close_title", "Warn before closing many tabs"),
+                pref_control("tabs", "last_tab_stays_open", "profiles.wizard_preferences_preset_last_tab_stays_open_title", "Keep window open after the last tab"),
+                pref_control("downloads", "download_dir", "profiles.wizard_preferences_preset_download_dir_title", "Use default download folder"),
+                pref_control("downloads", "download_prompt", "profiles.wizard_preferences_preset_download_prompt_title", "Always ask where to save files"),
+                pref_control("applications", "smooth_scroll", "profiles.wizard_preferences_preset_smooth_scroll_title", "Smooth scrolling"),
+                pref_control("language", "spellcheck_multiline", "profiles.wizard_preferences_preset_spellcheck_multiline_title", "Spellcheck multiline fields"),
             ],
             "prefixes": [
                 "accessibility.",

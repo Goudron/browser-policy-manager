@@ -1,5 +1,6 @@
 import asyncio
 import importlib
+import json
 import re
 from datetime import UTC, datetime
 from pathlib import Path
@@ -11,6 +12,7 @@ from starlette.requests import Request
 
 from app.core.config import get_settings
 from app.main import app
+from app.web.firefox_wizard_steps import get_wizard_steps
 from tests.support import assert_contains_all, build_profile_payload, make_test_client
 
 PROFILES_PAGE_EDITOR_TOKENS = (
@@ -101,9 +103,9 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-firefox-home-snippets-panel"',
     'id="wizard-firefox-home-layout-panel"',
     'id="wizard-search-bar"',
-    'id="wizard-step-4-default-search"',
-    'id="wizard-step-4-managed-engines"',
-    'id="wizard-step-4-suggestions"',
+    'id="wizard-step-2-default-search"',
+    'id="wizard-step-2-managed-engines"',
+    'id="wizard-step-2-suggestions"',
     'id="wizard-search-defaults-presets"',
     'data-search-defaults-preset="defaults"',
     'data-search-defaults-preset="managed_default"',
@@ -125,7 +127,6 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'data-settings-target="policy:DisableTelemetry"',
     'data-settings-target="field:wizard-proxy-mode"',
     'data-settings-target="search-engine-preset:duckduckgo"',
-    'data-search-engine-preset="docs_portal"',
     'data-search-engine-preset="ticket_queue"',
     'data-search-engine-preset="wiki_portal"',
     'data-search-engine-preset="duckduckgo"',
@@ -176,12 +177,12 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-requested-locales-card"',
     'id="wizard-generative-ai-card"',
     'id="wizard-user-messaging-card"',
-    'profiles.wizard_step_six_index_title',
-    'id="wizard-step-6-accounts"',
-    'id="wizard-step-6-language"',
-    'id="wizard-step-6-extensions"',
-    'id="wizard-step-6-bookmarks"',
-    'id="wizard-step-6-websites"',
+    'profiles.wizard_user_environment_map_title',
+    'id="wizard-step-4-accounts"',
+    'id="wizard-step-4-language"',
+    'id="wizard-step-4-extensions"',
+    'id="wizard-step-4-bookmarks"',
+    'id="wizard-step-4-websites"',
     'id="wizard-sync-focus-presets"',
     'data-sync-focus-preset="defaults"',
     'data-sync-focus-preset="accounts"',
@@ -200,9 +201,6 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'data-ai-posture-preset="disable"',
     'data-ai-posture-preset="availability"',
     'data-ai-posture-preset="mixed"',
-    'id="wizard-ai-providers-open-advanced"',
-    'id="wizard-ai-providers-handoff"',
-    'id="wizard-ai-providers-section-status"',
     'id="wizard-visual-search-enabled-card"',
     'id="wizard-website-filter-card"',
     'id="wizard-website-access-decision"',
@@ -230,6 +228,48 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-permissions-card"',
     'id="wizard-cookies-card"',
 )
+
+
+def test_guided_wizard_step_catalog_uses_six_step_model():
+    wizard_steps = get_wizard_steps()
+
+    assert [(step["step"], step["id"]) for step in wizard_steps] == [
+        (1, "start"),
+        (2, "browser_defaults"),
+        (3, "privacy"),
+        (4, "users_features"),
+        (5, "ai"),
+        (6, "review"),
+    ]
+    assert [step["label_fallback"] for step in wizard_steps] == [
+        "Profile & baseline",
+        "Browser access & defaults",
+        "Security & privacy",
+        "Users, add-ons & sites",
+        "AI & smart features",
+        "Review & export",
+    ]
+    assert wizard_steps[-1]["progress_fallback"] == "Step 6 of 6: Review & export"
+
+
+def test_guided_wizard_stepper_renders_six_navigation_steps():
+    client = make_test_client(app)
+    response = client.get("/profiles/new")
+
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html.parser")
+    step_buttons = soup.select("#wizard-stepper .wizard-step")
+
+    assert [button.get("data-step") for button in step_buttons] == [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+    ]
+    assert soup.select_one('#wizard-stepper .wizard-step[data-step="7"]') is None
+    assert soup.select_one('#wizard-stepper .wizard-step[data-step="8"]') is None
 
 PROFILES_PAGE_REVIEW_TOKENS = (
     'id="wizard-network-summary-authentication"',
@@ -355,9 +395,8 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     'id="wizard-export-review-now"',
     'id="wizard-export-summary-network"',
     'id="wizard-export-guided-summary-list"',
-    'id="wizard-export-guided-group-network"',
-    'id="wizard-export-guided-group-home"',
-    'id="wizard-export-guided-group-search"',
+    'id="wizard-export-guided-group-profile"',
+    'id="wizard-export-guided-group-browser"',
     'id="wizard-export-guided-group-privacy"',
     'id="wizard-export-guided-group-features"',
     'id="wizard-export-guided-group-ai"',
@@ -394,14 +433,16 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
 
 PROFILES_PAGE_GUIDED_UX_REGRESSION_TOKENS = (
     "Guided editor",
-    "Advanced settings",
+    "All settings",
+    "Task-first setup",
+    "Full visual catalog",
+    "Raw policies.json editing",
     "Save, validate, download",
     "Download policies.json",
     "Latest edits",
     "Final validation",
     "Ready to download",
-    "About this profile",
-    "What people will notice",
+    "Review by area",
     'id="wizard-extension-fine-tuning-toggle"',
     'id="wizard-extension-fine-tuning-panel"',
     'data-extension-profile-toggle="uBlock0@raymondhill.net"',
@@ -440,6 +481,8 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
 
     assert ".theme-subcard {" in css
     assert 'html[data-theme="dark"] .theme-subcard,' in css
+    assert ".editor-chrome-status-item {" in css
+    assert 'html[data-theme="dark"] .editor-chrome-status-item,' in css
     assert 'html[data-theme="dark"] [class~="bg-white/80"]' in css
     assert 'html[data-theme="dark"] [class~="border-white/70"]' in css
     assert 'html[data-theme="dark"] [class~="border-slate-200"]' in css
@@ -451,7 +494,7 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
     assert "color-scheme: light;" in css
     assert "color-scheme: dark;" in css
     assert 'url("data:image/svg+xml,' in css
-    assert editor_template.count("theme-subcard") >= 4
+    assert editor_template.count("editor-chrome-status-item") >= 4
     assert settings_template.count("theme-subcard") >= 4
 
 
@@ -465,25 +508,28 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.locale_system"] == "Browser"
     assert locale_json["profiles.locale_option_en"] == "English"
     assert locale_json["profiles.locale_option_ru"] == "Russian"
-    assert locale_json["profiles.docs_placeholder_status"] == "Docs placeholder"
     assert locale_json["profiles.editor_chrome_title"] == "Guided editor"
     assert locale_json["profiles.editor_chrome_profile_id"] == "Profile ID"
     assert locale_json["profiles.editor_chrome_validation"] == "Validation"
     assert locale_json["profiles.editor_chrome_modes_title"] == "Open another mode"
-    assert locale_json["profiles.editor_chrome_settings_link"] == "Advanced settings"
+    assert locale_json["profiles.editor_chrome_settings_link"] == "All settings"
+    assert locale_json["profiles.editor_chrome_guided_body"].startswith("Task-first setup")
+    assert locale_json["profiles.editor_chrome_settings_body"].startswith("Full visual catalog")
+    assert locale_json["profiles.editor_chrome_json_body"].startswith("Raw policies.json editing")
     assert locale_json["profiles.editor_chrome_json_link"] == "JSON editor"
-    assert locale_json["profiles.docs_placeholder_policy_title"] == "Policy reference"
-    assert locale_json["profiles.docs_placeholder_boundaries_title"] == "Boundary notes"
     assert locale_json["profiles.wizard_context_existing"].startswith("You are editing")
-    assert locale_json["profiles.wizard_step_one"] == "Start"
-    assert locale_json["profiles.wizard_step_two"] == "Network & browser basics"
-    assert locale_json["profiles.wizard_step_four"] == "Search & navigation"
-    assert locale_json["profiles.wizard_step_five"] == "Privacy & security"
-    assert locale_json["profiles.wizard_step_six"] == "Accounts, languages, add-ons & sites"
-    assert locale_json["profiles.wizard_step_seven"] == "AI & smart features"
-    assert locale_json["profiles.wizard_step_eight"] == "Review & export"
+    assert locale_json["profiles.wizard_step_one"] == "Profile & baseline"
+    assert locale_json["profiles.wizard_step_two"] == "Browser access & defaults"
+    assert locale_json["profiles.wizard_step_three"] == "Security & privacy"
+    assert locale_json["profiles.wizard_step_four"] == "Users, add-ons & sites"
+    assert locale_json["profiles.wizard_step_five"] == "AI & smart features"
+    assert locale_json["profiles.wizard_step_six"] == "Review & export"
+    assert locale_json["profiles.wizard_profile_identity_title"] == "Profile identity"
+    assert locale_json["profiles.wizard_profile_identity_body"].startswith(
+        "Name the profile and choose the Firefox schema channel"
+    )
     assert locale_json["profiles.workspace_scope_guided"] == "Guided editor"
-    assert locale_json["profiles.workspace_scope_advanced"] == "Advanced settings"
+    assert locale_json["profiles.workspace_scope_advanced"] == "All settings"
     assert locale_json["profiles.workspace_scope_current_label"] == "Current mode"
     assert locale_json["profiles.workspace_scope_guided_title"] == (
         "Best for most profile work"
@@ -491,19 +537,19 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.workspace_scope_advanced_title"] == (
         "Only when Guided editor is not enough"
     )
-    assert locale_json["profiles.advanced_context_title"] == "Continue in Advanced settings"
-    assert locale_json["profiles.advanced_context_return"] == "Back to this guided step"
+    assert locale_json["profiles.advanced_context_title"] == "Continue in All settings"
+    assert locale_json["profiles.advanced_context_return"] == "Back to previous mode"
     assert locale_json["profiles.advanced_context_empty_title"] == (
         "Starting here without a step handoff?"
     )
     assert locale_json["profiles.advanced_context_action_editor"] == "Open full policies.json"
-    assert locale_json["profiles.advanced_utility_title"] == "Advanced settings workflow"
+    assert locale_json["profiles.advanced_utility_title"] == "All settings workflow"
     assert locale_json["profiles.advanced_utility_editor_body"] == (
         "Use the full Firefox policies.json when you already know the lower-level keys you need to manage."
     )
     assert locale_json["profiles.advanced_downloads_title"] == "Download policies.json"
     assert locale_json["profiles.editor_section_hint"] == (
-        "Edit the full Firefox policies.json document here when Guided editor and Advanced settings are not enough."
+        "Edit the full Firefox policies.json document here when Guided editor and All settings are not enough."
     )
     assert locale_json["profiles.advanced_review_save_title"] == "Latest edits"
     assert locale_json["profiles.advanced_review_download_title"] == "Ready to download"
@@ -547,11 +593,22 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.reset_library"] == "Clear profile library"
     assert locale_json["profiles.library_filtered_short"] == "Filtered"
     assert locale_json["profiles.library_total_short"] == "Library"
+    assert locale_json["profiles.library_column_context"] == "Owner / note"
+    assert locale_json["profiles.library_action_all_settings"] == "All settings"
+    assert locale_json["profiles.library_action_duplicate"] == "Duplicate"
+    assert locale_json["profiles.library_profile_archived"] == "Profile {name} archived."
+    assert locale_json["profiles.library_filter_all_schemas"] == "All schemas"
+    assert locale_json["profiles.library_filter_archived"] == "Archived"
+    assert locale_json["profiles.library_validation_invalid"] == "Failed"
+    assert locale_json["profiles.library_validation_not_validated"] == "Not validated"
+    assert locale_json["profiles.library_sort_by"] == "Sort by"
     assert locale_json["profiles.dock_group_primary"] == "Main actions"
     assert locale_json["profiles.reload"] == "Refresh list"
     assert locale_json["profiles.import_firefox_policies_json"] == "Import policies.json"
     assert locale_json["profiles.import_firefox_policies_ready"].startswith("Choose a Firefox")
-    assert locale_json["profiles.status_import_firefox_policies_done"] == "Imported {name}."
+    assert locale_json["profiles.status_import_firefox_policies_done"] == (
+        "Imported new profile {name}. Schema: {schema}. Validation: {validation}."
+    )
     assert locale_json["profiles.error_import_firefox_policies"].startswith("Import error")
     assert locale_json["profiles.none_selected"] == "Choose a profile"
     assert locale_json["profiles.list_open"] == "Open profile"
@@ -585,12 +642,12 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_settings_map_label"] == "Firefox Settings areas"
     assert locale_json["profiles.wizard_settings_covered_title"] == "Settings covered"
-    assert locale_json["profiles.wizard_preferences_covered_title"] == "Advanced settings preference coverage"
+    assert locale_json["profiles.wizard_preferences_covered_title"] == "All settings preference coverage"
     assert locale_json["profiles.wizard_preferences_general_handoff_title"] == (
-        "Advanced settings for General preferences"
+        "All settings for General preferences"
     )
     assert locale_json["profiles.wizard_preferences_search_handoff_title"] == (
-        "Advanced settings for Search preferences"
+        "All settings for Search preferences"
     )
     assert locale_json["profiles.wizard_preferences_handoff_count"] == "{count} configured"
     assert locale_json["profiles.wizard_settings_controls_label"] == "What you can change here"
@@ -598,7 +655,8 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_settings_search_label"] == "Find a setting"
     assert locale_json["profiles.wizard_settings_search_clear"] == "Clear"
     assert locale_json["profiles.sort_updated_at"] == "Updated"
-    assert locale_json["profiles.order_desc"] == "DESC"
+    assert locale_json["profiles.sort_schema"] == "Schema"
+    assert locale_json["profiles.order_desc"] == "Descending"
     assert locale_json["profiles.status_draft_ready"].startswith("Draft ready")
     assert locale_json["profiles.editor_formatted"] == "Document formatted."
     assert locale_json["profiles.wizard_settings_search_kind_preference_preset"] == "Preference preset"
@@ -610,20 +668,24 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_home_surface_open"] == "Open"
     assert locale_json["profiles.wizard_step_two_index_title"] == "Step map"
     assert locale_json["profiles.wizard_step_two_index_proxy"] == "Proxy"
+    assert locale_json["profiles.wizard_browser_defaults_map_title"] == "Step map"
+    assert locale_json["profiles.wizard_browser_defaults_review_title"] == "Local review"
     assert locale_json["profiles.wizard_step_four_index_title"] == "Search step map"
     assert locale_json["profiles.wizard_step_four_index_engines"] == "Managed engines"
-    assert locale_json["profiles.wizard_step_six_index_title"] == "Step map"
-    assert locale_json["profiles.wizard_step_six_index_extensions"] == "Extensions"
-    assert locale_json["profiles.wizard_step_six_index_websites"] == "Websites"
+    assert locale_json["profiles.wizard_user_environment_map_title"] == (
+        "User environment map"
+    )
+    assert locale_json["profiles.wizard_user_environment_map_extensions"] == "Extensions"
+    assert locale_json["profiles.wizard_user_environment_map_websites"] == "Websites"
     assert locale_json["profiles.wizard_disclosure_show"] == "Show details"
     assert locale_json["profiles.wizard_disclosure_hide"] == "Hide details"
     assert locale_json["profiles.wizard_review_filter_changed"] == "Changed"
     assert locale_json["profiles.wizard_review_filter_attention"] == "Needs attention"
-    assert locale_json["profiles.wizard_review_filter_advanced"] == "Advanced settings only"
+    assert locale_json["profiles.wizard_review_filter_advanced"] == "Outside Guided editor"
     assert locale_json["profiles.wizard_review_filter_all"] == "All"
     assert locale_json["profiles.wizard_review_empty_changed"] == "No changed items here yet."
     assert locale_json["profiles.wizard_review_empty_advanced"] == (
-        "No advanced settings items are listed here right now."
+        "No items outside Guided editor are listed here right now."
     )
     assert locale_json["profiles.wizard_long_list_show_all"] == "Show all {count}"
     assert locale_json["profiles.wizard_long_list_show_fewer"] == "Show fewer"
@@ -683,8 +745,9 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_preferences_preset_sync_passwords_off_title"] == (
         "Do not sync passwords"
     )
+    assert locale_json["profiles.wizard_security_map_title"] == "Security posture map"
     assert locale_json["profiles.wizard_privacy_review_title"] == (
-        "How strict site access will be"
+        "Security posture at a glance"
     )
     assert locale_json["profiles.wizard_privacy_review_user_data"] == (
         "Privacy and saved credentials"
@@ -845,7 +908,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_export_compatibility_title"] == "Technical coverage"
     assert locale_json["profiles.wizard_shared_device_workflow_title"] == "Shared-device workflow"
     assert locale_json["profiles.wizard_export_section_ready_title"] == "Final checklist"
-    assert locale_json["profiles.wizard_export_section_changes_title"] == "What changed"
+    assert locale_json["profiles.wizard_export_section_changes_title"] == "Review before handoff"
     assert locale_json["profiles.wizard_export_section_technical_title"] == (
         "Technical details"
     )
@@ -854,10 +917,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_export_validation_state"] == "Final validation"
     assert locale_json["profiles.wizard_export_ready_state"] == "Ready to download"
     assert locale_json["profiles.wizard_export_ready_title"] == "Download policies.json"
-    assert locale_json["profiles.wizard_export_basics_title"] == "About this profile"
-    assert locale_json["profiles.wizard_export_guided_summary_title"] == (
-        "What people will notice"
-    )
+    assert locale_json["profiles.wizard_export_guided_summary_title"] == "Review by area"
     assert locale_json["profiles.wizard_export_guided_ai"] == "AI and smart features"
     assert locale_json["profiles.wizard_cleanup_preset_shared_title"] == (
         "Shared-device cleanup"
@@ -973,9 +1033,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_ai_posture_title"] == "AI posture"
     assert locale_json["profiles.wizard_ai_posture_disable_title"] == "Disable AI"
-    assert locale_json["profiles.wizard_ai_providers_state_empty"] == (
-        "No provider or model policy fields exist in the current Firefox 150 template."
-    )
+    assert locale_json["profiles.wizard_ai_generative_controls_title"] == "Generative AI settings"
     assert locale_json["profiles.wizard_network_enterprise_section_state_managed_preset"] == (
         "Windows SSO and enterprise roots enabled"
     )
@@ -1063,24 +1121,23 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.locale_system"] == "По браузеру"
     assert locale_json["profiles.locale_option_en"] == "Английский"
     assert locale_json["profiles.locale_option_ru"] == "Русский"
-    assert locale_json["profiles.docs_placeholder_status"] == "Место для документации"
     assert locale_json["profiles.editor_chrome_title"] == "Пошаговый редактор"
     assert locale_json["profiles.editor_chrome_profile_id"] == "ID профиля"
     assert locale_json["profiles.editor_chrome_validation"] == "Проверка"
     assert locale_json["profiles.editor_chrome_modes_title"] == "Открыть другой режим"
-    assert locale_json["profiles.editor_chrome_settings_link"] == "Расширенные настройки"
+    assert locale_json["profiles.editor_chrome_settings_link"] == "Все настройки"
+    assert locale_json["profiles.editor_chrome_guided_body"].startswith("Сценарная настройка")
+    assert locale_json["profiles.editor_chrome_settings_body"].startswith("Полный визуальный каталог")
+    assert locale_json["profiles.editor_chrome_json_body"].startswith("Редактирование сырого policies.json")
     assert locale_json["profiles.editor_chrome_json_link"] == "JSON-редактор"
-    assert locale_json["profiles.docs_placeholder_policy_title"] == "Справочник политик"
-    assert locale_json["profiles.docs_placeholder_boundaries_title"] == "Границы мастера"
-    assert locale_json["profiles.wizard_step_one"] == "Старт"
-    assert locale_json["profiles.wizard_step_two"] == "Сеть и базовые настройки"
-    assert locale_json["profiles.wizard_step_four"] == "Поиск и навигация"
-    assert locale_json["profiles.wizard_step_five"] == "Приватность и защита"
-    assert locale_json["profiles.wizard_step_six"] == "Аккаунты, языки, дополнения и сайты"
-    assert locale_json["profiles.wizard_step_seven"] == "ИИ и умные функции"
-    assert locale_json["profiles.wizard_step_eight"] == "Проверка и выгрузка"
+    assert locale_json["profiles.wizard_step_one"] == "Профиль и основа"
+    assert locale_json["profiles.wizard_step_two"] == "Доступ к браузеру и значения по умолчанию"
+    assert locale_json["profiles.wizard_step_three"] == "Защита и приватность"
+    assert locale_json["profiles.wizard_step_four"] == "Пользователи, дополнения и сайты"
+    assert locale_json["profiles.wizard_step_five"] == "ИИ и умные функции"
+    assert locale_json["profiles.wizard_step_six"] == "Проверка и выгрузка"
     assert locale_json["profiles.workspace_scope_guided"] == "Пошаговый редактор"
-    assert locale_json["profiles.workspace_scope_advanced"] == "Расширенные настройки"
+    assert locale_json["profiles.workspace_scope_advanced"] == "Все настройки"
     assert locale_json["profiles.workspace_scope_current_label"] == "Текущий режим"
     assert locale_json["profiles.workspace_scope_guided_title"] == (
         "Лучший путь для большей части работы"
@@ -1088,8 +1145,8 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.workspace_scope_advanced_title"] == (
         "Только когда Пошагового редактора уже недостаточно"
     )
-    assert locale_json["profiles.advanced_context_title"] == "Продолжение в расширенных настройках"
-    assert locale_json["profiles.advanced_context_return"] == "Вернуться к этому шагу"
+    assert locale_json["profiles.advanced_context_title"] == "Продолжение во Всех настройках"
+    assert locale_json["profiles.advanced_context_return"] == "Вернуться к предыдущему режиму"
     assert locale_json["profiles.advanced_context_empty_title"] == (
         "Открыли это место без перехода из шага?"
     )
@@ -1097,14 +1154,14 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Открыть полный policies.json"
     )
     assert locale_json["profiles.advanced_utility_title"] == (
-        "Работа в расширенных настройках"
+        "Работа во Всех настройках"
     )
     assert locale_json["profiles.advanced_utility_editor_body"] == (
         "Используйте полный Firefox policies.json, когда уже знаете, какими низкоуровневыми ключами нужно управлять."
     )
     assert locale_json["profiles.advanced_downloads_title"] == "Скачать policies.json"
     assert locale_json["profiles.editor_section_hint"] == (
-        "Редактируйте здесь полный Firefox policies.json, когда Пошагового редактора и расширенных настроек уже недостаточно."
+        "Редактируйте здесь полный Firefox policies.json, когда Пошагового редактора и Всех настроек уже недостаточно."
     )
     assert locale_json["profiles.advanced_review_save_title"] == "Последние правки"
     assert locale_json["profiles.advanced_review_download_title"] == (
@@ -1164,12 +1221,21 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.reset_library"] == "Очистить библиотеку профилей"
     assert locale_json["profiles.library_filtered_short"] == "Отфильтровано"
     assert locale_json["profiles.library_total_short"] == "Всего"
+    assert locale_json["profiles.library_column_context"] == "Владелец / заметка"
+    assert locale_json["profiles.library_action_all_settings"] == "Все настройки"
+    assert locale_json["profiles.library_action_duplicate"] == "Дублировать"
+    assert locale_json["profiles.library_profile_archived"] == "Профиль «{name}» отправлен в архив."
+    assert locale_json["profiles.library_filter_all_schemas"] == "Все схемы"
+    assert locale_json["profiles.library_filter_archived"] == "Архивные"
+    assert locale_json["profiles.library_validation_invalid"] == "Не пройдена"
+    assert locale_json["profiles.library_validation_not_validated"] == "Не проверена"
+    assert locale_json["profiles.library_sort_by"] == "Сортировать по"
     assert locale_json["profiles.dock_group_primary"] == "Главные действия"
     assert locale_json["profiles.reload"] == "Обновить список"
     assert locale_json["profiles.import_firefox_policies_json"] == "Импортировать policies.json"
     assert locale_json["profiles.import_firefox_policies_ready"].startswith("Выберите файл")
     assert locale_json["profiles.status_import_firefox_policies_done"] == (
-        "Импортирован профиль «{name}»."
+        "Импортирован новый профиль «{name}». Схема: {schema}. Проверка: {validation}."
     )
     assert locale_json["profiles.error_import_firefox_policies"].startswith("Ошибка импорта")
     assert locale_json["profiles.none_selected"] == "Выберите профиль"
@@ -1202,12 +1268,12 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_settings_map_label"] == "Разделы настроек Firefox"
     assert locale_json["profiles.wizard_settings_covered_title"] == "Покрытые настройки"
-    assert locale_json["profiles.wizard_preferences_covered_title"] == "Покрытие параметров в расширенных настройках"
+    assert locale_json["profiles.wizard_preferences_covered_title"] == "Покрытие параметров во всех настройках"
     assert locale_json["profiles.wizard_preferences_general_handoff_title"] == (
-        "Расширенные настройки для раздела «Основные»"
+        "Все настройки для раздела «Основные»"
     )
     assert locale_json["profiles.wizard_preferences_search_handoff_title"] == (
-        "Расширенные настройки поиска"
+        "Все настройки поиска"
     )
     assert locale_json["profiles.wizard_preferences_handoff_count"] == "Настроено: {count}"
     assert locale_json["profiles.wizard_settings_controls_label"] == "Что можно изменить здесь"
@@ -1215,6 +1281,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_settings_search_label"] == "Найти настройку"
     assert locale_json["profiles.wizard_settings_search_clear"] == "Очистить"
     assert locale_json["profiles.sort_updated_at"] == "Обновлено"
+    assert locale_json["profiles.sort_schema"] == "Схема"
     assert locale_json["profiles.order_desc"] == "По убыванию"
     assert locale_json["profiles.status_draft_ready"].startswith("Черновик готов")
     assert locale_json["profiles.editor_formatted"] == "Документ отформатирован."
@@ -1235,20 +1302,24 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_home_surface_open"] == "Открыть"
     assert locale_json["profiles.wizard_step_two_index_title"] == "Карта шага"
     assert locale_json["profiles.wizard_step_two_index_proxy"] == "Прокси"
+    assert locale_json["profiles.wizard_browser_defaults_map_title"] == "Карта шага"
+    assert locale_json["profiles.wizard_browser_defaults_review_title"] == "Локальная проверка"
     assert locale_json["profiles.wizard_step_four_index_title"] == "Карта шага поиска"
     assert locale_json["profiles.wizard_step_four_index_engines"] == "Управляемые поисковики"
-    assert locale_json["profiles.wizard_step_six_index_title"] == "Карта шага"
-    assert locale_json["profiles.wizard_step_six_index_extensions"] == "Дополнения"
-    assert locale_json["profiles.wizard_step_six_index_websites"] == "Сайты"
+    assert locale_json["profiles.wizard_user_environment_map_title"] == (
+        "Карта пользовательского окружения"
+    )
+    assert locale_json["profiles.wizard_user_environment_map_extensions"] == "Дополнения"
+    assert locale_json["profiles.wizard_user_environment_map_websites"] == "Сайты"
     assert locale_json["profiles.wizard_disclosure_show"] == "Показать детали"
     assert locale_json["profiles.wizard_disclosure_hide"] == "Скрыть детали"
     assert locale_json["profiles.wizard_review_filter_changed"] == "Изменённые"
     assert locale_json["profiles.wizard_review_filter_attention"] == "Требуют внимания"
-    assert locale_json["profiles.wizard_review_filter_advanced"] == "Только расширенные настройки"
+    assert locale_json["profiles.wizard_review_filter_advanced"] == "Вне Пошагового редактора"
     assert locale_json["profiles.wizard_review_filter_all"] == "Все"
     assert locale_json["profiles.wizard_review_empty_changed"] == "Здесь пока нет изменённых пунктов."
     assert locale_json["profiles.wizard_review_empty_advanced"] == (
-        "Сейчас здесь нет пунктов только для расширенных настроек."
+        "Сейчас здесь нет пунктов вне Пошагового редактора."
     )
     assert locale_json["profiles.wizard_long_list_show_all"] == "Показать все: {count}"
     assert locale_json["profiles.wizard_long_list_show_fewer"] == "Свернуть"
@@ -1355,8 +1426,9 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_preferences_preset_sync_passwords_off_title"] == (
         "Не синхронизировать пароли"
     )
+    assert locale_json["profiles.wizard_security_map_title"] == "Карта защитного режима"
     assert locale_json["profiles.wizard_privacy_review_title"] == (
-        "Насколько строгими будут правила для сайтов"
+        "Краткая сводка защитного режима"
     )
     assert locale_json["profiles.wizard_privacy_review_user_data"] == (
         "Приватность и сохранённые учётные данные"
@@ -1438,7 +1510,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_search_defaults_preset_restricted_title"] == (
         "Ограниченный поиск"
     )
-    assert locale_json["profiles.wizard_search_preset_docs_title"] == "Портал документации"
     assert locale_json["profiles.wizard_search_preset_applied"] == "Готовый набор поисковика добавлен."
     assert locale_json["profiles.wizard_search_preset_state_applied"] == (
         "Готовый набор совпадает с текущим поисковиком"
@@ -1463,7 +1534,10 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_firefox_home_recommendations_title"] == (
         "Истории и рекламный контент"
     )
-    assert locale_json["profiles.wizard_home_step_summary_title"] == "Итог настройки Home"
+    assert (
+        locale_json["profiles.wizard_home_step_summary_title"]
+        == "Итог настройки домашней страницы"
+    )
     assert locale_json["profiles.wizard_firefox_suggest_title"] == "Firefox Suggest"
     assert locale_json["profiles.wizard_firefox_suggest_preset_locked_down_title"] == (
         "Подсказки жёстко отключены"
@@ -1519,13 +1593,19 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Выберите модель управления"
     )
     assert locale_json["profiles.wizard_extensions_governance_managed_title"] == (
-        "Управляемый allowlist"
+        "Управляемый список разрешённых источников"
     )
     assert locale_json["profiles.wizard_extensions_governance_curated_title"] == (
         "Курируемая раскатка"
     )
     assert locale_json["profiles.wizard_extensions_governance_title"] == (
         "Сценарий управления дополнениями"
+    )
+    assert locale_json["profiles.wizard_profile_identity_title"] == (
+        "Идентификация профиля"
+    )
+    assert locale_json["profiles.wizard_profile_identity_body"].startswith(
+        "Задайте имя профиля и выберите канал схемы Firefox"
     )
     assert locale_json["profiles.wizard_extensions_review_body"].startswith(
         "Быстрая проверка"
@@ -1548,7 +1628,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_export_compatibility_title"] == "Техническое покрытие"
     assert locale_json["profiles.wizard_shared_device_workflow_title"] == "Сценарий общего устройства"
     assert locale_json["profiles.wizard_export_section_ready_title"] == "Финальный чеклист"
-    assert locale_json["profiles.wizard_export_section_changes_title"] == "Что изменилось"
+    assert locale_json["profiles.wizard_export_section_changes_title"] == "Проверка перед передачей"
     assert locale_json["profiles.wizard_export_section_technical_title"] == (
         "Технические детали"
     )
@@ -1557,10 +1637,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_export_validation_state"] == "Финальная проверка"
     assert locale_json["profiles.wizard_export_ready_state"] == "Готово к скачиванию"
     assert locale_json["profiles.wizard_export_ready_title"] == "Скачать policies.json"
-    assert locale_json["profiles.wizard_export_basics_title"] == "О профиле"
-    assert locale_json["profiles.wizard_export_guided_summary_title"] == (
-        "Что заметят пользователи"
-    )
+    assert locale_json["profiles.wizard_export_guided_summary_title"] == "Проверка по областям"
     assert locale_json["profiles.wizard_export_guided_ai"] == "ИИ и умные функции"
     assert locale_json["profiles.wizard_cleanup_preset_shared_title"] == (
         "Очистка для общих устройств"
@@ -1628,7 +1705,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_bookmarks_review_open"] == "Открыть"
     assert locale_json["profiles.wizard_bookmarks_handoff_title"] == "Редактор закладок"
     assert locale_json["profiles.wizard_bookmarks_open_action"] == (
-        "Открыть расширенные"
+        "Открыть Все настройки"
     )
     assert locale_json["profiles.wizard_bookmarks_row_state_toolbar"] == "Закладка на панели"
     assert locale_json["profiles.wizard_managed_bookmarks_row_state_invalid"] == (
@@ -1658,7 +1735,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Блокировок: {blocked} • Исключений: {exceptions}"
     )
     assert locale_json["profiles.wizard_authentication_state_configured"] == (
-        "Контролов: {controls} • Правил хостов: {rules}"
+        "Элементов управления: {controls} • Правил хостов: {rules}"
     )
     assert locale_json["profiles.wizard_trust_auth_workflow_title"] == (
         "Сценарий корпоративного доверия и входа"
@@ -1669,7 +1746,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_step_memory_open"] == "Открыть шаг"
     assert locale_json["profiles.wizard_step_memory_current"] == "Вы уже здесь"
     assert locale_json["profiles.wizard_export_boundary_register_title"] == (
-        "Что сознательно остаётся в расширенных настройках"
+        "Что сознательно остаётся во Всех настройках"
     )
     assert locale_json["profiles.wizard_export_drilldown_title"] == (
         "Детальный технический разбор"
@@ -1678,9 +1755,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Установлено: {count} • Включены корпоративные корневые сертификаты"
     )
     assert locale_json["profiles.wizard_doh_state_provider"] == "Свой поставщик"
-    assert locale_json["profiles.wizard_ai_providers_state_empty"] == (
-        "В текущем шаблоне Firefox 150 нет полей политик для поставщиков или моделей."
-    )
+    assert locale_json["profiles.wizard_ai_generative_controls_title"] == "Настройки генеративного ИИ"
     assert locale_json["profiles.wizard_permissions_state_strict"] == (
         "Настроено: {configured} • Строгих: {strict}"
     )
@@ -1743,7 +1818,7 @@ def test_profiles_page_renders_editor_shell():
         (
             "Browser Policy Manager",
             "Guided editor",
-            "Advanced settings",
+            "All settings",
             "JSON editor",
             'id="overview-panel"',
             'id="wizard-panel"',
@@ -1803,7 +1878,8 @@ def test_ai_wizard_presets_update_managed_policy_values():
     ).read_text(encoding="utf-8")
 
     assert "function applyAiPosturePreset(presetKey)" in source
-    assert 'getActiveWizardSchemaVersion() === "release-150"' in source
+    assert "function isAiWizardAvailable()" in source
+    assert "function hasUsableAiPolicyCard(policyCardEl)" in source
     assert 'setText(wizardAiSectionStatusEl, t("profiles.wizard_ai_esr_state"))' in source
     assert 'normalized.AIControls = buildAiControlsValue(presetKey);' in source
     assert 'Value: "blocked"' in source
@@ -1824,10 +1900,15 @@ def test_ai_wizard_exposes_current_firefox_150_controls_in_standard_step():
         / "_page_wizard_step_ai.html"
     ).read_text(encoding="utf-8")
 
+    assert 'id="wizard-ai-release-content" hidden' in template
     assert 'id="wizard-ai-policy-controls"' in template
     assert 'id="wizard-ai-esr-empty-state"' in template
     assert 'data-i18n="profiles.wizard_ai_esr_title"' in template
     assert 'data-i18n="profiles.wizard_ai_esr_body"' in template
+    assert 'id="wizard-ai-map-title"' in template
+    assert 'href="#wizard-step-5-posture"' in template
+    assert 'href="#wizard-step-5-availability"' in template
+    assert 'href="#wizard-step-5-surfaces"' in template
     assert 'id="wizard-ai-posture-presets"' in template
     assert 'id="wizard-ai-controls-card"' in template
     assert 'data-settings-target="policy:AIControls"' in template
@@ -1836,7 +1917,8 @@ def test_ai_wizard_exposes_current_firefox_150_controls_in_standard_step():
     assert 'id="wizard-visual-search-enabled-card"' in template
     assert 'data-settings-target="policy:VisualSearchEnabled"' in template
     assert 'data-ai-outcome-group="feature-controls"' in template
-    assert 'data-ai-outcome-group="adjacent-controls"' in template
+    assert 'data-ai-outcome-group="generative-controls"' in template
+    assert 'data-ai-outcome-group="surface-controls"' in template
     assert 'data-ai-posture-preset="providers"' not in template
     assert 'id="wizard-ai-fine-tuning-panel"' not in template
 
@@ -1938,17 +2020,17 @@ def test_default_wizard_path_does_not_render_settings_map_blocks():
 
     removed_tokens = (
         'id="wizard-settings-map-',
-        'id="wizard-settings-docs-',
+        'id="wizard-settings-controls-',
         'id="wizard-preferences-general-groups"',
         'id="wizard-preferences-home-groups"',
         'id="wizard-preferences-search-groups"',
         'id="wizard-preferences-privacy-groups"',
         'id="wizard-preferences-sync-groups"',
-        'id="wizard-preferences-general-docs"',
-        'id="wizard-preferences-home-docs"',
-        'id="wizard-preferences-search-docs"',
-        'id="wizard-preferences-privacy-docs"',
-        'id="wizard-preferences-sync-docs"',
+        'id="wizard-preferences-general-controls"',
+        'id="wizard-preferences-home-controls"',
+        'id="wizard-preferences-search-controls"',
+        'id="wizard-preferences-privacy-controls"',
+        'id="wizard-preferences-sync-controls"',
         'data-settings-nav',
         'data-settings-jump-target',
     )
@@ -1978,6 +2060,7 @@ def test_setup_step_defaults_to_corporate_baseline_and_active_preset_states():
     )
 
     assert response.status_code == 200
+    assert 'data-i18n="profiles.wizard_profile_identity_title"' in response.text
     assert 'id="wizard-name"' in response.text
     assert 'id="wizard-schema"' in response.text
     assert 'data-scenario-key="corporate_default" aria-pressed="true"' in response.text
@@ -1987,15 +2070,13 @@ def test_setup_step_defaults_to_corporate_baseline_and_active_preset_states():
     assert 'data-cis-layer-key="cis_l2" aria-pressed="false"' in response.text
     assert 'id="wizard-baseline-override-panel" hidden' in response.text
 
-    removed_default_blocks = (
-        'class="wizard-impact-panel',
-        'id="wizard-scenario-summary-copy"',
-        'id="wizard-shared-device-workflow-copy"',
-        'id="wizard-baseline-preview-copy"',
-        'id="wizard-baseline-summary-copy"',
-    )
-    for token in removed_default_blocks:
-        assert token not in response.text
+    assert 'id="wizard-scenario-summary-copy"' in response.text
+    assert 'id="wizard-scenario-summary-list"' in response.text
+    assert 'id="wizard-baseline-summary-copy"' in response.text
+    assert 'id="wizard-baseline-summary-list"' in response.text
+    assert 'class="wizard-impact-panel' not in response.text
+    assert 'id="wizard-shared-device-workflow-copy"' not in response.text
+    assert 'id="wizard-baseline-preview-copy"' not in response.text
 
     assert 'let wizardScenario = "corporate_default";' in flow_source
     assert 'let wizardStarter = "basic_corporate";' in flow_source
@@ -2003,10 +2084,13 @@ def test_setup_step_defaults_to_corporate_baseline_and_active_preset_states():
     assert 'button.setAttribute("aria-pressed", isActive ? "true" : "false");' in flow_source
     assert 'box-shadow:\n                inset 4px 0 0 rgba(15, 118, 110, 0.82)' in css_source
 
+    identity_index = setup_template.index("profiles.wizard_profile_identity_title")
+    scenario_summary_index = setup_template.index('"wizard-scenario-summary-copy"')
+    baseline_summary_index = setup_template.index('"wizard-baseline-summary-copy"')
     baseline_override_index = setup_template.index('"wizard-baseline-override-panel"')
     secondary_index = setup_template.index('wizard-starter-grid--secondary')
     cis_index = setup_template.index('data-cis-layer-key="cis_l2"')
-    assert baseline_override_index < secondary_index < cis_index
+    assert identity_index < scenario_summary_index < baseline_summary_index < baseline_override_index < secondary_index < cis_index
 
 
 def test_step_two_default_path_is_actionable_network_basics():
@@ -2048,9 +2132,20 @@ def test_step_two_default_path_is_actionable_network_basics():
     for token in core_tokens:
         assert token in response.text
 
+    added_tokens = (
+        'id="wizard-browser-defaults-map-title"',
+        'href="#wizard-step-2-basics"',
+        'href="#wizard-home-surface-startup"',
+        'href="#wizard-step-2-default-search"',
+        'href="#wizard-step-2-review"',
+        'id="wizard-home-summary-homepage"',
+        'id="wizard-search-summary-defaults"',
+    )
+    for token in added_tokens:
+        assert token in response.text
+
     removed_tokens = (
         'id="wizard-schema-shell-step-2"',
-        'href="#wizard-step-2-basics"',
         'id="wizard-upkeep-governance-copy"',
         'id="wizard-trust-auth-workflow-copy"',
         'id="wizard-step-2-advanced-preferences"',
@@ -2068,7 +2163,7 @@ def test_step_two_default_path_is_actionable_network_basics():
     assert "wizard-search-engine-preset--applied" in css_source
 
 
-def test_step_three_default_path_is_actionable_home_and_startup():
+def test_step_two_contains_actionable_home_and_startup_sections():
     root = Path(__file__).resolve().parents[1]
     response = _profiles_page_response()
     home_template = (
@@ -2107,7 +2202,6 @@ def test_step_three_default_path_is_actionable_home_and_startup():
         'id="wizard-schema-shell-step-3"',
         'class="wizard-home-step-summary"',
         'id="wizard-home-surfaces-workflow-copy"',
-        'id="wizard-home-summary-homepage"',
         'id="wizard-home-summary-user-messaging"',
         'id="wizard-preferences-home-add"',
         'id="wizard-preferences-home-bundles"',
@@ -2126,7 +2220,7 @@ def test_step_three_default_path_is_actionable_home_and_startup():
     assert 'renderPresetButtonState(firefoxHomePresetButtons, resolveFirefoxHomePreset(parsed), "firefoxHomePreset");' in network_source
 
 
-def test_step_four_default_path_is_actionable_search_and_navigation():
+def test_step_two_contains_actionable_search_and_navigation_sections():
     root = Path(__file__).resolve().parents[1]
     response = _profiles_page_response()
     search_template = (
@@ -2144,15 +2238,14 @@ def test_step_four_default_path_is_actionable_search_and_navigation():
 
     assert response.status_code == 200
     core_tokens = (
-        'id="wizard-step-4-default-search"',
+        'id="wizard-step-2-default-search"',
         'id="wizard-search-defaults-presets"',
         'data-search-defaults-preset="managed_default"',
         'id="wizard-search-default-engine"',
         'id="wizard-search-defaults-section-status"',
-        'id="wizard-step-4-managed-engines"',
+        'id="wizard-step-2-managed-engines"',
         'id="wizard-search-engine-add"',
         'id="wizard-search-engine-list"',
-        'data-search-engine-preset="docs_portal"',
         'data-search-engine-preset="duckduckgo"',
         'data-search-engine-field="Name"',
         'data-search-engine-field="URLTemplate"',
@@ -2160,7 +2253,7 @@ def test_step_four_default_path_is_actionable_search_and_navigation():
         'data-search-engine-advanced',
         'data-search-engine-field="Method"',
         'data-search-engine-field="PostData"',
-        'id="wizard-step-4-suggestions"',
+        'id="wizard-step-2-suggestions"',
         'id="wizard-firefox-suggest-presets"',
         'data-firefox-suggest-preset="private"',
         'data-firefox-suggest-key="WebSuggestions"',
@@ -2176,8 +2269,6 @@ def test_step_four_default_path_is_actionable_search_and_navigation():
         'href="#wizard-step-4-default-search"',
         'id="wizard-step-4-review"',
         'id="wizard-search-surfaces-workflow-copy"',
-        'id="wizard-search-summary-defaults"',
-        'id="wizard-search-summary-suggest-jump"',
         'id="wizard-step-4-advanced-preferences"',
         'id="wizard-preferences-search-handoff-panel"',
         'id="wizard-preferences-search-add"',
@@ -2197,7 +2288,7 @@ def test_step_four_default_path_is_actionable_search_and_navigation():
     assert "wizard-search-engine-preset--applied" in css_source
 
 
-def test_step_five_default_path_is_actionable_privacy_and_protection():
+def test_step_three_default_path_is_actionable_privacy_and_protection():
     root = Path(__file__).resolve().parents[1]
     response = _profiles_page_response()
     privacy_template = (
@@ -2216,9 +2307,17 @@ def test_step_five_default_path_is_actionable_privacy_and_protection():
     assert response.status_code == 200
     core_tokens = (
         'id="wizard-hardening-presets"',
+        'id="wizard-security-map-title"',
+        'href="#wizard-step-3-posture"',
+        'href="#wizard-step-3-cleanup"',
+        'href="#wizard-step-3-site-data"',
+        'href="#wizard-step-3-vpn"',
+        'href="#wizard-step-3-review"',
         'data-hardening-preset="balanced"',
         'data-hardening-preset="strict"',
         'id="wizard-hardening-section-status"',
+        'id="wizard-privacy-user-data-section-status"',
+        'id="wizard-lockdown-section-status"',
         'data-hardening-cleanup-subchoice',
         'id="wizard-cleanup-presets"',
         'data-cleanup-preset="shared"',
@@ -2276,7 +2375,7 @@ def test_step_five_default_path_is_actionable_privacy_and_protection():
     assert "wizard-search-engine-preset--applied" in css_source
 
 
-def test_step_six_default_path_is_compact_accounts_extensions_and_sites():
+def test_step_four_default_path_is_compact_accounts_extensions_and_sites():
     root = Path(__file__).resolve().parents[1]
     response = _profiles_page_response()
     sync_template = (
@@ -2288,31 +2387,37 @@ def test_step_six_default_path_is_compact_accounts_extensions_and_sites():
 
     assert response.status_code == 200
     core_tokens = (
-        'id="wizard-step-6-accounts"',
+        'id="wizard-user-environment-map-title"',
+        'href="#wizard-step-4-accounts"',
+        'href="#wizard-step-4-language"',
+        'href="#wizard-step-4-extensions"',
+        'href="#wizard-step-4-bookmarks"',
+        'href="#wizard-step-4-websites"',
+        'id="wizard-step-4-accounts"',
         'id="wizard-sync-focus-presets"',
         'data-sync-focus-preset="accounts"',
         'id="wizard-sync-section-status"',
         'id="wizard-sync-fine-tuning-toggle"',
         'id="wizard-user-messaging-card"',
-        'id="wizard-step-6-language"',
+        'id="wizard-step-4-language"',
         'id="wizard-language-presets"',
         'data-language-preset="translation_off"',
         'id="wizard-requested-locales-card"',
         'id="wizard-translate-enabled-card"',
         'id="wizard-language-section-status"',
         'id="wizard-language-ai-handoff"',
-        'id="wizard-step-6-extensions"',
+        'id="wizard-step-4-extensions"',
         'id="wizard-extension-governance-presets"',
         'data-extension-governance-preset="managed"',
         'id="wizard-extension-default-mode"',
         'id="wizard-extension-section-status"',
         'id="wizard-extension-fine-tuning-toggle"',
         'id="wizard-extension-curated-section"',
-        'id="wizard-step-6-bookmarks"',
+        'id="wizard-step-4-bookmarks"',
         'data-bookmarks-handoff',
         'id="wizard-bookmarks-open-advanced"',
         'id="wizard-bookmarks-section-status"',
-        'id="wizard-step-6-websites"',
+        'id="wizard-step-4-websites"',
         'id="wizard-website-access-decision"',
         'id="wizard-website-access-posture"',
         'data-website-access-posture="allow_only"',
@@ -2751,9 +2856,11 @@ def test_profile_editor_routes_render_wizard_shells():
         in edit_response.text
     )
     assert (
-        "<title>Route Skeleton Profile — Advanced settings — Browser Policy Manager</title>"
+        "<title>Route Skeleton Profile — All settings — Browser Policy Manager</title>"
         in settings_response.text
     )
+    assert "Advanced settings" not in settings_response.text
+    assert "Search mapped controls and apply policy changes without opening the JSON editor." in settings_response.text
     assert "<title>Route Skeleton Profile — JSON editor — Browser Policy Manager</title>" in json_response.text
     assert 'data-profiles-route-mode="new"' in new_response.text
     assert 'data-profiles-route-mode="edit"' in edit_response.text
@@ -2774,6 +2881,31 @@ def test_profile_editor_routes_render_wizard_shells():
         settings_response.text,
         (
             'id="settings-panel"',
+            'id="all-settings-review-panel"',
+            'id="all-settings-review-summary"',
+            'id="all-settings-review-actions"',
+            'id="all-settings-list-panel"',
+            'id="all-settings-list-summary"',
+            'id="all-settings-list"',
+            'id="all-settings-detail-panel"',
+            'id="all-settings-add-preference"',
+            'data-settings-list-filter="all"',
+            'data-settings-list-filter="configured"',
+            'data-settings-list-filter="available"',
+            'data-settings-list-filter="guided-covered"',
+            'data-settings-list-filter="all-settings-only"',
+            'data-settings-list-filter="invalid"',
+            'data-settings-list-filter="deprecated"',
+            'data-settings-list-filter="raw"',
+            'data-settings-list-filter="unknown"',
+            'id="settings-category-browser-access"',
+            'id="settings-category-home-startup"',
+            'id="settings-category-search-navigation"',
+            'id="settings-category-privacy-security"',
+            'id="settings-category-users-addons-sites"',
+            'id="settings-category-ai-smart-features"',
+            'id="settings-category-raw-unmapped"',
+            'data-settings-category-link="browser-access"',
             'id="wizard-settings-search-input"',
             'id="settings-schema-shell-step-2"',
             'data-settings-nav',
@@ -2808,6 +2940,7 @@ def test_profile_editor_routes_render_wizard_shells():
             'id="validate"',
             'id="format"',
             'id="download-firefox-policies"',
+            'rel="noopener"',
         ),
     )
     assert 'id="wizard-panel"' not in json_response.text
@@ -2848,7 +2981,13 @@ def test_profile_workspace_routes_smoke_dom_contracts():
             'data-profiles-template-kind="library"',
             'id="library-panel"',
             'id="search"',
+            'id="library-schema-filter"',
+            'id="library-lifecycle-filter"',
+            'id="library-validation-filter"',
+            'id="sort"',
+            'id="order"',
             'id="create-profile-link"',
+            'id="status"',
             'href="/profiles/new"',
             'id="list"',
             'id="compare-panel"',
@@ -2865,7 +3004,6 @@ def test_profile_workspace_routes_smoke_dom_contracts():
     assert 'id="wizard-panel"' not in library_response.text
     assert 'id="command-deck"' not in library_response.text
     assert 'id="editor-panel"' not in library_response.text
-
     for response, route_mode in ((new_response, "new"), (edit_response, "edit")):
         assert_contains_all(
             response.text,
@@ -2886,7 +3024,6 @@ def test_profile_workspace_routes_smoke_dom_contracts():
         assert 'id="details-panel"' not in response.text
         assert 'id="editor-panel"' not in response.text
         assert 'id="editor"' not in response.text
-
     assert f'data-editing-profile-id="{profile_id}"' in edit_response.text
     assert_contains_all(
         settings_response.text,
@@ -2894,6 +3031,29 @@ def test_profile_workspace_routes_smoke_dom_contracts():
             'data-profiles-route-mode="settings"',
             'data-profiles-template-kind="settings"',
             'id="settings-panel"',
+            'id="all-settings-review-panel"',
+            'id="all-settings-review-summary"',
+            'id="all-settings-review-actions"',
+            'id="all-settings-list-panel"',
+            'id="all-settings-list-summary"',
+            'id="all-settings-list"',
+            'id="all-settings-detail-panel"',
+            'data-settings-list-filter="all"',
+            'data-settings-list-filter="configured"',
+            'data-settings-list-filter="available"',
+            'data-settings-list-filter="guided-covered"',
+            'data-settings-list-filter="all-settings-only"',
+            'data-settings-list-filter="invalid"',
+            'data-settings-list-filter="deprecated"',
+            'data-settings-list-filter="raw"',
+            'data-settings-list-filter="unknown"',
+            'id="settings-category-browser-access"',
+            'id="settings-category-home-startup"',
+            'id="settings-category-search-navigation"',
+            'id="settings-category-privacy-security"',
+            'id="settings-category-users-addons-sites"',
+            'id="settings-category-ai-smart-features"',
+            'id="settings-category-raw-unmapped"',
             'id="wizard-settings-search-input"',
             'id="settings-schema-shell-step-2"',
             'data-settings-nav',
@@ -2926,6 +3086,43 @@ def test_profile_workspace_routes_smoke_dom_contracts():
     assert 'id="advanced-download-strip"' not in json_response.text
     assert 'id="advanced-review-strip"' not in json_response.text
     assert advanced_response.headers["location"] == f"/profiles/{profile_id}/json"
+
+
+def test_profile_library_exposes_complete_manager_control_surface():
+    client = make_test_client(app)
+    response = client.get("/profiles")
+
+    assert response.status_code == 200
+    assert_contains_all(
+        response.text,
+        (
+            'id="library-schema-filter"',
+            'id="library-lifecycle-filter"',
+            'id="library-validation-filter"',
+            'value="not_validated"',
+            'id="sort"',
+            'id="order"',
+            'id="import-firefox-policies"',
+            'id="import-firefox-policies-status"',
+            'id="compare-panel"',
+            'id="status"',
+        ),
+    )
+
+
+def test_duplicate_route_marks_existing_profile_as_clone_source():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Duplicate Route Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    response = client.get(f"/profiles/new?clone_from={profile_id}")
+
+    assert response.status_code == 200
+    assert 'data-profiles-route-mode="new"' in response.text
+    assert f'data-clone-source-id="{profile_id}"' in response.text
 
 
 def test_profile_editor_modes_explicitly_exclude_unrelated_ui_surfaces():
@@ -3117,7 +3314,7 @@ def test_deleted_profile_routes_require_include_deleted_and_preserve_archived_ch
     assert restored_soup.find(id="overview-context").get_text(strip=True) == "Saved profile"
 
 
-def test_guided_wizard_step_seven_stays_inside_wizard_panels_and_step_six_surfaces():
+def test_guided_wizard_ai_step_stays_separate_from_users_addons_sites_step():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
@@ -3130,21 +3327,21 @@ def test_guided_wizard_step_seven_stays_inside_wizard_panels_and_step_six_surfac
 
     soup = BeautifulSoup(response.text, "html.parser")
     wizard_panels = soup.find("div", class_="wizard-panels")
-    step_six = soup.find(id="wizard-step-6")
-    step_seven = soup.find(id="wizard-step-7")
-    bookmarks = soup.find(id="wizard-step-6-bookmarks")
-    websites = soup.find(id="wizard-step-6-websites")
+    step_four = soup.find(id="wizard-step-4")
+    step_five = soup.find(id="wizard-step-5")
+    bookmarks = soup.find(id="wizard-step-4-bookmarks")
+    websites = soup.find(id="wizard-step-4-websites")
 
     assert wizard_panels is not None
-    assert step_six is not None
-    assert step_seven is not None
+    assert step_four is not None
+    assert step_five is not None
     assert bookmarks is not None
     assert websites is not None
-    assert step_six in wizard_panels.find_all("section", recursive=False)
-    assert step_seven in wizard_panels.find_all("section", recursive=False)
-    assert bookmarks in step_six.descendants
-    assert websites in step_six.descendants
-    assert step_seven not in step_six.descendants
+    assert step_four in wizard_panels.find_all("section", recursive=False)
+    assert step_five in wizard_panels.find_all("section", recursive=False)
+    assert bookmarks in step_four.descendants
+    assert websites in step_four.descendants
+    assert step_five not in step_four.descendants
 
 
 def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subsections():
@@ -3167,22 +3364,31 @@ def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subse
         for child in wizard_panels.find_all(recursive=False)
         if getattr(child, "name", None) == "section" and child.get("id", "").startswith("wizard-step-")
     ]
-    assert direct_panel_ids == [f"wizard-step-{step}" for step in range(1, 9)]
+    assert direct_panel_ids == [f"wizard-step-{step}" for step in range(1, 7)]
 
     step_expected_descendants = {
         1: ("wizard-name", "wizard-schema", "wizard-starter-grid"),
-        2: ("wizard-step-2-basics", "wizard-step-2-proxy", "wizard-step-2-trust", "wizard-step-2-review"),
-        3: ("wizard-home-surface-startup", "wizard-home-surface-new-tab", "wizard-home-surface-firefox-home"),
-        4: ("wizard-step-4-default-search", "wizard-step-4-managed-engines", "wizard-step-4-suggestions"),
-        5: ("wizard-hardening-presets", "wizard-cleanup-presets", "wizard-site-data-presets"),
-        6: ("wizard-step-6-accounts", "wizard-step-6-language", "wizard-step-6-extensions", "wizard-step-6-bookmarks", "wizard-step-6-websites"),
-        7: ("wizard-ai-posture-presets", "wizard-ai-policy-controls", "wizard-ai-providers-handoff"),
-        8: ("wizard-export-ready-card", "wizard-export-summary-ai", "wizard-export-summary-features"),
+        2: (
+            "wizard-step-2-basics",
+            "wizard-step-2-proxy",
+            "wizard-step-2-trust",
+            "wizard-home-surface-startup",
+            "wizard-home-surface-new-tab",
+            "wizard-home-surface-firefox-home",
+            "wizard-step-2-default-search",
+            "wizard-step-2-managed-engines",
+            "wizard-step-2-suggestions",
+            "wizard-step-2-review",
+        ),
+        3: ("wizard-hardening-presets", "wizard-cleanup-presets", "wizard-site-data-presets"),
+        4: ("wizard-step-4-accounts", "wizard-step-4-language", "wizard-step-4-extensions", "wizard-step-4-bookmarks", "wizard-step-4-websites"),
+        5: ("wizard-ai-posture-presets", "wizard-ai-policy-controls", "wizard-visual-search-enabled-card"),
+        6: ("wizard-export-ready-card", "wizard-export-summary-ai", "wizard-export-summary-features"),
     }
 
     top_level_panels = {
         step: soup.find(id=f"wizard-step-{step}")
-        for step in range(1, 9)
+        for step in range(1, 7)
     }
     for step, panel in top_level_panels.items():
         assert panel is not None
@@ -3193,7 +3399,7 @@ def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subse
             assert descendant in panel.descendants
 
     for step, panel in top_level_panels.items():
-        other_step_prefixes = tuple(f"wizard-step-{other}-" for other in range(1, 9) if other != step)
+        other_step_prefixes = tuple(f"wizard-step-{other}-" for other in range(1, 7) if other != step)
         leaking_ids = [
             descendant.get("id")
             for descendant in panel.find_all(attrs={"id": True})
@@ -3354,7 +3560,7 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
     assert response.status_code == 200
     assert captured["name"] == "profiles_settings.html"
     assert captured["context"]["title"] == (
-        "Settings Split Profile — Advanced settings — Browser Policy Manager"
+        "Settings Split Profile — All settings — Browser Policy Manager"
     )
     assert captured["context"]["profiles_route_mode"] == "settings"
     assert captured["context"]["editing_profile_id"] == 8
@@ -3648,6 +3854,7 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
     assert web_profiles._resolve_focus_target("  policy:DisableTelemetry  ") == (
         "policy:DisableTelemetry"
     )
+    assert web_profiles._resolve_positive_int("not-a-number") is None
     assert web_profiles._resolve_json_focus_target_from_settings_focus(
         "settings-schema-shell-step-8"
     ) == "raw"
@@ -4031,25 +4238,44 @@ def test_library_action_buttons_use_border_box_contract():
     assert "width: 100%;" in block
 
 
-def test_library_compare_contract_persists_last_opened_profile_across_tabs():
+def test_library_action_buttons_do_not_break_russian_words():
+    source = (
+        Path(__file__).resolve().parents[1] / "app" / "static" / "profiles.css"
+    ).read_text(encoding="utf-8")
+
+    button_block_start = source.index(".library-row-actions .button-base {")
+    button_block_end = source.index("}", button_block_start)
+    button_block = source[button_block_start:button_block_end]
+
+    grid_block_start = source.index(".library-row-action-grid {")
+    grid_block_end = source.index("}", grid_block_start)
+    grid_block = source[grid_block_start:grid_block_end]
+
+    assert "overflow-wrap: anywhere;" not in button_block
+    assert "overflow-wrap: normal;" in button_block
+    assert "word-break: normal;" in button_block
+    assert "minmax(168px, 1fr)" in grid_block
+
+
+def test_library_compare_contract_selects_two_profiles_explicitly():
     source = (
         Path(__file__).resolve().parents[1] / "app" / "static" / "profiles_library_bootstrap.js"
     ).read_text(encoding="utf-8")
 
-    assert 'const compareBaseStorageKey = "bpm-library-compare-base";' in source
-    assert "let compareProfileState = null;" in source
-    assert "function readStoredCompareBase()" in source
-    assert "function persistCompareBaseProfile(profile, snapshot = null)" in source
+    assert 'const compareBaseStorageKey = "bpm-library-compare-base";' not in source
+    assert "let compareFirstProfileState = null;" in source
+    assert "let compareSecondProfileState = null;" in source
+    assert "function buildCompareState(profile)" in source
     assert "function renderComparePanel()" in source
-    assert "function getComparableBaseId()" in source
     assert "windowRef.__BPM_LIBRARY_ITEMS__ = Array.isArray(items) ? items : [];" in source
-    assert "await compareWithProfile(profile.id);" in source
-    assert 'windowRef.localStorage?.setItem(compareBaseStorageKey, JSON.stringify({' in source
-    assert "function refreshCompareBaselineUi()" in source
-    assert 'windowRef.addEventListener?.("storage", (event) => {' in source
-    assert "if (event.key !== compareBaseStorageKey) return;" in source
-    assert 'windowRef.addEventListener?.("focus", refreshCompareBaselineUi);' in source
-    assert 'documentRef.addEventListener?.("visibilitychange", () => {' in source
+    assert "async function selectProfileForComparison(id)" in source
+    assert "await selectProfileForComparison(profile.id);" in source
+    assert 't("profiles.library_compare_select_first")' in source
+    assert 't("profiles.library_compare_select_second")' in source
+    assert 't("profiles.library_compare_use_as_second")' in source
+    assert 'windowRef.localStorage?.setItem(compareBaseStorageKey, JSON.stringify({' not in source
+    assert 'windowRef.addEventListener?.("storage", (event) => {' not in source
+    assert 'windowRef.addEventListener?.("focus", refreshCompareBaselineUi);' not in source
 
 
 def test_compare_diff_recurses_into_missing_object_branches_contract():
@@ -4137,9 +4363,8 @@ def test_guided_advanced_handoffs_use_route_links_with_focus():
 
     assert 'data-workspace-scope-target="advanced"' not in ai_template
     assert 'data-workspace-scope-target="advanced"' not in export_template
-    assert 'href="{{ settings_href }}&focus=policy:GenerativeAI"' in ai_template
-    assert 'target="_blank"' in ai_template
-    assert 'rel="noopener"' in ai_template
+    assert 'id="wizard-ai-providers-handoff"' not in ai_template
+    assert 'id="wizard-ai-providers-open-advanced"' not in ai_template
     assert 'href="{{ settings_href }}&focus=settings-schema-shell-step-8"' in export_template
     assert 'target="_blank"' in export_template
     assert 'rel="noopener"' in export_template
@@ -4175,10 +4400,10 @@ def test_unsaved_guided_route_explicitly_disables_settings_and_json_handoffs():
     assert 'id="editor-mode-settings"' in response.text
     assert 'id="editor-mode-json"' in response.text
     assert response.text.count('aria-disabled="true"') >= 2
-    assert response.text.count('title="Save the profile first to open advanced settings or JSON in a separate tab."') >= 2
+    assert response.text.count('title="Save the profile first to open All settings or JSON in a separate tab."') >= 2
     assert 'id="editor-mode-links-hint"' in response.text
     assert 'role="status"' in response.text
-    assert 'Save the profile first to open advanced settings or JSON in a separate tab.' in response.text
+    assert 'Save the profile first to open All settings or JSON in a separate tab.' in response.text
 
 
 def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save():
@@ -4194,7 +4419,7 @@ def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save(
     assert response.status_code == 200
     assert f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit"' in response.text
     assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in response.text
-    assert 'title="Save the profile first to open advanced settings or JSON in a separate tab."' not in response.text
+    assert 'title="Save the profile first to open All settings or JSON in a separate tab."' not in response.text
     assert 'id="editor-mode-links-hint"' in response.text
     assert 'support-hidden' in response.text
 
@@ -4242,17 +4467,21 @@ def test_ai_step_locales_describe_esr_empty_state():
     en_catalog = client.get("/i18n/en.json").json()
     ru_catalog = client.get("/i18n/ru.json").json()
 
-    assert en_catalog["profiles.wizard_ai_esr_title"] == "No AI controls on Firefox ESR"
+    assert en_catalog["profiles.wizard_ai_esr_title"] == (
+        "This schema does not support AI settings"
+    )
     assert en_catalog["profiles.wizard_ai_esr_state"] == (
-        "No AI settings are available on this step for Firefox ESR."
+        "This schema does not support AI settings."
     )
-    assert ru_catalog["profiles.wizard_ai_esr_title"] == "Для Firefox ESR здесь нет настроек ИИ"
+    assert ru_catalog["profiles.wizard_ai_esr_title"] == (
+        "Эта схема не поддерживает настройки ИИ"
+    )
     assert ru_catalog["profiles.wizard_ai_esr_state"] == (
-        "Для Firefox ESR на этом шаге нет настроек ИИ."
+        "Эта схема не поддерживает настройки ИИ."
     )
 
 
-def test_documentation_placeholders_are_stable_and_optional():
+def test_documentation_placeholders_are_removed_from_ui():
     root = Path(__file__).resolve().parents[1]
     macro_source = (
         root / "app" / "templates" / "profiles" / "_wizard_macros.html"
@@ -4264,15 +4493,29 @@ def test_documentation_placeholders_are_stable_and_optional():
         encoding="utf-8"
     )
     response = _profiles_page_response()
+    client = make_test_client(app)
+    en_catalog = client.get("/i18n/en.json").json()
+    ru_catalog = client.get("/i18n/ru.json").json()
+    en_catalog_text = json.dumps(en_catalog, ensure_ascii=False)
+    ru_catalog_text = json.dumps(ru_catalog, ensure_ascii=False)
 
-    assert 'data-doc-placeholder="{{ doc_id }}"' in macro_source
-    assert 'aria-disabled="true"' in macro_source
-    assert 'href="#docs-{{ doc_id }}"' in macro_source
-    assert 'render_doc_placeholder("policy-boundaries"' in export_template
-    assert 'render_doc_placeholder("guided-schema-shell"' in macro_source
-    assert ".wizard-doc-placeholder" in css_source
-    assert 'data-doc-placeholder="policy-boundaries"' in response.text
-    assert 'href="#docs-policy-boundaries"' in response.text
+    removed_tokens = (
+        "docs_placeholder",
+        "wizard-doc-placeholder",
+        "data-doc-placeholder",
+        "render_doc_placeholder",
+        "docs-guided-schema-shell",
+        "docs-policy-boundaries",
+        "Future docs",
+        "Будущая документация",
+    )
+    for token in removed_tokens:
+        assert token not in macro_source
+        assert token not in export_template
+        assert token not in css_source
+        assert token not in response.text
+        assert token not in en_catalog_text
+        assert token not in ru_catalog_text
 
 
 def test_wizard_step_navigation_scrolls_only_for_normal_navigation():
@@ -4309,16 +4552,19 @@ def test_profile_library_narrow_viewport_contract():
     assert ".library-panel-toolbar #import-firefox-policies" in css_source
     assert ".library-table-shell" in css_source
     assert "overflow-x: hidden;" in css_source
+    assert ".library-row-facts" in css_source
+    assert "grid-template-areas:" in css_source
     assert ".library-row-meta::before" in css_source
-    assert 'content: "Schema";' in css_source
+    assert "content: attr(data-label);" in css_source
     assert ".library-row-updated::before" in css_source
-    assert 'content: "Updated";' in css_source
     assert ".library-row-status-wrap::before" in css_source
-    assert 'content: "Status";' in css_source
     assert ".library-row-actions .button-base" in css_source
+    assert ".library-import-feedback" in css_source
     assert 'id="search"' in template
     assert 'id="create-profile-link"' in template
     assert 'id="import-firefox-policies"' in template
+    assert 'id="import-firefox-policies-status"' in template
+    assert 'class="library-import-feedback"' in template
 
 
 def test_visual_editor_narrow_viewport_contract():
@@ -4343,6 +4589,84 @@ def test_visual_editor_narrow_viewport_contract():
     assert 'id="workspace-scope-panel"' not in workspace_template
 
 
+def test_compact_toolbar_narrow_viewport_contract():
+    root = Path(__file__).resolve().parents[1]
+    css_source = (root / "app" / "static" / "profiles.css").read_text(
+        encoding="utf-8"
+    )
+    header_template = (
+        root / "app" / "templates" / "profiles" / "_page_header.html"
+    ).read_text(encoding="utf-8")
+
+    assert '<header class="compact-toolbar surface-panel fade-up mb-4">' in header_template
+    assert ".compact-toolbar {" in css_source
+    assert "max-inline-size: 100%;" in css_source
+    assert "overflow-x: clip;" in css_source
+    assert ".compact-toolbar-title {" in css_source
+    assert "overflow-wrap: anywhere;" in css_source
+    assert "font-size: 2.45rem;" in css_source
+    assert "font-size: 1.9rem;" in css_source
+    assert "font-size: 1.62rem;" in css_source
+    assert ".compact-toolbar-control select.soft-input" in css_source
+    assert "max-width: 100%;" in css_source
+    assert "@media (max-width: 820px)" in css_source
+    assert ".app-shell" in css_source
+    assert "padding-inline: 12px;" in css_source
+    assert "@media (max-width: 560px)" in css_source
+    assert "padding-inline: 10px;" in css_source
+
+
+def test_profile_ui_decorative_density_contract():
+    root = Path(__file__).resolve().parents[1]
+    css_source = (root / "app" / "static" / "profiles.css").read_text(
+        encoding="utf-8"
+    )
+    template_sources = "\n".join(
+        (root / path).read_text(encoding="utf-8")
+        for path in [
+            "app/templates/profiles/_page_library_workspace.html",
+            "app/templates/profiles/_page_settings_workspace.html",
+            "app/templates/profiles/_page_json_workspace.html",
+            "app/templates/profiles/_page_footer.html",
+        ]
+    )
+
+    for token in (
+        "rounded-[30px]",
+        "rounded-[28px]",
+        "rounded-[26px]",
+        "rounded-[22px]",
+        "shadow-soft",
+        "shadow-inner",
+    ):
+        assert token not in template_sources
+
+    assert "box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);" in css_source
+    assert "backdrop-filter: blur(8px);" in css_source
+    assert "border-radius: 16px;" in css_source
+    assert ".panel-card {" in css_source
+    assert ".button-base:hover {\n            border-color: rgba(15, 118, 110, 0.28);" in css_source
+    assert "html[data-theme=\"dark\"] .workspace-scope-mode-card--active" in css_source
+    assert "box-shadow: none;" in css_source
+
+
+def test_profiles_css_custom_properties_are_declared():
+    root = Path(__file__).resolve().parents[1]
+    css_source = (root / "app" / "static" / "profiles.css").read_text(
+        encoding="utf-8"
+    )
+
+    used_tokens = set(re.findall(r"var\((--[a-zA-Z0-9_-]+)", css_source))
+    declared_tokens = set(
+        re.findall(r"^\s*(--[a-zA-Z0-9_-]+)\s*:", css_source, flags=re.MULTILINE)
+    )
+
+    assert used_tokens <= declared_tokens
+    assert "--ink-muted" in declared_tokens
+    assert "--ink-soft" in declared_tokens
+    assert "--line-soft" in declared_tokens
+
+
 def test_settings_workspace_hides_guided_step_numbers_and_centers_mapped_controls():
     root = Path(__file__).resolve().parents[1]
     settings_workspace = (
@@ -4353,6 +4677,66 @@ def test_settings_workspace_hides_guided_step_numbers_and_centers_mapped_control
     )
 
     assert '<div class="section-kicker">{{ step.step }}</div>' not in settings_workspace
+    assert "guided_source_section_ids" not in settings_workspace
+    assert "guided_source_shell_steps" not in settings_workspace
+    assert "{% for step in wizard_steps if step.step > 1 %}" not in settings_workspace
+    assert "{% for category in all_settings_categories %}" in settings_workspace
+    assert 'id="settings-category-{{ category.id }}"' in settings_workspace
+    assert 'data-settings-category-link="{{ category.id }}"' in settings_workspace
+    assert 'id="all-settings-list-panel"' in settings_workspace
+    assert 'id="all-settings-review-panel"' in settings_workspace
+    assert 'id="all-settings-review-summary"' in settings_workspace
+    assert 'id="all-settings-review-actions"' in settings_workspace
+    assert 'id="all-settings-list-summary"' in settings_workspace
+    assert 'id="all-settings-list"' in settings_workspace
+    assert 'id="all-settings-detail-panel"' in settings_workspace
+    assert 'id="all-settings-add-preference"' in settings_workspace
+    assert '("all", "profiles.settings_filter_all")' in settings_workspace
+    assert '("configured", "profiles.settings_filter_configured")' in settings_workspace
+    assert '("available", "profiles.settings_filter_available")' in settings_workspace
+    assert '("guided-covered", "profiles.settings_filter_guided_covered")' in settings_workspace
+    assert '("all-settings-only", "profiles.settings_filter_all_settings_only")' in settings_workspace
+    assert '("invalid", "profiles.settings_filter_invalid")' in settings_workspace
+    assert '("deprecated", "profiles.settings_filter_deprecated")' in settings_workspace
+    assert '("raw", "profiles.settings_filter_raw")' in settings_workspace
+    assert '("unknown", "profiles.settings_filter_unknown")' in settings_workspace
+    assert 'profiles_all_settings_list.js' in (
+        root / "app" / "templates" / "profiles" / "_page_document.html"
+    ).read_text(encoding="utf-8")
+    assert 'profiles_all_settings_detail.js' in (
+        root / "app" / "templates" / "profiles" / "_page_document.html"
+    ).read_text(encoding="utf-8")
+    settings_search_source = (
+        root / "app" / "static" / "profiles_settings_search.js"
+    ).read_text(encoding="utf-8")
+    all_settings_list_source = (
+        root / "app" / "static" / "profiles_all_settings_list.js"
+    ).read_text(encoding="utf-8")
+    all_settings_detail_source = (
+        root / "app" / "static" / "profiles_all_settings_detail.js"
+    ).read_text(encoding="utf-8")
+    runtime_source = (
+        root / "app" / "static" / "profiles_runtime.js"
+    ).read_text(encoding="utf-8")
+    bootstrap_core_source = (
+        root / "app" / "static" / "profiles_bootstrap_core.js"
+    ).read_text(encoding="utf-8")
+    assert "buildAllSettingsInventoryEntries" in settings_search_source
+    assert "all-settings-entry:${entry.kind}:${entry.id}" in settings_search_source
+    assert "findAllSettingsEntryTarget?.(normalizedTarget)" in settings_search_source
+    assert 'entry.rawFallback ? t("profiles.settings_filter_raw")' in settings_search_source
+    assert "getSearchEntries" in all_settings_list_source
+    assert "findTarget" in all_settings_list_source
+    assert "data-settings-entry-raw" in all_settings_list_source
+    assert "const sourceState = readWizardSchemaSource();" in all_settings_detail_source
+    assert 'documentRef.getElementById("mode")?.value || "json"' in all_settings_detail_source
+    assert "onDocumentChange(normalized);" in all_settings_detail_source
+    assert "getAllSettingsSearchEntries: () => allSettingsList.getSearchEntries()" in bootstrap_core_source
+    assert "handleAllSettingsDocumentChange = () =>" in bootstrap_core_source
+    assert "settingsSearch.buildIndex();" in bootstrap_core_source
+    assert "workspace.updateActionState();" in bootstrap_core_source
+    assert "buildWizardSettingsSearchIndex();" in runtime_source
+    assert "renderWizardSettingsSearchResults();" in runtime_source
     assert ".wizard-search-engine-preset {" in css_source
     assert ".button-base.wizard-search-engine-preset {" in css_source
     assert "display: flex;" in css_source
@@ -4491,12 +4875,12 @@ def test_settings_route_uses_visible_catalog_sections_without_hidden_wizard_back
     assert '_page_settings_preference_support.html' in settings_shell
     assert '_page_settings_wizard_backing.html' not in settings_shell
     assert 'data-settings-nav' in settings_workspace
-    assert 'data-settings-jump-target="{{ doc.target }}"' in settings_workspace
+    assert 'data-settings-jump-target="{{ control.target }}"' in settings_workspace
     assert 'data-settings-target="pref-section:{{ preference_section.id }}"' in settings_workspace
     assert 'id="wizard-preferences-{{ preference_section.id }}-presets"' in settings_workspace
     assert "settingsTargetAliases" in catalogs_source
     assert "function resolveTargetAlias(target)" in settings_search_source
-    assert 'shellPolicyTargetByLegacyTarget[normalizedTarget]' in settings_search_source
+    assert 'shellPolicyTargetByAlias[normalizedTarget]' in settings_search_source
     assert 'documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`)' in settings_search_source
     assert 'wizardSearchEngineAddButtonEl?.addEventListener("click"' in runtime_source
     assert "if (!hasWizardUi) {" in wizard_flow_source

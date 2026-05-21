@@ -49,6 +49,10 @@ def test_patch_validation_errors_and_delete_restore_branches_and_include_deleted
     ids_inc = {p["id"] for p in rlist_inc.json()}
     assert pid in ids_inc
 
+    rget_deleted = client.get(f"/api/profiles/{pid}", params={"include_deleted": "true"})
+    assert rget_deleted.status_code == 200
+    assert rget_deleted.json()["id"] == pid
+
     # Delete again returns the explicit not-found response.
     rdel2 = client.delete(f"/api/profiles/{pid}")
     assert rdel2.status_code == 404

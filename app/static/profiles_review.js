@@ -71,10 +71,8 @@
             wizardBookmarkSummaryFoldersJumpEl,
             wizardBookmarkSummaryNestedJumpEl,
             wizardAiSummaryAvailabilityEl,
-            wizardAiSummaryProvidersEl,
             wizardAiSummarySurfacesEl,
             wizardAiSummaryAvailabilityJumpEl,
-            wizardAiSummaryProvidersJumpEl,
             wizardAiSummarySurfacesJumpEl,
             wizardWebsiteAccessSummaryBlockedEl,
             wizardWebsiteAccessSummaryExceptionsEl,
@@ -919,17 +917,17 @@
             if (kind === "bookmarks") {
                 return bookmarksCardEl?.querySelector('[data-schema-array-row-state="toolbar"], [data-schema-array-row-state="menu"], [data-schema-array-row-state="draft"]')
                     || bookmarksCardEl
-                    || findSettingsTarget("shell-policy:6:Bookmarks");
+                    || findSettingsTarget("shell-policy:4:Bookmarks");
             }
             if (kind === "managed") {
                 return managedBookmarksCardEl?.querySelector('[data-schema-array-row-state="children"], [data-schema-array-row-state="name_only"], [data-schema-array-row-state="tree_only"], [data-schema-array-row-state="invalid"]')
                     || managedBookmarksCardEl
-                    || findSettingsTarget("shell-policy:6:ManagedBookmarks");
+                    || findSettingsTarget("shell-policy:4:ManagedBookmarks");
             }
             if (kind === "nested") {
                 return managedBookmarksCardEl?.querySelector('[data-schema-array-row-state="children"], [data-schema-array-row-state="tree_only"]')
                     || managedBookmarksCardEl
-                    || findSettingsTarget("shell-policy:6:ManagedBookmarks");
+                    || findSettingsTarget("shell-policy:4:ManagedBookmarks");
             }
             return null;
         }
@@ -1001,12 +999,12 @@
             const handlersCardEl = documentRef.querySelector('[data-schema-policy-id="Handlers"][data-schema-policy-kind="object-card"]');
 
             if (kind === "blocked" || kind === "exceptions") {
-                return websiteFilterCardEl || findSettingsTarget("shell-policy:6:WebsiteFilter");
+                return websiteFilterCardEl || findSettingsTarget("shell-policy:4:WebsiteFilter");
             }
             if (kind === "handlers") {
                 return handlersCardEl
                     || documentRef.querySelector('[data-wizard-shell-policy-id="Handlers"]')
-                    || findSettingsTarget("shell-policy:6:Handlers");
+                    || findSettingsTarget("shell-policy:4:Handlers");
             }
             return null;
         }
@@ -1072,18 +1070,13 @@
                     || generativeAiCardEl
                     || findSettingsTarget("policy:AIControls")
                     || findSettingsTarget("policy:GenerativeAI")
-                    || findSettingsTarget("shell-policy:7:AIControls")
-                    || findSettingsTarget("shell-policy:7:GenerativeAI");
-            }
-            if (kind === "providers") {
-                return documentRef.getElementById("wizard-ai-providers-section-anchor")
-                    || documentRef.getElementById("wizard-ai-providers-section-status")
-                    || documentRef.getElementById("wizard-step-7");
+                    || findSettingsTarget("shell-policy:5:AIControls")
+                    || findSettingsTarget("shell-policy:5:GenerativeAI");
             }
             if (kind === "surfaces") {
                 return visualSearchCardEl
                     || findSettingsTarget("policy:VisualSearchEnabled")
-                    || findSettingsTarget("shell-policy:7:VisualSearchEnabled");
+                    || findSettingsTarget("shell-policy:5:VisualSearchEnabled");
             }
             return null;
         }
@@ -1091,7 +1084,6 @@
         function renderAiReviewJumpButtons(summary) {
             [
                 { el: wizardAiSummaryAvailabilityJumpEl, enabled: summary.aiControlsManaged > 0 || summary.generativeAiControls > 0, kind: "availability" },
-                { el: wizardAiSummaryProvidersJumpEl, enabled: true, kind: "providers" },
                 { el: wizardAiSummarySurfacesJumpEl, enabled: summary.visualSearchManaged, kind: "surfaces" },
             ].forEach(({ el, enabled, kind }) => {
                 if (!el) return;
@@ -1110,11 +1102,6 @@
                         ? formatCountLabel("profiles.wizard_ai_review_availability_state", summary.generativeAiControls)
                         : t("profiles.wizard_review_default")),
                 summary.aiControlsManaged > 0 || summary.generativeAiControls > 0 ? "active" : "default",
-            );
-            setSummaryValue(
-                wizardAiSummaryProvidersEl,
-                t("profiles.wizard_ai_review_providers_state_empty"),
-                "default",
             );
             setSummaryValue(
                 wizardAiSummarySurfacesEl,
@@ -1756,7 +1743,7 @@
             }
 
             return {
-                step: 8,
+                step: 6,
                 stepTitle: title,
                 items,
                 remaining: Math.max(0, normalizedKeys.length - items.length),
@@ -2000,7 +1987,7 @@
             const policyKey = getCisDecisionPolicyKey(decision);
             const items = [formatCisDecisionPath(decision)].filter(Boolean);
             return {
-                step: 8,
+                step: 6,
                 stepTitle: t("profiles.wizard_cis_review_context_title").replace("{path}", policyKey || "CIS"),
                 items,
                 remaining: 0,
@@ -2061,14 +2048,14 @@
                     || findSettingsTarget("policy:TranslateEnabled")
                     || findSettingsTarget("field:wizard-extension-default-mode")
                     || findSettingsTarget("policy:WebsiteFilter")
-                    || findSettingsTarget("shell-policy:6:ExtensionSettings"),
+                    || findSettingsTarget("shell-policy:4:ExtensionSettings"),
                 };
             }
             if (kind === "ai") {
                 return {
                     target: findSettingsTarget("policy:GenerativeAI")
                     || findSettingsTarget("policy:VisualSearchEnabled")
-                    || findSettingsTarget("shell-policy:7:GenerativeAI"),
+                    || findSettingsTarget("shell-policy:5:GenerativeAI"),
                 };
             }
             if (kind === "privacy") {

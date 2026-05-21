@@ -1,5 +1,20 @@
-<section class="wizard-panel" id="wizard-step-5">
-    <div class="wizard-section-group">
+<section class="wizard-panel" id="wizard-step-3">
+    <nav class="wizard-step-map" aria-labelledby="wizard-security-map-title">
+        <div class="wizard-section-heading">
+            <h3 class="wizard-section-title" id="wizard-security-map-title" data-i18n="profiles.wizard_security_map_title">{{ tr("profiles.wizard_security_map_title") }}</h3>
+            <p class="wizard-section-copy" data-i18n="profiles.wizard_security_map_body">
+                {{ tr("profiles.wizard_security_map_body") }}
+            </p>
+        </div>
+        <div class="wizard-step-map-grid">
+            <a href="#wizard-step-3-posture" class="wizard-step-map-link" data-i18n="profiles.wizard_hardening_title">{{ tr("profiles.wizard_hardening_title") }}</a>
+            <a href="#wizard-step-3-cleanup" class="wizard-step-map-link" data-i18n="profiles.wizard_cleanup_title">{{ tr("profiles.wizard_cleanup_title") }}</a>
+            <a href="#wizard-step-3-site-data" class="wizard-step-map-link" data-i18n="profiles.wizard_privacy_site_controls_title">{{ tr("profiles.wizard_privacy_site_controls_title") }}</a>
+            <a href="#wizard-step-3-vpn" class="wizard-step-map-link" data-i18n="profiles.wizard_privacy_vpn_title">{{ tr("profiles.wizard_privacy_vpn_title") }}</a>
+            <a href="#wizard-step-3-review" class="wizard-step-map-link" data-i18n="profiles.wizard_privacy_review_title">{{ tr("profiles.wizard_privacy_review_title") }}</a>
+        </div>
+    </nav>
+    <div class="wizard-section-group" id="wizard-step-3-posture">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_hardening_title">{{ tr("profiles.wizard_hardening_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_hardening_body">
@@ -29,10 +44,17 @@
         <div id="wizard-hardening-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_hardening_section_state_empty">
             {{ tr("profiles.wizard_hardening_section_state_empty") }}
         </div>
-        <div id="wizard-cleanup-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_cleanup_section_state_empty">
-            {{ tr("profiles.wizard_cleanup_section_state_empty") }}
+        <div class="wizard-security-status-grid">
+            <div class="wizard-security-status">
+                <span class="wizard-security-status-label" data-i18n="profiles.wizard_privacy_review_user_data">{{ tr("profiles.wizard_privacy_review_user_data") }}</span>
+                <span class="wizard-security-status-value" id="wizard-privacy-user-data-section-status" data-i18n="profiles.wizard_privacy_section_state_empty">{{ tr("profiles.wizard_privacy_section_state_empty") }}</span>
+            </div>
+            <div class="wizard-security-status">
+                <span class="wizard-security-status-label" data-i18n="profiles.wizard_privacy_outcome_lockdown_title">{{ tr("profiles.wizard_privacy_outcome_lockdown_title") }}</span>
+                <span class="wizard-security-status-value" id="wizard-lockdown-section-status" data-i18n="profiles.wizard_lockdown_section_state_empty">{{ tr("profiles.wizard_lockdown_section_state_empty") }}</span>
+            </div>
         </div>
-        <details class="wizard-search-engine-preset-menu wizard-stage-panel" data-hardening-subposture-menu="cleanup" data-hardening-cleanup-subchoice>
+        <details class="wizard-search-engine-preset-menu wizard-stage-panel" id="wizard-step-3-cleanup" data-hardening-subposture-menu="cleanup" data-hardening-cleanup-subchoice>
             <summary class="button-base ghost-button wizard-search-engine-preset-menu-toggle">
                 <span data-i18n="profiles.wizard_hardening_subposture_cleanup">{{ tr("profiles.wizard_hardening_subposture_cleanup") }}</span>
             </summary>
@@ -41,6 +63,9 @@
             </div>
             <div class="wizard-input-hint" data-i18n="profiles.wizard_cleanup_hint">
                 {{ tr("profiles.wizard_cleanup_hint") }}
+            </div>
+            <div id="wizard-cleanup-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_cleanup_section_state_empty">
+                {{ tr("profiles.wizard_cleanup_section_state_empty") }}
             </div>
             <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-cleanup-presets">
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="defaults">
@@ -58,7 +83,7 @@
             </div>
         </details>
     </div>
-    <div class="wizard-section-group">
+    <div class="wizard-section-group" id="wizard-step-3-site-data">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_privacy_site_controls_title">{{ tr("profiles.wizard_privacy_site_controls_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_privacy_site_controls_body">
@@ -108,7 +133,7 @@
             </section>
         </div>
     </div>
-    <div class="wizard-section-group">
+    <div class="wizard-section-group" id="wizard-step-3-vpn">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_privacy_vpn_title">{{ tr("profiles.wizard_privacy_vpn_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_privacy_vpn_body">
@@ -122,7 +147,7 @@
             <div id="wizard-ip-protection-available-card" class="wizard-field-full" data-settings-target="policy:IPProtectionAvailable"></div>
         </div>
     </div>
-    <div class="wizard-section-group">
+    <div class="wizard-section-group" id="wizard-step-3-review">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_privacy_review_title">{{ tr("profiles.wizard_privacy_review_title") }}</h3>
             <p class="wizard-section-copy" data-i18n="profiles.wizard_privacy_review_body">

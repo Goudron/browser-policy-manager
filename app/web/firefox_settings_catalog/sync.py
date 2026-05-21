@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .builders import chip, doc_target, known_pref, pref_doc, preset
+from .builders import chip, control_target, known_pref, pref_control, preset
 
 
 def get_sync_section() -> dict[str, Any]:
@@ -18,17 +18,17 @@ def get_sync_section() -> dict[str, Any]:
                 chip("managed_addons", "profiles.wizard_settings_extensions_policy", "Managed add-ons"),
             ],
         },
-        "ui_docs": {
+        "ui_controls": {
             "policy": [
-                doc_target("account", "policy:DisableFirefoxAccounts", "profiles.policy_disable_accounts", "Disable Firefox Accounts"),
-                doc_target("data", "pref-section:sync", "profiles.wizard_preferences_sync_title", "Managed Preferences for Sync"),
+                control_target("account", "policy:DisableFirefoxAccounts", "profiles.policy_disable_accounts", "Disable Firefox Accounts"),
+                control_target("data", "pref-section:sync", "profiles.wizard_preferences_sync_title", "Managed Preferences for Sync"),
             ],
             "extensions": [
-                doc_target("addons_manager", "field:wizard-extension-default-mode", "profiles.wizard_extensions_mode_label", "Default add-on policy"),
-                doc_target("managed_addons", "field:wizard-extension-install", "profiles.wizard_extensions_install_label", "Managed install URLs"),
-                doc_target("managed_addons", "field:wizard-extension-locked", "profiles.wizard_extensions_locked_label", "Locked add-on IDs"),
-                doc_target("managed_addons", "field:wizard-extension-uninstall", "profiles.wizard_extensions_uninstall_label", "Add-on IDs to uninstall"),
-                doc_target("managed_addons", "field:extension-profile-ublock", "profiles.wizard_extension_profile_ublock_title", "uBlock Origin"),
+                control_target("addons_manager", "field:wizard-extension-default-mode", "profiles.wizard_extensions_mode_label", "Default add-on policy"),
+                control_target("managed_addons", "field:wizard-extension-install", "profiles.wizard_extensions_install_label", "Managed install URLs"),
+                control_target("managed_addons", "field:wizard-extension-locked", "profiles.wizard_extensions_locked_label", "Locked add-on IDs"),
+                control_target("managed_addons", "field:wizard-extension-uninstall", "profiles.wizard_extensions_uninstall_label", "Add-on IDs to uninstall"),
+                control_target("managed_addons", "field:extension-profile-ublock", "profiles.wizard_extension_profile_ublock_title", "uBlock Origin"),
             ],
         },
         "preferences": {
@@ -40,11 +40,11 @@ def get_sync_section() -> dict[str, Any]:
                 chip("data_types", "profiles.wizard_preferences_group_sync_data_types", "What to sync"),
                 chip("device_surfaces", "profiles.wizard_preferences_group_sync_device_surfaces", "Device sync surfaces"),
             ],
-            "docs": [
-                pref_doc("data_types", "sync_bookmarks", "profiles.wizard_preferences_preset_sync_bookmarks_title", "Sync bookmarks"),
-                pref_doc("data_types", "sync_history", "profiles.wizard_preferences_preset_sync_history_title", "Sync history"),
-                pref_doc("data_types", "sync_tabs", "profiles.wizard_preferences_preset_sync_tabs_title", "Sync open tabs"),
-                pref_doc("data_types", "sync_passwords_off", "profiles.wizard_preferences_preset_sync_passwords_off_title", "Do not sync passwords"),
+            "controls": [
+                pref_control("data_types", "sync_bookmarks", "profiles.wizard_preferences_preset_sync_bookmarks_title", "Sync bookmarks"),
+                pref_control("data_types", "sync_history", "profiles.wizard_preferences_preset_sync_history_title", "Sync history"),
+                pref_control("data_types", "sync_tabs", "profiles.wizard_preferences_preset_sync_tabs_title", "Sync open tabs"),
+                pref_control("data_types", "sync_passwords_off", "profiles.wizard_preferences_preset_sync_passwords_off_title", "Do not sync passwords"),
             ],
             "prefixes": [
                 "identity.fxaccounts.",

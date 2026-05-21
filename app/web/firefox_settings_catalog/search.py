@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .builders import chip, doc_target, known_pref, pref_doc, preset
+from .builders import chip, control_target, known_pref, pref_control, preset
 
 
 def get_search_section() -> dict[str, Any]:
@@ -19,19 +19,19 @@ def get_search_section() -> dict[str, Any]:
                 chip("suggestions", "profiles.wizard_settings_search_suggestions", "Search suggestions"),
             ],
         },
-        "ui_docs": {
+        "ui_controls": {
             "search": [
-                doc_target("default_engine", "field:wizard-search-default-engine", "profiles.wizard_search_default_engine_label", "Default search engine"),
-                doc_target("default_engine", "field:wizard-search-prevent-installs", "profiles.wizard_search_prevent_installs_label", "Engine installs from web pages"),
-                doc_target("default_engine", "field:wizard-search-remove", "profiles.wizard_search_remove_label", "Hide built-in search engines"),
-                doc_target("address_bar", "field:wizard-search-bar", "profiles.wizard_search_bar_label", "Search bar layout"),
-                doc_target("suggestions", "field:wizard-search-suggest", "profiles.wizard_search_suggest_label", "Search suggestions"),
+                control_target("default_engine", "field:wizard-search-default-engine", "profiles.wizard_search_default_engine_label", "Default search engine"),
+                control_target("default_engine", "field:wizard-search-prevent-installs", "profiles.wizard_search_prevent_installs_label", "Engine installs from web pages"),
+                control_target("default_engine", "field:wizard-search-remove", "profiles.wizard_search_remove_label", "Hide built-in search engines"),
+                control_target("address_bar", "field:wizard-search-bar", "profiles.wizard_search_bar_label", "Search bar layout"),
+                control_target("suggestions", "field:wizard-search-suggest", "profiles.wizard_search_suggest_label", "Search suggestions"),
             ],
             "suggest": [
-                doc_target("address_bar", "field:firefox-suggest-web", "profiles.wizard_firefox_suggest_web_label", "Web suggestions"),
-                doc_target("suggestions", "field:firefox-suggest-sponsored", "profiles.wizard_firefox_suggest_sponsored_label", "Sponsored suggestions"),
-                doc_target("suggestions", "field:firefox-suggest-improve", "profiles.wizard_firefox_suggest_improve_label", "Improve Suggest"),
-                doc_target("suggestions", "field:firefox-suggest-locked", "profiles.wizard_firefox_suggest_locked_label", "Lock Firefox Suggest"),
+                control_target("address_bar", "field:firefox-suggest-web", "profiles.wizard_firefox_suggest_web_label", "Web suggestions"),
+                control_target("suggestions", "field:firefox-suggest-sponsored", "profiles.wizard_firefox_suggest_sponsored_label", "Sponsored suggestions"),
+                control_target("suggestions", "field:firefox-suggest-improve", "profiles.wizard_firefox_suggest_improve_label", "Improve Suggest"),
+                control_target("suggestions", "field:firefox-suggest-locked", "profiles.wizard_firefox_suggest_locked_label", "Lock Firefox Suggest"),
             ],
         },
         "preferences": {
@@ -44,13 +44,13 @@ def get_search_section() -> dict[str, Any]:
                 chip("address_bar", "profiles.wizard_preferences_group_search_address_bar", "Address bar"),
                 chip("shortcuts", "profiles.wizard_preferences_group_search_shortcuts", "Search shortcuts"),
             ],
-            "docs": [
-                pref_doc("suggestions", "search_suggest", "profiles.wizard_preferences_preset_search_suggest_title", "Enable search suggestions"),
-                pref_doc("address_bar", "search_bookmarks", "profiles.wizard_preferences_preset_search_bookmarks_title", "Suggest bookmarks in address bar"),
-                pref_doc("address_bar", "search_history", "profiles.wizard_preferences_preset_search_history_title", "Suggest history in address bar"),
-                pref_doc("address_bar", "search_open_tabs", "profiles.wizard_preferences_preset_search_open_tabs_title", "Suggest open tabs in address bar"),
-                pref_doc("address_bar", "search_topsites", "profiles.wizard_preferences_preset_search_topsites_title", "Suggest top sites in address bar"),
-                pref_doc("shortcuts", "search_keywords", "profiles.wizard_preferences_preset_search_keywords_title", "Enable keyword search"),
+            "controls": [
+                pref_control("suggestions", "search_suggest", "profiles.wizard_preferences_preset_search_suggest_title", "Enable search suggestions"),
+                pref_control("address_bar", "search_bookmarks", "profiles.wizard_preferences_preset_search_bookmarks_title", "Suggest bookmarks in address bar"),
+                pref_control("address_bar", "search_history", "profiles.wizard_preferences_preset_search_history_title", "Suggest history in address bar"),
+                pref_control("address_bar", "search_open_tabs", "profiles.wizard_preferences_preset_search_open_tabs_title", "Suggest open tabs in address bar"),
+                pref_control("address_bar", "search_topsites", "profiles.wizard_preferences_preset_search_topsites_title", "Suggest top sites in address bar"),
+                pref_control("shortcuts", "search_keywords", "profiles.wizard_preferences_preset_search_keywords_title", "Enable keyword search"),
             ],
             "prefixes": [
                 "browser.search.",

@@ -151,13 +151,13 @@ async def test_create_profile_core_rolls_back_on_integrity_error(monkeypatch):
 
 
 @pytest.mark.anyio
-async def test_update_profile_core_merges_flags_and_skips_validation_when_disabled(monkeypatch):
+async def test_update_profile_core_replaces_flags_and_skips_validation_when_disabled(monkeypatch):
     session = _FakeSession()
     current = _profile_read(flags={"DisableTelemetry": True})
     captured = {}
     updated = _profile_read(
         description="Updated",
-        flags={"DisableTelemetry": True, "DisablePrivateBrowsing": True},
+        flags={"DisablePrivateBrowsing": True},
     )
 
     async def _fake_get(*args, **kwargs):
@@ -181,7 +181,6 @@ async def test_update_profile_core_merges_flags_and_skips_validation_when_disabl
     assert result is updated
     assert captured["profile_id"] == 5
     assert captured["payload"].flags == {
-        "DisableTelemetry": True,
         "DisablePrivateBrowsing": True,
     }
     assert "schema_version" not in captured["payload"].model_fields_set

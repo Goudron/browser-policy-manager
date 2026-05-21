@@ -509,7 +509,7 @@
             kindAttr = "",
         }) {
             const disabledAttr = disabled ? "disabled" : "";
-            const label = field.label || humanizeIdentifier(field.name || "");
+            const label = getSchemaFieldLabel(field);
             const fieldKind = field.kind;
             const listValues = fieldKind === "true-map"
                 ? (
@@ -703,19 +703,19 @@
                 { el: wizardWindowsSsoCardEl, policyId: "WindowsSSO", step: 2 },
                 { el: wizardAuthenticationCardEl, policyId: "Authentication", step: 2 },
                 { el: wizardCertificatesCardEl, policyId: "Certificates", step: 2 },
-                { el: wizardRequestedLocalesCardEl, policyId: "RequestedLocales", step: 6 },
-                { el: wizardTranslateEnabledCardEl, policyId: "TranslateEnabled", step: 6 },
-                { el: wizardIpProtectionAvailableCardEl, policyId: "IPProtectionAvailable", step: 5 },
-                { el: wizardAiControlsCardEl, policyId: "AIControls", step: 7 },
-                { el: wizardVisualSearchEnabledCardEl, policyId: "VisualSearchEnabled", step: 7 },
-                { el: wizardGenerativeAiCardEl, policyId: "GenerativeAI", step: 7 },
-                { el: wizardUserMessagingCardEl, policyId: "UserMessaging", step: 6 },
-                { el: wizardWebsiteFilterCardEl, policyId: "WebsiteFilter", step: 6 },
-                { el: wizardHandlersCardEl, policyId: "Handlers", step: 6 },
-                { el: wizardPermissionsCardEl, policyId: "Permissions", step: 5 },
-                { el: wizardCookiesCardEl, policyId: "Cookies", step: 5 },
-                { el: wizardInstallAddonsPermissionCardEl, policyId: "InstallAddonsPermission", step: 6 },
-                { el: wizardExtensionSettingsCardEl, policyId: "ExtensionSettings", step: 6 },
+                { el: wizardRequestedLocalesCardEl, policyId: "RequestedLocales", step: 4 },
+                { el: wizardTranslateEnabledCardEl, policyId: "TranslateEnabled", step: 4 },
+                { el: wizardIpProtectionAvailableCardEl, policyId: "IPProtectionAvailable", step: 3 },
+                { el: wizardAiControlsCardEl, policyId: "AIControls", step: 5 },
+                { el: wizardVisualSearchEnabledCardEl, policyId: "VisualSearchEnabled", step: 5 },
+                { el: wizardGenerativeAiCardEl, policyId: "GenerativeAI", step: 5 },
+                { el: wizardUserMessagingCardEl, policyId: "UserMessaging", step: 4 },
+                { el: wizardWebsiteFilterCardEl, policyId: "WebsiteFilter", step: 4 },
+                { el: wizardHandlersCardEl, policyId: "Handlers", step: 4 },
+                { el: wizardPermissionsCardEl, policyId: "Permissions", step: 3 },
+                { el: wizardCookiesCardEl, policyId: "Cookies", step: 3 },
+                { el: wizardInstallAddonsPermissionCardEl, policyId: "InstallAddonsPermission", step: 4 },
+                { el: wizardExtensionSettingsCardEl, policyId: "ExtensionSettings", step: 4 },
             ].forEach(({ el, policyId, step }) => {
                 renderMountedSchemaPolicy(
                     el,
@@ -862,6 +862,71 @@
                 `;
             }
 
+            if (inlineEditor.kind === "enum-select") {
+                const options = [`<option value=""></option>`]
+                    .concat((inlineEditor.enum || []).map((option) => `<option value="${escapeHtml(option)}"${currentValue === option ? " selected" : ""}>${escapeHtml(option)}</option>`))
+                    .join("");
+                return `
+                    <div
+                        class="wizard-shell-card"
+                        data-schema-policy-card
+                        data-schema-policy-id="${escapeHtml(item.id || "")}"
+                        data-schema-policy-kind="enum-select"
+                        data-settings-target="${escapeHtml(item.target || "")}">
+                        <div>
+                            <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
+                            <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
+                        </div>
+                        <label>
+                            <div class="field-label mb-1">${escapeHtml(t("profiles.wizard_shell_field_value"))}</div>
+                            <select class="soft-input" data-schema-policy-field="__value__" ${disabledAttr}>
+                                ${options}
+                            </select>
+                        </label>
+                    </div>
+                `;
+            }
+
+            if (inlineEditor.kind === "number") {
+                return `
+                    <div
+                        class="wizard-shell-card"
+                        data-schema-policy-card
+                        data-schema-policy-id="${escapeHtml(item.id || "")}"
+                        data-schema-policy-kind="number"
+                        data-settings-target="${escapeHtml(item.target || "")}">
+                        <div>
+                            <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
+                            <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
+                        </div>
+                        <label>
+                            <div class="field-label mb-1">${escapeHtml(t("profiles.wizard_shell_field_value"))}</div>
+                            <input type="number" class="soft-input" data-schema-policy-field="__value__" value="${currentValue ?? ""}" ${disabledAttr} />
+                        </label>
+                    </div>
+                `;
+            }
+
+            if (inlineEditor.kind === "text") {
+                return `
+                    <div
+                        class="wizard-shell-card"
+                        data-schema-policy-card
+                        data-schema-policy-id="${escapeHtml(item.id || "")}"
+                        data-schema-policy-kind="text"
+                        data-settings-target="${escapeHtml(item.target || "")}">
+                        <div>
+                            <div class="wizard-shell-card-title">${escapeHtml(policyLabel)}</div>
+                            <div class="wizard-shell-card-copy">${escapeHtml(metaParts.join(" • "))}</div>
+                        </div>
+                        <label>
+                            <div class="field-label mb-1">${escapeHtml(t("profiles.wizard_shell_field_value"))}</div>
+                            <input type="text" class="soft-input" data-schema-policy-field="__value__" value="${escapeHtml(currentValue ?? "")}" ${disabledAttr} />
+                        </label>
+                    </div>
+                `;
+            }
+
             if (inlineEditor.kind === "branch") {
                 const branchMode = typeof currentValue === "boolean"
                     ? "boolean"
@@ -993,7 +1058,7 @@
 
         function renderWizardSchemaInlineField(policyId, field, currentValue, disabled) {
             const disabledAttr = disabled ? "disabled" : "";
-            const label = field.label || humanizeIdentifier(field.name || "");
+            const label = getSchemaFieldLabel(field);
             const fieldName = escapeHtml(field.name || "");
             const fieldPath = field.name || "";
 
@@ -1105,7 +1170,7 @@
 
         function renderWizardSchemaNestedField(policyId, parentFieldName, field, currentValue, disabled) {
             const disabledAttr = disabled ? "disabled" : "";
-            const label = field.label || humanizeIdentifier(field.name || "");
+            const label = getSchemaFieldLabel(field);
             const fieldName = escapeHtml(field.name || "");
             const fieldPath = parentFieldName ? `${parentFieldName}.${field.name || ""}` : (field.name || "");
 
@@ -1291,7 +1356,7 @@
                 || currentObject.Title
                 || currentObject.URL
                 || currentObject.path
-                || `${field.label || field.name || "Item"} ${index + 1}`;
+                || `${getSchemaFieldLabel(field) || field.name || "Item"} ${index + 1}`;
             const fieldsMarkup = (field.fields || [])
                 .map((nestedField) => renderWizardSchemaNestedField("", field.name || "", nestedField, currentObject[nestedField.name], disabled))
                 .join("");
@@ -1315,7 +1380,7 @@
         function renderWizardSchemaNestedDictionaryRow(field, entryKey, entryValue, index, disabled) {
             const disabledAttr = disabled ? "disabled" : "";
             const currentObject = entryValue && typeof entryValue === "object" && !Array.isArray(entryValue) ? entryValue : {};
-            const rowTitle = entryKey || `${field.label || field.name || "Entry"} ${index + 1}`;
+            const rowTitle = entryKey || `${getSchemaFieldLabel(field) || field.name || "Entry"} ${index + 1}`;
             const keyLabel = field.entryKeyLabel || t("profiles.wizard_shell_dictionary_key_label");
             const metaLabel = field.metaLabel || t("profiles.wizard_shell_dictionary_item_meta");
             const fieldsMarkup = (field.fields || [])
@@ -1456,6 +1521,11 @@
             return t(`profiles.wizard_shell_subsection_${normalized}`, humanizeIdentifier(normalized));
         }
 
+        function getSchemaFieldLabel(field) {
+            const fallback = field?.label || humanizeIdentifier(field?.name || "");
+            return field?.label_key ? t(field.label_key, fallback) : fallback;
+        }
+
         function getShellWidgetLabel(widget) {
             const normalized = String(widget || "").trim();
             if (!normalized) return "";
@@ -1470,7 +1540,7 @@
 
         function getShellMetaParts(item) {
             return [
-                getShellSubsectionLabel(item?.subsection_label || item?.subsection || ""),
+                getShellSubsectionLabel(item?.subsection || item?.subsection_label || ""),
                 getShellWidgetLabel(item?.widget || ""),
                 item?.complexity === "basic"
                     ? t("profiles.wizard_shell_meta_basic")
@@ -1511,6 +1581,7 @@
 
         return {
             renderWizardSchemaShell,
+            renderSchemaPolicyEditorCard: renderWizardSchemaInlineEditor,
             renderSchemaPolicyReviewState: review.renderSchemaPolicyReviewState,
             applySchemaPolicyFromCard: actions.applySchemaPolicyFromCard,
             refreshSchemaListRows: actions.refreshSchemaListRows,

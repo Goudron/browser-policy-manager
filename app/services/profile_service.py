@@ -9,10 +9,14 @@ from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import ColumnElement
 
+from app.core.policy_validation import (
+    PolicyValidationError,
+    validate_profile_payload_with_schema,
+)
 from app.models.profile import Profile
 from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
 
-SortField = str  # "created_at" | "updated_at" | "name" | "id"
+SortField = str  # "created_at" | "updated_at" | "name" | "schema_version" | "id"
 SortOrder = str  # "asc" | "desc"
 
 
@@ -37,10 +41,32 @@ class ProfileService:
             "created_at": Profile.created_at,
             "updated_at": Profile.updated_at,
             "name": Profile.name,
+            "schema_version": Profile.schema_version,
             "id": Profile.id,
         }
         col = field_map.get(field, Profile.updated_at)
         return asc(col) if order == "asc" else desc(col)
+
+    @staticmethod
+    def _validation_state(profile: Profile) -> str:
+        if not profile.flags:
+            return "not_validated"
+        try:
+            validate_profile_payload_with_schema(
+                {
+                    "channel": profile.schema_version,
+                    "policies": profile.flags,
+                }
+            )
+        except (PolicyValidationError, ValueError):
+            return "invalid"
+        return "valid"
+
+    @staticmethod
+    def _as_read_model(profile: Profile) -> ProfileRead:
+        return ProfileRead.model_validate(profile).model_copy(
+            update={"validation_state": ProfileService._validation_state(profile)}
+        )
 
     # --- CRUD ---
 
@@ -51,6 +77,8 @@ class ProfileService:
         q: str | None = None,
         owner: str | None = None,
         schema_version: str | None = None,
+        validation_state: str | None = None,
+        lifecycle: str = "active",
         include_deleted: bool = False,
         limit: int = 50,
         offset: int = 0,
@@ -59,7 +87,9 @@ class ProfileService:
     ) -> builtins.list[ProfileRead]:
         stmt = select(Profile)
 
-        if not include_deleted:
+        if lifecycle == "archived":
+            stmt = stmt.where(Profile.deleted_at.is_not(None))
+        elif lifecycle != "all" and not include_deleted:
             stmt = stmt.where(Profile.deleted_at.is_(None))
 
         if owner:
@@ -76,8 +106,13 @@ class ProfileService:
                 item for item in items
                 if ProfileService._matches_name_query(item.name, q)
             ]
+        if validation_state:
+            items = [
+                item for item in items
+                if ProfileService._validation_state(item) == validation_state
+            ]
         items = items[offset: offset + limit]
-        return [ProfileRead.model_validate(x) for x in items]
+        return [ProfileService._as_read_model(item) for item in items]
 
     @staticmethod
     async def get(
@@ -88,7 +123,7 @@ class ProfileService:
             stmt = stmt.where(Profile.deleted_at.is_(None))
         res = await session.scalars(stmt)
         entity = res.first()
-        return ProfileRead.model_validate(entity) if entity else None
+        return ProfileService._as_read_model(entity) if entity else None
 
     @staticmethod
     async def count(
@@ -97,11 +132,15 @@ class ProfileService:
         q: str | None = None,
         owner: str | None = None,
         schema_version: str | None = None,
+        validation_state: str | None = None,
+        lifecycle: str = "active",
         include_deleted: bool = False,
     ) -> int:
         filters: builtins.list[ColumnElement[bool]] = []
 
-        if not include_deleted:
+        if lifecycle == "archived":
+            filters.append(Profile.deleted_at.is_not(None))
+        elif lifecycle != "all" and not include_deleted:
             filters.append(Profile.deleted_at.is_(None))
 
         if owner:
@@ -114,14 +153,22 @@ class ProfileService:
         if filters:
             stmt = stmt.where(*filters)
 
-        if not q:
+        if not q and not validation_state:
             return int(await session.scalar(stmt) or 0)
 
         rows_stmt = select(Profile)
         if filters:
             rows_stmt = rows_stmt.where(*filters)
         rows = await session.scalars(rows_stmt)
-        return sum(1 for item in rows if ProfileService._matches_name_query(item.name, q))
+        return sum(
+            1
+            for item in rows
+            if ProfileService._matches_name_query(item.name, q)
+            and (
+                not validation_state
+                or ProfileService._validation_state(item) == validation_state
+            )
+        )
 
     @staticmethod
     async def create(session: AsyncSession, data: ProfileCreate) -> ProfileRead:
@@ -136,7 +183,7 @@ class ProfileService:
         session.add(entity)
         await session.flush()
         await session.refresh(entity)
-        return ProfileRead.model_validate(entity)
+        return ProfileService._as_read_model(entity)
 
     @staticmethod
     async def update(
@@ -164,7 +211,7 @@ class ProfileService:
         entity.revision += 1
         await session.flush()
         await session.refresh(entity)
-        return ProfileRead.model_validate(entity)
+        return ProfileService._as_read_model(entity)
 
     @staticmethod
     async def soft_delete(session: AsyncSession, profile_id: int) -> bool:
@@ -189,7 +236,7 @@ class ProfileService:
         entity.deleted_at = None
         await session.flush()
         await session.refresh(entity)
-        return ProfileRead.model_validate(entity)
+        return ProfileService._as_read_model(entity)
 
     @staticmethod
     async def hard_delete(session: AsyncSession, profile_id: int) -> bool:

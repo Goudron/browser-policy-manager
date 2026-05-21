@@ -13,7 +13,7 @@ def chip(chip_id: str, label_key: str, fallback: str) -> dict[str, str]:
     }
 
 
-def doc_target(
+def control_target(
     area_id: str,
     target: str,
     label_key: str,
@@ -88,7 +88,7 @@ def value_option(value: Any, fallback: str, label_key: str = "") -> dict[str, An
     return item
 
 
-def pref_doc(
+def pref_control(
     area_id: str,
     preset_id: str,
     label_key: str,

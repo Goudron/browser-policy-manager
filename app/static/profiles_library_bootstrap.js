@@ -39,6 +39,8 @@
             getProfileLibraryStats,
             getProfile,
             importFirefoxPoliciesJson,
+            softDeleteProfile,
+            restoreProfile,
         } = data;
         const {
             t,
@@ -52,15 +54,18 @@
 
         const langStorageKey = "bpm-lang-mode";
         const themeStorageKey = "bpm-theme-mode";
-        const compareBaseStorageKey = "bpm-library-compare-base";
         let localeRequestId = 0;
-        let compareProfileState = null;
+        let compareFirstProfileState = null;
+        let compareSecondProfileState = null;
 
         const listEl = documentRef.getElementById("list");
         const listSummaryEl = documentRef.getElementById("list-summary");
         const listTotalSummaryEl = documentRef.getElementById("list-total-summary");
         const refreshButtonEl = documentRef.getElementById("refresh");
         const searchInputEl = documentRef.getElementById("search");
+        const schemaFilterEl = documentRef.getElementById("library-schema-filter");
+        const lifecycleFilterEl = documentRef.getElementById("library-lifecycle-filter");
+        const validationFilterEl = documentRef.getElementById("library-validation-filter");
         const sortSelectEl = documentRef.getElementById("sort");
         const orderSelectEl = documentRef.getElementById("order");
         const includeDeletedEl = documentRef.getElementById("include-deleted");
@@ -90,6 +95,9 @@
         function readFilters() {
             return {
                 q: searchInputEl?.value.trim() || "",
+                schemaVersion: schemaFilterEl?.value || "",
+                lifecycle: lifecycleFilterEl?.value || "active",
+                validationState: validationFilterEl?.value || "",
                 includeDeleted: includeDeletedEl?.checked || false,
                 sort: sortSelectEl?.value || "updated_at",
                 order: orderSelectEl?.value || "desc",
@@ -102,6 +110,16 @@
             importFirefoxPoliciesStatusEl.dataset.statusTone = tone;
         }
 
+        function setImportBusy(isBusy) {
+            if (importFirefoxPoliciesButtonEl) {
+                importFirefoxPoliciesButtonEl.disabled = isBusy;
+                importFirefoxPoliciesButtonEl.setAttribute("aria-busy", isBusy ? "true" : "false");
+            }
+            if (importFirefoxPoliciesStatusEl) {
+                importFirefoxPoliciesStatusEl.setAttribute("aria-busy", isBusy ? "true" : "false");
+            }
+        }
+
         function inferImportProfileName(file) {
             const rawName = file?.name || "policies.json";
             const withoutExtension = rawName.replace(/\.json$/i, "").trim();
@@ -109,6 +127,26 @@
                 return t("profiles.import_firefox_policies_default_name");
             }
             return withoutExtension;
+        }
+
+        function formatValidationStateLabel(profile) {
+            if (profile?.validation_state === "invalid") {
+                return t("profiles.library_validation_invalid");
+            }
+            if (profile?.validation_state === "not_validated") {
+                return t("profiles.library_validation_not_validated");
+            }
+            return t("profiles.library_validation_valid");
+        }
+
+        function formatValidationStateClass(profile) {
+            if (profile?.validation_state === "invalid") {
+                return "profile-list-status--invalid";
+            }
+            if (profile?.validation_state === "not_validated") {
+                return "profile-list-status--not-validated";
+            }
+            return "profile-list-status--valid";
         }
 
         function formatTimestamp(value) {
@@ -233,20 +271,27 @@
         function resolveCompareAreaForPolicy(key) {
             const policyKey = String(key || "");
             if ([
-                "WebsiteFilter",
-                "WebsiteFilterExceptions",
-                "Handlers",
-                "AutoLaunchProtocolsFromOrigins",
-            ].includes(policyKey)) return "step_six";
-            if ([
-                "DisableFirefoxAccounts",
+                "Proxy",
+                "Certificates",
+                "DNSOverHTTPS",
+                "WindowsSSO",
+                "Authentication",
                 "AppAutoUpdate",
-                "ExtensionSettings",
-                "ExtensionUpdate",
-                "InstallAddonsPermission",
-                "Bookmarks",
-                "ManagedBookmarks",
-            ].includes(policyKey)) return "step_six";
+                "DisableAppUpdate",
+                "DisableSystemAddonUpdate",
+                "DontCheckDefaultBrowser",
+                "PromptForDownloadLocation",
+                "Homepage",
+                "NewTabPage",
+                "OverrideFirstRunPage",
+                "OverridePostUpdatePage",
+                "FirefoxHome",
+                "DisablePocket",
+                "Preferences",
+                "SearchBar",
+                "SearchSuggestEnabled",
+                "SearchEngines",
+            ].includes(policyKey)) return "step_two";
             if ([
                 "DisableTelemetry",
                 "BlockAboutAddons",
@@ -254,46 +299,44 @@
                 "Cookies",
                 "Permissions",
                 "SanitizeOnShutdown",
-            ].includes(policyKey)) return "step_five";
-            if ([
-                "SearchSuggestEnabled",
-                "SearchBar",
-                "SearchEngines",
-            ].includes(policyKey)) return "step_four";
-            if ([
-                "Homepage",
-                "NewTabPage",
-                "OverrideFirstRunPage",
-                "OverridePostUpdatePage",
-                "FirefoxHome",
+                "OfferToSaveLogins",
+                "PasswordManagerEnabled",
             ].includes(policyKey)) return "step_three";
             if ([
-                "Proxy",
-                "Certificates",
-                "DNSOverHTTPS",
-                "WindowsSSO",
-                "Authentication",
-            ].includes(policyKey)) return "step_two";
+                "WebsiteFilter",
+                "WebsiteFilterExceptions",
+                "Handlers",
+                "AutoLaunchProtocolsFromOrigins",
+                "GoToIntranetSiteForSingleWordEntryInAddressBar",
+                "NoDefaultBookmarks",
+            ].includes(policyKey)) return "step_four";
+            if ([
+                "DisableFirefoxAccounts",
+                "ExtensionSettings",
+                "ExtensionUpdate",
+                "InstallAddonsPermission",
+                "Bookmarks",
+                "ManagedBookmarks",
+                "UserMessaging",
+                "RequestedLocales",
+                "TranslateEnabled",
+            ].includes(policyKey)) return "step_four";
             if ([
                 "DisableBuiltinAIChat",
                 "DisableFirefoxLabs",
-                "DisablePocket",
-                "GoToIntranetSiteForSingleWordEntryInAddressBar",
-                "NoDefaultBookmarks",
-                "OfferToSaveLogins",
-                "PasswordManagerEnabled",
-                "Preferences",
-            ].includes(policyKey)) return "step_seven";
+                "AIControls",
+                "GenerativeAI",
+                "VisualSearchEnabled",
+            ].includes(policyKey)) return "step_five";
             return "step_one";
         }
 
         function resolveCompareAreaForPreference(key) {
             const prefKey = String(key || "");
-            if (/homepage|newtab|firefox-home|snippets|topsites/i.test(prefKey)) return "step_three";
-            if (/search|suggest|urlbar/i.test(prefKey)) return "step_four";
-            if (/cookie|tracking|permission|telemetry|privacy|safe-browsing/i.test(prefKey)) return "step_five";
-            if (/locale|language|translate|extension|account|bookmark|handler|website|intranet/i.test(prefKey)) return "step_six";
-            if (/ai|visualsearch|chatbot|model|provider/i.test(prefKey)) return "step_seven";
+            if (/proxy|network|dns|update|download|browser|homepage|newtab|firefox-home|snippets|topsites|search|suggest|urlbar/i.test(prefKey)) return "step_two";
+            if (/cookie|tracking|permission|telemetry|privacy|safe-browsing|password|https|sanitize|private/i.test(prefKey)) return "step_three";
+            if (/locale|language|translate|extension|account|bookmark|handler|website|intranet/i.test(prefKey)) return "step_four";
+            if (/ai|visualsearch|chatbot|model|provider/i.test(prefKey)) return "step_five";
             return "step_two";
         }
 
@@ -314,8 +357,6 @@
                 "step_three",
                 "step_four",
                 "step_five",
-                "step_six",
-                "step_seven",
             ].map((areaKey) => {
                 const items = areaMap.get(areaKey) || [];
                 if (!items.length) return null;
@@ -326,80 +367,12 @@
             }).filter(Boolean);
         }
 
-        function normalizeCompareBaseSnapshot(snapshot, fallbackProfile = null) {
-            const source = snapshot && typeof snapshot === "object" ? snapshot : {};
-            const fallback = fallbackProfile && typeof fallbackProfile === "object" ? fallbackProfile : {};
-            const profileId = Number(source.id ?? fallback.id ?? 0);
-            if (!Number.isInteger(profileId) || profileId <= 0) return null;
+        function buildCompareState(profile) {
+            if (!profile?.id) return null;
             return {
-                id: profileId,
-                name: source.name || fallback.name || "",
-                owner: source.owner ?? fallback.owner ?? null,
-                description: source.description ?? fallback.description ?? null,
-                schemaVersion: source.schemaVersion || source.schema_version || fallback.schema_version || getDefaultSchemaVersion(documentRef),
-                flags: source.flags && typeof source.flags === "object" ? source.flags : {},
+                profile,
+                snapshot: buildProfileSnapshot(profile),
             };
-        }
-
-        function normalizeCompareBaseProfile(profile, fallbackSnapshot = null) {
-            const source = profile && typeof profile === "object" ? profile : {};
-            const fallback = fallbackSnapshot && typeof fallbackSnapshot === "object" ? fallbackSnapshot : {};
-            const profileId = Number(source.id ?? fallback.id ?? 0);
-            if (!Number.isInteger(profileId) || profileId <= 0) return null;
-            return {
-                id: profileId,
-                name: source.name || fallback.name || "",
-                owner: source.owner ?? fallback.owner ?? null,
-                description: source.description ?? fallback.description ?? null,
-                schema_version: source.schema_version || source.schemaVersion || fallback.schemaVersion || getDefaultSchemaVersion(documentRef),
-                is_deleted: source.is_deleted === true,
-                updated_at: source.updated_at || null,
-            };
-        }
-
-        function readStoredCompareBase() {
-            try {
-                const payloadText = windowRef.localStorage?.getItem(compareBaseStorageKey) || "";
-                if (!payloadText) return null;
-                const parsed = JSON.parse(payloadText);
-                const snapshot = normalizeCompareBaseSnapshot(parsed?.snapshot, parsed?.profile);
-                const profile = normalizeCompareBaseProfile(parsed?.profile, snapshot);
-                if (!snapshot || !profile) return null;
-                return { profile, snapshot };
-            } catch {
-                return null;
-            }
-        }
-
-        function persistCompareBaseProfile(profile, snapshot = null) {
-            const normalizedSnapshot = normalizeCompareBaseSnapshot(snapshot, profile);
-            const normalizedProfile = normalizeCompareBaseProfile(profile, normalizedSnapshot);
-            if (!normalizedSnapshot || !normalizedProfile) return;
-            try {
-                windowRef.localStorage?.setItem(compareBaseStorageKey, JSON.stringify({
-                    profile: normalizedProfile,
-                    snapshot: normalizedSnapshot,
-                }));
-            } catch {
-                // Ignore compare storage write failures.
-            }
-            if (compareProfileState?.profile?.id === normalizedProfile.id) {
-                compareProfileState = null;
-            }
-        }
-
-        function getComparableBaseState() {
-            const storedBase = readStoredCompareBase();
-            if (!storedBase?.profile?.id || !storedBase?.snapshot) return null;
-            return storedBase;
-        }
-
-        function getComparableBaseId() {
-            return getComparableBaseState()?.profile?.id || null;
-        }
-
-        function hasComparableBase() {
-            return Boolean(getComparableBaseId());
         }
 
         function renderComparePanel() {
@@ -421,49 +394,44 @@
                 || !compareGuidedAreasListEl
             ) return;
 
-            const comparableBaseState = getComparableBaseState();
-            if (!comparableBaseState) {
+            if (!compareFirstProfileState) {
                 compareEmptyEl.hidden = false;
                 compareActiveEl.hidden = true;
                 compareClearEl.hidden = true;
-                compareEmptyCopyEl.textContent = t("profiles.compare_empty_need_base");
+                compareEmptyCopyEl.textContent = t("profiles.library_compare_empty_pick_first");
                 return;
             }
 
-            if (!compareProfileState) {
+            if (!compareSecondProfileState) {
                 compareEmptyEl.hidden = false;
                 compareActiveEl.hidden = true;
-                compareClearEl.hidden = true;
-                compareEmptyCopyEl.textContent = t("profiles.compare_empty_pick_other");
+                compareClearEl.hidden = false;
+                compareEmptyCopyEl.textContent = t("profiles.library_compare_empty_pick_second").replace(
+                    "{name}",
+                    compareFirstProfileState.profile.name || t("profiles.none_selected"),
+                );
                 return;
             }
 
-            const currentSnapshot = comparableBaseState.snapshot;
-            if (!currentSnapshot) {
-                compareEmptyEl.hidden = false;
-                compareActiveEl.hidden = true;
-                compareClearEl.hidden = true;
-                compareEmptyCopyEl.textContent = t("profiles.compare_empty_invalid");
-                return;
-            }
-
-            const diff = buildCompareDiff(currentSnapshot, compareProfileState.snapshot);
+            const firstSnapshot = compareFirstProfileState.snapshot;
+            const secondSnapshot = compareSecondProfileState.snapshot;
+            const diff = buildCompareDiff(firstSnapshot, secondSnapshot);
             compareEmptyEl.hidden = true;
             compareActiveEl.hidden = false;
             compareClearEl.hidden = false;
-            compareCurrentNameEl.textContent = currentSnapshot.name || t("profiles.compare_current_draft");
-            compareCurrentCopyEl.textContent = t("profiles.compare_current_saved_copy")
-                .replace("{schema}", formatSchemaLabel(currentSnapshot.schemaVersion));
-            compareOtherNameEl.textContent = compareProfileState.profile.name || t("profiles.none_selected");
-            compareOtherCopyEl.textContent = t("profiles.compare_other_copy").replace(
+            compareCurrentNameEl.textContent = compareFirstProfileState.profile.name || t("profiles.none_selected");
+            compareCurrentCopyEl.textContent = t("profiles.library_compare_saved_copy")
+                .replace("{schema}", formatSchemaLabel(firstSnapshot.schemaVersion));
+            compareOtherNameEl.textContent = compareSecondProfileState.profile.name || t("profiles.none_selected");
+            compareOtherCopyEl.textContent = t("profiles.library_compare_saved_copy").replace(
                 "{schema}",
-                formatSchemaLabel(compareProfileState.snapshot.schemaVersion),
+                formatSchemaLabel(secondSnapshot.schemaVersion),
             );
             compareMetadataCountEl.textContent = `${diff.metadataChanges.length}`;
             comparePolicyCountEl.textContent = `${diff.policyEntries.size}`;
             comparePreferenceCountEl.textContent = `${diff.preferenceEntries.size}`;
             compareChangesCopyEl.textContent = diff.sampleChanges.length
-                ? t("profiles.compare_changes_active")
+                ? t("profiles.library_compare_changes_active")
                 : t("profiles.compare_changes_none");
             compareChangesListEl.innerHTML = "";
             compareGuidedAreasCopyEl.textContent = diff.sampleChanges.length
@@ -515,7 +483,8 @@
         }
 
         function clearCompareProfile(notify = true) {
-            compareProfileState = null;
+            compareFirstProfileState = null;
+            compareSecondProfileState = null;
             renderComparePanel();
             renderList(Array.isArray(windowRef.__BPM_LIBRARY_ITEMS__) ? windowRef.__BPM_LIBRARY_ITEMS__ : []);
             if (notify) {
@@ -523,28 +492,42 @@
             }
         }
 
-        async function compareWithProfile(id) {
+        async function selectProfileForComparison(id) {
             try {
                 const profile = await getProfile(id);
-                compareProfileState = {
-                    profile,
-                    snapshot: buildProfileSnapshot(profile),
-                };
+                const nextState = buildCompareState(profile);
+                if (!nextState) return;
+
+                if (!compareFirstProfileState) {
+                    compareFirstProfileState = nextState;
+                    compareSecondProfileState = null;
+                    setStatus(
+                        t("profiles.library_status_compare_first_selected").replace("{name}", profile.name),
+                        "info",
+                    );
+                } else if (compareFirstProfileState.profile.id === profile.id) {
+                    compareFirstProfileState = nextState;
+                    setStatus(
+                        t("profiles.library_status_compare_first_selected").replace("{name}", profile.name),
+                        "info",
+                    );
+                } else {
+                    compareSecondProfileState = nextState;
+                    setStatus(
+                        t("profiles.library_status_compare_ready")
+                            .replace("{first}", compareFirstProfileState.profile.name)
+                            .replace("{second}", profile.name),
+                        "info",
+                    );
+                }
                 renderComparePanel();
                 renderList(Array.isArray(windowRef.__BPM_LIBRARY_ITEMS__) ? windowRef.__BPM_LIBRARY_ITEMS__ : []);
-                setStatus(t("profiles.status_compare_ready").replace("{name}", profile.name), "info");
-                documentRef.getElementById("compare-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                if (compareSecondProfileState) {
+                    documentRef.getElementById("compare-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
             } catch (error) {
                 setStatus(t("profiles.error_compare").replace("{detail}", error?.message || String(error)), "error");
             }
-        }
-
-        function refreshCompareBaselineUi() {
-            if (compareProfileState?.profile?.id === getComparableBaseId()) {
-                compareProfileState = null;
-            }
-            renderComparePanel();
-            renderList(Array.isArray(windowRef.__BPM_LIBRARY_ITEMS__) ? windowRef.__BPM_LIBRARY_ITEMS__ : []);
         }
 
         function applyThemeMode(mode, persist = true) {
@@ -644,7 +627,7 @@
                 workspaceProfileCountEl.textContent = String(total);
             }
             if (workspaceProfileLabelEl) {
-                workspaceProfileLabelEl.textContent = libraryCountLabel(total, getCurrentLang());
+                workspaceProfileLabelEl.textContent = libraryCountLabel(total, getCurrentLang(), t);
             }
             workspaceProfileCountEl?.closest(".compact-counter")?.classList.remove("compact-counter--pending");
         }
@@ -669,19 +652,30 @@
             items.forEach((profile) => {
                 const li = documentRef.createElement("li");
                 li.className = "library-table-row";
-                const selected = profile.id === getComparableBaseId();
-                const canCompare = hasComparableBase() && !selected;
-                const compareActive = compareProfileState?.profile?.id === profile.id;
-                const openLabel = selected
-                    ? t("profiles.list_open_selected")
-                    : t("profiles.list_open");
-                const compareLabel = compareActive
-                    ? t("profiles.compare_selected")
-                    : t("profiles.compare_action");
+                const firstSelected = compareFirstProfileState?.profile?.id === profile.id;
+                const secondSelected = compareSecondProfileState?.profile?.id === profile.id;
+                const selected = firstSelected || secondSelected;
+                const openLabel = t("profiles.list_open");
+                const compareLabel = firstSelected
+                    ? t("profiles.library_compare_first_selected")
+                    : secondSelected
+                        ? t("profiles.library_compare_second_selected")
+                        : !compareFirstProfileState
+                            ? t("profiles.library_compare_select_first")
+                            : compareSecondProfileState
+                                ? t("profiles.library_compare_use_as_second")
+                                : t("profiles.library_compare_select_second");
                 const statusLabel = profile.is_deleted
                     ? t("profiles.badge_deleted")
                     : t("profiles.badge_active");
+                const validationLabel = formatValidationStateLabel(profile);
+                const profileOwner = profile.owner || t("profiles.library_owner_unassigned");
+                const profileDescription = profile.description || t("profiles.library_description_empty");
                 const editHref = `/profiles/${profile.id}/edit`;
+                const settingsHref = `/profiles/${profile.id}/settings${profile.is_deleted ? "?include_deleted=true" : ""}`;
+                const jsonHref = `/profiles/${profile.id}/json${profile.is_deleted ? "?include_deleted=true" : ""}`;
+                const duplicateHref = `/profiles/new?clone_from=${profile.id}${profile.is_deleted ? "&include_deleted=true" : ""}`;
+                const exportHref = `/api/export/profiles/${profile.id}/firefox/policies.json?download=1`;
 
                 li.innerHTML = `
                     <div class="library-row-grid profile-list-button ${selected ? "profile-list-button--selected" : ""}">
@@ -689,59 +683,112 @@
                             <a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">
                                 ${escapeHtml(profile.name)}
                             </a>
+                            <div class="library-row-identity-meta">#${profile.id}</div>
                         </div>
 
-                        <div class="library-row-meta">
-                            <div class="library-row-meta-primary">${formatSchemaLabel(profile.schema_version)}</div>
+                        <div class="library-row-context" data-label="${escapeHtml(t("profiles.library_column_context"))}">
+                            <div class="library-row-context-owner">${escapeHtml(profileOwner)}</div>
+                            <div class="library-row-context-note">${escapeHtml(profileDescription)}</div>
                         </div>
 
-                        <div class="library-row-updated">
-                            <div class="library-row-meta-secondary">${formatTimestamp(profile.updated_at)}</div>
-                        </div>
+                        <div class="library-row-facts">
+                            <div class="library-row-meta" data-label="${escapeHtml(t("profiles.library_column_schema"))}">
+                                <div class="library-row-meta-primary">${formatSchemaLabel(profile.schema_version)}</div>
+                            </div>
 
-                        <div class="library-row-status-wrap">
-                            <span class="profile-list-status ${profile.is_deleted
-                                ? "profile-list-status--deleted"
-                                : "profile-list-status--active"}">
-                                ${statusLabel}
-                            </span>
+                            <div class="library-row-status-wrap" data-label="${escapeHtml(t("profiles.library_column_status"))}">
+                                <span class="profile-list-status ${profile.is_deleted
+                                    ? "profile-list-status--deleted"
+                                    : "profile-list-status--active"}">
+                                    ${statusLabel}
+                                </span>
+                                <span class="profile-list-status ${formatValidationStateClass(profile)}">
+                                    ${validationLabel}
+                                </span>
+                            </div>
+
+                            <div class="library-row-updated" data-label="${escapeHtml(t("profiles.library_column_updated"))}">
+                                <div class="library-row-meta-secondary">${formatTimestamp(profile.updated_at)}</div>
+                            </div>
                         </div>
 
                         <div class="library-row-actions">
                             <a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}" target="_blank" rel="noopener">
                                 ${openLabel}
                             </a>
-                            ${canCompare ? `
+                            <div class="library-row-action-grid">
+                                <a class="button-base ghost-button library-row-secondary-action" href="${settingsHref}" target="_blank" rel="noopener">
+                                    ${t("profiles.library_action_all_settings")}
+                                </a>
+                                <a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">
+                                    ${t("profiles.library_action_json")}
+                                </a>
+                                <a class="button-base ghost-button library-row-secondary-action" href="${duplicateHref}" target="_blank" rel="noopener">
+                                    ${t("profiles.library_action_duplicate")}
+                                </a>
+                                ${profile.is_deleted ? `
+                                    <span
+                                        class="button-base ghost-button library-row-secondary-action library-row-secondary-action--disabled"
+                                        aria-disabled="true"
+                                        title="${escapeHtml(t("profiles.library_export_unavailable_archived"))}">
+                                        ${t("profiles.library_action_export")}
+                                    </span>
+                                ` : `
+                                    <a class="button-base ghost-button library-row-secondary-action" href="${exportHref}" download>
+                                        ${t("profiles.library_action_export")}
+                                    </a>
+                                `}
                                 <button
                                     type="button"
-                                    class="button-base ghost-button profile-compare-button ${compareActive ? "profile-compare-button--active" : ""}"
+                                    class="button-base ghost-button library-row-secondary-action"
+                                    data-library-lifecycle-action="${profile.is_deleted ? "restore" : "archive"}"
+                                    data-library-profile-id="${profile.id}">
+                                    ${profile.is_deleted ? t("profiles.restore") : t("profiles.soft_delete")}
+                                </button>
+                                <button
+                                    type="button"
+                                    class="button-base ghost-button library-row-secondary-action profile-compare-button ${selected ? "profile-compare-button--active" : ""}"
                                     data-compare-profile-id="${profile.id}">
                                     ${compareLabel}
                                 </button>
-                            ` : ""}
+                            </div>
                         </div>
                     </div>
                 `;
-                const openButton = li.querySelector(".library-row-open-button");
-                openButton?.addEventListener("click", () => {
-                    void (async () => {
-                        try {
-                            const comparableProfile = profile?.flags && typeof profile.flags === "object"
-                                ? profile
-                                : await getProfile(profile.id);
-                            persistCompareBaseProfile(comparableProfile, buildProfileSnapshot(comparableProfile));
-                            refreshCompareBaselineUi();
-                        } catch {
-                            // Ignore compare baseline prefetch failures and keep navigation intact.
-                        }
-                    })();
-                });
                 const compareButton = li.querySelector("[data-compare-profile-id]");
                 compareButton?.addEventListener("click", async () => {
-                    await compareWithProfile(profile.id);
+                    await selectProfileForComparison(profile.id);
+                });
+                const lifecycleButton = li.querySelector("[data-library-lifecycle-action]");
+                lifecycleButton?.addEventListener("click", async () => {
+                    await runLibraryLifecycleAction(profile, lifecycleButton.dataset.libraryLifecycleAction);
                 });
                 listEl.appendChild(li);
             });
+        }
+
+        async function runLibraryLifecycleAction(profile, action) {
+            if (!profile?.id) return;
+            if (action === "archive") {
+                if (!windowRef.confirm(t("profiles.confirm_soft_delete"))) return;
+                try {
+                    await softDeleteProfile(profile.id, windowRef.fetch);
+                    setStatus(t("profiles.library_profile_archived").replace("{name}", profile.name), "success");
+                    await reloadList();
+                } catch (error) {
+                    setStatus(t("profiles.error_delete").replace("{detail}", error.message || error), "error");
+                }
+                return;
+            }
+            if (action === "restore") {
+                try {
+                    const restored = await restoreProfile(profile.id, windowRef.fetch);
+                    setStatus(t("profiles.library_profile_restored").replace("{name}", restored.name), "success");
+                    await reloadList();
+                } catch (error) {
+                    setStatus(t("profiles.error_restore").replace("{detail}", error.message || error), "error");
+                }
+            }
         }
 
         async function reloadList() {
@@ -777,22 +824,44 @@
             }
 
             try {
+                setImportBusy(true);
+                const profileName = inferImportProfileName(file);
                 setImportStatus(
-                    t("profiles.import_firefox_policies_reading").replace("{name}", file.name || "policies.json"),
+                    t("profiles.import_firefox_policies_reading")
+                        .replace("{file}", file.name || "policies.json")
+                        .replace("{name}", profileName),
                     "info",
                 );
                 const rawText = await file.text();
-                const documentObj = JSON.parse(rawText);
+                let documentObj;
+                try {
+                    documentObj = JSON.parse(rawText);
+                } catch (parseError) {
+                    throw new Error(
+                        t("profiles.error_import_firefox_policies_parse")
+                            .replace("{detail}", parseError.message || parseError),
+                    );
+                }
                 const schemaVersion = getDefaultSchemaVersion(documentRef);
                 const imported = await importFirefoxPoliciesJson({
-                    name: inferImportProfileName(file),
+                    name: profileName,
                     description: t("profiles.import_firefox_policies_description")
                         .replace("{name}", file.name || "policies.json"),
                     schema_version: schemaVersion,
                     document: documentObj,
                 });
                 setImportStatus(
-                    t("profiles.status_import_firefox_policies_done").replace("{name}", imported.name),
+                    t("profiles.status_import_firefox_policies_done")
+                        .replace("{name}", imported.name)
+                        .replace("{schema}", formatSchemaLabel(imported.schema_version))
+                        .replace("{validation}", formatValidationStateLabel(imported)),
+                    "success",
+                );
+                setStatus(
+                    t("profiles.status_import_firefox_policies_done")
+                        .replace("{name}", imported.name)
+                        .replace("{schema}", formatSchemaLabel(imported.schema_version))
+                        .replace("{validation}", formatValidationStateLabel(imported)),
                     "success",
                 );
                 await reloadList();
@@ -808,6 +877,7 @@
                 if (importFirefoxPoliciesFileEl) {
                     importFirefoxPoliciesFileEl.value = "";
                 }
+                setImportBusy(false);
             }
         }
 
@@ -822,6 +892,9 @@
                 reloadList();
             });
             searchInputEl?.addEventListener("input", debounceReload);
+            schemaFilterEl?.addEventListener("change", reloadList);
+            lifecycleFilterEl?.addEventListener("change", reloadList);
+            validationFilterEl?.addEventListener("change", reloadList);
             sortSelectEl?.addEventListener("change", reloadList);
             orderSelectEl?.addEventListener("change", reloadList);
             includeDeletedEl?.addEventListener("change", reloadList);
@@ -853,16 +926,6 @@
         }
 
         bindControls();
-        windowRef.addEventListener?.("storage", (event) => {
-            if (event.key !== compareBaseStorageKey) return;
-            refreshCompareBaselineUi();
-        });
-        windowRef.addEventListener?.("focus", refreshCompareBaselineUi);
-        documentRef.addEventListener?.("visibilitychange", () => {
-            if (documentRef.visibilityState === "visible") {
-                refreshCompareBaselineUi();
-            }
-        });
         initialize().catch((error) => {
             console.warn("library bootstrap failed:", error);
         });

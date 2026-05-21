@@ -1,6 +1,6 @@
-{% from "profiles/_wizard_macros.html" import render_doc_placeholder, render_wizard_schema_shell with context %}
+{% from "profiles/_wizard_macros.html" import render_wizard_schema_shell with context %}
 
-<section class="wizard-panel" id="wizard-step-8">
+<section class="wizard-panel" id="wizard-step-6">
     <div class="wizard-review wizard-export-sections">
         <section class="wizard-export-section" id="wizard-export-section-ready" aria-labelledby="wizard-export-section-ready-title">
             <div class="wizard-export-section-heading">
@@ -117,60 +117,54 @@
                         <div class="wizard-export-plan-list" id="wizard-export-review-now" aria-live="polite"></div>
                     </div>
                 </div>
-                <div class="field-label mb-1" data-i18n="profiles.wizard_export_basics_title">{{ tr("profiles.wizard_export_basics_title") }}</div>
-                <div class="wizard-summary-list">
-                    <div class="wizard-summary-row">
-                        <span class="wizard-summary-key" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</span>
-                        <span class="wizard-summary-value" id="wizard-summary-name">-</span>
-                    </div>
-                    <div class="wizard-summary-row">
-                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_schema">{{ tr("profiles.wizard_summary_schema") }}</span>
-                        <span class="wizard-summary-value" id="wizard-summary-schema">{{ schema_channels_catalog.default_label }}</span>
-                    </div>
-                    <div class="wizard-summary-row">
-                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_starter">{{ tr("profiles.wizard_summary_starter") }}</span>
-                        <span class="wizard-summary-value" id="wizard-summary-starter" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
-                    </div>
-                    <div class="wizard-summary-row">
-                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_cis">{{ tr("profiles.wizard_summary_cis") }}</span>
-                        <span class="wizard-summary-value" id="wizard-summary-cis" data-i18n="profiles.wizard_cis_none_title">{{ tr("profiles.wizard_cis_none_title") }}</span>
-                    </div>
-                    <div class="wizard-summary-row" id="wizard-summary-derived-row" hidden>
-                        <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_derived">{{ tr("profiles.wizard_summary_derived") }}</span>
-                        <span class="wizard-summary-value wizard-summary-value--left" id="wizard-summary-derived"></span>
-                    </div>
-                    <div class="wizard-summary-row wizard-summary-row--stacked">
-                        <span class="wizard-summary-key" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</span>
-                        <span class="wizard-summary-value wizard-summary-value--left" data-i18n="profiles.wizard_lifecycle_summary_body">{{ tr("profiles.wizard_lifecycle_summary_body") }}</span>
-                        <div class="wizard-baseline-summary-list" id="wizard-summary-lifecycle-list"></div>
-                    </div>
-                    <div class="wizard-summary-row wizard-summary-row--stacked">
-                        <span class="wizard-summary-key" data-i18n="profiles.wizard_export_baseline_summary_title">{{ tr("profiles.wizard_export_baseline_summary_title") }}</span>
-                        <span class="wizard-summary-value wizard-summary-value--left" id="wizard-export-baseline-copy" data-i18n="profiles.wizard_export_baseline_summary_body">{{ tr("profiles.wizard_export_baseline_summary_body") }}</span>
-                        <div class="wizard-baseline-summary-list" id="wizard-export-baseline-list"></div>
-                    </div>
-                </div>
                 <div class="field-label mb-1" data-i18n="profiles.wizard_export_guided_summary_title">{{ tr("profiles.wizard_export_guided_summary_title") }}</div>
                 <div class="wizard-input-hint" data-i18n="profiles.wizard_export_guided_summary_body">{{ tr("profiles.wizard_export_guided_summary_body") }}</div>
                 <div class="wizard-summary-list wizard-summary-list--cards wizard-export-guided-groups" id="wizard-export-guided-summary-list">
-                    <div class="wizard-summary-group" id="wizard-export-guided-group-network">
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-profile">
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_one">{{ tr("profiles.wizard_step_one") }}</div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.name_label">{{ tr("profiles.name_label") }}</span>
+                            <span class="wizard-summary-value" id="wizard-summary-name">-</span>
+                        </div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_schema">{{ tr("profiles.wizard_summary_schema") }}</span>
+                            <span class="wizard-summary-value" id="wizard-summary-schema">{{ schema_channels_catalog.default_label }}</span>
+                        </div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_starter">{{ tr("profiles.wizard_summary_starter") }}</span>
+                            <span class="wizard-summary-value" id="wizard-summary-starter" data-i18n="profiles.wizard_starter_blank_title">{{ tr("profiles.wizard_starter_blank_title") }}</span>
+                        </div>
+                        <div class="wizard-summary-row">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_cis">{{ tr("profiles.wizard_summary_cis") }}</span>
+                            <span class="wizard-summary-value" id="wizard-summary-cis" data-i18n="profiles.wizard_cis_none_title">{{ tr("profiles.wizard_cis_none_title") }}</span>
+                        </div>
+                        <div class="wizard-summary-row" id="wizard-summary-derived-row" hidden>
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_derived">{{ tr("profiles.wizard_summary_derived") }}</span>
+                            <span class="wizard-summary-value wizard-summary-value--left" id="wizard-summary-derived"></span>
+                        </div>
+                        <div class="wizard-summary-row wizard-summary-row--stacked">
+                            <span class="wizard-summary-key" data-i18n="profiles.lifecycle_review_title">{{ tr("profiles.lifecycle_review_title") }}</span>
+                            <span class="wizard-summary-value wizard-summary-value--left" data-i18n="profiles.wizard_lifecycle_summary_body">{{ tr("profiles.wizard_lifecycle_summary_body") }}</span>
+                            <div class="wizard-baseline-summary-list" id="wizard-summary-lifecycle-list"></div>
+                        </div>
+                        <div class="wizard-summary-row wizard-summary-row--stacked">
+                            <span class="wizard-summary-key" data-i18n="profiles.wizard_export_baseline_summary_title">{{ tr("profiles.wizard_export_baseline_summary_title") }}</span>
+                            <span class="wizard-summary-value wizard-summary-value--left" id="wizard-export-baseline-copy" data-i18n="profiles.wizard_export_baseline_summary_body">{{ tr("profiles.wizard_export_baseline_summary_body") }}</span>
+                            <div class="wizard-baseline-summary-list" id="wizard-export-baseline-list"></div>
+                        </div>
+                    </div>
+                    <div class="wizard-summary-group" id="wizard-export-guided-group-browser">
                         <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_two">{{ tr("profiles.wizard_step_two") }}</div>
                         <div class="wizard-summary-row wizard-summary-row--decision">
                             <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_network">{{ tr("profiles.wizard_export_guided_network") }}</span>
                             <span class="wizard-summary-value" id="wizard-export-summary-network" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
                             <button type="button" class="button-base ghost-button" id="wizard-export-summary-network-jump" data-final-review-jump="network" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
                         </div>
-                    </div>
-                    <div class="wizard-summary-group" id="wizard-export-guided-group-home">
-                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_three">{{ tr("profiles.wizard_step_three") }}</div>
                         <div class="wizard-summary-row wizard-summary-row--decision">
                             <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_home">{{ tr("profiles.wizard_export_guided_home") }}</span>
                             <span class="wizard-summary-value" id="wizard-export-summary-home" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
                             <button type="button" class="button-base ghost-button" id="wizard-export-summary-home-jump" data-final-review-jump="home" data-i18n="profiles.wizard_export_open">{{ tr("profiles.wizard_export_open") }}</button>
                         </div>
-                    </div>
-                    <div class="wizard-summary-group" id="wizard-export-guided-group-search">
-                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_four">{{ tr("profiles.wizard_step_four") }}</div>
                         <div class="wizard-summary-row wizard-summary-row--decision">
                             <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_search">{{ tr("profiles.wizard_export_guided_search") }}</span>
                             <span class="wizard-summary-value" id="wizard-export-summary-search" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
@@ -178,7 +172,7 @@
                         </div>
                     </div>
                     <div class="wizard-summary-group" id="wizard-export-guided-group-privacy">
-                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_five">{{ tr("profiles.wizard_step_five") }}</div>
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_three">{{ tr("profiles.wizard_step_three") }}</div>
                         <div class="wizard-summary-row wizard-summary-row--decision">
                             <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_privacy">{{ tr("profiles.wizard_export_guided_privacy") }}</span>
                             <span class="wizard-summary-value" id="wizard-export-summary-privacy" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
@@ -186,7 +180,7 @@
                         </div>
                     </div>
                     <div class="wizard-summary-group" id="wizard-export-guided-group-features">
-                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_six">{{ tr("profiles.wizard_step_six") }}</div>
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_four">{{ tr("profiles.wizard_step_four") }}</div>
                         <div class="wizard-summary-row wizard-summary-row--decision">
                             <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_features">{{ tr("profiles.wizard_export_guided_features") }}</span>
                             <span class="wizard-summary-value" id="wizard-export-summary-features" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
@@ -194,7 +188,7 @@
                         </div>
                     </div>
                     <div class="wizard-summary-group" id="wizard-export-guided-group-ai">
-                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_seven">{{ tr("profiles.wizard_step_seven") }}</div>
+                        <div class="wizard-summary-group-title" data-i18n="profiles.wizard_step_five">{{ tr("profiles.wizard_step_five") }}</div>
                         <div class="wizard-summary-row wizard-summary-row--decision">
                             <span class="wizard-summary-key" data-i18n="profiles.wizard_export_guided_ai">{{ tr("profiles.wizard_export_guided_ai") }}</span>
                             <span class="wizard-summary-value" id="wizard-export-summary-ai" data-i18n="profiles.wizard_export_guided_empty">{{ tr("profiles.wizard_export_guided_empty") }}</span>
@@ -299,7 +293,6 @@
                 <div class="wizard-export-plan-group">
                     <div class="field-label mb-1" data-i18n="profiles.wizard_export_boundary_register_title">{{ tr("profiles.wizard_export_boundary_register_title") }}</div>
                     <div class="wizard-input-hint" data-i18n="profiles.wizard_export_boundary_register_body">{{ tr("profiles.wizard_export_boundary_register_body") }}</div>
-                    {{ render_doc_placeholder("policy-boundaries", "profiles.docs_placeholder_boundaries_title", "profiles.docs_placeholder_boundaries_body") }}
                     <div class="wizard-export-plan-list" id="wizard-export-boundary-register">
                         <div class="wizard-export-plan-item" data-plan-tone="default">
                             <div class="wizard-export-plan-copy" data-i18n="profiles.wizard_export_boundary_register_item_preferences">{{ tr("profiles.wizard_export_boundary_register_item_preferences") }}</div>

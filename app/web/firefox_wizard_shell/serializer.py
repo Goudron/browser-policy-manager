@@ -17,6 +17,7 @@ def serialize_policy(
         "id": definition.id,
         "label": humanize_identifier(definition.id),
         "description_key": definition.description_key,
+        "section_id": ui.section,
         "subsection": ui.subsection,
         "subsection_label": humanize_identifier(ui.subsection),
         "widget": ui.widget,

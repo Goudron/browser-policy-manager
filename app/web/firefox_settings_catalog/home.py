@@ -5,10 +5,10 @@ from typing import Any
 from .builders import (
     bundle_item,
     chip,
-    doc_target,
+    control_target,
     known_pref,
     pref_bundle,
-    pref_doc,
+    pref_control,
     preset,
     value_option,
 )
@@ -31,24 +31,24 @@ def get_home_section() -> dict[str, Any]:
                 chip("new_windows", "profiles.wizard_settings_home_new_windows", "New windows and tabs"),
             ],
         },
-        "ui_docs": {
+        "ui_controls": {
             "homepage": [
-                doc_target("homepage", "field:wizard-homepage-url", "profiles.wizard_homepage_url_label", "Primary homepage URL"),
-                doc_target("homepage", "field:wizard-homepage-additional", "profiles.wizard_homepage_additional_label", "Additional homepage tabs"),
-                doc_target("homepage", "field:wizard-homepage-locked", "profiles.wizard_homepage_locked_label", "Lock homepage settings"),
-                doc_target("startup", "field:wizard-homepage-start-page", "profiles.wizard_homepage_start_label", "Startup behavior"),
+                control_target("homepage", "field:wizard-homepage-url", "profiles.wizard_homepage_url_label", "Primary homepage URL"),
+                control_target("homepage", "field:wizard-homepage-additional", "profiles.wizard_homepage_additional_label", "Additional homepage tabs"),
+                control_target("homepage", "field:wizard-homepage-locked", "profiles.wizard_homepage_locked_label", "Lock homepage settings"),
+                control_target("startup", "field:wizard-homepage-start-page", "profiles.wizard_homepage_start_label", "Startup behavior"),
             ],
             "new_tab": [
-                doc_target("new_windows", "field:wizard-new-tab-page", "profiles.wizard_newtab_page_label", "New tab page"),
-                doc_target("new_windows", "field:wizard-override-first-run", "profiles.wizard_override_first_run_label", "First-run page override"),
-                doc_target("new_windows", "field:wizard-override-post-update", "profiles.wizard_override_post_update_label", "Post-update page override"),
-                doc_target("startup", "field:wizard-homepage-start-page", "profiles.wizard_homepage_start_label", "Startup behavior"),
+                control_target("new_windows", "field:wizard-new-tab-page", "profiles.wizard_newtab_page_label", "New tab page"),
+                control_target("new_windows", "field:wizard-override-first-run", "profiles.wizard_override_first_run_label", "First-run page override"),
+                control_target("new_windows", "field:wizard-override-post-update", "profiles.wizard_override_post_update_label", "Post-update page override"),
+                control_target("startup", "field:wizard-homepage-start-page", "profiles.wizard_homepage_start_label", "Startup behavior"),
             ],
             "firefox_home": [
-                doc_target("firefox_home", "field:firefox-home-search", "profiles.wizard_firefox_home_search_label", "Search"),
-                doc_target("firefox_home", "field:firefox-home-top-sites", "profiles.wizard_firefox_home_top_sites_label", "Top sites"),
-                doc_target("firefox_home", "field:firefox-home-pocket", "profiles.wizard_firefox_home_pocket_label", "Pocket"),
-                doc_target("firefox_home", "policy:DisablePocket", "profiles.policy_disable_pocket", "Disable Pocket"),
+                control_target("firefox_home", "field:firefox-home-search", "profiles.wizard_firefox_home_search_label", "Search"),
+                control_target("firefox_home", "field:firefox-home-top-sites", "profiles.wizard_firefox_home_top_sites_label", "Top sites"),
+                control_target("firefox_home", "field:firefox-home-pocket", "profiles.wizard_firefox_home_pocket_label", "Pocket"),
+                control_target("firefox_home", "policy:DisablePocket", "profiles.policy_disable_pocket", "Disable Pocket"),
             ],
         },
         "preferences": {
@@ -60,13 +60,13 @@ def get_home_section() -> dict[str, Any]:
                 chip("new_tabs", "profiles.wizard_preferences_group_home_new_tabs", "New windows and tabs"),
                 chip("firefox_home", "profiles.wizard_preferences_group_home_firefox_home", "Firefox Home"),
             ],
-            "docs": [
-                pref_doc("new_tabs", "home_new_tab", "profiles.wizard_preferences_preset_home_new_tab_title", "Enable Firefox Home on new tabs"),
-                pref_doc("firefox_home", "home_topsites", "profiles.wizard_preferences_preset_home_topsites_title", "Show top sites"),
-                pref_doc("firefox_home", "home_highlights", "profiles.wizard_preferences_preset_home_highlights_title", "Show highlights"),
-                pref_doc("firefox_home", "home_stories", "profiles.wizard_preferences_preset_home_stories_title", "Hide recommended stories"),
-                pref_doc("firefox_home", "home_sponsored", "profiles.wizard_preferences_preset_home_sponsored_title", "Hide sponsored top sites"),
-                pref_doc("firefox_home", "home_snippets", "profiles.wizard_preferences_preset_home_snippets_title", "Hide snippets"),
+            "controls": [
+                pref_control("new_tabs", "home_new_tab", "profiles.wizard_preferences_preset_home_new_tab_title", "Enable Firefox Home on new tabs"),
+                pref_control("firefox_home", "home_topsites", "profiles.wizard_preferences_preset_home_topsites_title", "Show top sites"),
+                pref_control("firefox_home", "home_highlights", "profiles.wizard_preferences_preset_home_highlights_title", "Show highlights"),
+                pref_control("firefox_home", "home_stories", "profiles.wizard_preferences_preset_home_stories_title", "Hide recommended stories"),
+                pref_control("firefox_home", "home_sponsored", "profiles.wizard_preferences_preset_home_sponsored_title", "Hide sponsored top sites"),
+                pref_control("firefox_home", "home_snippets", "profiles.wizard_preferences_preset_home_snippets_title", "Hide snippets"),
             ],
             "prefixes": [
                 "browser.newtabpage.",

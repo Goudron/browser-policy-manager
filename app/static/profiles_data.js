@@ -111,6 +111,9 @@
     function readProfileListFilters(documentRef) {
         return {
             q: documentRef.getElementById("search")?.value.trim() || "",
+            schemaVersion: documentRef.getElementById("library-schema-filter")?.value || "",
+            lifecycle: documentRef.getElementById("library-lifecycle-filter")?.value || "active",
+            validationState: documentRef.getElementById("library-validation-filter")?.value || "",
             includeDeleted: documentRef.getElementById("include-deleted")?.checked || false,
             sort: documentRef.getElementById("sort")?.value || "updated_at",
             order: documentRef.getElementById("order")?.value || "desc",
@@ -121,7 +124,12 @@
         const resolvedFilters = filters || readProfileListFilters(documentRef);
         const url = new URL("/api/profiles", locationRef.origin);
         if (resolvedFilters.q) url.searchParams.set("q", resolvedFilters.q);
-        if (resolvedFilters.includeDeleted) url.searchParams.set("include_deleted", "true");
+        if (resolvedFilters.schemaVersion) url.searchParams.set("schema_version", resolvedFilters.schemaVersion);
+        if (resolvedFilters.validationState) url.searchParams.set("validation_state", resolvedFilters.validationState);
+        url.searchParams.set("lifecycle", resolvedFilters.lifecycle || "active");
+        if (resolvedFilters.lifecycle === "archived" || resolvedFilters.lifecycle === "all" || resolvedFilters.includeDeleted) {
+            url.searchParams.set("include_deleted", "true");
+        }
         url.searchParams.set("sort", resolvedFilters.sort || "updated_at");
         url.searchParams.set("order", resolvedFilters.order || "desc");
         const res = await fetchImpl(url.toString());
@@ -133,14 +141,20 @@
         const resolvedFilters = filters || readProfileListFilters(documentRef);
         const url = new URL("/api/profiles/stats", locationRef.origin);
         if (resolvedFilters.q) url.searchParams.set("q", resolvedFilters.q);
-        if (resolvedFilters.includeDeleted) url.searchParams.set("include_deleted", "true");
+        if (resolvedFilters.schemaVersion) url.searchParams.set("schema_version", resolvedFilters.schemaVersion);
+        if (resolvedFilters.validationState) url.searchParams.set("validation_state", resolvedFilters.validationState);
+        url.searchParams.set("lifecycle", resolvedFilters.lifecycle || "active");
+        if (resolvedFilters.lifecycle === "archived" || resolvedFilters.lifecycle === "all" || resolvedFilters.includeDeleted) {
+            url.searchParams.set("include_deleted", "true");
+        }
         const res = await fetchImpl(url.toString());
         if (!res.ok) throw new Error(await readError(res));
         return await res.json();
     }
 
-    async function getProfile(id, fetchImpl = fetch) {
-        const res = await fetchImpl(`/api/profiles/${id}`);
+    async function getProfile(id, fetchImpl = fetch, includeDeleted = false) {
+        const suffix = includeDeleted ? "?include_deleted=true" : "";
+        const res = await fetchImpl(`/api/profiles/${id}${suffix}`);
         if (!res.ok) throw new Error(await readError(res));
         return await res.json();
     }
@@ -203,7 +217,7 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ document: flagsObj }),
         });
-        if (!res.ok) throw new Error(await readError(res));
+        if (!res.ok) throw await profileRequestError(res);
         return await res.json();
     }
 

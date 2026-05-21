@@ -80,6 +80,7 @@
         let isBusy = false;
         let libraryStats = { filtered: 0, total: 0 };
         let validationPreviewTone = "neutral";
+        let validationIssues = [];
 
         let renderExtensionReviewSummaryRef = () => { };
         let renderManualHomeAndSearchSectionStatusesRef = () => { };
@@ -273,6 +274,14 @@
             validationPreviewTone = value;
         }
 
+        function getValidationIssues() {
+            return validationIssues;
+        }
+
+        function setValidationIssues(value) {
+            validationIssues = Array.isArray(value) ? value : [];
+        }
+
         function renderExtensionReviewSummary(...args) {
             return renderExtensionReviewSummaryRef(...args);
         }
@@ -439,6 +448,8 @@
             setLibraryStats,
             getValidationPreviewTone,
             setValidationPreviewTone,
+            getValidationIssues,
+            setValidationIssues,
             renderExtensionReviewSummary,
             setRenderExtensionReviewSummary,
             renderManualHomeAndSearchSectionStatuses,

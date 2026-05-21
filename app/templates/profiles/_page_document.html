@@ -32,7 +32,8 @@
     {% if focus_target %}data-advanced-focus-target="{{ focus_target }}"{% endif %}
     {% if include_deleted %}data-include-deleted="true"{% endif %}
     {% if editing_profile_schema_version %}data-editing-profile-schema-version="{{ editing_profile_schema_version }}"{% endif %}
-    {% if editing_profile_id is not none %}data-editing-profile-id="{{ editing_profile_id }}"{% endif %}>
+    {% if editing_profile_id is not none %}data-editing-profile-id="{{ editing_profile_id }}"{% endif %}
+    {% if clone_source_id is not none %}data-clone-source-id="{{ clone_source_id }}"{% endif %}>
     {% include profiles_shell_template %}
     <script id="profiles-initial-locale" type="application/json">{{ initial_locale | tojson }}</script>
     {% if editing_profile_initial %}
@@ -64,6 +65,8 @@
     <script src="/static/profiles_schema_shell_actions.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_schema_shell_sections.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_schema_shell.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_all_settings_detail.js?v={{ asset_version }}"></script>
+    <script src="/static/profiles_all_settings_list.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_settings_search.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_wizard_flow.js?v={{ asset_version }}"></script>
     <script src="/static/profiles_workspace.js?v={{ asset_version }}"></script>

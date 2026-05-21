@@ -42,6 +42,7 @@
             syncWizardPoliciesFromEditor,
             setWizardStep,
             getWizardStep,
+            renderAllSettingsList,
             setStatus,
         } = dependencies;
 
@@ -64,6 +65,7 @@
         const getLibraryStats = state.getLibraryStats || (() => ({ filtered: 0, total: 0 }));
         const setLibraryStats = state.setLibraryStats || (() => {});
         const setValidationPreviewTone = state.setValidationPreviewTone || (() => {});
+        const setValidationIssues = state.setValidationIssues || (() => {});
 
         const {
             listEl,
@@ -879,20 +881,16 @@
                 "AppAutoUpdate",
                 "DontCheckDefaultBrowser",
                 "PromptForDownloadLocation",
-            ].includes(policyKey)) return "step_two";
-            if ([
                 "Homepage",
                 "NewTabPage",
                 "OverrideFirstRunPage",
                 "OverridePostUpdatePage",
                 "FirefoxHome",
-                "UserMessaging",
-            ].includes(policyKey)) return "step_three";
-            if ([
+                "SearchBar",
                 "SearchEngines",
                 "SearchSuggestEnabled",
                 "FirefoxSuggest",
-            ].includes(policyKey)) return "step_four";
+            ].includes(policyKey)) return "step_two";
             if ([
                 "Permissions",
                 "Cookies",
@@ -901,12 +899,18 @@
                 "DisablePrivateBrowsing",
                 "OfferToSaveLogins",
                 "OfferToSaveLoginsDefault",
+                "PasswordManagerEnabled",
+                "BlockAboutConfig",
+                "BlockAboutProfiles",
+                "DisableDeveloperTools",
+                "DisableBuiltinPDFViewer",
                 "SanitizeOnShutdown",
                 "HttpsOnlyMode",
                 "IPProtectionAvailable",
-            ].includes(policyKey)) return "step_five";
+            ].includes(policyKey)) return "step_three";
             if ([
                 "DisableFirefoxAccounts",
+                "UserMessaging",
                 "RequestedLocales",
                 "TranslateEnabled",
                 "Extensions",
@@ -917,19 +921,17 @@
                 "Bookmarks",
                 "ManagedBookmarks",
                 "GoToIntranetSiteForSingleWordEntryInAddressBar",
-            ].includes(policyKey)) return "step_six";
-            if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_seven";
+            ].includes(policyKey)) return "step_four";
+            if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_five";
             return "step_two";
         }
 
         function resolveCompareAreaForPreference(key) {
             const prefKey = String(key || "");
-            if (/proxy|network|dns|update|download|browser/i.test(prefKey)) return "step_two";
-            if (/homepage|newtab|firstrun|postupdate|home/i.test(prefKey)) return "step_three";
-            if (/search|suggest|urlbar/i.test(prefKey)) return "step_four";
-            if (/cookie|permission|privacy|telemetry|password|https|sanitize|private/i.test(prefKey)) return "step_five";
-            if (/locale|language|translate|extension|account|bookmark|handler|website|intranet/i.test(prefKey)) return "step_six";
-            if (/ai|visualsearch|chatbot|model|provider/i.test(prefKey)) return "step_seven";
+            if (/proxy|network|dns|update|download|browser|homepage|newtab|firstrun|postupdate|home|search|suggest|urlbar/i.test(prefKey)) return "step_two";
+            if (/cookie|permission|privacy|telemetry|password|https|sanitize|private/i.test(prefKey)) return "step_three";
+            if (/locale|language|translate|extension|account|bookmark|handler|website|intranet/i.test(prefKey)) return "step_four";
+            if (/ai|visualsearch|chatbot|model|provider/i.test(prefKey)) return "step_five";
             return "step_two";
         }
 
@@ -950,8 +952,6 @@
                 "step_three",
                 "step_four",
                 "step_five",
-                "step_six",
-                "step_seven",
             ].map((areaKey) => {
                 const items = areaMap.get(areaKey) || [];
                 if (!items.length) return null;
@@ -1136,6 +1136,9 @@
 
         function setValidationPreview(message = "", tone = "neutral") {
             setValidationPreviewTone(tone);
+            if (tone !== "error") {
+                setValidationIssues([]);
+            }
             const nextMessage = message || t("profiles.validation_idle");
             validationPreviewEl.textContent = nextMessage;
             if (advancedReviewValidationStateEl) {
@@ -1168,7 +1171,7 @@
             }
             const workspaceProfileLabelEl = documentRef.getElementById("workspace-profile-label");
             if (workspaceProfileLabelEl) {
-                workspaceProfileLabelEl.textContent = libraryCountLabel(total, getCurrentLang());
+                workspaceProfileLabelEl.textContent = libraryCountLabel(total, getCurrentLang(), t);
                 workspaceProfileLabelEl.removeAttribute("aria-hidden");
             }
             workspaceProfileCountEl?.closest(".compact-counter")?.classList.remove("compact-counter--pending");
@@ -1620,55 +1623,100 @@
                 const compareLabel = compareActive
                     ? t("profiles.compare_selected")
                     : t("profiles.compare_action");
-                const cloneLabel = t("profiles.clone_action");
                 const statusLabel = profile.is_deleted
                     ? t("profiles.badge_deleted")
                     : t("profiles.badge_active");
+                const validationLabel = profile.validation_state === "invalid"
+                    ? t("profiles.library_validation_invalid")
+                    : profile.validation_state === "not_validated"
+                        ? t("profiles.library_validation_not_validated")
+                        : t("profiles.library_validation_valid");
+                const validationClass = profile.validation_state === "invalid"
+                    ? "profile-list-status--invalid"
+                    : profile.validation_state === "not_validated"
+                        ? "profile-list-status--not-validated"
+                        : "profile-list-status--valid";
+                const profileOwner = profile.owner || t("profiles.library_owner_unassigned");
+                const profileDescription = profile.description || t("profiles.library_description_empty");
                 const editHref = `/profiles/${profile.id}/edit`;
+                const settingsHref = `/profiles/${profile.id}/settings${profile.is_deleted ? "?include_deleted=true" : ""}`;
+                const jsonHref = `/profiles/${profile.id}/json${profile.is_deleted ? "?include_deleted=true" : ""}`;
+                const exportHref = `/api/export/profiles/${profile.id}/firefox/policies.json?download=1`;
                 li.innerHTML = `
                     <div class="library-row-grid profile-list-button ${selected ? "profile-list-button--selected" : ""}">
                         <div class="library-row-primary">
                             <a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">
                                 ${escapeHtml(profile.name)}
                             </a>
+                            <div class="library-row-identity-meta">#${profile.id}</div>
                         </div>
 
-                        <div class="library-row-meta">
-                            <div class="library-row-meta-primary">${formatSchemaLabel(profile.schema_version)}</div>
+                        <div class="library-row-context" data-label="${escapeHtml(t("profiles.library_column_context"))}">
+                            <div class="library-row-context-owner">${escapeHtml(profileOwner)}</div>
+                            <div class="library-row-context-note">${escapeHtml(profileDescription)}</div>
                         </div>
 
-                        <div class="library-row-updated">
-                            <div class="library-row-meta-secondary">${formatTimestamp(profile.updated_at)}</div>
-                        </div>
+                        <div class="library-row-facts">
+                            <div class="library-row-meta" data-label="${escapeHtml(t("profiles.library_column_schema"))}">
+                                <div class="library-row-meta-primary">${formatSchemaLabel(profile.schema_version)}</div>
+                            </div>
 
-                        <div class="library-row-status-wrap">
-                            <span class="profile-list-status ${profile.is_deleted
-                                ? "profile-list-status--deleted"
-                                : "profile-list-status--active"}">
-                                ${statusLabel}
-                            </span>
+                            <div class="library-row-status-wrap" data-label="${escapeHtml(t("profiles.library_column_status"))}">
+                                <span class="profile-list-status ${profile.is_deleted
+                                    ? "profile-list-status--deleted"
+                                    : "profile-list-status--active"}">
+                                    ${statusLabel}
+                                </span>
+                                <span class="profile-list-status ${validationClass}">
+                                    ${validationLabel}
+                                </span>
+                            </div>
+
+                            <div class="library-row-updated" data-label="${escapeHtml(t("profiles.library_column_updated"))}">
+                                <div class="library-row-meta-secondary">${formatTimestamp(profile.updated_at)}</div>
+                            </div>
                         </div>
 
                         <div class="library-row-actions">
                             <a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}" target="_blank" rel="noopener">
                                 ${openLabel}
                             </a>
-                            ${canCompare ? `
-                                <button
-                                    type="button"
-                                    class="button-base ghost-button profile-compare-button ${compareActive ? "profile-compare-button--active" : ""}"
-                                    data-compare-profile-id="${profile.id}">
-                                    ${compareLabel}
-                                </button>
-                            ` : ""}
-                            ${canClone ? `
-                                <button
-                                    type="button"
-                                    class="button-base ghost-button profile-clone-button"
-                                    data-clone-profile-id="${profile.id}">
-                                    ${cloneLabel}
-                                </button>
-                            ` : ""}
+                            <div class="library-row-action-grid">
+                                <a class="button-base ghost-button library-row-secondary-action" href="${settingsHref}" target="_blank" rel="noopener">
+                                    ${t("profiles.library_action_all_settings")}
+                                </a>
+                                <a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">
+                                    ${t("profiles.library_action_json")}
+                                </a>
+                                ${canClone ? `
+                                    <button
+                                        type="button"
+                                        class="button-base ghost-button library-row-secondary-action profile-clone-button"
+                                        data-clone-profile-id="${profile.id}">
+                                        ${t("profiles.library_action_duplicate")}
+                                    </button>
+                                ` : ""}
+                                ${profile.is_deleted ? `
+                                    <span
+                                        class="button-base ghost-button library-row-secondary-action library-row-secondary-action--disabled"
+                                        aria-disabled="true"
+                                        title="${escapeHtml(t("profiles.library_export_unavailable_archived"))}">
+                                        ${t("profiles.library_action_export")}
+                                    </span>
+                                ` : `
+                                    <a class="button-base ghost-button library-row-secondary-action" href="${exportHref}" download>
+                                        ${t("profiles.library_action_export")}
+                                    </a>
+                                `}
+                                ${canCompare ? `
+                                    <button
+                                        type="button"
+                                        class="button-base ghost-button library-row-secondary-action profile-compare-button ${compareActive ? "profile-compare-button--active" : ""}"
+                                        data-compare-profile-id="${profile.id}">
+                                        ${compareLabel}
+                                    </button>
+                                ` : ""}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1692,7 +1740,7 @@
                 });
                 const cloneButton = li.querySelector("[data-clone-profile-id]");
                 cloneButton?.addEventListener("click", async () => {
-                    await cloneFromProfile(profile.id);
+                    await cloneFromProfile(profile.id, { includeDeleted: profile.is_deleted === true });
                 });
                 listEl.appendChild(li);
             }
@@ -1769,17 +1817,17 @@
             }
         }
 
-        async function cloneFromProfile(id) {
+        async function cloneFromProfile(id, options = {}) {
             const editor = getEditor();
             try {
                 if (!(await confirmIfDirty())) return;
-                const profile = await getProfile(id);
+                const profile = await getProfile(id, windowRef.fetch, options.includeDeleted === true);
                 const schemaVersion = profile.schema_version || defaultSchemaVersion;
                 const flags = profile.flags && typeof profile.flags === "object" ? profile.flags : {};
                 documentRef.getElementById("profile-type").value = schemaVersion;
                 documentRef.getElementById("mode").value = "json";
                 setCurrentRaw(flags);
-                editor.setValue(toEditorValue(flags, documentRef.getElementById("mode").value));
+                editor?.setValue(toEditorValue(flags, documentRef.getElementById("mode").value));
                 setCloneDraftState(profile);
                 if (profile?.compliance?.layer) {
                     setWizardComplianceLayer(profile.compliance.layer, { skipApply: true, allowKeepCurrent: true });
@@ -2055,6 +2103,7 @@
                 );
                 const res = await validateFlags(profileKey, document);
                 if (res.ok) {
+                    setValidationIssues([]);
                     setStatus(t("profiles.status_validation_ok").replace("{schema}", profileKey), "success");
                     setValidationPreview(t("profiles.validation_ok"), "success");
                 } else {
@@ -2066,9 +2115,11 @@
                     setValidationPreview(res.detail || t("profiles.validation_failed"), "error");
                 }
             } catch (e) {
+                setValidationIssues(Array.isArray(e.detail?.issues) ? e.detail.issues : []);
                 setStatus(t("profiles.error_validation_failed").replace("{detail}", e.message || e), "error");
                 setValidationPreview(e.message || String(e), "error");
             } finally {
+                renderAllSettingsList?.();
                 setBusyState(false);
             }
         }
@@ -2085,8 +2136,11 @@
 
             try {
                 setBusyState(true, "profiles.importing_firefox_policies");
+                const profileName = inferImportProfileName(file);
                 setImportStatus(
-                    t("profiles.import_firefox_policies_reading").replace("{name}", file.name || "policies.json"),
+                    t("profiles.import_firefox_policies_reading")
+                        .replace("{file}", file.name || "policies.json")
+                        .replace("{name}", profileName),
                     "info",
                 );
 
@@ -2103,7 +2157,7 @@
 
                 const schemaVersion = documentRef.getElementById("profile-type").value || defaultSchemaVersion;
                 const imported = await importFirefoxPoliciesJson({
-                    name: inferImportProfileName(file),
+                    name: profileName,
                     description: t("profiles.import_firefox_policies_description")
                         .replace("{name}", file.name || "policies.json"),
                     schema_version: schemaVersion,
@@ -2113,13 +2167,33 @@
                 setCloneSourceProfile(null);
                 setLifecycleSessionNote(null);
                 setImportStatus(
-                    t("profiles.status_import_firefox_policies_done").replace("{name}", imported.name),
+                    t("profiles.status_import_firefox_policies_done")
+                        .replace("{name}", imported.name)
+                        .replace("{schema}", formatSchemaLabel(imported.schema_version))
+                        .replace(
+                            "{validation}",
+                            imported.validation_state === "invalid"
+                                ? t("profiles.library_validation_invalid")
+                                : imported.validation_state === "not_validated"
+                                    ? t("profiles.library_validation_not_validated")
+                                    : t("profiles.library_validation_valid"),
+                        ),
                     "success",
                 );
                 await reloadList();
                 await loadProfile(imported.id, { skipConfirm: true });
                 setStatus(
-                    t("profiles.status_import_firefox_policies_done").replace("{name}", imported.name),
+                    t("profiles.status_import_firefox_policies_done")
+                        .replace("{name}", imported.name)
+                        .replace("{schema}", formatSchemaLabel(imported.schema_version))
+                        .replace(
+                            "{validation}",
+                            imported.validation_state === "invalid"
+                                ? t("profiles.library_validation_invalid")
+                                : imported.validation_state === "not_validated"
+                                    ? t("profiles.library_validation_not_validated")
+                                    : t("profiles.library_validation_valid"),
+                        ),
                     "success",
                 );
                 setValidationPreview(t("profiles.validation_ready"), "success");
@@ -2220,6 +2294,7 @@
             resetDraft,
             reloadList,
             loadProfile,
+            cloneFromProfile,
             readFormState,
             buildCreatePayload,
             buildSnapshot,

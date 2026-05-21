@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import uuid
 from pathlib import Path
 
@@ -48,9 +49,9 @@ UI_SHELL_TOKENS = (
     'id="wizard-homepage-url"',
     'id="wizard-homepage-shared-presets"',
     'id="wizard-search-bar"',
-    'id="wizard-step-4-default-search"',
-    'id="wizard-step-4-managed-engines"',
-    'id="wizard-step-4-suggestions"',
+    'id="wizard-step-2-default-search"',
+    'id="wizard-step-2-managed-engines"',
+    'id="wizard-step-2-suggestions"',
     'id="wizard-search-default-engine"',
     'id="wizard-search-engine-add"',
     'id="wizard-search-engine-list"',
@@ -61,7 +62,6 @@ UI_SHELL_TOKENS = (
     'data-settings-target="policy:DisableTelemetry"',
     'data-settings-target="field:wizard-proxy-mode"',
     'data-settings-target="search-engine-preset:duckduckgo"',
-    'data-search-engine-preset="docs_portal"',
     'data-search-engine-preset="ticket_queue"',
     'data-search-engine-preset="wiki_portal"',
     'data-search-engine-preset="duckduckgo"',
@@ -98,12 +98,12 @@ UI_SHELL_TOKENS = (
     'id="wizard-firefox-home-section-status"',
     'id="wizard-search-defaults-section-status"',
     'id="wizard-firefox-suggest-section-status"',
-    'profiles.wizard_step_six_index_title',
-    'id="wizard-step-6-accounts"',
-    'id="wizard-step-6-language"',
-    'id="wizard-step-6-extensions"',
-    'id="wizard-step-6-bookmarks"',
-    'id="wizard-step-6-websites"',
+    'profiles.wizard_user_environment_map_title',
+    'id="wizard-step-4-accounts"',
+    'id="wizard-step-4-language"',
+    'id="wizard-step-4-extensions"',
+    'id="wizard-step-4-bookmarks"',
+    'id="wizard-step-4-websites"',
     'id="wizard-privacy-summary-permissions"',
     'id="wizard-privacy-summary-cookies"',
     'id="wizard-privacy-summary-permissions-jump"',
@@ -127,8 +127,6 @@ UI_SHELL_TOKENS = (
     'id="wizard-ai-esr-empty-state"',
     'id="wizard-ai-policy-controls"',
     'id="wizard-ai-governance-copy"',
-    'id="wizard-ai-providers-handoff"',
-    'id="wizard-ai-providers-section-status"',
     'id="wizard-visual-search-enabled-card"',
     'data-schema-dict-status',
     'data-schema-array-status',
@@ -173,9 +171,8 @@ UI_SHELL_TOKENS = (
     'id="wizard-export-ready-copy"',
     'id="wizard-export-checklist"',
     'id="wizard-export-guided-summary-list"',
-    'id="wizard-export-guided-group-network"',
-    'id="wizard-export-guided-group-home"',
-    'id="wizard-export-guided-group-search"',
+    'id="wizard-export-guided-group-profile"',
+    'id="wizard-export-guided-group-browser"',
     'id="wizard-export-guided-group-privacy"',
     'id="wizard-export-guided-group-features"',
     'id="wizard-export-guided-group-ai"',
@@ -212,6 +209,9 @@ UI_SHELL_TOKENS = (
 UI_LOCALE_KEYS = (
     "profiles.title",
     "profiles.create_submit",
+    "profiles.editor_chrome_guided_body",
+    "profiles.editor_chrome_settings_body",
+    "profiles.editor_chrome_json_body",
     "profiles.signal_dirty",
     "profiles.validation_ok",
     "profiles.locale_system",
@@ -224,12 +224,13 @@ UI_LOCALE_KEYS = (
     "profiles.wizard_context_new",
     "profiles.wizard_step_one",
     "profiles.wizard_step_two",
+    "profiles.wizard_step_three",
+    "profiles.wizard_step_four",
+    "profiles.wizard_step_five",
     "profiles.wizard_step_six",
-    "profiles.wizard_step_six_index_title",
-    "profiles.wizard_step_six_index_extensions",
-    "profiles.wizard_step_six_index_websites",
-    "profiles.wizard_step_seven",
-    "profiles.wizard_step_eight",
+    "profiles.wizard_user_environment_map_title",
+    "profiles.wizard_user_environment_map_extensions",
+    "profiles.wizard_user_environment_map_websites",
     "profiles.wizard_next_action_hardening_posture",
     "profiles.wizard_next_action_extensions_rollout",
     "profiles.wizard_next_action_website_filter",
@@ -287,11 +288,11 @@ UI_LOCALE_KEYS = (
     "profiles.wizard_language_governance_title",
     "profiles.wizard_ai_posture_title",
     "profiles.wizard_ai_posture_disable_title",
+    "profiles.wizard_ai_map_title",
     "profiles.wizard_ai_controls_title",
     "profiles.wizard_ai_esr_title",
     "profiles.wizard_ai_esr_body",
     "profiles.wizard_ai_esr_state",
-    "profiles.wizard_ai_providers_state_empty",
     "profiles.wizard_export_compatibility_title",
     "profiles.wizard_export_profile_saved",
     "profiles.wizard_export_state_unsaved_existing",
@@ -367,6 +368,8 @@ UI_LOCALE_KEYS = (
 
 P2_3_UX_REGRESSION_TOKENS = (
     'id="wizard-hardening-section-status"',
+    'id="wizard-privacy-user-data-section-status"',
+    'id="wizard-lockdown-section-status"',
     'data-hardening-cleanup-subchoice',
     'data-hardening-subposture-menu="cleanup"',
     'id="wizard-cleanup-section-status"',
@@ -396,9 +399,8 @@ P2_3_UX_REGRESSION_TOKENS = (
     'id="wizard-export-missing-now"',
     'id="wizard-export-review-now"',
     'id="wizard-export-guided-summary-list"',
-    'id="wizard-export-guided-group-network"',
-    'id="wizard-export-guided-group-home"',
-    'id="wizard-export-guided-group-search"',
+    'id="wizard-export-guided-group-profile"',
+    'id="wizard-export-guided-group-browser"',
     'id="wizard-export-guided-group-privacy"',
     'id="wizard-export-guided-group-features"',
     'id="wizard-export-guided-group-ai"',
@@ -451,6 +453,9 @@ PR4_1_POST_ROADMAP_LOCALE_KEYS = (
     "profiles.compare_guided_areas_title",
     "profiles.compare_guided_areas_active",
     "profiles.compare_guided_area_step_one",
+    "profiles.compare_guided_area_step_two",
+    "profiles.compare_guided_area_step_three",
+    "profiles.compare_guided_area_step_four",
     "profiles.compare_guided_area_step_five",
     "profiles.compare_guided_area_preview",
     "profiles.compare_guided_area_more",
@@ -472,7 +477,7 @@ PR4_1_POST_ROADMAP_LOCALE_KEYS = (
     "profiles.lifecycle_item_recent_restored",
     "profiles.wizard_step_memory_title",
     "profiles.wizard_step_memory_active",
-    "profiles.wizard_step_memory_step_network",
+    "profiles.wizard_step_memory_step_browser",
     "profiles.wizard_step_memory_step_privacy",
     "profiles.wizard_export_boundary_register_title",
     "profiles.wizard_export_drilldown_title",
@@ -538,14 +543,14 @@ def test_profiles_ui_shell_keeps_export_actions_before_technical_catalog():
     assert page.status_code == 200, page.text
     html = page.text
 
-    step_eight_index = html.index('id="wizard-step-8"')
+    step_six_index = html.index('id="wizard-step-6"')
     ready_index = html.index('id="wizard-export-section-ready"')
     save_action_index = html.index('id="wizard-export-save-action"')
     download_action_index = html.index('id="wizard-export-firefox-policies"')
     technical_index = html.index('id="wizard-export-section-technical"')
     shell_index = html.index('id="wizard-schema-shell-step-8"')
 
-    assert step_eight_index < ready_index < save_action_index < download_action_index
+    assert step_six_index < ready_index < save_action_index < download_action_index
     assert download_action_index < technical_index < shell_index
 
 
@@ -572,7 +577,7 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
     assert_has_keys(locale_en_json, P2_3_LOCALE_KEYS)
     assert_has_keys(locale_ru_json, P2_3_LOCALE_KEYS)
 
-    assert locale_en_json["profiles.advanced_context_title"] == "Continue in Advanced settings"
+    assert locale_en_json["profiles.advanced_context_title"] == "Continue in All settings"
     assert locale_en_json["profiles.wizard_export_baseline_summary_title"] == "Baseline guardrails"
     assert locale_en_json["profiles.wizard_export_shareable_title"] == "Shareable summary"
     assert locale_en_json["profiles.wizard_export_shareable_generate"] == (
@@ -581,8 +586,8 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
     assert locale_en_json["profiles.wizard_export_included_title"] == (
         "Included in the policies.json you download now"
     )
-    assert locale_ru_json["profiles.advanced_context_title"] == "Продолжение в расширенных настройках"
-    assert locale_ru_json["profiles.advanced_context_return"] == "Вернуться к этому шагу"
+    assert locale_ru_json["profiles.advanced_context_title"] == "Продолжение во Всех настройках"
+    assert locale_ru_json["profiles.advanced_context_return"] == "Вернуться к предыдущему режиму"
     assert locale_ru_json["profiles.wizard_export_shareable_title"] == "Выжимка для передачи"
     assert locale_ru_json["profiles.wizard_export_shareable_generate"] == (
         "Сформировать/скопировать выжимку"
@@ -600,11 +605,11 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     assert_contains_all(
         new_page.text,
         (
-            'id="wizard-step-7"',
+            'id="wizard-step-5"',
             'id="wizard-ai-esr-empty-state"',
+            'id="wizard-ai-release-content"',
             'id="wizard-ai-posture-presets"',
             'id="wizard-ai-policy-controls"',
-            'id="wizard-ai-providers-handoff"',
             'data-settings-target="policy:AIControls"',
             'data-settings-target="policy:GenerativeAI"',
             'data-settings-target="policy:VisualSearchEnabled"',
@@ -639,6 +644,9 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     extensions_source = (
         root / "app" / "static" / "profiles_extensions.js"
     ).read_text(encoding="utf-8")
+    bootstrap_source = (
+        root / "app" / "static" / "profiles_bootstrap_core.js"
+    ).read_text(encoding="utf-8")
 
     assert 'schemaVersion: "esr-140.10"' in shared_source
     assert "function getActiveWizardSchemaVersion()" in shared_source
@@ -648,17 +656,21 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     assert "|| currentProfile?.schemaVersion" in shared_source
     assert "|| defaultSchemaVersion;" in shared_source
     assert 'wizardAiEsrcEmptyStateEl: byId("wizard-ai-esr-empty-state")' in dom_source
+    assert 'wizardAiReleaseContentEl: byId("wizard-ai-release-content")' in dom_source
     assert 'wizardAiPosturePresetsEl: byId("wizard-ai-posture-presets")' in dom_source
     assert 'wizardAiPolicyControlsEl: byId("wizard-ai-policy-controls")' in dom_source
-    assert 'wizardAiProvidersHandoffEl: byId("wizard-ai-providers-handoff")' in dom_source
-    assert "function isReleaseAiWizardAvailable()" in extensions_source
-    assert 'return getActiveWizardSchemaVersion() === "release-150";' in extensions_source
+    assert "function isAiWizardAvailable()" in extensions_source
+    assert "function hasUsableAiPolicyCard(policyCardEl)" in extensions_source
+    assert "wizardAiEsrcEmptyStateEl," in bootstrap_source
+    assert "wizardAiReleaseContentEl," in bootstrap_source
+    assert "wizardAiControlsCardEl," in bootstrap_source
     assert "wizardAiEsrcEmptyStateEl.hidden = releaseAiAvailable;" in extensions_source
+    assert "wizardAiReleaseContentEl.hidden = !releaseAiAvailable;" in extensions_source
     assert "wizardAiPosturePresetsEl.hidden = !releaseAiAvailable;" in extensions_source
     assert "wizardAiPolicyControlsEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiProvidersHandoffEl.hidden = !releaseAiAvailable;" in extensions_source
     assert 'setText(wizardAiSectionStatusEl, t("profiles.wizard_ai_esr_state"));' in extensions_source
-    assert 'setText(aiProvidersSectionStatusEl, t("profiles.wizard_ai_esr_state"));' in extensions_source
+    assert "wizardAiProvidersHandoffEl" not in extensions_source
+    assert "aiProvidersSectionStatusEl" not in extensions_source
     assert 'wizardAiGovernanceCopyEl.textContent = t("profiles.wizard_ai_esr_body");' in extensions_source
     assert 'renderPresetButtonState(aiPosturePresetButtons, null, "aiPosturePreset");' in extensions_source
 
@@ -693,7 +705,6 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
     assert 'id="wizard-ai-esr-empty-state"' in edit_page.text
     assert 'id="wizard-ai-posture-presets"' in edit_page.text
     assert 'id="wizard-ai-policy-controls"' in edit_page.text
-    assert 'id="wizard-ai-providers-handoff"' in edit_page.text
     assert 'data-settings-target="policy:AIControls"' in edit_page.text
     assert 'data-settings-target="policy:GenerativeAI"' in edit_page.text
     assert 'data-settings-target="policy:VisualSearchEnabled"' in edit_page.text
@@ -719,13 +730,12 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
         root / "app" / "static" / "profiles_extensions.js"
     ).read_text(encoding="utf-8")
 
-    assert "const releaseAiAvailable = isReleaseAiWizardAvailable();" in extensions_source
+    assert "const releaseAiAvailable = isAiWizardAvailable();" in extensions_source
     assert "wizardAiEsrcEmptyStateEl.hidden = releaseAiAvailable;" in extensions_source
     assert "wizardAiPostureBarEl.hidden = !releaseAiAvailable;" in extensions_source
     assert "wizardAiPostureBodyEl.hidden = !releaseAiAvailable;" in extensions_source
     assert "wizardAiPosturePresetsEl.hidden = !releaseAiAvailable;" in extensions_source
     assert "wizardAiPolicyControlsEl.hidden = !releaseAiAvailable;" in extensions_source
-    assert "wizardAiProvidersHandoffEl.hidden = !releaseAiAvailable;" in extensions_source
     assert 't("profiles.wizard_ai_section_state_feature_controls")' in extensions_source
     assert 't("profiles.wizard_ai_section_state_visual_search_disabled")' in extensions_source
     assert 'wizardAiGovernanceCopyEl.textContent = hasManagedAiPosture' in extensions_source
@@ -745,7 +755,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
             'id="wizard-privacy-vpn-section-status"',
             'id="wizard-ip-protection-available-card"',
             'data-settings-target="policy:IPProtectionAvailable"',
-            'id="wizard-step-7"',
+            'id="wizard-step-5"',
             'id="wizard-ai-controls-card"',
             'data-settings-target="policy:AIControls"',
             'id="wizard-export-summary-ai-jump"',
@@ -824,7 +834,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     assert '[data-settings-target="policy:IPProtectionAvailable"]' in runtime_source
     assert '[data-settings-target="policy:AIControls"]' in runtime_source
     assert '"IPProtectionAvailable",' in workspace_source
-    assert 'if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_seven";' in workspace_source
+    assert 'if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_five";' in workspace_source
     assert '"IPProtectionAvailable",' in flow_source
     assert '"AIControls",' in flow_source
 
@@ -938,6 +948,11 @@ def test_profiles_ui_locale_catalog_exposes_post_roadmap_review_and_history_copy
     assert locale_en_json["profiles.wizard_step_memory_step_privacy"] == (
         "Changed privacy, hardening, site permissions, or cleanup posture."
     )
+    assert locale_en_json["profiles.compare_guided_area_step_two"] == (
+        "Browser access and defaults"
+    )
+    assert "profiles.compare_guided_area_step_six" not in locale_en_json
+    assert "profiles.compare_guided_area_step_seven" not in locale_en_json
     assert locale_en_json["profiles.wizard_export_drilldown_unknown_title"] == (
         "Unknown key: {label}"
     )
@@ -952,14 +967,58 @@ def test_profiles_ui_locale_catalog_exposes_post_roadmap_review_and_history_copy
     assert locale_ru_json["profiles.lifecycle_item_state_archived"] == (
         "Сейчас этот профиль находится в архиве."
     )
-    assert locale_ru_json["profiles.wizard_step_memory_step_network"] == (
-        "Изменены поддержка браузера, прокси или корпоративный сетевой доступ."
+    assert locale_ru_json["profiles.wizard_step_memory_step_browser"] == (
+        "Изменены доступ к браузеру, запуск, поиск или значения навигации по умолчанию."
     )
+    assert locale_ru_json["profiles.compare_guided_area_step_four"] == (
+        "Пользователи, дополнения и сайты"
+    )
+    assert "profiles.compare_guided_area_step_six" not in locale_ru_json
+    assert "profiles.compare_guided_area_step_seven" not in locale_ru_json
     assert locale_ru_json["profiles.wizard_step_memory_open"] == "Открыть шаг"
     assert locale_ru_json["profiles.wizard_step_memory_current"] == "Вы уже здесь"
     assert locale_ru_json["profiles.wizard_export_drilldown_raw_title"] == (
-        "Только для расширенных настроек: {label}"
+        "Вне Пошагового редактора: {label}"
     )
+
+
+def test_guided_runtime_mappings_follow_six_step_model():
+    root = Path(__file__).resolve().parents[1]
+    catalogs_source = (root / "app" / "static" / "profiles_catalogs.js").read_text(
+        encoding="utf-8"
+    )
+    flow_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(
+        encoding="utf-8"
+    )
+    workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
+        encoding="utf-8"
+    )
+    library_source = (
+        root / "app" / "static" / "profiles_library_bootstrap.js"
+    ).read_text(encoding="utf-8")
+
+    assert 'general: { step: 2, key: "profiles.wizard_step_two"' in catalogs_source
+    assert 'home: { step: 2, key: "profiles.wizard_step_two"' in catalogs_source
+    assert 'search: { step: 2, key: "profiles.wizard_step_two"' in catalogs_source
+    assert "Array.from({ length: Math.max(0, wizardTotalSteps - 1) }, (_, index) => index + 1)" in flow_source
+    assert '2: t("profiles.wizard_step_memory_step_browser")' in flow_source
+    assert '"Step 1 of 6: Profile & baseline"' in flow_source
+    assert 'return "step_six";' not in workspace_source
+    assert 'return "step_seven";' not in workspace_source
+    assert 'return "step_six";' not in library_source
+    assert 'return "step_seven";' not in library_source
+
+
+def test_guided_locale_catalog_drops_obsolete_eight_step_labels():
+    root = Path(__file__).resolve().parents[1]
+    locale_en_json = json.loads((root / "app" / "i18n" / "en.json").read_text(encoding="utf-8"))
+    locale_ru_json = json.loads((root / "app" / "i18n" / "ru.json").read_text(encoding="utf-8"))
+
+    for locale_json in (locale_en_json, locale_ru_json):
+        assert "profiles.wizard_step_seven" not in locale_json
+        assert "profiles.wizard_step_seven_copy" not in locale_json
+        assert "profiles.wizard_step_eight" not in locale_json
+        assert "profiles.wizard_step_eight_copy" not in locale_json
 
 
 def test_profiles_public_workflow_smoke():
@@ -989,8 +1048,7 @@ def test_profiles_public_workflow_smoke():
     assert updated_response.status_code == 200, updated_response.text
     updated = updated_response.json()
     assert updated["description"] == "Saved from UI smoke"
-    assert updated["flags"]["DisableTelemetry"] is False
-    assert updated["flags"]["DisablePrivateBrowsing"] is True
+    assert updated["flags"] == {"DisableTelemetry": False}
 
     list_response = client.get("/api/profiles", params={"q": payload["name"]})
     assert list_response.status_code == 200, list_response.text
@@ -1001,7 +1059,6 @@ def test_profiles_public_workflow_smoke():
     assert export_firefox.json() == {
         "policies": {
             "DisableTelemetry": False,
-            "DisablePrivateBrowsing": True,
         }
     }
 
@@ -1018,7 +1075,7 @@ def test_profiles_public_workflow_smoke():
 
     restored_export = client.get(f"/api/export/profiles/{profile_id}/firefox/policies.json")
     assert restored_export.status_code == 200, restored_export.text
-    assert restored_export.json()["policies"]["DisablePrivateBrowsing"] is True
+    assert restored_export.json()["policies"] == {"DisableTelemetry": False}
 
     hard_delete_response = client.delete(f"/api/profiles/{profile_id}/hard")
     assert hard_delete_response.status_code == 204

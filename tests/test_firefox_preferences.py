@@ -9,9 +9,9 @@ def test_wizard_settings_catalog_is_single_source_of_truth():
     assert [section["id"] for section in catalog["sections"]] == ["general", "home", "search", "privacy", "sync"]
     assert set(catalog["sections_by_id"]) == {"general", "home", "search", "privacy", "sync"}
     assert catalog["sections_by_id"]["general"]["ui_maps"]["policy"][0]["label_key"] == "profiles.wizard_settings_general_startup"
-    assert catalog["sections_by_id"]["general"]["ui_docs"]["policy"][0]["target"] == "field:wizard-homepage-start-page"
+    assert catalog["sections_by_id"]["general"]["ui_controls"]["policy"][0]["target"] == "field:wizard-homepage-start-page"
     assert catalog["sections_by_id"]["privacy"]["ui_maps"]["lockdown"][0]["fallback"] == "HTTPS-Only Mode"
-    assert catalog["sections_by_id"]["privacy"]["preferences"]["docs"][0]["target"] == "preference-preset:privacy_tracking"
+    assert catalog["sections_by_id"]["privacy"]["preferences"]["controls"][0]["target"] == "preference-preset:privacy_tracking"
     assert catalog["sections_by_id"]["sync"]["preferences"]["gui_groups"][0]["id"] == "account"
     assert preferences_catalog["sections"][0]["id"] == catalog["sections"][0]["preferences"]["id"]
     assert preferences_catalog["known_preferences"]

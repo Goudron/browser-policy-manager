@@ -1,7 +1,7 @@
 <div class="app-layout">
     <main class="workspace-column space-y-4">
         <section id="library-panel"
-            class="panel-card surface-panel library-panel-shell rounded-[30px] p-4 shadow-soft fade-up md:p-5">
+            class="panel-card surface-panel library-panel-shell fade-up">
             <div class="library-panel-head">
                 <div class="library-panel-intro">
                     <div class="section-kicker" data-i18n="profiles.sidebar_title">{{ tr("profiles.sidebar_title") }}</div>
@@ -17,6 +17,51 @@
                         <strong id="list-total-summary" class="ml-1" aria-hidden="true"></strong>
                     </div>
                 </div>
+            </div>
+            <div class="library-filter-bar" aria-label="{{ tr('profiles.library_filters') }}">
+                <label class="library-filter-field" for="library-schema-filter">
+                    <span data-i18n="profiles.schema_label">{{ tr("profiles.schema_label", "Schema") }}</span>
+                    <select id="library-schema-filter" class="soft-input">
+                        <option value="" data-i18n="profiles.library_filter_all_schemas">{{ tr("profiles.library_filter_all_schemas", "All schemas") }}</option>
+                        {% for option in schema_channels_catalog.options %}
+                        <option value="{{ option.value }}">{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label class="library-filter-field" for="library-lifecycle-filter">
+                    <span data-i18n="profiles.library_filter_lifecycle">{{ tr("profiles.library_filter_lifecycle", "Profile state") }}</span>
+                    <select id="library-lifecycle-filter" class="soft-input">
+                        <option value="active" data-i18n="profiles.library_filter_active">{{ tr("profiles.library_filter_active", "Active") }}</option>
+                        <option value="archived" data-i18n="profiles.library_filter_archived">{{ tr("profiles.library_filter_archived", "Archived") }}</option>
+                        <option value="all" data-i18n="profiles.library_filter_all_states">{{ tr("profiles.library_filter_all_states", "All states") }}</option>
+                    </select>
+                </label>
+                <label class="library-filter-field" for="library-validation-filter">
+                    <span data-i18n="profiles.library_filter_validation">{{ tr("profiles.library_filter_validation", "Validation") }}</span>
+                    <select id="library-validation-filter" class="soft-input">
+                        <option value="" data-i18n="profiles.library_filter_all_validation">{{ tr("profiles.library_filter_all_validation", "Any result") }}</option>
+                        <option value="valid" data-i18n="profiles.library_validation_valid">{{ tr("profiles.library_validation_valid", "Passed") }}</option>
+                        <option value="invalid" data-i18n="profiles.library_validation_invalid">{{ tr("profiles.library_validation_invalid", "Failed") }}</option>
+                        <option value="not_validated" data-i18n="profiles.library_validation_not_validated">{{ tr("profiles.library_validation_not_validated", "Not validated") }}</option>
+                    </select>
+                </label>
+                <label class="library-filter-field" for="sort">
+                    <span data-i18n="profiles.library_sort_by">{{ tr("profiles.library_sort_by", "Sort by") }}</span>
+                    <select id="sort" class="soft-input">
+                        <option value="updated_at" data-i18n="profiles.sort_updated_at">{{ tr("profiles.sort_updated_at", "Updated") }}</option>
+                        <option value="created_at" data-i18n="profiles.sort_created_at">{{ tr("profiles.sort_created_at", "Created") }}</option>
+                        <option value="name" data-i18n="profiles.sort_name">{{ tr("profiles.sort_name", "Name") }}</option>
+                        <option value="schema_version" data-i18n="profiles.sort_schema">{{ tr("profiles.sort_schema", "Schema") }}</option>
+                        <option value="id" data-i18n="profiles.sort_id">{{ tr("profiles.sort_id", "ID") }}</option>
+                    </select>
+                </label>
+                <label class="library-filter-field" for="order">
+                    <span data-i18n="profiles.library_sort_direction">{{ tr("profiles.library_sort_direction", "Direction") }}</span>
+                    <select id="order" class="soft-input">
+                        <option value="desc" data-i18n="profiles.order_desc">{{ tr("profiles.order_desc", "Descending") }}</option>
+                        <option value="asc" data-i18n="profiles.order_asc">{{ tr("profiles.order_asc", "Ascending") }}</option>
+                    </select>
+                </label>
             </div>
 
             <div class="library-panel-toolbar">
@@ -60,43 +105,41 @@
             </div>
             <div
                 id="import-firefox-policies-status"
-                class="support-hidden"
+                class="library-import-feedback"
                 aria-live="polite"
                 data-i18n="profiles.import_firefox_policies_ready">
                 {{ tr("profiles.import_firefox_policies_ready") }}
             </div>
+            <div
+                id="status"
+                class="status-banner status-banner--info rounded-2xl border px-4 py-3 text-sm"
+                role="status"
+                aria-live="polite">
+                {{ tr("profiles.library_ready", "Library ready.") }}
+            </div>
 
             <div class="support-hidden">
                 <input id="include-deleted" type="checkbox" />
-                <select id="sort">
-                    <option value="updated_at" data-i18n="profiles.sort_updated_at">{{ tr("profiles.sort_updated_at", "Updated") }}</option>
-                    <option value="created_at" data-i18n="profiles.sort_created_at">{{ tr("profiles.sort_created_at", "Created") }}</option>
-                    <option value="name" data-i18n="profiles.sort_name">{{ tr("profiles.sort_name", "Name") }}</option>
-                    <option value="id" data-i18n="profiles.sort_id">{{ tr("profiles.sort_id", "ID") }}</option>
-                </select>
-                <select id="order">
-                    <option value="desc" data-i18n="profiles.order_desc">{{ tr("profiles.order_desc", "DESC") }}</option>
-                    <option value="asc" data-i18n="profiles.order_asc">{{ tr("profiles.order_asc", "ASC") }}</option>
-                </select>
             </div>
 
             <div class="library-table-shell">
                 <div class="library-table-head" aria-hidden="true">
                     <div class="library-table-head-cell" data-i18n="profiles.library_column_profile">{{ tr("profiles.library_column_profile", "Profile") }}</div>
                     <div class="library-table-head-cell" data-i18n="profiles.library_column_schema">{{ tr("profiles.library_column_schema", "Schema") }}</div>
-                    <div class="library-table-head-cell" data-i18n="profiles.library_column_updated">{{ tr("profiles.library_column_updated", "Updated") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_context">{{ tr("profiles.library_column_context", "Owner / note") }}</div>
                     <div class="library-table-head-cell" data-i18n="profiles.library_column_status">{{ tr("profiles.library_column_status", "Status") }}</div>
+                    <div class="library-table-head-cell" data-i18n="profiles.library_column_updated">{{ tr("profiles.library_column_updated", "Updated") }}</div>
                     <div class="library-table-head-cell library-table-head-cell--actions" data-i18n="profiles.library_column_actions">{{ tr("profiles.library_column_actions", "Actions") }}</div>
                 </div>
                 <ul id="list" class="library-table" role="list"></ul>
             </div>
         </section>
 
-        <section id="compare-panel" class="panel-card surface-panel rounded-[30px] p-4 shadow-soft md:p-5 fade-up">
+        <section id="compare-panel" class="panel-card surface-panel fade-up">
             <div class="editor-header mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div>
                     <div class="section-kicker mb-2" data-i18n="profiles.compare_title">{{ tr("profiles.compare_title") }}</div>
-                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.compare_body">{{ tr("profiles.compare_body") }}</p>
+                    <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.library_compare_body">{{ tr("profiles.library_compare_body") }}</p>
                 </div>
                 <button
                     type="button"
@@ -110,18 +153,18 @@
 
             <div id="compare-empty" class="compare-empty surface-soft-box">
                 <div class="section-kicker" data-i18n="profiles.compare_empty_title">{{ tr("profiles.compare_empty_title") }}</div>
-                <p class="compare-empty-copy" id="compare-empty-copy" role="status" aria-live="polite" data-i18n="profiles.compare_empty_body">{{ tr("profiles.compare_empty_body") }}</p>
+                <p class="compare-empty-copy" id="compare-empty-copy" role="status" aria-live="polite" data-i18n="profiles.library_compare_empty_body">{{ tr("profiles.library_compare_empty_body") }}</p>
             </div>
 
             <div id="compare-active" hidden>
                 <div class="compare-targets-grid">
                     <div class="compare-target-card surface-soft-box">
-                        <div class="section-kicker" data-i18n="profiles.compare_current_title">{{ tr("profiles.compare_current_title") }}</div>
+                        <div class="section-kicker" data-i18n="profiles.library_compare_first_title">{{ tr("profiles.library_compare_first_title") }}</div>
                         <div class="compare-target-name" id="compare-current-name"></div>
                         <p class="compare-target-copy" id="compare-current-copy"></p>
                     </div>
                     <div class="compare-target-card surface-soft-box">
-                        <div class="section-kicker" data-i18n="profiles.compare_other_title">{{ tr("profiles.compare_other_title") }}</div>
+                        <div class="section-kicker" data-i18n="profiles.library_compare_second_title">{{ tr("profiles.library_compare_second_title") }}</div>
                         <div class="compare-target-name" id="compare-other-name"></div>
                         <p class="compare-target-copy" id="compare-other-copy"></p>
                     </div>
