@@ -207,6 +207,8 @@ def get_privacy_section() -> dict[str, Any]:
                     "Sets the default behavior for sites that want to send desktop notifications.",
                     value_type="number",
                     status="locked",
+                    label_key="profiles.wizard_preferences_known_privacy_notification_default_title",
+                    description_key="profiles.wizard_preferences_known_privacy_notification_default_copy",
                     value_control="select",
                     value_options=[
                         value_option(0, "Always ask"),

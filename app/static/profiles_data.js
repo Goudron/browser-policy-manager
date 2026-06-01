@@ -1,6 +1,69 @@
 (() => {
+    const API_ERROR_MESSAGE_KEYS = new Map([
+        ["Expected policies.json root object", "profiles.error_expected_policies_document_root"],
+        ["Expected policies to be an object", "profiles.error_expected_policies_object"],
+        ["Profile not found", "profiles.error_api_profile_not_found"],
+        ["Profile with this name already exists", "profiles.error_api_profile_name_exists"],
+        ["Profile has been modified since it was loaded", "profiles.error_api_revision_conflict"],
+        ["Firefox policies.json import failed", "profiles.error_api_firefox_import_failed"],
+        ["Firefox policies.json validation failed", "profiles.error_api_firefox_validation_failed"],
+        ["Invalid JSON in request body", "profiles.error_api_invalid_json_body"],
+        ["Unsupported import content type", "profiles.error_api_unsupported_import_type"],
+        ["Policy validation failed", "profiles.error_api_policy_validation_failed"],
+        ["Profile validation failed", "profiles.error_api_profile_validation_failed"],
+        ["Expected object with policy mappings", "profiles.error_api_expected_policy_mapping"],
+        ["Locale not supported", "profiles.error_api_locale_not_supported"],
+        ["Locale file not found", "profiles.error_api_locale_file_not_found"],
+    ]);
+
     function isPlainObject(value) {
         return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+    }
+
+    function translateDataMessage(key, fallback, replacements = {}) {
+        const locale = window.__BPM_INITIAL_LOCALE__;
+        let message = locale && Object.prototype.hasOwnProperty.call(locale, key)
+            ? locale[key]
+            : fallback;
+        Object.entries(replacements).forEach(([name, value]) => {
+            message = message.replace(`{${name}}`, String(value));
+        });
+        return message;
+    }
+
+    function translateKnownApiMessage(message) {
+        if (!message) return translateDataMessage("profiles.error_api_unknown", "Request failed.");
+        const knownKey = API_ERROR_MESSAGE_KEYS.get(message);
+        if (knownKey) return translateDataMessage(knownKey, message);
+
+        const unknownProfileMatch = /^Unknown profile '(.+)'$/.exec(message);
+        if (unknownProfileMatch) {
+            return translateDataMessage(
+                "profiles.error_api_unknown_profile",
+                "Unknown schema profile: {profile}",
+                { profile: unknownProfileMatch[1] },
+            );
+        }
+
+        const unavailableSchemaMatch = /^Schema for profile '(.+)' is not available$/.exec(message);
+        if (unavailableSchemaMatch) {
+            return translateDataMessage(
+                "profiles.error_api_schema_unavailable",
+                "Schema for profile {profile} is not available.",
+                { profile: unavailableSchemaMatch[1] },
+            );
+        }
+
+        const invalidJsonMatch = /^Invalid JSON in (.+)$/.exec(message);
+        if (invalidJsonMatch) {
+            return translateDataMessage(
+                "profiles.error_api_invalid_json_in",
+                "Invalid JSON in {source}.",
+                { source: invalidJsonMatch[1] },
+            );
+        }
+
+        return message;
     }
 
     function toFirefoxPoliciesDocument(flagsObj) {
@@ -13,13 +76,13 @@
     function toInternalFlags(documentObj) {
         if (documentObj === null || documentObj === undefined) return {};
         if (!isPlainObject(documentObj)) {
-            throw new Error("Expected policies.json root object");
+            throw new Error(translateKnownApiMessage("Expected policies.json root object"));
         }
         if (!Object.prototype.hasOwnProperty.call(documentObj, "policies")) {
             return documentObj;
         }
         if (!isPlainObject(documentObj.policies)) {
-            throw new Error("Expected policies to be an object");
+            throw new Error(translateKnownApiMessage("Expected policies to be an object"));
         }
         return documentObj.policies;
     }
@@ -73,24 +136,24 @@
                 return {
                     message: issues
                         .slice(0, 3)
-                        .map((issue) => `${issue.policy || "document"}: ${issue.message}`)
+                        .map((issue) => `${issue.policy || "document"}: ${translateKnownApiMessage(issue.message)}`)
                         .join(" • "),
                     detail: parsed.detail,
                     raw,
                 };
             }
             if (typeof parsed.detail === "string") {
-                return { message: parsed.detail, detail: parsed.detail, raw };
+                return { message: translateKnownApiMessage(parsed.detail), detail: parsed.detail, raw };
             }
             if (parsed.detail?.message) {
-                return { message: parsed.detail.message, detail: parsed.detail, raw };
+                return { message: translateKnownApiMessage(parsed.detail.message), detail: parsed.detail, raw };
             }
             if (parsed.message) {
-                return { message: parsed.message, detail: parsed.detail, raw };
+                return { message: translateKnownApiMessage(parsed.message), detail: parsed.detail, raw };
             }
-            return { message: raw, detail: parsed.detail, raw };
+            return { message: translateDataMessage("profiles.error_api_unknown", "Request failed."), detail: parsed.detail, raw };
         } catch {
-            return { message: raw, detail: null, raw };
+            return { message: translateDataMessage("profiles.error_api_unknown", "Request failed."), detail: null, raw };
         }
     }
 

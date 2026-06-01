@@ -4,9 +4,69 @@
         return themeMediaQuery.matches ? "dark" : "light";
     }
 
-    function resolveBrowserLanguage(navigatorRef = navigator) {
-        const preferred = (navigatorRef.languages && navigatorRef.languages[0]) || navigatorRef.language || "en";
-        return preferred.toLowerCase().startsWith("ru") ? "ru" : "en";
+    const localeResolutionRules = [
+        { code: "en", fallback: "en", matches: ["en", "en-*"] },
+        { code: "ru", fallback: "en", matches: ["ru", "ru-*"] },
+        { code: "de", fallback: "en", matches: ["de", "de-*"] },
+        { code: "zh-CN", fallback: "en", matches: ["zh-CN", "zh-Hans", "zh-Hans-*", "zh"] },
+        { code: "fr", fallback: "en", matches: ["fr", "fr-*"] },
+        { code: "es-ES", fallback: "en", matches: ["es-ES", "es", "es-*"] },
+    ];
+
+    function normalizeLanguageTag(languageTag) {
+        return String(languageTag || "").trim().replace(/_/g, "-").toLowerCase();
+    }
+
+    function languageMatchesRule(languageTag, rule) {
+        const normalizedTag = normalizeLanguageTag(languageTag);
+        const normalizedRule = normalizeLanguageTag(rule);
+        if (!normalizedTag || !normalizedRule) return false;
+        if (normalizedRule.endsWith("-*")) {
+            const prefix = normalizedRule.slice(0, -2);
+            return normalizedTag.startsWith(`${prefix}-`);
+        }
+        return normalizedTag === normalizedRule;
+    }
+
+    function resolveTargetLanguage(languageTag) {
+        const matchedRule = localeResolutionRules.find((localeRule) => (
+            localeRule.matches.some((rule) => languageMatchesRule(languageTag, rule))
+        ));
+        return matchedRule ? matchedRule.code : "en";
+    }
+
+    function resolveAvailableLanguage(languageCode, availableLanguageModes) {
+        if (!availableLanguageModes || availableLanguageModes.includes(languageCode)) {
+            return languageCode;
+        }
+        const rule = localeResolutionRules.find((localeRule) => localeRule.code === languageCode);
+        const fallback = rule ? rule.fallback : "en";
+        if (availableLanguageModes.includes(fallback)) {
+            return fallback;
+        }
+        return availableLanguageModes.includes("en") ? "en" : availableLanguageModes[0];
+    }
+
+    function resolveBrowserLanguage(navigatorRef = navigator, availableLanguageModes = null) {
+        const languageCandidates = [
+            ...(Array.isArray(navigatorRef.languages) ? navigatorRef.languages : []),
+            navigatorRef.language,
+        ].filter(Boolean);
+        const activeLanguageModes = Array.isArray(availableLanguageModes)
+            ? availableLanguageModes.filter((mode) => mode !== "system")
+            : null;
+        let fallbackLanguage = null;
+
+        for (const languageTag of languageCandidates.length ? languageCandidates : ["en"]) {
+            const targetLanguage = resolveTargetLanguage(languageTag);
+            if (!activeLanguageModes || activeLanguageModes.includes(targetLanguage)) {
+                return targetLanguage;
+            }
+            if (!fallbackLanguage) {
+                fallbackLanguage = resolveAvailableLanguage(targetLanguage, activeLanguageModes);
+            }
+        }
+        return fallbackLanguage || resolveAvailableLanguage("en", activeLanguageModes);
     }
 
     function updateThemeColorMeta(documentRef, resolvedTheme) {
@@ -75,6 +135,7 @@
     window.BPMProfilesPlatform = {
         resolveTheme,
         resolveBrowserLanguage,
+        resolveTargetLanguage,
         updateThemeColorMeta,
         syncThemeSensitiveControls,
         libraryCountLabel,

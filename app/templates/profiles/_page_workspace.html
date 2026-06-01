@@ -10,7 +10,7 @@
         <div class="support-hidden" aria-live="polite">
             <div id="overview-status">{{ tr("profiles.signal_saved") }}</div>
             {% if profiles_template_kind == 'editor' %}
-            <div id="status">{{ tr("profiles.workspace_ready", "Workspace ready.") }}</div>
+            <div id="status" data-i18n="profiles.workspace_ready">{{ tr("profiles.workspace_ready", "Workspace ready.") }}</div>
             {% endif %}
         </div>
     </main>

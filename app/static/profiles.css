@@ -118,7 +118,7 @@
 
         body {
             margin: 0;
-            font-family: "Avenir Next", "Segoe UI Variable", "Helvetica Neue", sans-serif;
+            font-family: "Avenir Next", "Segoe UI Variable", "Segoe UI", "Helvetica Neue", "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", sans-serif;
             color: var(--ink);
             background:
                 linear-gradient(180deg, var(--bg-top), var(--bg-mid) 44%, var(--bg-bottom));
@@ -1176,8 +1176,10 @@
         }
 
         .wizard-settings-search-shell {
+            box-sizing: border-box;
             display: grid;
             gap: 0.65rem;
+            width: 100%;
             max-width: 360px;
             min-width: min(100%, 260px);
             border-radius: 12px;
@@ -1286,7 +1288,10 @@
         .all-settings-filter-button {
             gap: 8px;
             min-height: 38px;
+            min-width: 0;
+            max-width: 100%;
             border-radius: 999px;
+            white-space: normal;
         }
 
         .all-settings-filter-button.is-active {
@@ -1299,6 +1304,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex: 0 0 auto;
             min-width: 22px;
             min-height: 22px;
             padding: 0 6px;
@@ -1317,6 +1323,7 @@
         .all-settings-review-card {
             display: grid;
             gap: 10px;
+            min-width: 0;
             min-height: 142px;
             padding: 14px;
             border: 1px solid var(--line-soft);
@@ -1324,6 +1331,7 @@
             background: rgba(255, 255, 255, 0.72);
             color: inherit;
             text-align: left;
+            overflow-wrap: anywhere;
             cursor: pointer;
             transition:
                 background-color 160ms ease,
@@ -1354,19 +1362,23 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
+            min-width: 0;
         }
 
         .all-settings-review-card-title {
+            min-width: 0;
             color: var(--ink);
             font-size: 0.92rem;
             font-weight: 700;
             line-height: 1.25;
+            overflow-wrap: anywhere;
         }
 
         .all-settings-review-card-count {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex: 0 0 auto;
             min-width: 32px;
             min-height: 30px;
             padding: 0 9px;
@@ -1391,16 +1403,20 @@
         }
 
         .all-settings-review-card-body {
+            min-width: 0;
             color: var(--muted);
             font-size: 0.84rem;
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .all-settings-review-card-action {
             align-self: end;
+            min-width: 0;
             color: rgb(15 118 110);
             font-size: 0.78rem;
             font-weight: 700;
+            overflow-wrap: anywhere;
         }
 
         .all-settings-review-card:disabled .all-settings-review-card-action {
@@ -1411,11 +1427,11 @@
         .all-settings-list-row {
             display: grid;
             grid-template-columns:
-                minmax(220px, 1.45fr)
-                minmax(132px, 0.72fr)
-                minmax(190px, 1fr)
-                minmax(112px, 0.62fr)
-                minmax(180px, 1fr);
+                minmax(170px, 1.45fr)
+                minmax(110px, 0.72fr)
+                minmax(150px, 1fr)
+                minmax(96px, 0.62fr)
+                minmax(140px, 1fr);
             gap: 14px;
             align-items: center;
         }
@@ -1473,13 +1489,13 @@
         }
 
         .all-settings-list-setting-key {
-            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
             font-size: 0.84rem;
             font-weight: 600;
         }
 
         .all-settings-list-cell--value {
-            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
             font-size: 0.8rem;
         }
 
@@ -1515,7 +1531,7 @@
 
         .all-settings-detail-key {
             color: var(--ink);
-            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
             font-size: 0.96rem;
             font-weight: 700;
             overflow-wrap: anywhere;
@@ -1606,7 +1622,7 @@
             padding: 12px;
             background: rgba(15, 23, 42, 0.04);
             color: var(--ink);
-            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
             font-size: 0.78rem;
             white-space: pre-wrap;
             overflow-wrap: anywhere;
@@ -1646,7 +1662,7 @@
         }
 
         .all-settings-detail-issues span {
-            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
             font-size: 0.76rem;
         }
 
@@ -1761,10 +1777,9 @@
             font-size: 0.82rem;
             line-height: 1.42;
             color: var(--muted);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            display: block;
+            overflow-wrap: anywhere;
+            hyphens: auto;
         }
 
         .wizard-panels {
@@ -1950,6 +1965,7 @@
             display: inline-flex;
             flex-wrap: wrap;
             width: fit-content;
+            min-width: 0;
             max-width: 100%;
             gap: 4px;
             padding: 4px;
@@ -1962,6 +1978,8 @@
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
+            min-width: 0;
+            max-width: 100%;
             padding: 4px;
             border-radius: 8px;
             border: 1px solid var(--surface-soft-border);
@@ -1970,6 +1988,8 @@
 
         .wizard-proxy-mode-chip {
             min-height: 0;
+            min-width: 0;
+            max-width: 100%;
             padding: 8px 12px;
             border-radius: 6px;
             border-color: transparent;
@@ -2045,11 +2065,14 @@
             display: grid;
             gap: 8px;
             align-content: start;
+            min-width: 0;
             min-height: 150px;
             width: 100%;
+            max-width: 100%;
             text-align: left;
             font: inherit;
             color: inherit;
+            overflow-wrap: anywhere;
             cursor: pointer;
             border-radius: 12px;
             padding: 16px 18px;
@@ -2067,7 +2090,9 @@
             align-items: center;
             gap: 8px;
             min-height: 0;
+            min-width: 0;
             width: auto;
+            max-width: 100%;
             padding: 8px 10px;
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.62);
@@ -2085,6 +2110,7 @@
             min-height: 0;
             width: auto;
             min-width: 112px;
+            max-width: 100%;
             padding: 8px 12px;
             border-radius: 6px;
             border-color: transparent;
@@ -2127,15 +2153,19 @@
         }
 
         .wizard-starter-title {
+            min-width: 0;
             font-size: 0.96rem;
             font-weight: 700;
             color: var(--ink);
+            overflow-wrap: anywhere;
         }
 
         .wizard-starter-copy {
+            min-width: 0;
             font-size: 0.87rem;
             line-height: 1.6;
             color: var(--muted);
+            overflow-wrap: anywhere;
         }
 
         .wizard-starter-card--secondary .wizard-starter-title {
@@ -2149,10 +2179,12 @@
 
         .wizard-starter-note {
             margin-top: auto;
+            min-width: 0;
             font-size: 0.78rem;
             line-height: 1.5;
             color: var(--ink-soft);
             font-weight: 600;
+            overflow-wrap: anywhere;
         }
 
         .wizard-starter-badge {
@@ -2160,6 +2192,7 @@
             align-items: center;
             gap: 0.35rem;
             width: fit-content;
+            max-width: 100%;
             border-radius: 999px;
             background: rgba(15, 118, 110, 0.1);
             color: var(--ink);
@@ -2168,6 +2201,8 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             padding: 0.35rem 0.7rem;
+            white-space: normal;
+            overflow-wrap: anywhere;
         }
 
         .wizard-starter-badge--recommended {
@@ -2526,9 +2561,11 @@
             align-items: flex-start;
             justify-content: center;
             gap: 4px;
+            min-width: 0;
             min-height: 88px;
             text-align: left;
             width: 100%;
+            max-width: 100%;
             border: 1px solid rgba(148, 163, 184, 0.16);
             background: rgba(255, 255, 255, 0.86);
             background-color: rgba(255, 255, 255, 0.86);
@@ -2536,6 +2573,7 @@
             box-shadow:
                 inset 0 0 0 999px rgba(255, 255, 255, 0.86),
                 0 10px 24px rgba(15, 23, 42, 0.04);
+            overflow-wrap: anywhere;
         }
 
         .wizard-search-engine-preset:hover {
@@ -2547,9 +2585,11 @@
         }
 
         .wizard-search-engine-preset-copy {
+            min-width: 0;
             font-size: 0.82rem;
             line-height: 1.5;
             color: var(--muted);
+            overflow-wrap: anywhere;
         }
 
         .wizard-search-engine-preset-status {
@@ -2991,6 +3031,7 @@
             grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
             gap: 16px;
             align-items: start;
+            min-width: 0;
         }
 
         .wizard-review.wizard-export-sections {
@@ -3106,10 +3147,12 @@
 
         .wizard-summary-card,
         .wizard-actions-card {
+            min-width: 0;
             border-radius: 12px;
             padding: 16px 18px;
             border: 1px solid var(--surface-soft-border);
             background: rgba(255, 255, 255, 0.66);
+            overflow-wrap: anywhere;
         }
 
         .wizard-summary-list {
@@ -3159,8 +3202,11 @@
 
         .wizard-review-filter {
             min-height: 34px;
+            min-width: 0;
+            max-width: 100%;
             padding: 0.45rem 0.7rem;
             font-size: 0.78rem;
+            white-space: normal;
         }
 
         .wizard-review-filter.is-active {
@@ -3194,6 +3240,7 @@
             align-items: baseline;
             justify-content: space-between;
             gap: 16px;
+            min-width: 0;
             font-size: 0.92rem;
             border-radius: 18px;
         }
@@ -3280,13 +3327,17 @@
         }
 
         .wizard-summary-key {
+            min-width: 0;
             color: var(--muted);
+            overflow-wrap: anywhere;
         }
 
         .wizard-summary-value {
+            min-width: 0;
             color: var(--ink);
             font-weight: 600;
             text-align: right;
+            overflow-wrap: anywhere;
         }
 
         .wizard-summary-value--left {
@@ -3417,6 +3468,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
+            min-width: 0;
             padding: 11px 12px;
             border-radius: 16px;
             border: 1px solid var(--surface-soft-border);
@@ -3449,15 +3501,18 @@
         }
 
         .wizard-export-plan-copy {
+            min-width: 0;
             color: var(--ink);
             font-size: 0.92rem;
             line-height: 1.45;
             font-weight: 600;
             max-width: 100%;
+            overflow-wrap: anywhere;
         }
 
         .wizard-export-plan-action {
             flex-shrink: 0;
+            max-width: 100%;
         }
 
         .wizard-workflow-card {
@@ -3618,7 +3673,7 @@
             width: 100%;
             min-height: 14rem;
             resize: vertical;
-            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+            font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC", "Noto Sans CJK SC", monospace;
             font-size: 0.9rem;
             line-height: 1.5;
             color: rgba(15, 23, 42, 0.88);
@@ -4101,10 +4156,12 @@
         .workspace-scope-mode-card {
             display: grid;
             gap: 4px;
+            min-width: 0;
             border-radius: 12px;
             padding: 14px 16px;
             border: 1px solid rgba(148, 163, 184, 0.16);
             background: rgba(255, 255, 255, 0.78);
+            overflow-wrap: anywhere;
         }
 
         .workspace-scope-mode-card--active {
@@ -4114,17 +4171,21 @@
         }
 
         .workspace-scope-mode-title {
+            min-width: 0;
             color: var(--ink);
             font-size: 0.96rem;
             font-weight: 700;
             line-height: 1.42;
+            overflow-wrap: anywhere;
         }
 
         .workspace-scope-mode-copy {
             margin: 0;
+            min-width: 0;
             color: var(--muted);
             font-size: 0.88rem;
             line-height: 1.58;
+            overflow-wrap: anywhere;
         }
 
         .workspace-scope-button {
@@ -4260,21 +4321,27 @@
         .editor-mode-option-copy {
             display: grid;
             gap: 0.18rem;
+            min-width: 0;
             width: 100%;
             text-align: left;
+            overflow-wrap: anywhere;
         }
 
         .editor-mode-option-title {
+            min-width: 0;
             color: var(--ink);
             font-weight: 700;
             line-height: 1.35;
+            overflow-wrap: anywhere;
         }
 
         .editor-mode-option-body {
+            min-width: 0;
             color: var(--muted);
             font-size: 0.78rem;
             font-weight: 500;
             line-height: 1.45;
+            overflow-wrap: anywhere;
         }
 
         .editor-mode-option[aria-current="page"] .editor-mode-option-title {
@@ -4554,10 +4621,13 @@
         }
 
         .button-base {
+            box-sizing: border-box;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            min-width: 0;
             min-height: 48px;
+            max-width: 100%;
             padding: 0 16px;
             border-radius: 10px;
             border: 1px solid transparent;
@@ -4566,7 +4636,12 @@
             color-scheme: light;
             font-size: 0.95rem;
             font-weight: 600;
+            line-height: 1.2;
+            text-align: center;
             text-decoration: none;
+            white-space: normal;
+            overflow-wrap: normal;
+            word-break: normal;
             cursor: pointer;
             transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
         }
@@ -6323,12 +6398,15 @@
         }
 
         .compact-toolbar-control select.soft-input {
+            box-sizing: border-box;
             width: 100%;
             min-width: 0;
             padding-right: 2.25rem;
             justify-self: stretch;
             min-height: 3rem;
             max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .compact-counter {

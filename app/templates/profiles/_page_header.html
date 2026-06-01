@@ -28,8 +28,16 @@
                 </span>
                 <select id="lang" class="soft-input rounded-xl px-3 py-2 text-sm">
                     <option value="system" selected data-i18n="profiles.locale_system">{{ tr("profiles.locale_system") }}</option>
-                    <option value="en" data-i18n="profiles.locale_option_en">{{ tr("profiles.locale_option_en", "English") }}</option>
-                    <option value="ru" data-i18n="profiles.locale_option_ru">{{ tr("profiles.locale_option_ru", "Русский") }}</option>
+                    {% for locale_option in locale_picker_options %}
+                    <option
+                        value="{{ locale_option.code }}"
+                        lang="{{ locale_option.bcp47 }}"
+                        data-locale-code="{{ locale_option.code }}"
+                        data-locale-bcp47="{{ locale_option.bcp47 }}"
+                        data-locale-native-name="{{ locale_option.native_name }}"
+                        data-locale-has-catalog="{{ 'true' if locale_option.has_catalog else 'false' }}"
+                        {% if not locale_option.has_catalog %}disabled{% endif %}>{{ locale_option.native_name }}</option>
+                    {% endfor %}
                 </select>
             </label>
             <label class="compact-toolbar-control">

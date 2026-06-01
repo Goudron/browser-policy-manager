@@ -18,6 +18,9 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from app.core.locales import ACTIVE_CATALOG_LOCALES
+from app.core.locales import DEFAULT_LOCALE as DEFAULT_UI_LOCALE
+
 
 def _read_project_version() -> str:
     pyproject_path = Path(__file__).resolve().parents[2] / "pyproject.toml"
@@ -59,8 +62,8 @@ class Settings(BaseSettings):
     # -------------------------------------------------------------------------
     # Internationalization / Localization
     # -------------------------------------------------------------------------
-    DEFAULT_LOCALE: str = "en"
-    SUPPORTED_LOCALES: list[str] = ["en", "ru"]
+    DEFAULT_LOCALE: str = DEFAULT_UI_LOCALE
+    SUPPORTED_LOCALES: list[str] = list(ACTIVE_CATALOG_LOCALES)
     I18N_DIR: str = "app/i18n"
 
     # -------------------------------------------------------------------------

@@ -260,7 +260,7 @@
 
         function getLocalizedTaskCopy(copySpec) {
             if (!copySpec) return "";
-            return t(copySpec.key, copySpec.fallback || "");
+            return t(copySpec.key);
         }
 
         function renderTaskFirstFieldGroup(policyId, groupSpec, fields, currentObject, disabled) {
@@ -1514,30 +1514,30 @@
         function getShellPolicyLabel(item) {
             const policyId = String(item?.id || "").trim();
             if (!policyId) return "";
-            return t(`profiles.shell_policy_${toSnakeCase(policyId)}`, item?.label || policyId);
+            return t(`profiles.shell_policy_${toSnakeCase(policyId)}`);
         }
 
         function getShellSubsectionLabel(subsection) {
             const normalized = String(subsection || "").trim();
             if (!normalized) return "";
-            return t(`profiles.wizard_shell_subsection_${normalized}`, humanizeIdentifier(normalized));
+            return t(`profiles.wizard_shell_subsection_${normalized}`);
         }
 
         function getSchemaFieldLabel(field) {
             const fallback = field?.label || humanizeIdentifier(field?.name || "");
-            return field?.label_key ? t(field.label_key, fallback) : fallback;
+            return field?.label_key ? t(field.label_key) : fallback;
         }
 
         function getShellWidgetLabel(widget) {
             const normalized = String(widget || "").trim();
             if (!normalized) return "";
-            return t(`profiles.wizard_shell_widget_${normalized}`, humanizeIdentifier(normalized));
+            return t(`profiles.wizard_shell_widget_${normalized}`);
         }
 
         function getShellTagLabel(tag) {
             const normalized = String(tag || "").trim();
             if (!normalized) return "";
-            return t(`profiles.wizard_shell_tag_${normalized}`, humanizeIdentifier(normalized));
+            return t(`profiles.wizard_shell_tag_${normalized}`);
         }
 
         function getShellMetaParts(item) {
@@ -1560,10 +1560,7 @@
 
             container.innerHTML = items
                 .map((item) => {
-                    const meta = t(
-                        "profiles.wizard_shell_preferences_meta",
-                        "{prefixes} prefixes • {presets} presets",
-                    )
+                    const meta = t("profiles.wizard_shell_preferences_meta")
                         .replace("{prefixes}", String(item.prefix_count || 0))
                         .replace("{presets}", String(item.preset_count || 0));
 
@@ -1573,7 +1570,7 @@
                             class="button-base ghost-button wizard-shell-item"
                             data-wizard-shell-jump="preferences"
                             data-settings-jump-target="${escapeHtml(item.target || "")}">
-                            <span class="wizard-shell-item-title">${escapeHtml(t(item.title_key, item.fallback || item.id || ""))}</span>
+                            <span class="wizard-shell-item-title">${escapeHtml(t(item.title_key))}</span>
                             <span class="wizard-shell-item-meta">${escapeHtml(meta)}</span>
                         </button>
                     `;

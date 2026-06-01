@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import subprocess
@@ -338,6 +339,34 @@ def _set_locale(driver, wait, ui, *, locale: str, expected_text: str) -> None:
     wait.until(lambda current_driver: expected_text in current_driver.find_element("tag name", "body").text)
 
 
+def _assert_document_width_fits_viewport(driver) -> None:
+    metrics = driver.execute_script(
+        """
+        const doc = document.documentElement;
+        const body = document.body;
+        const scrolling = document.scrollingElement || doc;
+        return {
+          documentWidth: Math.max(
+            doc ? doc.scrollWidth : 0,
+            body ? body.scrollWidth : 0,
+            scrolling ? scrolling.scrollWidth : 0
+          ),
+          viewportWidth: window.innerWidth,
+          bodyWidth: body ? body.scrollWidth : 0,
+          documentElementWidth: doc ? doc.scrollWidth : 0,
+          path: window.location.pathname,
+          lang: doc ? doc.lang : "",
+        };
+        """
+    )
+    assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1, metrics
+
+
+def _load_locale_catalog(locale: str) -> dict[str, str]:
+    catalog_path = Path(__file__).resolve().parents[1] / "app" / "i18n" / f"{locale}.json"
+    return json.loads(catalog_path.read_text(encoding="utf-8"))
+
+
 def _parse_grid_template_columns(template_value: str) -> list[float]:
     values: list[float] = []
     for part in str(template_value or "").split():
@@ -534,7 +563,7 @@ def test_json_editor_browser_regression_saves_validates_and_exports_full_documen
                     "return Boolean(window.monaco?.editor?.getModels?.().length);"
                 )
             )
-            assert driver.find_element(by.By.ID, "advanced-return-link").text.strip() == "Back to previous mode"
+            assert not driver.find_elements(by.By.ID, "advanced-return-link")
             download_link = driver.find_element(by.By.ID, "download-firefox-policies")
             assert download_link.get_attribute("rel") == "noopener"
             assert download_link.get_attribute("href").endswith(
@@ -1809,6 +1838,561 @@ def test_primary_modes_browser_regression_stay_russian_and_fit_viewport_in_ru():
             _close_chromium_driver(driver)
 
 
+def test_locale_smoke_matrix_browser_regression_loads_new_locales_across_primary_routes():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    target_locales = ("de", "zh-CN", "fr", "es-ES")
+    locale_catalogs = {locale: _load_locale_catalog(locale) for locale in target_locales}
+    payload = build_profile_payload(
+        name="Chromium locale smoke matrix profile",
+        description="GLOC-601 locale route smoke matrix",
+        owner="locale-smoke@example.org",
+        schema_version="release-151",
+        flags={
+            "DisableTelemetry": True,
+            "Homepage": {
+                "URL": "https://portal.example.local/",
+                "Locked": True,
+            },
+        },
+    )
+
+    def assert_route_text(driver, locale: str, keys: tuple[str, ...]) -> None:
+        body_text = driver.execute_script("return document.body ? document.body.textContent : '';")
+        for key in keys:
+            assert locale_catalogs[locale][key] in body_text
+        assert driver.execute_script("return document.documentElement.lang;") == locale
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        route_matrix = (
+            (
+                "Library",
+                "/profiles",
+                "#list",
+                ("profiles.title", "profiles.nav_library"),
+            ),
+            (
+                "Guided editor",
+                f"/profiles/{profile_id}/edit",
+                "#wizard-panel",
+                ("profiles.workspace_scope_guided",),
+            ),
+            (
+                "All settings",
+                f"/profiles/{profile_id}/settings",
+                "#settings-panel",
+                ("profiles.editor_chrome_settings_link", "profiles.settings_review_title"),
+            ),
+            (
+                "JSON editor",
+                f"/profiles/{profile_id}/json",
+                "#editor-panel",
+                ("profiles.editor_chrome_json_link", "profiles.editor_title_section"),
+            ),
+        )
+
+        for locale in target_locales:
+            driver = _build_chromium_driver()
+            wait = ui.WebDriverWait(driver, 20)
+
+            try:
+                driver.get(f"{base_url}/profiles")
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, "#lang")))
+                wait.until(
+                    lambda current_driver: "compact-counter--pending"
+                    not in current_driver.find_element(
+                        by.By.CSS_SELECTOR,
+                        ".compact-counter",
+                    ).get_attribute("class")
+                )
+                wait.until(
+                    ec.presence_of_element_located(
+                        (
+                            by.By.CSS_SELECTOR,
+                            f'a.library-row-open-button[href="/profiles/{profile_id}/edit"]',
+                        )
+                    )
+                )
+                _set_locale(
+                    driver,
+                    wait,
+                    ui,
+                    locale=locale,
+                    expected_text=locale_catalogs[locale]["profiles.locale_hint"],
+                )
+                assert_route_text(driver, locale, ("profiles.title", "profiles.nav_library"))
+
+                for route_name, path, ready_selector, expected_keys in route_matrix[1:]:
+                    driver.get(f"{base_url}{path}")
+                    wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+                    route_locale = locale
+                    route_expected_keys = expected_keys
+                    wait.until(
+                        lambda current_driver,
+                        route_locale=route_locale,
+                        route_expected_keys=route_expected_keys: all(
+                            locale_catalogs[route_locale][key]
+                            in current_driver.execute_script("return document.body ? document.body.textContent : '';")
+                            for key in route_expected_keys
+                        ),
+                        message=f"{route_name} did not localize for {locale}",
+                    )
+                    assert_route_text(driver, locale, expected_keys)
+            finally:
+                _close_chromium_driver(driver)
+
+
+def test_locale_viewport_overflow_browser_regression_fits_all_locales_and_primary_routes():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    target_locales = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
+    locale_catalogs = {locale: _load_locale_catalog(locale) for locale in target_locales}
+    payload = build_profile_payload(
+        name="Viewport overflow locale matrix profile",
+        description="GLOC-602 viewport overflow route matrix",
+        owner="locale-overflow@example.org",
+        schema_version="release-151",
+        flags={
+            "DisableTelemetry": True,
+            "Homepage": {
+                "URL": "https://portal.example.local/",
+                "Locked": True,
+            },
+        },
+    )
+
+    def body_text(driver) -> str:
+        return driver.execute_script("return document.body ? document.body.textContent : '';")
+
+    def wait_for_localized_route(driver, locale: str, keys: tuple[str, ...], route_name: str) -> None:
+        wait.until(
+            lambda current_driver: all(
+                locale_catalogs[locale][key] in body_text(current_driver)
+                for key in keys
+            ),
+            message=f"{route_name} did not localize for {locale}",
+        )
+        assert driver.execute_script("return document.documentElement.lang;") == locale
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        route_matrix = (
+            (
+                "Library",
+                "/profiles",
+                "#list",
+                ("profiles.title", "profiles.nav_library"),
+            ),
+            (
+                "Guided editor",
+                f"/profiles/{profile_id}/edit",
+                "#wizard-panel",
+                ("profiles.workspace_scope_guided",),
+            ),
+            (
+                "All settings",
+                f"/profiles/{profile_id}/settings",
+                "#settings-panel",
+                ("profiles.editor_chrome_settings_link", "profiles.settings_review_title"),
+            ),
+            (
+                "JSON editor",
+                f"/profiles/{profile_id}/json",
+                "#editor-panel",
+                ("profiles.editor_chrome_json_link", "profiles.editor_title_section"),
+            ),
+        )
+
+        for locale in target_locales:
+            driver = _build_chromium_driver()
+            wait = ui.WebDriverWait(driver, 20)
+
+            try:
+                driver.get(f"{base_url}/profiles")
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, "#lang")))
+                wait.until(
+                    lambda current_driver: "compact-counter--pending"
+                    not in current_driver.find_element(
+                        by.By.CSS_SELECTOR,
+                        ".compact-counter",
+                    ).get_attribute("class")
+                )
+                _set_locale(
+                    driver,
+                    wait,
+                    ui,
+                    locale=locale,
+                    expected_text=locale_catalogs[locale]["profiles.locale_hint"],
+                )
+
+                for route_name, path, ready_selector, expected_keys in route_matrix:
+                    driver.get(f"{base_url}{path}")
+                    wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+                    wait_for_localized_route(driver, locale, expected_keys, route_name)
+                    _assert_document_width_fits_viewport(driver)
+            finally:
+                _close_chromium_driver(driver)
+
+
+def test_locale_switching_browser_regression_updates_visible_ui_without_stale_text():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    target_locales = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
+    switch_sequence = ("ru", "de", "zh-CN", "fr", "es-ES", "en")
+    locale_catalogs = {locale: _load_locale_catalog(locale) for locale in target_locales}
+    payload = build_profile_payload(
+        name="Locale switching regression profile",
+        description="GLOC-604 locale switch route matrix",
+        owner="locale-switching@example.org",
+        schema_version="release-151",
+        flags={
+            "DisableTelemetry": True,
+            "Homepage": {
+                "URL": "https://portal.example.local/",
+                "Locked": True,
+            },
+        },
+    )
+
+    def visible_body_text(driver) -> str:
+        return driver.execute_script("return document.body ? document.body.innerText : '';")
+
+    def visible_text_contains(body_text: str, value: str) -> bool:
+        return value.casefold() in body_text.casefold()
+
+    def expected_texts(locale: str, route_keys: tuple[str, ...]) -> tuple[str, ...]:
+        values = []
+        for key in ("profiles.locale_hint", *route_keys):
+            value = locale_catalogs[locale][key]
+            if value and value not in values:
+                values.append(value)
+        return tuple(values)
+
+    def stale_texts(previous_locale: str, current_locale: str, route_keys: tuple[str, ...]) -> tuple[str, ...]:
+        current_values = set(expected_texts(current_locale, route_keys))
+        return tuple(
+            value
+            for value in expected_texts(previous_locale, route_keys)
+            if value not in current_values
+        )
+
+    def select_locale(driver, locale: str) -> None:
+        select = ui.Select(wait.until(lambda current_driver: current_driver.find_element(by.By.ID, "lang")))
+        select.select_by_value(locale)
+
+    def wait_for_locale_state(
+        driver,
+        *,
+        locale: str,
+        previous_locale: str | None,
+        route_name: str,
+        route_keys: tuple[str, ...],
+    ) -> None:
+        expected_values = expected_texts(locale, route_keys)
+        stale_values = (
+            stale_texts(previous_locale, locale, route_keys)
+            if previous_locale is not None
+            else ()
+        )
+
+        allowed_picker_values = {locale}
+        if previous_locale is None and locale == "en":
+            allowed_picker_values.add("system")
+
+        wait.until(
+            lambda current_driver: (
+                current_driver.execute_script("return document.documentElement.lang;") == locale
+                and current_driver.execute_script("return document.getElementById('lang')?.value || '';")
+                in allowed_picker_values
+                and all(visible_text_contains(visible_body_text(current_driver), value) for value in expected_values)
+                and not any(visible_text_contains(visible_body_text(current_driver), value) for value in stale_values)
+            ),
+            message=f"{route_name} did not switch cleanly from {previous_locale} to {locale}",
+        )
+
+        body_text = visible_body_text(driver)
+        for value in expected_values:
+            assert visible_text_contains(body_text, value)
+        for value in stale_values:
+            assert not visible_text_contains(body_text, value)
+
+    with run_test_app_server() as base_url:
+        create_response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert create_response.status_code == 201, create_response.text
+        profile_id = create_response.json()["id"]
+
+        route_matrix = (
+            (
+                "Library",
+                "/profiles",
+                "#list",
+                ("profiles.nav_library",),
+            ),
+            (
+                "Guided editor",
+                f"/profiles/{profile_id}/edit",
+                "#wizard-panel",
+                ("profiles.workspace_scope_guided",),
+            ),
+            (
+                "All settings",
+                f"/profiles/{profile_id}/settings",
+                "#settings-panel",
+                ("profiles.editor_chrome_settings_link", "profiles.settings_review_title"),
+            ),
+            (
+                "JSON editor",
+                f"/profiles/{profile_id}/json",
+                "#editor-panel",
+                ("profiles.editor_chrome_json_link", "profiles.editor_title_section"),
+            ),
+        )
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            for route_name, path, ready_selector, route_keys in route_matrix:
+                driver.get(f"{base_url}{path}")
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+                wait_for_locale_state(
+                    driver,
+                    locale="en",
+                    previous_locale=None,
+                    route_name=route_name,
+                    route_keys=route_keys,
+                )
+
+                previous_locale = "en"
+                for locale in switch_sequence:
+                    select_locale(driver, locale)
+                    wait_for_locale_state(
+                        driver,
+                        locale=locale,
+                        previous_locale=previous_locale,
+                        route_name=route_name,
+                        route_keys=route_keys,
+                    )
+                    previous_locale = locale
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_localized_import_edit_validate_export_workflow_browser_regression():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    target_locales = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
+    locale_catalogs = {locale: _load_locale_catalog(locale) for locale in target_locales}
+
+    def body_text(driver) -> str:
+        return driver.execute_script("return document.body ? document.body.innerText : '';")
+
+    def visible_text_contains(driver, value: str) -> bool:
+        return value.casefold() in body_text(driver).casefold()
+
+    def wait_for_catalog_text(driver, locale: str, keys: tuple[str, ...], surface: str) -> None:
+        wait.until(
+            lambda current_driver: (
+                current_driver.execute_script("return document.documentElement.lang;") == locale
+                and all(visible_text_contains(current_driver, locale_catalogs[locale][key]) for key in keys)
+            ),
+            message=f"{surface} did not expose expected localized text for {locale}",
+        )
+
+    def import_profile_through_picker(driver, locale: str, profile_name: str) -> int:
+        policy_document = {
+            "policies": {
+                "DisableTelemetry": True,
+            }
+        }
+        driver.execute_script(
+            """
+            const input = document.getElementById('import-firefox-policies-file');
+            const payload = JSON.stringify(arguments[0]);
+            const file = new File([payload], `${arguments[1]}.json`, { type: 'application/json' });
+            const transfer = new DataTransfer();
+            transfer.items.add(file);
+            input.files = transfer.files;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+            """,
+            policy_document,
+            profile_name,
+        )
+        wait.until(
+            lambda current_driver: (
+                profile_name
+                in current_driver.find_element(by.By.ID, "import-firefox-policies-status").text
+            ),
+            message=f"Import did not complete visibly for {locale}",
+        )
+        profile_link = wait.until(ec.presence_of_element_located((by.By.LINK_TEXT, profile_name)))
+        href = profile_link.get_attribute("href")
+        profile_id = int(urlparse(href).path.strip("/").split("/")[1])
+        status_text = driver.find_element(by.By.ID, "status").text
+        assert profile_name in status_text
+        return profile_id
+
+    def check_guided_editor_surface(driver, locale: str, profile_id: int) -> None:
+        driver.get(f"{base_url}/profiles/{profile_id}/edit")
+        wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+        wait_for_catalog_text(
+            driver,
+            locale,
+            ("profiles.workspace_scope_guided",),
+            "Guided editor",
+        )
+        wait.until(
+            lambda current_driver: current_driver.execute_script(
+                "return document.body.dataset.wizardNavigationReady === 'true';"
+            )
+        )
+        assert driver.find_element(by.By.ID, "wizard-schema")
+
+    def edit_all_settings_preference(driver, locale: str, profile_id: int) -> None:
+        preference_name = f"browser.gloc605.{locale.lower().replace('-', '_')}"
+        driver.get(f"{base_url}/profiles/{profile_id}/settings")
+        wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
+        wait.until(ec.presence_of_element_located((by.By.ID, "all-settings-list")))
+        wait_for_catalog_text(
+            driver,
+            locale,
+            ("profiles.editor_chrome_settings_link", "profiles.settings_review_title"),
+            "All settings",
+        )
+        _click_selector(driver, wait, '#all-settings-list [data-settings-entry-id="NewTabPage"]')
+        wait.until(
+            lambda current_driver: current_driver.find_element(
+                by.By.ID,
+                "all-settings-detail-panel",
+            ).get_attribute("data-settings-detail-id")
+            == "NewTabPage"
+        )
+        _safe_click(driver, driver.find_element(by.By.ID, "all-settings-add-preference"))
+        wait.until(
+            lambda current_driver: current_driver.find_element(
+                by.By.ID,
+                "all-settings-detail-panel",
+            ).get_attribute("data-settings-detail-id")
+            == "__new_preference__"
+        )
+        preference_name_input = driver.find_element(
+            by.By.CSS_SELECTOR,
+            "#all-settings-detail-panel [data-settings-detail-pref-name]",
+        )
+        preference_name_input.clear()
+        preference_name_input.send_keys(preference_name)
+        preference_type = driver.find_element(
+            by.By.CSS_SELECTOR,
+            "#all-settings-detail-panel [data-settings-detail-pref-type]",
+        )
+        ui.Select(preference_type).select_by_value("boolean")
+        preference_value = driver.find_element(
+            by.By.CSS_SELECTOR,
+            "#all-settings-detail-panel [data-settings-detail-pref-value-select]",
+        )
+        ui.Select(preference_value).select_by_value("true")
+        _safe_click(
+            driver,
+            driver.find_element(
+                by.By.CSS_SELECTOR,
+                "#all-settings-detail-panel [data-settings-detail-apply-preference]",
+            ),
+        )
+        wait.until(
+            ec.presence_of_element_located((
+                by.By.CSS_SELECTOR,
+                f'[data-settings-entry-id="{preference_name}"]',
+            ))
+        )
+        _wait_for_selector_disabled(wait, driver, "#validate", False)
+        _click_selector(driver, wait, "#validate")
+        wait.until(
+            lambda current_driver: visible_text_contains(
+                current_driver,
+                locale_catalogs[locale]["profiles.validation_ok"],
+            )
+        )
+        _wait_for_selector_disabled(wait, driver, "#save", False)
+        _click_selector(driver, wait, "#save")
+        _wait_for_selector_disabled(wait, driver, "#save", True)
+
+    def assert_json_export(driver, locale: str, profile_id: int) -> None:
+        preference_name = f"browser.gloc605.{locale.lower().replace('-', '_')}"
+        driver.get(f"{base_url}/profiles/{profile_id}/json")
+        wait.until(ec.presence_of_element_located((by.By.ID, "editor-panel")))
+        wait.until(ec.presence_of_element_located((by.By.ID, "download-firefox-policies")))
+        wait_for_catalog_text(
+            driver,
+            locale,
+            ("profiles.editor_chrome_json_link", "profiles.editor_title_section"),
+            "JSON editor",
+        )
+        download_link = driver.find_element(by.By.ID, "download-firefox-policies")
+        assert download_link.get_attribute("href").endswith(
+            f"/api/export/profiles/{profile_id}/firefox/policies.json"
+        )
+
+        export_response = requests.get(
+            f"{base_url}/api/export/profiles/{profile_id}/firefox/policies.json",
+            timeout=10,
+        )
+        assert export_response.status_code == 200, export_response.text
+        policies = export_response.json()["policies"]
+        assert policies["DisableTelemetry"] is True
+        assert policies["Preferences"][preference_name] == {
+            "Status": "default",
+            "Value": True,
+            "Type": "boolean",
+        }
+
+    with run_test_app_server() as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+
+        try:
+            for locale in target_locales:
+                locale_slug = locale.lower().replace("-", "_")
+                profile_name = f"gloc-605-{locale_slug}"
+
+                driver.get(f"{base_url}/profiles")
+                wait.until(ec.presence_of_element_located((by.By.ID, "import-firefox-policies-file")))
+                _set_locale(
+                    driver,
+                    wait,
+                    ui,
+                    locale=locale,
+                    expected_text=locale_catalogs[locale]["profiles.locale_hint"],
+                )
+                wait_for_catalog_text(
+                    driver,
+                    locale,
+                    ("profiles.nav_library", "profiles.import_firefox_policies_json"),
+                    "Library",
+                )
+
+                profile_id = import_profile_through_picker(driver, locale, profile_name)
+                check_guided_editor_surface(driver, locale, profile_id)
+                edit_all_settings_preference(driver, locale, profile_id)
+                assert_json_export(driver, locale, profile_id)
+        finally:
+            _close_chromium_driver(driver)
+
+
 def test_responsive_ui_acceptance_covers_ru_library_actions_and_ai_schema_split():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
@@ -2643,7 +3227,7 @@ def test_archived_profile_chrome_browser_regression_keeps_deleted_and_restored_s
 
             assert "include_deleted=true" in driver.current_url
             assert driver.find_element(by.By.ID, "current-name").text.strip() == payload["name"]
-            assert f"return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue" in settings_json_link.get_attribute("href")
+            assert "return=" not in settings_json_link.get_attribute("href")
             assert "include_deleted=true" in settings_json_link.get_attribute("href")
 
             settings_handles = set(driver.window_handles)
@@ -2651,15 +3235,16 @@ def test_archived_profile_chrome_browser_regression_keeps_deleted_and_restored_s
             _switch_to_new_window(driver, wait, settings_handles)
             wait.until(ec.presence_of_element_located((by.By.ID, "editor-panel")))
             wait.until(lambda current_driver: current_driver.find_element(by.By.ID, "profile-state-badge").text.strip().lower() == "deleted")
-            json_return_link = wait.until(ec.presence_of_element_located((by.By.ID, "advanced-return-link")))
+            json_settings_link = wait.until(ec.presence_of_element_located((by.By.ID, "editor-mode-settings")))
 
             assert "include_deleted=true" in driver.current_url
             assert driver.find_element(by.By.ID, "current-name").text.strip() == payload["name"]
-            assert json_return_link.get_attribute("href").endswith(
-                f"/profiles/{profile_id}/settings?include_deleted=true"
+            assert not driver.find_elements(by.By.ID, "advanced-return-link")
+            assert json_settings_link.get_attribute("href").endswith(
+                f"/profiles/{profile_id}/settings?include_deleted=true&return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue&focus=settings-schema-shell-step-8"
             )
 
-            open_with_retry(json_return_link.get_attribute("href"))
+            open_with_retry(json_settings_link.get_attribute("href"))
             wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
             wait.until(lambda current_driver: current_driver.find_element(by.By.ID, "profile-state-badge").text.strip().lower() == "deleted")
             wait.until(lambda current_driver: current_driver.find_element(by.By.ID, "current-name").text.strip() == payload["name"])
@@ -2800,9 +3385,6 @@ def test_archived_profile_semantic_focus_browser_regression_preserves_route_awar
                     == payload["name"]
                 )
 
-                json_return_link = wait.until(
-                    ec.presence_of_element_located((by.By.ID, "advanced-return-link"))
-                )
                 settings_link = wait.until(
                     ec.presence_of_element_located((by.By.ID, "editor-mode-settings"))
                 )
@@ -2812,15 +3394,13 @@ def test_archived_profile_semantic_focus_browser_regression_preserves_route_awar
                     assert expected_focus in driver.current_url
                 else:
                     assert "focus=raw" in driver.current_url
-                assert json_return_link.get_attribute("href").endswith(
-                    f"/profiles/{profile_id}/settings?include_deleted=true"
-                )
+                assert not driver.find_elements(by.By.ID, "advanced-return-link")
                 settings_href = settings_link.get_attribute("href") or ""
                 assert "include_deleted=true" in settings_href
                 assert "focus=settings-schema-shell-step-8" in settings_href
                 assert f"return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue" in settings_href
 
-                open_with_retry(json_return_link.get_attribute("href"))
+                open_with_retry(settings_href)
                 wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
                 wait.until(
                     lambda current_driver: current_driver.find_element(

@@ -16,6 +16,11 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.core.locales import (
+    LOCALE_MATRIX,
+    resolve_active_catalog_locale_code,
+    resolve_target_locale_code,
+)
 from app.core.schema_channels import build_schema_channels_catalog
 from app.db import get_session
 from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
@@ -57,14 +62,15 @@ def _resolve_request_locale(request: Request) -> str:
     supported = tuple(settings.SUPPORTED_LOCALES)
     header = request.headers.get("accept-language", "")
 
-    weighted_locales: list[tuple[float, str]] = []
+    weighted_direct_locales: list[tuple[float, str]] = []
+    weighted_fallback_locales: list[tuple[float, str]] = []
     for raw_part in header.split(","):
         part = raw_part.strip()
         if not part:
             continue
-        lang_token, _, params = part.partition(";")
-        lang = lang_token.strip().lower().split("-", 1)[0]
-        if lang not in supported:
+        lang, _, params = part.partition(";")
+        lang = lang.strip()
+        if not lang:
             continue
         weight = 1.0
         for param in params.split(";"):
@@ -75,10 +81,19 @@ def _resolve_request_locale(request: Request) -> str:
                 weight = float(param[2:])
             except ValueError:
                 weight = 0.0
-        weighted_locales.append((weight, lang))
+        if weight <= 0:
+            continue
+        target_locale = resolve_target_locale_code(lang)
+        if target_locale in supported:
+            weighted_direct_locales.append((weight, target_locale))
+        else:
+            weighted_fallback_locales.append(
+                (weight, resolve_active_catalog_locale_code(lang, supported))
+            )
 
+    weighted_locales = weighted_direct_locales or weighted_fallback_locales
     if not weighted_locales:
-        return "en"
+        return settings.DEFAULT_LOCALE
 
     weighted_locales.sort(key=lambda item: item[0], reverse=True)
     return weighted_locales[0][1]
@@ -150,6 +165,7 @@ def _build_profiles_page_context(
             wizard_schema_shell_catalog,
         ),
         "schema_channels_catalog": build_schema_channels_catalog(),
+        "locale_picker_options": LOCALE_MATRIX,
         "initial_lang": initial_lang,
         "initial_locale": initial_locale,
         "tr": tr,
@@ -424,7 +440,6 @@ async def profiles_edit_page(
             ),
             json_href=_build_profile_json_href(
                 profile_id,
-                return_url=current_route,
                 focus_target="editor",
                 include_deleted=include_deleted,
             ),
@@ -446,8 +461,6 @@ async def profiles_settings_page(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
     return_url = _resolve_safe_profiles_return_url(request.query_params.get("return"))
     focus_target = _resolve_focus_target(request.query_params.get("focus"))
-    current_route = _build_profile_route_path(profile_id, "settings", include_deleted=include_deleted)
-
     return templates.TemplateResponse(
         request,
         "profiles_settings.html",
@@ -469,7 +482,6 @@ async def profiles_settings_page(
             ),
             json_href=_build_profile_json_href(
                 profile_id,
-                return_url=current_route,
                 focus_target=_resolve_json_focus_target_from_settings_focus(focus_target)
                 or "editor",
                 include_deleted=include_deleted,

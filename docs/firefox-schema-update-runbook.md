@@ -162,7 +162,9 @@ After the bundled JSON is correct:
 4. Confirm the `/profiles` library route runs the profile schema normalizer before returning the library shell, so the first profile-list refresh sees current schema channels.
 5. Update documentation and UI labels to the new Release / ESR pair.
    In `README.md`, refresh the Supported Firefox Schemas table, examples that carry a `schema_version`, and any prose that names the active Release / ESR versions.
-6. Update the legacy guard so the previous release strings are banned outside the explicit migration and normalization exceptions.
+6. Update every active locale catalog when Release / ESR labels, schema-channel copy, policy names, or schema-related UI strings change.
+   Cover `app/i18n/en.json`, `app/i18n/ru.json`, `app/i18n/de.json`, `app/i18n/zh-CN.json`, `app/i18n/fr.json`, and `app/i18n/es-ES.json`; follow `docs/locale_update_runbook_2026-06-01.md`, the global glossary, and the placeholder rules. If new or changed Mozilla/Firefox terms enter the UI, verify terminology against Pontoon/SUMO evidence and update the glossary or locale audit notes before release.
+7. Update the legacy guard so the previous release strings are banned outside the explicit migration and normalization exceptions.
 
 Important: only the migration, runtime normalizer, and their tests should keep references to the previous channels.
 
@@ -202,6 +204,14 @@ Expected test touch points:
   Verifies opening `/profiles` invokes runtime normalization before the library loads profile data, and visible UI/header text reflects the current supported versions.
 - `tests/test_firefox_wizard_shell.py`
   Verifies important new policies land in the intended UI section, bucket, and inline editor shape.
+- `tests/test_locale_catalogs.py`
+  Verifies locale key parity, placeholder parity, and catalog integrity after schema-related copy changes.
+- `tests/test_ui_runtime_i18n_contract.py`
+  Verifies runtime-rendered UI keys exist in every active locale catalog.
+- `tests/test_locale_visible_english_allowlists.py`
+  Verifies non-English locales do not accidentally expose English UI copy outside the technical allowlist.
+- `tests/test_ui_locale_glossary.py`
+  Verifies glossary, locale-maintenance runbooks, ownership notes, and Mozilla terminology evidence stay current when schema changes add or rename user-facing terms.
 
 If CI has a legacy guard step, update it in `.github/workflows/ci.yml` in the same commit.
 
@@ -217,8 +227,13 @@ Run the focused checks first:
   tests/test_migrations.py \
   tests/test_profile_schema_normalization.py \
   tests/test_firefox_wizard_shell.py \
-  tests/test_web_profiles_page.py
+  tests/test_web_profiles_page.py \
+  tests/test_locale_catalogs.py \
+  tests/test_ui_runtime_i18n_contract.py \
+  tests/test_locale_visible_english_allowlists.py
 ```
+
+If the schema bump changes Firefox/Mozilla terminology or locale-maintenance documentation, also run `tests/test_ui_locale_glossary.py`.
 
 Then run the full suite:
 
@@ -232,6 +247,7 @@ If the schema bump touched product wiring heavily, also review the profiles page
 - wizard defaults to the intended channel
 - validation uses the same default channel as the UI
 - existing migrated profiles still open and export correctly
+- non-English locales still show the current Release / ESR labels and schema-related messages without English fallback islands
 
 ## Release Checklist
 
@@ -245,15 +261,20 @@ Before calling the bump finished, confirm all of the following:
 - opening `/profiles` runs the normalizer before library data is loaded
 - UI audit completed for newly added/changed policies
 - current Firefox Release / ESR labels are visible in the main header and schema selector
+- active locale catalogs are updated for current Release / ESR labels, schema-channel copy, policy names, and schema-related UI strings
 - important new policies are either intentionally mapped into Guided/All settings or explicitly left raw with a reason
 - starter presets reviewed against changed policy semantics
 - tests for schema channels, metadata, legacy guards, and migrations are green
+- locale parity, runtime i18n, and visible-English allowlist tests are green
+- glossary and Pontoon/SUMO evidence are updated when the schema bump introduces or renames Mozilla/Firefox user-facing terms
 - `README.md` mentions the current supported Release / ESR versions
 
 ## Common Failure Modes
 
 - Using the new Firefox version with the old Mozilla `policy-templates` tag.
 - Updating UI labels but leaving API or validation defaults on the previous channel.
+- Updating English schema labels or README text but leaving non-English catalogs on the previous Release / ESR wording.
+- Adding schema-related locale keys only to `en.json`, which creates fallback islands in non-English UI.
 - Regenerating the bundled schema but forgetting the Alembic migration.
 - Keeping old filenames or source tags in tests and CI guards.
 - Leaving the previous schema JSON files in `app/schemas/policies/`, which makes it look like both are supported.

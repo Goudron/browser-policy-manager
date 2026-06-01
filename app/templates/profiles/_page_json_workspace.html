@@ -23,14 +23,6 @@
                     </p>
                 </div>
                 <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
-                    {% if return_url %}
-                    <a
-                        id="advanced-return-link"
-                        href="{{ return_url }}"
-                        class="button-base ghost-button">
-                        {{ tr("profiles.advanced_context_return") }}
-                    </a>
-                    {% endif %}
                     <a
                         id="download-firefox-policies"
                         href="#"
@@ -52,6 +44,7 @@
                 <div
                     id="status"
                     aria-live="polite"
+                    data-i18n="profiles.workspace_ready"
                     class="status-banner status-banner--info rounded-2xl border px-4 py-3 text-sm">
                     {{ tr("profiles.workspace_ready", "Workspace ready.") }}
                 </div>

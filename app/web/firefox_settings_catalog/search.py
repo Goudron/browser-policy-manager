@@ -93,6 +93,8 @@ def get_search_section() -> dict[str, Any]:
                     "Shows Firefox quick actions such as clear history or open downloads while typing.",
                     value_type="boolean",
                     status="default",
+                    label_key="profiles.wizard_preferences_known_search_quick_actions_title",
+                    description_key="profiles.wizard_preferences_known_search_quick_actions_copy",
                 ),
             ],
         },

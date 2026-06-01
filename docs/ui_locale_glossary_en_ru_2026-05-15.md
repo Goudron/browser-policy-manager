@@ -2,10 +2,17 @@
 
 Date: `2026-05-15`
 
-Scope: current product UI only. Supported UI locales remain `en` and `ru`.
-This glossary is a maintainer reference for UI copy, tests, and future locale edits. It is not an in-app documentation surface.
+Scope: historical EN/RU product UI terminology only.
 
-The Russian column records the intended current UI terms. LOC-003 must verify Firefox/Mozilla-specific terminology against Mozilla Pontoon and SUMO before broader localization changes.
+This file is archived and is not the active maintainer glossary for locale edits. Do not add new terminology decisions here. Use `docs/ui_locale_glossary_global_2026-05-29.md` for current
+six-locale UI copy, tests, release documentation, and future locale edits.
+
+The six-locale expansion superseded this document during `GLOC-103` with
+`docs/ui_locale_glossary_global_2026-05-29.md`; `GLOC-702` made that global glossary the single current maintainer reference. Keep this file only as the historical EN/RU reference.
+
+The Russian column records pre-expansion UI terms. Current Firefox/Mozilla-specific terminology must
+be checked in the global glossary and the Mozilla Pontoon/SUMO audit trail before broader
+localization changes.
 
 ## Product Surfaces
 
