@@ -163,6 +163,8 @@ def get_home_section() -> dict[str, Any]:
                     "Controls how many rows of top sites Firefox Home shows.",
                     value_type="number",
                     status="default",
+                    label_key="profiles.wizard_preferences_known_home_topsites_rows_title",
+                    description_key="profiles.wizard_preferences_known_home_topsites_rows_copy",
                     value_control="select",
                     value_options=[
                         value_option(1, "1 row"),

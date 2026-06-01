@@ -664,9 +664,14 @@
         }
 
         async function applyLanguageMode(mode, persist = true) {
-            const normalizedMode = ["system", "en", "ru"].includes(mode) ? mode : "system";
+            const enabledLanguageModes = langSelectEl
+                ? Array.from(langSelectEl.options)
+                    .filter((option) => !option.disabled)
+                    .map((option) => option.value)
+                : ["system", "en", "ru"];
+            const normalizedMode = enabledLanguageModes.includes(mode) ? mode : "system";
             const resolvedLanguage = normalizedMode === "system"
-                ? resolveBrowserLanguage(windowRef.navigator)
+                ? resolveBrowserLanguage(windowRef.navigator, enabledLanguageModes)
                 : normalizedMode;
             const requestId = ++localeRequestId;
 

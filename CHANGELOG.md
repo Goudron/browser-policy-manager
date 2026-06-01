@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.8.0
+
+### Added
+- Added first-class runtime locale catalogs for German, Simplified Chinese, French, and Spanish (Spain), bringing the UI matrix to `en`, `ru`, `de`, `zh-CN`, `fr`, and `es-ES`.
+- Added locale matrix, fallback, picker, runtime-loading, and catalog parity coverage for all six supported locales.
+- Added Mozilla/Pontoon/SUMO terminology audits, a six-locale UI glossary, locale placeholder/identifier rules, and a locale-update runbook for future copy changes.
+- Added browser and workflow QA contracts for locale smoke coverage, viewport overflow, screenshot review, locale switching, and localized import/edit/export flows.
+
+### Changed
+- Moved the project from `0.7.7` to `0.8.0`.
+- Updated README localization guidance to describe the six supported locales, English source-language policy, Mozilla terminology expectations, and current `0.8.0` product state.
+- Promoted the global six-locale glossary as the current maintainer terminology reference and kept the old EN/RU glossary as a historical archive only.
+- Expanded locale quality checks so valid technical English remains allowed while untranslated prose, placeholder drift, key mismatches, and machine-translation artifacts are caught earlier.
+
+### Fixed
+- Fixed untranslated and partially translated UI islands across Guided editor, All settings, JSON editor, Library, CIS flows, runtime counts, validation/error text, search/filter labels, and generated workflow copy.
+- Fixed locale-specific terminology issues found during review, including Chinese profile wording, footer copyright identity, Mozilla terms, and accidental English fragments in non-English catalogs.
+- Removed the redundant `Back to previous mode` return button from settings/JSON editor routes so JSON mode opens consistently from Library, Guided editor, and All settings.
+- Fixed locale-related layout and script risks exposed by German, French, Spanish, and Simplified Chinese QA passes.
+
+### Quality
+- Kept `mypy app`, `ruff check .`, and fast pytest green after the locale expansion.
+- Confirmed non-live `app/` coverage remains at `100%`.
+
 ## 0.7.7
 
 ### Added

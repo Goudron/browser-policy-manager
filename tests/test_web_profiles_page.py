@@ -474,6 +474,34 @@ def _profiles_page_response():
     return client.get("/profiles/new")
 
 
+def test_profiles_page_locale_picker_displays_target_locale_metadata():
+    response = _profiles_page_response()
+    soup = BeautifulSoup(response.text, "html.parser")
+    lang_select = soup.find(id="lang")
+    options = {option.get("value"): option for option in lang_select.find_all("option")}
+
+    assert list(options) == ["system", "en", "ru", "de", "zh-CN", "fr", "es-ES"]
+    assert options["en"].get_text(strip=True) == "English"
+    assert options["ru"].get_text(strip=True) == "Русский"
+    assert options["de"].get_text(strip=True) == "Deutsch"
+    assert options["zh-CN"].get_text(strip=True) == "简体中文"
+    assert options["fr"].get_text(strip=True) == "Français"
+    assert options["es-ES"].get_text(strip=True) == "Español"
+    assert options["zh-CN"]["data-locale-bcp47"] == "zh-CN"
+    assert options["es-ES"]["data-locale-code"] == "es-ES"
+
+    assert options["en"]["data-locale-has-catalog"] == "true"
+    assert options["ru"]["data-locale-has-catalog"] == "true"
+    assert options["de"]["data-locale-has-catalog"] == "true"
+    assert options["zh-CN"]["data-locale-has-catalog"] == "true"
+    assert options["fr"]["data-locale-has-catalog"] == "true"
+    assert options["es-ES"]["data-locale-has-catalog"] == "true"
+    assert not options["de"].has_attr("disabled")
+    assert not options["zh-CN"].has_attr("disabled")
+    assert not options["fr"].has_attr("disabled")
+    assert not options["es-ES"].has_attr("disabled")
+
+
 def test_theme_safe_surface_cards_and_dark_white_override_contract():
     css = Path("app/static/profiles.css").read_text(encoding="utf-8")
     editor_template = Path("app/templates/profiles/_page_editor_chrome.html").read_text(encoding="utf-8")
@@ -508,6 +536,10 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.locale_system"] == "Browser"
     assert locale_json["profiles.locale_option_en"] == "English"
     assert locale_json["profiles.locale_option_ru"] == "Russian"
+    assert locale_json["profiles.locale_option_de"] == "German"
+    assert locale_json["profiles.locale_option_zh_cn"] == "Simplified Chinese"
+    assert locale_json["profiles.locale_option_fr"] == "French"
+    assert locale_json["profiles.locale_option_es_es"] == "Spanish"
     assert locale_json["profiles.editor_chrome_title"] == "Guided editor"
     assert locale_json["profiles.editor_chrome_profile_id"] == "Profile ID"
     assert locale_json["profiles.editor_chrome_validation"] == "Validation"
@@ -538,7 +570,6 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Only when Guided editor is not enough"
     )
     assert locale_json["profiles.advanced_context_title"] == "Continue in All settings"
-    assert locale_json["profiles.advanced_context_return"] == "Back to previous mode"
     assert locale_json["profiles.advanced_context_empty_title"] == (
         "Starting here without a step handoff?"
     )
@@ -565,13 +596,13 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Applies Level 1 and the stricter Level 2 controls for hardened environments."
     )
     assert locale_json["profiles.wizard_export_review_cis_manual"] == (
-        "Review {count} CIS conflict(s) where the base scenario stayed in place."
+        "Review CIS conflicts where the base scenario stayed in place: {count}."
     )
     assert locale_json["profiles.wizard_cis_review_manual_title"] == (
         "CIS manual review: {path}"
     )
     assert locale_json["profiles.wizard_cis_exceptions_count"] == (
-        "{count} CIS exception(s) need notes."
+        "CIS exceptions needing notes: {count}."
     )
     assert locale_json["profiles.wizard_cis_exceptions_show_full"] == (
         "Show full CIS exception notes"
@@ -649,7 +680,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_preferences_search_handoff_title"] == (
         "All settings for Search preferences"
     )
-    assert locale_json["profiles.wizard_preferences_handoff_count"] == "{count} configured"
+    assert locale_json["profiles.wizard_preferences_handoff_count"] == "Configured: {count}"
     assert locale_json["profiles.wizard_settings_controls_label"] == "What you can change here"
     assert locale_json["profiles.wizard_settings_filter_all"] == "All"
     assert locale_json["profiles.wizard_settings_search_label"] == "Find a setting"
@@ -773,7 +804,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Next recommendation"
     )
     assert locale_json["profiles.wizard_hardening_governance_remaining_count"] == (
-        "{count} remaining"
+        "Remaining: {count}"
     )
     assert locale_json["profiles.wizard_privacy_review_permissions"] == "Permissions"
     assert locale_json["profiles.wizard_privacy_review_permissions_subcounts"] == (
@@ -1096,7 +1127,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_extensions_advanced_arbitrary_rules"] == (
         "Arbitrary ExtensionSettings"
     )
-    assert locale_json["profiles.wizard_extensions_advanced_count"] == "{count} configured"
+    assert locale_json["profiles.wizard_extensions_advanced_count"] == "Configured: {count}"
     assert locale_json["profiles.status_revision_conflict"] == (
         "This profile changed in another tab. Reload it before saving again."
     )
@@ -1121,6 +1152,10 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.locale_system"] == "По браузеру"
     assert locale_json["profiles.locale_option_en"] == "Английский"
     assert locale_json["profiles.locale_option_ru"] == "Русский"
+    assert locale_json["profiles.locale_option_de"] == "Немецкий"
+    assert locale_json["profiles.locale_option_zh_cn"] == "Китайский упрощённый"
+    assert locale_json["profiles.locale_option_fr"] == "Французский"
+    assert locale_json["profiles.locale_option_es_es"] == "Испанский"
     assert locale_json["profiles.editor_chrome_title"] == "Пошаговый редактор"
     assert locale_json["profiles.editor_chrome_profile_id"] == "ID профиля"
     assert locale_json["profiles.editor_chrome_validation"] == "Проверка"
@@ -1146,7 +1181,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Только когда Пошагового редактора уже недостаточно"
     )
     assert locale_json["profiles.advanced_context_title"] == "Продолжение во Всех настройках"
-    assert locale_json["profiles.advanced_context_return"] == "Вернуться к предыдущему режиму"
     assert locale_json["profiles.advanced_context_empty_title"] == (
         "Открыли это место без перехода из шага?"
     )
@@ -2635,12 +2669,94 @@ def test_resolve_request_locale_skips_unsupported_languages_and_bad_weights():
             "type": "http",
             "method": "GET",
             "path": "/profiles",
-            "headers": [(b"accept-language", b"fr;q=1, ru;q=oops, en;q=0.5")],
+            "headers": [(b"accept-language", b"pt-BR;q=1, ;q=0.9, ru;q=oops, en;q=0.5")],
             "query_string": b"",
         }
     )
 
     assert reloaded._resolve_request_locale(request) == "en"
+
+
+def test_resolve_request_locale_uses_matrix_backed_regional_fallbacks(monkeypatch):
+    import app.web.profiles as web_profiles
+
+    reloaded = importlib.reload(web_profiles)
+    monkeypatch.setattr(
+        reloaded,
+        "settings",
+        SimpleNamespace(
+            SUPPORTED_LOCALES=("en", "ru", "de", "zh-CN", "fr", "es-ES"),
+            DEFAULT_LOCALE="en",
+        ),
+    )
+
+    cases = (
+        (b"de-AT,de;q=0.9,en;q=0.1", "de"),
+        (b"fr-CA,fr;q=0.9,en;q=0.1", "fr"),
+        (b"es-MX,es;q=0.9,en;q=0.1", "es-ES"),
+        (b"zh-Hans-CN,zh;q=0.9,en;q=0.1", "zh-CN"),
+    )
+    for header, expected_locale in cases:
+        request = Request(
+            {
+                "type": "http",
+                "method": "GET",
+                "path": "/profiles",
+                "headers": [(b"accept-language", header)],
+                "query_string": b"",
+            }
+        )
+        assert reloaded._resolve_request_locale(request) == expected_locale
+
+
+def test_resolve_request_locale_falls_back_to_active_catalog_for_target_only_locales(
+    monkeypatch,
+):
+    import app.web.profiles as web_profiles
+
+    reloaded = importlib.reload(web_profiles)
+    monkeypatch.setattr(
+        reloaded.settings,
+        "SUPPORTED_LOCALES",
+        ("en", "ru", "de", "zh-CN", "fr"),
+    )
+
+    request = Request(
+        {
+            "type": "http",
+            "method": "GET",
+            "path": "/profiles",
+            "headers": [(b"accept-language", b"es-MX,es;q=0.9,en;q=0.1")],
+            "query_string": b"",
+        }
+    )
+
+    assert reloaded._resolve_request_locale(request) == "en"
+
+
+def test_resolve_request_locale_prefers_next_active_catalog_before_default_fallback(
+    monkeypatch,
+):
+    import app.web.profiles as web_profiles
+
+    reloaded = importlib.reload(web_profiles)
+    monkeypatch.setattr(
+        reloaded.settings,
+        "SUPPORTED_LOCALES",
+        ("en", "ru", "de", "zh-CN", "fr"),
+    )
+
+    request = Request(
+        {
+            "type": "http",
+            "method": "GET",
+            "path": "/profiles",
+            "headers": [(b"accept-language", b"es-MX,es;q=0.9,ru-RU;q=0.8,en;q=0.1")],
+            "query_string": b"",
+        }
+    )
+
+    assert reloaded._resolve_request_locale(request) == "ru"
 
 
 def test_load_locale_catalog_returns_empty_mapping_for_missing_locale(tmp_path, monkeypatch):
@@ -3237,7 +3353,7 @@ def test_visual_editor_routes_hide_inline_advanced_surface():
 
     assert 'class="content-grid grid gap-4 support-hidden"' not in new_response.text
     assert 'class="content-grid grid gap-4 support-hidden"' not in edit_response.text
-    assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in edit_response.text
+    assert f'href="/profiles/{profile_id}/json?focus=editor"' in edit_response.text
     assert f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit"' in edit_response.text
     assert 'id="settings-panel"' in settings_response.text
     assert 'data-settings-runtime-backing' not in settings_response.text
@@ -3296,7 +3412,7 @@ def test_deleted_profile_routes_require_include_deleted_and_preserve_archived_ch
         in archived_response.text
     )
     assert (
-        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;return=/profiles/{profile_id}/edit%3Finclude_deleted%3Dtrue&amp;focus=editor"'
+        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;focus=editor"'
         in archived_response.text
     )
 
@@ -3632,9 +3748,7 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
     assert captured["context"]["settings_href"] == (
         "/profiles/8/settings?return=/profiles/8/edit&focus=policy:DisableTelemetry"
     )
-    assert captured["context"]["json_href"] == (
-        "/profiles/8/json?return=/profiles/8/settings&focus=policy:DisableTelemetry"
-    )
+    assert captured["context"]["json_href"] == "/profiles/8/json?focus=policy:DisableTelemetry"
 
 
 def test_profile_json_route_uses_json_template(monkeypatch):
@@ -3775,8 +3889,7 @@ def test_profile_json_route_renders_return_and_focus_context():
     assert response.status_code == 200
     assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in response.text
     assert 'data-advanced-focus-target="policy:DisableTelemetry"' in response.text
-    assert 'id="advanced-return-link"' in response.text
-    assert f'href="/profiles/{profile_id}/edit"' in response.text
+    assert 'id="advanced-return-link"' not in response.text
     assert unsafe_response.status_code == 307
     assert unsafe_response.headers["location"] == f"/profiles/{profile_id}/json?focus=policy:DisableTelemetry"
 
@@ -3802,13 +3915,13 @@ def test_archived_profile_handoff_routes_preserve_include_deleted_return_context
     assert 'data-include-deleted="true"' in settings_response.text
     assert f'data-advanced-return-url="/profiles/{profile_id}/edit?include_deleted=true"' in settings_response.text
     assert (
-        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&amp;focus=policy:DisableTelemetry"'
+        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;focus=policy:DisableTelemetry"'
         in settings_response.text
     )
     assert 'data-include-deleted="true"' in json_response.text
     assert f'data-advanced-return-url="/profiles/{profile_id}/settings?include_deleted=true"' in json_response.text
     assert f'href="/profiles/{profile_id}/settings?include_deleted=true&amp;return=/profiles/{profile_id}/json%3Finclude_deleted%3Dtrue&amp;focus=settings-schema-shell-step-8"' in json_response.text
-    assert f'href="/profiles/{profile_id}/settings?include_deleted=true"' in json_response.text
+    assert 'id="advanced-return-link"' not in json_response.text
 
 
 def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context():
@@ -3839,7 +3952,7 @@ def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context
     assert json_unknown_response.status_code == 200
 
     assert (
-        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;return=/profiles/{profile_id}/settings%3Finclude_deleted%3Dtrue&amp;focus=policy:DisableTelemetry"'
+        f'href="/profiles/{profile_id}/json?include_deleted=true&amp;focus=policy:DisableTelemetry"'
         in settings_policy_response.text
     )
     assert 'id="settings-schema-shell-step-5-details"' in settings_policy_response.text
@@ -3880,7 +3993,7 @@ def test_active_profile_semantic_focus_routes_preopen_expected_settings_shell():
     assert settings_policy_response.status_code == 200
     assert json_raw_response.status_code == 200
     assert (
-        f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&amp;focus=policy:DisableTelemetry"'
+        f'href="/profiles/{profile_id}/json?focus=policy:DisableTelemetry"'
         in settings_policy_response.text
     )
     assert 'id="settings-schema-shell-step-5-details"' in settings_policy_response.text
@@ -4089,6 +4202,10 @@ def test_profile_advanced_helpers_reject_unsafe_values_and_build_focus_only_href
         focus_target="settings-schema-shell-step-8",
         include_deleted=True,
     ) == "/profiles/8/settings?include_deleted=true&return=/profiles/8/json%3Finclude_deleted%3Dtrue&focus=settings-schema-shell-step-8"
+    assert web_profiles._build_profile_route_path(8, "settings") == "/profiles/8/settings"
+    assert web_profiles._build_profile_route_path(8, "settings", include_deleted=True) == (
+        "/profiles/8/settings?include_deleted=true"
+    )
 
 
 def test_profile_json_route_regression_contract():
@@ -4479,7 +4596,7 @@ def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save(
 
     assert response.status_code == 200
     assert f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit"' in response.text
-    assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in response.text
+    assert f'href="/profiles/{profile_id}/json?focus=editor"' in response.text
     assert 'title="Save the profile first to open All settings or JSON in a separate tab."' not in response.text
     assert 'id="editor-mode-links-hint"' in response.text
     assert 'support-hidden' in response.text
@@ -4499,7 +4616,7 @@ def test_profile_settings_route_preserves_step8_json_handoff():
 
     assert response.status_code == 200
     assert (
-        f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/settings&amp;focus=raw"'
+        f'href="/profiles/{profile_id}/json?focus=raw"'
         in response.text
     )
 

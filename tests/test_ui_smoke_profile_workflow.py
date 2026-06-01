@@ -414,7 +414,6 @@ P2_3_UX_REGRESSION_TOKENS = (
 
 P2_3_LOCALE_KEYS = (
     "profiles.advanced_context_title",
-    "profiles.advanced_context_return",
     "profiles.wizard_hardening_preset_balanced_title",
     "profiles.wizard_hardening_governance_title",
     "profiles.wizard_cleanup_preset_shared_title",
@@ -587,7 +586,6 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
         "Included in the policies.json you download now"
     )
     assert locale_ru_json["profiles.advanced_context_title"] == "Продолжение во Всех настройках"
-    assert locale_ru_json["profiles.advanced_context_return"] == "Вернуться к предыдущему режиму"
     assert locale_ru_json["profiles.wizard_export_shareable_title"] == "Выжимка для передачи"
     assert locale_ru_json["profiles.wizard_export_shareable_generate"] == (
         "Сформировать/скопировать выжимку"
@@ -1334,7 +1332,7 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
     assert f'data-editing-profile-id="{profile_id}"' in visual_response.text
     assert 'data-profiles-route-mode="edit"' in visual_response.text
     assert 'data-profiles-template-kind="editor"' in visual_response.text
-    assert f'href="/profiles/{profile_id}/json?return=/profiles/{profile_id}/edit&amp;focus=editor"' in visual_response.text
+    assert f'href="/profiles/{profile_id}/json?focus=editor"' in visual_response.text
 
     visual_flags = {
         **created["flags"],
@@ -1366,6 +1364,7 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
     assert 'data-profiles-route-mode="json"' in json_response.text
     assert 'data-profiles-template-kind="json"' in json_response.text
     assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in json_response.text
+    assert 'id="advanced-return-link"' not in json_response.text
     assert 'data-advanced-focus-target="editor"' in json_response.text
     assert f"<title>{payload['name']} — JSON editor — Browser Policy Manager</title>" in json_response.text
 

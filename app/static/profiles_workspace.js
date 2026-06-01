@@ -753,7 +753,7 @@
         function buildConflictCopyName(form) {
             const sourceName = form.name || getCurrentProfile()?.name || t("profiles.conflict_copy_source_fallback");
             const revision = saveConflictState?.expectedRevision || getCurrentProfile()?.revision || "";
-            const stamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+            const stamp = formatTimestamp(new Date());
             return t("profiles.conflict_copy_name")
                 .replace("{name}", sourceName)
                 .replace("{revision}", String(revision || "?"))
@@ -1279,7 +1279,6 @@
             if (includeDeleted) {
                 params.push(includeDeletedSuffix);
             }
-            params.push(`return=${encodeURIComponent(returnPath)}`);
             params.push(`focus=${encodeURIComponent(jsonFocusTarget)}`);
             return `/profiles/${currentId}/json?${params.join("&")}`;
         }

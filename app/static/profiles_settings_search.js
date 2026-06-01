@@ -394,18 +394,16 @@
                 return;
             }
 
-            const single = matches.length === 1;
             if (isAllSettingsRoute) {
                 wizardSettingsSearchMetaEl.textContent = t(
-                    single
+                    matches.length === 1
                         ? "profiles.settings_search_match_one"
                         : "profiles.settings_search_match_many",
                 ).replace("{count}", String(matches.length));
                 return;
             }
-            wizardSettingsSearchMetaEl.textContent = getCurrentLang() === "ru"
-                ? `${matches.length} ${single ? "совпадение" : "совпадений"} в мастере.`
-                : `${matches.length} ${single ? "match" : "matches"} in the wizard.`;
+            wizardSettingsSearchMetaEl.textContent = t("profiles.wizard_settings_search_match_count")
+                .replace("{count}", String(matches.length));
         }
 
         function renderResults() {

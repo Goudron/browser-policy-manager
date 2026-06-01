@@ -33,11 +33,13 @@ ALLOWED_VISIBLE_LATIN_TOKENS = {
     "Hello",
     "Preferences",
     # Literal or placeholder-like technical fragments intentionally shown in UI.
+    "about",
     "example",
     "false",
     "firefox",
     "local",
     "mailto",
+    "policies",
     "q",
     "r",
     "source",

@@ -6,7 +6,7 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.7.7`<br>
+**Version:** `0.8.0`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
@@ -37,7 +37,7 @@ creates a profile ID.
 - All settings catalog for full visual inspection and policy editing outside the guided flow.
 - JSON editor backed by the locally bundled Monaco editor.
 - CIS Firefox hardening assets, starter presets, generated layers, and merge logic.
-- English primary UI with Russian localization.
+- English source UI with six active runtime locale catalogs.
 
 ## Supported Firefox Schemas
 
@@ -184,12 +184,33 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 
 ## Localization
 
-The primary project and UI language is English.
+The primary project and UI source language is English. Product copy starts from
+`app/i18n/en.json` and English maintainer documentation before it is localized.
 
-Russian localization is included and maintained as a first-class locale. Russian UI terminology
-should follow Mozilla Pontoon and SUMO style where applicable, including terms such as
-`Аккаунт Mozilla` and `куки`. English text should not appear in the Russian UI unless it is a
-brand name, policy key, product identifier, API term, or another intentionally untranslated value.
+BPM 0.8.0 ships a six-locale UI matrix:
+
+| Locale | Native label | Status |
+|---|---|---|
+| `en` | English | Active source catalog |
+| `ru` | Русский | Active localized catalog |
+| `de` | Deutsch | Active localized catalog |
+| `zh-CN` | 简体中文 | Active localized catalog |
+| `fr` | Français | Active localized catalog |
+| `es-ES` | Español | Active localized catalog |
+
+Every listed locale is an active runtime catalog. A locale remains shippable only while its
+`app/i18n/{locale}.json` file exists, keeps key and placeholder parity with English, passes
+locale-quality checks, and receives terminology review. Unsupported or regional browser-language
+matches fall back to the nearest active catalog, currently `en`, `ru`, `de`, `zh-CN`, `fr`, or
+`es-ES`.
+
+Mozilla, Firefox, browser UI, privacy, permission, add-on, translation, and policy terminology
+should follow Mozilla Pontoon and SUMO style where applicable. English text should not appear in a
+localized UI unless it is a brand name, policy key, product identifier, API term, JSON value, or
+another intentionally untranslated technical value.
+
+Current locale ownership is single-maintainer and manual-review based. External/community translation intake is not a separate maintained workflow yet; any proposed locale copy must follow
+the project glossary, placeholder rules, Pontoon/SUMO terminology workflow, and locale QA runbook.
 
 Localization catalogs are served from:
 
@@ -197,10 +218,14 @@ Localization catalogs are served from:
 GET /i18n/{locale}.json
 ```
 
-Currently supported locales:
+Currently active runtime catalogs:
 
 - `en`
 - `ru`
+- `de`
+- `zh-CN`
+- `fr`
+- `es-ES`
 
 ## Architecture
 

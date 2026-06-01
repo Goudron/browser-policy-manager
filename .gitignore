@@ -85,6 +85,7 @@ pytestdebug.log
 *.rej
 /artifacts/
 /tmp_screens/
+/docs/screenshots/
 
 # Official source PDFs are local curation inputs; commit derived YAML metadata instead.
 /app/compliance/firefox/cis/source_materials/*.pdf

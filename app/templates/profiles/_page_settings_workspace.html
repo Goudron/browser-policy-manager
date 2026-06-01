@@ -23,15 +23,6 @@
                             {{ tr("profiles.settings_route_body", "Search mapped controls and apply policy changes without opening the JSON editor.") }}
                         </p>
                     </div>
-                    {% if return_url %}
-                    <a
-                        id="settings-return-link"
-                        href="{{ return_url }}"
-                        class="button-base ghost-button"
-                        data-i18n="profiles.advanced_context_return">
-                        {{ tr("profiles.advanced_context_return") }}
-                    </a>
-                    {% endif %}
                 </div>
 
                 <div class="wizard-settings-search-shell surface-soft-box">
@@ -318,7 +309,7 @@
 
         <div class="support-hidden" aria-live="polite">
             <div id="overview-status">{{ tr("profiles.signal_saved") }}</div>
-            <div id="status">{{ tr("profiles.workspace_ready", "Workspace ready.") }}</div>
+            <div id="status" data-i18n="profiles.workspace_ready">{{ tr("profiles.workspace_ready", "Workspace ready.") }}</div>
         </div>
     </main>
 </div>

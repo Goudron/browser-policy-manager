@@ -42,7 +42,7 @@
                 </div>
                 <p class="compact-profile-copy" id="current-meta">
                     {% if has_initial_profile %}
-                        ID {{ initial_profile.id }} • {{ initial_schema_label }} • {{ tr("profiles.meta_updated").replace("{value}", initial_profile.updated_at or "—") }}
+                        ID {{ initial_profile.id }} • {{ initial_schema_label }}
                     {% endif %}
                 </p>
                 <p class="compact-profile-copy" id="profile-derived-note" role="status" aria-live="polite" hidden></p>
