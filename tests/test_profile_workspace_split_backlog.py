@@ -1,23 +1,44 @@
-from pathlib import Path
-
-REPO_ROOT = Path(__file__).resolve().parents[1]
-BACKLOG_PATH = REPO_ROOT / "docs/profile_workspace_split_simplification_backlog_2026-04-21.md"
+from tests.docs_index import REPO_ROOT, doc_path_from_index, docs_manifest
 
 
-def test_simplified_wizard_component_contract_is_documented():
-    backlog = BACKLOG_PATH.read_text(encoding="utf-8")
+def _finished_backlog_item(item_id: str) -> dict[str, object]:
+    manifest = docs_manifest()
+    items = [
+        item
+        for item in manifest["finished_backlog_items"]
+        if item["id"] == item_id
+    ]
+    assert len(items) == 1
+    return items[0]
 
-    assert "### `WS-D01` Define The Simplified Wizard Component Contract" in backlog
-    assert "Status: Done" in backlog
-    assert "Simplified wizard component contract:" in backlog
-    assert "Every default-visible wizard section should answer one admin question" in backlog
-    assert "Title" in backlog
-    assert "One-line purpose" in backlog
-    assert "Primary choice" in backlog
-    assert "Active state" in backlog
-    assert "Real warnings" in backlog
-    assert "Advanced link" in backlog
-    assert "What must leave the default path:" in backlog
-    assert "Settings maps and guided coverage maps." in backlog
-    assert "`remaining N of M` coverage language." in backlog
-    assert "Completion checklist for `WS-D02` through `WS-D13`:" in backlog
+
+def test_simplified_wizard_component_contract_is_recorded_in_docs_manifest():
+    item = _finished_backlog_item("WS-D01")
+    source_doc = doc_path_from_index(
+        "profile_workspace_split_simplification_backlog_2026-04-21.md",
+        status="backlog",
+    )
+
+    assert item["title"] == "Define The Simplified Wizard Component Contract"
+    assert item["status"] == "done"
+    assert item["source_doc"] == source_doc.relative_to(REPO_ROOT / "docs").as_posix()
+    assert item["contract"] == "simplified_wizard_component"
+    assert item["default_visible_section_answer"] == "one_admin_question"
+    assert item["followup_range"] == "WS-D02..WS-D13"
+    assert item["required_components"] == [
+        "title",
+        "one_line_purpose",
+        "primary_choice",
+        "active_state",
+        "real_warnings",
+        "advanced_link",
+    ]
+    assert item["excluded_default_path"] == [
+        "settings_maps",
+        "guided_coverage_maps",
+        "remaining_n_of_m_coverage_language",
+        "schema_shell_inventories",
+        "long_policy_reference_copy",
+        "raw_policy_fallback_lists",
+        "advanced_only_controls",
+    ]

@@ -1,8 +1,10 @@
 from pathlib import Path
 
+from tests.docs_index import doc_path_from_index
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CSS_PATH = REPO_ROOT / "app" / "static" / "profiles.css"
-AUDIT_DOC_PATH = REPO_ROOT / "docs" / "fr_overflow_audit_2026-05-30.md"
+AUDIT_DOC_PATH = doc_path_from_index("fr_overflow_audit_2026-05-30.md", status="audit")
 
 
 def test_french_overflow_audit_document_records_clean_primary_surfaces():

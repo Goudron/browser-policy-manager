@@ -1,8 +1,12 @@
 from pathlib import Path
 
+from tests.docs_index import doc_path_from_index
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CSS_PATH = REPO_ROOT / "app" / "static" / "profiles.css"
-AUDIT_DOC_PATH = REPO_ROOT / "docs" / "responsive_long_label_css_audit_2026-05-30.md"
+AUDIT_DOC_PATH = doc_path_from_index(
+    "responsive_long_label_css_audit_2026-05-30.md", status="audit"
+)
 
 
 def _css_source() -> str:

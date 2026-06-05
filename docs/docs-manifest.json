@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-02",
+  "finished_backlog_items": [
+    {
+      "id": "WS-D01",
+      "title": "Define The Simplified Wizard Component Contract",
+      "status": "done",
+      "source_doc": "archive/2026-q2/profile_workspace_split_simplification_backlog_2026-04-21.md",
+      "source_heading": "### `WS-D01` Define The Simplified Wizard Component Contract",
+      "contract": "simplified_wizard_component",
+      "default_visible_section_answer": "one_admin_question",
+      "required_components": [
+        "title",
+        "one_line_purpose",
+        "primary_choice",
+        "active_state",
+        "real_warnings",
+        "advanced_link"
+      ],
+      "excluded_default_path": [
+        "settings_maps",
+        "guided_coverage_maps",
+        "remaining_n_of_m_coverage_language",
+        "schema_shell_inventories",
+        "long_policy_reference_copy",
+        "raw_policy_fallback_lists",
+        "advanced_only_controls"
+      ],
+      "reachable_support": [
+        "search_index_targets",
+        "collapsed_fine_tuning",
+        "focused_advanced_links",
+        "future_documentation_links",
+        "final_review_summaries"
+      ],
+      "followup_range": "WS-D02..WS-D13"
+    }
+  ]
+}

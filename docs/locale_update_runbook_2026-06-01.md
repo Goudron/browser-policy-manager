@@ -81,20 +81,16 @@ Update documentation when the change affects terminology, QA expectations, or re
 Run the narrow locale checks first:
 
 ```bash
-.venv/bin/pytest -q tests/test_locale_catalogs.py tests/test_locale_visible_english_allowlists.py tests/test_ui_runtime_i18n_contract.py
+make test-locale-contract
 ```
 
-When the change affects glossary, terminology, or locale documentation, also run:
+The target covers catalog parity, accidental-English allowlists, runtime i18n keys, glossary
+contracts, search/filter strings, generated counts, viewport/layout contracts, locale switching,
+localized import/edit/export, and the focused profile UI workflow.
 
-```bash
-.venv/bin/pytest -q tests/test_ui_locale_glossary.py
-```
-
-When the change affects All settings search/filter strings or runtime-generated counts, also run:
-
-```bash
-.venv/bin/pytest -q tests/test_all_settings_search_filter_i18n.py tests/test_runtime_count_i18n.py
-```
+When you need to isolate one failing area, use the file list in the
+`test-locale-contract` target body as the source of truth instead of copying new
+one-off commands into this runbook.
 
 ## 6. Run Browser And Workflow QA When UI Surfaces Change
 
@@ -102,19 +98,7 @@ Use browser or workflow checks when the change affects visible UI layout, locale
 import/edit/export, or route-specific strings:
 
 ```bash
-.venv/bin/pytest -q tests/test_chromium_locale_smoke_matrix_contract.py tests/test_locale_viewport_overflow_contract.py
-```
-
-For locale switching and localized profile workflows:
-
-```bash
-.venv/bin/pytest -q tests/test_locale_switching_regression_contract.py tests/test_localized_import_edit_export_workflow_contract.py
-```
-
-For a focused runtime workflow check after profile UI changes:
-
-```bash
-.venv/bin/pytest -q tests/test_web_profiles_page.py tests/test_ui_smoke_profile_workflow.py
+make test-locale-contract
 ```
 
 ## 7. Final Quality Gate
@@ -122,9 +106,8 @@ For a focused runtime workflow check after profile UI changes:
 Before merging or tagging a locale release, run the standard project gate:
 
 ```bash
-.venv/bin/mypy app
-.venv/bin/ruff check .
-.venv/bin/pytest -q --cov=app --cov-report=term-missing
+make quality
+make coverage
 ```
 
 The expected coverage result for the app surface is `TOTAL 100%`. If coverage drops below 100%,

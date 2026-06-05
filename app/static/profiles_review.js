@@ -168,6 +168,7 @@
         const setWizardComplianceDecisionNote = state.setWizardComplianceDecisionNote || (() => {});
         const getBaselineSummary = state.getBaselineSummary || (() => ({ copy: "", items: [] }));
         const workspaceSignalEl = state.workspaceSignalEl || null;
+        const reviewState = window.BPMProfilesReviewState || {};
 
         function setText(el, value) {
             if (el) {
@@ -229,16 +230,11 @@
         }
 
         function hasMeaningfulValue(value) {
-            if (typeof value === "boolean" || typeof value === "number") return true;
-            if (typeof value === "string") return value.trim().length > 0;
-            if (Array.isArray(value)) return value.some((entry) => hasMeaningfulValue(entry));
-            if (value && typeof value === "object") return Object.values(value).some((entry) => hasMeaningfulValue(entry));
-            return false;
+            return reviewState.hasMeaningfulValue(value);
         }
 
         function countConfiguredObjectEntries(value) {
-            const currentObject = value && typeof value === "object" && !Array.isArray(value) ? value : {};
-            return Object.values(currentObject).filter((entry) => hasMeaningfulValue(entry)).length;
+            return reviewState.countConfiguredObjectEntries(value);
         }
 
         function formatCountText(key, count) {
@@ -2302,7 +2298,7 @@
                 nextSteps.push({
                     tone: "attention",
                     label: t("profiles.wizard_export_plan_fix_current_file"),
-                    action: { kind: "scope", value: "advanced", label: t("profiles.advanced_handoff_open") },
+                    action: { kind: "scope", value: "settings", label: t("profiles.settings_handoff_open") },
                 });
             } else if (summary.validationStateTone !== "ready") {
                 nextSteps.push({
@@ -2539,7 +2535,7 @@
                 missingNow.push({
                     tone: "attention",
                     label: t("profiles.wizard_export_missing_invalid"),
-                    action: { kind: "scope", value: "advanced", label: t("profiles.advanced_handoff_open") },
+                    action: { kind: "scope", value: "settings", label: t("profiles.settings_handoff_open") },
                 });
             }
 

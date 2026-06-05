@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import builtins
+from dataclasses import dataclass
 from typing import Any, cast
 
 from sqlalchemy import asc, delete, desc, func, select
@@ -18,6 +19,20 @@ from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
 
 SortField = str  # "created_at" | "updated_at" | "name" | "schema_version" | "id"
 SortOrder = str  # "asc" | "desc"
+
+
+@dataclass(frozen=True, slots=True)
+class ProfileQuery:
+    q: str | None = None
+    owner: str | None = None
+    schema_version: str | None = None
+    validation_state: str | None = None
+    lifecycle: str = "active"
+    include_deleted: bool = False
+    limit: int = 50
+    offset: int = 0
+    sort: SortField = "updated_at"
+    order: SortOrder = "desc"
 
 
 class ProfileService:
@@ -46,6 +61,38 @@ class ProfileService:
         }
         col = field_map.get(field, Profile.updated_at)
         return asc(col) if order == "asc" else desc(col)
+
+    @staticmethod
+    def _query_filters(query: ProfileQuery) -> builtins.list[ColumnElement[bool]]:
+        filters: builtins.list[ColumnElement[bool]] = []
+
+        if query.lifecycle == "archived":
+            filters.append(Profile.deleted_at.is_not(None))
+        elif query.lifecycle != "all" and not query.include_deleted:
+            filters.append(Profile.deleted_at.is_(None))
+
+        if query.owner:
+            filters.append(Profile.owner == query.owner)
+
+        if query.schema_version:
+            filters.append(Profile.schema_version == query.schema_version)
+
+        return filters
+
+    @staticmethod
+    def _apply_query_filters(stmt, query: ProfileQuery):
+        filters = ProfileService._query_filters(query)
+        return stmt.where(*filters) if filters else stmt
+
+    @staticmethod
+    def _matches_query(profile: Profile, query: ProfileQuery) -> bool:
+        if not ProfileService._matches_name_query(profile.name, query.q):
+            return False
+        if query.validation_state and (
+            ProfileService._validation_state(profile) != query.validation_state
+        ):
+            return False
+        return True
 
     @staticmethod
     def _validation_state(profile: Profile) -> str:
@@ -85,33 +132,25 @@ class ProfileService:
         sort: SortField = "updated_at",
         order: SortOrder = "desc",
     ) -> builtins.list[ProfileRead]:
-        stmt = select(Profile)
-
-        if lifecycle == "archived":
-            stmt = stmt.where(Profile.deleted_at.is_not(None))
-        elif lifecycle != "all" and not include_deleted:
-            stmt = stmt.where(Profile.deleted_at.is_(None))
-
-        if owner:
-            stmt = stmt.where(Profile.owner == owner)
-
-        if schema_version:
-            stmt = stmt.where(Profile.schema_version == schema_version)
-
-        stmt = stmt.order_by(ProfileService._sort_clause(sort, order))
+        query = ProfileQuery(
+            q=q,
+            owner=owner,
+            schema_version=schema_version,
+            validation_state=validation_state,
+            lifecycle=lifecycle,
+            include_deleted=include_deleted,
+            limit=limit,
+            offset=offset,
+            sort=sort,
+            order=order,
+        )
+        stmt = ProfileService._apply_query_filters(select(Profile), query)
+        stmt = stmt.order_by(ProfileService._sort_clause(query.sort, query.order))
         res = await session.scalars(stmt)
         items = list(res)
-        if q:
-            items = [
-                item for item in items
-                if ProfileService._matches_name_query(item.name, q)
-            ]
-        if validation_state:
-            items = [
-                item for item in items
-                if ProfileService._validation_state(item) == validation_state
-            ]
-        items = items[offset: offset + limit]
+        if query.q or query.validation_state:
+            items = [item for item in items if ProfileService._matches_query(item, query)]
+        items = items[query.offset: query.offset + query.limit]
         return [ProfileService._as_read_model(item) for item in items]
 
     @staticmethod
@@ -136,39 +175,22 @@ class ProfileService:
         lifecycle: str = "active",
         include_deleted: bool = False,
     ) -> int:
-        filters: builtins.list[ColumnElement[bool]] = []
+        query = ProfileQuery(
+            q=q,
+            owner=owner,
+            schema_version=schema_version,
+            validation_state=validation_state,
+            lifecycle=lifecycle,
+            include_deleted=include_deleted,
+        )
+        stmt = ProfileService._apply_query_filters(select(func.count()).select_from(Profile), query)
 
-        if lifecycle == "archived":
-            filters.append(Profile.deleted_at.is_not(None))
-        elif lifecycle != "all" and not include_deleted:
-            filters.append(Profile.deleted_at.is_(None))
-
-        if owner:
-            filters.append(Profile.owner == owner)
-
-        if schema_version:
-            filters.append(Profile.schema_version == schema_version)
-
-        stmt = select(func.count()).select_from(Profile)
-        if filters:
-            stmt = stmt.where(*filters)
-
-        if not q and not validation_state:
+        if not query.q and not query.validation_state:
             return int(await session.scalar(stmt) or 0)
 
-        rows_stmt = select(Profile)
-        if filters:
-            rows_stmt = rows_stmt.where(*filters)
+        rows_stmt = ProfileService._apply_query_filters(select(Profile), query)
         rows = await session.scalars(rows_stmt)
-        return sum(
-            1
-            for item in rows
-            if ProfileService._matches_name_query(item.name, q)
-            and (
-                not validation_state
-                or ProfileService._validation_state(item) == validation_state
-            )
-        )
+        return sum(1 for item in rows if ProfileService._matches_query(item, query))
 
     @staticmethod
     async def create(session: AsyncSession, data: ProfileCreate) -> ProfileRead:

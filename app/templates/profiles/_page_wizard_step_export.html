@@ -66,16 +66,16 @@
                             target="_blank"
                             rel="noopener"
                             class="button-base ghost-button"
-                            data-i18n="profiles.advanced_handoff_open">
-                            {{ tr("profiles.advanced_handoff_open") }}
+                            data-i18n="profiles.settings_handoff_open">
+                            {{ tr("profiles.settings_handoff_open") }}
                         </a>
                         {% else %}
                         <button
                             type="button"
                             class="button-base ghost-button"
                             disabled
-                            data-i18n="profiles.advanced_handoff_open">
-                            {{ tr("profiles.advanced_handoff_open") }}
+                            data-i18n="profiles.settings_handoff_open">
+                            {{ tr("profiles.settings_handoff_open") }}
                         </button>
                         {% endif %}
                     </div>
@@ -250,19 +250,19 @@
                 <p class="wizard-subtitle" data-i18n="profiles.wizard_export_section_technical_body">{{ tr("profiles.wizard_export_section_technical_body") }}</p>
             </div>
             {{ render_wizard_schema_shell(8) }}
-            <div class="wizard-summary-card" data-advanced-compatibility-panel>
+            <div class="wizard-summary-card" data-settings-compatibility-panel>
                 <div class="section-kicker" data-i18n="profiles.wizard_export_compatibility_title">{{ tr("profiles.wizard_export_compatibility_title") }}</div>
                 <p class="wizard-subtitle" data-i18n="profiles.wizard_export_compatibility_body">{{ tr("profiles.wizard_export_compatibility_body") }}</p>
                 <div class="wizard-summary-list">
-                    <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
+                    <div class="wizard-summary-row" data-workspace-scope-panel="settings">
                         <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_mode">{{ tr("profiles.wizard_summary_mode") }}</span>
                         <span class="wizard-summary-value" id="wizard-summary-mode">JSON</span>
                     </div>
-                    <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
+                    <div class="wizard-summary-row" data-workspace-scope-panel="settings">
                         <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_policies">{{ tr("profiles.wizard_summary_policies") }}</span>
                         <span class="wizard-summary-value" id="wizard-summary-policies">0</span>
                     </div>
-                    <div class="wizard-summary-row" data-workspace-scope-panel="advanced">
+                    <div class="wizard-summary-row" data-workspace-scope-panel="settings">
                         <span class="wizard-summary-key" data-i18n="profiles.wizard_summary_extensions">{{ tr("profiles.wizard_summary_extensions") }}</span>
                         <span class="wizard-summary-value" id="wizard-summary-extensions">0</span>
                     </div>

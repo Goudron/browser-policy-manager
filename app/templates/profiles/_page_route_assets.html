@@ -1,0 +1,81 @@
+{% set route_kind = profiles_template_kind %}
+{% set route_requires_monaco = route_kind == "json" %}
+{% if profiles_asset_phase == "head" %}
+{% set head_scripts = ["/static/profiles_head_bootstrap.js"] %}
+{% if route_kind != "library" %}
+{% set head_scripts = head_scripts + ["/static/vendor/js-yaml.js"] %}
+{% endif %}
+{% set stylesheets = ["/static/vendor/profiles_tailwind.css"] %}
+{% if route_requires_monaco %}
+{% set stylesheets = stylesheets + ["/static/vendor/profiles_monaco.css"] %}
+{% endif %}
+{% set stylesheets = stylesheets + ["/static/profiles.css"] %}
+{% for script_path in head_scripts %}
+    <script src="{{ script_path }}?v={{ asset_version }}"></script>
+{% endfor %}
+{% for stylesheet_path in stylesheets %}
+    <link rel="stylesheet" href="{{ stylesheet_path }}?v={{ asset_version }}" />
+{% endfor %}
+{% elif profiles_asset_phase == "body" %}
+{% set shared_scripts = [
+    "/static/profiles_utils.js",
+    "/static/profiles_shared.js",
+    "/static/profiles_platform.js",
+    "/static/profiles_data.js",
+] %}
+{% set library_scripts = [
+    "/static/profiles_library_bootstrap.js",
+    "/static/profiles_library.js",
+] %}
+{% set editor_core_scripts = [
+    "/static/profiles_catalogs.js",
+    "/static/profiles_dom.js",
+    "/static/profiles_review_state.js",
+    "/static/profiles_review.js",
+    "/static/profiles_preferences_rows.js",
+    "/static/profiles_preferences_state.js",
+    "/static/profiles_preferences_views.js",
+    "/static/profiles_preferences.js",
+    "/static/profiles_search_engines.js",
+    "/static/profiles_network.js",
+    "/static/profiles_extensions.js",
+] %}
+{% if route_requires_monaco %}
+{% set editor_core_scripts = editor_core_scripts + ["/static/vendor/profiles_monaco.js"] %}
+{% endif %}
+{% set editor_core_scripts = editor_core_scripts + [
+    "/static/profiles_schema_shell_value_io.js",
+    "/static/profiles_schema_shell_review.js",
+    "/static/profiles_schema_shell_actions.js",
+    "/static/profiles_schema_shell_sections.js",
+    "/static/profiles_schema_shell.js",
+    "/static/profiles_all_settings_detail.js",
+    "/static/profiles_all_settings_list.js",
+    "/static/profiles_settings_search.js",
+    "/static/profiles_wizard_flow.js",
+    "/static/profiles_workspace_state.js",
+    "/static/profiles_workspace.js",
+    "/static/profiles_page_bootstrap.js",
+    "/static/profiles_runtime_json_editor.js",
+    "/static/profiles_runtime_dirty_guard.js",
+    "/static/profiles_runtime.js",
+    "/static/profiles_bootstrap_core.js",
+    "/static/profiles_bootstrap_features.js",
+    "/static/profiles_bootstrap_runtime.js",
+    "/static/profiles_bootstrap_sections.js",
+    "/static/profiles_bootstrap.js",
+] %}
+{% set route_entrypoints = {
+    "editor": "/static/profiles_guided.js",
+    "settings": "/static/profiles_settings.js",
+    "json": "/static/profiles_json.js",
+} %}
+{% if route_kind == "library" %}
+{% set body_scripts = shared_scripts + library_scripts %}
+{% else %}
+{% set body_scripts = shared_scripts + editor_core_scripts + [route_entrypoints.get(route_kind, "/static/profiles.js")] %}
+{% endif %}
+{% for script_path in body_scripts %}
+    <script src="{{ script_path }}?v={{ asset_version }}"></script>
+{% endfor %}
+{% endif %}

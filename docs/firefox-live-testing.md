@@ -25,26 +25,52 @@ If you prefer explicit paths, you can still use:
 - `BPM_FIREFOX_BIN`
 - `BPM_GECKODRIVER_BIN`
 
+## Sandbox lifecycle
+
+Treat `.bpm-test-browsers/` as disposable local state:
+
+- it is intentionally ignored by git;
+- it can be several hundred megabytes after Firefox and geckodriver are installed;
+- it is safe to remove when you need to reclaim disk space or force a fresh browser install;
+- it should not be copied into docs, screenshots, release bundles, or frontend vendor assets.
+
+Use the explicit cleanup target when you want to remove the sandbox together with other ignored
+local artifacts:
+
+```bash
+make clean-local-artifacts
+```
+
+After cleanup, run `make setup-firefox-live-browsers` again before the next live Firefox suite.
+For a quick local size check without deleting anything, run `make repo-health` and review the
+`Ignored Local Artifacts` section.
+
 ## Quick setup
 
 Linux helper:
 
 ```bash
-bash tools/setup_firefox_live_browsers.sh release
+make setup-firefox-live-browsers
 ```
 
 The helper downloads the latest Linux Firefox Release build into `.bpm-test-browsers/` and prints
 the installed Firefox and geckodriver versions at the end. For the current BPM release channel, the
 expected target is Firefox `150.x`.
 
+To install the ESR sandbox instead, pass the channel through Make:
+
+```bash
+make setup-firefox-live-browsers FIREFOX_CHANNEL=esr
+```
+
 Then run:
 
 ```bash
-.venv/bin/pytest -m firefox_live -q
+make test-firefox-live
 ```
 
 The default `pytest` run excludes `firefox_live` and `firefox_live_amo`, so use
-the explicit marker command above when you want the real-browser suite.
+the explicit Make target above when you want the deterministic real-browser suite.
 
 ## AMO canary
 
@@ -53,7 +79,7 @@ The main `firefox_live` suite stays deterministic and avoids dependencies on ext
 Real AMO extension-install coverage lives in a separate canary suite:
 
 ```bash
-.venv/bin/pytest -m firefox_live_amo -q
+make test-firefox-live-amo
 ```
 
 This currently verifies that Firefox can force-install `uBlock Origin` from AMO through

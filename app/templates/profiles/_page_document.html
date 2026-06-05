@@ -1,35 +1,21 @@
 <!doctype html>
 <html lang="{{ initial_lang }}">
-{% set is_library_template = profiles_template_kind == "library" %}
-{% set is_guided_template = profiles_template_kind == "editor" %}
-{% set is_settings_template = profiles_template_kind == "settings" %}
-{% set is_advanced_template = profiles_template_kind == "advanced" %}
-{% set is_json_template = profiles_template_kind == "json" %}
-
 <head>
     <meta charset="utf-8" />
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f6efe4" />
     <link rel="icon" href="/favicon.ico?v={{ asset_version }}" sizes="any" />
-    <script src="/static/profiles_head_bootstrap.js?v={{ asset_version }}"></script>
-    {% if not is_library_template %}
-    <script src="/static/vendor/js-yaml.js?v={{ asset_version }}"></script>
-    {% endif %}
-
-    <link rel="stylesheet" href="/static/vendor/profiles_tailwind.css?v={{ asset_version }}" />
-    {% if not is_library_template and not is_settings_template %}
-    <link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v={{ asset_version }}" />
-    {% endif %}
-    <link rel="stylesheet" href="/static/profiles.css?v={{ asset_version }}" />
+    {% set profiles_asset_phase = "head" %}
+    {% include "profiles/_page_route_assets.html" %}
 </head>
 
 <body class="app-body min-h-screen"
     data-initial-lang="{{ initial_lang }}"
     data-profiles-route-mode="{{ profiles_route_mode }}"
     data-profiles-template-kind="{{ profiles_template_kind }}"
-    {% if return_url %}data-advanced-return-url="{{ return_url }}"{% endif %}
-    {% if focus_target %}data-advanced-focus-target="{{ focus_target }}"{% endif %}
+    {% if return_url %}data-json-return-url="{{ return_url }}"{% endif %}
+    {% if focus_target %}data-json-focus-target="{{ focus_target }}"{% endif %}
     {% if include_deleted %}data-include-deleted="true"{% endif %}
     {% if editing_profile_schema_version %}data-editing-profile-schema-version="{{ editing_profile_schema_version }}"{% endif %}
     {% if editing_profile_id is not none %}data-editing-profile-id="{{ editing_profile_id }}"{% endif %}
@@ -39,56 +25,8 @@
     {% if editing_profile_initial %}
     <script id="profiles-initial-profile" type="application/json">{{ editing_profile_initial | tojson }}</script>
     {% endif %}
-    <script src="/static/profiles_utils.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_shared.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_platform.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_data.js?v={{ asset_version }}"></script>
-    {% if is_library_template %}
-    <script src="/static/profiles_library_bootstrap.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_library.js?v={{ asset_version }}"></script>
-    {% else %}
-    <script src="/static/profiles_catalogs.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_dom.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_review.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_preferences_rows.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_preferences_state.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_preferences_views.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_preferences.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_search_engines.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_network.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_extensions.js?v={{ asset_version }}"></script>
-    {% if not is_settings_template %}
-    <script src="/static/vendor/profiles_monaco.js?v={{ asset_version }}"></script>
-    {% endif %}
-    <script src="/static/profiles_schema_shell_value_io.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_schema_shell_review.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_schema_shell_actions.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_schema_shell_sections.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_schema_shell.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_all_settings_detail.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_all_settings_list.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_settings_search.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_wizard_flow.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_workspace.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_page_bootstrap.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_runtime.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_bootstrap_core.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_bootstrap_features.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_bootstrap_runtime.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_bootstrap_sections.js?v={{ asset_version }}"></script>
-    <script src="/static/profiles_bootstrap.js?v={{ asset_version }}"></script>
-    {% if is_guided_template %}
-    <script src="/static/profiles_guided.js?v={{ asset_version }}"></script>
-    {% elif is_settings_template %}
-    <script src="/static/profiles_settings.js?v={{ asset_version }}"></script>
-    {% elif is_json_template %}
-    <script src="/static/profiles_json.js?v={{ asset_version }}"></script>
-    {% elif is_advanced_template %}
-    <script src="/static/profiles_advanced.js?v={{ asset_version }}"></script>
-    {% else %}
-    <script src="/static/profiles.js?v={{ asset_version }}"></script>
-    {% endif %}
-    {% endif %}
+    {% set profiles_asset_phase = "body" %}
+    {% include "profiles/_page_route_assets.html" %}
 </body>
 
 </html>

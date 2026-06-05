@@ -8,7 +8,11 @@ Normalized by backlog item: `GLOC-102`
 
 Source catalog: `app/i18n/en.json`
 
-Machine-readable snapshot: `docs/source_string_inventory_en_2026-05-21.json`
+Machine-readable snapshot: `docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`
+
+The JSON snapshot is archived behind `docs/docs-index.md` so active documentation stays light.
+Use this summary for routine review, and open the archived JSON only when raw key-level data is
+needed.
 
 ## Snapshot
 
@@ -106,8 +110,8 @@ First 40 placeholder-bearing keys:
 
 | Key | Placeholders |
 | --- | --- |
-| `profiles.advanced_context_from_step` | `{step}` |
-| `profiles.advanced_context_more` | `{count}` |
+| `profiles.settings_context_from_step` | `{step}` |
+| `profiles.settings_context_more` | `{count}` |
 | `profiles.clone_handoff_active` | `{name}` |
 | `profiles.clone_handoff_item_compare` | `{name}` |
 | `profiles.clone_meta` | `{name}` |

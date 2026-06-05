@@ -35,13 +35,13 @@ This backlog is intentionally short and focused on polish, consistency, and real
 
 ### P1: Make the product feel more finished
 
-4. Decide on stable naming for the advanced mode.
+4. Decide on stable naming for the JSON editor.
    Problem:
-   The product currently mixes `Advanced document`, `advanced view`, `document view`, `raw JSON/YAML`, and Russian text with untranslated `Advanced document`.
+   The product currently mixes `JSON editor`, `JSON editor`, `document view`, `raw JSON/YAML`, and Russian text with untranslated `JSON editor`.
    Fix:
    Pick one canonical product name and localize it consistently across [app/templates/profiles/_page_workspace.html](/home/valery/Projects/browser-policy-manager/app/templates/profiles/_page_workspace.html), [app/templates/profiles/_page_wizard_step_export.html](/home/valery/Projects/browser-policy-manager/app/templates/profiles/_page_wizard_step_export.html), [app/templates/profiles/_wizard_macros.html](/home/valery/Projects/browser-policy-manager/app/templates/profiles/_wizard_macros.html), [app/i18n/en.json](/home/valery/Projects/browser-policy-manager/app/i18n/en.json), and [app/i18n/ru.json](/home/valery/Projects/browser-policy-manager/app/i18n/ru.json).
    Acceptance:
-   The advanced mode has one name in EN and one deliberate localized name in RU.
+   The JSON editor has one name in EN and one deliberate localized name in RU.
 
 5. Add action-oriented empty states to the heaviest guided cards.
    Problem:
@@ -69,7 +69,7 @@ This backlog is intentionally short and focused on polish, consistency, and real
    Acceptance:
    We have a small written list of actual viewport issues instead of inferred mobile polish only.
    Notes:
-   See [docs/wizard_viewport_qa_2026-03-31.md](/home/valery/Projects/browser-policy-manager/docs/wizard_viewport_qa_2026-03-31.md).
+   See [docs/archive/2026-q2/wizard_viewport_qa_2026-03-31.md](archive/2026-q2/wizard_viewport_qa_2026-03-31.md).
 
 8. Add light accessibility polish to disclosure-heavy areas.
    Problem:
@@ -83,7 +83,7 @@ This backlog is intentionally short and focused on polish, consistency, and real
    Problem:
    Current smoke coverage protects core rendering, but not the final UX assumptions around guided vs advanced visibility and compact mobile-oriented structure.
    Fix:
-   Extend [tests/test_web_profiles_page.py](/home/valery/Projects/browser-policy-manager/tests/test_web_profiles_page.py) and/or [tests/test_ui_smoke_profile_workflow.py](/home/valery/Projects/browser-policy-manager/tests/test_ui_smoke_profile_workflow.py) with assertions for the guided export framing, advanced-mode naming, and key fine-tuning controls.
+   Extend [tests/test_web_profiles_page.py](/home/valery/Projects/browser-policy-manager/tests/test_web_profiles_page.py) and/or [tests/test_ui_smoke_profile_workflow.py](/home/valery/Projects/browser-policy-manager/tests/test_ui_smoke_profile_workflow.py) with assertions for the guided export framing, JSON-editor naming, and key fine-tuning controls.
    Acceptance:
    We have at least one test slice guarding the last UX cleanup decisions.
    Status:
@@ -94,7 +94,7 @@ This backlog is intentionally short and focused on polish, consistency, and real
 1. P0.1 export copy and finish-line framing
 2. P0.2 privacy rhythm pass
 3. P0.3 guided copy sweep
-4. P1.4 advanced-mode naming
+4. P1.4 JSON-editor naming
 5. P1.5 empty-state improvements
 6. P1.6 compact add-on cards
 7. P2.7 viewport QA pass
@@ -104,7 +104,7 @@ This backlog is intentionally short and focused on polish, consistency, and real
 ## Definition of done
 
 - Guided mode reads as a browser-setup flow, not a schema editor.
-- The advanced mode has one stable product name.
+- The JSON editor has one stable product name.
 - `Home`, `Search`, `Privacy`, and `Features` follow the same interaction rhythm.
 - Mobile feels intentionally designed, not merely collapsed.
 - Export feels like a confident finish step.

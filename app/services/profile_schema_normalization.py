@@ -11,6 +11,7 @@ from app.core.policy_validation import (
     load_policy_schema_for_channel,
     validate_profile_policies_or_raise,
 )
+from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
 from app.models.profile import Profile
 
 logger = logging.getLogger(__name__)
@@ -21,10 +22,10 @@ LEGACY_RELEASE_149 = f"release-{149}"
 LEGACY_RELEASE_150 = f"release-{150}"
 
 LEGACY_SCHEMA_VERSION_MAP: dict[str, str] = {
-    LEGACY_ESR_140_9: "esr-140.11",
-    LEGACY_ESR_140_10: "esr-140.11",
-    LEGACY_RELEASE_149: "release-151",
-    LEGACY_RELEASE_150: "release-151",
+    LEGACY_ESR_140_9: CURRENT_ESR_SCHEMA_CHANNEL,
+    LEGACY_ESR_140_10: CURRENT_ESR_SCHEMA_CHANNEL,
+    LEGACY_RELEASE_149: CURRENT_RELEASE_SCHEMA_CHANNEL,
+    LEGACY_RELEASE_150: CURRENT_RELEASE_SCHEMA_CHANNEL,
 }
 
 

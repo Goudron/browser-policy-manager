@@ -8,8 +8,7 @@ from typing import Any
 
 from app.compliance.firefox.cis.validation import BASE_DIR, find_benchmark, load_yaml_file
 from app.core.policy_validation import (
-    load_policy_schema_for_channel,
-    validate_profile_policies_or_raise,
+    validate_profile_policies_or_raise_for_channel,
 )
 from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
 
@@ -134,8 +133,7 @@ def build_all_cis_layers(
 
 
 def validate_cis_layer(layer: GeneratedCisLayer) -> None:
-    schema = load_policy_schema_for_channel(layer.schema_channel)
-    validate_profile_policies_or_raise(layer.policies, schema)
+    validate_profile_policies_or_raise_for_channel(layer.policies, layer.schema_channel)
 
 
 def write_generated_layers(

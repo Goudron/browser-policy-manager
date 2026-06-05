@@ -15,7 +15,7 @@ COUNT_LABEL_KEYS = {
     "profiles.settings_list_value_array",
     "profiles.wizard_settings_search_match_count",
     "profiles.wizard_preferences_handoff_count",
-    "profiles.advanced_context_more",
+    "profiles.settings_context_more",
     "profiles.wizard_hardening_governance_remaining_count",
     "profiles.wizard_hardening_governance_item_sites_ready",
     "profiles.wizard_hardening_governance_item_deeper_ready",

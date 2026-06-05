@@ -3,10 +3,11 @@
   "private": true,
   "description": "Pinned frontend vendor dependencies for Browser Policy Manager static assets.",
   "scripts": {
-    "build:monaco": "bash tools/build_monaco_bundle.sh"
+    "build:monaco": "bash tools/build_monaco_bundle.sh",
+    "rebuild:vendor": "bash tools/rebuild_frontend_vendor.sh"
   },
   "dependencies": {
-    "js-yaml": "4.1.0",
+    "js-yaml": "4.2.0",
     "monaco-editor": "0.52.0"
   },
   "devDependencies": {

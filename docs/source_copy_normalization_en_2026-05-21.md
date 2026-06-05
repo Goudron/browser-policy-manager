@@ -6,7 +6,9 @@ Backlog item: `GLOC-102`
 
 Source catalog: `app/i18n/en.json`
 
-Updated inventory snapshot: `docs/source_string_inventory_en_2026-05-21.json`
+Updated inventory summary: `docs/source_string_inventory_en_2026-05-21.md`
+
+Archived raw snapshot: `docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`
 
 ## Scope
 

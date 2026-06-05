@@ -2,10 +2,11 @@ import json
 from pathlib import Path
 
 from app.web.firefox_settings_catalog import get_wizard_settings_catalog
+from tests.docs_index import doc_path_from_index
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 I18N_DIR = REPO_ROOT / "app" / "i18n"
-AUDIT_DOC_PATH = REPO_ROOT / "docs" / "zh_cn_script_audit_2026-05-30.md"
+AUDIT_DOC_PATH = doc_path_from_index("zh_cn_script_audit_2026-05-30.md", status="audit")
 
 
 def _load_catalog(locale: str) -> dict[str, str]:

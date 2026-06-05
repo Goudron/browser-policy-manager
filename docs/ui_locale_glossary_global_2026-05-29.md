@@ -14,7 +14,9 @@ Source locale: `en`
 
 Target locales: `ru`, `de`, `zh-CN`, `fr`, `es-ES`
 
-Source inventory: `docs/source_string_inventory_en_2026-05-21.json`
+Source inventory summary: `docs/source_string_inventory_en_2026-05-21.md`
+
+Archived raw inventory: `docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`
 
 Normalization notes: `docs/source_copy_normalization_en_2026-05-21.md`
 
@@ -24,10 +26,10 @@ Placeholder and identifier rules: `docs/locale_placeholder_identifier_rules_2026
 
 Mozilla terminology audits:
 
-- `docs/de_mozilla_terminology_audit_2026-05-29.md`
-- `docs/zh_cn_mozilla_terminology_audit_2026-05-29.md`
-- `docs/fr_mozilla_terminology_audit_2026-05-29.md`
-- `docs/es_es_mozilla_terminology_audit_2026-05-30.md`
+- `docs/archive/2026-q2/de_mozilla_terminology_audit_2026-05-29.md`
+- `docs/archive/2026-q2/zh_cn_mozilla_terminology_audit_2026-05-29.md`
+- `docs/archive/2026-q2/fr_mozilla_terminology_audit_2026-05-29.md`
+- `docs/archive/2026-q2/es_es_mozilla_terminology_audit_2026-05-30.md`
 
 ## Scope
 
@@ -37,7 +39,7 @@ current six-locale terminology decisions that should guide UI strings, release d
 locale review, and future source-copy changes.
 
 This file replaces the historical EN/RU-only glossary at
-`docs/ui_locale_glossary_en_ru_2026-05-15.md` for active maintenance. The historical file remains
+`docs/archive/2026-q2/ui_locale_glossary_en_ru_2026-05-15.md` for active maintenance. The historical file remains
 only as an archive of pre-expansion Russian terminology.
 
 ## QA Consolidation
@@ -53,10 +55,10 @@ not applicable. Do not add active terminology decisions to the historical EN/RU 
 
 | Locale | Audit task | Evidence log | Glossary result |
 |---|---|---|---|
-| `de` | `GLOC-301` | `docs/de_mozilla_terminology_audit_2026-05-29.md` | Firefox/Mozilla rows filled with German Pontoon/SUMO decisions. |
-| `zh-CN` | `GLOC-302` | `docs/zh_cn_mozilla_terminology_audit_2026-05-29.md` | Firefox/Mozilla rows filled with Simplified Chinese Pontoon/SUMO decisions. |
-| `fr` | `GLOC-303` | `docs/fr_mozilla_terminology_audit_2026-05-29.md` | Firefox/Mozilla rows filled with French Pontoon/SUMO decisions. |
-| `es-ES` | `GLOC-304` | `docs/es_es_mozilla_terminology_audit_2026-05-30.md` | Firefox/Mozilla rows filled with Spanish Pontoon/SUMO decisions. |
+| `de` | `GLOC-301` | `docs/archive/2026-q2/de_mozilla_terminology_audit_2026-05-29.md` | Firefox/Mozilla rows filled with German Pontoon/SUMO decisions. |
+| `zh-CN` | `GLOC-302` | `docs/archive/2026-q2/zh_cn_mozilla_terminology_audit_2026-05-29.md` | Firefox/Mozilla rows filled with Simplified Chinese Pontoon/SUMO decisions. |
+| `fr` | `GLOC-303` | `docs/archive/2026-q2/fr_mozilla_terminology_audit_2026-05-29.md` | Firefox/Mozilla rows filled with French Pontoon/SUMO decisions. |
+| `es-ES` | `GLOC-304` | `docs/archive/2026-q2/es_es_mozilla_terminology_audit_2026-05-30.md` | Firefox/Mozilla rows filled with Spanish Pontoon/SUMO decisions. |
 
 Accepted QA findings:
 

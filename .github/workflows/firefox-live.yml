@@ -35,8 +35,8 @@ jobs:
 
       - name: Setup isolated Firefox sandbox
         run: |
-          bash tools/setup_firefox_live_browsers.sh "${{ matrix.channel }}"
+          make setup-firefox-live-browsers FIREFOX_CHANNEL="${{ matrix.channel }}"
 
       - name: Run Firefox live tests
         run: |
-          pytest -q tests/live_firefox/test_policy_activation.py tests/live_firefox/test_policy_behavior.py -m firefox_live -rs
+          make test-firefox-live

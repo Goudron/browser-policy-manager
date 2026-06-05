@@ -13,14 +13,15 @@ from app.core.locales import (
     resolve_active_catalog_locale_code,
     resolve_target_locale_code,
 )
+from tests.docs_index import doc_path_from_index
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-LOCALE_LOADING_AUDIT_PATH = (
-    REPO_ROOT / "docs" / "global_locale_loading_assumptions_audit_2026-05-21.md"
+LOCALE_LOADING_AUDIT_PATH = doc_path_from_index(
+    "global_locale_loading_assumptions_audit_2026-05-21.md", status="audit"
 )
 README_PATH = REPO_ROOT / "README.md"
-DOCUMENTATION_PORTAL_ROADMAP_PATH = (
-    REPO_ROOT / "docs" / "documentation_portal_roadmap_2026-05-21.md"
+DOCUMENTATION_PORTAL_ROADMAP_PATH = doc_path_from_index(
+    "documentation_portal_roadmap_2026-05-21.md", status="backlog"
 )
 
 
@@ -161,11 +162,11 @@ def test_readme_documents_target_and_active_locale_sets():
     readme = README_PATH.read_text(encoding="utf-8")
     readme_single_line = " ".join(readme.split())
 
-    assert "**Version:** `0.8.0`" in readme
+    assert "**Version:** `0.8.5`" in readme
     assert "English source UI with six active runtime locale catalogs." in readme
     assert "The primary project and UI source language is English." in readme
     assert "`app/i18n/en.json`" in readme
-    assert "BPM 0.8.0 ships a six-locale UI matrix:" in readme
+    assert "BPM 0.8.5 ships a six-locale UI matrix:" in readme
     assert "| `de` | Deutsch | Active localized catalog |" in readme
     assert "| `zh-CN` | 简体中文 | Active localized catalog |" in readme
     assert "| `fr` | Français | Active localized catalog |" in readme

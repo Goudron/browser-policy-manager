@@ -36,8 +36,8 @@ jobs:
 
       - name: Setup isolated Firefox sandbox
         run: |
-          bash tools/setup_firefox_live_browsers.sh "${{ matrix.channel }}"
+          make setup-firefox-live-browsers FIREFOX_CHANNEL="${{ matrix.channel }}"
 
       - name: Run Firefox AMO canary tests
         run: |
-          pytest -q tests/live_firefox/test_extension_settings_amo.py -m firefox_live_amo -rs
+          make test-firefox-live-amo

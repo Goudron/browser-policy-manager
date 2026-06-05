@@ -8,7 +8,9 @@ Applies to locales: `de`, `zh-CN`, `fr`, `es-ES`, and future locale maintenance 
 
 Primary glossary: `docs/ui_locale_glossary_global_2026-05-29.md`
 
-Source inventory: `docs/source_string_inventory_en_2026-05-21.json`
+Source inventory summary: `docs/source_string_inventory_en_2026-05-21.md`
+
+Archived raw inventory: `docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`
 
 ## Goal
 
