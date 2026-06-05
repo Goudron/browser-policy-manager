@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.compliance.firefox.cis.validation import BASE_DIR, load_yaml_file
-from app.core.policy_validation import load_policy_schema_for_channel, validate_profile_policies
+from app.core.policy_validation import validate_profile_policies_for_channel
 
 
 def _build_policy_from_target(target: dict[str, Any]) -> dict[str, Any] | None:
@@ -45,8 +45,7 @@ def test_cis_mapping_targets_validate_against_declared_schema_channels() -> None
             for channel, status in schema_channels.items():
                 if status != "valid":
                     continue
-                schema = load_policy_schema_for_channel(channel)
-                issues = validate_profile_policies(policy_doc, schema)
+                issues = validate_profile_policies_for_channel(policy_doc, channel)
                 if issues:
                     errors.append(
                         f"{rec_id} -> {channel} {target.get('path')} failed: "

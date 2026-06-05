@@ -6,7 +6,9 @@ Backlog item: `GLOC-105`
 
 Applies to locales: `ru`, `de`, `zh-CN`, `fr`, `es-ES`
 
-Source inventory: `docs/source_string_inventory_en_2026-05-21.json`
+Source inventory summary: `docs/source_string_inventory_en_2026-05-21.md`
+
+Archived raw inventory: `docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`
 
 Global glossary: `docs/ui_locale_glossary_global_2026-05-29.md`
 
@@ -84,7 +86,7 @@ The source inventory currently records one HTML-sensitive literal:
 | `profiles.wizard_proxy_passthrough_placeholder` | `<local>` | Preserve exactly. It is a proxy bypass literal, not markup. |
 
 If future source strings add angle-bracket or entity-like fragments, update
-`docs/source_string_inventory_en_2026-05-21.json` or create a new inventory snapshot before
+`docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json` or create a new inventory snapshot before
 translation.
 
 ## Reviewer Checklist
@@ -120,7 +122,7 @@ Use these labels in locale audit notes:
 ## Source Data
 
 The complete placeholder inventory is in `placeholder_map` inside
-`docs/source_string_inventory_en_2026-05-21.json`.
+`docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`.
 
 The complete technical-token inventory is in `technical_token_map` inside
-`docs/source_string_inventory_en_2026-05-21.json`.
+`docs/archive/2026-q2/source_string_inventory_en_2026-05-21.json`.

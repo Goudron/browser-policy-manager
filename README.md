@@ -6,9 +6,22 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.8.0`<br>
+**Version:** `0.8.5`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
+
+## What's New In 0.8.5
+
+BPM 0.8.5 is a maintenance and refactoring release focused on making the project easier to
+change without altering its product contract.
+
+- Split large frontend, backend, test, locale, and documentation ownership areas into smaller,
+  more explicit modules and generated sources.
+- Added reproducible frontend vendor, locale catalog, repository health, and release-readiness
+  workflows through Make targets and contract checks.
+- Introduced marker-based test layers, stronger database/app/cache isolation, and an opt-in
+  pure-unit `pytest-xdist` pilot while keeping mandatory CI serial.
+- Archived completed planning and audit documents behind a maintained docs index and manifest.
 
 ## Product Scope
 
@@ -62,7 +75,6 @@ fields in the UI, while Firefox Release 151 exposes the current AI controls.
 | `GET /profiles/{id}/edit` | Guided editor for an existing profile. |
 | `GET /profiles/{id}/settings` | All settings catalog for an existing profile. |
 | `GET /profiles/{id}/json` | JSON editor for an existing profile. |
-| `GET /profiles/{id}/advanced` | Compatibility redirect to `/profiles/{id}/json`. |
 | `GET /i18n/{locale}.json` | Localization catalog. |
 | `GET /health` | Liveness probe. |
 | `GET /health/ready` | Readiness probe. |
@@ -187,7 +199,7 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 The primary project and UI source language is English. Product copy starts from
 `app/i18n/en.json` and English maintainer documentation before it is localized.
 
-BPM 0.8.0 ships a six-locale UI matrix:
+BPM 0.8.5 ships a six-locale UI matrix:
 
 | Locale | Native label | Status |
 |---|---|---|
@@ -246,7 +258,7 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-uvicorn app.main:app --reload
+make dev
 ```
 
 Open:
@@ -259,15 +271,13 @@ Open:
 Quality checks:
 
 ```bash
-ruff check .
-mypy app
-pytest
+make quality
 ```
 
 Coverage-oriented run:
 
 ```bash
-pytest --cov=app --cov-branch --cov-report=term-missing
+make coverage
 ```
 
 Migrations:
@@ -280,13 +290,25 @@ alembic revision --autogenerate -m "describe change"
 Frontend vendor rebuild:
 
 ```bash
-npm install
-npm run build:monaco
+npm ci
+make rebuild-frontend-vendor
+make verify-frontend-vendor
 ```
 
 ## Testing
 
-Default test runs exclude heavy browser-driven suites through project pytest settings:
+Default test runs exclude heavy browser-driven suites through project pytest settings.
+Use the marker-aware Makefile targets for routine development:
+
+```bash
+make test-fast
+make test-contract
+make test-ui
+make test-live
+make test-release
+```
+
+The excluded heavy layers are:
 
 - `browser_ui`
 - `firefox_live`
@@ -295,10 +317,22 @@ Default test runs exclude heavy browser-driven suites through project pytest set
 Run them explicitly when needed:
 
 ```bash
-pytest -m browser_ui
-pytest -m firefox_live
-pytest -m firefox_live_amo
+make test-ui
+make test-firefox-live
+make test-firefox-live-amo
 ```
+
+`browser_ui` is a compact Chromium/Selenium smoke layer. It checks Firefox
+policies import, the Library, Guided editor, All settings, JSON editor, route
+handoff links, and the Russian/Simplified Chinese locale pair. Deep UI behavior,
+full locale quality, and edit/export edge cases stay in faster API and static
+contract tests.
+
+`pytest-xdist` is intentionally not enabled in mandatory BPM 0.8.5 CI. The
+opt-in pure-unit pilot is available through `make test-unit-pilot` and
+`make test-unit-xdist`. See
+[`docs/architecture/pytest-xdist-readiness.md`](docs/architecture/pytest-xdist-readiness.md)
+for the final BPM 0.8.5 decision and future adoption gates.
 
 Live Firefox policy checks validate Firefox runtime behavior for exported `policies.json`
 artifacts rather than the `/profiles` browser UI.
@@ -306,7 +340,7 @@ artifacts rather than the `/profiles` browser UI.
 For local Chromium-based UI verification:
 
 ```bash
-./.venv/bin/python tools/run_local_chromium_ui_audit.py
+make local-chromium-ui-audit
 ```
 
 That audit writes reports and screenshots under `artifacts/local_chromium_ui_audit/`.

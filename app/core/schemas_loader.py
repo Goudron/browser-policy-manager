@@ -5,7 +5,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from app.core.schema_channels import RAW_SCHEMA_DIRS, SCHEMA_FILENAMES
+from app.core.schema_channels import RAW_SCHEMA_DIRS, SCHEMA_FILENAMES, get_schema_channel
 
 
 class SchemaNotFoundError(RuntimeError):
@@ -160,11 +160,9 @@ def load_schema(profile: str, *, allow_stub_fallback: bool = False) -> dict[str,
         )
 
     # Optional fallback: generate a minimal schema and persist it to cache for reproducibility.
-    title = (
-        "Firefox ESR 140.11 Policies (stub)"
-        if profile.startswith("esr-140.11")
-        else "Firefox Release 151 Policies (stub)"
-    )
+    channel = get_schema_channel(profile)
+    label = channel.label if channel else profile
+    title = f"Firefox {label} Policies (stub)"
     stub = _minimal_schema(title)
     _write_json_file(cache_path, stub)
     return stub

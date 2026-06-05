@@ -2,7 +2,7 @@
     const WIZARD_REVIEW_FILTERS = [
         { value: "changed", key: "profiles.wizard_review_filter_changed", fallback: "Changed" },
         { value: "attention", key: "profiles.wizard_review_filter_attention", fallback: "Needs attention" },
-        { value: "advanced", key: "profiles.wizard_review_filter_advanced", fallback: "Outside Guided editor" },
+        { value: "settings", key: "profiles.wizard_review_filter_settings", fallback: "Outside Guided editor" },
         { value: "all", key: "profiles.wizard_review_filter_all", fallback: "All" },
     ];
     const WIZARD_LONG_LIST_LIMIT = 5;
@@ -177,8 +177,8 @@
     function initWizardReviewFilters(documentRef, t) {
         function isAdvancedOnlyRow(row) {
             return Boolean(
-                row.closest('[data-workspace-scope-panel="advanced"]')
-                || row.closest("[data-advanced-compatibility-panel]")
+                row.closest('[data-workspace-scope-panel="settings"]')
+                || row.closest("[data-settings-compatibility-panel]")
                 || row.querySelector('[data-final-review-jump="raw"], [data-final-review-jump="deprecated"], [data-final-review-jump="unknown"]')
             );
         }
@@ -189,7 +189,7 @@
             if (filterValue === "attention") {
                 return tone === "attention" || tone === "strict";
             }
-            if (filterValue === "advanced") {
+            if (filterValue === "settings") {
                 return isAdvancedOnlyRow(row) && tone !== "default";
             }
             return tone !== "default";
@@ -199,7 +199,7 @@
             const labels = {
                 changed: ["profiles.wizard_review_empty_changed", "No changed items here yet."],
                 attention: ["profiles.wizard_review_empty_attention", "Nothing needs attention here right now."],
-                advanced: ["profiles.wizard_review_empty_advanced", "No items outside Guided editor are listed here right now."],
+                advanced: ["profiles.wizard_review_empty_settings", "No items outside Guided editor are listed here right now."],
                 all: ["profiles.wizard_review_empty_all", "No review rows here yet."],
             };
             const [key, fallback] = labels[filterValue] || labels.changed;
@@ -223,7 +223,7 @@
                 emptyEl.dataset.i18n = {
                     changed: "profiles.wizard_review_empty_changed",
                     attention: "profiles.wizard_review_empty_attention",
-                    advanced: "profiles.wizard_review_empty_advanced",
+                    advanced: "profiles.wizard_review_empty_settings",
                     all: "profiles.wizard_review_empty_all",
                 }[filterValue] || "profiles.wizard_review_empty_changed";
             }

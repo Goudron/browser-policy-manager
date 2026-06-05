@@ -3,7 +3,7 @@
 ## Goal
 
 Turn the Firefox policy wizard into a task-first flow for engineers, admins, and students.
-The main wizard should focus on understandable browser outcomes, while JSON/YAML and schema coverage move into an advanced view.
+The main wizard should focus on understandable browser outcomes, while JSON/YAML and schema coverage move into an JSON editor.
 
 ## Principles
 
@@ -25,7 +25,7 @@ The main wizard should focus on understandable browser outcomes, while JSON/YAML
 ### Phase 2: Advanced View Separation
 
 - Move Monaco JSON/YAML editing out of the main wizard path.
-- Move schema-shell coverage and raw fallback review into an `Advanced document` view.
+- Move schema-shell coverage and raw fallback review into an `JSON editor` view.
 - Keep export and validation available from the review step.
 
 ### Phase 3: Network And Search Rewrite

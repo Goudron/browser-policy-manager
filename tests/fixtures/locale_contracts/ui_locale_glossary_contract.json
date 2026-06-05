@@ -1,0 +1,320 @@
+{
+  "de_mozilla_terminology_audit_records_evidence_and_decisions": {
+    "required_sources": [
+      "https://pontoon.mozilla.org/de/",
+      "https://support.mozilla.org/de/kb/firefox-konto-auf-supportmozillaorg",
+      "https://support.mozilla.org/de/kb/startseite-festlegen",
+      "https://support.mozilla.org/de/kb/privater-modus",
+      "https://support.mozilla.org/de/kb/dns-over-https",
+      "https://support.mozilla.org/de/kb/vollstandige-webseiten-in-firefox-ubersetzen"
+    ],
+    "required_terms": [
+      "mozilla.account",
+      "Mozilla-Konto",
+      "mozilla.firefox_home",
+      "Firefox-Startseite",
+      "mozilla.private_browsing",
+      "Privater Modus",
+      "mozilla.dns_over_https",
+      "DNS über HTTPS",
+      "mozilla.site_permissions",
+      "Website-Berechtigungen",
+      "mozilla.addons",
+      "Add-ons",
+      "mozilla.extensions",
+      "Erweiterungen",
+      "mozilla.website_translations",
+      "Website-Übersetzungen",
+      "mozilla.built_in_vpn",
+      "Integriertes VPN",
+      "policy.managed_preferences",
+      "Verwaltete Einstellungen"
+    ]
+  },
+  "es_es_mozilla_terminology_audit_records_evidence_and_decisions": {
+    "required_sources": [
+      "https://pontoon.mozilla.org/es-ES/firefox/",
+      "https://support.mozilla.org/es/products/firefox/accounts",
+      "https://support.mozilla.org/es/kb/como-configurar-la-pagina-de-inicio",
+      "https://support.mozilla.org/es/kb/navegacion-privada-Firefox-no-guardar-historial-navegacion",
+      "https://support.mozilla.org/en-US/kb/firefox-dns-over-https?lang=es",
+      "https://support.mozilla.org/es/kb/traduccion-pagina-web",
+      "https://support.mozilla.org/es/kb/usar-la-vpn-de-firefox-en-firefox"
+    ],
+    "required_terms": [
+      "mozilla.account",
+      "Mozilla account",
+      "mozilla.firefox_home",
+      "página de inicio de Firefox",
+      "mozilla.private_browsing",
+      "navegación privada",
+      "mozilla.dns_over_https",
+      "DNS sobre HTTPS",
+      "mozilla.site_permissions",
+      "permisos del sitio",
+      "mozilla.addons",
+      "complementos",
+      "mozilla.extensions",
+      "extensiones",
+      "mozilla.website_translations",
+      "traducciones de sitios web",
+      "mozilla.built_in_vpn",
+      "VPN integrada",
+      "policy.managed_preferences",
+      "preferencias gestionadas"
+    ]
+  },
+  "firefox_schema_update_runbook_includes_locale_update_gate": {
+    "required_catalogs": [
+      "app/i18n/en.json",
+      "app/i18n/ru.json",
+      "app/i18n/de.json",
+      "app/i18n/zh-CN.json",
+      "app/i18n/fr.json",
+      "app/i18n/es-ES.json"
+    ],
+    "required_markers": [
+      "Update every active locale catalog when Release / ESR labels",
+      "docs/locale_update_runbook_2026-06-01.md",
+      "Pontoon/SUMO evidence",
+      "tests/test_locale_catalogs.py",
+      "tests/test_ui_runtime_i18n_contract.py",
+      "tests/test_locale_visible_english_allowlists.py",
+      "tests/test_ui_locale_glossary.py",
+      "current Release / ESR labels",
+      "without English fallback islands",
+      "Adding schema-related locale keys only to `en.json`"
+    ]
+  },
+  "fr_mozilla_terminology_audit_records_evidence_and_decisions": {
+    "required_sources": [
+      "https://pontoon.mozilla.org/fr/",
+      "https://support.mozilla.org/fr/products/mozilla-account/accounts",
+      "https://support.mozilla.org/fr/kb/comment-definir-page-accueil",
+      "https://support.mozilla.org/fr/kb/navigation-privee-naviguer-avec-firefox-sans-enregistrer-historique",
+      "https://support.mozilla.org/fr/kb/dns-over-https",
+      "https://support.mozilla.org/fr/kb/traduction-sites-web",
+      "https://support.mozilla.org/fr/kb/vpn-integre"
+    ],
+    "required_terms": [
+      "mozilla.account",
+      "compte Mozilla",
+      "mozilla.firefox_home",
+      "page d’accueil de Firefox",
+      "mozilla.private_browsing",
+      "navigation privée",
+      "mozilla.dns_over_https",
+      "DNS via HTTPS",
+      "mozilla.site_permissions",
+      "permissions des sites",
+      "mozilla.addons",
+      "modules complémentaires",
+      "mozilla.extensions",
+      "extensions",
+      "mozilla.website_translations",
+      "traductions des sites web",
+      "mozilla.built_in_vpn",
+      "VPN intégré",
+      "policy.managed_preferences",
+      "préférences gérées"
+    ]
+  },
+  "global_ui_locale_glossary_consolidates_mozilla_qa_findings": {
+    "required_markers": [
+      "`GLOC-305` consolidates the Mozilla terminology QA findings",
+      "| `de` | `GLOC-301` | `docs/archive/2026-q2/de_mozilla_terminology_audit_2026-05-29.md` |",
+      "| `zh-CN` | `GLOC-302` | `docs/archive/2026-q2/zh_cn_mozilla_terminology_audit_2026-05-29.md` |",
+      "| `fr` | `GLOC-303` | `docs/archive/2026-q2/fr_mozilla_terminology_audit_2026-05-29.md` |",
+      "| `es-ES` | `GLOC-304` | `docs/archive/2026-q2/es_es_mozilla_terminology_audit_2026-05-30.md` |",
+      "Spanish keeps `Mozilla account`",
+      "Russian `Private Browsing` remains `Приватные окна`",
+      "`Visual search` and `AI & smart features` have weaker localized SUMO coverage",
+      "`TBD` remains valid only as an explicit needs-review marker",
+      "`GLOC-702` makes this file the single current glossary document"
+    ],
+    "required_rows": [
+      "| mozilla.account | Mozilla account | аккаунт Mozilla | Mozilla-Konto | Mozilla 账号 | compte Mozilla | Mozilla account |",
+      "| mozilla.dns_over_https | DNS over HTTPS | DNS через HTTPS | DNS über HTTPS | 基于 HTTPS 的 DNS | DNS via HTTPS | DNS sobre HTTPS |",
+      "| mozilla.built_in_vpn | Built-in VPN | Встроенный VPN | Integriertes VPN | 内置 VPN | VPN intégré | VPN integrada |"
+    ]
+  },
+  "global_ui_locale_glossary_records_six_locale_terms": {
+    "required_terms": [
+      "Browser Policy Manager",
+      "Менеджер профилей браузера",
+      "Guided editor",
+      "Пошаговый редактор",
+      "All settings",
+      "Все настройки",
+      "JSON editor",
+      "JSON-редактор",
+      "Profile library",
+      "Библиотека профилей",
+      "Profile name",
+      "Имя профиля",
+      "Mozilla account",
+      "аккаунт Mozilla",
+      "Mozilla-Konto",
+      "Mozilla 账号",
+      "compte Mozilla",
+      "Mozilla account",
+      "Firefox Home",
+      "Домашняя страница Firefox",
+      "Firefox-Startseite",
+      "Firefox 主页",
+      "page d’accueil de Firefox",
+      "página de inicio de Firefox",
+      "Private Browsing",
+      "Privater Modus",
+      "隐私浏览",
+      "navigation privée",
+      "navegación privada",
+      "Cookies",
+      "Куки",
+      "Cookie",
+      "cookies",
+      "Add-ons",
+      "Дополнения",
+      "附加组件",
+      "modules complémentaires",
+      "complementos",
+      "Address bar",
+      "Адресная строка",
+      "Adressleiste",
+      "地址栏",
+      "barre d’adresse",
+      "barra de direcciones",
+      "Site permissions",
+      "Разрешения сайтов",
+      "Website-Berechtigungen",
+      "网站权限",
+      "permissions des sites",
+      "permisos del sitio",
+      "Managed preferences",
+      "Управляемые параметры",
+      "Verwaltete Einstellungen",
+      "托管首选项",
+      "préférences gérées",
+      "preferencias gestionadas",
+      "Outside Guided editor",
+      "Вне Пошагового редактора",
+      "Außerhalb des geführten Editors",
+      "引导式编辑器之外",
+      "Hors éditeur guidé",
+      "Fuera del editor guiado",
+      "CIS benchmark overlay",
+      "Наложение бенчмарка CIS",
+      "Validation failed",
+      "Проверка не прошла",
+      "{count}",
+      "DisablePrivateBrowsing",
+      "browser.startup.homepage",
+      "policies.json",
+      "ИИ и умные функции"
+    ]
+  },
+  "locale_ownership_records_single_maintainer_model": {
+    "required_rows": [
+      "| English source copy | Project maintainer |",
+      "| Russian localization | Project maintainer |",
+      "| German localization | Project maintainer |",
+      "| Simplified Chinese localization | Project maintainer |",
+      "| French localization | Project maintainer |",
+      "| Spanish (Spain) localization | Project maintainer |",
+      "| Locale QA and release readiness | Project maintainer |"
+    ]
+  },
+  "locale_update_runbook_records_repeatable_release_process": {
+    "required_catalogs": [
+      "app/i18n/en.json",
+      "app/i18n/ru.json",
+      "app/i18n/de.json",
+      "app/i18n/zh-CN.json",
+      "app/i18n/fr.json",
+      "app/i18n/es-ES.json"
+    ],
+    "required_commands": [
+      "make test-locale-contract",
+      "make quality",
+      "make coverage"
+    ],
+    "required_review_points": [
+      "Mozilla terms match the global glossary or have fresh Pontoon/SUMO evidence.",
+      "Non-English catalogs do not contain accidental English prose.",
+      "The expected coverage result for the app surface is `TOTAL 100%`.",
+      "any known `TBD` or `needs-review` terminology left intentionally unresolved.",
+      "single-maintainer, manual-review model",
+      "External or community translation contributions are not a separate maintained workflow yet"
+    ]
+  },
+  "mozilla_terminology_workflow_records_repeatable_process": {
+    "required_sources": [
+      "https://pontoon.mozilla.org/projects/firefox/",
+      "https://pontoon.mozilla.org/de/",
+      "https://pontoon.mozilla.org/zh-CN/firefox/",
+      "https://pontoon.mozilla.org/fr/",
+      "https://pontoon.mozilla.org/es-ES/firefox/",
+      "https://support.mozilla.org/en-US/kb/firefox-options-preferences-and-settings",
+      "https://support.mozilla.org/en-US/kb/website-translation"
+    ],
+    "required_terms": [
+      "mozilla.account",
+      "mozilla.firefox_home",
+      "mozilla.private_browsing",
+      "mozilla.website_translations",
+      "mozilla.dns_over_https",
+      "mozilla.site_permissions",
+      "mozilla.built_in_vpn",
+      "mozilla.ip_protection",
+      "policy.managed_preferences"
+    ]
+  },
+  "placeholder_identifier_rules_record_locale_review_contract": {
+    "required_tokens": [
+      "{count}",
+      "{searchTerms}",
+      "DisablePrivateBrowsing",
+      "IPProtectionAvailable",
+      "browser.startup.homepage",
+      "policies.json",
+      "about:config",
+      "uBlock0@raymondhill.net",
+      "q={searchTerms}&source=firefox",
+      "<local>",
+      "placeholder-missing",
+      "identifier-translated",
+      "untranslated-prose"
+    ]
+  },
+  "zh_cn_mozilla_terminology_audit_records_evidence_and_decisions": {
+    "required_sources": [
+      "https://pontoon.mozilla.org/zh-CN/firefox/",
+      "https://support.mozilla.org/zh-CN/products/firefox/privacy-and-security",
+      "https://support.mozilla.org/zh-CN/kb/firefox-dns-over-https",
+      "https://support.mozilla.org/zh-CN/kb/website-translation",
+      "https://support.mozilla.org/zh-CN/kb/use-ip-concealment-in-firefox"
+    ],
+    "required_terms": [
+      "mozilla.account",
+      "Mozilla 账号",
+      "mozilla.firefox_home",
+      "Firefox 主页",
+      "mozilla.private_browsing",
+      "隐私浏览",
+      "mozilla.dns_over_https",
+      "基于 HTTPS 的 DNS",
+      "mozilla.site_permissions",
+      "网站权限",
+      "mozilla.addons",
+      "附加组件",
+      "mozilla.extensions",
+      "扩展",
+      "mozilla.website_translations",
+      "网站翻译",
+      "mozilla.built_in_vpn",
+      "内置 VPN",
+      "policy.managed_preferences",
+      "托管首选项"
+    ]
+  }
+}

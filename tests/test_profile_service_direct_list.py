@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.db import AsyncSessionAdapter
 from app.models.profile import Base
 from app.schemas.profile import ProfileCreate
-from app.services.profile_service import ProfileService
+from app.services.profile_service import ProfileQuery, ProfileService
 
 
 def _mk(owner: str, schema: str, name_prefix: str = "SRV", flags: dict | None = None):
@@ -145,3 +145,32 @@ async def test_service_list_name_query_treats_empty_and_whitespace_as_no_filter(
 def test_matches_name_query_returns_true_for_missing_query() -> None:
     assert ProfileService._matches_name_query("Any profile", None) is True
     assert ProfileService._matches_name_query("Any profile", "") is True
+
+
+def test_profile_query_filters_keep_sql_filtering_in_one_helper() -> None:
+    active = ProfileQuery(owner="ops@example.org", schema_version="esr-140.11")
+    archived = ProfileQuery(lifecycle="archived")
+    all_profiles = ProfileQuery(lifecycle="all")
+
+    assert len(ProfileService._query_filters(active)) == 3
+    assert len(ProfileService._query_filters(archived)) == 1
+    assert ProfileService._query_filters(all_profiles) == []
+
+
+def test_profile_query_post_filter_matches_name_and_validation_state(monkeypatch) -> None:
+    class FakeProfile:
+        name = "Базовый корпоративный профиль"
+        flags = {"DisableTelemetry": True}
+
+    monkeypatch.setattr(ProfileService, "_validation_state", lambda profile: "valid")
+
+    assert ProfileService._matches_query(FakeProfile(), ProfileQuery(q="КОРПОРАТИВНЫЙ"))
+    assert ProfileService._matches_query(
+        FakeProfile(),
+        ProfileQuery(q="базовый", validation_state="valid"),
+    )
+    assert not ProfileService._matches_query(FakeProfile(), ProfileQuery(q="missing"))
+    assert not ProfileService._matches_query(
+        FakeProfile(),
+        ProfileQuery(validation_state="invalid"),
+    )

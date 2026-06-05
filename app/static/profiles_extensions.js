@@ -46,7 +46,7 @@
             wizardSyncFineTuningToggleEl,
             wizardSyncFineTuningPanelEl,
             wizardBookmarksSectionStatusEl,
-            wizardBookmarksOpenAdvancedEl,
+            wizardBookmarksOpenSettingsEl,
             wizardBookmarksConfiguredActionsEl,
             wizardBookmarksLinksJumpEl,
             wizardBookmarksFoldersJumpEl,
@@ -913,14 +913,14 @@
         }
 
         function openBookmarksAdvanced(kind = "links") {
-            const advancedLink = documentRef.getElementById("editor-mode-settings");
-            const advancedHref = advancedLink?.getAttribute("href") || "";
+            const settingsLink = documentRef.getElementById("editor-mode-settings");
+            const settingsHref = settingsLink?.getAttribute("href") || "";
             if (
-                !advancedLink
-                || advancedLink.getAttribute("aria-disabled") === "true"
-                || advancedLink.matches("button[disabled]")
-                || !advancedHref
-                || advancedHref === "#"
+                !settingsLink
+                || settingsLink.getAttribute("aria-disabled") === "true"
+                || settingsLink.matches("button[disabled]")
+                || !settingsHref
+                || settingsHref === "#"
             ) {
                 return;
             }
@@ -931,19 +931,19 @@
                 : "shell-policy:4:Bookmarks";
 
             try {
-                const nextUrl = new URL(advancedHref, window.location.origin);
+                const nextUrl = new URL(settingsHref, window.location.origin);
                 nextUrl.searchParams.set("focus", focusTarget);
-                const advancedWindow = window.open(
+                const settingsWindow = window.open(
                     `${nextUrl.pathname}${nextUrl.search}`,
                     "_blank",
                     "noopener",
                 );
-                if (advancedWindow) {
-                    advancedWindow.opener = null;
+                if (settingsWindow) {
+                    settingsWindow.opener = null;
                 }
                 return;
             } catch {
-                advancedLink.click();
+                settingsLink.click();
             }
         }
 
@@ -1598,7 +1598,7 @@
                     revealSyncFocus(button.dataset.syncFocusPreset || "defaults");
                 });
             });
-            wizardBookmarksOpenAdvancedEl?.addEventListener("click", () => {
+            wizardBookmarksOpenSettingsEl?.addEventListener("click", () => {
                 const editor = getEditor();
                 if (!editor) {
                     openBookmarksAdvanced("links");

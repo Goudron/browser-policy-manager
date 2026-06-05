@@ -1,0 +1,15 @@
+{
+    "profiles.editor_title_section": "JSON 编辑器",
+    "profiles.editor_section_hint": "当引导式编辑器和所有设置仍不足够时，在此编辑完整 Firefox policies.json 文档。",
+    "profiles.editor_note": "一个结构化文档视图、一条验证路径，并可直接导出 Firefox policies.json。",
+    "profiles.validate": "验证",
+    "profiles.format": "格式化",
+    "profiles.download_firefox_policies_json": "下载 Firefox policies.json",
+    "profiles.validation_ok": "验证 。",
+    "profiles.validation_failed": "验证 失败.",
+    "profiles.validation_result_invalid": "无效",
+    "profiles.validation_idle": "验证 将 此处.",
+    "profiles.validation_ready": "可验证或下载。",
+    "profiles.editor_formatted": "文档 。",
+    "profiles.editor_mode_switched": "文档 到 {mode}."
+}

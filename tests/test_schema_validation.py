@@ -3,7 +3,7 @@
 Basic tests for schema loading and policy validation.
 
 The tests assert:
-- Schemas for "esr-140.11" and "release-151" are loadable.
+- Schemas for supported channels are loadable.
 - Validator is constructible for each supported profile.
 - Passing a clearly wrong type (e.g., integer) fails validation.
 - Bundled schema snapshots expose the expected Mozilla metadata for v7.11.
@@ -15,7 +15,13 @@ from pathlib import Path
 import pytest
 from jsonschema import ValidationError
 
-from app.core.schema_channels import SCHEMA_FILENAMES
+from app.core.schema_channels import (
+    CURRENT_ESR_SCHEMA_CHANNEL,
+    CURRENT_RELEASE_SCHEMA_CHANNEL,
+    SCHEMA_FILENAMES,
+    SCHEMA_MOZILLA_VERSIONS,
+    SUPPORTED_SCHEMA_CHANNELS,
+)
 from app.core.schemas_loader import available_profiles, load_schema
 from app.core.validation import PolicySchemaValidator
 
@@ -25,12 +31,12 @@ SCHEMAS_DIR = REPO_ROOT / "app" / "schemas" / "policies"
 
 def test_available_profiles_scope():
     profiles = available_profiles()
-    assert set(profiles.keys()) == {"esr-140.11", "release-151"}
-    assert profiles["esr-140.11"].endswith("firefox-esr-140.11.json")
-    assert profiles["release-151"].endswith("firefox-release-151.json")
+    assert set(profiles.keys()) == set(SUPPORTED_SCHEMA_CHANNELS)
+    for channel, filename in SCHEMA_FILENAMES.items():
+        assert profiles[channel].endswith(filename)
 
 
-@pytest.mark.parametrize("profile", ["esr-140.11", "release-151"])
+@pytest.mark.parametrize("profile", SUPPORTED_SCHEMA_CHANNELS)
 def test_load_schema_ok(profile):
     schema = load_schema(profile)
     assert isinstance(schema, dict)
@@ -38,7 +44,7 @@ def test_load_schema_ok(profile):
     assert isinstance(schema, dict) and len(schema) > 0
 
 
-@pytest.mark.parametrize("profile", ["esr-140.11", "release-151"])
+@pytest.mark.parametrize("profile", SUPPORTED_SCHEMA_CHANNELS)
 def test_validator_rejects_wrong_type(profile):
     validator = PolicySchemaValidator(profile)
     with pytest.raises(ValidationError):
@@ -48,10 +54,7 @@ def test_validator_rejects_wrong_type(profile):
 
 @pytest.mark.parametrize(
     ("profile", "expected_version"),
-    [
-        ("esr-140.11", "140.11"),
-        ("release-151", "151.0"),
-    ],
+    [(channel, SCHEMA_MOZILLA_VERSIONS[channel]) for channel in SUPPORTED_SCHEMA_CHANNELS],
 )
 def test_bundled_schema_metadata_matches_mozilla_v711(profile, expected_version):
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[profile]
@@ -69,14 +72,14 @@ def test_bundled_schema_metadata_matches_mozilla_v711(profile, expected_version)
 
 
 def test_release_151_keeps_upstream_min_version_metadata():
-    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES["release-151"]
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert schema["properties"]["DisableRemoteImprovements"]["x-bpm-min-version"] == "148.0"
 
 
 def test_release_151_includes_new_policy_templates_entries():
-    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES["release-151"]
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert "AIControls" in schema["properties"]
@@ -92,7 +95,7 @@ def test_release_151_includes_new_policy_templates_entries():
 
 
 def test_esr_140_11_does_not_include_release_only_new_entries():
-    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES["esr-140.11"]
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert "AIControls" not in schema["properties"]

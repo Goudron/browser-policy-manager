@@ -440,6 +440,8 @@
         function clear() {
             if (!wizardSettingsSearchInputEl) return;
             wizardSettingsSearchInputEl.value = "";
+            wizardSettingsSearchInputEl.dispatchEvent(new window.Event("input", { bubbles: true }));
+            wizardSettingsSearchInputEl.dispatchEvent(new window.Event("search", { bubbles: true }));
             renderResults();
         }
 

@@ -116,7 +116,7 @@ UI_SHELL_TOKENS = (
     'id="wizard-extension-uninstall"',
     'data-extension-rule-group="uninstall"',
     'data-bookmarks-handoff',
-    'id="wizard-bookmarks-open-advanced"',
+    'id="wizard-bookmarks-open-settings"',
     'id="wizard-bookmarks-configured-actions"',
     'id="wizard-bookmarks-links-jump"',
     'id="wizard-bookmarks-folders-jump"',
@@ -413,7 +413,7 @@ P2_3_UX_REGRESSION_TOKENS = (
 )
 
 P2_3_LOCALE_KEYS = (
-    "profiles.advanced_context_title",
+    "profiles.settings_context_title",
     "profiles.wizard_hardening_preset_balanced_title",
     "profiles.wizard_hardening_governance_title",
     "profiles.wizard_cleanup_preset_shared_title",
@@ -576,7 +576,7 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
     assert_has_keys(locale_en_json, P2_3_LOCALE_KEYS)
     assert_has_keys(locale_ru_json, P2_3_LOCALE_KEYS)
 
-    assert locale_en_json["profiles.advanced_context_title"] == "Continue in All settings"
+    assert locale_en_json["profiles.settings_context_title"] == "Continue in All settings"
     assert locale_en_json["profiles.wizard_export_baseline_summary_title"] == "Baseline guardrails"
     assert locale_en_json["profiles.wizard_export_shareable_title"] == "Shareable summary"
     assert locale_en_json["profiles.wizard_export_shareable_generate"] == (
@@ -585,7 +585,7 @@ def test_profiles_ui_locale_catalog_exposes_recent_ux_regression_keys():
     assert locale_en_json["profiles.wizard_export_included_title"] == (
         "Included in the policies.json you download now"
     )
-    assert locale_ru_json["profiles.advanced_context_title"] == "Продолжение во Всех настройках"
+    assert locale_ru_json["profiles.settings_context_title"] == "Продолжение во Всех настройках"
     assert locale_ru_json["profiles.wizard_export_shareable_title"] == "Выжимка для передачи"
     assert locale_ru_json["profiles.wizard_export_shareable_generate"] == (
         "Сформировать/скопировать выжимку"
@@ -1320,8 +1320,8 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
 
     assert '(routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId' in runtime_source
     assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in runtime_source
-    assert "setAdvancedHandoffContext(null);" in runtime_source
-    assert "applyAdvancedFocusTarget(focusTarget);" in runtime_source
+    assert "setJsonHandoffContext(null);" in runtime_source
+    assert "applyJsonFocusTarget(focusTarget);" in runtime_source
     assert "saveButtonEl.addEventListener(\"click\", saveCurrent);" in runtime_source
     assert "saveCurrent();" in runtime_source
     assert "setSaveCurrent(workspace.saveCurrent);" in bootstrap_source
@@ -1363,9 +1363,9 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
     assert f'data-editing-profile-id="{profile_id}"' in json_response.text
     assert 'data-profiles-route-mode="json"' in json_response.text
     assert 'data-profiles-template-kind="json"' in json_response.text
-    assert f'data-advanced-return-url="/profiles/{profile_id}/edit"' in json_response.text
-    assert 'id="advanced-return-link"' not in json_response.text
-    assert 'data-advanced-focus-target="editor"' in json_response.text
+    assert f'data-json-return-url="/profiles/{profile_id}/edit"' in json_response.text
+    assert 'id="json-return-link"' not in json_response.text
+    assert 'data-json-focus-target="editor"' in json_response.text
     assert f"<title>{payload['name']} — JSON editor — Browser Policy Manager</title>" in json_response.text
 
     json_flags = {

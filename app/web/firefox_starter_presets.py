@@ -7,7 +7,7 @@ from app.compliance.firefox.cis.generation import build_cis_layer
 from app.compliance.firefox.cis.merge import merge_base_with_cis_layer
 from app.compliance.firefox.cis.validation import BASE_DIR as CIS_BASE_DIR
 from app.compliance.firefox.cis.validation import load_yaml_file
-from app.core.schema_channels import SUPPORTED_SCHEMA_CHANNELS
+from app.core.schema_channels import CURRENT_RELEASE_SCHEMA_CHANNEL, SUPPORTED_SCHEMA_CHANNELS
 from app.services.policy_schema_service import get_policy_definition
 
 SUPPORTED_POLICY_CHANNELS = SUPPORTED_SCHEMA_CHANNELS
@@ -379,7 +379,7 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
             "policy_values": {
                 "default": _resolve_policy_values_for_channel(
                     preset.get("policy_values", {}).get("default", {}),
-                    "release-151",
+                    CURRENT_RELEASE_SCHEMA_CHANNEL,
                 ),
             },
             "homepage": deepcopy(preset.get("homepage", {})),

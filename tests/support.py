@@ -21,6 +21,11 @@ from sqlalchemy.orm import sessionmaker
 
 from app.db import AsyncSessionAdapter, get_session
 from app.models.profile import Base
+from tests.app_harness import (
+    resolve_test_app,
+    restore_dependency_overrides,
+    snapshot_dependency_overrides,
+)
 
 
 class TestClient:
@@ -118,20 +123,16 @@ def make_test_client(app: FastAPI | None = None, **kwargs: Any) -> TestClient:
     """
     Build a sync-friendly ASGI test client.
 
-    When no application is supplied, create a fresh app instance so tests do
-    not share router-level state through a module-global client.
+    No application resolves to a fresh app instance. Explicit app instances are
+    preserved, with their complete dependency override maps restored on close.
     """
-
-    if app is None:
-        from app.main import create_app
-
-        app = create_app()
+    app = resolve_test_app(app)
 
     engine = create_engine("sqlite:///:memory:", echo=False, future=True)
     testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
     Base.metadata.create_all(bind=engine)
     session = testing_session_factory()
-    previous_override = app.dependency_overrides.get(get_session)
+    override_snapshot = snapshot_dependency_overrides(app)
 
     async def override_get_session():
         yield AsyncSessionAdapter(session)
@@ -139,10 +140,7 @@ def make_test_client(app: FastAPI | None = None, **kwargs: Any) -> TestClient:
     app.dependency_overrides[get_session] = override_get_session
 
     def _cleanup() -> None:
-        if previous_override is None:
-            app.dependency_overrides.pop(get_session, None)
-        else:
-            app.dependency_overrides[get_session] = previous_override
+        restore_dependency_overrides(app, override_snapshot)
         session.close()
         engine.dispose()
 
@@ -186,9 +184,7 @@ def run_test_app_server_handle(
     temporary browser-test database.
     """
 
-    from app.main import create_app
-
-    app = create_app()
+    app = resolve_test_app()
     with tempfile.TemporaryDirectory(prefix="bpm-ui-server-") as tmp_dir:
         db_path = Path(tmp_dir) / "bpm-ui.db"
         engine = create_engine(
@@ -207,6 +203,7 @@ def run_test_app_server_handle(
             finally:
                 session.close()
 
+        override_snapshot = snapshot_dependency_overrides(app)
         app.dependency_overrides[get_session] = override_get_session
         port = pick_free_port(host)
         config = uvicorn.Config(app=app, host=host, port=port, log_level=log_level)
@@ -238,7 +235,7 @@ def run_test_app_server_handle(
         finally:
             server.should_exit = True
             thread.join(timeout=10)
-            app.dependency_overrides.pop(get_session, None)
+            restore_dependency_overrides(app, override_snapshot)
             engine.dispose()
 
 

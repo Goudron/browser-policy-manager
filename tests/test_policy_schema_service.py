@@ -6,6 +6,8 @@ import pytest
 
 from app.services import policy_schema_service as service
 
+pytestmark = pytest.mark.usefixtures("reset_app_caches")
+
 
 def _write_schema(path, *, channel: str = "release-151") -> None:
     payload = {
@@ -57,7 +59,6 @@ def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
     _write_schema(release_file)
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
-    service.load_policy_schema.cache_clear()
 
     schema = service.load_policy_schema("release-151")
     definition = service.get_policy_definition("release-151", "DisableTelemetry")
@@ -87,15 +88,12 @@ def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
     cached = service.load_policy_schema("release-151")
     assert cached.version == "149.0"
 
-    service.load_policy_schema.cache_clear()
-
 
 def test_load_policy_schema_attaches_ui_metadata(tmp_path, monkeypatch):
     release_file = tmp_path / "firefox-release-151.json"
     _write_schema(release_file)
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
-    service.load_policy_schema.cache_clear()
 
     schema = service.load_policy_schema("release-151")
     definition = schema.get_policy("DisableTelemetry")
@@ -107,8 +105,6 @@ def test_load_policy_schema_attaches_ui_metadata(tmp_path, monkeypatch):
     assert definition.ui.subsection == "data_collection"
     assert definition.ui.widget == "toggle"
     assert definition.ui.support_level == "mapped"
-
-    service.load_policy_schema.cache_clear()
 
 
 def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch):
@@ -128,7 +124,6 @@ def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch
     )
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
-    service.load_policy_schema.cache_clear()
 
     definition = service.load_policy_schema("release-151").get_policy("CustomPortal")
 
@@ -140,11 +135,8 @@ def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch
     assert definition.ui.support_level == "fallback"
     assert definition.ui.preserve_unknown_fields is False
 
-    service.load_policy_schema.cache_clear()
-
 
 def test_real_policy_schemas_expose_ui_metadata_for_every_policy():
-    service.load_policy_schema.cache_clear()
     section_ids = {section.id for section in service.load_policy_schema("release-151").ui_sections}
 
     for channel in service.CHANNEL_TO_FILENAME:
@@ -157,7 +149,6 @@ def test_real_policy_schemas_expose_ui_metadata_for_every_policy():
 
 
 def test_real_policy_schemas_expose_expected_widgets_and_sections():
-    service.load_policy_schema.cache_clear()
     schema = service.load_policy_schema("release-151")
 
     assert schema.get_policy("Proxy").ui.widget == "object-card"
@@ -171,7 +162,6 @@ def test_real_policy_schemas_expose_expected_widgets_and_sections():
 
 
 def test_real_policy_schemas_capture_nested_map_and_branch_metadata():
-    service.load_policy_schema.cache_clear()
     schema = service.load_policy_schema("release-151")
 
     authentication = schema.get_policy("Authentication")
@@ -198,7 +188,6 @@ def test_real_policy_schemas_capture_nested_map_and_branch_metadata():
 
 
 def test_real_policy_schemas_capture_array_item_metadata():
-    service.load_policy_schema.cache_clear()
     schema = service.load_policy_schema("release-151")
 
     bookmarks = schema.get_policy("Bookmarks")
@@ -216,7 +205,6 @@ def test_real_policy_schemas_capture_array_item_metadata():
 
 
 def test_real_policy_schemas_capture_definition_additional_properties_schema():
-    service.load_policy_schema.cache_clear()
     schema = service.load_policy_schema("release-151")
 
     extension_settings = schema.get_policy("ExtensionSettings")

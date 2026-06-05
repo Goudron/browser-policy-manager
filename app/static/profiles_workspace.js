@@ -138,10 +138,10 @@
             wizardExportValidateActionEl,
             wizardExportReadyCardEl,
             wizardExportFirefoxPoliciesEl,
-            advancedReviewStripEl,
-            advancedReviewSaveStateEl,
-            advancedReviewValidationStateEl,
-            advancedReviewDownloadStateEl,
+            jsonReviewStripEl,
+            jsonReviewSaveStateEl,
+            jsonReviewValidationStateEl,
+            jsonReviewDownloadStateEl,
             wizardFinishEl,
             wizardSummaryLifecycleListEl,
             wizardCloneHandoffPanelEl,
@@ -151,15 +151,17 @@
         const overviewPanelEl = documentRef.getElementById("overview-panel");
         const commandDeckEl = documentRef.getElementById("command-deck");
         const routeMode = documentRef.body?.dataset.profilesRouteMode || "new";
-        const advancedFocusTarget = documentRef.body?.dataset.advancedFocusTarget || "";
+        const routeFocusTarget = documentRef.body?.dataset.jsonFocusTarget || "";
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         const compareBaseStorageKey = "bpm-library-compare-base";
+        const workspaceState = windowRef.BPMProfilesWorkspaceState || {};
         let compareProfileState = null;
         let saveConflictState = null;
 
         function normalizeSettingsModeFocusTarget(focusTarget) {
             const normalizedTarget = String(focusTarget || "").trim();
-            if (!normalizedTarget || normalizedTarget === "editor") return "";
+            if (!normalizedTarget) return "";
+            if (normalizedTarget === "editor") return "settings-schema-shell-step-8";
             if (
                 normalizedTarget === "raw"
                 || normalizedTarget === "deprecated"
@@ -195,6 +197,10 @@
         function isJsonModeFocusTarget(focusTarget) {
             return normalizeJsonModeFocusTarget(focusTarget) !== "editor"
                 || String(focusTarget || "").trim() === "editor";
+        }
+
+        function encodeReturnPath(returnPath) {
+            return encodeURIComponent(returnPath).replaceAll("%2F", "/");
         }
 
         function setImportStatus(message, tone = "info") {
@@ -236,34 +242,11 @@
         }
 
         function normalizeCompareBaseSnapshot(snapshot, fallbackProfile = null) {
-            const source = snapshot && typeof snapshot === "object" ? snapshot : {};
-            const fallback = fallbackProfile && typeof fallbackProfile === "object" ? fallbackProfile : {};
-            const profileId = Number(source.id ?? fallback.id ?? 0);
-            if (!Number.isInteger(profileId) || profileId <= 0) return null;
-            return {
-                id: profileId,
-                name: source.name || fallback.name || "",
-                owner: source.owner ?? fallback.owner ?? null,
-                description: source.description ?? fallback.description ?? null,
-                schemaVersion: source.schemaVersion || source.schema_version || fallback.schema_version || defaultSchemaVersion,
-                flags: source.flags && typeof source.flags === "object" ? source.flags : {},
-            };
+            return workspaceState.normalizeCompareBaseSnapshot(snapshot, fallbackProfile, defaultSchemaVersion);
         }
 
         function normalizeCompareBaseProfile(profile, fallbackSnapshot = null) {
-            const source = profile && typeof profile === "object" ? profile : {};
-            const fallback = fallbackSnapshot && typeof fallbackSnapshot === "object" ? fallbackSnapshot : {};
-            const profileId = Number(source.id ?? fallback.id ?? 0);
-            if (!Number.isInteger(profileId) || profileId <= 0) return null;
-            return {
-                id: profileId,
-                name: source.name || fallback.name || "",
-                owner: source.owner ?? fallback.owner ?? null,
-                description: source.description ?? fallback.description ?? null,
-                schema_version: source.schema_version || source.schemaVersion || fallback.schemaVersion || defaultSchemaVersion,
-                is_deleted: source.is_deleted === true,
-                updated_at: source.updated_at || null,
-            };
+            return workspaceState.normalizeCompareBaseProfile(profile, fallbackSnapshot, defaultSchemaVersion);
         }
 
         function readStoredCompareBase() {
@@ -548,56 +531,27 @@
         }
 
         function getWorkflowLifecycleState(dirty, invalid) {
-            const currentId = getCurrentId();
-            const currentProfile = getCurrentProfile();
-            const hasDraftName = Boolean(nameInput.value.trim());
-
-            if (currentProfile?.is_deleted) {
-                return {
-                    selectionState: "archived",
-                    workflowState: "archived",
-                    title: t("profiles.dock_state_archived_title"),
-                    copy: t("profiles.wizard_export_state_archived"),
-                };
-            }
-            if (!currentId && !hasDraftName) {
-                return {
-                    selectionState: "empty",
-                    workflowState: "empty",
-                    title: t("profiles.dock_state_empty_title"),
-                    copy: t("profiles.selection_empty_status"),
-                };
-            }
-            if (!currentId) {
-                return {
-                    selectionState: "draft",
-                    workflowState: "draft",
-                    title: t("profiles.dock_state_draft_title"),
-                    copy: t("profiles.wizard_export_state_unsaved_new"),
-                };
-            }
-            if (invalid) {
-                return {
-                    selectionState: "active",
-                    workflowState: "invalid",
-                    title: t("profiles.dock_state_invalid_title"),
-                    copy: t("profiles.wizard_export_state_invalid_dirty"),
-                };
-            }
-            if (dirty) {
-                return {
-                    selectionState: "active",
-                    workflowState: "dirty",
-                    title: t("profiles.dock_state_dirty_title"),
-                    copy: t("profiles.wizard_export_state_unsaved_existing"),
-                };
-            }
-            return {
-                selectionState: "active",
-                workflowState: "ready",
-                title: t("profiles.dock_state_ready_title"),
-                copy: t("profiles.wizard_export_download_hint_ready"),
-            };
+            return workspaceState.getWorkflowLifecycleState({
+                dirty,
+                invalid,
+                currentId: getCurrentId(),
+                currentProfile: getCurrentProfile(),
+                hasDraftName: Boolean(nameInput.value.trim()),
+                labels: {
+                    archivedTitle: t("profiles.dock_state_archived_title"),
+                    archivedCopy: t("profiles.wizard_export_state_archived"),
+                    emptyTitle: t("profiles.dock_state_empty_title"),
+                    emptyCopy: t("profiles.selection_empty_status"),
+                    draftTitle: t("profiles.dock_state_draft_title"),
+                    draftCopy: t("profiles.wizard_export_state_unsaved_new"),
+                    invalidTitle: t("profiles.dock_state_invalid_title"),
+                    invalidCopy: t("profiles.wizard_export_state_invalid_dirty"),
+                    dirtyTitle: t("profiles.dock_state_dirty_title"),
+                    dirtyCopy: t("profiles.wizard_export_state_unsaved_existing"),
+                    readyTitle: t("profiles.dock_state_ready_title"),
+                    readyCopy: t("profiles.wizard_export_download_hint_ready"),
+                },
+            });
         }
 
         function syncWorkspaceOverview() {
@@ -642,22 +596,11 @@
         }
 
         function normalizeValue(value) {
-            if (Array.isArray(value)) {
-                return value.map(normalizeValue);
-            }
-            if (value && typeof value === "object") {
-                return Object.keys(value)
-                    .sort()
-                    .reduce((acc, key) => {
-                        acc[key] = normalizeValue(value[key]);
-                        return acc;
-                    }, {});
-            }
-            return value;
+            return workspaceState.normalizeValue(value);
         }
 
         function snapshotToString(snapshot) {
-            return JSON.stringify(normalizeValue(snapshot));
+            return workspaceState.snapshotToString(snapshot);
         }
 
         function escapeHtml(value) {
@@ -728,26 +671,16 @@
 
         function buildUpdatePayload(form, parsedFlags, compliancePayload, options = {}) {
             const { includeExpectedRevision = true } = options;
-            return {
-                description: form.description,
-                owner: form.owner,
-                schema_version: form.schemaVersion,
-                flags: parsedFlags,
-                compliance: compliancePayload,
-                ...(includeExpectedRevision ? buildExpectedRevisionPayload() : {}),
-            };
+            return workspaceState.buildUpdatePayload(
+                form,
+                parsedFlags,
+                compliancePayload,
+                includeExpectedRevision ? buildExpectedRevisionPayload() : {},
+            );
         }
 
         function buildCreatePayload(form, parsedFlags, compliancePayload, options = {}) {
-            const { name = form.name } = options;
-            return {
-                name,
-                description: form.description,
-                owner: form.owner,
-                schema_version: form.schemaVersion,
-                flags: parsedFlags,
-                compliance: compliancePayload,
-            };
+            return workspaceState.buildCreatePayload(form, parsedFlags, compliancePayload, options);
         }
 
         function buildConflictCopyName(form) {
@@ -789,30 +722,11 @@
         }
 
         function isPlainObject(value) {
-            return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+            return workspaceState.isPlainObject(value);
         }
 
         function collectDiffPaths(baseValue, otherValue, path = [], changes = []) {
-            const normalizedBase = normalizeValue(baseValue);
-            const normalizedOther = normalizeValue(otherValue);
-
-            if (isPlainObject(normalizedBase) || isPlainObject(normalizedOther)) {
-                const baseObject = isPlainObject(normalizedBase) ? normalizedBase : {};
-                const otherObject = isPlainObject(normalizedOther) ? normalizedOther : {};
-                const keys = Array.from(new Set([
-                    ...Object.keys(baseObject),
-                    ...Object.keys(otherObject),
-                ])).sort();
-                keys.forEach((key) => {
-                    collectDiffPaths(baseObject[key], otherObject[key], [...path, key], changes);
-                });
-                return changes;
-            }
-
-            if (snapshotToString(normalizedBase) !== snapshotToString(normalizedOther)) {
-                changes.push(path);
-            }
-            return changes;
+            return workspaceState.collectDiffPaths(baseValue, otherValue, path, changes);
         }
 
         function buildCompareDiff(baseSnapshot, otherSnapshot) {
@@ -1143,9 +1057,9 @@
             }
             const nextMessage = message || t("profiles.validation_idle");
             validationPreviewEl.textContent = nextMessage;
-            if (advancedReviewValidationStateEl) {
-                advancedReviewValidationStateEl.textContent = nextMessage;
-                advancedReviewValidationStateEl.dataset.reviewTone = tone || "neutral";
+            if (jsonReviewValidationStateEl) {
+                jsonReviewValidationStateEl.textContent = nextMessage;
+                jsonReviewValidationStateEl.dataset.reviewTone = tone || "neutral";
             }
             validationPreviewEl.className = tone === "error"
                 ? "max-w-full text-xs text-red-700"
@@ -1198,9 +1112,9 @@
             if (dockStatusTextEl) {
                 dockStatusTextEl.textContent = workspaceSignalEl.textContent;
             }
-            if (advancedReviewSaveStateEl) {
-                advancedReviewSaveStateEl.textContent = workspaceSignalEl.textContent;
-                advancedReviewSaveStateEl.dataset.reviewTone = invalid ? "error" : (dirty ? "warn" : "success");
+            if (jsonReviewSaveStateEl) {
+                jsonReviewSaveStateEl.textContent = workspaceSignalEl.textContent;
+                jsonReviewSaveStateEl.dataset.reviewTone = invalid ? "error" : (dirty ? "warn" : "success");
             }
             return { dirty, invalid };
         }
@@ -1263,22 +1177,23 @@
                     ? `/profiles/${currentId}/json${includeDeleted ? `?${includeDeletedSuffix}` : ""}`
                     : `/profiles/${currentId}/edit${includeDeleted ? `?${includeDeletedSuffix}` : ""}`);
             if (modeKey === "settings") {
-                const settingsFocusTarget = normalizeSettingsModeFocusTarget(advancedFocusTarget);
+                const settingsFocusTarget = normalizeSettingsModeFocusTarget(routeFocusTarget);
                 const params = [];
                 if (includeDeleted) {
                     params.push(includeDeletedSuffix);
                 }
-                params.push(`return=${encodeURIComponent(returnPath)}`);
+                params.push(`return=${encodeReturnPath(returnPath)}`);
                 if (settingsFocusTarget) {
                     params.push(`focus=${encodeURIComponent(settingsFocusTarget)}`);
                 }
                 return `/profiles/${currentId}/settings?${params.join("&")}`;
             }
-            const jsonFocusTarget = normalizeJsonModeFocusTarget(advancedFocusTarget);
+            const jsonFocusTarget = normalizeJsonModeFocusTarget(routeFocusTarget);
             const params = [];
             if (includeDeleted) {
                 params.push(includeDeletedSuffix);
             }
+            params.push(`return=${encodeReturnPath(returnPath)}`);
             params.push(`focus=${encodeURIComponent(jsonFocusTarget)}`);
             return `/profiles/${currentId}/json?${params.join("&")}`;
         }
@@ -1286,9 +1201,9 @@
         function refreshEditorModeLinks() {
             const hasSavedProfile = Boolean(getCurrentId());
             const guidedActive = routeMode === "new" || routeMode === "edit";
-            const advancedMode = routeMode === "settings"
+            const detailMode = routeMode === "settings"
                 ? "settings"
-                : (isJsonModeFocusTarget(advancedFocusTarget) ? "json" : "settings");
+                : (isJsonModeFocusTarget(routeFocusTarget) ? "json" : "settings");
 
             setEditorModeLinkState(editorModeGuidedEl, {
                 href: buildEditorModeHref("guided"),
@@ -1298,12 +1213,12 @@
             setEditorModeLinkState(editorModeSettingsEl, {
                 href: buildEditorModeHref("settings"),
                 available: hasSavedProfile,
-                active: routeMode === "settings" || (routeMode === "json" && advancedMode === "settings"),
+                active: routeMode === "settings" || (routeMode === "json" && detailMode === "settings"),
             });
             setEditorModeLinkState(editorModeJsonEl, {
                 href: buildEditorModeHref("json"),
                 available: hasSavedProfile,
-                active: routeMode === "json" && advancedMode === "json",
+                active: routeMode === "json" && detailMode === "json",
             });
             if (editorModeLinksHintEl) {
                 editorModeLinksHintEl.classList.toggle("support-hidden", hasSavedProfile);
@@ -1347,12 +1262,12 @@
             if (dockStateSummaryEl) {
                 dockStateSummaryEl.dataset.workflowState = lifecycleState.workflowState;
             }
-            if (advancedReviewStripEl) {
-                advancedReviewStripEl.dataset.workflowState = lifecycleState.workflowState;
+            if (jsonReviewStripEl) {
+                jsonReviewStripEl.dataset.workflowState = lifecycleState.workflowState;
             }
-            if (advancedReviewDownloadStateEl) {
-                advancedReviewDownloadStateEl.textContent = lifecycleState.copy;
-                advancedReviewDownloadStateEl.dataset.reviewTone =
+            if (jsonReviewDownloadStateEl) {
+                jsonReviewDownloadStateEl.textContent = lifecycleState.copy;
+                jsonReviewDownloadStateEl.dataset.reviewTone =
                     lifecycleState.workflowState === "ready" ? "success"
                         : lifecycleState.workflowState === "invalid" || lifecycleState.workflowState === "archived" ? "error"
                             : lifecycleState.workflowState === "dirty" ? "warn"

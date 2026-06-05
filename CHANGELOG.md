@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.8.5
+
+### Added
+- Added repository health reporting, refactoring acceptance rules, and a maintained architecture map to reduce repeated project discovery work.
+- Added a documentation index and machine-readable manifest, with completed audits and backlogs moved into a dated archive.
+- Added source locale catalogs, deterministic locale build/check commands, locale inventory, and locale quality tooling while preserving runtime catalog parity.
+- Added reproducible frontend vendor locking, checksum verification, scripted rebuilds, license checks, and size-diff reporting.
+- Added marker-based test layers, executable Make targets, release-readiness guidance, and a manual pure-unit `pytest-xdist` pilot.
+- Added xdist-safe database, FastAPI app, dependency override, and cache isolation harnesses for pytest.
+
+### Changed
+- Moved the project from `0.8.0` to `0.8.5`.
+- Split large profile frontend assets, route context/navigation helpers, schema normalization logic, policy validation logic, and test modules into smaller ownership-focused files.
+- Replaced scattered playbook commands with Make targets for routine development, locale maintenance, vendor rebuilds, schema work, browser checks, and release verification.
+- Split CI into mandatory fast checks, coverage/contract checks, manual browser UI checks, and scheduled/manual live Firefox checks.
+- Kept `pytest-xdist` opt-in for BPM 0.8.5 after the pure-unit pilot improved its 221-test subset by approximately 27% to 37% but did not shorten the existing mandatory CI critical path.
+
+### Fixed
+- Removed the obsolete editor compatibility route, redirect, compatibility artifacts, and stale JSON-editor naming so the product exposes only Library, Guided editor, All settings, and JSON editor surfaces.
+- Refreshed vendored `js-yaml` to the patched `4.2.0` release and retained YAML import compatibility.
+- Reduced brittle documentation, static-source, locale, and workflow assertions by moving repeated contracts into shared helpers and generated checks.
+
+### Quality
+- Kept mandatory fast tests, focused contract tests, Ruff, mypy, and release-oriented test layers green throughout the refactoring backlog.
+- Preserved the existing product behavior, supported Firefox schema channels, six-locale runtime matrix, and non-browser coverage gate.
+
 ## 0.8.0
 
 ### Added
@@ -66,7 +92,7 @@
 
 ### Added
 - Added Firefox `policies.json` import as a first-class product workflow, including API support, validation, and profile-library import controls.
-- Added dedicated profile workspace routes for library, visual editor, and advanced editor flows instead of treating `/profiles` as one combined surface.
+- Added dedicated profile workspace routes for library, visual editor, and JSON editor flows instead of treating `/profiles` as one combined surface.
 - Added CIS Firefox compliance data, mappings, generated hardening layers, merge logic, tooling, and regression coverage.
 - Added schema support for Firefox `release-150` and `esr-140.10`, plus migration coverage for stored profile schema versions.
 - Added a local Chromium UI audit script and artifact/report flow for guided, advanced, layout, theme, and localization QA.
@@ -95,17 +121,17 @@
 - Fixed multiple guided wizard bugs found during Chromium QA, including AI-step behavior, preset application, language switching, advanced handoff, export-step readiness, and `SearchEngines` document generation.
 - Fixed dark-theme surface leaks, desktop/mobile overflow issues, and narrow-viewport regressions across library, guided, review, and advanced surfaces.
 - Fixed profile-library state, labels, and rendering glitches that could surface stale fixtures, untranslated action copy, or inconsistent badges on first load.
-- Fixed remaining advanced-workflow terminology drift where older `Advanced document` / `Техдокумент` copy still appeared.
+- Fixed remaining advanced-workflow terminology drift where older `JSON editor` / `JSON editor` copy still appeared.
 - Fixed remaining SQLite URL normalization edge cases with explicit regression tests.
 
 ### Notes
-- This release exposed architectural coupling across the library, guided editor, advanced editor, export/review surfaces, and shared frontend runtime. Those follow-up architecture issues are planned for `0.7.5-dev`.
+- This release exposed architectural coupling across the library, guided editor, JSON editor, export/review surfaces, and shared frontend runtime. Those follow-up architecture issues are planned for `0.7.5-dev`.
 
 ## 0.7.0
 
 ### Added
 - Added Firefox `policies.json` import as a first-class product workflow, including API support, validation, and profile-library import controls.
-- Added dedicated profile workspace routes for library, visual editor, and advanced editor flows instead of treating `/profiles` as one combined surface.
+- Added dedicated profile workspace routes for library, visual editor, and JSON editor flows instead of treating `/profiles` as one combined surface.
 - Added CIS Firefox compliance data, mappings, generated hardening layers, merge logic, tooling, and regression coverage.
 - Added schema support for Firefox `release-150` and `esr-140.10`, plus migration coverage for stored profile schema versions.
 - Added a local Chromium UI audit script and artifact/report flow for guided, advanced, layout, theme, and localization QA.
@@ -126,11 +152,11 @@
 - Fixed multiple guided wizard bugs found during Chromium QA, including AI-step behavior, preset application, language switching, advanced handoff, export-step readiness, and `SearchEngines` document generation.
 - Fixed dark-theme surface leaks, desktop/mobile overflow issues, and narrow-viewport regressions across library, guided, review, and advanced surfaces.
 - Fixed profile-library state, labels, and rendering glitches that could surface stale fixtures, untranslated action copy, or inconsistent badges on first load.
-- Fixed remaining advanced-workflow terminology drift where older `Advanced document` / `Техдокумент` copy still appeared.
+- Fixed remaining advanced-workflow terminology drift where older `JSON editor` / `JSON editor` copy still appeared.
 - Fixed remaining SQLite URL normalization edge cases with explicit regression tests.
 
 ### Notes
-- This release exposed architectural coupling across the library, guided editor, advanced editor, export/review surfaces, and shared frontend runtime. Those follow-up architecture issues are planned for `0.7.5-dev`.
+- This release exposed architectural coupling across the library, guided editor, JSON editor, export/review surfaces, and shared frontend runtime. Those follow-up architecture issues are planned for `0.7.5-dev`.
 
 ## Earlier (2025-10-26)
 

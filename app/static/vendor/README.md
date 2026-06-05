@@ -13,10 +13,16 @@ Related local bootstrap assets outside `vendor/`:
 
 These keep theme selection, Monaco bundle wiring, and initial locale bootstrapping self-hosted without inline executable scripts.
 
+`vendor-lock.json`
+- Local checksum lock for the checked-in vendor outputs
+- Verified by `make verify-frontend-vendor`
+- Update only after an intentional vendor rebuild with
+  `make rebuild-frontend-vendor`
+
 `js-yaml.js`
 - Upstream package: `js-yaml`
-- Version: `4.1.0`
-- Source URL: `https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js`
+- Version: `4.2.0`
+- Source URL: `https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js`
 - License file: `js-yaml.LICENSE`
 
 `profiles_monaco.js`
@@ -31,8 +37,8 @@ Update procedure:
 2. Update `app/static/vendor/profiles_tailwind.css` if new `/profiles` utility classes are introduced.
 3. Replace `app/static/vendor/js-yaml.js`.
 4. Replace `app/static/vendor/js-yaml.LICENSE`.
-5. Install frontend dependencies with `npm install`.
-6. Run `npm run build:monaco`.
-7. Replace `app/static/vendor/monaco.LICENSE` if the upstream version changes.
+5. Update `package.json` and `package-lock.json` only for intentional dependency changes.
+6. Replace `app/static/vendor/monaco.LICENSE` if the upstream version changes.
+7. Run `make rebuild-frontend-vendor`.
 8. Keep `app/templates/profiles.html` pointing at local assets only.
-9. Run `ruff check .`, `mypy app`, and `pytest -q`.
+9. Run `make verify-frontend-vendor`, `ruff check .`, `mypy app`, and `pytest -q`.

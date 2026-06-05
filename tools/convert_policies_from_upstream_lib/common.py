@@ -4,12 +4,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from app.core.schema_channels import (
+    CURRENT_ESR_SCHEMA_CHANNEL,
+    CURRENT_RELEASE_SCHEMA_CHANNEL,
+    SCHEMA_FILENAMES,
+)
+
 BASE_DIR = Path(__file__).resolve().parents[2]
 UPSTREAM_HTML_PATH = BASE_DIR / "data" / "upstream" / "policy-templates" / "policy-templates.html"
 
 SCHEMAS_DIR = BASE_DIR / "app" / "schemas" / "policies"
-RELEASE_SCHEMA_PATH = SCHEMAS_DIR / "firefox-release-151.json"
-ESR_SCHEMA_PATH = SCHEMAS_DIR / "firefox-esr-140.11.json"
+RELEASE_SCHEMA_PATH = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
+ESR_SCHEMA_PATH = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
 LINUX_POLICIES_PATH = (
     BASE_DIR / "data" / "upstream" / "policy-templates" / "v7.11" / "linux-policies.json"
 )

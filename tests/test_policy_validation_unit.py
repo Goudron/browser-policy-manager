@@ -148,6 +148,65 @@ def test_validate_profile_policies_or_raise_raises_for_invalid_payload():
     assert excinfo.value.issues[0].policy == "DisableTelemetry"
 
 
+def test_validate_profile_policies_for_channel_reuses_compiled_validator(monkeypatch):
+    validation.clear_policy_validator_cache()
+    build_calls = []
+
+    class _Validator:
+        def iter_errors(self, profile_policies):
+            assert profile_policies == {"DisableTelemetry": True}
+            return []
+
+    def _fake_load(channel: str):
+        assert channel == "release-151"
+        return {
+            "type": "object",
+            "properties": {"DisableTelemetry": {"type": "boolean"}},
+        }
+
+    def _fake_build(schema: dict):
+        build_calls.append(schema)
+        return _Validator()
+
+    monkeypatch.setattr(validation, "load_policy_schema_for_channel", _fake_load)
+    monkeypatch.setattr(validation, "_build_validator", _fake_build)
+
+    for _ in range(2):
+        assert (
+            validation.validate_profile_policies_for_channel(
+                {"DisableTelemetry": True},
+                "release-151",
+            )
+            == []
+        )
+
+    assert len(build_calls) == 1
+    validation.clear_policy_validator_cache()
+
+
+def test_validate_profile_policies_or_raise_for_channel_raises_for_invalid_payload(monkeypatch):
+    issues = [
+        validation.PolicyValidationIssue(
+            policy="DisableTelemetry",
+            path=["DisableTelemetry"],
+            message="Bad value",
+        )
+    ]
+    monkeypatch.setattr(
+        validation,
+        "validate_profile_policies_for_channel",
+        lambda profile_policies, channel: issues,
+    )
+
+    with pytest.raises(validation.PolicyValidationError) as excinfo:
+        validation.validate_profile_policies_or_raise_for_channel(
+            {"DisableTelemetry": "bad"},
+            "release-151",
+        )
+
+    assert excinfo.value.issues == issues
+
+
 def test_validate_profile_payload_with_schema_defaults_channel_and_validates(monkeypatch):
     captured = {}
 

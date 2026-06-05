@@ -4,6 +4,12 @@ import argparse
 import json
 from pathlib import Path
 
+from app.core.schema_channels import (
+    CURRENT_ESR_SCHEMA_CHANNEL,
+    CURRENT_RELEASE_SCHEMA_CHANNEL,
+    SCHEMA_MOZILLA_VERSIONS,
+)
+
 from .common import (
     ESR_SCHEMA_PATH,
     LINUX_POLICIES_PATH,
@@ -58,23 +64,35 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--release-channel",
-        default="release-151",
-        help="Channel string stored in the Release schema (default: release-151).",
+        default=CURRENT_RELEASE_SCHEMA_CHANNEL,
+        help=(
+            "Channel string stored in the Release schema "
+            f"(default: {CURRENT_RELEASE_SCHEMA_CHANNEL})."
+        ),
     )
     parser.add_argument(
         "--release-version",
-        default="151.0",
-        help="Version string stored in the Release schema (default: 151.0).",
+        default=SCHEMA_MOZILLA_VERSIONS[CURRENT_RELEASE_SCHEMA_CHANNEL],
+        help=(
+            "Version string stored in the Release schema "
+            f"(default: {SCHEMA_MOZILLA_VERSIONS[CURRENT_RELEASE_SCHEMA_CHANNEL]})."
+        ),
     )
     parser.add_argument(
         "--esr-channel",
-        default="esr-140.11",
-        help="Channel string stored in the ESR schema (default: esr-140.11).",
+        default=CURRENT_ESR_SCHEMA_CHANNEL,
+        help=(
+            "Channel string stored in the ESR schema "
+            f"(default: {CURRENT_ESR_SCHEMA_CHANNEL})."
+        ),
     )
     parser.add_argument(
         "--esr-version",
-        default="140.11",
-        help="Version string stored in the ESR schema (default: 140.11).",
+        default=SCHEMA_MOZILLA_VERSIONS[CURRENT_ESR_SCHEMA_CHANNEL],
+        help=(
+            "Version string stored in the ESR schema "
+            f"(default: {SCHEMA_MOZILLA_VERSIONS[CURRENT_ESR_SCHEMA_CHANNEL]})."
+        ),
     )
     parser.add_argument(
         "--source-tag",

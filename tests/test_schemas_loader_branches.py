@@ -6,12 +6,7 @@ import pytest
 
 from app.core import schemas_loader as loader
 
-
-@pytest.fixture(autouse=True)
-def clear_schema_loader_cache():
-    loader.load_schema.cache_clear()
-    yield
-    loader.load_schema.cache_clear()
+pytestmark = pytest.mark.usefixtures("reset_app_caches")
 
 
 def test_json_helpers_round_trip(tmp_path):

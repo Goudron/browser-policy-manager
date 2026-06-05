@@ -1,7 +1,9 @@
 from pathlib import Path
 
+from tests.docs_index import doc_path_from_index
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-AUDIT_DOC_PATH = REPO_ROOT / "docs" / "locale_screenshot_pack_audit_2026-05-30.md"
+AUDIT_DOC_PATH = doc_path_from_index("locale_screenshot_pack_audit_2026-05-30.md", status="audit")
 GITIGNORE_PATH = REPO_ROOT / ".gitignore"
 
 

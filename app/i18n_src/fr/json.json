@@ -1,0 +1,15 @@
+{
+    "profiles.editor_title_section": "JSON éditeur",
+    "profiles.editor_section_hint": "Modifier le complet Firefox policies.json ici quand Éditeur guidé et Tous les paramètres sont pas suffisant.",
+    "profiles.editor_note": "Un élément vue, un validation chemin, et direct Firefox policies.jsonation.",
+    "profiles.validate": "Valider",
+    "profiles.format": "Format",
+    "profiles.download_firefox_policies_json": "Télécharger Firefox policies.json",
+    "profiles.validation_ok": "Validation réussie.",
+    "profiles.validation_failed": "Échec de la validation.",
+    "profiles.validation_result_invalid": "invalide",
+    "profiles.validation_idle": "Les résultats de validation apparaîtront ici.",
+    "profiles.validation_ready": "Prêt pour la validation ou le téléchargement.",
+    "profiles.editor_formatted": "Formaté.",
+    "profiles.editor_mode_switched": "élément pour {mode}."
+}

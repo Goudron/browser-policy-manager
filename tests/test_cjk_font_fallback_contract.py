@@ -3,11 +3,12 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 from app.main import app
+from tests.docs_index import doc_path_from_index
 from tests.support import make_test_client
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CSS_PATH = REPO_ROOT / "app" / "static" / "profiles.css"
-AUDIT_DOC_PATH = REPO_ROOT / "docs" / "cjk_font_fallback_audit_2026-05-30.md"
+AUDIT_DOC_PATH = doc_path_from_index("cjk_font_fallback_audit_2026-05-30.md", status="audit")
 
 
 def _css_source() -> str:

@@ -1,0 +1,15 @@
+{
+    "profiles.editor_title_section": "JSON-редактор",
+    "profiles.editor_section_hint": "Редактируйте здесь полный Firefox policies.json, когда Пошагового редактора и Всех настроек уже недостаточно.",
+    "profiles.editor_note": "Один структурированный документ, один маршрут проверки и прямой экспорт Firefox policies.json.",
+    "profiles.validate": "Проверить",
+    "profiles.format": "Форматировать",
+    "profiles.download_firefox_policies_json": "Скачать Firefox policies.json",
+    "profiles.validation_ok": "Проверка прошла успешно.",
+    "profiles.validation_failed": "Проверка не пройдена.",
+    "profiles.validation_result_invalid": "неверные данные",
+    "profiles.validation_idle": "Здесь будут появляться результаты проверки.",
+    "profiles.validation_ready": "Можно проверять или скачивать.",
+    "profiles.editor_formatted": "Документ отформатирован.",
+    "profiles.editor_mode_switched": "Формат документа переключён на {mode}."
+}

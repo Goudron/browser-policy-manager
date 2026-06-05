@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-03",
+  "packages": {
+    "js-yaml": "4.2.0",
+    "monaco-editor": "0.52.0",
+    "esbuild": "0.25.3"
+  },
+  "assets": [
+    {
+      "path": "js-yaml.js",
+      "size": 43461,
+      "sha256": "da1e8c845d515c586ca48897a26bf180494a21d34e2f92b0c2e2d51e7c55a53d"
+    },
+    {
+      "path": "js-yaml.LICENSE",
+      "size": 1084,
+      "sha256": "a07bc24468b9654ce76a547d47a2db282d07733b715db4c73a98bd63961f9550"
+    },
+    {
+      "path": "profiles_tailwind.css",
+      "size": 6250,
+      "sha256": "fed01029f59384f7f9c364bb3ddda33e74ba886d65f188c4f4ace55581119c98"
+    },
+    {
+      "path": "profiles_monaco.js",
+      "size": 5421583,
+      "sha256": "95695d9e0dde5ef13bbb621329d937ef6bee14d3f5afffc6f5b27887c1ae7fff"
+    },
+    {
+      "path": "profiles_monaco.css",
+      "size": 83265,
+      "sha256": "8af79d6d35a2455d6c2c2dacfb7083d07c9e8863395cd899fbc2af90d11fef50"
+    },
+    {
+      "path": "monaco-editor.worker.js",
+      "size": 557424,
+      "sha256": "a42fcedc157aab85432d863397280a94ed4d409f170d174c1770c3ad305d16ab"
+    },
+    {
+      "path": "monaco-json.worker.js",
+      "size": 858430,
+      "sha256": "51798846d25e3d2ad41effc33aa7c5d9d860163447ba0df08e6b3d9cb8fe6ffa"
+    },
+    {
+      "path": "monaco.LICENSE",
+      "size": 1098,
+      "sha256": "33e4ff1a06ef62ba21788ea162564ee8165269a24a9ce6ef301837447eab0ac6"
+    }
+  ]
+}

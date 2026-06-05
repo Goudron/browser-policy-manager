@@ -2,8 +2,8 @@ import json
 import re
 from pathlib import Path
 
+from app.web.firefox_preferences import get_wizard_preferences_catalog
 from app.web.firefox_wizard_shell import get_wizard_schema_shell_catalog
-from app.web.profiles import get_wizard_preferences_catalog
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 I18N_DIR = REPO_ROOT / "app" / "i18n"
