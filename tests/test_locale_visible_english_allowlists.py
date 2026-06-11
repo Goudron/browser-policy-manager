@@ -140,6 +140,78 @@ def test_audited_locale_surfaces_do_not_contain_forbidden_english_fragments():
         assert _unapproved_visible_english_fragments(audited_text, locale) == []
 
 
+def test_compare_locale_terms_match_dedicated_ownerless_interface_copy():
+    expected = {
+        "ru": {
+            "profiles.compare_route_title": "Сравнить настройки профилей",
+            "profiles.compare_left_label": "Профиль A",
+            "profiles.compare_right_label": "Профиль B",
+            "profiles.compare_settings_title": "Настройки рядом",
+            "profiles.compare_state_missing": "Отсутствует",
+            "profiles.compare_state_equal": "То же значение",
+            "profiles.compare_state_different": "Другое значение",
+        },
+        "de": {
+            "profiles.compare_route_title": "Profileinstellungen vergleichen",
+            "profiles.compare_left_label": "Profil A",
+            "profiles.compare_right_label": "Profil B",
+            "profiles.compare_settings_title": "Einstellungen nebeneinander",
+            "profiles.compare_state_missing": "Fehlt",
+            "profiles.compare_state_equal": "Gleicher Wert",
+            "profiles.compare_state_different": "Anderer Wert",
+        },
+        "zh-CN": {
+            "profiles.compare_route_title": "比较配置档案设置",
+            "profiles.compare_left_label": "配置档案甲",
+            "profiles.compare_right_label": "配置档案乙",
+            "profiles.compare_settings_title": "并排查看设置",
+            "profiles.compare_state_missing": "缺失",
+            "profiles.compare_state_equal": "值相同",
+            "profiles.compare_state_different": "值不同",
+        },
+        "fr": {
+            "profiles.compare_route_title": "Comparer les paramètres des profils",
+            "profiles.compare_left_label": "Profil A",
+            "profiles.compare_right_label": "Profil B",
+            "profiles.compare_settings_title": "Paramètres côte à côte",
+            "profiles.compare_state_missing": "Manquant",
+            "profiles.compare_state_equal": "Même valeur",
+            "profiles.compare_state_different": "Valeur différente",
+        },
+        "es-ES": {
+            "profiles.compare_route_title": "Comparar ajustes de perfiles",
+            "profiles.compare_left_label": "Perfil A",
+            "profiles.compare_right_label": "Perfil B",
+            "profiles.compare_settings_title": "Ajustes en paralelo",
+            "profiles.compare_state_missing": "Falta",
+            "profiles.compare_state_equal": "Mismo valor",
+            "profiles.compare_state_different": "Valor diferente",
+        },
+    }
+    stale_fragments = (
+        "owner",
+        "Owner",
+        "No owner",
+        "Left profile",
+        "Right profile",
+        "Left value",
+        "Right value",
+        "Settings comparison",
+        "Not set",
+    )
+
+    for locale, expected_terms in expected.items():
+        catalog = _load_catalog(locale)
+        for key, value in expected_terms.items():
+            assert catalog[key] == value
+
+        compare_text = "\n".join(
+            value for key, value in catalog.items() if key.startswith("profiles.compare_")
+        )
+        for fragment in stale_fragments:
+            assert fragment not in compare_text
+
+
 def test_corporate_cis_l2_visible_locale_strings_do_not_reuse_english_source_phrases():
     english_catalog = _load_catalog("en")
     source_phrases = {

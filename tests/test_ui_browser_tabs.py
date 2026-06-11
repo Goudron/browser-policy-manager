@@ -167,15 +167,15 @@ def _assert_document_fits(driver) -> None:
     assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1, metrics
 
 
-def _create_profile(base_url: str, *, name: str) -> int:
+def _create_profile(base_url: str, *, name: str, flags: dict | None = None) -> int:
     response = requests.post(
         f"{base_url}/api/profiles",
         json=build_profile_payload(
             name=name,
             description="Chromium smoke profile",
-            owner="browser-smoke@example.org",
             schema_version="release-151",
-            flags={
+            flags=flags
+            or {
                 "DisableTelemetry": True,
                 "Homepage": {"URL": "https://portal.example.local/", "Locked": True},
             },
@@ -184,6 +184,49 @@ def _create_profile(base_url: str, *, name: str) -> int:
     )
     assert response.status_code == 201, response.text
     return int(response.json()["id"])
+
+
+def _click_element(driver, element) -> None:
+    driver.execute_script(
+        "arguments[0].scrollIntoView({ block: 'center', inline: 'center' });", element
+    )
+    try:
+        element.click()
+    except Exception as exc:
+        if exc.__class__.__name__ != "ElementClickInterceptedException":
+            raise
+        driver.execute_script("arguments[0].click();", element)
+
+
+def _click_and_switch_to_new_tab(driver, wait, element):
+    previous_handles = set(driver.window_handles)
+    _click_element(driver, element)
+    wait.until(
+        lambda current_driver: len(set(current_driver.window_handles) - previous_handles) == 1
+    )
+    new_handle = (set(driver.window_handles) - previous_handles).pop()
+    driver.switch_to.window(new_handle)
+    return new_handle
+
+
+def _click_css_when_ready(driver, wait, by, selector: str) -> None:
+    def attempt(current_driver):
+        try:
+            element = current_driver.find_element(by.By.CSS_SELECTOR, selector)
+            if not element.is_displayed() or not element.is_enabled():
+                return False
+            _click_element(current_driver, element)
+            return True
+        except Exception as exc:
+            if exc.__class__.__name__ in {
+                "ElementClickInterceptedException",
+                "NoSuchElementException",
+                "StaleElementReferenceException",
+            }:
+                return False
+            raise
+
+    wait.until(attempt)
 
 
 def _import_profile_through_picker(driver, wait, by, profile_name: str) -> int:
@@ -309,5 +352,168 @@ def test_browser_smoke_editor_mode_links_preserve_route_context():
             assert f"/profiles/{profile_id}/settings" in settings_href
             assert f"return=/profiles/{profile_id}/json" in settings_href
             assert "focus=settings-schema-shell-step-8" in settings_href
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_library_compare_opens_new_tab_and_selects_two_profiles():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    left_name = "Compare Browser Smoke Alpha"
+    right_name = "Compare Browser Smoke Beta"
+
+    with run_test_app_server() as base_url:
+        left_id = _create_profile(
+            base_url,
+            name=left_name,
+            flags={
+                "DisableTelemetry": True,
+                "Homepage": {"URL": "https://alpha.example.local/", "Locked": True},
+            },
+        )
+        right_id = _create_profile(
+            base_url,
+            name=right_name,
+            flags={
+                "DisableTelemetry": False,
+                "Homepage": {"URL": "https://beta.example.local/", "Locked": True},
+            },
+        )
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            wait.until(lambda current_driver: left_name in _body_text(current_driver))
+
+            compare_link = wait.until(
+                ec.element_to_be_clickable((by.By.ID, "compare-profiles-link"))
+            )
+            assert compare_link.get_attribute("target") == "_blank"
+            assert compare_link.get_attribute("rel") == "noopener"
+
+            _click_and_switch_to_new_tab(driver, wait, compare_link)
+            wait.until(ec.presence_of_element_located((by.By.ID, "compare-page")))
+            assert urlparse(driver.current_url).path == "/profiles/compare"
+
+            for side, profile_id, profile_name in (
+                ("left", left_id, left_name),
+                ("right", right_id, right_name),
+            ):
+                search = wait.until(
+                    ec.presence_of_element_located((by.By.ID, f"compare-{side}-search"))
+                )
+                search.clear()
+                search.send_keys(profile_name)
+                _click_css_when_ready(
+                    driver,
+                    wait,
+                    by,
+                    (
+                        f'[data-compare-result-side="{side}"]'
+                        f'[data-compare-profile-id="{profile_id}"]'
+                    )
+                )
+                wait.until(
+                    lambda current_driver, current_side=side, expected_name=profile_name: expected_name
+                    in current_driver.find_element(by.By.ID, f"compare-{current_side}-profile").text
+                )
+
+            wait.until(
+                lambda current_driver: len(
+                    current_driver.find_elements(
+                        by.By.CSS_SELECTOR, "#compare-settings-rows tr[data-compare-row-id]"
+                    )
+                )
+                >= 1
+            )
+            left_cells = driver.find_elements(
+                by.By.CSS_SELECTOR,
+                '#compare-settings-rows td[data-compare-column="left"]',
+            )
+            right_cells = driver.find_elements(
+                by.By.CSS_SELECTOR,
+                '#compare-settings-rows td[data-compare-column="right"]',
+            )
+            assert left_cells
+            assert len(left_cells) == len(right_cells)
+            assert driver.find_elements(
+                by.By.CSS_SELECTOR,
+                '#compare-settings-rows tr[data-compare-row-changed="true"]',
+            )
+            assert (
+                "DisableTelemetry" in driver.find_element(by.By.ID, "compare-settings-table").text
+            )
+            assert not driver.find_elements(by.By.ID, "list")
+            assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-clone-profile-id]")
+            _assert_document_fits(driver)
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    source_name = "Clone Browser Smoke Source"
+    clone_name = "Clone Browser Smoke Custom Name"
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name=source_name)
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            library_handle = driver.current_window_handle
+            profile_link = wait.until(ec.element_to_be_clickable((by.By.LINK_TEXT, source_name)))
+            assert profile_link.get_attribute("target") == "_blank"
+            assert profile_link.get_attribute("rel") == "noopener"
+
+            edit_handle = _click_and_switch_to_new_tab(driver, wait, profile_link)
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            assert urlparse(driver.current_url).path == f"/profiles/{profile_id}/edit"
+            assert (
+                driver.find_element(by.By.ID, "profile-name").get_attribute("value") == source_name
+            )
+            driver.close()
+            driver.switch_to.window(library_handle)
+            wait.until(lambda current_driver: edit_handle not in current_driver.window_handles)
+
+            clone_button = wait.until(
+                ec.element_to_be_clickable(
+                    (by.By.CSS_SELECTOR, f'[data-clone-profile-id="{profile_id}"]')
+                )
+            )
+            _click_element(driver, clone_button)
+            clone_panel = wait.until(
+                ec.visibility_of_element_located(
+                    (by.By.ID, f"library-clone-name-panel-{profile_id}")
+                )
+            )
+            clone_input = clone_panel.find_element(by.By.CSS_SELECTOR, "[data-clone-name-input]")
+            clone_input.clear()
+            clone_input.send_keys(clone_name)
+            confirm = clone_panel.find_element(by.By.CSS_SELECTOR, "[data-clone-name-confirm]")
+            wait.until(lambda _driver: confirm.get_attribute("aria-disabled") == "false")
+            assert confirm.get_attribute("target") == "_blank"
+            assert confirm.get_attribute("rel") == "noopener"
+
+            _click_and_switch_to_new_tab(driver, wait, confirm)
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            assert urlparse(driver.current_url).path == "/profiles/new"
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.ID, "profile-name"
+                ).get_attribute("value")
+                == clone_name
+            )
+            assert driver.find_element(by.By.TAG_NAME, "body").get_attribute(
+                "data-clone-source-id"
+            ) == str(profile_id)
+            _assert_document_fits(driver)
         finally:
             _close_chromium_driver(driver)

@@ -142,7 +142,6 @@
         const orderSelectEl = documentRef.getElementById("order");
         const includeDeletedEl = documentRef.getElementById("include-deleted");
         const nameInput = documentRef.getElementById("profile-name");
-        const ownerInput = documentRef.getElementById("profile-owner");
         const descriptionInput = documentRef.getElementById("profile-description");
         const profileTypeEl = documentRef.getElementById("profile-type");
         const wizardNameEl = documentRef.getElementById("wizard-name");
@@ -275,11 +274,7 @@
 
             documentRef.querySelectorAll([
                 "#profile-derived-note",
-                "#profile-clone-handoff-copy",
                 "#profile-lifecycle-copy",
-                "#compare-empty-copy",
-                "#compare-changes-copy",
-                "#compare-guided-areas-copy",
                 "#json-context-copy",
                 "#wizard-clone-handoff-copy",
                 "#wizard-shared-device-workflow-copy",
@@ -290,10 +285,7 @@
             });
 
             documentRef.querySelectorAll([
-                "#profile-clone-handoff-list",
                 "#profile-lifecycle-list",
-                "#compare-changes-list",
-                "#compare-guided-areas-list",
                 "#json-context-list",
                 "#wizard-clone-handoff-list",
                 "#wizard-shared-device-workflow-list",
@@ -349,7 +341,6 @@
             const contextualActionButtons = Array.from(documentRef.querySelectorAll([
                 "[data-step-memory-jump]",
                 "[data-clone-handoff-step]",
-                "[data-clone-handoff-compare]",
                 "[data-export-assist-action]",
                 "[data-workspace-scope-target]",
             ].join(", ")));
@@ -363,8 +354,8 @@
                     ?.querySelector(".wizard-step-memory-item-title")
                     ?.textContent?.trim() || "";
                 const contextText = [itemTitle, itemCopy].filter(Boolean).join(". ");
-                const copyEl = button.closest(".profile-clone-handoff-panel, .profile-lifecycle-panel, .wizard-workflow-card, .wizard-step-actions")
-                    ?.querySelector("#profile-clone-handoff-copy, #profile-lifecycle-copy, #wizard-clone-handoff-copy, #wizard-shared-device-workflow-copy, #wizard-step-memory-copy");
+                const copyEl = button.closest(".profile-lifecycle-panel, .wizard-workflow-card, .wizard-step-actions")
+                    ?.querySelector("#profile-lifecycle-copy, #wizard-clone-handoff-copy, #wizard-shared-device-workflow-copy, #wizard-step-memory-copy");
                 if (actionText && contextText) {
                     button.setAttribute("aria-label", `${actionText}. ${contextText}`);
                 }
@@ -1633,10 +1624,12 @@
             const profileId = Number(rawProfileId);
             const rawCloneSourceId = bodyEl?.dataset.cloneSourceId || "";
             const cloneSourceId = Number(rawCloneSourceId);
+            const cloneName = (bodyEl?.dataset.cloneName || "").trim();
             return {
                 routeMode,
                 editingProfileId: Number.isInteger(profileId) && profileId > 0 ? profileId : null,
                 cloneSourceId: Number.isInteger(cloneSourceId) && cloneSourceId > 0 ? cloneSourceId : null,
+                cloneName,
                 includeDeleted: bodyEl?.dataset.includeDeleted === "true",
                 returnUrl: bodyEl?.dataset.advancedReturnUrl || "",
                 focusTarget: bodyEl?.dataset.jsonFocusTarget || "",
@@ -1870,7 +1863,7 @@
         }
 
         async function bootstrapProfileRouteState() {
-            const { routeMode, editingProfileId, cloneSourceId, focusTarget } = readProfilesRouteContext();
+            const { routeMode, editingProfileId, cloneSourceId, cloneName, focusTarget } = readProfilesRouteContext();
             if ((routeMode === "edit" || routeMode === "settings" || routeMode === "json") && editingProfileId) {
                 const hydratedProfile = getCurrentProfile();
                 if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId) {
@@ -1911,7 +1904,10 @@
 
             if (routeMode === "new" && cloneSourceId) {
                 await resetDraft(true);
-                await cloneFromProfile(cloneSourceId, { includeDeleted: readProfilesRouteContext().includeDeleted });
+                await cloneFromProfile(cloneSourceId, {
+                    cloneName,
+                    includeDeleted: readProfilesRouteContext().includeDeleted,
+                });
                 return;
             }
 
@@ -2046,10 +2042,6 @@
                     await doImportFirefoxPoliciesJson?.(file);
                 });
                 nameInput?.addEventListener("input", () => {
-                    syncWizardFieldsFromForm();
-                    updateActionState();
-                });
-                ownerInput?.addEventListener("input", () => {
                     syncWizardFieldsFromForm();
                     updateActionState();
                 });

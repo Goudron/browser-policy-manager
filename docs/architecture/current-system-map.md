@@ -2,7 +2,7 @@
 
 Date: 2026-06-01
 
-This map is the first orientation point for BPM 0.8.5 refactoring work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
+This map is the first orientation point for BPM 0.8.7 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
 
 Refactoring acceptance rules live in `docs/architecture/refactoring-acceptance-rules.md`.
 
@@ -135,7 +135,7 @@ Related tools live under `tools/cis_firefox`.
 ## Test Layers
 
 The current default pytest config excludes `firefox_live`, `firefox_live_amo`, and `browser_ui`.
-Routine development should use the marker-aware Makefile targets created for BPM 0.8.5.
+Routine development should use the marker-aware Makefile targets documented for the current project shape.
 
 | Layer | Main files or markers |
 |---|---|
@@ -147,7 +147,7 @@ Routine development should use the marker-aware Makefile targets created for BPM
 | Live Firefox | markers `firefox_live`, `firefox_live_amo`, files under `tests/live_firefox`. |
 | Tooling | `tests/tools`. |
 
-Current baseline from `tools/repo_health_report.py`: the historical full default timing was 803.15s test time. BPM 0.8.5 now favors layered targets over one default catch-all run.
+Current baseline from `tools/repo_health_report.py`: the historical full default timing was 803.15s test time. BPM now favors layered targets over one default catch-all run.
 
 ## CI And Local Commands
 

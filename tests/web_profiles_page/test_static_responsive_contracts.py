@@ -87,6 +87,59 @@ def test_profile_library_narrow_viewport_contract():
     )
 
 
+def test_profile_compare_table_responsive_layout_contract():
+    css = css_source()
+    template = template_source("_page_compare_workspace.html")
+    source = static_source("profiles_compare.js")
+
+    assert_source_contains_all(
+        template,
+        (
+            'class="compare-table-shell"',
+            'id="compare-settings-table"',
+            'class="compare-settings-table text-left text-sm"',
+            'class="compare-setting-column"',
+            'class="compare-value-column"',
+        ),
+    )
+    assert_source_contains_all(
+        source,
+        (
+            'class="compare-setting-cell px-3 py-3 align-top"',
+            'data-label="${escapeHtml(settingColumnLabel)}"',
+            'data-label="${escapeHtml(leftColumnLabel)}"',
+            'data-label="${escapeHtml(rightColumnLabel)}"',
+        ),
+    )
+    assert_source_contains_all(
+        css,
+        (
+            "#compare-page {",
+            "overflow-x: clip;",
+            ".compare-table-shell {",
+            "overflow-x: auto;",
+            ".compare-settings-table {",
+            "table-layout: fixed;",
+            "min-width: 760px;",
+            ".compare-setting-column {",
+            "width: 34%;",
+            ".compare-value-column {",
+            "width: 33%;",
+            "@media (max-width: 820px)",
+            ".compare-table-shell",
+            "overflow-x: hidden;",
+            ".compare-settings-table colgroup,",
+            ".compare-settings-table thead",
+            "display: none;",
+            ".compare-settings-table tr",
+            "grid-template-columns: 1fr;",
+            ".compare-setting-cell::before,",
+            ".compare-value-cell::before",
+            "content: attr(data-label);",
+        ),
+    )
+
+
 def test_visual_editor_narrow_viewport_contract():
     workspace_template = template_source("_page_workspace.html")
 
@@ -280,15 +333,32 @@ def test_profile_library_actions_use_editor_route_links():
         template_source("_page_library_workspace.html"),
         ('id="create-profile-link"', 'href="/profiles/new"', 'target="_blank"', 'rel="noopener"'),
     )
+    library_source = static_source("profiles_library_bootstrap.js")
     assert_source_contains_all(
-        static_source("profiles_workspace.js"),
+        library_source,
         (
             'const editHref = `/profiles/${profile.id}/edit`;',
             '<a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">',
-            '<a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}" target="_blank" rel="noopener">',
+            '<a class="button-base library-row-open-button" href="${editHref}" target="_blank" rel="noopener">',
+            '<a class="button-base ghost-button library-row-secondary-action" href="${settingsHref}" target="_blank" rel="noopener">',
+            '<a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">',
+            'data-clone-profile-id="${profile.id}"',
+            'data-clone-name-input',
+            'target="_blank"',
+            'rel="noopener"',
+            'data-clone-name-confirm',
+            'data-library-lifecycle-action="${profile.is_deleted ? "restore" : "archive"}"',
         ),
     )
-    assert_source_excludes_all(static_source("profiles_workspace.js"), ("loadProfile(profile.id)",))
+    assert_source_excludes_all(
+        library_source,
+        (
+            "data-compare-profile-id",
+            "profile-compare-button",
+            "library-row-open-button--selected",
+            "loadProfile(profile.id)",
+        ),
+    )
 
 
 def test_visual_editor_save_uses_revision_token_contract():
@@ -466,7 +536,7 @@ def test_profile_review_and_workspace_state_helpers_are_split_from_dom_adapters(
         static_source("profiles_workspace_state.js"),
         (
             "window.BPMProfilesWorkspaceState = {",
-            "normalizeCompareBaseSnapshot",
+            "function snapshotToString(snapshot)",
             "getWorkflowLifecycleState",
             "buildCreatePayload",
         ),
@@ -475,8 +545,16 @@ def test_profile_review_and_workspace_state_helpers_are_split_from_dom_adapters(
         static_source("profiles_workspace.js"),
         (
             "const workspaceState = windowRef.BPMProfilesWorkspaceState || {};",
-            "return workspaceState.normalizeCompareBaseSnapshot(snapshot, fallbackProfile, defaultSchemaVersion);",
             "return workspaceState.buildCreatePayload(form, parsedFlags, compliancePayload, options);",
+        ),
+    )
+    assert_source_excludes_all(
+        static_source("profiles_workspace.js"),
+        (
+            "normalizeCompareBaseSnapshot",
+            "compareBaseStorageKey",
+            "buildCompareDiff",
+            "compareWithProfile",
         ),
     )
     assert_source_contains_all(
@@ -507,6 +585,56 @@ def test_profile_review_and_workspace_state_helpers_are_split_from_dom_adapters(
             "jsonReviewDownloadStateEl,",
         ),
     )
+
+
+def test_editor_workspace_static_boundary_has_no_profile_comparison_flow():
+    sources = (
+        static_source("profiles_workspace.js"),
+        static_source("profiles_workspace_state.js"),
+        static_source("profiles_dom.js"),
+        static_source("profiles_runtime.js"),
+        static_source("profiles_bootstrap_core.js"),
+    )
+    forbidden = (
+        "BPMProfilesCompareState",
+        "profiles_compare_state.js",
+        "profiles_compare.js",
+        "compareProfileState",
+        "compareBaseStorageKey",
+        "normalizeCompareBaseSnapshot",
+        "normalizeCompareBaseProfile",
+        "readStoredCompareBase",
+        "writeStoredCompareBase",
+        "persistCompareBaseProfile",
+        "getComparableBaseState",
+        "getComparableBaseId",
+        "hasComparableBase",
+        "buildCompareDiff",
+        "renderComparePanel",
+        "clearCompareProfile",
+        "compareWithProfile",
+        "compareClearEl",
+        "compareEmptyEl",
+        "compareActiveEl",
+        "compareCurrentNameEl",
+        "compareOtherNameEl",
+        "compareMetadataCountEl",
+        "comparePolicyCountEl",
+        "comparePreferenceCountEl",
+        "compareChangesListEl",
+        "compareGuidedAreasListEl",
+        "profileCloneHandoffPanelEl",
+        "profileCloneHandoffCopyEl",
+        "profileCloneHandoffListEl",
+        "data-clone-handoff-compare",
+        "profile-compare-button",
+        "data-compare-profile-id",
+        'id("compare-panel")',
+        'byId("compare-panel")',
+        'byId("profile-clone-handoff-panel")',
+    )
+
+    assert_sources_exclude_all(sources, forbidden)
 
 
 def test_conflict_save_as_copy_creates_new_profile_contract():

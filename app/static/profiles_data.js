@@ -228,7 +228,7 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
         });
-        if (!res.ok) throw new Error(await readError(res));
+        if (!res.ok) throw await profileRequestError(res);
         return await res.json();
     }
 

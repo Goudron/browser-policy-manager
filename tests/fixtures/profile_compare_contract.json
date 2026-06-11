@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM087-M2-02",
+  "comparison_model": {
+    "scope": "two saved profiles",
+    "row_identity": "Each row represents one setting present in either profile: a top-level policy or one Preferences entry.",
+    "ordering": "Policy rows sort by policy id before preference rows, which sort by preference name.",
+    "value_states": [
+      "missing",
+      "equal",
+      "different"
+    ],
+    "owner_metadata": "excluded"
+  },
+  "profiles": {
+    "left": {
+      "id": 10,
+      "name": "Workstation baseline",
+      "schema_version": "release-151",
+      "flags": {
+        "DisableTelemetry": true,
+        "Homepage": {
+          "URL": "https://intranet.example",
+          "Locked": true
+        },
+        "Preferences": {
+          "browser.startup.homepage": {
+            "Status": "locked",
+            "Value": "https://intranet.example"
+          },
+          "browser.tabs.warnOnClose": {
+            "Status": "default",
+            "Value": true
+          }
+        }
+      }
+    },
+    "right": {
+      "id": 11,
+      "name": "Kiosk baseline",
+      "schema_version": "release-151",
+      "flags": {
+        "DisableTelemetry": true,
+        "SearchBar": "separate",
+        "Preferences": {
+          "browser.startup.homepage": {
+            "Status": "locked",
+            "Value": "https://portal.example"
+          },
+          "browser.tabs.warnOnClose": {
+            "Status": "default",
+            "Value": true
+          }
+        }
+      }
+    }
+  },
+  "expected_rows": [
+    {
+      "id": "policy:DisableTelemetry",
+      "kind": "policy",
+      "setting_key": "DisableTelemetry",
+      "label": "DisableTelemetry",
+      "left": {
+        "state": "equal",
+        "value": true,
+        "display_value": "true"
+      },
+      "right": {
+        "state": "equal",
+        "value": true,
+        "display_value": "true"
+      },
+      "changed": false
+    },
+    {
+      "id": "policy:Homepage",
+      "kind": "policy",
+      "setting_key": "Homepage",
+      "label": "Homepage",
+      "left": {
+        "state": "different",
+        "value": {
+          "Locked": true,
+          "URL": "https://intranet.example"
+        },
+        "display_value": "{\"Locked\": true, \"URL\": \"https://intranet.example\"}"
+      },
+      "right": {
+        "state": "missing",
+        "value": null,
+        "display_value": "Missing"
+      },
+      "changed": true
+    },
+    {
+      "id": "policy:SearchBar",
+      "kind": "policy",
+      "setting_key": "SearchBar",
+      "label": "SearchBar",
+      "left": {
+        "state": "missing",
+        "value": null,
+        "display_value": "Missing"
+      },
+      "right": {
+        "state": "different",
+        "value": "separate",
+        "display_value": "separate"
+      },
+      "changed": true
+    },
+    {
+      "id": "preference:browser.startup.homepage",
+      "kind": "preference",
+      "setting_key": "Preferences.browser.startup.homepage",
+      "label": "browser.startup.homepage",
+      "preference_name": "browser.startup.homepage",
+      "left": {
+        "state": "different",
+        "value": {
+          "Status": "locked",
+          "Value": "https://intranet.example"
+        },
+        "display_value": "{\"Status\": \"locked\", \"Value\": \"https://intranet.example\"}"
+      },
+      "right": {
+        "state": "different",
+        "value": {
+          "Status": "locked",
+          "Value": "https://portal.example"
+        },
+        "display_value": "{\"Status\": \"locked\", \"Value\": \"https://portal.example\"}"
+      },
+      "changed": true
+    },
+    {
+      "id": "preference:browser.tabs.warnOnClose",
+      "kind": "preference",
+      "setting_key": "Preferences.browser.tabs.warnOnClose",
+      "label": "browser.tabs.warnOnClose",
+      "preference_name": "browser.tabs.warnOnClose",
+      "left": {
+        "state": "equal",
+        "value": {
+          "Status": "default",
+          "Value": true
+        },
+        "display_value": "{\"Status\": \"default\", \"Value\": true}"
+      },
+      "right": {
+        "state": "equal",
+        "value": {
+          "Status": "default",
+          "Value": true
+        },
+        "display_value": "{\"Status\": \"default\", \"Value\": true}"
+      },
+      "changed": false
+    }
+  ]
+}

@@ -6,10 +6,9 @@ from app.services.profile_service import ProfileService
 from tests.support import build_profile_payload, make_test_client
 
 
-def _mk(name_prefix: str, owner: str, schema: str, flags: dict | None = None):
+def _mk(name_prefix: str, schema: str, flags: dict | None = None):
     return build_profile_payload(
         name_prefix=name_prefix,
-        owner=owner,
         schema_version=schema,
         description="List filters",
         flags=flags or {"DisableTelemetry": True},
@@ -19,10 +18,10 @@ def _mk(name_prefix: str, owner: str, schema: str, flags: dict | None = None):
 def test_list_filters_include_deleted_sort_and_pagination():
     client = make_test_client(app)
 
-    # Seed multiple records with different owners/schemas; delete one
-    r1 = client.post("/api/profiles", json=_mk("LF-A", "ops@example.org", "esr-140.11"))
-    r2 = client.post("/api/profiles", json=_mk("LF-B", "sec@example.org", "esr-140.11"))
-    r3 = client.post("/api/profiles", json=_mk("LF-C", "ops@example.org", "esr-140.11"))
+    # Seed multiple records; delete one.
+    r1 = client.post("/api/profiles", json=_mk("LF-A", "esr-140.11"))
+    r2 = client.post("/api/profiles", json=_mk("LF-B", "esr-140.11"))
+    r3 = client.post("/api/profiles", json=_mk("LF-C", "esr-140.11"))
     assert r1.status_code == r2.status_code == r3.status_code == 201
     pid_deleted = r2.json()["id"]
     rdel = client.delete(f"/api/profiles/{pid_deleted}")
@@ -51,11 +50,10 @@ def test_list_filters_include_deleted_sort_and_pagination():
     assert r_all.status_code == 200
     assert pid_deleted in {p["id"] for p in r_all.json()}
 
-    # Owner + schema_version + q filters combined
+    # schema_version + q filters combined
     r_f = client.get(
         "/api/profiles",
         params={
-            "owner": "ops@example.org",
             "schema_version": "esr-140.11",
             "q": "LF-",
         },
@@ -71,7 +69,6 @@ def test_list_filters_include_deleted_sort_and_pagination():
 
     empty_payload = build_profile_payload(
         name_prefix="LF-EMPTY",
-        owner="ops@example.org",
         description="No managed rules yet",
     )
     empty_payload["flags"] = {}

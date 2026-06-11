@@ -1,8 +1,9 @@
 {% set route_kind = profiles_template_kind %}
 {% set route_requires_monaco = route_kind == "json" %}
+{% set route_requires_js_yaml = route_kind not in ["library", "compare"] %}
 {% if profiles_asset_phase == "head" %}
 {% set head_scripts = ["/static/profiles_head_bootstrap.js"] %}
-{% if route_kind != "library" %}
+{% if route_requires_js_yaml %}
 {% set head_scripts = head_scripts + ["/static/vendor/js-yaml.js"] %}
 {% endif %}
 {% set stylesheets = ["/static/vendor/profiles_tailwind.css"] %}
@@ -69,9 +70,12 @@
     "editor": "/static/profiles_guided.js",
     "settings": "/static/profiles_settings.js",
     "json": "/static/profiles_json.js",
+    "compare": "/static/profiles_compare.js",
 } %}
 {% if route_kind == "library" %}
 {% set body_scripts = shared_scripts + library_scripts %}
+{% elif route_kind == "compare" %}
+{% set body_scripts = shared_scripts + ["/static/profiles_compare_state.js", route_entrypoints["compare"]] %}
 {% else %}
 {% set body_scripts = shared_scripts + editor_core_scripts + [route_entrypoints.get(route_kind, "/static/profiles.js")] %}
 {% endif %}

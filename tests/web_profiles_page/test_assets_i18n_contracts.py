@@ -93,9 +93,15 @@ def test_profiles_library_page_uses_library_only_assets():
     assert '<script src="/static/profiles_library_bootstrap.js?v=' in response.text
     assert '<script src="/static/profiles_library.js?v=' in response.text
     assert 'id="schema-channels-catalog"' in response.text
+    assert 'id="compare-profiles-link"' in response.text
+    assert 'href="/profiles/compare"' in response.text
+    assert 'target="_blank"' in response.text
+    assert 'rel="noopener"' in response.text
     assert '<script src="/static/vendor/js-yaml.js?v=' not in response.text
     assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in response.text
     assert '<script src="/static/vendor/profiles_monaco.js?v=' not in response.text
+    assert '<script src="/static/profiles_compare_state.js?v=' not in response.text
+    assert '<script src="/static/profiles_compare.js?v=' not in response.text
     assert '<script src="/static/profiles_catalogs.js?v=' not in response.text
     assert '<script src="/static/profiles_page_bootstrap.js?v=' not in response.text
     assert '<script src="/static/profiles_runtime.js?v=' not in response.text
@@ -108,6 +114,92 @@ def test_profiles_library_page_uses_library_only_assets():
     assert 'id="wizard-preferences-catalog"' not in response.text
     assert 'id="wizard-manual-policy-controls"' not in response.text
     assert 'id="wizard-schema-shell-catalog"' not in response.text
+
+
+def test_profiles_compare_page_uses_compare_only_assets():
+    client = make_test_client(app)
+
+    response = client.get("/profiles/compare")
+
+    assert response.status_code == 200
+    assert '<script src="/static/profiles_head_bootstrap.js?v=' in response.text
+    assert '<script src="/static/profiles_utils.js?v=' in response.text
+    assert '<script src="/static/profiles_compare_state.js?v=' in response.text
+    assert '<script src="/static/profiles_shared.js?v=' in response.text
+    assert '<script src="/static/profiles_platform.js?v=' in response.text
+    assert '<script src="/static/profiles_data.js?v=' in response.text
+    assert '<script src="/static/profiles_compare.js?v=' in response.text
+    assert '<script id="compare-preferences-catalog" type="application/json">' in response.text
+    assert '<script src="/static/vendor/js-yaml.js?v=' not in response.text
+    assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in response.text
+    assert '<script src="/static/vendor/profiles_monaco.js?v=' not in response.text
+    assert '<script src="/static/profiles_library_bootstrap.js?v=' not in response.text
+    assert '<script src="/static/profiles_library.js?v=' not in response.text
+    assert '<script src="/static/profiles_catalogs.js?v=' not in response.text
+    assert '<script src="/static/profiles_workspace_state.js?v=' not in response.text
+    assert '<script src="/static/profiles_workspace.js?v=' not in response.text
+    assert '<script src="/static/profiles_runtime.js?v=' not in response.text
+    assert '<script src="/static/profiles_guided.js?v=' not in response.text
+    assert '<script src="/static/profiles_settings.js?v=' not in response.text
+    assert '<script src="/static/profiles_json.js?v=' not in response.text
+
+
+def test_profiles_compare_entrypoint_wires_profile_search_and_selection_contract():
+    source = static_source("profiles_compare.js")
+
+    assert_source_contains_all(
+        source,
+        (
+            "buildProfileSearchFilters(sideState.query)",
+            'lifecycle: "active"',
+            "data.listProfiles(",
+            "data.getProfile(profileId, windowRef.fetch, false)",
+            'documentRef.getElementById(`compare-${side}-search`)',
+            'documentRef.getElementById(`compare-${side}-results`)',
+            'documentRef.getElementById(`compare-${side}-profile`)',
+            'data-compare-results-state="loading"',
+            'data-compare-results-state="error"',
+            'data-compare-results-state="empty"',
+            'button.dataset.compareProfileId = String(profile.id);',
+            'button.setAttribute("role", "option");',
+            'button.setAttribute("aria-selected", selected ? "true" : "false");',
+            'elements[side]?.search?.addEventListener("input", () => scheduleLoad(side));',
+            'elements[side]?.results?.addEventListener("click", (event) => {',
+            "selectProfileForSide(side, profileId);",
+            "loadProfilesForSide(side);",
+            "resolvePreselectedProfileIds(windowRef.location)",
+            "preselectProfileForSide(side, preselectedIds[side]);",
+            "function buildCompareRows(leftProfile, rightProfile, compareState = window.BPMProfilesCompareState",
+            "compareState.collectProfileSettingKeys(leftFlags, rightFlags)",
+            "compareState.readSettingValue(leftFlags, rowKey)",
+            "renderCompareTable();",
+            'row.dataset.compareRowId = compareRow.id;',
+            'data-compare-column="left"',
+            'data-compare-column="right"',
+            'const preferencesCatalog = readEmbeddedJson(documentRef, "compare-preferences-catalog");',
+            "buildPreferenceLabelLookup(preferencesCatalog, locale)",
+            "resolveSettingPresentation(rowKey, options)",
+            'data-compare-setting-kind="${compareRow.kind}"',
+            "preferenceKindLabel: t(\"profiles.compare_kind_preference\")",
+            "policyKindLabel: t(\"profiles.compare_kind_policy\")",
+            "stateLabels: {",
+            'class="compare-value-cell compare-value-cell--${compareRow.left.state}',
+            'data-compare-value-state-label="${compareRow.left.state}"',
+            "${escapeHtml(compareRow.left.stateLabel)}",
+            'class="compare-value-code"',
+        ),
+    )
+
+
+def test_profiles_compare_route_reuses_existing_profile_api_contract():
+    source = static_source("profiles_compare.js")
+    api_source = (REPO_ROOT / "app" / "api" / "profiles.py").read_text(encoding="utf-8")
+
+    assert 'new URL("/api/profiles", locationRef.origin)' in static_source("profiles_data.js")
+    assert 'fetchImpl(`/api/profiles/${id}${suffix}`)' in static_source("profiles_data.js")
+    assert "/api/profiles/compare" not in source
+    assert "/api/profiles/compare" not in api_source
+    assert 'router = APIRouter(prefix="/api/profiles", tags=["profiles"])' in api_source
 
 
 def test_profiles_editor_modes_use_mode_specific_entrypoints():
@@ -130,16 +222,50 @@ def test_profiles_editor_modes_use_mode_specific_entrypoints():
     assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in guided_response.text
     assert '<script src="/static/vendor/profiles_monaco.js?v=' not in guided_response.text
     assert '<script src="/static/profiles_library.js?v=' not in guided_response.text
+    assert '<script src="/static/profiles_compare_state.js?v=' not in guided_response.text
     assert '<script src="/static/profiles.js?v=' not in guided_response.text
     assert '<script src="/static/profiles_settings.js?v=' in settings_response.text
     assert '<script src="/static/profiles_guided.js?v=' not in settings_response.text
     assert '<link rel="stylesheet" href="/static/vendor/profiles_monaco.css?v=' not in settings_response.text
     assert '<script src="/static/vendor/profiles_monaco.js?v=' not in settings_response.text
+    assert '<script src="/static/profiles_compare_state.js?v=' not in settings_response.text
     assert '<script src="/static/profiles_json.js?v=' in json_response.text
     assert '<script src="/static/profiles_guided.js?v=' not in json_response.text
     assert '<script src="/static/profiles_settings.js?v=' not in json_response.text
     assert '<script src="/static/profiles_library.js?v=' not in json_response.text
+    assert '<script src="/static/profiles_compare_state.js?v=' not in json_response.text
     assert '<script src="/static/profiles.js?v=' not in json_response.text
+
+
+def test_profiles_editor_modes_do_not_load_compare_entrypoints_or_hidden_compare_assets():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Editor Compare Asset Boundary Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    responses = (
+        client.get("/profiles/new"),
+        client.get(f"/profiles/{profile_id}/edit"),
+        client.get(f"/profiles/{profile_id}/settings"),
+        client.get(f"/profiles/{profile_id}/json"),
+    )
+
+    forbidden = (
+        '<script src="/static/profiles_compare_state.js?v=',
+        '<script src="/static/profiles_compare.js?v=',
+        '<script id="compare-preferences-catalog" type="application/json">',
+        'data-profiles-route-mode="compare"',
+        'data-profiles-template-kind="compare"',
+        'id="compare-page"',
+        'id="compare-settings-table"',
+        'id="compare-left-search"',
+        'id="compare-right-search"',
+    )
+    for response in responses:
+        assert response.status_code == 200
+        assert_source_excludes_all(response.text, forbidden)
 
 
 def test_profiles_page_uses_request_locale_for_initial_render():
@@ -155,7 +281,7 @@ def test_profiles_page_uses_request_locale_for_initial_render():
     assert "Библиотека" in response.text
     assert "Менеджер профилей браузера" in response.text
     assert "Поиск по имени профиля" in response.text
-    assert "Сравнение двух профилей" in response.text
+    assert "Сравнение двух профилей" not in response.text
     assert "Пошаговый мастер" not in response.text
     assert "Search engine" not in response.text
     assert "Engine name" not in response.text
@@ -167,6 +293,15 @@ def test_profiles_page_uses_request_locale_for_initial_render():
     assert "Controls in this area" not in response.text
     assert "Top-level policies" not in response.text
     assert "Control Room" not in response.text
+
+
+def test_library_compare_copy_keys_are_removed_from_runtime_catalogs():
+    for locale in ("en", "ru", "de", "es-ES", "fr", "zh-CN"):
+        locale_json = json.loads((REPO_ROOT / "app" / "i18n" / f"{locale}.json").read_text(encoding="utf-8"))
+
+        assert all(not key.startswith("profiles.library_compare_") for key in locale_json)
+        assert "profiles.library_status_compare_first_selected" not in locale_json
+        assert "profiles.library_status_compare_ready" not in locale_json
 
 
 def test_resolve_request_locale_skips_unsupported_languages_and_bad_weights():
@@ -425,6 +560,8 @@ def test_static_profiles_bootstrap_assets_exist():
     static_root = REPO_ROOT / "app" / "static"
     head_bootstrap = static_root / "profiles_head_bootstrap.js"
     page_bootstrap = static_root / "profiles_page_bootstrap.js"
+    compare_state = static_root / "profiles_compare_state.js"
+    compare_entry = static_root / "profiles_compare.js"
     library_bootstrap = static_root / "profiles_library_bootstrap.js"
     library_entry = static_root / "profiles_library.js"
     guided_entry = static_root / "profiles_guided.js"
@@ -438,6 +575,8 @@ def test_static_profiles_bootstrap_assets_exist():
 
     assert head_bootstrap.is_file()
     assert page_bootstrap.is_file()
+    assert compare_state.is_file()
+    assert compare_entry.is_file()
     assert library_bootstrap.is_file()
     assert library_entry.is_file()
     assert guided_entry.is_file()
@@ -480,7 +619,9 @@ def test_profiles_page_assets_are_declared_through_route_manifest():
     assert '"editor": "/static/profiles_guided.js"' in manifest_template
     assert '"settings": "/static/profiles_settings.js"' in manifest_template
     assert '"json": "/static/profiles_json.js"' in manifest_template
+    assert '"compare": "/static/profiles_compare.js"' in manifest_template
     assert "/static/profiles_library.js" in manifest_template
+    assert '"/static/profiles_compare_state.js"' in manifest_template
     assert '"/static/profiles_review_state.js"' in manifest_template
     assert '"/static/profiles_workspace_state.js"' in manifest_template
     assert '"/static/profiles.css"' in manifest_template
@@ -503,6 +644,7 @@ def test_web_profiles_module_wires_templates_and_route():
     assert reloaded.templates.env.loader.searchpath == [str(reloaded.settings.TEMPLATES_DIR)]
     assert profile_route_paths == {
         "/profiles",
+        "/profiles/compare",
         "/profiles/new",
         "/profiles/{profile_id}/edit",
         "/profiles/{profile_id}/settings",

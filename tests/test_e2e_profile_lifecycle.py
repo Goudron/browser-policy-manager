@@ -12,7 +12,6 @@ def _make_profile_payload() -> dict:
         "name": f"E2E-{unique}",
         "description": "End-to-end lifecycle profile",
         "schema_version": "esr-140.11",
-        "owner": "ops@example.org",
         "flags": {
             "DisableTelemetry": True,
             "DisablePrivateBrowsing": True,
@@ -44,7 +43,6 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     # Update metadata and flags. PATCH replaces flags so UI removals persist.
     patch_payload = {
         "description": "Updated in lifecycle flow",
-        "owner": "sec@example.org",
         "flags": {
             "DisableTelemetry": False,
         },
@@ -53,7 +51,6 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     assert updated_response.status_code == 200, updated_response.text
     updated = updated_response.json()
     assert updated["description"] == "Updated in lifecycle flow"
-    assert updated["owner"] == "sec@example.org"
     assert updated["flags"] == {
         "DisableTelemetry": False,
     }
@@ -106,7 +103,6 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
     assert get_restored.status_code == 200, get_restored.text
     restored_profile = get_restored.json()
     assert restored_profile["is_deleted"] is False
-    assert restored_profile["owner"] == "sec@example.org"
 
     # Final list read confirms the restored profile participates in the library.
     list_response = client.get("/api/profiles", params={"q": payload["name"]})

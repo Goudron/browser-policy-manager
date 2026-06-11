@@ -196,10 +196,11 @@ def test_profile_workspace_routes_smoke_dom_contracts():
             'id="sort"',
             'id="order"',
             'id="create-profile-link"',
+            'id="compare-profiles-link"',
             'id="status"',
             'href="/profiles/new"',
+            'href="/profiles/compare"',
             'id="list"',
-            'id="compare-panel"',
         ),
     )
     assert 'data-editing-profile-id="' not in library_response.text
@@ -213,6 +214,17 @@ def test_profile_workspace_routes_smoke_dom_contracts():
     assert 'id="wizard-panel"' not in library_response.text
     assert 'id="command-deck"' not in library_response.text
     assert 'id="editor-panel"' not in library_response.text
+    for token in (
+        'id="compare-panel"',
+        'id="compare-clear"',
+        'id="compare-empty"',
+        'id="compare-active"',
+        'id="compare-current-name"',
+        'id="compare-other-name"',
+        'id="compare-changes-list"',
+        'id="compare-guided-areas-list"',
+    ):
+        assert token not in library_response.text
     for response, route_mode in ((new_response, "new"), (edit_response, "edit")):
         assert_contains_all(
             response.text,
@@ -312,10 +324,149 @@ def test_profile_library_exposes_complete_manager_control_surface():
             'id="order"',
             'id="import-firefox-policies"',
             'id="import-firefox-policies-status"',
-            'id="compare-panel"',
+            'id="compare-profiles-link"',
+            'href="/profiles/compare"',
             'id="status"',
         ),
     )
+    assert '<a id="compare-profiles-link"' in response.text
+    assert 'data-i18n="profiles.compare_action"' in response.text
+    assert 'target="_blank"' in response.text
+    assert 'rel="noopener"' in response.text
+    assert 'id="compare-panel"' not in response.text
+    assert 'id="compare-empty"' not in response.text
+    assert 'id="compare-active"' not in response.text
+
+
+def test_profile_library_comparison_boundary_is_navigation_only():
+    client = make_test_client(app)
+    response = client.get("/profiles")
+
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html.parser")
+    compare_link = soup.find(id="compare-profiles-link")
+
+    assert compare_link is not None
+    assert compare_link.name == "a"
+    assert compare_link.get("href") == "/profiles/compare"
+    assert compare_link.get("target") == "_blank"
+    assert compare_link.get("rel") == ["noopener"]
+    assert compare_link.get("data-i18n-title") == "profiles.compare_action"
+    assert compare_link.find(attrs={"data-i18n": "profiles.compare_action"}) is not None
+
+    for element_id in (
+        "compare-panel",
+        "compare-clear",
+        "compare-empty",
+        "compare-empty-copy",
+        "compare-active",
+        "compare-current-name",
+        "compare-current-copy",
+        "compare-other-name",
+        "compare-other-copy",
+        "compare-metadata-count",
+        "compare-policy-count",
+        "compare-preference-count",
+        "compare-changes-copy",
+        "compare-changes-list",
+        "compare-guided-areas-copy",
+        "compare-guided-areas-list",
+    ):
+        assert soup.find(id=element_id) is None
+
+    assert not soup.select("[data-compare-profile-id]")
+    assert "profiles.library_compare_" not in response.text
+    assert "profiles.library_status_compare_" not in response.text
+    assert '<script src="/static/profiles_compare.js?v=' not in response.text
+
+
+def test_profile_compare_route_renders_dedicated_compare_shell_contract():
+    client = make_test_client(app)
+    response = client.get("/profiles/compare")
+
+    assert response.status_code == 200
+    assert "<title>Compare profile settings — Browser Policy Manager</title>" in response.text
+    soup = BeautifulSoup(response.text, "html.parser")
+    assert_contains_all(
+        response.text,
+        (
+            'data-profiles-route-mode="compare"',
+            'data-profiles-template-kind="compare"',
+            'id="compare-page"',
+            'id="compare-left-search"',
+            'id="compare-right-search"',
+            'id="compare-left-results"',
+            'id="compare-right-results"',
+            'id="compare-left-profile"',
+            'id="compare-right-profile"',
+            'id="compare-settings-table"',
+            'id="compare-preferences-catalog"',
+            'data-compare-column="left"',
+            'data-compare-column="right"',
+            'data-compare-value-state="missing"',
+            'data-compare-value-state="equal"',
+            'data-compare-value-state="different"',
+        ),
+    )
+
+    for side, label in (("left", "Profile A"), ("right", "Profile B")):
+        search = soup.find(id=f"compare-{side}-search")
+        results = soup.find(id=f"compare-{side}-results")
+        selected = soup.find(id=f"compare-{side}-profile")
+
+        assert search is not None
+        assert search.name == "input"
+        assert search.get("type") == "search"
+        assert search.get("autocomplete") == "off"
+        assert search.get("data-compare-search") == side
+        assert search.get("data-i18n-placeholder") == "profiles.compare_search_placeholder"
+        assert search.get("placeholder") == "Find a profile by name"
+        assert results is not None
+        assert results.get("role") == "listbox"
+        assert results.get("aria-label") == f"{label} results"
+        assert selected is not None
+        assert selected.get("data-compare-selected-profile") == side
+        assert selected.find(attrs={"data-i18n": "profiles.compare_profile_empty"}) is not None
+
+    table = soup.find(id="compare-settings-table")
+    assert table is not None
+    colgroup = table.find("colgroup")
+    assert colgroup is not None
+    assert [
+        col.get("class")
+        for col in colgroup.find_all("col", recursive=False)
+    ] == [
+        ["compare-setting-column"],
+        ["compare-value-column"],
+        ["compare-value-column"],
+    ]
+    assert table.select_one('th[data-i18n="profiles.compare_setting_column"]') is not None
+    assert table.select_one('th[data-compare-column="left"][data-i18n="profiles.compare_left_column"]') is not None
+    assert table.select_one('th[data-compare-column="right"][data-i18n="profiles.compare_right_column"]') is not None
+    empty_cell = table.select_one('tbody td[data-i18n="profiles.compare_table_empty"]')
+    assert empty_cell is not None
+    assert empty_cell.get("colspan") == "3"
+
+    for token in (
+        'id="library-panel"',
+        'id="list"',
+        'id="new-profile"',
+        'id="wizard-panel"',
+        'id="settings-panel"',
+        'id="editor-panel"',
+        'id="editor"',
+        'id="profile-name"',
+        'id="profile-clone-handoff-panel"',
+        'id="compare-panel"',
+        "profile-list-button",
+        "profile-compare-button",
+        "data-clone-profile-id",
+        "profiles.library_compare_",
+        "profiles.library_status_compare_",
+        "/static/profiles_library_bootstrap.js",
+        "/static/profiles_workspace.js",
+    ):
+        assert token not in response.text
 
 
 def test_duplicate_route_marks_existing_profile_as_clone_source():
@@ -359,6 +510,7 @@ def test_profile_editor_modes_explicitly_exclude_unrelated_ui_surfaces():
         'id="library-panel"',
         'id="search"',
         'id="compare-panel"',
+        'id="profile-clone-handoff-panel"',
         'id="settings-panel"',
         'id="editor-panel"',
         'id="editor"',
@@ -370,6 +522,7 @@ def test_profile_editor_modes_explicitly_exclude_unrelated_ui_surfaces():
     for token in (
         'id="library-panel"',
         'id="compare-panel"',
+        'id="profile-clone-handoff-panel"',
         'id="wizard-panel"',
         'id="wizard-step-actions"',
         'id="editor-panel"',
@@ -382,6 +535,7 @@ def test_profile_editor_modes_explicitly_exclude_unrelated_ui_surfaces():
     for token in (
         'id="library-panel"',
         'id="compare-panel"',
+        'id="profile-clone-handoff-panel"',
         'id="wizard-panel"',
         'id="settings-panel"',
         'id="wizard-settings-search-input"',
@@ -392,6 +546,51 @@ def test_profile_editor_modes_explicitly_exclude_unrelated_ui_surfaces():
         'id="json-review-strip"',
     ):
         assert token not in json_response.text
+
+
+def test_profile_editor_routes_do_not_render_comparison_dom_or_clone_handoff_controls():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Editor Compare DOM Removal Profile"),
+    )
+    profile_id = create_response.json()["id"]
+
+    responses = (
+        client.get("/profiles/new"),
+        client.get(f"/profiles/{profile_id}/edit"),
+        client.get(f"/profiles/{profile_id}/settings"),
+        client.get(f"/profiles/{profile_id}/json"),
+    )
+
+    forbidden_ids = (
+        "compare-panel",
+        "compare-clear",
+        "compare-empty",
+        "compare-empty-copy",
+        "compare-active",
+        "compare-current-name",
+        "compare-current-copy",
+        "compare-other-name",
+        "compare-other-copy",
+        "compare-metadata-count",
+        "compare-policy-count",
+        "compare-preference-count",
+        "compare-changes-copy",
+        "compare-changes-list",
+        "compare-guided-areas-copy",
+        "compare-guided-areas-list",
+        "profile-clone-handoff-panel",
+        "profile-clone-handoff-copy",
+        "profile-clone-handoff-list",
+    )
+
+    for response in responses:
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.text, "html.parser")
+        for element_id in forbidden_ids:
+            assert soup.find(id=element_id) is None
+        assert not soup.select('[data-clone-handoff-action="compare"]')
 
 
 def test_shared_editor_chrome_dom_contract_is_present_across_editor_modes():

@@ -70,7 +70,6 @@ def test_import_firefox_policies_json_accepts_multipart_file_upload():
                 "name": "Multipart Firefox",
                 "schema_version": "release-151",
                 "description": "Uploaded policies.json",
-                "owner": "Endpoint tests",
             },
             files={
                 "file": (
@@ -85,7 +84,6 @@ def test_import_firefox_policies_json_accepts_multipart_file_upload():
     profile = response.json()
     assert profile["name"] == "Multipart Firefox"
     assert profile["description"] == "Uploaded policies.json"
-    assert profile["owner"] == "Endpoint tests"
     assert profile["schema_version"] == "release-151"
     assert profile["flags"] == document["policies"]
 

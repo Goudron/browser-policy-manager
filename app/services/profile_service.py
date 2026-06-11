@@ -24,7 +24,6 @@ SortOrder = str  # "asc" | "desc"
 @dataclass(frozen=True, slots=True)
 class ProfileQuery:
     q: str | None = None
-    owner: str | None = None
     schema_version: str | None = None
     validation_state: str | None = None
     lifecycle: str = "active"
@@ -70,9 +69,6 @@ class ProfileService:
             filters.append(Profile.deleted_at.is_not(None))
         elif query.lifecycle != "all" and not query.include_deleted:
             filters.append(Profile.deleted_at.is_(None))
-
-        if query.owner:
-            filters.append(Profile.owner == query.owner)
 
         if query.schema_version:
             filters.append(Profile.schema_version == query.schema_version)
@@ -122,7 +118,6 @@ class ProfileService:
         session: AsyncSession,
         *,
         q: str | None = None,
-        owner: str | None = None,
         schema_version: str | None = None,
         validation_state: str | None = None,
         lifecycle: str = "active",
@@ -134,7 +129,6 @@ class ProfileService:
     ) -> builtins.list[ProfileRead]:
         query = ProfileQuery(
             q=q,
-            owner=owner,
             schema_version=schema_version,
             validation_state=validation_state,
             lifecycle=lifecycle,
@@ -169,7 +163,6 @@ class ProfileService:
         session: AsyncSession,
         *,
         q: str | None = None,
-        owner: str | None = None,
         schema_version: str | None = None,
         validation_state: str | None = None,
         lifecycle: str = "active",
@@ -177,7 +170,6 @@ class ProfileService:
     ) -> int:
         query = ProfileQuery(
             q=q,
-            owner=owner,
             schema_version=schema_version,
             validation_state=validation_state,
             lifecycle=lifecycle,
@@ -200,7 +192,6 @@ class ProfileService:
             schema_version=data.schema_version,
             flags=data.flags,
             compliance=data.compliance,
-            owner=data.owner,
         )
         session.add(entity)
         await session.flush()
@@ -227,8 +218,6 @@ class ProfileService:
             entity.flags = data.flags
         if "compliance" in fields_to_update:
             entity.compliance = data.compliance
-        if "owner" in fields_to_update:
-            entity.owner = data.owner
 
         entity.revision += 1
         await session.flush()

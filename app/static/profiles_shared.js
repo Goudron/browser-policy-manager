@@ -100,7 +100,6 @@
         const defaultSchemaVersion = getDefaultSchemaVersion(documentRef);
         let readFormStateRef = () => ({
             name: "",
-            owner: null,
             description: null,
             schemaVersion: defaultSchemaVersion,
         });
@@ -409,7 +408,6 @@
         function setReadFormState(fn) {
             readFormStateRef = fn || (() => ({
                 name: "",
-                owner: null,
                 description: null,
                 schemaVersion: "esr-140.11",
             }));

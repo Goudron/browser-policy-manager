@@ -12,14 +12,13 @@ from app.schemas.profile import ProfileCreate
 from app.services.profile_service import ProfileQuery, ProfileService
 
 
-def _mk(owner: str, schema: str, name_prefix: str = "SRV", flags: dict | None = None):
+def _mk(schema: str, name_prefix: str = "SRV", flags: dict | None = None):
     u = uuid.uuid4().hex[:6]
     return ProfileCreate(
         name=f"{name_prefix}-{u}",
         description="Service list",
         schema_version=schema,
         flags=flags or {"DisableTelemetry": True},
-        owner=owner,
     )
 
 
@@ -38,18 +37,16 @@ def service_session() -> AsyncSessionAdapter:
 
 @pytest.mark.anyio
 async def test_service_list_filters_sort_and_pagination_direct(service_session: AsyncSessionAdapter):
-    """Exercise ProfileService.list directly (owner/schema_version/sort/limit/offset and q branch)."""
-    for owner in ("ops@example.org", "sec@example.org"):
-        for i in range(2):
-            await ProfileService.create(
-                service_session, _mk(owner, "esr-140.11", name_prefix=f"SVC-{i}")
-            )
+    """Exercise ProfileService.list directly (schema_version/sort/limit/offset and q branch)."""
+    for i in range(4):
+        await ProfileService.create(
+            service_session, _mk("esr-140.11", name_prefix=f"SVC-{i}")
+        )
     await service_session.commit()
 
     items = await ProfileService.list(
         service_session,
         q=None,
-        owner="ops@example.org",
         schema_version="esr-140.11",
         sort="name",
         order="asc",
@@ -62,7 +59,6 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     items2 = await ProfileService.list(
         service_session,
         q=None,
-        owner=None,
         schema_version="esr-140.11",
         sort="updated_at",
         order="desc",
@@ -74,7 +70,6 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     items3 = await ProfileService.list(
         service_session,
         q="SVC-",
-        owner=None,
         schema_version=None,
         sort="unknown_field",
         order="desc",
@@ -85,10 +80,9 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
 
     filtered_count = await ProfileService.count(
         service_session,
-        owner="ops@example.org",
         schema_version="esr-140.11",
     )
-    assert filtered_count == 2
+    assert filtered_count == 4
 
 
 @pytest.mark.anyio
@@ -100,7 +94,6 @@ async def test_service_list_name_query_is_case_insensitive_for_cyrillic(service_
             description="Unicode search",
             schema_version="esr-140.11",
             flags={"DisableTelemetry": True},
-            owner="ops@example.org",
         ),
     )
     await service_session.commit()
@@ -127,7 +120,6 @@ async def test_service_list_name_query_treats_empty_and_whitespace_as_no_filter(
             description="Whitespace query",
             schema_version="esr-140.11",
             flags={"DisableTelemetry": True},
-            owner="ops@example.org",
         ),
     )
     await service_session.commit()
@@ -148,11 +140,11 @@ def test_matches_name_query_returns_true_for_missing_query() -> None:
 
 
 def test_profile_query_filters_keep_sql_filtering_in_one_helper() -> None:
-    active = ProfileQuery(owner="ops@example.org", schema_version="esr-140.11")
+    active = ProfileQuery(schema_version="esr-140.11")
     archived = ProfileQuery(lifecycle="archived")
     all_profiles = ProfileQuery(lifecycle="all")
 
-    assert len(ProfileService._query_filters(active)) == 3
+    assert len(ProfileService._query_filters(active)) == 2
     assert len(ProfileService._query_filters(archived)) == 1
     assert ProfileService._query_filters(all_profiles) == []
 

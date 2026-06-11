@@ -66,11 +66,6 @@ class FirefoxPoliciesJsonImportRequest(BaseModel):
         default=None,
         description="Optional internal compliance metadata to attach to the created profile.",
     )
-    owner: str | None = Field(
-        default=None,
-        max_length=255,
-        description="Optional profile owner metadata.",
-    )
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -158,7 +153,6 @@ async def _read_firefox_policies_import_request(
                     "schema_version": form.get("schema_version") or DEFAULT_SCHEMA_CHANNEL,
                     "document": _decode_json_document(raw_document, source="policies.json"),
                     "compliance": compliance,
-                    "owner": form.get("owner") or None,
                 }
             )
         finally:
@@ -241,7 +235,6 @@ async def _list_profiles_core(
     session: AsyncSession,
     *,
     q: str | None = None,
-    owner: str | None = None,
     schema_version: str | None = None,
     validation_state: str | None = None,
     lifecycle: str = "active",
@@ -254,7 +247,6 @@ async def _list_profiles_core(
     return await ProfileService.list(
         session,
         q=q,
-        owner=owner,
         schema_version=schema_version,
         validation_state=validation_state,
         lifecycle=lifecycle,
@@ -270,7 +262,6 @@ async def _profile_library_stats_core(
     session: AsyncSession,
     *,
     q: str | None = None,
-    owner: str | None = None,
     schema_version: str | None = None,
     validation_state: str | None = None,
     lifecycle: str = "active",
@@ -279,7 +270,6 @@ async def _profile_library_stats_core(
     filtered = await ProfileService.count(
         session,
         q=q,
-        owner=owner,
         schema_version=schema_version,
         validation_state=validation_state,
         lifecycle=lifecycle,
@@ -287,7 +277,6 @@ async def _profile_library_stats_core(
     )
     total = await ProfileService.count(
         session,
-        owner=owner,
         schema_version=schema_version,
         validation_state=validation_state,
         lifecycle=lifecycle,
@@ -437,7 +426,6 @@ async def _reset_profiles_library_core(session: AsyncSession) -> dict[str, int]:
 async def list_profiles(
     session: AsyncSession = Depends(get_session),
     q: str | None = Query(None, description="Substring filter for profile name/description"),
-    owner: str | None = Query(None, description="Filter by owner"),
     schema_version: str | None = Query(None, description="Filter by schema_version (channel)"),
     validation_state: str | None = Query(
         None,
@@ -453,7 +441,6 @@ async def list_profiles(
     return await _list_profiles_core(
         session,
         q=q,
-        owner=owner,
         schema_version=schema_version,
         validation_state=validation_state,
         lifecycle=lifecycle,
@@ -469,7 +456,6 @@ async def list_profiles(
 async def profile_library_stats(
     session: AsyncSession = Depends(get_session),
     q: str | None = Query(None, description="Substring filter for profile name/description"),
-    owner: str | None = Query(None, description="Filter by owner"),
     schema_version: str | None = Query(None, description="Filter by schema_version (channel)"),
     validation_state: str | None = Query(
         None,
@@ -481,7 +467,6 @@ async def profile_library_stats(
     return await _profile_library_stats_core(
         session,
         q=q,
-        owner=owner,
         schema_version=schema_version,
         validation_state=validation_state,
         lifecycle=lifecycle,
@@ -552,7 +537,6 @@ async def create_profile(
                                 "required": ["policies"],
                             },
                             "compliance": {"type": "object", "nullable": True},
-                            "owner": {"type": "string", "nullable": True, "maxLength": 255},
                         },
                         "example": FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE,
                     },
@@ -570,7 +554,6 @@ async def create_profile(
                             "name": {"type": "string", "maxLength": 255},
                             "schema_version": {"type": "string", "default": DEFAULT_SCHEMA_CHANNEL},
                             "description": {"type": "string"},
-                            "owner": {"type": "string", "maxLength": 255},
                             "compliance": {
                                 "type": "string",
                                 "description": "Optional JSON object with compliance metadata.",
@@ -640,7 +623,6 @@ async def import_firefox_policies_json(
             schema_version=payload.schema_version,
             flags=flags,
             compliance=payload.compliance,
-            owner=payload.owner,
         ),
         session,
         validate_policies=False,

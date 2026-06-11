@@ -10,7 +10,6 @@ from tests.support import assert_contains_all, assert_has_keys, make_test_client
 
 UI_SHELL_TOKENS = (
     'id="profile-name"',
-    'id="profile-owner"',
     'id="profile-description"',
     'id="lang"',
     'id="wizard-panel"',
@@ -19,9 +18,6 @@ UI_SHELL_TOKENS = (
     'id="profile-compliance-panel"',
     'id="profile-compliance-copy"',
     'id="profile-compliance-list"',
-    'id="profile-clone-handoff-panel"',
-    'id="profile-clone-handoff-copy" role="status" aria-live="polite"',
-    'id="profile-clone-handoff-list" role="list"',
     'id="profile-lifecycle-panel"',
     'id="profile-lifecycle-copy"',
     'id="profile-lifecycle-list"',
@@ -248,15 +244,11 @@ UI_LOCALE_KEYS = (
     "profiles.wizard_upkeep_governance_title",
     "profiles.wizard_shell_nested_unsupported",
     "profiles.wizard_shared_device_workflow_title",
-    "profiles.compare_title",
+    "profiles.compare_route_title",
     "profiles.compare_action",
-    "profiles.clone_action",
     "profiles.clone_handoff_title",
     "profiles.clone_handoff_active",
-    "profiles.clone_handoff_item_compare",
     "profiles.clone_handoff_open_step",
-    "profiles.clone_handoff_compare",
-    "profiles.compare_summary_policies",
     "profiles.wizard_summary_derived",
     "profiles.lifecycle_review_title",
     "profiles.wizard_preferences_general_title",
@@ -449,16 +441,6 @@ P2_3_EXPORT_LIFECYCLE_LOCALE_KEYS = (
 )
 
 PR4_1_POST_ROADMAP_LOCALE_KEYS = (
-    "profiles.compare_guided_areas_title",
-    "profiles.compare_guided_areas_active",
-    "profiles.compare_guided_area_step_one",
-    "profiles.compare_guided_area_step_two",
-    "profiles.compare_guided_area_step_three",
-    "profiles.compare_guided_area_step_four",
-    "profiles.compare_guided_area_step_five",
-    "profiles.compare_guided_area_preview",
-    "profiles.compare_guided_area_more",
-    "profiles.clone_action",
     "profiles.clone_meta",
     "profiles.clone_source_value",
     "profiles.wizard_summary_derived",
@@ -492,7 +474,6 @@ def _make_payload() -> dict:
         "name": f"UI-{unique}",
         "description": "UI smoke lifecycle profile",
         "schema_version": "esr-140.11",
-        "owner": "ops@example.org",
         "flags": {
             "DisableTelemetry": True,
             "DisablePrivateBrowsing": True,
@@ -617,7 +598,6 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     payload = {
         "name": f"ESR AI Empty State-{uuid.uuid4().hex[:8]}",
         "description": "ESR AI empty-state regression",
-        "owner": "desktop@example.org",
         "schema_version": "esr-140.11",
         "flags": {
             "DisableTelemetry": True,
@@ -679,7 +659,6 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
     payload = {
         "name": f"Release AI Controls-{uuid.uuid4().hex[:8]}",
         "description": "Release AI controls regression",
-        "owner": "desktop@example.org",
         "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
@@ -764,7 +743,6 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     payload = {
         "name": f"Release Guided AI VPN-{uuid.uuid4().hex[:8]}",
         "description": "Firefox 151 guided AI and VPN regression",
-        "owner": "desktop@example.org",
         "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
@@ -816,9 +794,6 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     runtime_source = (root / "app" / "static" / "profiles_runtime.js").read_text(
         encoding="utf-8"
     )
-    workspace_source = (root / "app" / "static" / "profiles_workspace.js").read_text(
-        encoding="utf-8"
-    )
     flow_source = (root / "app" / "static" / "profiles_wizard_flow.js").read_text(
         encoding="utf-8"
     )
@@ -836,10 +811,6 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     assert 'wizardLocalNetworkAccessCardEl' in (
         root / "app" / "static" / "profiles_schema_shell_sections.js"
     ).read_text(encoding="utf-8")
-    assert '"IPProtectionAvailable",' in workspace_source
-    assert '"LocalNetworkAccess",' in workspace_source
-    assert '"XSLTEnabled",' in workspace_source
-    assert 'if (["AIControls", "GenerativeAI", "VisualSearchEnabled"].includes(policyKey)) return "step_five";' in workspace_source
     assert '"IPProtectionAvailable",' in flow_source
     assert '"LocalNetworkAccess",' in flow_source
     assert '"XSLTEnabled",' in flow_source
@@ -861,7 +832,6 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
         f"/api/profiles/{created['id']}",
         json={
             "description": "Saved after guided AI and VPN review",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": update_flags,
             "expected_revision": created["revision"],
@@ -948,27 +918,18 @@ def test_profiles_ui_locale_catalog_exposes_post_roadmap_review_and_history_copy
     assert_has_keys(locale_en_json, PR4_1_POST_ROADMAP_LOCALE_KEYS)
     assert_has_keys(locale_ru_json, PR4_1_POST_ROADMAP_LOCALE_KEYS)
 
-    assert locale_en_json["profiles.compare_guided_areas_title"] == "Differences by guided area"
-    assert locale_en_json["profiles.clone_action"] == "Clone and adjust"
     assert locale_en_json["profiles.lifecycle_item_recent_restored"] == (
         "Restored in this session at {value}."
     )
     assert locale_en_json["profiles.wizard_step_memory_step_privacy"] == (
         "Changed privacy, hardening, site permissions, or cleanup posture."
     )
-    assert locale_en_json["profiles.compare_guided_area_step_two"] == (
-        "Browser access and defaults"
-    )
-    assert "profiles.compare_guided_area_step_six" not in locale_en_json
-    assert "profiles.compare_guided_area_step_seven" not in locale_en_json
     assert locale_en_json["profiles.wizard_export_drilldown_unknown_title"] == (
         "Unknown key: {label}"
     )
     assert locale_en_json["profiles.wizard_step_memory_open"] == "Open step"
     assert locale_en_json["profiles.wizard_step_memory_current"] == "You are here"
 
-    assert locale_ru_json["profiles.compare_guided_areas_title"] == "Различия по шагам мастера"
-    assert locale_ru_json["profiles.clone_action"] == "Клонировать и доработать"
     assert locale_ru_json["profiles.clone_meta"] == (
         "Черновик на основе профиля «{name}». Сохраните его как отдельный профиль, когда будете готовы."
     )
@@ -978,16 +939,21 @@ def test_profiles_ui_locale_catalog_exposes_post_roadmap_review_and_history_copy
     assert locale_ru_json["profiles.wizard_step_memory_step_browser"] == (
         "Изменены доступ к браузеру, запуск, поиск или значения навигации по умолчанию."
     )
-    assert locale_ru_json["profiles.compare_guided_area_step_four"] == (
-        "Пользователи, дополнения и сайты"
-    )
-    assert "profiles.compare_guided_area_step_six" not in locale_ru_json
-    assert "profiles.compare_guided_area_step_seven" not in locale_ru_json
     assert locale_ru_json["profiles.wizard_step_memory_open"] == "Открыть шаг"
     assert locale_ru_json["profiles.wizard_step_memory_current"] == "Вы уже здесь"
     assert locale_ru_json["profiles.wizard_export_drilldown_raw_title"] == (
         "Вне Пошагового редактора: {label}"
     )
+    removed_library_compare_keys = (
+        "profiles.compare_title",
+        "profiles.compare_summary_policies",
+        "profiles.compare_guided_areas_title",
+        "profiles.compare_guided_area_step_two",
+        "profiles.clone_action",
+    )
+    for removed_key in removed_library_compare_keys:
+        assert removed_key not in locale_en_json
+        assert removed_key not in locale_ru_json
 
 
 def test_guided_runtime_mappings_follow_six_step_model():
@@ -1049,7 +1015,6 @@ def test_profiles_public_workflow_smoke():
         f"/api/profiles/{profile_id}",
         json={
             "description": "Saved from UI smoke",
-            "owner": "sec@example.org",
             "flags": {"DisableTelemetry": False},
         },
     )
@@ -1142,7 +1107,6 @@ def test_create_corporate_cis_l2_browser_regression_can_download_policies_json()
     payload = {
         "name": f"Corporate CIS L2 Browser-{uuid.uuid4().hex[:8]}",
         "description": "Created by the browser regression path",
-        "owner": "security@example.org",
         "schema_version": schema_version,
         "flags": flags,
         "compliance": {
@@ -1198,7 +1162,6 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     payload = {
         "name": f"Library Editor Browser-{uuid.uuid4().hex[:8]}",
         "description": "Created before opening from the library",
-        "owner": "desktop@example.org",
         "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
@@ -1269,7 +1232,6 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
         f"/api/profiles/{profile_id}",
         json={
             "description": "Saved after guided homepage edit",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": next_flags,
             "expected_revision": created["revision"],
@@ -1291,7 +1253,6 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
     payload = {
         "name": f"Visual JSON Browser-{uuid.uuid4().hex[:8]}",
         "description": "Shared visual and JSON route regression",
-        "owner": "platform@example.org",
         "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
@@ -1345,7 +1306,6 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
         f"/api/profiles/{profile_id}",
         json={
             "description": "Saved from visual editor route",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": visual_flags,
             "expected_revision": created["revision"],
@@ -1376,7 +1336,6 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
         f"/api/profiles/{profile_id}",
         json={
             "description": "Saved from JSON editor route",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": json_flags,
             "expected_revision": visual_saved["revision"],
@@ -1401,7 +1360,6 @@ def test_stale_save_conflict_browser_regression_does_not_overwrite_profile():
     payload = {
         "name": f"Stale Save Browser-{uuid.uuid4().hex[:8]}",
         "description": "Initial shared tab state",
-        "owner": "secops@example.org",
         "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
@@ -1461,7 +1419,6 @@ def test_stale_save_conflict_browser_regression_does_not_overwrite_profile():
         f"/api/profiles/{profile_id}",
         json={
             "description": "Saved by tab A",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": tab_a_flags,
             "expected_revision": tab_a_profile["revision"],
@@ -1483,7 +1440,6 @@ def test_stale_save_conflict_browser_regression_does_not_overwrite_profile():
         f"/api/profiles/{profile_id}",
         json={
             "description": "Stale tab B should not persist",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": tab_b_flags,
             "expected_revision": tab_b_profile["revision"],
@@ -1518,7 +1474,6 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
     payload = {
         "name": original_name,
         "description": "Initial shared tab state",
-        "owner": "secops@example.org",
         "schema_version": "release-151",
         "flags": {
             "DisableTelemetry": True,
@@ -1568,7 +1523,6 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
         f"/api/profiles/{profile_id}",
         json={
             "description": "Saved by tab A",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": tab_a_flags,
             "expected_revision": tab_a_profile["revision"],
@@ -1588,7 +1542,6 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
         f"/api/profiles/{profile_id}",
         json={
             "description": "Stale tab B should become a copy",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": local_draft_flags,
             "expected_revision": tab_b_profile["revision"],
@@ -1602,7 +1555,6 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
         json={
             "name": copy_name,
             "description": "Stale tab B should become a copy",
-            "owner": payload["owner"],
             "schema_version": payload["schema_version"],
             "flags": local_draft_flags,
         },

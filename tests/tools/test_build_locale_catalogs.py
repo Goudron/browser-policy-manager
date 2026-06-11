@@ -10,7 +10,7 @@ def test_locale_namespace_classifier_routes_known_profile_key_groups():
     assert build_locale_catalogs.namespace_for_key("profiles.wizard_title") == "wizard"
     assert build_locale_catalogs.namespace_for_key("profiles.settings_route_title") == "settings"
     assert build_locale_catalogs.namespace_for_key("profiles.library_count_many") == "library"
-    assert build_locale_catalogs.namespace_for_key("profiles.compare_title") == "library"
+    assert build_locale_catalogs.namespace_for_key("profiles.compare_route_title") == "library"
     assert build_locale_catalogs.namespace_for_key("profiles.settings_context_title") == "settings"
     assert build_locale_catalogs.namespace_for_key("profiles.editor_title_section") == "json"
     assert build_locale_catalogs.namespace_for_key("profiles.shell_policy_pdfjs") == "policy-labels"

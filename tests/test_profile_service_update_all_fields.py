@@ -7,8 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.db import AsyncSessionAdapter
-from app.models.profile import Base
-from app.schemas.profile import ProfileCreate, ProfileUpdate
+from app.models.profile import Base, Profile
+from app.schemas.profile import ProfileCreate, ProfileRead, ProfileUpdate
 from app.services.profile_service import ProfileService
 
 
@@ -20,7 +20,6 @@ def _mk_create_payload() -> ProfileCreate:
         schema_version="esr-140.11",
         flags={"DisableTelemetry": True},
         compliance={"framework": "cis", "layer": "cis_l1"},
-        owner="ops@example.org",
     )
 
 
@@ -39,7 +38,7 @@ def service_session() -> AsyncSessionAdapter:
 
 @pytest.mark.anyio
 async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSessionAdapter):
-    """Hit all field assignments in ProfileService.update (desc/schema/flags/owner)."""
+    """Hit all field assignments in ProfileService.update (desc/schema/flags/compliance)."""
     created = await ProfileService.create(service_session, _mk_create_payload())
     await service_session.commit()
     profile_id = created.id
@@ -49,7 +48,6 @@ async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSes
         schema_version="release-151",
         flags={"DisableTelemetry": False, "DisablePrivateBrowsing": True},
         compliance={"framework": "cis", "layer": "cis_l2"},
-        owner="sec@example.org",
     )
 
     updated = await ProfileService.update(service_session, profile_id, patch)
@@ -60,17 +58,16 @@ async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSes
     assert updated.flags.get("DisableTelemetry") is False
     assert updated.flags.get("DisablePrivateBrowsing") is True
     assert updated.compliance == {"framework": "cis", "layer": "cis_l2"}
-    assert updated.owner == "sec@example.org"
 
     cleared = await ProfileService.update(
         service_session,
         profile_id,
-        ProfileUpdate(description=None, owner=None),
+        ProfileUpdate(description=None, compliance=None),
     )
     await service_session.commit()
     assert cleared is not None
     assert cleared.description is None
-    assert cleared.owner is None
+    assert cleared.compliance is None
 
     missing = await ProfileService.update(service_session, 9_999_999, patch)
     assert missing is None
@@ -98,6 +95,13 @@ async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSes
     deleted_again = await ProfileService.hard_delete(service_session, profile_id)
     assert missing is None
     assert deleted_again is False
+
+
+def test_profile_model_and_schemas_do_not_expose_owner():
+    assert "owner" not in Profile.__table__.columns
+    assert "owner" not in ProfileCreate.model_fields
+    assert "owner" not in ProfileUpdate.model_fields
+    assert "owner" not in ProfileRead.model_fields
 
 
 @pytest.mark.anyio

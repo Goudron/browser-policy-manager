@@ -1,0 +1,105 @@
+<main id="compare-page" class="space-y-4" aria-labelledby="compare-page-title">
+    <section class="surface-panel fade-up p-4 md:p-5">
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div class="min-w-0">
+                <p class="section-eyebrow" data-i18n="profiles.compare_route_eyebrow">
+                    {{ tr("profiles.compare_route_eyebrow", "Dedicated comparison") }}
+                </p>
+                <h2 id="compare-page-title" class="section-title text-slate-900" data-i18n="profiles.compare_route_title">
+                    {{ tr("profiles.compare_route_title", "Compare profile settings") }}
+                </h2>
+            </div>
+            <a class="button-base ghost-button soft-input" href="/profiles" data-i18n="profiles.compare_back_to_library">
+                {{ tr("profiles.compare_back_to_library", "Back to Library") }}
+            </a>
+        </div>
+    </section>
+
+    <section class="grid gap-4 lg:grid-cols-2" aria-labelledby="compare-selection-title">
+        <h3 id="compare-selection-title" class="sr-only" data-i18n="profiles.compare_selection_title">
+            {{ tr("profiles.compare_selection_title", "Choose profiles to compare") }}
+        </h3>
+        <div class="surface-panel p-4">
+            <label class="field-label" for="compare-left-search" data-i18n="profiles.compare_left_label">
+                {{ tr("profiles.compare_left_label", "Profile A") }}
+            </label>
+            <input
+                id="compare-left-search"
+                class="soft-input mt-2 w-full rounded-xl px-3 py-2 text-sm"
+                type="search"
+                autocomplete="off"
+                data-compare-search="left"
+                data-i18n-placeholder="profiles.compare_search_placeholder"
+                placeholder="{{ tr("profiles.compare_search_placeholder", "Find a profile by name") }}" />
+            <div id="compare-left-results" class="mt-3" role="listbox" aria-label="Profile A results"></div>
+            <div id="compare-left-profile" class="mt-3 compact-counter" data-compare-selected-profile="left">
+                <strong data-i18n="profiles.compare_profile_empty">{{ tr("profiles.compare_profile_empty", "No profile selected") }}</strong>
+            </div>
+        </div>
+        <div class="surface-panel p-4">
+            <label class="field-label" for="compare-right-search" data-i18n="profiles.compare_right_label">
+                {{ tr("profiles.compare_right_label", "Profile B") }}
+            </label>
+            <input
+                id="compare-right-search"
+                class="soft-input mt-2 w-full rounded-xl px-3 py-2 text-sm"
+                type="search"
+                autocomplete="off"
+                data-compare-search="right"
+                data-i18n-placeholder="profiles.compare_search_placeholder"
+                placeholder="{{ tr("profiles.compare_search_placeholder", "Find a profile by name") }}" />
+            <div id="compare-right-results" class="mt-3" role="listbox" aria-label="Profile B results"></div>
+            <div id="compare-right-profile" class="mt-3 compact-counter" data-compare-selected-profile="right">
+                <strong data-i18n="profiles.compare_profile_empty">{{ tr("profiles.compare_profile_empty", "No profile selected") }}</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="surface-panel p-4" aria-labelledby="compare-settings-title">
+        <div class="mb-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <h3 id="compare-settings-title" class="section-title text-slate-900" data-i18n="profiles.compare_settings_title">
+                {{ tr("profiles.compare_settings_title", "Settings side by side") }}
+            </h3>
+            <div class="flex flex-wrap gap-2 text-xs" aria-label="Value states">
+                <span class="status-pill" data-compare-value-state="missing" data-i18n="profiles.compare_state_missing">
+                    {{ tr("profiles.compare_state_missing", "Missing") }}
+                </span>
+                <span class="status-pill" data-compare-value-state="equal" data-i18n="profiles.compare_state_equal">
+                    {{ tr("profiles.compare_state_equal", "Same value") }}
+                </span>
+                <span class="status-pill" data-compare-value-state="different" data-i18n="profiles.compare_state_different">
+                    {{ tr("profiles.compare_state_different", "Different value") }}
+                </span>
+            </div>
+        </div>
+        <div class="compare-table-shell">
+            <table id="compare-settings-table" class="compare-settings-table text-left text-sm">
+                <colgroup>
+                    <col class="compare-setting-column" />
+                    <col class="compare-value-column" />
+                    <col class="compare-value-column" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-3 py-2" data-i18n="profiles.compare_setting_column">
+                            {{ tr("profiles.compare_setting_column", "Setting") }}
+                        </th>
+                        <th scope="col" class="px-3 py-2" data-compare-column="left" data-i18n="profiles.compare_left_column">
+                            {{ tr("profiles.compare_left_column", "Profile A value") }}
+                        </th>
+                        <th scope="col" class="px-3 py-2" data-compare-column="right" data-i18n="profiles.compare_right_column">
+                            {{ tr("profiles.compare_right_column", "Profile B value") }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="compare-settings-rows">
+                    <tr>
+                        <td class="px-3 py-3 text-slate-500" colspan="3" data-i18n="profiles.compare_table_empty">
+                            {{ tr("profiles.compare_table_empty", "Choose Profile A and Profile B to compare their settings.") }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
