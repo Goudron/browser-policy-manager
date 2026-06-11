@@ -10,7 +10,7 @@ for managing Firefox `policies.json` documents without forcing every workflow th
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
-## What's In 0.8.7
+## What's Planned In 0.8.7
 
 BPM 0.8.7 is the current development line for dedicated saved-profile comparison and explicit
 clone naming.
