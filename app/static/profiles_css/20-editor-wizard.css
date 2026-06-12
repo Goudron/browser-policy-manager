@@ -4513,15 +4513,3 @@
             border-color: rgba(110, 231, 183, 0.34);
             color: #ffffff;
         }
-
-        html[data-theme="dark"] .library-row-open-button--selected {
-            background: rgba(16, 185, 129, 0.52);
-            border-color: rgba(167, 243, 208, 0.34);
-            color: #ffffff;
-        }
-
-        html[data-theme="dark"] .profile-compare-button--active {
-            background: linear-gradient(135deg, rgba(8, 47, 73, 0.58), rgba(14, 116, 144, 0.34));
-            border-color: rgba(56, 189, 248, 0.26);
-            color: #e0f2fe;
-        }

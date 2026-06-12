@@ -37,7 +37,6 @@
         const {
             listProfiles,
             getProfileLibraryStats,
-            getProfile,
             importFirefoxPoliciesJson,
             softDeleteProfile,
             restoreProfile,
@@ -55,8 +54,6 @@
         const langStorageKey = "bpm-lang-mode";
         const themeStorageKey = "bpm-theme-mode";
         let localeRequestId = 0;
-        let compareFirstProfileState = null;
-        let compareSecondProfileState = null;
 
         const listEl = documentRef.getElementById("list");
         const listSummaryEl = documentRef.getElementById("list-summary");
@@ -76,21 +73,6 @@
         const workspaceProfileLabelEl = documentRef.getElementById("workspace-profile-label");
         const langSelectEl = documentRef.getElementById("lang");
         const themeSelectEl = documentRef.getElementById("theme");
-        const compareClearEl = documentRef.getElementById("compare-clear");
-        const compareEmptyEl = documentRef.getElementById("compare-empty");
-        const compareEmptyCopyEl = documentRef.getElementById("compare-empty-copy");
-        const compareActiveEl = documentRef.getElementById("compare-active");
-        const compareCurrentNameEl = documentRef.getElementById("compare-current-name");
-        const compareCurrentCopyEl = documentRef.getElementById("compare-current-copy");
-        const compareOtherNameEl = documentRef.getElementById("compare-other-name");
-        const compareOtherCopyEl = documentRef.getElementById("compare-other-copy");
-        const compareMetadataCountEl = documentRef.getElementById("compare-metadata-count");
-        const comparePolicyCountEl = documentRef.getElementById("compare-policy-count");
-        const comparePreferenceCountEl = documentRef.getElementById("compare-preference-count");
-        const compareChangesCopyEl = documentRef.getElementById("compare-changes-copy");
-        const compareChangesListEl = documentRef.getElementById("compare-changes-list");
-        const compareGuidedAreasCopyEl = documentRef.getElementById("compare-guided-areas-copy");
-        const compareGuidedAreasListEl = documentRef.getElementById("compare-guided-areas-list");
 
         function readFilters() {
             return {
@@ -161,373 +143,83 @@
             }
         }
 
-        function buildProfileSnapshot(profile) {
-            return {
-                id: profile?.id ?? null,
-                name: profile?.name || "",
-                owner: profile?.owner || null,
-                description: profile?.description || null,
-                schemaVersion: profile?.schema_version || getDefaultSchemaVersion(documentRef),
-                flags: profile?.flags && typeof profile.flags === "object" ? profile.flags : {},
-            };
+        function buildDefaultCloneName(profile) {
+            const sourceName = profile?.name || t("profiles.clone_source_unknown");
+            return t("profiles.clone_name_pattern").replace("{name}", sourceName);
         }
 
-        function normalizeValue(value) {
-            if (Array.isArray(value)) {
-                return value.map((item) => normalizeValue(item));
+        function buildCloneDraftHref(profile, cloneName) {
+            const params = new URLSearchParams();
+            params.set("clone_from", String(profile.id));
+            params.set("clone_name", cloneName);
+            if (profile.is_deleted) {
+                params.set("include_deleted", "true");
             }
-            if (value && typeof value === "object") {
-                return Object.keys(value).sort().reduce((acc, key) => {
-                    acc[key] = normalizeValue(value[key]);
-                    return acc;
-                }, {});
-            }
-            return value;
+            return `/profiles/new?${params.toString()}`;
         }
 
-        function snapshotToString(value) {
-            return JSON.stringify(normalizeValue(value));
-        }
-
-        function isPlainObject(value) {
-            return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-        }
-
-        function collectDiffPaths(baseValue, otherValue, path = [], changes = []) {
-            const normalizedBase = normalizeValue(baseValue);
-            const normalizedOther = normalizeValue(otherValue);
-
-            if (isPlainObject(normalizedBase) || isPlainObject(normalizedOther)) {
-                const baseObject = isPlainObject(normalizedBase) ? normalizedBase : {};
-                const otherObject = isPlainObject(normalizedOther) ? normalizedOther : {};
-                const keys = Array.from(new Set([
-                    ...Object.keys(baseObject),
-                    ...Object.keys(otherObject),
-                ])).sort();
-                keys.forEach((key) => {
-                    collectDiffPaths(baseObject[key], otherObject[key], [...path, key], changes);
-                });
-                return changes;
-            }
-
-            if (snapshotToString(normalizedBase) !== snapshotToString(normalizedOther)) {
-                changes.push(path);
-            }
-            return changes;
-        }
-
-        function buildCompareDiff(baseSnapshot, otherSnapshot) {
-            const metadataFields = [
-                ["name", t("profiles.compare_metadata_name")],
-                ["owner", t("profiles.compare_metadata_owner")],
-                ["description", t("profiles.compare_metadata_description")],
-                ["schemaVersion", t("profiles.compare_metadata_schema")],
-            ];
-            const metadataChanges = metadataFields
-                .filter(([key]) => snapshotToString(baseSnapshot?.[key]) !== snapshotToString(otherSnapshot?.[key]))
-                .map(([, label]) => label);
-            const changedPaths = collectDiffPaths(baseSnapshot?.flags || {}, otherSnapshot?.flags || {});
-            const policyEntries = new Map();
-            const preferenceEntries = new Map();
-
-            changedPaths.forEach((path) => {
-                if (!Array.isArray(path) || !path.length) return;
-                if (path[0] === "Preferences" && path[1]) {
-                    if (!preferenceEntries.has(path[1])) {
-                        preferenceEntries.set(path[1], path);
-                    }
-                    return;
-                }
-                if (!policyEntries.has(path[0])) {
-                    policyEntries.set(path[0], path);
-                }
-            });
-
-            const sampleChanges = [
-                ...metadataChanges.slice(0, 2).map((label) => ({
-                    title: label,
-                    copy: t("profiles.compare_change_metadata_copy"),
-                })),
-                ...Array.from(policyEntries.entries()).slice(0, 2).map(([key, path]) => ({
-                    title: key,
-                    copy: path.length > 1
-                        ? t("profiles.compare_change_policy_nested")
-                        : t("profiles.compare_change_policy_direct"),
-                })),
-                ...Array.from(preferenceEntries.entries()).slice(0, 2).map(([key]) => ({
-                    title: key,
-                    copy: t("profiles.compare_change_preference_copy"),
-                })),
-            ].slice(0, 6);
-
-            return {
-                metadataChanges,
-                policyEntries,
-                preferenceEntries,
-                sampleChanges,
-            };
-        }
-
-        function resolveCompareAreaForPolicy(key) {
-            const policyKey = String(key || "");
-            if ([
-                "Proxy",
-                "Certificates",
-                "DNSOverHTTPS",
-                "WindowsSSO",
-                "Authentication",
-                "AppAutoUpdate",
-                "DisableAppUpdate",
-                "DisableSystemAddonUpdate",
-                "DontCheckDefaultBrowser",
-                "PromptForDownloadLocation",
-                "Homepage",
-                "NewTabPage",
-                "OverrideFirstRunPage",
-                "OverridePostUpdatePage",
-                "FirefoxHome",
-                "DisablePocket",
-                "Preferences",
-                "SearchBar",
-                "SearchSuggestEnabled",
-                "SearchEngines",
-            ].includes(policyKey)) return "step_two";
-            if ([
-                "DisableTelemetry",
-                "BlockAboutAddons",
-                "EnableTrackingProtection",
-                "Cookies",
-                "Permissions",
-                "SanitizeOnShutdown",
-                "OfferToSaveLogins",
-                "PasswordManagerEnabled",
-            ].includes(policyKey)) return "step_three";
-            if ([
-                "WebsiteFilter",
-                "WebsiteFilterExceptions",
-                "Handlers",
-                "AutoLaunchProtocolsFromOrigins",
-                "GoToIntranetSiteForSingleWordEntryInAddressBar",
-                "NoDefaultBookmarks",
-            ].includes(policyKey)) return "step_four";
-            if ([
-                "DisableFirefoxAccounts",
-                "ExtensionSettings",
-                "ExtensionUpdate",
-                "InstallAddonsPermission",
-                "Bookmarks",
-                "ManagedBookmarks",
-                "UserMessaging",
-                "RequestedLocales",
-                "TranslateEnabled",
-            ].includes(policyKey)) return "step_four";
-            if ([
-                "DisableBuiltinAIChat",
-                "DisableFirefoxLabs",
-                "AIControls",
-                "GenerativeAI",
-                "VisualSearchEnabled",
-            ].includes(policyKey)) return "step_five";
-            return "step_one";
-        }
-
-        function resolveCompareAreaForPreference(key) {
-            const prefKey = String(key || "");
-            if (/proxy|network|dns|update|download|browser|homepage|newtab|firefox-home|snippets|topsites|search|suggest|urlbar/i.test(prefKey)) return "step_two";
-            if (/cookie|tracking|permission|telemetry|privacy|safe-browsing|password|https|sanitize|private/i.test(prefKey)) return "step_three";
-            if (/locale|language|translate|extension|account|bookmark|handler|website|intranet/i.test(prefKey)) return "step_four";
-            if (/ai|visualsearch|chatbot|model|provider/i.test(prefKey)) return "step_five";
-            return "step_two";
-        }
-
-        function buildCompareAreaGroups(diff) {
-            const areaMap = new Map();
-            const addToArea = (areaKey, label) => {
-                if (!areaMap.has(areaKey)) areaMap.set(areaKey, []);
-                areaMap.get(areaKey).push(label);
-            };
-
-            diff.metadataChanges.forEach((label) => addToArea("step_one", label));
-            Array.from(diff.policyEntries.keys()).forEach((key) => addToArea(resolveCompareAreaForPolicy(key), key));
-            Array.from(diff.preferenceEntries.keys()).forEach((key) => addToArea(resolveCompareAreaForPreference(key), key));
-
-            return [
-                "step_one",
-                "step_two",
-                "step_three",
-                "step_four",
-                "step_five",
-            ].map((areaKey) => {
-                const items = areaMap.get(areaKey) || [];
-                if (!items.length) return null;
-                return {
-                    title: t(`profiles.compare_guided_area_${areaKey}`),
-                    items,
-                };
-            }).filter(Boolean);
-        }
-
-        function buildCompareState(profile) {
-            if (!profile?.id) return null;
-            return {
-                profile,
-                snapshot: buildProfileSnapshot(profile),
-            };
-        }
-
-        function renderComparePanel() {
-            if (
-                !compareEmptyEl
-                || !compareActiveEl
-                || !compareEmptyCopyEl
-                || !compareClearEl
-                || !compareCurrentNameEl
-                || !compareCurrentCopyEl
-                || !compareOtherNameEl
-                || !compareOtherCopyEl
-                || !compareMetadataCountEl
-                || !comparePolicyCountEl
-                || !comparePreferenceCountEl
-                || !compareChangesCopyEl
-                || !compareChangesListEl
-                || !compareGuidedAreasCopyEl
-                || !compareGuidedAreasListEl
-            ) return;
-
-            if (!compareFirstProfileState) {
-                compareEmptyEl.hidden = false;
-                compareActiveEl.hidden = true;
-                compareClearEl.hidden = true;
-                compareEmptyCopyEl.textContent = t("profiles.library_compare_empty_pick_first");
-                return;
-            }
-
-            if (!compareSecondProfileState) {
-                compareEmptyEl.hidden = false;
-                compareActiveEl.hidden = true;
-                compareClearEl.hidden = false;
-                compareEmptyCopyEl.textContent = t("profiles.library_compare_empty_pick_second").replace(
-                    "{name}",
-                    compareFirstProfileState.profile.name || t("profiles.none_selected"),
-                );
-                return;
-            }
-
-            const firstSnapshot = compareFirstProfileState.snapshot;
-            const secondSnapshot = compareSecondProfileState.snapshot;
-            const diff = buildCompareDiff(firstSnapshot, secondSnapshot);
-            compareEmptyEl.hidden = true;
-            compareActiveEl.hidden = false;
-            compareClearEl.hidden = false;
-            compareCurrentNameEl.textContent = compareFirstProfileState.profile.name || t("profiles.none_selected");
-            compareCurrentCopyEl.textContent = t("profiles.library_compare_saved_copy")
-                .replace("{schema}", formatSchemaLabel(firstSnapshot.schemaVersion));
-            compareOtherNameEl.textContent = compareSecondProfileState.profile.name || t("profiles.none_selected");
-            compareOtherCopyEl.textContent = t("profiles.library_compare_saved_copy").replace(
-                "{schema}",
-                formatSchemaLabel(secondSnapshot.schemaVersion),
-            );
-            compareMetadataCountEl.textContent = `${diff.metadataChanges.length}`;
-            comparePolicyCountEl.textContent = `${diff.policyEntries.size}`;
-            comparePreferenceCountEl.textContent = `${diff.preferenceEntries.size}`;
-            compareChangesCopyEl.textContent = diff.sampleChanges.length
-                ? t("profiles.library_compare_changes_active")
-                : t("profiles.compare_changes_none");
-            compareChangesListEl.innerHTML = "";
-            compareGuidedAreasCopyEl.textContent = diff.sampleChanges.length
-                ? t("profiles.compare_guided_areas_active")
-                : t("profiles.compare_guided_areas_none");
-            compareGuidedAreasListEl.innerHTML = "";
-
-            if (!diff.sampleChanges.length) {
-                const item = documentRef.createElement("li");
-                item.className = "compare-changes-item";
-                item.setAttribute("role", "listitem");
-                item.textContent = t("profiles.compare_no_diff");
-                compareChangesListEl.appendChild(item);
-
-                const groupedItem = documentRef.createElement("li");
-                groupedItem.className = "compare-changes-item";
-                groupedItem.setAttribute("role", "listitem");
-                groupedItem.textContent = t("profiles.compare_no_diff");
-                compareGuidedAreasListEl.appendChild(groupedItem);
-                return;
-            }
-
-            diff.sampleChanges.forEach((change) => {
-                const item = documentRef.createElement("li");
-                item.className = "compare-changes-item";
-                item.setAttribute("role", "listitem");
-                item.innerHTML = `
-                    <span class="compare-change-title">${change.title}</span>
-                    <span class="compare-change-copy">${change.copy}</span>
-                `;
-                compareChangesListEl.appendChild(item);
-            });
-
-            buildCompareAreaGroups(diff).forEach((group) => {
-                const item = documentRef.createElement("li");
-                item.className = "compare-changes-item";
-                item.setAttribute("role", "listitem");
-                const preview = group.items.slice(0, 3).join(", ");
-                const remaining = group.items.length - Math.min(group.items.length, 3);
-                const copy = remaining > 0
-                    ? t("profiles.compare_guided_area_more").replace("{items}", preview).replace("{remaining}", String(remaining))
-                    : t("profiles.compare_guided_area_preview").replace("{items}", preview);
-                item.innerHTML = `
-                    <span class="compare-change-title">${group.title} (${group.items.length})</span>
-                    <span class="compare-change-copy">${copy}</span>
-                `;
-                compareGuidedAreasListEl.appendChild(item);
+        function profileNameExists(name, sourceProfileId = null) {
+            const normalizedName = String(name || "").trim().toLocaleLowerCase();
+            if (!normalizedName) return false;
+            return (windowRef.__BPM_LIBRARY_ITEMS__ || []).some((profile) => {
+                if (sourceProfileId && profile.id === sourceProfileId) return false;
+                return String(profile.name || "").trim().toLocaleLowerCase() === normalizedName;
             });
         }
 
-        function clearCompareProfile(notify = true) {
-            compareFirstProfileState = null;
-            compareSecondProfileState = null;
-            renderComparePanel();
-            renderList(Array.isArray(windowRef.__BPM_LIBRARY_ITEMS__) ? windowRef.__BPM_LIBRARY_ITEMS__ : []);
-            if (notify) {
-                setStatus(t("profiles.status_compare_cleared"), "info");
+        function updateCloneNameControl(panelEl, profile) {
+            const inputEl = panelEl?.querySelector("[data-clone-name-input]");
+            const confirmEl = panelEl?.querySelector("[data-clone-name-confirm]");
+            const statusEl = panelEl?.querySelector("[data-clone-name-status]");
+            if (!inputEl || !confirmEl || !statusEl) return;
+
+            const cloneName = inputEl.value.trim();
+            let message = t("profiles.clone_name_ready");
+            let isValid = true;
+            if (!cloneName) {
+                message = t("profiles.clone_name_required");
+                isValid = false;
+            } else if (profileNameExists(cloneName, profile.id)) {
+                message = t("profiles.clone_name_duplicate");
+                isValid = false;
             }
+
+            statusEl.textContent = message;
+            statusEl.dataset.statusTone = isValid ? "info" : "warn";
+            inputEl.setAttribute("aria-invalid", isValid ? "false" : "true");
+            confirmEl.href = isValid ? buildCloneDraftHref(profile, cloneName) : "#";
+            confirmEl.setAttribute("aria-disabled", isValid ? "false" : "true");
+            confirmEl.classList.toggle("pointer-events-none", !isValid);
+            confirmEl.classList.toggle("opacity-50", !isValid);
         }
 
-        async function selectProfileForComparison(id) {
-            try {
-                const profile = await getProfile(id);
-                const nextState = buildCompareState(profile);
-                if (!nextState) return;
+        function closeOtherCloneNamePanels(activePanelEl = null) {
+            documentRef.querySelectorAll("[data-clone-name-panel]").forEach((panelEl) => {
+                if (panelEl === activePanelEl) return;
+                panelEl.hidden = true;
+            });
+            documentRef.querySelectorAll("[data-clone-profile-id]").forEach((buttonEl) => {
+                if (activePanelEl && buttonEl.getAttribute("aria-controls") === activePanelEl.id) return;
+                buttonEl.setAttribute("aria-expanded", "false");
+            });
+        }
 
-                if (!compareFirstProfileState) {
-                    compareFirstProfileState = nextState;
-                    compareSecondProfileState = null;
-                    setStatus(
-                        t("profiles.library_status_compare_first_selected").replace("{name}", profile.name),
-                        "info",
-                    );
-                } else if (compareFirstProfileState.profile.id === profile.id) {
-                    compareFirstProfileState = nextState;
-                    setStatus(
-                        t("profiles.library_status_compare_first_selected").replace("{name}", profile.name),
-                        "info",
-                    );
-                } else {
-                    compareSecondProfileState = nextState;
-                    setStatus(
-                        t("profiles.library_status_compare_ready")
-                            .replace("{first}", compareFirstProfileState.profile.name)
-                            .replace("{second}", profile.name),
-                        "info",
-                    );
-                }
-                renderComparePanel();
-                renderList(Array.isArray(windowRef.__BPM_LIBRARY_ITEMS__) ? windowRef.__BPM_LIBRARY_ITEMS__ : []);
-                if (compareSecondProfileState) {
-                    documentRef.getElementById("compare-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }
-            } catch (error) {
-                setStatus(t("profiles.error_compare").replace("{detail}", error?.message || String(error)), "error");
-            }
+        function openCloneNamePanel(panelEl, buttonEl, profile) {
+            if (!panelEl) return;
+            closeOtherCloneNamePanels(panelEl);
+            panelEl.hidden = false;
+            buttonEl?.setAttribute("aria-expanded", "true");
+            updateCloneNameControl(panelEl, profile);
+            const inputEl = panelEl.querySelector("[data-clone-name-input]");
+            inputEl?.focus();
+            inputEl?.select();
+        }
+
+        function closeCloneNamePanel(panelEl, buttonEl) {
+            if (!panelEl) return;
+            panelEl.hidden = true;
+            buttonEl?.setAttribute("aria-expanded", "false");
+            buttonEl?.focus();
         }
 
         function applyThemeMode(mode, persist = true) {
@@ -615,7 +307,6 @@
 
             await loadLocale(resolvedLanguage, requestId);
             await reloadList();
-            renderComparePanel();
         }
 
         function updateLibrarySummary(stats) {
@@ -657,33 +348,23 @@
             items.forEach((profile) => {
                 const li = documentRef.createElement("li");
                 li.className = "library-table-row";
-                const firstSelected = compareFirstProfileState?.profile?.id === profile.id;
-                const secondSelected = compareSecondProfileState?.profile?.id === profile.id;
-                const selected = firstSelected || secondSelected;
                 const openLabel = t("profiles.list_open");
-                const compareLabel = firstSelected
-                    ? t("profiles.library_compare_first_selected")
-                    : secondSelected
-                        ? t("profiles.library_compare_second_selected")
-                        : !compareFirstProfileState
-                            ? t("profiles.library_compare_select_first")
-                            : compareSecondProfileState
-                                ? t("profiles.library_compare_use_as_second")
-                                : t("profiles.library_compare_select_second");
                 const statusLabel = profile.is_deleted
                     ? t("profiles.badge_deleted")
                     : t("profiles.badge_active");
                 const validationLabel = formatValidationStateLabel(profile);
-                const profileOwner = profile.owner || t("profiles.library_owner_unassigned");
                 const profileDescription = profile.description || t("profiles.library_description_empty");
                 const editHref = `/profiles/${profile.id}/edit`;
                 const settingsHref = `/profiles/${profile.id}/settings${profile.is_deleted ? "?include_deleted=true" : ""}`;
                 const jsonHref = `/profiles/${profile.id}/json${profile.is_deleted ? "?include_deleted=true" : ""}`;
-                const duplicateHref = `/profiles/new?clone_from=${profile.id}${profile.is_deleted ? "&include_deleted=true" : ""}`;
                 const exportHref = `/api/export/profiles/${profile.id}/firefox/policies.json?download=1`;
+                const clonePanelId = `library-clone-name-panel-${profile.id}`;
+                const cloneInputId = `library-clone-name-input-${profile.id}`;
+                const cloneStatusId = `library-clone-name-status-${profile.id}`;
+                const defaultCloneName = buildDefaultCloneName(profile);
 
                 li.innerHTML = `
-                    <div class="library-row-grid profile-list-button ${selected ? "profile-list-button--selected" : ""}">
+                    <div class="library-row-grid profile-list-button">
                         <div class="library-row-primary">
                             <a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">
                                 ${escapeHtml(profile.name)}
@@ -692,7 +373,6 @@
                         </div>
 
                         <div class="library-row-context" data-label="${escapeHtml(t("profiles.library_column_context"))}">
-                            <div class="library-row-context-owner">${escapeHtml(profileOwner)}</div>
                             <div class="library-row-context-note">${escapeHtml(profileDescription)}</div>
                         </div>
 
@@ -718,7 +398,7 @@
                         </div>
 
                         <div class="library-row-actions">
-                            <a class="button-base library-row-open-button ${selected ? "library-row-open-button--selected" : ""}" href="${editHref}" target="_blank" rel="noopener">
+                            <a class="button-base library-row-open-button" href="${editHref}" target="_blank" rel="noopener">
                                 ${openLabel}
                             </a>
                             <div class="library-row-action-grid">
@@ -728,9 +408,14 @@
                                 <a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">
                                     ${t("profiles.library_action_json")}
                                 </a>
-                                <a class="button-base ghost-button library-row-secondary-action" href="${duplicateHref}" target="_blank" rel="noopener">
+                                <button
+                                    type="button"
+                                    class="button-base ghost-button library-row-secondary-action"
+                                    data-clone-profile-id="${profile.id}"
+                                    aria-controls="${clonePanelId}"
+                                    aria-expanded="false">
                                     ${t("profiles.library_action_duplicate")}
-                                </a>
+                                </button>
                                 ${profile.is_deleted ? `
                                     <span
                                         class="button-base ghost-button library-row-secondary-action library-row-secondary-action--disabled"
@@ -750,23 +435,76 @@
                                     data-library-profile-id="${profile.id}">
                                     ${profile.is_deleted ? t("profiles.restore") : t("profiles.soft_delete")}
                                 </button>
-                                <button
-                                    type="button"
-                                    class="button-base ghost-button library-row-secondary-action profile-compare-button ${selected ? "profile-compare-button--active" : ""}"
-                                    data-compare-profile-id="${profile.id}">
-                                    ${compareLabel}
-                                </button>
+                            </div>
+                            <div
+                                id="${clonePanelId}"
+                                class="library-clone-name-panel"
+                                data-clone-name-panel
+                                hidden>
+                                <label class="field-label" for="${cloneInputId}">
+                                    ${t("profiles.clone_name_label")}
+                                </label>
+                                <div class="library-clone-name-controls">
+                                    <input
+                                        id="${cloneInputId}"
+                                        type="text"
+                                        class="soft-input library-clone-name-input"
+                                        value="${escapeHtml(defaultCloneName)}"
+                                        aria-describedby="${cloneStatusId}"
+                                        data-clone-name-input />
+                                    <div class="library-clone-name-actions">
+                                        <a
+                                            class="button-base primary-button library-clone-name-confirm"
+                                            href="${buildCloneDraftHref(profile, defaultCloneName)}"
+                                            target="_blank"
+                                            rel="noopener"
+                                            data-clone-name-confirm>
+                                            ${t("profiles.clone_name_confirm")}
+                                        </a>
+                                        <button
+                                            type="button"
+                                            class="button-base ghost-button library-clone-name-cancel"
+                                            data-clone-name-cancel>
+                                            ${t("profiles.clone_name_cancel")}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div
+                                    id="${cloneStatusId}"
+                                    class="library-clone-name-status"
+                                    role="status"
+                                    aria-live="polite"
+                                    data-clone-name-status>
+                                    ${t("profiles.clone_name_ready")}
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
-                const compareButton = li.querySelector("[data-compare-profile-id]");
-                compareButton?.addEventListener("click", async () => {
-                    await selectProfileForComparison(profile.id);
-                });
                 const lifecycleButton = li.querySelector("[data-library-lifecycle-action]");
                 lifecycleButton?.addEventListener("click", async () => {
                     await runLibraryLifecycleAction(profile, lifecycleButton.dataset.libraryLifecycleAction);
+                });
+                const cloneButton = li.querySelector("[data-clone-profile-id]");
+                const clonePanel = li.querySelector("[data-clone-name-panel]");
+                cloneButton?.addEventListener("click", () => {
+                    if (clonePanel?.hidden === false) {
+                        closeCloneNamePanel(clonePanel, cloneButton);
+                    } else {
+                        openCloneNamePanel(clonePanel, cloneButton, profile);
+                    }
+                });
+                clonePanel?.querySelector("[data-clone-name-input]")?.addEventListener("input", () => {
+                    updateCloneNameControl(clonePanel, profile);
+                });
+                clonePanel?.querySelector("[data-clone-name-confirm]")?.addEventListener("click", (event) => {
+                    updateCloneNameControl(clonePanel, profile);
+                    if (event.currentTarget.getAttribute("aria-disabled") === "true") {
+                        event.preventDefault();
+                    }
+                });
+                clonePanel?.querySelector("[data-clone-name-cancel]")?.addEventListener("click", () => {
+                    closeCloneNamePanel(clonePanel, cloneButton);
                 });
                 listEl.appendChild(li);
             });
@@ -805,7 +543,6 @@
                 ]);
                 renderList(items);
                 updateLibrarySummary(stats);
-                renderComparePanel();
             } catch (error) {
                 console.warn("library list load failed:", error);
             }
@@ -910,9 +647,6 @@
                 const file = event.target.files?.[0] || null;
                 await doImportFirefoxPoliciesJson(file);
             });
-            compareClearEl?.addEventListener("click", () => {
-                clearCompareProfile();
-            });
         }
 
         async function initialize() {
@@ -927,7 +661,6 @@
             applyThemeMode(savedThemeMode, false);
             setImportStatus(t("profiles.import_firefox_policies_ready"));
             await applyLanguageMode(savedLangMode, false);
-            renderComparePanel();
         }
 
         bindControls();

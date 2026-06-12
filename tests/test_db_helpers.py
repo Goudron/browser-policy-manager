@@ -247,7 +247,6 @@ def test_upgrade_legacy_sqlite_schema_skips_deleted_at_when_already_present(tmp_
                     description TEXT,
                     schema_version VARCHAR(50) NOT NULL,
                     flags JSON NOT NULL,
-                    owner VARCHAR(255),
                     deleted_at DATETIME,
                     created_at DATETIME NOT NULL,
                     updated_at DATETIME NOT NULL

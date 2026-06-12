@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.8.5"
+version = "0.8.7.1"
 description = "Firefox enterprise policy profile manager with guided, visual settings, and JSON editing workflows."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -134,6 +134,10 @@ markers = [
   "browser_ui: runs Chromium-based browser UI regression tests",
   "firefox_live: runs live Firefox enterprise-policy tests",
   "firefox_live_amo: runs live Firefox AMO canary tests",
+]
+filterwarnings = [
+  "ignore:websockets\\.legacy is deprecated:DeprecationWarning:websockets\\.legacy",
+  "ignore:websockets\\.server\\.WebSocketServerProtocol is deprecated:DeprecationWarning:uvicorn\\.protocols\\.websockets\\.websockets_impl",
 ]
 
 [tool.coverage.run]

@@ -6,30 +6,35 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.8.5`<br>
+**Version:** `0.8.7.1`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
-## What's New In 0.8.5
+## What's Included In 0.8.7.1
 
-BPM 0.8.5 is a maintenance and refactoring release focused on making the project easier to
-change without altering its product contract.
+BPM 0.8.7.1 ships the compare and clone UI polish from the patch line.
 
-- Split large frontend, backend, test, locale, and documentation ownership areas into smaller,
-  more explicit modules and generated sources.
-- Added reproducible frontend vendor, locale catalog, repository health, and release-readiness
-  workflows through Make targets and contract checks.
-- Introduced marker-based test layers, stronger database/app/cache isolation, and an opt-in
-  pure-unit `pytest-xdist` pilot while keeping mandatory CI serial.
-- Archived completed planning and audit documents behind a maintained docs index and manifest.
+- Saved-profile comparison lives only in the dedicated `/profiles/compare` interface.
+- The Library stays focused on profile management and opens the comparison workflow in a new tab.
+- The comparison interface shares the product language and theme preferences with Library and editor
+  routes, including new-tab handoff from Library.
+- Profile selection in Compare uses bounded, searchable result lists that remain usable with large
+  saved-profile libraries.
+- Compare table setting labels render policy and managed-preference identities without duplicated
+  names or keys.
+- Duplicate/clone actions ask for the new draft name before opening the clone draft, and localized
+  clone controls stay inside the Library action panel.
+- Guided editor, All settings, and JSON editor routes open independently so related work can stay
+  in separate browser tabs.
 
 ## Product Scope
 
-BPM manages one canonical profile model and exposes it through four dedicated UI surfaces:
+BPM manages one canonical profile model and exposes it through five dedicated UI surfaces:
 
 | Surface | Purpose |
 |---|---|
 | Profile library | Manage saved profiles, lifecycle state, schema channel, validation status, duplication, export, and editor entry points. |
+| Profile comparison | Quickly find two saved profiles and compare policy and managed-preference settings side by side. |
 | Guided editor | Build common Firefox policy profiles through a shorter task-first workflow. |
 | All settings | Search and edit the full visual catalog of supported schema-backed controls. |
 | JSON editor | Edit the complete Firefox Enterprise `policies.json` document directly. |
@@ -42,6 +47,10 @@ creates a profile ID.
 
 - Database-backed Firefox policy profile library.
 - Create, edit, duplicate, archive, restore, hard-delete, import, and export workflows.
+- Named clone drafts that preserve the source configuration while letting the user choose the new
+  profile name before opening the draft.
+- Dedicated saved-profile comparison with fast two-profile search and a two-column settings table
+  covering both policies and managed preferences.
 - Firefox Enterprise `policies.json` import and export at the product boundary.
 - Version-aware validation against bundled Firefox policy schemas.
 - Guided editor for common administrator and security-team scenarios.
@@ -71,6 +80,7 @@ fields in the UI, while Firefox Release 151 exposes the current AI controls.
 |---|---|
 | `GET /` | JSON root endpoint with app status and version. |
 | `GET /profiles` | Profile library. |
+| `GET /profiles/compare` | Dedicated saved-profile comparison interface. |
 | `GET /profiles/new` | Guided editor for a new draft. |
 | `GET /profiles/{id}/edit` | Guided editor for an existing profile. |
 | `GET /profiles/{id}/settings` | All settings catalog for an existing profile. |
@@ -146,8 +156,8 @@ JSON import example:
 ```
 
 The import endpoint also accepts `multipart/form-data` with a `file` field containing a Firefox
-`policies.json` file. Optional form fields include `name`, `description`, `schema_version`,
-`owner`, and `compliance`.
+`policies.json` file. Optional form fields include `name`, `description`, `schema_version`, and
+`compliance`.
 
 Export example:
 
@@ -169,6 +179,22 @@ For migration and breaking-change notes around this contract, see
 The library is the operational home for saved profiles. It supports profile search and filtering,
 schema and lifecycle visibility, validation state, duplication, import, export, archive/restore,
 and direct entry into the guided editor, All settings, or JSON editor.
+
+Comparison is intentionally not embedded in the Library. The Library provides a compare action that
+opens `/profiles/compare` in a new tab and carries the selected language and theme preference into
+the comparison route.
+
+Duplicating a profile opens a clone-name control first. After the name is confirmed, BPM opens a
+new guided-editor draft initialized from the selected profile and the requested clone name. The
+clone-name controls wrap within the Library action panel across the active locale set.
+
+### Profile Comparison
+
+The comparison interface is built for quick side-by-side review of two saved profiles. Each side
+has its own profile search and selected-profile summary. The settings table compares the union of
+policy and managed-preference settings present in either profile, with explicit missing, same-value,
+and different-value states. Result lists are bounded and scrollable for larger libraries, and the
+setting column keeps policy/preference identity readable without repeating the same identifier.
 
 ### Guided Editor
 
@@ -199,7 +225,7 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 The primary project and UI source language is English. Product copy starts from
 `app/i18n/en.json` and English maintainer documentation before it is localized.
 
-BPM 0.8.5 ships a six-locale UI matrix:
+BPM 0.8.7.1 keeps a six-locale UI matrix:
 
 | Locale | Native label | Status |
 |---|---|---|
@@ -274,6 +300,15 @@ Quality checks:
 make quality
 ```
 
+Equivalent focused gates:
+
+```bash
+make typecheck
+make lint
+pytest -q
+make coverage
+```
+
 Coverage-oriented run:
 
 ```bash
@@ -322,17 +357,19 @@ make test-firefox-live
 make test-firefox-live-amo
 ```
 
-`browser_ui` is a compact Chromium/Selenium smoke layer. It checks Firefox
+`browser_ui` is a compact local Chromium/Selenium smoke layer. It checks Firefox
 policies import, the Library, Guided editor, All settings, JSON editor, route
-handoff links, and the Russian/Simplified Chinese locale pair. Deep UI behavior,
-full locale quality, and edit/export edge cases stay in faster API and static
-contract tests.
+handoff links, the dedicated comparison workflow, compare locale handoff, large
+compare selector lists, comparison table setting labels, named clone drafts,
+clone-name action bounds, and the Russian/Simplified Chinese locale pair. Deep
+UI behavior, full locale quality, and edit/export edge cases stay in faster API
+and static contract tests. GitHub Actions runs mypy, Ruff, and pytest with
+coverage; browser UI smoke remains a local/release verification layer.
 
-`pytest-xdist` is intentionally not enabled in mandatory BPM 0.8.5 CI. The
-opt-in pure-unit pilot is available through `make test-unit-pilot` and
-`make test-unit-xdist`. See
+`pytest-xdist` is intentionally not enabled in mandatory CI. The opt-in pure-unit
+pilot is available through `make test-unit-pilot` and `make test-unit-xdist`. See
 [`docs/architecture/pytest-xdist-readiness.md`](docs/architecture/pytest-xdist-readiness.md)
-for the final BPM 0.8.5 decision and future adoption gates.
+for the xdist decision and future adoption gates.
 
 Live Firefox policy checks validate Firefox runtime behavior for exported `policies.json`
 artifacts rather than the `/profiles` browser UI.

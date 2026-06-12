@@ -73,15 +73,6 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-panel"',
     'id="wizard-starter-catalog"',
     'class="wizard-baseline-stack"',
-    'id="compare-panel"',
-    'id="compare-clear"',
-    'id="compare-empty"',
-    'id="compare-active"',
-    'id="compare-current-name"',
-    'id="compare-other-name"',
-    'id="compare-changes-list"',
-    'id="compare-guided-areas-copy"',
-    'id="compare-guided-areas-list"',
     'data-scenario-key="corporate_default"',
     'data-scenario-key="shared_devices"',
     'data-scenario-key="hardened"',
@@ -113,9 +104,6 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'data-cis-layer-key="none"',
     'data-cis-layer-key="cis_l1"',
     'data-cis-layer-key="cis_l2"',
-    'id="profile-clone-handoff-panel"',
-    'id="profile-clone-handoff-copy" role="status" aria-live="polite"',
-    'id="profile-clone-handoff-list" role="list"',
     'id="profile-lifecycle-panel"',
     'id="profile-lifecycle-copy"',
     'id="profile-lifecycle-list"',
@@ -575,7 +563,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.reset_library"] == "Clear profile library"
     assert locale_json["profiles.library_filtered_short"] == "Filtered"
     assert locale_json["profiles.library_total_short"] == "Library"
-    assert locale_json["profiles.library_column_context"] == "Owner / note"
+    assert locale_json["profiles.library_column_context"] == "Note"
     assert locale_json["profiles.library_action_all_settings"] == "All settings"
     assert locale_json["profiles.library_action_duplicate"] == "Duplicate"
     assert locale_json["profiles.library_profile_archived"] == "Profile {name} archived."
@@ -595,15 +583,11 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.none_selected"] == "Choose a profile"
     assert locale_json["profiles.list_open"] == "Open profile"
     assert locale_json["profiles.list_selected_hint"] == "This profile is currently open."
-    assert locale_json["profiles.compare_title"] == "Compare two profiles"
+    assert locale_json["profiles.compare_route_title"] == "Compare profile settings"
     assert locale_json["profiles.compare_action"] == "Compare here"
-    assert locale_json["profiles.clone_action"] == "Clone and adjust"
     assert locale_json["profiles.clone_handoff_title"] == (
         "Recommended checks for this derived draft"
     )
-    assert locale_json["profiles.clone_handoff_compare"] == "Compare now"
-    assert locale_json["profiles.compare_summary_policies"] == "Changed policy areas"
-    assert locale_json["profiles.compare_guided_areas_title"] == "Differences by guided area"
     assert locale_json["profiles.wizard_summary_derived"] == "Based on"
     assert locale_json["profiles.lifecycle_review_title"] == "Lifecycle review"
     assert locale_json["profiles.selection_empty_status"] == "Choose a profile or start a new draft to begin."
@@ -1205,7 +1189,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.reset_library"] == "Очистить библиотеку профилей"
     assert locale_json["profiles.library_filtered_short"] == "Отфильтровано"
     assert locale_json["profiles.library_total_short"] == "Всего"
-    assert locale_json["profiles.library_column_context"] == "Владелец / заметка"
+    assert locale_json["profiles.library_column_context"] == "Заметка"
     assert locale_json["profiles.library_action_all_settings"] == "Все настройки"
     assert locale_json["profiles.library_action_duplicate"] == "Дублировать"
     assert locale_json["profiles.library_profile_archived"] == "Профиль «{name}» отправлен в архив."
@@ -1225,15 +1209,11 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.none_selected"] == "Выберите профиль"
     assert locale_json["profiles.list_open"] == "Открыть профиль"
     assert locale_json["profiles.list_selected_hint"] == "Этот профиль сейчас открыт."
-    assert locale_json["profiles.compare_title"] == "Сравнение двух профилей"
+    assert locale_json["profiles.compare_route_title"] == "Сравнить настройки профилей"
     assert locale_json["profiles.compare_action"] == "Сравнить здесь"
-    assert locale_json["profiles.clone_action"] == "Клонировать и доработать"
     assert locale_json["profiles.clone_handoff_title"] == (
         "Что обычно стоит проверить в производной копии"
     )
-    assert locale_json["profiles.clone_handoff_compare"] == "Сравнить сейчас"
-    assert locale_json["profiles.compare_summary_policies"] == "Изменённые области политик"
-    assert locale_json["profiles.compare_guided_areas_title"] == "Различия по шагам мастера"
     assert locale_json["profiles.wizard_summary_derived"] == "Основан на"
     assert locale_json["profiles.lifecycle_review_title"] == "Жизненный цикл профиля"
     assert locale_json["profiles.selection_empty_status"] == "Выберите профиль или начните новый черновик, чтобы начать."

@@ -32,7 +32,6 @@ def _profile_read(**overrides):
         "schema_version": "esr-140.11",
         "flags": {"DisableTelemetry": True},
         "revision": 1,
-        "owner": "qa",
         "created_at": datetime(2026, 1, 1),
         "updated_at": datetime(2026, 1, 2),
         "deleted_at": None,

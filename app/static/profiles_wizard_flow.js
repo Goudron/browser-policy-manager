@@ -375,7 +375,6 @@
                 return {
                     form: {
                         name: typeof parsed.name === "string" ? parsed.name : "",
-                        owner: typeof parsed.owner === "string" ? parsed.owner : "",
                         description: typeof parsed.description === "string" ? parsed.description : "",
                         schemaVersion: typeof parsed.schemaVersion === "string" ? parsed.schemaVersion : defaultSchemaVersion,
                     },
@@ -534,12 +533,10 @@
             if (!editor || !snapshot) return false;
 
             const profileTypeEl = documentRef.getElementById("profile-type");
-            const ownerInput = documentRef.getElementById("profile-owner");
             const descriptionInput = documentRef.getElementById("profile-description");
             const nextSchemaVersion = snapshot.form?.schemaVersion || defaultSchemaVersion;
 
             nameInput.value = snapshot.form?.name || "";
-            if (ownerInput) ownerInput.value = snapshot.form?.owner || "";
             if (descriptionInput) descriptionInput.value = snapshot.form?.description || "";
             if (profileTypeEl) profileTypeEl.value = nextSchemaVersion;
             if (wizardSchemaEl) wizardSchemaEl.value = nextSchemaVersion;

@@ -68,6 +68,7 @@ def _build_profiles_page_context(
     settings_href: str | None = None,
     json_href: str | None = None,
     clone_source_id: int | None = None,
+    clone_name: str | None = None,
 ) -> dict[str, object]:
     return build_profiles_page_context(
         request,
@@ -85,6 +86,7 @@ def _build_profiles_page_context(
         settings_href=settings_href,
         json_href=json_href,
         clone_source_id=clone_source_id,
+        clone_name=clone_name,
     )
 
 
@@ -96,6 +98,13 @@ def _resolve_positive_int(raw_value: str | None) -> int | None:
     except ValueError:
         return None
     return value if value > 0 else None
+
+
+def _resolve_clone_name(raw_value: str | None) -> str | None:
+    if raw_value is None:
+        return None
+    value = raw_value.strip()
+    return value or None
 
 
 @router.get("/profiles", response_class=HTMLResponse)
@@ -115,10 +124,25 @@ async def profiles_page(
     )
 
 
+@router.get("/profiles/compare", response_class=HTMLResponse)
+async def profiles_compare_page(request: Request) -> HTMLResponse:
+    """Render the dedicated saved-profile comparison shell."""
+    return templates.TemplateResponse(
+        request,
+        "profiles_compare.html",
+        _build_profiles_page_context(
+            request,
+            title=f"Compare profile settings — {settings.APP_NAME}",
+            route_mode="compare",
+        ),
+    )
+
+
 @router.get("/profiles/new", response_class=HTMLResponse)
 async def profiles_new_page(request: Request) -> HTMLResponse:
     """Render the visual wizard shell for a new profile draft."""
     clone_source_id = _resolve_positive_int(request.query_params.get("clone_from"))
+    clone_name = _resolve_clone_name(request.query_params.get("clone_name"))
     include_deleted = resolve_include_deleted_flag(request.query_params.get("include_deleted"))
     return templates.TemplateResponse(
         request,
@@ -129,6 +153,7 @@ async def profiles_new_page(request: Request) -> HTMLResponse:
             route_mode="new",
             include_deleted=include_deleted,
             clone_source_id=clone_source_id,
+            clone_name=clone_name,
         ),
     )
 

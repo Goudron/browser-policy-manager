@@ -127,6 +127,7 @@ def build_profiles_page_context(
     settings_href: str | None = None,
     json_href: str | None = None,
     clone_source_id: int | None = None,
+    clone_name: str | None = None,
 ) -> dict[str, object]:
     current_year = (now or datetime.now(UTC)).year
     footer_year_range = "2025" if current_year <= 2025 else f"2025-{current_year}"
@@ -159,6 +160,7 @@ def build_profiles_page_context(
         "settings_href": settings_href,
         "json_href": json_href,
         "clone_source_id": clone_source_id,
+        "clone_name": clone_name,
         "wizard_settings_catalog": wizard_settings_catalog,
         "wizard_preferences_catalog": wizard_preferences_catalog,
         "wizard_preferences_sections_by_id": {

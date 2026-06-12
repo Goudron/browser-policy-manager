@@ -10,23 +10,26 @@ def _workflow_source(filename: str) -> str:
     return (WORKFLOWS_DIR / filename).read_text(encoding="utf-8")
 
 
-def test_ci_workflow_splits_mandatory_fast_and_coverage_layers():
+def test_ci_workflow_runs_single_pytest_coverage_layer():
     source = _workflow_source("ci.yml")
 
-    assert "fast-tests:" in source
-    assert "name: Mandatory fast tests" in source
-    assert "make test-fast" in source
-    assert "coverage-and-contracts:" in source
-    assert "name: Coverage and contract checks" in source
-    assert "make test-contract" in source
-    assert '-m "not browser_ui and not firefox_live and not firefox_live_amo"' in source
+    assert "fast-tests:" not in source
+    assert "coverage:" in source
+    assert "name: Pytest with coverage" in source
+    assert "make test-fast" not in source
+    assert "make test-contract" not in source
+    assert "pytest \\" in source
+    assert "-q \\" in source
     assert "--cov-fail-under=85" in source
 
 
-def test_ci_workflow_verifies_frontend_vendor_lock():
+def test_ci_workflow_keeps_only_requested_quality_gates():
     source = _workflow_source("ci.yml")
 
-    assert "make verify-frontend-vendor" in source
+    assert "make lint" in source
+    assert "make typecheck" in source
+    assert "make verify-frontend-vendor" not in source
+    assert "Guard legacy schema refs" not in source
     assert "test -f app/static/vendor/js-yaml.js" not in source
 
 
@@ -39,18 +42,14 @@ def test_ci_workflow_uses_make_targets_for_quality_commands():
     assert "mypy app" not in source
 
 
-def test_ci_workflow_keeps_browser_ui_manual_only():
+def test_ci_workflow_excludes_browser_ui_checks():
     source = _workflow_source("ci.yml")
 
-    assert "run-browser-ui:" in source
-    assert "browser-ui:" in source
-    assert "name: Browser UI checks" in source
-    assert "github.event_name == 'workflow_dispatch' && inputs.run-browser-ui" in source
-    assert "make test-ui" in source
-    assert "make test-ui" not in source.split("fast-tests:", maxsplit=1)[1].split(
-        "coverage-and-contracts:",
-        maxsplit=1,
-    )[0]
+    assert "run-browser-ui:" not in source
+    assert "browser-ui:" not in source
+    assert "name: Browser UI checks" not in source
+    assert "github.event_name == 'workflow_dispatch' && inputs.run-browser-ui" not in source
+    assert "make test-ui" not in source
 
 
 def test_ci_workflow_does_not_enable_xdist_in_mandatory_jobs():

@@ -162,11 +162,15 @@ def test_readme_documents_target_and_active_locale_sets():
     readme = README_PATH.read_text(encoding="utf-8")
     readme_single_line = " ".join(readme.split())
 
-    assert "**Version:** `0.8.5`" in readme
+    assert "**Version:** `0.8.7.1`" in readme
+    assert "## What's Included In 0.8.7.1" in readme
+    assert "BPM 0.8.7.1 ships the compare and clone UI polish from the patch line." in readme
+    assert "Saved-profile comparison lives only in the dedicated `/profiles/compare` interface." in readme
+    assert "Compare table setting labels render policy and managed-preference identities without duplicated" in readme
     assert "English source UI with six active runtime locale catalogs." in readme
     assert "The primary project and UI source language is English." in readme
     assert "`app/i18n/en.json`" in readme
-    assert "BPM 0.8.5 ships a six-locale UI matrix:" in readme
+    assert "BPM 0.8.7.1 keeps a six-locale UI matrix:" in readme
     assert "| `de` | Deutsch | Active localized catalog |" in readme
     assert "| `zh-CN` | 简体中文 | Active localized catalog |" in readme
     assert "| `fr` | Français | Active localized catalog |" in readme

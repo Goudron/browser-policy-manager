@@ -105,18 +105,14 @@ def build_profile_payload(
     description: str = "Test profile",
     schema_version: str = "esr-140.11",
     flags: dict[str, Any] | None = None,
-    owner: str | None = None,
     name: str | None = None,
 ) -> dict[str, Any]:
-    payload = {
+    return {
         "name": name or f"{name_prefix}-{uuid.uuid4().hex[:6]}",
         "description": description,
         "schema_version": schema_version,
         "flags": flags or {"DisableTelemetry": True},
     }
-    if owner is not None:
-        payload["owner"] = owner
-    return payload
 
 
 def make_test_client(app: FastAPI | None = None, **kwargs: Any) -> TestClient:

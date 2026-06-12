@@ -29,6 +29,7 @@ def test_legacy_sqlite_schema_is_renamed_and_completed(tmp_path: Path):
                 )
             )
             conn.execute(text("CREATE UNIQUE INDEX ix_policies_name ON policies (name)"))
+            conn.execute(text("CREATE INDEX ix_policies_owner ON policies (owner)"))
             conn.execute(text("CREATE INDEX ix_policies_created_at ON policies (created_at)"))
             conn.execute(text("CREATE INDEX ix_policies_updated_at ON policies (updated_at)"))
 
@@ -39,6 +40,7 @@ def test_legacy_sqlite_schema_is_renamed_and_completed(tmp_path: Path):
         assert "policies" not in inspector.get_table_names()
 
         columns = {column["name"] for column in inspector.get_columns("profiles")}
+        assert "owner" not in columns
         assert "deleted_at" in columns
         assert "revision" in columns
 
@@ -47,7 +49,8 @@ def test_legacy_sqlite_schema_is_renamed_and_completed(tmp_path: Path):
         assert "ix_profiles_created_at" in index_names
         assert "ix_profiles_updated_at" in index_names
         assert "ix_profiles_schema_version" in index_names
-        assert "ix_profiles_owner" in index_names
+        assert "ix_profiles_owner" not in index_names
+        assert "ix_policies_owner" not in index_names
         assert "ix_profiles_deleted_at" in index_names
         assert "ix_policies_name" not in index_names
     finally:

@@ -189,6 +189,7 @@
         if (resolvedFilters.q) url.searchParams.set("q", resolvedFilters.q);
         if (resolvedFilters.schemaVersion) url.searchParams.set("schema_version", resolvedFilters.schemaVersion);
         if (resolvedFilters.validationState) url.searchParams.set("validation_state", resolvedFilters.validationState);
+        if (resolvedFilters.limit) url.searchParams.set("limit", String(resolvedFilters.limit));
         url.searchParams.set("lifecycle", resolvedFilters.lifecycle || "active");
         if (resolvedFilters.lifecycle === "archived" || resolvedFilters.lifecycle === "all" || resolvedFilters.includeDeleted) {
             url.searchParams.set("include_deleted", "true");
@@ -228,7 +229,7 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
         });
-        if (!res.ok) throw new Error(await readError(res));
+        if (!res.ok) throw await profileRequestError(res);
         return await res.json();
     }
 

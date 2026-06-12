@@ -8,7 +8,8 @@ from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
 
-CURRENT_HEAD = "20260521_upgrade_profiles_to_firefox151"
+CURRENT_HEAD = "20260606_drop_profile_owner"
+PRE_OWNER_DROP_HEAD = "20260521_upgrade_profiles_to_firefox151"
 
 
 @pytest.mark.order(1)  # run early, but after environment setup
@@ -45,6 +46,9 @@ def test_alembic_upgrade_head_on_sqlite_tmp(tmp_path: Path):
         cols = {c["name"] for c in insp.get_columns("profiles")}
         assert "deleted_at" in cols
         assert "revision" in cols
+        assert "owner" not in cols
+        index_names = {idx["name"] for idx in insp.get_indexes("profiles")}
+        assert "ix_profiles_owner" not in index_names
         with engine.connect() as conn:
             version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
         assert version == CURRENT_HEAD
@@ -110,9 +114,11 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
         assert "policies" not in insp.get_table_names()
         columns = {column["name"] for column in insp.get_columns("profiles")}
         assert "revision" in columns
+        assert "owner" not in columns
         index_names = {idx["name"] for idx in insp.get_indexes("profiles")}
         assert "ix_profiles_name" in index_names
         assert "ix_profiles_deleted_at" in index_names
+        assert "ix_profiles_owner" not in index_names
         assert "ix_policies_name" not in index_names
         with engine.connect() as conn:
             version = conn.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
@@ -124,5 +130,49 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
             ("legacy-esr", "esr-140.11"),
             ("legacy-release", "release-151"),
         ]
+    finally:
+        engine.dispose()
+
+
+@pytest.mark.order(3)
+def test_alembic_profile_owner_drop_upgrade_and_downgrade(tmp_path: Path):
+    ini = Path("alembic.ini")
+    if not ini.exists():
+        pytest.skip("alembic.ini not found; skipping alembic smoke test")
+
+    db_path = tmp_path / "owner-drop.db"
+    url = f"sqlite:///{db_path}"
+    cfg = Config(str(ini))
+    cfg.set_main_option("sqlalchemy.url", url)
+
+    engine = create_engine(url, future=True)
+    try:
+        command.upgrade(cfg, PRE_OWNER_DROP_HEAD)
+        insp = inspect(engine)
+        columns = {column["name"] for column in insp.get_columns("profiles")}
+        assert "owner" in columns
+        assert "ix_profiles_owner" in {idx["name"] for idx in insp.get_indexes("profiles")}
+    finally:
+        engine.dispose()
+
+    command.upgrade(cfg, CURRENT_HEAD)
+
+    engine = create_engine(url, future=True)
+    try:
+        insp = inspect(engine)
+        columns = {column["name"] for column in insp.get_columns("profiles")}
+        assert "owner" not in columns
+        assert "ix_profiles_owner" not in {idx["name"] for idx in insp.get_indexes("profiles")}
+    finally:
+        engine.dispose()
+
+    command.downgrade(cfg, PRE_OWNER_DROP_HEAD)
+
+    engine = create_engine(url, future=True)
+    try:
+        insp = inspect(engine)
+        columns = {column["name"] for column in insp.get_columns("profiles")}
+        assert "owner" in columns
+        assert "ix_profiles_owner" in {idx["name"] for idx in insp.get_indexes("profiles")}
     finally:
         engine.dispose()

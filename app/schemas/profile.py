@@ -16,7 +16,6 @@ class ProfileBase(BaseModel):
     schema_version: str = Field(default=DEFAULT_SCHEMA_CHANNEL, max_length=50)
     flags: dict[str, Any] = Field(default_factory=dict)
     compliance: dict[str, Any] | None = None
-    owner: str | None = Field(default=None, max_length=255)
 
 
 class ProfileCreate(ProfileBase):
@@ -28,7 +27,6 @@ class ProfileUpdate(BaseModel):
     schema_version: str | None = Field(default=None, max_length=50)
     flags: dict[str, Any] | None = None
     compliance: dict[str, Any] | None = None
-    owner: str | None = Field(default=None, max_length=255)
     expected_revision: int | None = Field(default=None, ge=1)
 
 

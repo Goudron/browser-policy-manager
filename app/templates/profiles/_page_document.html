@@ -19,6 +19,7 @@
     {% if include_deleted %}data-include-deleted="true"{% endif %}
     {% if editing_profile_schema_version %}data-editing-profile-schema-version="{{ editing_profile_schema_version }}"{% endif %}
     {% if editing_profile_id is not none %}data-editing-profile-id="{{ editing_profile_id }}"{% endif %}
+    {% if clone_name %}data-clone-name="{{ clone_name }}"{% endif %}
     {% if clone_source_id is not none %}data-clone-source-id="{{ clone_source_id }}"{% endif %}>
     {% include profiles_shell_template %}
     <script id="profiles-initial-locale" type="application/json">{{ initial_locale | tojson }}</script>

@@ -27,8 +27,10 @@ _CURRENT_PROFILE_TABLE = "profiles"
 _LEGACY_PROFILE_INDEXES = (
     "ix_policies_created_at",
     "ix_policies_name",
+    "ix_policies_owner",
     "ix_policies_updated_at",
     "uq_policies_name",
+    "ix_profiles_owner",
     "uq_profiles_name",
 )
 _CURRENT_PROFILE_INDEX_DDL = (
@@ -36,7 +38,6 @@ _CURRENT_PROFILE_INDEX_DDL = (
     "CREATE UNIQUE INDEX IF NOT EXISTS ix_profiles_name ON profiles (name)",
     "CREATE INDEX IF NOT EXISTS ix_profiles_updated_at ON profiles (updated_at)",
     "CREATE INDEX IF NOT EXISTS ix_profiles_schema_version ON profiles (schema_version)",
-    "CREATE INDEX IF NOT EXISTS ix_profiles_owner ON profiles (owner)",
     "CREATE INDEX IF NOT EXISTS ix_profiles_deleted_at ON profiles (deleted_at)",
 )
 
@@ -246,6 +247,9 @@ def _upgrade_legacy_sqlite_schema(sync_engine: Engine) -> None:
 
         for index_name in _LEGACY_PROFILE_INDEXES:
             conn.exec_driver_sql(f"DROP INDEX IF EXISTS {index_name}")
+
+        if "owner" in columns:
+            conn.exec_driver_sql("ALTER TABLE profiles DROP COLUMN owner")
 
         for ddl in _CURRENT_PROFILE_INDEX_DDL:
             conn.exec_driver_sql(ddl)

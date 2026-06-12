@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.8.7.1
+
+### Changed
+- Completed the BPM 0.8.7.1 polish pass for the dedicated `/profiles/compare` route.
+- Made Compare participate in the shared language and theme preference flow, including Library
+  new-tab handoff.
+- Documented the completed compare and clone behavior in README and local visual QA notes.
+
+### Fixed
+- Fixed Compare language/theme persistence so the route no longer falls out of sync with the
+  Library-selected preferences.
+- Improved large profile selection in Compare with bounded, scrollable search results and clearer
+  name, schema, and updated-time spacing.
+- Removed duplicated policy/preference identifiers from comparison table setting cells.
+- Kept Library clone-name actions inside their panel across supported locales and narrower
+  viewports.
+
+### Quality
+- Added Chromium/Selenium smoke coverage for compare locale handoff, large selector lists,
+  comparison table labels, and Russian clone-name action bounds.
+- Kept `make typecheck`, `make lint`, `pytest -q`, `make coverage`, and `make test-ui` green.
+- Confirmed non-live `app/` coverage remains at `100%`.
+
+## 0.8.7
+
+### Added
+- Added a dedicated `/profiles/compare` interface for selecting two saved profiles and comparing
+  policy and managed-preference settings side by side.
+- Added compare-specific frontend assets, route templates, localization keys, responsive layout
+  contracts, and browser UI smoke coverage.
+- Added explicit clone naming from the Library so duplicate-profile flows open a named guided-editor
+  draft in a new tab.
+
+### Changed
+- Kept the Profile Library focused on profile management by replacing embedded comparison UI with
+  a navigation control to the dedicated comparison route.
+- Simplified profile data flow by removing the unused owner field from runtime models, schemas, API
+  filters/responses, import handling, frontend payloads, locale catalogs, and active docs.
+- Updated README and active architecture notes for the completed 0.8.7 product state.
+
+### Fixed
+- Removed stale Library/editor comparison DOM, state, CSS, locale keys, and clone-handoff compare
+  guidance so comparison happens only in `/profiles/compare`.
+- Tightened clone-name conflict handling and browser-smoke coverage for named clone drafts.
+- Suppressed noisy third-party `websockets` deprecation warnings in pytest while keeping project
+  warnings visible.
+
+### Quality
+- Kept `make typecheck`, `make lint`, `pytest -q`, `make coverage`, and `make test-ui` green.
+- Confirmed non-live `app/` coverage remains at `100%`.
+
 ## 0.8.5
 
 ### Added
