@@ -452,20 +452,22 @@
                                         value="${escapeHtml(defaultCloneName)}"
                                         aria-describedby="${cloneStatusId}"
                                         data-clone-name-input />
-                                    <a
-                                        class="button-base primary-button library-clone-name-confirm"
-                                        href="${buildCloneDraftHref(profile, defaultCloneName)}"
-                                        target="_blank"
-                                        rel="noopener"
-                                        data-clone-name-confirm>
-                                        ${t("profiles.clone_name_confirm")}
-                                    </a>
-                                    <button
-                                        type="button"
-                                        class="button-base ghost-button library-clone-name-cancel"
-                                        data-clone-name-cancel>
-                                        ${t("profiles.clone_name_cancel")}
-                                    </button>
+                                    <div class="library-clone-name-actions">
+                                        <a
+                                            class="button-base primary-button library-clone-name-confirm"
+                                            href="${buildCloneDraftHref(profile, defaultCloneName)}"
+                                            target="_blank"
+                                            rel="noopener"
+                                            data-clone-name-confirm>
+                                            ${t("profiles.clone_name_confirm")}
+                                        </a>
+                                        <button
+                                            type="button"
+                                            class="button-base ghost-button library-clone-name-cancel"
+                                            data-clone-name-cancel>
+                                            ${t("profiles.clone_name_cancel")}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div
                                     id="${cloneStatusId}"

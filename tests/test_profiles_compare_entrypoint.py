@@ -50,6 +50,7 @@ def test_compare_entrypoint_builds_active_profile_search_filters() -> None:
         "q": "Finance",
         "lifecycle": "active",
         "includeDeleted": False,
+        "limit": 40,
         "sort": "updated_at",
         "order": "desc",
     }
@@ -249,6 +250,132 @@ def test_compare_entrypoint_labels_managed_preferences_as_first_class_settings()
             "settingKey": "Preferences.unknown.preference",
         },
     ]
+
+
+def test_compare_entrypoint_omits_duplicate_setting_identity_metadata() -> None:
+    result = _run_compare_script(
+        """
+        const policy = compare.resolveSettingPresentation(
+            {
+                kind: "policy",
+                label: "AIControls",
+                settingKey: "AIControls",
+            },
+        );
+        const preference = compare.resolveSettingPresentation(
+            {
+                kind: "preference",
+                preferenceName: "browser.tabs.warnOnClose",
+                label: "browser.tabs.warnOnClose",
+                settingKey: "Preferences.browser.tabs.warnOnClose",
+            },
+            {
+                preferenceLabels: {
+                    "browser.tabs.warnOnClose": "browser.tabs.warnOnClose",
+                },
+            },
+        );
+        const policyIdentity = compare.renderSettingIdentity({
+            kind: "policy",
+            kindLabel: policy.kindLabel,
+            label: policy.label,
+            settingKey: policy.settingKey,
+        });
+        const preferenceIdentity = compare.renderSettingIdentity({
+            kind: "preference",
+            kindLabel: preference.kindLabel,
+            label: preference.label,
+            settingKey: preference.settingKey,
+        });
+        console.log(JSON.stringify({ policy, preference, policyIdentity, preferenceIdentity }));
+        """
+    )
+
+    assert result["policy"] == {
+        "label": "AIControls",
+        "kindLabel": "Policy",
+        "settingKey": "AIControls",
+    }
+    assert result["preference"] == {
+        "label": "browser.tabs.warnOnClose",
+        "kindLabel": "Managed preference",
+        "settingKey": "Preferences.browser.tabs.warnOnClose",
+    }
+    assert 'data-compare-setting-label' in result["policyIdentity"]
+    assert 'data-compare-setting-key' not in result["policyIdentity"]
+    assert result["policyIdentity"].count("AIControls") == 1
+    assert 'data-compare-setting-key' in result["preferenceIdentity"]
+    assert result["preferenceIdentity"].count("browser.tabs.warnOnClose") == 2
+
+
+def test_compare_entrypoint_renders_long_setting_identity_and_values_safely() -> None:
+    result = _run_compare_script(
+        """
+        const longPreference = "browser.enterprise.really.long.preference.name.with.many.sections.and.<unsafe>";
+        const rows = compare.buildCompareRows(
+            {
+                flags: {
+                    Preferences: {
+                        [longPreference]: {
+                            Status: "locked",
+                            Value: "https://example.test/" + "a".repeat(90),
+                        },
+                    },
+                },
+            },
+            {
+                flags: {
+                    Preferences: {
+                        [longPreference]: {
+                            Status: "default",
+                            Value: "https://example.test/" + "b".repeat(90),
+                        },
+                    },
+                },
+            },
+            compareState,
+            {
+                preferenceLabels: {
+                    [longPreference]: "Readable <long> enterprise preference label " + "x".repeat(80),
+                },
+                preferenceKindLabel: "Managed preference",
+                stateLabels: {
+                    missing: "Missing",
+                    equal: "Same value",
+                    different: "Different value",
+                },
+            },
+        );
+        const row = rows[0];
+        const identity = compare.renderSettingIdentity(row);
+        console.log(JSON.stringify({
+            id: row.id,
+            kind: row.kind,
+            label: row.label,
+            settingKey: row.settingKey,
+            leftState: row.left.state,
+            rightState: row.right.state,
+            leftDisplay: row.left.displayValue,
+            rightDisplay: row.right.displayValue,
+            identity,
+        }));
+        """
+    )
+
+    assert result["id"].startswith("preference:browser.enterprise.really.long.preference")
+    assert result["kind"] == "preference"
+    assert result["leftState"] == "different"
+    assert result["rightState"] == "different"
+    assert result["settingKey"].startswith("Preferences.browser.enterprise.really.long")
+    assert result["label"].startswith("Readable <long> enterprise preference label")
+    assert "&lt;long&gt;" in result["identity"]
+    assert "&lt;unsafe&gt;" in result["identity"]
+    assert 'data-compare-setting-label' in result["identity"]
+    assert 'data-compare-setting-key' in result["identity"]
+    assert '"Status":"locked"' in result["leftDisplay"]
+    assert '"Status":"default"' in result["rightDisplay"]
+    assert len(result["leftDisplay"]) > 120
+    assert len(result["rightDisplay"]) > 120
 
 
 def test_compare_entrypoint_supports_accessible_value_state_labels() -> None:

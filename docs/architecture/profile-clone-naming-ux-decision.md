@@ -52,3 +52,23 @@ Library edit, settings, JSON, and compare navigation.
 - `BPM087-M5-05` tightens duplicate-name conflict handling and copy.
 - Owner metadata is intentionally excluded from this decision because BPM 0.8.7
   removes profile owners from the product.
+
+## BPM0871-M6-01 Layout Audit
+
+The BPM 0.8.7.1 clone-name overflow defect is in the Library row clone panel:
+
+- container: `.library-clone-name-panel` rendered by `profiles_library_bootstrap.js`;
+- control group: `.library-clone-name-controls`;
+- actions: `.library-clone-name-confirm` and `.library-clone-name-cancel`;
+- current grid: `minmax(160px, 1fr) minmax(120px, auto) minmax(96px, auto)` with `8px` gaps;
+- current breakpoint: only at `max-width: 820px`, where the controls collapse to one column.
+
+The overflow condition is any Library card/action column whose available inline size is smaller than
+the three-column minimum plus gaps and panel padding, or any locale whose confirm/cancel labels need
+more than the current action minimums. Russian labels make this visible: the right cancel action can
+escape the panel before the page reaches the `820px` breakpoint.
+
+The fix should keep the panel at `max-inline-size: 100%`, clip accidental horizontal overflow at the
+panel boundary, and let the action group wrap or stack inside the panel. Confirmation and cancel
+controls need `min-width: 0`, `max-width: 100%`, normal whitespace, and `overflow-wrap: anywhere` so
+localized labels stay inside their buttons.

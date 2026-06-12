@@ -140,6 +140,79 @@ def test_profile_compare_table_responsive_layout_contract():
     )
 
 
+def test_profile_compare_table_heading_legend_wraps_localized_labels_contract():
+    css = css_source()
+    template = template_source("_page_compare_workspace.html")
+
+    assert_source_contains_all(
+        template,
+        (
+            'class="compare-settings-heading mb-3"',
+            'class="compare-settings-heading__title section-title text-slate-900"',
+            'class="compare-state-legend"',
+            'class="status-pill compare-state-legend__item"',
+            'data-compare-value-state="missing"',
+            'data-compare-value-state="equal"',
+            'data-compare-value-state="different"',
+        ),
+    )
+    assert_source_contains_all(
+        css,
+        (
+            ".compare-settings-heading {",
+            "grid-template-columns: minmax(0, 1fr) auto;",
+            ".compare-settings-heading__title {",
+            "overflow-wrap: anywhere;",
+            ".compare-state-legend {",
+            "flex-wrap: wrap;",
+            "justify-content: flex-end;",
+            ".compare-state-legend__item {",
+            "white-space: normal;",
+            "overflow-wrap: anywhere;",
+            "@media (max-width: 820px)",
+            ".compare-state-legend {",
+            "justify-content: flex-start;",
+        ),
+    )
+
+
+def test_profile_compare_table_long_setting_names_and_values_stay_wrapped_contract():
+    css = css_source()
+    source = static_source("profiles_compare.js")
+
+    assert_source_contains_all(
+        source,
+        (
+            'class="compare-setting-cell px-3 py-3 align-top"',
+            'class="compare-value-cell compare-value-cell--${compareRow.left.state}',
+            'class="compare-value-code"',
+            "renderSettingIdentity(compareRow)",
+            "compare-setting-cell__label",
+            "compare-setting-cell__meta",
+        ),
+    )
+    assert_source_contains_all(
+        css,
+        (
+            ".compare-setting-cell,",
+            ".compare-value-cell {",
+            "max-width: 100%;",
+            "overflow: hidden;",
+            ".compare-setting-cell__label {",
+            "word-break: break-word;",
+            ".compare-setting-cell__meta {",
+            "word-break: break-word;",
+            ".compare-value-state {",
+            "white-space: normal;",
+            ".compare-value-code {",
+            "max-inline-size: 100%;",
+            "white-space: pre-wrap;",
+            "overflow-wrap: anywhere;",
+            "word-break: break-word;",
+        ),
+    )
+
+
 def test_visual_editor_narrow_viewport_contract():
     workspace_template = template_source("_page_workspace.html")
 

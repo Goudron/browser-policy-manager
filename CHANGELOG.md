@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.8.7.1
+
+### Changed
+- Completed the BPM 0.8.7.1 polish pass for the dedicated `/profiles/compare` route.
+- Made Compare participate in the shared language and theme preference flow, including Library
+  new-tab handoff.
+- Documented the completed compare and clone behavior in README and local visual QA notes.
+
+### Fixed
+- Fixed Compare language/theme persistence so the route no longer falls out of sync with the
+  Library-selected preferences.
+- Improved large profile selection in Compare with bounded, scrollable search results and clearer
+  name, schema, and updated-time spacing.
+- Removed duplicated policy/preference identifiers from comparison table setting cells.
+- Kept Library clone-name actions inside their panel across supported locales and narrower
+  viewports.
+
+### Quality
+- Added Chromium/Selenium smoke coverage for compare locale handoff, large selector lists,
+  comparison table labels, and Russian clone-name action bounds.
+- Kept `make typecheck`, `make lint`, `pytest -q`, `make coverage`, and `make test-ui` green.
+- Confirmed non-live `app/` coverage remains at `100%`.
+
 ## 0.8.7
 
 ### Added

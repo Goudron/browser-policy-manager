@@ -6,18 +6,24 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.8.7`<br>
+**Version:** `0.8.7.1`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
-## What's Planned In 0.8.7
+## What's Included In 0.8.7.1
 
-BPM 0.8.7 is the current development line for dedicated saved-profile comparison and explicit
-clone naming.
+BPM 0.8.7.1 ships the compare and clone UI polish from the patch line.
 
-- Saved-profile comparison lives in a dedicated `/profiles/compare` interface.
+- Saved-profile comparison lives only in the dedicated `/profiles/compare` interface.
 - The Library stays focused on profile management and opens the comparison workflow in a new tab.
-- Duplicate/clone actions ask for the new draft name before opening the clone draft.
+- The comparison interface shares the product language and theme preferences with Library and editor
+  routes, including new-tab handoff from Library.
+- Profile selection in Compare uses bounded, searchable result lists that remain usable with large
+  saved-profile libraries.
+- Compare table setting labels render policy and managed-preference identities without duplicated
+  names or keys.
+- Duplicate/clone actions ask for the new draft name before opening the clone draft, and localized
+  clone controls stay inside the Library action panel.
 - Guided editor, All settings, and JSON editor routes open independently so related work can stay
   in separate browser tabs.
 
@@ -175,17 +181,20 @@ schema and lifecycle visibility, validation state, duplication, import, export, 
 and direct entry into the guided editor, All settings, or JSON editor.
 
 Comparison is intentionally not embedded in the Library. The Library provides a compare action that
-opens `/profiles/compare` in a new tab, where two saved profiles can be searched and selected.
+opens `/profiles/compare` in a new tab and carries the selected language and theme preference into
+the comparison route.
 
 Duplicating a profile opens a clone-name control first. After the name is confirmed, BPM opens a
-new guided-editor draft initialized from the selected profile and the requested clone name.
+new guided-editor draft initialized from the selected profile and the requested clone name. The
+clone-name controls wrap within the Library action panel across the active locale set.
 
 ### Profile Comparison
 
 The comparison interface is built for quick side-by-side review of two saved profiles. Each side
 has its own profile search and selected-profile summary. The settings table compares the union of
 policy and managed-preference settings present in either profile, with explicit missing, same-value,
-and different-value states.
+and different-value states. Result lists are bounded and scrollable for larger libraries, and the
+setting column keeps policy/preference identity readable without repeating the same identifier.
 
 ### Guided Editor
 
@@ -216,7 +225,7 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 The primary project and UI source language is English. Product copy starts from
 `app/i18n/en.json` and English maintainer documentation before it is localized.
 
-BPM 0.8.7 keeps a six-locale UI matrix:
+BPM 0.8.7.1 keeps a six-locale UI matrix:
 
 | Locale | Native label | Status |
 |---|---|---|
@@ -291,6 +300,15 @@ Quality checks:
 make quality
 ```
 
+Equivalent focused gates:
+
+```bash
+make typecheck
+make lint
+pytest -q
+make coverage
+```
+
 Coverage-oriented run:
 
 ```bash
@@ -339,11 +357,14 @@ make test-firefox-live
 make test-firefox-live-amo
 ```
 
-`browser_ui` is a compact Chromium/Selenium smoke layer. It checks Firefox
+`browser_ui` is a compact local Chromium/Selenium smoke layer. It checks Firefox
 policies import, the Library, Guided editor, All settings, JSON editor, route
-handoff links, the dedicated comparison workflow, named clone drafts, and the
-Russian/Simplified Chinese locale pair. Deep UI behavior, full locale quality,
-and edit/export edge cases stay in faster API and static contract tests.
+handoff links, the dedicated comparison workflow, compare locale handoff, large
+compare selector lists, comparison table setting labels, named clone drafts,
+clone-name action bounds, and the Russian/Simplified Chinese locale pair. Deep
+UI behavior, full locale quality, and edit/export edge cases stay in faster API
+and static contract tests. GitHub Actions runs mypy, Ruff, and pytest with
+coverage; browser UI smoke remains a local/release verification layer.
 
 `pytest-xdist` is intentionally not enabled in mandatory CI. The opt-in pure-unit
 pilot is available through `make test-unit-pilot` and `make test-unit-xdist`. See

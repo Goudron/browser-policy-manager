@@ -144,6 +144,218 @@ def test_profiles_compare_page_uses_compare_only_assets():
     assert '<script src="/static/profiles_json.js?v=' not in response.text
 
 
+def test_profiles_compare_entrypoint_wires_route_locale_switching_contract():
+    source = static_source("profiles_compare.js")
+
+    assert_source_contains_all(
+        source,
+        (
+            "const platform = windowRef.BPMProfilesPlatform;",
+            "const { resolveBrowserLanguage } = platform;",
+            'const langStorageKey = "bpm-lang-mode";',
+            'const langSelectEl = documentRef.getElementById("lang");',
+            "function applyLocaleText(nextLocale)",
+            'documentRef.querySelectorAll("[data-i18n]")',
+            'documentRef.querySelectorAll("[data-i18n-placeholder]")',
+            'documentRef.querySelectorAll("[data-i18n-title]")',
+            'documentRef.querySelectorAll("[data-i18n-aria-label]")',
+            "const res = await windowRef.fetch(`/i18n/${lang}.json`);",
+            "windowRef.__BPM_INITIAL_LANG__ = lang;",
+            "windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;",
+            "async function applyLanguageMode(mode, persist = true)",
+            "resolveBrowserLanguage(windowRef.navigator, enabledLanguageModes)",
+            "windowRef.localStorage.setItem(langStorageKey, normalizedMode);",
+            'langSelectEl?.addEventListener("change", async (event) => {',
+            "await applyLanguageMode(event.target.value);",
+        ),
+    )
+
+
+def test_profiles_compare_entrypoint_wires_route_theme_switching_contract():
+    source = static_source("profiles_compare.js")
+
+    assert_source_contains_all(
+        source,
+        (
+            "const { resolveTheme, updateThemeColorMeta, syncThemeSensitiveControls } = platform;",
+            'const themeStorageKey = "bpm-theme-mode";',
+            'const themeSelectEl = documentRef.getElementById("theme");',
+            "function applyThemeMode(mode, persist = true)",
+            'const normalizedMode = ["system", "light", "dark"].includes(mode) ? mode : "system";',
+            "const resolvedTheme = resolveTheme(",
+            "documentRef.documentElement.dataset.themeMode = normalizedMode;",
+            "documentRef.documentElement.dataset.theme = resolvedTheme;",
+            "updateThemeColorMeta(documentRef, resolvedTheme);",
+            "syncThemeSensitiveControls?.(documentRef, resolvedTheme);",
+            "windowRef.localStorage.setItem(themeStorageKey, normalizedMode);",
+            'themeSelectEl?.addEventListener("change", (event) => {',
+            "applyThemeMode(event.target.value);",
+            'const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";',
+            "themeSelectEl.value = savedThemeMode;",
+            "applyThemeMode(savedThemeMode, false);",
+        ),
+    )
+
+
+def test_profiles_compare_preserves_library_language_and_theme_modes_contract():
+    source = static_source("profiles_compare.js")
+    library_source = static_source("profiles_library_bootstrap.js")
+    client = make_test_client(app)
+    response = client.get("/profiles")
+
+    assert 'id="compare-profiles-link"' in response.text
+    assert 'href="/profiles/compare"' in response.text
+    assert 'target="_blank"' in response.text
+    assert 'const langStorageKey = "bpm-lang-mode";' in library_source
+    assert 'const langStorageKey = "bpm-lang-mode";' in source
+    assert 'const themeStorageKey = "bpm-theme-mode";' in library_source
+    assert 'const themeStorageKey = "bpm-theme-mode";' in source
+    assert 'windowRef.localStorage.getItem(langStorageKey) || "system"' in source
+    assert 'windowRef.localStorage.getItem(themeStorageKey) || "system"' in source
+    assert "langSelectEl.value = savedLangMode;" in source
+    assert "themeSelectEl.value = savedThemeMode;" in source
+    assert "await applyLanguageMode(savedLangMode, false);" in source
+    assert "applyThemeMode(savedThemeMode, false);" in source
+    assert "renderCompareTable();" in source
+
+
+def test_profiles_compare_persists_language_and_theme_for_library_return_contract():
+    source = static_source("profiles_compare.js")
+    library_source = static_source("profiles_library_bootstrap.js")
+
+    assert_source_contains_all(
+        source,
+        (
+            'langSelectEl?.addEventListener("change", async (event) => {',
+            "await applyLanguageMode(event.target.value);",
+            'themeSelectEl?.addEventListener("change", (event) => {',
+            "applyThemeMode(event.target.value);",
+            "async function applyLanguageMode(mode, persist = true)",
+            "function applyThemeMode(mode, persist = true)",
+            "windowRef.localStorage.setItem(langStorageKey, normalizedMode);",
+            "windowRef.localStorage.setItem(themeStorageKey, normalizedMode);",
+            'const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || "system";',
+            'const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";',
+        ),
+    )
+    assert_source_contains_all(
+        library_source,
+        (
+            'const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || "system";',
+            'const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";',
+            "await applyLanguageMode(savedLangMode, false);",
+            "applyThemeMode(savedThemeMode, false);",
+        ),
+    )
+
+
+def test_profiles_compare_selector_options_split_name_schema_and_timestamp_contract():
+    source = static_source("profiles_compare.js")
+    css = css_source()
+    template = template_source("_page_compare_workspace.html")
+
+    assert_source_contains_all(
+        source,
+        (
+            "function renderProfileOption(profile, sideState, side)",
+            'button.className = "compare-profile-option',
+            'button.setAttribute("data-compare-profile-option", "true");',
+            'nameEl.setAttribute("data-compare-profile-name", "");',
+            'schemaEl.setAttribute("data-compare-profile-schema", "");',
+            'updatedEl.setAttribute("data-compare-profile-updated", "");',
+            "formatProfileSchema(profile, utils.formatSchemaLabel)",
+            "formatProfileUpdatedAt(profile)",
+            "button.append(",
+            "compare-selected-profile--active",
+            "compare-selected-profile__name",
+            "compare-selected-profile__meta",
+        ),
+    )
+    assert_source_contains_all(
+        css,
+        (
+            ".compare-profile-option {",
+            ".compare-profile-option__name {",
+            ".compare-profile-option__meta {",
+            ".compare-profile-option__schema {",
+            ".compare-profile-option__updated {",
+            ".compare-selected-profile {",
+            ".compare-selected-profile__name {",
+            ".compare-selected-profile__meta",
+            ".compare-selected-profile__empty {",
+            "column-gap:",
+        ),
+    )
+    assert 'class="compare-selected-profile mt-3"' in template
+    assert 'class="mt-3 compact-counter"' not in template
+
+
+def test_profiles_compare_selector_results_are_bounded_scroll_containers_contract():
+    template = template_source("_page_compare_workspace.html")
+    source = static_source("profiles_compare.js")
+    css = css_source()
+
+    assert_source_contains_all(
+        template,
+        (
+            'id="compare-left-results"',
+            'id="compare-right-results"',
+            'class="compare-profile-results',
+            'data-compare-results-list="left"',
+            'data-compare-results-list="right"',
+        ),
+    )
+    assert_source_contains_all(
+        source,
+        (
+            'resultsEl.dataset.compareResultsCount = String(sideState.items.length);',
+            'resultsEl.classList.toggle("compare-profile-results--overflow", sideState.items.length >',
+            "sideState.items.slice(0,",
+            "button.classList.add",
+            '"compare-profile-option"',
+            "compareProfileResultsLimit",
+            "limit: compareProfileResultsLimit",
+        ),
+    )
+    assert 'if (resolvedFilters.limit) url.searchParams.set("limit", String(resolvedFilters.limit));' in static_source("profiles_data.js")
+    assert_source_contains_all(
+        css,
+        (
+            ".compare-profile-results {",
+            "max-height:",
+            "overflow-y: auto;",
+            "overscroll-behavior: contain;",
+            ".compare-profile-results--overflow {",
+            ".compare-profile-option {",
+            "min-height:",
+        ),
+    )
+
+
+def test_profiles_compare_table_setting_identity_avoids_duplicate_key_contract():
+    source = static_source("profiles_compare.js")
+    css = css_source()
+
+    assert_source_contains_all(
+        source,
+        (
+            "function renderSettingIdentity(compareRow)",
+            'data-compare-setting-label',
+            'data-compare-setting-key',
+            "if (compareRow.settingKey && compareRow.settingKey !== compareRow.label)",
+            "renderSettingIdentity(compareRow)",
+        ),
+    )
+    assert_source_contains_all(
+        css,
+        (
+            ".compare-setting-cell__kind {",
+            ".compare-setting-cell__label {",
+            ".compare-setting-cell__meta {",
+        ),
+    )
+
+
 def test_profiles_compare_entrypoint_wires_profile_search_and_selection_contract():
     source = static_source("profiles_compare.js")
 
@@ -179,7 +391,7 @@ def test_profiles_compare_entrypoint_wires_profile_search_and_selection_contract
             'const preferencesCatalog = readEmbeddedJson(documentRef, "compare-preferences-catalog");',
             "buildPreferenceLabelLookup(preferencesCatalog, locale)",
             "resolveSettingPresentation(rowKey, options)",
-            'data-compare-setting-kind="${compareRow.kind}"',
+            'data-compare-setting-kind="${escapeHtml(compareRow.kind)}"',
             "preferenceKindLabel: t(\"profiles.compare_kind_preference\")",
             "policyKindLabel: t(\"profiles.compare_kind_policy\")",
             "stateLabels: {",

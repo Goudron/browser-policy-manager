@@ -356,10 +356,11 @@ def test_browser_smoke_editor_mode_links_preserve_route_context():
             _close_chromium_driver(driver)
 
 
-def test_browser_smoke_library_compare_opens_new_tab_and_selects_two_profiles():
+def test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_two_profiles():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
     ui = pytest.importorskip("selenium.webdriver.support.ui")
+    ru = _load_locale_catalog("ru")
 
     left_name = "Compare Browser Smoke Alpha"
     right_name = "Compare Browser Smoke Beta"
@@ -387,6 +388,8 @@ def test_browser_smoke_library_compare_opens_new_tab_and_selects_two_profiles():
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "list")))
             wait.until(lambda current_driver: left_name in _body_text(current_driver))
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+            assert ru["profiles.compare_action"] in _body_text(driver)
 
             compare_link = wait.until(
                 ec.element_to_be_clickable((by.By.ID, "compare-profiles-link"))
@@ -397,6 +400,19 @@ def test_browser_smoke_library_compare_opens_new_tab_and_selects_two_profiles():
             _click_and_switch_to_new_tab(driver, wait, compare_link)
             wait.until(ec.presence_of_element_located((by.By.ID, "compare-page")))
             assert urlparse(driver.current_url).path == "/profiles/compare"
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    "return document.documentElement.lang;"
+                )
+                == "ru"
+            )
+            wait.until(
+                lambda current_driver: ru["profiles.compare_route_title"]
+                in _body_text(current_driver)
+            )
+            compare_lang = wait.until(ec.presence_of_element_located((by.By.ID, "lang")))
+            assert compare_lang.get_attribute("value") == "ru"
+            assert ru["profiles.compare_settings_title"] in _body_text(driver)
 
             for side, profile_id, profile_name in (
                 ("left", left_id, left_name),
@@ -448,6 +464,294 @@ def test_browser_smoke_library_compare_opens_new_tab_and_selects_two_profiles():
             )
             assert not driver.find_elements(by.By.ID, "list")
             assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-clone-profile-id]")
+            _assert_document_fits(driver)
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_profiles():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    bulk_prefix = "Compare Selector Large List"
+    right_name = "Compare Selector Right Target"
+
+    with run_test_app_server() as base_url:
+        for index in range(50):
+            _create_profile(
+                base_url,
+                name=f"{bulk_prefix} {index:02d}",
+                flags={
+                    "DisableTelemetry": index % 2 == 0,
+                    "Homepage": {
+                        "URL": f"https://bulk-{index:02d}.example.local/",
+                        "Locked": True,
+                    },
+                },
+            )
+        right_id = _create_profile(
+            base_url,
+            name=right_name,
+            flags={
+                "DisableTelemetry": False,
+                "Homepage": {"URL": "https://right-target.example.local/", "Locked": True},
+            },
+        )
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/compare")
+            wait.until(ec.presence_of_element_located((by.By.ID, "compare-page")))
+
+            left_search = wait.until(
+                ec.presence_of_element_located((by.By.ID, "compare-left-search"))
+            )
+            left_search.clear()
+            left_search.send_keys(bulk_prefix)
+            left_results = wait.until(
+                ec.presence_of_element_located((by.By.ID, "compare-left-results"))
+            )
+            wait.until(
+                lambda current_driver: len(
+                    current_driver.find_elements(
+                        by.By.CSS_SELECTOR,
+                        '#compare-left-results [data-compare-profile-option="true"]',
+                    )
+                )
+                >= 12
+            )
+            left_options = driver.find_elements(
+                by.By.CSS_SELECTOR,
+                '#compare-left-results [data-compare-profile-option="true"]',
+            )
+            list_metrics = driver.execute_script(
+                """
+                const list = arguments[0];
+                return {
+                  clientHeight: list.clientHeight,
+                  scrollHeight: list.scrollHeight,
+                  overflowY: window.getComputedStyle(list).overflowY,
+                  renderedCount: Number(list.dataset.compareResultsCount || 0),
+                };
+                """,
+                left_results,
+            )
+            assert 12 <= len(left_options) <= 40
+            assert list_metrics["renderedCount"] == len(left_options)
+            assert list_metrics["overflowY"] == "auto"
+            assert list_metrics["scrollHeight"] > list_metrics["clientHeight"]
+
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", left_results)
+            wait.until(lambda _driver: left_results.get_property("scrollTop") > 0)
+            last_option = left_options[-1]
+            selected_left_name = last_option.find_element(
+                by.By.CSS_SELECTOR,
+                "[data-compare-profile-name]",
+            ).text
+            driver.execute_script("arguments[0].click();", last_option)
+            wait.until(
+                lambda current_driver: selected_left_name
+                in current_driver.find_element(by.By.ID, "compare-left-profile").text
+            )
+
+            right_search = wait.until(
+                ec.presence_of_element_located((by.By.ID, "compare-right-search"))
+            )
+            right_search.clear()
+            right_search.send_keys(right_name)
+            _click_css_when_ready(
+                driver,
+                wait,
+                by,
+                (
+                    '[data-compare-result-side="right"]'
+                    f'[data-compare-profile-id="{right_id}"]'
+                ),
+            )
+            wait.until(
+                lambda current_driver: right_name
+                in current_driver.find_element(by.By.ID, "compare-right-profile").text
+            )
+            wait.until(
+                lambda current_driver: len(
+                    current_driver.find_elements(
+                        by.By.CSS_SELECTOR, "#compare-settings-rows tr[data-compare-row-id]"
+                    )
+                )
+                >= 1
+            )
+            _assert_document_fits(driver)
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_compare_table_setting_cells_do_not_duplicate_identifiers():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    left_name = "Compare Labels Browser Smoke Left"
+    right_name = "Compare Labels Browser Smoke Right"
+    preference_name = "browser.startup.homepage"
+
+    with run_test_app_server() as base_url:
+        left_id = _create_profile(
+            base_url,
+            name=left_name,
+            flags={
+                "DisableTelemetry": True,
+                "Homepage": {"URL": "https://labels-left.example.local/", "Locked": True},
+                "Preferences": {
+                    preference_name: {
+                        "Status": "locked",
+                        "Value": "https://labels-left.example.local/",
+                    },
+                },
+            },
+        )
+        right_id = _create_profile(
+            base_url,
+            name=right_name,
+            flags={
+                "DisableTelemetry": False,
+                "Homepage": {"URL": "https://labels-right.example.local/", "Locked": True},
+                "Preferences": {
+                    preference_name: {
+                        "Status": "locked",
+                        "Value": "https://labels-right.example.local/",
+                    },
+                },
+            },
+        )
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/compare?left={left_id}&right={right_id}")
+            wait.until(ec.presence_of_element_located((by.By.ID, "compare-page")))
+            wait.until(
+                lambda current_driver: len(
+                    current_driver.find_elements(
+                        by.By.CSS_SELECTOR, "#compare-settings-rows tr[data-compare-row-id]"
+                    )
+                )
+                >= 3
+            )
+
+            setting_cells = driver.find_elements(by.By.CSS_SELECTOR, ".compare-setting-cell")
+            assert setting_cells
+            rendered_rows = {
+                cell.find_element(by.By.CSS_SELECTOR, "[data-compare-setting-label]").text: {
+                    "text": cell.text,
+                    "keys": [
+                        element.text
+                        for element in cell.find_elements(
+                            by.By.CSS_SELECTOR,
+                            "[data-compare-setting-key]",
+                        )
+                    ],
+                }
+                for cell in setting_cells
+            }
+
+            assert "DisableTelemetry" in rendered_rows
+            assert rendered_rows["DisableTelemetry"]["keys"] == []
+            assert rendered_rows["DisableTelemetry"]["text"].split().count("DisableTelemetry") == 1
+
+            preference_rows = [
+                row
+                for label, row in rendered_rows.items()
+                if preference_name in label or preference_name in " ".join(row["keys"])
+            ]
+            assert len(preference_rows) == 1
+            preference_row = preference_rows[0]
+            assert preference_row["keys"] == [f"Preferences.{preference_name}"]
+            assert preference_row["text"].split().count(preference_name) <= 1
+            _assert_document_fits(driver)
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_library_clone_name_actions_stay_inside_panel_in_russian():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    ru = _load_locale_catalog("ru")
+
+    source_name = "Clone Layout Browser Smoke Source"
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name=source_name)
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.set_window_size(920, 1100)
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            wait.until(lambda current_driver: source_name in _body_text(current_driver))
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+
+            _click_css_when_ready(
+                driver,
+                wait,
+                by,
+                f'[data-clone-profile-id="{profile_id}"]',
+            )
+            clone_panel = wait.until(
+                ec.visibility_of_element_located(
+                    (by.By.ID, f"library-clone-name-panel-{profile_id}")
+                )
+            )
+            wait.until(lambda _driver: ru["profiles.clone_name_confirm"] in clone_panel.text)
+
+            layout_metrics = driver.execute_script(
+                """
+                const panel = arguments[0];
+                const actions = panel.querySelector('.library-clone-name-actions');
+                const buttons = [
+                  panel.querySelector('[data-clone-name-confirm]'),
+                  panel.querySelector('[data-clone-name-cancel]'),
+                ].filter(Boolean);
+                const panelRect = panel.getBoundingClientRect();
+                const actionRect = actions.getBoundingClientRect();
+                return {
+                  panelClientWidth: panel.clientWidth,
+                  panelScrollWidth: panel.scrollWidth,
+                  actionsClientWidth: actions.clientWidth,
+                  actionsScrollWidth: actions.scrollWidth,
+                  actionWithinPanel:
+                    actionRect.left >= panelRect.left - 1 &&
+                    actionRect.right <= panelRect.right + 1,
+                  buttonMetrics: buttons.map((button) => {
+                    const rect = button.getBoundingClientRect();
+                    const styles = window.getComputedStyle(button);
+                    return {
+                      text: button.innerText.trim(),
+                      left: rect.left,
+                      right: rect.right,
+                      width: rect.width,
+                      whiteSpace: styles.whiteSpace,
+                      withinPanel:
+                        rect.left >= panelRect.left - 1 &&
+                        rect.right <= panelRect.right + 1,
+                    };
+                  }),
+                };
+                """,
+                clone_panel,
+            )
+
+            assert layout_metrics["panelScrollWidth"] <= layout_metrics["panelClientWidth"] + 1
+            assert layout_metrics["actionsScrollWidth"] <= layout_metrics["actionsClientWidth"] + 1
+            assert layout_metrics["actionWithinPanel"] is True
+            assert [item["text"] for item in layout_metrics["buttonMetrics"]] == [
+                ru["profiles.clone_name_confirm"],
+                ru["profiles.clone_name_cancel"],
+            ]
+            assert all(item["withinPanel"] for item in layout_metrics["buttonMetrics"])
+            assert all(item["whiteSpace"] == "normal" for item in layout_metrics["buttonMetrics"])
             _assert_document_fits(driver)
         finally:
             _close_chromium_driver(driver)

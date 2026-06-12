@@ -31,9 +31,9 @@
                 data-compare-search="left"
                 data-i18n-placeholder="profiles.compare_search_placeholder"
                 placeholder="{{ tr("profiles.compare_search_placeholder", "Find a profile by name") }}" />
-            <div id="compare-left-results" class="mt-3" role="listbox" aria-label="Profile A results"></div>
-            <div id="compare-left-profile" class="mt-3 compact-counter" data-compare-selected-profile="left">
-                <strong data-i18n="profiles.compare_profile_empty">{{ tr("profiles.compare_profile_empty", "No profile selected") }}</strong>
+            <div id="compare-left-results" class="compare-profile-results mt-3" role="listbox" aria-label="Profile A results" data-compare-results-list="left"></div>
+            <div id="compare-left-profile" class="compare-selected-profile mt-3" data-compare-selected-profile="left">
+                <span class="compare-selected-profile__empty" data-i18n="profiles.compare_profile_empty">{{ tr("profiles.compare_profile_empty", "No profile selected") }}</span>
             </div>
         </div>
         <div class="surface-panel p-4">
@@ -48,26 +48,26 @@
                 data-compare-search="right"
                 data-i18n-placeholder="profiles.compare_search_placeholder"
                 placeholder="{{ tr("profiles.compare_search_placeholder", "Find a profile by name") }}" />
-            <div id="compare-right-results" class="mt-3" role="listbox" aria-label="Profile B results"></div>
-            <div id="compare-right-profile" class="mt-3 compact-counter" data-compare-selected-profile="right">
-                <strong data-i18n="profiles.compare_profile_empty">{{ tr("profiles.compare_profile_empty", "No profile selected") }}</strong>
+            <div id="compare-right-results" class="compare-profile-results mt-3" role="listbox" aria-label="Profile B results" data-compare-results-list="right"></div>
+            <div id="compare-right-profile" class="compare-selected-profile mt-3" data-compare-selected-profile="right">
+                <span class="compare-selected-profile__empty" data-i18n="profiles.compare_profile_empty">{{ tr("profiles.compare_profile_empty", "No profile selected") }}</span>
             </div>
         </div>
     </section>
 
     <section class="surface-panel p-4" aria-labelledby="compare-settings-title">
-        <div class="mb-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <h3 id="compare-settings-title" class="section-title text-slate-900" data-i18n="profiles.compare_settings_title">
+        <div class="compare-settings-heading mb-3">
+            <h3 id="compare-settings-title" class="compare-settings-heading__title section-title text-slate-900" data-i18n="profiles.compare_settings_title">
                 {{ tr("profiles.compare_settings_title", "Settings side by side") }}
             </h3>
-            <div class="flex flex-wrap gap-2 text-xs" aria-label="Value states">
-                <span class="status-pill" data-compare-value-state="missing" data-i18n="profiles.compare_state_missing">
+            <div class="compare-state-legend" aria-label="Value states">
+                <span class="status-pill compare-state-legend__item" data-compare-value-state="missing" data-i18n="profiles.compare_state_missing">
                     {{ tr("profiles.compare_state_missing", "Missing") }}
                 </span>
-                <span class="status-pill" data-compare-value-state="equal" data-i18n="profiles.compare_state_equal">
+                <span class="status-pill compare-state-legend__item" data-compare-value-state="equal" data-i18n="profiles.compare_state_equal">
                     {{ tr("profiles.compare_state_equal", "Same value") }}
                 </span>
-                <span class="status-pill" data-compare-value-state="different" data-i18n="profiles.compare_state_different">
+                <span class="status-pill compare-state-legend__item" data-compare-value-state="different" data-i18n="profiles.compare_state_different">
                     {{ tr("profiles.compare_state_different", "Different value") }}
                 </span>
             </div>

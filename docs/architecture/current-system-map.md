@@ -2,7 +2,7 @@
 
 Date: 2026-06-01
 
-This map is the first orientation point for BPM 0.8.7 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
+This map is the first orientation point for BPM 0.8.7.1 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
 
 Refactoring acceptance rules live in `docs/architecture/refactoring-acceptance-rules.md`.
 
@@ -25,6 +25,7 @@ Shared `/profiles` locale, asset-version, footer, wizard catalog, schema shell, 
 | Route | Template | Purpose |
 |---|---|---|
 | `GET /profiles` | `profiles_library.html` | Profile library and lifecycle workspace. |
+| `GET /profiles/compare` | `profiles_compare.html` | Dedicated saved-profile comparison workspace. |
 | `GET /profiles/new` | `profiles_editor.html` | Guided editor for a new unsaved draft. |
 | `GET /profiles/{profile_id}/edit` | `profiles_editor.html` | Guided editor for an existing profile. |
 | `GET /profiles/{profile_id}/settings` | `profiles_settings.html` | All settings visual policy catalog. |
@@ -78,6 +79,7 @@ The frontend is currently self-hosted, route-rendered Jinja plus static browser 
 | Server-side profile navigation | `app/web/profile_navigation.py` builds profile route URLs and resolves `return`, `focus`, and `include_deleted` semantics. |
 | Bootstrap and shared helpers | `profiles_head_bootstrap.js`, `profiles_page_bootstrap.js`, `profiles_bootstrap*.js`, `profiles_shared.js`, `profiles_utils.js`, `profiles_platform.js`, `profiles_data.js`. |
 | Profile library | `profiles_library_bootstrap.js`, `profiles_library.js`, `_page_library_workspace.html`. |
+| Profile comparison | `profiles_compare_state.js`, `profiles_compare.js`, `_page_compare_workspace.html`. |
 | Guided editor | `profiles_guided.js`, `profiles_wizard_flow.js`, `_page_wizard*.html`, `app/web/firefox_wizard_steps.py`. |
 | All settings | `profiles_settings.js`, `profiles_schema_shell*.js`, `profiles_all_settings_*.js`, `profiles_settings_search.js`. |
 | JSON editor | `profiles_json.js`, `profiles_runtime.js`, vendored Monaco assets. |
@@ -86,9 +88,8 @@ The frontend is currently self-hosted, route-rendered Jinja plus static browser 
 
 Current refactoring risk: scripts are split across files, but most modules communicate through `window.BPMProfiles*` globals and depend on load order in `_page_document.html`.
 
-The profile workspace has four product surfaces only: Library, Guided editor,
-All settings, and JSON editor. There is no compatibility route for retired
-editor modes.
+The profile workspace has five product surfaces only: Library, Profile comparison, Guided editor,
+All settings, and JSON editor. There is no compatibility route for retired editor modes.
 
 ## Vendor And Generated Assets
 

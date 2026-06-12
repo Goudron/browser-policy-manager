@@ -110,6 +110,39 @@ retiring existing comparison entrypoints:
 
 Profile-owner comparison metadata has been removed with the owner cleanup milestone.
 
+## BPM0871-M2-01 Compare Locale Bootstrapping Audit
+
+Audit date: 2026-06-11
+
+The compare route reuses the shared page header, so the language and theme selectors are rendered on
+`/profiles/compare`. The locale runtime path is incomplete:
+
+- Server-side initial copy is resolved in `app/web/profiles_context.py` from `Accept-Language` only.
+  It does not know about the browser `localStorage` preference that Library writes.
+- `app/static/profiles_page_bootstrap.js` reads the embedded `profiles-initial-locale` payload and
+  exposes `window.__BPM_INITIAL_LANG__` and `window.__BPM_INITIAL_LOCALE__` for every profile route.
+- Library loads `app/static/profiles_library_bootstrap.js`, which reads `bpm-lang-mode`, resolves
+  `system` language through `BPMProfilesPlatform.resolveBrowserLanguage`, fetches `/i18n/{lang}.json`,
+  updates `window.__BPM_INITIAL_LOCALE__`, applies `[data-i18n]` and placeholder/title/aria-label
+  text, persists language changes, and reloads Library data.
+- Editor/settings/JSON routes load the editor runtime chain, where `profiles_runtime.js` exposes the
+  same `applyLanguageMode`/`loadLocale` behavior for non-Library profile surfaces.
+- Compare loads only shared scripts, `profiles_compare_state.js`, and `profiles_compare.js`.
+  It does not load Library bootstrap or editor runtime, and `profiles_compare.js` captures
+  `const locale = windowRef.__BPM_INITIAL_LOCALE__ || {}` once during `start()`.
+
+Observed consequence: changing `#lang` on `/profiles/compare` has no compare-owned listener, so the
+selector value can change without applying translated text. Opening compare from Library also falls
+back to the server-resolved initial locale unless a compare-specific runtime reads the already
+persisted `bpm-lang-mode` value and applies it after the new tab loads.
+
+The fix path for BPM 0.8.7.1 should give compare a route-owned locale bootstrap instead of loading
+the Library or editor runtime wholesale. That bootstrap needs to read and write the same
+`bpm-lang-mode` key, use the shared platform language resolver, fetch `/i18n/{lang}.json`, update
+`window.__BPM_INITIAL_LANG__` and `window.__BPM_INITIAL_LOCALE__`, apply text to all shared
+`data-i18n` attributes, and ask `profiles_compare.js` to re-render selected summaries, result states,
+and the comparison table after locale changes.
+
 ## Test Touchpoints
 
 These tests protect the completed comparison boundary:

@@ -2475,7 +2475,7 @@
     "profiles.compare_kind_policy": "Politique",
     "profiles.compare_kind_preference": "Préférence gérée",
     "profiles.compare_action": "Comparer ici",
-    "profiles.compare_selected": "Actuellement comparerd",
+    "profiles.compare_selected": "Comparaison en cours",
     "profiles.clone_name_pattern": "{name} (copie)",
     "profiles.clone_name_label": "Nom du clone",
     "profiles.clone_name_confirm": "Ouvrir le brouillon",

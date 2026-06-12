@@ -226,6 +226,20 @@
                 overflow-x: hidden;
             }
 
+            .compare-settings-heading {
+                grid-template-columns: 1fr;
+            }
+
+            .compare-state-legend {
+                justify-content: flex-start;
+                min-width: 0;
+            }
+
+            .compare-state-legend__item {
+                max-width: min(100%, 11rem);
+                text-align: left;
+            }
+
             .compare-settings-table {
                 display: block;
                 min-width: 0;
@@ -684,6 +698,10 @@
 
             .library-clone-name-controls {
                 grid-template-columns: 1fr;
+            }
+
+            .library-clone-name-actions {
+                flex-direction: column;
             }
 
             .library-clone-name-confirm,

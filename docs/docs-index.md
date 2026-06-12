@@ -1,4 +1,4 @@
-# BPM 0.8.7 Documentation Index
+# BPM 0.8.7.1 Documentation Index
 
 Updated: 2026-06-11
 
@@ -26,7 +26,7 @@ Ignored local artifact groups:
 | [docs/docs-manifest.json](docs-manifest.json) | active | Machine-readable documentation contracts for finished backlog items. |
 | [docs/architecture/current-system-map.md](architecture/current-system-map.md) | active | Current backend, frontend, data, schema, and test-system map for refactoring. |
 | [docs/architecture/profile-clone-naming-ux-decision.md](architecture/profile-clone-naming-ux-decision.md) | active | BPM 0.8.7 clone naming UX and validation decision. |
-| [docs/architecture/profile-comparison-entrypoint-audit.md](architecture/profile-comparison-entrypoint-audit.md) | active | Maintained BPM 0.8.7 profile comparison ownership boundary and guardrail map. |
+| [docs/architecture/profile-comparison-entrypoint-audit.md](architecture/profile-comparison-entrypoint-audit.md) | active | Maintained profile comparison ownership boundary and guardrail map. |
 | [docs/architecture/pytest-xdist-isolation-audit.md](architecture/pytest-xdist-isolation-audit.md) | audit | Current pytest-xdist isolation blocker map for BPM 0.8.5. |
 | [docs/architecture/pytest-xdist-readiness.md](architecture/pytest-xdist-readiness.md) | active | Maintained decision record for pytest-xdist readiness and adoption gates. |
 | [docs/architecture/refactoring-acceptance-rules.md](architecture/refactoring-acceptance-rules.md) | active | Shared acceptance contract for behavior-preserving refactors. |
@@ -34,6 +34,8 @@ Ignored local artifact groups:
 | [docs/archive/2026-q2/browser_datetime_i18n_audit_2026-05-30.md](archive/2026-q2/browser_datetime_i18n_audit_2026-05-30.md) | audit | Point-in-time datetime localization audit. |
 | [docs/bpm_0_8_5_refactoring_backlog_2026-06-01.md](bpm_0_8_5_refactoring_backlog_2026-06-01.md) | backlog | Approved BPM 0.8.5 refactoring and optimization backlog. |
 | [docs/bpm_0_8_7_profile_comparison_clone_owner_cleanup_backlog_2026-06-05.md](bpm_0_8_7_profile_comparison_clone_owner_cleanup_backlog_2026-06-05.md) | backlog | BPM 0.8.7 profile comparison, clone naming, and owner cleanup backlog. |
+| [docs/bpm_0_8_7_1_compare_clone_ui_polish_backlog_2026-06-11.md](bpm_0_8_7_1_compare_clone_ui_polish_backlog_2026-06-11.md) | backlog | BPM 0.8.7.1 compare and clone UI polish backlog. |
+| [docs/archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md](archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md) | audit | BPM 0.8.7.1 compare and clone visual QA notes. |
 | [docs/archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md](archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md) | audit | Point-in-time Chromium locale smoke matrix. |
 | [docs/archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md](archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md) | audit | Point-in-time CIS Firefox benchmark feature analysis. |
 | [docs/archive/2026-q2/cis_firefox_implementation_roadmap_2026-04-12.md](archive/2026-q2/cis_firefox_implementation_roadmap_2026-04-12.md) | backlog | CIS Firefox implementation roadmap. |

@@ -181,6 +181,10 @@ make coverage
 make test-ui
 ```
 
+Browser/Selenium tests are known to require access outside the Codex filesystem sandbox. When
+running `make test-ui` or any Selenium/browser UI command during backlog execution, request sandbox
+escalation immediately. Do not first try the browser test command inside the sandbox.
+
 If Make targets change in a future epic, update this runbook and the backlog together.
 
 Do not push from the backlog execution step. The assistant creates the commit when requested by the
@@ -208,6 +212,8 @@ Before calling a new backlog ready, confirm:
 - every task has `low`, `medium`, `high`, or `extra high` as minimal reasoning;
 - first milestone includes version transition across product surfaces;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
+- Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
+  trial run;
 - final milestone includes README refresh, changelog entry, git commit, and maintainer-run push
   command;
 - README instructions preserve maintainer copyright and email-topic information;

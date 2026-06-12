@@ -68,6 +68,107 @@ def test_library_clone_name_control_copy_keys_are_in_runtime_catalogs():
             assert locale_json[key]
 
 
+def test_library_clone_name_actions_stay_inside_panel_with_long_labels_contract():
+    source = static_source("profiles_library_bootstrap.js")
+    css = css_source()
+
+    assert_source_contains_all(
+        source,
+        (
+            'class="library-clone-name-panel"',
+            'class="library-clone-name-controls"',
+            'class="library-clone-name-actions"',
+            'class="button-base primary-button library-clone-name-confirm"',
+            'class="button-base ghost-button library-clone-name-cancel"',
+        ),
+    )
+    assert_source_contains_all(
+        css,
+        (
+            ".library-clone-name-panel {",
+            "max-inline-size: 100%;",
+            "overflow-x: clip;",
+            ".library-clone-name-controls {",
+            "grid-template-columns: minmax(0, 1fr);",
+            ".library-clone-name-actions {",
+            "display: flex;",
+            "flex-wrap: wrap;",
+            ".library-clone-name-confirm,",
+            ".library-clone-name-cancel {",
+            "min-width: 0;",
+            "max-width: 100%;",
+            "white-space: normal;",
+            "overflow-wrap: anywhere;",
+            "@media (max-width: 820px)",
+            ".library-clone-name-actions",
+            "flex-direction: column;",
+        ),
+    )
+
+
+def test_library_clone_name_controls_align_with_library_action_sizing_contract():
+    css = css_source()
+
+    assert_source_contains_all(
+        css,
+        (
+            ".library-clone-name-panel {",
+            "box-sizing: border-box;",
+            ".library-clone-name-controls {",
+            "align-items: stretch;",
+            "gap: 8px;",
+            ".library-clone-name-input {",
+            "box-sizing: border-box;",
+            "min-height: 42px;",
+            ".library-clone-name-actions {",
+            "align-items: stretch;",
+            ".library-clone-name-confirm,",
+            ".library-clone-name-cancel {",
+            "box-sizing: border-box;",
+            "min-height: 42px;",
+            "justify-content: center;",
+            "text-align: center;",
+            ".library-clone-name-status {",
+            "max-width: 100%;",
+            "overflow-wrap: anywhere;",
+        ),
+    )
+
+
+def test_library_clone_name_layout_covers_russian_and_french_long_labels_contract():
+    css = css_source()
+    locales = {
+        locale: json.loads((REPO_ROOT / "app" / "i18n" / f"{locale}.json").read_text(encoding="utf-8"))
+        for locale in ("ru", "fr")
+    }
+
+    assert locales["ru"]["profiles.clone_name_confirm"] == "Открыть черновик"
+    assert locales["ru"]["profiles.clone_name_ready"] == "Выберите имя перед открытием черновика клона."
+    assert locales["fr"]["profiles.clone_name_confirm"] == "Ouvrir le brouillon"
+    assert locales["fr"]["profiles.clone_name_ready"] == "Choisissez un nom avant d’ouvrir le brouillon cloné."
+
+    assert_source_contains_all(
+        css,
+        (
+            ".library-clone-name-panel {",
+            "max-inline-size: 100%;",
+            "overflow-x: clip;",
+            ".library-clone-name-actions {",
+            "flex-wrap: wrap;",
+            ".library-clone-name-confirm,",
+            ".library-clone-name-cancel {",
+            "white-space: normal;",
+            "overflow-wrap: anywhere;",
+            "line-height: 1.25;",
+            ".library-clone-name-status {",
+            "overflow-wrap: anywhere;",
+            "@media (max-width: 820px)",
+            ".library-clone-name-actions",
+            "flex-direction: column;",
+        ),
+    )
+
+
 def test_new_profile_clone_route_exposes_requested_clone_name_to_draft():
     client = make_test_client(app)
     create_response = client.post(

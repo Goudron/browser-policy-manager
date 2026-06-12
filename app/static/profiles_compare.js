@@ -1,5 +1,6 @@
 (() => {
     const sideKeys = ["left", "right"];
+    const compareProfileResultsLimit = 40;
 
     function escapeHtml(value) {
         return String(value ?? "")
@@ -15,6 +16,7 @@
             q: String(query || "").trim(),
             lifecycle: "active",
             includeDeleted: false,
+            limit: compareProfileResultsLimit,
             sort: "updated_at",
             order: "desc",
         };
@@ -73,6 +75,14 @@
         return [schema, updated].filter(Boolean).join(" • ");
     }
 
+    function formatProfileSchema(profile, formatSchemaLabel = (value) => value || "") {
+        return formatSchemaLabel(profile?.schema_version || "") || "";
+    }
+
+    function formatProfileUpdatedAt(profile) {
+        return profile?.updated_at ? String(profile.updated_at) : "";
+    }
+
     function resolveCompareValueState(entry, otherEntry, compareState) {
         if (!entry?.present) return "missing";
         if (!otherEntry?.present) return "different";
@@ -96,6 +106,20 @@
             kindLabel: options.policyKindLabel || "Policy",
             settingKey: rowKey.settingKey,
         };
+    }
+
+    function renderSettingIdentity(compareRow) {
+        let settingKey = "";
+        if (compareRow.settingKey && compareRow.settingKey !== compareRow.label) {
+            settingKey = compareRow.settingKey;
+        }
+        return `
+            <span class="compare-setting-cell__kind" data-compare-setting-kind="${escapeHtml(compareRow.kind)}">
+                ${escapeHtml(compareRow.kindLabel)}
+            </span>
+            <span class="compare-setting-cell__label" data-compare-setting-label>${escapeHtml(compareRow.label)}</span>
+            ${settingKey ? `<span class="compare-setting-cell__meta" data-compare-setting-key>${escapeHtml(settingKey)}</span>` : ""}
+        `;
     }
 
     function resolveValueStateLabel(state, options = {}) {
@@ -177,13 +201,22 @@
 
         const data = windowRef.BPMProfilesData;
         const compareState = windowRef.BPMProfilesCompareState;
+        const platform = windowRef.BPMProfilesPlatform;
+        if (!data || !compareState || !platform) return null;
+        const { resolveBrowserLanguage } = platform;
+        const { resolveTheme, updateThemeColorMeta, syncThemeSensitiveControls } = platform;
         const utils = windowRef.BPMProfilesUtils || {};
-        const locale = windowRef.__BPM_INITIAL_LOCALE__ || {};
+        let locale = windowRef.__BPM_INITIAL_LOCALE__ || {};
         const preferencesCatalog = readEmbeddedJson(documentRef, "compare-preferences-catalog");
-        const preferenceLabels = buildPreferenceLabelLookup(preferencesCatalog, locale);
+        let preferenceLabels = buildPreferenceLabelLookup(preferencesCatalog, locale);
         const state = createInitialState();
         const preselectedIds = resolvePreselectedProfileIds(windowRef.location);
         const searchTimers = new Map();
+        let localeRequestId = 0;
+        const langStorageKey = "bpm-lang-mode";
+        const themeStorageKey = "bpm-theme-mode";
+        const langSelectEl = documentRef.getElementById("lang");
+        const themeSelectEl = documentRef.getElementById("theme");
         const tableRowsEl = documentRef.getElementById("compare-settings-rows");
         const elements = Object.fromEntries(sideKeys.map((side) => [
             side,
@@ -196,6 +229,101 @@
 
         function t(key) {
             return typeof locale[key] === "string" && locale[key] ? locale[key] : "";
+        }
+
+        function applyLocaleText(nextLocale) {
+            documentRef.querySelectorAll("[data-i18n]").forEach((el) => {
+                const key = el.getAttribute("data-i18n");
+                if (key && nextLocale[key]) el.textContent = nextLocale[key];
+            });
+            documentRef.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+                const key = el.getAttribute("data-i18n-placeholder");
+                if (key && nextLocale[key]) el.placeholder = nextLocale[key];
+            });
+            documentRef.querySelectorAll("[data-i18n-title]").forEach((el) => {
+                const key = el.getAttribute("data-i18n-title");
+                if (key && nextLocale[key]) el.title = nextLocale[key];
+            });
+            documentRef.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+                const key = el.getAttribute("data-i18n-aria-label");
+                if (key && nextLocale[key]) el.setAttribute("aria-label", nextLocale[key]);
+            });
+        }
+
+        function refreshLocaleDependentViews() {
+            preferenceLabels = buildPreferenceLabelLookup(preferencesCatalog, locale);
+            sideKeys.forEach((side) => {
+                renderSelected(side);
+                renderResults(side);
+            });
+            renderCompareTable();
+        }
+
+        function applyThemeMode(mode, persist = true) {
+            const normalizedMode = ["system", "light", "dark"].includes(mode) ? mode : "system";
+            const resolvedTheme = resolveTheme(
+                normalizedMode,
+                windowRef.matchMedia("(prefers-color-scheme: dark)"),
+            );
+
+            documentRef.documentElement.dataset.themeMode = normalizedMode;
+            documentRef.documentElement.dataset.theme = resolvedTheme;
+            if (themeSelectEl) {
+                themeSelectEl.value = normalizedMode;
+            }
+            updateThemeColorMeta(documentRef, resolvedTheme);
+            syncThemeSensitiveControls?.(documentRef, resolvedTheme);
+
+            if (persist) {
+                windowRef.localStorage.setItem(themeStorageKey, normalizedMode);
+            }
+        }
+
+        async function loadLocale(lang, requestId = 0) {
+            try {
+                let nextLocale = null;
+                if (lang === windowRef.__BPM_INITIAL_LANG__ && windowRef.__BPM_INITIAL_LOCALE__) {
+                    nextLocale = windowRef.__BPM_INITIAL_LOCALE__;
+                } else {
+                    const res = await windowRef.fetch(`/i18n/${lang}.json`);
+                    if (!res.ok) throw new Error(await res.text());
+                    nextLocale = await res.json();
+                }
+                if (requestId && requestId !== localeRequestId) return;
+
+                locale = nextLocale;
+                documentRef.documentElement.lang = lang;
+                windowRef.__BPM_INITIAL_LANG__ = lang;
+                windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;
+                applyLocaleText(nextLocale);
+                refreshLocaleDependentViews();
+            } catch (error) {
+                console.warn("compare i18n load failed:", error);
+            }
+        }
+
+        async function applyLanguageMode(mode, persist = true) {
+            const enabledLanguageModes = langSelectEl
+                ? Array.from(langSelectEl.options)
+                    .filter((option) => !option.disabled)
+                    .map((option) => option.value)
+                : ["system", "en", "ru"];
+            const normalizedMode = enabledLanguageModes.includes(mode) ? mode : "system";
+            const resolvedLanguage = normalizedMode === "system"
+                ? resolveBrowserLanguage(windowRef.navigator, enabledLanguageModes)
+                : normalizedMode;
+            const requestId = ++localeRequestId;
+
+            documentRef.documentElement.dataset.langMode = normalizedMode;
+            if (langSelectEl) {
+                langSelectEl.value = normalizedMode;
+            }
+
+            if (persist) {
+                windowRef.localStorage.setItem(langStorageKey, normalizedMode);
+            }
+
+            await loadLocale(resolvedLanguage, requestId);
         }
 
         function renderCompareTable() {
@@ -247,11 +375,7 @@
                 row.dataset.compareRowChanged = compareRow.changed ? "true" : "false";
                 row.innerHTML = `
                     <th scope="row" class="compare-setting-cell px-3 py-3 align-top" data-label="${escapeHtml(settingColumnLabel)}">
-                        <span class="block text-[11px] font-semibold uppercase tracking-wide text-slate-500" data-compare-setting-kind="${compareRow.kind}">
-                            ${escapeHtml(compareRow.kindLabel)}
-                        </span>
-                        <span class="block font-semibold text-slate-900">${escapeHtml(compareRow.label)}</span>
-                        <span class="block text-xs text-slate-500" data-compare-setting-key>${escapeHtml(compareRow.settingKey)}</span>
+                        ${renderSettingIdentity(compareRow)}
                     </th>
                     <td class="compare-value-cell compare-value-cell--${compareRow.left.state} px-3 py-3 align-top" data-label="${escapeHtml(leftColumnLabel)}" data-compare-column="left" data-compare-value-state="${compareRow.left.state}">
                         <span class="compare-value-state" data-compare-value-state-label="${compareRow.left.state}">
@@ -275,15 +399,63 @@
             if (!selectedEl) return;
             const selected = getSideState(state, side).selected;
             if (!selected) {
+                selectedEl.classList.remove("compare-selected-profile--active");
                 selectedEl.innerHTML = `
-                    <strong data-i18n="profiles.compare_profile_empty">${escapeHtml(t("profiles.compare_profile_empty") || "No profile selected")}</strong>
+                    <span class="compare-selected-profile__empty" data-i18n="profiles.compare_profile_empty">
+                        ${escapeHtml(t("profiles.compare_profile_empty") || "No profile selected")}
+                    </span>
                 `;
                 return;
             }
+            const schema = formatProfileSchema(selected, utils.formatSchemaLabel);
+            const updated = formatProfileUpdatedAt(selected);
+            selectedEl.classList.add("compare-selected-profile--active");
             selectedEl.innerHTML = `
-                <strong>${escapeHtml(selected.name || t("profiles.none_selected") || "None selected")}</strong>
-                <span>${escapeHtml(formatProfileSummary(selected, utils.formatSchemaLabel))}</span>
+                <span class="compare-selected-profile__name">${escapeHtml(selected.name || t("profiles.none_selected") || "None selected")}</span>
+                <span class="compare-selected-profile__meta">
+                    ${schema ? `<span>${escapeHtml(schema)}</span>` : ""}
+                    ${updated ? `<span>${escapeHtml(updated)}</span>` : ""}
+                </span>
             `;
+        }
+
+        function renderProfileOption(profile, sideState, side) {
+            const selected = sideState.selected?.id === profile.id;
+            const button = documentRef.createElement("button");
+            const schema = formatProfileSchema(profile, utils.formatSchemaLabel);
+            const updated = formatProfileUpdatedAt(profile);
+            button.type = "button";
+            button.className = "compare-profile-option button-base soft-input mt-2 w-full text-left";
+            button.dataset.compareResultSide = side;
+            button.dataset.compareProfileId = String(profile.id);
+            button.setAttribute("data-compare-profile-option", "true");
+            button.setAttribute("role", "option");
+            button.setAttribute("aria-selected", selected ? "true" : "false");
+
+            const nameEl = documentRef.createElement("span");
+            nameEl.className = "compare-profile-option__name";
+            nameEl.setAttribute("data-compare-profile-name", "");
+            nameEl.textContent = profile.name || t("profiles.none_selected") || "None selected";
+
+            const metaEl = documentRef.createElement("span");
+            metaEl.className = "compare-profile-option__meta";
+            if (schema) {
+                const schemaEl = documentRef.createElement("span");
+                schemaEl.className = "compare-profile-option__schema";
+                schemaEl.setAttribute("data-compare-profile-schema", "");
+                schemaEl.textContent = schema;
+                metaEl.append(schemaEl);
+            }
+            if (updated) {
+                const updatedEl = documentRef.createElement("span");
+                updatedEl.className = "compare-profile-option__updated";
+                updatedEl.setAttribute("data-compare-profile-updated", "");
+                updatedEl.textContent = updated;
+                metaEl.append(updatedEl);
+            }
+
+            button.append(nameEl, metaEl);
+            return button;
         }
 
         function renderResults(side) {
@@ -291,6 +463,8 @@
             if (!resultsEl) return;
             const sideState = getSideState(state, side);
             resultsEl.innerHTML = "";
+            resultsEl.dataset.compareResultsCount = String(sideState.items.length);
+            resultsEl.classList.toggle("compare-profile-results--overflow", sideState.items.length > compareProfileResultsLimit);
 
             if (sideState.loading) {
                 resultsEl.innerHTML = `
@@ -319,19 +493,9 @@
                 return;
             }
 
-            sideState.items.forEach((profile) => {
-                const selected = sideState.selected?.id === profile.id;
-                const button = documentRef.createElement("button");
-                button.type = "button";
-                button.className = "button-base ghost-button soft-input mt-2 w-full text-left";
-                button.dataset.compareResultSide = side;
-                button.dataset.compareProfileId = String(profile.id);
-                button.setAttribute("role", "option");
-                button.setAttribute("aria-selected", selected ? "true" : "false");
-                button.innerHTML = `
-                    <span class="block font-semibold">${escapeHtml(profile.name || t("profiles.none_selected") || "None selected")}</span>
-                    <span class="block text-xs text-slate-500">${escapeHtml(formatProfileSummary(profile, utils.formatSchemaLabel))}</span>
-                `;
+            sideState.items.slice(0, compareProfileResultsLimit).forEach((profile) => {
+                const button = renderProfileOption(profile, sideState, side);
+                button.classList.add("compare-profile-option");
                 resultsEl.appendChild(button);
             });
         }
@@ -400,6 +564,26 @@
             }, 180));
         }
 
+        async function initializePreferences() {
+            const savedLangMode = windowRef.localStorage.getItem(langStorageKey) || "system";
+            const savedThemeMode = windowRef.localStorage.getItem(themeStorageKey) || "system";
+            if (langSelectEl) {
+                langSelectEl.value = savedLangMode;
+            }
+            if (themeSelectEl) {
+                themeSelectEl.value = savedThemeMode;
+            }
+            applyThemeMode(savedThemeMode, false);
+            await applyLanguageMode(savedLangMode, false);
+        }
+
+        langSelectEl?.addEventListener("change", async (event) => {
+            await applyLanguageMode(event.target.value);
+        });
+        themeSelectEl?.addEventListener("change", (event) => {
+            applyThemeMode(event.target.value);
+        });
+
         sideKeys.forEach((side) => {
             elements[side]?.search?.addEventListener("input", () => scheduleLoad(side));
             elements[side]?.results?.addEventListener("click", (event) => {
@@ -415,9 +599,17 @@
             preselectProfileForSide(side, preselectedIds[side]);
         });
 
+        initializePreferences().catch((error) => {
+            console.warn("compare preferences bootstrap failed:", error);
+        });
+
         return {
+            applyLanguageMode,
+            applyThemeMode,
             loadProfilesForSide,
+            loadLocale,
             preselectProfileForSide,
+            refreshLocaleDependentViews,
             renderCompareTable,
             renderSide,
             selectProfileForSide,
@@ -432,10 +624,13 @@
         createInitialState,
         escapeHtml,
         formatProfileSummary,
+        formatProfileSchema,
+        formatProfileUpdatedAt,
         ready: true,
         readEmbeddedJson,
         resolvePreselectedProfileIds,
         resolveSettingPresentation,
+        renderSettingIdentity,
         resolveValueStateLabel,
         start,
     };
