@@ -90,6 +90,28 @@ def test_global_ui_locale_glossary_records_six_locale_terms():
     assert "docs/locale_placeholder_identifier_rules_2026-05-29.md" in glossary
 
 
+def test_global_ui_locale_glossary_records_all_settings_mode_terms():
+    glossary = GLOSSARY_PATH.read_text(encoding="utf-8")
+
+    required_rows = (
+        "| product.all_settings_review_mode | Review mode | Режим проверки | Prüfmodus | 检查模式 | Mode Revue | Modo Revisión |",
+        "| product.all_settings_configured_mode | Configured mode | Режим настроенных параметров | Modus Konfiguriert | 已配置模式 | Mode Configurés | Modo Configuradas |",
+        "| product.all_settings_catalog_mode | Catalog mode | Режим каталога | Katalogmodus | 目录模式 | Mode Catalogue | Modo Catálogo |",
+    )
+    for row in required_rows:
+        assert row in glossary
+
+    for key in (
+        "profiles.settings_mode_review",
+        "profiles.settings_mode_configured",
+        "profiles.settings_mode_catalog",
+    ):
+        assert key in glossary
+    assert "avoid schema jargon" in glossary
+    assert "settings applied by the current profile" in glossary
+    assert "finding any available setting" in glossary
+
+
 def test_global_ui_locale_glossary_consolidates_mozilla_qa_findings():
     glossary = GLOSSARY_PATH.read_text(encoding="utf-8")
 

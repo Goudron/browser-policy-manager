@@ -28,6 +28,12 @@
                 panel.hidden = !expanded;
             }
             button.setAttribute("aria-expanded", expanded ? "true" : "false");
+            button.setAttribute(
+                "data-i18n",
+                expanded
+                    ? button.dataset.wizardDisclosureHideKey
+                    : button.dataset.wizardDisclosureShowKey,
+            );
             button.textContent = labelFor(button, expanded);
         }
 

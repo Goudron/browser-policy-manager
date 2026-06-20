@@ -77,7 +77,7 @@ def test_profile_navigation_resolves_settings_shell_focus_step():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:DisableTelemetry",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         == 5
@@ -85,7 +85,7 @@ def test_profile_navigation_resolves_settings_shell_focus_step():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:LocalNetworkAccess",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         == 5
@@ -93,7 +93,7 @@ def test_profile_navigation_resolves_settings_shell_focus_step():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "deprecated:LegacyPolicy",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         == 8
@@ -101,7 +101,7 @@ def test_profile_navigation_resolves_settings_shell_focus_step():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "shell-policy:8:DisableProfileRefresh",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         == 8
@@ -116,7 +116,7 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "shell-policy:not-a-step:DisableTelemetry",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         is None
@@ -124,7 +124,7 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "shell-policy:8",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         is None
@@ -132,7 +132,7 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:   ",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         is None
@@ -140,7 +140,7 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:DefinitelyNotInTheCatalog",
-            "release-151",
+            "release-152",
             shell_catalog,
         )
         is None
@@ -148,10 +148,10 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-151",
+            "release-152",
             {
                 "channels": {
-                    "release-151": {
+                    "release-152": {
                         "steps": {
                             "not-a-step": {
                                 "recommended": [{"id": "MatchedPolicy"}],
@@ -166,7 +166,7 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-151",
+            "release-152",
             {"channels": []},
         )
         is None
@@ -174,26 +174,26 @@ def test_profile_navigation_rejects_invalid_settings_shell_focus_step_inputs():
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-151",
-            {"channels": {"release-151": []}},
+            "release-152",
+            {"channels": {"release-152": []}},
         )
         is None
     )
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-151",
-            {"channels": {"release-151": {"steps": []}}},
+            "release-152",
+            {"channels": {"release-152": {"steps": []}}},
         )
         is None
     )
     assert (
         profile_navigation.resolve_settings_shell_focus_step(
             "policy:MatchedPolicy",
-            "release-151",
+            "release-152",
             {
                 "channels": {
-                    "release-151": {
+                    "release-152": {
                         "steps": {
                             "5": ["not-a-dict"],
                         }

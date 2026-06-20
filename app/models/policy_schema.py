@@ -90,9 +90,9 @@ class PolicyDefinition(BaseModel):
 class PolicySchema(BaseModel):
     """Top-level schema for all policies for a given channel/version."""
 
-    channel: str  # e.g. "release-151", "esr-140.11"
+    channel: str  # e.g. "release-152", "esr-140.12"
     version: str  # e.g. "149.0" or "140.9"
-    source: str  # e.g. "mozilla-policy-templates-v7.11"
+    source: str  # e.g. "mozilla-policy-templates-v7.12"
 
     policies: dict[str, PolicyDefinition] = Field(default_factory=dict)
     ui_sections: list[PolicyUiSection] = Field(default_factory=list)

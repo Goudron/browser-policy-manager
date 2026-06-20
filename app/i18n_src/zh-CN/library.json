@@ -68,7 +68,6 @@
     "profiles.lifecycle_item_recent_restored": "在 此 在 {value}.",
     "profiles.compare_route_eyebrow": "专用比较",
     "profiles.compare_route_title": "比较配置档案设置",
-    "profiles.compare_back_to_library": "返回库",
     "profiles.compare_left_label": "配置档案甲",
     "profiles.compare_right_label": "配置档案乙",
     "profiles.compare_search_placeholder": "按名称查找配置档案",

@@ -117,12 +117,11 @@ def test_profile_editor_routes_render_wizard_shells():
             'id="settings-category-users-addons-sites"',
             'id="settings-category-ai-smart-features"',
             'id="settings-category-raw-unmapped"',
-            'data-settings-category-link="browser-access"',
+            'id="all-settings-catalog-advanced"',
             'id="wizard-settings-search-input"',
             'id="settings-schema-shell-step-2"',
             'data-settings-nav',
-            'id="settings-preferences-general"',
-            'id="wizard-preferences-general-presets"',
+            'data-settings-preferences-compat',
             'id="editor-mode-guided"',
             'id="editor-mode-settings"',
             'id="editor-mode-json"',
@@ -130,9 +129,14 @@ def test_profile_editor_routes_render_wizard_shells():
             'id="validate"',
         ),
     )
+    assert 'id="all-settings-category-summary"' not in settings_response.text
     assert 'id="wizard-panel"' not in settings_response.text
     assert 'id="editor-panel"' not in settings_response.text
     assert 'id="editor"' not in settings_response.text
+    assert 'id="all-settings-catalog-advanced"' in settings_response.text
+    assert 'data-settings-catalog-advanced' in settings_response.text
+    assert 'data-settings-focus-open="false"' in settings_response.text
+    assert 'id="settings-advanced-schema-browser-access-details" hidden' in settings_response.text
     assert 'id="format"' not in settings_response.text
     assert 'id="editor-panel"' not in new_response.text
     assert 'id="editor-panel"' not in edit_response.text
@@ -275,18 +279,21 @@ def test_profile_workspace_routes_smoke_dom_contracts():
             'id="settings-category-users-addons-sites"',
             'id="settings-category-ai-smart-features"',
             'id="settings-category-raw-unmapped"',
+            'id="all-settings-catalog-advanced"',
             'id="wizard-settings-search-input"',
             'id="settings-schema-shell-step-2"',
             'data-settings-nav',
-            'id="settings-preferences-general"',
-            'id="wizard-preferences-general-presets"',
+            'data-settings-preferences-compat',
             'id="save"',
             'id="validate"',
         ),
     )
+    assert 'id="all-settings-category-summary"' not in settings_response.text
     assert 'id="wizard-panel"' not in settings_response.text
     assert 'id="editor-panel"' not in settings_response.text
     assert 'id="editor"' not in settings_response.text
+    assert 'data-settings-focus-open="false"' in settings_response.text
+    assert 'id="settings-advanced-schema-browser-access-details" hidden' in settings_response.text
     assert_contains_all(
         json_response.text,
         (
@@ -403,11 +410,17 @@ def test_profile_compare_route_renders_dedicated_compare_shell_contract():
             'id="compare-preferences-catalog"',
             'data-compare-column="left"',
             'data-compare-column="right"',
-            'data-compare-value-state="missing"',
-            'data-compare-value-state="equal"',
-            'data-compare-value-state="different"',
         ),
     )
+    assert_contains_all(
+        static_source("profiles_compare.js"),
+        (
+            'data-compare-value-state="${compareRow.left.state}"',
+            'data-compare-value-state="${compareRow.right.state}"',
+        ),
+    )
+    assert soup.select_one(".compare-state-legend") is None
+    assert soup.select_one('#compare-page a[href="/profiles"]') is None
 
     for side, label in (("left", "Profile A"), ("right", "Profile B")):
         search = soup.find(id=f"compare-{side}-search")
@@ -678,7 +691,7 @@ def test_deleted_profile_routes_require_include_deleted_and_preserve_archived_ch
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Route Profile", schema_version="release-151"),
+        json=build_profile_payload(name="Archived Route Profile", schema_version="release-152"),
     )
     profile_id = create_response.json()["id"]
     delete_response = client.delete(f"/api/profiles/{profile_id}")
@@ -723,7 +736,7 @@ def test_guided_wizard_ai_step_stays_separate_from_users_addons_sites_step():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-151"),
+        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-152"),
     )
     profile_id = create_response.json()["id"]
 
@@ -753,7 +766,7 @@ def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subse
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-151"),
+        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-152"),
     )
     profile_id = create_response.json()["id"]
 
@@ -925,7 +938,7 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="Template Split Profile",
-            schema_version="release-151",
+            schema_version="release-152",
             flags={"DisableTelemetry": True},
         )
 
@@ -954,11 +967,11 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
     assert captured["name"] == "profiles_editor.html"
     assert captured["context"]["profiles_route_mode"] == "edit"
     assert captured["context"]["editing_profile_id"] == 7
-    assert captured["context"]["editing_profile_schema_version"] == "release-151"
+    assert captured["context"]["editing_profile_schema_version"] == "release-152"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 7,
         "name": "Template Split Profile",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {"DisableTelemetry": True},
     }
 
@@ -982,7 +995,7 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="Settings Split Profile",
-            schema_version="esr-140.11",
+            schema_version="esr-140.12",
             flags={"DisableTelemetry": True},
         )
 
@@ -1014,11 +1027,11 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
     )
     assert captured["context"]["profiles_route_mode"] == "settings"
     assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["editing_profile_schema_version"] == "esr-140.11"
+    assert captured["context"]["editing_profile_schema_version"] == "esr-140.12"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 8,
         "name": "Settings Split Profile",
-        "schema_version": "esr-140.11",
+        "schema_version": "esr-140.12",
         "flags": {"DisableTelemetry": True},
     }
     assert captured["context"]["return_url"] == "/profiles/8/edit"
@@ -1048,7 +1061,7 @@ def test_profile_json_route_uses_json_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="JSON Split Profile",
-            schema_version="release-151",
+            schema_version="release-152",
             flags={"DisableTelemetry": True},
         )
 
@@ -1080,11 +1093,11 @@ def test_profile_json_route_uses_json_template(monkeypatch):
     )
     assert captured["context"]["profiles_route_mode"] == "json"
     assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["editing_profile_schema_version"] == "release-151"
+    assert captured["context"]["editing_profile_schema_version"] == "release-152"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 8,
         "name": "JSON Split Profile",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {"DisableTelemetry": True},
     }
     assert captured["context"]["return_url"] == "/profiles/8/edit"
@@ -1143,7 +1156,7 @@ def test_archived_profile_handoff_routes_preserve_include_deleted_return_context
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-151"),
+        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-152"),
     )
     profile_id = create_response.json()["id"]
     assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
@@ -1173,7 +1186,7 @@ def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-151"),
+        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-152"),
     )
     profile_id = create_response.json()["id"]
     assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
@@ -1201,6 +1214,8 @@ def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context
         in settings_policy_response.text
     )
     assert 'id="settings-schema-shell-step-5-details"' in settings_policy_response.text
+    assert 'id="settings-advanced-schema-privacy-security-details"' in settings_policy_response.text
+    assert 'aria-controls="settings-advanced-schema-privacy-security-details"' in settings_policy_response.text
     assert 'aria-controls="settings-schema-shell-step-5-details"' in settings_policy_response.text
     assert 'aria-expanded="true"' in settings_policy_response.text
     assert (
@@ -1224,7 +1239,7 @@ def test_active_profile_semantic_focus_routes_preopen_expected_settings_shell():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-151"),
+        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-152"),
     )
     profile_id = create_response.json()["id"]
 
@@ -1242,12 +1257,61 @@ def test_active_profile_semantic_focus_routes_preopen_expected_settings_shell():
         in settings_policy_response.text
     )
     assert 'id="settings-schema-shell-step-5-details"' in settings_policy_response.text
+    assert 'id="settings-advanced-schema-privacy-security-details"' in settings_policy_response.text
+    assert 'aria-controls="settings-advanced-schema-privacy-security-details"' in settings_policy_response.text
     assert 'aria-controls="settings-schema-shell-step-5-details"' in settings_policy_response.text
     assert 'aria-expanded="true"' in settings_policy_response.text
     assert (
         f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/json&amp;focus=settings-schema-shell-step-8"'
         in json_raw_response.text
     )
+
+
+def test_all_settings_schema_shell_rehoming_keeps_nodes_reachable_without_default_clutter():
+    client = make_test_client(app)
+    create_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Schema Shell Rehome Contract", schema_version="release-152"),
+    )
+    profile_id = create_response.json()["id"]
+
+    default_response = client.get(f"/profiles/{profile_id}/settings")
+    focused_response = client.get(
+        f"/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit&focus=policy:DisableTelemetry"
+    )
+
+    assert default_response.status_code == 200
+    assert focused_response.status_code == 200
+
+    default_soup = BeautifulSoup(default_response.text, "html.parser")
+    focused_soup = BeautifulSoup(focused_response.text, "html.parser")
+
+    default_advanced = default_soup.select_one("#all-settings-catalog-advanced")
+    assert default_advanced is not None
+    assert default_advanced.has_attr("hidden")
+    assert default_advanced["data-settings-focus-open"] == "false"
+    assert default_advanced.select_one("#settings-schema-shell-step-2") is not None
+    assert default_advanced.select_one("[data-settings-advanced-schema-shell]") is not None
+    assert default_advanced.select_one("#settings-preferences-general") is None
+    assert default_advanced.select_one(".theme-subcard") is None
+
+    preference_bridge = default_soup.select_one("[data-settings-preferences-compat]")
+    assert preference_bridge is not None
+    assert "support-hidden" in preference_bridge.get("class", [])
+    assert preference_bridge.select_one("#settings-preferences-general") is not None
+    assert preference_bridge.select_one("#wizard-preferences-general-presets") is not None
+    assert preference_bridge.select_one(".theme-subcard") is None
+
+    focused_advanced = focused_soup.select_one("#all-settings-catalog-advanced")
+    assert focused_advanced is not None
+    assert not focused_advanced.has_attr("hidden")
+    assert focused_advanced["data-settings-focus-open"] == "true"
+    focused_schema = focused_advanced.select_one("#settings-schema-shell-step-5-details")
+    assert focused_schema is not None
+    assert not focused_schema.has_attr("hidden")
+    focused_outer = focused_advanced.select_one("#settings-advanced-schema-privacy-security-details")
+    assert focused_outer is not None
+    assert not focused_outer.has_attr("hidden")
 
 
 def test_profile_routes_delegate_navigation_helpers():

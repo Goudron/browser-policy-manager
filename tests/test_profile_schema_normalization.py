@@ -16,9 +16,11 @@ from tools import backfill_profile_schema_versions
 LEGACY_ESR_140_8 = f"esr-140.{8}"
 LEGACY_ESR_140_9 = f"esr-140.{9}"
 LEGACY_ESR_140_10 = f"esr-140.{10}"
+LEGACY_ESR_140_11 = f"esr-140.{11}"
 LEGACY_RELEASE_148 = f"release-{148}"
 LEGACY_RELEASE_149 = f"release-{149}"
 LEGACY_RELEASE_150 = f"release-{150}"
+LEGACY_RELEASE_151 = f"release-{151}"
 
 
 def _make_session():
@@ -36,9 +38,11 @@ def test_profile_schema_normalization_updates_only_selected_legacy_channels():
             [
                 Profile(name="legacy-esr-9", schema_version=LEGACY_ESR_140_9, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-esr-10", schema_version=LEGACY_ESR_140_10, flags={"DisableTelemetry": True}),
+                Profile(name="legacy-esr-11", schema_version=LEGACY_ESR_140_11, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-current-minus-one", schema_version=LEGACY_RELEASE_149, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-current-minus-one-copy", schema_version=LEGACY_RELEASE_149, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-current", schema_version=LEGACY_RELEASE_150, flags={"DisableTelemetry": True}),
+                Profile(name="legacy-release-151", schema_version=LEGACY_RELEASE_151, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-esr-8", schema_version=LEGACY_ESR_140_8, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-older", schema_version=LEGACY_RELEASE_148, flags={"DisableTelemetry": True}),
                 Profile(
@@ -59,20 +63,24 @@ def test_profile_schema_normalization_updates_only_selected_legacy_channels():
             row.name: (row.schema_version, row.revision)
             for row in session.scalars(select(Profile).order_by(Profile.name)).all()
         }
-        assert result.scanned == 5
-        assert result.normalized == 5
+        assert result.scanned == 7
+        assert result.normalized == 7
         assert result.skipped_invalid == 0
         assert rows["legacy-esr-10"][0] == CURRENT_ESR_SCHEMA_CHANNEL
+        assert rows["legacy-esr-11"][0] == CURRENT_ESR_SCHEMA_CHANNEL
         assert rows["legacy-esr-9"][0] == CURRENT_ESR_SCHEMA_CHANNEL
         assert rows["legacy-release-current"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
+        assert rows["legacy-release-151"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
         assert rows["legacy-release-current-minus-one"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
         assert rows["legacy-release-current-minus-one-copy"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
         assert rows["legacy-esr-8"][0] == LEGACY_ESR_140_8
         assert rows["legacy-release-older"][0] == LEGACY_RELEASE_148
         assert rows["current-release"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
         assert rows["legacy-esr-10"][1] == 2
+        assert rows["legacy-esr-11"][1] == 2
         assert rows["legacy-esr-9"][1] == 2
         assert rows["legacy-release-current"][1] == 2
+        assert rows["legacy-release-151"][1] == 2
         assert rows["legacy-release-current-minus-one"][1] == 2
         assert rows["legacy-release-current-minus-one-copy"][1] == 2
     finally:

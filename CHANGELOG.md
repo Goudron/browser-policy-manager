@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.8.8
+
+### Added
+- Added a shared All settings inventory model for schema-backed policies, known and unknown managed
+  preferences, validation issues, source attribution, CIS decisions, search, and detail editing.
+- Added explicit Review, Configured, and Catalog modes inside the existing All settings route.
+  Review prioritizes invalid, CIS review, raw, unknown, deprecated, and imported items; Configured
+  summarizes applied settings by domain/source; Catalog exposes the complete supported inventory.
+- Added grouped, scope-aware settings search with deduplicated destinations and a primary detail
+  editor for apply, remove, reset, source, validation, and location context.
+- Added domain summaries, source filters, category drilldown, bounded visible lists, Catalog
+  pagination, keyboard/focus contracts, screen-reader labels, and responsive heavy-profile layouts.
+- Added a distinct permanent-delete action for active and archived Library profiles with explicit
+  irreversible confirmation and failure-safe API handling.
+- Added bundled Firefox Release 152 and ESR 140.12 schemas from Mozilla policy templates v7.12,
+  including migration/runtime normalization, generated CIS layers, and All settings coverage for
+  new schema policies.
+
+### Changed
+- Made Review the default All settings workflow for saved enterprise profiles instead of opening
+  the complete schema catalog and every long section at once.
+- Re-homed full schema-shell and managed-preference controls behind Catalog/detail while retaining
+  complete coverage and guided/raw/deprecated metadata.
+- Unified baseline, CIS, manual, imported, raw, unknown, and catalog-only source state across list,
+  summary, search, and detail views.
+- Updated supported Firefox channels, UI labels, README examples, converter defaults, legacy guards,
+  migrations, locale catalogs, CIS mappings, and generated layers to Release 152 / ESR 140.12.
+- Updated all six active locale catalogs and the global terminology/allowlist contracts for new All
+  settings copy, permanent deletion, Compare cleanup, and the Web Serial policy label.
+
+### Fixed
+- Removed duplicate All settings category/catalog surfaces and conflicting configured counters,
+  filters, automatic category drilldown, and row-selection category mutation.
+- Corrected heavy-profile inventory hydration so corporate preset + CIS Level 2 profiles expose
+  configured, baseline, CIS, guided, raw, and known-preference counts instead of zeros or unknowns.
+- Fixed JSON editor loading for CIS-managed known preferences and localized Guided disclosure labels
+  across runtime language changes.
+- Removed the redundant return-to-Library action, dead header container, and stale value-state legend
+  from the dedicated Compare route while retaining new-tab Library handoff.
+- Reduced large-profile list latency by reusing cached schema validators and stabilized browser smoke
+  interactions across asynchronous locale rerenders.
+
+### Quality
+- Added inventory, route-state, source attribution, search grouping, detail editing, performance,
+  responsive layout, accessibility, Library deletion, Compare cleanup, schema migration, locale,
+  and Chromium/Selenium regression coverage.
+- Kept `make typecheck`, `make lint`, `make test-ui`, and `make test-release` green after the completed
+  epic and Firefox schema bump.
+- Confirmed non-live `app/` coverage remains at `100%`: 2,739 statements and 828 branches with no
+  missing statements, branches, or partial branches.
+
 ## 0.8.7.1
 
 ### Changed

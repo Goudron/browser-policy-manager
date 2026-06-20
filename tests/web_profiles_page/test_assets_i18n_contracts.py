@@ -58,7 +58,7 @@ def test_existing_profile_routes_embed_initial_profile_payload():
         "/api/profiles",
         json=build_profile_payload(
             name="Initial Profile Embed Contract",
-            schema_version="release-151",
+            schema_version="release-152",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -69,7 +69,7 @@ def test_existing_profile_routes_embed_initial_profile_payload():
     assert response.status_code == 200
     assert '<script id="profiles-initial-profile" type="application/json">' in response.text
     assert '"name": "Initial Profile Embed Contract"' in response.text
-    assert '"schema_version": "release-151"' in response.text
+    assert '"schema_version": "release-152"' in response.text
     assert '"DisableTelemetry": true' in response.text
 
     soup = BeautifulSoup(response.text, "html.parser")

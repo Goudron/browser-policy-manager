@@ -186,14 +186,21 @@
             wizardSettingsSearchMetaEl,
             wizardSettingsSearchResultsEl,
             wizardSettingsSearchClearEl,
+            wizardSettingsSearchScopeEl,
+            wizardSettingsSearchScopeButtons,
+            allSettingsConfiguredSummaryEl,
+            allSettingsSourceFiltersEl,
             allSettingsListSummaryEl,
             allSettingsReviewSummaryEl,
             allSettingsReviewActionsEl,
             allSettingsListEl,
             allSettingsListEmptyEl,
+            allSettingsListBudgetEl,
             allSettingsDetailPanelEl,
             allSettingsAddPreferenceEl,
+            allSettingsCatalogAdvancedEl,
             allSettingsFilterButtons,
+            allSettingsSourceFilterButtons,
             nameInput,
             wizardContextCopyEl,
             wizardNameEl,
@@ -433,6 +440,7 @@
             },
         });
 
+        let handleAllSettingsDocumentChange = () => {};
         const schemaShell = window.BPMProfilesSchemaShell.create({
             documentRef,
             elements: {
@@ -474,6 +482,7 @@
                 renderWebsiteAccessReviewSummary: (...args) => renderWebsiteAccessReviewSummary(...args),
                 renderPrivacyReviewSummary: (...args) => renderPrivacyReviewSummary(...args),
                 getManagedExtensionProfileById,
+                onDocumentChange: (...args) => handleAllSettingsDocumentChange(...args),
             },
             state: {
                 getEditor,
@@ -483,7 +492,57 @@
             wizardSchemaShellViews,
         });
 
-        let handleAllSettingsDocumentChange = () => {};
+        function readAllSettingsModeFromUrl() {
+            const params = new URLSearchParams(windowRef.location?.search || "");
+            const mode = params.get("settingsMode") || params.get("mode") || "";
+            return ["review", "configured", "catalog"].includes(mode) ? mode : "review";
+        }
+
+        function replaceAllSettingsModeUrl(mode) {
+            if (!windowRef.history?.replaceState || !windowRef.location) return;
+            const params = new URLSearchParams(windowRef.location.search || "");
+            if (mode && mode !== "review") {
+                params.set("settingsMode", mode);
+            } else {
+                params.delete("settingsMode");
+                params.delete("mode");
+            }
+            const query = params.toString();
+            const nextUrl = `${windowRef.location.pathname}${query ? `?${query}` : ""}${windowRef.location.hash || ""}`;
+            windowRef.history.replaceState(windowRef.history.state, "", nextUrl);
+        }
+
+        const allSettingsRouteState = window.BPMProfilesAllSettingsState.create({
+            activeMode: readAllSettingsModeFromUrl(),
+        });
+        let getWizardComplianceMergeInfoRef = () => null;
+        function getAllSettingsComplianceInfo() {
+            const wizardComplianceInfo = getWizardComplianceMergeInfoRef();
+            return Array.isArray(wizardComplianceInfo?.decisions)
+                && wizardComplianceInfo.decisions.length
+                ? wizardComplianceInfo
+                : getCurrentProfile()?.compliance || null;
+        }
+
+        function getAllSettingsManualEdits() {
+            return getCurrentProfile()?.manual_edits
+                || getCurrentProfile()?.manualEdits
+                || getCurrentProfile()?.source_state?.manual_edits
+                || [];
+        }
+
+        const settingsInventory = window.BPMProfilesSettingsInventory.create({
+            dependencies: {
+                t,
+                getActiveWizardSchemaVersion: () => getActiveWizardSchemaVersion(),
+                getValidationIssues: () => getValidationIssues(),
+                getComplianceInfo: () => getAllSettingsComplianceInfo(),
+                getManualEdits: () => getAllSettingsManualEdits(),
+            },
+            allSettingsCategoryCatalog,
+            wizardPreferencesCatalog,
+            wizardSchemaShellCatalog,
+        });
         const allSettingsDetail = window.BPMProfilesAllSettingsDetail.create({
             documentRef,
             elements: {
@@ -504,23 +563,58 @@
                 renderSchemaPolicyReviewState: (...args) => schemaShell.renderSchemaPolicyReviewState(...args),
                 onDocumentChange: (...args) => handleAllSettingsDocumentChange(...args),
                 setStatus: (...args) => setStatus(...args),
+                settingsInventory,
+                getAllSettingsMode: () => allSettingsRouteState.getSnapshot().activeMode,
             },
             state: {
                 getEditor,
                 setCurrentRaw,
             },
-            wizardPreferencesCatalog,
         });
+        const allSettingsModeButtons = Array.from(
+            documentRef.querySelectorAll("[data-settings-mode]"),
+        );
+        let allSettingsList = null;
+        function syncAllSettingsModeButtons() {
+            const activeMode = allSettingsRouteState.getSnapshot().activeMode;
+            allSettingsModeButtons.forEach((button) => {
+                const isActive = button.dataset.settingsMode === activeMode;
+                button.classList.toggle("is-active", isActive);
+                button.setAttribute("aria-pressed", isActive ? "true" : "false");
+            });
+            const reviewPanel = allSettingsReviewSummaryEl?.closest("#all-settings-review-panel");
+            if (reviewPanel) {
+                reviewPanel.hidden = activeMode !== "review";
+            }
+            if (allSettingsCatalogAdvancedEl) {
+                const focusOpen = allSettingsCatalogAdvancedEl.dataset.settingsFocusOpen === "true";
+                allSettingsCatalogAdvancedEl.hidden = activeMode !== "catalog" && !focusOpen;
+            }
+        }
+        allSettingsModeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                allSettingsRouteState.setActiveMode(button.dataset.settingsMode || "review");
+                allSettingsRouteState.setActiveFilter("all");
+                replaceAllSettingsModeUrl(allSettingsRouteState.getSnapshot().activeMode);
+                syncAllSettingsModeButtons();
+                allSettingsList?.render?.();
+            });
+        });
+        syncAllSettingsModeButtons();
 
-        const allSettingsList = window.BPMProfilesAllSettingsList.create({
+        allSettingsList = window.BPMProfilesAllSettingsList.create({
             documentRef,
             elements: {
+                allSettingsConfiguredSummaryEl,
+                allSettingsSourceFiltersEl,
                 allSettingsListSummaryEl,
                 allSettingsReviewSummaryEl,
                 allSettingsReviewActionsEl,
                 allSettingsListEl,
                 allSettingsListEmptyEl,
+                allSettingsListBudgetEl,
                 allSettingsFilterButtons,
+                allSettingsSourceFilterButtons,
             },
             dependencies: {
                 t,
@@ -528,7 +622,18 @@
                 getActiveWizardSchemaVersion: () => getActiveWizardSchemaVersion(),
                 readWizardSchemaSource: () => readWizardSchemaSource(),
                 getValidationIssues: () => getValidationIssues(),
+                getComplianceInfo: () => getAllSettingsComplianceInfo(),
+                getManualEdits: () => getAllSettingsManualEdits(),
+                getCurrentLang: () => getCurrentLang(),
                 onSelectionChange: (entry) => allSettingsDetail.render(entry),
+                onModeChange: (mode, options = {}) => {
+                    if (options.updateUrl) {
+                        replaceAllSettingsModeUrl(mode);
+                    }
+                    syncAllSettingsModeButtons();
+                },
+                allSettingsRouteState,
+                settingsInventory,
             },
             allSettingsCategoryCatalog,
             wizardPreferencesCatalog,
@@ -542,19 +647,21 @@
                 wizardSettingsSearchMetaEl,
                 wizardSettingsSearchResultsEl,
                 wizardSettingsSearchClearEl,
+                wizardSettingsSearchScopeEl,
+                wizardSettingsSearchScopeButtons,
             },
             dependencies: {
                 t,
                 escapeHtml,
                 humanizeIdentifier,
                 normalizeSearchText,
-                getActiveWizardSchemaVersion: () => getActiveWizardSchemaVersion(),
                 setWizardStep: (step) => setWizardStep(step),
                 getAllSettingsSearchEntries: () => allSettingsList.getSearchEntries(),
                 findAllSettingsEntryTarget: (target) => allSettingsList.findTarget(target),
             },
             state: {
                 getCurrentLang,
+                allSettingsRouteState,
             },
             wizardSettingsCatalog,
             wizardSearchSectionSteps,
@@ -643,6 +750,7 @@
         });
         setSetWizardStep(wizardFlow.setWizardStep);
         setUpdateWizardSummary(wizardFlow.updateWizardSummary);
+        getWizardComplianceMergeInfoRef = () => wizardFlow.getWizardComplianceMergeInfo();
 
         let review;
         let renderFinalExportStepSummaryRef = () => {};

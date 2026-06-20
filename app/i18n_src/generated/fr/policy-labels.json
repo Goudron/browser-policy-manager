@@ -20,6 +20,7 @@
     "profiles.shell_policy_app_update_pin": "Application mise a jour pin",
     "profiles.shell_policy_allowed_domains_for_apps": "Autorisé domaines pour apps",
     "profiles.shell_policy_default_download_directory": "Par défaut téléchargement repertoire",
+    "profiles.shell_policy_default_serial_guard_setting": "Accès Web Serial par défaut",
     "profiles.shell_policy_disable_default_browser_agent": "Desactiver par défaut navigateur agent",
     "profiles.shell_policy_disable_encrypted_client_hello": "Desactiver Encrypted Client Hello",
     "profiles.shell_policy_disable_profile_refresh": "Desactiver profil refresh",

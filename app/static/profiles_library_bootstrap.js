@@ -39,6 +39,7 @@
             getProfileLibraryStats,
             importFirefoxPoliciesJson,
             softDeleteProfile,
+            hardDeleteProfile,
             restoreProfile,
         } = data;
         const {
@@ -435,6 +436,13 @@
                                     data-library-profile-id="${profile.id}">
                                     ${profile.is_deleted ? t("profiles.restore") : t("profiles.soft_delete")}
                                 </button>
+                                <button
+                                    type="button"
+                                    class="button-base danger-button library-row-secondary-action library-row-danger-action"
+                                    data-library-lifecycle-action="hard-delete"
+                                    data-library-profile-id="${profile.id}">
+                                    ${t("profiles.hard_delete")}
+                                </button>
                             </div>
                             <div
                                 id="${clonePanelId}"
@@ -481,9 +489,14 @@
                         </div>
                     </div>
                 `;
-                const lifecycleButton = li.querySelector("[data-library-lifecycle-action]");
-                lifecycleButton?.addEventListener("click", async () => {
-                    await runLibraryLifecycleAction(profile, lifecycleButton.dataset.libraryLifecycleAction);
+                li.querySelectorAll("[data-library-lifecycle-action]").forEach((lifecycleButton) => {
+                    lifecycleButton.addEventListener("click", async () => {
+                        await runLibraryLifecycleAction(
+                            profile,
+                            lifecycleButton.dataset.libraryLifecycleAction,
+                            lifecycleButton,
+                        );
+                    });
                 });
                 const cloneButton = li.querySelector("[data-clone-profile-id]");
                 const clonePanel = li.querySelector("[data-clone-name-panel]");
@@ -510,7 +523,7 @@
             });
         }
 
-        async function runLibraryLifecycleAction(profile, action) {
+        async function runLibraryLifecycleAction(profile, action, actionButton = null) {
             if (!profile?.id) return;
             if (action === "archive") {
                 if (!windowRef.confirm(t("profiles.confirm_soft_delete"))) return;
@@ -530,6 +543,26 @@
                     await reloadList();
                 } catch (error) {
                     setStatus(t("profiles.error_restore").replace("{detail}", error.message || error), "error");
+                }
+                return;
+            }
+            if (action === "hard-delete") {
+                const confirmation = t("profiles.confirm_hard_delete")
+                    .replace("{name}", profile.name || "");
+                if (!windowRef.confirm(confirmation)) return;
+                actionButton?.setAttribute("aria-busy", "true");
+                if (actionButton) actionButton.disabled = true;
+                try {
+                    await hardDeleteProfile(profile.id, windowRef.fetch);
+                    setStatus(t("profiles.hard_delete_done"), "success");
+                    await reloadList();
+                } catch (error) {
+                    setStatus(t("profiles.error_delete").replace("{detail}", error.message || error), "error");
+                } finally {
+                    if (actionButton?.isConnected) {
+                        actionButton.disabled = false;
+                        actionButton.removeAttribute("aria-busy");
+                    }
                 }
             }
         }

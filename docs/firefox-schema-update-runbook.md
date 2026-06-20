@@ -50,6 +50,18 @@ Recommended workflow:
 
 The release zip is the authoritative source for the example policy payloads used by the converter.
 
+Before downloading, confirm the release metadata from the official Mozilla GitHub release page or
+API. The release name must explicitly match the target Firefox Release / ESR pair. Record the zip
+checksum in the execution notes so a later regeneration can identify the exact input. The `data/`
+tree is a local, Git-ignored converter cache; the committed/reviewed outputs are the bundled schemas
+and the code/tests that identify their upstream source.
+
+Mozilla release notes and the rendered legacy docs page can move at different speeds. Compare the
+release notes with the generated diff. If Mozilla announces a new field but it is absent from both
+the rendered docs input and `linux/policies.json`, do not silently claim coverage: verify the current
+Firefox Admin Docs or upstream implementation, then either extend the converter with a tested rule
+or record the upstream/converter gap explicitly.
+
 ## Files That Must Move Together
 
 Treat the following as one unit of change:
@@ -70,6 +82,8 @@ Treat the following as one unit of change:
 - All settings templates/static bindings when schema-shell behavior, search, or route handoff changes
 - `app/i18n_src/*/*.json` source catalogs and generated `app/i18n/*.json` runtime catalogs when
   labels, placement copy, or policy help text changes
+- `app/i18n_src/catalog-order.json`, `app/i18n_src/overrides/*/policy-labels.json`, and generated
+  `app/i18n_src/generated/*/policy-labels.json` when schema generation introduces a policy label
 - `tests/test_schema_channels.py`
 - `tests/test_schema_validation.py`
 - `tests/test_firefox_wizard_shell.py`
@@ -78,6 +92,9 @@ Treat the following as one unit of change:
 - `tests/test_web_profiles_page.py`
 - `tests/test_no_legacy_schema_refs.py`
 - `tests/test_migrations.py`
+- `tests/test_ru_locale_quality.py` and
+  `tests/fixtures/locale_contracts/visible_english_allowlists.json` when a new policy label contains
+  a preserved Latin technical/product term
 - `.github/workflows/ci.yml`
 - `README.md`
 - `alembic/versions/*.py` for the schema-version migration
@@ -116,6 +133,10 @@ At minimum, update:
 - default Release / ESR version strings
 - default Mozilla source tag
 - `--version` choices in `tools/update_schemas.py` if the raw-cache helper is still used
+
+Do not use a broad version-string replacement for historical policy metadata. Existing policies
+must keep their real `x-bpm-min-version` and compatibility provenance even when the active channel
+moves forward.
 
 ## 3. Generate the new bundled schemas
 
@@ -170,7 +191,7 @@ If these checks fail, do not continue into app changes yet.
 After the bundled JSON is correct:
 
 1. Remove old channel references from the product code.
-2. Add an Alembic migration that rewrites persisted `profiles.schema_version` values from the old channel strings to the new ones.
+2. Add an Alembic migration that rewrites persisted `profiles.schema_version` values from the old channel strings to the new ones. Its `down_revision` must be the current Alembic head, which may be newer than the previous schema migration.
 3. Update `app/services/profile_schema_normalization.py` so explicit runtime backfill also maps the previous Release / ESR channels to the new supported channels. This covers local databases that do not go through Alembic.
 4. Run `make backfill-profile-schema-versions` against the target database and confirm the reported `scanned`, `normalized`, and `skipped_invalid` counts. The `/profiles` library route must remain read-only and must not run schema normalization during GET rendering.
 5. Update documentation and UI labels to the new Release / ESR pair.
@@ -186,6 +207,29 @@ After the bundled JSON is correct:
 7. Update the legacy guard so the previous release strings are banned outside the explicit migration and normalization exceptions.
 
 Important: only the migration, runtime normalizer, and their tests should keep references to the previous channels.
+
+### Schema-generated policy labels
+
+Every new schema policy can create a runtime key such as
+`profiles.shell_policy_<normalized_policy_name>`. Handle these keys before running the broad locale
+suite:
+
+1. Derive the exact key through the existing schema-shell/catalog builder or its focused contract.
+2. Add the key to `app/i18n_src/catalog-order.json`; overrides alone are not emitted unless the key
+   is in catalog order.
+3. Add translations to all six `app/i18n_src/overrides/<locale>/policy-labels.json` files.
+4. Run `make build-locale-catalogs`. Never hand-edit generated policy-label segments or runtime
+   `app/i18n/*.json` as the source of truth.
+5. Run the focused runtime-key and accidental-English tests immediately. If the label intentionally
+   preserves a technical name such as an API name, update both the global visible-English fixture
+   and any locale-specific quality allowlist (currently Russian has an additional token check).
+6. Add or update the global glossary and Mozilla terminology evidence when the term is new.
+
+Run the maintained locale contract after registering the generated key:
+
+```bash
+make test-locale-contract
+```
 
 ## 6. Audit BPM UI impact from the new policy docs
 
@@ -248,7 +292,8 @@ Expected test touch points:
 - `tests/test_profile_schema_normalization.py`
   Verifies runtime/library normalization upgrades previous channels to the current pair and leaves invalid profiles untouched.
 - `tests/test_web_profiles_page.py`
-  Verifies opening `/profiles` invokes runtime normalization before the library loads profile data, and visible UI/header text reflects the current supported versions.
+  Verifies the Library remains read-only and visible UI/header text reflects the current supported
+  versions. Startup/backfill normalization belongs in `tests/test_profile_schema_normalization.py`.
 - `tests/test_firefox_wizard_shell.py`
   Verifies important new policies land in the intended UI section, bucket, and inline editor shape.
 - `tests/test_firefox_manual_policy_controls.py`
@@ -285,6 +330,10 @@ For fast visual smoke, run the compact Chromium/Selenium layer:
 make test-ui
 ```
 
+Run `make test-ui` outside the Codex filesystem/network sandbox from the first attempt. The suite
+creates local HTTP sockets and browser-driver processes; a sandboxed trial is expected to fail with
+`PermissionError: Operation not permitted` and provides no product signal.
+
 The browser smoke suite intentionally checks only Russian and Simplified Chinese locale rendering,
 primary route loading, policies import, and route handoff across the Library, Guided editor, All
 settings, and JSON editor. Do not expand it into a deep browser regression matrix; put detailed
@@ -295,6 +344,24 @@ Then run the full suite:
 ```bash
 make test-release
 ```
+
+Run `make test-release` outside the sandbox as well. It includes the `browser_ui` marker, so it has
+the same local socket/browser requirements as `make test-ui`.
+
+Recommended gate order:
+
+1. `make test-firefox-schema-contract`
+2. focused converter, schema-manager, CIS-generation, and placement tests
+3. `make test-locale-contract` when any visible version or policy term changed
+4. `make lint` and `make typecheck`
+5. `make test-ui` outside the sandbox
+6. `make test-release` outside the sandbox
+
+Do not solve a large-list browser timeout by increasing Selenium waits first. Profile lists validate
+many documents and must use the cached validator for their schema channel rather than recompiling a
+full JSON Schema per row. Measure the API path before changing test timing. Also remember that locale
+initialization can rerender lists: browser tests should reacquire elements after rerenders or perform
+one atomic DOM lookup/action instead of retaining stale Selenium handles.
 
 If the schema bump touched product wiring heavily, also review the profiles page manually in the browser and verify:
 
@@ -313,7 +380,8 @@ Before calling the bump finished, confirm all of the following:
 - schema metadata points to the correct Mozilla tag
 - Alembic migration upgrades stored `schema_version` values
 - runtime profile schema normalization maps the previous Release / ESR pair to the new channels
-- opening `/profiles` runs the normalizer before library data is loaded
+- application startup or the explicit backfill normalizes legacy rows before normal Library use,
+  while GET `/profiles` remains read-only
 - UI audit completed for newly added/changed policies
 - no separate advanced editor route, redirect, template, or bundle was reintroduced
 - current Firefox Release / ESR labels are visible in the main header and schema selector
@@ -324,6 +392,8 @@ Before calling the bump finished, confirm all of the following:
 - tests for schema channels, metadata, legacy guards, and migrations are green
 - fast Chromium/Selenium smoke is green when the bump touches route handoff, editor wiring, import flow, or visible locale copy
 - locale parity, runtime i18n, and visible-English allowlist tests are green
+- new schema-generated policy-label keys are present in catalog order, all six override catalogs,
+  generated segments, and runtime catalogs
 - glossary and Pontoon/SUMO evidence are updated when the schema bump introduces or renames Mozilla/Firefox user-facing terms
 - `README.md` mentions the current supported Release / ESR versions
 
@@ -333,6 +403,17 @@ Before calling the bump finished, confirm all of the following:
 - Updating UI labels but leaving API or validation defaults on the previous channel.
 - Updating English schema labels or README text but leaving non-English catalogs on the previous Release / ESR wording.
 - Adding schema-related locale keys only to `en.json`, which creates fallback islands in non-English UI.
+- Adding policy-label overrides without adding the key to `app/i18n_src/catalog-order.json`, so the
+  build silently omits the label from generated/runtime catalogs.
+- Preserving a new Latin technical term in localized labels but updating only the global allowlist
+  and forgetting a locale-specific quality allowlist.
+- Running `make test-ui` or `make test-release` inside the sandbox and mistaking local-socket denial
+  for a product failure.
+- Raising browser timeouts when the actual regression is repeated JSON Schema compilation in a
+  large profile list.
+- Reusing Selenium element handles across asynchronous locale rerenders, producing stale-element
+  failures unrelated to product behavior.
+- Broadly replacing version numbers inside historical policy compatibility metadata.
 - Regenerating the bundled schema but forgetting the Alembic migration.
 - Keeping old filenames or source tags in tests and CI guards.
 - Leaving the previous schema JSON files in `app/schemas/policies/`, which makes it look like both are supported.

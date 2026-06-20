@@ -20,7 +20,7 @@ def test_get_schema_or_404_loads_supported_profile(monkeypatch):
     sentinel = {"policies": {"DisableTelemetry": {"type": "boolean"}}}
     monkeypatch.setattr(validation_module, "load_policy_schema_for_channel", lambda profile: sentinel)
 
-    result = validation_module._get_schema_or_404("esr-140.11")
+    result = validation_module._get_schema_or_404("esr-140.12")
 
     assert result is sentinel
 
@@ -32,7 +32,7 @@ def test_get_schema_or_404_reports_unavailable_schema(monkeypatch):
     monkeypatch.setattr(validation_module, "load_policy_schema_for_channel", _raise_missing)
 
     with pytest.raises(HTTPException) as excinfo:
-        validation_module._get_schema_or_404("esr-140.11")
+        validation_module._get_schema_or_404("esr-140.12")
 
     assert excinfo.value.status_code == 503
     assert "not available" in str(excinfo.value.detail)
@@ -49,7 +49,7 @@ async def test_validate_profile_422_with_empty_issues(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "esr-140.11",
+            "esr-140.12",
             validation_module.ValidationRequest(document={"DisableTelemetry": True}),
         )
 
@@ -68,7 +68,7 @@ async def test_validate_profile_400_on_unexpected_error(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "release-151",
+            "release-152",
             validation_module.ValidationRequest(document={"DisableTelemetry": True}),
         )
 
@@ -95,7 +95,7 @@ async def test_validate_profile_422_includes_first_issue_message(monkeypatch):
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "esr-140.11",
+            "esr-140.12",
             validation_module.ValidationRequest(document={"DisableTelemetry": "nope"}),
         )
 
@@ -117,16 +117,16 @@ async def test_validate_profile_accepts_firefox_policies_document(monkeypatch):
     monkeypatch.setattr(validation_module, "validate_firefox_policies_document", _validate)
 
     result = await validation_module.validate_profile(
-        "release-151",
+        "release-152",
         validation_module.ValidationRequest(
             document={"policies": {"DisableTelemetry": True}},
         ),
     )
 
-    assert result == {"ok": True, "profile": "release-151"}
+    assert result == {"ok": True, "profile": "release-152"}
     assert seen == {
         "document": {"policies": {"DisableTelemetry": True}},
-        "profile": "release-151",
+        "profile": "release-152",
     }
 
 
@@ -148,7 +148,7 @@ async def test_validate_profile_reports_firefox_document_shape_errors(monkeypatc
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "release-151",
+            "release-152",
             validation_module.ValidationRequest(document={"policies": []}),
         )
 
@@ -184,7 +184,7 @@ async def test_validate_profile_reports_firefox_document_policy_errors(monkeypat
 
     with pytest.raises(HTTPException) as excinfo:
         await validation_module.validate_profile(
-            "release-151",
+            "release-152",
             validation_module.ValidationRequest(
                 document={"policies": {"DisableTelemetry": "nope"}},
             ),

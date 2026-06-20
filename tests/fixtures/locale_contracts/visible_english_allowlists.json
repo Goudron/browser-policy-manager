@@ -67,7 +67,6 @@
     "de": [
       "profiles.compare_route_title",
       "profiles.compare_route_eyebrow",
-      "profiles.compare_back_to_library",
       "profiles.compare_left_label",
       "profiles.compare_right_label",
       "profiles.compare_search_placeholder",
@@ -100,7 +99,6 @@
     "es-ES": [
       "profiles.compare_route_title",
       "profiles.compare_route_eyebrow",
-      "profiles.compare_back_to_library",
       "profiles.compare_left_label",
       "profiles.compare_right_label",
       "profiles.compare_search_placeholder",
@@ -136,7 +134,6 @@
     "fr": [
       "profiles.compare_route_title",
       "profiles.compare_route_eyebrow",
-      "profiles.compare_back_to_library",
       "profiles.compare_left_label",
       "profiles.compare_right_label",
       "profiles.compare_search_placeholder",
@@ -172,7 +169,6 @@
     "ru": [
       "profiles.compare_route_title",
       "profiles.compare_route_eyebrow",
-      "profiles.compare_back_to_library",
       "profiles.compare_left_label",
       "profiles.compare_right_label",
       "profiles.compare_search_placeholder",
@@ -201,7 +197,6 @@
     "zh-CN": [
       "profiles.compare_route_title",
       "profiles.compare_route_eyebrow",
-      "profiles.compare_back_to_library",
       "profiles.compare_left_label",
       "profiles.compare_right_label",
       "profiles.compare_search_placeholder",
@@ -389,6 +384,7 @@
     "SSLVersion",
     "SSO",
     "SameSite",
+    "Serial",
     "Startpage",
     "U2F",
     "URI",
@@ -398,6 +394,7 @@
     "VPN",
     "Valery",
     "WPAD",
+    "Web",
     "WebAuthn",
     "Wiki",
     "Windows",
@@ -455,8 +452,8 @@
       "Firefox policies.json",
       "DNS через HTTPS",
       "VPN",
-      "ESR 140.11",
-      "Release 151"
+      "ESR 140.12",
+      "Release 152"
     ],
     "zh-CN": [
       "Firefox policies.json",

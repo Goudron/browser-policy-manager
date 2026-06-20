@@ -83,7 +83,7 @@ if (JSON.stringify(withPolicy) !== JSON.stringify({{
 
 let validationBody = null;
 (async () => {{
-  await data.validateFlags("release-151", {{ policies: {{ DisableTelemetry: true }} }}, async (_url, options) => {{
+  await data.validateFlags("release-152", {{ policies: {{ DisableTelemetry: true }} }}, async (_url, options) => {{
     validationBody = JSON.parse(options.body);
     return {{
       ok: true,

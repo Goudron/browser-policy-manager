@@ -96,9 +96,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--source-tag",
-        default="mozilla-policy-templates-v7.11",
+        default="mozilla-policy-templates-v7.12",
         help=(
-            "Source tag identifier stored in the schemas (default: mozilla-policy-templates-v7.11). "
+            "Source tag identifier stored in the schemas (default: mozilla-policy-templates-v7.12). "
             "Useful for tracking which upstream snapshot was used."
         ),
     )

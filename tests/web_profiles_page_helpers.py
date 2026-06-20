@@ -602,7 +602,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_upkeep_governance_title"] == "Browser upkeep workflow"
     assert locale_json["profiles.wizard_home_surfaces_workflow_title"] == "Home and startup workflow"
     assert locale_json["profiles.wizard_language_governance_title"] == "Language governance workflow"
-    assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 151 AI policy controls"
+    assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 152 AI policy controls"
     assert locale_json["profiles.wizard_general_policy_section_state_download_prompt_on"] == (
         "Ask where to save downloads"
     )
@@ -1688,7 +1688,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_language_governance_title"] == (
         "Сценарий управления языком"
     )
-    assert locale_json["profiles.wizard_ai_controls_title"] == "Политики ИИ Firefox 151"
+    assert locale_json["profiles.wizard_ai_controls_title"] == "Политики ИИ Firefox 152"
     assert locale_json["profiles.wizard_search_surfaces_workflow_title"] == (
         "Сценарий поискового опыта"
     )

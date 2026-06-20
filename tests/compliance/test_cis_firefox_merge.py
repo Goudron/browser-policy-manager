@@ -16,8 +16,8 @@ from app.web.firefox_starter_presets import build_wizard_starter_document
 
 
 def test_cis_merge_adds_missing_hardening_without_dropping_base_only_settings() -> None:
-    base = build_wizard_starter_document("basic_corporate", "release-151")
-    layer = build_cis_layer(2, "release-151")
+    base = build_wizard_starter_document("basic_corporate", "release-152")
+    layer = build_cis_layer(2, "release-152")
 
     result = merge_base_with_cis_layer(base, layer, base_label="basic_corporate", cis_label="cis_l2")
 
@@ -27,13 +27,13 @@ def test_cis_merge_adds_missing_hardening_without_dropping_base_only_settings() 
     assert result.effective_policies["Homepage"]["URL"] == "https://intranet.example.local/"
     validate_profile_policies_or_raise(
         result.effective_policies,
-        load_policy_schema_for_channel("release-151"),
+        load_policy_schema_for_channel("release-152"),
     )
 
 
 def test_cis_merge_keeps_base_update_and_proxy_governance_for_review() -> None:
-    base = build_wizard_starter_document("basic_corporate", "release-151")
-    layer = build_cis_layer(1, "release-151")
+    base = build_wizard_starter_document("basic_corporate", "release-152")
+    layer = build_cis_layer(1, "release-152")
 
     result = merge_base_with_cis_layer(base, layer)
     decisions = {decision.path: decision for decision in result.decisions}
@@ -49,8 +49,8 @@ def test_cis_merge_keeps_base_update_and_proxy_governance_for_review() -> None:
 
 
 def test_cis_merge_reports_already_satisfied_and_cis_replacements() -> None:
-    base = build_wizard_starter_document("basic_corporate", "release-151")
-    layer = build_cis_layer(2, "release-151")
+    base = build_wizard_starter_document("basic_corporate", "release-152")
+    layer = build_cis_layer(2, "release-152")
 
     result = merge_base_with_cis_layer(base, layer)
     decisions = {decision.path: decision for decision in result.decisions}
@@ -62,9 +62,9 @@ def test_cis_merge_reports_already_satisfied_and_cis_replacements() -> None:
 
 
 def test_cis_merge_level_2_contains_level_1_plus_level_2_decisions() -> None:
-    base = build_wizard_starter_document("blank", "release-151")
-    l1 = merge_base_with_cis_layer(base, build_cis_layer(1, "release-151"))
-    l2 = merge_base_with_cis_layer(base, build_cis_layer(2, "release-151"))
+    base = build_wizard_starter_document("blank", "release-152")
+    l1 = merge_base_with_cis_layer(base, build_cis_layer(1, "release-152"))
+    l2 = merge_base_with_cis_layer(base, build_cis_layer(2, "release-152"))
 
     assert set(l1.effective_policies) < set(l2.effective_policies)
     assert "NewTabPage" not in l1.effective_policies
@@ -73,8 +73,8 @@ def test_cis_merge_level_2_contains_level_1_plus_level_2_decisions() -> None:
 
 
 def test_cis_merge_keeps_soc_sanitize_cleanup_conflicts_for_review() -> None:
-    base = build_wizard_starter_document("soc_hard", "release-151")
-    layer = build_cis_layer(1, "release-151")
+    base = build_wizard_starter_document("soc_hard", "release-152")
+    layer = build_cis_layer(1, "release-152")
 
     result = merge_base_with_cis_layer(base, layer, base_label="soc_hard", cis_label="cis_l1")
     decisions = {decision.path: decision for decision in result.decisions}
@@ -85,8 +85,8 @@ def test_cis_merge_keeps_soc_sanitize_cleanup_conflicts_for_review() -> None:
 
 
 def test_cis_merge_preserves_classroom_kiosk_controls_and_adds_cis_hardening() -> None:
-    base = build_wizard_starter_document("classroom_kiosk", "release-151")
-    layer = build_cis_layer(2, "release-151")
+    base = build_wizard_starter_document("classroom_kiosk", "release-152")
+    layer = build_cis_layer(2, "release-152")
 
     result = merge_base_with_cis_layer(
         base,
@@ -122,7 +122,7 @@ def test_cis_merge_preserves_classroom_kiosk_controls_and_adds_cis_hardening() -
 
     validate_profile_policies_or_raise(
         policies,
-        load_policy_schema_for_channel("release-151"),
+        load_policy_schema_for_channel("release-152"),
     )
 
 
@@ -233,7 +233,7 @@ def test_cis_merge_conflict_decisions_cover_rule_outcomes(tmp_path) -> None:
         benchmark_id="fixture",
         upstream_version="1.0",
         level=1,
-        schema_channel="release-151",
+        schema_channel="release-152",
         recommendation_ids=("bool-cis", "bool-base", "unknown"),
         policies={
             "BlockAboutConfig": True,

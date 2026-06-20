@@ -11,6 +11,7 @@
             fromEditorValue,
             toEditorValue,
             setStatus,
+            onDocumentChange = () => {},
         } = dependencies;
         const { getEditor = () => null, setCurrentRaw = () => {} } = state;
         const {
@@ -19,6 +20,12 @@
             renderWizardSchemaNestedArrayRow,
             renderWizardSchemaNestedDictionaryRow,
         } = helpers;
+
+        function notifyDetailDocumentChange(card, normalized) {
+            if (card?.closest?.("#all-settings-detail-panel")) {
+                onDocumentChange(normalized);
+            }
+        }
 
         function refreshSchemaListRows(container) {
             const listEl = container?.querySelector("[data-schema-list]");
@@ -336,6 +343,7 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setStatus(t("profiles.wizard_schema_policy_applied"), "info");
+                notifyDetailDocumentChange(card, normalized);
             } catch (e) {
                 setStatus(t("profiles.error_schema_policy").replace("{detail}", e.message || e), "error");
             }
@@ -358,6 +366,7 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setStatus(t("profiles.wizard_shell_array_item_added"), "info");
+                notifyDetailDocumentChange(card, normalized);
             } catch (e) {
                 setStatus(t("profiles.error_schema_array").replace("{detail}", e.message || e), "error");
             }
@@ -385,6 +394,7 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setStatus(t("profiles.wizard_shell_array_item_removed"), "info");
+                notifyDetailDocumentChange(card, normalized);
             } catch (e) {
                 setStatus(t("profiles.error_schema_array").replace("{detail}", e.message || e), "error");
             }
@@ -416,6 +426,7 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setStatus(t("profiles.wizard_shell_dictionary_entry_added"), "info");
+                notifyDetailDocumentChange(card, normalized);
             } catch (e) {
                 setStatus(t("profiles.error_schema_dictionary").replace("{detail}", e.message || e), "error");
             }
@@ -449,6 +460,7 @@
                 setCurrentRaw(normalized);
                 editor.setValue(toEditorValue(normalized, mode));
                 setStatus(t("profiles.wizard_shell_dictionary_entry_removed"), "info");
+                notifyDetailDocumentChange(card, normalized);
             } catch (e) {
                 setStatus(t("profiles.error_schema_dictionary").replace("{detail}", e.message || e), "error");
             }

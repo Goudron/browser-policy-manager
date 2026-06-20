@@ -1,6 +1,6 @@
 <main id="compare-page" class="space-y-4" aria-labelledby="compare-page-title">
     <section class="surface-panel fade-up p-4 md:p-5">
-        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div class="compare-route-heading">
             <div class="min-w-0">
                 <p class="section-eyebrow" data-i18n="profiles.compare_route_eyebrow">
                     {{ tr("profiles.compare_route_eyebrow", "Dedicated comparison") }}
@@ -9,9 +9,6 @@
                     {{ tr("profiles.compare_route_title", "Compare profile settings") }}
                 </h2>
             </div>
-            <a class="button-base ghost-button soft-input" href="/profiles" data-i18n="profiles.compare_back_to_library">
-                {{ tr("profiles.compare_back_to_library", "Back to Library") }}
-            </a>
         </div>
     </section>
 
@@ -60,17 +57,6 @@
             <h3 id="compare-settings-title" class="compare-settings-heading__title section-title text-slate-900" data-i18n="profiles.compare_settings_title">
                 {{ tr("profiles.compare_settings_title", "Settings side by side") }}
             </h3>
-            <div class="compare-state-legend" aria-label="Value states">
-                <span class="status-pill compare-state-legend__item" data-compare-value-state="missing" data-i18n="profiles.compare_state_missing">
-                    {{ tr("profiles.compare_state_missing", "Missing") }}
-                </span>
-                <span class="status-pill compare-state-legend__item" data-compare-value-state="equal" data-i18n="profiles.compare_state_equal">
-                    {{ tr("profiles.compare_state_equal", "Same value") }}
-                </span>
-                <span class="status-pill compare-state-legend__item" data-compare-value-state="different" data-i18n="profiles.compare_state_different">
-                    {{ tr("profiles.compare_state_different", "Different value") }}
-                </span>
-            </div>
         </div>
         <div class="compare-table-shell">
             <table id="compare-settings-table" class="compare-settings-table text-left text-sm">

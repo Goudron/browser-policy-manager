@@ -16,6 +16,7 @@
     "profiles.shell_policy_app_update_pin": "App update pin",
     "profiles.shell_policy_allowed_domains_for_apps": "Allowed domains for apps",
     "profiles.shell_policy_default_download_directory": "Default download directory",
+    "profiles.shell_policy_default_serial_guard_setting": "Default Web Serial access",
     "profiles.shell_policy_disable_default_browser_agent": "Disable default browser agent",
     "profiles.shell_policy_disable_profile_refresh": "Disable profile refresh",
     "profiles.shell_policy_disable_safe_mode": "Disable safe mode",

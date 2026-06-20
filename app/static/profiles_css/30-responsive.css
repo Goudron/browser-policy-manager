@@ -46,6 +46,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .all-settings-mode-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .all-settings-domain-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .all-settings-manager-grid {
                 grid-template-columns: 1fr;
             }
@@ -108,6 +116,7 @@
             .wizard-outcome-group__controls,
             .wizard-shell-grid,
             .wizard-review,
+            .all-settings-domain-summary,
             .all-settings-review-grid,
             .wizard-export-section-grid,
             .wizard-summary-list--cards,
@@ -193,9 +202,34 @@
                 border-radius: 18px;
             }
 
+            .wizard-settings-search-scope,
+            .all-settings-filter-bar,
+            .all-settings-source-filter-bar {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .wizard-settings-search-scope-button,
+            .all-settings-filter-button,
+            .all-settings-source-filter-button,
+            .all-settings-list-budget-toggle,
+            .all-settings-detail-actions .button-base {
+                width: 100%;
+                justify-content: center;
+            }
+
             .wizard-settings-search-row .soft-input,
             .wizard-settings-search-clear {
                 min-height: 2.45rem;
+            }
+
+            .all-settings-list-heading {
+                grid-template-columns: 1fr;
+            }
+
+            .all-settings-list-heading #all-settings-add-preference {
+                width: 100%;
+                justify-content: center;
             }
 
             .all-settings-list-head {
@@ -214,6 +248,10 @@
                 gap: 3px;
             }
 
+            .all-settings-list-cell--setting {
+                gap: 8px;
+            }
+
             .all-settings-list-cell::before {
                 content: attr(data-label);
                 color: var(--ink-soft);
@@ -222,22 +260,39 @@
                 text-transform: uppercase;
             }
 
+            .all-settings-list-budget {
+                display: grid;
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+
+            .all-settings-list-budget-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                justify-content: stretch;
+            }
+
+            .all-settings-detail {
+                max-width: none;
+                padding: 14px;
+            }
+
+            .all-settings-detail-meta > div {
+                grid-template-columns: 1fr;
+                gap: 3px;
+            }
+
+            .all-settings-detail-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
             .compare-table-shell {
                 overflow-x: hidden;
             }
 
             .compare-settings-heading {
                 grid-template-columns: 1fr;
-            }
-
-            .compare-state-legend {
-                justify-content: flex-start;
-                min-width: 0;
-            }
-
-            .compare-state-legend__item {
-                max-width: min(100%, 11rem);
-                text-align: left;
             }
 
             .compare-settings-table {

@@ -16,20 +16,20 @@ class SchemaChannel:
 
 SCHEMA_CHANNELS: tuple[SchemaChannel, ...] = (
     SchemaChannel(
-        value="esr-140.11",
-        label="ESR 140.11",
-        filename="firefox-esr-140.11.json",
-        raw_dir="esr14011",
-        mozilla_version="140.11",
+        value="esr-140.12",
+        label="ESR 140.12",
+        filename="firefox-esr-140.12.json",
+        raw_dir="esr14012",
+        mozilla_version="140.12",
         family="esr",
         is_default=True,
     ),
     SchemaChannel(
-        value="release-151",
-        label="Release 151",
-        filename="firefox-release-151.json",
-        raw_dir="release151",
-        mozilla_version="151.0",
+        value="release-152",
+        label="Release 152",
+        filename="firefox-release-152.json",
+        raw_dir="release152",
+        mozilla_version="152.0",
         family="release",
     ),
 )

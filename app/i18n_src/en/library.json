@@ -68,7 +68,6 @@
     "profiles.lifecycle_item_recent_restored": "Restored in this session at {value}.",
     "profiles.compare_route_eyebrow": "Dedicated comparison",
     "profiles.compare_route_title": "Compare profile settings",
-    "profiles.compare_back_to_library": "Back to Library",
     "profiles.compare_left_label": "Profile A",
     "profiles.compare_right_label": "Profile B",
     "profiles.compare_search_placeholder": "Find a profile by name",

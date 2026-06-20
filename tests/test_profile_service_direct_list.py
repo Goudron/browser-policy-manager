@@ -40,14 +40,14 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     """Exercise ProfileService.list directly (schema_version/sort/limit/offset and q branch)."""
     for i in range(4):
         await ProfileService.create(
-            service_session, _mk("esr-140.11", name_prefix=f"SVC-{i}")
+            service_session, _mk("esr-140.12", name_prefix=f"SVC-{i}")
         )
     await service_session.commit()
 
     items = await ProfileService.list(
         service_session,
         q=None,
-        schema_version="esr-140.11",
+        schema_version="esr-140.12",
         sort="name",
         order="asc",
         limit=2,
@@ -59,7 +59,7 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
     items2 = await ProfileService.list(
         service_session,
         q=None,
-        schema_version="esr-140.11",
+        schema_version="esr-140.12",
         sort="updated_at",
         order="desc",
         limit=1,
@@ -80,7 +80,7 @@ async def test_service_list_filters_sort_and_pagination_direct(service_session: 
 
     filtered_count = await ProfileService.count(
         service_session,
-        schema_version="esr-140.11",
+        schema_version="esr-140.12",
     )
     assert filtered_count == 4
 
@@ -92,7 +92,7 @@ async def test_service_list_name_query_is_case_insensitive_for_cyrillic(service_
         ProfileCreate(
             name="Базовый Корпоративный Профиль",
             description="Unicode search",
-            schema_version="esr-140.11",
+            schema_version="esr-140.12",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -118,7 +118,7 @@ async def test_service_list_name_query_treats_empty_and_whitespace_as_no_filter(
         ProfileCreate(
             name="Базовый Корпоративный Профиль",
             description="Whitespace query",
-            schema_version="esr-140.11",
+            schema_version="esr-140.12",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -140,7 +140,7 @@ def test_matches_name_query_returns_true_for_missing_query() -> None:
 
 
 def test_profile_query_filters_keep_sql_filtering_in_one_helper() -> None:
-    active = ProfileQuery(schema_version="esr-140.11")
+    active = ProfileQuery(schema_version="esr-140.12")
     archived = ProfileQuery(lifecycle="archived")
     all_profiles = ProfileQuery(lifecycle="all")
 

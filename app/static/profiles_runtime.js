@@ -237,6 +237,7 @@
             const fallback = expanded
                 ? toggleEl.dataset.wizardDisclosureHide
                 : toggleEl.dataset.wizardDisclosureShow;
+            toggleEl.setAttribute("data-i18n", key);
             toggleEl.textContent = t(key, fallback || toggleEl.textContent || "");
         }
 
@@ -736,9 +737,11 @@
                         targetEl.classList.remove("settings-target-highlight");
                     }, 1800);
 
-                    const focusTarget = targetEl.matches("input, select, textarea, button")
+                    const focusTarget = targetEl.matches("input, select, textarea, button, [tabindex]")
                         ? targetEl
-                        : targetEl.querySelector("input, select, textarea, button");
+                        : targetEl.querySelector(
+                            "[data-settings-detail-primary-focus], .all-settings-detail-editor [data-schema-policy-field], .all-settings-detail-editor [data-schema-branch-mode], input, select, textarea, button, [tabindex]",
+                        );
                     focusElementForA11y(focusTarget || targetEl);
                 });
             });
@@ -1877,6 +1880,10 @@
                             ),
                         );
                     }
+                    syncEditorBackedUi();
+                    renderAllSettingsList();
+                    buildWizardSettingsSearchIndex();
+                    renderWizardSettingsSearchResults();
                     setBaselineFromCurrentUi();
                     setStatus(t("profiles.status_profile_loaded").replace("{name}", hydratedProfile.name), "success");
                     if (routeMode === "edit" && cloneSourceId === editingProfileId) {
@@ -1991,7 +1998,10 @@
                     wizardSchemaEl.value = bootstrapSchemaVersion;
                 }
                 jsonEditorRuntime.setEditorModelLanguage(monacoRef, editor, "json");
-                editor.setValue(toEditorValue({}, savedMode));
+                editor.setValue(toEditorValue(
+                    getCurrentRaw() && typeof getCurrentRaw() === "object" ? getCurrentRaw() : {},
+                    savedMode,
+                ));
                 syncProxyWizardUi();
                 syncWizardFieldsFromForm();
                 syncEditorBackedUi();

@@ -13,6 +13,7 @@
             data-wizard-disclosure-toggle
             data-wizard-disclosure-show-key="profiles.wizard_disclosure_show"
             data-wizard-disclosure-hide-key="profiles.wizard_disclosure_hide"
+            data-i18n="{{ 'profiles.wizard_disclosure_hide' if default_open else 'profiles.wizard_disclosure_show' }}"
             aria-expanded="{{ 'true' if default_open else 'false' }}"
             aria-controls="{{ panel_id }}">
             {{ tr("profiles.wizard_disclosure_hide" if default_open else "profiles.wizard_disclosure_show") }}

@@ -99,7 +99,7 @@ def test_compare_entrypoint_formats_profile_summary_and_escapes_html() -> None:
     result = _run_compare_script(
         """
         const summary = compare.formatProfileSummary(
-            { schema_version: "release-151", updated_at: "2026-06-05T12:00:00Z" },
+            { schema_version: "release-152", updated_at: "2026-06-05T12:00:00Z" },
             (value) => `Firefox ${value}`,
         );
         const escaped = compare.escapeHtml("<b>Managed & safe</b>");
@@ -108,7 +108,7 @@ def test_compare_entrypoint_formats_profile_summary_and_escapes_html() -> None:
     )
 
     assert result == {
-        "summary": "Firefox release-151 • 2026-06-05T12:00:00Z",
+        "summary": "Firefox release-152 • 2026-06-05T12:00:00Z",
         "escaped": "&lt;b&gt;Managed &amp; safe&lt;/b&gt;",
     }
 

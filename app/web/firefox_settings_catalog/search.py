@@ -96,6 +96,13 @@ def get_search_section() -> dict[str, Any]:
                     label_key="profiles.wizard_preferences_known_search_quick_actions_title",
                     description_key="profiles.wizard_preferences_known_search_quick_actions_copy",
                 ),
+                known_pref(
+                    "browser.search.update",
+                    "Search engine updates",
+                    "Controls whether Firefox keeps built-in search engine definitions updated.",
+                    value_type="boolean",
+                    status="locked",
+                ),
             ],
         },
     }

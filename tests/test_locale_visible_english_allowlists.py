@@ -145,7 +145,6 @@ def test_compare_locale_terms_match_dedicated_ownerless_interface_copy():
         "ru": {
             "profiles.compare_route_eyebrow": "Отдельное сравнение",
             "profiles.compare_route_title": "Сравнить настройки профилей",
-            "profiles.compare_back_to_library": "Назад в библиотеку",
             "profiles.compare_left_label": "Профиль A",
             "profiles.compare_right_label": "Профиль B",
             "profiles.compare_search_placeholder": "Найти профиль по имени",
@@ -167,7 +166,6 @@ def test_compare_locale_terms_match_dedicated_ownerless_interface_copy():
         "de": {
             "profiles.compare_route_eyebrow": "Eigener Vergleich",
             "profiles.compare_route_title": "Profileinstellungen vergleichen",
-            "profiles.compare_back_to_library": "Zurück zur Bibliothek",
             "profiles.compare_left_label": "Profil A",
             "profiles.compare_right_label": "Profil B",
             "profiles.compare_search_placeholder": "Profil nach Name suchen",
@@ -190,7 +188,6 @@ def test_compare_locale_terms_match_dedicated_ownerless_interface_copy():
         "zh-CN": {
             "profiles.compare_route_eyebrow": "专用比较",
             "profiles.compare_route_title": "比较配置档案设置",
-            "profiles.compare_back_to_library": "返回库",
             "profiles.compare_left_label": "配置档案甲",
             "profiles.compare_right_label": "配置档案乙",
             "profiles.compare_search_placeholder": "按名称查找配置档案",
@@ -213,7 +210,6 @@ def test_compare_locale_terms_match_dedicated_ownerless_interface_copy():
         "fr": {
             "profiles.compare_route_eyebrow": "Comparaison dédiée",
             "profiles.compare_route_title": "Comparer les paramètres des profils",
-            "profiles.compare_back_to_library": "Retour à la bibliothèque",
             "profiles.compare_left_label": "Profil A",
             "profiles.compare_right_label": "Profil B",
             "profiles.compare_search_placeholder": "Rechercher un profil par nom",
@@ -236,7 +232,6 @@ def test_compare_locale_terms_match_dedicated_ownerless_interface_copy():
         "es-ES": {
             "profiles.compare_route_eyebrow": "Comparación dedicada",
             "profiles.compare_route_title": "Comparar ajustes de perfiles",
-            "profiles.compare_back_to_library": "Volver a la biblioteca",
             "profiles.compare_left_label": "Perfil A",
             "profiles.compare_right_label": "Perfil B",
             "profiles.compare_search_placeholder": "Buscar un perfil por nombre",
