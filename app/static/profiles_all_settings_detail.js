@@ -4,7 +4,6 @@
         elements = {},
         dependencies = {},
         state = {},
-        wizardPreferencesCatalog = {},
     }) {
         const {
             t,
@@ -20,6 +19,8 @@
             renderSchemaPolicyReviewState,
             onDocumentChange = () => {},
             setStatus,
+            settingsInventory = null,
+            getAllSettingsMode = () => "review",
         } = dependencies;
         const {
             allSettingsDetailPanelEl,
@@ -52,11 +53,11 @@
             }
         }
 
-        function getKnownPreference(prefName) {
-            const knownPreferences = Array.isArray(wizardPreferencesCatalog.known_preferences)
-                ? wizardPreferencesCatalog.known_preferences
-                : [];
-            return knownPreferences.find((item) => item?.pref === prefName) || null;
+        function getKnownPreference(prefName, entry = selectedEntry) {
+            if (entry?.kind === "preference" && entry.id === prefName && entry.editor?.knownPreference) {
+                return entry.editor.knownPreference;
+            }
+            return settingsInventory?.getKnownPreference?.(prefName) || null;
         }
 
         function getPreferenceNameFromEditor() {
@@ -101,6 +102,43 @@
             return `<span class="all-settings-detail-badge" data-tone="${escapeHtml(tone)}">${escapeHtml(label)}</span>`;
         }
 
+        function uniqueValues(values) {
+            return [...new Set((Array.isArray(values) ? values : []).filter(Boolean))];
+        }
+
+        function sourceLabel(source) {
+            const sourceKeys = {
+                baseline: "profiles.settings_source_baseline",
+                cis: "profiles.settings_source_cis",
+                manual: "profiles.settings_source_manual",
+                imported: "profiles.settings_source_imported",
+                "raw-fallback": "profiles.settings_source_raw",
+                unknown: "profiles.settings_review_source_unknown",
+                catalog: "profiles.settings_review_source_catalog",
+            };
+            return t(sourceKeys[source] || "profiles.settings_source_manual");
+        }
+
+        function sourceSummary(entry) {
+            const sources = uniqueValues(entry?.sources);
+            if (!sources.length && entry?.source) sources.push(entry.source);
+            if (!sources.length) sources.push(entry?.configured ? "manual" : "catalog");
+            return sources.map((source) => sourceLabel(source)).join(", ");
+        }
+
+        function formatLocationPath(path) {
+            return Array.isArray(path)
+                ? path.filter(Boolean).map((part) => String(part)).join(".")
+                : "";
+        }
+
+        function locationSummary(entry) {
+            const sourcePath = formatLocationPath(entry?.sourceDetails?.path);
+            if (sourcePath) return sourcePath;
+            if (entry?.kind === "preference" && entry?.id) return `Preferences.${entry.id}`;
+            return entry?.id || "";
+        }
+
         function renderBadges(entry) {
             const badges = [
                 detailBadge(entry.kindLabel),
@@ -126,9 +164,10 @@
         }
 
         function renderActionBar(entry, { supportsOpen = true, supportsReset = true, supportsRemove = true } = {}) {
+            const showOpenLocation = supportsOpen && entry.target && getAllSettingsMode() === "catalog";
             return `
                 <div class="all-settings-detail-actions">
-                    ${supportsOpen && entry.target ? `
+                    ${showOpenLocation ? `
                         <button
                             type="button"
                             class="button-base ghost-button"
@@ -154,12 +193,33 @@
             `;
         }
 
-        function renderPolicyMetadata(entry) {
+        function renderEntryMetadata(entry, extraRows = []) {
             const item = entry.schemaItem || {};
             const rows = [
                 [
+                    t("profiles.settings_detail_meta_kind"),
+                    entry.kindLabel,
+                    "kind",
+                ],
+                [
+                    t("profiles.settings_detail_meta_category"),
+                    entry.categoryLabel,
+                    "category",
+                ],
+                [
+                    t("profiles.settings_detail_meta_source"),
+                    sourceSummary(entry),
+                    "source",
+                ],
+                [
+                    t("profiles.settings_detail_meta_location"),
+                    locationSummary(entry),
+                    "location",
+                ],
+                [
                     t("profiles.settings_detail_meta_widget"),
                     item.widget ? t(`profiles.wizard_shell_widget_${item.widget}`) : "",
+                    "widget",
                 ],
                 [
                     t("profiles.settings_detail_meta_complexity"),
@@ -168,20 +228,23 @@
                         : item.complexity
                             ? t("profiles.wizard_shell_meta_advanced")
                             : "",
+                    "complexity",
                 ],
                 [
                     t("profiles.settings_detail_meta_support"),
                     item.support_level
                         ? t(`profiles.settings_detail_support_${item.support_level}`)
                         : "",
+                    "support",
                 ],
+                ...extraRows,
             ].filter(([, value]) => value);
 
             if (!rows.length) return "";
             return `
                 <dl class="all-settings-detail-meta">
-                    ${rows.map(([label, value]) => `
-                        <div>
+                    ${rows.map(([label, value, key]) => `
+                        <div ${key ? `data-settings-detail-${escapeHtml(key)}` : ""}>
                             <dt>${escapeHtml(label)}</dt>
                             <dd>${escapeHtml(value)}</dd>
                         </div>
@@ -199,7 +262,7 @@
                 <div class="all-settings-detail-raw-editor">
                     <label class="wizard-field-full">
                         <div class="field-label mb-1">${escapeHtml(t("profiles.settings_detail_raw_value"))}</div>
-                        <textarea class="soft-input" rows="8" data-settings-detail-raw-value>${escapeHtml(
+                        <textarea class="soft-input" rows="8" data-settings-detail-raw-value data-settings-detail-primary-focus>${escapeHtml(
                             formatJsonEditorValue(sourceData?.[entry.id], entry.configured),
                         )}</textarea>
                     </label>
@@ -219,7 +282,7 @@
                     </div>
                     ${renderActionBar(entry)}
                 </div>
-                ${renderPolicyMetadata(entry)}
+                ${renderEntryMetadata(entry)}
                 <div class="all-settings-detail-current">
                     <div class="field-label">${escapeHtml(t("profiles.settings_detail_current_value"))}</div>
                     <pre>${escapeHtml(formatDetailValue(sourceData?.[entry.id], entry.configured))}</pre>
@@ -242,7 +305,7 @@
                 : null;
             if (currentEntry) return currentEntry;
 
-            const knownPreference = getKnownPreference(entry.id);
+            const knownPreference = getKnownPreference(entry.id, entry);
             const seed = {};
             if (knownPreference?.status) seed.Status = knownPreference.status;
             if (knownPreference?.type) seed.Type = knownPreference.type;
@@ -278,7 +341,7 @@
 
         function renderPreferenceEditor(entry, sourceData) {
             const seed = getPreferenceSeed(entry, sourceData);
-            const knownPreference = getKnownPreference(entry.id);
+            const knownPreference = getKnownPreference(entry.id, entry);
             const currentStatus = seed.Status || "default";
             const currentType = seed.Type || knownPreference?.type || "";
             const currentValue = hasOwn(seed, "Value") ? seed.Value : "";
@@ -308,7 +371,7 @@
                         ` : ""}
                         <label>
                             <div class="field-label mb-1">${escapeHtml(t("profiles.wizard_preferences_field_status"))}</div>
-                            <select class="soft-input" data-settings-detail-pref-status>
+                            <select class="soft-input" data-settings-detail-pref-status data-settings-detail-primary-focus>
                                 <option value="default"${currentStatus === "default" ? " selected" : ""}>${escapeHtml(t("profiles.wizard_preferences_status_default"))}</option>
                                 <option value="locked"${currentStatus === "locked" ? " selected" : ""}>${escapeHtml(t("profiles.wizard_preferences_status_locked"))}</option>
                                 <option value="user"${currentStatus === "user" ? " selected" : ""}>${escapeHtml(t("profiles.wizard_preferences_status_user"))}</option>
@@ -371,6 +434,7 @@
                         supportsRemove: !entry.isNewPreference,
                     })}
                 </div>
+                ${renderEntryMetadata(entry)}
                 <div class="all-settings-detail-current">
                     <div class="field-label">${escapeHtml(t("profiles.settings_detail_current_value"))}</div>
                     <pre>${escapeHtml(formatDetailValue(preferences[entry.id], entry.configured))}</pre>
@@ -399,6 +463,27 @@
                 isNewPreference: true,
                 target: "",
                 value: t("profiles.settings_list_value_not_configured"),
+                state: "available",
+                source: "manual",
+                sources: ["manual"],
+                attentionFlags: {
+                    invalid: false,
+                    deprecated: false,
+                    rawFallback: false,
+                    unknown: false,
+                    reviewRequired: false,
+                },
+                valueSummary: t("profiles.settings_list_value_not_configured"),
+                editor: {
+                    target: "",
+                    kind: "preference",
+                    schemaItem: null,
+                    knownPreference: null,
+                    preferenceSectionId: "",
+                    preferenceSection: null,
+                    preferenceValue: null,
+                    preference: "__new_preference__",
+                },
                 issues: [],
             };
             render(selectedEntry);
@@ -457,6 +542,7 @@
                 if (editor) {
                     const mode = documentRef.getElementById("mode")?.value || "json";
                     editor.setValue(toEditorValue(normalized, mode));
+                    onDocumentChange(normalized);
                 } else {
                     onDocumentChange(normalized);
                 }
@@ -579,7 +665,10 @@
             const textInput = editorEl.querySelector("[data-settings-detail-pref-value-input]");
             const selectInput = editorEl.querySelector("[data-settings-detail-pref-value-select]");
             const nameInput = editorEl.querySelector("[data-settings-detail-pref-name]");
-            const knownPreference = getKnownPreference(nameInput ? getPreferenceNameFromEditor() : selectedEntry?.id);
+            const knownPreference = getKnownPreference(
+                nameInput ? getPreferenceNameFromEditor() : selectedEntry?.id,
+                selectedEntry,
+            );
             const currentValue = selectInput && !selectInput.hidden
                 ? selectInput.value
                 : textInput?.value || "";

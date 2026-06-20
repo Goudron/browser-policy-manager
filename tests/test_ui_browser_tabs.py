@@ -5,13 +5,19 @@ import shutil
 import subprocess
 import tempfile
 import time
+from copy import deepcopy
 from pathlib import Path
 from urllib.parse import urlparse
 
 import pytest
 import requests
 
-from tests.support import build_profile_payload, pick_free_port, run_test_app_server
+from tests.support import (
+    build_corporate_cis_l2_profile_fixture,
+    build_profile_payload,
+    pick_free_port,
+    run_test_app_server,
+)
 
 pytestmark = pytest.mark.browser_ui
 
@@ -173,7 +179,7 @@ def _create_profile(base_url: str, *, name: str, flags: dict | None = None) -> i
         json=build_profile_payload(
             name=name,
             description="Chromium smoke profile",
-            schema_version="release-151",
+            schema_version="release-152",
             flags=flags
             or {
                 "DisableTelemetry": True,
@@ -320,6 +326,291 @@ def test_browser_smoke_primary_routes_render_in_ru_and_zh_cn():
                 _close_chromium_driver(driver)
 
 
+def test_browser_smoke_guided_disclosure_labels_follow_active_locale():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    locale_catalogs = {locale: _load_locale_catalog(locale) for locale in SMOKE_LOCALES}
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name="Disclosure Locale Browser Smoke")
+        for locale in SMOKE_LOCALES:
+            driver = _build_chromium_driver()
+            wait = ui.WebDriverWait(driver, 20)
+            catalog = locale_catalogs[locale]
+            try:
+                driver.get(f"{base_url}/profiles/{profile_id}/edit")
+                wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+                _set_locale(
+                    driver,
+                    wait,
+                    ui,
+                    locale=locale,
+                    expected_text=catalog["profiles.locale_hint"],
+                )
+                disclosure = wait.until(
+                    ec.presence_of_element_located(
+                        (
+                            by.By.CSS_SELECTOR,
+                            '[data-wizard-disclosure-toggle][aria-controls="wizard-baseline-override-panel"]',
+                        )
+                    )
+                )
+                wait.until(
+                    lambda _driver,
+                    button=disclosure,
+                    expected=catalog["profiles.wizard_disclosure_show"]: button.text.strip()
+                    == expected
+                )
+                driver.execute_script("arguments[0].click();", disclosure)
+                wait.until(
+                    lambda _driver,
+                    button=disclosure,
+                    expected=catalog["profiles.wizard_disclosure_hide"]: button.text.strip()
+                    == expected
+                )
+            finally:
+                _close_chromium_driver(driver)
+
+
+def test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    with run_test_app_server() as base_url:
+        active_id = _create_profile(base_url, name="Permanent Delete Active")
+        archived_id = _create_profile(base_url, name="Permanent Delete Archived")
+        failure_id = _create_profile(base_url, name="Permanent Delete Failure")
+        archive_response = requests.delete(f"{base_url}/api/profiles/{archived_id}", timeout=10)
+        assert archive_response.status_code == 204, archive_response.text
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            driver.execute_script(
+                """
+                const lifecycle = document.getElementById('library-lifecycle-filter');
+                lifecycle.value = 'all';
+                lifecycle.dispatchEvent(new Event('change', { bubbles: true }));
+                window.__BPM_CONFIRM_MESSAGES__ = [];
+                window.confirm = (message) => {
+                  window.__BPM_CONFIRM_MESSAGES__.push(String(message));
+                  return true;
+                };
+                """
+            )
+
+            def delete_button(profile_id: int):
+                return (
+                    by.By.CSS_SELECTOR,
+                    f'[data-library-lifecycle-action="hard-delete"]'
+                    f'[data-library-profile-id="{profile_id}"]',
+                )
+
+            for profile_id in (active_id, archived_id):
+                target = delete_button(profile_id)
+                selector = target[1]
+                wait.until(
+                    lambda current_driver, current_selector=selector: current_driver.execute_script(
+                        "return document.querySelector(arguments[0])?.classList.contains('danger-button') || false;",
+                        current_selector,
+                    )
+                )
+                _click_css_when_ready(driver, wait, by, selector)
+                wait.until(
+                    lambda current_driver, selector=target: not current_driver.find_elements(*selector)
+                )
+                get_response = requests.get(
+                    f"{base_url}/api/profiles/{profile_id}?include_deleted=true",
+                    timeout=10,
+                )
+                assert get_response.status_code == 404, get_response.text
+
+            confirmation_messages = driver.execute_script(
+                "return window.__BPM_CONFIRM_MESSAGES__.slice();"
+            )
+            assert len(confirmation_messages) == 2
+            assert all("archive" in message and "cannot be restored" in message for message in confirmation_messages)
+
+            driver.execute_script(
+                """
+                const originalFetch = window.fetch.bind(window);
+                const failedUrl = `/api/profiles/${arguments[0]}/hard`;
+                window.fetch = (input, init = {}) => {
+                  if (String(input).endsWith(failedUrl) && init.method === 'DELETE') {
+                    return Promise.resolve(new Response(
+                      JSON.stringify({ detail: 'forced hard-delete failure' }),
+                      { status: 500, headers: { 'Content-Type': 'application/json' } },
+                    ));
+                  }
+                  return originalFetch(input, init);
+                };
+                """,
+                failure_id,
+            )
+            failure_button = wait.until(ec.element_to_be_clickable(delete_button(failure_id)))
+            driver.execute_script("arguments[0].click();", failure_button)
+            wait.until(
+                lambda current_driver: "forced hard-delete failure"
+                in current_driver.find_element(by.By.ID, "status").text
+            )
+            assert driver.find_elements(*delete_button(failure_id))
+            assert requests.get(
+                f"{base_url}/api/profiles/{failure_id}", timeout=10
+            ).status_code == 200
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    fixture = build_corporate_cis_l2_profile_fixture(name="All Settings Counts Browser Smoke")
+
+    with run_test_app_server() as base_url:
+        payload = deepcopy(fixture.payload)
+        payload["flags"]["GenerativeAI"] = {"Enabled": False, "Locked": True}
+        payload["flags"]["VisualSearchEnabled"] = False
+        response = requests.post(f"{base_url}/api/profiles", json=payload, timeout=10)
+        assert response.status_code == 201, response.text
+        profile_id = int(response.json()["id"])
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/settings?settingsMode=configured")
+            wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    """
+                    const summary = document.getElementById('all-settings-list-summary')?.textContent || '';
+                    const sourceCounts = Array.from(
+                      document.querySelectorAll('[data-settings-source-filter-count]')
+                    ).map((el) => Number(el.textContent || '0'));
+                    return /configured|настроено/.test(summary)
+                      && /configured|настроено/.test(summary)
+                      && sourceCounts.some((count) => count > 0);
+                    """
+                )
+            )
+            counts = driver.execute_script(
+                """
+                const summary = document.getElementById('all-settings-list-summary')?.textContent || '';
+                const configuredMatch = summary.match(/настроено:?\\s*(\\d+)/i)
+                  || summary.match(/(\\d+)\\s+configured/i);
+                const visibleMatch = summary.match(/Показано:?\\s*(\\d+)\\s+из\\s+(\\d+)/i)
+                  || summary.match(/(\\d+)\\s+shown\\s+of\\s+(\\d+)/i);
+                const sourceCounts = Object.fromEntries(
+                  Array.from(document.querySelectorAll('[data-settings-source-filter]')).map((button) => [
+                    button.dataset.settingsSourceFilter,
+                    Number(button.querySelector('[data-settings-source-filter-count]')?.textContent || '0'),
+                  ])
+                );
+                const listFilters = Object.fromEntries(
+                  Array.from(document.querySelectorAll('[data-settings-list-filter]')).map((button) => [
+                    button.dataset.settingsListFilter,
+                    {
+                      hidden: button.hidden,
+                      count: Number(button.querySelector('[data-settings-list-filter-count]')?.textContent || '0'),
+                    },
+                  ])
+                );
+                const unknownReviewCount = Number(
+                  document
+                    .querySelector('[data-settings-review-filter="unknown"] [data-settings-review-count]')
+                    ?.textContent || '0'
+                );
+                return {
+                  summary,
+                  configured: configuredMatch ? Number(configuredMatch[1]) : 0,
+                  visible: visibleMatch ? Number(visibleMatch[1]) : 0,
+                  total: visibleMatch ? Number(visibleMatch[2]) : 0,
+                  sourceCounts,
+                  listFilters,
+                  unknownReviewCount,
+                };
+                """
+            )
+
+            assert counts["configured"] > 0, counts
+            assert 0 < counts["visible"] < counts["total"], counts
+            assert counts["visible"] == counts["configured"], counts
+            assert counts["listFilters"]["configured"]["hidden"] is True, counts
+            assert counts["listFilters"]["available"]["hidden"] is True, counts
+            assert counts["listFilters"]["all"]["hidden"] is False, counts
+            assert counts["listFilters"]["all"]["count"] == counts["visible"], counts
+            assert counts["sourceCounts"]["source:cis"] > 0, counts
+            assert counts["sourceCounts"]["source:baseline"] > 0, counts
+            assert counts["unknownReviewCount"] == 0, counts
+
+            driver.execute_script(
+                """
+                document
+                  .querySelector('[data-settings-list-budget-action="expand"]')
+                  ?.click();
+                """
+            )
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    """
+                    return Boolean(
+                      document.querySelector('[data-settings-list-budget-action="next"]')
+                    );
+                    """
+                )
+            )
+            driver.execute_script(
+                """
+                document
+                  .querySelector('[data-settings-list-budget-action="next"]')
+                  ?.click();
+                """
+            )
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    """
+                    return Boolean(
+                      document.querySelector('[data-settings-entry-id="VisualSearchEnabled"]')
+                    );
+                    """
+                )
+            )
+            after_selection = driver.execute_script(
+                """
+                document
+                  .querySelector('[data-settings-entry-id="VisualSearchEnabled"]')
+                  ?.click();
+                const summary = document.getElementById('all-settings-list-summary')?.textContent || '';
+                const configuredMatch = summary.match(/настроено:?\\s*(\\d+)/i)
+                  || summary.match(/(\\d+)\\s+configured/i);
+                const visibleMatch = summary.match(/Показано:?\\s*(\\d+)\\s+из\\s+(\\d+)/i)
+                  || summary.match(/(\\d+)\\s+shown\\s+of\\s+(\\d+)/i);
+                const allFilterCount = Number(
+                  document
+                    .querySelector('[data-settings-list-filter="all"] [data-settings-list-filter-count]')
+                    ?.textContent || '0'
+                );
+                const selected = document.querySelector('.all-settings-list-row.is-selected');
+                return {
+                  summary,
+                  configured: configuredMatch ? Number(configuredMatch[1]) : 0,
+                  visible: visibleMatch ? Number(visibleMatch[1]) : 0,
+                  total: visibleMatch ? Number(visibleMatch[2]) : 0,
+                  allFilterCount,
+                  selectedId: selected?.dataset.settingsEntryId || '',
+                };
+                """
+            )
+            assert after_selection["selectedId"] == "VisualSearchEnabled", after_selection
+            assert after_selection["visible"] == after_selection["configured"], after_selection
+            assert after_selection["allFilterCount"] == after_selection["configured"], after_selection
+        finally:
+            _close_chromium_driver(driver)
+
+
 def test_browser_smoke_editor_mode_links_preserve_route_context():
     by = pytest.importorskip("selenium.webdriver.common.by")
     ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
@@ -352,6 +643,45 @@ def test_browser_smoke_editor_mode_links_preserve_route_context():
             assert f"/profiles/{profile_id}/settings" in settings_href
             assert f"return=/profiles/{profile_id}/json" in settings_href
             assert "focus=settings-schema-shell-step-8" in settings_href
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_smoke_json_editor_loads_corporate_cis_known_preferences():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    fixture = build_corporate_cis_l2_profile_fixture(name="JSON CIS Preferences Browser Smoke")
+
+    with run_test_app_server() as base_url:
+        response = requests.post(f"{base_url}/api/profiles", json=fixture.payload, timeout=10)
+        assert response.status_code == 201, response.text
+        profile_id = int(response.json()["id"])
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/json?focus=raw")
+            wait.until(ec.presence_of_element_located((by.By.ID, "editor-panel")))
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    """
+                    const value = window.monaco?.editor?.getModels?.()[0]?.getValue?.() || '';
+                    return value.includes('browser.safebrowsing.malware.enabled');
+                    """
+                )
+            )
+            status = driver.execute_script(
+                """
+                const status = document.getElementById('status');
+                return {
+                  text: status?.textContent?.trim() || '',
+                  isError: status?.classList?.contains('status-banner--error') || false,
+                };
+                """
+            )
+
+            assert status["isError"] is False, status
+            assert "knownPreference" not in status["text"], status
         finally:
             _close_chromium_driver(driver)
 
@@ -413,6 +743,12 @@ def test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_t
             compare_lang = wait.until(ec.presence_of_element_located((by.By.ID, "lang")))
             assert compare_lang.get_attribute("value") == "ru"
             assert ru["profiles.compare_settings_title"] in _body_text(driver)
+            assert not driver.find_elements(
+                by.By.CSS_SELECTOR,
+                '#compare-page a[href="/profiles"]',
+            )
+            compare_heading = driver.find_element(by.By.CSS_SELECTOR, ".compare-route-heading")
+            assert len(compare_heading.find_elements(by.By.XPATH, "./*")) == 1
 
             for side, profile_id, profile_name in (
                 ("left", left_id, left_name),
@@ -423,19 +759,36 @@ def test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_t
                 )
                 search.clear()
                 search.send_keys(profile_name)
-                _click_css_when_ready(
-                    driver,
-                    wait,
-                    by,
-                    (
-                        f'[data-compare-result-side="{side}"]'
-                        f'[data-compare-profile-id="{profile_id}"]'
-                    )
+                selector = (
+                    f'[data-compare-result-side="{side}"]'
+                    f'[data-compare-profile-id="{profile_id}"]'
                 )
-                wait.until(
-                    lambda current_driver, current_side=side, expected_name=profile_name: expected_name
-                    in current_driver.find_element(by.By.ID, f"compare-{current_side}-profile").text
-                )
+
+                def select_current_option(
+                    current_driver,
+                    current_side=side,
+                    expected_name=profile_name,
+                    current_selector=selector,
+                ):
+                    if expected_name in current_driver.find_element(
+                        by.By.ID, f"compare-{current_side}-profile"
+                    ).text:
+                        return True
+                    try:
+                        _click_element(
+                            current_driver,
+                            current_driver.find_element(by.By.CSS_SELECTOR, current_selector),
+                        )
+                    except Exception as exc:
+                        if exc.__class__.__name__ not in {
+                            "ElementClickInterceptedException",
+                            "NoSuchElementException",
+                            "StaleElementReferenceException",
+                        }:
+                            raise
+                    return False
+
+                wait.until(select_current_option)
 
             wait.until(
                 lambda current_driver: len(
@@ -510,9 +863,7 @@ def test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_
             )
             left_search.clear()
             left_search.send_keys(bulk_prefix)
-            left_results = wait.until(
-                ec.presence_of_element_located((by.By.ID, "compare-left-results"))
-            )
+            wait.until(ec.presence_of_element_located((by.By.ID, "compare-left-results")))
             wait.until(
                 lambda current_driver: len(
                     current_driver.find_elements(
@@ -526,31 +877,38 @@ def test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_
                 by.By.CSS_SELECTOR,
                 '#compare-left-results [data-compare-profile-option="true"]',
             )
-            list_metrics = driver.execute_script(
-                """
-                const list = arguments[0];
-                return {
-                  clientHeight: list.clientHeight,
-                  scrollHeight: list.scrollHeight,
-                  overflowY: window.getComputedStyle(list).overflowY,
-                  renderedCount: Number(list.dataset.compareResultsCount || 0),
-                };
-                """,
-                left_results,
+            list_metrics = wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    """
+                    const list = document.querySelector("#compare-left-results");
+                    const metrics = {
+                      clientHeight: list.clientHeight,
+                      scrollHeight: list.scrollHeight,
+                      overflowY: window.getComputedStyle(list).overflowY,
+                      renderedCount: Number(list.dataset.compareResultsCount || 0),
+                    };
+                    return metrics.scrollHeight > metrics.clientHeight ? metrics : null;
+                    """
+                )
             )
             assert 12 <= len(left_options) <= 40
             assert list_metrics["renderedCount"] == len(left_options)
             assert list_metrics["overflowY"] == "auto"
             assert list_metrics["scrollHeight"] > list_metrics["clientHeight"]
 
-            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", left_results)
-            wait.until(lambda _driver: left_results.get_property("scrollTop") > 0)
-            last_option = left_options[-1]
-            selected_left_name = last_option.find_element(
-                by.By.CSS_SELECTOR,
-                "[data-compare-profile-name]",
-            ).text
-            driver.execute_script("arguments[0].click();", last_option)
+            selection = driver.execute_script(
+                """
+                const list = document.querySelector("#compare-left-results");
+                list.scrollTop = list.scrollHeight;
+                const options = list.querySelectorAll('[data-compare-profile-option="true"]');
+                const option = options[options.length - 1];
+                const name = option.querySelector("[data-compare-profile-name]").textContent.trim();
+                option.click();
+                return { name, scrollTop: list.scrollTop };
+                """
+            )
+            assert selection["scrollTop"] > 0
+            selected_left_name = selection["name"]
             wait.until(
                 lambda current_driver: selected_left_name
                 in current_driver.find_element(by.By.ID, "compare-left-profile").text

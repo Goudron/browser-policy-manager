@@ -95,6 +95,9 @@ Accepted QA findings:
 | product.library_short | Library | Библиотека | TBD | TBD | TBD | TBD | Short navigation label. |
 | product.guided_editor | Guided editor | Пошаговый редактор | TBD | TBD | TBD | TBD | Task-first editor for common administrator workflows. |
 | product.all_settings | All settings | Все настройки | TBD | TBD | TBD | TBD | Full visual settings manager; not an "advanced settings" synonym. |
+| product.all_settings_review_mode | Review mode | Режим проверки | Prüfmodus | 检查模式 | Mode Revue | Modo Revisión | `profiles.settings_mode_review`; All settings mode for attention queues; copy should stay action-first and avoid schema jargon. |
+| product.all_settings_configured_mode | Configured mode | Режим настроенных параметров | Modus Konfiguriert | 已配置模式 | Mode Configurés | Modo Configuradas | `profiles.settings_mode_configured`; All settings mode for settings applied by the current profile. |
+| product.all_settings_catalog_mode | Catalog mode | Режим каталога | Katalogmodus | 目录模式 | Mode Catalogue | Modo Catálogo | `profiles.settings_mode_catalog`; All settings mode for finding any available setting. |
 | product.json_editor | JSON editor | JSON-редактор | TBD | TBD | TBD | TBD | Raw `policies.json` editor. Keep `JSON` untranslated. |
 | product.command_deck | Command deck | Командная панель | TBD | TBD | TBD | TBD | Shared action surface for save, validate, restore, and profile actions. |
 | product.current_mode | Current mode | Текущий режим | TBD | TBD | TBD | TBD | Editor chrome and mode switch context. |
@@ -160,6 +163,7 @@ Accepted QA findings:
 | mozilla.ai_smart_features | AI & smart features | ИИ и умные функции | KI und intelligente Funktionen | AI 与智能功能 | IA et fonctionnalités intelligentes | IA y funciones inteligentes | Keep the AI step standalone in the Guided editor. |
 | mozilla.built_in_vpn | Built-in VPN | Встроенный VPN | Integriertes VPN | 内置 VPN | VPN intégré | VPN integrada | Visible label for the Mozilla VPN/IP protection availability area. |
 | mozilla.ip_protection | IP protection | защита IP-адреса | IP-Schutz | IP 保护 | protection IP | protección IP | Policy/schema explanation term; keep `IP` as technical abbreviation unless locale guidance differs. |
+| mozilla.web_serial | Web Serial | Web Serial | Web Serial | Web Serial | Web Serial | Web Serial | Web API name used by `DefaultSerialGuardSetting`; preserve the technical API name and localize the surrounding access wording. |
 
 ## Policy And Schema Terms
 

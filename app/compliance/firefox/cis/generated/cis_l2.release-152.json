@@ -177,6 +177,6 @@
     "1.1.41",
     "1.1.42"
   ],
-  "schema_channel": "esr-140.11",
+  "schema_channel": "release-152",
   "upstream_version": "1.0.0"
 }

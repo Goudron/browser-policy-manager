@@ -4,7 +4,10 @@ import re
 import tomllib
 from pathlib import Path
 
+from app.core.config import Settings
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
+CURRENT_TARGET_VERSION = "0.8.8"
 
 
 def _project_version() -> str:
@@ -16,6 +19,9 @@ def _project_version() -> str:
 
 def test_current_version_surfaces_follow_pyproject():
     version = _project_version()
+
+    assert version == CURRENT_TARGET_VERSION
+    assert Settings().APP_VERSION == version
 
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
@@ -32,3 +38,22 @@ def test_current_version_surfaces_follow_pyproject():
     ) == version
     assert docs_index.startswith(f"# BPM {version} Documentation Index\n")
     assert f"first orientation point for BPM {version} work" in system_map
+
+
+def test_current_changelog_summarizes_completed_088_release_scope():
+    changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    current_entry = " ".join(changelog.split("## 0.8.7.1", 1)[0].split())
+
+    for expected in (
+        "Review, Configured, and Catalog modes",
+        "source attribution",
+        "grouped, scope-aware settings search",
+        "primary detail editor",
+        "bounded visible lists",
+        "permanent-delete action",
+        "redundant return-to-Library action",
+        "all six active locale catalogs",
+        "Firefox Release 152 and ESR 140.12 schemas",
+        "coverage remains at `100%`",
+    ):
+        assert expected in current_entry

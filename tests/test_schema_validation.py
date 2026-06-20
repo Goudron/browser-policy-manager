@@ -6,7 +6,7 @@ The tests assert:
 - Schemas for supported channels are loadable.
 - Validator is constructible for each supported profile.
 - Passing a clearly wrong type (e.g., integer) fails validation.
-- Bundled schema snapshots expose the expected Mozilla metadata for v7.11.
+- Bundled schema snapshots expose the expected Mozilla metadata for v7.12.
 """
 
 import json
@@ -56,13 +56,13 @@ def test_validator_rejects_wrong_type(profile):
     ("profile", "expected_version"),
     [(channel, SCHEMA_MOZILLA_VERSIONS[channel]) for channel in SUPPORTED_SCHEMA_CHANNELS],
 )
-def test_bundled_schema_metadata_matches_mozilla_v711(profile, expected_version):
+def test_bundled_schema_metadata_matches_mozilla_v712(profile, expected_version):
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[profile]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert schema["x-bpm-channel"] == profile
     assert schema["x-bpm-version"] == expected_version
-    assert schema["x-bpm-source"] == "mozilla-policy-templates-v7.11"
+    assert schema["x-bpm-source"] == "mozilla-policy-templates-v7.12"
     assert (
         schema["properties"]["ExtensionSettings"]["additionalProperties"]["properties"][
             "allowed_types"
@@ -71,14 +71,14 @@ def test_bundled_schema_metadata_matches_mozilla_v711(profile, expected_version)
     )
 
 
-def test_release_151_keeps_upstream_min_version_metadata():
+def test_release_152_keeps_upstream_min_version_metadata():
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert schema["properties"]["DisableRemoteImprovements"]["x-bpm-min-version"] == "148.0"
 
 
-def test_release_151_includes_new_policy_templates_entries():
+def test_release_152_includes_new_policy_templates_entries():
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
@@ -86,6 +86,8 @@ def test_release_151_includes_new_policy_templates_entries():
     assert "IPProtectionAvailable" in schema["properties"]
     assert "LocalNetworkAccess" in schema["properties"]
     assert "XSLTEnabled" in schema["properties"]
+    assert schema["properties"]["DefaultSerialGuardSetting"]["enum"] == [2, 3]
+    assert schema["properties"]["FirefoxHome"]["properties"]["Weather"]["type"] == "boolean"
     assert (
         schema["properties"]["ExtensionSettings"]["additionalProperties"]["properties"][
             "update_url"
@@ -94,7 +96,7 @@ def test_release_151_includes_new_policy_templates_entries():
     )
 
 
-def test_esr_140_11_does_not_include_release_only_new_entries():
+def test_esr_140_12_includes_shared_new_entries_but_not_release_only_entries():
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
@@ -102,3 +104,5 @@ def test_esr_140_11_does_not_include_release_only_new_entries():
     assert "IPProtectionAvailable" not in schema["properties"]
     assert "LocalNetworkAccess" not in schema["properties"]
     assert "XSLTEnabled" not in schema["properties"]
+    assert schema["properties"]["DefaultSerialGuardSetting"]["enum"] == [2, 3]
+    assert schema["properties"]["FirefoxHome"]["properties"]["Weather"]["type"] == "boolean"

@@ -30,6 +30,7 @@
             textToList,
         } = dependencies;
         const renderAiReviewSummary = dependencies.renderAiReviewSummary || (() => {});
+        const onDocumentChange = dependencies.onDocumentChange || (() => {});
 
         const getEditor = state.getEditor || (() => null);
         const setCurrentRaw = state.setCurrentRaw || (() => {});
@@ -1492,6 +1493,7 @@
                 toEditorValue,
                 setStatus,
                 parseBooleanSelectValue,
+                onDocumentChange,
             },
             state: {
                 getEditor,

@@ -8,7 +8,8 @@ from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
 
-CURRENT_HEAD = "20260606_drop_profile_owner"
+CURRENT_HEAD = "20260620_upgrade_profiles_to_firefox152"
+OWNER_DROP_HEAD = "20260606_drop_profile_owner"
 PRE_OWNER_DROP_HEAD = "20260521_upgrade_profiles_to_firefox151"
 
 
@@ -127,8 +128,8 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
             ).all()
         assert version == CURRENT_HEAD
         assert schema_versions == [
-            ("legacy-esr", "esr-140.11"),
-            ("legacy-release", "release-151"),
+            ("legacy-esr", "esr-140.12"),
+            ("legacy-release", "release-152"),
         ]
     finally:
         engine.dispose()
@@ -155,7 +156,7 @@ def test_alembic_profile_owner_drop_upgrade_and_downgrade(tmp_path: Path):
     finally:
         engine.dispose()
 
-    command.upgrade(cfg, CURRENT_HEAD)
+    command.upgrade(cfg, OWNER_DROP_HEAD)
 
     engine = create_engine(url, future=True)
     try:

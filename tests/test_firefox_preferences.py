@@ -88,6 +88,22 @@ def test_wizard_preferences_catalog_matches_gui_sections():
     assert [option["value"] for option in known_by_pref["network.cookie.cookieBehavior"]["value_options"]] == [0, 1, 4, 5]
     assert known_by_pref["network.trr.mode"]["value_control"] == "select"
     assert [option["value"] for option in known_by_pref["network.trr.mode"]["value_options"]] == [0, 2, 3, 5]
+    cis_known_preferences = {
+        "browser.safebrowsing.malware.enabled": "privacy",
+        "browser.safebrowsing.phishing.enabled": "privacy",
+        "browser.search.update": "search",
+        "dom.allow_scripts_to_close_windows": "privacy",
+        "dom.disable_window_flip": "privacy",
+        "dom.disable_window_move_resize": "privacy",
+        "extensions.blocklist.enabled": "privacy",
+        "media.peerconnection.enabled": "privacy",
+        "network.IDN_show_punycode": "privacy",
+        "security.mixed_content.block_active_content": "privacy",
+    }
+    for pref, section_id in cis_known_preferences.items():
+        assert known_by_pref[pref]["section_id"] == section_id
+        assert known_by_pref[pref]["type"] == "boolean"
+        assert known_by_pref[pref]["status"] == "locked"
     assert known_by_pref["permissions.default.geo"]["value_control"] == "select"
     assert [option["value"] for option in known_by_pref["permissions.default.geo"]["value_options"]] == [0, 1, 2]
     assert known_by_pref["permissions.default.camera"]["value_control"] == "select"

@@ -9,7 +9,7 @@ from app.services import policy_schema_service as service
 pytestmark = pytest.mark.usefixtures("reset_app_caches")
 
 
-def _write_schema(path, *, channel: str = "release-151") -> None:
+def _write_schema(path, *, channel: str = "release-152") -> None:
     payload = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Release Policies 149.0",
@@ -29,7 +29,7 @@ def _write_schema(path, *, channel: str = "release-151") -> None:
     path.write_text(json.dumps(payload), encoding="utf-8")
 
 
-def _write_custom_schema(path, properties: dict[str, object], *, channel: str = "release-151") -> None:
+def _write_custom_schema(path, properties: dict[str, object], *, channel: str = "release-152") -> None:
     payload = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "Release Policies 149.0",
@@ -51,20 +51,20 @@ def test_get_schema_path_unknown_channel_raises():
 def test_get_schema_path_missing_file_raises(tmp_path, monkeypatch):
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
     with pytest.raises(FileNotFoundError):
-        service._get_schema_path("release-151")
+        service._get_schema_path("release-152")
 
 
 def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
-    release_file = tmp_path / "firefox-release-151.json"
+    release_file = tmp_path / "firefox-release-152.json"
     _write_schema(release_file)
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
 
-    schema = service.load_policy_schema("release-151")
-    definition = service.get_policy_definition("release-151", "DisableTelemetry")
-    missing = service.get_policy_definition("release-151", "NoSuchPolicy")
+    schema = service.load_policy_schema("release-152")
+    definition = service.get_policy_definition("release-152", "DisableTelemetry")
+    missing = service.get_policy_definition("release-152", "NoSuchPolicy")
 
-    assert schema.channel == "release-151"
+    assert schema.channel == "release-152"
     assert definition is not None
     assert definition.id == "DisableTelemetry"
     assert missing is None
@@ -77,7 +77,7 @@ def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
                 "title": "Release Policies 148.1",
                 "type": "object",
                 "additionalProperties": False,
-                "x-bpm-channel": "release-151",
+                "x-bpm-channel": "release-152",
                 "x-bpm-version": "148.1",
                 "x-bpm-source": "updated-fixture",
                 "properties": {},
@@ -85,17 +85,17 @@ def test_load_policy_schema_and_get_definition(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
-    cached = service.load_policy_schema("release-151")
+    cached = service.load_policy_schema("release-152")
     assert cached.version == "149.0"
 
 
 def test_load_policy_schema_attaches_ui_metadata(tmp_path, monkeypatch):
-    release_file = tmp_path / "firefox-release-151.json"
+    release_file = tmp_path / "firefox-release-152.json"
     _write_schema(release_file)
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
 
-    schema = service.load_policy_schema("release-151")
+    schema = service.load_policy_schema("release-152")
     definition = schema.get_policy("DisableTelemetry")
 
     assert schema.ui_sections
@@ -108,7 +108,7 @@ def test_load_policy_schema_attaches_ui_metadata(tmp_path, monkeypatch):
 
 
 def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch):
-    release_file = tmp_path / "firefox-release-151.json"
+    release_file = tmp_path / "firefox-release-152.json"
     _write_custom_schema(
         release_file,
         {
@@ -125,7 +125,7 @@ def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch
 
     monkeypatch.setattr(service, "SCHEMAS_DIR", tmp_path)
 
-    definition = service.load_policy_schema("release-151").get_policy("CustomPortal")
+    definition = service.load_policy_schema("release-152").get_policy("CustomPortal")
 
     assert definition is not None
     assert definition.ui is not None
@@ -137,7 +137,7 @@ def test_load_policy_schema_uses_safe_fallback_ui_metadata(tmp_path, monkeypatch
 
 
 def test_real_policy_schemas_expose_ui_metadata_for_every_policy():
-    section_ids = {section.id for section in service.load_policy_schema("release-151").ui_sections}
+    section_ids = {section.id for section in service.load_policy_schema("release-152").ui_sections}
 
     for channel in service.CHANNEL_TO_FILENAME:
         schema = service.load_policy_schema(channel)
@@ -149,7 +149,7 @@ def test_real_policy_schemas_expose_ui_metadata_for_every_policy():
 
 
 def test_real_policy_schemas_expose_expected_widgets_and_sections():
-    schema = service.load_policy_schema("release-151")
+    schema = service.load_policy_schema("release-152")
 
     assert schema.get_policy("Proxy").ui.widget == "object-card"
     assert schema.get_policy("Proxy").ui.section == "network_access"
@@ -162,7 +162,7 @@ def test_real_policy_schemas_expose_expected_widgets_and_sections():
 
 
 def test_real_policy_schemas_capture_nested_map_and_branch_metadata():
-    schema = service.load_policy_schema("release-151")
+    schema = service.load_policy_schema("release-152")
 
     authentication = schema.get_policy("Authentication")
     sanitize = schema.get_policy("SanitizeOnShutdown")
@@ -188,7 +188,7 @@ def test_real_policy_schemas_capture_nested_map_and_branch_metadata():
 
 
 def test_real_policy_schemas_capture_array_item_metadata():
-    schema = service.load_policy_schema("release-151")
+    schema = service.load_policy_schema("release-152")
 
     bookmarks = schema.get_policy("Bookmarks")
     managed_bookmarks = schema.get_policy("ManagedBookmarks")
@@ -205,7 +205,7 @@ def test_real_policy_schemas_capture_array_item_metadata():
 
 
 def test_real_policy_schemas_capture_definition_additional_properties_schema():
-    schema = service.load_policy_schema("release-151")
+    schema = service.load_policy_schema("release-152")
 
     extension_settings = schema.get_policy("ExtensionSettings")
 

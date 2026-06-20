@@ -20,6 +20,7 @@
     "profiles.shell_policy_app_update_pin": "Закрепление версии обновления",
     "profiles.shell_policy_allowed_domains_for_apps": "Разрешённые домены для приложений",
     "profiles.shell_policy_default_download_directory": "Каталог загрузки по умолчанию",
+    "profiles.shell_policy_default_serial_guard_setting": "Доступ к Web Serial по умолчанию",
     "profiles.shell_policy_disable_default_browser_agent": "Отключить агент проверки браузера по умолчанию",
     "profiles.shell_policy_disable_encrypted_client_hello": "Отключить Encrypted Client Hello",
     "profiles.shell_policy_disable_profile_refresh": "Отключить обновление профиля",

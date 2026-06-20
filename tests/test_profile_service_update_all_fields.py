@@ -17,7 +17,7 @@ def _mk_create_payload() -> ProfileCreate:
     return ProfileCreate(
         name=f"UPD-{u}",
         description="Original description",
-        schema_version="esr-140.11",
+        schema_version="esr-140.12",
         flags={"DisableTelemetry": True},
         compliance={"framework": "cis", "layer": "cis_l1"},
     )
@@ -45,7 +45,7 @@ async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSes
 
     patch = ProfileUpdate(
         description="Changed description",
-        schema_version="release-151",
+        schema_version="release-152",
         flags={"DisableTelemetry": False, "DisablePrivateBrowsing": True},
         compliance={"framework": "cis", "layer": "cis_l2"},
     )
@@ -54,7 +54,7 @@ async def test_update_all_mutable_fields_and_read_back(service_session: AsyncSes
     await service_session.commit()
     assert updated is not None
     assert updated.description == "Changed description"
-    assert updated.schema_version == "release-151"
+    assert updated.schema_version == "release-152"
     assert updated.flags.get("DisableTelemetry") is False
     assert updated.flags.get("DisablePrivateBrowsing") is True
     assert updated.compliance == {"framework": "cis", "layer": "cis_l2"}

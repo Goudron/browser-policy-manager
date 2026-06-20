@@ -69,6 +69,7 @@ def test_all_settings_schema_shell_labels_are_catalog_backed_for_active_locales(
 def test_all_settings_review_and_detail_labels_exist_in_active_catalogs():
     en_catalog = _load_catalog("en")
     required_prefixes = (
+        "profiles.settings_a11y_",
         "profiles.settings_filter_",
         "profiles.settings_review_",
         "profiles.settings_detail_",

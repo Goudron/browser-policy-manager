@@ -1,6 +1,6 @@
-# BPM 0.8.7.1 Documentation Index
+# BPM 0.8.8 Documentation Index
 
-Updated: 2026-06-11
+Updated: 2026-06-20
 
 This index classifies every maintained documentation file under `docs/` so
 refactoring work can separate active contracts from historical audits and
@@ -19,11 +19,15 @@ Ignored local artifact groups:
 
 - `docs/screenshots/` - local QA captures and HTML dumps; intentionally not
   tracked in the maintained documentation index.
+- `docs/codex/` - local generated Codex/Obsidian context snapshots; intentionally
+  excluded from commits and the maintained documentation index.
 
 | File | Status | Purpose |
 | --- | --- | --- |
 | [docs/docs-index.md](docs-index.md) | active | Maintained map of documentation ownership and cleanup state. |
 | [docs/docs-manifest.json](docs-manifest.json) | active | Machine-readable documentation contracts for finished backlog items. |
+| [docs/architecture/all-settings-current-contracts.md](architecture/all-settings-current-contracts.md) | active | Current All settings DOM, module ownership, and data-flow contracts before the 0.8.8 refactor. |
+| [docs/architecture/all-settings-single-surface-decision.md](architecture/all-settings-single-surface-decision.md) | active | BPM 0.8.8 decision record for keeping All settings as one triage-first route. |
 | [docs/architecture/current-system-map.md](architecture/current-system-map.md) | active | Current backend, frontend, data, schema, and test-system map for refactoring. |
 | [docs/architecture/profile-clone-naming-ux-decision.md](architecture/profile-clone-naming-ux-decision.md) | active | BPM 0.8.7 clone naming UX and validation decision. |
 | [docs/architecture/profile-comparison-entrypoint-audit.md](architecture/profile-comparison-entrypoint-audit.md) | active | Maintained profile comparison ownership boundary and guardrail map. |
@@ -35,6 +39,7 @@ Ignored local artifact groups:
 | [docs/bpm_0_8_5_refactoring_backlog_2026-06-01.md](bpm_0_8_5_refactoring_backlog_2026-06-01.md) | backlog | Approved BPM 0.8.5 refactoring and optimization backlog. |
 | [docs/bpm_0_8_7_profile_comparison_clone_owner_cleanup_backlog_2026-06-05.md](bpm_0_8_7_profile_comparison_clone_owner_cleanup_backlog_2026-06-05.md) | backlog | BPM 0.8.7 profile comparison, clone naming, and owner cleanup backlog. |
 | [docs/bpm_0_8_7_1_compare_clone_ui_polish_backlog_2026-06-11.md](bpm_0_8_7_1_compare_clone_ui_polish_backlog_2026-06-11.md) | backlog | BPM 0.8.7.1 compare and clone UI polish backlog. |
+| [docs/bpm_0_8_8_all_settings_architecture_backlog_2026-06-12.md](bpm_0_8_8_all_settings_architecture_backlog_2026-06-12.md) | backlog | BPM 0.8.8 All settings architecture and enterprise-scale UX backlog. |
 | [docs/archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md](archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md) | audit | BPM 0.8.7.1 compare and clone visual QA notes. |
 | [docs/archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md](archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md) | audit | Point-in-time Chromium locale smoke matrix. |
 | [docs/archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md](archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md) | audit | Point-in-time CIS Firefox benchmark feature analysis. |

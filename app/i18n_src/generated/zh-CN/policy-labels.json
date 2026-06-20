@@ -20,6 +20,7 @@
     "profiles.shell_policy_app_update_pin": "应用 更新",
     "profiles.shell_policy_allowed_domains_for_apps": "允许 用于",
     "profiles.shell_policy_default_download_directory": "默认 下载",
+    "profiles.shell_policy_default_serial_guard_setting": "默认 Web Serial 访问权限",
     "profiles.shell_policy_disable_default_browser_agent": "禁用 默认 浏览器",
     "profiles.shell_policy_disable_encrypted_client_hello": "禁用",
     "profiles.shell_policy_disable_profile_refresh": "禁用 配置档案",

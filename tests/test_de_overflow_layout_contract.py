@@ -32,12 +32,12 @@ def test_settings_search_shell_uses_border_box_for_mobile_width():
 def test_all_settings_list_columns_keep_reasonable_minimums_for_long_german_labels():
     css = _css()
     list_grid_rule = css.split(".all-settings-list-head,\n        .all-settings-list-row {", 1)[1].split("}", 1)[0]
+    badge_rule = css.split(".all-settings-list-badge,\n        .all-settings-list-state {", 1)[1].split("}", 1)[0]
 
-    assert "minmax(170px, 1.45fr)" in list_grid_rule
-    assert "minmax(110px, 0.72fr)" in list_grid_rule
-    assert "minmax(150px, 1fr)" in list_grid_rule
-    assert "minmax(96px, 0.62fr)" in list_grid_rule
-    assert "minmax(140px, 1fr)" in list_grid_rule
+    assert "minmax(220px, 1.6fr)" in list_grid_rule
+    assert "minmax(160px, 1fr)" in list_grid_rule
+    assert "minmax(96px, 0.62fr)" not in list_grid_rule
+    assert "overflow-wrap: anywhere;" in badge_rule
 
 
 def test_wizard_step_copy_wraps_instead_of_clamping_locale_text():

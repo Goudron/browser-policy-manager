@@ -68,7 +68,6 @@
     "profiles.lifecycle_item_recent_restored": "Восстановлен в этой сессии в {value}.",
     "profiles.compare_route_eyebrow": "Отдельное сравнение",
     "profiles.compare_route_title": "Сравнить настройки профилей",
-    "profiles.compare_back_to_library": "Назад в библиотеку",
     "profiles.compare_left_label": "Профиль A",
     "profiles.compare_right_label": "Профиль B",
     "profiles.compare_search_placeholder": "Найти профиль по имени",

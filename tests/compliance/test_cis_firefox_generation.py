@@ -17,8 +17,8 @@ from app.core.policy_validation import (
 
 
 def test_cis_level_2_includes_level_1_recommendations() -> None:
-    l1 = build_cis_layer(1, "release-151")
-    l2 = build_cis_layer(2, "release-151")
+    l1 = build_cis_layer(1, "release-152")
+    l2 = build_cis_layer(2, "release-152")
 
     assert len(l1.recommendation_ids) == 49
     assert len(l2.recommendation_ids) == 53
@@ -32,7 +32,7 @@ def test_cis_layers_validate_against_supported_firefox_schemas() -> None:
 
 
 def test_cis_generated_layers_include_policy_and_preference_targets() -> None:
-    layer = build_cis_layer(2, "release-151")
+    layer = build_cis_layer(2, "release-152")
 
     assert layer.policies["DisableTelemetry"] is True
     assert layer.policies["DisableAppUpdate"] is False
@@ -49,14 +49,14 @@ def test_write_generated_layers_creates_deterministic_json_documents(tmp_path) -
     written = write_generated_layers(output_dir=tmp_path)
 
     assert [path.name for path in written] == [
-        "cis_l1.esr-140.11.json",
-        "cis_l2.esr-140.11.json",
-        "cis_l1.release-151.json",
-        "cis_l2.release-151.json",
+        "cis_l1.esr-140.12.json",
+        "cis_l2.esr-140.12.json",
+        "cis_l1.release-152.json",
+        "cis_l2.release-152.json",
     ]
-    document = json.loads((tmp_path / "cis_l2.release-151.json").read_text(encoding="utf-8"))
+    document = json.loads((tmp_path / "cis_l2.release-152.json").read_text(encoding="utf-8"))
     assert document["level"] == 2
-    assert document["schema_channel"] == "release-151"
+    assert document["schema_channel"] == "release-152"
     assert len(document["recommendation_ids"]) == 53
     assert document["policies"]["DisablePrivateBrowsing"] is True
 
@@ -73,17 +73,17 @@ def test_build_cis_layer_rejects_unknown_level_and_benchmark() -> None:
     import pytest
 
     with pytest.raises(ValueError, match="CIS level"):
-        build_cis_layer(3, "release-151")
+        build_cis_layer(3, "release-152")
 
     with pytest.raises(ValueError, match="Unknown CIS benchmark"):
-        build_cis_layer(1, "release-151", benchmark_id="missing")
+        build_cis_layer(1, "release-152", benchmark_id="missing")
 
 
 def test_cis_generation_skips_unmapped_and_unsupported_targets(tmp_path) -> None:
     from tests.compliance.test_cis_firefox_sources import _mapping, _recommendation, _write_fixture
 
     unsupported = _mapping("1.1.1")
-    unsupported["targets"][0]["schema_channels"] = {"release-151": "invalid"}
+    unsupported["targets"][0]["schema_channels"] = {"release-152": "invalid"}
     _write_fixture(
         tmp_path,
         recommendations=[
@@ -94,7 +94,7 @@ def test_cis_generation_skips_unmapped_and_unsupported_targets(tmp_path) -> None
         mappings=[unsupported],
     )
 
-    layer = build_cis_layer(1, "release-151", base_dir=tmp_path)
+    layer = build_cis_layer(1, "release-152", base_dir=tmp_path)
 
     assert layer.recommendation_ids == ()
     assert layer.policies == {}
@@ -112,7 +112,7 @@ def test_cis_generation_skips_recommendations_without_string_ids(tmp_path) -> No
         mappings=[_mapping("1.1.1")],
     )
 
-    layer = build_cis_layer(1, "release-151", base_dir=tmp_path)
+    layer = build_cis_layer(1, "release-152", base_dir=tmp_path)
 
     assert layer.recommendation_ids == ()
     assert layer.policies == {}

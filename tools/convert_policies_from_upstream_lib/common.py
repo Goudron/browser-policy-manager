@@ -17,7 +17,7 @@ SCHEMAS_DIR = BASE_DIR / "app" / "schemas" / "policies"
 RELEASE_SCHEMA_PATH = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
 ESR_SCHEMA_PATH = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
 LINUX_POLICIES_PATH = (
-    BASE_DIR / "data" / "upstream" / "policy-templates" / "v7.11" / "linux-policies.json"
+    BASE_DIR / "data" / "upstream" / "policy-templates" / "v7.12" / "linux-policies.json"
 )
 
 ENUM_WRAPPER_KEY = "__bpm_enum__"

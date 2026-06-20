@@ -31,6 +31,18 @@ def test_documentation_placeholders_are_removed_from_ui():
     )
 
 
+def test_wizard_disclosure_toggle_keeps_runtime_i18n_key_in_sync():
+    macros = template_source("_wizard_macros.html")
+    bootstrap = static_source("profiles_bootstrap.js")
+    runtime = static_source("profiles_runtime.js")
+
+    assert "data-i18n=\"{{ 'profiles.wizard_disclosure_hide' if default_open else 'profiles.wizard_disclosure_show' }}\"" in macros
+    assert 'button.setAttribute(\n                "data-i18n",' in bootstrap
+    assert "button.dataset.wizardDisclosureHideKey" in bootstrap
+    assert "button.dataset.wizardDisclosureShowKey" in bootstrap
+    assert 'toggleEl.setAttribute("data-i18n", key);' in runtime
+
+
 def test_wizard_step_navigation_scrolls_only_for_normal_navigation():
     runtime_source = static_source("profiles_runtime.js")
     settings_search_source = static_source("profiles_settings_search.js")
@@ -140,7 +152,7 @@ def test_profile_compare_table_responsive_layout_contract():
     )
 
 
-def test_profile_compare_table_heading_legend_wraps_localized_labels_contract():
+def test_profile_compare_table_heading_omits_stale_value_state_legend_contract():
     css = css_source()
     template = template_source("_page_compare_workspace.html")
 
@@ -149,31 +161,22 @@ def test_profile_compare_table_heading_legend_wraps_localized_labels_contract():
         (
             'class="compare-settings-heading mb-3"',
             'class="compare-settings-heading__title section-title text-slate-900"',
-            'class="compare-state-legend"',
-            'class="status-pill compare-state-legend__item"',
-            'data-compare-value-state="missing"',
-            'data-compare-value-state="equal"',
-            'data-compare-value-state="different"',
         ),
     )
     assert_source_contains_all(
         css,
         (
             ".compare-settings-heading {",
-            "grid-template-columns: minmax(0, 1fr) auto;",
+            "grid-template-columns: minmax(0, 1fr);",
             ".compare-settings-heading__title {",
             "overflow-wrap: anywhere;",
-            ".compare-state-legend {",
-            "flex-wrap: wrap;",
-            "justify-content: flex-end;",
-            ".compare-state-legend__item {",
-            "white-space: normal;",
-            "overflow-wrap: anywhere;",
             "@media (max-width: 820px)",
-            ".compare-state-legend {",
-            "justify-content: flex-start;",
         ),
     )
+    assert 'class="compare-state-legend"' not in template
+    assert 'class="status-pill compare-state-legend__item"' not in template
+    assert ".compare-state-legend" not in css
+    assert ".compare-state-legend__item" not in css
 
 
 def test_profile_compare_table_long_setting_names_and_values_stay_wrapped_contract():
@@ -330,16 +333,21 @@ def test_settings_workspace_hides_guided_step_numbers_and_centers_mapped_control
         (
             "{% for category in all_settings_categories %}",
             'id="settings-category-{{ category.id }}"',
-            'data-settings-category-link="{{ category.id }}"',
+            'id="all-settings-catalog-advanced"',
+            'data-settings-catalog-advanced',
+            '{% if not settings_shell_step_to_open %}hidden{% endif %}',
             'id="all-settings-list-panel"',
             'id="all-settings-review-panel"',
             'id="all-settings-review-summary"',
             'id="all-settings-review-actions"',
             'id="all-settings-list-summary"',
-            'id="all-settings-list"',
-            'id="all-settings-detail-panel"',
-            'id="all-settings-add-preference"',
-            '("all", "profiles.settings_filter_all")',
+                'id="all-settings-list"',
+                'id="all-settings-detail-panel"',
+                'id="all-settings-add-preference"',
+                'data-settings-advanced-schema-shell',
+                'profiles.settings_advanced_schema_title',
+                'profiles.settings_advanced_schema_body',
+                '("all", "profiles.settings_filter_all")',
             '("configured", "profiles.settings_filter_configured")',
             '("available", "profiles.settings_filter_available")',
             '("guided-covered", "profiles.settings_filter_guided_covered")',
@@ -350,26 +358,58 @@ def test_settings_workspace_hides_guided_step_numbers_and_centers_mapped_control
             '("unknown", "profiles.settings_filter_unknown")',
         ),
     )
+    assert 'id="all-settings-category-summary"' not in settings_workspace
+    assert 'class="all-settings-domain-summary all-settings-state-summary"' not in settings_workspace
     assert_source_contains_all(
         template_source("_page_route_assets.html"),
-        ('"/static/profiles_all_settings_list.js"', '"/static/profiles_all_settings_detail.js"'),
-    )
-    assert_source_contains_all(
-        static_source("profiles_settings_search.js"),
         (
-            "buildAllSettingsInventoryEntries",
-            "all-settings-entry:${entry.kind}:${entry.id}",
-            "findAllSettingsEntryTarget?.(normalizedTarget)",
-            'entry.rawFallback ? t("profiles.settings_filter_raw")',
+            '"/static/profiles_all_settings_state.js"',
+            '"/static/profiles_settings_inventory.js"',
+            '"/static/profiles_all_settings_detail.js"',
+            '"/static/profiles_all_settings_list.js"',
         ),
     )
     assert_source_contains_all(
+        static_source("profiles_settings_search.js"),
+            (
+                "buildAllSettingsInventoryEntries",
+                "all-settings-entry:${entry.kind}:${entry.id}",
+                "findAllSettingsEntryTarget?.(entryTarget)",
+                'entry.rawFallback ? t("profiles.settings_filter_raw")',
+            ),
+        )
+    assert_source_contains_all(
         static_source("profiles_all_settings_list.js"),
-        ("getSearchEntries", "findTarget", "data-settings-entry-raw"),
+        (
+            "settingsInventory",
+            "settingsInventory?.collect?.(sourceData)",
+            "allSettingsRouteState",
+            "routeState.updateEntries",
+            "getSearchEntries",
+            "findTarget",
+            "data-settings-entry-raw",
+        ),
+    )
+    assert_source_contains_all(
+        static_source("profiles_all_settings_state.js"),
+        (
+            "function create(initialState = {})",
+            "activeCategory",
+            "activeFilter",
+            "searchQuery",
+            "selectedEntryKey",
+            "focusedTarget",
+            "expandedGroups",
+            "function updateEntries(entries = [], options = {})",
+            "function buildCounts(entries, modeEntries, visibleEntries, filterValues, matchesFilter)",
+            "window.BPMProfilesAllSettingsState = { create };",
+        ),
     )
     assert_source_contains_all(
         static_source("profiles_all_settings_detail.js"),
         (
+            "settingsInventory = null",
+            "settingsInventory?.getKnownPreference?.(prefName)",
             "const sourceState = readWizardSchemaSource();",
             'documentRef.getElementById("mode")?.value || "json"',
             "onDocumentChange(normalized);",
@@ -378,6 +418,11 @@ def test_settings_workspace_hides_guided_step_numbers_and_centers_mapped_control
     assert_source_contains_all(
         static_source("profiles_bootstrap_core.js"),
         (
+            "const allSettingsRouteState = window.BPMProfilesAllSettingsState.create({",
+            "activeMode: readAllSettingsModeFromUrl(),",
+            "const settingsInventory = window.BPMProfilesSettingsInventory.create({",
+            "allSettingsRouteState,",
+            "settingsInventory,",
             "getAllSettingsSearchEntries: () => allSettingsList.getSearchEntries()",
             "handleAllSettingsDocumentChange = () =>",
             "settingsSearch.buildIndex();",
@@ -430,6 +475,91 @@ def test_profile_library_actions_use_editor_route_links():
             "profile-compare-button",
             "library-row-open-button--selected",
             "loadProfile(profile.id)",
+        ),
+    )
+
+
+def test_all_settings_desktop_layout_gives_heavy_lists_full_width():
+    css = css_source()
+    manager_grid_rule = css.split(".all-settings-manager-grid {", 1)[1].split("}", 1)[0]
+    detail_rule = css.split(".all-settings-detail {", 1)[1].split("}", 1)[0]
+
+    assert "grid-template-columns: minmax(0, 1fr);" in manager_grid_rule
+    assert "minmax(320px" not in manager_grid_rule
+    assert "width: 100%;" in detail_rule
+    assert "max-width: 1040px;" in detail_rule
+
+
+def test_all_settings_mobile_layout_stacks_heavy_controls_and_detail():
+    css = css_source()
+    responsive_css = css.split("/* profiles_css/30-responsive.css */", 1)[1]
+    mobile_rule = responsive_css.split("@media (max-width: 820px) {", 1)[1].split("@media", 1)[0]
+
+    for snippet in (
+        ".wizard-settings-search-scope,",
+        ".all-settings-filter-bar,",
+        ".all-settings-source-filter-bar",
+        "grid-template-columns: 1fr;",
+        ".all-settings-list-budget {",
+        ".all-settings-list-budget-actions {",
+        ".all-settings-detail {",
+        "max-width: none;",
+        ".all-settings-detail-meta > div {",
+        ".all-settings-detail-actions {",
+        ".all-settings-list-heading #all-settings-add-preference {",
+    ):
+        assert snippet in mobile_rule
+
+
+def test_all_settings_long_label_contract_targets_live_heavy_ui_elements():
+    settings_template = template_source("_page_settings_workspace.html")
+    list_source = static_source("profiles_all_settings_list.js")
+    detail_source = static_source("profiles_all_settings_detail.js")
+
+    assert_source_contains_all(
+        settings_template,
+        (
+            "all-settings-mode-bar",
+            "all-settings-mode-button",
+            "all-settings-mode-title",
+            "all-settings-mode-copy",
+            "all-settings-source-filter-bar",
+            "all-settings-source-filter-button",
+            "all-settings-list-budget",
+            "all-settings-detail-panel",
+        ),
+    )
+    assert_source_contains_all(
+        list_source,
+        (
+            "all-settings-domain-card",
+            "all-settings-domain-card-title",
+            "all-settings-domain-card-body",
+            "all-settings-domain-card-counts",
+            "all-settings-domain-card-coverage",
+            "all-settings-list-budget-count",
+            "all-settings-list-budget-actions",
+            "all-settings-list-budget-toggle",
+            'data-settings-list-budget-action="prev"',
+            'data-settings-list-budget-action="next"',
+            'data-settings-list-budget-action="${listWindow.expanded ? "collapse" : "expand"}"',
+            "all-settings-list-row",
+            "all-settings-list-cell all-settings-list-cell--setting",
+            "all-settings-list-cell all-settings-list-cell--value",
+            "data-label=",
+            "all-settings-list-badge",
+            "data-settings-entry-source",
+            "data-settings-entry-category-badge",
+        ),
+    )
+    assert_source_contains_all(
+        detail_source,
+        (
+            "all-settings-detail-actions",
+            "button-base ghost-button",
+            "button-base danger-button",
+            "data-settings-detail-reset",
+            "data-settings-detail-remove",
         ),
     )
 
@@ -523,7 +653,7 @@ def test_guided_route_uses_headless_editor_contract_without_monaco_surface():
     assert "{% if profiles_template_kind == 'editor' %}" in template_source("_page_workspace.html")
 
 
-def test_settings_route_uses_visible_catalog_sections_without_hidden_wizard_backing():
+def test_settings_route_rehomes_preference_sections_into_hidden_compat_bridge():
     settings_shell = template_source("_settings_shell.html")
     settings_workspace = template_source("_page_settings_workspace.html")
 
@@ -534,8 +664,20 @@ def test_settings_route_uses_visible_catalog_sections_without_hidden_wizard_back
         (
             "data-settings-nav",
             'data-settings-jump-target="{{ control.target }}"',
+            'data-settings-preferences-compat',
             'data-settings-target="pref-section:{{ preference_section.id }}"',
             'id="wizard-preferences-{{ preference_section.id }}-presets"',
+        ),
+    )
+    assert_source_excludes_all(
+        settings_workspace,
+        (
+            'class="mt-4 surface-soft-box rounded-[14px] p-4"',
+            "profiles.settings_preferences_presets",
+            "profiles.settings_preferences_bundles",
+            "profiles.settings_preferences_known",
+            "profiles.settings_preferences_manual",
+            'class="theme-subcard rounded-[12px] px-4 py-4"',
         ),
     )
     assert "settingsTargetAliases" in static_source("profiles_catalogs.js")
@@ -544,6 +686,9 @@ def test_settings_route_uses_visible_catalog_sections_without_hidden_wizard_back
         (
             "function resolveTargetAlias(target)",
             "shellPolicyTargetByAlias[normalizedTarget]",
+            'target: resolveTargetAlias(`pref-section:${preferenceSection.id}`)',
+            'normalizedTarget.startsWith("pref-section:")',
+            "item?.editor?.preferenceSectionId",
             'documentRef.querySelector(`[data-settings-target="${resolveTargetAlias(normalizedTarget)}"]`)',
         ),
     )

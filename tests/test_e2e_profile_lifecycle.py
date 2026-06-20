@@ -11,7 +11,7 @@ def _make_profile_payload() -> dict:
     return {
         "name": f"E2E-{unique}",
         "description": "End-to-end lifecycle profile",
-        "schema_version": "esr-140.11",
+        "schema_version": "esr-140.12",
         "flags": {
             "DisableTelemetry": True,
             "DisablePrivateBrowsing": True,
@@ -57,7 +57,7 @@ def test_profile_lifecycle_create_validate_save_export_delete_restore():
 
     # Validate the updated profile payload via the public validation endpoint.
     validate_after = client.post(
-        "/api/validate/esr-140.11",
+        "/api/validate/esr-140.12",
         json={"document": updated["flags"]},
     )
     assert validate_after.status_code == 200, validate_after.text

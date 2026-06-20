@@ -26,6 +26,8 @@ ALLOWED_VISIBLE_LATIN_TOKENS = {
     "Public",
     "Release",
     "Suggest",
+    "Serial",
+    "Web",
     "Windows",
     # Human-readable pieces of accepted multi-word technical/product names.
     "Client",

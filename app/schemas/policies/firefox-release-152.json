@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Release 151 Policies 151.0",
+  "title": "Release 152 Policies 152.0",
   "type": "object",
   "additionalProperties": false,
-  "x-bpm-channel": "release-151",
-  "x-bpm-version": "151.0",
-  "x-bpm-source": "mozilla-policy-templates-v7.11",
+  "x-bpm-channel": "release-152",
+  "x-bpm-version": "152.0",
+  "x-bpm-source": "mozilla-policy-templates-v7.12",
   "properties": {
     "3rdparty": {
       "type": "object",
@@ -1180,6 +1180,10 @@
         },
         "Snippets": {
           "type": "boolean"
+        },
+        "Weather": {
+          "type": "boolean",
+          "default": true
         },
         "Locked": {
           "type": "boolean"
@@ -2500,6 +2504,17 @@
       "x-bpm-id": "WindowsSSO",
       "x-bpm-description-key": "policy.WindowsSSO",
       "x-bpm-min-version": "91.0"
+    },
+    "DefaultSerialGuardSetting": {
+      "type": "integer",
+      "default": 2,
+      "enum": [
+        2,
+        3
+      ],
+      "x-bpm-id": "DefaultSerialGuardSetting",
+      "x-bpm-description-key": "policy.DefaultSerialGuardSetting",
+      "x-bpm-min-version": "1.0"
     },
     "LocalNetworkAccess": {
       "type": "object",

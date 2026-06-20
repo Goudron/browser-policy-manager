@@ -34,6 +34,12 @@ def _block_containing(selector: str, text: str) -> str:
         start = end + 1
 
 
+def _mobile_820_block() -> str:
+    source = _css_source()
+    responsive_source = source.split("/* profiles_css/30-responsive.css */", 1)[1]
+    return responsive_source.split("@media (max-width: 820px) {", 1)[1].split("@media", 1)[0]
+
+
 def test_responsive_long_label_audit_document_records_generic_scope():
     audit_doc = AUDIT_DOC_PATH.read_text(encoding="utf-8")
 
@@ -124,3 +130,69 @@ def test_table_cell_contracts_remain_mobile_friendly():
     assert "@media (max-width: 820px)" in source
     assert ".all-settings-list-row" in source
     assert "grid-template-columns: 1fr;" in source
+
+
+def test_all_settings_heavy_mode_controls_have_long_label_guards():
+    mode_bar = _block(".all-settings-mode-bar {")
+    mode_button = _block(".all-settings-mode-button {")
+    mode_title = _block(".all-settings-mode-title {")
+    mode_copy = _block(".all-settings-mode-copy {")
+    source_button = _block(".all-settings-source-filter-button {")
+    filter_button = _block(".all-settings-filter-button {")
+
+    assert "grid-template-columns: repeat(3, minmax(0, 1fr));" in mode_bar
+    for block in (mode_button, source_button, filter_button):
+        assert "min-width: 0;" in block
+        assert "white-space: normal;" in block
+    assert "line-height: 1.25;" in mode_title
+    assert "line-height: 1.35;" in mode_copy
+    assert "max-width: 100%;" in source_button
+    assert "max-width: 100%;" in filter_button
+
+
+def test_all_settings_summaries_badges_rows_actions_and_budget_wrap_in_long_label_locales():
+    domain_card = _block(".all-settings-domain-card {")
+    domain_title = _block(".all-settings-domain-card-title {")
+    domain_body = _block(".all-settings-domain-card-body {")
+    domain_counts = _block(".all-settings-domain-card-counts {")
+    domain_coverage = _block(".all-settings-domain-card-coverage {")
+    domain_count = _block(".all-settings-domain-card-count {")
+    row_grid = _block(".all-settings-list-head,\n        .all-settings-list-row {")
+    list_cell = _block(".all-settings-list-cell {")
+    list_badge = _block(".all-settings-list-badge,\n        .all-settings-list-state {")
+    budget = _block(".all-settings-list-budget {")
+    budget_count = _block(".all-settings-list-budget-count {")
+    budget_actions = _block(".all-settings-list-budget-actions {")
+    budget_toggle = _block(".all-settings-list-budget-toggle {")
+    detail_actions = _block(".all-settings-detail-actions {")
+    mobile_rule = _mobile_820_block()
+
+    for block in (domain_card, domain_title, domain_body, list_cell, list_badge):
+        assert "min-width: 0;" in block
+        assert "overflow-wrap: anywhere;" in block
+
+    for block in (domain_counts, domain_coverage, domain_count, budget_count, budget_actions, budget_toggle):
+        assert "min-width: 0;" in block
+
+    assert "flex-wrap: wrap;" in domain_counts
+    assert "flex-wrap: wrap;" in domain_coverage
+    assert "flex-wrap: wrap;" in budget_actions
+    assert "flex-wrap: wrap;" in detail_actions
+    assert "line-height: 1.2;" in list_badge
+    assert "minmax(220px, 1.6fr)" in row_grid
+    assert "minmax(160px, 1fr)" in row_grid
+    assert "justify-content: space-between;" in budget
+    assert "white-space: normal;" in budget_toggle
+
+    for snippet in (
+        ".all-settings-list-head {\n                display: none;",
+        ".all-settings-list-row {\n                grid-template-columns: 1fr;",
+        ".all-settings-list-cell::before {\n                content: attr(data-label);",
+        ".all-settings-list-budget {\n                display: grid;",
+        ".all-settings-list-budget-actions {\n                display: grid;",
+        ".all-settings-detail-actions {\n                display: grid;",
+        ".all-settings-detail-actions .button-base",
+        "width: 100%;",
+        "justify-content: center;",
+    ):
+        assert snippet in mobile_rule

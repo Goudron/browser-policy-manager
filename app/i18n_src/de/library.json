@@ -68,7 +68,6 @@
     "profiles.lifecycle_item_recent_restored": "Wiederherstellend in diese session bei {value}.",
     "profiles.compare_route_eyebrow": "Eigener Vergleich",
     "profiles.compare_route_title": "Profileinstellungen vergleichen",
-    "profiles.compare_back_to_library": "Zurück zur Bibliothek",
     "profiles.compare_left_label": "Profil A",
     "profiles.compare_right_label": "Profil B",
     "profiles.compare_search_placeholder": "Profil nach Name suchen",

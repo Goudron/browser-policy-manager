@@ -24,7 +24,7 @@ def test_app_cache_reset_registry_covers_mutable_application_caches():
 def test_reset_app_caches_can_reset_one_named_cache_without_flushing_another():
     reset_app_caches()
     get_settings()
-    load_schema("release-151")
+    load_schema("release-152")
 
     assert get_settings.cache_info().currsize == 1
     assert load_schema.cache_info().currsize == 1

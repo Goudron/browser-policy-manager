@@ -1247,6 +1247,7 @@
                 syncWizardPoliciesFromEditor();
                 syncWizardPreferencesFromEditor();
                 syncWizardExtensionsFromEditor();
+                renderAllSettingsList?.();
                 setBaselineFromCurrentUi();
                 if (syncLibrary) {
                     const [items, stats] = await Promise.all([

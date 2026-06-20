@@ -24,21 +24,21 @@ def test_schema_channels_constants_are_consistent():
     assert SCHEMA_MOZILLA_VERSIONS == {
         channel.value: channel.mozilla_version for channel in SCHEMA_CHANNELS
     }
-    assert SUPPORTED_SCHEMA_CHANNELS == ("esr-140.11", "release-151")
-    assert SUPPORTED_SCHEMA_CHANNEL_SET == {"esr-140.11", "release-151"}
-    assert DEFAULT_SCHEMA_CHANNEL == "esr-140.11"
-    assert DEFAULT_RELEASE_SCHEMA_CHANNEL == "release-151"
+    assert SUPPORTED_SCHEMA_CHANNELS == ("esr-140.12", "release-152")
+    assert SUPPORTED_SCHEMA_CHANNEL_SET == {"esr-140.12", "release-152"}
+    assert DEFAULT_SCHEMA_CHANNEL == "esr-140.12"
+    assert DEFAULT_RELEASE_SCHEMA_CHANNEL == "release-152"
     assert CURRENT_ESR_SCHEMA_CHANNEL == DEFAULT_SCHEMA_CHANNEL
     assert CURRENT_RELEASE_SCHEMA_CHANNEL == DEFAULT_RELEASE_SCHEMA_CHANNEL
-    assert SCHEMA_LABELS["esr-140.11"] == "ESR 140.11"
-    assert SCHEMA_LABELS["release-151"] == "Release 151"
-    assert SCHEMA_FILENAMES["esr-140.11"] == "firefox-esr-140.11.json"
-    assert SCHEMA_FILENAMES["release-151"] == "firefox-release-151.json"
-    assert RAW_SCHEMA_DIRS["esr-140.11"] == "esr14011"
-    assert RAW_SCHEMA_DIRS["release-151"] == "release151"
-    assert SCHEMA_MOZILLA_VERSIONS["esr-140.11"] == "140.11"
-    assert SCHEMA_MOZILLA_VERSIONS["release-151"] == "151.0"
-    assert get_schema_channel("release-151") is not None
+    assert SCHEMA_LABELS["esr-140.12"] == "ESR 140.12"
+    assert SCHEMA_LABELS["release-152"] == "Release 152"
+    assert SCHEMA_FILENAMES["esr-140.12"] == "firefox-esr-140.12.json"
+    assert SCHEMA_FILENAMES["release-152"] == "firefox-release-152.json"
+    assert RAW_SCHEMA_DIRS["esr-140.12"] == "esr14012"
+    assert RAW_SCHEMA_DIRS["release-152"] == "release152"
+    assert SCHEMA_MOZILLA_VERSIONS["esr-140.12"] == "140.12"
+    assert SCHEMA_MOZILLA_VERSIONS["release-152"] == "152.0"
+    assert get_schema_channel("release-152") is not None
     assert get_schema_channel("unknown-channel") is None
 
 
@@ -48,12 +48,12 @@ def test_schema_channels_catalog_matches_constants():
     assert catalog["supported_channels"] == list(SUPPORTED_SCHEMA_CHANNELS)
     assert catalog["default_channel"] == DEFAULT_SCHEMA_CHANNEL
     assert catalog["default_release_channel"] == DEFAULT_RELEASE_SCHEMA_CHANNEL
-    assert catalog["default_label"] == "ESR 140.11"
+    assert catalog["default_label"] == "ESR 140.12"
     assert catalog["labels"] == SCHEMA_LABELS
     assert catalog["filenames"] == SCHEMA_FILENAMES
     assert catalog["mozilla_versions"] == SCHEMA_MOZILLA_VERSIONS
     assert catalog["options"] == [
-        {"value": "esr-140.11", "label": "ESR 140.11"},
-        {"value": "release-151", "label": "Release 151"},
+        {"value": "esr-140.12", "label": "ESR 140.12"},
+        {"value": "release-152", "label": "Release 152"},
     ]
-    assert get_schema_label("release-151") == "Release 151"
+    assert get_schema_label("release-152") == "Release 152"

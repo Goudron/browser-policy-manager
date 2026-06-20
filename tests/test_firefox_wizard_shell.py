@@ -7,14 +7,14 @@ def test_wizard_schema_shell_catalog_exposes_steps_and_channels():
     catalog = get_wizard_schema_shell_catalog()
 
     assert [step["step"] for step in catalog["steps"]] == [2, 3, 4, 5, 6, 7, 8]
-    assert set(catalog["channels"]) == {"esr-140.11", "release-151"}
+    assert set(catalog["channels"]) == {"esr-140.12", "release-152"}
 
 
 def test_wizard_schema_shell_catalog_groups_real_policies_into_step_buckets():
     catalog = get_wizard_schema_shell_catalog()
-    release_general = catalog["channels"]["release-151"]["steps"]["2"]
-    release_search = catalog["channels"]["release-151"]["steps"]["4"]
-    release_review = catalog["channels"]["release-151"]["steps"]["8"]
+    release_general = catalog["channels"]["release-152"]["steps"]["2"]
+    release_search = catalog["channels"]["release-152"]["steps"]["4"]
+    release_review = catalog["channels"]["release-152"]["steps"]["8"]
 
     general_recommended = {item["id"] for item in release_general["recommended"]}
     search_recommended = {item["id"] for item in release_search["recommended"]}
@@ -31,29 +31,42 @@ def test_wizard_schema_shell_catalog_groups_real_policies_into_step_buckets():
 
 def test_wizard_schema_shell_catalog_marks_raw_fallback_items():
     catalog = get_wizard_schema_shell_catalog()
-    review_items = catalog["channels"]["esr-140.11"]["steps"]["8"]["raw_fallback"]
+    review_items = catalog["channels"]["esr-140.12"]["steps"]["8"]["raw_fallback"]
 
     assert review_items
     assert all(item["support_level"] == "fallback" for item in review_items)
     assert all(item["target"].startswith("shell-policy:8:") for item in review_items)
 
 
+def test_firefox_152_serial_guard_stays_in_all_settings_review_fallback():
+    catalog = get_wizard_schema_shell_catalog()
+
+    for channel in ("esr-140.12", "release-152"):
+        review_items = catalog["channels"][channel]["steps"]["8"]["raw_fallback"]
+        serial_guard = next(
+            item for item in review_items if item["id"] == "DefaultSerialGuardSetting"
+        )
+
+        assert serial_guard["section_id"] == "advanced"
+        assert serial_guard["support_level"] == "fallback"
+
+
 def test_wizard_schema_shell_catalog_exposes_inline_editor_specs_for_phase_three_policies():
     catalog = get_wizard_schema_shell_catalog()
     step_two_items = (
-        catalog["channels"]["release-151"]["steps"]["2"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["2"]["additional"]
+        catalog["channels"]["release-152"]["steps"]["2"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["2"]["additional"]
     )
     step_three_items = (
-        catalog["channels"]["release-151"]["steps"]["3"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["3"]["additional"]
-        + catalog["channels"]["release-151"]["steps"]["3"]["raw_fallback"]
+        catalog["channels"]["release-152"]["steps"]["3"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["3"]["additional"]
+        + catalog["channels"]["release-152"]["steps"]["3"]["raw_fallback"]
     )
     step_four_items = (
-        catalog["channels"]["release-151"]["steps"]["4"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["4"]["additional"]
+        catalog["channels"]["release-152"]["steps"]["4"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["4"]["additional"]
     )
-    step_six_items = catalog["channels"]["release-151"]["steps"]["6"]["recommended"]
+    step_six_items = catalog["channels"]["release-152"]["steps"]["6"]["recommended"]
 
     by_id = {
         item["id"]: item
@@ -99,7 +112,7 @@ def test_wizard_schema_shell_catalog_exposes_visual_editors_for_guided_scalar_po
     catalog = get_wizard_schema_shell_catalog()
     release_items = {
         item["id"]: item
-        for step in catalog["channels"]["release-151"]["steps"].values()
+        for step in catalog["channels"]["release-152"]["steps"].values()
         for bucket in ("recommended", "additional", "raw_fallback")
         for item in step[bucket]
     }
@@ -141,10 +154,10 @@ def test_wizard_schema_shell_catalog_exposes_visual_editors_for_guided_scalar_po
 def test_wizard_schema_shell_catalog_exposes_complex_inline_editor_specs_for_phase_five():
     catalog = get_wizard_schema_shell_catalog()
     step_two_items = (
-        catalog["channels"]["release-151"]["steps"]["2"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["2"]["additional"]
+        catalog["channels"]["release-152"]["steps"]["2"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["2"]["additional"]
     )
-    step_five_items = catalog["channels"]["release-151"]["steps"]["5"]["recommended"]
+    step_five_items = catalog["channels"]["release-152"]["steps"]["5"]["recommended"]
 
     by_id = {item["id"]: item for item in step_two_items + step_five_items}
 
@@ -164,9 +177,9 @@ def test_wizard_schema_shell_catalog_exposes_complex_inline_editor_specs_for_pha
 def test_wizard_schema_shell_catalog_exposes_nested_object_and_cookie_inline_editors():
     catalog = get_wizard_schema_shell_catalog()
     step_five_items = (
-        catalog["channels"]["release-151"]["steps"]["5"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["5"]["additional"]
-        + catalog["channels"]["release-151"]["steps"]["5"]["raw_fallback"]
+        catalog["channels"]["release-152"]["steps"]["5"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["5"]["additional"]
+        + catalog["channels"]["release-152"]["steps"]["5"]["raw_fallback"]
     )
     by_id = {item["id"]: item for item in step_five_items}
 
@@ -199,9 +212,9 @@ def test_wizard_schema_shell_catalog_exposes_nested_object_and_cookie_inline_edi
 def test_wizard_schema_shell_catalog_exposes_recursive_handler_inline_editor():
     catalog = get_wizard_schema_shell_catalog()
     step_six_items = (
-        catalog["channels"]["release-151"]["steps"]["6"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["6"]["additional"]
-        + catalog["channels"]["release-151"]["steps"]["6"]["raw_fallback"]
+        catalog["channels"]["release-152"]["steps"]["6"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["6"]["additional"]
+        + catalog["channels"]["release-152"]["steps"]["6"]["raw_fallback"]
     )
     by_id = {item["id"]: item for item in step_six_items}
 
@@ -223,7 +236,7 @@ def test_wizard_schema_shell_catalog_exposes_recursive_handler_inline_editor():
 
 def test_wizard_schema_shell_catalog_exposes_array_inline_editor_specs_for_phase_six():
     catalog = get_wizard_schema_shell_catalog()
-    step_six_items = catalog["channels"]["release-151"]["steps"]["6"]["additional"]
+    step_six_items = catalog["channels"]["release-152"]["steps"]["6"]["additional"]
     by_id = {item["id"]: item for item in step_six_items}
 
     bookmarks = by_id["Bookmarks"]["inline_editor"]
@@ -241,8 +254,8 @@ def test_wizard_schema_shell_catalog_exposes_array_inline_editor_specs_for_phase
 def test_wizard_schema_shell_catalog_exposes_dictionary_inline_editor_specs_for_phase_seven():
     catalog = get_wizard_schema_shell_catalog()
     step_six_items = (
-        catalog["channels"]["release-151"]["steps"]["6"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["6"]["additional"]
+        catalog["channels"]["release-152"]["steps"]["6"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["6"]["additional"]
     )
     by_id = {item["id"]: item for item in step_six_items}
 
@@ -277,8 +290,8 @@ def test_wizard_schema_shell_catalog_exposes_dictionary_inline_editor_specs_for_
 def test_wizard_schema_shell_catalog_exposes_ai_inline_editors_on_step_seven():
     catalog = get_wizard_schema_shell_catalog()
     step_seven_items = (
-        catalog["channels"]["release-151"]["steps"]["7"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["7"]["additional"]
+        catalog["channels"]["release-152"]["steps"]["7"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["7"]["additional"]
     )
     by_id = {item["id"]: item for item in step_seven_items}
 
@@ -322,8 +335,8 @@ def test_wizard_schema_shell_catalog_exposes_ai_inline_editors_on_step_seven():
 def test_wizard_schema_shell_catalog_exposes_release_151_privacy_network_controls_on_step_five():
     catalog = get_wizard_schema_shell_catalog()
     step_five_items = (
-        catalog["channels"]["release-151"]["steps"]["5"]["recommended"]
-        + catalog["channels"]["release-151"]["steps"]["5"]["additional"]
+        catalog["channels"]["release-152"]["steps"]["5"]["recommended"]
+        + catalog["channels"]["release-152"]["steps"]["5"]["additional"]
     )
     by_id = {item["id"]: item for item in step_five_items}
 
@@ -341,9 +354,9 @@ def test_wizard_schema_shell_catalog_exposes_release_151_privacy_network_control
     assert by_id["XSLTEnabled"]["inline_editor"]["kind"] == "boolean-select"
 
     esr_step_five_items = (
-        catalog["channels"]["esr-140.11"]["steps"]["5"]["recommended"]
-        + catalog["channels"]["esr-140.11"]["steps"]["5"]["additional"]
-        + catalog["channels"]["esr-140.11"]["steps"]["5"]["raw_fallback"]
+        catalog["channels"]["esr-140.12"]["steps"]["5"]["recommended"]
+        + catalog["channels"]["esr-140.12"]["steps"]["5"]["additional"]
+        + catalog["channels"]["esr-140.12"]["steps"]["5"]["raw_fallback"]
     )
     esr_ids = {item["id"] for item in esr_step_five_items}
     assert "LocalNetworkAccess" not in esr_ids

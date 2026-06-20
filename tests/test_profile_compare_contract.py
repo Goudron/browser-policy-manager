@@ -57,7 +57,7 @@ def test_profile_compare_contract_declares_two_saved_profile_model() -> None:
         profile = contract["profiles"][side]
         assert isinstance(profile["id"], int)
         assert profile["name"]
-        assert profile["schema_version"] == "release-151"
+        assert profile["schema_version"] == "release-152"
         assert isinstance(profile["flags"], dict)
 
 

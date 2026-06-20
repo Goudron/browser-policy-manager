@@ -110,7 +110,6 @@ def test_compare_locale_keys_are_source_and_runtime_catalog_backed():
 
     assert expected_compare_keys == {
         "profiles.compare_action",
-        "profiles.compare_back_to_library",
         "profiles.compare_kind_policy",
         "profiles.compare_kind_preference",
         "profiles.compare_left_column",

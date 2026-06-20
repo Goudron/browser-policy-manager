@@ -16,7 +16,7 @@ def _import_payload(name: str = "Imported Firefox") -> dict:
     return {
         "name": name,
         "description": "Imported from Firefox policies.json",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "document": {
             "policies": {
                 "DisableTelemetry": True,
@@ -36,7 +36,7 @@ def test_import_firefox_policies_json_creates_profile_and_round_trips_export():
         assert response.status_code == status.HTTP_201_CREATED, response.text
         profile = response.json()
         assert profile["name"] == "Imported Firefox"
-        assert profile["schema_version"] == "release-151"
+        assert profile["schema_version"] == "release-152"
         assert profile["flags"] == {
             "DisableTelemetry": True,
             "BlockAboutConfig": True,
@@ -68,7 +68,7 @@ def test_import_firefox_policies_json_accepts_multipart_file_upload():
             "/api/profiles/import/firefox/policies.json",
             data={
                 "name": "Multipart Firefox",
-                "schema_version": "release-151",
+                "schema_version": "release-152",
                 "description": "Uploaded policies.json",
             },
             files={
@@ -84,7 +84,7 @@ def test_import_firefox_policies_json_accepts_multipart_file_upload():
     profile = response.json()
     assert profile["name"] == "Multipart Firefox"
     assert profile["description"] == "Uploaded policies.json"
-    assert profile["schema_version"] == "release-151"
+    assert profile["schema_version"] == "release-152"
     assert profile["flags"] == document["policies"]
 
 
@@ -95,7 +95,7 @@ def test_import_firefox_policies_json_accepts_multipart_document_field_and_compl
         response = client.post(
             "/api/profiles/import/firefox/policies.json",
             data={
-                "schema_version": "release-151",
+                "schema_version": "release-152",
                 "compliance": json.dumps({"framework": "cis", "layer": "cis_l1"}),
             },
             files={"document": (None, json.dumps(document))},
@@ -114,7 +114,7 @@ def test_import_firefox_policies_json_uses_uploaded_filename_as_default_name():
     with make_test_client() as client:
         response = client.post(
             "/api/profiles/import/firefox/policies.json",
-            data={"schema_version": "release-151"},
+            data={"schema_version": "release-152"},
             files={"file": ("workstation-baseline.json", json.dumps(document), "application/json")},
         )
 
@@ -130,7 +130,7 @@ def test_import_firefox_policies_json_rejects_bad_multipart_compliance_shape():
             "/api/profiles/import/firefox/policies.json",
             data={
                 "name": "Bad Compliance",
-                "schema_version": "release-151",
+                "schema_version": "release-152",
                 "compliance": json.dumps(["cis"]),
             },
             files={"file": ("policies.json", json.dumps(document), "application/json")},
@@ -208,7 +208,7 @@ def test_import_firefox_policies_json_rejects_invalid_multipart_json_without_cre
             "/api/profiles/import/firefox/policies.json",
             data={
                 "name": "Invalid Multipart JSON",
-                "schema_version": "release-151",
+                "schema_version": "release-152",
             },
             files={
                 "file": (
@@ -229,7 +229,7 @@ def test_import_firefox_policies_json_rejects_invalid_multipart_json_without_cre
 def test_import_firefox_policies_json_rejects_internal_flags_shape():
     payload = {
         "name": "Wrong Shape",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "document": {
             "flags": {
                 "DisableTelemetry": True,
@@ -250,7 +250,7 @@ def test_import_firefox_policies_json_rejects_internal_flags_shape():
 def test_import_firefox_policies_json_rejects_schema_validation_errors_with_external_path():
     payload = {
         "name": "Invalid Imported Policy",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "document": {
             "policies": {
                 "Proxy": {

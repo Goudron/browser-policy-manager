@@ -9,7 +9,7 @@ def _maintained_docs_files() -> set[str]:
     for path in docs_root.rglob("*"):
         if not path.is_file():
             continue
-        if "screenshots" in path.relative_to(docs_root).parts:
+        if {"screenshots", "codex"} & set(path.relative_to(docs_root).parts):
             continue
         paths.add(path.relative_to(docs_root).as_posix())
     return paths

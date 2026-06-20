@@ -206,7 +206,6 @@ def validate_profile_payload_with_schema(payload: dict[str, Any]) -> None:
     """
 
     channel = payload.get("channel") or DEFAULT_RELEASE_SCHEMA_CHANNEL
-    schema = load_policy_schema_for_channel(channel)
 
     policies = payload.get("policies") or {}
     if not isinstance(policies, dict):
@@ -220,4 +219,4 @@ def validate_profile_payload_with_schema(payload: dict[str, Any]) -> None:
             ]
         )
 
-    validate_profile_policies_or_raise(policies, schema)
+    validate_profile_policies_or_raise_for_channel(policies, channel)

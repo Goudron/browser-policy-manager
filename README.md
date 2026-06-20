@@ -6,16 +6,27 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.8.7.1`<br>
+**Version:** `0.8.8`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
 
-## What's Included In 0.8.7.1
+## What's Included In 0.8.8
 
-BPM 0.8.7.1 ships the compare and clone UI polish from the patch line.
+BPM 0.8.8 completes the All settings architecture and enterprise-scale UX work while retaining the
+comparison and clone workflow polish from the 0.8.7.1 patch line.
 
+- All settings opens in Review mode so invalid, CIS review, raw, unknown, deprecated, and imported
+  items appear before the full catalog.
+- Configured mode summarizes what the profile applies by domain and source; Catalog mode exposes
+  the complete schema-backed policy and managed-preference inventory.
+- A shared settings inventory powers Review, Configured, Catalog, grouped search, source
+  attribution, bounded lists, and the primary detail editor without duplicating edit paths.
+- The Library offers archive/restore and a separate permanent-delete action for active or archived
+  profiles. Permanent deletion requires an explicit irreversible confirmation.
 - Saved-profile comparison lives only in the dedicated `/profiles/compare` interface.
 - The Library stays focused on profile management and opens the comparison workflow in a new tab.
+- Compare does not render a redundant return-to-Library action; closing or switching from its tab
+  returns to the already-open Library.
 - The comparison interface shares the product language and theme preferences with Library and editor
   routes, including new-tab handoff from Library.
 - Profile selection in Compare uses bounded, searchable result lists that remain usable with large
@@ -46,7 +57,7 @@ creates a profile ID.
 ## Main Capabilities
 
 - Database-backed Firefox policy profile library.
-- Create, edit, duplicate, archive, restore, hard-delete, import, and export workflows.
+- Create, edit, duplicate, archive, restore, permanently delete, import, and export workflows.
 - Named clone drafts that preserve the source configuration while letting the user choose the new
   profile name before opening the draft.
 - Dedicated saved-profile comparison with fast two-profile search and a two-column settings table
@@ -55,8 +66,9 @@ creates a profile ID.
 - Version-aware validation against bundled Firefox policy schemas.
 - Guided editor for common administrator and security-team scenarios.
 - Dedicated AI and smart browser features step for schema versions that support those policies.
-- Schema-aware ESR/Release behavior, including ESR 140.11 handling for unsupported AI settings.
-- All settings catalog for full visual inspection and policy editing outside the guided flow.
+- Schema-aware ESR/Release behavior, including ESR 140.12 handling for unsupported AI settings.
+- Triage-first All settings workflow with Review, Configured, and Catalog modes, source attribution,
+  grouped search, bounded long lists, and one primary detail editor.
 - JSON editor backed by the locally bundled Monaco editor.
 - CIS Firefox hardening assets, starter presets, generated layers, and merge logic.
 - English source UI with six active runtime locale catalogs.
@@ -65,14 +77,14 @@ creates a profile ID.
 
 | Channel | Schema key | Status |
 |---|---|---|
-| Firefox ESR 140.11 | `esr-140.11` | Active |
-| Firefox Release 151 | `release-151` | Active |
+| Firefox ESR 140.12 | `esr-140.12` | Active |
+| Firefox Release 152 | `release-152` | Active |
 
 Bundled schema files live in `app/schemas/policies/`.
 
 The selected schema controls validation, imported-profile normalization, available UI controls,
-and schema-specific behavior. For example, Firefox ESR 140.11 does not expose supported AI policy
-fields in the UI, while Firefox Release 151 exposes the current AI controls.
+and schema-specific behavior. For example, Firefox ESR 140.12 does not expose supported AI policy
+fields in the UI, while Firefox Release 152 exposes the current AI controls.
 
 ## Web Routes
 
@@ -140,7 +152,7 @@ JSON import example:
 {
   "name": "Workstation baseline",
   "description": "Imported Firefox deployment policy",
-  "schema_version": "esr-140.11",
+  "schema_version": "esr-140.12",
   "document": {
     "policies": {
       "DisableTelemetry": true,
@@ -180,6 +192,10 @@ The library is the operational home for saved profiles. It supports profile sear
 schema and lifecycle visibility, validation state, duplication, import, export, archive/restore,
 and direct entry into the guided editor, All settings, or JSON editor.
 
+Archive is reversible: archived profiles can be restored. Permanent delete is a distinct destructive
+action available for active and archived profiles; it requires confirmation that the profile will
+not be kept in the archive and cannot be restored.
+
 Comparison is intentionally not embedded in the Library. The Library provides a compare action that
 opens `/profiles/compare` in a new tab and carries the selected language and theme preference into
 the comparison route.
@@ -195,6 +211,8 @@ has its own profile search and selected-profile summary. The settings table comp
 policy and managed-preference settings present in either profile, with explicit missing, same-value,
 and different-value states. Result lists are bounded and scrollable for larger libraries, and the
 setting column keeps policy/preference identity readable without repeating the same identifier.
+Because Compare opens from Library in a new tab, its header intentionally has no redundant
+return-to-Library control.
 
 ### Guided Editor
 
@@ -203,17 +221,32 @@ sections, starter presets, compliance-aware baselines, and focused controls for 
 administration tasks. It intentionally stays smaller than a full schema mirror.
 
 The AI and smart browser features step remains a dedicated guided step. It shows current Firefox
-Release AI controls where the selected schema supports them. For ESR 140.11, the step clearly
+Release AI controls where the selected schema supports them. For ESR 140.12, the step clearly
 states that the schema does not support AI settings and does not render unsupported controls.
 
 ### All Settings
 
-All settings is the full visual manager for schema-backed configuration. It provides search,
-category navigation, guided-coverage markers, lower-level preference controls, and raw/unmapped
-fallback handling for values that do not yet have a richer visual editor.
+All settings is the full visual manager for schema-backed configuration and uses three explicit
+working modes:
 
-Use All settings when a profile needs complete inspection or detailed changes beyond the guided
-workflow.
+- **Review** is the default for saved enterprise profiles. It prioritizes invalid values, CIS manual
+  review, raw fallback, unknown/imported keys, and deprecated settings; clean profiles get a concise
+  completion state.
+- **Configured** shows what the profile applies, starting with domain summaries and source filters
+  for baseline, CIS, manual, imported, and raw settings. Category drilldown is deliberate rather
+  than automatically narrowing the initial list.
+- **Catalog** exposes all available schema-backed policies and known managed preferences without
+  forcing that complete inventory into the default view.
+
+All three modes consume the same settings inventory. Search groups configured settings, available
+policies, preferences, and actions instead of presenting ambiguous duplicate targets. Selecting an
+entry opens the primary detail editor with its value, source, validation state, location, and
+apply/remove/reset actions. Advanced schema-shell and preference controls remain reachable from
+Catalog/detail, but no longer compete as duplicate full-page editors.
+
+Long lists are budgeted or paginated, and responsive layouts keep modes, search, rows, and detail
+usable on desktop and narrow screens. Use All settings when a profile needs complete inspection,
+review, or detailed changes beyond the shorter Guided workflow.
 
 ### JSON Editor
 
@@ -225,7 +258,7 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 The primary project and UI source language is English. Product copy starts from
 `app/i18n/en.json` and English maintainer documentation before it is localized.
 
-BPM 0.8.7.1 keeps a six-locale UI matrix:
+BPM 0.8.8 keeps a six-locale UI matrix:
 
 | Locale | Native label | Status |
 |---|---|---|
@@ -305,7 +338,10 @@ Equivalent focused gates:
 ```bash
 make typecheck
 make lint
-pytest -q
+make test-fast
+make test-contract
+make test-firefox-schema-contract
+make test-locale-contract
 make coverage
 ```
 
@@ -342,6 +378,9 @@ make test-ui
 make test-live
 make test-release
 ```
+
+`make test-ui` and `make test-release` start local application/browser processes and should be run
+in an environment that permits local HTTP sockets and Chromium/Selenium execution.
 
 The excluded heavy layers are:
 

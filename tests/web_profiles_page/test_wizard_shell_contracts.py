@@ -93,7 +93,8 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
     assert "color-scheme: dark;" in css
     assert 'url("data:image/svg+xml,' in css
     assert editor_template.count("editor-chrome-status-item") >= 4
-    assert settings_template.count("theme-subcard") >= 4
+    assert "theme-subcard" not in settings_template
+    assert "data-settings-preferences-compat" in settings_template
 
 
 def test_profiles_page_renders_editor_shell():

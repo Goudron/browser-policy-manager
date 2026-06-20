@@ -473,7 +473,7 @@ def _make_payload() -> dict:
     return {
         "name": f"UI-{unique}",
         "description": "UI smoke lifecycle profile",
-        "schema_version": "esr-140.11",
+        "schema_version": "esr-140.12",
         "flags": {
             "DisableTelemetry": True,
             "DisablePrivateBrowsing": True,
@@ -598,7 +598,7 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
     payload = {
         "name": f"ESR AI Empty State-{uuid.uuid4().hex[:8]}",
         "description": "ESR AI empty-state regression",
-        "schema_version": "esr-140.11",
+        "schema_version": "esr-140.12",
         "flags": {
             "DisableTelemetry": True,
         },
@@ -626,7 +626,7 @@ def test_esr_ai_step_browser_regression_shows_empty_state_instead_of_release_con
         root / "app" / "static" / "profiles_bootstrap_core.js"
     ).read_text(encoding="utf-8")
 
-    assert 'schemaVersion: "esr-140.11"' in shared_source
+    assert 'schemaVersion: "esr-140.12"' in shared_source
     assert "function getActiveWizardSchemaVersion()" in shared_source
     assert 'return documentRef.getElementById("profile-type")?.value' in shared_source
     assert "|| wizardSchemaEl?.value" in shared_source
@@ -659,7 +659,7 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
     payload = {
         "name": f"Release AI Controls-{uuid.uuid4().hex[:8]}",
         "description": "Release AI controls regression",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {
             "DisableTelemetry": True,
             "AIControls": {
@@ -687,7 +687,7 @@ def test_release_ai_step_browser_regression_keeps_release_controls_available():
     assert 'data-settings-target="policy:VisualSearchEnabled"' in edit_page.text
 
     validate_response = client.post(
-        "/api/validate/release-151",
+        "/api/validate/release-152",
         json={"document": payload["flags"]},
     )
     assert validate_response.status_code == 200, validate_response.text
@@ -742,8 +742,8 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
 
     payload = {
         "name": f"Release Guided AI VPN-{uuid.uuid4().hex[:8]}",
-        "description": "Firefox 151 guided AI and VPN regression",
-        "schema_version": "release-151",
+        "description": "Firefox 152 guided AI and VPN regression",
+        "schema_version": "release-152",
         "flags": {
             "DisableTelemetry": True,
             "IPProtectionAvailable": False,
@@ -766,7 +766,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     }
 
     validate_response = client.post(
-        "/api/validate/release-151",
+        "/api/validate/release-152",
         json={"document": payload["flags"]},
     )
     assert validate_response.status_code == 200, validate_response.text
@@ -775,7 +775,7 @@ def test_release_guided_ai_and_vpn_browser_regression_can_save_and_export():
     create_response = client.post("/api/profiles", json=payload)
     assert create_response.status_code == 201, create_response.text
     created = create_response.json()
-    assert created["schema_version"] == "release-151"
+    assert created["schema_version"] == "release-152"
 
     edit_page = client.get(f"/profiles/{created['id']}/edit")
     assert edit_page.status_code == 200, edit_page.text
@@ -1097,7 +1097,7 @@ def test_create_corporate_cis_l2_browser_regression_can_download_policies_json()
     assert "buildCreatePayload(form, parsedFlags, compliancePayload)" in workspace_source
     assert "setLinkHref(wizardExportFirefoxPoliciesEl, firefoxPoliciesHref);" in workspace_source
 
-    schema_version = "release-151"
+    schema_version = "release-152"
     catalog = get_wizard_starter_catalog()
     merged = catalog["compliance_merged_presets"]["basic_corporate"]["cis_l2"][
         schema_version
@@ -1162,7 +1162,7 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     payload = {
         "name": f"Library Editor Browser-{uuid.uuid4().hex[:8]}",
         "description": "Created before opening from the library",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
@@ -1208,8 +1208,31 @@ def test_library_to_editor_browser_regression_can_load_and_save_guided_homepage(
     assert "const editHref = `/profiles/${profile.id}/edit`;" in workspace_source
     assert '<a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">' in workspace_source
     assert "await loadProfile(editingProfileId, { skipConfirm: true, syncLibrary: false });" in runtime_source
+    assert "editor.setValue(toEditorValue(\n                    getCurrentRaw()" in runtime_source
+    hydrated_profile_block = runtime_source[
+        runtime_source.index("if (hydratedProfile && Number(hydratedProfile.id) === editingProfileId)")
+        : runtime_source.index("await resetDraft(true);")
+    ]
+    assert hydrated_profile_block.index("syncEditorBackedUi();") < hydrated_profile_block.index(
+        "renderAllSettingsList();"
+    )
+    assert hydrated_profile_block.index("renderAllSettingsList();") < hydrated_profile_block.index(
+        "setBaselineFromCurrentUi();"
+    )
     assert "editor.setValue(toEditorValue(getCurrentRaw(), documentRef.getElementById(\"mode\").value));" in workspace_source
     assert "syncWizardNetworkFromEditor();" in workspace_source
+    assert "renderAllSettingsList?.();" in workspace_source
+    load_profile_block = workspace_source[
+        workspace_source.index("async function loadProfile(") : workspace_source.index(
+            "async function cloneFromProfile("
+        )
+    ]
+    assert load_profile_block.index("syncWizardExtensionsFromEditor();") < load_profile_block.index(
+        "renderAllSettingsList?.();"
+    )
+    assert load_profile_block.index("renderAllSettingsList?.();") < load_profile_block.index(
+        "setBaselineFromCurrentUi();"
+    )
     assert "const homepageUrl = wizardHomepageUrlEl.value.trim();" in network_source
     assert "if (homepageUrl) nextHomepage.URL = homepageUrl;" in network_source
     assert "buildUpdatePayload(form, parsedFlags, compliancePayload" in workspace_source
@@ -1253,7 +1276,7 @@ def test_visual_and_json_same_profile_regression_can_save_without_conflict():
     payload = {
         "name": f"Visual JSON Browser-{uuid.uuid4().hex[:8]}",
         "description": "Shared visual and JSON route regression",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
@@ -1360,7 +1383,7 @@ def test_stale_save_conflict_browser_regression_does_not_overwrite_profile():
     payload = {
         "name": f"Stale Save Browser-{uuid.uuid4().hex[:8]}",
         "description": "Initial shared tab state",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
@@ -1474,7 +1497,7 @@ def test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile()
     payload = {
         "name": original_name,
         "description": "Initial shared tab state",
-        "schema_version": "release-151",
+        "schema_version": "release-152",
         "flags": {
             "DisableTelemetry": True,
             "Homepage": {
