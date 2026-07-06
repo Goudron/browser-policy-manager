@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-missing-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Восстановиться после missing profile route</title>
+  <shortdesc>Восстановитесь, когда bookmark, stale tab или editor URL сообщает Profile not found.</shortdesc>
+  <taskbody>
+    <prereq><p>Видимый статус BPM, сообщение валидации, предупреждение браузера или неуспешное действие показывает, что текущий workflow нельзя безопасно продолжать.</p></prereq>
+    <context><p>Missing profile route означает, что URL больше не указывает на active profile; профиль может быть archived, deleted, скрыт фильтрами или уже removed.</p></context>
+    <steps>
+      <step><cmd>Вернитесь в Library вместо редактирования failed route.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Сбросьте search and filters, затем найдите профиль по имени, schema channel и последнему известному status.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Включите archived profiles, если профиль мог быть deliberate archived.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Если профиль всё ещё missing, прекратите использовать stale URL и продолжайте только из visible Library row или known export.</cmd><info><note type="warning">Не редактируйте internal storage, browser local data, строки базы данных или generated build artifacts для восстановления пользовательской работы с профилем.</note></info></step>
+    </steps>
+    <result><p>Вы либо открываете профиль из видимого состояния Library, либо подтверждаете, что bookmarked route больше непригоден.</p></result>
+    <postreq><p>Восстановление: если та же ошибка повторяется после одной чистой попытки, остановите workflow и сохраните видимое сообщение, имя профиля, канал схемы и текущую поверхность для maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-use-profile-library"/>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+  </related-links>
+</task>

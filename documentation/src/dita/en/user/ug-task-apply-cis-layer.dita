@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-apply-cis-layer" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Apply a CIS layer</title>
+  <shortdesc>Add a supported CIS layer when the profile needs a hardened baseline from BPM’s mapped recommendations.</shortdesc>
+  <taskbody>
+    <prereq><p>A profile draft and schema channel are selected.</p></prereq>
+    <context><p>The CIS layer is a BPM mapping aid; review every resulting setting for the deployment and do not treat it as certification.</p></context>
+    <steps>
+      <step><cmd>Open Step 1, Profile &amp; baseline.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose the supported CIS layer that matches the target channel and scenario.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Review the compliance-aware baseline changes in the summary.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Keep or adjust settings that conflict with the deployment goal.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The profile includes the selected CIS layer as part of its baseline.</p></result>
+    <postreq><p>Recovery: if the layer is not suitable, remove it and revalidate before saving.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-cis-layer-merge"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

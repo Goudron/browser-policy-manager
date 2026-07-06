@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-work-across-editor-tabs" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Über mehrere Editor-Tabs arbeiten</title>
+  <shortdesc>Nutzen Sie getrennte Browser-Tabs für gespeicherte Profilmodi, ohne Entwürfe oder ungespeicherte Änderungen zu verwechseln.</shortdesc>
+  <taskbody>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie die benötigte Oberfläche bereit: Bibliothek, Guided Editor, All Settings, JSON oder Compare.</p></prereq>
+    <context><p>BPM öffnet gespeicherte Profilmodi und Vergleichsflächen in getrennten Tabs, damit Guided Editor, All Settings, JSON und Compare nebeneinander geprüft werden können.</p></context>
+    <steps>
+      <step><cmd>Öffnen Sie ein gespeichertes Profil aus der Bibliothek im benötigten Editor-Modus.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
+      <step><cmd>Halten Sie Profilname, Schema-Kanal und Lifecycle-Badge in jedem Tab sichtbar.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
+      <step><cmd>Speichern Sie Änderungen in einem Tab, bevor ein anderer Tab für Export, Vergleich oder Validierung genutzt wird.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
+      <step><cmd>Schließen oder aktualisieren Sie Tabs erst nach Prüfung der Warnung zu ungespeicherten Änderungen und des sichtbaren Speicherstatus.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie bewusst, bevor Sie einen Editor verlassen, einen Tab schließen oder eine unumkehrbare Aktion bestätigen.</note></info></step>
+    </steps>
+    <result><p>Sie können mehrere Oberflächen prüfen und den maßgeblichen gespeicherten Zustand klar halten.</p></result>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Zustand unklar ist, stoppen Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-open-saved-profile"/>
+    <link keyref="topic.ug-troubleshoot-unsaved-changes"/>
+  </related-links>
+</task>

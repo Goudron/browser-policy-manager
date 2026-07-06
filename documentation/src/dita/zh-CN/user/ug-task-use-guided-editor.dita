@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-guided-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>浏览 Guided Editor 的六个步骤</title>
+  <shortdesc>浏览 Guided Editor 的六个步骤：配置文件和基线、访问和默认值、安全和隐私、用户/附加组件/站点、AI &amp; smart features，以及审查和导出。</shortdesc>
+  <taskbody>
+    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
+    <context><p>Guided Editor 将配置文件设置组织为六个任务优先步骤，并保持所选架构的验证状态可见。</p></context>
+    <steps>
+      <step><cmd>从步骤 1“配置文件和基线”开始，确认名称、架构通道、场景、起始预设和 CIS 层。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>继续步骤 2“浏览器访问和默认值”，配置网络访问、浏览器行为、主页、搜索和导航。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>使用步骤 3 配置隐私、权限、Cookie、清理、DNS 和安全加固状态。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>使用步骤 4 配置账户、扩展、书签、语言、翻译、附加组件和站点处理。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>步骤 5 只用于所选架构支持的现有 Firefox AI 和智能功能策略。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>在步骤 6“审查和导出”中完成验证、保存并下载已审查的配置文件。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+    </steps>
+    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-guided-settings"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

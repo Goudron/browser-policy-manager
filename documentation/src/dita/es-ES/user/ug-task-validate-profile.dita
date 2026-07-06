@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-validate-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Validar un perfil</title>
+  <shortdesc>Ejecute validación consciente del esquema antes de guardar, exportar o comparar cambios de políticas.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
+    <context><p>La validación comprueba nombres de políticas, formas de valores, canal de esquema compatible, diferencias ESR/Release y entradas raw o unknown visibles en BPM.</p></context>
+    <steps>
+      <step><cmd>Abra el perfil en Guided, All Settings o JSON.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Confirme el canal de esquema Firefox seleccionado antes de validar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Ejecute la validación o revise el panel visible de validación en la superficie activa.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Resuelva unsupported policies, wrong value types, unknown raw entries o valores importados obsoletos antes de tratar el perfil como listo.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+    </steps>
+    <result><p>Sabe si el perfil está listo para guardarse y exportarse para el canal Firefox seleccionado.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

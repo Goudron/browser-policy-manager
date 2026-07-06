@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-unsaved-changes" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Recuperarse de cambios sin guardar</title>
+  <shortdesc>Evite perder cambios del editor sin guardar durante navegación, cierre de pestaña, actualización o cambio de modo.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
+    <context><p>BPM advierte sobre dirty editor state, pero el usuario debe decidir si guardar, descartar o permanecer en la página.</p></context>
+    <steps>
+      <step><cmd>Deténgase cuando el navegador o BPM informe cambios sin guardar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Identifique la pestaña activa, nombre del perfil, canal de esquema y modo de editor que contiene el borrador.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Guarde el perfil si los cambios deben convertirse en el nuevo estado, o cancele la navegación para revisarlos primero.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Si descarta cambios intencionalmente, vuelva a abrir el perfil desde la Biblioteca y confirme el estado guardado antes de continuar.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+    </steps>
+    <result><p>Conserva el borrador guardándolo o vuelve conscientemente al último estado guardado del perfil.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

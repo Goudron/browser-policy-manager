@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "guide_id": "user-guide",
+  "status": "closed",
+  "closed_by_backlog_item": "BPM090-M4-12",
+  "closure_date": "2026-06-28",
+  "source_inventory": "docs/architecture/product-user-capability-inventory-0.9.0.md",
+  "case_map": "documentation/config/user-guide-map-0.9.0.json",
+  "summary": {
+    "inventory_capability_count": 106,
+    "planned_topic_count": 89,
+    "localized_topic_count_per_locale": 89,
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "omissions": []
+  },
+  "reviewed_sources": [
+    "README.md",
+    "app/web/profiles.py",
+    "app/templates/profiles_library.html",
+    "app/templates/profiles_compare.html",
+    "app/templates/profiles_editor.html",
+    "app/templates/profiles_settings.html",
+    "app/templates/profiles_json.html",
+    "app/templates/profiles/_page_header.html",
+    "app/templates/profiles/_page_editor_chrome.html",
+    "app/templates/profiles/_page_library_workspace.html",
+    "app/templates/profiles/_page_compare_workspace.html",
+    "app/templates/profiles/_page_wizard.html",
+    "app/templates/profiles/_page_settings_workspace.html",
+    "app/templates/profiles/_page_json_workspace.html",
+    "app/templates/profiles/_page_wizard_step_ai.html",
+    "app/api/profiles.py",
+    "app/api/export.py",
+    "app/api/validation.py",
+    "app/i18n/en.json",
+    "app/i18n/ru.json",
+    "app/i18n/de.json",
+    "app/i18n/zh-CN.json",
+    "app/i18n/fr.json",
+    "app/i18n/es-ES.json",
+    "tests/test_ui_browser_tabs.py",
+    "tests/test_chromium_locale_smoke_matrix_contract.py",
+    "tests/test_localized_import_edit_export_workflow_contract.py"
+  ],
+  "readme_capabilities": [
+    "Database-backed Firefox policy profile library.",
+    "Create, edit, duplicate, archive, restore, permanently delete, import, and export workflows.",
+    "Named clone drafts that preserve the source configuration while letting the user choose the new profile name before opening the draft.",
+    "Dedicated saved-profile comparison with fast two-profile search and a two-column settings table covering both policies and managed preferences.",
+    "Firefox Enterprise `policies.json` import and export at the product boundary.",
+    "Version-aware validation against bundled Firefox policy schemas.",
+    "Guided editor for common administrator and security-team scenarios.",
+    "Dedicated AI and smart browser features step for schema versions that support those policies.",
+    "Schema-aware ESR/Release behavior, including ESR 140.12 handling for unsupported AI settings.",
+    "Triage-first All settings workflow with Review, Configured, and Catalog modes, source attribution, grouped search, bounded long lists, and one primary detail editor.",
+    "JSON editor backed by the locally bundled Monaco editor.",
+    "CIS Firefox hardening assets, starter presets, generated layers, and merge logic.",
+    "English source UI with six active runtime locale catalogs."
+  ],
+  "product_routes": [
+    {
+      "readme_route": "GET /profiles",
+      "app_route": "@router.get(\"/profiles\"",
+      "surface": "Profile library",
+      "topic_ids": ["ug-task-use-profile-library", "ug-reference-library-profile-row"]
+    },
+    {
+      "readme_route": "GET /profiles/compare",
+      "app_route": "@router.get(\"/profiles/compare\"",
+      "surface": "Profile comparison",
+      "topic_ids": ["ug-task-compare-profiles", "ug-concept-comparison-workflow"]
+    },
+    {
+      "readme_route": "GET /profiles/new",
+      "app_route": "@router.get(\"/profiles/new\"",
+      "surface": "New guided draft",
+      "topic_ids": ["ug-task-create-first-profile", "ug-task-choose-profile-identity-schema"]
+    },
+    {
+      "readme_route": "GET /profiles/{id}/edit",
+      "app_route": "@router.get(\"/profiles/{profile_id}/edit\"",
+      "surface": "Guided editor",
+      "topic_ids": ["ug-task-use-guided-editor", "ug-task-open-saved-profile"]
+    },
+    {
+      "readme_route": "GET /profiles/{id}/settings",
+      "app_route": "@router.get(\"/profiles/{profile_id}/settings\"",
+      "surface": "All settings",
+      "topic_ids": ["ug-task-use-all-settings", "ug-task-follow-setting-deep-link"]
+    },
+    {
+      "readme_route": "GET /profiles/{id}/json",
+      "app_route": "@router.get(\"/profiles/{profile_id}/json\"",
+      "surface": "JSON editor",
+      "topic_ids": ["ug-task-use-json-editor", "ug-task-edit-raw-policies-json"]
+    },
+    {
+      "readme_route": "GET /i18n/{locale}.json",
+      "app_route": "@app.get(\"/i18n/{locale}.json\"",
+      "surface": "Runtime locale catalog",
+      "topic_ids": ["ug-task-change-interface-language", "ug-concept-language-detection-fallback"]
+    }
+  ],
+  "non_user_routes": [
+    {
+      "readme_route": "GET /",
+      "reason": "JSON application status endpoint; not a profile-management user workflow."
+    },
+    {
+      "readme_route": "GET /health",
+      "reason": "Liveness probe for deployment/operations, outside the case-oriented User Guide."
+    },
+    {
+      "readme_route": "GET /health/ready",
+      "reason": "Readiness probe for deployment/operations, outside the case-oriented User Guide."
+    }
+  ],
+  "api_boundaries": [
+    {
+      "readme_endpoint": "GET /api/profiles",
+      "source_file": "app/api/profiles.py",
+      "source_token": "router = APIRouter(prefix=\"/api/profiles\"",
+      "topic_ids": ["ug-task-use-profile-library", "ug-task-filter-profile-library"]
+    },
+    {
+      "readme_endpoint": "POST /api/profiles",
+      "source_file": "app/api/profiles.py",
+      "source_token": "@router.post(",
+      "topic_ids": ["ug-task-save-profile", "ug-task-create-first-profile"]
+    },
+    {
+      "readme_endpoint": "PATCH /api/profiles/{id}",
+      "source_file": "app/api/profiles.py",
+      "source_token": "@router.patch(\"/{profile_id}\"",
+      "topic_ids": ["ug-task-save-profile", "ug-troubleshoot-save-conflict"]
+    },
+    {
+      "readme_endpoint": "DELETE /api/profiles/{id}",
+      "source_file": "app/api/profiles.py",
+      "source_token": "@router.delete(\"/{profile_id}\"",
+      "topic_ids": ["ug-task-archive-profile", "ug-task-manage-destructive-actions"]
+    },
+    {
+      "readme_endpoint": "POST /api/profiles/{id}/restore",
+      "source_file": "app/api/profiles.py",
+      "source_token": "@router.post(\"/{profile_id}/restore\"",
+      "topic_ids": ["ug-task-restore-profile", "ug-task-review-archived-profile"]
+    },
+    {
+      "readme_endpoint": "DELETE /api/profiles/{id}/hard",
+      "source_file": "app/api/profiles.py",
+      "source_token": "\"/{profile_id}/hard\"",
+      "topic_ids": ["ug-task-permanently-delete-profile", "ug-task-manage-destructive-actions"]
+    },
+    {
+      "readme_endpoint": "POST /api/profiles/import/firefox/policies.json",
+      "source_file": "app/api/profiles.py",
+      "source_token": "\"/import/firefox/policies.json\"",
+      "topic_ids": ["ug-task-import-policies-json", "ug-troubleshoot-import-failure"]
+    },
+    {
+      "readme_endpoint": "GET /api/export/profiles/{id}/firefox/policies.json",
+      "source_file": "app/api/export.py",
+      "source_token": "\"/profiles/{profile_id}/firefox/policies.json\"",
+      "topic_ids": ["ug-task-export-policies-json"]
+    },
+    {
+      "readme_endpoint": "POST /api/validate/{profile}",
+      "source_file": "app/api/validation.py",
+      "source_token": "@router.post(\"/{profile}\"",
+      "topic_ids": ["ug-task-validate-profile", "ug-troubleshoot-policy-validation"]
+    }
+  ],
+  "template_evidence": [
+    {
+      "surface": "Library",
+      "file": "app/templates/profiles/_page_library_workspace.html",
+      "tokens": ["id=\"list\"", "id=\"search\"", "id=\"library-schema-filter\"", "id=\"library-lifecycle-filter\"", "id=\"library-validation-filter\"", "id=\"import-firefox-policies\"", "id=\"compare-profiles-link\""]
+    },
+    {
+      "surface": "Compare",
+      "file": "app/templates/profiles/_page_compare_workspace.html",
+      "tokens": ["id=\"compare-page\"", "id=\"compare-left-search\"", "id=\"compare-right-search\"", "id=\"compare-settings-table\""]
+    },
+    {
+      "surface": "Guided",
+      "file": "app/templates/profiles/_page_wizard.html",
+      "tokens": ["id=\"wizard-panel\"", "id=\"wizard-settings-search-input\"", "id=\"wizard-stepper\""]
+    },
+    {
+      "surface": "AI guided step",
+      "file": "app/templates/profiles/_page_wizard_step_ai.html",
+      "tokens": ["id=\"wizard-ai-esr-empty-state\"", "id=\"wizard-ai-release-content\"", "data-settings-target=\"policy:AIControls\"", "data-settings-target=\"policy:VisualSearchEnabled\""]
+    },
+    {
+      "surface": "All Settings",
+      "file": "app/templates/profiles/_page_settings_workspace.html",
+      "tokens": ["id=\"settings-panel\"", "(\"review\", \"profiles.settings_mode_review\"", "(\"configured\", \"profiles.settings_mode_configured\"", "(\"catalog\", \"profiles.settings_mode_catalog\"", "id=\"all-settings-source-filters\"", "id=\"all-settings-detail-panel\""]
+    },
+    {
+      "surface": "JSON",
+      "file": "app/templates/profiles/_page_json_workspace.html",
+      "tokens": ["id=\"editor-panel\"", "id=\"editor\"", "id=\"download-firefox-policies\""]
+    },
+    {
+      "surface": "Cross-surface chrome",
+      "file": "app/templates/profiles/_page_editor_chrome.html",
+      "tokens": ["id=\"save\"", "id=\"validate\"", "id=\"workspace-signal\"", "id=\"profile-lifecycle-panel\"", "id=\"profile-compliance-panel\"", "target=\"_blank\""]
+    },
+    {
+      "surface": "Locale and theme header",
+      "file": "app/templates/profiles/_page_header.html",
+      "tokens": ["id=\"lang\"", "id=\"theme\"", "profiles.locale_system", "profiles.theme_dark"]
+    }
+  ],
+  "browser_smoke_flows": [
+    "test_browser_smoke_imports_firefox_policies_json_in_russian_library",
+    "test_browser_smoke_primary_routes_render_in_ru_and_zh_cn",
+    "test_browser_smoke_guided_disclosure_labels_follow_active_locale",
+    "test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure",
+    "test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile",
+    "test_browser_smoke_editor_mode_links_preserve_route_context",
+    "test_browser_smoke_json_editor_loads_corporate_cis_known_preferences",
+    "test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_two_profiles",
+    "test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_profiles",
+    "test_browser_smoke_compare_table_setting_cells_do_not_duplicate_identifiers",
+    "test_browser_smoke_library_clone_name_actions_stay_inside_panel_in_russian",
+    "test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+  ],
+  "release_gate_rules": [
+    "Every CAP-* row in the product user capability inventory must appear in the User Guide case map.",
+    "Every case-map topic must have DITA source, key definitions, and map reachability in all six locales.",
+    "Every README Main Capabilities bullet must be covered by at least one mapped capability family.",
+    "Every user-facing profile route and Firefox import/export/validation boundary must have a mapped User Guide topic.",
+    "Runtime locale catalogs must keep key parity across en, ru, de, zh-CN, fr, and es-ES.",
+    "Browser UI smoke flows remain reviewed evidence but require explicit browser_ui execution outside the default docs contract."
+  ]
+}

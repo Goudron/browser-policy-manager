@@ -58,7 +58,12 @@
                 </div>
                 <section class="wizard-outcome-group wizard-field-full" id="wizard-step-5-availability" data-ai-outcome-group="feature-controls">
                     <div class="wizard-outcome-group__head">
-                        <h5 class="wizard-outcome-group__title" data-i18n="profiles.wizard_ai_feature_controls_title">{{ tr("profiles.wizard_ai_feature_controls_title") }}</h5>
+                        <h5 class="wizard-outcome-group__title inline-help-label">
+                            <span data-i18n="profiles.wizard_ai_feature_controls_title">{{ tr("profiles.wizard_ai_feature_controls_title") }}</span>
+                            {% set context_help_icon_target = "policy-ai-controls" %}
+                            {% set context_help_icon_label_key = "profiles.help_policy_ai_controls" %}
+                            {% include "profiles/_context_help_icon.html" %}
+                        </h5>
                         <p class="wizard-outcome-group__body" data-i18n="profiles.wizard_ai_feature_controls_body">{{ tr("profiles.wizard_ai_feature_controls_body") }}</p>
                     </div>
                     <div class="wizard-outcome-group__controls wizard-outcome-group__controls--stacked wizard-stage-panel">
@@ -76,7 +81,12 @@
                 </section>
                 <section class="wizard-outcome-group wizard-field-full" id="wizard-step-5-surfaces" data-ai-outcome-group="surface-controls">
                     <div class="wizard-outcome-group__head">
-                        <h5 class="wizard-outcome-group__title" data-i18n="profiles.wizard_ai_surfaces_title">{{ tr("profiles.wizard_ai_surfaces_title") }}</h5>
+                        <h5 class="wizard-outcome-group__title inline-help-label">
+                            <span data-i18n="profiles.wizard_ai_surfaces_title">{{ tr("profiles.wizard_ai_surfaces_title") }}</span>
+                            {% set context_help_icon_target = "policy-visual-search-enabled" %}
+                            {% set context_help_icon_label_key = "profiles.help_policy_visual_search_enabled" %}
+                            {% include "profiles/_context_help_icon.html" %}
+                        </h5>
                         <p class="wizard-outcome-group__body" data-i18n="profiles.wizard_ai_surfaces_body">{{ tr("profiles.wizard_ai_surfaces_body") }}</p>
                     </div>
                     <div class="wizard-outcome-group__controls wizard-outcome-group__controls--stacked wizard-stage-panel">

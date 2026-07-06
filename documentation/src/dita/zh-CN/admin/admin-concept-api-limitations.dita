@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-api-limitations" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>当前 API limitations 和 security constraints</title>
+  <shortdesc>BPM 0.9.0 明确记录当前 limitations，避免 integrations 推断 API 未暴露的 guarantees。</shortdesc>
+  <conbody>
+    <section id="a-security"><title>Security constraints</title><p>当前 API 没有 authentication 或 authorization layer。除非 deployment settings 覆盖，CORS 默认使用 <codeph>*</codeph> origins。文档不得暗示 API token authentication、OAuth、role-based access control、tenant isolation 或 production authorization behavior。</p></section>
+    <section id="a-versioning"><title>Versioning and compatibility</title><p>API 没有 version prefix、compatibility policy、deprecation header 或 media-type version。Integrations 应固定其测试的 BPM release，并监控 <codeph>/openapi.json</codeph>、API inventory 和 release notes，而不是假设 guaranteed backward compatibility。</p></section>
+    <section id="a-concurrency"><title>Concurrency, idempotency, and retry</title><p>只有 PATCH 通过 optional <codeph>expected_revision</codeph> 支持 optimistic concurrency。Create、import、delete、restore、reset 和 export 不暴露 ETags、precondition headers、idempotency keys 或 retry contracts。Consumers 必须设计自己的 safe retry 和 duplicate-name recovery behavior。</p></section>
+    <section id="a-bulk-transactions"><title>Bulk and transaction boundaries</title><p>BPM 0.9.0 不暴露 bulk profile CRUD endpoint、bulk export endpoint、cursor pagination 或 multi-operation transaction contract。Failed multi-step integration 不会由 BPM 自动回滚；integrating product 拥有 recovery sequencing 和 audit records。</p></section>
+    <section id="a-errors"><title>Error envelope limitations</title><p>Error responses 不使用单一 stable versioned envelope。Status <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 和 <codeph>503</codeph> 可携带不同 <codeph>detail</codeph> shapes。Consumers 必须按 operation、status 和 documented body shape 分支处理。</p></section>
+    <section id="a-exclusions"><title>Excluded and HTML surfaces</title><p>六个 OpenAPI <codeph>web</codeph> operations 是 HTML product routes，不是 stable machine-integration APIs。<codeph>/i18n/{locale}.json</codeph>、<codeph>/favicon.ico</codeph>、<codeph>/static/*</codeph>、generated schema UIs 和 underscore-prefixed Python helpers 不属于 integration operation topics。</p></section>
+    <section id="a-health"><title>Health response limits</title><p><codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 只暴露 compact status fields。Readiness 不报告 per-dependency diagnostics、database details、schema health、documentation portal status 或 deployment approval。Operational monitors 应将它们视为 minimal handshake endpoints。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.ug-troubleshoot-product-connection"/>
+    <link keyref="topic.ug-troubleshoot-save-conflict"/>
+  </related-links>
+</concept>

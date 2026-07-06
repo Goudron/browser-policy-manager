@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-corpus-results-0.9.0",
+  "backlog_item": "BPM090-M10-01",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "search_mode": "deterministic-local-static",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "non_ai_boundary": {
+    "mode": "no-ai-no-rag-no-embeddings-no-generative-answers",
+    "allowed": [
+      "static per-locale indexes generated during documentation publishing",
+      "deterministic tokenization and normalization",
+      "reviewed aliases, identifiers, synonyms, and typo-tolerance rules",
+      "plain-text snippets derived from published DITA output"
+    ],
+    "forbidden": [
+      "RAG",
+      "embeddings",
+      "semantic vector search",
+      "generative answers",
+      "chat-style documentation answers",
+      "runtime network search services",
+      "telemetry-backed learning or personalization"
+    ]
+  },
+  "corpus": {
+    "source_authority": [
+      "documentation/src/dita/{locale}/maps/*.ditamap",
+      "documentation/src/dita/{locale}/{user,firefox,cis,api,admin}/*.dita",
+      "documentation/src/generated/firefox/firefox-policy-skeletons-0.9.0.json",
+      "documentation/src/generated/cis/cis-recommendation-skeletons-0.9.0.json",
+      "docs/architecture/product-user-capability-inventory-0.9.0.md",
+      "docs/architecture/api-documentation-inventory-0.9.0.md",
+      "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+      "docs/architecture/cis-documentation-inventory-0.9.0.json"
+    ],
+    "searchable_fields": [
+      {
+        "field": "title",
+        "origin": "DITA topic title and anchor titles",
+        "weight_class": "exact-high"
+      },
+      {
+        "field": "shortdesc",
+        "origin": "DITA shortdesc",
+        "weight_class": "high"
+      },
+      {
+        "field": "headings",
+        "origin": "DITA section, step, table, and troubleshooting headings",
+        "weight_class": "medium"
+      },
+      {
+        "field": "body",
+        "origin": "published DITA body text after markup stripping",
+        "weight_class": "normal"
+      },
+      {
+        "field": "keywords",
+        "origin": "reviewed DITA metadata and maintained search aliases",
+        "weight_class": "high"
+      },
+      {
+        "field": "identifiers",
+        "origin": "stable topic, policy, preference, CIS, API operation, capability, guide, and version identifiers",
+        "weight_class": "exact-high"
+      },
+      {
+        "field": "aliases",
+        "origin": "reviewed locale aliases, old anchors, API route names, and domain synonyms",
+        "weight_class": "high"
+      }
+    ],
+    "identifier_fields": [
+      "topic_id",
+      "anchor_id",
+      "guide_id",
+      "policy_id",
+      "known_preference_id",
+      "cis_recommendation_id",
+      "api_operation_id",
+      "capability_id",
+      "firefox_channel",
+      "bpm_version"
+    ],
+    "exclusions": [
+      {
+        "kind": "hidden_or_unpublished",
+        "rule": "exclude any DITA topic, generated skeleton, asset, fixture, or output that is not present in manifest.topics, manifest.assets, or a reviewed search-only allowlist"
+      },
+      {
+        "kind": "wrong_locale_content",
+        "rule": "each locale index contains only that locale's publishable prose plus allowlisted language-neutral technical identifiers"
+      },
+      {
+        "kind": "restricted_source_expression",
+        "rule": "exclude protected Mozilla or CIS source prose unless the provenance matrix allows reuse; keep source identifiers and BPM-authored summaries only"
+      },
+      {
+        "kind": "provenance_only_cis",
+        "rule": "exclude CIS provenance-only records from user-facing result documents; they may appear only as non-clickable diagnostics in maintainer checks"
+      },
+      {
+        "kind": "runtime_private_state",
+        "rule": "exclude user profiles, local database rows, logs, screenshots awaiting review, caches, build reports, and runtime telemetry"
+      }
+    ]
+  },
+  "document_schema": {
+    "schema_version": 1,
+    "required_fields": [
+      "document_id",
+      "locale",
+      "guide_id",
+      "topic_id",
+      "topic_kind",
+      "url",
+      "source",
+      "searchable",
+      "facets",
+      "versions"
+    ],
+    "source": {
+      "required_fields": ["topic_id", "anchor_id", "dita_key", "source_slug", "output_path"],
+      "anchor_id": "null for whole-topic documents; stable a-* ID for section/anchor documents"
+    },
+    "searchable": {
+      "required_fields": ["title", "shortdesc", "headings", "body", "keywords", "identifiers", "aliases"],
+      "plain_text_only": true,
+      "html_allowed": false
+    },
+    "facets": {
+      "required_fields": [
+        "locale",
+        "guide_id",
+        "topic_kind",
+        "firefox_channel",
+        "policy_category",
+        "cis_level",
+        "cis_control_state",
+        "api_area",
+        "bpm_version"
+      ],
+      "nullable_fields": [
+        "firefox_channel",
+        "policy_category",
+        "cis_level",
+        "cis_control_state",
+        "api_area"
+      ]
+    },
+    "versions": {
+      "required_fields": ["bpm_version", "documentation_version", "source_revision"]
+    }
+  },
+  "result_schema": {
+    "schema_version": 1,
+    "required_fields": [
+      "result_id",
+      "document_id",
+      "locale",
+      "guide_id",
+      "topic_id",
+      "anchor_id",
+      "title",
+      "url",
+      "snippet",
+      "score",
+      "score_breakdown",
+      "matched_fields",
+      "identifiers",
+      "facets"
+    ],
+    "snippet": {
+      "plain_text_only": true,
+      "max_characters": 260,
+      "must_escape_before_dom_insertion": true
+    },
+    "score_breakdown": {
+      "required_fields": ["exact_identifier", "title", "alias", "heading", "body", "bounded_typo", "recency"],
+      "recency": "reserved deterministic tie-breaker only; no behavioral learning"
+    },
+    "result_url": {
+      "source": "manifest topic output plus optional anchor",
+      "must_start_with": "/help/{locale}/",
+      "must_not_contain_translated_filename": true
+    },
+    "empty_result": {
+      "localized": true,
+      "must_not_call_network": true,
+      "must_not_offer_ai_answer": true
+    }
+  },
+  "facet_contract": {
+    "locale": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "guide_id": ["user-guide", "firefox-policy-guide", "cis-settings-guide", "api-integration-guide", "administrator-guide"],
+    "firefox_channel": ["esr-140.12", "release-152", null],
+    "policy_category": [
+      "advanced",
+      "ai_smart",
+      "browser_behavior",
+      "extensions_integrations",
+      "home_startup",
+      "network_access",
+      "privacy_security",
+      "search",
+      null
+    ],
+    "cis_level": ["level-1", "level-2", null],
+    "cis_control_state": [
+      "mapped",
+      "preference_mapped",
+      "needs_research",
+      "deprecated_or_removed",
+      "manual-review",
+      "provenance-only",
+      null
+    ],
+    "api_area": ["service", "health", "profiles", "validation", "import-export", "ui", null]
+  },
+  "integrity": {
+    "index_per_locale": true,
+    "manifest_records_sha256": true,
+    "clean_build_reproducible": true,
+    "duplicate_document_id_rejected": true,
+    "broken_topic_or_anchor_rejected": true,
+    "wrong_locale_text_rejected": true
+  }
+}

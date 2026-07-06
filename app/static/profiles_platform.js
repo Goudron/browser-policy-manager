@@ -115,6 +115,27 @@
         });
     }
 
+    function updateDocumentationLinks(documentRef, lang) {
+        const locale = String(lang || "en").trim() || "en";
+
+        documentRef.querySelectorAll("[data-documentation-link]").forEach((linkEl) => {
+            let href = "";
+            try {
+                const links = JSON.parse(linkEl.dataset.documentationLinks || "{}");
+                href = typeof links[locale] === "string" ? links[locale] : "";
+            } catch {
+                href = "";
+            }
+            if (href) {
+                linkEl.setAttribute("href", href);
+                linkEl.removeAttribute("aria-disabled");
+            } else {
+                linkEl.removeAttribute("href");
+                linkEl.setAttribute("aria-disabled", "true");
+            }
+        });
+    }
+
     function libraryCountLabel(count, currentLang, translate = (_key, fallback) => fallback) {
         if (currentLang === "ru") {
             const mod10 = count % 10;
@@ -138,6 +159,7 @@
         resolveTargetLanguage,
         updateThemeColorMeta,
         syncThemeSensitiveControls,
+        updateDocumentationLinks,
         libraryCountLabel,
     };
 })();

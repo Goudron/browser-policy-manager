@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="fx-task-review-complex-policy-configuration" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Revisar una configuración compleja de políticas antes de exportar</title>
+  <shortdesc>Use un review flow repetible para nested objects, arrays, raw fallback, conflicts y channel-specific availability.</shortdesc>
+  <taskbody>
+    <prereq><p>Hay un perfil abierto y contiene al menos una familia compleja de políticas o una managed preference.</p></prereq>
+    <context><p>Las políticas complejas son más seguras cuando se revisan por familia, origen, schema channel y forma del boundary document exportado.</p></context>
+    <steps>
+      <step><cmd>Abra All Settings y filtre la familia afectada.</cmd><info><p>Resultado esperado: las policies, preferences y source labels relacionadas se ven juntas.</p></info></step>
+      <step><cmd>Compruebe el badge Release/ESR de cada policy de la familia.</cmd><info><note type="warning">Una Release-only policy no debe exportarse para un perfil orientado a ESR.</note></info></step>
+      <step><cmd>Inspeccione los nested object y array values, incluidos los unknown preserved fields.</cmd><info><p>Resultado esperado: los raw fallback values se conservan o eliminan intencionadamente antes de guardar.</p></info></step>
+      <step><cmd>Compare preset, CIS, imported, manual y raw sources.</cmd><info><p>Resultado esperado: los conflicts se resuelven deliberadamente y no quedan ocultos por ediciones posteriores.</p></info></step>
+      <step><cmd>Valide el perfil y revise la forma del <codeph>policies.json</codeph> generado.</cmd><info><p>Resultado esperado: BPM no informa schema errors para el canal seleccionado.</p></info></step>
+    </steps>
+    <result><p>La familia compleja tiene nested values, source decisions y channel support revisados, además de un resultado de validación limpio.</p></result>
+    <postreq><p>Si la validación falla, vuelva a la familia, elimine unsupported keys o cambie al canal que realmente admite la policy.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.fx-concept-complex-policy-families"/>
+    <link keyref="topic.fx-reference-managed-preference-locking"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

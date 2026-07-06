@@ -1,0 +1,15 @@
+{% set context_help_links = documentation_context_help_links.get(context_help_surface, {}) %}
+{% set context_help_href = context_help_links.get(initial_lang) %}
+{% if context_help_href %}
+<a
+    class="context-help-link"
+    href="{{ context_help_href }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    data-i18n="profiles.context_help_action"
+    data-documentation-links='{{ context_help_links | tojson }}'
+    data-documentation-link
+    data-context-help-surface="{{ context_help_surface }}">
+    {{ tr("profiles.context_help_action") }}
+</a>
+{% endif %}

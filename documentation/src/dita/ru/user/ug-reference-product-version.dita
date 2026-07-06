@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-product-version" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Справка по версии продукта</title>
+  <shortdesc>Используйте заголовок BPM и version context, чтобы подтвердить, с какой версией продукта и документации вы работаете.</shortdesc>
+  <refbody>
+    <section id="a-version-location"><title>Где смотреть версию</title><p>Заголовок страницы показывает running BPM version, а пакет документации собран для BPM 0.9.0.</p></section>
+    <section id="a-version-scope"><title>Область версии</title><p>Версия продукта описывает поведение BPM, а не версию Firefox browser, установленную на конечной машине.</p></section>
+    <section id="a-schema-version"><title>Версия схемы</title><p>Каналы схем Firefox, например ESR 140.12 и Release 152, выбираются отдельно и влияют на validation и available controls.</p></section>
+    <section id="a-version-recovery"><title>Восстановление</title><p>Если поведение продукта не совпадает с guide, сохраните BPM version, schema channel, route, locale и visible status перед сообщением о mismatch.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+  </related-links>
+</reference>

@@ -206,6 +206,20 @@ After the bundled JSON is correct:
    against Pontoon/SUMO evidence and update the glossary or locale audit notes before release.
 7. Update the legacy guard so the previous release strings are banned outside the explicit migration and normalization exceptions.
 
+### Documentation drift gate
+
+Treat Firefox schema documentation as part of the schema bump, not as a later cleanup:
+
+1. Follow `documentation/runbooks/inventory-refresh.md`, especially the Firefox Release/ESR schema
+   bump drift gate.
+2. Update `docs/architecture/firefox-policy-documentation-inventory-0.9.0.{json,md}` and any
+   affected DITA Firefox Policy Guide topics, User Guide schema-channel topics, Administrator/DevOps
+   references, manifests, UI targets, aliases, and deterministic search fixtures in the same review.
+3. Preserve six-locale content equivalence for every changed publishable topic; do not leave compact
+   localized summaries or English fallback prose.
+4. Run the focused Firefox documentation inventory/skeleton/manifest contracts before the release
+   gate, then run `make docs-release-check` when generated documentation artifacts changed.
+
 Important: only the migration, runtime normalizer, and their tests should keep references to the previous channels.
 
 ### Schema-generated policy labels

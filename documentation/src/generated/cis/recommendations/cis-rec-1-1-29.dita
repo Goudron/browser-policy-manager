@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cis-rec-1-1-29" audience="user security-reviewer" product="bpm-0-9-0" platform="web" props="cis-level-1" otherprops="cis(1.1.29)">
+  <title>CIS recommendation 1.1.29</title>
+  <shortdesc>BPM-generated skeleton for CIS recommendation <codeph>1.1.29</codeph>, containing BPM-owned mapping facts and reviewed-prose regions.</shortdesc>
+  <refbody>
+    <section id="a-disclaimer" outputclass="cis-disclaimer">
+      <title>Disclaimer and scope</title>
+      <p>BPM is an independent implementation and is not authorized, sponsored, endorsed, certified, or approved by CIS. BPM documentation is not a substitute for the official CIS benchmark. BPM output does not prove CIS compliance.</p>
+      <p>The official CIS PDF and source expression are not copied, translated, indexed, or packaged. BPM documents its own mappings, generated layers, merge behavior, manual-review states, and limitations in original prose.</p>
+    </section>
+    <section id="a-benchmark">
+      <title>Benchmark and version</title>
+      <p>Benchmark ID <codeph>cis-firefox-esr-gpo</codeph>; upstream name <codeph>CIS Mozilla Firefox ESR GPO Benchmark</codeph>; version <codeph>1.0.0</codeph>; release date <codeph>2024-07-19</codeph>; tested by CIS against <codeph>Mozilla Firefox 115.10 ESR on Windows 11 Release 23H2</codeph>; source license <codeph>CC-BY-NC-SA-4.0</codeph>; official source required <codeph>true</codeph>.</p>
+    </section>
+    <section id="a-recommendation-identity">
+      <title>Recommendation identity</title>
+      <p>Recommendation ID <codeph>1.1.29</codeph>; level <codeph>1</codeph>; scored <codeph>true</codeph>; source section <codeph>1.1.29</codeph>; source title SHA-256 <codeph>20011088df0adfb666c7e01eb65304dd1657daabd005bf1e2de78a7345478691</codeph>; publication disposition <codeph>planned-dita-topic</codeph>; provenance ID <codeph>cis-source-1.1.29</codeph>.</p>
+    </section>
+    <section id="a-bpm-authored-summary">
+      <title>BPM-authored rationale summary</title>
+      <p>Category <codeph>privacy</codeph>; assessment <codeph>automated</codeph>; confidence <codeph>high</codeph>; mapping status <codeph>mapped</codeph>; mapping reason available <codeph>true</codeph>; review note available <codeph>false</codeph>; non-publishable reason <codeph>none</codeph>.</p>
+    <!-- BPM-HAND-REGION-START bpm-authored-summary -->
+      <p>Reviewed BPM-authored rationale for CIS recommendation <codeph>1.1.29</codeph> is pending. Keep this prose independent from the official benchmark expression.</p>
+    <!-- BPM-HAND-REGION-END bpm-authored-summary -->
+    </section>
+    <section id="a-bpm-mapping">
+      <title>BPM mapping</title>
+      <p>The table lists BPM-owned mapping facts derived from shipped CIS layers, not text copied from the official benchmark.</p>
+      <simpletable outputclass="cis-mapping-table">
+        <sthead><stentry>Kind</stentry><stentry>Target</stentry><stentry>Firefox topic</stentry><stentry>UI target</stentry><stentry>Path</stentry><stentry>Value</stentry><stentry>Value type</stentry><stentry>Lock state</stentry><stentry>Channels</stentry><stentry>Merge rule</stentry><stentry>Layer checks</stentry></sthead>
+        <strow outputclass="cis-mapping-row policy"><stentry><codeph>policy</codeph></stentry><stentry><codeph>DisableFirefoxStudies</codeph></stentry><stentry><xref keyref="topic.fx-policy-DisableFirefoxStudies"><codeph>fx-policy-DisableFirefoxStudies</codeph></xref></stentry><stentry><codeph>policy:DisableFirefoxStudies</codeph></stentry><stentry><codeph>DisableFirefoxStudies</codeph></stentry><stentry><codeph>true</codeph></stentry><stentry><codeph>boolean</codeph></stentry><stentry><codeph>not-a-lock-field</codeph></stentry><stentry><codeph>esr-140.12: valid, release-152: valid</codeph></stentry><stentry><codeph>boolean_true_is_stricter</codeph></stentry><stentry><codeph>cis-l1.esr-140.12=true, cis-l1.release-152=true, cis-l2.esr-140.12=true, cis-l2.release-152=true</codeph></stentry></strow>
+      </simpletable>
+      <sectiondiv outputclass="cis-mapping-example"><p>Minimal BPM-owned boundary fragment for <codeph>DisableFirefoxStudies</codeph>:</p><codeblock outputclass="language-json">{&quot;policies&quot;: {&quot;DisableFirefoxStudies&quot;: true}}</codeblock></sectiondiv>
+    </section>
+    <section id="a-automation-state">
+      <title>Automation and manual state</title>
+      <p>Assessment: <codeph>automated</codeph>. Generated layers: <codeph>[&quot;cis-l1.esr-140.12&quot;, &quot;cis-l1.release-152&quot;, &quot;cis-l2.esr-140.12&quot;, &quot;cis-l2.release-152&quot;]</codeph>. Manual-review paths matched by this skeleton: <codeph>none for this recommendation</codeph>.</p>
+      <p>Global manual-review path count: <codeph>9</codeph>. BPM records review requirements and merge decisions. BPM has no separate persisted CIS exception or waiver model in 0.9.0.</p>
+    </section>
+    <section id="a-conflicts">
+      <title>Conflicts and exceptions</title>
+    <!-- BPM-HAND-REGION-START conflicts -->
+      <p>Reviewed conflict and exception guidance is pending. Use BPM source attribution and manual-review state before deciding whether to keep, replace, or document a value.</p>
+    <!-- BPM-HAND-REGION-END conflicts -->
+    <!-- BPM-HAND-REGION-START limitations -->
+      <p>Reviewed limitation notes are pending. BPM records mappings and review states but does not provide a separate persisted CIS exception or waiver model in 0.9.0.</p>
+    <!-- BPM-HAND-REGION-END limitations -->
+    </section>
+    <section id="a-verification">
+      <title>Verification</title>
+    <!-- BPM-HAND-REGION-START verification -->
+      <p>Reviewed verification guidance is pending. Validate the selected Firefox schema channel, inspect exported paths, and perform independent runtime review outside BPM.</p>
+    <!-- BPM-HAND-REGION-END verification -->
+    </section>
+    <section id="a-provenance" outputclass="cis-disclaimer">
+      <title>Provenance</title>
+      <ul>
+        <li>Publishable source family: <codeph>bpm-cis-mapping-implementation</codeph>.</li>
+        <li>Restricted benchmark source family: <codeph>cis-benchmark-pdf</codeph>.</li>
+        <li>Source license: <codeph>CC-BY-NC-SA-4.0</codeph>; publication policy: <codeph>approval-required for benchmark expression</codeph>.</li>
+        <li>Recommendation source hash: <codeph>20011088df0adfb666c7e01eb65304dd1657daabd005bf1e2de78a7345478691</codeph>.</li>
+        <li>Provenance record: <codeph>cis-source-1.1.29</codeph>.</li>
+        <li>The official CIS PDF and source expression are not copied, translated, indexed, or packaged by this skeleton.</li>
+        <li>BPM is an independent implementation and is not authorized, sponsored, endorsed, certified, or approved by CIS.</li>
+      </ul>
+    </section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.cis-concept-orientation"/>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-task-resolve-cis-manual-review"/>
+  </related-links>
+</reference>

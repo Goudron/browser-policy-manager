@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-run-level-2-hardened-workflow" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Выполнить hardened workflow CIS Level 2</title>
+  <shortdesc>Используйте Level 2 fixture, чтобы проверить более строгий CIS profile перед deployment.</shortdesc>
+  <taskbody>
+    <prereq><p>Используйте fixture <codeph>cis-workflow-level-2-release-fixture</codeph>: Firefox Release 152, layer <codeph>cis-l2.release-152</codeph>, starter preset <codeph>soc_hard</codeph> и comparison profile <codeph>cis-workflow-level-1-release-reference</codeph>.</p></prereq>
+    <context><p>Level 2 — hardened path. Он может быть менее совместимым, чем Level 1, поэтому reviewer должен проверить Guided и All Settings, разобрать attention items, сравнить с Level 1 reference, экспортировать и независимо верифицировать результат.</p></context>
+    <steps>
+      <step><cmd>Создайте или дублируйте Release 152 profile, примените SOC-style hardened starter preset и примените CIS layer Level 2.</cmd><info><p>Ожидаемый результат: profile записывает <codeph>soc_hard</codeph> и <codeph>cis-l2.release-152</codeph> в source trail.</p></info></step>
+      <step><cmd>Проверьте profile в Guided Editor, уделяя внимание stricter security/privacy defaults и controls, которые могут влиять на usability, add-ons, browsing data, network behavior или enterprise operations.</cmd><info><p>Ожидаемый результат: high-impact settings определены до export profile.</p></info></step>
+      <step><cmd>В All Settings отфильтруйте configured CIS rows, откройте attention items и проследите каждую row до generated recommendation topic, mapping table, UI target и affected Firefox policy topic.</cmd><info><p>Ожидаемый результат: у каждого stricter value есть видимый source path и policy-topic route для review.</p></info></step>
+      <step><cmd>Разберите manual-review rows и intentional deviations через deviation task, включая owner, reason, review date, external record и признак, остаётся ли value baseline, CIS, manual, imported или raw.</cmd><info><note type="warning">BPM 0.9.0 не сохраняет dedicated exception или waiver object; сохраните external record до того, как считать deviation reviewed.</note></info></step>
+      <step><cmd>Сравните Level 2 profile с Level 1 reference fixture и проверьте все changed или newly configured rows.</cmd><info><p>Ожидаемый результат: reviewer может объяснить, чем Level 2 отличается от Level 1, до approval.</p></info></step>
+      <step><cmd>Валидируйте, экспортируйте <codeph>policies.json</codeph> и выполните independent deployment verification утверждённым runtime, operating-system, network или audit method.</cmd><info><p>Ожидаемый результат: hardened profile имеет export artifact, validation result, comparison evidence и external verification evidence.</p></info></step>
+    </steps>
+    <result><p>Representative hardened profile Level 2 reviewable end to end и остаётся в границах BPM mapping, export и source-attribution evidence.</p></result>
+    <postreq><p>Если independent verification выявляет deployment risk, оставьте profile как draft и обновите external decision record перед reuse.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.cis-concept-manual-review-exceptions"/>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.ug-task-review-attention-items"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</task>

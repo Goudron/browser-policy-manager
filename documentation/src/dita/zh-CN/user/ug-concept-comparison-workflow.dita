@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-comparison-workflow" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>配置文件比较工作流</title><shortdesc>Compare 用于查看两个配置文件的已保存设置差异，而不会更改任何配置文件。</shortdesc>
+  <conbody><p>流程是：从库打开 Compare，分别搜索 Profile A 和 Profile B，查看每个所选配置文件摘要，然后读取比较表。</p><p>表格使用两个配置文件中 policy 和 managed-preference 设置的并集。行可以是 equal、changed，或在一侧 missing。Compare 只读，不合并值。</p></conbody>
+  <related-links><link keyref="topic.ug-reference-comparison-states"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
+</concept>

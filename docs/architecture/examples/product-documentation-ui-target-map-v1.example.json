@@ -1,0 +1,49 @@
+{
+  "$schema": "../schemas/product-documentation-ui-target-map-v1.schema.json",
+  "schema_version": 1,
+  "manifest_schema_version": 1,
+  "bpm_version": "0.9.0",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "targets": {
+    "topic:ug-task-create-first-profile": {
+      "kind": "topic",
+      "source_id": "ug-task-create-first-profile",
+      "source_inventory": "product-user-capability-inventory-0.9.0.md",
+      "topic_id": "ug-task-create-first-profile",
+      "anchor_id": "a-prerequisites"
+    },
+    "policy:AIControls": {
+      "kind": "policy",
+      "source_id": "AIControls",
+      "source_inventory": "firefox-policy-documentation-inventory-0.9.0.json",
+      "topic_id": "fx-policy-AIControls",
+      "anchor_id": "a-value-shape"
+    },
+    "known-preference:browser.download.dir": {
+      "kind": "known-preference",
+      "source_id": "browser.download.dir",
+      "source_inventory": "firefox-policy-documentation-inventory-0.9.0.json",
+      "topic_id": "fx-pref-browser-download-dir"
+    },
+    "cis:1.1.1.1": {
+      "kind": "cis",
+      "source_id": "1.1.1.1",
+      "source_inventory": "cis-documentation-inventory-0.9.0.json",
+      "topic_id": "cis-rec-1-1-1-1",
+      "anchor_id": "a-bpm-mapping"
+    },
+    "api-operation:API-PROFILE-005": {
+      "kind": "api-operation",
+      "source_id": "API-PROFILE-005",
+      "source_inventory": "api-documentation-inventory-0.9.0.md",
+      "topic_id": "api-ref-update-profile",
+      "anchor_id": "a-validation-errors"
+    },
+    "capability:CAP-LIB-001": {
+      "kind": "capability",
+      "source_id": "CAP-LIB-001",
+      "source_inventory": "product-user-capability-inventory-0.9.0.md",
+      "topic_id": "ug-task-create-first-profile"
+    }
+  }
+}

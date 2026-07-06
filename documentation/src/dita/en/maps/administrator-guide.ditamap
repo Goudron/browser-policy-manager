@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="map-administrator-guide" xml:lang="en">
+  <title>Administrator and DevOps Guide</title>
+  <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only" />
+  <topicref keyref="topic.admin-task-prepare-linux-source-deployment" />
+  <topicref keyref="topic.admin-task-set-up-linux-source-checkout" />
+  <topicref keyref="topic.admin-task-configure-linux-source-runtime" />
+  <topicref keyref="topic.admin-task-verify-linux-source-deployment" />
+  <topicref keyref="topic.admin-task-prepare-windows-wsl-source-deployment" />
+  <topicref keyref="topic.admin-task-set-up-windows-wsl-source-checkout" />
+  <topicref keyref="topic.admin-task-configure-windows-wsl-network-runtime" />
+  <topicref keyref="topic.admin-task-verify-windows-wsl-source-deployment" />
+  <topicref keyref="topic.admin-task-review-devops-configuration-sources" />
+  <topicref keyref="topic.admin-task-plan-devops-storage-logs-backups" />
+  <topicref keyref="topic.admin-task-review-devops-network-cors-security" />
+  <topicref keyref="topic.admin-task-record-devops-operational-boundaries" />
+  <topicref keyref="topic.admin-task-prepare-source-update-evidence" />
+  <topicref keyref="topic.admin-task-refresh-source-revision-dependencies" />
+  <topicref keyref="topic.admin-task-run-source-update-migrations-docs" />
+  <topicref keyref="topic.admin-task-verify-source-update-rollback-stop" />
+  <topicref keyref="topic.admin-concept-integration-audience" />
+  <topicref keyref="topic.admin-concept-supported-integration-patterns" />
+  <topicref keyref="topic.admin-concept-api-conventions" />
+  <topicref keyref="topic.admin-concept-api-limitations" />
+  <topicref keyref="topic.admin-task-sync-profile-lifecycle" />
+  <topicref keyref="topic.admin-task-manage-profile-retirement" />
+  <topicref keyref="topic.admin-task-import-firefox-policies-json" />
+  <topicref keyref="topic.admin-task-export-firefox-policies-json" />
+  <topicref keyref="topic.admin-task-validate-firefox-policies-json" />
+  <topicref keyref="topic.admin-task-check-health-readiness" />
+  <topicref keyref="topic.admin-task-run-pull-compare-update-scenario" />
+  <topicref keyref="topic.admin-task-run-import-review-export-scenario" />
+  <topicref keyref="topic.admin-task-use-reusable-api-examples" />
+  <topicref keyref="topic.admin-task-run-control-product-inventory-pull" />
+  <topicref keyref="topic.admin-task-run-validate-before-apply-update" />
+  <topicref keyref="topic.admin-task-run-import-review-export-handoff" />
+  <topicref keyref="topic.admin-task-gate-control-product-startup" />
+  <topicref keyref="topic.admin-task-record-integration-failure-audit" />
+  <topicref keyref="topic.admin-troubleshoot-failed-startup-probes" />
+  <topicref keyref="topic.admin-troubleshoot-schema-cache-validation" />
+  <topicref keyref="topic.admin-troubleshoot-import-export-failures" />
+  <topicref keyref="topic.admin-troubleshoot-database-storage" />
+  <topicref keyref="topic.admin-troubleshoot-wsl-networking-dependencies" />
+  <topicref keyref="topic.admin-troubleshoot-documentation-portal-build-links" />
+  <topicref keyref="topic.admin-task-assess-single-node-source-readiness" />
+  <topicref keyref="topic.admin-task-review-network-exposure-proxy-readiness" />
+  <topicref keyref="topic.admin-task-plan-monitoring-backup-update-windows" />
+  <topicref keyref="topic.admin-task-record-ha-production-deferred-boundaries" />
+</map>

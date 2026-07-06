@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-malformed-json" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Von malformed JSON wiederherstellen</title>
+  <shortdesc>Diagnostizieren Sie malformed JSON syntax vor Speichern, Import oder Validierung eines Policy-Dokuments.</shortdesc>
+  <taskbody>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Malformed JSON ist ein Syntaxproblem: BPM kann das Dokument nicht weit genug parsen, um Policy-Namen oder Werte zu validieren.</p></context>
+    <steps>
+      <step><cmd>Lassen Sie JSON editor oder import error geöffnet, damit Zeile, Spalte oder parse message sichtbar bleibt.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Prüfen Sie die nächsten braces, brackets, commas, quotation marks und escaped characters um die gemeldete Stelle.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Formatieren oder validieren Sie das Dokument nach der Syntaxkorrektur erneut.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Fahren Sie erst mit schema validation fort, nachdem JSON erfolgreich geparst wurde.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+    </steps>
+    <result><p>Das Dokument wird als JSON geparst und kann zur normalen Policy-Validierung wechseln.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-json-document"/>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+  </related-links>
+</task>

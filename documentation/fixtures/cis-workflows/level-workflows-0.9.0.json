@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M6-07",
+  "target_bpm_version": "0.9.0",
+  "synthetic": true,
+  "description": "Compact deterministic fixtures for representative CIS Level 1 and Level 2 documentation workflows.",
+  "route_order": [
+    "Library",
+    "Guided Editor",
+    "All Settings",
+    "Profile Comparison",
+    "Export",
+    "External verification"
+  ],
+  "workflows": [
+    {
+      "workflow_id": "cis-workflow-level-1-esr-fixture",
+      "level": 1,
+      "schema_channel": "esr-140.12",
+      "cis_layer_id": "cis-l1.esr-140.12",
+      "starter_preset": "basic_corporate",
+      "comparison_profile": "blank-esr-140.12",
+      "expected_mapped_recommendations": 49,
+      "manual_review_decision_categories": [
+        "update governance",
+        "proxy routing",
+        "evidence-retention",
+        "unsupported mapping research",
+        "deprecated target",
+        "local deployment requirement"
+      ],
+      "required_user_surfaces": [
+        "Library",
+        "Guided Editor",
+        "All Settings",
+        "Profile Comparison",
+        "Export"
+      ],
+      "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external."
+    },
+    {
+      "workflow_id": "cis-workflow-level-2-release-fixture",
+      "level": 2,
+      "schema_channel": "release-152",
+      "cis_layer_id": "cis-l2.release-152",
+      "starter_preset": "soc_hard",
+      "comparison_profile": "cis-workflow-level-1-release-reference",
+      "expected_mapped_recommendations": 53,
+      "manual_review_decision_categories": [
+        "update governance",
+        "proxy routing",
+        "evidence-retention",
+        "unsupported mapping research",
+        "deprecated target",
+        "local deployment requirement"
+      ],
+      "required_user_surfaces": [
+        "Library",
+        "Guided Editor",
+        "All Settings",
+        "Profile Comparison",
+        "Export"
+      ],
+      "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external."
+    }
+  ]
+}

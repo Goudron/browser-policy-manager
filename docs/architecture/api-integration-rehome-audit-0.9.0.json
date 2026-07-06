@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M12-07",
+  "target_bpm_version": "0.9.0",
+  "status": "rehome-completed",
+  "purpose": "Record the completed API/integration documentation re-home into the Administrator/DevOps Guide.",
+  "decision": {
+    "administrator_guide_becomes_integration_owner": true,
+    "api_integration_guide_is_temporary_source_until_m12_07": false,
+    "user_guide_retains_only_ui_workflows_and_user_visible_recovery": true,
+    "no_dita_topic_moves_in_this_task": false,
+    "api_integration_guide_is_thin_compatibility_landing_after_m12_07": true,
+    "administrator_guide_contains_migrated_api_corpus": true
+  },
+  "guide_ownership_after_rehome": {
+    "administrator-guide": [
+      "API audience, supported patterns, conventions, limitations, operation references, executable examples, health/readiness handshakes, DevOps integration runbooks, and integration failure evidence."
+    ],
+    "user-guide": [
+      "Browser UI import/export/validation workflows, visible user troubleshooting, and cross-links to administrator integration procedures."
+    ],
+    "api-integration-guide": [
+      "Thin compatibility landing page that points readers to Administrator/DevOps API integration topics."
+    ]
+  },
+  "api_topics_to_rehome": [
+    {
+      "current_topic_id": "api-concept-integration-audience",
+      "current_key": "topic.api-concept-integration-audience",
+      "current_source": "documentation/src/dita/{locale}/api/api-concept-integration-audience.dita",
+      "future_topic_id": "admin-concept-integration-audience",
+      "future_key": "topic.admin-concept-integration-audience",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-concept-integration-audience.dita",
+      "future_section": "integration/audience-and-boundaries",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-concept-supported-patterns",
+      "current_key": "topic.api-concept-supported-patterns",
+      "current_source": "documentation/src/dita/{locale}/api/api-concept-supported-patterns.dita",
+      "future_topic_id": "admin-concept-supported-integration-patterns",
+      "future_key": "topic.admin-concept-supported-integration-patterns",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-concept-supported-integration-patterns.dita",
+      "future_section": "integration/supported-patterns",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-concept-api-conventions",
+      "current_key": "topic.api-concept-api-conventions",
+      "current_source": "documentation/src/dita/{locale}/api/api-concept-api-conventions.dita",
+      "future_topic_id": "admin-concept-api-conventions",
+      "future_key": "topic.admin-concept-api-conventions",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-concept-api-conventions.dita",
+      "future_section": "integration/api-conventions",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-concept-api-limitations",
+      "current_key": "topic.api-concept-api-limitations",
+      "current_source": "documentation/src/dita/{locale}/api/api-concept-api-limitations.dita",
+      "future_topic_id": "admin-concept-api-limitations",
+      "future_key": "topic.admin-concept-api-limitations",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-concept-api-limitations.dita",
+      "future_section": "integration/current-limitations",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-sync-profile-lifecycle",
+      "current_key": "topic.api-task-sync-profile-lifecycle",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-sync-profile-lifecycle.dita",
+      "future_topic_id": "admin-task-sync-profile-lifecycle",
+      "future_key": "topic.admin-task-sync-profile-lifecycle",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-sync-profile-lifecycle.dita",
+      "future_section": "integration/profile-lifecycle",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-manage-profile-retirement",
+      "current_key": "topic.api-task-manage-profile-retirement",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-manage-profile-retirement.dita",
+      "future_topic_id": "admin-task-manage-profile-retirement",
+      "future_key": "topic.admin-task-manage-profile-retirement",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-manage-profile-retirement.dita",
+      "future_section": "integration/profile-lifecycle",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-import-firefox-policies-json",
+      "current_key": "topic.api-task-import-firefox-policies-json",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-import-firefox-policies-json.dita",
+      "future_topic_id": "admin-task-import-firefox-policies-json",
+      "future_key": "topic.admin-task-import-firefox-policies-json",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-import-firefox-policies-json.dita",
+      "future_section": "integration/import-export",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-export-firefox-policies-json",
+      "current_key": "topic.api-task-export-firefox-policies-json",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-export-firefox-policies-json.dita",
+      "future_topic_id": "admin-task-export-firefox-policies-json",
+      "future_key": "topic.admin-task-export-firefox-policies-json",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-export-firefox-policies-json.dita",
+      "future_section": "integration/import-export",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-validate-firefox-policies-json",
+      "current_key": "topic.api-task-validate-firefox-policies-json",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-validate-firefox-policies-json.dita",
+      "future_topic_id": "admin-task-validate-firefox-policies-json",
+      "future_key": "topic.admin-task-validate-firefox-policies-json",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-validate-firefox-policies-json.dita",
+      "future_section": "integration/validation-gates",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-check-health-readiness",
+      "current_key": "topic.api-task-check-health-readiness",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-check-health-readiness.dita",
+      "future_topic_id": "admin-task-check-health-readiness",
+      "future_key": "topic.admin-task-check-health-readiness",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-check-health-readiness.dita",
+      "future_section": "operations/health-and-readiness",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-run-pull-compare-update-scenario",
+      "current_key": "topic.api-task-run-pull-compare-update-scenario",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-run-pull-compare-update-scenario.dita",
+      "future_topic_id": "admin-task-run-pull-compare-update-scenario",
+      "future_key": "topic.admin-task-run-pull-compare-update-scenario",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-run-pull-compare-update-scenario.dita",
+      "future_section": "integration/control-product-runbooks",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-run-import-review-export-scenario",
+      "current_key": "topic.api-task-run-import-review-export-scenario",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-run-import-review-export-scenario.dita",
+      "future_topic_id": "admin-task-run-import-review-export-scenario",
+      "future_key": "topic.admin-task-run-import-review-export-scenario",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-run-import-review-export-scenario.dita",
+      "future_section": "integration/control-product-runbooks",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    },
+    {
+      "current_topic_id": "api-task-use-reusable-api-examples",
+      "current_key": "topic.api-task-use-reusable-api-examples",
+      "current_source": "documentation/src/dita/{locale}/api/api-task-use-reusable-api-examples.dita",
+      "future_topic_id": "admin-task-use-reusable-api-examples",
+      "future_key": "topic.admin-task-use-reusable-api-examples",
+      "future_source": "documentation/src/dita/{locale}/admin/admin-task-use-reusable-api-examples.dita",
+      "future_section": "integration/examples",
+      "disposition": "moved_to_administrator_guide_in_m12_07",
+      "current_source_after_m12_07": "removed_from_publishable_api_source; compatibility landing remains at documentation/src/dita/{locale}/api/api-integration-guide.dita"
+    }
+  ],
+  "user_guide_api_adjacent_topics": [
+    {
+      "topic_id": "ug-task-import-policies-json",
+      "current_key": "topic.ug-task-import-policies-json",
+      "current_source": "documentation/src/dita/{locale}/user/ug-task-import-policies-json.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "Library/UI import steps, Firefox boundary-document explanation, visible import recovery.",
+      "api_procedure_fragments_to_rehome": [
+        "JSON API-adjacent import shape",
+        "Multipart API-adjacent import shape",
+        "endpoint/request field details for programmatic import"
+      ],
+      "future_cross_links": [
+        "topic.admin-task-import-firefox-policies-json",
+        "topic.admin-concept-api-conventions"
+      ]
+    },
+    {
+      "topic_id": "ug-task-export-policies-json",
+      "current_key": "topic.ug-task-export-policies-json",
+      "current_source": "documentation/src/dita/{locale}/user/ug-task-export-policies-json.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "Library/JSON Editor export steps, exported Firefox document shape, active-profile recovery.",
+      "api_procedure_fragments_to_rehome": [
+        "API-adjacent export options",
+        "download=1, pretty=1, indent, include_deleted endpoint/query behavior"
+      ],
+      "future_cross_links": [
+        "topic.admin-task-export-firefox-policies-json",
+        "topic.admin-concept-api-limitations"
+      ]
+    },
+    {
+      "topic_id": "ug-task-validate-profile",
+      "current_key": "topic.ug-task-validate-profile",
+      "current_source": "documentation/src/dita/{locale}/user/ug-task-validate-profile.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "Visible UI validation action and profile readiness decision.",
+      "api_procedure_fragments_to_rehome": [],
+      "future_cross_links": [
+        "topic.admin-task-validate-firefox-policies-json"
+      ]
+    },
+    {
+      "topic_id": "ug-troubleshoot-import-failure",
+      "current_key": "topic.ug-troubleshoot-import-failure",
+      "current_source": "documentation/src/dita/{locale}/user/ug-troubleshoot-import-failure.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "User-visible import diagnostics, retry limit, and preserved UI state.",
+      "api_procedure_fragments_to_rehome": [],
+      "future_cross_links": [
+        "topic.admin-task-import-firefox-policies-json",
+        "topic.admin-task-use-reusable-api-examples"
+      ]
+    },
+    {
+      "topic_id": "ug-troubleshoot-policy-validation",
+      "current_key": "topic.ug-troubleshoot-policy-validation",
+      "current_source": "documentation/src/dita/{locale}/user/ug-troubleshoot-policy-validation.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "Visible validation error classification and UI recovery.",
+      "api_procedure_fragments_to_rehome": [],
+      "future_cross_links": [
+        "topic.admin-task-validate-firefox-policies-json"
+      ]
+    },
+    {
+      "topic_id": "ug-troubleshoot-schema-mismatch",
+      "current_key": "topic.ug-troubleshoot-schema-mismatch",
+      "current_source": "documentation/src/dita/{locale}/user/ug-troubleshoot-schema-mismatch.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "User-facing ESR/Release channel mismatch decision and UI recovery.",
+      "api_procedure_fragments_to_rehome": [],
+      "future_cross_links": [
+        "topic.admin-task-validate-firefox-policies-json"
+      ]
+    },
+    {
+      "topic_id": "ug-troubleshoot-product-connection",
+      "current_key": "topic.ug-troubleshoot-product-connection",
+      "current_source": "documentation/src/dita/{locale}/user/ug-troubleshoot-product-connection.dita",
+      "keep_in_user_guide": true,
+      "retained_scope": "Visible browser/UI connection failure recovery and maintainer handoff evidence.",
+      "api_procedure_fragments_to_rehome": [
+        "operational API failure diagnosis beyond visible user status"
+      ],
+      "future_cross_links": [
+        "topic.admin-task-check-health-readiness",
+        "topic.admin-concept-api-limitations"
+      ]
+    }
+  ],
+  "fixtures_to_preserve": [
+    "documentation/fixtures/import-export/firefox-policies-import.example.json",
+    "documentation/fixtures/import-export/api-json-import-request.example.json",
+    "documentation/fixtures/import-export/multipart-import-fields.example.json",
+    "documentation/fixtures/import-export/firefox-policies-export.example.json",
+    "documentation/fixtures/schema-validation/common-valid-policies.example.json",
+    "documentation/fixtures/schema-validation/invalid-policy-value.example.json",
+    "documentation/fixtures/schema-validation/esr-unsupported-ai.example.json",
+    "documentation/fixtures/schema-validation/release-only-ai-valid.example.json",
+    "documentation/fixtures/api-states/api-integration-states-0.9.0.json"
+  ],
+  "tests_to_update_or_preserve": [
+    {
+      "path": "documentation/tests/contract/test_api_integration_topics.py",
+      "future_action": "retarget topic directory/key expectations from api/* to admin/* after M12-07 moved the corpus"
+    },
+    {
+      "path": "documentation/tests/contract/test_api_openapi_drift.py",
+      "future_action": "preserve OpenAPI operation coverage and use admin-* guide topic IDs"
+    },
+    {
+      "path": "documentation/tests/contract/test_api_locale_parity.py",
+      "future_action": "preserve six-locale parity expectations for migrated admin integration topics"
+    },
+    {
+      "path": "documentation/tests/contract/test_user_guide_import_export_topics.py",
+      "future_action": "remove API procedure ownership expectations from User Guide and keep UI workflow/cross-link checks"
+    },
+    {
+      "path": "documentation/tests/contract/test_guide_maps.py",
+      "future_action": "assert admin integration topic keyrefs live in administrator-guide.ditamap and api-integration-guide.ditamap is a thin landing"
+    },
+    {
+      "path": "documentation/tests/contract/test_api_rehome_audit.py",
+      "future_action": "keep this completed migration record synchronized with admin/API contracts"
+    }
+  ],
+  "redirect_and_cross_link_plan": {
+    "api_guide_topic_urls": "Current API guide topic URLs are superseded by Administrator/DevOps topic URLs; the old guide entry point remains reachable through a thin API Integration Guide landing page until a future alias layer is implemented.",
+    "api_guide_landing": "The API Integration Guide remains as a compatibility landing page that explains the Administrator/DevOps Guide owns integration procedures.",
+    "user_guide_links": "User Guide import, export, validation, and troubleshooting topics keep UI steps and link to admin integration procedures for endpoint, request, response, health, retry, and automation details.",
+    "no_lost_procedure_rule": "Every current API topic has exactly one future admin topic and every API-adjacent User Guide procedure fragment has either a retained UI scope or a future admin cross-link."
+  }
+}

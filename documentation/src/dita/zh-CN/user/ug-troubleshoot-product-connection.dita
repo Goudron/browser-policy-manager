@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-product-connection" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>从 product connection failure 中恢复</title>
+  <shortdesc>从 Library 或 editor surfaces 中可见的 network、browser 或 BPM API operation failure 中恢复。</shortdesc>
+  <taskbody>
+    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败操作表明当前 workflow 无法安全继续。</p></prereq>
+    <context><p>Connection failures 可能是 temporary browser testing caveats、network interruptions、server restarts 或 API operation failures；安全响应是在 retry 前保留上下文。</p></context>
+    <steps>
+      <step><cmd>读取可见 status，并确定失败 operation 是 load、save、import、export、archive、restore、delete、validation 还是 comparison。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>重试同一操作前，检查同一 browser session 中其他 BPM surfaces 是否仍然响应。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>保留 unsaved changes 和 profile context 后重试 failed action 一次。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>如果 browser testing caveat 或 API failure 持续存在，请停止 user edits，并保留 visible error details 供 maintainer review。</cmd><info><note type="warning">不要编辑 internal storage、browser local data、数据库行或 generated build artifacts 来恢复面向用户的配置文件工作。</note></info></step>
+    </steps>
+    <result><p>workflow 要么在 clean retry 后继续，要么带着足够 visible context 停止，以诊断 product connection problem。</p></result>
+    <postreq><p>恢复：如果同一错误在一次干净重试后仍然重复，请停止 workflow，并保留可见消息、配置文件名称、架构通道和当前界面供 maintainer review。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-troubleshoot-library-operation"/>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "guide_id": "firefox-policy-guide",
+  "backlog_item": "BPM090-M5-01",
+  "status": "defined",
+  "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+  "template_source": "documentation/src/shared/templates/firefox-policy-reference-topic.dita",
+  "topic": {
+    "dita_type": "reference",
+    "topic_id_pattern": "fx-policy-{policy_id}",
+    "managed_preference_topic_id_pattern": "fx-pref-{preference_id_slug}",
+    "key_pattern": "topic.fx-policy-{policy_id}",
+    "filename_pattern": "fx-policy-{policy_id}.dita",
+    "title_pattern": "{policy_id}",
+    "audience": "user",
+    "platform": "web",
+    "product": "bpm-0-9-0",
+    "otherprops_policy": "policy({policy_id})",
+    "conditional_props": {
+      "release": "firefox-release",
+      "esr": "firefox-esr"
+    }
+  },
+  "required_sections": [
+    {
+      "id": "a-purpose",
+      "title": "Purpose",
+      "required_fields": ["policy_id", "summary", "firefox_runtime_effect"]
+    },
+    {
+      "id": "a-bpm-location",
+      "title": "BPM location",
+      "required_fields": ["ui_target", "ui.section", "ui.subsection", "ui.support_level", "ui.widget"]
+    },
+    {
+      "id": "a-value-shape",
+      "title": "Value shape",
+      "required_fields": ["value_type", "json_shape", "nested_fields", "preserve_unknown_fields"]
+    },
+    {
+      "id": "a-channel-support",
+      "title": "Release and ESR support",
+      "required_fields": ["channel_scope", "channels", "min_version", "max_version", "deprecated", "schema_sha256"]
+    },
+    {
+      "id": "a-examples",
+      "title": "Examples",
+      "required_fields": ["valid_examples", "example_channel", "validation_status"]
+    },
+    {
+      "id": "a-validation",
+      "title": "Validation",
+      "required_fields": ["accepted_values", "required_fields", "known_validation_errors", "affected_policy_path"]
+    },
+    {
+      "id": "a-caveats",
+      "title": "Caveats",
+      "required_fields": ["deployment_caveats", "schema_caveats", "raw_fallback_caveats"]
+    },
+    {
+      "id": "a-interactions",
+      "title": "Interactions",
+      "required_fields": ["related_policies", "managed_preferences", "conflicts", "overrides"]
+    },
+    {
+      "id": "a-cis-links",
+      "title": "CIS links",
+      "required_fields": ["cis_recommendation_ids", "cis_level", "manual_review_state"]
+    },
+    {
+      "id": "a-provenance",
+      "title": "Provenance",
+      "required_fields": ["schema_source", "mozilla_version", "schema_version", "inventory_revision", "source_review_status"]
+    }
+  ],
+  "channel_support_model": {
+    "channel_scope_values": ["both", "release-only", "esr-only"],
+    "supported_channels": ["esr-140.12", "release-152"],
+    "per_channel_required_fields": [
+      "value_type",
+      "min_version",
+      "max_version",
+      "deprecated",
+      "schema_sha256",
+      "description_key",
+      "ui"
+    ],
+    "changed_definition_flag": "definition_changed_across_channels",
+    "release_only_note_required": true,
+    "esr_absence_note_required": true
+  },
+  "value_shape_model": {
+    "value_types": ["boolean", "string", "integer", "array", "object"],
+    "simple_policy_types": ["boolean", "string", "integer"],
+    "complex_policy_types": ["array", "object"],
+    "nested_field_fields": ["path", "type", "required", "enum_values", "item_shape", "description"],
+    "unknown_nested_field_rule": "Use preserve_unknown_fields from channel metadata; if true, document raw fallback behavior and safe review before save/export.",
+    "managed_preference_shape": {
+      "container_policy": "Preferences",
+      "required_fields": ["preference_id", "type", "status", "ui_target", "value_control", "preset_ids"],
+      "topic_id_pattern": "fx-pref-{preference_id_slug}"
+    }
+  },
+  "example_model": {
+    "required": true,
+    "no_example_marker": "no-schema-valid-example",
+    "example_fields": ["id", "channel", "document", "validates", "purpose", "notes"],
+    "document_shape": "Firefox boundary document with top-level policies object",
+    "validation_gate": "Examples must validate against the declared channel or carry the no-schema-valid-example marker with a reason."
+  },
+  "relationship_model": {
+    "ui_targets": ["policy:{policy_id}", "known-preference:{preference_id}"],
+    "user_guide_links": [
+      "ug-task-choose-firefox-schema",
+      "ug-concept-schema-aware-behavior",
+      "ug-task-use-all-settings",
+      "ug-task-use-json-editor",
+      "ug-task-export-policies-json"
+    ],
+    "cis_link_format": "cis({recommendation_id})",
+    "api_operation_links": ["API-VAL-001", "API-EXP-001", "API-IMP-001"]
+  },
+  "generator_contract": {
+    "skeleton_owner": "documentation/src/generated",
+    "reviewed_topic_owner": "documentation/src/dita/{locale}/firefox",
+    "hand_authored_regions": [
+      "purpose",
+      "caveats",
+      "interactions",
+      "cis-links",
+      "reviewed-examples"
+    ],
+    "generated_regions": [
+      "policy-id",
+      "bpm-location",
+      "value-shape",
+      "channel-support",
+      "provenance"
+    ],
+    "regeneration_rule": "Regeneration may update generated regions only and must preserve hand-authored regions byte-for-byte unless an explicit review marker is changed."
+  },
+  "fixture_policy_ids": {
+    "simple_boolean_both_channels": "DisableTelemetry",
+    "complex_object_both_channels": "Homepage",
+    "advanced_dictionary_preserve_unknown": "Preferences",
+    "release_only_object": "AIControls",
+    "release_only_boolean": "VisualSearchEnabled"
+  }
+}

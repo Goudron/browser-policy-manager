@@ -10,6 +10,18 @@
         <p class="compact-toolbar-subtitle" data-i18n="profiles.subtitle">
             {{ tr("profiles.subtitle") }}
         </p>
+        {% if documentation_home_href %}
+        <a
+            class="compact-toolbar-docs-link"
+            href="{{ documentation_home_href }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-i18n="profiles.documentation_link"
+            data-documentation-links='{{ documentation_home_links | tojson }}'
+            data-documentation-link>
+            {{ tr("profiles.documentation_link") }}
+        </a>
+        {% endif %}
     </div>
 
     <div class="compact-toolbar-side">

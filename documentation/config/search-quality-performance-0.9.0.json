@@ -1,0 +1,488 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-quality-performance-0.9.0",
+  "backlog_item": "BPM090-M10-07",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "search_mode": "deterministic-local-static",
+  "non_ai_boundary": "no-ai-no-rag-no-embeddings-no-generative-answers",
+  "coverage_requirements": {
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "categories": [
+      "exact",
+      "natural_language",
+      "typo",
+      "synonym",
+      "channel",
+      "cis",
+      "api",
+      "cjk",
+      "no_result",
+      "adversarial"
+    ],
+    "cjk_required_locales": ["zh-CN"],
+    "minimum_locale_fixture_count": 9
+  },
+  "quality_thresholds": {
+    "top_result_required": true,
+    "required_score_component_positive": true,
+    "no_result_categories": ["no_result", "adversarial"],
+    "maximum_no_result_count": 0
+  },
+  "performance_budget": {
+    "latency_budget_proxy": "deterministic scan units are used instead of wall-clock timers for stable CI results",
+    "max_index_bytes_per_locale": 3000000,
+    "max_documents_per_locale": 170,
+    "max_quality_fixtures_per_locale": 12,
+    "max_visible_results_per_query": 50,
+    "max_deterministic_scan_units_per_locale": 2040
+  },
+  "quality_fixtures": [
+    {
+      "fixture_id": "en-exact-ai-controls",
+      "locale": "en",
+      "category": "exact",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "en-natural-profile-library",
+      "locale": "en",
+      "category": "natural_language",
+      "query": "How do I use the profile library?",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "en-typo-profile-library",
+      "locale": "en",
+      "category": "typo",
+      "query": "profil library",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "en-synonym-saved-profiles",
+      "locale": "en",
+      "category": "synonym",
+      "query": "saved profiles",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "en-channel-release-ai",
+      "locale": "en",
+      "category": "channel",
+      "query": "AIControls",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "en-cis-recommendation",
+      "locale": "en",
+      "category": "cis",
+      "query": "cis:1.1.1.1",
+      "filters": {"guide_id": ["cis-settings-guide"]},
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "en-api-validation",
+      "locale": "en",
+      "category": "api",
+      "query": "API-VAL-001",
+      "filters": {"api_area": ["validation"]},
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "en-no-result",
+      "locale": "en",
+      "category": "no_result",
+      "query": "zzzxqv427-no-match",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "en-adversarial-html-like",
+      "locale": "en",
+      "category": "adversarial",
+      "query": "<x-bpm-adversarial-zzzxqv427>",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "ru-exact-ai-controls",
+      "locale": "ru",
+      "category": "exact",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "ru-natural-profile-library",
+      "locale": "ru",
+      "category": "natural_language",
+      "query": "как открыть библиотеку профилей",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "ru-typo-profile-library",
+      "locale": "ru",
+      "category": "typo",
+      "query": "библиотка профилей",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "ru-synonym-saved-profiles",
+      "locale": "ru",
+      "category": "synonym",
+      "query": "сохранённые профили",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "ru-channel-release-ai",
+      "locale": "ru",
+      "category": "channel",
+      "query": "AIControls",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "ru-cis-recommendation",
+      "locale": "ru",
+      "category": "cis",
+      "query": "cis:1.1.1.1",
+      "filters": {"guide_id": ["cis-settings-guide"]},
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "ru-api-validation",
+      "locale": "ru",
+      "category": "api",
+      "query": "API-VAL-001",
+      "filters": {"api_area": ["validation"]},
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "ru-no-result",
+      "locale": "ru",
+      "category": "no_result",
+      "query": "zzzxqv427-no-match",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "ru-adversarial-html-like",
+      "locale": "ru",
+      "category": "adversarial",
+      "query": "<x-bpm-adversarial-zzzxqv427>",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "de-exact-ai-controls",
+      "locale": "de",
+      "category": "exact",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "de-natural-profile-library",
+      "locale": "de",
+      "category": "natural_language",
+      "query": "Wie nutze ich die Profilbibliothek?",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "de-typo-api-validation",
+      "locale": "de",
+      "category": "typo",
+      "query": "API Validirungsendpunkt",
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "de-synonym-saved-profiles",
+      "locale": "de",
+      "category": "synonym",
+      "query": "gespeicherte Profile",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "de-channel-release-ai",
+      "locale": "de",
+      "category": "channel",
+      "query": "AIControls",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "de-cis-recommendation",
+      "locale": "de",
+      "category": "cis",
+      "query": "cis:1.1.1.1",
+      "filters": {"guide_id": ["cis-settings-guide"]},
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "de-api-validation",
+      "locale": "de",
+      "category": "api",
+      "query": "API-VAL-001",
+      "filters": {"api_area": ["validation"]},
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "de-no-result",
+      "locale": "de",
+      "category": "no_result",
+      "query": "zzzxqv427-no-match",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "de-adversarial-html-like",
+      "locale": "de",
+      "category": "adversarial",
+      "query": "<x-bpm-adversarial-zzzxqv427>",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "zh-cn-exact-ai-controls",
+      "locale": "zh-CN",
+      "category": "exact",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "zh-cn-natural-profile-library",
+      "locale": "zh-CN",
+      "category": "natural_language",
+      "query": "如何使用配置档案库",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "zh-cn-typo-profile-library",
+      "locale": "zh-CN",
+      "category": "typo",
+      "query": "配置档安库",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "zh-cn-synonym-saved-profiles",
+      "locale": "zh-CN",
+      "category": "synonym",
+      "query": "已保存配置档案",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "zh-cn-channel-release-ai",
+      "locale": "zh-CN",
+      "category": "channel",
+      "query": "AIControls",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "zh-cn-cis-recommendation",
+      "locale": "zh-CN",
+      "category": "cis",
+      "query": "cis:1.1.1.1",
+      "filters": {"guide_id": ["cis-settings-guide"]},
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "zh-cn-api-validation",
+      "locale": "zh-CN",
+      "category": "api",
+      "query": "API-VAL-001",
+      "filters": {"api_area": ["validation"]},
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "zh-cn-cjk-profile-library",
+      "locale": "zh-CN",
+      "category": "cjk",
+      "query": "配置档案库",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "zh-cn-no-result",
+      "locale": "zh-CN",
+      "category": "no_result",
+      "query": "zzzxqv427-no-match",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "zh-cn-adversarial-html-like",
+      "locale": "zh-CN",
+      "category": "adversarial",
+      "query": "<x-bpm-adversarial-zzzxqv427>",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "fr-exact-ai-controls",
+      "locale": "fr",
+      "category": "exact",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "fr-natural-profile-library",
+      "locale": "fr",
+      "category": "natural_language",
+      "query": "Comment utiliser la bibliothèque des profils ?",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "fr-typo-profile-library",
+      "locale": "fr",
+      "category": "typo",
+      "query": "bibliotheqe profils",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "fr-synonym-saved-profiles",
+      "locale": "fr",
+      "category": "synonym",
+      "query": "profils enregistrés",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "fr-channel-release-ai",
+      "locale": "fr",
+      "category": "channel",
+      "query": "AIControls",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "fr-cis-recommendation",
+      "locale": "fr",
+      "category": "cis",
+      "query": "cis:1.1.1.1",
+      "filters": {"guide_id": ["cis-settings-guide"]},
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "fr-api-validation",
+      "locale": "fr",
+      "category": "api",
+      "query": "API-VAL-001",
+      "filters": {"api_area": ["validation"]},
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "fr-no-result",
+      "locale": "fr",
+      "category": "no_result",
+      "query": "zzzxqv427-no-match",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "fr-adversarial-html-like",
+      "locale": "fr",
+      "category": "adversarial",
+      "query": "<x-bpm-adversarial-zzzxqv427>",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "es-es-exact-ai-controls",
+      "locale": "es-ES",
+      "category": "exact",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "es-es-natural-profile-library",
+      "locale": "es-ES",
+      "category": "natural_language",
+      "query": "Cómo usar la biblioteca de perfiles",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "es-es-typo-profile-library",
+      "locale": "es-ES",
+      "category": "typo",
+      "query": "bibliotca perfiles",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "es-es-synonym-saved-profiles",
+      "locale": "es-ES",
+      "category": "synonym",
+      "query": "perfiles guardados",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "es-es-channel-release-ai",
+      "locale": "es-ES",
+      "category": "channel",
+      "query": "AIControls",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "es-es-cis-recommendation",
+      "locale": "es-ES",
+      "category": "cis",
+      "query": "cis:1.1.1.1",
+      "filters": {"guide_id": ["cis-settings-guide"]},
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "es-es-api-validation",
+      "locale": "es-ES",
+      "category": "api",
+      "query": "API-VAL-001",
+      "filters": {"api_area": ["validation"]},
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "es-es-no-result",
+      "locale": "es-ES",
+      "category": "no_result",
+      "query": "zzzxqv427-no-match",
+      "expected_count": 0
+    },
+    {
+      "fixture_id": "es-es-adversarial-html-like",
+      "locale": "es-ES",
+      "category": "adversarial",
+      "query": "<x-bpm-adversarial-zzzxqv427>",
+      "expected_count": 0
+    }
+  ]
+}

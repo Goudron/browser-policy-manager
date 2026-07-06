@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-starter-presets" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Выбор starter preset перед детальной настройкой политик</title>
+  <shortdesc>Starter presets наполняют профиль BPM для типовых сред до проверки, валидации и уточнения отдельных политик Firefox.</shortdesc>
+  <conbody>
+    <section id="a-purpose"><title>Назначение</title><p>Starter preset — это baseline BPM, а не готовая рекомендация для deployment. Используйте его, чтобы получить начальный набор политик, затем проверьте каждое изменённое значение в Guided Editor, All Settings или JSON Editor перед экспортом.</p></section>
+    <section id="a-basic-corporate"><title>Базовый корпоративный профиль</title><p>Выбирайте corporate preset, когда профиль должен опираться на managed updates, снижение telemetry, ограничения accounts и Pocket, enterprise roots, system proxy, заблокированную intranet homepage, контролируемые downloads и блокировку установки расширений по умолчанию.</p></section>
+    <section id="a-classroom-kiosk"><title>Класс или киоск</title><p>Выбирайте classroom или kiosk preset, когда браузер стартует с заблокированной школьной страницы, использует ограниченное поведение просмотра, ограничивает private browsing и internal pages, а также может принудительно установить проверенное classroom extension при блокировке остальных расширений.</p></section>
+    <section id="a-protected-station"><title>Защищённая станция</title><p>Выбирайте protected-station preset для hardened workstations или SOC-style сред, где нужны более строгие proxy, DNS, certificate, permission, private browsing, extension и preference controls. Проверьте каждое сетевое и сертификатное значение перед экспортом, потому что environment-specific placeholders нужно заменить.</p></section>
+    <section id="a-after-selection"><title>После выбора</title><p>После применения preset провалидируйте выбранный канал Firefox, проверьте source tracing, удалите ненужные значения и экспортируйте только проверенный <codeph>policies.json</codeph>. CIS layer можно добавить отдельно, когда профилю нужен документированный security baseline.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.ug-task-apply-starter-preset"/>
+    <link keyref="topic.ug-concept-cis-layer-merge"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</concept>

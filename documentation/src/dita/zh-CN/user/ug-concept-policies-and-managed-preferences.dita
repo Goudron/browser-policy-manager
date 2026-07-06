@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-policies-and-managed-preferences" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>策略和受管理首选项</title>
+  <shortdesc>BPM 将 Firefox Enterprise 策略与受管理首选项值分开处理，同时把二者保存在一个配置文件中。</shortdesc>
+  <conbody>
+    <p>策略是命名的 Firefox Enterprise 控件，用于浏览器行为、访问、权限或功能设置。受管理首选项是带有值和可选锁定行为的首选项键。</p>
+    <p>向导编辑器覆盖常见策略目标。所有设置显示更广泛的受支持目录。JSON 编辑器显示用于导入和导出的准确文档边界。</p>
+    <p>逐项策略参考属于 Firefox 策略指南；本用户指南解释用户如何在 BPM 中找到并安全编辑这些控件。</p>
+  </conbody>
+</concept>

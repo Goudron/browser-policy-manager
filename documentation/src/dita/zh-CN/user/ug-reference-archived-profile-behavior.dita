@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-archived-profile-behavior" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>归档配置文件行为</title><shortdesc>归档配置文件仍可通过生命周期筛选看到，但与活动配置文件相比有限制。</shortdesc>
+  <refbody><section id="a-archived-purpose"><title>用途</title><p>归档用于保留配置文件，以便查看或稍后恢复。</p></section><section id="a-archived-limits"><title>限制</title><p>归档行不是普通活动导出目标，部分操作在恢复前不可用。</p></section><section id="a-archived-warning"><title>警告</title><p>永久删除也可以移除归档配置文件。</p></section><section id="a-archived-recovery"><title>恢复</title><p>需要普通编辑和活动生命周期时使用恢复。</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-restore-profile"/><link keyref="topic.ug-task-permanently-delete-profile"/></related-links>
+</reference>

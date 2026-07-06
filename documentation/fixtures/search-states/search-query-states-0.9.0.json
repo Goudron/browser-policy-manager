@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "search-query-states",
+  "synthetic": true,
+  "search_mode": "deterministic-local-static",
+  "queries": [
+    {
+      "id": "exact-policy-ai",
+      "locale": "en",
+      "query": "AIControls",
+      "expected_top_topic": "fx-concept-complex-policy-families",
+      "expected_component": "exact_identifier"
+    },
+    {
+      "id": "localized-profile-library",
+      "locale": "ru",
+      "query": "библиотека профилей",
+      "expected_top_topic": "ug-task-use-profile-library",
+      "expected_component": "alias"
+    },
+    {
+      "id": "empty-adversarial-html",
+      "locale": "en",
+      "query": "<script>alert(1)</script>",
+      "expected_result_count": 0,
+      "expected_recovery": "localized-empty-result"
+    }
+  ]
+}

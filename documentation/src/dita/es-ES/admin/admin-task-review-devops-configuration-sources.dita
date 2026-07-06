@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-review-devops-configuration-sources" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Revisar las fuentes de configuración DevOps</title>
+  <shortdesc>Identifique las BPM configuration sources actuales, registre effective runtime values y separe los ajustes ordinarios de expectativas de secret management no admitidas.</shortdesc>
+  <taskbody>
+    <prereq><p>BPM está desplegado desde código fuente en Linux o mediante WSL, y el administrador puede inspeccionar el shell environment, el archivo <codeph>.env</codeph> opcional y el source checkout.</p></prereq>
+    <context><p>BPM 0.9.0 carga settings desde environment variables con el prefijo <codeph>BPM_</codeph> y desde un archivo <codeph>.env</codeph> en la repository-root. El configuration model vive en <codeph>app/core/config.py</codeph>. Esta versión no define application secret store, credential vault, API token setting, encryption-key setting ni production configuration profile.</p></context>
+    <steps>
+      <step><cmd>Liste las configuration sources usadas para esta ejecución.</cmd><info><p>Registre si los values proceden de shell exports, de un <codeph>.env</codeph> local o de defaults en <codeph>app/core/config.py</codeph>. Mantenga <codeph>.env</codeph> local al checkout y no lo confirme al repositorio.</p></info></step>
+      <step><cmd>Registre los runtime settings que afectan al process behavior.</cmd><info><p>Incluya <codeph>BPM_APP_NAME</codeph>, <codeph>BPM_APP_VERSION</codeph>, <codeph>BPM_DEBUG</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_RELOAD</codeph>, <codeph>BPM_API_PREFIX</codeph>, <codeph>BPM_DEFAULT_LOCALE</codeph>, <codeph>BPM_SUPPORTED_LOCALES</codeph>, <codeph>BPM_I18N_DIR</codeph> y <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>. Los defaults son local-source defaults, no production policy.</p></info></step>
+      <step><cmd>Registre data, schema y network-related settings por separado.</cmd><info><p>Controle <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DB_ECHO</codeph>, <codeph>BPM_ENABLE_CORS</codeph>, <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, <codeph>BPM_SCHEMA_BASE_URL</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> y <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph>. Trate database URLs y network origins como operational evidence aunque no contengan password.</p></info></step>
+      <step><cmd>Mantenga secrets fuera de los BPM configuration examples.</cmd><info><note type="warning">La documentación BPM 0.9.0 source deployment no proporciona authentication setup, managed secrets, encryption-at-rest configuration, token rotation, tenant isolation ni secret redaction guarantees. Si su entorno necesita esos controls, regístrelos como external platform controls, no como BPM-supported features.</note></info></step>
+    </steps>
+    <result><p>El despliegue tiene un configuration inventory revisado que coincide con los source settings actuales y no implica secret-management behavior no admitido.</p></result>
+    <postreq><p>Use los temas de storage, network y operational-boundary para revisar el impacto de los values registrados antes de exponer BPM fuera de un controlled local environment.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+    <link keyref="topic.admin-task-review-devops-network-cors-security"/>
+  </related-links>
+</task>

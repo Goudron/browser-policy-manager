@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="fx-policy-FirefoxSuggest" audience="user" product="bpm-0-9-0" platform="web" props="firefox-release firefox-esr" otherprops="policy(FirefoxSuggest)">
+  <title>FirefoxSuggest</title>
+  <shortdesc>Schema-grounded skeleton for the Firefox <codeph>FirefoxSuggest</codeph> policy.</shortdesc>
+  <refbody>
+    <section id="a-purpose">
+      <title>Purpose</title>
+    <!-- BPM-HAND-REGION-START purpose -->
+      <p><codeph>FirefoxSuggest</codeph> has a generated schema skeleton. Reviewed runtime guidance is added in the authored Firefox Policy Guide tasks.</p>
+    <!-- BPM-HAND-REGION-END purpose -->
+    </section>
+    <section id="a-bpm-location">
+      <title>BPM location</title>
+      <p>UI target: <codeph>policy:FirefoxSuggest</codeph>.</p>
+      <dl>
+        <dlentry><dt><codeph>esr-140.12</codeph></dt><dd>Section <codeph>search</codeph>, subsection <codeph>suggest</codeph>, support <codeph>mapped</codeph>, widget <codeph>object-card</codeph>, complexity <codeph>basic</codeph>.</dd></dlentry>
+        <dlentry><dt><codeph>release-152</codeph></dt><dd>Section <codeph>search</codeph>, subsection <codeph>suggest</codeph>, support <codeph>mapped</codeph>, widget <codeph>object-card</codeph>, complexity <codeph>basic</codeph>.</dd></dlentry>
+      </dl>
+    </section>
+    <section id="a-value-shape">
+      <title>Value shape</title>
+      <p>Schema value type: <codeph>object</codeph>. Unknown nested fields preserved by BPM UI metadata: <codeph>false</codeph>.</p>
+    </section>
+    <section id="a-channel-support">
+      <title>Release and ESR support</title>
+      <p outputclass="channel-support-badge channel-scope-both">Supported in Firefox Release 152 and Firefox ESR 140.12.</p>
+      <p>Channel scope: <codeph>both</codeph>.</p>
+      <p props="firefox-release">Release 152 supports this policy.</p>
+      <p props="firefox-esr">ESR 140.12 supports this policy.</p>
+      <ul>
+        <li><codeph>esr-140.12</codeph>: type <codeph>object</codeph>, min <codeph>118.0</codeph>, max <codeph>none</codeph>, deprecated <codeph>false</codeph>, UI <codeph>search/suggest</codeph> as <codeph>mapped</codeph> with <codeph>object-card</codeph>.</li>
+        <li><codeph>release-152</codeph>: type <codeph>object</codeph>, min <codeph>118.0</codeph>, max <codeph>none</codeph>, deprecated <codeph>false</codeph>, UI <codeph>search/suggest</codeph> as <codeph>mapped</codeph> with <codeph>object-card</codeph>.</li>
+      </ul>
+    </section>
+    <section id="a-examples">
+      <title>Examples</title>
+      <sectiondiv outputclass="schema-valid-example"><p><codeph>esr-140.12</codeph> schema-valid example <codeph>fx-policy-FirefoxSuggest-esr-140.12</codeph>:</p><codeblock outputclass="language-json">{
+  &quot;policies&quot;: {
+    &quot;FirefoxSuggest&quot;: {
+      &quot;WebSuggestions&quot;: true
+    }
+  }
+}</codeblock></sectiondiv>
+      <sectiondiv outputclass="schema-valid-example"><p><codeph>release-152</codeph> schema-valid example <codeph>fx-policy-FirefoxSuggest-release-152</codeph>:</p><codeblock outputclass="language-json">{
+  &quot;policies&quot;: {
+    &quot;FirefoxSuggest&quot;: {
+      &quot;WebSuggestions&quot;: true
+    }
+  }
+}</codeblock></sectiondiv>
+    <!-- BPM-HAND-REGION-START reviewed-examples -->
+      <p>Reviewed example guidance can add practical notes without changing the schema-valid generated examples above.</p>
+    <!-- BPM-HAND-REGION-END reviewed-examples -->
+    </section>
+    <section id="a-validation">
+      <title>Validation</title>
+    <!-- BPM-HAND-REGION-START validation -->
+      <p>BPM validates this policy at <codeph>policies.FirefoxSuggest</codeph> against the selected Firefox schema channel. Reviewed validation guidance is pending.</p>
+    <!-- BPM-HAND-REGION-END validation -->
+    </section>
+    <section id="a-caveats">
+      <title>Caveats</title>
+    <!-- BPM-HAND-REGION-START caveats -->
+      <p>Reviewed deployment, schema, unsupported-channel, and raw fallback caveats are pending.</p>
+    <!-- BPM-HAND-REGION-END caveats -->
+    </section>
+    <section id="a-interactions">
+      <title>Interactions</title>
+    <!-- BPM-HAND-REGION-START interactions -->
+      <p>Reviewed related-policy, managed-preference, conflict, and override guidance is pending.</p>
+    <!-- BPM-HAND-REGION-END interactions -->
+    </section>
+    <section id="a-cis-links">
+      <title>CIS links</title>
+    <!-- BPM-HAND-REGION-START cis-links -->
+      <p>No reviewed CIS recommendation links are assigned in this skeleton.</p>
+    <!-- BPM-HAND-REGION-END cis-links -->
+    </section>
+    <section id="a-provenance">
+      <title>Provenance</title>
+      <ul>
+        <li>Source family: <codeph>mozilla-policy-schema-facts</codeph>.</li>
+        <li>Reuse mode: <codeph>generated-facts</codeph> with BPM-authored guidance regions.</li>
+        <li>License: <codeph>MPL-2.0</codeph>.</li>
+        <li>Mozilla source locator: <codeph>https://github.com/mozilla/policy-templates/releases/tag/v7.12</codeph>.</li>
+        <li>Source retrieved on: <codeph>2026-03-24</codeph>.</li>
+        <li>BPM is not affiliated with or endorsed by Mozilla.</li>
+        <li>Inventory backlog item: <codeph>BPM090-M2-03</codeph>.</li>
+        <li>Generated for BPM: <codeph>0.9.0</codeph>.</li>
+        <li><codeph>esr-140.12</codeph>: Mozilla version <codeph>140.12</codeph>, schema source <codeph>mozilla-policy-templates-v7.12</codeph>, schema SHA-256 <codeph>f2cb5ea1140fbdb2d105855f0bcff0c7857108a0a5fb17d491d2d5c49db7627a</codeph>.</li>
+        <li><codeph>release-152</codeph>: Mozilla version <codeph>152.0</codeph>, schema source <codeph>mozilla-policy-templates-v7.12</codeph>, schema SHA-256 <codeph>f2cb5ea1140fbdb2d105855f0bcff0c7857108a0a5fb17d491d2d5c49db7627a</codeph>.</li>
+      </ul>
+    </section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</reference>

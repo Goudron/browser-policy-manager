@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-presets-layers-merge" xml:lang="en" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>How presets, CIS layers, and source attribution merge</title>
+  <shortdesc>Use this topic to understand how BPM combines a starter preset, a CIS layer, imported data, manual edits, and raw fallback before export.</shortdesc>
+  <conbody>
+    <section id="a-source-order"><title>Source order</title><p>BPM treats the starter preset as the initial baseline, applies the selected CIS layer for the chosen Firefox schema channel, then keeps later imported, manual, or raw fallback values visible as separate source attribution. Review values in All Settings before export because source attribution explains why a configured value exists and whether a change overrides baseline, CIS, manual, imported, or raw source.</p></section>
+    <section id="a-starter-presets"><title>Starter presets</title><p>The documented starter choices are blank, keep_current, basic_corporate, classroom_kiosk, and soc_hard. Basic corporate starts from office governance, classroom_kiosk starts from constrained shared browsing, and soc_hard starts from protected-station assumptions. When no CIS layer is selected, these presets still contribute their own policy top-level counts: 23 for basic_corporate, 22 for classroom_kiosk, and 28 for soc_hard.</p></section>
+    <section id="a-layer-decisions"><title>Layer decision types</title><p>CIS merging records added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter, and manual_review_kept_base decisions. For example, blank plus CIS Level 1 adds 30 policy top-level values, while blank plus CIS Level 2 adds 33. Basic corporate plus CIS Level 1 records 17 added_from_cis, 15 already_satisfied, 20 kept_base_only, and 4 manual_review_kept_base decisions in each supported channel.</p></section>
+    <section id="a-conflicts-manual-review"><title>Conflicts and manual review</title><p>Manual-review decisions mean BPM kept the starter or base value visible instead of silently accepting a universal CIS result. Basic corporate keeps 4 manual-review decisions, classroom_kiosk keeps 1, and soc_hard keeps 7 when a CIS layer is applied. The most visible conflict areas are update governance, proxy mode and lock state, and selected sanitize-on-shutdown values.</p></section>
+    <section id="a-attribution-boundary"><title>Attribution boundary</title><p>Source attribution is a BPM review aid, not a certification statement. A value can be traced to baseline, CIS, manual, imported, or raw source; BPM can explain the merge decision and generated layer, but it does not prove CIS compliance, does not export BPM profile metadata, and does not copy official CIS benchmark expression.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-task-trace-cis-source"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+    <link keyref="topic.ug-task-resolve-cis-manual-review"/>
+  </related-links>
+</concept>

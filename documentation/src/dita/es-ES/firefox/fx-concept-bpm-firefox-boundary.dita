@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-bpm-firefox-boundary" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Dónde termina la validación de BPM y empieza el runtime de Firefox</title>
+  <shortdesc>BPM valida y exporta un Firefox Enterprise policy document; Firefox aplica ese documento en runtime fuera de BPM.</shortdesc>
+  <conbody>
+    <section id="a-profile-model"><title>Modelo de perfil de BPM</title><p>Un perfil de BPM es un modelo de edición guardado. Puede contener valores de políticas, managed preferences, información de origen, estado de validación, valores derivados de preset o CIS y raw imported data antes de exportar.</p></section>
+    <section id="a-boundary-document"><title>Documento de frontera de Firefox</title><p>La frontera exportada es un documento <codeph>policies.json</codeph> con un objeto superior <codeph>policies</codeph>. BPM valida forma, policy IDs compatibles, disponibilidad por canal y restricciones de valores conocidas, pero no prueba el comportamiento de cada instalación de Firefox desplegada.</p></section>
+    <section id="a-runtime-responsibility"><title>Responsabilidad del runtime de Firefox</title><p>Firefox controla la carga de políticas, las rutas de despliegue del sistema operativo, la instalación de extensiones, la confianza en certificados, el acceso de red y los efectos visibles en el navegador. La documentación de BPM describe la ruta de configuración y los hechos conocidos del esquema, no procedimientos administrativos de rollout.</p></section>
+    <section id="a-managed-preferences"><title>Managed preferences</title><p>Las managed preferences se configuran mediante la política de Firefox <codeph>Preferences</codeph>. BPM puede mostrar preferences conocidas y conservar advanced values, pero el efecto sigue dependiendo del soporte del runtime de Firefox y del canal de esquema elegido.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</concept>

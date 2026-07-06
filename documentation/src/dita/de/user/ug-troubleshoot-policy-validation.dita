@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-policy-validation" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Policy validation errors interpretieren</title>
+  <shortdesc>Diagnostizieren Sie validation errors für unsupported policy, wrong value type, unknown entry, raw fallback oder affected policy path.</shortdesc>
+  <taskbody>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Validation errors sind strukturierte Rückmeldungen zum gewählten Firefox schema channel und zur genauen Policy oder Managed Preference, die BPM nicht als bereit akzeptiert.</p></context>
+    <steps>
+      <step><cmd>Lesen Sie affected policy path und message, bevor Werte geändert werden.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Klassifizieren Sie das Problem als unsupported policy, wrong value type, deprecated setting, unknown entry, imported value oder raw fallback.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Nutzen Sie All Settings oder JSON, um zur affected location zu wechseln und nur den gemeldeten Wert zu korrigieren.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Führen Sie revalidate profile im selben schema channel vor Speichern oder Export erneut aus.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+    </steps>
+    <result><p>Der validation error ist behoben oder als deliberate raw/unsupported value dokumentiert, der nicht release-ready ist.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

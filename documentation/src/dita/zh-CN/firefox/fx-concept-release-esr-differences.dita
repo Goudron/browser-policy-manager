@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-release-esr-differences" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Firefox Release 与 ESR 策略差异</title>
+  <shortdesc>使用 channel badges 和当前 schema channel，避免配置所选 Firefox 系列中不可用的策略。</shortdesc>
+  <conbody>
+    <section id="a-current-channels"><title>当前通道</title><p>BPM 0.9.0 记录 Firefox Release 152 和 Firefox ESR 140.12。生成的 policy references 带有 channel metadata，使 navigation、search indexes 和未来 filters 能诚实显示当前通道。</p></section>
+    <section id="a-support-badges"><title>Support badges</title><p>每个生成的 policy reference 中的 support badge 表明该策略支持两个通道，还是仅支持 Release。badge 来自维护的 Firefox policy inventory，而不是翻译文本。</p></section>
+    <section id="a-release-only"><title>Release-only 策略</title><p>当前有八个 Release-only 策略：<codeph>AIControls</codeph>、<codeph>BrowserDataBackup</codeph>、<codeph>DisableRemoteImprovements</codeph>、<codeph>GenerativeAI</codeph>、<codeph>IPProtectionAvailable</codeph>、<codeph>LocalNetworkAccess</codeph>、<codeph>VisualSearchEnabled</codeph> 和 <codeph>XSLTEnabled</codeph>。当活动架构为 ESR 140.12 时，BPM 必须把它们视为不可用。</p></section>
+    <section id="a-changed-definitions"><title>已变化定义</title><p>当前 inventory 中没有任何共同策略在 Release 152 与 ESR 140.12 之间存在 schema definition 差异。未来 schema refresh 必须通过 generated channel-differences artifact 更新此说明。</p></section>
+    <section id="a-user-action"><title>用户操作</title><p>选择策略前先选择 Firefox schema channel，检查 channel badge，并在导出前重新验证。不要把 Release-only topic 当作同一策略支持 ESR 的证据。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</concept>

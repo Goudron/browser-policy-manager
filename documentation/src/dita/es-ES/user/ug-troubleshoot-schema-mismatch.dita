@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-schema-mismatch" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Resolver schema mismatch</title>
+  <shortdesc>Gestione unsupported schema channel, ESR/Release mismatch o schema-dependent setting sin forzar cambios ocultos de datos.</shortdesc>
+  <taskbody>
+    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
+    <context><p>Schema mismatch suele significar que un setting existe en un Firefox channel pero está unavailable, deprecated o tiene otra forma en el channel seleccionado.</p></context>
+    <steps>
+      <step><cmd>Confirme si el perfil apunta a ESR 140.12 o Release 152.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Identifique el setting unavailable, unsupported, deprecated o schema-dependent en ese channel.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Elija cambiar schema channel o quitar/cambiar affected setting para el Firefox objetivo.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Vuelva a revalidate y review export readiness después de decidir channel o setting.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+    </steps>
+    <result><p>El perfil apunta al Firefox channel previsto y ya no oculta un schema-dependent mismatch.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

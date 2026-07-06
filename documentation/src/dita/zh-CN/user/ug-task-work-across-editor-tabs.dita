@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-work-across-editor-tabs" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>跨编辑器标签页工作</title>
+  <shortdesc>为已保存配置文件的不同模式使用独立浏览器标签页，避免混淆草稿或丢失未保存更改。</shortdesc>
+  <taskbody>
+    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
+    <context><p>BPM 会在独立标签页中打开已保存配置文件模式和比较界面，方便并排查看 Guided、All Settings、JSON 和 Compare。</p></context>
+    <steps>
+      <step><cmd>从库中以所需编辑器模式打开已保存的配置文件。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>在每个标签页中保持配置文件名称、架构通道和生命周期标记可见。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>在依赖另一个标签页进行导出、比较或验证之前，先保存当前标签页中的更改。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>只有在检查未保存更改警告和可见保存状态之后，才关闭或刷新标签页。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+    </steps>
+    <result><p>您可以查看多个界面，同时清楚知道哪个保存状态是权威状态。</p></result>
+    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-open-saved-profile"/>
+    <link keyref="topic.ug-troubleshoot-unsaved-changes"/>
+  </related-links>
+</task>

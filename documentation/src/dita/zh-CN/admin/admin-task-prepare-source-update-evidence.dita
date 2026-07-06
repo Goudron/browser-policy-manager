@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-prepare-source-update-evidence" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>在从源码更新前准备 evidence</title>
+  <shortdesc>在将 BPM 移动到更新的 source revision 之前，收集 source revision、configuration、database backup、profile export evidence 和 stop conditions。</shortdesc>
+  <taskbody>
+    <prereq><p>BPM 正从 Linux 或 WSL source checkout 运行，并且管理员已完成 configuration、storage、backup 和 operational-boundary reviews。</p></prereq>
+    <context><p>update-from-source procedure 会改变 code、dependencies、database schema 和 documentation output expectations。BPM 0.9.0 不提供 automatic rollback、database downgrade guarantees、managed backup 或 packaged upgrade tooling。将 evidence collection 视为必需的 pre-update gate。</p></context>
+    <steps>
+      <step><cmd>停止 foreground BPM process，并记录当前 source state。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git status --short
+git rev-parse --short HEAD
+]]></codeblock><p>只有在 working tree state 已理解，并且 current source revision 已记录为 rollback reference 时才继续。</p></info></step>
+      <step><cmd>记录 effective configuration 和 runtime paths。</cmd><info><p>捕获活动的 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph>、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>，以及 values 来自 shell exports 还是 <codeph>.env</codeph>。不要把 secrets 复制到 update note。</p></info></step>
+      <step><cmd>在 BPM 停止时创建 manual database backup evidence。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p backups
+cp data/bpm.db backups/bpm-pre-update.db
+sha256sum backups/bpm-pre-update.db
+]]></codeblock><p>记录 timestamp、current revision、database URL、file size 和 checksum。如果部署不使用 <codeph>data/bpm.db</codeph>，请备份从 <codeph>BPM_DATABASE_URL</codeph> 解析出的 path。</p></info></step>
+      <step><cmd>在更改 code 前导出 critical profile evidence。</cmd><info><p>使用现有 API export examples 保存所需 Firefox <codeph>policies.json</codeph> documents，并记录 response status、profile ID、revision、schema channel 和 exported-document hash。</p><note type="warning">如果缺少 database backup 或 export evidence，请停止 update。不要用 Git rollback 或 <codeph>alembic downgrade</codeph> 会安全的假设替代缺失的 backup evidence。</note></info></step>
+    </steps>
+    <result><p>Update 具有已验证的 pre-change evidence set 和已知 previous source reference。</p></result>
+    <postreq><p>只有在 evidence set 完整并经过审查后，才继续刷新 source revision 和 dependencies。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-refresh-source-revision-dependencies"/>
+  </related-links>
+</task>

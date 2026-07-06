@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-profile-name" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Corriger les erreurs de nom de profil</title>
+  <shortdesc>Corrigez empty, duplicate ou unclear profile name pendant la création ou le clone.</shortdesc>
+  <taskbody>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
+    <context><p>Les noms de profils identifient Library rows, editor tabs, comparison choices, imports et recovery messages ; name validation bloque donc les enregistrements ambigus.</p></context>
+    <steps>
+      <step><cmd>Lisez le name validation hint avant de modifier d’autres champs du profil.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Saisissez un non-empty name qui distingue l’objectif du profil, Firefox channel ou source file.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Dans clone workflows, modifiez suggested clone name avant confirmation s’il duplique une row existante.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Relancez save ou duplicate après disparition du name hint.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+    </steps>
+    <result><p>Le profil ou clone possède un nom visible unique retrouvable plus tard dans la Library.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-create-first-profile"/>
+    <link keyref="topic.ug-task-duplicate-profile"/>
+  </related-links>
+</task>

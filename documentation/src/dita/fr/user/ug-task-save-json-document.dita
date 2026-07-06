@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-save-json-document" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Enregistrer le document JSON</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. Save a valid raw JSON document back to the canonical BPM profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. The JSON document has been validated or the remaining warnings are understood.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All Settings, Compare, or export workflows.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. Validate the JSON document.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. Choose Save only when the top-level policies object and policy values are correct.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. Wait for the saved status before leaving the route.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Enregistrer le document JSON. Reopen the profile or export policies.json when you need handoff evidence.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez la syntaxe JSON, top-level policies et les erreurs de validation des stratégies.</note></info></step>
+    </steps>
+    <result><p>JSON Editor affiche l’état attendu, et l’action peut être expliquée lors de la revue. The BPM profile stores the JSON changes in the canonical profile model.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, validez le document, revenez à All Settings ou ouvrez le sujet associé. Recovery: if save fails, fix validation errors or return to a previous saved profile before editing again.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-json-document"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

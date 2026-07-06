@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-choose-firefox-schema" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Выберите канал схемы Firefox</title>
+  <shortdesc>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. Choose between Firefox ESR 140.12 and Firefox Release 152 before importing, validating, or editing a profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. Start this task before creating a profile, importing policies.json, or validating a raw JSON document.</p></prereq>
+    <context><p>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. The schema channel decides which Firefox policies BPM can validate and which controls are shown as supported. ESR 140.12 is the default long-support channel; Release 152 is the current mainstream channel and includes newer policy controls such as AIControls and VisualSearchEnabled.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. Compare the target browser fleet with the supported channels: ESR 140.12 or Release 152.</cmd><info><p>Ожидаемый результат: выбранный канал схемы соответствует целевому Firefox и дальнейшей проверке.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. Choose ESR 140.12 when the profile is intended for the supported Extended Support Release deployment.</cmd><info><p>Ожидаемый результат: выбранный канал схемы соответствует целевому Firefox и дальнейшей проверке.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. Choose Release 152 when the profile needs current Release-only controls, including supported AI and visual search policies.</cmd><info><p>Ожидаемый результат: выбранный канал схемы соответствует целевому Firefox и дальнейшей проверке.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает schema-channel workflow для русской локали: Выберите канал схемы Firefox. Validate after choosing the channel and before saving, export, or handoff.</cmd><info><note type="warning">Предупреждение: перед сохранением или экспортом проверьте канал схемы и ошибки validation.</note></info></step>
+    </steps>
+    <result><p>Канал схемы и состояние validation понятны перед дальнейшей работой с профилем. The profile uses the schema channel that matches the intended Firefox deployment.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожиданий, подтвердите канал, проверьте affected policy path и откройте связанный раздел. Recovery: if validation reports unsupported, unavailable, deprecated, or unknown settings, confirm the schema channel before editing policy values.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

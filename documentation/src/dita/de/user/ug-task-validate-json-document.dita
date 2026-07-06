@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-validate-json-document" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>JSON-Dokument validieren</title>
+  <shortdesc>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. Validate raw JSON syntax and Firefox policy values before saving.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. Open JSON Editor with the document you want to check.</p></prereq>
+    <context><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. Validation distinguishes malformed JSON from policy or schema errors. A document can parse as JSON and still fail policy validation.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. Choose the shared Validate action.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. If validation reports malformed JSON, fix syntax such as trailing commas or missing braces.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. If validation reports policy errors, correct unsupported keys, wrong value types, or schema-channel mismatches.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument validieren. Validate again until the status explains that the document is acceptable or the remaining issue is intentional for raw review.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern JSON-Syntax, top-level policies und Policy-Validierungsfehler.</note></info></step>
+    </steps>
+    <result><p>JSON Editor befindet sich im erwarteten Zustand, und die Aktion ist bei der Prüfung erklärbar. The document has a known validation state before save or export.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, validieren Sie das Dokument, kehren Sie zu All Settings zurück oder öffnen Sie das verknüpfte Thema. Recovery: if errors are hard to read, use All Settings to inspect the affected policy or preference visually.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+    <link keyref="topic.ug-task-save-json-document"/>
+  </related-links>
+</task>

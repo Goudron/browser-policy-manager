@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-malformed-json" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>从 malformed JSON 中恢复</title>
+  <shortdesc>在保存、导入或验证策略文档前诊断 malformed JSON syntax。</shortdesc>
+  <taskbody>
+    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败操作表明当前 workflow 无法安全继续。</p></prereq>
+    <context><p>Malformed JSON 是语法问题：BPM 无法解析文档到足以验证策略名称或值的程度。</p></context>
+    <steps>
+      <step><cmd>保持 JSON editor 或 import error 打开，以便行、列或 parse message 仍然可见。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>检查报告位置附近的 braces、brackets、commas、quotation marks 和 escaped characters。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>修正语法后再次格式化或验证文档。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>只有在 JSON 成功解析后，才继续 schema validation。</cmd><info><note type="warning">不要编辑 internal storage、browser local data、数据库行或 generated build artifacts 来恢复面向用户的配置文件工作。</note></info></step>
+    </steps>
+    <result><p>文档可作为 JSON 解析，并可进入正常策略验证。</p></result>
+    <postreq><p>恢复：如果同一错误在一次干净重试后仍然重复，请停止 workflow，并保留可见消息、配置文件名称、架构通道和当前界面供 maintainer review。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-json-document"/>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+  </related-links>
+</task>

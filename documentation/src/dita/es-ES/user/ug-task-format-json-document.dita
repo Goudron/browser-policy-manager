@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-format-json-document" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Formatear el documento JSON</title>
+  <shortdesc>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Format the current JSON document before review, validation, or handoff.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Open JSON Editor with a JSON document in the editor.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Choose the JSON format action.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Review the resulting indentation and object layout.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Confirm no policy value changed during formatting.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Validate the document after formatting if you plan to save.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe la sintaxis JSON, top-level policies y los errores de validación de políticas.</note></info></step>
+    </steps>
+    <result><p>JSON Editor queda en el estado esperado y la acción se puede explicar durante la revisión. The JSON document is easier to review and remains semantically unchanged.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, valide el documento, vuelva a All Settings o abra el tema relacionado. Recovery: if formatting fails, fix JSON syntax first; trailing commas and missing braces are common causes.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

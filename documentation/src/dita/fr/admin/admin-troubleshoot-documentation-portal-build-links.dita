@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-documentation-portal-build-links" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Diagnostic: Troubleshoot documentation portal build and link failures</title>
+  <shortdesc>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Diagnose /help/ build, manifest, search, source-link, and generated-link failures without patching built artifacts.</shortdesc>
+  <taskbody>
+    <prereq><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Use this procedure when <codeph>make docs-validate</codeph>, <codeph>make docs-build</codeph>, <codeph>make test-docs-contract</codeph>, <codeph>/help/</codeph>, or generated documentation links fail during source operation or update-from-source checks.</p></prereq>
+    <context><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Documentation portal troubleshooting belongs to source DITA, maps, keys, config, tools, and focused tests. Built output under <codeph>documentation/build/</codeph>, reports, manifests, search indexes, and packages are regenerated evidence, not hand-edited source.</p></context>
+    <steps>
+      <step><cmd>Diagnostic 1: Start with the smallest documentation command named by the failure.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. For one changed topic, run <codeph>make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/admin/example.dita"</codeph>. For contracts, run the named <codeph>documentation/tests/contract/...</codeph> file. For full link validation, run <codeph>make docs-validate</codeph>.</p></info></step>
+  <step><cmd>Diagnostic 2: Classify source-link versus generated-link failures.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Source failures usually name a DITA topic, key, or fragment. Generated-link failures appear after DITA publish and can involve manifest, target map, search, or normalized output path. Preserve the failing path and target URL.</p></info></step>
+  <step><cmd>Diagnostic 3: Fix source, map, key, config, or generator input only.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Do not patch <codeph>documentation/build/</codeph>, <codeph>documentation/dist/</codeph>, <codeph>documentation/reports/</codeph>, generated search indexes, or packaged artifacts by hand. Update the DITA topic, map, keydef, config, or build tool, then rebuild.</p></info></step>
+  <step><cmd>Diagnostic 4: Verify /help/ runtime boundaries separately.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. If the static build passes but BPM <codeph>/help/</codeph> reports missing, stale, incompatible, incomplete, or not-found states, check installed artifact path and manifest digest. Preserve FastAPI <codeph>/docs</codeph> and <codeph>/openapi.json</codeph> separately.</p></info></step>
+  <step><cmd>Diagnostic 5: Record the focused rerun and remaining gates.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Use <codeph>make test-docs-contract</codeph>, <codeph>make docs-validate</codeph>, and <codeph>make docs-build</codeph> for this troubleshooting slice. </p><note type="warning">Browser-backed docs checks, screenshots, manual QA, package verification, and product release tests remain separate gates unless explicitly run.</note></info></step>
+    </steps>
+    <result><p>L’opérateur obtient un diagnostic classifié, préserve user data et connaît le prochain smallest rerun. The operator can diagnose documentation portal failures from source and regenerate output without hand-editing disposable artifacts.</p></result>
+    <postreq><p>Après correction, revenez au workflow Administrator/DevOps lié et relancez seulement les checks affectés. After the portal build passes, rerun the update-from-source verification topic and any affected contextual help route checks.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-run-source-update-migrations-docs"/>
+<link keyref="topic.admin-task-verify-source-update-rollback-stop"/>
+<link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+<link keyref="topic.ug-concept-documentation-search-boundary"/>
+  </related-links>
+</task>

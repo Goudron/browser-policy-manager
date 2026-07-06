@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-policy-selection" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Eine Firefox-Richtlinie zur Konfiguration auswählen</title>
+  <shortdesc>Wählen Sie Richtlinien nach gewünschtem Ergebnis, Schemakanal, Wertform und der BPM-Oberfläche mit dem sichersten Bearbeitungspfad.</shortdesc>
+  <conbody>
+    <section id="a-start-with-outcome"><title>Mit dem Ergebnis beginnen</title><p>Beginnen Sie mit dem benötigten Browser-Verhalten, etwa Updates, Startseite, Erweiterungen, Datenschutz, Berechtigungen, Suche, Zertifikate, Proxy oder Controls für AI- und Smart-Funktionen. Nutzen Sie danach die Referenz-Skeletons im Firefox Policy Guide und die Workflows im User Guide, um die stabile policy ID zu finden.</p></section>
+    <section id="a-check-channel"><title>Release- und ESR-Unterstützung prüfen</title><p>Einige Richtlinien existieren sowohl in Firefox Release 152 als auch in ESR 140.12, andere nur in Release. Wählen Sie den BPM-Schemakanal, bevor Sie sich auf eine Richtlinie verlassen, und behandeln Sie eine nicht verfügbare Richtlinie als Validierungsblocker.</p></section>
+    <section id="a-pick-edit-surface"><title>Bearbeitungsoberfläche wählen</title><p>Verwenden Sie den Guided Editor für häufige aufgabenorientierte Entscheidungen, All Settings für den vollständigen Katalog und die Quellverfolgung, und den JSON Editor, wenn Sie exakte Kontrolle über das Firefox-Grenzdokument benötigen. Exportieren Sie erst nach sauberer Validierung für den gewählten Kanal.</p></section>
+    <section id="a-review-value-shape"><title>Wertform prüfen</title><p>Einfache boolean-, string- und integer-Richtlinien lassen sich meist direkt bearbeiten. Komplexe object-, array-, extension-, permission-, search-, certificate-, proxy- und preference-locking-Richtlinien brauchen zusätzliche Prüfung, weil verschachtelte Felder, unbekannte Werte und raw fallback das exportierte <codeph>policies.json</codeph> beeinflussen können.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+  </related-links>
+</concept>

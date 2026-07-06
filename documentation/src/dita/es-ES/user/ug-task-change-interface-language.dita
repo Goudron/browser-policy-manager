@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-change-interface-language" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Cambiar el idioma de la interfaz</title>
+  <shortdesc>Seleccione inglés, ruso, alemán, chino simplificado, francés, español o el idioma del sistema para BPM.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
+    <context><p>Use el selector de idioma cuando las capturas, etiquetas, mensajes de validación y ejemplos de documentación deban coincidir con la configuración regional del operador.</p></context>
+    <steps>
+      <step><cmd>Abra el selector de idioma en el encabezado de la página.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Elija English, Русский, Deutsch, 简体中文, Français, Español o el idioma del sistema.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Confirme que la navegación, los mensajes de validación, el estado y los controles del editor cambian a la configuración regional seleccionada.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Continúe editando solo después de confirmar que el perfil y el canal de esquema siguen siendo los mismos.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+    </steps>
+    <result><p>BPM muestra la interfaz en la configuración regional seleccionada sin cambiar los datos del perfil.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-language-detection-fallback"/>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+  </related-links>
+</task>

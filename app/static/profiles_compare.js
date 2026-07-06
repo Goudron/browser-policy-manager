@@ -205,6 +205,7 @@
         if (!data || !compareState || !platform) return null;
         const { resolveBrowserLanguage } = platform;
         const { resolveTheme, updateThemeColorMeta, syncThemeSensitiveControls } = platform;
+        const { updateDocumentationLinks } = platform;
         const utils = windowRef.BPMProfilesUtils || {};
         let locale = windowRef.__BPM_INITIAL_LOCALE__ || {};
         const preferencesCatalog = readEmbeddedJson(documentRef, "compare-preferences-catalog");
@@ -295,6 +296,7 @@
                 documentRef.documentElement.lang = lang;
                 windowRef.__BPM_INITIAL_LANG__ = lang;
                 windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;
+                updateDocumentationLinks?.(documentRef, lang);
                 applyLocaleText(nextLocale);
                 refreshLocaleDependentViews();
             } catch (error) {

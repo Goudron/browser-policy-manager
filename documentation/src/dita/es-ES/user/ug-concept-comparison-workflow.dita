@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-comparison-workflow" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Flujo de comparación de perfiles</title><shortdesc>Compare permite revisar diferencias de ajustes guardados entre dos perfiles sin modificar ninguno.</shortdesc>
+  <conbody><p>El flujo es abrir Compare desde la Biblioteca, buscar Profile A y Profile B por separado, revisar cada resumen y leer la tabla de comparación.</p><p>La tabla usa la unión de ajustes policy y managed-preference de ambos perfiles. Una fila puede ser equal, changed o missing en un lado. Compare es de solo lectura y no fusiona valores.</p></conbody>
+  <related-links><link keyref="topic.ug-reference-comparison-states"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
+</concept>

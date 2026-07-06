@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-supported-integration-patterns" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>支持的 integration patterns</title>
+  <shortdesc>BPM 0.9.0 支持用于 profile、validation、Firefox document、metadata、inventory 和 health workflows 的 generic API patterns。</shortdesc>
+  <conbody>
+    <section id="a-profile-synchronization"><title>Profile synchronization</title><p>集成产品可以 list profiles、read profile by ID、create normalized profile、patch mutable profile fields、archive、restore、permanently delete 或 reset profile library。Synchronization 必须将 profile ID 和 revision 视为 BPM-owned state，不得假设 bulk operations、name mutation 或跨多个 requests 的 automatic rollback。</p></section>
+    <section id="a-validation-gates"><title>Validation gates</title><p>Validation gate 可以在 deployment workflow 接受之前，将 candidate canonical <codeph>policies.json</codeph> document 提交到 supported validation endpoint。Gate 必须同时检查 response body 和 status code，因为 validation 可能返回成功 HTTP status 但 <codeph>ok=false</codeph>。</p></section>
+    <section id="a-import-export"><title>Policy import and export</title><p>集成可以将 Firefox <codeph>policies.json</codeph> 导入为 BPM profile，也可以将 saved BPM profile 导出回 canonical Firefox JSON。不要混用 normalized profile model 和 canonical Firefox document shape；import/export 是这两种 representations 的边界。</p></section>
+    <section id="a-compliance-metadata"><title>Compliance metadata handoff</title><p>API 在 profile create、update 和 import operations 上暴露 opaque <codeph>compliance</codeph> object。集成可以通过 BPM 传递自己的 metadata，但 BPM 0.9.0 不发布该 object 的 versioned schema，也不验证 external compliance semantics。</p></section>
+    <section id="a-inventory-and-health"><title>Inventory and health checks</title><p>Inventory-style consumers 可以 list profiles、为同一 filter context 请求 stats、read individual profiles，并调用 service、liveness 和 readiness endpoints。Health responses 有意保持 compact，不暴露 per-dependency diagnostics、documentation status 或超出现有 fixed fields 的 deployment readiness。</p></section>
+    <section id="a-unsupported-patterns"><title>Unsupported patterns</title><p>本指南不记录 authentication、authorization、rate limits、idempotency keys、request IDs、webhooks、bulk export、bulk CRUD、cursor pagination、product-specific connectors、vendor partnerships 或 transactional orchestration，因为 BPM 0.9.0 不暴露这些 guarantees。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-review-profile-context"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</concept>

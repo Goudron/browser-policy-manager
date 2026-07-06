@@ -240,8 +240,20 @@ def test_visual_editor_narrow_viewport_contract():
 
 
 def test_compact_toolbar_narrow_viewport_contract():
-    assert '<header class="compact-toolbar surface-panel fade-up mb-4">' in template_source(
-        "_page_header.html"
+    header_template = template_source("_page_header.html")
+
+    assert '<header class="compact-toolbar surface-panel fade-up mb-4">' in header_template
+    assert_source_contains_all(
+        header_template,
+        (
+            'class="compact-toolbar-docs-link"',
+            "{% if documentation_home_href %}",
+            'href="{{ documentation_home_href }}"',
+            'target="_blank"',
+            'rel="noopener noreferrer"',
+            "data-documentation-links",
+            "data-documentation-link",
+        ),
     )
     assert_source_contains_all(
         css_source(),
@@ -254,6 +266,7 @@ def test_compact_toolbar_narrow_viewport_contract():
             "font-size: 2.45rem;",
             "font-size: 1.9rem;",
             "font-size: 1.62rem;",
+            ".compact-toolbar-docs-link {",
             ".compact-toolbar-control select.soft-input",
             "max-width: 100%;",
             "@media (max-width: 820px)",
@@ -261,6 +274,95 @@ def test_compact_toolbar_narrow_viewport_contract():
             "padding-inline: 12px;",
             "@media (max-width: 560px)",
             "padding-inline: 10px;",
+        ),
+    )
+
+
+def test_contextual_help_links_are_manifest_backed_and_responsive_contract():
+    partial = template_source("_context_help_link.html")
+    templates = {
+        "library": template_source("_page_library_workspace.html"),
+        "compare": template_source("_page_compare_workspace.html"),
+        "guided": template_source("_page_wizard.html"),
+        "settings": template_source("_page_settings_workspace.html"),
+        "json": template_source("_page_json_workspace.html"),
+    }
+
+    assert_source_contains_all(
+        partial,
+        (
+            "documentation_context_help_links.get(context_help_surface",
+            'class="context-help-link"',
+            'target="_blank"',
+            'rel="noopener noreferrer"',
+            'data-i18n="profiles.context_help_action"',
+            "data-documentation-links",
+            "data-context-help-surface",
+        ),
+    )
+    for surface, template in templates.items():
+        assert f'{{% set context_help_surface = "{surface}" %}}' in template
+        assert '{% include "profiles/_context_help_link.html" %}' in template
+    assert_source_contains_all(
+        css_source(),
+        (
+            ".context-help-link {",
+            ".context-help-link::after",
+            ".context-help-link:hover",
+            ".context-help-link:focus-visible",
+            'html[data-theme="dark"] .context-help-link',
+        ),
+    )
+
+
+def test_deep_help_icon_links_are_manifest_backed_and_responsive_contract():
+    partial = template_source("_context_help_icon.html")
+    template_sources = "\n".join(
+        (
+            template_source("_page_library_workspace.html"),
+            template_source("_page_wizard_step_setup.html"),
+            template_source("_page_wizard_step_ai.html"),
+            template_source("_page_editor_chrome.html"),
+            template_source("_page_json_workspace.html"),
+            template_source("_page_wizard_step_export.html"),
+        )
+    )
+
+    assert_source_contains_all(
+        partial,
+        (
+            "documentation_deep_help_links.get(context_help_icon_target",
+            'class="context-help-icon-link"',
+            'target="_blank"',
+            'rel="noopener noreferrer"',
+            'title="{{ tr(context_help_icon_label_key) }}"',
+            'aria-label="{{ tr(context_help_icon_label_key) }}"',
+            "data-i18n-title",
+            "data-i18n-aria-label",
+            "data-documentation-links",
+            "data-context-help-target",
+            "<span aria-hidden=\"true\">i</span>",
+        ),
+    )
+    for target in (
+        "policy-ai-controls",
+        "policy-visual-search-enabled",
+        "cis-baseline-selection",
+        "validation",
+        "import-firefox-policies",
+        "export-firefox-policies",
+    ):
+        assert f'{{% set context_help_icon_target = "{target}" %}}' in template_sources
+    assert_source_contains_all(
+        css_source(),
+        (
+            ".inline-help-label {",
+            ".context-help-icon-link {",
+            "inline-size: 1.35rem;",
+            "border-radius: 999px;",
+            ".context-help-icon-link:hover",
+            ".context-help-icon-link:focus-visible",
+            'html[data-theme="dark"] .context-help-icon-link',
         ),
     )
 

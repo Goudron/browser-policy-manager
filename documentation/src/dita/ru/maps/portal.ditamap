@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="map-portal" xml:lang="ru">
+  <title>Документация по продукту BPM</title>
+  <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
+  <mapref href="user-guide.ditamap" format="ditamap"/>
+  <mapref href="firefox-policy-guide.ditamap" format="ditamap"/>
+  <mapref href="cis-settings-guide.ditamap" format="ditamap"/>
+  <mapref href="api-integration-guide.ditamap" format="ditamap"/>
+  <mapref href="administrator-guide.ditamap" format="ditamap"/>
+</map>

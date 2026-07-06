@@ -1,0 +1,11 @@
+{
+  "policies": {
+    "AIControls": {
+      "Default": {
+        "Locked": true,
+        "Value": "blocked"
+      }
+    },
+    "VisualSearchEnabled": false
+  }
+}

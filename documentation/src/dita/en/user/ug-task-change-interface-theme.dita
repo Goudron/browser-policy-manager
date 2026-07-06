@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-change-interface-theme" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Change the interface theme</title>
+  <shortdesc>Select system, light, or dark theme without changing profile content.</shortdesc>
+  <taskbody>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <context><p>Theme selection affects only the BPM interface and helps review tables, code blocks, validation states, and warnings comfortably.</p></context>
+    <steps>
+      <step><cmd>Open the theme selector in the page header.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Choose System, Light, or Dark.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Check that editor panels, tables, notes, focus indicators, and validation states remain readable.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Continue editing after confirming that unsaved profile data is still present.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
+    </steps>
+    <result><p>BPM uses the selected visual theme across supported surfaces.</p></result>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

@@ -1,0 +1,501 @@
+/*
+ * BPM 0.9.0 documentation portal theme.
+ *
+ * This stylesheet is first-party, static, self-hosted, and intentionally CSS-only: no remote
+ * assets, inline styles, script hooks, or generated per-build values are required by the shell.
+ */
+
+:root {
+  color-scheme: light dark;
+  --bpm-docs-bg: #f6f8fb;
+  --bpm-docs-surface: #ffffff;
+  --bpm-docs-surface-muted: #eef3f8;
+  --bpm-docs-text: #172033;
+  --bpm-docs-text-muted: #526070;
+  --bpm-docs-border: #bdc9d7;
+  --bpm-docs-accent: #174ea6;
+  --bpm-docs-accent-strong: #0b3478;
+  --bpm-docs-focus: #ffbf47;
+  --bpm-docs-code-bg: #111827;
+  --bpm-docs-code-text: #f8fafc;
+  --bpm-docs-warning-bg: #fff5d6;
+  --bpm-docs-warning-border: #9a6700;
+  --bpm-docs-shadow: 0 1rem 2.5rem rgb(23 32 51 / 12%);
+  --bpm-docs-line: 1.65;
+  --bpm-docs-measure: 78ch;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bpm-docs-bg: #0b1020;
+    --bpm-docs-surface: #111827;
+    --bpm-docs-surface-muted: #1f2937;
+    --bpm-docs-text: #f8fafc;
+    --bpm-docs-text-muted: #cbd5e1;
+    --bpm-docs-border: #475569;
+    --bpm-docs-accent: #8ab4f8;
+    --bpm-docs-accent-strong: #bfdbfe;
+    --bpm-docs-focus: #ffd166;
+    --bpm-docs-code-bg: #020617;
+    --bpm-docs-code-text: #f8fafc;
+    --bpm-docs-warning-bg: #3b2f09;
+    --bpm-docs-warning-border: #facc15;
+    --bpm-docs-shadow: none;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bpm-docs-bg);
+  color: var(--bpm-docs-text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  line-height: var(--bpm-docs-line);
+  text-size-adjust: 100%;
+}
+
+body.bpm-docs-shell {
+  margin: 0;
+  min-width: 0;
+}
+
+a {
+  color: var(--bpm-docs-accent);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--bpm-docs-accent-strong);
+}
+
+:focus-visible {
+  outline: 0.2rem solid var(--bpm-docs-focus);
+  outline-offset: 0.18rem;
+}
+
+.bpm-docs-skip-link {
+  background: var(--bpm-docs-focus);
+  color: #111827;
+  font-weight: 700;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  position: fixed;
+  transform: translateY(-200%);
+  z-index: 100;
+}
+
+.bpm-docs-skip-link:focus,
+.bpm-docs-skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.bpm-docs-header,
+.bpm-docs-breadcrumbs,
+.bpm-docs-content-grid,
+.bpm-docs-footer {
+  margin-inline: auto;
+  max-width: 76rem;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+}
+
+.bpm-docs-header {
+  align-items: end;
+  background: var(--bpm-docs-surface);
+  border-block-end: 1px solid var(--bpm-docs-border);
+  box-shadow: var(--bpm-docs-shadow);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(14rem, 1fr) auto;
+  padding-block: 1.25rem;
+}
+
+.bpm-docs-brand {
+  min-width: 0;
+}
+
+.bpm-docs-brand-kicker,
+.bpm-docs-version,
+.bpm-docs-footer {
+  color: var(--bpm-docs-text-muted);
+  font-size: 0.92rem;
+}
+
+.bpm-docs-brand-kicker,
+.bpm-docs-brand-title,
+.bpm-docs-version {
+  margin: 0;
+}
+
+.bpm-docs-brand-title {
+  font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+  font-weight: 760;
+  line-height: 1.2;
+}
+
+.bpm-docs-header-nav {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.8rem;
+  justify-content: end;
+}
+
+.bpm-docs-header-nav ul,
+.bpm-docs-breadcrumbs ol,
+.bpm-docs-guide-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bpm-docs-header-nav ul,
+.bpm-docs-breadcrumbs ol {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.bpm-docs-header-nav a,
+.bpm-docs-guide-list a {
+  border: 1px solid var(--bpm-docs-border);
+  border-radius: 999px;
+  display: inline-block;
+  min-block-size: 2rem;
+  padding: 0.32rem 0.72rem;
+  text-decoration: none;
+}
+
+.bpm-docs-header-nav a[aria-current="true"],
+.bpm-docs-guide-list a[aria-current="page"] {
+  background: var(--bpm-docs-accent);
+  border-color: var(--bpm-docs-accent);
+  color: #ffffff;
+}
+
+.bpm-docs-breadcrumbs {
+  padding-block: 1rem 0;
+}
+
+.bpm-docs-breadcrumbs li + li::before {
+  color: var(--bpm-docs-text-muted);
+  content: "/";
+  margin-inline: 0.35rem 0.55rem;
+}
+
+.bpm-docs-content-grid {
+  align-items: start;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr);
+  padding-block: 1.25rem 2rem;
+}
+
+.bpm-docs-sidebar,
+.bpm-docs-main {
+  background: var(--bpm-docs-surface);
+  border: 1px solid var(--bpm-docs-border);
+  border-radius: 1rem;
+}
+
+.bpm-docs-sidebar {
+  padding: 1rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.bpm-docs-sidebar h2 {
+  font-size: 1rem;
+  margin-block: 0 0.8rem;
+}
+
+.bpm-docs-guide-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bpm-docs-guide-list a {
+  border-radius: 0.7rem;
+  inline-size: 100%;
+}
+
+.bpm-docs-main {
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.bpm-docs-main > :first-child {
+  margin-block-start: 0;
+}
+
+.bpm-docs-search {
+  background: var(--bpm-docs-surface-muted);
+  border: 1px solid var(--bpm-docs-border);
+  border-radius: 0.9rem;
+  margin-block-end: 1.5rem;
+  padding: 1rem;
+}
+
+.bpm-docs-search h2,
+.bpm-docs-search h3,
+.bpm-docs-search h4,
+.bpm-docs-search p {
+  margin-block-start: 0;
+}
+
+.bpm-docs-search-form label,
+.bpm-docs-search-filter-grid legend {
+  display: block;
+  font-weight: 700;
+  margin-block-end: 0.35rem;
+}
+
+.bpm-docs-search-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bpm-docs-search-input {
+  background: var(--bpm-docs-surface);
+  border: 1px solid var(--bpm-docs-border);
+  border-radius: 0.55rem;
+  color: var(--bpm-docs-text);
+  flex: 1 1 16rem;
+  font: inherit;
+  min-block-size: 2.55rem;
+  min-inline-size: 0;
+  padding: 0.45rem 0.65rem;
+}
+
+.bpm-docs-search button {
+  background: var(--bpm-docs-accent);
+  border: 1px solid var(--bpm-docs-accent);
+  border-radius: 0.55rem;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  min-block-size: 2.55rem;
+  padding: 0.45rem 0.75rem;
+}
+
+.bpm-docs-search-clear {
+  background: var(--bpm-docs-surface);
+  color: var(--bpm-docs-accent);
+}
+
+.bpm-docs-search-help,
+.bpm-docs-search-status,
+.bpm-docs-search-result-meta {
+  color: var(--bpm-docs-text-muted);
+  font-size: 0.92rem;
+}
+
+.bpm-docs-search-filters {
+  margin-block: 0.8rem;
+}
+
+.bpm-docs-search-filter-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  margin-block-start: 0.75rem;
+}
+
+.bpm-docs-search-filter-grid fieldset {
+  border: 1px solid var(--bpm-docs-border);
+  border-radius: 0.7rem;
+  margin: 0;
+  padding: 0.65rem;
+}
+
+.bpm-docs-search-filter-grid label {
+  display: block;
+  margin-block: 0.28rem;
+}
+
+.bpm-docs-search-result-list {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bpm-docs-search-result-list li {
+  background: var(--bpm-docs-surface);
+  border: 1px solid var(--bpm-docs-border);
+  border-radius: 0.75rem;
+  padding: 0.8rem;
+}
+
+.bpm-docs-search-result-list h4 {
+  margin-block-end: 0.25rem;
+}
+
+.bpm-docs-search-snippet {
+  margin-block-end: 0;
+}
+
+.bpm-docs-search mark {
+  background: var(--bpm-docs-focus);
+  border-radius: 0.18rem;
+  color: #111827;
+  padding-inline: 0.08rem;
+}
+
+.bpm-docs-main h1,
+.bpm-docs-main h2,
+.bpm-docs-main h3,
+.bpm-docs-main h4 {
+  line-height: 1.25;
+}
+
+.bpm-docs-main p,
+.bpm-docs-main li,
+.bpm-docs-main dd {
+  max-inline-size: var(--bpm-docs-measure);
+}
+
+.bpm-docs-main pre,
+.bpm-docs-main table {
+  max-inline-size: 100%;
+  overflow: auto;
+}
+
+.bpm-docs-main pre {
+  background: var(--bpm-docs-code-bg);
+  border-radius: 0.8rem;
+  color: var(--bpm-docs-code-text);
+  padding: 1rem;
+  white-space: pre;
+}
+
+.bpm-docs-main code,
+.bpm-docs-main kbd,
+.bpm-docs-main samp {
+  font-family: "Cascadia Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+.bpm-docs-main :not(pre) > code {
+  background: var(--bpm-docs-surface-muted);
+  border-radius: 0.35rem;
+  padding: 0.08rem 0.28rem;
+}
+
+.bpm-docs-main table {
+  border-collapse: collapse;
+  display: block;
+}
+
+.bpm-docs-main caption {
+  font-weight: 700;
+  margin-block-end: 0.5rem;
+  text-align: start;
+}
+
+.bpm-docs-main th,
+.bpm-docs-main td {
+  border: 1px solid var(--bpm-docs-border);
+  padding: 0.55rem 0.7rem;
+  vertical-align: top;
+}
+
+.bpm-docs-main th {
+  background: var(--bpm-docs-surface-muted);
+  font-weight: 700;
+}
+
+.bpm-docs-main .note,
+.bpm-docs-main .note_note,
+.bpm-docs-main .note_warning,
+.bpm-docs-main .warning {
+  background: var(--bpm-docs-warning-bg);
+  border-inline-start: 0.35rem solid var(--bpm-docs-warning-border);
+  border-radius: 0.6rem;
+  padding: 0.85rem 1rem;
+}
+
+.bpm-docs-footer {
+  border-block-start: 1px solid var(--bpm-docs-border);
+  padding-block: 1rem 2rem;
+}
+
+@media (max-width: 48rem) {
+  .bpm-docs-header {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .bpm-docs-header-nav {
+    justify-content: start;
+  }
+
+  .bpm-docs-content-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bpm-docs-sidebar {
+    position: static;
+  }
+
+  .bpm-docs-search-row {
+    display: grid;
+  }
+}
+
+@media (max-width: 320px) {
+  .bpm-docs-header,
+  .bpm-docs-breadcrumbs,
+  .bpm-docs-content-grid,
+  .bpm-docs-footer {
+    padding-inline: 0.75rem;
+  }
+
+  .bpm-docs-header-nav a,
+  .bpm-docs-guide-list a,
+  .bpm-docs-search button {
+    inline-size: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .bpm-docs-header-nav a,
+  .bpm-docs-guide-list a,
+  .bpm-docs-search,
+  .bpm-docs-search-input,
+  .bpm-docs-search button,
+  .bpm-docs-search-filter-grid fieldset,
+  .bpm-docs-search-result-list li,
+  .bpm-docs-sidebar,
+  .bpm-docs-main {
+    border-color: CanvasText;
+  }
+
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}

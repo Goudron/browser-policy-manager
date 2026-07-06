@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-release-esr-differences" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Différences entre les stratégies Firefox Release et ESR</title>
+  <shortdesc>Utilisez les channel badges et le canal de schéma actif pour éviter de configurer des stratégies absentes de la famille Firefox choisie.</shortdesc>
+  <conbody>
+    <section id="a-current-channels"><title>Canaux actuels</title><p>BPM 0.9.0 documente Firefox Release 152 et Firefox ESR 140.12. Les policy references générées portent des channel metadata afin que la navigation, les search indexes et les futurs filters puissent afficher correctement le canal actif.</p></section>
+    <section id="a-support-badges"><title>Support badges</title><p>Un support badge dans chaque policy reference générée indique si la stratégie est prise en charge dans les deux canaux ou seulement dans Release. Le badge est généré depuis le Firefox policy inventory maintenu, pas depuis la prose traduite.</p></section>
+    <section id="a-release-only"><title>Stratégies Release-only</title><p>Huit stratégies actuelles sont Release-only : <codeph>AIControls</codeph>, <codeph>BrowserDataBackup</codeph>, <codeph>DisableRemoteImprovements</codeph>, <codeph>GenerativeAI</codeph>, <codeph>IPProtectionAvailable</codeph>, <codeph>LocalNetworkAccess</codeph>, <codeph>VisualSearchEnabled</codeph> et <codeph>XSLTEnabled</codeph>. Lorsque le schéma actif est ESR 140.12, BPM doit les traiter comme indisponibles.</p></section>
+    <section id="a-changed-definitions"><title>Définitions modifiées</title><p>L’inventaire actuel ne contient aucune stratégie commune dont la définition de schéma diffère entre Release 152 et ESR 140.12. Les futures mises à jour de schéma devront modifier cette phrase via le generated channel-differences artifact.</p></section>
+    <section id="a-user-action"><title>Action utilisateur</title><p>Sélectionnez le Firefox schema channel avant de choisir une stratégie, vérifiez le channel badge, puis revalidez avant export. N’utilisez pas un topic Release-only comme preuve de prise en charge ESR.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</concept>

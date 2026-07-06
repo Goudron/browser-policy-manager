@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "dita_version": "1.3",
+  "attributes": {
+    "audience": [
+      "user",
+      "administrator",
+      "devops",
+      "integrator",
+      "security-reviewer",
+      "support"
+    ],
+    "platform": [
+      "web",
+      "linux",
+      "windows",
+      "macos"
+    ],
+    "product": [
+      "bpm-0-9-0"
+    ],
+    "deliveryTarget": [
+      "locale-en",
+      "locale-ru",
+      "locale-de",
+      "locale-zh-CN",
+      "locale-fr",
+      "locale-es-ES"
+    ],
+    "props": [
+      "firefox-release",
+      "firefox-esr",
+      "cis-level-1",
+      "cis-level-2"
+    ]
+  },
+  "otherprops_groups": {
+    "policy": {
+      "source": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+      "collection": "policies",
+      "identity_field": "policy_id"
+    },
+    "cis": {
+      "source": "docs/architecture/cis-documentation-inventory-0.9.0.json",
+      "collection": "recommendations",
+      "identity_field": "recommendation_id"
+    },
+    "api-operation": {
+      "source": "docs/architecture/api-documentation-inventory-0.9.0.md",
+      "table_identity_pattern": "API-[A-Z]+-[0-9]{3}"
+    }
+  }
+}

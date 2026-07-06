@@ -51,11 +51,17 @@
                         <div class="dock-actions-grid">
                             <button type="button" id="wizard-export-save-action" class="button-base ghost-button" data-i18n="profiles.save">{{ tr("profiles.save") }}</button>
                             <button type="button" id="wizard-export-validate-action" class="button-base ghost-button" data-i18n="profiles.validate">{{ tr("profiles.validate") }}</button>
+                            {% set context_help_icon_target = "validation" %}
+                            {% set context_help_icon_label_key = "profiles.help_validation" %}
+                            {% include "profiles/_context_help_icon.html" %}
                             <a id="wizard-export-firefox-policies" href="#"
                                 class="button-base ghost-button soft-input inline-flex items-center justify-center rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                                 data-i18n="profiles.download_firefox_policies_json">
                                 {{ tr("profiles.download_firefox_policies_json") }}
                             </a>
+                            {% set context_help_icon_target = "export-firefox-policies" %}
+                            {% set context_help_icon_label_key = "profiles.help_export_firefox_policies" %}
+                            {% include "profiles/_context_help_icon.html" %}
                         </div>
                         <div class="wizard-export-download-hint" id="wizard-export-download-hint" data-i18n="profiles.wizard_export_download_hint_unsaved_new">
                             {{ tr("profiles.wizard_export_download_hint_unsaved_new") }}

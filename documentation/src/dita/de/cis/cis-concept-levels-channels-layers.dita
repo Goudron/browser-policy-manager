@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-levels-channels-layers" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Zwischen CIS-Levels, Kanälen und generated layers wählen</title>
+  <shortdesc>Die CIS-Auswahl in BPM hängt vom gewünschten Härtungsgrad und vom Firefox-Schemakanal für Validation und Export ab.</shortdesc>
+  <conbody>
+    <section id="a-level-1"><title>Level 1</title><p>Level 1 ist der Ausgangspunkt für breite Enterprise-Nutzung. In BPM wird er durch generated Level 1 layers für ESR 140.12 und Release 152 repräsentiert; jeder Layer deckt 49 mapped recommendations ab. Nutzen Sie ihn, wenn das Profil die security posture verbessern soll, ohne normale Browsing- und Support-Workflows stark einzuschränken.</p></section>
+    <section id="a-level-2"><title>Level 2</title><p>Level 2 ist strenger und ergänzt Controls, die usability, operations oder troubleshooting beeinflussen können. BPM hat Level 2 layers für ESR 140.12 und Release 152 erzeugt; jeder deckt 53 mapped recommendations ab. Wählen Sie ihn nur, wenn der Deployment Owner stärkere Einschränkungen akzeptiert und einen Review-Prozess für Exceptions besitzt.</p></section>
+    <section id="a-supported-channels"><title>Unterstützte Firefox-Kanäle</title><p>BPM validiert CIS layers derzeit gegen die Schemas Firefox ESR 140.12 und Firefox Release 152. Ein Recommendation Topic kann auf eine Firefox Policy oder Managed Preference verweisen, die in beiden Kanälen gültig ist; trotzdem muss der gewählte schema channel bis zum Export konsistent bleiben.</p></section>
+    <section id="a-generated-layers"><title>Generated layers</title><p>Die verfügbaren generated layers sind cis-l1.esr-140.12, cis-l1.release-152, cis-l2.esr-140.12 und cis-l2.release-152. Jeder Layer steuert BPM-eigene Policy-Werte oder locked managed preferences bei; danach protokolliert die Profile-Merge-Logik, ob ein Wert hinzugefügt, bereits erfüllt, ersetzt, im Base strenger oder für manual review behalten wurde.</p></section>
+    <section id="a-manual-review"><title>Manual review</title><p>Neun explizite Pfade erfordern manual review, weil lokale Governance die richtige Entscheidung ändern kann. Update controls, proxy mode und lock state sowie ausgewählte sanitize-on-shutdown values sind Beispiele, bei denen BPM den Punkt sichtbar macht, aber keine universelle Compliance-Entscheidung trifft.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-concept-orientation"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-concept-cis-layer-merge"/>
+    <link keyref="topic.ug-task-resolve-cis-manual-review"/>
+  </related-links>
+</concept>

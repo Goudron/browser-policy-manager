@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "commit_policy": {
+    "reviewed_sources": "commit",
+    "localized_screenshots": "commit-after-review",
+    "generated_dita": "ignore-and-regenerate",
+    "local_build_output": "ignore-and-regenerate",
+    "release_archives": "ignore-and-build-in-ci"
+  },
+  "paths": {
+    "generated_dita": "documentation/src/generated",
+    "local_site": "documentation/build/site",
+    "release_archive": "documentation/dist/bpm-documentation-0.9.0.tar.gz",
+    "release_checksum": "documentation/dist/bpm-documentation-0.9.0.tar.gz.sha256"
+  },
+  "archive": {
+    "root": "bpm-documentation-0.9.0",
+    "format": "tar.gz",
+    "mtime": 0,
+    "file_mode": "0644",
+    "directory_mode": "0755",
+    "owner": "0:0",
+    "ordering": "lowercase-posix-path"
+  },
+  "current_runtime_contract": {
+    "runtime_ready": false,
+    "required_before_shipping": [
+      "release extraction policy from the verified documentation package into the runtime site",
+      "localized screenshot capture and review",
+      "final manual QA and defect disposition for the installed documentation flow"
+    ],
+    "runtime_source": "make docs-install-dev may promote a local build for maintainer dev review; release still requires verified package extraction"
+  }
+}

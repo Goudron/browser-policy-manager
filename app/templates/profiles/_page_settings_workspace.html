@@ -20,6 +20,8 @@
                             data-i18n="profiles.settings_route_body">
                             {{ tr("profiles.settings_route_body", "Search mapped controls and apply policy changes without opening the JSON editor.") }}
                         </p>
+                        {% set context_help_surface = "settings" %}
+                        {% include "profiles/_context_help_link.html" %}
                     </div>
                 </div>
 

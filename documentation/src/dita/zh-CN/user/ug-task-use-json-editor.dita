@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-json-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>使用 JSON Editor</title>
+  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Open a saved profile. JSON Editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. JSON Editor is the raw document surface. Use it when Guided or All Settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Open the saved profile from the Library or another editor.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Switch to JSON Editor.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Confirm the editor shows a top-level policies object and the download action is available.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Use JSON Editor only when exact raw document control is needed.</cmd><info><note type="warning">警告：保存前请检查 JSON 语法、top-level policies 和策略验证错误。</note></info></step>
+    </steps>
+    <result><p>JSON Editor 处于预期状态，并且该操作可在审查时解释。 The current profile is visible as editable Firefox policies.json content.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请验证文档、返回 All Settings 或打开相关主题。 Recovery: if the route cannot open, save the profile first or return to All Settings for visual editing.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-when-to-use-json-editor"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

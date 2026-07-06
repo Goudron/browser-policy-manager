@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE val PUBLIC "-//OASIS//DTD DITA DITAVAL//EN" "ditaval.dtd">
+<val>
+  <prop action="exclude" att="deliveryTarget" val="locale-en"/>
+  <prop action="exclude" att="deliveryTarget" val="locale-ru"/>
+  <prop action="exclude" att="deliveryTarget" val="locale-de"/>
+  <prop action="exclude" att="deliveryTarget" val="locale-fr"/>
+  <prop action="exclude" att="deliveryTarget" val="locale-es-ES"/>
+</val>

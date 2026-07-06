@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-create-first-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Create a first profile from the Library</title>
+  <shortdesc>Start a new Guided profile draft from the Library when no saved profile is suitable to reuse.</shortdesc>
+  <taskbody>
+    <prereq><p>You are in the Profile Library and want a new profile rather than opening or duplicating an existing one.</p></prereq>
+    <context><p>The create action opens a Guided Editor draft. The draft becomes a saved profile only after you save it.</p></context>
+    <steps>
+      <step><cmd>Choose the Library action to create a new profile.</cmd><info><p>Expected result: BPM opens the Guided Editor for a new draft.</p></info></step>
+      <step><cmd>Choose the profile purpose, schema channel, and starter options shown by the editor.</cmd><info><p>The schema channel affects available controls and validation behavior.</p></info></step>
+      <step><cmd>Save the draft when it has the name and initial settings you want.</cmd><info><note type="warning">Closing an unsaved draft can lose draft-only changes.</note></info></step>
+    </steps>
+    <result><p>The new profile is saved and can be found again from the Library.</p></result>
+    <postreq><p>Recovery: if you meant to reuse an existing profile, cancel the draft and duplicate the saved profile instead.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-duplicate-profile"/>
+  </related-links>
+</task>

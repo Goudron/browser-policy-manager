@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-compare-profiles" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Open Compare from the Library</title>
+  <shortdesc>Open the dedicated Compare surface in a new tab before selecting two saved profiles.</shortdesc>
+  <taskbody>
+    <prereq><p>The Profile Library is open and at least two saved profiles exist.</p></prereq>
+    <context><p>Compare is a dedicated saved-profile surface. It keeps the current language and theme and does not replace the Library tab.</p></context>
+    <steps>
+      <step><cmd>Choose the Compare profiles action in the Library.</cmd><info><p>Expected result: BPM opens the Compare interface in a new browser tab.</p></info></step>
+      <step><cmd>Use the left and right search fields to choose Profile A and Profile B.</cmd><info><note type="warning">Compare reads saved profile state. Save editor changes before relying on the comparison.</note></info></step>
+    </steps>
+    <result><p>The Compare surface is ready for independent Profile A and Profile B selection.</p></result>
+    <postreq><p>Recovery: if the Compare tab opens without expected profiles, return to the Library, refresh it, and confirm both profiles are saved and visible.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-comparison-workflow"/>
+    <link keyref="topic.ug-task-select-comparison-profiles"/>
+  </related-links>
+</task>

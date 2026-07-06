@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-documentation-search-boundary" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Comprender los límites de la búsqueda de documentación</title>
+  <shortdesc>Use la búsqueda de documentación como un índice local y determinista de temas de ayuda publicados, no como un asistente de IA.</shortdesc>
+  <conbody>
+    <section id="a-local-offline"><title>Local y sin conexión</title><p>El portal de documentación busca en el índice estático empaquetado con el mismo artefacto de ayuda. No llama a un servicio de búsqueda externo, no requiere acceso a internet, no envía consultas para telemetría y no aprende del comportamiento del usuario.</p></section>
+    <section id="a-deterministic-results"><title>Resultados deterministas</title><p>La búsqueda compara títulos DITA localizados, descripciones breves, encabezados, cuerpo, aliases revisados e identificadores técnicos estables, como policy IDs, CIS recommendation IDs y API operation IDs. La ordenación usa pesos fijos, facets, filters y typo tolerance limitada, por lo que el mismo artefacto y la misma consulta producen el mismo orden de resultados.</p></section>
+    <section id="a-not-ai"><title>Sin respuestas de IA</title><p>La búsqueda no proporciona conversational answers, semantic embeddings, vector retrieval, RAG, generative summaries ni automatic recommendations. Si no aparece ningún resultado, use la navegación de las guías, identificadores exactos o filters en lugar de esperar que el portal infiera una respuesta.</p></section>
+    <section id="a-product-ai-policies"><title>Las políticas de IA del producto siguen documentadas</title><p>Algunas políticas de Firefox Release controlan el comportamiento de IA y smart-feature del navegador. Esas políticas son ajustes normales del producto BPM y siguen documentadas; describirlas no añade funcionalidad de IA al portal de documentación.</p></section>
+  </conbody>
+</concept>

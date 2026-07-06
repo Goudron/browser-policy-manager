@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-navigate-settings-categories" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Naviguer dans les catégories de paramètres</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Navigate All Settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Open All Settings in Configured or Catalog mode.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Open the category navigation or catalog summary.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Choose the domain or cluster that matches the configuration goal.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Naviguer dans les catégories de paramètres. Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if a category does not contain the expected control, search by policy ID or inspect raw/unmapped items.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-task-use-advanced-schema-controls"/>
+  </related-links>
+</task>

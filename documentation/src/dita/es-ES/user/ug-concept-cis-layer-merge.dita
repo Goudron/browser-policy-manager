@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-cis-layer-merge" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Preajustes iniciales y capas CIS</title>
+  <shortdesc>Los preajustes iniciales y las capas CIS ayudan a crear un perfil inicial antes de la revisión manual y la edición.</shortdesc>
+  <conbody>
+    <p>Un preajuste inicial da al perfil un propósito inicial, como uso corporativo, de aula u orientado a seguridad. Una capa CIS añade opciones de base de seguridad mapeadas por BPM donde BPM las admite.</p>
+    <p>Las fuentes por capas siguen visibles en Todos los ajustes para distinguir valores baseline, CIS, importados, manuales y sin procesar. Algunos elementos relacionados con CIS requieren revisión manual en lugar de aceptación automática.</p>
+    <p>La documentación de BPM describe mapeos y comportamiento de flujos de trabajo de BPM. No afirma certificación ni aprobación de CIS.</p>
+  </conbody>
+</concept>

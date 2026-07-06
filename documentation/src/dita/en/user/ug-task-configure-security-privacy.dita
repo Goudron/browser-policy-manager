@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-security-privacy" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Configure security and privacy</title>
+  <shortdesc>Use Step 3 for privacy posture, permissions, cookies, cleanup, DNS, and hardening controls.</shortdesc>
+  <taskbody>
+    <prereq><p>A Guided profile draft is open on the intended schema channel.</p></prereq>
+    <context><p>Security &amp; privacy settings can change both user experience and risk posture, so review warnings before saving.</p></context>
+    <steps>
+      <step><cmd>Open Step 3, Security &amp; privacy.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Configure privacy controls and permission defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Set cookies, cleanup, DNS, and security hardening options needed by the profile.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Check validation messages and explain any exception in the review.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The profile has a reviewed security and privacy posture.</p></result>
+    <postreq><p>Recovery: if a site workflow breaks, revisit permission or cookie settings and compare against the profile goal.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-configure-users-addons-sites"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

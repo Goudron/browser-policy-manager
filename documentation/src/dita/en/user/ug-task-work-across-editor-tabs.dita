@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-work-across-editor-tabs" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Work across editor tabs</title>
+  <shortdesc>Use separate browser tabs for saved-profile modes without confusing drafts or losing unsaved changes.</shortdesc>
+  <taskbody>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <context><p>BPM opens saved profile modes and comparison surfaces in separate tabs so users can inspect Guided, All Settings, JSON, and Compare side by side.</p></context>
+    <steps>
+      <step><cmd>Open a saved profile from the Library in the required editor mode.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Keep the profile name, schema channel, and lifecycle badge visible in each tab.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Save changes in one tab before relying on another tab for export, comparison, or validation.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Close or refresh tabs only after checking the unsaved-change warning and visible save status.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
+    </steps>
+    <result><p>You can review multiple surfaces while keeping the authoritative saved state clear.</p></result>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-open-saved-profile"/>
+    <link keyref="topic.ug-troubleshoot-unsaved-changes"/>
+  </related-links>
+</task>

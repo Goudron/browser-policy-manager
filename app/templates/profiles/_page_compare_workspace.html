@@ -8,6 +8,8 @@
                 <h2 id="compare-page-title" class="section-title text-slate-900" data-i18n="profiles.compare_route_title">
                     {{ tr("profiles.compare_route_title", "Compare profile settings") }}
                 </h2>
+                {% set context_help_surface = "compare" %}
+                {% include "profiles/_context_help_link.html" %}
             </div>
         </div>
     </section>

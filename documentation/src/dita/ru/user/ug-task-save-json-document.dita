@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-save-json-document" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Сохраните JSON-документ</title>
+  <shortdesc>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. Save a valid raw JSON document back to the canonical BPM profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. The JSON document has been validated or the remaining warnings are understood.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All Settings, Compare, or export workflows.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. Validate the JSON document.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. Choose Save only when the top-level policies object and policy values are correct.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. Wait for the saved status before leaving the route.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Сохраните JSON-документ. Reopen the profile or export policies.json when you need handoff evidence.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте синтаксис JSON, top-level policies и ошибки policy validation.</note></info></step>
+    </steps>
+    <result><p>JSON Editor находится в ожидаемом состоянии, а действие можно объяснить при проверке. The BPM profile stores the JSON changes in the canonical profile model.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, валидируйте документ, вернитесь в All Settings или откройте связанный раздел. Recovery: if save fails, fix validation errors or return to a previous saved profile before editing again.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-json-document"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

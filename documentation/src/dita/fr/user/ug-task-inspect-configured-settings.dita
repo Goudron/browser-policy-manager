@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-inspect-configured-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Inspecter les paramètres configurés</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Use Configured mode to understand what the profile currently applies by domain, category, and source.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Open a saved profile in All Settings.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Configured mode focuses on values already present in the profile, not on every possible policy. Domain summaries help you explain the active configuration.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Switch to Configured mode.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Review the configured summary cards by domain or category.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Open a category to inspect the settings applied there.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Use source filters if you need to separate baseline, CIS, manual, imported, or raw values.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. You can describe the active policy and managed preference values applied by the profile.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if a value is missing, switch to Catalog mode or clear source filters before deciding it is absent.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-filter-settings-by-source"/>
+    <link keyref="topic.ug-task-inspect-setting-details"/>
+  </related-links>
+</task>

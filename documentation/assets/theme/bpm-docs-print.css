@@ -1,0 +1,53 @@
+@media print {
+  :root {
+    --bpm-docs-bg: #ffffff;
+    --bpm-docs-surface: #ffffff;
+    --bpm-docs-text: #000000;
+    --bpm-docs-text-muted: #333333;
+    --bpm-docs-border: #777777;
+    --bpm-docs-accent: #000000;
+    --bpm-docs-shadow: none;
+  }
+
+  body.bpm-docs-shell {
+    background: #ffffff;
+    color: #000000;
+    font-size: 11pt;
+  }
+
+  .bpm-docs-skip-link,
+  .bpm-docs-header-nav,
+  .bpm-docs-search,
+  .bpm-docs-sidebar {
+    display: none !important;
+  }
+
+  .bpm-docs-header,
+  .bpm-docs-breadcrumbs,
+  .bpm-docs-content-grid,
+  .bpm-docs-footer {
+    display: block;
+    max-width: none;
+    padding: 0;
+  }
+
+  .bpm-docs-header,
+  .bpm-docs-footer {
+    border-color: #777777;
+  }
+
+  .bpm-docs-main {
+    border: 0;
+    padding: 0;
+  }
+
+  a {
+    color: #000000;
+    text-decoration: underline;
+  }
+
+  pre,
+  table {
+    break-inside: avoid;
+  }
+}

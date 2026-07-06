@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-integration-audience" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>集成受众和 API 边界</title>
+  <shortdesc>API Integration Guide 面向使用 BPM 当前 programmatic API 的外部工具，不假设 unsupported product guarantees。</shortdesc>
+  <conbody>
+    <section id="a-audience"><title>受众</title><p>当您构建或审查与 BPM 交换 profile 和 Firefox policy data 的 configuration、compliance、orchestration、inventory 或 control product 时，请使用本指南。主要读者是 API integrators、security reviewers、release engineers 和 maintainers，他们需要 profile synchronization、validation gates、policy import/export、compliance metadata、inventory 和 health checks 的可重复 contract。</p></section>
+    <section id="a-evidence-boundary"><title>Evidence boundary</title><p>本指南基于 generated OpenAPI contract、maintained API inventory、route/model source 和 focused API tests。它记录 BPM 0.9.0 已经暴露的 API。它不授权新的 endpoints、security models、data schemas、retry semantics 或 compatibility promises。</p></section>
+    <section id="a-supported-consumers"><title>支持的 consumer roles</title><p>支持的 consumers 是 generic roles：configuration manager、compliance scanner、policy review gate、profile inventory collector、deployment orchestrator 和 operational monitor。它们可以调用 API inventory 中列出的 service、profile、Firefox import/export、validation 和 health operations。</p></section>
+    <section id="a-unsupported-claims"><title>不支持的声明</title><p>不要描述 product-specific connector、marketplace integration、certified integration、partnership、managed agent 或 vendor workflow，除非该 connector 实际随产品发布。HTML routes、static assets、generated schema UIs 和 underscore-prefixed Python helpers 不是 stable machine-integration APIs。</p></section>
+    <section id="a-data-ownership"><title>数据所有权</title><p>BPM 拥有 normalized profile model、validation state、revision、lifecycle state、opaque compliance object 和 canonical Firefox export rendering。集成产品拥有自己的 scheduling、authorization、audit trail、retry policy、exception record、deployment decision，以及 BPM 外部的任何 runtime verification。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</concept>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-guided-editor" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Parcourir les six étapes de Guided Editor</title>
+  <shortdesc>Parcourez les six étapes de Guided Editor : profil et base, accès et valeurs par défaut, sécurité et confidentialité, utilisateurs/modules/sites, AI &amp; smart features, puis relecture et export.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
+    <context><p>Guided Editor transforme la configuration du profil en six étapes orientées tâche et garde visible la validation du schéma choisi.</p></context>
+    <steps>
+      <step><cmd>Commencez par l’étape 1 « Profil et base » : confirmez le nom, le canal de schéma, le scénario, le préréglage de départ et la couche CIS.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Passez à l’étape 2 « Accès au navigateur et valeurs par défaut » pour le réseau, le comportement du navigateur, l’accueil, la recherche et la navigation.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Utilisez l’étape 3 pour la confidentialité, les permissions, les cookies, le nettoyage, le DNS et le durcissement de sécurité.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Utilisez l’étape 4 pour les comptes, extensions, marque-pages, langue, traduction, modules et traitement des sites.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Utilisez l’étape 5 uniquement pour les stratégies Firefox existantes d’IA et de fonctions intelligentes prises en charge par le schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Terminez par l’étape 6 « Relire et exporter » : validez, enregistrez et téléchargez le profil relu.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+    </steps>
+    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-guided-settings"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

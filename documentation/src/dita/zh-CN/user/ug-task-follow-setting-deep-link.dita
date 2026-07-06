@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-follow-setting-deep-link" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>打开设置深层链接</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Confirm the destination editor and focused setting or state.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The linked setting opens in the correct surface with focus preserved.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

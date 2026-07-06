@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-orientation" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Понять рекомендации CIS в BPM</title>
+  <shortdesc>BPM описывает собственные маппинги усиления Firefox для CIS Mozilla Firefox ESR GPO Benchmark, не копируя ограниченный текст benchmark и не заявляя сертификацию.</shortdesc>
+  <conbody>
+    <section id="a-benchmark"><title>Benchmark, используемый BPM</title><p>BPM 0.9.0 связывает маппинги с CIS Mozilla Firefox ESR GPO Benchmark версии 1.0.0, выпущенным 2024-07-19 и протестированным CIS на Mozilla Firefox 115.10 ESR в Windows 11 Release 23H2. BPM дополнительно проверяет форму экспортируемой политики по встроенным схемам Firefox ESR 140.12 и Firefox Release 152, поэтому выбранный канал BPM остаётся важным.</p></section>
+    <section id="a-what-bpm-publishes"><title>Что публикует BPM</title><p>Руководство публикует авторские описания BPM: идентификаторы рекомендаций, уровни, generated layers, цели policy или managed preference, поведение merge, состояния manual review и точки передачи на проверку. Оно может показывать, что BPM сопоставляет 55 записей рекомендаций, планирует 53 topic по рекомендациям и оставляет две нерешённые записи только как provenance-only.</p></section>
+    <section id="a-what-bpm-does-not-prove"><title>Что BPM не доказывает</title><p>BPM является независимой реализацией и не авторизован, не спонсируется, не одобрен, не сертифицирован и не утверждён CIS. Руководство не заменяет официальный CIS benchmark, а экспорт BPM не доказывает CIS compliance или поведение Firefox runtime в любой среде.</p></section>
+    <section id="a-when-appropriate"><title>Когда использовать CIS guidance</title><p>Используйте CIS guidance, когда профилю нужна документированная security baseline для enterprise review, подготовки kiosk, защищённых рабочих станций или сравнения starter preset с hardened layer. Не используйте её как единственное разрешение на deployment: перед export проверьте локальные требования к updates, proxy, certificates, extensions, privacy и хранению evidence.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-task-apply-cis-layer"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+  </related-links>
+</concept>

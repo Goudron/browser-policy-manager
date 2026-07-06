@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-filter-all-settings" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Фильтруйте список All Settings</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. Filter by configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown state.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. Open All Settings with a visible settings list.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. State filters narrow a large inventory by the decision the user needs to make. They are different from source filters, which explain where a value came from.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. Open the list filter toolbar.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. Choose the state filter that matches the task: configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. Inspect the filtered count and representative rows.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Фильтруйте список All Settings. Clear the state filter before applying unrelated edits.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The list shows settings with the selected state only.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if a row is missing, clear state filters and search by exact policy or preference identifier.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-large-settings-inventories"/>
+    <link keyref="topic.ug-task-search-all-settings"/>
+  </related-links>
+</task>

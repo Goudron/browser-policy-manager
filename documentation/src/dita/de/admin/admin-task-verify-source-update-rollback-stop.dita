@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-verify-source-update-rollback-stop" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Update verifizieren und Rollback-Stop-Bedingungen anwenden</title>
+  <shortdesc>Starten Sie den aktualisierten BPM process, prüfen Sie probes, UI, API evidence und documentation status und entscheiden Sie dann über accept, stop oder restore from backup.</shortdesc>
+  <taskbody>
+    <prereq><p>Migrations, source smoke und documentation rebuild checks sind abgeschlossen oder ein failure point wurde erfasst.</p></prereq>
+    <context><p>Post-update verification belegt, dass der aktualisierte source run für die aktuelle controlled environment nutzbar ist. Sie beweist keine production readiness, kein reverse proxy behavior, kein HA, kein managed backup und kein Firefox runtime enforcement.</p></context>
+    <steps>
+      <step><cmd>Starten Sie den aktualisierten source process und prüfen Sie probes.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make dev
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Expected responses bleiben <codeph>{"status":"ok"}</codeph> und <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Prüfen Sie product UI, API evidence und documentation status.</cmd><info><p>Öffnen Sie <codeph>http://127.0.0.1:8000/profiles</codeph>, führen Sie die required reusable API examples aus, bestätigen Sie exported <codeph>policies.json</codeph> evidence bei Bedarf und prüfen Sie, dass <codeph>/help/</codeph> keine stale, incompatible oder missing documentation für das installed artifact meldet.</p></info></step>
+      <step><cmd>Akzeptieren Sie das Update nur, wenn jeder required check erfasst ist.</cmd><info><p>Erfassen Sie previous revision, target revision, migration result, source smoke result, documentation validation/build result, health/readiness responses, UI smoke result, API/export evidence und bekannte deferred production controls.</p></info></step>
+      <step><cmd>Wenden Sie rollback oder stop conditions an, ohne automatic recovery zu erfinden.</cmd><info><p>Wenn failure vor migrations auftritt, kehren Sie zur previous source revision zurück und installieren dependencies neu. Wenn failure nach migrations auftritt, stoppen Sie BPM, stellen das verified pre-update database backup wieder her, kehren zur previous source revision zurück, installieren dependencies neu und wiederholen health/UI smoke checks. Wenn backup evidence fehlt, restore unverified ist oder data nach migration geändert wurde, stoppen und eskalieren Sie, statt rollback success zu behaupten.</p><note type="warning">Markieren Sie das Update nicht als complete, wenn probes fail, documentation stale ist, exports unerwartet abweichen, migrations uncertain sind oder rollback evidence incomplete ist.</note></info></step>
+    </steps>
+    <result><p>Das Update ist entweder accepted with complete evidence, stopped at a known blocker oder restored from the pre-update backup with explicit proof.</p></result>
+    <postreq><p>Verwenden Sie die resulting evidence in der operations handoff note und in zukünftiger production/HA/reverse-proxy planning.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-run-source-update-migrations-docs"/>
+    <link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

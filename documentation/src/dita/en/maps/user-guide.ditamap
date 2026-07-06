@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="map-user-guide" xml:lang="en">
+  <title>BPM User Guide</title>
+  <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Orient and plan profile work</navtitle>
+      <data name="intent-id" value="orient-and-plan"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-reference-product-version"/>
+    <topicref keyref="topic.ug-reference-profile-status"/>
+    <topicref keyref="topic.ug-task-change-interface-language"/>
+    <topicref keyref="topic.ug-concept-language-detection-fallback"/>
+    <topicref keyref="topic.ug-task-change-interface-theme"/>
+    <topicref keyref="topic.ug-concept-accessible-product-operation"/>
+    <topicref keyref="topic.ug-concept-documentation-search-boundary"/>
+    <topicref keyref="topic.ug-task-work-across-editor-tabs"/>
+    <topicref keyref="topic.ug-concept-profile-model"/>
+    <topicref keyref="topic.ug-concept-choose-editor-surface"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Create and start a profile</navtitle>
+      <data name="intent-id" value="create-and-start"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-task-choose-firefox-schema"/>
+    <topicref keyref="topic.ug-concept-schema-aware-behavior"/>
+    <topicref keyref="topic.ug-concept-cis-layer-merge"/>
+    <topicref keyref="topic.ug-task-choose-profile-identity-schema"/>
+    <topicref keyref="topic.ug-task-choose-guided-scenario"/>
+    <topicref keyref="topic.ug-task-apply-starter-preset"/>
+    <topicref keyref="topic.ug-task-apply-cis-layer"/>
+    <topicref keyref="topic.ug-task-create-first-profile"/>
+    <topicref keyref="topic.ug-task-import-policies-json"/>
+    <topicref keyref="topic.ug-task-open-saved-profile"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Configure with Guided Editor</navtitle>
+      <data name="intent-id" value="configure-with-guidance"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-task-use-guided-editor"/>
+    <topicref keyref="topic.ug-task-search-guided-settings"/>
+    <topicref keyref="topic.ug-task-configure-browser-access-defaults"/>
+    <topicref keyref="topic.ug-task-configure-home-search-navigation"/>
+    <topicref keyref="topic.ug-task-configure-security-privacy"/>
+    <topicref keyref="topic.ug-task-configure-users-addons-sites"/>
+    <topicref keyref="topic.ug-task-configure-firefox-ai-policies"/>
+    <topicref keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <topicref keyref="topic.ug-task-use-guided-fine-tuning"/>
+    <topicref keyref="topic.ug-task-review-guided-profile"/>
+    <topicref keyref="topic.ug-task-save-export-guided-profile"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Review, validate, and finish profile changes</navtitle>
+      <data name="intent-id" value="review-validate-and-finish"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-task-save-profile"/>
+    <topicref keyref="topic.ug-task-validate-profile"/>
+    <topicref keyref="topic.ug-task-switch-editor-mode"/>
+    <topicref keyref="topic.ug-task-review-profile-context"/>
+    <topicref keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <topicref keyref="topic.ug-task-export-policies-json"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Inspect and edit complete settings</navtitle>
+      <data name="intent-id" value="inspect-and-edit-complete-settings"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-task-use-all-settings"/>
+    <topicref keyref="topic.ug-task-review-attention-items"/>
+    <topicref keyref="topic.ug-task-inspect-configured-settings"/>
+    <topicref keyref="topic.ug-task-filter-settings-by-source"/>
+    <topicref keyref="topic.ug-task-browse-settings-catalog"/>
+    <topicref keyref="topic.ug-task-search-all-settings"/>
+    <topicref keyref="topic.ug-task-filter-all-settings"/>
+    <topicref keyref="topic.ug-task-inspect-setting-details"/>
+    <topicref keyref="topic.ug-task-edit-setting-detail"/>
+    <topicref keyref="topic.ug-task-remove-reset-setting"/>
+    <topicref keyref="topic.ug-task-add-managed-preference"/>
+    <topicref keyref="topic.ug-task-navigate-settings-categories"/>
+    <topicref keyref="topic.ug-task-use-advanced-schema-controls"/>
+    <topicref keyref="topic.ug-task-handle-raw-unknown-settings"/>
+    <topicref keyref="topic.ug-task-follow-setting-deep-link"/>
+    <topicref keyref="topic.ug-task-trace-setting-source"/>
+    <topicref keyref="topic.ug-task-resolve-cis-manual-review"/>
+    <topicref keyref="topic.ug-reference-all-settings-review-states"/>
+    <topicref keyref="topic.ug-reference-large-settings-inventories"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Work with JSON and interchange</navtitle>
+      <data name="intent-id" value="work-with-json-and-interchange"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-task-use-json-editor"/>
+    <topicref keyref="topic.ug-task-edit-raw-policies-json"/>
+    <topicref keyref="topic.ug-task-format-json-document"/>
+    <topicref keyref="topic.ug-task-validate-json-document"/>
+    <topicref keyref="topic.ug-task-save-json-document"/>
+    <topicref keyref="topic.ug-concept-when-to-use-json-editor"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Find, organize, and compare profiles</navtitle>
+      <data name="intent-id" value="find-organize-and-compare-profiles"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-task-review-archived-profile"/>
+    <topicref keyref="topic.ug-task-use-profile-library"/>
+    <topicref keyref="topic.ug-task-find-profile"/>
+    <topicref keyref="topic.ug-task-filter-profile-library"/>
+    <topicref keyref="topic.ug-task-sort-profile-library"/>
+    <topicref keyref="topic.ug-task-refresh-profile-library"/>
+    <topicref keyref="topic.ug-reference-library-profile-row"/>
+    <topicref keyref="topic.ug-task-duplicate-profile"/>
+    <topicref keyref="topic.ug-task-archive-profile"/>
+    <topicref keyref="topic.ug-task-restore-profile"/>
+    <topicref keyref="topic.ug-task-permanently-delete-profile"/>
+    <topicref keyref="topic.ug-reference-archived-profile-behavior"/>
+    <topicref keyref="topic.ug-task-compare-profiles"/>
+    <topicref keyref="topic.ug-concept-comparison-workflow"/>
+    <topicref keyref="topic.ug-task-select-comparison-profiles"/>
+    <topicref keyref="topic.ug-task-interpret-profile-comparison"/>
+    <topicref keyref="topic.ug-reference-comparison-states"/>
+  </topichead>
+  <topichead outputclass="case-oriented-section">
+    <topicmeta>
+      <navtitle>Recover safely</navtitle>
+      <data name="intent-id" value="recover-safely"/>
+    </topicmeta>
+    <topicref keyref="topic.ug-troubleshoot-save-conflict"/>
+    <topicref keyref="topic.ug-troubleshoot-library-operation"/>
+    <topicref keyref="topic.ug-troubleshoot-malformed-json"/>
+    <topicref keyref="topic.ug-troubleshoot-import-failure"/>
+    <topicref keyref="topic.ug-troubleshoot-policy-validation"/>
+    <topicref keyref="topic.ug-troubleshoot-schema-mismatch"/>
+    <topicref keyref="topic.ug-troubleshoot-profile-name"/>
+    <topicref keyref="topic.ug-troubleshoot-missing-profile"/>
+    <topicref keyref="topic.ug-troubleshoot-product-connection"/>
+    <topicref keyref="topic.ug-task-manage-destructive-actions"/>
+    <topicref keyref="topic.ug-troubleshoot-unsaved-changes"/>
+  </topichead>
+</map>

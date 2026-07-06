@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-format-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>格式化 JSON 文档</title>
+  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Format the current JSON document before review, validation, or handoff.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Open JSON Editor with a JSON document in the editor.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Choose the JSON format action.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Review the resulting indentation and object layout.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Confirm no policy value changed during formatting.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：格式化 JSON 文档. Validate the document after formatting if you plan to save.</cmd><info><note type="warning">警告：保存前请检查 JSON 语法、top-level policies 和策略验证错误。</note></info></step>
+    </steps>
+    <result><p>JSON Editor 处于预期状态，并且该操作可在审查时解释。 The JSON document is easier to review and remains semantically unchanged.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请验证文档、返回 All Settings 或打开相关主题。 Recovery: if formatting fails, fix JSON syntax first; trailing commas and missing braces are common causes.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

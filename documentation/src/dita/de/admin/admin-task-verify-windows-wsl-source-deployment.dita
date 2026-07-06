@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+  <title>BPM-Source-Deployment über WSL verifizieren</title>
+  <shortdesc>Prüfen Sie probes aus WSL und Windows, bestätigen Sie die UI route, untersuchen Sie logs und beheben Sie typische WSL networking und filesystem issues.</shortdesc>
+  <taskbody>
+    <prereq><p>BPM läuft aus dem WSL checkout mit den vorgesehenen <codeph>BPM_DATABASE_URL</codeph>, host, port und documentation-site settings.</p></prereq>
+    <context><p>Die Verifikation muss sowohl die Antwort des Linux process als auch den Windows browser access path belegen. Sie zertifiziert keine native Windows installation, kein production hardening, kein reverse proxy behavior, keine backup readiness und kein Firefox runtime enforcement.</p></context>
+    <steps>
+      <step><cmd>Prüfen Sie health und readiness innerhalb von WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Erwartete responses sind <codeph>{"status":"ok"}</codeph> und <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Prüfen Sie dieselben probes aus Windows PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+Invoke-WebRequest http://localhost:8000/health
+Invoke-WebRequest http://localhost:8000/health/ready
+]]></codeblock><p>Wenn localhost nicht funktioniert, wiederholen Sie den Test mit der WSL IP aus <codeph>hostname -I</codeph>. Notieren Sie, welche Adresse erfolgreich war.</p></info></step>
+      <step><cmd>Öffnen Sie die UI route aus dem Windows browser.</cmd><info><p>Verwenden Sie <codeph>http://localhost:8000/profiles</codeph> oder <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. Die Profile Library route sollte das BPM interface oder einen beabsichtigten empty/error state laden, keinen traceback.</p></info></step>
+      <step><cmd>Beheben Sie WSL-specific failures, bevor BPM code geändert wird.</cmd><info><p>Bei connection failures prüfen Sie, ob <codeph>make dev</codeph> noch läuft, kontrollieren <codeph>BPM_HOST</codeph>, führen <codeph>wsl --list --verbose</codeph> aus und aktualisieren die WSL IP nach einem Neustart der distribution. Bei langsamen file watching oder permission errors verschieben Sie den checkout aus <codeph>/mnt/c</codeph> nach <codeph>/home/&lt;linux-user&gt;</codeph>. Führen Sie <codeph>make test-fast</codeph> erst aus, wenn environment path und network route stabil sind.</p><note type="warning">Erfolgreiche health checks über WSL belegen keine production readiness, kein Windows service behavior, keine managed backups und keinen HA support.</note></info></step>
+    </steps>
+    <result><p>Der Administrator hat evidence, dass BPM innerhalb von WSL startet, probes beantwortet, aus Windows erreichbar ist und keine unmittelbaren WSL networking oder filesystem blockers zeigt.</p></result>
+    <postreq><p>Halten Sie PowerShell output, WSL shell commands, Namen der <codeph>BPM_*</codeph> variables, probe responses und foreground logs zusammen, ohne secrets zu kopieren.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+    <link keyref="topic.admin-task-verify-linux-source-deployment"/>
+  </related-links>
+</task>

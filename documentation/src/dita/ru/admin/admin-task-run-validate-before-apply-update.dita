@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-run-validate-before-apply-update" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Проверить и применить обновление профиля с expected_revision</title>
+  <shortdesc>Выполните validation-first обновление, которое защищает состояние BPM текущей ревизией и останавливается на устаревших или невалидных данных.</shortdesc>
+  <taskbody>
+    <prereq><p>Внешний продукт уже прочитал целевой профиль и сохранил его текущий <codeph>revision</codeph>. Подготовьте кандидатный Firefox <codeph>policies.json</codeph> перед любым profile patch.</p></prereq>
+    <context><p>Процедура использует <codeph>API-VAL-001</codeph>, <codeph>API-PROFILE-003</codeph> и <codeph>API-PROFILE-005</codeph>. Она описывает текущий optimistic update path; BPM не предоставляет ETags, precondition headers, idempotency keys или multi-operation transactions.</p></context>
+    <steps>
+      <step><cmd>Соберите candidate Firefox document вне BPM.</cmd><info><p>Record desired policy keys, source system, reviewer, ticket, and schema channel. Example candidate: <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>.</p></info></step>
+  <step><cmd>Провалидируйте candidate перед patch профиля.</cmd><info><p>Пример запроса: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>. Пример ответа: <codeph>200 {"ok":true,"profile":"release-152"}</codeph>. Примеры ошибок: <codeph>400</codeph>, <codeph>404</codeph>, <codeph>422</codeph>, or <codeph>503</codeph>.</p></info></step>
+  <step><cmd>Перечитайте профиль перед update, если approval window длинный.</cmd><info><p>Пример запроса: <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>. Пример ответа: <codeph>200 ProfileRead</codeph>. If <codeph>revision</codeph> changed, re-run comparison and approval rather than patching stale state.</p></info></step>
+  <step><cmd>Патчьте только mutable fields с наблюдаемой revision.</cmd><info><p>Пример запроса: <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> with JSON <codeph>{"flags":{"DisableTelemetry":true,"BlockAboutConfig":true},"expected_revision":7,"compliance":{"source":"control-product","decision":"approved"}}</codeph>. Пример ответа: <codeph>200 ProfileRead</codeph> with incremented <codeph>revision</codeph>.</p></info></step>
+  <step><cmd>Считайте conflict responses stop signals.</cmd><info><p>Примеры ошибок: <codeph>400</codeph> invalid payload, <codeph>404</codeph> missing profile, <codeph>409</codeph> stale <codeph>expected_revision</codeph>, and <codeph>422</codeph> schema-level request errors. A <codeph>409</codeph> means the external desired state must be recalculated.</p></info></step>
+  <step><cmd>Запишите update evidence и не выполняйте blind replay.</cmd><info><note type="warning">Не retry the same PATCH blindly. Сохраните old revision, new revision, validation body, patch body hash, response status, reviewer approval, and the retry decision outside BPM.</note></info></step>
+    </steps>
+    <result><p>The profile update is applied only after validation and revision checks, with explicit audit evidence for success or conflict. Результат фиксируется с теми же API identifiers и evidence boundaries.</p></result>
+    <postreq><p>Export the profile or hand off compliance metadata only after the read-back profile matches the approved desired state. Следующий шаг выполняется только после сохранения audit evidence.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+<link keyref="topic.admin-task-sync-profile-lifecycle"/>
+<link keyref="topic.admin-task-run-pull-compare-update-scenario"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

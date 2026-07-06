@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-archived-profile-behavior" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Comportement des profils archivés</title><shortdesc>Les profils archivés restent visibles avec les filtres de cycle de vie, mais ont des limites par rapport aux profils actifs.</shortdesc>
+  <refbody><section id="a-archived-purpose"><title>But</title><p>Archiver conserve un profil pour examen ou restauration ultérieure.</p></section><section id="a-archived-limits"><title>Limites</title><p>Les lignes archivées ne sont pas des cibles actives normales d’export, et certaines actions sont désactivées jusqu’à restauration.</p></section><section id="a-archived-warning"><title>Avertissement</title><p>La suppression définitive peut aussi retirer un profil archivé.</p></section><section id="a-archived-recovery"><title>Récupération</title><p>Utilisez Restaurer pour retrouver l’édition normale et le cycle de vie actif.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-restore-profile"/><link keyref="topic.ug-task-permanently-delete-profile"/></related-links>
+</reference>

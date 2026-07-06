@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="fixture-conditional-metadata" xml:lang="en">
+  <title>Conditional metadata fixture</title>
+  <body>
+    <section props="firefox-release">
+      <title>Release channel</title>
+      <p>VISIBLE_RELEASE_ONLY</p>
+    </section>
+    <section props="firefox-esr">
+      <title>ESR channel</title>
+      <p>VISIBLE_ESR_ONLY</p>
+    </section>
+    <p deliveryTarget="locale-en">VISIBLE_LOCALE_EN</p>
+    <p deliveryTarget="locale-ru">VISIBLE_LOCALE_RU</p>
+  </body>
+</topic>

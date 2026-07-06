@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-verify-linux-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>Проверить Linux-развёртывание из исходников</title>
+  <shortdesc>Используйте health probes, web UI, logs и узкую test command, чтобы подтвердить пригодность BPM instance, запущенного из исходников.</shortdesc>
+  <taskbody>
+    <prereq><p>BPM process запущен из repository checkout с нужными <codeph>BPM_DATABASE_URL</codeph>, host, port и documentation-site settings.</p></prereq>
+    <context><p>Текущее приложение публикует liveness по <codeph>/health</codeph> и readiness по <codeph>/health/ready</codeph>. Эти probes подтверждают только ответ running process; они не доказывают production hardening, Firefox enforcement, backup readiness или HA behavior.</p></context>
+    <steps>
+      <step><cmd>Проверьте liveness и readiness с Linux-хоста.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Ожидаемые responses: <codeph>{"status":"ok"}</codeph> и <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Откройте product UI и убедитесь, что route Profile Library отвечает.</cmd><info><p>Используйте <codeph>http://127.0.0.1:8000/profiles</codeph>. Route должен загрузить BPM interface или показать намеренное application state, а не server traceback.</p></info></step>
+      <step><cmd>Проверьте foreground application logs.</cmd><info><p>Просмотрите терминал, где работает <codeph>make dev</codeph> или <codeph>uvicorn app.main:app --reload --port 8000</codeph>. Фиксируйте startup errors, migration errors, port conflicts и documentation-site warnings без копирования secrets в tickets.</p></info></step>
+      <step><cmd>Запустите узкий source smoke suite, когда изменения кода или окружения требуют подтверждения.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make test-fast
+]]></codeblock><note type="warning">Успешный source smoke не сертифицирует production readiness, reverse proxy behavior, managed backups или Firefox runtime policy enforcement.</note></info></step>
+    </steps>
+    <result><p>У администратора есть evidence, что Linux source deployment стартует, отвечает на health/readiness probes, обслуживает UI route и не имеет immediate foreground-log blockers.</p></result>
+    <postreq><p>Если проверка не проходит, храните command, имена environment variables, probe responses и relevant log lines вместе для troubleshooting. Не расширяйте этот ранбук до отложенных installer или production-topology instructions.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-configure-linux-source-runtime"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</task>

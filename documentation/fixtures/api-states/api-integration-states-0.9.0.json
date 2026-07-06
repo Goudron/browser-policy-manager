@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "api-integration-states",
+  "synthetic": true,
+  "base_url_variable": "$BPM_BASE_URL",
+  "operations": [
+    {
+      "id": "health-readiness",
+      "method": "GET",
+      "path": "/api/health/ready",
+      "expected_status": 200,
+      "documentation_topic": "api-task-check-health-readiness"
+    },
+    {
+      "id": "validate-profile-document",
+      "method": "POST",
+      "path": "/api/validation/firefox-policies",
+      "request_fixture": "documentation/fixtures/schema-validation/common-valid-policies.example.json",
+      "expected_status": 200,
+      "documentation_topic": "api-task-validate-firefox-policies-json"
+    }
+  ]
+}

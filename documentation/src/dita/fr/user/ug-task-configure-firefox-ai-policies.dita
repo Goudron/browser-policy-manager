@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-firefox-ai-policies" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Configurer les stratégies Firefox pour l’IA et les fonctions intelligentes</title>
+  <shortdesc>Utilisez l’étape 5 pour les stratégies Firefox existantes liées à AI &amp; smart features, à la recherche visuelle et aux surfaces intelligentes quand le schéma Release les prend en charge.</shortdesc>
+  <taskbody>
+    <prereq><p>Sélectionnez un schéma Release qui prend ces stratégies en charge, ou tenez compte du fait que certains contrôles sont absents dans ESR 140.12.</p></prereq>
+    <context><p>Ce sujet décrit les stratégies Firefox existantes pour l’IA et les fonctions intelligentes comme fonctionnalité du produit. Il n’ajoute pas de fonction IA au portail documentaire : RAG, embeddings, recherche ou réponses génératives sont hors 0.9.0.</p></context>
+    <steps>
+      <step><cmd>Ouvrez l’étape 5 « AI &amp; smart features ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Vérifiez les surfaces de navigateur intégrées liées à l’IA, à la recherche visuelle et aux fonctions intelligentes listées pour le schéma Release choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Activez, désactivez ou laissez chaque stratégie prise en charge selon l’objectif du profil.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Si un contrôle est absent dans ESR 140.12, traitez-le comme non pris en charge dans ESR et ne créez pas manuellement un paramètre Guided.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+    </steps>
+    <result><p>Les stratégies Firefox prises en charge pour l’IA et les fonctions intelligentes sont relues comme paramètres produit, tandis que la limite documentaire sans RAG, embeddings ni réponses génératives est conservée.</p></result>
+    <postreq><p>Récupération : si un contrôle attendu n’apparaît pas dans ESR, passez au schéma Release pris en charge pour la vérification ou notez l’absence de prise en charge ESR.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

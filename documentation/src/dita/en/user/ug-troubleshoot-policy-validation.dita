@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-policy-validation" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Interpret policy validation errors</title>
+  <shortdesc>Diagnose validation errors for unsupported policy, wrong value type, unknown entry, raw fallback, or affected policy path.</shortdesc>
+  <taskbody>
+    <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
+    <context><p>Validation errors are structured feedback about the selected Firefox schema channel and the exact policy or managed preference that BPM cannot accept as ready.</p></context>
+    <steps>
+      <step><cmd>Read the affected policy path and message before changing values.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Classify the issue as unsupported policy, wrong value type, deprecated setting, unknown entry, imported value, or raw fallback.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Use All Settings or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Revalidate the profile in the same schema channel before saving or exporting.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
+    </steps>
+    <result><p>The validation error is either resolved or documented as a deliberate raw/unsupported value that cannot be treated as release-ready.</p></result>
+    <postreq><p>Recovery: if the same error repeats after one clean retry, stop the workflow, preserve the visible message, profile name, schema channel, and current surface for maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

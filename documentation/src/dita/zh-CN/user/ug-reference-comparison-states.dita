@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-comparison-states" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>比较状态和行类型</title><shortdesc>比较行说明 policy 或 managed preference 是 equal、changed 还是 missing。</shortdesc>
+  <refbody><section id="a-comparison-row-types"><title>行类型</title><p>Policy 行表示 Firefox Enterprise policy；preference 行表示受管理首选项键和值。</p></section><section id="a-comparison-equal"><title>Equal</title><p>两个配置文件都包含该设置，并且值匹配。</p></section><section id="a-comparison-changed"><title>Changed</title><p>两个配置文件都包含该设置，但值不同。</p></section><section id="a-comparison-missing"><title>Missing</title><p>该设置只存在于一侧。</p></section><section id="a-comparison-recovery"><title>恢复</title><p>如果状态意外，请确认所选配置文件，保存更改并重新打开 Compare。</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-select-comparison-profiles"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
+</reference>

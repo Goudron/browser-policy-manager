@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-export-policies-json" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Экспорт профиля как Firefox policies.json</title>
+  <shortdesc>Эта задача описывает полный сценарий «Экспорт профиля как Firefox policies.json»: решения, действия, ожидаемый результат, предупреждения и восстановление.</shortdesc>
+  <taskbody>
+    <prereq><p>Откройте BPM и убедитесь, что выбран правильный рабочий контекст, схема Firefox или состояние профиля для этой задачи.</p></prereq>
+    <context><p>Эта тема описывает полный пользовательский сценарий для русской локали без сокращённого пересказа.</p></context>
+    <steps>
+      <step><cmd>Откройте область BPM, которая соответствует задаче «Экспорт профиля как Firefox policies.json».</cmd><info><p>Ожидаемый результат: профиль остаётся согласованным, а действие можно объяснить при проверке.</p></info></step>
+      <step><cmd>Проверьте текущие значения, состояние профиля, подсказки и ограничения выбранной схемы.</cmd><info><p>Ожидаемый результат: профиль остаётся согласованным, а действие можно объяснить при проверке.</p></info></step>
+      <step><cmd>Внесите только те изменения, которые нужны для цели профиля, и не меняйте соседние параметры случайно.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, состояние профиля и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>Профиль или представление BPM находится в ожидаемом состоянии для этого сценария.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, вернитесь к владельцу настройки, отмените последнее изменение или откройте связанный раздел.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

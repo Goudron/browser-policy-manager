@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-attention-items" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Проверьте элементы внимания All Settings</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Use Review mode to triage invalid, CIS manual-review, raw, unknown, deprecated, and imported items before routine editing.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Open a saved profile in All Settings.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Review mode is the default attention-first view. It gathers settings that may require a decision before export, comparison, or handoff.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Open All Settings and stay in Review mode.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Read the review summary and grouped action cards.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Open each invalid, CIS manual-review, raw, unknown, deprecated, or imported item that applies to the profile.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте элементы внимания All Settings. Resolve the item, document why it remains, or move to the linked detail view for a deliberate edit.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. Attention items are either resolved, intentionally retained, or ready for a focused detail edit.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if Review looks empty but you expected issues, clear filters, refresh the profile, and confirm the selected schema channel.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-all-settings-review-states"/>
+    <link keyref="topic.ug-task-inspect-setting-details"/>
+  </related-links>
+</task>

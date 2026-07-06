@@ -1,0 +1,11 @@
+{
+  "endpoint": "/api/profiles/import/firefox/policies.json",
+  "content_type": "multipart/form-data",
+  "fields": {
+    "file": "firefox-policies-import.example.json",
+    "name": "Example imported Firefox profile",
+    "description": "Synthetic multipart import example for BPM 0.9.0 documentation.",
+    "channel": "firefox-release",
+    "compliance": "{\"source\":\"documentation-fixture\"}"
+  }
+}

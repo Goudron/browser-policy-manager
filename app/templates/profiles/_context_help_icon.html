@@ -1,0 +1,18 @@
+{% set context_help_icon_links = documentation_deep_help_links.get(context_help_icon_target, {}) %}
+{% set context_help_icon_href = context_help_icon_links.get(initial_lang) %}
+{% if context_help_icon_href %}
+<a
+    class="context-help-icon-link"
+    href="{{ context_help_icon_href }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    title="{{ tr(context_help_icon_label_key) }}"
+    aria-label="{{ tr(context_help_icon_label_key) }}"
+    data-i18n-title="{{ context_help_icon_label_key }}"
+    data-i18n-aria-label="{{ context_help_icon_label_key }}"
+    data-documentation-links='{{ context_help_icon_links | tojson }}'
+    data-documentation-link
+    data-context-help-target="{{ context_help_icon_target }}">
+    <span aria-hidden="true">i</span>
+</a>
+{% endif %}

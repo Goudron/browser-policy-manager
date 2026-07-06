@@ -73,12 +73,14 @@ def test_xdist_pilot_workflow_is_manual_and_narrow():
     assert "make test-live" not in source
 
 
-def test_firefox_live_workflows_are_scheduled_or_manual_only():
+def test_firefox_live_workflows_are_manual_and_guarded_only():
     for filename in ("firefox-live.yml", "firefox-live-amo.yml"):
         source = _workflow_source(filename)
 
-        assert "schedule:" in source
         assert "workflow_dispatch:" in source
+        assert "run_live_tests:" in source
+        assert "inputs.run_live_tests == 'RUN'" in source
+        assert "schedule:" not in source
         assert "pull_request:" not in source
         assert "push:" not in source
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-manage-destructive-actions" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>安全管理破坏性操作</title>
+  <shortdesc>有意识地取消或确认归档、恢复、重置、移除和永久删除操作。</shortdesc>
+  <taskbody>
+    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
+    <context><p>破坏性操作可能隐藏配置文件、移除设置、重置值，或在确认后永久删除一行。</p></context>
+    <steps>
+      <step><cmd>确认前阅读操作标签以及受影响的配置文件或设置。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>如果可见配置文件、生命周期状态、架构通道或 source attribution 与预期目标不一致，请取消。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>对于 permanent delete，请确认不再需要导出、比较和复查。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>确认后等待状态消息，并在重复操作前刷新一次库或编辑器。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+    </steps>
+    <result><p>操作要么被安全取消，要么以可见状态和明确影响完成。</p></result>
+    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-archive-profile"/>
+    <link keyref="topic.ug-task-permanently-delete-profile"/>
+  </related-links>
+</task>

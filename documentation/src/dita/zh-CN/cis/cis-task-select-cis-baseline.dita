@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-select-cis-baseline" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>选择 CIS baseline 和 starter preset</title>
+  <shortdesc>在详细 review 前，选择符合 deployment 目标的 Firefox schema channel、starter preset 和 CIS layer。</shortdesc>
+  <taskbody>
+    <prereq><p>你已有 profile draft，知道目标浏览器应遵循 Firefox ESR 140.12 还是 Firefox Release 152 schema 行为，并且能够在 export 前检查 value。</p></prereq>
+    <context><p>Starter preset 描述环境形态，而 CIS layer 添加 BPM 映射的 hardening baseline。两者都应作为经过 review 的输入使用，而不是自动 deployment approval。</p></context>
+    <steps>
+      <step><cmd>选择匹配 target deployment 的 Firefox schema channel：ESR 140.12 或 Release 152。</cmd><info><p>预期结果：BPM 按目标 channel 验证可用 policy 和 managed preference。</p></info></step>
+      <step><cmd>选择 starter preset：Basic corporate 用于受管 office profile，classroom 或 kiosk 用于受限 shared browsing，protected station 用于 hardened SOC-style workstation。</cmd><info><p>预期结果：profile 在应用 CIS hardening 前拥有初始 environment baseline。</p></info></step>
+      <step><cmd>选择 CIS Level 1 作为广泛 baseline hardening，或在 deployment 接受 stricter control 和额外 review 时选择 CIS Level 2。</cmd><info><p>预期结果：BPM 为所选 Firefox channel 应用匹配的 generated layer。</p></info></step>
+      <step><cmd>检查由 preset、CIS layer、import、manual edit 或 raw fallback 添加的 value 的 source attribution。</cmd><info><p>预期结果：每个 configured value 在 export 前都可以追踪。</p></info></step>
+      <step><cmd>在保存 profile 前解决 manual-review path 和 conflict。</cmd><info><note type="warning">不要把生成的 profile 视为 CIS certification，也不要把它当作官方 benchmark 和本地 security approval 的替代品。</note></info></step>
+      <step><cmd>只有在 channel、preset、CIS level 和 manual decision 已记录后，才执行 validation 和 export。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 可 review，并与所选 BPM baseline 关联。</p></info></step>
+    </steps>
+    <result><p>Profile 拥有明确选择的 starter preset、受支持的 CIS layer、可见 source attribution，以及剩余 manual verification duties 的清单。</p></result>
+    <postreq><p>如果 baseline 过严或过宽，移除 CIS layer 或切换 starter preset，重新 validation，并在 export 前重复 review。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-orientation"/>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</task>

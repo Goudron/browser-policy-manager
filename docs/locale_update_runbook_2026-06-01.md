@@ -75,6 +75,13 @@ Update documentation when the change affects terminology, QA expectations, or re
 | Accidental-English exception | `docs/locale_visible_english_allowlists_2026-05-30.md` |
 | Runtime/browser workflow QA change | the relevant `docs/*_audit_*.md` file for that backlog item |
 | Release-facing locale support change | `README.md` and release notes/changelog when present |
+| Product documentation topic, screenshot, or search alias change | matching DITA peers under `documentation/src/dita/<locale>/`, `documentation/assets/screenshots/<locale>/`, manifest/search fixtures, and `documentation/runbooks/localization-and-screenshots.md` |
+
+When the change affects product documentation, treat DITA localization drift as release-blocking:
+all six locale peers must remain content-equivalent in topic body, title, map label, key, metadata,
+code/example, warnings, recovery paths, examples, caveats, supported/unsupported claims, and search
+aliases. Do not close the change with compact localized peers unless a release-blocking follow-up is
+explicitly recorded and approved.
 
 ## 5. Run Fast Locale Checks
 

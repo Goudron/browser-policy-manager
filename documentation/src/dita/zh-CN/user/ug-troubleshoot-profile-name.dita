@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-profile-name" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>解决配置文件名称错误</title>
+  <shortdesc>在创建或 clone 期间修复 empty、duplicate 或 unclear profile name。</shortdesc>
+  <taskbody>
+    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败操作表明当前 workflow 无法安全继续。</p></prereq>
+    <context><p>配置文件名称用于识别 Library rows、editor tabs、comparison choices、imports 和 recovery messages，因此 name validation 会阻止模糊保存。</p></context>
+    <steps>
+      <step><cmd>更改其他配置文件字段前阅读 name validation hint。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>输入 non-empty name，用于区分配置文件目的、Firefox channel 或 source file。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>在 clone workflows 中，如果 suggested clone name 与现有 row 重复，请在确认前更改。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>name hint 消失后再次 save 或 duplicate。</cmd><info><note type="warning">不要编辑 internal storage、browser local data、数据库行或 generated build artifacts 来恢复面向用户的配置文件工作。</note></info></step>
+    </steps>
+    <result><p>配置文件或 clone 具有唯一可见名称，之后可在 Library 中找到。</p></result>
+    <postreq><p>恢复：如果同一错误在一次干净重试后仍然重复，请停止 workflow，并保留可见消息、配置文件名称、架构通道和当前界面供 maintainer review。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-create-first-profile"/>
+    <link keyref="topic.ug-task-duplicate-profile"/>
+  </related-links>
+</task>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-change-interface-theme" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Changer le thème de l’interface</title>
+  <shortdesc>Sélectionnez le thème système, clair ou sombre sans modifier le contenu du profil.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
+    <context><p>Le choix du thème concerne uniquement l’interface BPM et facilite la lecture des tableaux, blocs de code, états de validation et avertissements.</p></context>
+    <steps>
+      <step><cmd>Ouvrez le sélecteur de thème dans l’en-tête de page.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Choisissez Système, Clair ou Sombre.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Vérifiez que les panneaux d’édition, tableaux, notes, indicateurs de focus et états de validation restent lisibles.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Reprenez l’édition après avoir confirmé que les données non enregistrées du profil sont toujours présentes.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+    </steps>
+    <result><p>BPM utilise le thème visuel sélectionné sur les surfaces prises en charge.</p></result>
+    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

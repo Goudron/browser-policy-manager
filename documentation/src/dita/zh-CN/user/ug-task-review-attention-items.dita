@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-attention-items" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>审查 All Settings 注意项</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Use Review mode to triage invalid, CIS manual-review, raw, unknown, deprecated, and imported items before routine editing.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Open a saved profile in All Settings.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Review mode is the default attention-first view. It gathers settings that may require a decision before export, comparison, or handoff.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Open All Settings and stay in Review mode.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Read the review summary and grouped action cards.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Open each invalid, CIS manual-review, raw, unknown, deprecated, or imported item that applies to the profile.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：审查 All Settings 注意项. Resolve the item, document why it remains, or move to the linked detail view for a deliberate edit.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 Attention items are either resolved, intentionally retained, or ready for a focused detail edit.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if Review looks empty but you expected issues, clear filters, refresh the profile, and confirm the selected schema channel.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-all-settings-review-states"/>
+    <link keyref="topic.ug-task-inspect-setting-details"/>
+  </related-links>
+</task>

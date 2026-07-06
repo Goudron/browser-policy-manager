@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-ranking-typo-0.9.0",
+  "backlog_item": "BPM090-M10-04",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "non_ai_boundary": "no-ai-no-rag-no-embeddings-no-generative-answers",
+  "ranking_order": [
+    "exact_identifier",
+    "title",
+    "alias",
+    "heading",
+    "body",
+    "bounded_typo"
+  ],
+  "weights": {
+    "exact_identifier": 1000,
+    "title": 180,
+    "alias": 140,
+    "heading": 80,
+    "body": 20,
+    "bounded_typo": 12,
+    "recency": 0
+  },
+  "typo_tolerance": {
+    "algorithm": "bounded-levenshtein",
+    "min_token_length": 5,
+    "max_token_length": 32,
+    "max_distance_by_length": [
+      {
+        "min_length": 5,
+        "max_length": 8,
+        "max_distance": 1
+      },
+      {
+        "min_length": 9,
+        "max_length": 32,
+        "max_distance": 2
+      }
+    ],
+    "fields": [
+      "title",
+      "aliases",
+      "headings"
+    ],
+    "excluded_token_patterns": [
+      "^/[A-Za-z0-9._/-]+$",
+      "^[A-Za-z]+:[A-Za-z0-9._:-]+$",
+      "^[A-Z]{2,}-[A-Z]{2,}-[0-9]+$",
+      "^[0-9]+(?:\\.[0-9]+)+$"
+    ]
+  },
+  "tie_breakers": [
+    "score_desc",
+    "exact_identifier_desc",
+    "title_desc",
+    "alias_desc",
+    "guide_id",
+    "topic_id"
+  ],
+  "ranking_fixtures": [
+    {
+      "fixture_id": "exact-policy-ai-controls",
+      "locale": "en",
+      "query": "AIControls",
+      "expected_top_topic_id": "fx-concept-complex-policy-families",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "exact-api-validation-operation",
+      "locale": "en",
+      "query": "API-VAL-001",
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "exact-cis-recommendation",
+      "locale": "en",
+      "query": "cis:1.1.1.1",
+      "expected_top_topic_id": "cis-settings-guide",
+      "required_score_component": "exact_identifier"
+    },
+    {
+      "fixture_id": "title-api-validation",
+      "locale": "en",
+      "query": "Validate candidate Firefox policies.json through the API",
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "title"
+    },
+    {
+      "fixture_id": "alias-ru-ai-controls",
+      "locale": "ru",
+      "query": "контролы ИИ",
+      "expected_top_topic_id": "ug-reference-schema-dependent-guided-controls",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "typo-en-profile-library",
+      "locale": "en",
+      "query": "profil library",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "typo-de-validation-endpoint",
+      "locale": "de",
+      "query": "API Validirungsendpunkt",
+      "expected_top_topic_id": "admin-task-validate-firefox-policies-json",
+      "required_score_component": "bounded_typo"
+    },
+    {
+      "fixture_id": "diacritic-fr-profile-library",
+      "locale": "fr",
+      "query": "bibliotheque des profils",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "cjk-zh-profile-library",
+      "locale": "zh-CN",
+      "query": "配置档案库",
+      "expected_top_topic_id": "ug-task-use-profile-library",
+      "required_score_component": "alias"
+    },
+    {
+      "fixture_id": "alias-es-json-export",
+      "locale": "es-ES",
+      "query": "exportar policies.json",
+      "expected_top_topic_id": "ug-task-export-policies-json",
+      "required_score_component": "alias"
+    }
+  ]
+}

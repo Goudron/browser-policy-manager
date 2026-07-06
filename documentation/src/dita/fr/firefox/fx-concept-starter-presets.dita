@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-starter-presets" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Choisir un starter preset avant l’édition détaillée</title>
+  <shortdesc>Les starter presets initialisent un profil BPM pour des environnements courants avant la revue, la validation et l’ajustement des stratégies Firefox.</shortdesc>
+  <conbody>
+    <section id="a-purpose"><title>Objectif</title><p>Un starter preset est une baseline BPM, pas une recommandation de déploiement finalisée. Utilisez-le pour créer un premier ensemble de stratégies, puis inspectez chaque valeur modifiée dans Guided Editor, All Settings ou JSON Editor avant export.</p></section>
+    <section id="a-basic-corporate"><title>Basic corporate</title><p>Choisissez le corporate preset lorsque le profil doit privilégier managed updates, réduction de telemetry, restrictions accounts et Pocket, enterprise roots, system proxy, intranet homepage verrouillée, downloads contrôlés et blocage de l’installation d’extensions par défaut.</p></section>
+    <section id="a-classroom-kiosk"><title>Classroom ou kiosk</title><p>Choisissez le classroom ou kiosk preset lorsque le navigateur démarre sur une page scolaire verrouillée, utilise un comportement de navigation contraint, limite private browsing et les pages internes, et peut forcer une classroom extension revue tout en bloquant les autres extensions.</p></section>
+    <section id="a-protected-station"><title>Protected station</title><p>Choisissez le protected-station preset pour des postes durcis ou des environnements SOC-style nécessitant des contrôles proxy, DNS, certificate, permission, private browsing, extension et preference plus stricts. Vérifiez chaque valeur réseau et certificat avant export, car les placeholders propres à l’environnement doivent être remplacés.</p></section>
+    <section id="a-after-selection"><title>Après la sélection</title><p>Après application du preset, validez le canal Firefox choisi, vérifiez la source tracing, supprimez les valeurs indésirables et exportez uniquement un <codeph>policies.json</codeph> revu. Une CIS layer peut être ajoutée séparément lorsque le profil nécessite une baseline de sécurité documentée.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.ug-task-apply-starter-preset"/>
+    <link keyref="topic.ug-concept-cis-layer-merge"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</concept>

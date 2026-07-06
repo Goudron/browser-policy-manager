@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-home-search-navigation" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Configure home, search, and navigation</title>
+  <shortdesc>Set home surfaces, navigation behavior, managed search engines, and search suggestions from Step 2.</shortdesc>
+  <taskbody>
+    <prereq><p>Step 2 is open and the schema channel is correct.</p></prereq>
+    <context><p>These controls affect what users see first and how Firefox resolves navigation and search activity.</p></context>
+    <steps>
+      <step><cmd>Open the home, search, and navigation sections.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Set homepage or new-tab behavior required by the profile.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Configure managed search engines and search suggestions according to policy.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Review navigation defaults before moving to security settings.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The profile defines home, managed search, suggestions, and navigation behavior.</p></result>
+    <postreq><p>Recovery: if users would lose an expected search path, adjust the managed search engine entry before saving.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-configure-browser-access-defaults"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

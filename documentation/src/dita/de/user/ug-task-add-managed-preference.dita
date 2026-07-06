@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-add-managed-preference" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Verwaltete Preference hinzufügen</title>
+  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Add a known managed preference that is not yet configured in the profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Open All Settings with the correct schema channel selected.</p></prereq>
+    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Choose the known preference key and review its expected value type.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Enter the value and lock state required by the profile.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Verwaltete Preference hinzufügen. Apply, validate, and save the managed preference.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+    </steps>
+    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The profile contains the new managed preference with the intended value and lock behavior.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the preference key is unknown or validation fails, remove the draft value and use JSON only for deliberate raw review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-handle-raw-unknown-settings"/>
+  </related-links>
+</task>

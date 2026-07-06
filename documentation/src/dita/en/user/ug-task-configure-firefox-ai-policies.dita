@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-firefox-ai-policies" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Configure Firefox AI and smart-feature policies</title>
+  <shortdesc>Use Step 5 for existing Firefox browser policy controls related to AI &amp; smart features, visual search, and smart surfaces on supported Release schemas.</shortdesc>
+  <taskbody>
+    <prereq><p>A Release schema that supports the controls is selected, or you understand that ESR 140.12 may omit them.</p></prereq>
+    <context><p>This topic documents existing Firefox policy settings as product functionality. It does not add AI functionality to the 0.9.0 documentation portal: RAG, embeddings, generative search, and generative answers remain out of scope.</p></context>
+    <steps>
+      <step><cmd>Open Step 5, AI &amp; smart features.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Review the built-in browser AI surfaces, visual search, and smart browser features listed for the selected Release schema.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Enable, disable, or leave each supported policy according to the profile goal.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>If a control is absent on ESR 140.12, treat it as unsupported rather than manually inventing a Guided setting.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>Supported Firefox AI and smart-feature policies are reviewed as product settings while the documentation portal remains non-AI for 0.9.0.</p></result>
+    <postreq><p>Recovery: if a stakeholder expected an absent ESR control, switch to a supported Release schema for review or document the unsupported state.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

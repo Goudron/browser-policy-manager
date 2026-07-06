@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-trace-cis-source" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Einen CIS-Wert zur Quelle zurückverfolgen</title>
+  <shortdesc>Verfolgen Sie einen configured value vor dem Export zum starter preset, CIS layer, merge decision und späteren edits zurück.</shortdesc>
+  <taskbody>
+    <prereq><p>Öffnen Sie ein Profil, das aus einem starter preset erstellt wurde oder einen CIS Level 1 oder Level 2 layer enthält.</p></prereq>
+    <context><p>Tracing ist nützlich, wenn ein Reviewer fragt, ob eine Einstellung aus original baseline, CIS layer, import, manual edit oder raw fallback stammt.</p></context>
+    <steps>
+      <step><cmd>Öffnen Sie All Settings und filtern Sie nach configured values oder nach dem CIS source badge.</cmd><info><p>Erwartetes Ergebnis: Die relevante policy oder managed preference bleibt mit source attribution sichtbar.</p></info></step>
+      <step><cmd>Lesen Sie source attribution und bestimmen Sie, ob der current value baseline, CIS, manual, imported oder raw ist.</cmd><info><p>Erwartetes Ergebnis: Sie können die unmittelbare Quelle des Werts benennen.</p></info></step>
+      <step><cmd>Öffnen Sie das zugehörige CIS recommendation oder Firefox policy topic, wenn ein generated layer den value beigetragen hat.</cmd><info><p>Erwartetes Ergebnis: Recommendation ID, path, value, channel support und merge rule sind sichtbar.</p></info></step>
+      <step><cmd>Prüfen Sie die merge decision: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter oder manual_review_kept_base.</cmd><info><p>Erwartetes Ergebnis: Sie wissen, ob CIS den Wert hinzugefügt, bestätigt, ersetzt oder einen base value für review behalten hat.</p></info></step>
+      <step><cmd>Klären Sie manual-review oder conflict states vor dem Speichern.</cmd><info><note type="warning">Verdecken Sie eine manual_review_kept_base decision nicht durch eine nicht zusammenhängende manual edit; dokumentieren Sie zuerst den review reason.</note></info></step>
+      <step><cmd>Validieren und exportieren Sie erst, wenn source und decision für einen anderen Reviewer nachvollziehbar sind.</cmd><info><p>Erwartetes Ergebnis: Das exportierte <codeph>policies.json</codeph> spiegelt eine reviewed choice wider, während BPM-only attribution im profile verbleibt.</p></info></step>
+    </steps>
+    <result><p>Der configured value kann als baseline, CIS, manual, imported oder raw erklärt werden, mit sichtbarer merge decision und review status.</p></result>
+    <postreq><p>Wenn attribution uneindeutig ist, vergleichen Sie das Profil mit einem blank profile plus demselben CIS layer und prüfen Sie anschließend imports und manual changes.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.ug-task-filter-settings-by-source"/>
+    <link keyref="topic.ug-task-review-profile-context"/>
+  </related-links>
+</task>

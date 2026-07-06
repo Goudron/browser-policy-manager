@@ -13,9 +13,9 @@ def test_frontend_vendor_lock_tracks_expected_packages_and_assets():
     lock = json.loads(verify_frontend_vendor.LOCK_PATH.read_text(encoding="utf-8"))
 
     assert lock["packages"] == {
-        "js-yaml": "4.2.0",
-        "monaco-editor": "0.52.0",
-        "esbuild": "0.25.3",
+        "js-yaml": "5.2.1",
+        "monaco-editor": "0.53.0",
+        "esbuild": "0.28.1",
     }
     assert [entry["path"] for entry in lock["assets"]] == list(
         verify_frontend_vendor.LOCKED_ASSET_PATHS

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "locale-states",
+  "synthetic": true,
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "states": [
+    {
+      "id": "locale-active-ru",
+      "requested_locale": "ru",
+      "expected_documentation_root": "/help/ru/",
+      "expected_status_page_locale": "ru"
+    },
+    {
+      "id": "locale-noncanonical-zh",
+      "requested_locale": "zh",
+      "expected_documentation_root": "/help/zh-CN/",
+      "expected_status_page_locale": "zh-CN"
+    },
+    {
+      "id": "locale-unsupported-it",
+      "requested_locale": "it",
+      "expected_fallback_locale": "en",
+      "expected_status": "fallback"
+    }
+  ]
+}

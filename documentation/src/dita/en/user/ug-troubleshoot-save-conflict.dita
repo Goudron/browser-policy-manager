@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-save-conflict" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Resolve a save conflict</title>
+  <shortdesc>Recover from a concurrent update or stale tab without silently losing profile changes.</shortdesc>
+  <taskbody>
+    <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
+    <context><p>A save conflict means another tab or session changed the saved profile after the current editor loaded it.</p></context>
+    <steps>
+      <step><cmd>Stop on the save-conflict panel and do not overwrite immediately.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Compare the visible profile name, schema channel, editor mode, and last saved state with the tab that produced the conflict.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Copy any unsaved draft values that must be preserved before reloading the profile.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Reload the profile or retry save only after choosing whether to keep the current draft or the newer saved state.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
+    </steps>
+    <result><p>The stale tab is resolved without silently discarding the current draft or the newer saved profile.</p></result>
+    <postreq><p>Recovery: if the same error repeats after one clean retry, stop the workflow, preserve the visible message, profile name, schema channel, and current surface for maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.ug-troubleshoot-unsaved-changes"/>
+  </related-links>
+</task>

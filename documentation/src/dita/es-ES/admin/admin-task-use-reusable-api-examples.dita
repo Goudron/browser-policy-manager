@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+    <task id="admin-task-use-reusable-api-examples" xml:lang="es-ES" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+      <title>Reutilizar ejemplos API DevOps y plantillas de entorno</title>
+      <shortdesc>Use environment templates neutrales, fragmentos curl, multipart samples y Python assertions compactas para los workflows API actuales de BPM.</shortdesc>
+      <taskbody>
+        <prereq><p>Defina <codeph>BPM_BASE_URL</codeph> para la instancia BPM bajo prueba. No coloque credentials, tenant names, host names personales, private hosts ni production profile IDs en reusable examples; BPM 0.9.0 no documenta actualmente API authentication.</p></prereq>
+        <context><p>Este tema cubre <codeph>API-HEALTH-001</codeph>, <codeph>API-HEALTH-002</codeph>, <codeph>API-PROFILE-001</codeph>, <codeph>API-PROFILE-003</codeph>, <codeph>API-PROFILE-004</codeph>, <codeph>API-PROFILE-005</codeph>, <codeph>API-FF-001</codeph>, <codeph>API-VAL-001</codeph> y <codeph>API-FF-002</codeph>. Los ejemplos usan deliberadamente <codeph>$BPM_BASE_URL</codeph>, synthetic names, <codeph>release-152</codeph>, response assertions y disposable fixture IDs en vez de environment-specific hosts o secrets.</p></context>
+        <steps>
+          <step><cmd>Cree una environment template reutilizable antes de copiar peticiones curl.</cmd><info><p>Request example: <codeph>export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"</codeph>. Response example: el shell mantiene una base URL, schema channel, synthetic profile name y optional import path para toda la ejecución. Error example: el shell termina la asignación si falta un valor requerido.</p><codeblock outputclass="language-bash"><![CDATA[
+# .env.devops-example.template
+BPM_BASE_URL=
+BPM_SCHEMA_CHANNEL=release-152
+BPM_PROFILE_NAME=docs-api-example
+BPM_JSON_IMPORT_PATH=./policies.json
+
+export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"
+export BPM_SCHEMA_CHANNEL="${BPM_SCHEMA_CHANNEL:-release-152}"
+export BPM_PROFILE_NAME="${BPM_PROFILE_NAME:-docs-api-example}"
+export BPM_JSON_IMPORT_PATH="${BPM_JSON_IMPORT_PATH:-./policies.json}"
+]]></codeblock></info></step>
+      <step><cmd>Proteja cada secuencia reutilizable con probes de health y readiness.</cmd><info><p>Request example: <codeph>curl -fsS "$BPM_BASE_URL/health"</codeph> y <codeph>curl -fsS "$BPM_BASE_URL/health/ready"</codeph>. Response example: <codeph>{"status":"ok"}</codeph> y <codeph>{"status":"ready","ready":true}</codeph>. Error example: curl devuelve non-zero para transport errors o non-2xx responses con <codeph>-f</codeph>.</p><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS "$BPM_BASE_URL/health"
+curl -fsS "$BPM_BASE_URL/health/ready"
+]]></codeblock></info></step>
+      <step><cmd>Reutilice profile lifecycle snippets para create, list, read y guarded update.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/profiles</codeph>, <codeph>GET $BPM_BASE_URL/api/profiles</codeph>, <codeph>GET $BPM_BASE_URL/api/profiles/$PROFILE_ID</codeph> y <codeph>PATCH $BPM_BASE_URL/api/profiles/$PROFILE_ID</codeph>. Response example: <codeph>201 ProfileRead</codeph>, <codeph>200 ProfileRead[]</codeph>, <codeph>200 ProfileRead</codeph> y <codeph>revision</codeph> incrementada. Error examples: <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph> stale <codeph>expected_revision</codeph> o <codeph>422</codeph>.</p><codeblock outputclass="language-bash"><![CDATA[
+PROFILE_JSON="$(curl -fsS -H 'Content-Type: application/json' \
+  -d '{"name":"docs-api-example","schema_version":"release-152","flags":{"DisableTelemetry":true}}' \
+  "$BPM_BASE_URL/api/profiles")"
+PROFILE_ID="$(python -c 'import json,sys; print(json.load(sys.stdin)["id"])' <<<"$PROFILE_JSON")"
+PROFILE_REVISION="$(python -c 'import json,sys; print(json.load(sys.stdin)["revision"])' <<<"$PROFILE_JSON")"
+
+curl -fsS "$BPM_BASE_URL/api/profiles?q=docs-api-example&lifecycle=active&limit=50&offset=0"
+curl -fsS "$BPM_BASE_URL/api/profiles/$PROFILE_ID"
+curl -fsS -X PATCH -H 'Content-Type: application/json' \
+  -d "{\"flags\":{\"DisableTelemetry\":true,\"BlockAboutConfig\":true},\"expected_revision\":$PROFILE_REVISION}" \
+  "$BPM_BASE_URL/api/profiles/$PROFILE_ID"
+]]></codeblock></info></step>
+      <step><cmd>Reutilice validation y JSON import snippets con forma explícita de payload.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> y <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>. Response example: <codeph>200 {"ok":true,"profile":"release-152"}</codeph> y <codeph>201 ProfileRead</codeph>. Error examples: <codeph>400</codeph>, <codeph>409</codeph>, <codeph>415</codeph>, <codeph>422</codeph> o <codeph>503</codeph>.</p><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS -H 'Content-Type: application/json' \
+  -d '{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}' \
+  "$BPM_BASE_URL/api/validate/$BPM_SCHEMA_CHANNEL"
+
+curl -fsS -H 'Content-Type: application/json' \
+  -d '{"name":"docs-json-import-example","schema_version":"release-152","compliance":{"source":"docs-devops-template"},"document":{"policies":{"DisableTelemetry":true}}}' \
+  "$BPM_BASE_URL/api/profiles/import/firefox/policies.json"
+]]></codeblock></info></step>
+      <step><cmd>Reutilice multipart import y export snippets para file-based handoff.</cmd><info><p>Request example: upload <codeph>multipart/form-data</codeph> a <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> seguido de <codeph>GET $BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1</codeph>. Response example: <codeph>201 ProfileRead</codeph> para import y <codeph>200 application/json</codeph> con canonical Firefox <codeph>policies</codeph> para export. Error example: <codeph>404</codeph> missing profile o <codeph>422</codeph> invalid profile ID.</p><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS \
+  -F "name=docs-multipart-import-example" \
+  -F "schema_version=$BPM_SCHEMA_CHANNEL" \
+  -F 'compliance={"source":"docs-devops-template"}' \
+  -F "file=@$BPM_JSON_IMPORT_PATH;type=application/json" \
+  "$BPM_BASE_URL/api/profiles/import/firefox/policies.json"
+
+curl -fsS "$BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1"
+]]></codeblock></info></step>
+      <step><cmd>Use un Python helper compacto cuando la integración requiera reusable response assertions.</cmd><info><p>Request example: <codeph>session.post(f"{base_url}/api/validate/{schema_channel}", json=payload, timeout=10)</codeph>. Response example: el helper falla inmediatamente salvo que status y JSON body coincidan con la assertion. Error example: assertion failures, timeout exceptions, stale <codeph>expected_revision</codeph> o structured API errors deben registrarse por el integrating product.</p><codeblock outputclass="language-python"><![CDATA[
+import os
+import requests
+
+base_url = os.environ["BPM_BASE_URL"].rstrip("/")
+schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-152")
+session = requests.Session()
+
+ready = session.get(f"{base_url}/health/ready", timeout=10)
+ready.raise_for_status()
+assert ready.json() == {"status": "ready", "ready": True}
+
+payload = {"document": {"policies": {"DisableTelemetry": True, "BlockAboutConfig": True}}}
+validation = session.post(f"{base_url}/api/validate/{schema_channel}", json=payload, timeout=10)
+validation.raise_for_status()
+assert validation.json() == {"ok": True, "profile": schema_channel}
+
+created = session.post(
+    f"{base_url}/api/profiles",
+    json={"name": "docs-python-example", "schema_version": schema_channel, "flags": payload["document"]["policies"]},
+    timeout=10,
+)
+created.raise_for_status()
+profile = created.json()
+assert profile["schema_version"] == schema_channel
+
+exported = session.get(
+    f"{base_url}/api/export/profiles/{profile['id']}/firefox/policies.json?pretty=1",
+    timeout=10,
+)
+exported.raise_for_status()
+assert exported.json() == {"policies": payload["document"]["policies"]}
+]]></codeblock><note type="warning">Conserve response status, profile ID, revision, schema channel, exported document hash y assertion result en evidencia externa. No copie real host names, secrets, API keys, secret values ni production identifiers en documentation examples.</note></info></step>
+        </steps>
+        <result><p>El producto integrador dispone de reusable curl y Python examples seguros para copiar, independientes de deployment hosts, sincronizados con el BPM API behavior actual y vinculados a explicit response assertions.</p></result>
+        <postreq><p>Combine estos examples con los runbooks pull/list/read, validate-before-apply, import-review-export y failure-audit al crear workflows completos de control products externos.</p></postreq>
+      </taskbody>
+      <related-links>
+        <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-run-control-product-inventory-pull"/>
+    <link keyref="topic.admin-task-run-validate-before-apply-update"/>
+    <link keyref="topic.admin-task-run-import-review-export-handoff"/>
+      </related-links>
+    </task>

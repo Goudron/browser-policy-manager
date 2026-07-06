@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-verify-linux-source-deployment" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>Vérifier un déploiement Linux depuis les sources</title>
+  <shortdesc>Utilisez les health probes, la web UI, les logs et une test command étroite pour confirmer que l’instance BPM lancée depuis les sources est utilisable.</shortdesc>
+  <taskbody>
+    <prereq><p>Le BPM process tourne depuis le repository checkout avec les <codeph>BPM_DATABASE_URL</codeph>, host, port et documentation-site settings prévus.</p></prereq>
+    <context><p>L’application actuelle expose la liveness sur <codeph>/health</codeph> et la readiness sur <codeph>/health/ready</codeph>. Ces probes confirment seulement la réponse du running process ; elles ne prouvent pas le production hardening, Firefox enforcement, backup readiness ni HA behavior.</p></context>
+    <steps>
+      <step><cmd>Vérifiez la liveness et la readiness depuis l’hôte Linux.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Les responses attendues sont <codeph>{"status":"ok"}</codeph> et <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Ouvrez la product UI et confirmez que la Profile Library route répond.</cmd><info><p>Utilisez <codeph>http://127.0.0.1:8000/profiles</codeph>. La route doit charger la BPM interface ou afficher un application state intentionnel, pas un server traceback.</p></info></step>
+      <step><cmd>Inspectez les foreground application logs.</cmd><info><p>Consultez le terminal qui exécute <codeph>make dev</codeph> ou <codeph>uvicorn app.main:app --reload --port 8000</codeph>. Relevez les startup errors, migration errors, port conflicts et documentation-site warnings sans copier de secrets dans les tickets.</p></info></step>
+      <step><cmd>Exécutez la source smoke suite étroite lorsque des changements de code ou d’environnement doivent être confirmés.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make test-fast
+]]></codeblock><note type="warning">Une source smoke réussie ne certifie pas la production readiness, le reverse proxy behavior, les managed backups ni le Firefox runtime policy enforcement.</note></info></step>
+    </steps>
+    <result><p>L’administrateur dispose d’evidence montrant que le Linux source deployment démarre, répond aux health/readiness probes, sert la UI route et ne présente pas de foreground-log blockers immédiats.</p></result>
+    <postreq><p>En cas d’échec, conservez ensemble la command, les noms des environment variables, les probe responses et les relevant log lines pour le troubleshooting. N’élargissez pas ce runbook aux installer ou production-topology instructions différés.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-configure-linux-source-runtime"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</task>

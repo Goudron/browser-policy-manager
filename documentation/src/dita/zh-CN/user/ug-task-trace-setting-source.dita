@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-trace-setting-source" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>追踪设置来源</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Trace a configured setting to baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Open a configured setting in All Settings.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Source attribution helps explain why a value exists and whether changing it would override a baseline, CIS layer, manual edit, import, or raw fallback.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Open the setting detail or configured summary that shows source badges.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Identify whether the value comes from baseline, CIS, manual, imported, or raw source.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Follow related CIS or profile context links when a generated layer contributed the value.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Record the source before editing, removing, or resetting the setting.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 You know where the configured value came from and can explain the impact of changing it.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if source attribution is ambiguous, compare the profile with a clean baseline or inspect the imported source document.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-filter-settings-by-source"/>
+    <link keyref="topic.ug-concept-cis-layer-merge"/>
+  </related-links>
+</task>

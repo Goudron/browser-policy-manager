@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-run-validate-before-apply-update" xml:lang="fr" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Procédure DevOps: Profilupdate mit expected_revision validieren und anwenden</title>
+  <shortdesc>Procédure complète pour un produit de contrôle externe avec propriété des données, preuves auditables et limites de retry explicites.</shortdesc>
+  <taskbody>
+    <prereq><p>Définissez <codeph>$BPM_BASE_URL</codeph> et consignez le propriétaire externe, le canal de schéma, le ticket, la décision de retry et les preuves.</p></prereq>
+    <context><p>La procédure utilise les mêmes opérations BPM indiquées ci-dessous et conserve les API names, payloads et URLs comme identifiants techniques stables. Elle couvre health-gated startup, data ownership, failure recovery et la règle do not retry blindly. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></context>
+    <steps>
+      <step><cmd>Exécuter et consigner l’étape 1</cmd><info><p>Conservez les preuves dans le produit externe, vérifiez le résultat BPM et ne supposez pas de transaction, webhook ou retry sûr non documenté. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>Exécuter et consigner l’étape 2</cmd><info><p>Conservez les preuves dans le produit externe, vérifiez le résultat BPM et ne supposez pas de transaction, webhook ou retry sûr non documenté. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>Exécuter et consigner l’étape 3</cmd><info><p>Conservez les preuves dans le produit externe, vérifiez le résultat BPM et ne supposez pas de transaction, webhook ou retry sûr non documenté. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>Exécuter et consigner l’étape 4</cmd><info><p>Conservez les preuves dans le produit externe, vérifiez le résultat BPM et ne supposez pas de transaction, webhook ou retry sûr non documenté. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>Exécuter et consigner l’étape 5</cmd><info><p>Conservez les preuves dans le produit externe, vérifiez le résultat BPM et ne supposez pas de transaction, webhook ou retry sûr non documenté. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>Exécuter et consigner l’étape 6</cmd><info><note type="warning">Si les preuves sont incomplètes ou périmées, arrêtez le flux, relisez BPM et ouvrez une nouvelle décision opérateur. <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></note></info></step>
+    </steps>
+    <result><p>Procédure complète pour un produit de contrôle externe avec propriété des données, preuves auditables et limites de retry explicites. Conservez les preuves dans le produit externe, vérifiez le résultat BPM et ne supposez pas de transaction, webhook ou retry sûr non documenté.</p></result>
+    <postreq><p>Si les preuves sont incomplètes ou périmées, arrêtez le flux, relisez BPM et ouvrez une nouvelle décision opérateur.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+<link keyref="topic.admin-task-sync-profile-lifecycle"/>
+<link keyref="topic.admin-task-run-pull-compare-update-scenario"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

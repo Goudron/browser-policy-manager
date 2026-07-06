@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-comparison-workflow" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Рабочий процесс сравнения профилей</title><shortdesc>Compare помогает просмотреть различия сохранённых настроек двух профилей без изменения профилей.</shortdesc>
+  <conbody><p>Процесс: открыть Compare из Библиотеки, независимо найти Profile A и Profile B, проверить summary каждого профиля и прочитать comparison table.</p><p>Таблица использует объединение policy и managed-preference settings. Строка может быть equal, changed или missing на одной стороне. Compare работает только для чтения и не объединяет значения.</p></conbody>
+  <related-links><link keyref="topic.ug-reference-comparison-states"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
+</concept>

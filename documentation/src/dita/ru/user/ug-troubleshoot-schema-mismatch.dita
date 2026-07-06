@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-schema-mismatch" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Разрешить schema mismatch</title>
+  <shortdesc>Обработайте unsupported schema channel, ESR/Release mismatch или schema-dependent setting без скрытого изменения данных.</shortdesc>
+  <taskbody>
+    <prereq><p>Видимый статус BPM, сообщение валидации, предупреждение браузера или неуспешное действие показывает, что текущий workflow нельзя безопасно продолжать.</p></prereq>
+    <context><p>Schema mismatch обычно означает, что setting существует в одном Firefox channel, но unavailable, deprecated или имеет другую форму в выбранном channel.</p></context>
+    <steps>
+      <step><cmd>Проверьте, нацелен ли профиль на ESR 140.12 или Release 152.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Определите setting, который unavailable, unsupported, deprecated или schema-dependent в этом channel.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Выберите: переключить schema channel или удалить/изменить affected setting для целевого Firefox.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Повторите revalidate и review export readiness после решения по channel или setting.</cmd><info><note type="warning">Не редактируйте internal storage, browser local data, строки базы данных или generated build artifacts для восстановления пользовательской работы с профилем.</note></info></step>
+    </steps>
+    <result><p>Профиль нацелен на нужный Firefox channel и больше не скрывает schema-dependent mismatch.</p></result>
+    <postreq><p>Восстановление: если та же ошибка повторяется после одной чистой попытки, остановите workflow и сохраните видимое сообщение, имя профиля, канал схемы и текущую поверхность для maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

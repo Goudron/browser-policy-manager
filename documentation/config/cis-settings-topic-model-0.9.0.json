@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "guide_id": "cis-settings-guide",
+  "backlog_item": "BPM090-M6-01",
+  "status": "defined",
+  "source_inventory": "docs/architecture/cis-documentation-inventory-0.9.0.json",
+  "source_matrix": "docs/architecture/product-documentation-provenance-matrix-0.9.0.json",
+  "template_source": "documentation/src/shared/templates/cis-recommendation-reference-topic.dita",
+  "topic": {
+    "dita_type": "reference",
+    "topic_id_pattern": "cis-rec-{recommendation_id_slug}",
+    "key_pattern": "topic.cis-rec-{recommendation_id_slug}",
+    "filename_pattern": "cis-rec-{recommendation_id_slug}.dita",
+    "title_pattern": "CIS recommendation {recommendation_id}",
+    "audience": "user security-reviewer",
+    "platform": "web",
+    "product": "bpm-0-9-0",
+    "otherprops_cis": "cis({recommendation_id})",
+    "conditional_props": {
+      "level_1": "cis-level-1",
+      "level_2": "cis-level-2"
+    }
+  },
+  "required_sections": [
+    {
+      "id": "a-disclaimer",
+      "title": "Disclaimer and scope",
+      "required_fields": [
+        "independent_implementation",
+        "not_certified",
+        "not_endorsed",
+        "not_substitute_for_benchmark",
+        "not_proof_of_compliance",
+        "source_expression_blocked"
+      ]
+    },
+    {
+      "id": "a-benchmark",
+      "title": "Benchmark and version",
+      "required_fields": [
+        "benchmark.id",
+        "upstream_name",
+        "upstream_version",
+        "exact_release_date",
+        "tested_by_cis_against",
+        "source_license",
+        "official_source_required"
+      ]
+    },
+    {
+      "id": "a-recommendation-identity",
+      "title": "Recommendation identity",
+      "required_fields": [
+        "recommendation_id",
+        "level",
+        "scored",
+        "source_section",
+        "source_title_sha256",
+        "publication_disposition",
+        "provenance_id"
+      ]
+    },
+    {
+      "id": "a-bpm-authored-summary",
+      "title": "BPM-authored rationale summary",
+      "required_fields": [
+        "category",
+        "assessment",
+        "confidence",
+        "mapping_status",
+        "has_mapping_reason",
+        "has_review_note",
+        "non_publishable_reason"
+      ]
+    },
+    {
+      "id": "a-bpm-mapping",
+      "title": "BPM mapping",
+      "required_fields": [
+        "targets",
+        "kind",
+        "target_id",
+        "target_doc_id",
+        "ui_target",
+        "path",
+        "value",
+        "schema_channels",
+        "merge_rule"
+      ]
+    },
+    {
+      "id": "a-automation-state",
+      "title": "Automation and manual state",
+      "required_fields": [
+        "generated_layers",
+        "assessment",
+        "manual_review_paths",
+        "merge_decision_types",
+        "exception_contract.persisted_exception_model"
+      ]
+    },
+    {
+      "id": "a-conflicts",
+      "title": "Conflicts and exceptions",
+      "required_fields": [
+        "merge_contract",
+        "starter_presets",
+        "conflicts",
+        "manual_review_kept_base",
+        "exception_recording_boundary"
+      ]
+    },
+    {
+      "id": "a-verification",
+      "title": "Verification",
+      "required_fields": [
+        "schema_channel",
+        "health_or_validation_handoff",
+        "exported_policy_path",
+        "manual_review_action",
+        "verification_boundary"
+      ]
+    },
+    {
+      "id": "a-provenance",
+      "title": "Provenance",
+      "required_fields": [
+        "source_family_id",
+        "source_locator",
+        "source_license",
+        "rights_approval_id",
+        "source_title_sha256",
+        "publication_policy",
+        "no_certification_notice"
+      ]
+    }
+  ],
+  "disclaimer_contract": {
+    "required_outputclass": "cis-disclaimer",
+    "must_appear_in_sections": ["a-disclaimer", "a-provenance"],
+    "required_statements": [
+      "BPM is an independent implementation and is not authorized, sponsored, endorsed, certified, or approved by CIS.",
+      "BPM documentation is not a substitute for the official CIS benchmark.",
+      "BPM output does not prove CIS compliance.",
+      "The official CIS PDF and source expression are not copied, translated, indexed, or packaged.",
+      "BPM documents its own mappings, generated layers, merge behavior, manual-review states, and limitations in original prose.",
+      "BPM has no separate persisted CIS exception or waiver model in 0.9.0."
+    ],
+    "forbidden_claims": [
+      "CIS certified",
+      "CIS-certified",
+      "CIS endorsed",
+      "CIS-approved guide",
+      "authorized CIS guide",
+      "guarantees CIS compliance",
+      "proves CIS compliance",
+      "complete benchmark substitute",
+      "official CIS guidance"
+    ]
+  },
+  "source_boundary": {
+    "publishable_source_family_ids": [
+      "bpm-cis-mapping-implementation",
+      "cis-trademarks-and-certification-marks"
+    ],
+    "restricted_source_family_ids": ["cis-benchmark-pdf"],
+    "benchmark_source_publication_policy": "approval-required",
+    "source_expression_blocked_by_default": true,
+    "rights_approval_id_required_for_benchmark_expression": true,
+    "allowed_without_rights_approval": [
+      "recommendation_id",
+      "benchmark identity and version",
+      "benchmark official source link",
+      "source_title_sha256",
+      "BPM-authored mapping facts",
+      "BPM-authored workflow and verification guidance"
+    ],
+    "blocked_without_rights_approval": [
+      "official PDF",
+      "recommendation titles",
+      "benchmark rationale prose",
+      "audit prose",
+      "remediation prose",
+      "default-value prose",
+      "substantial benchmark tables or screenshots"
+    ]
+  },
+  "recommendation_model": {
+    "recommendation_count": 55,
+    "planned_topic_count": 53,
+    "provenance_only_count": 2,
+    "allowed_publication_dispositions": [
+      "planned-dita-topic",
+      "provenance-only-non-publishable"
+    ],
+    "supported_mapping_statuses": [
+      "mapped",
+      "preference_mapped",
+      "needs_research",
+      "deprecated_or_removed"
+    ],
+    "recommendation_id_format": "CIS dotted numeric identifier",
+    "topic_slug_rule": "replace dots with hyphens",
+    "doc_id_format": "cis-rec-{recommendation_id_slug}",
+    "planned_topics_require_targets": true,
+    "provenance_only_must_not_publish_topic": true,
+    "source_title_hash_required": true
+  },
+  "automation_model": {
+    "assessment_values": ["automated"],
+    "supported_schema_channels": ["esr-140.12", "release-152"],
+    "supported_levels": [1, 2],
+    "generated_layer_fields": [
+      "layer_id",
+      "level",
+      "schema_channel",
+      "recommendation_count",
+      "policy_top_level_count",
+      "document_sha256",
+      "file"
+    ],
+    "manual_review_path_count": 9,
+    "exception_contract": {
+      "persisted_exception_model": false,
+      "documentation_statement_required": true
+    }
+  },
+  "relationship_model": {
+    "ui_targets": [
+      "cis:{recommendation_id}",
+      "policy:{policy_id}",
+      "known-preference:{preference_id}"
+    ],
+    "firefox_policy_link_format": "policy:{target_id}",
+    "firefox_preference_link_format": "known-preference:{target_id}",
+    "user_guide_links": [
+      "ug-task-apply-cis-layer",
+      "ug-concept-cis-layer-merge",
+      "ug-task-resolve-cis-manual-review",
+      "ug-task-trace-setting-source"
+    ]
+  },
+  "validation_contract": {
+    "reject_certification_claims": true,
+    "reject_source_expression_without_rights_approval": true,
+    "reject_planned_topic_without_target": true,
+    "reject_provenance_only_publishable_topic": true,
+    "reject_missing_disclaimer": true,
+    "reject_missing_source_title_hash": true
+  },
+  "generator_contract": {
+    "skeleton_owner": "documentation/src/generated",
+    "reviewed_topic_owner": "documentation/src/dita/{locale}/cis",
+    "hand_authored_regions": [
+      "disclaimer",
+      "bpm-authored-summary",
+      "conflicts",
+      "verification",
+      "limitations"
+    ],
+    "generated_regions": [
+      "benchmark",
+      "recommendation-identity",
+      "bpm-mapping",
+      "automation-state",
+      "provenance"
+    ],
+    "regeneration_rule": "Regeneration may update generated factual regions only and must preserve reviewed prose and disclaimers byte-for-byte unless a review marker is changed."
+  },
+  "fixture_recommendation_ids": {
+    "automated_policy": "1.1.1.1",
+    "manual_review_path_policy": "1.1.5.1",
+    "automated_preference": "1.1.18.1",
+    "provenance_only_needs_research": "1.1.5.3",
+    "provenance_only_deprecated_or_removed": "1.1.12.1"
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Utiliser All Settings</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Open All Settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. A saved profile exists. New unsaved drafts must be saved before All Settings can open.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. All Settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Open the saved profile from the Library.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Choose the All Settings editor surface.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Use the mode that matches the task: Review for attention, Configured for applied values, or Catalog for every supported setting.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The saved profile is open in All Settings with the correct mode available.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if All Settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-choose-editor-surface"/>
+    <link keyref="topic.ug-task-review-attention-items"/>
+  </related-links>
+</task>

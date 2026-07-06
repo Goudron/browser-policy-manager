@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-normalization-aliases-0.9.0",
+  "backlog_item": "BPM090-M10-03",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "non_ai_boundary": "no-ai-no-rag-no-embeddings-no-generative-answers",
+  "normalization": {
+    "unicode_form": "NFKC",
+    "casefold": true,
+    "strip_diacritics": true,
+    "punctuation": "split punctuation except allowlisted endpoint and identifier separators",
+    "cjk_tokenization": "preserve full CJK runs and add deterministic unigrams plus overlapping bigrams",
+    "identifier_policy": "preserve allowlisted technical identifiers as normalized tokens; do not translate identifiers"
+  },
+  "alias_groups": [
+    {
+      "alias_id": "profile-library",
+      "target_topic_ids": ["ug-task-use-profile-library"],
+      "target_ids": ["topic:ug-task-use-profile-library"],
+      "technical_identifiers": ["ug-task-use-profile-library"],
+      "terms": {
+        "en": ["profile library", "library", "saved profiles"],
+        "ru": ["библиотека профилей", "библиотека", "сохранённые профили"],
+        "de": ["Profilbibliothek", "Bibliothek", "gespeicherte Profile"],
+        "zh-CN": ["配置档案库", "档案库", "已保存配置档案"],
+        "fr": ["bibliothèque des profils", "bibliothèque", "profils enregistrés"],
+        "es-ES": ["biblioteca de perfiles", "biblioteca", "perfiles guardados"]
+      }
+    },
+    {
+      "alias_id": "firefox-ai-controls",
+      "target_topic_ids": [
+        "ug-task-configure-firefox-ai-policies",
+        "ug-reference-schema-dependent-guided-controls"
+      ],
+      "target_ids": ["policy:AIControls"],
+      "technical_identifiers": ["AIControls", "policy:AIControls"],
+      "terms": {
+        "en": ["AI controls", "Firefox AI policies", "smart feature controls"],
+        "ru": ["контролы ИИ", "политики ИИ Firefox", "умные функции"],
+        "de": ["KI-Steuerungen", "Firefox-KI-Richtlinien", "Smart-Funktionen"],
+        "zh-CN": ["AI 控件", "Firefox AI 策略", "智能功能控制"],
+        "fr": ["contrôles IA", "politiques IA Firefox", "fonctionnalités intelligentes"],
+        "es-ES": ["controles de IA", "políticas de IA de Firefox", "funciones inteligentes"]
+      }
+    },
+    {
+      "alias_id": "api-validation",
+      "target_topic_ids": ["api-task-validate-firefox-policies-json"],
+      "target_ids": ["api-operation:API-VAL-001"],
+      "technical_identifiers": ["API-VAL-001", "api-operation:API-VAL-001", "/api/validation/firefox"],
+      "terms": {
+        "en": ["API validation", "validation endpoint", "validate policies.json"],
+        "ru": ["валидация API", "эндпоинт валидации", "проверить policies.json"],
+        "de": ["API-Validierung", "Validierungsendpunkt", "policies.json validieren"],
+        "zh-CN": ["API 验证", "验证端点", "验证 policies.json"],
+        "fr": ["validation API", "point de terminaison de validation", "valider policies.json"],
+        "es-ES": ["validación API", "endpoint de validación", "validar policies.json"]
+      }
+    },
+    {
+      "alias_id": "cis-baseline",
+      "target_topic_ids": ["cis-task-select-cis-baseline", "ug-task-apply-cis-layer"],
+      "target_ids": ["cis:1.1.1.1"],
+      "technical_identifiers": ["CIS", "cis:1.1.1.1", "1.1.1.1"],
+      "terms": {
+        "en": ["CIS baseline", "CIS layer", "hardening level"],
+        "ru": ["базовый профиль CIS", "слой CIS", "уровень усиления"],
+        "de": ["CIS-Basislinie", "CIS-Ebene", "Härtungsstufe"],
+        "zh-CN": ["CIS 基线", "CIS 层", "加固级别"],
+        "fr": ["référence CIS", "couche CIS", "niveau de durcissement"],
+        "es-ES": ["línea base CIS", "capa CIS", "nivel de endurecimiento"]
+      }
+    },
+    {
+      "alias_id": "json-import-export",
+      "target_topic_ids": [
+        "ug-task-import-policies-json",
+        "ug-task-export-policies-json",
+        "api-task-import-firefox-policies-json",
+        "api-task-export-firefox-policies-json"
+      ],
+      "target_ids": ["topic:ug-task-import-policies-json", "topic:ug-task-export-policies-json"],
+      "technical_identifiers": ["policies.json", "JSON"],
+      "terms": {
+        "en": ["policies.json import", "policies.json export", "Firefox JSON"],
+        "ru": ["импорт policies.json", "экспорт policies.json", "Firefox JSON"],
+        "de": ["policies.json importieren", "policies.json exportieren", "Firefox JSON"],
+        "zh-CN": ["导入 policies.json", "导出 policies.json", "Firefox JSON"],
+        "fr": ["importer policies.json", "exporter policies.json", "JSON Firefox"],
+        "es-ES": ["importar policies.json", "exportar policies.json", "JSON de Firefox"]
+      }
+    }
+  ],
+  "query_fixtures": [
+    {
+      "fixture_id": "en-profile-library",
+      "locale": "en",
+      "query": "profile library",
+      "expected_alias_ids": ["profile-library"],
+      "expected_tokens": ["profile", "library"]
+    },
+    {
+      "fixture_id": "en-ai-controls",
+      "locale": "en",
+      "query": "AIControls policy",
+      "expected_alias_ids": ["firefox-ai-controls"],
+      "expected_tokens": ["aicontrols", "policy"]
+    },
+    {
+      "fixture_id": "en-api-validation",
+      "locale": "en",
+      "query": "/api/validation/firefox",
+      "expected_alias_ids": ["api-validation"],
+      "expected_tokens": ["/api/validation/firefox"]
+    },
+    {
+      "fixture_id": "ru-profile-library",
+      "locale": "ru",
+      "query": "библиотека профилей",
+      "expected_alias_ids": ["profile-library"],
+      "expected_tokens": ["библиотека", "профилей"]
+    },
+    {
+      "fixture_id": "ru-ai-controls",
+      "locale": "ru",
+      "query": "контролы ИИ AIControls",
+      "expected_alias_ids": ["firefox-ai-controls"],
+      "expected_tokens": ["контролы", "ии", "aicontrols"]
+    },
+    {
+      "fixture_id": "ru-cis-baseline",
+      "locale": "ru",
+      "query": "слой CIS 1.1.1.1",
+      "expected_alias_ids": ["cis-baseline"],
+      "expected_tokens": ["слой", "cis", "1.1.1.1"]
+    },
+    {
+      "fixture_id": "de-profile-library",
+      "locale": "de",
+      "query": "Profilbibliothek",
+      "expected_alias_ids": ["profile-library"],
+      "expected_tokens": ["profilbibliothek"]
+    },
+    {
+      "fixture_id": "de-api-validation",
+      "locale": "de",
+      "query": "API-VAL-001 Validierungsendpunkt",
+      "expected_alias_ids": ["api-validation"],
+      "expected_tokens": ["api-val-001", "validierungsendpunkt"]
+    },
+    {
+      "fixture_id": "de-cis-baseline",
+      "locale": "de",
+      "query": "CIS-Basislinie",
+      "expected_alias_ids": ["cis-baseline"],
+      "expected_tokens": ["cis-basislinie"]
+    },
+    {
+      "fixture_id": "zh-cn-profile-library",
+      "locale": "zh-CN",
+      "query": "配置档案库",
+      "expected_alias_ids": ["profile-library"],
+      "expected_tokens": ["配置档案库", "配置", "档案"]
+    },
+    {
+      "fixture_id": "zh-cn-ai-controls",
+      "locale": "zh-CN",
+      "query": "AIControls AI 控件",
+      "expected_alias_ids": ["firefox-ai-controls"],
+      "expected_tokens": ["aicontrols", "ai", "控件"]
+    },
+    {
+      "fixture_id": "zh-cn-api-validation",
+      "locale": "zh-CN",
+      "query": "验证 /api/validation/firefox",
+      "expected_alias_ids": ["api-validation"],
+      "expected_tokens": ["验证", "/api/validation/firefox"]
+    },
+    {
+      "fixture_id": "fr-profile-library",
+      "locale": "fr",
+      "query": "bibliothèque des profils",
+      "expected_alias_ids": ["profile-library"],
+      "expected_tokens": ["bibliotheque", "des", "profils"]
+    },
+    {
+      "fixture_id": "fr-ai-controls",
+      "locale": "fr",
+      "query": "contrôles IA AIControls",
+      "expected_alias_ids": ["firefox-ai-controls"],
+      "expected_tokens": ["controles", "ia", "aicontrols"]
+    },
+    {
+      "fixture_id": "fr-cis-baseline",
+      "locale": "fr",
+      "query": "référence CIS",
+      "expected_alias_ids": ["cis-baseline"],
+      "expected_tokens": ["reference", "cis"]
+    },
+    {
+      "fixture_id": "es-profile-library",
+      "locale": "es-ES",
+      "query": "biblioteca de perfiles",
+      "expected_alias_ids": ["profile-library"],
+      "expected_tokens": ["biblioteca", "de", "perfiles"]
+    },
+    {
+      "fixture_id": "es-api-validation",
+      "locale": "es-ES",
+      "query": "validación API",
+      "expected_alias_ids": ["api-validation"],
+      "expected_tokens": ["validacion", "api"]
+    },
+    {
+      "fixture_id": "es-json-import-export",
+      "locale": "es-ES",
+      "query": "exportar policies.json",
+      "expected_alias_ids": ["json-import-export"],
+      "expected_tokens": ["exportar", "policies.json"]
+    }
+  ]
+}

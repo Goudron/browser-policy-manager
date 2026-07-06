@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-run-validate-before-apply-update" xml:lang="de" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Profilupdate mit expected_revision validieren und anwenden</title>
+  <shortdesc>Führen Sie ein validate-before-apply Update aus, das BPM-Zustand über die aktuelle Revision schützt und bei stale revision stoppt.</shortdesc>
+  <taskbody>
+    <prereq><p>Das externe Produkt hat das Zielprofil gelesen und dessen <codeph>revision</codeph> gespeichert. Erstellen Sie das Kandidaten-<codeph>policies.json</codeph>, bevor ein Patch gesendet wird.</p></prereq>
+    <context><p>Dieser Ablauf nutzt <codeph>API-VAL-001</codeph>, <codeph>API-PROFILE-003</codeph> und <codeph>API-PROFILE-005</codeph>. BPM does not provide ETags, Precondition-Header, Idempotency Keys oder Multi-Operation-Transaktionen.</p></context>
+    <steps>
+      <step><cmd>Kandidatendokument außerhalb von BPM erzeugen.</cmd><info><p>Dokumentieren Sie gewünschte Policy-Keys, Quellsystem, Reviewer, Ticket und Schema-Kanal. Beispiel: <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>.</p></info></step>
+  <step><cmd>Kandidat vor dem Patch validieren.</cmd><info><p>Anfragebeispiel: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>. Antwort: <codeph>200 {"ok":true,"profile":"release-152"}</codeph>. Fehler: <codeph>400</codeph>, <codeph>404</codeph>, <codeph>422</codeph> oder <codeph>503</codeph>.</p></info></step>
+  <step><cmd>Profil bei langem Freigabefenster erneut lesen.</cmd><info><p>Anfragebeispiel: <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>. Wenn sich <codeph>revision</codeph> geändert hat, starten Sie Vergleich und Freigabe neu.</p></info></step>
+  <step><cmd>Nur mutable Felder mit beobachteter Revision patchen.</cmd><info><p>Anfragebeispiel: <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> mit <codeph>{"flags":{"DisableTelemetry":true,"BlockAboutConfig":true},"expected_revision":7,"compliance":{"source":"control-product","decision":"approved"}}</codeph>. Antwort: <codeph>200 ProfileRead</codeph> mit erhöhter <codeph>revision</codeph>.</p></info></step>
+  <step><cmd>Konflikte als Stoppsignal behandeln.</cmd><info><p>Fehlerbeispiele: <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph> bei stale <codeph>expected_revision</codeph> und <codeph>422</codeph>. Bei <codeph>409</codeph> muss der Desired State neu berechnet werden.</p></info></step>
+  <step><cmd>Update-Evidence sichern und nicht blind wiederholen.</cmd><info><note type="warning">Nicht denselben PATCH blind erneut senden. Speichern Sie alte und neue Revision, Validation Body, Hash des Patch Body, Response Status, Reviewer Approval und Retry-Entscheidung außerhalb von BPM.</note></info></step>
+    </steps>
+    <result><p>Das Profil wird nur nach Validierung und Revisionsprüfung aktualisiert; Erfolg und Konflikt besitzen audit evidence.</p></result>
+    <postreq><p>Export oder compliance metadata handoff erfolgen erst, wenn das Read-back-Profil dem freigegebenen Desired State entspricht.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+<link keyref="topic.admin-task-sync-profile-lifecycle"/>
+<link keyref="topic.admin-task-run-pull-compare-update-scenario"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

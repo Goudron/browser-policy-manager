@@ -1,0 +1,327 @@
+{
+  "$schema": "../schemas/product-documentation-manifest-v1.schema.json",
+  "schema_version": 1,
+  "artifact": {
+    "bpm_version": "0.9.0",
+    "documentation_version": "0.9.0-example.1",
+    "build_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_revision": "1111111111111111111111111111111111111111",
+    "dita_ot_version": "4.4"
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "default_locale": "en",
+  "guides": {
+    "user-guide": {
+      "url_root": "user",
+      "home_topic_id": "ug-task-create-first-profile",
+      "title": {
+        "en": "User Guide",
+        "ru": "Руководство пользователя",
+        "de": "Benutzerhandbuch",
+        "zh-CN": "用户指南",
+        "fr": "Guide de l’utilisateur",
+        "es-ES": "Guía del usuario"
+      }
+    },
+    "firefox-policy-guide": {
+      "url_root": "firefox",
+      "home_topic_id": "fx-policy-AIControls",
+      "title": {
+        "en": "Firefox Policy Guide",
+        "ru": "Руководство по политикам Firefox",
+        "de": "Firefox-Richtlinienhandbuch",
+        "zh-CN": "Firefox 策略指南",
+        "fr": "Guide des stratégies Firefox",
+        "es-ES": "Guía de políticas de Firefox"
+      }
+    },
+    "cis-settings-guide": {
+      "url_root": "cis",
+      "home_topic_id": "cis-rec-1-1-1-1",
+      "title": {
+        "en": "CIS Settings Guide",
+        "ru": "Руководство по настройкам CIS",
+        "de": "CIS-Einstellungshandbuch",
+        "zh-CN": "CIS 设置指南",
+        "fr": "Guide des paramètres CIS",
+        "es-ES": "Guía de configuración CIS"
+      }
+    },
+    "api-integration-guide": {
+      "url_root": "api",
+      "home_topic_id": "api-ref-update-profile",
+      "title": {
+        "en": "API Integration Guide",
+        "ru": "Руководство по интеграции API",
+        "de": "API-Integrationshandbuch",
+        "zh-CN": "API 集成指南",
+        "fr": "Guide d’intégration API",
+        "es-ES": "Guía de integración de API"
+      }
+    },
+    "administrator-guide": {
+      "url_root": "admin",
+      "home_topic_id": "administrator-guide",
+      "title": {
+        "en": "Administrator and DevOps Guide",
+        "ru": "Руководство администратора и DevOps",
+        "de": "Administrator- und DevOps-Handbuch",
+        "zh-CN": "管理员和 DevOps 指南",
+        "fr": "Guide administrateur et DevOps",
+        "es-ES": "Guía de administración y DevOps"
+      }
+    }
+  },
+  "topics": {
+    "ug-task-create-first-profile": {
+      "guide_id": "user-guide",
+      "dita_key": "topic.ug-task-create-first-profile",
+      "source_slug": "ug-task-create-first-profile",
+      "url_path": "tasks/create-first-profile",
+      "kind": "task",
+      "title": {
+        "en": "Create your first profile",
+        "ru": "Создание первого профиля",
+        "de": "Erstes Profil erstellen",
+        "zh-CN": "创建第一个配置文件",
+        "fr": "Créer votre premier profil",
+        "es-ES": "Crear el primer perfil"
+      },
+      "anchors": {
+        "a-prerequisites": {
+          "title": {
+            "en": "Prerequisites",
+            "ru": "Предварительные требования",
+            "de": "Voraussetzungen",
+            "zh-CN": "先决条件",
+            "fr": "Prérequis",
+            "es-ES": "Requisitos previos"
+          },
+          "aliases": []
+        }
+      },
+      "output": {
+        "en": "en/user/tasks/create-first-profile/index.html",
+        "ru": "ru/user/tasks/create-first-profile/index.html",
+        "de": "de/user/tasks/create-first-profile/index.html",
+        "zh-CN": "zh-CN/user/tasks/create-first-profile/index.html",
+        "fr": "fr/user/tasks/create-first-profile/index.html",
+        "es-ES": "es-ES/user/tasks/create-first-profile/index.html"
+      }
+    },
+    "fx-policy-AIControls": {
+      "guide_id": "firefox-policy-guide",
+      "dita_key": "topic.fx-policy-AIControls",
+      "source_slug": "fx-policy-ai-controls",
+      "url_path": "policies/ai-controls",
+      "kind": "reference",
+      "title": {
+        "en": "AIControls policy",
+        "ru": "Политика AIControls",
+        "de": "AIControls-Richtlinie",
+        "zh-CN": "AIControls 策略",
+        "fr": "Stratégie AIControls",
+        "es-ES": "Política AIControls"
+      },
+      "anchors": {
+        "a-value-shape": {
+          "title": {
+            "en": "Value shape",
+            "ru": "Форма значения",
+            "de": "Wertstruktur",
+            "zh-CN": "值结构",
+            "fr": "Structure de la valeur",
+            "es-ES": "Estructura del valor"
+          },
+          "aliases": ["a-schema"]
+        }
+      },
+      "output": {
+        "en": "en/firefox/policies/ai-controls/index.html",
+        "ru": "ru/firefox/policies/ai-controls/index.html",
+        "de": "de/firefox/policies/ai-controls/index.html",
+        "zh-CN": "zh-CN/firefox/policies/ai-controls/index.html",
+        "fr": "fr/firefox/policies/ai-controls/index.html",
+        "es-ES": "es-ES/firefox/policies/ai-controls/index.html"
+      }
+    },
+    "fx-pref-browser-download-dir": {
+      "guide_id": "firefox-policy-guide",
+      "dita_key": "topic.fx-pref-browser-download-dir",
+      "source_slug": "fx-pref-browser-download-dir",
+      "url_path": "preferences/browser-download-dir",
+      "kind": "reference",
+      "title": {
+        "en": "browser.download.dir preference",
+        "ru": "Настройка browser.download.dir",
+        "de": "Einstellung browser.download.dir",
+        "zh-CN": "browser.download.dir 首选项",
+        "fr": "Préférence browser.download.dir",
+        "es-ES": "Preferencia browser.download.dir"
+      },
+      "anchors": {},
+      "output": {
+        "en": "en/firefox/preferences/browser-download-dir/index.html",
+        "ru": "ru/firefox/preferences/browser-download-dir/index.html",
+        "de": "de/firefox/preferences/browser-download-dir/index.html",
+        "zh-CN": "zh-CN/firefox/preferences/browser-download-dir/index.html",
+        "fr": "fr/firefox/preferences/browser-download-dir/index.html",
+        "es-ES": "es-ES/firefox/preferences/browser-download-dir/index.html"
+      }
+    },
+    "cis-rec-1-1-1-1": {
+      "guide_id": "cis-settings-guide",
+      "dita_key": "topic.cis-rec-1-1-1-1",
+      "source_slug": "cis-rec-1-1-1-1",
+      "url_path": "recommendations/1-1-1-1",
+      "kind": "reference",
+      "title": {
+        "en": "CIS recommendation 1.1.1.1",
+        "ru": "Рекомендация CIS 1.1.1.1",
+        "de": "CIS-Empfehlung 1.1.1.1",
+        "zh-CN": "CIS 建议 1.1.1.1",
+        "fr": "Recommandation CIS 1.1.1.1",
+        "es-ES": "Recomendación CIS 1.1.1.1"
+      },
+      "anchors": {
+        "a-bpm-mapping": {
+          "title": {
+            "en": "BPM mapping",
+            "ru": "Сопоставление BPM",
+            "de": "BPM-Zuordnung",
+            "zh-CN": "BPM 映射",
+            "fr": "Mappage BPM",
+            "es-ES": "Asignación BPM"
+          },
+          "aliases": []
+        }
+      },
+      "output": {
+        "en": "en/cis/recommendations/1-1-1-1/index.html",
+        "ru": "ru/cis/recommendations/1-1-1-1/index.html",
+        "de": "de/cis/recommendations/1-1-1-1/index.html",
+        "zh-CN": "zh-CN/cis/recommendations/1-1-1-1/index.html",
+        "fr": "fr/cis/recommendations/1-1-1-1/index.html",
+        "es-ES": "es-ES/cis/recommendations/1-1-1-1/index.html"
+      }
+    },
+    "api-ref-update-profile": {
+      "guide_id": "api-integration-guide",
+      "dita_key": "topic.api-ref-update-profile",
+      "source_slug": "api-ref-update-profile",
+      "url_path": "reference/update-profile",
+      "kind": "reference",
+      "title": {
+        "en": "Update a profile",
+        "ru": "Обновление профиля",
+        "de": "Profil aktualisieren",
+        "zh-CN": "更新配置文件",
+        "fr": "Mettre à jour un profil",
+        "es-ES": "Actualizar un perfil"
+      },
+      "anchors": {
+        "a-validation-errors": {
+          "title": {
+            "en": "Validation errors",
+            "ru": "Ошибки проверки",
+            "de": "Validierungsfehler",
+            "zh-CN": "验证错误",
+            "fr": "Erreurs de validation",
+            "es-ES": "Errores de validación"
+          },
+          "aliases": []
+        }
+      },
+      "output": {
+        "en": "en/api/reference/update-profile/index.html",
+        "ru": "ru/api/reference/update-profile/index.html",
+        "de": "de/api/reference/update-profile/index.html",
+        "zh-CN": "zh-CN/api/reference/update-profile/index.html",
+        "fr": "fr/api/reference/update-profile/index.html",
+        "es-ES": "es-ES/api/reference/update-profile/index.html"
+      }
+    },
+    "administrator-guide": {
+      "guide_id": "administrator-guide",
+      "dita_key": "topic.administrator-guide",
+      "source_slug": "administrator-guide",
+      "url_path": "home",
+      "kind": "landing",
+      "title": {
+        "en": "Administrator and DevOps Guide",
+        "ru": "Руководство администратора и DevOps",
+        "de": "Administrator- und DevOps-Handbuch",
+        "zh-CN": "管理员和 DevOps 指南",
+        "fr": "Guide administrateur et DevOps",
+        "es-ES": "Guía de administración y DevOps"
+      },
+      "anchors": {
+        "a-administrator-guide": {
+          "title": {
+            "en": "Administrator and DevOps Guide",
+            "ru": "Руководство администратора и DevOps",
+            "de": "Administrator- und DevOps-Handbuch",
+            "zh-CN": "管理员和 DevOps 指南",
+            "fr": "Guide administrateur et DevOps",
+            "es-ES": "Guía de administración y DevOps"
+          },
+          "aliases": []
+        }
+      },
+      "output": {
+        "en": "en/admin/home/index.html",
+        "ru": "ru/admin/home/index.html",
+        "de": "de/admin/home/index.html",
+        "zh-CN": "zh-CN/admin/home/index.html",
+        "fr": "fr/admin/home/index.html",
+        "es-ES": "es-ES/admin/home/index.html"
+      }
+    }
+  },
+  "assets": {
+    "shot-ug-task-create-first-profile-library-empty": {
+      "kind": "screenshot",
+      "media_type": "image/webp",
+      "localization": "per-locale",
+      "reuse_approved": false,
+      "topic_ids": ["ug-task-create-first-profile"],
+      "variants": {
+        "en": { "path": "assets/screenshots/en/shot-ug-task-create-first-profile-library-empty.webp", "sha256": "0000000000000000000000000000000000000000000000000000000000000001", "width": 1440, "height": 900 },
+        "ru": { "path": "assets/screenshots/ru/shot-ug-task-create-first-profile-library-empty.webp", "sha256": "0000000000000000000000000000000000000000000000000000000000000002", "width": 1440, "height": 900 },
+        "de": { "path": "assets/screenshots/de/shot-ug-task-create-first-profile-library-empty.webp", "sha256": "0000000000000000000000000000000000000000000000000000000000000003", "width": 1440, "height": 900 },
+        "zh-CN": { "path": "assets/screenshots/zh-CN/shot-ug-task-create-first-profile-library-empty.webp", "sha256": "0000000000000000000000000000000000000000000000000000000000000004", "width": 1440, "height": 900 },
+        "fr": { "path": "assets/screenshots/fr/shot-ug-task-create-first-profile-library-empty.webp", "sha256": "0000000000000000000000000000000000000000000000000000000000000005", "width": 1440, "height": 900 },
+        "es-ES": { "path": "assets/screenshots/es-ES/shot-ug-task-create-first-profile-library-empty.webp", "sha256": "0000000000000000000000000000000000000000000000000000000000000006", "width": 1440, "height": 900 }
+      }
+    }
+  },
+  "search": {
+    "en": { "path": "search/en/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000001", "format_version": 1, "document_count": 6 },
+    "ru": { "path": "search/ru/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000002", "format_version": 1, "document_count": 6 },
+    "de": { "path": "search/de/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000003", "format_version": 1, "document_count": 6 },
+    "zh-CN": { "path": "search/zh-CN/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000004", "format_version": 1, "document_count": 6 },
+    "fr": { "path": "search/fr/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000005", "format_version": 1, "document_count": 6 },
+    "es-ES": { "path": "search/es-ES/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000006", "format_version": 1, "document_count": 6 }
+  },
+  "aliases": {
+    "user/tasks/create-profile": {
+      "topic_id": "ug-task-create-first-profile",
+      "canonical_url_path": "user/tasks/create-first-profile",
+      "reason": "Example of a renamed pre-0.9 task path.",
+      "since_bpm_version": "0.9.0"
+    }
+  },
+  "tombstones": {
+    "user/reference/legacy-editor": {
+      "retired_topic_id": "ug-reference-legacy-editor",
+      "reason": "Example retired topic with no honest semantic successor.",
+      "since_bpm_version": "0.9.0",
+      "status": 410
+    }
+  },
+  "ui_target_map": {
+    "path": "ui-target-map.json",
+    "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "schema_version": 1
+  }
+}

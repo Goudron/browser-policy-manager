@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-policy-selection" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Elegir una política de Firefox para configurar</title>
+  <shortdesc>Elija políticas según el resultado de usuario, el canal de esquema, la forma del valor y la superficie de BPM que ofrece la edición más segura.</shortdesc>
+  <conbody>
+    <section id="a-start-with-outcome"><title>Empezar por el resultado</title><p>Empiece por el comportamiento del navegador que necesita: actualizaciones, página de inicio, extensiones, privacidad, permisos, búsqueda, certificados, proxy o controls para funciones AI y smart. Después use los reference skeletons de Firefox Policy Guide y los flujos de User Guide para encontrar el policy ID estable.</p></section>
+    <section id="a-check-channel"><title>Comprobar compatibilidad Release y ESR</title><p>Algunas políticas existen tanto en Firefox Release 152 como en ESR 140.12, mientras que otras son solo Release. Seleccione el canal de esquema de BPM antes de depender de una política y trate una política no disponible como un bloqueo de validación.</p></section>
+    <section id="a-pick-edit-surface"><title>Elegir la superficie de edición</title><p>Use Guided Editor para elecciones habituales orientadas a tareas, All Settings para el catálogo completo y el rastreo de fuentes, y JSON Editor cuando necesite control exacto del documento de frontera de Firefox. Exporte solo después de una validación limpia para el canal elegido.</p></section>
+    <section id="a-review-value-shape"><title>Revisar la forma del valor</title><p>Las políticas boolean, string e integer simples suelen poder editarse directamente. Las políticas object, array, extension, permission, search, certificate, proxy y preference-locking complejas requieren revisión adicional, porque los campos anidados, la conservación de desconocidos y el raw fallback pueden afectar al <codeph>policies.json</codeph> exportado.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+  </related-links>
+</concept>

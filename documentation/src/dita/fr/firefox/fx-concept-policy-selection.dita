@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-policy-selection" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Choisir une stratégie Firefox à configurer</title>
+  <shortdesc>Choisissez les stratégies selon l’objectif utilisateur, le canal de schéma, la forme de valeur et la surface BPM offrant le chemin de modification le plus sûr.</shortdesc>
+  <conbody>
+    <section id="a-start-with-outcome"><title>Commencer par le résultat</title><p>Commencez par le comportement de navigateur recherché : mises à jour, page d’accueil, extensions, confidentialité, permissions, recherche, certificats, proxy ou controls pour les fonctions AI et smart. Utilisez ensuite les reference skeletons du Firefox Policy Guide et les workflows du User Guide pour trouver le policy ID stable.</p></section>
+    <section id="a-check-channel"><title>Vérifier Release et ESR</title><p>Certaines stratégies existent dans Firefox Release 152 et ESR 140.12, tandis que d’autres sont propres à Release. Sélectionnez le canal de schéma BPM avant de vous appuyer sur une stratégie, et traitez une stratégie indisponible comme un blocage de validation.</p></section>
+    <section id="a-pick-edit-surface"><title>Choisir la surface d’édition</title><p>Utilisez Guided Editor pour les choix fréquents orientés tâche, All Settings pour le catalogue complet et la traçabilité des sources, et JSON Editor lorsqu’un contrôle exact du document frontière Firefox est nécessaire. Exportez uniquement après une validation propre pour le canal choisi.</p></section>
+    <section id="a-review-value-shape"><title>Examiner la forme de valeur</title><p>Les stratégies boolean, string et integer simples sont généralement modifiables directement. Les stratégies object, array, extension, permission, search, certificate, proxy et preference-locking exigent une revue supplémentaire, car les champs imbriqués, la conservation d’inconnus et le raw fallback peuvent affecter le <codeph>policies.json</codeph> exporté.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+  </related-links>
+</concept>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-remove-reset-setting" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Remove or reset a setting</title>
+  <shortdesc>Remove a configured value or reset it back to the inherited baseline, preset, or unconfigured state.</shortdesc>
+  <taskbody>
+    <prereq><p>Open the setting detail panel for a configured value.</p></prereq>
+    <context><p>Remove and reset actions are destructive for the selected value, so the user should understand source and downstream effects first.</p></context>
+    <steps>
+      <step><cmd>Inspect the current value and source badge.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose Remove or Reset only for the setting you intend to change.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Read any warning or validation message shown by the detail panel.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Save the profile after confirming the value is absent, reset, or inherited as expected.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
+    </steps>
+    <result><p>The setting no longer applies from the previous configured value.</p></result>
+    <postreq><p>Recovery: if the removal was unintended, reapply the previous value from history, import, comparison, or a saved source document.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-setting-detail"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</task>

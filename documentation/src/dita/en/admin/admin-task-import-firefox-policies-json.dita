@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-import-firefox-policies-json" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Import Firefox policies.json through the API</title>
+  <shortdesc>Create a normalized BPM profile from a canonical Firefox Enterprise <codeph>policies.json</codeph> document using JSON or multipart input.</shortdesc>
+  <taskbody>
+    <prereq><p>Set <codeph>$BPM_BASE_URL</codeph>, choose a supported schema channel such as <codeph>release-152</codeph>, and prepare a full Firefox document with a top-level <codeph>policies</codeph> object.</p></prereq>
+    <context><p>This task covers <codeph>API-FF-001</codeph>. Import accepts <codeph>application/json</codeph> with <codeph>FirefoxPoliciesJsonImportRequest</codeph> or <codeph>multipart/form-data</codeph> with a <codeph>file</codeph> field. BPM validates the canonical Firefox document, normalizes <codeph>policies</codeph> into profile <codeph>flags</codeph>, and stores optional opaque <codeph>compliance</codeph> metadata on the BPM profile.</p></context>
+    <steps>
+      <step><cmd>Submit a JSON import request when the integrating product already has the document in memory.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> with <codeph>Content-Type: application/json</codeph> and JSON <codeph>{"name":"api-json-import","description":"Imported by control product","schema_version":"release-152","compliance":{"framework":"cis","layer":"cis_l1"},"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>.</p></info></step>
+      <step><cmd>Use multipart import when the source system hands over a file.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> with <codeph>multipart/form-data</codeph>, fields <codeph>name=api-multipart-import</codeph>, <codeph>schema_version=release-152</codeph>, optional <codeph>description</codeph>, optional <codeph>compliance={"framework":"cis","layer":"cis_l2"}</codeph> as a JSON string, and <codeph>file=@policies.json;type=application/json</codeph>. Runtime also accepts a multipart <codeph>document</codeph> field, but the OpenAPI multipart schema currently declares <codeph>file</codeph>; use <codeph>file</codeph> for new examples.</p></info></step>
+      <step><cmd>Read the created BPM profile from the <codeph>201 ProfileRead</codeph> response.</cmd><info><p>Response example: <codeph>201 ProfileRead</codeph> with <codeph>schema_version="release-152"</codeph>, <codeph>flags.DisableTelemetry=true</codeph>, <codeph>flags.BlockAboutConfig=true</codeph>, stored <codeph>compliance</codeph>, <codeph>id</codeph>, and <codeph>revision</codeph>. Store the returned profile ID instead of inferring identity from the profile name.</p></info></step>
+      <step><cmd>Treat import errors as profile creation failures and do not assume partial profile state.</cmd><info><p>Error examples: <codeph>400</codeph> for malformed JSON, wrong document shape, or unsupported schema channel; <codeph>409</codeph> for duplicate profile name; <codeph>415</codeph> for unsupported media type; <codeph>422</codeph> for request or Firefox policy validation errors.</p></info></step>
+      <step><cmd>Keep canonical Firefox and normalized BPM shapes separate in integration code.</cmd><info><p>The request <codeph>document.policies</codeph> is the Firefox deployment boundary. The created profile's <codeph>flags</codeph> are BPM's normalized model. Do not send a top-level <codeph>flags</codeph> object to this import endpoint.</p></info></step>
+      <step><cmd>Record import evidence in the integrating product.</cmd><info><note type="warning">Import creates a BPM profile but does not deploy Firefox settings, prove runtime enforcement, or provide an idempotency key. Record the source document hash, schema channel, returned profile ID, revision, compliance metadata, and duplicate-name recovery decision externally.</note></info></step>
+    </steps>
+    <result><p>The Firefox <codeph>policies.json</codeph> document is represented as a normalized BPM profile that can be reviewed, validated, exported, and tracked by ID.</p></result>
+    <postreq><p>Use the export task to render the saved profile back to canonical Firefox JSON before handing it to deployment tooling.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.ug-task-import-policies-json"/>
+  </related-links>
+</task>

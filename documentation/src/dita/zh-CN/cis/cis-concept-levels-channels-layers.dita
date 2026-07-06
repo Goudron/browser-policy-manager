@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-levels-channels-layers" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>在 CIS level、channel 和 generated layer 之间选择</title>
+  <shortdesc>BPM 中的 CIS 选择取决于目标 hardening level，以及用于 validation 和 export 的 Firefox schema channel。</shortdesc>
+  <conbody>
+    <section id="a-level-1"><title>Level 1</title><p>Level 1 是广泛 enterprise 使用的默认起点。在 BPM 中，它由 ESR 140.12 和 Release 152 的 generated Level 1 layer 表示，每个 layer 覆盖 49 条 mapped recommendation。当 profile 需要提升 security posture，同时保留常规 browsing 和 support workflow 时使用它。</p></section>
+    <section id="a-level-2"><title>Level 2</title><p>Level 2 更严格，会添加可能影响 usability、operations 或 troubleshooting 的 control。BPM 为 ESR 140.12 和 Release 152 生成了 Level 2 layer，每个覆盖 53 条 mapped recommendation。只有当 deployment owner 接受更强 restriction 并具备 exception review 流程时才选择它。</p></section>
+    <section id="a-supported-channels"><title>支持的 Firefox channel</title><p>BPM 当前针对 Firefox ESR 140.12 和 Firefox Release 152 schema 验证 CIS layer。某个 recommendation topic 可能链接到两个 channel 都有效的 Firefox policy 或 managed preference，但在 export 之前仍需要保持所选 schema channel 一致。</p></section>
+    <section id="a-generated-layers"><title>Generated layers</title><p>可用的 generated layer 是 cis-l1.esr-140.12、cis-l1.release-152、cis-l2.esr-140.12 和 cis-l2.release-152。每个 layer 提供 BPM 自有的 policy value 或 locked managed preference，随后 profile merge logic 记录 value 是 added、already satisfied、replaced、base stricter，还是 kept for manual review。</p></section>
+    <section id="a-manual-review"><title>Manual review</title><p>九个明确 path 需要 manual review，因为本地治理可能改变正确决策。Update controls、proxy mode 和 lock state，以及部分 sanitize-on-shutdown value，都是 BPM 只提示问题而不作通用 compliance 决定的例子。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-concept-orientation"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-concept-cis-layer-merge"/>
+    <link keyref="topic.ug-task-resolve-cis-manual-review"/>
+  </related-links>
+</concept>

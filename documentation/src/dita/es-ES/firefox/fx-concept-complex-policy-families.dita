@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-complex-policy-families" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Familias complejas de políticas de Firefox</title>
+  <shortdesc>Revise las familias de políticas anidadas como grupos, porque un único valor exportado puede combinar varios comportamientos relacionados del navegador.</shortdesc>
+  <conbody>
+    <section id="a-extensions"><title>Extensions</title><p>Use <codeph>ExtensionSettings</codeph> para reglas de instalación basadas en dictionary y extension IDs desconocidos; use la forma heredada <codeph>Extensions</codeph> solo cuando esa estructura coincida con el comportamiento previsto de Firefox.</p></section>
+    <section id="a-permissions"><title>Permissions</title><p><codeph>Permissions</codeph> agrupa decisiones de camera, microphone, location, notification, autoplay y funciones similares. Revise las allow/block lists juntas, porque un dominio puede verse afectado por más de una permission branch.</p></section>
+    <section id="a-updates"><title>Updates</title><p>Update controls como <codeph>DisableAppUpdate</codeph>, <codeph>AppAutoUpdate</codeph> y <codeph>DisableSystemAddonUpdate</codeph> deben revisarse como una sola familia para que los usuarios entiendan qué updater sigue activo.</p></section>
+    <section id="a-certificates"><title>Certificates</title><p><codeph>Certificates</codeph> puede importar enterprise roots e instalar certificate files. Trate las rutas y el trust behavior como dependientes del entorno y verifíquelos fuera de BPM antes del deployment.</p></section>
+    <section id="a-proxy"><title>Proxy</title><p><codeph>Proxy</codeph> combina mode, server, port y protocol reuse. Valide cuidadosamente los manual proxy values, porque las direcciones mal formadas pueden bloquear el acceso de red del navegador.</p></section>
+    <section id="a-search-homepage"><title>Search y homepage</title><p><codeph>SearchEngines</codeph> y <codeph>Homepage</codeph> definen los primeros puntos de entrada del usuario. Las Search URL templates deben conservar <codeph>{searchTerms}</codeph>, y las locked homepages deben comprobarse con source tracing.</p></section>
+    <section id="a-privacy-ai"><title>Privacy y AI controls</title><p>Privacy families como <codeph>EnableTrackingProtection</codeph> y <codeph>Cookies</codeph> pueden interactuar con site exceptions. Firefox AI controls como <codeph>AIControls</codeph> son políticas de producto que deben documentarse; no añaden AI functionality al documentation portal.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-task-review-complex-policy-configuration"/>
+    <link keyref="topic.fx-reference-managed-preference-locking"/>
+    <link keyref="topic.fx-concept-release-esr-differences"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+  </related-links>
+</concept>

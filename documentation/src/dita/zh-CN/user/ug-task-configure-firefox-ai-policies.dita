@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-firefox-ai-policies" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>配置 Firefox AI 和智能功能策略</title>
+  <shortdesc>当 Release 架构支持时，使用步骤 5 配置与 AI &amp; smart features、视觉搜索和智能表面相关的现有 Firefox 策略。</shortdesc>
+  <taskbody>
+    <prereq><p>请选择支持这些策略的 Release 架构，或预先确认 ESR 140.12 中部分控制不存在。</p></prereq>
+    <context><p>本主题把现有 Firefox AI 和智能功能策略作为产品功能来说明。它不会向文档门户添加 AI 功能；RAG、嵌入、生成式搜索或生成式回答不属于 0.9.0。</p></context>
+    <steps>
+      <step><cmd>打开步骤 5“AI &amp; smart features”。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>检查所选 Release 架构列出的内置浏览器 AI 表面、视觉搜索和智能功能。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>根据配置文件目标，对每个受支持策略选择启用、禁用或保持不变。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>如果某个控制在 ESR 140.12 中不存在，请将其视为 ESR 不支持，不要手动把它编造成 Guided 设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+    </steps>
+    <result><p>受支持的 Firefox AI 和智能功能策略已作为产品设置审查，同时保留文档门户不使用 RAG、嵌入或生成式回答的边界。</p></result>
+    <postreq><p>恢复：如果预期控制在 ESR 中不可见，请切换到受支持的 Release 架构进行审查，或记录 ESR 不支持该控制。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

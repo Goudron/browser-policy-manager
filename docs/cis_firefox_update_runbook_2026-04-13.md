@@ -65,10 +65,26 @@ Include `--json` for machine-readable output or `--validate-targets` to scan for
 ./.venv/bin/pytest -q tests/compliance
 ```
 
-## 8. Release checklist
+## 8. Documentation drift gate
+
+Treat CIS documentation as part of the benchmark or mapping refresh:
+
+1. Follow `documentation/runbooks/inventory-refresh.md`, especially the CIS benchmark and mapping
+   drift gate.
+2. Update `docs/architecture/cis-documentation-inventory-0.9.0.{json,md}` and every affected CIS
+   DITA recommendation, workflow, mapping, preset/layer/source-attribution, manual-review,
+   verification, manifest, UI target, search, and locale peer in the same review.
+3. Preserve source-rights boundaries: do not copy or index restricted CIS benchmark expression, and
+   do not claim CIS certification, endorsement, conformance, or compliance guarantee.
+4. Run the focused CIS documentation inventory/skeleton/manifest contracts before release readiness,
+   then run `make docs-release-check` if generated documentation artifacts changed.
+
+## 9. Release checklist
 
 - `sources.yaml` includes the new entry and keeps prior versions.
 - `is_default` points at the intended current version.
 - All compliance tests pass.
 - Compliance metadata reflects the new version.
+- CIS documentation inventory, DITA topics, manifests, search indexes, and locale peers reflect the
+  current mappings and boundaries.
 - Update notes mention the benchmark version and release date.

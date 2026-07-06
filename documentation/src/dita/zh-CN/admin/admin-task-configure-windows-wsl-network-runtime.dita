@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+  <title>配置 WSL runtime 和浏览器访问</title>
+  <shortdesc>在 WSL 内设置 BPM runtime variables，选择安全的 bind address，启动 source process，并确定 Windows 中使用的 browser URL。</shortdesc>
+  <taskbody>
+    <prereq><p>BPM checkout、virtual environment、dependencies 和 migrations 已在 WSL Linux filesystem 中准备好。</p></prereq>
+    <context><p>BPM 从 Linux process 读取 <codeph>BPM_</codeph> environment variables。现代 WSL 通常会把 <codeph>localhost</codeph> 转发到 Windows；当 browser access 或 firewall behavior 不清楚时，应检查 WSL IP。</p></context>
+    <steps>
+      <step><cmd>在 WSL shell 中设置 local runtime variables。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+source .venv/bin/activate
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+export BPM_HOST="0.0.0.0"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+]]></codeblock><p><codeph>BPM_HOST="0.0.0.0"</codeph> 允许 Windows browser 通过 localhost forwarding 访问 WSL process。仅在 browser 也位于 WSL 中或 forwarding 已验证时使用 <codeph>127.0.0.1</codeph>。</p></info></step>
+      <step><cmd>从 WSL checkout 启动 BPM。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make dev
+]]></codeblock><p>Makefile 启动 <codeph>uvicorn app.main:app --reload --port 8000</codeph>。保持 WSL terminal 打开，以便看到 startup messages、tracebacks 和 file-watcher output。</p></info></step>
+      <step><cmd>确定 Windows browser URL。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+hostname -I
+]]></codeblock><p>先从 Windows 尝试 <codeph>http://localhost:8000/profiles</codeph>。如果 localhost forwarding 不可用，使用 <codeph>hostname -I</codeph> 报告的第一个 WSL IP，例如 <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>。</p></info></step>
+      <step><cmd>明确保留 security boundaries。</cmd><info><note type="warning">向其他 hosts 开放 WSL port、修改 Windows firewall rules、添加 TLS 或在 BPM 前放置 reverse proxy，都不属于本 WSL source-deployment 主题，必须等待 production-readiness guidance。</note></info></step>
+    </steps>
+    <result><p>BPM source process 在 WSL 内运行，并且 Windows browser access path 已确定。</p></result>
+    <postreq><p>验证 health、readiness、UI access 和 WSL-specific failure modes。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-set-up-windows-wsl-source-checkout"/>
+    <link keyref="topic.admin-task-verify-windows-wsl-source-deployment"/>
+  </related-links>
+</task>

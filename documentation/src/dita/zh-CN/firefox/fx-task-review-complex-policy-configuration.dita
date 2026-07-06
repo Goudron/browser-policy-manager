@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="fx-task-review-complex-policy-configuration" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>导出前审查复杂策略配置</title>
+  <shortdesc>使用可重复的 review flow 处理 nested objects、arrays、raw fallback、conflicts 和 channel-specific availability。</shortdesc>
+  <taskbody>
+    <prereq><p>已打开一个配置文件，并且其中至少包含一个复杂策略族或 managed preference。</p></prereq>
+    <context><p>复杂策略按策略族、来源、schema channel 和导出的 boundary shape 审查时最安全。</p></context>
+    <steps>
+      <step><cmd>打开 All Settings，并筛选到受影响的策略族。</cmd><info><p>预期结果：相关 policies、preferences 和 source labels 会一起显示。</p></info></step>
+      <step><cmd>检查该策略族中每个 policy 的 Release/ESR badge。</cmd><info><note type="warning">Release-only policy 不得导出到面向 ESR 的配置文件。</note></info></step>
+      <step><cmd>检查 nested object 和 array values，包括 unknown preserved fields。</cmd><info><p>预期结果：raw fallback values 会在保存前被有意保留或删除。</p></info></step>
+      <step><cmd>比较 preset、CIS、imported、manual 和 raw sources。</cmd><info><p>预期结果：conflicts 被明确解决，而不是被后续编辑掩盖。</p></info></step>
+      <step><cmd>验证配置文件，并审查生成的 <codeph>policies.json</codeph> 结构。</cmd><info><p>预期结果：BPM 不会针对所选通道报告 schema errors。</p></info></step>
+    </steps>
+    <result><p>复杂策略族拥有已审查的 nested values、source decisions、channel support 和干净的验证结果。</p></result>
+    <postreq><p>如果验证失败，请回到该策略族，删除 unsupported keys，或切换到实际支持该 policy 的通道。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.fx-concept-complex-policy-families"/>
+    <link keyref="topic.fx-reference-managed-preference-locking"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

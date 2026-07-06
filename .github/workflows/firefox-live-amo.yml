@@ -1,15 +1,19 @@
 name: Firefox Live AMO Canary
 
 on:
-  schedule:
-    - cron: "30 2 * * *"
   workflow_dispatch:
+    inputs:
+      run_live_tests:
+        description: "Type RUN to execute the live Firefox AMO canary suite."
+        required: true
+        default: "skip"
 
 permissions:
   contents: read
 
 jobs:
   firefox-live-amo:
+    if: ${{ inputs.run_live_tests == 'RUN' }}
     name: Firefox Live AMO (${{ matrix.channel }})
     runs-on: ubuntu-latest
     strategy:

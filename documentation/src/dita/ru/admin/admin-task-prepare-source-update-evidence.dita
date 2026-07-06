@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-prepare-source-update-evidence" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Подготовить evidence перед обновлением из исходников</title>
+  <shortdesc>Соберите source revision, configuration, database backup, profile export evidence и stop conditions перед переходом BPM на более новую source revision.</shortdesc>
+  <taskbody>
+    <prereq><p>BPM работает из Linux или WSL source checkout, а администратор завершил reviews по configuration, storage, backup и operational-boundary.</p></prereq>
+    <context><p>Update-from-source procedure меняет code, dependencies, database schema и ожидания по documentation output. BPM 0.9.0 не предоставляет automatic rollback, database downgrade guarantees, managed backup или packaged upgrade tooling. Рассматривайте evidence collection как обязательный pre-update gate.</p></context>
+    <steps>
+      <step><cmd>Остановите foreground BPM process и зафиксируйте текущий source state.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git status --short
+git rev-parse --short HEAD
+]]></codeblock><p>Продолжайте только когда working tree state понятен, а current source revision записана как rollback reference.</p></info></step>
+      <step><cmd>Зафиксируйте effective configuration и runtime paths.</cmd><info><p>Сохраните активные <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph> и источник значений: shell exports или <codeph>.env</codeph>. Не копируйте secrets в update note.</p></info></step>
+      <step><cmd>Создайте manual database backup evidence, пока BPM остановлен.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p backups
+cp data/bpm.db backups/bpm-pre-update.db
+sha256sum backups/bpm-pre-update.db
+]]></codeblock><p>Запишите timestamp, current revision, database URL, file size и checksum. Если deployment использует не <codeph>data/bpm.db</codeph>, сохраните path, resolved from <codeph>BPM_DATABASE_URL</codeph>.</p></info></step>
+      <step><cmd>Экспортируйте critical profile evidence до изменения code.</cmd><info><p>Используйте существующие API export examples, чтобы сохранить нужные Firefox <codeph>policies.json</codeph> documents и зафиксировать response status, profile ID, revision, schema channel и exported-document hash.</p><note type="warning">Если database backup или export evidence отсутствует, остановите update. Не заменяйте backup evidence предположением, что Git rollback или <codeph>alembic downgrade</codeph> будет безопасным.</note></info></step>
+    </steps>
+    <result><p>У update есть проверенный pre-change evidence set и известная previous source reference.</p></result>
+    <postreq><p>Переходите к refreshing source revision и dependencies только после завершения и проверки evidence set.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-refresh-source-revision-dependencies"/>
+  </related-links>
+</task>

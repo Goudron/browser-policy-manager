@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-language-detection-fallback" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Spracherkennung und Fallback</title>
+  <shortdesc>Verstehen Sie, wie BPM eine unterstützte Locale auswählt und was geschieht, wenn die Browsersprache nicht unterstützt wird.</shortdesc>
+  <conbody>
+    <section id="a-supported-locales"><title>Supported locales</title><p>BPM unterstützt en, ru, de, zh-CN, fr und es-ES als vollwertige Oberflächen-Locales.</p></section>
+    <section id="a-system-language"><title>System language</title><p>Systemsprache folgt der Browsersprache, wenn sie einer unterstützten BPM-Locale entspricht.</p></section>
+    <section id="a-fallback"><title>Fallback</title><p>Wenn die Browsersprache nicht unterstützt wird, fällt BPM auf eine unterstützte Locale zurück, statt teilweise übersetzte Zeichenketten zu zeigen.</p></section>
+    <section id="a-content-parity"><title>Content parity</title><p>Produktdokumentation und Screenshots müssen in allen sechs Locales inhaltlich gleichwertig bleiben, auch wenn UI-Bezeichnungen sprachlich abweichen.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-change-interface-language"/>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+  </related-links>
+</concept>

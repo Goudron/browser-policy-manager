@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-choose-firefox-schema" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Firefox-Schemakanal wählen</title>
+  <shortdesc>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. Choose between Firefox ESR 140.12 and Firefox Release 152 before importing, validating, or editing a profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. Start this task before creating a profile, importing policies.json, or validating a raw JSON document.</p></prereq>
+    <context><p>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. The schema channel decides which Firefox policies BPM can validate and which controls are shown as supported. ESR 140.12 is the default long-support channel; Release 152 is the current mainstream channel and includes newer policy controls such as AIControls and VisualSearchEnabled.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. Compare the target browser fleet with the supported channels: ESR 140.12 or Release 152.</cmd><info><p>Erwartetes Ergebnis: Der gewählte Schemakanal passt zum Ziel-Firefox und zur weiteren Validierung.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. Choose ESR 140.12 when the profile is intended for the supported Extended Support Release deployment.</cmd><info><p>Erwartetes Ergebnis: Der gewählte Schemakanal passt zum Ziel-Firefox und zur weiteren Validierung.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. Choose Release 152 when the profile needs current Release-only controls, including supported AI and visual search policies.</cmd><info><p>Erwartetes Ergebnis: Der gewählte Schemakanal passt zum Ziel-Firefox und zur weiteren Validierung.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den Schema-Channel-Ablauf vollständig für die deutsche Lokalisierung: Firefox-Schemakanal wählen. Validate after choosing the channel and before saving, export, or handoff.</cmd><info><note type="warning">Warnung: Prüfen Sie vor Speichern oder Export den Schemakanal und Validierungsfehler.</note></info></step>
+    </steps>
+    <result><p>Schemakanal und Validierungszustand sind vor der weiteren Profilarbeit verständlich. The profile uses the schema channel that matches the intended Firefox deployment.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, bestätigen Sie den Kanal, prüfen Sie den affected policy path und öffnen Sie das verknüpfte Thema. Recovery: if validation reports unsupported, unavailable, deprecated, or unknown settings, confirm the schema channel before editing policy values.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

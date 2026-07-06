@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-profile-context" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Vérifier le contexte du profil</title>
+  <shortdesc>Vérifiez l’identité du profil, le cycle de vie, le canal de schéma, l’état de validation et le contexte de source avant de terminer.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
+    <context><p>Le contexte du profil évite de modifier par erreur le mauvais profil, le mauvais canal Firefox, une ligne archivée, une source importée ou un onglet périmé.</p></context>
+    <steps>
+      <step><cmd>Lisez le nom du profil, l’état de cycle de vie, le canal de schéma et le contexte de dernière mise à jour.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Vérifiez si la valeur courante vient de manual edit, baseline, CIS, import ou raw fallback lorsque source attribution est affichée.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Examinez l’état de validation et les avertissements avant export ou comparaison.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Si le contexte ne correspond pas à la tâche prévue, arrêtez-vous et rouvrez le profil depuis la Bibliothèque.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+    </steps>
+    <result><p>Vous pouvez expliquer quel profil vous modifiez et quelles contraintes s’y appliquent.</p></result>
+    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+  </related-links>
+</task>

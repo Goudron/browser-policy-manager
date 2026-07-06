@@ -1,4 +1,5 @@
 # ruff: noqa: F403,F405
+from tests.test_documentation_runtime_route import _write_packaged_site
 from tests.web_profiles_page_helpers import *
 
 
@@ -162,6 +163,7 @@ def test_profiles_compare_entrypoint_wires_route_locale_switching_contract():
             "const res = await windowRef.fetch(`/i18n/${lang}.json`);",
             "windowRef.__BPM_INITIAL_LANG__ = lang;",
             "windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;",
+            "updateDocumentationLinks?.(documentRef, lang);",
             "async function applyLanguageMode(mode, persist = true)",
             "resolveBrowserLanguage(windowRef.navigator, enabledLanguageModes)",
             "windowRef.localStorage.setItem(langStorageKey, normalizedMode);",
@@ -505,6 +507,197 @@ def test_profiles_page_uses_request_locale_for_initial_render():
     assert "Controls in this area" not in response.text
     assert "Top-level policies" not in response.text
     assert "Control Room" not in response.text
+
+
+def test_profiles_header_documentation_link_is_six_locale_and_runtime_locale_aware(
+    tmp_path,
+    monkeypatch,
+):
+    _write_packaged_site(tmp_path)
+    monkeypatch.setenv("BPM_DOCUMENTATION_SITE_DIR", str(tmp_path))
+    get_settings.cache_clear()
+    client = make_test_client(app)
+    expected_labels = {
+        "en": "Open product documentation",
+        "ru": "Открыть документацию",
+        "de": "Produktdokumentation öffnen",
+        "zh-CN": "打开产品文档",
+        "fr": "Ouvrir la documentation produit",
+        "es-ES": "Abrir documentación del producto",
+    }
+
+    for locale, label in expected_labels.items():
+        locale_json = client.get(f"/i18n/{locale}.json").json()
+        assert locale_json["profiles.documentation_link"] == label
+        for key in (
+            "profiles.help_policy_ai_controls",
+            "profiles.help_policy_visual_search_enabled",
+            "profiles.help_cis_baseline_selection",
+            "profiles.help_validation",
+            "profiles.help_import_firefox_policies",
+            "profiles.help_export_firefox_policies",
+        ):
+            assert locale_json[key]
+            assert locale_json[key] != locale_json["profiles.context_help_action"]
+
+    response = client.get(
+        "/profiles",
+        headers={"Accept-Language": "ru-RU,ru;q=0.9,en;q=0.8"},
+    )
+    header_template = template_source("_page_header.html")
+    platform_source = static_source("profiles_platform.js")
+    library_source = static_source("profiles_library_bootstrap.js")
+    runtime_source = static_source("profiles_runtime.js")
+    compare_source = static_source("profiles_compare.js")
+
+    try:
+        assert response.status_code == 200
+        assert 'href="/help/ru/index.html"' in response.text
+        assert '"/help/en/index.html"' in response.text
+        assert '"/help/de/index.html"' in response.text
+        assert 'target="_blank"' in response.text
+        assert 'rel="noopener noreferrer"' in response.text
+    finally:
+        get_settings.cache_clear()
+
+    assert_source_contains_all(
+        header_template,
+        (
+            "{% if documentation_home_href %}",
+            'href="{{ documentation_home_href }}"',
+            'target="_blank"',
+            'rel="noopener noreferrer"',
+            'data-i18n="profiles.documentation_link"',
+            "data-documentation-links",
+            "data-documentation-link",
+        ),
+    )
+    assert_source_contains_all(
+        platform_source,
+        (
+            "function updateDocumentationLinks(documentRef, lang)",
+            'documentRef.querySelectorAll("[data-documentation-link]")',
+            "JSON.parse(linkEl.dataset.documentationLinks || \"{}\")",
+            "linkEl.setAttribute(\"href\", href);",
+        ),
+    )
+    for source in (library_source, runtime_source, compare_source):
+        assert "updateDocumentationLinks?.(documentRef, lang);" in source
+
+
+def test_profiles_contextual_help_links_resolve_from_manifest_for_five_surfaces(
+    tmp_path,
+    monkeypatch,
+):
+    _write_packaged_site(tmp_path)
+    monkeypatch.setenv("BPM_DOCUMENTATION_SITE_DIR", str(tmp_path))
+    get_settings.cache_clear()
+    client = make_test_client(app)
+    profile_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Contextual Help Target Profile"),
+    )
+    profile_id = profile_response.json()["id"]
+    routes = {
+        "/profiles": ("library", "ug-task-use-profile-library"),
+        "/profiles/compare": ("compare", "ug-task-compare-profiles"),
+        "/profiles/new": ("guided", "ug-task-use-guided-editor"),
+        f"/profiles/{profile_id}/settings": ("settings", "ug-task-use-all-settings"),
+        f"/profiles/{profile_id}/json": ("json", "ug-task-use-json-editor"),
+    }
+
+    try:
+        for route, (surface, topic_id) in routes.items():
+            response = client.get(route)
+            assert response.status_code == 200
+            assert f'data-context-help-surface="{surface}"' in response.text
+            assert f'href="/help/en/user/{topic_id}.html"' in response.text
+            assert 'data-i18n="profiles.context_help_action"' in response.text
+            assert 'data-documentation-link' in response.text
+            assert 'target="_blank"' in response.text
+            assert 'rel="noopener noreferrer"' in response.text
+    finally:
+        get_settings.cache_clear()
+
+
+def test_profiles_deep_help_icon_links_resolve_from_manifest_targets(
+    tmp_path,
+    monkeypatch,
+):
+    _write_packaged_site(tmp_path)
+    monkeypatch.setenv("BPM_DOCUMENTATION_SITE_DIR", str(tmp_path))
+    get_settings.cache_clear()
+    client = make_test_client(app)
+    profile_response = client.post(
+        "/api/profiles",
+        json=build_profile_payload(name="Deep Help Target Profile"),
+    )
+    profile_id = profile_response.json()["id"]
+    routes = {
+        "/profiles": {
+            "import-firefox-policies": (
+                "/help/en/user/ug-task-import-policies-json.html",
+                "Open help for importing Firefox policies.json",
+            ),
+        },
+        "/profiles/new": {
+            "policy-ai-controls": (
+                "/help/en/firefox/fx-concept-complex-policy-families.html#a-privacy-ai",
+                "Open help for Firefox AI policy controls",
+            ),
+            "policy-visual-search-enabled": (
+                "/help/en/firefox/fx-concept-complex-policy-families.html#a-privacy-ai",
+                "Open help for the VisualSearchEnabled policy",
+            ),
+            "cis-baseline-selection": (
+                "/help/en/cis/cis-settings-guide.html#a-cis-settings-guide",
+                "Open help for selecting CIS baselines",
+            ),
+            "validation": (
+                "/help/en/user/ug-task-validate-profile.html",
+                "Open help for profile validation",
+            ),
+            "export-firefox-policies": (
+                "/help/en/user/ug-task-export-policies-json.html",
+                "Open help for exporting Firefox policies.json",
+            ),
+        },
+        f"/profiles/{profile_id}/json": {
+            "validation": (
+                "/help/en/user/ug-task-validate-profile.html",
+                "Open help for profile validation",
+            ),
+            "export-firefox-policies": (
+                "/help/en/user/ug-task-export-policies-json.html",
+                "Open help for exporting Firefox policies.json",
+            ),
+        },
+    }
+
+    try:
+        for route, expected_links in routes.items():
+            response = client.get(route)
+            assert response.status_code == 200
+            soup = BeautifulSoup(response.text, "html.parser")
+            for target_id, (href, title) in expected_links.items():
+                link = soup.find(
+                    "a",
+                    {
+                        "class": "context-help-icon-link",
+                        "data-context-help-target": target_id,
+                    },
+                )
+                assert link is not None, f"{target_id} not rendered on {route}"
+                assert link.get_text(strip=True) == "i"
+                assert link["href"] == href
+                assert link["target"] == "_blank"
+                assert link["rel"] == ["noopener", "noreferrer"]
+                assert link["title"] == title
+                assert link["aria-label"] == title
+                assert link["data-documentation-link"] == ""
+                assert '"/help/ru/' in link["data-documentation-links"]
+    finally:
+        get_settings.cache_clear()
 
 
 def test_library_compare_copy_keys_are_removed_from_runtime_catalogs():

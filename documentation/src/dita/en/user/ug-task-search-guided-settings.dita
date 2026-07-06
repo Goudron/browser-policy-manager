@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-search-guided-settings" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Search Guided settings</title>
+  <shortdesc>Search Guided controls and jump to the matching setting without scanning every step.</shortdesc>
+  <taskbody>
+    <prereq><p>A profile is open in Guided Editor.</p></prereq>
+    <context><p>Guided search is useful when you know the policy goal but not the step that contains the control family.</p></context>
+    <steps>
+      <step><cmd>Place the cursor in the Guided settings search field.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Type a policy, preference, or plain-language term such as search, cookies, bookmarks, or permissions.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose a result to jump to the matching step and control.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Confirm the schema channel if the expected result is missing.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The matching setting is visible and ready to review or edit.</p></result>
+    <postreq><p>Recovery: if no result appears, clear filters and confirm the selected Firefox schema supports the control.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+  </related-links>
+</task>

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M11-05",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "purpose": "Index compact deterministic synthetic fixtures used to reproduce documentation failures without production data or large corpora.",
+  "max_fixture_bytes": 16384,
+  "required_categories": [
+    "profile",
+    "policy",
+    "preference",
+    "cis",
+    "api",
+    "locale",
+    "search",
+    "screenshot"
+  ],
+  "fixtures": [
+    {
+      "id": "profile-states",
+      "category": "profile",
+      "path": "documentation/fixtures/profile-states/profile-states-0.9.0.json",
+      "failure_domains": ["content", "portal_integration", "screenshot"]
+    },
+    {
+      "id": "policy-preference-states",
+      "category": "policy",
+      "also_covers": ["preference"],
+      "path": "documentation/fixtures/policy-preference-states/policy-preference-states-0.9.0.json",
+      "failure_domains": ["content", "search", "api_examples"]
+    },
+    {
+      "id": "cis-workflows",
+      "category": "cis",
+      "path": "documentation/fixtures/cis-workflows/level-workflows-0.9.0.json",
+      "failure_domains": ["content", "search"]
+    },
+    {
+      "id": "api-integration-states",
+      "category": "api",
+      "path": "documentation/fixtures/api-states/api-integration-states-0.9.0.json",
+      "failure_domains": ["api_examples", "links"]
+    },
+    {
+      "id": "locale-states",
+      "category": "locale",
+      "path": "documentation/fixtures/locale-states/locale-states-0.9.0.json",
+      "failure_domains": ["localization", "portal_integration"]
+    },
+    {
+      "id": "search-query-states",
+      "category": "search",
+      "path": "documentation/fixtures/search-states/search-query-states-0.9.0.json",
+      "failure_domains": ["search"]
+    },
+    {
+      "id": "screenshot-states",
+      "category": "screenshot",
+      "path": "documentation/fixtures/screenshot-states/screenshot-states-0.9.0.json",
+      "failure_domains": ["screenshot"]
+    }
+  ],
+  "forbidden_material": [
+    "production databases",
+    "customer profiles",
+    "secrets",
+    "private hosts",
+    "full generated sites",
+    "full external corpora",
+    "official CIS PDFs",
+    "browser downloads"
+  ]
+}

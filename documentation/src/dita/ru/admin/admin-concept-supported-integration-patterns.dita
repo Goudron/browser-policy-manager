@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-supported-integration-patterns" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Поддерживаемые integration patterns</title>
+  <shortdesc>BPM 0.9.0 поддерживает generic API patterns для profile, validation, Firefox document, metadata, inventory и health workflows.</shortdesc>
+  <conbody>
+    <section id="a-profile-synchronization"><title>Profile synchronization</title><p>Интегрирующий продукт может list profiles, read profile by ID, create normalized profile, patch mutable profile fields, archive, restore, permanently delete или reset profile library. Synchronization должна считать profile ID и revision состоянием BPM и не должна предполагать bulk operations, name mutation или automatic rollback между несколькими requests.</p></section>
+    <section id="a-validation-gates"><title>Validation gates</title><p>Validation gate может отправить candidate canonical <codeph>policies.json</codeph> document в supported validation endpoint до того, как deployment workflow примет его. Gate должен проверять response body вместе со status code, потому что validation может вернуть успешный HTTP status с <codeph>ok=false</codeph>.</p></section>
+    <section id="a-import-export"><title>Policy import and export</title><p>Интеграция может импортировать Firefox <codeph>policies.json</codeph> как BPM profile и экспортировать saved BPM profile обратно в canonical Firefox JSON. Не смешивайте normalized profile model с canonical Firefox document shape; import/export является границей между этими representations.</p></section>
+    <section id="a-compliance-metadata"><title>Compliance metadata handoff</title><p>API предоставляет opaque <codeph>compliance</codeph> object в profile create, update и import operations. Интеграции могут передавать через BPM собственную metadata, но BPM 0.9.0 не публикует versioned schema для этого object и не validates external compliance semantics.</p></section>
+    <section id="a-inventory-and-health"><title>Inventory and health checks</title><p>Inventory-style consumers могут list profiles, request stats для того же filter context, read individual profiles и вызывать service, liveness и readiness endpoints. Health responses намеренно compact и не раскрывают per-dependency diagnostics, documentation status или deployment readiness сверх текущих fixed fields.</p></section>
+    <section id="a-unsupported-patterns"><title>Unsupported patterns</title><p>Руководство не документирует authentication, authorization, rate limits, idempotency keys, request IDs, webhooks, bulk export, bulk CRUD, cursor pagination, product-specific connectors, vendor partnerships или transactional orchestration, потому что BPM 0.9.0 не предоставляет такие guarantees.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-review-profile-context"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</concept>

@@ -1,0 +1,483 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M12-07",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "purpose": "Keep documentation-only debugging inside documentation/tests with compact fixtures and explicit suite ownership.",
+  "pytest_discovery_boundary": {
+    "current_default_testpaths": ["tests"],
+    "documentation_tests_are_run_by_focused_make_targets": true,
+    "implemented_make_targets_backlog_item": "BPM090-M12-07",
+    "general_tests_tree_may_keep_cross_boundary_contracts": true
+  },
+  "make_targets": {
+    "test-docs": {
+      "purpose": "Run documentation unit and contract suites without browser, live Firefox, or general BPM test discovery.",
+      "command": "make test-docs",
+      "paths": ["documentation/tests/unit/", "documentation/tests/contract/"],
+      "browser_backed": false
+    },
+    "test-docs-contract": {
+      "purpose": "Run only documentation docs_contract tests.",
+      "command": "make test-docs-contract",
+      "paths": ["documentation/tests/contract/"],
+      "browser_backed": false
+    },
+    "test-docs-ui": {
+      "purpose": "Run documentation portal/UI non-browser contracts and browser-backed smoke.",
+      "command": "make test-docs-ui",
+      "paths": [
+        "documentation/tests/contract/test_portal_shell_theme.py",
+        "documentation/tests/contract/test_manifest_generation.py",
+        "documentation/tests/browser/"
+      ],
+      "browser_backed": true,
+      "sandbox_escalation_note": "Documentation UI browser smoke requires immediate sandbox escalation."
+    },
+    "test-docs-ui-contract": {
+      "purpose": "Run only documentation portal/UI non-browser contracts.",
+      "command": "make test-docs-ui-contract",
+      "paths": [
+        "documentation/tests/contract/test_portal_shell_theme.py",
+        "documentation/tests/contract/test_manifest_generation.py"
+      ],
+      "browser_backed": false
+    },
+    "test-docs-browser": {
+      "purpose": "Run browser-backed documentation portal smoke for BPM links and /help/ behavior.",
+      "command": "make test-docs-browser",
+      "paths": ["documentation/tests/browser/"],
+      "browser_backed": true,
+      "sandbox_escalation_note": "Launches Chromium/Selenium and therefore requires immediate sandbox escalation."
+    },
+    "docs-snapshot": {
+      "purpose": "Regenerate the bounded documentation subsystem snapshot for future Codex sessions.",
+      "command": "make docs-snapshot",
+      "paths": ["documentation/tools/generate_subsystem_snapshot.py"],
+      "browser_backed": false
+    },
+    "docs-fast-check": {
+      "purpose": "Validate changed documentation source inputs and report affected locale, guide, search, and output areas before the full corpus.",
+      "command": "make docs-fast-check",
+      "paths": ["documentation/tools/build_docs.py"],
+      "browser_backed": false
+    },
+    "docs-coverage": {
+      "purpose": "Run isolated documentation-code coverage for the accepted coverage policy.",
+      "command": "make docs-coverage",
+      "paths": ["documentation/tests/unit/test_validate_metadata.py"],
+      "browser_backed": false
+    },
+    "docs-release-check": {
+      "purpose": "Run the release-blocking documentation gate before the general BPM release suite.",
+      "command": "make docs-release-check",
+      "paths": [
+        "documentation/tools/build_docs.py",
+        "documentation/tests/contract/"
+      ],
+      "browser_backed": false
+    }
+  },
+  "suites": {
+    "unit": {
+      "path": "documentation/tests/unit/",
+      "owner": "documentation tooling unit tests",
+      "marker_policy": "unit-style tests may remain unmarked until M11-02 command selection is implemented",
+      "scope": [
+        "pure documentation build helpers",
+        "toolchain bootstrap behavior",
+        "manifest/search generation helpers with compact temporary trees"
+      ],
+      "must_not_require": [
+        "browser",
+        "network",
+        "installed documentation artifact",
+        "production database",
+        "full generated site scan"
+      ]
+    },
+    "contract": {
+      "path": "documentation/tests/contract/",
+      "owner": "documentation source, content, manifest, search, link, and release-shape contracts",
+      "marker_policy": "all tests use pytestmark = pytest.mark.docs_contract",
+      "scope": [
+        "DITA maps and topic structure",
+        "content and locale parity",
+        "manifest, target map, artifact, and publishing contracts",
+        "search corpus, normalization, ranking, facets, quality, and integrity contracts",
+        "source inventory drift and API example synchronization"
+      ],
+      "must_not_require": [
+        "browser",
+        "live Firefox",
+        "ignored generated output",
+        "customer data",
+        "licensed source PDFs"
+      ]
+    },
+    "browser": {
+      "path": "documentation/tests/browser/",
+      "owner": "documentation browser smoke, accessibility, responsive, search UI, and screenshot checks",
+      "marker_policy": "future tests must use browser_ui or the M11-02 documentation UI selector and immediate sandbox escalation",
+      "scope": [
+        "portal navigation in a real browser",
+        "BPM header/contextual help entry flow",
+        "keyboard/focus behavior",
+        "responsive and theme behavior",
+        "locale switching",
+        "search UI behavior",
+        "screenshot capture validation"
+      ],
+      "must_not_require": [
+        "production database",
+        "external network search",
+        "unreviewed screenshots",
+        "sandboxed browser trial before escalation"
+      ]
+    }
+  },
+  "domains": {
+    "dita": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_guide_maps.py",
+        "documentation/tests/contract/test_metadata_contract.py",
+        "documentation/tests/contract/test_authoring_runbooks.py"
+      ],
+      "fixtures": ["documentation/fixtures/metadata-filter/"],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_guide_maps.py documentation/tests/contract/test_metadata_contract.py"
+    },
+    "content": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_user_guide_*.py",
+        "documentation/tests/contract/test_firefox_policy_*.py",
+        "documentation/tests/contract/test_cis_*.py"
+      ],
+      "fixtures": [
+        "documentation/fixtures/firefox-policy-families/",
+        "documentation/fixtures/cis-workflows/"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_user_guide_locale_parity.py"
+    },
+    "manifest": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_manifest_generation.py",
+        "documentation/tests/contract/test_artifact_policy.py",
+        "documentation/tests/unit/test_build_docs.py"
+      ],
+      "fixtures": ["documentation/fixtures/metadata-filter/"],
+      "focused_rerun": "./.venv/bin/pytest -q documentation/tests/unit/test_build_docs.py::test_manifest_generation_lists_guides_locales_search_and_target_map"
+    },
+    "localization": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_*_locale_parity.py",
+        "documentation/tests/contract/test_user_guide_locale_parity.py",
+        "documentation/tests/contract/test_api_locale_parity.py"
+      ],
+      "fixtures": ["documentation/fixtures/metadata-filter/"],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_user_guide_locale_parity.py"
+    },
+    "screenshot": {
+      "primary_suite": "browser",
+      "path_globs": [
+        "documentation/tests/browser/test_*screenshot*.py",
+        "documentation/tests/browser/test_documentation_portal_browser_smoke.py"
+      ],
+      "fixtures": ["documentation/fixtures/README.md"],
+      "focused_rerun": "make test-docs-browser"
+    },
+    "search": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_search_*.py",
+        "documentation/tests/unit/test_build_docs.py"
+      ],
+      "fixtures": [
+        "documentation/config/search-corpus-and-results-0.9.0.json",
+        "documentation/config/search-normalization-aliases-0.9.0.json",
+        "documentation/config/search-ranking-typo-0.9.0.json",
+        "documentation/config/search-facets-filters-0.9.0.json",
+        "documentation/config/search-quality-performance-0.9.0.json",
+        "documentation/config/search-integrity-drift-0.9.0.json"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q documentation/tests/contract/test_search_corpus_contract.py documentation/tests/contract/test_search_integrity_drift.py"
+    },
+    "links": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_manifest_generation.py",
+        "documentation/tests/unit/test_build_docs.py"
+      ],
+      "fixtures": ["documentation/fixtures/metadata-filter/"],
+      "focused_rerun": "./.venv/bin/pytest -q documentation/tests/unit/test_build_docs.py::test_generated_link_validation_accepts_complete_six_locale_site"
+    },
+    "api_examples": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_api_*.py",
+        "documentation/tests/contract/test_user_guide_import_export_topics.py"
+      ],
+      "fixtures": [
+        "documentation/fixtures/import-export/",
+        "documentation/fixtures/schema-validation/"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_openapi_drift.py documentation/tests/contract/test_api_integration_topics.py"
+    },
+    "api_rehome_audit": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_api_rehome_audit.py"],
+      "fixtures": [
+        "docs/architecture/api-integration-rehome-audit-0.9.0.json",
+        "docs/architecture/api-integration-rehome-audit-0.9.0.md",
+        "documentation/src/dita/en/maps/api-integration-guide.ditamap",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "documentation/src/dita/en/maps/user-guide.ditamap"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_rehome_audit.py"
+    },
+    "administrator_guide_scope": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_guide_scope.py"],
+      "fixtures": [
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "docs/architecture/product-documentation-provenance-review-0.9.0.md"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_guide_scope.py"
+    },
+    "administrator_devops_operational_boundaries": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_devops_operational_boundaries.py"],
+      "fixtures": [
+        "documentation/src/dita/en/admin/admin-task-review-devops-configuration-sources.dita",
+        "documentation/src/dita/en/admin/admin-task-plan-devops-storage-logs-backups.dita",
+        "documentation/src/dita/en/admin/admin-task-review-devops-network-cors-security.dita",
+        "documentation/src/dita/en/admin/admin-task-record-devops-operational-boundaries.dita",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "app/core/config.py"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_devops_operational_boundaries.py"
+    },
+    "administrator_linux_deployment": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_linux_deployment_topics.py"],
+      "fixtures": [
+        "documentation/src/dita/en/admin/admin-task-prepare-linux-source-deployment.dita",
+        "documentation/src/dita/en/admin/admin-task-set-up-linux-source-checkout.dita",
+        "documentation/src/dita/en/admin/admin-task-configure-linux-source-runtime.dita",
+        "documentation/src/dita/en/admin/admin-task-verify-linux-source-deployment.dita",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "README.md",
+        "Makefile",
+        "app/core/config.py",
+        "app/api/health.py"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_linux_deployment_topics.py"
+    },
+    "administrator_windows_wsl_deployment": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py"],
+      "fixtures": [
+        "documentation/src/dita/en/admin/admin-task-prepare-windows-wsl-source-deployment.dita",
+        "documentation/src/dita/en/admin/admin-task-set-up-windows-wsl-source-checkout.dita",
+        "documentation/src/dita/en/admin/admin-task-configure-windows-wsl-network-runtime.dita",
+        "documentation/src/dita/en/admin/admin-task-verify-windows-wsl-source-deployment.dita",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py"
+    },
+    "administrator_update_from_source": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_update_from_source_topics.py"],
+      "fixtures": [
+        "documentation/src/dita/en/admin/admin-task-prepare-source-update-evidence.dita",
+        "documentation/src/dita/en/admin/admin-task-refresh-source-revision-dependencies.dita",
+        "documentation/src/dita/en/admin/admin-task-run-source-update-migrations-docs.dita",
+        "documentation/src/dita/en/admin/admin-task-verify-source-update-rollback-stop.dita",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "README.md",
+        "Makefile",
+        "alembic.ini",
+        "app/api/health.py"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_update_from_source_topics.py"
+    },
+    "administrator_troubleshooting_diagnostics": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py"],
+      "fixtures": [
+        "documentation/src/dita/en/admin/admin-troubleshoot-failed-startup-probes.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-schema-cache-validation.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-import-export-failures.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-database-storage.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-wsl-networking-dependencies.dita",
+        "documentation/src/dita/en/admin/admin-troubleshoot-documentation-portal-build-links.dita",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "documentation/runbooks/debugging-protocol.md"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py"
+    },
+    "administrator_production_readiness_boundaries": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_production_readiness_boundaries.py"],
+      "fixtures": [
+        "documentation/src/dita/en/admin/admin-task-assess-single-node-source-readiness.dita",
+        "documentation/src/dita/en/admin/admin-task-review-network-exposure-proxy-readiness.dita",
+        "documentation/src/dita/en/admin/admin-task-plan-monitoring-backup-update-windows.dita",
+        "documentation/src/dita/en/admin/admin-task-record-ha-production-deferred-boundaries.dita",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "docs/architecture/product-documentation-provenance-review-0.9.0.md"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_production_readiness_boundaries.py"
+    },
+    "administrator_guide_validation": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_administrator_guide_validation_fixtures.py"],
+      "fixtures": [
+        "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "documentation/src/dita/en/maps/api-integration-guide.ditamap",
+        "app/core/config.py",
+        "app/api/health.py",
+        "Makefile",
+        "README.md"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_administrator_guide_validation_fixtures.py"
+    },
+    "portal_integration": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_portal_shell_theme.py",
+        "documentation/tests/contract/test_manifest_generation.py",
+        "documentation/tests/browser/test_documentation_portal_browser_smoke.py"
+      ],
+      "fixtures": ["documentation/fixtures/metadata-filter/"],
+      "focused_rerun": "make test-docs-ui"
+    },
+    "suite_boundaries": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_documentation_suite_boundaries.py"],
+      "fixtures": ["documentation/tests/suite-boundaries-0.9.0.json"],
+      "focused_rerun": "make test-docs-contract"
+    },
+    "coverage": {
+      "primary_suite": "unit",
+      "path_globs": [
+        "documentation/tests/unit/test_validate_metadata.py",
+        "documentation/tests/contract/test_documentation_coverage_policy.py"
+      ],
+      "fixtures": ["documentation/config/coverage-policy-0.9.0.json"],
+      "focused_rerun": "make docs-coverage"
+    },
+    "fixtures": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_documentation_fixture_catalog.py"],
+      "fixtures": [
+        "documentation/fixtures/fixture-catalog-0.9.0.json",
+        "documentation/fixtures/profile-states/",
+        "documentation/fixtures/policy-preference-states/",
+        "documentation/fixtures/locale-states/",
+        "documentation/fixtures/search-states/",
+        "documentation/fixtures/screenshot-states/",
+        "documentation/fixtures/api-states/"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_fixture_catalog.py"
+    },
+    "diagnostics": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_documentation_diagnostics_policy.py",
+        "documentation/tests/unit/test_build_docs.py"
+      ],
+      "fixtures": ["documentation/config/diagnostics-policy-0.9.0.json"],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_diagnostics_policy.py"
+    },
+    "debugging_protocol": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_documentation_debugging_protocol.py"],
+      "fixtures": ["documentation/runbooks/debugging-protocol.md"],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_debugging_protocol.py"
+    },
+    "snapshot": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_documentation_subsystem_snapshot.py",
+        "documentation/tests/unit/test_generate_subsystem_snapshot.py"
+      ],
+      "fixtures": ["documentation/PROJECT_SNAPSHOT.generated.md"],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_subsystem_snapshot.py"
+    },
+    "release_gate": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_documentation_release_gate.py"],
+      "fixtures": ["docs/architecture/product-documentation-release-contract-0.9.0.md"],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_release_gate.py"
+    },
+    "content_coverage_audit": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_product_documentation_content_coverage_audit.py"],
+      "fixtures": [
+        "docs/architecture/product-documentation-content-coverage-audit-0.9.0.json",
+        "docs/architecture/product-documentation-content-coverage-audit-0.9.0.md",
+        "docs/architecture/product-user-capability-inventory-0.9.0.md",
+        "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "docs/architecture/api-documentation-inventory-0.9.0.md",
+        "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
+        "documentation/config/search-corpus-and-results-0.9.0.json",
+        "documentation/config/artifact-policy.json"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_product_documentation_content_coverage_audit.py"
+    },
+    "browser_smoke": {
+      "primary_suite": "browser",
+      "path_globs": ["documentation/tests/browser/test_documentation_portal_browser_smoke.py"],
+      "fixtures": [],
+      "focused_rerun": "make test-docs-browser"
+    },
+    "toolchain": {
+      "primary_suite": "unit",
+      "path_globs": ["documentation/tests/unit/test_bootstrap_toolchain.py"],
+      "fixtures": ["documentation/config/toolchain-lock.json", "documentation/config/requirements.lock"],
+      "focused_rerun": "./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/unit/test_bootstrap_toolchain.py"
+    }
+  },
+  "compact_fixture_rules": {
+    "allowed": [
+      "small synthetic JSON examples",
+      "minimal DITA maps/topics",
+      "locale-neutral metadata fixtures",
+      "reviewed source assets referenced by ID",
+      "deterministic API/import/export examples without credentials"
+    ],
+    "forbidden": [
+      "production databases",
+      "customer profiles",
+      "secrets",
+      "private hosts",
+      "full generated sites",
+      "full external corpora",
+      "official CIS PDFs",
+      "browser downloads",
+      "ignored build, dist, reports, or cache output"
+    ]
+  },
+  "general_tests_boundary": {
+    "allowed_cross_boundary_contracts": [
+      "architecture decisions under docs/architecture/",
+      "runtime bridge contracts that must import app/documentation/",
+      "repository-level docs index and context-guide contracts",
+      "pytest marker policy and release-gate contracts"
+    ],
+    "must_not_debug_from_general_tests": [
+      "DITA topic authoring failures",
+      "locale parity failures",
+      "search index fixture drift",
+      "manifest generation internals",
+      "screenshot capture issues",
+      "API example source fixtures"
+    ]
+  }
+}

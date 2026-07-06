@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-archive-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Archive an active profile</title>
+  <shortdesc>Move an active profile out of the normal active list without permanently deleting it.</shortdesc>
+  <taskbody>
+    <prereq><p>The profile is active, visible in the Library, and no longer needed for normal editing or export workflows.</p></prereq>
+    <context><p>Archiving is reversible. It keeps the profile available through archived or all lifecycle filters.</p></context>
+    <steps>
+      <step><cmd>Confirm the row name, schema, validation state, and updated time.</cmd><info><p>Expected result: you know exactly which profile will change lifecycle state.</p></info></step>
+      <step><cmd>Choose the Archive lifecycle action.</cmd><info><note type="warning">Archived profiles are retained but no longer behave like normal active export targets.</note></info></step>
+      <step><cmd>Wait for the action status and refresh the Library if needed.</cmd><info><p>The row appears under archived or all lifecycle filters after the action completes.</p></info></step>
+    </steps>
+    <result><p>The profile is archived and can be restored later.</p></result>
+    <postreq><p>Recovery: restore the profile if you archived the wrong row.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-restore-profile"/>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+  </related-links>
+</task>

@@ -467,6 +467,14 @@ def _profiles_page_response():
 
 def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.title"] == "Browser profile manager"
+    assert locale_json["profiles.documentation_link"] == "Open product documentation"
+    assert locale_json["profiles.context_help_action"] == "Help for this section"
+    assert locale_json["profiles.help_policy_ai_controls"] == "Open help for Firefox AI policy controls"
+    assert locale_json["profiles.help_policy_visual_search_enabled"] == "Open help for the VisualSearchEnabled policy"
+    assert locale_json["profiles.help_cis_baseline_selection"] == "Open help for selecting CIS baselines"
+    assert locale_json["profiles.help_validation"] == "Open help for profile validation"
+    assert locale_json["profiles.help_import_firefox_policies"] == "Open help for importing Firefox policies.json"
+    assert locale_json["profiles.help_export_firefox_policies"] == "Open help for exporting Firefox policies.json"
     assert locale_json["profiles.workspace_overview"] == "Profile setup overview"
     assert locale_json["profiles.footer_owner"] == "Valery Ledovskoy"
     assert locale_json["profiles.footer_license_prefix"] == "Licensed under"
@@ -1078,6 +1086,14 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
 
 def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.title"] == "Менеджер профилей браузера"
+    assert locale_json["profiles.documentation_link"] == "Открыть документацию"
+    assert locale_json["profiles.context_help_action"] == "Справка по разделу"
+    assert locale_json["profiles.help_policy_ai_controls"] == "Открыть справку по политикам Firefox для AI-контролов"
+    assert locale_json["profiles.help_policy_visual_search_enabled"] == "Открыть справку по политике визуального поиска"
+    assert locale_json["profiles.help_cis_baseline_selection"] == "Открыть справку по выбору базовых уровней CIS"
+    assert locale_json["profiles.help_validation"] == "Открыть справку по проверке профиля"
+    assert locale_json["profiles.help_import_firefox_policies"] == "Открыть справку по импорту Firefox policies.json"
+    assert locale_json["profiles.help_export_firefox_policies"] == "Открыть справку по экспорту Firefox policies.json"
     assert locale_json["profiles.workspace_overview"] == "Сводка по настройке профиля"
     assert locale_json["profiles.footer_owner"] == "Валерий Ледовской"
     assert locale_json["profiles.footer_license_prefix"] == "Лицензия"

@@ -1,0 +1,326 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M14-07",
+  "target_bpm_version": "0.9.0",
+  "audit_date": "2026-07-06",
+  "status": "accepted-with-release-blockers",
+  "purpose": "Record the final BPM 0.9.0 product-documentation content coverage audit across product capabilities, Administrator/DevOps source deployment, update, API/integration, production-readiness boundaries, Firefox schema, CIS, locales, screenshots, manifest, and search inventories.",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "guide_families": [
+    "user-guide",
+    "firefox-policy-guide",
+    "cis-settings-guide",
+    "api-integration-guide",
+    "administrator-guide"
+  ],
+  "coverage_policy": {
+    "all_domains_must_be": "covered_or_release_blocker",
+    "silent_gaps_forbidden": true,
+    "source_authority_must_be_tested": true,
+    "locale_peer_equivalence_required": true,
+    "generated_artifacts_are_evidence_not_hand_edited_source": true
+  },
+  "release_blockers": [
+    "release extraction policy from the verified documentation package into the runtime site",
+    "localized screenshot capture and review",
+    "final manual QA and defect disposition for the installed documentation flow"
+  ],
+  "domains": [
+    {
+      "id": "user_capabilities",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G04"],
+      "summary": {
+        "capability_count": 106,
+        "planned_topic_count": 89,
+        "localized_topic_count_per_locale": 89
+      },
+      "source_inventories": [
+        "docs/architecture/product-user-capability-inventory-0.9.0.md",
+        "documentation/config/user-guide-coverage-closure-0.9.0.json",
+        "documentation/config/user-guide-map-0.9.0.json"
+      ],
+      "evidence_files": [
+        "documentation/tests/contract/test_user_guide_coverage_closure.py",
+        "tests/test_product_user_capability_inventory.py"
+      ],
+      "gate_tests": [
+        "documentation/tests/contract/test_user_guide_coverage_closure.py",
+        "tests/test_product_user_capability_inventory.py"
+      ]
+    },
+    {
+      "id": "administrator_linux_source_deployment",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G12"],
+      "summary": {"topic_count": 4},
+      "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
+      "evidence_files": ["documentation/tests/contract/test_administrator_linux_deployment_topics.py"],
+      "gate_tests": ["documentation/tests/contract/test_administrator_linux_deployment_topics.py"]
+    },
+    {
+      "id": "administrator_windows_wsl_source_deployment",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G12"],
+      "summary": {"topic_count": 4},
+      "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
+      "evidence_files": ["documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py"],
+      "gate_tests": ["documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py"]
+    },
+    {
+      "id": "administrator_devops_operations",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G12"],
+      "summary": {"topic_count": 4},
+      "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
+      "evidence_files": ["documentation/tests/contract/test_administrator_devops_operational_boundaries.py"],
+      "gate_tests": ["documentation/tests/contract/test_administrator_devops_operational_boundaries.py"]
+    },
+    {
+      "id": "administrator_update_from_source",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G12"],
+      "summary": {"topic_count": 4},
+      "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
+      "evidence_files": ["documentation/tests/contract/test_administrator_update_from_source_topics.py"],
+      "gate_tests": ["documentation/tests/contract/test_administrator_update_from_source_topics.py"]
+    },
+    {
+      "id": "administrator_api_integration",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G07", "DOC090-G12"],
+      "summary": {"migrated_admin_topic_count": 13},
+      "source_inventories": [
+        "docs/architecture/api-integration-rehome-audit-0.9.0.json",
+        "docs/architecture/api-documentation-inventory-0.9.0.md"
+      ],
+      "evidence_files": [
+        "documentation/tests/contract/test_api_rehome_audit.py",
+        "documentation/tests/contract/test_api_integration_topics.py",
+        "documentation/tests/contract/test_api_openapi_drift.py"
+      ],
+      "gate_tests": [
+        "documentation/tests/contract/test_api_rehome_audit.py",
+        "documentation/tests/contract/test_api_integration_topics.py",
+        "documentation/tests/contract/test_api_openapi_drift.py"
+      ]
+    },
+    {
+      "id": "administrator_control_product_runbooks",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G07", "DOC090-G12"],
+      "summary": {"topic_count": 5},
+      "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
+      "evidence_files": ["documentation/tests/contract/test_api_devops_integration_runbooks.py"],
+      "gate_tests": ["documentation/tests/contract/test_api_devops_integration_runbooks.py"]
+    },
+    {
+      "id": "administrator_troubleshooting_diagnostics",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G12"],
+      "summary": {"topic_count": 6},
+      "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
+      "evidence_files": ["documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py"],
+      "gate_tests": ["documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py"]
+    },
+    {
+      "id": "administrator_production_readiness_boundaries",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G12"],
+      "summary": {"topic_count": 4, "deferred_boundary_claims_preserved": true},
+      "source_inventories": [
+        "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
+        "docs/architecture/product-documentation-release-contract-0.9.0.md"
+      ],
+      "evidence_files": ["documentation/tests/contract/test_administrator_production_readiness_boundaries.py"],
+      "gate_tests": ["documentation/tests/contract/test_administrator_production_readiness_boundaries.py"]
+    },
+    {
+      "id": "firefox_policy_schema",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G05"],
+      "summary": {
+        "policy_count": 120,
+        "managed_preference_count": 62,
+        "release_only_policy_count": 8
+      },
+      "source_inventories": [
+        "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+        "docs/architecture/firefox-policy-documentation-inventory-0.9.0.md"
+      ],
+      "evidence_files": [
+        "tests/test_firefox_policy_documentation_inventory.py",
+        "documentation/tests/contract/test_firefox_policy_skeleton_generation.py",
+        "documentation/tests/contract/test_firefox_policy_locale_parity.py"
+      ],
+      "gate_tests": [
+        "tests/test_firefox_policy_documentation_inventory.py",
+        "documentation/tests/contract/test_firefox_policy_skeleton_generation.py",
+        "documentation/tests/contract/test_firefox_policy_locale_parity.py"
+      ]
+    },
+    {
+      "id": "cis_settings",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G06"],
+      "summary": {
+        "recommendation_count": 55,
+        "planned_topic_count": 53,
+        "provenance_only_count": 2,
+        "manual_review_paths": 9
+      },
+      "source_inventories": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "docs/architecture/cis-documentation-inventory-0.9.0.md"
+      ],
+      "evidence_files": [
+        "tests/test_cis_documentation_inventory.py",
+        "documentation/tests/contract/test_cis_recommendation_skeleton_generation.py",
+        "documentation/tests/contract/test_cis_locale_parity.py"
+      ],
+      "gate_tests": [
+        "tests/test_cis_documentation_inventory.py",
+        "documentation/tests/contract/test_cis_recommendation_skeleton_generation.py",
+        "documentation/tests/contract/test_cis_locale_parity.py"
+      ]
+    },
+    {
+      "id": "api_operations",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G07"],
+      "summary": {
+        "integration_operation_count": 15,
+        "web_route_count": 6,
+        "inventory_topic_count": 6
+      },
+      "source_inventories": ["docs/architecture/api-documentation-inventory-0.9.0.md"],
+      "evidence_files": [
+        "tests/test_api_documentation_inventory.py",
+        "documentation/tests/contract/test_api_openapi_drift.py"
+      ],
+      "gate_tests": [
+        "tests/test_api_documentation_inventory.py",
+        "documentation/tests/contract/test_api_openapi_drift.py"
+      ]
+    },
+    {
+      "id": "locale_parity",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G08"],
+      "summary": {"locale_count": 6, "guide_count": 5, "full_peer_content_required": true},
+      "source_inventories": [
+        "documentation/src/dita/en/maps/portal.ditamap",
+        "documentation/src/dita/ru/maps/portal.ditamap",
+        "documentation/src/dita/de/maps/portal.ditamap",
+        "documentation/src/dita/zh-CN/maps/portal.ditamap",
+        "documentation/src/dita/fr/maps/portal.ditamap",
+        "documentation/src/dita/es-ES/maps/portal.ditamap"
+      ],
+      "evidence_files": [
+        "documentation/tests/contract/test_user_guide_locale_parity.py",
+        "documentation/tests/contract/test_firefox_policy_locale_parity.py",
+        "documentation/tests/contract/test_cis_locale_parity.py",
+        "documentation/tests/contract/test_api_locale_parity.py"
+      ],
+      "gate_tests": [
+        "documentation/tests/contract/test_user_guide_locale_parity.py",
+        "documentation/tests/contract/test_firefox_policy_locale_parity.py",
+        "documentation/tests/contract/test_cis_locale_parity.py",
+        "documentation/tests/contract/test_api_locale_parity.py"
+      ]
+    },
+    {
+      "id": "localized_screenshots",
+      "disposition": "release-blocker",
+      "blocks_release": true,
+      "release_gates": ["DOC090-G09"],
+      "summary": {
+        "current_fixture_capture_rows": 2,
+        "required_before_shipping": "complete localized screenshot capture and review",
+        "planned_command_missing": "make docs-screenshots-check"
+      },
+      "source_inventories": [
+        "documentation/fixtures/screenshot-states/screenshot-states-0.9.0.json",
+        "docs/architecture/product-documentation-release-contract-0.9.0.md"
+      ],
+      "evidence_files": [
+        "documentation/tests/browser/test_documentation_portal_browser_smoke.py",
+        "documentation/fixtures/screenshot-states/screenshot-states-0.9.0.json"
+      ],
+      "gate_tests": ["make test-docs-browser"],
+      "release_blockers": ["localized screenshot capture and review"]
+    },
+    {
+      "id": "manifest_target_map",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G10", "DOC090-G13"],
+      "summary": {"guide_count": 5, "locale_count": 6, "ui_target_map_required": true},
+      "source_inventories": [
+        "docs/architecture/product-documentation-manifest-and-ui-target-schema-0.9.0.md",
+        "docs/architecture/schemas/product-documentation-manifest-v1.schema.json",
+        "docs/architecture/schemas/product-documentation-ui-target-map-v1.schema.json"
+      ],
+      "evidence_files": [
+        "documentation/tests/contract/test_manifest_generation.py",
+        "tests/test_product_documentation_manifest_schema.py",
+        "tests/test_documentation_runtime_route.py"
+      ],
+      "gate_tests": [
+        "documentation/tests/contract/test_manifest_generation.py",
+        "tests/test_product_documentation_manifest_schema.py",
+        "tests/test_documentation_runtime_route.py"
+      ]
+    },
+    {
+      "id": "search_indexes",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G11"],
+      "summary": {
+        "locale_index_count": 6,
+        "search_mode": "deterministic-local-static",
+        "non_ai_boundary": "no-ai-no-rag-no-embeddings-no-generative-answers"
+      },
+      "source_inventories": [
+        "documentation/config/search-corpus-and-results-0.9.0.json",
+        "documentation/config/search-integrity-drift-0.9.0.json"
+      ],
+      "evidence_files": [
+        "documentation/tests/contract/test_search_corpus_contract.py",
+        "documentation/tests/contract/test_search_integrity_drift.py",
+        "documentation/tests/contract/test_search_quality_performance.py"
+      ],
+      "gate_tests": [
+        "documentation/tests/contract/test_search_corpus_contract.py",
+        "documentation/tests/contract/test_search_integrity_drift.py",
+        "documentation/tests/contract/test_search_quality_performance.py"
+      ]
+    },
+    {
+      "id": "portal_runtime",
+      "disposition": "covered",
+      "release_gates": ["DOC090-G10", "DOC090-G13"],
+      "summary": {
+        "header_documentation_link": true,
+        "surface_contextual_help_links": 5,
+        "deep_help_icon_groups": ["policy", "cis", "validation", "import-export"],
+        "openapi_docs_preserved": true
+      },
+      "source_inventories": [
+        "docs/architecture/product-documentation-accessibility-security-contract-0.9.0.md",
+        "documentation/tests/suite-boundaries-0.9.0.json"
+      ],
+      "evidence_files": [
+        "tests/test_documentation_runtime_route.py",
+        "tests/web_profiles_page/test_assets_i18n_contracts.py",
+        "documentation/tests/browser/test_documentation_portal_browser_smoke.py"
+      ],
+      "gate_tests": [
+        "tests/test_documentation_runtime_route.py",
+        "tests/web_profiles_page/test_assets_i18n_contracts.py",
+        "documentation/tests/browser/test_documentation_portal_browser_smoke.py"
+      ]
+    }
+  ],
+  "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_product_documentation_content_coverage_audit.py",
+  "full_release_rerun": "make docs-release-check"
+}

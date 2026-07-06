@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-gate-control-product-startup" xml:lang="es-ES" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Procedimiento DevOps: Start des Steuerungsprodukts mit BPM health und readiness gaten</title>
+  <shortdesc>Procedimiento completo para un producto de control externo con propiedad de datos, evidencia auditable y límites explícitos de reintento.</shortdesc>
+  <taskbody>
+    <prereq><p>Defina <codeph>$BPM_BASE_URL</codeph> y registre propietario externo, canal de esquema, ticket, decisión de reintento y evidencias.</p></prereq>
+    <context><p>El procedimiento usa las mismas operaciones BPM indicadas abajo y conserva API names, payloads y URLs como identificadores técnicos estables. Cubre health-gated startup, data ownership, failure recovery y la regla do not retry blindly. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></context>
+    <steps>
+      <step><cmd>Ejecutar y registrar el paso 1</cmd><info><p>Conserve la evidencia en el producto externo, verifique el resultado de BPM y no suponga transacciones, webhooks ni reintentos seguros no documentados. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
+  <step><cmd>Ejecutar y registrar el paso 2</cmd><info><p>Conserve la evidencia en el producto externo, verifique el resultado de BPM y no suponga transacciones, webhooks ni reintentos seguros no documentados. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
+  <step><cmd>Ejecutar y registrar el paso 3</cmd><info><p>Conserve la evidencia en el producto externo, verifique el resultado de BPM y no suponga transacciones, webhooks ni reintentos seguros no documentados. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
+  <step><cmd>Ejecutar y registrar el paso 4</cmd><info><p>Conserve la evidencia en el producto externo, verifique el resultado de BPM y no suponga transacciones, webhooks ni reintentos seguros no documentados. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
+  <step><cmd>Ejecutar y registrar el paso 5</cmd><info><p>Conserve la evidencia en el producto externo, verifique el resultado de BPM y no suponga transacciones, webhooks ni reintentos seguros no documentados. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
+  <step><cmd>Ejecutar y registrar el paso 6</cmd><info><note type="warning">Si la evidencia está incompleta u obsoleta, detenga el flujo, vuelva a leer BPM y abra una nueva decisión del operador. <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></note></info></step>
+    </steps>
+    <result><p>Procedimiento completo para un producto de control externo con propiedad de datos, evidencia auditable y límites explícitos de reintento. Conserve la evidencia en el producto externo, verifique el resultado de BPM y no suponga transacciones, webhooks ni reintentos seguros no documentados.</p></result>
+    <postreq><p>Si la evidencia está incompleta u obsoleta, detenga el flujo, vuelva a leer BPM y abra una nueva decisión del operador.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+<link keyref="topic.admin-task-review-devops-network-cors-security"/>
+<link keyref="topic.admin-task-use-reusable-api-examples"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

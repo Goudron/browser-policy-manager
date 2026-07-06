@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-save-conflict" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Resolver un conflicto de guardado</title>
+  <shortdesc>Recupérese de una concurrent update o stale tab sin perder silenciosamente cambios del perfil.</shortdesc>
+  <taskbody>
+    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
+    <context><p>Un conflicto de guardado significa que otra pestaña o sesión cambió el perfil guardado después de que el editor actual lo cargó.</p></context>
+    <steps>
+      <step><cmd>Deténgase en el panel save-conflict y no sobrescriba de inmediato.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Compare el nombre visible del perfil, canal de esquema, modo de editor y último estado guardado con la pestaña que produjo el conflicto.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Copie los valores de borrador sin guardar que deban conservarse antes de recargar el perfil.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Recargue el perfil o reintente guardar solo después de elegir si conservar el borrador actual o el estado guardado más reciente.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+    </steps>
+    <result><p>El stale tab se resuelve sin descartar silenciosamente el borrador actual ni el perfil guardado más reciente.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.ug-troubleshoot-unsaved-changes"/>
+  </related-links>
+</task>

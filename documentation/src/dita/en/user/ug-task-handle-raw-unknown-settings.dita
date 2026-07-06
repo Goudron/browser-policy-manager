@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-handle-raw-unknown-settings" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Handle raw and unknown settings</title>
+  <shortdesc>Inspect imported unknown keys and raw-fallback values without losing them accidentally.</shortdesc>
+  <taskbody>
+    <prereq><p>Open Review mode or a raw/unknown filtered list in All Settings.</p></prereq>
+    <context><p>Raw and unknown settings may come from import, schema differences, or values BPM cannot model visually. Treat them as preservation and review items, not routine edits.</p></context>
+    <steps>
+      <step><cmd>Filter or open Review items for raw, unknown, or imported settings.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Decide whether to preserve, remove, reset, or inspect the value in JSON Editor.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Save only after confirming the value should remain or be removed.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
+    </steps>
+    <result><p>Raw and unknown values are preserved or removed intentionally.</p></result>
+    <postreq><p>Recovery: if the value might be important, export or compare the profile before removing it.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-follow-setting-deep-link"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-add-managed-preference" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Добавьте управляемую preference</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Add a known managed preference that is not yet configured in the profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Open All Settings with the correct schema channel selected.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Choose the known preference key and review its expected value type.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Enter the value and lock state required by the profile.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Apply, validate, and save the managed preference.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The profile contains the new managed preference with the intended value and lock behavior.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the preference key is unknown or validation fails, remove the draft value and use JSON only for deliberate raw review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-handle-raw-unknown-settings"/>
+  </related-links>
+</task>

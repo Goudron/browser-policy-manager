@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-refresh-profile-library" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Refresh the Profile Library</title>
+  <shortdesc>Reload Library rows and interpret load or action status before repeating an operation.</shortdesc>
+  <taskbody>
+    <prereq><p>The Library is open, and you need to confirm current saved profile state after a change or failed load.</p></prereq>
+    <context><p>Refresh reloads the Library from BPM. It does not validate profiles or save unsaved editor changes.</p></context>
+    <steps>
+      <step><cmd>Choose Refresh in the Library.</cmd><info><p>Expected result: the status announces loading and then either a refreshed list or an error.</p></info></step>
+      <step><cmd>Wait for the status message before starting another Library action.</cmd><info><note type="warning">Repeating lifecycle or delete actions while the status is unresolved can make it harder to tell which operation failed.</note></info></step>
+      <step><cmd>Review filtered and total counts after refresh.</cmd><info><p>Counts can change if another tab saved, archived, restored, or deleted a profile.</p></info></step>
+    </steps>
+    <result><p>The Library view reflects the latest profile list available to BPM.</p></result>
+    <postreq><p>Recovery: if refresh fails, keep the current page open and use the troubleshooting topic to decide whether to retry or preserve context.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-troubleshoot-library-operation"/>
+    <link keyref="topic.ug-task-use-profile-library"/>
+  </related-links>
+</task>

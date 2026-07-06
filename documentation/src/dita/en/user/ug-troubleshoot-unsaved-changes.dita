@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-unsaved-changes" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Recover from unsaved changes</title>
+  <shortdesc>Avoid losing unsaved editor changes during navigation, tab close, refresh, or mode switching.</shortdesc>
+  <taskbody>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <context><p>BPM warns about dirty editor state, but users still need to decide whether to save, discard, or stay on the page.</p></context>
+    <steps>
+      <step><cmd>Stop when the browser or BPM reports unsaved changes.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Identify the active tab, profile name, schema channel, and editor mode that contains the draft.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Save the profile if the changes should become the new profile state, or cancel navigation to review them first.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>If you intentionally discard changes, reopen the profile from the Library and confirm the saved state before continuing.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
+    </steps>
+    <result><p>You either preserve the draft by saving it or knowingly return to the last saved profile state.</p></result>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

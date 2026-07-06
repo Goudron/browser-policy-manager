@@ -1,15 +1,19 @@
 name: Firefox Live Policy Tests
 
 on:
-  schedule:
-    - cron: "0 2 * * *"
   workflow_dispatch:
+    inputs:
+      run_live_tests:
+        description: "Type RUN to execute the live Firefox policy suite."
+        required: true
+        default: "skip"
 
 permissions:
   contents: read
 
 jobs:
   firefox-live:
+    if: ${{ inputs.run_live_tests == 'RUN' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

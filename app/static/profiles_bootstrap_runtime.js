@@ -9,7 +9,13 @@
         core = {},
         features = {},
     }) {
-        const { resolveTheme, resolveBrowserLanguage, updateThemeColorMeta, syncThemeSensitiveControls } = platform;
+        const {
+            resolveTheme,
+            resolveBrowserLanguage,
+            updateThemeColorMeta,
+            syncThemeSensitiveControls,
+            updateDocumentationLinks,
+        } = platform;
         const { fromEditorValue, toEditorValue } = data;
         const {
             t,
@@ -34,6 +40,7 @@
                 resolveBrowserLanguage,
                 updateThemeColorMeta,
                 syncThemeSensitiveControls,
+                updateDocumentationLinks,
                 fromEditorValue,
                 toEditorValue,
                 renderPreferencePresetButtons: features.renderPreferencePresetButtons,

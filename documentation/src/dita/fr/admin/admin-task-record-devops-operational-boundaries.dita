@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-record-devops-operational-boundaries" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Consigner les boundaries de source operation</title>
+  <shortdesc>Créez une operations handoff note indiquant runtime user, process model, supported checks et deferred production capabilities.</shortdesc>
+  <taskbody>
+    <prereq><p>Les reviews configuration, storage, backup, network et CORS sont terminées pour la source-run instance.</p></prereq>
+    <context><p>La documentation BPM 0.9.0 Administrator/DevOps prend actuellement en charge source-run operation pour controlled evaluation. Elle ne fournit pas encore distribution installers, native services, official daemonization, production topology ni operational runbooks complets pour chaque enterprise control.</p></context>
+    <steps>
+      <step><cmd>Consignez runtime user et process model.</cmd><info><p>Identifiez le shell user propriétaire du checkout, de <codeph>.venv</codeph>, de <codeph>data/</codeph> et du process <codeph>make dev</codeph> ou <codeph>uvicorn app.main:app --reload --port 8000</codeph> en cours. Ne revendiquez pas supported service account, systemd unit, Windows service ni restart policy si votre external platform ne les fournit pas et n’en est pas propriétaire.</p></info></step>
+      <step><cmd>Consignez les checks pris en charge aujourd’hui.</cmd><info><p>Incluez source revision, active configuration values, migration status, <codeph>/health</codeph>, <codeph>/health/ready</codeph>, UI route smoke, API example status, foreground-log review et manual backup evidence. Reliez API evidence aux reusable API examples au lieu de dupliquer endpoint procedures.</p></info></step>
+      <step><cmd>Consignez les deferred capabilities comme blockers ou external responsibilities.</cmd><info><p>Indiquez que packaged installers, native Linux ou Windows services, reverse proxy and TLS recipes, HA clustering, managed secrets, authentication configuration, backup automation, restore orchestration, monitoring dashboards, log rotation et production hardening ne sont pas fournis par BPM 0.9.0 source documentation.</p></info></step>
+      <step><cmd>Ajoutez des user-facing recovery references sans déplacer l’ownership.</cmd><info><p>Quand un operator doit comprendre des UI symptoms, liez vers le user-facing troubleshooting comme product connection recovery. Conservez deployment, API, backup et network ownership dans l’Administrator/DevOps Guide.</p></info></step>
+    </steps>
+    <result><p>La handoff note indique ce que le source deployment actuel peut supporter, quelle evidence le prouve et quelles production responsibilities restent hors de BPM 0.9.0.</p></result>
+    <postreq><p>Utilisez cette boundary note comme point de départ pour le update-from-source runbook et les futures production/HA/reverse-proxy documentation tasks.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-review-devops-configuration-sources"/>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+    <link keyref="topic.admin-task-review-devops-network-cors-security"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+    <link keyref="topic.ug-troubleshoot-product-connection"/>
+  </related-links>
+</task>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-configure-linux-source-runtime" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>Configure Linux source runtime settings</title>
+  <shortdesc>Set the database URL, host, port, reload mode, CORS, and documentation-site path used by the source-run BPM process.</shortdesc>
+  <taskbody>
+    <prereq><p>The checkout dependencies are installed and migrations have been applied for the database you plan to use.</p></prereq>
+    <context><p>BPM reads environment variables with the <codeph>BPM_</codeph> prefix and also supports a repository-local <codeph>.env</codeph> file. The default database URL is <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>, which stores data in <codeph>data/bpm.db</codeph>.</p></context>
+    <steps>
+      <step><cmd>Create the local data directory and define the database URL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+]]></codeblock><p>For repeatable source runs, the same value may be stored in a local <codeph>.env</codeph> file that is not committed.</p></info></step>
+      <step><cmd>Set network and reload values for the local source process.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+]]></codeblock><p>Use loopback for local verification. Binding to a shared interface is an operational decision outside this source-runbook boundary.</p></info></step>
+      <step><cmd>Review CORS and documentation-site settings.</cmd><info><p>The source defaults include <codeph>BPM_ENABLE_CORS</codeph>, <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, and <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>. Keep permissive CORS only for controlled local evaluation, and point <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> at an installed static documentation site when one is available.</p></info></step>
+      <step><cmd>Start BPM from the repository script.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make dev
+]]></codeblock><p>The Makefile runs <codeph>uvicorn app.main:app --reload --port 8000</codeph>. Keep the foreground terminal open so startup messages and tracebacks are visible.</p></info></step>
+    </steps>
+    <result><p>BPM is running from source with explicit local runtime settings.</p></result>
+    <postreq><p>Verify health, readiness, the product UI, and first administrative smoke checks.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-set-up-linux-source-checkout"/>
+    <link keyref="topic.admin-task-verify-linux-source-deployment"/>
+  </related-links>
+</task>

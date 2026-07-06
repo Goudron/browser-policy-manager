@@ -59,6 +59,9 @@
                     data-i18n="profiles.validate">
                     {{ tr("profiles.validate") }}
                 </button>
+                {% set context_help_icon_target = "validation" %}
+                {% set context_help_icon_label_key = "profiles.help_validation" %}
+                {% include "profiles/_context_help_icon.html" %}
                 {% if profiles_route_mode == "json" %}
                 <button id="format"
                     class="button-base ghost-button"

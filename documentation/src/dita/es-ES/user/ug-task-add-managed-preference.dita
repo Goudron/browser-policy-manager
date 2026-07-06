@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-add-managed-preference" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Añadir una preferencia administrada</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Add a known managed preference that is not yet configured in the profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Open All Settings with the correct schema channel selected.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Choose the known preference key and review its expected value type.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Enter the value and lock state required by the profile.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Añadir una preferencia administrada. Apply, validate, and save the managed preference.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. The profile contains the new managed preference with the intended value and lock behavior.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the preference key is unknown or validation fails, remove the draft value and use JSON only for deliberate raw review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-handle-raw-unknown-settings"/>
+  </related-links>
+</task>

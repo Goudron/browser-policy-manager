@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-release-esr-differences" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Различия политик Firefox Release и ESR</title>
+  <shortdesc>Используйте channel badges и активный канал схемы, чтобы не настраивать политики, недоступные в выбранной ветке Firefox.</shortdesc>
+  <conbody>
+    <section id="a-current-channels"><title>Текущие каналы</title><p>BPM 0.9.0 документирует Firefox Release 152 и Firefox ESR 140.12. Сгенерированные policy references несут channel metadata, чтобы navigation, search indexes и будущие filters могли честно показывать активный канал.</p></section>
+    <section id="a-support-badges"><title>Support badges</title><p>Support badge в каждой сгенерированной policy reference показывает, поддерживается ли политика в обоих каналах или только в Release. Badge генерируется из поддерживаемого Firefox policy inventory, а не из переведённого текста.</p></section>
+    <section id="a-release-only"><title>Release-only политики</title><p>Сейчас восемь политик доступны только в Release: <codeph>AIControls</codeph>, <codeph>BrowserDataBackup</codeph>, <codeph>DisableRemoteImprovements</codeph>, <codeph>GenerativeAI</codeph>, <codeph>IPProtectionAvailable</codeph>, <codeph>LocalNetworkAccess</codeph>, <codeph>VisualSearchEnabled</codeph> и <codeph>XSLTEnabled</codeph>. Когда активная схема — ESR 140.12, BPM должен считать их недоступными.</p></section>
+    <section id="a-changed-definitions"><title>Изменённые определения</title><p>В текущем inventory нет общей политики, определение схемы которой отличается между Release 152 и ESR 140.12. Будущие обновления схем должны менять это утверждение через generated channel-differences artifact.</p></section>
+    <section id="a-user-action"><title>Действие пользователя</title><p>Выберите Firefox schema channel до выбора политики, проверьте channel badge и выполните повторную валидацию перед экспортом. Не используйте Release-only topic как доказательство поддержки той же политики в ESR.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</concept>

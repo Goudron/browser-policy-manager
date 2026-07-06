@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-choose-firefox-schema" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Choose a Firefox schema channel</title>
+  <shortdesc>Choose between Firefox ESR 140.12 and Firefox Release 152 before importing, validating, or editing a profile.</shortdesc>
+  <taskbody>
+    <prereq><p>Start this task before creating a profile, importing policies.json, or validating a raw JSON document.</p></prereq>
+    <context><p>The schema channel decides which Firefox policies BPM can validate and which controls are shown as supported. ESR 140.12 is the default long-support channel; Release 152 is the current mainstream channel and includes newer policy controls such as AIControls and VisualSearchEnabled.</p></context>
+    <steps>
+      <step><cmd>Compare the target browser fleet with the supported channels: ESR 140.12 or Release 152.</cmd><info><p>Expected result: the selected schema channel remains visible and intentional.</p></info></step>
+      <step><cmd>Choose ESR 140.12 when the profile is intended for the supported Extended Support Release deployment.</cmd><info><p>Expected result: the selected schema channel remains visible and intentional.</p></info></step>
+      <step><cmd>Choose Release 152 when the profile needs current Release-only controls, including supported AI and visual search policies.</cmd><info><p>Expected result: the selected schema channel remains visible and intentional.</p></info></step>
+      <step><cmd>Validate after choosing the channel and before saving, export, or handoff.</cmd><info><note type="warning">Validation can change from valid to invalid when the schema channel changes. Confirm the channel before saving or exporting.</note></info></step>
+    </steps>
+    <result><p>The profile uses the schema channel that matches the intended Firefox deployment.</p></result>
+    <postreq><p>Recovery: if validation reports unsupported, unavailable, deprecated, or unknown settings, confirm the schema channel before editing policy values.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

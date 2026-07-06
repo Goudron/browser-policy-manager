@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-add-managed-preference" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>添加托管 preference</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Add a known managed preference that is not yet configured in the profile.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Open All Settings with the correct schema channel selected.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Open the add preference control or find the preference in Catalog mode.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Choose the known preference key and review its expected value type.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Enter the value and lock state required by the profile.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：添加托管 preference. Apply, validate, and save the managed preference.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The profile contains the new managed preference with the intended value and lock behavior.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if the preference key is unknown or validation fails, remove the draft value and use JSON only for deliberate raw review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-handle-raw-unknown-settings"/>
+  </related-links>
+</task>

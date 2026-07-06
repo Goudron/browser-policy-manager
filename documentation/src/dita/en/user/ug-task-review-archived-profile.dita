@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-archived-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Review an archived profile</title>
+  <shortdesc>Open an archived profile deliberately with archived context before restore or permanent delete decisions.</shortdesc>
+  <taskbody>
+    <prereq><p>The archived profile is still visible through a Library lifecycle filter or an include_deleted route.</p></prereq>
+    <context><p>Archived profiles can be reviewed through include-deleted routes and Library lifecycle filters, but they are not normal active editing/export targets.</p></context>
+    <steps>
+      <step><cmd>Set the Library lifecycle filter to Archived or All states.</cmd><info><p>Expected result: archived lifecycle context remains visible before any restore or destructive action.</p></info></step>
+      <step><cmd>Confirm the archived badge, profile name, schema channel, validation state, and update time before opening the row.</cmd><info><p>Expected result: archived lifecycle context remains visible before any restore or destructive action.</p></info></step>
+      <step><cmd>Open the archived profile only when you need review context, restore planning, comparison, or a deletion decision.</cmd><info><p>Expected result: archived lifecycle context remains visible before any restore or destructive action.</p></info></step>
+      <step><cmd>Restore the profile before normal editing/export, or cancel if the archived context is not the intended target.</cmd><info><note type="warning">Archived profile actions can affect profiles that are intentionally hidden from the normal active Library view.</note></info></step>
+    </steps>
+    <result><p>You review the archived profile with its lifecycle context visible and avoid treating it as an active profile by mistake.</p></result>
+    <postreq><p>Recovery: if a bookmarked archived route reports Profile not found, return to the Library with archived profiles included and reopen from the visible row.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+    <link keyref="topic.ug-task-restore-profile"/>
+  </related-links>
+</task>

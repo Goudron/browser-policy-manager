@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-browse-settings-catalog" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Einstellungskatalog durchsuchen</title>
+  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Use Catalog mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Open a saved profile in All Settings.</p></prereq>
+    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Catalog mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Switch to Catalog mode.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Browse categories for supported policies and known managed preferences.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Use category cards or search to narrow the inventory.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskatalog durchsuchen. Select a setting before applying, editing, or resetting a value.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+    </steps>
+    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. You can find supported policies and known preferences without using raw JSON first.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the catalog is large, use search, filters, or bounded-list controls instead of scrolling blindly.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-reference-large-settings-inventories"/>
+  </related-links>
+</task>

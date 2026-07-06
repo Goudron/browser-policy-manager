@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "supported_platforms": [
+    "linux-x86_64"
+  ],
+  "cache_directory": "documentation/.cache/toolchain",
+  "components": {
+    "dita_ot": {
+      "version": "4.4",
+      "license": "Apache-2.0",
+      "archive": {
+        "url": "https://github.com/dita-ot/dita-ot/releases/download/4.4/dita-ot-4.4.zip",
+        "sha256": "598b9d405ed88112abb08a41189d750584e7eece86e89e97787777dea19401a0",
+        "format": "zip",
+        "root": "dita-ot-4.4"
+      },
+      "executable": "bin/dita"
+    },
+    "java": {
+      "vendor": "Eclipse Temurin",
+      "version": "21.0.11+10",
+      "vm": "HotSpot",
+      "license": "GPL-2.0-with-classpath-exception",
+      "platforms": {
+        "linux-x86_64": {
+          "archive": {
+            "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.11%2B10/OpenJDK21U-jre_x64_linux_hotspot_21.0.11_10.tar.gz",
+            "sha256": "e5038aae3ca9ff670bc696496b0728dbd23d280026bad30291cb919221ecfdcb",
+            "format": "tar.gz",
+            "root": "jdk-21.0.11+10-jre"
+          },
+          "executable": "bin/java"
+        }
+      }
+    },
+    "first_party_plugin": {
+      "id": "org.bpm.docs.html5",
+      "version": "0.9.0",
+      "license": "MPL-2.0",
+      "state": "reserved-not-installed"
+    }
+  },
+  "python": {
+    "requires": ">=3.14,<3.15",
+    "requirements_lock": "documentation/config/requirements.lock"
+  }
+}

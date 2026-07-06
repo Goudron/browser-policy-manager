@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-browse-settings-catalog" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Parcourir le catalogue des paramètres</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Use Catalog mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Open a saved profile in All Settings.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Catalog mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Switch to Catalog mode.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Browse categories for supported policies and known managed preferences.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Use category cards or search to narrow the inventory.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Parcourir le catalogue des paramètres. Select a setting before applying, editing, or resetting a value.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. You can find supported policies and known preferences without using raw JSON first.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if the catalog is large, use search, filters, or bounded-list controls instead of scrolling blindly.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-reference-large-settings-inventories"/>
+  </related-links>
+</task>

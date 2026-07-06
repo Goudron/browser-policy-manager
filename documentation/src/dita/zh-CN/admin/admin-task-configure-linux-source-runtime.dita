@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-configure-linux-source-runtime" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>配置 Linux 源码运行时设置</title>
+  <shortdesc>设置从源码运行的 BPM process 使用的 database URL、host、port、reload mode、CORS 和 documentation-site path。</shortdesc>
+  <taskbody>
+    <prereq><p>checkout dependencies 已安装，并且已为计划使用的数据库应用 migrations。</p></prereq>
+    <context><p>BPM 读取带 <codeph>BPM_</codeph> 前缀的 environment variables，也支持 repository-local 的 <codeph>.env</codeph> 文件。default database URL 是 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，数据存放在 <codeph>data/bpm.db</codeph>。</p></context>
+    <steps>
+      <step><cmd>创建本地数据目录并定义 database URL。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+]]></codeblock><p>为了可重复的 source runs，相同值也可以写入未提交的本地 <codeph>.env</codeph> 文件。</p></info></step>
+      <step><cmd>为本地 source process 设置 network 和 reload values。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+]]></codeblock><p>本地验证使用 loopback。绑定到 shared interface 是此 source-runbook boundary 之外的运维决策。</p></info></step>
+      <step><cmd>检查 CORS 和 documentation-site settings。</cmd><info><p>source defaults 包含 <codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。只在受控 local evaluation 中保留 permissive CORS；当 installed static documentation site 可用时，将 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 指向它。</p></info></step>
+      <step><cmd>通过仓库脚本启动 BPM。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make dev
+]]></codeblock><p>Makefile 运行 <codeph>uvicorn app.main:app --reload --port 8000</codeph>。保持 foreground terminal 打开，以便查看 startup messages 和 tracebacks。</p></info></step>
+    </steps>
+    <result><p>BPM 已使用明确的 local runtime settings 从源码运行。</p></result>
+    <postreq><p>验证 health、readiness、product UI 和第一批 administrative smoke checks。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-set-up-linux-source-checkout"/>
+    <link keyref="topic.admin-task-verify-linux-source-deployment"/>
+  </related-links>
+</task>

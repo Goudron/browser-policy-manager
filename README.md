@@ -6,37 +6,8 @@ and exporting Firefox Enterprise policy profiles.
 It is designed for system administrators and security teams who need a practical daily tool
 for managing Firefox `policies.json` documents without forcing every workflow through raw JSON.
 
-**Version:** `0.8.8`<br>
 **License:** [MPL-2.0](LICENSE)<br>
 **Python:** `3.14+`
-
-## What's Included In 0.8.8
-
-BPM 0.8.8 completes the All settings architecture and enterprise-scale UX work while retaining the
-comparison and clone workflow polish from the 0.8.7.1 patch line.
-
-- All settings opens in Review mode so invalid, CIS review, raw, unknown, deprecated, and imported
-  items appear before the full catalog.
-- Configured mode summarizes what the profile applies by domain and source; Catalog mode exposes
-  the complete schema-backed policy and managed-preference inventory.
-- A shared settings inventory powers Review, Configured, Catalog, grouped search, source
-  attribution, bounded lists, and the primary detail editor without duplicating edit paths.
-- The Library offers archive/restore and a separate permanent-delete action for active or archived
-  profiles. Permanent deletion requires an explicit irreversible confirmation.
-- Saved-profile comparison lives only in the dedicated `/profiles/compare` interface.
-- The Library stays focused on profile management and opens the comparison workflow in a new tab.
-- Compare does not render a redundant return-to-Library action; closing or switching from its tab
-  returns to the already-open Library.
-- The comparison interface shares the product language and theme preferences with Library and editor
-  routes, including new-tab handoff from Library.
-- Profile selection in Compare uses bounded, searchable result lists that remain usable with large
-  saved-profile libraries.
-- Compare table setting labels render policy and managed-preference identities without duplicated
-  names or keys.
-- Duplicate/clone actions ask for the new draft name before opening the clone draft, and localized
-  clone controls stay inside the Library action panel.
-- Guided editor, All settings, and JSON editor routes open independently so related work can stay
-  in separate browser tabs.
 
 ## Product Scope
 
@@ -97,6 +68,8 @@ fields in the UI, while Firefox Release 152 exposes the current AI controls.
 | `GET /profiles/{id}/edit` | Guided editor for an existing profile. |
 | `GET /profiles/{id}/settings` | All settings catalog for an existing profile. |
 | `GET /profiles/{id}/json` | JSON editor for an existing profile. |
+| `GET /help/` | Installed product documentation portal. |
+| `GET /help/{locale}/...` | Locale-specific documentation pages, assets, manifest-backed topic links, and static search indexes. |
 | `GET /i18n/{locale}.json` | Localization catalog. |
 | `GET /health` | Liveness probe. |
 | `GET /health/ready` | Readiness probe. |
@@ -184,6 +157,67 @@ Export example:
 For migration and breaking-change notes around this contract, see
 [`docs/firefox_policies_json_migration_notes_2026-04-14.md`](docs/firefox_policies_json_migration_notes_2026-04-14.md).
 
+## Product Documentation Portal
+
+BPM product documentation is authored as DITA topics under `documentation/src/dita/` and published
+as a static, manifest-validated site. The BPM runtime does not import DITA tooling, Java, build
+dependencies, or source topics.
+
+BPM serves an installed static documentation artifact under `/help/`, keeps FastAPI `/docs` for
+OpenAPI, exposes a locale-aware documentation link from the product header, and uses contextual help
+icons for the main product surfaces and selected policy/CIS/import/export/validation targets.
+Release package extraction, localized screenshot capture/review, and final manual QA disposition
+remain explicit release blockers rather than hidden completed claims.
+
+The portal contains five guide families in all six active locales:
+
+| Guide | Scope |
+|---|---|
+| User Guide | Case-oriented help for every user-visible BPM capability and recovery path. |
+| Firefox Policy Guide | Supported Firefox Release/ESR policies, managed preferences, examples, channel differences, caveats, and provenance. |
+| CIS Settings Guide | BPM's CIS mappings, presets, merge workflow, manual-review states, and source/provenance boundaries without copying restricted benchmark prose. |
+| API Integration Guide | Thin compatibility landing page that points API readers to the Administrator/DevOps Guide. |
+| Administrator/DevOps Guide | Source deployment for Linux and Windows 10/11 through WSL, operations, update-from-source, API integration, external control-product runbooks, troubleshooting, and current production/HA/reverse-proxy boundaries. |
+
+Documentation locales match the runtime UI locale matrix: `en`, `ru`, `de`, `zh-CN`, `fr`, and
+`es-ES`. Published search is deterministic, local, offline-capable, and non-AI: no RAG,
+embeddings, vector database, hosted search service, or generated answers are used. The static
+indexes support locale-aware lookup, aliases, bounded typo tolerance, ranking, facets, filters, and
+localized empty-result recovery.
+
+For maintainer review from source, build and install the local documentation artifact before
+opening BPM:
+
+```bash
+make docs-install-dev
+make dev
+```
+
+Then open the product UI and use the documentation link in the header, or open:
+
+```text
+http://127.0.0.1:8000/help/
+```
+
+Focused documentation commands:
+
+```bash
+make setup-docs-toolchain
+make test-docs
+make test-docs-contract
+make test-docs-ui-contract
+make test-docs-browser
+make docs-validate
+make docs-build
+make docs-release-check
+make docs-coverage
+```
+
+`make test-docs-browser` launches Chromium/Selenium. `make docs-install-dev` installs ignored local
+output under `app/documentation/site`; release packaging still requires the package/extraction gates.
+`make docs-screenshots-check` is not implemented yet, so complete localized screenshot
+capture/review remains a release blocker.
+
 ## UI Modes
 
 ### Profile Library
@@ -195,10 +229,12 @@ and direct entry into the guided editor, All settings, or JSON editor.
 Archive is reversible: archived profiles can be restored. Permanent delete is a distinct destructive
 action available for active and archived profiles; it requires confirmation that the profile will
 not be kept in the archive and cannot be restored.
+Permanent deletion requires an explicit irreversible confirmation.
 
 Comparison is intentionally not embedded in the Library. The Library provides a compare action that
 opens `/profiles/compare` in a new tab and carries the selected language and theme preference into
 the comparison route.
+Saved-profile comparison lives only in the dedicated `/profiles/compare` interface.
 
 Duplicating a profile opens a clone-name control first. After the name is confirmed, BPM opens a
 new guided-editor draft initialized from the selected profile and the requested clone name. The
@@ -258,7 +294,7 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 The primary project and UI source language is English. Product copy starts from
 `app/i18n/en.json` and English maintainer documentation before it is localized.
 
-BPM 0.8.8 keeps a six-locale UI matrix:
+BPM keeps a six-locale UI matrix:
 
 | Locale | Native label | Status |
 |---|---|---|
@@ -309,6 +345,7 @@ Currently active runtime catalogs:
 - Route-aware security headers and CSP middleware.
 - Startup normalization for legacy stored schema versions.
 - Bundled Firefox policy schemas under `app/schemas/policies/`.
+- Static product documentation runtime bridge under `app/documentation/`.
 
 ## Quick Start
 
@@ -324,6 +361,7 @@ Open:
 
 - API root: <http://127.0.0.1:8000/>
 - Profile library: <http://127.0.0.1:8000/profiles>
+- Documentation portal, after `make docs-install-dev`: <http://127.0.0.1:8000/help/>
 
 ## Development Commands
 
@@ -342,6 +380,7 @@ make test-fast
 make test-contract
 make test-firefox-schema-contract
 make test-locale-contract
+make docs-release-check
 make coverage
 ```
 
@@ -433,6 +472,7 @@ That audit writes reports and screenshots under `artifacts/local_chromium_ui_aud
 | `app/services/` | Import, export, normalization, validation, and profile services. |
 | `alembic/` | Database migrations. |
 | `docs/` | Runbooks, migration notes, and project planning notes. |
+| `documentation/` | DITA documentation source, toolchain config, focused tests, fixtures, build tools, and ignored generated output. |
 | `tools/` | Local build, audit, conversion, and maintenance scripts. |
 | `tests/` | Unit, API, web, browser UI, and live Firefox regression tests. |
 

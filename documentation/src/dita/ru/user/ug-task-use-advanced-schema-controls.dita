@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-advanced-schema-controls" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Используйте advanced schema controls</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Reach advanced schema-shell and preference controls from All Settings without treating Guided as the complete editor.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Open All Settings in Catalog mode.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Advanced controls remain deliberate. All Settings is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Switch to Catalog mode and open the advanced schema or preference disclosure.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Edit only the advanced control needed for the profile goal.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте advanced schema controls. Validate and save before returning to Guided, JSON, or the Library.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The advanced setting is reached and changed deliberately without duplicate default editors.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the control is unsupported in the selected schema, leave it unchanged and document the schema boundary.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</task>

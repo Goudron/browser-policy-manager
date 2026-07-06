@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-integration-audience" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Аудитория интеграций и граница API</title>
+  <shortdesc>Руководство по API-интеграции предназначено для внешних инструментов, которые используют текущий programmatic API BPM без неподдерживаемых гарантий продукта.</shortdesc>
+  <conbody>
+    <section id="a-audience"><title>Аудитория</title><p>Используйте это руководство, если вы создаёте или проверяете configuration, compliance, orchestration, inventory или control product, который обменивается с BPM данными profiles и Firefox policies. Основные читатели: API integrators, security reviewers, release engineers и maintainers, которым нужен повторяемый контракт для profile synchronization, validation gates, policy import/export, compliance metadata, inventory и health checks.</p></section>
+    <section id="a-evidence-boundary"><title>Граница evidence</title><p>Руководство основано на generated OpenAPI contract, maintained API inventory, route/model source и focused API tests. Оно документирует API, который BPM уже предоставляет в версии 0.9.0. Оно не разрешает новые endpoints, security models, data schemas, retry semantics или compatibility promises.</p></section>
+    <section id="a-supported-consumers"><title>Поддерживаемые роли consumers</title><p>Поддерживаемые consumers описываются как generic roles: configuration manager, compliance scanner, policy review gate, profile inventory collector, deployment orchestrator и operational monitor. Они могут вызывать service, profile, Firefox import/export, validation и health operations из API inventory.</p></section>
+    <section id="a-unsupported-claims"><title>Неподдерживаемые утверждения</title><p>Не описывайте product-specific connector, marketplace integration, certified integration, partnership, managed agent или vendor workflow, если такой connector реально не поставляется. HTML routes, static assets, generated schema UIs и underscore-prefixed Python helpers не являются stable machine-integration APIs.</p></section>
+    <section id="a-data-ownership"><title>Владение данными</title><p>BPM владеет normalized profile model, validation state, revision, lifecycle state, opaque compliance object и canonical Firefox export rendering. Интегрирующие продукты владеют scheduling, authorization, audit trail, retry policy, exception record, deployment decision и любой runtime verification вне BPM.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</concept>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-wsl-networking-dependencies" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>诊断: Troubleshoot WSL networking and stale dependencies</title>
+  <shortdesc>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Diagnose Windows 10/11 through WSL access problems, Linux filesystem placement, and stale Python dependencies after source changes.</shortdesc>
+  <taskbody>
+    <prereq><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Use this procedure when Windows cannot reach a WSL-hosted BPM process, probes work inside WSL but not from Windows, file performance is unstable under <codeph>/mnt/c</codeph>, or dependencies appear stale after <codeph>git checkout &lt;approved-new-ref&gt;</codeph>.</p></prereq>
+    <context><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 WSL troubleshooting keeps Windows browser access, Linux process binding, filesystem placement, and Python environment refresh separate. BPM does not provide a native Windows service or installer in 0.9.0.</p></context>
+    <steps>
+      <step><cmd>诊断 1: Confirm where the source checkout and virtual environment live.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Prefer the Linux filesystem for the checkout and <codeph>.venv</codeph>. Record whether files are under <codeph>/mnt/c</codeph>, which can change performance and permissions. Do not mix multiple checkouts during diagnosis.</p></info></step>
+  <step><cmd>诊断 2: Verify the WSL process binding and Windows route.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Check <codeph>BPM_HOST="0.0.0.0"</codeph>, <codeph>BPM_PORT="8000"</codeph>, <codeph>curl -fsS http://127.0.0.1:8000/health</codeph> inside WSL, and browser access from Windows. If Windows fails, record firewall and port-forwarding evidence.</p></info></step>
+  <step><cmd>诊断 3: Refresh dependencies after source movement or revision changes.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Focused rerun: <codeph>source .venv/bin/activate</codeph>, <codeph>python -m pip install --upgrade pip</codeph>, and <codeph>pip install -e ".[dev]"</codeph>. If dependency errors persist, record package names and source revision rather than editing installed packages manually.</p></info></step>
+  <step><cmd>诊断 4: Separate stale dependency symptoms from schema or database problems.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 If import/export or validation fails after dependency refresh, use schema/cache and import/export troubleshooting. If profile visibility changes, use database/storage troubleshooting.</p></info></step>
+  <step><cmd>诊断 5: Stop unsafe native-Windows assumptions.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Do not create undocumented Windows services, move the database between filesystems, or claim native installer behavior. </p><note type="warning">If WSL networking remains ambiguous, stop external integrations and escalate with WSL distro, checkout path, bind address, Windows URL, and probe outputs.</note></info></step>
+    </steps>
+    <result><p>操作员获得分类诊断，保护 user data，并知道下一个 smallest rerun。 The operator can distinguish WSL routing, filesystem placement, and dependency-refresh defects without changing product storage.</p></result>
+    <postreq><p>修复后返回相关 Administrator/DevOps workflow，只重跑受影响的 checks。 After WSL access is stable, return to source deployment verification and health-gated startup.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-windows-wsl-source-deployment"/>
+<link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+<link keyref="topic.admin-task-refresh-source-revision-dependencies"/>
+<link keyref="topic.admin-task-gate-control-product-startup"/>
+  </related-links>
+</task>

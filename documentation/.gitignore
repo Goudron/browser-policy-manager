@@ -1,0 +1,46 @@
+# Disposable build and diagnostic output.
+/build/
+/reports/
+/.cache/
+/dist/
+
+# Generator-owned DITA is regenerated from maintained inventories; only reviewed exceptions are committed.
+/src/generated/*
+!/src/generated/README.md
+!/src/generated/firefox/
+!/src/generated/firefox/*.ditamap
+!/src/generated/firefox/*.json
+!/src/generated/firefox/policies/
+!/src/generated/firefox/policies/*.dita
+!/src/generated/cis/
+!/src/generated/cis/*.ditamap
+!/src/generated/cis/*.json
+!/src/generated/cis/recommendations/
+!/src/generated/cis/recommendations/*.dita
+
+# Documentation-only dependency and toolchain state.
+/.toolchain/
+/.venv/
+/node_modules/
+/vendor/
+/tools/.venv/
+/tools/node_modules/
+/tools/vendor/
+
+# Test, coverage, browser, and process artifacts.
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+/.coverage
+/coverage.xml
+*.log
+*.pid
+*.tmp
+*.temp
+
+# Local editor and operating-system noise.
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

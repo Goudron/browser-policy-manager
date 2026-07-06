@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-supported-integration-patterns" xml:lang="fr" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Integration patterns pris en charge</title>
+  <shortdesc>BPM 0.9.0 prend en charge des generic API patterns pour les workflows profile, validation, Firefox document, metadata, inventory et health.</shortdesc>
+  <conbody>
+    <section id="a-profile-synchronization"><title>Profile synchronization</title><p>Un produit intégré peut list profiles, read profile by ID, create normalized profile, patch mutable profile fields, archive, restore, permanently delete ou reset profile library. La synchronization doit traiter profile ID et revision comme BPM-owned state et ne doit pas supposer de bulk operations, name mutation ou automatic rollback sur plusieurs requests.</p></section>
+    <section id="a-validation-gates"><title>Validation gates</title><p>Un validation gate peut envoyer un candidate canonical <codeph>policies.json</codeph> document au supported validation endpoint avant qu’un deployment workflow l’accepte. Le gate doit inspecter le response body autant que le status code, car validation peut retourner un HTTP status réussi avec <codeph>ok=false</codeph>.</p></section>
+    <section id="a-import-export"><title>Policy import and export</title><p>Une intégration peut importer Firefox <codeph>policies.json</codeph> comme BPM profile et exporter un saved BPM profile vers le canonical Firefox JSON. Ne mélangez pas normalized profile model et canonical Firefox document shape ; import/export est la limite entre ces representations.</p></section>
+    <section id="a-compliance-metadata"><title>Compliance metadata handoff</title><p>L’API expose un opaque <codeph>compliance</codeph> object sur les profile create, update et import operations. Les intégrations peuvent transmettre leur propre metadata via BPM, mais BPM 0.9.0 ne publie pas de versioned schema pour cet object et ne valide pas les external compliance semantics.</p></section>
+    <section id="a-inventory-and-health"><title>Inventory and health checks</title><p>Les inventory-style consumers peuvent list profiles, demander stats pour le même filter context, read individual profiles et appeler les service, liveness et readiness endpoints. Les health responses sont volontairement compactes et n’exposent pas de per-dependency diagnostics, documentation status ou deployment readiness au-delà des fixed fields actuels.</p></section>
+    <section id="a-unsupported-patterns"><title>Unsupported patterns</title><p>Le guide ne documente pas authentication, authorization, rate limits, idempotency keys, request IDs, webhooks, bulk export, bulk CRUD, cursor pagination, product-specific connectors, vendor partnerships ou transactional orchestration, car BPM 0.9.0 n’expose pas ces guarantees.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-review-profile-context"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</concept>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-filter-all-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>筛选 All Settings 列表</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. Filter by configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown state.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. Open All Settings with a visible settings list.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. State filters narrow a large inventory by the decision the user needs to make. They are different from source filters, which explain where a value came from.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. Open the list filter toolbar.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. Choose the state filter that matches the task: configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. Inspect the filtered count and representative rows.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：筛选 All Settings 列表. Clear the state filter before applying unrelated edits.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The list shows settings with the selected state only.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if a row is missing, clear state filters and search by exact policy or preference identifier.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-large-settings-inventories"/>
+    <link keyref="topic.ug-task-search-all-settings"/>
+  </related-links>
+</task>

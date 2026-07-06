@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-profile-status" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Справка по статусу профиля</title>
+  <shortdesc>Проверяйте profile name, ID, schema, lifecycle, dirty/saved state и validation context перед действием.</shortdesc>
+  <refbody>
+    <section id="a-profile-identity"><title>Идентичность</title><p>Profile name и ID подтверждают, что текущий editor, Library row или Compare selection относится к нужному saved profile или draft.</p></section>
+    <section id="a-profile-lifecycle"><title>Lifecycle</title><p>Lifecycle state различает active, archived, draft, restored и deletion-sensitive работу с профилем.</p></section>
+    <section id="a-profile-validation"><title>Валидация</title><p>Validation context показывает, готовы ли текущие policy и managed-preference values к save, comparison или export.</p></section>
+    <section id="a-profile-dirty-state"><title>Dirty state</title><p>Dirty/saved state показывает, нужно ли сохранить видимые editor changes перед navigation, export или доверием другой вкладке.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-review-profile-context"/>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+  </related-links>
+</reference>

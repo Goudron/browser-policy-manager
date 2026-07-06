@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-validate-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Проверить профиль валидацией</title>
+  <shortdesc>Запустите schema-aware валидацию перед сохранением, экспортом или сравнением изменений политик.</shortdesc>
+  <taskbody>
+    <prereq><p>Откройте BPM в браузере и держите доступной нужную поверхность: Библиотеку, Guided, All Settings, JSON или Compare.</p></prereq>
+    <context><p>Валидация проверяет имена политик, форму значений, поддерживаемый канал схемы, отличия ESR/Release, а также raw и unknown entries, видимые в BPM.</p></context>
+    <steps>
+      <step><cmd>Откройте профиль в Guided, All Settings или JSON.</cmd><info><p>Ожидаемый результат: BPM явно показывает выбранный профиль, поверхность редактирования, локаль и тему во время работы.</p></info></step>
+      <step><cmd>Проверьте выбранный канал схемы Firefox перед валидацией.</cmd><info><p>Ожидаемый результат: BPM явно показывает выбранный профиль, поверхность редактирования, локаль и тему во время работы.</p></info></step>
+      <step><cmd>Запустите валидацию или просмотрите видимую панель валидации на активной поверхности.</cmd><info><p>Ожидаемый результат: BPM явно показывает выбранный профиль, поверхность редактирования, локаль и тему во время работы.</p></info></step>
+      <step><cmd>Исправьте unsupported policies, wrong value types, unknown raw entries или устаревшие импортированные значения перед тем, как считать профиль готовым.</cmd><info><note type="warning">Сохраните или осознанно отбросьте изменения перед уходом из редактора, закрытием вкладки или подтверждением необратимого действия.</note></info></step>
+    </steps>
+    <result><p>Вы понимаете, готов ли профиль к сохранению и экспорту для выбранного канала Firefox.</p></result>
+    <postreq><p>Восстановление: если видимое состояние непонятно, остановите редактирование, прочитайте текущий статус, один раз обновите страницу и откройте профиль из Библиотеки заново.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

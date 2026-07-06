@@ -16,6 +16,8 @@
                     <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.editor_section_hint">
                         {{ tr("profiles.editor_section_hint") }}
                     </p>
+                    {% set context_help_surface = "json" %}
+                    {% include "profiles/_context_help_link.html" %}
                 </div>
                 <div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
                     <a
@@ -27,6 +29,9 @@
                         data-i18n="profiles.download_firefox_policies_json">
                         {{ tr("profiles.download_firefox_policies_json") }}
                     </a>
+                    {% set context_help_icon_target = "export-firefox-policies" %}
+                    {% set context_help_icon_label_key = "profiles.help_export_firefox_policies" %}
+                    {% include "profiles/_context_help_icon.html" %}
                 </div>
             </div>
 

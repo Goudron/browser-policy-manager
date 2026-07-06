@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-review-devops-network-cors-security" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>检查 network、CORS 和 security limits</title>
+  <shortdesc>在让 source-run BPM instance 可访问之前，检查 host、port、reload、health probes、CORS defaults 和 security limits。</shortdesc>
+  <taskbody>
+    <prereq><p>source process 可以通过 <codeph>make dev</codeph> 启动，管理员可以修改 <codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_RELOAD</codeph>、<codeph>BPM_ENABLE_CORS</codeph> 和 <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>。</p></prereq>
+    <context><p>当前 defaults 面向 local source operation：<codeph>BPM_HOST="0.0.0.0"</codeph>、<codeph>BPM_PORT="8000"</codeph>、<codeph>BPM_RELOAD="true"</codeph>、<codeph>BPM_ENABLE_CORS="true"</codeph>，以及等同于 <codeph>["*"]</codeph> 的 permissive origins。这些 defaults 不是 hardened network exposure policy。</p></context>
+    <steps>
+      <step><cmd>为当前环境选择最窄的 bind address。</cmd><info><p>本地 Linux checks 使用 <codeph>127.0.0.1</codeph>。只有当 WSL browser forwarding 或 controlled lab network 需要时才使用 <codeph>0.0.0.0</codeph>。记录任何 non-loopback binding 的原因。</p></info></step>
+      <step><cmd>用 health 和 readiness probes 作为 operational access gate。</cmd><info><p>在 API examples 或 UI smoke checks 前使用 <codeph>GET /health</codeph> 和 <codeph>GET /health/ready</codeph>。成功 probes 只说明 process liveness/readiness；不证明 database backup status、Firefox enforcement、authentication、authorization 或 production topology。</p></info></step>
+      <step><cmd>对任何 shared evaluation 限制 CORS。</cmd><info><p>对于 local experiments，permissive <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 可能可以接受。对于 shared host，请设置 explicit origins 并记录 browser origin 的所有者。BPM 0.9.0 文档不定义 credentialed CORS、CSRF protections、API authentication 或 tenant isolation。</p></info></step>
+      <step><cmd>不要把不支持的 security controls 写成 BPM claim。</cmd><info><note type="warning">本版本不交付 TLS termination、reverse proxy recipes、firewall policy、rate limiting、request signing、audit logging、SSO、OAuth/OIDC setup、role-based access control、vulnerability scanning 或 HA failover。如果环境增加这些内容，请把它们记录为 external controls。</note></info></step>
+    </steps>
+    <result><p>source-run BPM 的 network posture 被记录为 controlled local 或 lab exposure，而不是 production security architecture。</p></result>
+    <postreq><p>如果 probes 失败或 exposure 不清楚，请先使用 source-deployment verification topics，再继续 API integration examples。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-verify-linux-source-deployment"/>
+    <link keyref="topic.admin-task-verify-windows-wsl-source-deployment"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</task>

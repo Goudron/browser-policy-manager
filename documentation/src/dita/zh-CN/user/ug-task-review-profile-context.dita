@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-profile-context" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>查看配置文件上下文</title>
+  <shortdesc>在完成工作前检查配置文件身份、生命周期、架构通道、验证状态和来源上下文。</shortdesc>
+  <taskbody>
+    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
+    <context><p>配置文件上下文可避免误编辑错误配置文件、错误 Firefox 通道、已归档行、导入来源或过期标签页。</p></context>
+    <steps>
+      <step><cmd>读取配置文件名称、生命周期状态、架构通道和最后更新时间上下文。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>如果显示 source attribution，请检查当前值是否来自 manual edit、baseline、CIS、import 或 raw fallback。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>导出或比较前查看验证状态和警告。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>如果上下文与预期任务冲突，请停止并从库中重新打开配置文件。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+    </steps>
+    <result><p>您可以说明正在编辑哪个配置文件，以及哪些约束适用于它。</p></result>
+    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+  </related-links>
+</task>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-guided-fine-tuning" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Use Guided fine-tuning controls</title>
+  <shortdesc>Expand fine-tuning and advanced controls deliberately after the baseline choices are clear.</shortdesc>
+  <taskbody>
+    <prereq><p>A Guided profile draft has a scenario, preset, or initial settings.</p></prereq>
+    <context><p>Fine-tuning lets you reach advanced controls without abandoning the task-first Guided workflow.</p></context>
+    <steps>
+      <step><cmd>Open the step that owns the control family you need.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Expand the fine-tuning or advanced area for that family.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Change only the setting needed for the profile goal.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Recheck the plain-language summary and validation message before continuing.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The profile contains deliberate advanced changes rather than accidental broad edits.</p></result>
+    <postreq><p>Recovery: if the change is hard to explain, reset the control and use All Settings or JSON Editor for deeper inspection.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</task>

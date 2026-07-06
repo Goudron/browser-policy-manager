@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "screenshot-states",
+  "synthetic": true,
+  "capture_matrix": [
+    {
+      "id": "library-ru-desktop-dark",
+      "locale": "ru",
+      "surface": "Profile Library",
+      "viewport": "desktop",
+      "theme": "dark",
+      "source_profile_fixture": "doc-profile-release-baseline",
+      "expected_asset_id": "profile-library-ru-desktop-dark"
+    },
+    {
+      "id": "settings-en-narrow-light",
+      "locale": "en",
+      "surface": "All Settings",
+      "viewport": "narrow",
+      "theme": "light",
+      "source_profile_fixture": "doc-profile-release-baseline",
+      "expected_asset_id": "all-settings-en-narrow-light"
+    }
+  ],
+  "temporary_outputs": "documentation/reports/screenshots/"
+}

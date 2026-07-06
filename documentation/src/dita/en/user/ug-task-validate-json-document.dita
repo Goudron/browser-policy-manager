@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-validate-json-document" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Validate the JSON document</title>
+  <shortdesc>Validate raw JSON syntax and Firefox policy values before saving.</shortdesc>
+  <taskbody>
+    <prereq><p>Open JSON Editor with the document you want to check.</p></prereq>
+    <context><p>Validation distinguishes malformed JSON from policy or schema errors. A document can parse as JSON and still fail policy validation.</p></context>
+    <steps>
+      <step><cmd>Choose the shared Validate action.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>If validation reports malformed JSON, fix syntax such as trailing commas or missing braces.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>If validation reports policy errors, correct unsupported keys, wrong value types, or schema-channel mismatches.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>Validate again until the status explains that the document is acceptable or the remaining issue is intentional for raw review.</cmd><info><note type="warning">Saving raw JSON can change the canonical BPM profile. Validate syntax and policy values before saving.</note></info></step>
+    </steps>
+    <result><p>The document has a known validation state before save or export.</p></result>
+    <postreq><p>Recovery: if errors are hard to read, use All Settings to inspect the affected policy or preference visually.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+    <link keyref="topic.ug-task-save-json-document"/>
+  </related-links>
+</task>

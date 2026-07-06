@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>HA und production deferred boundaries erfassen</title>
+  <shortdesc>Benennen Sie, welche production, HA, reverse-proxy, restore und service-management capabilities heute fehlen und was für spätere design work vorbereitet werden kann.</shortdesc>
+  <taskbody>
+    <prereq><p>Readiness, network exposure, backup/export, monitoring und update-window notes existieren für die aktuelle source-run Instanz.</p></prereq>
+    <context><p>Dieses Thema erfasst die Grenze zwischen current single-node source operation und zukünftiger production architecture. Es benennt ausdrücklich what is planned but not implemented yet.</p></context>
+    <steps>
+      <step><cmd>Benennen Sie die supported current shape.</cmd><info><p>Schreiben Sie, dass BPM 0.9.0 Administrator/DevOps Dokumentation source deployment, manual configuration, health/readiness checks, API examples, manual backup evidence, documentation rebuild checks und single-node update windows unterstützt.</p></info></step>
+      <step><cmd>Benennen Sie fehlende service und proxy capabilities.</cmd><info><p>Listen Sie packaged services, native Linux service units, Windows services, official reverse-proxy recipes, TLS/proxy recipes, managed secrets, authentication gateway configuration und production hardening als in BPM 0.9.0 source documentation fehlend auf.</p></info></step>
+      <step><cmd>Benennen Sie fehlende HA und upgrade capabilities.</cmd><info><p>Listen Sie supported HA clustering, multi-node coordination, load balancer session affinity guidance, shared storage locking, zero-downtime migration, rolling upgrades, automatic failover und official restore automation als future work, nicht als current behavior.</p></info></step>
+      <step><cmd>Wandeln Sie future needs in design inputs um.</cmd><info><note type="warning">Stellen Sie nicht mehrere source nodes hinter einen load balancer und nennen das Ergebnis supported HA. Erfassen Sie required RTO/RPO, backup verification, TLS ownership, secrets ownership, logging, monitoring und upgrade-window expectations als inputs für spätere distribution/runtime tasks.</note></info></step>
+    </steps>
+    <result><p>Der boundary record verhindert unsupported production, HA und reverse-proxy claims und bewahrt nützliche preparation work für future releases.</p></result>
+    <postreq><p>Nutzen Sie diesen record während manual documentation QA und wenn spätere installer, service, reverse-proxy und HA backlog items genehmigt werden.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+    <link keyref="topic.admin-task-review-network-exposure-proxy-readiness"/>
+    <link keyref="topic.admin-task-verify-source-update-rollback-stop"/>
+    <link keyref="topic.admin-troubleshoot-failed-startup-probes"/>
+  </related-links>
+</task>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-edit-raw-policies-json" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Raw policies JSON bearbeiten</title>
+  <shortdesc>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. Edit the raw policies.json document with the locally bundled Monaco editor.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. Open JSON Editor for a saved profile.</p></prereq>
+    <context><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. The Monaco editor is bundled locally and edits the raw JSON text. BPM still validates before saving to the normalized profile model.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. Place focus in the JSON editor.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. Edit only the policy, preference, or raw value required by the task.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. Keep the top-level policies object and valid JSON syntax.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Raw policies JSON bearbeiten. Use validation before saving the raw edit.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern JSON-Syntax, top-level policies und Policy-Validierungsfehler.</note></info></step>
+    </steps>
+    <result><p>JSON Editor befindet sich im erwarteten Zustand, und die Aktion ist bei der Prüfung erklärbar. The editor contains the intended raw JSON change and is ready for validation.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, validieren Sie das Dokument, kehren Sie zu All Settings zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the edit becomes confusing, format the document or discard changes before saving.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-format-json-document"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

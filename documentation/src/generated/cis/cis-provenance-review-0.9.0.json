@@ -1,0 +1,3006 @@
+{
+  "accuracy_checks": {
+    "authored_topics_require_non_certification_boundary": true,
+    "benchmark_version_metadata_complete": true,
+    "generated_topics_require_source_boundary": true,
+    "layer_checked_examples_required": true,
+    "level_metadata_complete": true,
+    "manual_review_metadata_complete": true,
+    "mapping_metadata_complete": true,
+    "provenance_only_records_closed": true,
+    "source_metadata_complete": true
+  },
+  "backlog_item": "BPM090-M6-09",
+  "benchmark": {
+    "exact_release_date": "2024-07-19",
+    "id": "cis-firefox-esr-gpo",
+    "official_source_required": true,
+    "source_content_redistribution_reviewed": false,
+    "source_license": "CC-BY-NC-SA-4.0",
+    "source_license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "source_terms_url": "https://www.cisecurity.org/terms-of-use-for-non-member-cis-products",
+    "tested_by_cis_against": "Mozilla Firefox 115.10 ESR on Windows 11 Release 23H2",
+    "upstream_name": "CIS Mozilla Firefox ESR GPO Benchmark",
+    "upstream_version": "1.0.0"
+  },
+  "forbidden_claims": [
+    "CIS certified",
+    "CIS-certified",
+    "CIS endorsed",
+    "CIS-approved guide",
+    "authorized CIS guide",
+    "guarantees CIS compliance",
+    "proves CIS compliance",
+    "complete benchmark substitute",
+    "official CIS guidance",
+    "copied-cis-benchmark-prose",
+    "published-cis-recommendation-title",
+    "published-cis-audit-or-remediation-prose",
+    "missing-source-title-hash",
+    "missing-provenance-id",
+    "missing-manual-review-boundary"
+  ],
+  "generated_by": "documentation/tools/generate_cis_recommendation_skeletons.py",
+  "manual_review_paths": [
+    {
+      "path": [
+        "AppAutoUpdate"
+      ],
+      "path_id": "AppAutoUpdate",
+      "reason": "Update governance may be handled by enterprise patch management."
+    },
+    {
+      "path": [
+        "BackgroundAppUpdate"
+      ],
+      "path_id": "BackgroundAppUpdate",
+      "reason": "Update governance may be handled by enterprise patch management."
+    },
+    {
+      "path": [
+        "DisableAppUpdate"
+      ],
+      "path_id": "DisableAppUpdate",
+      "reason": "Update governance may be handled by enterprise patch management."
+    },
+    {
+      "path": [
+        "DisableSystemAddonUpdate"
+      ],
+      "path_id": "DisableSystemAddonUpdate",
+      "reason": "Update governance may be handled by enterprise patch management."
+    },
+    {
+      "path": [
+        "Proxy",
+        "Locked"
+      ],
+      "path_id": "Proxy.Locked",
+      "reason": "Proxy lock is environment-specific and should preserve the selected routing model."
+    },
+    {
+      "path": [
+        "Proxy",
+        "Mode"
+      ],
+      "path_id": "Proxy.Mode",
+      "reason": "Proxy mode is environment-specific and may enforce enterprise traffic routing."
+    },
+    {
+      "path": [
+        "SanitizeOnShutdown",
+        "FormData"
+      ],
+      "path_id": "SanitizeOnShutdown.FormData",
+      "reason": "CIS preserves forensic evidence, while some hardened scenarios intentionally clear form data."
+    },
+    {
+      "path": [
+        "SanitizeOnShutdown",
+        "History"
+      ],
+      "path_id": "SanitizeOnShutdown.History",
+      "reason": "CIS preserves forensic evidence, while some hardened scenarios intentionally clear history."
+    },
+    {
+      "path": [
+        "SanitizeOnShutdown",
+        "Sessions"
+      ],
+      "path_id": "SanitizeOnShutdown.Sessions",
+      "reason": "CIS preserves forensic evidence, while some hardened scenarios intentionally clear session data."
+    }
+  ],
+  "path": "documentation/src/generated/cis/cis-provenance-review-0.9.0.json",
+  "records": [
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-1-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.1.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.1.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.1.1",
+      "source_title_published": false,
+      "source_title_sha256": "f3736db8a1e089b5cce4901698b5d871a469bea84c2e8335e9703a4f5629a85d",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-InstallAddonsPermission"
+      ],
+      "target_paths": [
+        "InstallAddonsPermission.Default"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-1-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-2-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.2.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.2.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.2.1",
+      "source_title_published": false,
+      "source_title_sha256": "5c7b6a7af4b16b84c59e94ae9798c57bb2fca8598622dc056c302715826d5630",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Authentication"
+      ],
+      "target_paths": [
+        "Authentication.NTLM"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-2-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-5-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "SanitizeOnShutdown.Sessions"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.5.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.5.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.5.1",
+      "source_title_published": false,
+      "source_title_sha256": "5e4a309a018ed1de2adbefc38152327351450f109a6f0947f44321b3be162d3d",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SanitizeOnShutdown"
+      ],
+      "target_paths": [
+        "SanitizeOnShutdown.Sessions"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-5-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-5-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "SanitizeOnShutdown.History"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.5.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.5.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.5.2",
+      "source_title_published": false,
+      "source_title_sha256": "93d80d8d0b970ee883af79ea0c32f33a8cb45d14fd47fd1a8dd4f744d751f0d0",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SanitizeOnShutdown"
+      ],
+      "target_paths": [
+        "SanitizeOnShutdown.History"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-5-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": null,
+      "expected_topic_props": null,
+      "generated_layers": [],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "needs_research",
+      "non_publishable_reason": "No supported target is approved while mapping research remains unresolved.",
+      "provenance_id": "cis-source-1.1.5.3",
+      "publication_disposition": "provenance-only-non-publishable",
+      "recommendation_id": "1.1.5.3",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.5.3",
+      "source_title_published": false,
+      "source_title_sha256": "f7286ec9d6bb44124cd1779575d004542fd67908df690018c1b0107014057d7c",
+      "target_count": 0,
+      "target_doc_ids": [],
+      "target_paths": [],
+      "topic_path": null,
+      "topic_section_ids": []
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-5-4",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "SanitizeOnShutdown.FormData"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.5.4",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.5.4",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.5.4",
+      "source_title_published": false,
+      "source_title_sha256": "b6a1548659c1c36b693d781a6fabcbba9ced6a6970589b666699e74f7f02d249",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SanitizeOnShutdown"
+      ],
+      "target_paths": [
+        "SanitizeOnShutdown.FormData"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-5-4.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-5-5",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.5.5",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.5.5",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.5.5",
+      "source_title_published": false,
+      "source_title_sha256": "d8d4bbd6e56a7dc82231be3bbf01b06ca09bea92bc2bd7abf26a8392d6f3fd37",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SanitizeOnShutdown"
+      ],
+      "target_paths": [
+        "SanitizeOnShutdown.Locked"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-5-5.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-6-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.6.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.6.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.6.1",
+      "source_title_published": false,
+      "source_title_sha256": "f20d8fa70564a6150fa57c6053a631cecf3b324a89b408768d6876b16591ab66",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Cookies"
+      ],
+      "target_paths": [
+        "Cookies.Behavior"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-6-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-6-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.6.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.6.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.6.2",
+      "source_title_published": false,
+      "source_title_sha256": "038eb94fd43884d8cee43dcc3cb4682b28d0bb4372389f68581203c7b7177fd0",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Cookies"
+      ],
+      "target_paths": [
+        "Cookies.BehaviorPrivateBrowsing"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-6-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-7-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.7.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.7.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.7.1",
+      "source_title_published": false,
+      "source_title_sha256": "ba7a023846aff2ca8a3b45f92eb8f5b0ef2f1fe0dcb164ad671802e4b684b74d",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisabledCiphers"
+      ],
+      "target_paths": [
+        "DisabledCiphers.TLS_RSA_WITH_3DES_EDE_CBC_SHA"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-7-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-9-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.9.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.9.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.9.1",
+      "source_title_published": false,
+      "source_title_sha256": "93ee11eef9234f179fd0d1eae28097cd7d152c126c481fc3c2d251503ef14ce0",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-EncryptedMediaExtensions"
+      ],
+      "target_paths": [
+        "EncryptedMediaExtensions.Locked"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-9-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-10-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.10.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.10.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.10.1",
+      "source_title_published": false,
+      "source_title_sha256": "3dfd7664538114644055ec6ed256d51c7d642191a4627983d707e74b3fbd923b",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-ExtensionUpdate"
+      ],
+      "target_paths": [
+        "ExtensionUpdate"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-10-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": null,
+      "expected_topic_props": null,
+      "generated_layers": [],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "deprecated_or_removed",
+      "non_publishable_reason": "No modern supported Firefox target exists; retain provenance only.",
+      "provenance_id": "cis-source-1.1.12.1",
+      "publication_disposition": "provenance-only-non-publishable",
+      "recommendation_id": "1.1.12.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.12.1",
+      "source_title_published": false,
+      "source_title_sha256": "1749b9a147eb3a6b48c29826dbf03c0cb21db78eec4163dfd0f663a6b293c496",
+      "target_count": 0,
+      "target_doc_ids": [],
+      "target_paths": [],
+      "topic_path": null,
+      "topic_section_ids": []
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-15-3-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.15.3.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.15.3.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.15.3.1",
+      "source_title_published": false,
+      "source_title_sha256": "e42d7478c140b84e128b01171be27d2528f22832f2d1289ea2990a1d9e3a657b",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Permissions"
+      ],
+      "target_paths": [
+        "Permissions.Location.BlockNewRequests"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-15-3-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-15-3-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.15.3.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.15.3.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.15.3.2",
+      "source_title_published": false,
+      "source_title_sha256": "e13c93ad735ca176e576823c9c986eb5a0420443aa8776c548197f3c2a67c90e",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Permissions"
+      ],
+      "target_paths": [
+        "Permissions.Location.Locked"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-15-3-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-17-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.17.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.17.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.17.1",
+      "source_title_published": false,
+      "source_title_sha256": "448f3f4bc38eb26ae2a855b4caa82dd7e1c6de90b48b456ca8b8dcf1aca2106b",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-PopupBlocking"
+      ],
+      "target_paths": [
+        "PopupBlocking.Default"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-17-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-17-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.17.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.17.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.17.2",
+      "source_title_published": false,
+      "source_title_sha256": "e13c93ad735ca176e576823c9c986eb5a0420443aa8776c548197f3c2a67c90e",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-PopupBlocking"
+      ],
+      "target_paths": [
+        "PopupBlocking.Locked"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-17-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.1",
+      "source_title_published": false,
+      "source_title_sha256": "a50ab67fcb44a25c5ab7df533f54bb65f4220d04c32689ccc4efb0b5ec55d3cc",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-browser-safebrowsing-malware-enabled"
+      ],
+      "target_paths": [
+        "browser.safebrowsing.malware.enabled"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.2",
+      "source_title_published": false,
+      "source_title_sha256": "931c150000dce8c5d45263db550e0a0fecda3511fee684ff9c2dafd0a9d6b7e0",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-browser-safebrowsing-phishing-enabled"
+      ],
+      "target_paths": [
+        "browser.safebrowsing.phishing.enabled"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-3",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.3",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.3",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.3",
+      "source_title_published": false,
+      "source_title_sha256": "9c783d5772daa4cdc706d4f40737f458289568fe8dfa6ff71fe8f59cadfb0222",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-browser-search-update"
+      ],
+      "target_paths": [
+        "browser.search.update"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-3.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-4",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.4",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.4",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.4",
+      "source_title_published": false,
+      "source_title_sha256": "01dd2cfb7d23aecdd55b0fdc970e17a95ab73ebcc327923cc7cd6a04e2b259bb",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-dom-allow-scripts-to-close-windows"
+      ],
+      "target_paths": [
+        "dom.allow_scripts_to_close_windows"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-4.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-5",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.5",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.5",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.5",
+      "source_title_published": false,
+      "source_title_sha256": "4a3880759107420bb496686c3e923641eb4395995b4ebb9a988ce504366eecf0",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-dom-disable-window-flip"
+      ],
+      "target_paths": [
+        "dom.disable_window_flip"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-5.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-6",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.6",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.6",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.6",
+      "source_title_published": false,
+      "source_title_sha256": "90ff259d620c61348d659caf497613b42b5bc86659e56948880196e24ea809ab",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-dom-disable-window-move-resize"
+      ],
+      "target_paths": [
+        "dom.disable_window_move_resize"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-6.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-7",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.7",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.7",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.7",
+      "source_title_published": false,
+      "source_title_sha256": "bb5e818fc93f8b67b8f13c134171ac280f69d36f9732667ab432c293a16c70fb",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-extensions-blocklist-enabled"
+      ],
+      "target_paths": [
+        "extensions.blocklist.enabled"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-7.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-8",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.8",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.8",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.8",
+      "source_title_published": false,
+      "source_title_sha256": "11f84b6cf98b338b4bd8a72eb28769972f4d54bdce6dc4b499a99b132eada086",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-media-peerconnection-enabled"
+      ],
+      "target_paths": [
+        "media.peerconnection.enabled"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-8.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-9",
+      "expected_topic_props": "cis-level-2",
+      "generated_layers": [
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 2,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.9",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.9",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.9",
+      "source_title_published": false,
+      "source_title_sha256": "7b1b69fd970fd7cc364e0abf32ef2bdecde52a677e927b95035387dcff9e14ac",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-network-idn-show-punycode"
+      ],
+      "target_paths": [
+        "network.IDN_show_punycode"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-9.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-18-10",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "preference_mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.18.10",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.18.10",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.18.10",
+      "source_title_published": false,
+      "source_title_sha256": "d5833e43c673be1d0f49a2877d2299c8f27a7ff34d1a2be50491fb4ec29051eb",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-pref-security-mixed-content-block-active-content"
+      ],
+      "target_paths": [
+        "security.mixed_content.block_active_content"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-18-10.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-19-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "Proxy.Mode"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.19.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.19.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.19.1",
+      "source_title_published": false,
+      "source_title_sha256": "232d7c9db3a5d77c1b9bae93cdd94b5a86bba89adcad61e842787f7b49816824",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Proxy"
+      ],
+      "target_paths": [
+        "Proxy.Mode"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-19-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-19-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "Proxy.Locked"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.19.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.19.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.19.2",
+      "source_title_published": false,
+      "source_title_sha256": "f5cf940b3df067126fcb059d8e7ed36c3ebe64faa691943b9292af09a20c30ec",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-Proxy"
+      ],
+      "target_paths": [
+        "Proxy.Locked"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-19-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-20-1",
+      "expected_topic_props": "cis-level-2",
+      "generated_layers": [
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 2,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.20.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.20.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.20.1",
+      "source_title_published": false,
+      "source_title_sha256": "7d0e144e51fc297751005f5bde2ae8023b5ed0c87fa58a961524ed832f0c1d86",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SearchSuggestEnabled"
+      ],
+      "target_paths": [
+        "SearchSuggestEnabled"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-20-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-22-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.22.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.22.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.22.1",
+      "source_title_published": false,
+      "source_title_sha256": "3c6fc85ddb9c951953724e5e0a3d224eb25dafab36e98e09814df642729468bd",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-EnableTrackingProtection"
+      ],
+      "target_paths": [
+        "EnableTrackingProtection.Cryptomining"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-22-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-22-2",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.22.2",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.22.2",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.22.2",
+      "source_title_published": false,
+      "source_title_sha256": "0789a6da763dcbdec9fbfb77d4c72487c8a33bd505312d73186feb7b2374b70e",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-EnableTrackingProtection"
+      ],
+      "target_paths": [
+        "EnableTrackingProtection.Locked"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-22-2.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-22-3",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.22.3",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.22.3",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.22.3",
+      "source_title_published": false,
+      "source_title_sha256": "fccf57a9dbcf4b90c5d06014d097046d5245cf9944aced2148c92728e1191575",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-EnableTrackingProtection"
+      ],
+      "target_paths": [
+        "EnableTrackingProtection.EmailTracking"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-22-3.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-22-4",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.22.4",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.22.4",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.22.4",
+      "source_title_published": false,
+      "source_title_sha256": "7707cfa3332aa7c70257a8e70634dc9da102159a906024e14baec07182d87c8c",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-EnableTrackingProtection"
+      ],
+      "target_paths": [
+        "EnableTrackingProtection.Value"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-22-4.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-22-5",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.22.5",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.22.5",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.22.5",
+      "source_title_published": false,
+      "source_title_sha256": "1e1dd3acf2c03e85e9cfdb5b2cc542e4be8bc4e4353107fe47a5c1c2d5a13ee2",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-EnableTrackingProtection"
+      ],
+      "target_paths": [
+        "EnableTrackingProtection.Fingerprinting"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-22-5.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-23-1",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.23.1",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.23.1",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.23.1",
+      "source_title_published": false,
+      "source_title_sha256": "40e803320a75fed9e698819bca9dccc123ec0064c4c572ff9347ff677c5b012a",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-UserMessaging"
+      ],
+      "target_paths": [
+        "UserMessaging.ExtensionRecommendations"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-23-1.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-24",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "AppAutoUpdate"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.24",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.24",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.24",
+      "source_title_published": false,
+      "source_title_sha256": "800328d9c7588d0631a696f55409550089cbebb23e9f6858c349ffa0fd6cf433",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-AppAutoUpdate"
+      ],
+      "target_paths": [
+        "AppAutoUpdate"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-24.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-25",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "BackgroundAppUpdate"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.25",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.25",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.25",
+      "source_title_published": false,
+      "source_title_sha256": "d74ff9e557e8fc0e8cd65309f5f1125a4e3e30aa6d64bfe512f58251a2f48cc8",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-BackgroundAppUpdate"
+      ],
+      "target_paths": [
+        "BackgroundAppUpdate"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-25.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-26",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.26",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.26",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.26",
+      "source_title_published": false,
+      "source_title_sha256": "6227a2b7eb720ccdec2542a06f9db42276cf6aec7659f50b32a9f8d141553f21",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableDeveloperTools"
+      ],
+      "target_paths": [
+        "DisableDeveloperTools"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-26.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-27",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.27",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.27",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.27",
+      "source_title_published": false,
+      "source_title_sha256": "bca8aefbf7d9687a0e2447f8150c2f3fc1699742491346b88b576d0a8c90838e",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableFeedbackCommands"
+      ],
+      "target_paths": [
+        "DisableFeedbackCommands"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-27.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-28",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.28",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.28",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.28",
+      "source_title_published": false,
+      "source_title_sha256": "c980c4a33ad330137cef960a0be2a6aafe3b41da0986864940e8839e26ce2dbb",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableFirefoxAccounts"
+      ],
+      "target_paths": [
+        "DisableFirefoxAccounts"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-28.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-29",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.29",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.29",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.29",
+      "source_title_published": false,
+      "source_title_sha256": "20011088df0adfb666c7e01eb65304dd1657daabd005bf1e2de78a7345478691",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableFirefoxStudies"
+      ],
+      "target_paths": [
+        "DisableFirefoxStudies"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-29.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-30",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.30",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.30",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.30",
+      "source_title_published": false,
+      "source_title_sha256": "0d9bdd483e3f3795d7db192d9c81cc733050b92dc338fe8ec2c2de18173cb22c",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableForgetButton"
+      ],
+      "target_paths": [
+        "DisableForgetButton"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-30.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-31",
+      "expected_topic_props": "cis-level-2",
+      "generated_layers": [
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 2,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.31",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.31",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.31",
+      "source_title_published": false,
+      "source_title_sha256": "b3bf24c1bcf1910799d244678838b654807ea71d30aa86d5fe00284409832164",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableFormHistory"
+      ],
+      "target_paths": [
+        "DisableFormHistory"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-31.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-32",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.32",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.32",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.32",
+      "source_title_published": false,
+      "source_title_sha256": "9fd248f7e3385aa681e36826a76438c58dce24f78d18a25eba67d7043c0279d2",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisablePocket"
+      ],
+      "target_paths": [
+        "DisablePocket"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-32.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-33",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.33",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.33",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.33",
+      "source_title_published": false,
+      "source_title_sha256": "9cb926abf212c4ebe07d43dbc9e785f217e534a24eebd32a2b679bd9afb79dce",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisablePrivateBrowsing"
+      ],
+      "target_paths": [
+        "DisablePrivateBrowsing"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-33.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-34",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "DisableSystemAddonUpdate"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.34",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.34",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.34",
+      "source_title_published": false,
+      "source_title_sha256": "ba59c6f22beae2267db02e2c38bea37400f8ba9f8b6db71e470c33646afd41ff",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableSystemAddonUpdate"
+      ],
+      "target_paths": [
+        "DisableSystemAddonUpdate"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-34.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-35",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.35",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.35",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.35",
+      "source_title_published": false,
+      "source_title_sha256": "1984c0280cfbec2d9fb01dbb1e29ef0411569c7805730d2a8b06daa532f608a5",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableTelemetry"
+      ],
+      "target_paths": [
+        "DisableTelemetry"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-35.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-36",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [
+        "DisableAppUpdate"
+      ],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.36",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.36",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.36",
+      "source_title_published": false,
+      "source_title_sha256": "5aefb3bf53372e12b3221dd52fa73792934e4db1811509801e6dcb2beedcc322",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-DisableAppUpdate"
+      ],
+      "target_paths": [
+        "DisableAppUpdate"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-36.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-37",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.37",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.37",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.37",
+      "source_title_published": false,
+      "source_title_sha256": "0946e1aa2913369641b8eb80c2c9e366491e8d59a3f0bfaafaf45d54658700d6",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SSLVersionMax"
+      ],
+      "target_paths": [
+        "SSLVersionMax"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-37.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-38",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.38",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.38",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.38",
+      "source_title_published": false,
+      "source_title_sha256": "804d1e4d8aa34cac4b55cafcf53d7a460e6b6454e2e0c7d80aa751ce75148f76",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-SSLVersionMin"
+      ],
+      "target_paths": [
+        "SSLVersionMin"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-38.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-39",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.39",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.39",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.39",
+      "source_title_published": false,
+      "source_title_sha256": "be7f86e9f5fd38b22a334ac67626f6b09df20de7ebbfb8b616b926be9d6e1284",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-NetworkPrediction"
+      ],
+      "target_paths": [
+        "NetworkPrediction"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-39.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-40",
+      "expected_topic_props": "cis-level-2",
+      "generated_layers": [
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 2,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.40",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.40",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.40",
+      "source_title_published": false,
+      "source_title_sha256": "9ca2d2b933066c6d1ae26009d2d0b87317f0de55c5ec0922b5708b8223bad5dd",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-NewTabPage"
+      ],
+      "target_paths": [
+        "NewTabPage"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-40.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-41",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.41",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.41",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.41",
+      "source_title_published": false,
+      "source_title_sha256": "84998113644000d0212740103dbde55746c61de9f79b4c47146afbcb54434190",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-OfferToSaveLogins"
+      ],
+      "target_paths": [
+        "OfferToSaveLogins"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-41.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    },
+    {
+      "accuracy_basis": [
+        "docs/architecture/cis-documentation-inventory-0.9.0.json",
+        "app/compliance/firefox/cis/generated/*.json",
+        "documentation/config/cis-settings-topic-model-0.9.0.json"
+      ],
+      "assessment": "automated",
+      "benchmark_prose_published": false,
+      "doc_id": "cis-rec-1-1-42",
+      "expected_topic_props": "cis-level-1",
+      "generated_layers": [
+        "cis-l1.esr-140.12",
+        "cis-l1.release-152",
+        "cis-l2.esr-140.12",
+        "cis-l2.release-152"
+      ],
+      "level": 1,
+      "manual_review_paths": [],
+      "mapping_status": "mapped",
+      "non_publishable_reason": null,
+      "provenance_id": "cis-source-1.1.42",
+      "publication_disposition": "planned-dita-topic",
+      "recommendation_id": "1.1.42",
+      "restricted_source_family_id": "cis-benchmark-pdf",
+      "reuse_mode": "generated-facts-and-bpm-authored-prose",
+      "rights_approval_id_when_required": null,
+      "source_expression_indexed": false,
+      "source_expression_published": false,
+      "source_family_id": "bpm-cis-mapping-implementation",
+      "source_section": "1.1.42",
+      "source_title_published": false,
+      "source_title_sha256": "1fd32951224a18b70ba4eeec9c36085236774b592fcd0210a5cfe62e38af5f7c",
+      "target_count": 1,
+      "target_doc_ids": [
+        "fx-policy-PasswordManagerEnabled"
+      ],
+      "target_paths": [
+        "PasswordManagerEnabled"
+      ],
+      "topic_path": "documentation/src/generated/cis/recommendations/cis-rec-1-1-42.dita",
+      "topic_section_ids": [
+        "a-disclaimer",
+        "a-benchmark",
+        "a-recommendation-identity",
+        "a-bpm-authored-summary",
+        "a-bpm-mapping",
+        "a-automation-state",
+        "a-conflicts",
+        "a-verification",
+        "a-provenance"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "source_boundary": {
+    "allowed_publication_policy": "approval-required for benchmark expression",
+    "benchmark_prose_published": false,
+    "certification_claimed": false,
+    "compliance_guaranteed": false,
+    "conformance_claimed": false,
+    "official_pdf_committed": false,
+    "official_pdf_packaged": false,
+    "publishable_source_family_id": "bpm-cis-mapping-implementation",
+    "restricted_source_family_id": "cis-benchmark-pdf",
+    "rights_approval_id_when_required": null,
+    "source_expression_copied": false,
+    "source_expression_indexed": false,
+    "source_titles_published": false
+  },
+  "source_family_ids": {
+    "publishable_mapping": "bpm-cis-mapping-implementation",
+    "restricted_benchmark": "cis-benchmark-pdf",
+    "trademark_policy": "cis-trademarks-and-certification-marks"
+  },
+  "source_inventory": "docs/architecture/cis-documentation-inventory-0.9.0.json",
+  "source_inventory_sha256": "08c54242de4a0583797f743cdba93d27c96e6df5c89c1634544790dda907823c",
+  "source_matrix": "docs/architecture/product-documentation-provenance-matrix-0.9.0.json",
+  "source_model": "documentation/config/cis-settings-topic-model-0.9.0.json",
+  "source_model_sha256": "04d8116f2ba4598b521182f73497a121a396799ed912f047b701a531b640ed53",
+  "summary": {
+    "level_counts": {
+      "L1": 51,
+      "L2": 4
+    },
+    "manual_review_path_count": 9,
+    "mapping_status_counts": {
+      "deprecated_or_removed": 1,
+      "mapped": 43,
+      "needs_research": 1,
+      "preference_mapped": 10
+    },
+    "merge_decision_types": [
+      "added_from_cis",
+      "already_satisfied",
+      "cis_replaced_base",
+      "kept_base_only",
+      "kept_base_stricter",
+      "manual_review_kept_base"
+    ],
+    "persisted_exception_model": false,
+    "planned_topic_count": 53,
+    "provenance_only_count": 2,
+    "publication_disposition_counts": {
+      "planned-dita-topic": 53,
+      "provenance-only-non-publishable": 2
+    },
+    "recommendation_count": 55,
+    "target_count": 53
+  },
+  "target_bpm_version": "0.9.0"
+}

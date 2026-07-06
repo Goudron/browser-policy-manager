@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-accessible-product-operation" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Operación accesible del producto</title>
+  <shortdesc>Use BPM con estados, errores, foco, respuesta de teclado y diseños adaptables localizados.</shortdesc>
+  <conbody>
+    <section id="a-keyboard"><title>Keyboard</title><p>El comportamiento de teclado debe mantener acciones principales, navegación, filtros, controles de editor, confirmaciones y enlaces accesibles sin puntero.</p></section>
+    <section id="a-focus"><title>Focus</title><p>Los indicadores de foco muestran dónde se aplica la siguiente acción tras navegación, cambio de modo, validación y diálogos.</p></section>
+    <section id="a-status-feedback"><title>Status feedback</title><p>Los estados y errores localizados explican resultados de guardado, validación, importación, exportación, archivado, restauración y eliminación.</p></section>
+    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>Los diseños adaptables preservan las mismas tareas en pantallas estrechas; cambios de tema y configuración regional no deben ocultar advertencias ni confirmaciones destructivas.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-change-interface-theme"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</concept>

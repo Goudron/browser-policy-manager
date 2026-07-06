@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-edit-setting-detail" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Editar el detalle de un ajuste</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Apply or edit a Firefox policy or managed preference value from the All Settings detail panel.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Open a setting detail panel for a supported editable value.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Detail editing keeps the change focused on one setting while reusing shared validation and save behavior.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Inspect the current value and validation state.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Enter or choose the new policy or managed preference value.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Apply the detail edit and watch for validation feedback.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Editar el detalle de un ajuste. Save the profile when the edited value is valid and intentional.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. The selected policy or managed preference has the new value in the profile.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if validation fails, correct the value shape or reset the detail before saving.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-inspect-setting-details"/>
+    <link keyref="topic.ug-task-remove-reset-setting"/>
+  </related-links>
+</task>

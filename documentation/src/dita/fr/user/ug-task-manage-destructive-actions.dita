@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-manage-destructive-actions" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Gérer les actions destructrices en sécurité</title>
+  <shortdesc>Annulez ou confirmez volontairement les actions d’archivage, restauration, réinitialisation, suppression et suppression définitive.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
+    <context><p>Les actions destructrices peuvent masquer un profil, supprimer des paramètres, réinitialiser des valeurs ou supprimer définitivement une ligne après confirmation.</p></context>
+    <steps>
+      <step><cmd>Lisez le libellé de l’action et le profil ou paramètre concerné avant de confirmer.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Annulez si le profil visible, l’état de cycle de vie, le canal de schéma ou source attribution ne correspond pas à la cible prévue.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Pour permanent delete, confirmez que l’export, la comparaison et la revue ne sont plus nécessaires.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Après confirmation, attendez le message d’état et actualisez une fois la Bibliothèque ou l’éditeur avant de répéter l’action.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+    </steps>
+    <result><p>L’action est annulée en sécurité ou terminée avec un état visible et un impact compris.</p></result>
+    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-archive-profile"/>
+    <link keyref="topic.ug-task-permanently-delete-profile"/>
+  </related-links>
+</task>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-validate-json-document" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Валидируйте JSON-документ</title>
+  <shortdesc>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. Validate raw JSON syntax and Firefox policy values before saving.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. Open JSON Editor with the document you want to check.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. Validation distinguishes malformed JSON from policy or schema errors. A document can parse as JSON and still fail policy validation.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. Choose the shared Validate action.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. If validation reports malformed JSON, fix syntax such as trailing commas or missing braces.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. If validation reports policy errors, correct unsupported keys, wrong value types, or schema-channel mismatches.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Валидируйте JSON-документ. Validate again until the status explains that the document is acceptable or the remaining issue is intentional for raw review.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте синтаксис JSON, top-level policies и ошибки policy validation.</note></info></step>
+    </steps>
+    <result><p>JSON Editor находится в ожидаемом состоянии, а действие можно объяснить при проверке. The document has a known validation state before save or export.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, валидируйте документ, вернитесь в All Settings или откройте связанный раздел. Recovery: if errors are hard to read, use All Settings to inspect the affected policy or preference visually.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+    <link keyref="topic.ug-task-save-json-document"/>
+  </related-links>
+</task>

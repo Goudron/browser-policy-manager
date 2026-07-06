@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-run-source-update-migrations-docs" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Ejecutar migrations y documentation rebuild checks</title>
+  <shortdesc>Aplique database migrations, valide documentation source y reconstruya static documentation output después del cambio de source revision.</shortdesc>
+  <taskbody>
+    <prereq><p>El checkout y dependencies se refrescaron correctamente, y database backup evidence se recopiló mientras BPM estaba detenido.</p></prereq>
+    <context><p>Updates pueden introducir database migrations y documentation changes. BPM 0.9.0 documenta forward migration con <codeph>alembic upgrade head</codeph>; no promete automatic downgrade ni safe schema rollback.</p></context>
+    <steps>
+      <step><cmd>Aplique database migrations a la database prevista.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+]]></codeblock><p>Use el deployment value real para <codeph>BPM_DATABASE_URL</codeph>. Deténgase inmediatamente si migration output no está claro o falla.</p></info></step>
+      <step><cmd>Ejecute un source smoke check estrecho antes de servir a users.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make test-fast
+]]></codeblock><p>Este check es source smoke, no production certification ni HA validation.</p></info></step>
+      <step><cmd>Valide y reconstruya documentation output para la revision actualizada.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make docs-validate
+make docs-build
+]]></codeblock><p><codeph>make docs-validate</codeph> revisa DITA, metadata, source links y generated links. <codeph>make docs-build</codeph> reconstruye ignored static output; por sí solo no instala un default documentation artifact en application runtime.</p></info></step>
+      <step><cmd>Deténgase ante migration, smoke o documentation rebuild failures.</cmd><info><note type="warning">Después de una migration, no asuma que Git checkout rollback es suficiente. No ejecute <codeph>alembic downgrade</codeph> salvo que una reviewed release note diga explícitamente que está admitido para el par exacto de revisions. Use el pre-update database backup como safe recovery baseline cuando se requiera rollback.</note></info></step>
+    </steps>
+    <result><p>La source revision actualizada completó migrations, source smoke y documentation rebuild checks, o el update se detuvo en un named failure point.</p></result>
+    <postreq><p>Inicie BPM y ejecute el post-update verification topic antes de devolver la instance a users o integrators.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-refresh-source-revision-dependencies"/>
+    <link keyref="topic.admin-task-verify-source-update-rollback-stop"/>
+  </related-links>
+</task>

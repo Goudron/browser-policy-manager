@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-run-level-2-hardened-workflow" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Gehärteten Level-2-CIS-Workflow ausführen</title>
+  <shortdesc>Nutzen Sie das Level-2-Fixture, um ein strengeres CIS-Profil vor dem Deployment zu prüfen.</shortdesc>
+  <taskbody>
+    <prereq><p>Verwenden Sie Fixture <codeph>cis-workflow-level-2-release-fixture</codeph>: Firefox Release 152, Layer <codeph>cis-l2.release-152</codeph>, Starter-Preset <codeph>soc_hard</codeph> und Vergleichsprofil <codeph>cis-workflow-level-1-release-reference</codeph>.</p></prereq>
+    <context><p>Level 2 ist der hardened path. Er kann weniger kompatibel als Level 1 sein; deshalb muss der Reviewer Guided und All Settings prüfen, attention items bearbeiten, gegen eine Level-1-Referenz vergleichen, exportieren und das Ergebnis unabhängig verifizieren.</p></context>
+    <steps>
+      <step><cmd>Erstellen oder duplizieren Sie ein Release-152-Profil, wenden Sie das SOC-style hardened Starter-Preset an und anschließend den Level-2-CIS-Layer.</cmd><info><p>Erwartetes Ergebnis: Das Profil schreibt <codeph>soc_hard</codeph> und <codeph>cis-l2.release-152</codeph> in den source trail.</p></info></step>
+      <step><cmd>Prüfen Sie das Profil im Guided Editor mit Fokus auf strengere Sicherheits-/Datenschutzvorgaben und Controls, die Usability, Add-ons, Browsing-Daten, Netzwerkverhalten oder Enterprise Operations beeinflussen können.</cmd><info><p>Erwartetes Ergebnis: High-impact settings sind vor dem Export identifiziert.</p></info></step>
+      <step><cmd>Filtern Sie in All Settings konfigurierte CIS rows, öffnen Sie attention items und verfolgen Sie jede row zum generated recommendation topic, zur mapping table, zum UI target und zum affected Firefox policy topic.</cmd><info><p>Erwartetes Ergebnis: Jeder strengere Wert hat einen sichtbaren source path und eine policy-topic route für den Review.</p></info></step>
+      <step><cmd>Bearbeiten Sie manual-review rows und intentional deviations mit der deviation task, einschließlich owner, reason, review date, external record und ob der Wert baseline, CIS, manual, imported oder raw bleibt.</cmd><info><note type="warning">BPM 0.9.0 speichert kein dediziertes exception oder waiver object; sichern Sie den external record, bevor eine deviation als reviewed gilt.</note></info></step>
+      <step><cmd>Vergleichen Sie das Level-2-Profil mit dem Level-1 reference fixture und prüfen Sie alle changed oder newly configured rows.</cmd><info><p>Erwartetes Ergebnis: Der Reviewer kann vor der Freigabe erklären, warum Level 2 von Level 1 abweicht.</p></info></step>
+      <step><cmd>Validieren und exportieren Sie <codeph>policies.json</codeph> und führen Sie independent deployment verification mit der freigegebenen Runtime-, Betriebssystem-, Netzwerk- oder Audit-Methode durch.</cmd><info><p>Erwartetes Ergebnis: Das gehärtete Profil besitzt Export-Artefakt, Validierungsergebnis, Vergleichsevidenz und externe Verifikationsevidenz.</p></info></step>
+    </steps>
+    <result><p>Das repräsentative gehärtete Level-2-Profil ist end-to-end prüfbar und bleibt auf BPM mapping, export und source-attribution evidence begrenzt.</p></result>
+    <postreq><p>Wenn die unabhängige Verifikation ein Deployment-Risiko zeigt, behalten Sie das Profil als Draft und aktualisieren Sie den external decision record vor Wiederverwendung.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.cis-concept-manual-review-exceptions"/>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.ug-task-review-attention-items"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</task>
