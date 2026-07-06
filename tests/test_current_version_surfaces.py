@@ -51,8 +51,10 @@ def test_current_version_surfaces_follow_pyproject():
     assert re.search(r"^## (?P<version>[^\n]+)$", changelog, re.MULTILINE).group(
         "version"
     ) == version
-    assert "Status: **In progress.**" in changelog.split("## 0.8.8", 1)[0]
-    assert "records only completed and verified 0.9.0 work" in changelog
+    current_changelog_entry = changelog.split("## 0.8.8", 1)[0]
+    assert "Status: **In progress.**" not in current_changelog_entry
+    assert "Completed full default pytest" in current_changelog_entry
+    assert "Maintainer manual documentation QA found issues accepted for deferral" in current_changelog_entry
     assert docs_index.startswith(f"# BPM {version} Documentation Index\n")
     assert f"first orientation point for BPM {version} work" in system_map
 

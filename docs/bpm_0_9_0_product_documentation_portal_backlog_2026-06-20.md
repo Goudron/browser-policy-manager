@@ -918,6 +918,9 @@ Goal: prove the 0.9.0 documentation product is complete, accurate, maintainable,
   prevent accidental cron re-enablement. Final staging excludes ignored local documentation
   installs, build output, reports, and packaged archives while committing the approved 0.9.0
   documentation epic, dependency/vendor refresh, runtime integration, and verification records.
+- [x] `BPM090-M14-13` — completed on 2026-07-06. The maintainer-run handoff command is
+  `git push origin dev`; backlog execution intentionally leaves the push to the maintainer while
+  recording that the 0.9.0 documentation epic itself is fully committed.
 - [x] `BPM090-M4-07` — completed on 2026-06-27. The User Guide now has localized DITA All Settings
   topics covering Review, Configured, and Catalog modes; invalid, CIS manual-review, raw, unknown,
   deprecated, imported, and clean review states; source and state filters; large inventories;
