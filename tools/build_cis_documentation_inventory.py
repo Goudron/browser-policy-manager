@@ -228,7 +228,6 @@ def build_inventory() -> dict[str, Any]:
         )
     ]
 
-    source_pdf = BASE_DIR / source_entry["official_source_pdf"]
     benchmark = {
         key: source_entry.get(key)
         for key in (
@@ -252,7 +251,7 @@ def build_inventory() -> dict[str, Any]:
             "tested_by_cis_against",
         )
     }
-    benchmark["official_source_pdf_present"] = source_pdf.is_file()
+    benchmark["official_source_pdf_present"] = source_entry["official_source_status"] == "imported"
     benchmark["source_content_redistribution_reviewed"] = False
 
     starter_catalog = get_wizard_starter_catalog()
