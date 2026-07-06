@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-switch-editor-mode" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>切换编辑器模式</title>
+  <shortdesc>在同一个已保存配置文件的 Guided、All Settings 和 JSON 之间有意识地切换。</shortdesc>
+  <taskbody>
+    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
+    <context><p>切换模式只改变编辑界面，不改变底层已保存配置文件；在信任其他界面之前必须保存未保存更改。</p></context>
+    <steps>
+      <step><cmd>确认当前配置文件已保存并具有可见 ID。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>选择目标模式：Guided 用于常见流程，All Settings 用于完整检查，JSON 用于原始文档工作。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>打开目标模式并确认配置文件名称和架构通道。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>只有在保存或明确放弃更改之后，才返回之前的模式。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+    </steps>
+    <result><p>您正在适合当前任务的编辑器模式中处理同一个配置文件。</p></result>
+    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-choose-editor-surface"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

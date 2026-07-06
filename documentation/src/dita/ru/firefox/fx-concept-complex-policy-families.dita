@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-complex-policy-families" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Сложные семейства политик Firefox</title>
+  <shortdesc>Проверяйте вложенные семейства политик группами, потому что одно экспортируемое значение может объединять несколько связанных поведений браузера.</shortdesc>
+  <conbody>
+    <section id="a-extensions"><title>Extensions</title><p>Используйте <codeph>ExtensionSettings</codeph> для dictionary-based правил установки и неизвестных extension IDs; legacy <codeph>Extensions</codeph> используйте только когда эта форма соответствует нужному поведению Firefox.</p></section>
+    <section id="a-permissions"><title>Permissions</title><p><codeph>Permissions</codeph> группирует camera, microphone, location, notification, autoplay и похожие решения. Проверяйте allow/block lists вместе, потому что домен может попадать сразу в несколько веток permissions.</p></section>
+    <section id="a-updates"><title>Updates</title><p>Controls обновлений, такие как <codeph>DisableAppUpdate</codeph>, <codeph>AppAutoUpdate</codeph> и <codeph>DisableSystemAddonUpdate</codeph>, нужно рассматривать как одно семейство, чтобы было понятно, какой updater остаётся активным.</p></section>
+    <section id="a-certificates"><title>Certificates</title><p><codeph>Certificates</codeph> может импортировать enterprise roots и устанавливать certificate files. Пути и trust behavior зависят от среды, поэтому проверяйте их вне BPM перед deployment.</p></section>
+    <section id="a-proxy"><title>Proxy</title><p><codeph>Proxy</codeph> объединяет mode, server, port и protocol reuse. Внимательно валидируйте manual proxy values: неверные адреса могут заблокировать сетевой доступ браузера.</p></section>
+    <section id="a-search-homepage"><title>Search и homepage</title><p><codeph>SearchEngines</codeph> и <codeph>Homepage</codeph> задают первые точки входа пользователя. Search URL templates должны сохранять <codeph>{searchTerms}</codeph>, а locked homepages нужно сверять с source tracing.</p></section>
+    <section id="a-privacy-ai"><title>Privacy и AI controls</title><p>Privacy families, например <codeph>EnableTrackingProtection</codeph> и <codeph>Cookies</codeph>, могут взаимодействовать с site exceptions. Firefox AI controls, например <codeph>AIControls</codeph>, являются политиками продукта; они не добавляют AI functionality в documentation portal.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-task-review-complex-policy-configuration"/>
+    <link keyref="topic.fx-reference-managed-preference-locking"/>
+    <link keyref="topic.fx-concept-release-esr-differences"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+  </related-links>
+</concept>

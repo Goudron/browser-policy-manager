@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-library-profile-row" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Поля строки профиля в Библиотеке</title>
+  <shortdesc>Строка Библиотеки показывает идентичность, схему, заметку, валидацию, lifecycle и время обновления сохранённого профиля.</shortdesc>
+  <refbody><section id="a-row-identity"><title>Идентичность</title><p>Имя, ID, заметка и время обновления помогают подтвердить нужный профиль.</p></section><section id="a-row-state"><title>Состояние</title><p>Канал схемы, состояние валидации и lifecycle подсказывают доступные действия.</p></section><section id="a-row-warning"><title>Предупреждение</title><p>Не полагайтесь только на положение строки после сортировки или фильтрации.</p></section><section id="a-row-recovery"><title>Восстановление</title><p>Если сведения выглядят устаревшими, обновите Библиотеку.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-refresh-profile-library"/><link keyref="topic.ug-reference-archived-profile-behavior"/></related-links>
+</reference>

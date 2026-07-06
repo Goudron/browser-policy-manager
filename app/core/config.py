@@ -93,6 +93,7 @@ class Settings(BaseSettings):
     DATA_DIR: Path = ROOT_DIR / "data"
     TEMPLATES_DIR: Path = APP_DIR / "templates"
     STATIC_DIR: Path = APP_DIR / "static"
+    DOCUMENTATION_SITE_DIR: str = "app/documentation/site"
 
 
 @lru_cache

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="fx-task-review-complex-policy-configuration" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Проверка сложной конфигурации политики перед экспортом</title>
+  <shortdesc>Используйте повторяемый review flow для nested objects, arrays, raw fallback, conflicts и channel-specific availability.</shortdesc>
+  <taskbody>
+    <prereq><p>Профиль открыт и содержит хотя бы одно сложное семейство политик или managed preference.</p></prereq>
+    <context><p>Сложные политики безопаснее проверять по семейству, источнику, каналу схемы и форме экспортируемого boundary document.</p></context>
+    <steps>
+      <step><cmd>Откройте All Settings и отфильтруйте затронутое семейство.</cmd><info><p>Ожидаемый результат: связанные policies, preferences и source labels видны вместе.</p></info></step>
+      <step><cmd>Проверьте Release/ESR badge для каждой политики семейства.</cmd><info><note type="warning">Release-only policy нельзя экспортировать для профиля, ориентированного на ESR.</note></info></step>
+      <step><cmd>Просмотрите nested object и array values, включая unknown preserved fields.</cmd><info><p>Ожидаемый результат: raw fallback values намеренно сохранены или удалены перед сохранением.</p></info></step>
+      <step><cmd>Сравните preset, CIS, imported, manual и raw sources.</cmd><info><p>Ожидаемый результат: conflicts решены явно, а не скрыты более поздними правками.</p></info></step>
+      <step><cmd>Выполните валидацию профиля и проверьте форму generated <codeph>policies.json</codeph>.</cmd><info><p>Ожидаемый результат: BPM не сообщает schema errors для выбранного канала.</p></info></step>
+    </steps>
+    <result><p>Сложное семейство имеет проверенные nested values, source decisions, channel support и чистый результат валидации.</p></result>
+    <postreq><p>Если валидация не проходит, вернитесь к семейству, удалите unsupported keys или переключитесь на канал, который действительно поддерживает политику.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.fx-concept-complex-policy-families"/>
+    <link keyref="topic.fx-reference-managed-preference-locking"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

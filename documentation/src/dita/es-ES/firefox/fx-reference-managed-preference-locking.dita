@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="fx-reference-managed-preference-locking" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Referencia de bloqueo de managed preferences</title>
+  <shortdesc>Managed preferences se exportan mediante la política Firefox <codeph>Preferences</codeph> y requieren una revisión explícita de value, type y status.</shortdesc>
+  <refbody>
+    <section id="a-container-policy"><title>Container policy</title><p>Firefox almacena managed preferences en <codeph>Preferences</codeph>. BPM documenta las preferences conocidas por separado, pero las exporta como entries dentro de esa container policy.</p></section>
+    <section id="a-status-values"><title>Status values</title><p><codeph>locked</codeph> impide cambios del usuario cuando Firefox admite la preference. <codeph>default</codeph>, <codeph>user</codeph> y <codeph>clear</codeph> tienen runtime meanings distintos y no deben usarse como sinónimos.</p></section>
+    <section id="a-type-values"><title>Type values</title><p>Defina <codeph>Type</codeph> como <codeph>boolean</codeph>, <codeph>number</codeph> o <codeph>string</codeph> cuando BPM necesite una value shape exacta. El tipo de <codeph>Value</codeph> debe coincidir con el type declarado.</p></section>
+    <section id="a-source-conflicts"><title>Source conflicts</title><p>Una preference puede proceder de un preset, CIS layer, import, manual edit o raw fallback. Revise el origen antes del locking, porque una locked preference puede anular la expectativa del usuario con más fuerza que un unlocked policy default.</p></section>
+    <section id="a-safe-review"><title>Safe review</title><p>Valide Release y ESR cuando un perfil pueda reutilizarse entre canales, y mantenga sin cambios los preference IDs. BPM puede validar la container shape, pero el Firefox runtime decide el efecto final.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.fx-task-review-complex-policy-configuration"/>
+    <link keyref="topic.ug-task-add-managed-preference"/>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</reference>

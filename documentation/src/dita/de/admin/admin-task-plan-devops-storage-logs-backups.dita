@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-plan-devops-storage-logs-backups" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Storage, Logs und Backup-Evidence planen</title>
+  <shortdesc>Lokalisieren Sie source-deployment database, schema cache, documentation site, foreground logs und manual backup evidence, ohne managed backup oder restore support zu behaupten.</shortdesc>
+  <taskbody>
+    <prereq><p>Das deployment configuration inventory enthält <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> und <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>.</p></prereq>
+    <context><p>Das default source deployment speichert application data in SQLite unter <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>, entsprechend <codeph>data/bpm.db</codeph> im repository root. Schema cache files liegen standardmäßig unter <codeph>app/schemas/mozilla</codeph>, und ein installed documentation artifact wird aus <codeph>app/documentation/site</codeph> gelesen, wenn vorhanden.</p></context>
+    <steps>
+      <step><cmd>Identifizieren Sie files und directories mit operational state.</cmd><info><p>Erfassen Sie repository path, <codeph>data/</codeph>, <codeph>data/bpm.db</codeph>, <codeph>app/schemas/mozilla</codeph> und <codeph>app/documentation/site</codeph>. In WSL müssen diese paths im Linux filesystem bleiben, nicht unter <codeph>/mnt/c</codeph>.</p></info></step>
+      <step><cmd>Definieren Sie einen manual backup evidence step vor riskanten Arbeiten.</cmd><info><p>Stoppen Sie den foreground BPM process, kopieren Sie <codeph>data/bpm.db</codeph> an einen kontrollierten backup location und erfassen Sie timestamp, source revision, database URL, file size und checksum. BPM 0.9.0 bietet kein automated backup, keine point-in-time recovery und keine tested restore orchestration.</p></info></step>
+      <step><cmd>Erfassen Sie logs des aktuellen source process.</cmd><info><p>Source runs schreiben startup messages, Uvicorn access output, tracebacks, migration errors, port conflicts und documentation-site warnings in foreground terminal, stdout oder stderr. Ein dedicated BPM application log directory, log rotation policy, request ID, audit log oder Event Viewer integration ist in diesem Release nicht dokumentiert.</p></info></step>
+      <step><cmd>Kombinieren Sie file backup evidence mit export evidence, wenn profile handoff wichtig ist.</cmd><info><p>Nutzen Sie bestehende API export examples, um relevante Firefox <codeph>policies.json</codeph> documents zu exportieren, und speichern Sie response status, profile ID, revision, schema channel und exported-document hash. Behandeln Sie export evidence nicht als vollständiges database restore.</p></info></step>
+    </steps>
+    <result><p>Der Administrator weiß, wo der aktuelle source-deployment state liegt und welche manual evidence vor updates oder troubleshooting gesammelt werden kann.</p></result>
+    <postreq><p>Vor Änderungen an source revisions oder database schemas verwenden Sie den zukünftigen update-from-source runbook und stoppen, wenn backup oder restore evidence unvollständig ist.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-review-devops-configuration-sources"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

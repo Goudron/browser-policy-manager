@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-integrity-drift-0.9.0",
+  "backlog_item": "BPM090-M10-08",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "search_mode": "deterministic-local-static",
+  "non_ai_boundary": "no-ai-no-rag-no-embeddings-no-generative-answers",
+  "check_categories": [
+    "missing_topics",
+    "stale_anchors",
+    "duplicate_document_ids",
+    "wrong_locale",
+    "wrong_url_or_output",
+    "broken_snippet_sources",
+    "firefox_policy_inventory_gaps",
+    "cis_inventory_gaps",
+    "api_inventory_gaps"
+  ],
+  "report_contract": {
+    "status_must_be": "pass",
+    "failure_count_must_be": 0,
+    "report_is_recomputed_during_manifest_and_package_validation": true,
+    "actionable_ids_required": true
+  },
+  "document_integrity": {
+    "manifest_topic_coverage": "Every manifest topic must have exactly one search document per locale.",
+    "extra_document_topics": "No search document may reference a topic outside manifest.topics.",
+    "duplicate_document_ids": "Duplicate locale:topic document IDs are rejected.",
+    "wrong_locale": "Document locale, URL prefix, and source output path must match the active locale."
+  },
+  "anchor_integrity": {
+    "target_anchor_validation": "Every target-map anchor_id used by policy/CIS/API/topic/capability targets must exist in the target topic anchors.",
+    "target_topic_validation": "Every target-map topic_id must exist in manifest topics."
+  },
+  "snippet_integrity": {
+    "source_fields": ["shortdesc", "body", "title"],
+    "max_characters": 260,
+    "plain_text_only": true,
+    "control_characters_forbidden": true,
+    "html_snippets_forbidden": true
+  },
+  "inventory_gap_integrity": {
+    "firefox_policy": "Every Firefox policy ID from the generated policy index must have a policy target.",
+    "cis": "Every CIS recommendation/provenance record from the generated CIS index must have a CIS target.",
+    "api": "Every API operation from the API documentation inventory must have an API target.",
+    "extra_targets_forbidden": true
+  }
+}

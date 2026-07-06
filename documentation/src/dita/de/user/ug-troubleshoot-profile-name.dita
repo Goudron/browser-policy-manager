@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-profile-name" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Profilnamenfehler beheben</title>
+  <shortdesc>Beheben Sie empty, duplicate oder unclear profile name bei Erstellung oder Clone.</shortdesc>
+  <taskbody>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Profilnamen identifizieren Library rows, editor tabs, comparison choices, imports und recovery messages; daher blockiert name validation mehrdeutige Speicherungen.</p></context>
+    <steps>
+      <step><cmd>Lesen Sie den name validation hint, bevor andere Profilfelder geändert werden.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Geben Sie einen non-empty name ein, der Profilzweck, Firefox channel oder source file unterscheidet.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Ändern Sie in clone workflows den suggested clone name vor Bestätigung, wenn er eine vorhandene row dupliziert.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Speichern oder duplizieren Sie erneut, nachdem der name hint verschwunden ist.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+    </steps>
+    <result><p>Profil oder Clone besitzt einen eindeutigen sichtbaren Namen, der später in der Library gefunden werden kann.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-create-first-profile"/>
+    <link keyref="topic.ug-task-duplicate-profile"/>
+  </related-links>
+</task>

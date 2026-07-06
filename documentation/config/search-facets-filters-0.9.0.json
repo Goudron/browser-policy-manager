@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-facets-filters-0.9.0",
+  "backlog_item": "BPM090-M10-05",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "search_mode": "deterministic-local-static",
+  "non_ai_boundary": {
+    "mode": "no-ai-no-rag-no-embeddings-no-generative-answers",
+    "note": "Facets and filters are computed from the static documentation corpus and local metadata only."
+  },
+  "facet_fields": {
+    "locale": {
+      "label": "Current documentation locale",
+      "values": ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
+    },
+    "guide_id": {
+      "label": "Guide family",
+      "values": [
+        "user-guide",
+        "firefox-policy-guide",
+        "cis-settings-guide",
+        "api-integration-guide",
+        "administrator-guide"
+      ]
+    },
+    "topic_kind": {
+      "label": "DITA topic kind",
+      "values": ["concept", "task", "reference", "troubleshooting", "landing"]
+    },
+    "firefox_channel": {
+      "label": "Firefox channel",
+      "values": ["esr-140.12", "release-152"]
+    },
+    "policy_category": {
+      "label": "Firefox policy category",
+      "values": [
+        "advanced",
+        "ai_smart",
+        "browser_behavior",
+        "extensions_integrations",
+        "home_startup",
+        "network_access",
+        "privacy_security",
+        "search"
+      ]
+    },
+    "cis_level": {
+      "label": "CIS level",
+      "values": ["level-1", "level-2"]
+    },
+    "cis_control_state": {
+      "label": "CIS control state",
+      "values": [
+        "mapped",
+        "preference_mapped",
+        "needs_research",
+        "deprecated_or_removed",
+        "manual-review",
+        "provenance-only"
+      ]
+    },
+    "api_area": {
+      "label": "API area",
+      "values": ["service", "health", "profiles", "validation", "import-export", "ui"]
+    },
+    "bpm_version": {
+      "label": "BPM version",
+      "values": ["0.9.0"]
+    }
+  },
+  "filter_contract": {
+    "composition": "AND across facet fields; OR within values of the same facet field.",
+    "counts": "Counts are per static locale index and match document.filter_facets exactly.",
+    "empty_result_recovery": "Show the localized empty-result message and keep the selected filters visible.",
+    "state_preservation": "Selected filters are serialized to URL query parameters without changing result URLs.",
+    "sort_order": "Facet values and result topic IDs are deterministic and lexicographically stable."
+  },
+  "url_state": {
+    "parameters": {
+      "locale": "locale",
+      "guide_id": "guide",
+      "topic_kind": "topic_kind",
+      "firefox_channel": "channel",
+      "policy_category": "policy_category",
+      "cis_level": "cis_level",
+      "cis_control_state": "cis_state",
+      "api_area": "api_area",
+      "bpm_version": "bpm_version"
+    },
+    "multi_value_encoding": "repeat-parameter",
+    "example": "?guide=administrator-guide&api_area=validation"
+  },
+  "empty_result": {
+    "messages": {
+      "en": "No documentation pages match the selected filters. Clear one or more filters or switch to another guide.",
+      "ru": "Нет страниц документации, соответствующих выбранным фильтрам. Снимите один или несколько фильтров либо перейдите в другое руководство.",
+      "de": "Keine Dokumentationsseiten entsprechen den ausgewählten Filtern. Entfernen Sie einen oder mehrere Filter oder wechseln Sie zu einem anderen Handbuch.",
+      "zh-CN": "没有文档页面符合所选筛选条件。请清除一个或多个筛选条件，或切换到其他指南。",
+      "fr": "Aucune page de documentation ne correspond aux filtres sélectionnés. Supprimez un ou plusieurs filtres ou passez à un autre guide.",
+      "es-ES": "Ninguna página de documentación coincide con los filtros seleccionados. Quite uno o varios filtros o cambie a otra guía."
+    }
+  },
+  "filter_fixtures": [
+    {
+      "fixture_id": "en-guide-user",
+      "locale": "en",
+      "filters": {"guide_id": ["user-guide"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["user-guide"]
+    },
+    {
+      "fixture_id": "en-firefox-release-ai",
+      "locale": "en",
+      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["fx-concept-complex-policy-families"]
+    },
+    {
+      "fixture_id": "en-cis-level-1-mapped",
+      "locale": "en",
+      "filters": {"guide_id": ["cis-settings-guide"], "cis_level": ["level-1"], "cis_control_state": ["mapped"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["cis-settings-guide"]
+    },
+    {
+      "fixture_id": "en-api-validation",
+      "locale": "en",
+      "filters": {"guide_id": ["administrator-guide"], "api_area": ["validation"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["admin-task-validate-firefox-policies-json"]
+    },
+    {
+      "fixture_id": "en-empty-api-cis",
+      "locale": "en",
+      "filters": {"api_area": ["validation"], "cis_level": ["level-2"]},
+      "expected_count": 0,
+      "expected_empty": true
+    },
+    {
+      "fixture_id": "ru-guide-user",
+      "locale": "ru",
+      "filters": {"guide_id": ["user-guide"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["user-guide"]
+    },
+    {
+      "fixture_id": "ru-empty-api-cis",
+      "locale": "ru",
+      "filters": {"api_area": ["validation"], "cis_level": ["level-2"]},
+      "expected_count": 0,
+      "expected_empty": true
+    },
+    {
+      "fixture_id": "de-guide-user",
+      "locale": "de",
+      "filters": {"guide_id": ["user-guide"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["user-guide"]
+    },
+    {
+      "fixture_id": "de-empty-api-cis",
+      "locale": "de",
+      "filters": {"api_area": ["validation"], "cis_level": ["level-2"]},
+      "expected_count": 0,
+      "expected_empty": true
+    },
+    {
+      "fixture_id": "zh-cn-guide-user",
+      "locale": "zh-CN",
+      "filters": {"guide_id": ["user-guide"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["user-guide"]
+    },
+    {
+      "fixture_id": "zh-cn-empty-api-cis",
+      "locale": "zh-CN",
+      "filters": {"api_area": ["validation"], "cis_level": ["level-2"]},
+      "expected_count": 0,
+      "expected_empty": true
+    },
+    {
+      "fixture_id": "fr-guide-user",
+      "locale": "fr",
+      "filters": {"guide_id": ["user-guide"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["user-guide"]
+    },
+    {
+      "fixture_id": "fr-empty-api-cis",
+      "locale": "fr",
+      "filters": {"api_area": ["validation"], "cis_level": ["level-2"]},
+      "expected_count": 0,
+      "expected_empty": true
+    },
+    {
+      "fixture_id": "es-es-guide-user",
+      "locale": "es-ES",
+      "filters": {"guide_id": ["user-guide"]},
+      "expected_min_count": 1,
+      "must_include_topic_ids": ["user-guide"]
+    },
+    {
+      "fixture_id": "es-es-empty-api-cis",
+      "locale": "es-ES",
+      "filters": {"api_area": ["validation"], "cis_level": ["level-2"]},
+      "expected_count": 0,
+      "expected_empty": true
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+  <title>为通过 WSL 从源码部署准备 Windows 10/11</title>
+  <shortdesc>启用 WSL，选择受支持的 Linux distribution 假设，并确认 BPM 在 Linux 内运行，而不是作为 native Windows service 运行。</shortdesc>
+  <taskbody>
+    <prereq><p>使用 Windows 10 或 Windows 11，并具有启用 WSL 2、安装 Linux distribution（例如 Ubuntu LTS）、在 PowerShell 和 WSL shell 中运行命令的权限。</p></prereq>
+    <context><p>本 runbook 说明通过 WSL 进行 BPM 0.9.0 source deployment。受支持的 application process 仍然是在 WSL 内部执行 Linux source workflow；本版本不交付 native Windows installers、Windows services、MSI packages、scheduled tasks、IIS hosting 或 production Windows service management。</p></context>
+    <steps>
+      <step><cmd>从 PowerShell 确认 WSL 可用。</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+wsl --status
+wsl --list --verbose
+]]></codeblock><p>预期结果：WSL 已安装，WSL 2 可用，并且可看到所选 Linux distribution。</p></info></step>
+      <step><cmd>如果缺少 WSL 或批准的 Linux distribution，请安装它们。</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+wsl --install
+wsl --install -d Ubuntu
+]]></codeblock><p>使用组织批准的 distribution name。如果 Windows 要求重启，请重启；distribution 首次启动时创建 Linux user。</p></info></step>
+      <step><cmd>记录 distribution 和 filesystem boundary。</cmd><info><p>将 BPM 放在 WSL Linux filesystem 中，例如 <codeph>/home/&lt;linux-user&gt;/browser-policy-manager</codeph>。不要从 <codeph>/mnt/c</codeph> 运行 checkout，因为 Windows filesystem semantics 和 antivirus scanning 可能让 Python environments、file watching 和 permissions 变得不可靠。</p></info></step>
+      <step><cmd>确认此 Windows 路径目前不支持的内容。</cmd><info><note type="warning">这不是 native Windows installation。本 runbook 不提供 MSI/EXE packaging、Windows service、service account model、Event Viewer integration、Windows firewall policy、reverse proxy/TLS recipe、HA topology、managed secrets、backup automation 或 production hardening。</note></info></step>
+    </steps>
+    <result><p>Windows 和 WSL 已准备好，可在清晰的 platform 与 filesystem boundaries 下执行 Linux-based BPM source deployment。</p></result>
+    <postreq><p>继续打开 WSL distribution shell，并在 Linux home directory 中设置 source checkout。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-set-up-windows-wsl-source-checkout"/>
+    <link keyref="topic.admin-task-prepare-linux-source-deployment"/>
+  </related-links>
+</task>

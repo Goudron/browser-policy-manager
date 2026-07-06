@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-run-validate-before-apply-update" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>DevOps 流程: Profilupdate mit expected_revision validieren und anwenden</title>
+  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <taskbody>
+    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
+    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></context>
+    <steps>
+      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></note></info></step>
+    </steps>
+    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
+    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+<link keyref="topic.admin-task-sync-profile-lifecycle"/>
+<link keyref="topic.admin-task-run-pull-compare-update-scenario"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

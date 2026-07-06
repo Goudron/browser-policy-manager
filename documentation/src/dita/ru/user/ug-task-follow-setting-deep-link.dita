@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-follow-setting-deep-link" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Откройте deep link параметра</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Confirm the destination editor and focused setting or state.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The linked setting opens in the correct surface with focus preserved.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

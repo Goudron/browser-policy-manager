@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-integration-audience" xml:lang="fr" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Audience d’intégration et limite API</title>
+  <shortdesc>Le API Integration Guide s’adresse aux outils externes qui utilisent l’API programmatique actuelle de BPM sans supposer de garanties produit non prises en charge.</shortdesc>
+  <conbody>
+    <section id="a-audience"><title>Audience</title><p>Utilisez ce guide lorsque vous créez ou révisez un configuration, compliance, orchestration, inventory ou control product qui échange des profile et Firefox policy data avec BPM. Les lecteurs principaux sont les API integrators, security reviewers, release engineers et maintainers qui ont besoin d’un contrat répétable pour profile synchronization, validation gates, policy import/export, compliance metadata, inventory et health checks.</p></section>
+    <section id="a-evidence-boundary"><title>Evidence boundary</title><p>Le guide repose sur le generated OpenAPI contract, le maintained API inventory, la route/model source et les focused API tests. Il documente l’API déjà exposée par BPM en version 0.9.0. Il n’autorise pas de nouveaux endpoints, security models, data schemas, retry semantics ou compatibility promises.</p></section>
+    <section id="a-supported-consumers"><title>Rôles consumers pris en charge</title><p>Les consumers pris en charge sont des generic roles : configuration manager, compliance scanner, policy review gate, profile inventory collector, deployment orchestrator et operational monitor. Ils peuvent appeler les service, profile, Firefox import/export, validation et health operations listées dans l’API inventory.</p></section>
+    <section id="a-unsupported-claims"><title>Déclarations non prises en charge</title><p>Ne décrivez pas de product-specific connector, marketplace integration, certified integration, partnership, managed agent ou vendor workflow sauf si ce connector est réellement livré. HTML routes, static assets, generated schema UIs et underscore-prefixed Python helpers ne sont pas des stable machine-integration APIs.</p></section>
+    <section id="a-data-ownership"><title>Responsabilité des données</title><p>BPM possède le normalized profile model, validation state, revision, lifecycle state, opaque compliance object et canonical Firefox export rendering. Les produits intégrés possèdent leur scheduling, authorization, audit trail, retry policy, exception record, deployment decision et toute runtime verification hors BPM.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</concept>

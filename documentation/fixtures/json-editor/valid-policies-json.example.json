@@ -1,0 +1,11 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "Preferences": {
+      "browser.startup.homepage": {
+        "Status": "locked",
+        "Value": "https://example.invalid/"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-handle-raw-unknown-settings" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Обрабатывайте raw и unknown параметры</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Inspect imported unknown keys and raw-fallback values without losing them accidentally.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Open Review mode or a raw/unknown filtered list in All Settings.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Raw and unknown settings may come from import, schema differences, or values BPM cannot model visually. Treat them as preservation and review items, not routine edits.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Filter or open Review items for raw, unknown, or imported settings.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Decide whether to preserve, remove, reset, or inspect the value in JSON Editor.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Обрабатывайте raw и unknown параметры. Save only after confirming the value should remain or be removed.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. Raw and unknown values are preserved or removed intentionally.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the value might be important, export or compare the profile before removing it.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-follow-setting-deep-link"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

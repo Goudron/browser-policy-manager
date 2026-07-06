@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-run-level-1-workflow" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Level-1-CIS-Workflow ausführen</title>
+  <shortdesc>Erstellen, prüfen, vergleichen, exportieren und verifizieren Sie ein repräsentatives Level-1-CIS-Profil unabhängig.</shortdesc>
+  <taskbody>
+    <prereq><p>Verwenden Sie Fixture <codeph>cis-workflow-level-1-esr-fixture</codeph>: Firefox ESR 140.12, Layer <codeph>cis-l1.esr-140.12</codeph>, Starter-Preset <codeph>basic_corporate</codeph> und Vergleichsprofil <codeph>blank-esr-140.12</codeph>.</p></prereq>
+    <context><p>Der Workflow ist deterministisch, weil er immer dieselbe Reihenfolge nutzt: Library, Guided Editor, All Settings, Profile Comparison, Export und externe Verifikation. Recommendation rows führen über generierte Mapping-Tabellen zu den betroffenen Firefox-Policy-Topics.</p></context>
+    <steps>
+      <step><cmd>Erstellen Sie ein Profil aus der Library, wählen Sie Firefox ESR 140.12, wenden Sie das Basic corporate Starter-Preset an und anschließend den Level-1-CIS-Layer.</cmd><info><p>Erwartetes Ergebnis: Das Profil zeigt <codeph>cis-l1.esr-140.12</codeph> als aktiven CIS-Layer und behält die Source Attribution des Starter-Presets sichtbar.</p></info></step>
+      <step><cmd>Öffnen Sie den Guided Editor und prüfen Sie CIS-related summary, Schema-Kanal, Profilidentität und die wichtigen Sicherheits-/Datenschutzgruppen des Level-1-Layers.</cmd><info><p>Erwartetes Ergebnis: Der Guided Editor zeigt das Level-1-Profil als prüfbare Konfiguration, nicht als Nachweis von CIS Compliance.</p></info></step>
+      <step><cmd>Öffnen Sie All Settings, filtern Sie nach CIS/source attribution, prüfen Sie konfigurierte Zeilen und folgen Sie jeder recommendation row zur generierten Mapping-Tabelle und zum betroffenen Firefox-Policy-Topic.</cmd><info><p>Erwartetes Ergebnis: Der Reviewer kann Werte über <codeph>baseline</codeph>, <codeph>CIS</codeph>, <codeph>manual</codeph>, <codeph>imported</codeph> oder raw source states nachverfolgen.</p></info></step>
+      <step><cmd>Bearbeiten Sie attention items und manual-review rows, indem Sie Owner und Entscheidung für update governance, proxy routing, evidence-retention, unsupported mapping research, deprecated targets oder lokale Deployment-Anforderungen festhalten.</cmd><info><note type="warning">Schließen Sie manual-review items nicht mit einer Compliance-Behauptung; erfassen Sie externe Evidenz, wenn die Entscheidung von Runtime-, Netzwerk-, Betriebssystem- oder Audit-Prüfungen außerhalb von BPM abhängt.</note></info></step>
+      <step><cmd>Vergleichen Sie das Level-1-Profil mit dem blank ESR fixture profile und prüfen Sie equal, changed, missing-left und missing-right rows.</cmd><info><p>Erwartetes Ergebnis: Der Vergleich bestätigt, dass der Level-1-Layer die erwarteten konfigurierten Policy- und Preference-Unterschiede eingeführt hat.</p></info></step>
+      <step><cmd>Validieren Sie das Profil, exportieren Sie <codeph>policies.json</codeph> und führen Sie die genehmigte unabhängige Deployment-Verifikation außerhalb von BPM aus.</cmd><info><p>Erwartetes Ergebnis: Exportiertes Dokument, Validierungsergebnis, Vergleichsnotiz und externer Verifikationsnachweis können gemeinsam geprüft werden.</p></info></step>
+    </steps>
+    <result><p>Das repräsentative gehärtete Level-1-Profil ist erstellt, in Guided und All Settings geprüft, verglichen, exportiert und mit nachvollziehbarer Evidenz unabhängig verifiziert.</p></result>
+    <postreq><p>Wenn einer recommendation row eine generierte Mapping-Tabelle, ein betroffener Firefox-policy topic path, ein Exportpfad oder ein external verification record fehlt, bleibt der Workflow offen.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.cis-task-trace-cis-source"/>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-policies-and-managed-preferences" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Stratégies et préférences gérées</title>
+  <shortdesc>BPM sépare les politiques Firefox Enterprise des valeurs de préférences gérées tout en les conservant dans un même profil.</shortdesc>
+  <conbody>
+    <p>Les politiques sont des contrôles Firefox Enterprise nommés pour le comportement du navigateur, l’accès, les autorisations ou les fonctions. Les préférences gérées sont des clés de préférence avec des valeurs et un verrouillage facultatif.</p>
+    <p>L’Éditeur guidé couvre les objectifs de politiques courants. Tous les paramètres expose le catalogue pris en charge plus large. L’Éditeur JSON montre la limite exacte du document utilisée pour l’import et l’export.</p>
+    <p>Les détails politique par politique appartiennent au Guide des politiques Firefox ; ce Guide utilisateur explique comment atteindre et modifier ces contrôles dans BPM en toute sécurité.</p>
+  </conbody>
+</concept>

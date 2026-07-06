@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-export-firefox-policies-json" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>通过 API 导出 Firefox policies.json</title>
+  <shortdesc>Render one BPM profile as the Firefox Enterprise deployment document with optional download and pretty-print parameters.</shortdesc>
+  <taskbody>
+    <prereq><p>Store the BPM profile ID returned by create or import. If the profile is archived, decide explicitly whether the integration is allowed to export it with <codeph>include_deleted=true</codeph>.</p></prereq>
+    <context><p>This task covers <codeph>API-FF-002</codeph>. Export reads BPM's normalized <codeph>flags</codeph> and returns canonical Firefox JSON with a top-level <codeph>policies</codeph> object. BPM profile metadata and opaque <codeph>compliance</codeph> metadata are not exported into the Firefox deployment document.</p></context>
+    <steps>
+      <step><cmd>Export the active profile as canonical Firefox JSON.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph>. Response example: <codeph>200 application/json</codeph> with JSON <codeph>{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}</codeph>.</p></info></step>
+      <step><cmd>Add download mode when the caller needs an attachment filename.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1</codeph>. Response example: <codeph>200 application/json</codeph> plus <codeph>Content-Disposition: attachment; filename="profile-42-policies.json"</codeph>. The JSON body is the same deployment document.</p></info></step>
+      <step><cmd>Choose formatting parameters deliberately.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> selects indentation of two spaces when <codeph>indent</codeph> is omitted. Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?indent=0</codeph> uses the explicit indentation parameter. Error example: <codeph>422</codeph> for invalid constrained query values.</p></info></step>
+      <step><cmd>Export an archived profile only when the external workflow has a review reason.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?include_deleted=true&amp;download=1&amp;pretty=1</codeph>. Response example: <codeph>200 application/json</codeph>. Error examples: <codeph>404</codeph> when a missing or archived profile is not visible; <codeph>422</codeph> for invalid path or query input.</p></info></step>
+      <step><cmd>Validate the exported document before handing it to another system.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with JSON <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>. Response example: <codeph>200 {"ok":true,"profile":"release-152"}</codeph>. Validation confirms schema shape, not Firefox runtime deployment success.</p></info></step>
+      <step><cmd>Record the exact exported artifact externally.</cmd><info><note type="warning">Export has no ETag, precondition header, bulk endpoint, or transaction wrapper. Record the profile ID, revision observed before export, schema channel, query parameters, exported document hash, and downstream handoff decision outside BPM.</note></info></step>
+    </steps>
+    <result><p>The integration has a canonical Firefox <codeph>policies.json</codeph> artifact that excludes BPM-only metadata and can be supplied to deployment tooling.</p></result>
+    <postreq><p>If validation fails or the profile revision changed between read and export, stop the handoff and refresh the profile state.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

@@ -15,6 +15,11 @@ from app.core.locales import (
     resolve_target_locale_code,
 )
 from app.core.schema_channels import build_schema_channels_catalog
+from app.documentation.manifest import (
+    resolve_documentation_contextual_help_links,
+    resolve_documentation_deep_help_links,
+    resolve_documentation_home_links,
+)
 from app.web.firefox_all_settings_categories import get_all_settings_category_catalog
 from app.web.firefox_manual_policy_controls import get_manual_policy_controls_catalog
 from app.web.firefox_preferences import get_wizard_preferences_catalog
@@ -137,6 +142,9 @@ def build_profiles_page_context(
     all_settings_category_catalog = get_all_settings_category_catalog()
     initial_lang = resolve_request_locale(request, settings_obj)
     initial_locale = load_locale_catalog(initial_lang, settings_obj)
+    documentation_home_links = resolve_documentation_home_links()
+    documentation_context_help_links = resolve_documentation_contextual_help_links()
+    documentation_deep_help_links = resolve_documentation_deep_help_links()
 
     def tr(key: str, fallback: str = "") -> str:
         value = initial_locale.get(key)
@@ -182,5 +190,9 @@ def build_profiles_page_context(
         "locale_picker_options": LOCALE_MATRIX,
         "initial_lang": initial_lang,
         "initial_locale": initial_locale,
+        "documentation_home_links": documentation_home_links or {},
+        "documentation_home_href": (documentation_home_links or {}).get(initial_lang),
+        "documentation_context_help_links": documentation_context_help_links,
+        "documentation_deep_help_links": documentation_deep_help_links,
         "tr": tr,
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-library-operation" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Troubleshoot a Library operation</title>
+  <shortdesc>Recover safely from Library load, lifecycle, deletion, and action-status failures.</shortdesc>
+  <taskbody>
+    <prereq><p>A Library load or row action reported an error, timed out, or left the visible rows in an unexpected state.</p></prereq>
+    <context><p>Troubleshooting starts by preserving context and reading the visible status before retrying.</p></context>
+    <steps>
+      <step><cmd>Do not repeat a destructive action until the current status is clear.</cmd><info><note type="warning">Repeating archive or permanent delete after a partial failure can hide which action actually succeeded.</note></info></step>
+      <step><cmd>Record the profile name, row state, filter state, and visible status message.</cmd><info><p>Expected result: you can explain what BPM showed before retrying.</p></info></step>
+      <step><cmd>Refresh the Library once.</cmd><info><p>If the refreshed state matches the intended result, continue from the refreshed row list.</p></info></step>
+      <step><cmd>If the refreshed state is still wrong, reset search and filters and inspect the profile under all lifecycle states.</cmd><info><p>This distinguishes a hidden row from a failed or completed operation.</p></info></step>
+    </steps>
+    <result><p>You know whether to retry the operation, restore the profile, stop before deletion, or continue from the refreshed Library view.</p></result>
+    <postreq><p>Recovery: for repeated connection or API failures, stop Library changes and preserve the visible status for support or maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-refresh-profile-library"/>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+  </related-links>
+</task>

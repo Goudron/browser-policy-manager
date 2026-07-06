@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M5-07",
+  "target_bpm_version": "0.9.0",
+  "description": "Contextual documentation targets for Firefox policies until per-policy authored pages are localized and promoted into the portal maps.",
+  "default_policy_target": {
+    "topic_id": "fx-concept-policy-selection",
+    "anchor_id": "a-review-value-shape",
+    "related_policy_ids": [],
+    "user_task_topic_ids": [
+      "ug-task-use-all-settings",
+      "ug-task-validate-profile",
+      "ug-task-export-policies-json"
+    ],
+    "api_operation_ids": [
+      "API-VAL-001",
+      "API-FF-002"
+    ],
+    "validation_topic_id": "ug-troubleshoot-policy-validation"
+  },
+  "family_targets": [
+    {
+      "family_id": "extensions",
+      "policy_ids": [
+        "Extensions",
+        "ExtensionSettings",
+        "ExtensionUpdate",
+        "InstallAddonsPermission"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-extensions",
+      "related_policy_ids": [
+        "Extensions",
+        "ExtensionSettings",
+        "ExtensionUpdate",
+        "InstallAddonsPermission"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-configure-users-addons-sites",
+        "ug-task-use-all-settings"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "permissions",
+      "policy_ids": [
+        "Permissions",
+        "DefaultSerialGuardSetting",
+        "LocalFileLinks",
+        "LocalNetworkAccess",
+        "PopupBlocking",
+        "WebsiteFilter"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-permissions",
+      "related_policy_ids": [
+        "Permissions",
+        "PopupBlocking",
+        "WebsiteFilter"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-configure-users-addons-sites",
+        "ug-task-configure-security-privacy"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "updates",
+      "policy_ids": [
+        "AppAutoUpdate",
+        "AppUpdatePin",
+        "AppUpdateURL",
+        "BackgroundAppUpdate",
+        "DisableAppUpdate",
+        "DisableSystemAddonUpdate",
+        "ManualAppUpdateOnly"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-updates",
+      "related_policy_ids": [
+        "AppAutoUpdate",
+        "BackgroundAppUpdate",
+        "DisableAppUpdate",
+        "DisableSystemAddonUpdate"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-use-all-settings",
+        "ug-task-validate-profile"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "certificates",
+      "policy_ids": [
+        "Certificates",
+        "DisabledCiphers",
+        "HttpsOnlyMode",
+        "PostQuantumKeyAgreementEnabled",
+        "SecurityDevices",
+        "SSLVersionMax",
+        "SSLVersionMin"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-certificates",
+      "related_policy_ids": [
+        "Certificates",
+        "SecurityDevices",
+        "SSLVersionMax",
+        "SSLVersionMin"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-configure-security-privacy",
+        "ug-task-use-all-settings"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "proxy",
+      "policy_ids": [
+        "DNSOverHTTPS",
+        "HttpAllowlist",
+        "Proxy"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-proxy",
+      "related_policy_ids": [
+        "DNSOverHTTPS",
+        "HttpAllowlist",
+        "Proxy"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-configure-browser-access-defaults",
+        "ug-task-use-all-settings"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "search-homepage",
+      "policy_ids": [
+        "FirefoxHome",
+        "Homepage",
+        "NewTabPage",
+        "OverrideFirstRunPage",
+        "OverridePostUpdatePage",
+        "SearchBar",
+        "SearchEngines",
+        "SearchSuggestEnabled",
+        "ShowHomeButton"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-search-homepage",
+      "related_policy_ids": [
+        "FirefoxHome",
+        "Homepage",
+        "NewTabPage",
+        "SearchEngines",
+        "SearchSuggestEnabled"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-configure-home-search-navigation",
+        "ug-task-use-all-settings"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "privacy-ai",
+      "policy_ids": [
+        "AIControls",
+        "AutofillAddressEnabled",
+        "AutofillCreditCardEnabled",
+        "Cookies",
+        "DisableFirefoxStudies",
+        "DisableTelemetry",
+        "EnableTrackingProtection",
+        "FirefoxSuggest",
+        "GenerativeAI",
+        "IPProtectionAvailable",
+        "OfferToSaveLogins",
+        "OfferToSaveLoginsDefault",
+        "PasswordManagerEnabled",
+        "PasswordManagerExceptions",
+        "PrivateBrowsingModeAvailability",
+        "SanitizeOnShutdown",
+        "TranslateEnabled",
+        "UserMessaging",
+        "VisualSearchEnabled"
+      ],
+      "topic_id": "fx-concept-complex-policy-families",
+      "anchor_id": "a-privacy-ai",
+      "related_policy_ids": [
+        "AIControls",
+        "GenerativeAI",
+        "VisualSearchEnabled",
+        "EnableTrackingProtection",
+        "Cookies"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-configure-firefox-ai-policies",
+        "ug-task-configure-security-privacy",
+        "ug-task-use-all-settings"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    },
+    {
+      "family_id": "managed-preferences",
+      "policy_ids": [
+        "Preferences"
+      ],
+      "topic_id": "fx-reference-managed-preference-locking",
+      "anchor_id": "a-container-policy",
+      "related_policy_ids": [
+        "Preferences"
+      ],
+      "user_task_topic_ids": [
+        "ug-task-add-managed-preference",
+        "ug-task-trace-setting-source"
+      ],
+      "api_operation_ids": [
+        "API-VAL-001",
+        "API-FF-002"
+      ],
+      "validation_topic_id": "ug-troubleshoot-policy-validation"
+    }
+  ]
+}

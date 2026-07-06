@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-change-interface-language" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Changer la langue de l’interface</title>
+  <shortdesc>Sélectionnez l’anglais, le russe, l’allemand, le chinois simplifié, le français, l’espagnol ou la langue système pour BPM.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
+    <context><p>Utilisez le sélecteur de langue lorsque les captures, libellés, messages de validation et exemples de documentation doivent correspondre à la locale de l’opérateur.</p></context>
+    <steps>
+      <step><cmd>Ouvrez le sélecteur de langue dans l’en-tête de page.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Choisissez English, Русский, Deutsch, 简体中文, Français, Español ou la langue système.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Vérifiez que la navigation, les messages de validation, les statuts et les contrôles d’édition passent dans la locale choisie.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Ne poursuivez l’édition qu’après avoir confirmé que le profil et le canal de schéma n’ont pas changé.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+    </steps>
+    <result><p>BPM affiche l’interface dans la locale choisie sans modifier les données du profil.</p></result>
+    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-language-detection-fallback"/>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+  </related-links>
+</task>

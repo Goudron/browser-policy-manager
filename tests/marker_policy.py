@@ -23,7 +23,21 @@ SLOW_TEST_FILES = {
 }
 
 DOCS_CONTRACT_FILES = {
+    "tests/test_api_documentation_inventory.py",
+    "tests/test_cis_documentation_inventory.py",
+    "tests/test_dita_publishing_toolchain_decision.py",
+    "tests/test_documentation_identifiers_and_url_conventions.py",
+    "tests/test_documentation_runtime_route.py",
     "tests/test_docs_index.py",
+    "tests/test_firefox_policy_documentation_inventory.py",
+    "tests/test_product_documentation_release_contract.py",
+    "tests/test_product_documentation_ownership_boundary.py",
+    "tests/test_product_documentation_manifest_schema.py",
+    "tests/test_product_documentation_accessibility_security_contract.py",
+    "tests/test_product_documentation_context_guide.py",
+    "tests/test_product_documentation_provenance_review.py",
+    "tests/test_product_documentation_scaffold.py",
+    "tests/test_product_user_capability_inventory.py",
     "tests/test_pytest_xdist_isolation_audit_contract.py",
     "tests/test_readme_firefox_policies_contract.py",
 }

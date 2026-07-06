@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-schema-mismatch" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Schema mismatch lösen</title>
+  <shortdesc>Behandeln Sie unsupported schema channel, ESR/Release mismatch oder schema-dependent setting ohne versteckte Datenänderungen.</shortdesc>
+  <taskbody>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Schema mismatch bedeutet meist, dass eine Einstellung in einem Firefox channel existiert, im gewählten channel aber unavailable, deprecated oder anders geformt ist.</p></context>
+    <steps>
+      <step><cmd>Bestätigen Sie, ob das Profil ESR 140.12 oder Release 152 adressiert.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Identifizieren Sie die Einstellung, die in diesem channel unavailable, unsupported, deprecated oder schema-dependent ist.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Entscheiden Sie, ob der schema channel gewechselt oder die affected setting für das Firefox-Ziel entfernt/geändert wird.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Führen Sie revalidate und review export readiness nach der Channel- oder Einstellungsentscheidung aus.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+    </steps>
+    <result><p>Das Profil zielt auf den beabsichtigten Firefox channel und verbirgt keinen schema-dependent mismatch mehr.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

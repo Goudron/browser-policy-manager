@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-refresh-source-revision-dependencies" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Refresh the source revision and dependencies</title>
+  <shortdesc>Move the checkout to an approved newer revision and reinstall the Python environment without hiding dependency or worktree failures.</shortdesc>
+  <taskbody>
+    <prereq><p>The pre-update evidence set exists, the previous revision is recorded, and an approved target branch, tag, or commit is known.</p></prereq>
+    <context><p>BPM source updates are Git and Python-environment operations performed in the existing checkout. The procedure does not install a packaged distribution, native service, or production upgrade manager.</p></context>
+    <steps>
+      <step><cmd>Fetch the approved source reference.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git fetch --tags
+git status --short
+]]></codeblock><p>Stop if local changes are unexpected. Preserve user-owned or site-owned changes instead of overwriting them.</p></info></step>
+      <step><cmd>Move to the approved newer source revision.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git checkout <approved-new-ref>
+git rev-parse --short HEAD
+]]></codeblock><p>Record the target revision and compare it with the approved change ticket or release note.</p></info></step>
+      <step><cmd>Refresh the repository-local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+]]></codeblock><p>Use the existing <codeph>.venv</codeph> unless the update note explicitly requires rebuilding it. Record dependency failures before changing the database.</p></info></step>
+      <step><cmd>Stop on unresolved source or dependency failures.</cmd><info><note type="warning">If checkout, dependency installation, or virtual-environment activation fails, do not run migrations. Return to the recorded previous revision only if the database has not been changed, then reinstall the previous dependency set and re-run the pre-update smoke checks.</note></info></step>
+    </steps>
+    <result><p>The checkout and Python environment are on the approved target revision, or the update has stopped before database changes.</p></result>
+    <postreq><p>Run database migrations and documentation checks only after the dependency refresh succeeds.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-source-update-evidence"/>
+    <link keyref="topic.admin-task-run-source-update-migrations-docs"/>
+  </related-links>
+</task>

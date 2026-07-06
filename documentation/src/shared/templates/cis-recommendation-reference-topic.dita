@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cis-recommendation-reference-topic-template" xml:lang="en" audience="user security-reviewer" product="bpm-0-9-0" platform="web" props="cis-level-1" otherprops="cis(1.1.1.1)">
+  <title>CIS recommendation reference topic template</title>
+  <shortdesc>Template for generated and reviewed CIS Settings Guide recommendation topics.</shortdesc>
+  <refbody>
+    <section id="a-disclaimer" outputclass="cis-disclaimer">
+      <title>Disclaimer and scope</title>
+      <p>BPM is an independent implementation and is not authorized, sponsored, endorsed, certified, or approved by CIS. BPM documentation is not a substitute for the official CIS benchmark. BPM output does not prove CIS compliance.</p>
+      <p>The official CIS PDF and source expression are not copied, translated, indexed, or packaged. BPM documents its own mappings, generated layers, merge behavior, manual-review states, and limitations in original prose.</p>
+    </section>
+    <section id="a-benchmark">
+      <title>Benchmark and version</title>
+      <p>Identify the benchmark name, version, release date, license boundary, official-source requirement, and tested Firefox baseline used to frame the BPM mapping.</p>
+    </section>
+    <section id="a-recommendation-identity">
+      <title>Recommendation identity</title>
+      <p>Record the recommendation ID, level, scored state, source section, source title hash, publication disposition, and provenance record.</p>
+    </section>
+    <section id="a-bpm-authored-summary">
+      <title>BPM-authored rationale summary</title>
+      <p>Summarize the BPM-maintained mapping intent, confidence, mapping status, review notes, and non-publishable reason when a recommendation remains provenance-only.</p>
+    </section>
+    <section id="a-bpm-mapping">
+      <title>BPM mapping</title>
+      <p>List each policy or managed-preference target, affected path, value or lock state, Release/ESR support, merge rule, and link to the Firefox policy reference.</p>
+    </section>
+    <section id="a-automation-state">
+      <title>Automation and manual state</title>
+      <p>Explain whether BPM configures the recommendation automatically, which generated layers include it, and which paths require manual review.</p>
+    </section>
+    <section id="a-conflicts">
+      <title>Conflicts and exceptions</title>
+      <p>Describe preset and layer merge outcomes, stricter-base decisions, manual-review-kept-base decisions, and the 0.9.0 boundary that BPM has no separate persisted CIS exception or waiver model.</p>
+    </section>
+    <section id="a-verification">
+      <title>Verification</title>
+      <p>Point readers to BPM validation, health or export checks, exported policy paths, independent runtime verification, and any manual action required outside BPM.</p>
+    </section>
+    <section id="a-provenance" outputclass="cis-disclaimer">
+      <title>Provenance</title>
+      <p>Record the source family, license, publication policy, recommendation source hash, and no-certification notice without publishing restricted benchmark expression.</p>
+    </section>
+  </refbody>
+</reference>

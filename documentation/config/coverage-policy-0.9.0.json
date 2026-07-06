@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M11-04",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "purpose": "Keep documentation-owned code coverage separate from product application coverage.",
+  "included_modules": [
+    {
+      "path": "documentation/tools/validate_metadata.py",
+      "coverage_target_percent": 100,
+      "test_command": "make docs-coverage"
+    }
+  ],
+  "reported_uncovered_modules": [
+    "documentation/tools/build_docs.py",
+    "documentation/tools/bootstrap_toolchain.py",
+    "documentation/tools/generate_firefox_policy_skeletons.py",
+    "documentation/tools/generate_cis_recommendation_skeletons.py",
+    "app/documentation/manifest.py",
+    "app/documentation/router.py"
+  ],
+  "report_outputs": {
+    "terminal": true,
+    "xml": "documentation/reports/coverage/docs-coverage.xml",
+    "html": "documentation/reports/coverage/html/index.html"
+  },
+  "release_gate": {
+    "covered_scope_must_be_100_percent": true,
+    "shortfall_is_not_known_debt": true,
+    "reported_uncovered_modules_must_be_named": true,
+    "full_documentation_surface_gate": "BPM090-M14-04"
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-advanced-schema-controls" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>使用高级架构控件</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Reach advanced schema-shell and preference controls from All Settings without treating Guided as the complete editor.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Open All Settings in Catalog mode.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Advanced controls remain deliberate. All Settings is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Switch to Catalog mode and open the advanced schema or preference disclosure.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Edit only the advanced control needed for the profile goal.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用高级架构控件. Validate and save before returning to Guided, JSON, or the Library.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The advanced setting is reached and changed deliberately without duplicate default editors.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if the control is unsupported in the selected schema, leave it unchanged and document the schema boundary.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</task>

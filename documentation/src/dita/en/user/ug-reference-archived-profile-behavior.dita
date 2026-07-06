@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-archived-profile-behavior" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Archived profile behavior</title>
+  <shortdesc>Archived profiles stay visible through lifecycle filters but have limitations compared with active profiles.</shortdesc>
+  <refbody>
+    <section id="a-archived-purpose"><title>Purpose</title><p>Archive keeps a profile for review or later restore without keeping it in the normal active working set.</p></section>
+    <section id="a-archived-limits"><title>Limitations</title><p>Archived rows are not normal active export targets, and some row actions are disabled until the profile is restored.</p></section>
+    <section id="a-archived-warning"><title>Warning</title><p>Permanent delete can still remove an archived profile. Confirm the row carefully before destructive actions.</p></section>
+    <section id="a-archived-recovery"><title>Recovery</title><p>Restore an archived profile when you need normal editing or active lifecycle behavior again.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-restore-profile"/>
+    <link keyref="topic.ug-task-permanently-delete-profile"/>
+  </related-links>
+</reference>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-restore-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Restore an archived profile</title>
+  <shortdesc>Return an archived profile to the active Library lifecycle when it should be edited or used again.</shortdesc>
+  <taskbody>
+    <prereq><p>The lifecycle filter shows archived or all profiles, and the target profile row is visible.</p></prereq>
+    <context><p>Restore reverses archive. It does not revalidate the profile or change policy values.</p></context>
+    <steps>
+      <step><cmd>Confirm the archived row identity and updated time.</cmd><info><p>Expected result: you identify the archived profile you want to bring back.</p></info></step>
+      <step><cmd>Choose Restore on that row.</cmd><info><note type="warning">Restore makes the profile active again, but its previous validation state may still need review.</note></info></step>
+      <step><cmd>Switch to the active lifecycle filter or all profiles to confirm the restored row.</cmd><info><p>Refresh if the status reports success but the row remains hidden.</p></info></step>
+    </steps>
+    <result><p>The profile is active again and available for normal editor workflows.</p></result>
+    <postreq><p>Recovery: archive the profile again if it was restored by mistake.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-archive-profile"/>
+    <link keyref="topic.ug-task-filter-profile-library"/>
+  </related-links>
+</task>

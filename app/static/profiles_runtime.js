@@ -11,6 +11,7 @@
             resolveBrowserLanguage,
             updateThemeColorMeta,
             syncThemeSensitiveControls,
+            updateDocumentationLinks,
             fromEditorValue,
             toEditorValue,
             renderPreferencePresetButtons,
@@ -628,6 +629,7 @@
                 documentRef.documentElement.lang = lang;
                 windowRef.__BPM_INITIAL_LANG__ = lang;
                 windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;
+                updateDocumentationLinks?.(documentRef, lang);
 
                 applyLocaleText(nextLocale);
                 guardLocaleStep("renderPreferencePresetButtons", () => renderPreferencePresetButtons());

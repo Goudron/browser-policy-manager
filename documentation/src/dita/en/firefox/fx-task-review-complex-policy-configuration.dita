@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="fx-task-review-complex-policy-configuration" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Review a complex policy configuration before export</title>
+  <shortdesc>Use a repeatable review flow for nested objects, arrays, raw fallback, conflicts, and channel-specific availability.</shortdesc>
+  <taskbody>
+    <prereq><p>A profile is open and contains at least one complex policy family or managed preference.</p></prereq>
+    <context><p>Complex policies are safest when reviewed by family, source, schema channel, and exported boundary shape.</p></context>
+    <steps>
+      <step><cmd>Open All Settings and filter to the affected family.</cmd><info><p>Expected result: related policies, preferences, and source labels are visible together.</p></info></step>
+      <step><cmd>Check the Release/ESR badge for every policy in the family.</cmd><info><note type="warning">A Release-only policy must not be exported for an ESR-targeted profile.</note></info></step>
+      <step><cmd>Inspect nested object and array values, including unknown preserved fields.</cmd><info><p>Expected result: raw fallback values are intentionally kept or removed before save.</p></info></step>
+      <step><cmd>Compare preset, CIS, imported, manual, and raw sources.</cmd><info><p>Expected result: conflicts are resolved deliberately rather than hidden by later edits.</p></info></step>
+      <step><cmd>Validate the profile and review the generated <codeph>policies.json</codeph> shape.</cmd><info><p>Expected result: BPM reports no schema errors for the selected channel.</p></info></step>
+    </steps>
+    <result><p>The complex family has reviewed nested values, source decisions, channel support, and a clean validation result.</p></result>
+    <postreq><p>If validation fails, return to the family, remove unsupported keys, or switch to the channel that actually supports the policy.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.fx-concept-complex-policy-families"/>
+    <link keyref="topic.fx-reference-managed-preference-locking"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

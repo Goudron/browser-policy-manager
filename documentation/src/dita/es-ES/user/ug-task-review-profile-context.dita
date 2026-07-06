@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-profile-context" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Revisar el contexto del perfil</title>
+  <shortdesc>Compruebe identidad del perfil, ciclo de vida, canal de esquema, estado de validación y contexto de origen antes de terminar.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
+    <context><p>El contexto del perfil evita editar por accidente el perfil equivocado, canal Firefox equivocado, fila archivada, origen importado o pestaña obsoleta.</p></context>
+    <steps>
+      <step><cmd>Lea el nombre del perfil, estado de ciclo de vida, canal de esquema y contexto de última actualización.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Compruebe si el valor actual proviene de manual edit, baseline, CIS, import o raw fallback cuando se muestra source attribution.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Revise el estado de validación y advertencias antes de exportar o comparar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Si el contexto no coincide con la tarea prevista, deténgase y vuelva a abrir el perfil desde la Biblioteca.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+    </steps>
+    <result><p>Puede explicar qué perfil está editando y qué restricciones se le aplican.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+  </related-links>
+</task>

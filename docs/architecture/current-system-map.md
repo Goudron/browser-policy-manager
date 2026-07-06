@@ -2,7 +2,7 @@
 
 Date: 2026-06-01
 
-This map is the first orientation point for BPM 0.8.8 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
+This map is the first orientation point for BPM 0.9.0 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
 
 Refactoring acceptance rules live in `docs/architecture/refactoring-acceptance-rules.md`.
 
@@ -153,8 +153,8 @@ Current baseline from `tools/repo_health_report.py`: the historical full default
 ## CI And Local Commands
 
 - Main CI: `.github/workflows/ci.yml` splits lint/type checks, mandatory fast tests, coverage/contract checks, and manual browser UI checks.
-- Scheduled/manual live Firefox policy tests: `.github/workflows/firefox-live.yml`.
-- Scheduled/manual AMO canary: `.github/workflows/firefox-live-amo.yml`.
+- Manual guarded live Firefox policy tests: `.github/workflows/firefox-live.yml`.
+- Manual guarded AMO canary: `.github/workflows/firefox-live-amo.yml`.
 - Gist snapshot publishing: `.github/workflows/gist-snapshot.yml`.
 - Layered local tests: `make test-fast`, `make test-contract`, `make test-ui`, `make test-live`, `make test-release`.
 - Local health report: `make repo-health`.

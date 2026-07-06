@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-run-control-product-inventory-pull" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>DevOps 流程: BPM-Profile aus einem externen Steuerungsprodukt abrufen und lesen</title>
+  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <taskbody>
+    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
+    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></context>
+    <steps>
+      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
+  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></note></info></step>
+    </steps>
+    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
+    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+<link keyref="topic.admin-concept-api-conventions"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+<link keyref="topic.admin-task-run-pull-compare-update-scenario"/>
+  </related-links>
+</task>

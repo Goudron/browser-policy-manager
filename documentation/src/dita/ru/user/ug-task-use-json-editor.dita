@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-json-editor" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Используйте JSON Editor</title>
+  <shortdesc>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. Open a saved profile. JSON Editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. JSON Editor is the raw document surface. Use it when Guided or All Settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. Open the saved profile from the Library or another editor.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. Switch to JSON Editor.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. Confirm the editor shows a top-level policies object and the download action is available.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Используйте JSON Editor. Use JSON Editor only when exact raw document control is needed.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте синтаксис JSON, top-level policies и ошибки policy validation.</note></info></step>
+    </steps>
+    <result><p>JSON Editor находится в ожидаемом состоянии, а действие можно объяснить при проверке. The current profile is visible as editable Firefox policies.json content.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, валидируйте документ, вернитесь в All Settings или откройте связанный раздел. Recovery: if the route cannot open, save the profile first or return to All Settings for visual editing.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-when-to-use-json-editor"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

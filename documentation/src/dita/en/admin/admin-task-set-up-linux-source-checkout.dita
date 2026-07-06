@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-set-up-linux-source-checkout" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>Set up the Linux source checkout</title>
+  <shortdesc>Clone the BPM repository, create the Python virtual environment, install development dependencies, and prepare the local database schema.</shortdesc>
+  <taskbody>
+    <prereq><p>The Linux host is prepared, and the administrator has access to the BPM repository URL and target branch or tag for version 0.9.0.</p></prereq>
+    <context><p>The repository README defines the supported source setup sequence. Use repository-local commands so later troubleshooting can compare the environment with committed scripts.</p></context>
+    <steps>
+      <step><cmd>Clone the repository and enter the checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git clone <repository-url> browser-policy-manager
+cd browser-policy-manager
+git checkout <approved-0.9.0-ref>
+]]></codeblock><p>Replace placeholders with the approved internal repository URL and release reference.</p></info></step>
+      <step><cmd>Create and activate the local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+]]></codeblock><p>The virtual environment stays inside the checkout and is not committed.</p></info></step>
+      <step><cmd>Install BPM source dependencies from the checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+pip install -e ".[dev]"
+]]></codeblock><p>The editable install keeps runtime code and tests aligned with the current source tree.</p></info></step>
+      <step><cmd>Apply database migrations for the selected runtime database.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+alembic upgrade head
+]]></codeblock><note type="warning">Run migrations only against the intended BPM database. For the default source workflow this is the local SQLite database, not a production service database.</note></info></step>
+    </steps>
+    <result><p>The checkout has an activated Python environment, installed dependencies, and a migrated database schema.</p></result>
+    <postreq><p>Configure the runtime environment before starting the application process.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-linux-source-deployment"/>
+    <link keyref="topic.admin-task-configure-linux-source-runtime"/>
+  </related-links>
+</task>

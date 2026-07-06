@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-refresh-source-revision-dependencies" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Source revision und dependencies aktualisieren</title>
+  <shortdesc>Bewegen Sie den Checkout auf eine freigegebene neuere revision und installieren Sie die Python environment neu, ohne dependency oder worktree failures zu verdecken.</shortdesc>
+  <taskbody>
+    <prereq><p>Das pre-update evidence set existiert, die previous revision ist erfasst, und ein freigegebener target branch, tag oder commit ist bekannt.</p></prereq>
+    <context><p>BPM source updates sind Git- und Python-environment operations im bestehenden checkout. Die procedure installiert keine packaged distribution, keinen native service und keinen production upgrade manager.</p></context>
+    <steps>
+      <step><cmd>Holen Sie die freigegebene source reference.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git fetch --tags
+git status --short
+]]></codeblock><p>Stoppen Sie, wenn local changes unerwartet sind. Bewahren Sie user-owned oder site-owned changes, statt sie zu überschreiben.</p></info></step>
+      <step><cmd>Wechseln Sie zur freigegebenen neueren source revision.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git checkout <approved-new-ref>
+git rev-parse --short HEAD
+]]></codeblock><p>Erfassen Sie die target revision und vergleichen Sie sie mit dem approved change ticket oder release note.</p></info></step>
+      <step><cmd>Aktualisieren Sie die repository-local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+]]></codeblock><p>Verwenden Sie die bestehende <codeph>.venv</codeph>, sofern die update note keinen Neuaufbau verlangt. Erfassen Sie dependency failures, bevor die database geändert wird.</p></info></step>
+      <step><cmd>Stoppen Sie bei unresolved source oder dependency failures.</cmd><info><note type="warning">Wenn checkout, dependency installation oder virtual-environment activation fehlschlägt, führen Sie keine migrations aus. Kehren Sie nur dann zur recorded previous revision zurück, wenn die database noch nicht geändert wurde, installieren Sie danach das previous dependency set und wiederholen Sie die pre-update smoke checks.</note></info></step>
+    </steps>
+    <result><p>Checkout und Python environment stehen auf der freigegebenen target revision, oder das Update wurde vor database changes gestoppt.</p></result>
+    <postreq><p>Führen Sie database migrations und documentation checks erst aus, nachdem dependency refresh erfolgreich war.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-source-update-evidence"/>
+    <link keyref="topic.admin-task-run-source-update-migrations-docs"/>
+  </related-links>
+</task>

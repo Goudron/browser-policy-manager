@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-documentation-search-boundary" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Comprendre les limites de la recherche documentaire</title>
+  <shortdesc>Utilisez la recherche documentaire comme un index local et déterministe des rubriques d’aide publiées, pas comme un assistant IA.</shortdesc>
+  <conbody>
+    <section id="a-local-offline"><title>Locale et hors ligne</title><p>Le portail documentaire recherche dans l’index statique livré avec le même artefact d’aide. Il n’appelle pas de service de recherche externe, ne demande pas d’accès internet, n’envoie pas de requêtes de télémétrie et n’apprend pas du comportement utilisateur.</p></section>
+    <section id="a-deterministic-results"><title>Résultats déterministes</title><p>La recherche compare les titres de rubriques DITA localisés, les descriptions courtes, les titres internes, le corps du texte, les aliases relus et les identifiants techniques stables, par exemple policy IDs, CIS recommendation IDs et API operation IDs. Le classement utilise des poids fixes, facets, filters et une typo tolerance limitée, donc le même artefact et la même requête produisent le même ordre de résultats.</p></section>
+    <section id="a-not-ai"><title>Pas de réponses IA</title><p>La recherche ne fournit pas de conversational answers, semantic embeddings, vector retrieval, RAG, generative summaries ni automatic recommendations. Si aucun résultat n’apparaît, utilisez la navigation des guides, les identifiants exacts ou les filters au lieu d’attendre que le portail déduise une réponse.</p></section>
+    <section id="a-product-ai-policies"><title>Les stratégies IA du produit restent documentées</title><p>Certaines stratégies Firefox Release contrôlent le comportement IA et smart-feature du navigateur. Ces stratégies sont des paramètres produit BPM ordinaires et restent documentées ; les décrire n’ajoute pas de fonction IA au portail documentaire.</p></section>
+  </conbody>
+</concept>

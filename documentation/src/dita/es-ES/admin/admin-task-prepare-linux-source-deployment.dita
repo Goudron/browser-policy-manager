@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-prepare-linux-source-deployment" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>Preparar un host Linux para despliegue desde código fuente</title>
+  <shortdesc>Confirme el límite admitido de source deployment, los prerrequisitos del host y las capacidades de producción diferidas antes de instalar BPM desde un repository checkout.</shortdesc>
+  <taskbody>
+    <prereq><p>Use un host Linux donde pueda instalar Python 3.14+, Git, herramientas de compilación y curl. Este runbook asume un source checkout, no un packaged installer.</p></prereq>
+    <context><p>BPM 0.9.0 puede ejecutarse desde el código fuente para desarrollo, revisión y evaluación administrativa controlada. Packaged installers, native service units, recetas systemd oficiales, reverse proxy and TLS recipes, HA clustering, managed secrets y production hardening no se entregan en esta versión y no deben presentarse como comportamiento de despliegue admitido.</p></context>
+    <steps>
+      <step><cmd>Identifique el propósito del despliegue y registre que se trata de un source-based Linux deployment.</cmd><info><p>Resultado esperado: la nota operativa indica que BPM se inicia desde un Git checkout y que los distribution-specific installers quedan diferidos.</p></info></step>
+      <step><cmd>Instale o verifique los prerrequisitos del host.</cmd><info><p>Se requieren Git, Python 3.14+, pip, make, curl y un shell que pueda ejecutar <codeph>source .venv/bin/activate</codeph>. Los comandos del repositorio usan el entorno virtual local y no requieren un BPM package global.</p></info></step>
+      <step><cmd>Cree un directorio de trabajo separado de production data y secrets.</cmd><info><p>Mantenga el repository checkout, <codeph>.venv</codeph> y los SQLite data locales bajo una ruta controlada. No coloque secrets reales en ejemplos de documentación ni en committed files.</p></info></step>
+      <step><cmd>Confirme qué queda intencionalmente fuera de alcance antes de continuar.</cmd><info><note type="warning">Este runbook no proporciona packaged installer, native service, supported systemd unit, reverse proxy recipe, TLS termination, HA topology, managed secret store, backup automation ni production-hardening checklist.</note></info></step>
+    </steps>
+    <result><p>El host y las suposiciones operativas están listos para un workflow BPM 0.9.0 admitido desde un source checkout.</p></result>
+    <postreq><p>Continúe con el tema Linux source checkout antes de configurar runtime variables.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-set-up-linux-source-checkout"/>
+  </related-links>
+</task>

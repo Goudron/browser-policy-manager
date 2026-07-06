@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-select-comparison-profiles" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Select profiles to compare</title>
+  <shortdesc>Search independently for Profile A and Profile B, select rows from bounded result lists, and review each summary.</shortdesc>
+  <taskbody>
+    <prereq><p>The Compare surface is open from the Library.</p></prereq>
+    <context><p>Each side has its own search field and result list so you can choose profiles with similar names without mixing sides.</p></context>
+    <steps>
+      <step><cmd>Search for Profile A in the left search field and select the intended row.</cmd><info><p>Expected result: the left selected-profile summary shows the profile name, schema channel, lifecycle, and status context.</p></info></step>
+      <step><cmd>Search for Profile B in the right search field and select the intended row.</cmd><info><p>Expected result: the right summary updates independently.</p></info></step>
+      <step><cmd>Confirm both summaries before reading the comparison table.</cmd><info><note type="warning">Do not rely on search result position alone. Confirm identity and schema on both sides.</note></info></step>
+    </steps>
+    <result><p>Profile A and Profile B are selected and ready for comparison.</p></result>
+    <postreq><p>Recovery: if one profile is missing, clear that side's search, refresh the Library in the original tab, and confirm the profile is saved.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+  </related-links>
+</task>

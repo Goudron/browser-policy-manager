@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-accessible-product-operation" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Zugängliche Produktbedienung</title>
+  <shortdesc>Nutzen Sie BPM mit lokalisierten Status-, Fehler-, Fokus- und Tastatur-Rückmeldungen sowie responsiven Layouts.</shortdesc>
+  <conbody>
+    <section id="a-keyboard"><title>Keyboard</title><p>Tastaturverhalten muss Hauptaktionen, Navigation, Filter, Editor-Steuerelemente, Bestätigungen und Links ohne Zeigegerät erreichbar halten.</p></section>
+    <section id="a-focus"><title>Focus</title><p>Fokusmarkierungen zeigen, worauf die nächste Aktion nach Navigation, Moduswechsel, Validierung und Dialogen wirkt.</p></section>
+    <section id="a-status-feedback"><title>Status feedback</title><p>Lokalisierte Status- und Fehlerrückmeldungen erklären Ergebnisse von Speichern, Validierung, Import, Export, Archivierung, Wiederherstellung und Löschung.</p></section>
+    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>Responsive Layouts erhalten dieselben Aufgaben auf schmalen Bildschirmen; Theme- und Locale-Wechsel dürfen Warnungen oder destruktive Bestätigungen nicht verdecken.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-change-interface-theme"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</concept>

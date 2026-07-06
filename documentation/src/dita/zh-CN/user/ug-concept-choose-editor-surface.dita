@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-choose-editor-surface" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>选择合适的 BPM 界面</title>
+  <shortdesc>BPM 有五个用户界面：库、向导编辑器、所有设置、JSON 编辑器和比较。</shortdesc>
+  <conbody>
+    <p>按想要完成的结果选择界面，而不是按产品内部模块选择。</p>
+    <dl>
+      <dlentry><dt>库</dt><dd>查找、创建、导入、复制、归档、恢复、删除、导出和打开配置文件。</dd></dlentry>
+      <dlentry><dt>向导编辑器</dt><dd>通过面向任务的步骤和起始选择创建或更新常见策略配置。</dd></dlentry>
+      <dlentry><dt>所有设置</dt><dd>查看需要注意的项目，浏览完整的受支持策略和首选项目录，并编辑详细值。</dd></dlentry>
+      <dlentry><dt>JSON 编辑器</dt><dd>在需要精确原始控制时检查或编辑准确的 Firefox 策略文档。</dd></dlentry>
+      <dlentry><dt>比较</dt><dd>比较两个已保存配置文件，了解相同、不同或缺失的设置。</dd></dlentry>
+    </dl>
+  </conbody>
+</concept>

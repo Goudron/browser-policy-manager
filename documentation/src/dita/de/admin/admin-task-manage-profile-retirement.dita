@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-manage-profile-retirement" xml:lang="de" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Profile archivieren, wiederherstellen, endgültig löschen oder zurücksetzen</title>
+  <shortdesc>Use destructive profile lifecycle endpoints with explicit review and recovery records.</shortdesc>
+  <taskbody>
+    <prereq><p>Confirm the target profile ID, current lifecycle state, and external approval record before calling destructive endpoints.</p></prereq>
+    <context><p>This task covers <codeph>API-PROFILE-006</codeph>, <codeph>API-PROFILE-007</codeph>, <codeph>API-PROFILE-008</codeph>, and <codeph>API-PROFILE-009</codeph>. BPM 0.9.0 has no bulk confirmation token, no undo endpoint for permanent delete, and no transaction rollback across operations.</p></context>
+    <steps>
+      <step><cmd>Archive a profile when you need to remove it from active workflows while preserving it for review.</cmd><info><note type="warning">Archive is a destructive lifecycle change for active workflows. Record the approval reason and profile ID before the call.</note><p>Request example: <codeph>DELETE $BPM_BASE_URL/api/profiles/42</codeph>. Response example: <codeph>204</codeph> with no JSON body. Error examples: <codeph>404</codeph> missing profile or <codeph>422</codeph> invalid path input.</p></info></step>
+      <step><cmd>Restore an archived profile only after checking whether the name and profile purpose are still valid.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/profiles/42/restore</codeph>. Response example: <codeph>200 ProfileRead</codeph>. Error examples: <codeph>404</codeph> profile cannot be restored or found; <codeph>422</codeph> invalid path input.</p></info></step>
+      <step><cmd>Permanently delete a profile only when the external retention policy allows removal.</cmd><info><note type="warning">Permanent delete removes an active or archived profile and has no BPM undo endpoint. Export or record required evidence before the call.</note><p>Request example: <codeph>DELETE $BPM_BASE_URL/api/profiles/42/hard</codeph>. Response example: <codeph>204</codeph> with no JSON body. Error examples: <codeph>404</codeph> missing profile or <codeph>422</codeph> invalid path input.</p></info></step>
+      <step><cmd>Reset the profile library only in disposable or explicitly approved environments.</cmd><info><note type="warning">Reset permanently deletes every profile in the Library and currently requires no confirmation token. Never use it as a routine synchronization shortcut.</note><p>Request example: <codeph>DELETE $BPM_BASE_URL/api/profiles/reset</codeph>. Response example: <codeph>200 {"deleted":3}</codeph>. Error behavior: no application error is currently declared; database failures use framework handling.</p></info></step>
+      <step><cmd>After any destructive call, re-list profiles and read the affected record when applicable.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/profiles?lifecycle=all</codeph>. Response example: <codeph>200 ProfileRead[]</codeph>. Error example: <codeph>422</codeph> invalid query input. Use this verification to update the integrating product's inventory state.</p></info></step>
+      <step><cmd>Write the external audit record with operation ID, HTTP method, path, profile ID, approver, reason, timestamp, response status, and recovery decision.</cmd><info><p>Expected result: a later reviewer can distinguish archive, restore, hard delete, and reset actions and can see why the integration considered the operation safe.</p></info></step>
+    </steps>
+    <result><p>Destructive profile lifecycle operations are documented with request, response, error, warning, and recovery evidence.</p></result>
+    <postreq><p>If the approval record is missing, stop the integration workflow before calling permanent delete or reset.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.ug-task-archive-profile"/>
+    <link keyref="topic.ug-task-permanently-delete-profile"/>
+  </related-links>
+</task>

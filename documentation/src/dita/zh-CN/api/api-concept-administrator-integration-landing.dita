@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="api-concept-administrator-integration-landing" xml:lang="zh-CN" audience="integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>API Integration Guide 已移至管理员指南</title>
+  <shortdesc>请使用管理员和 DevOps 指南查看当前 API 集成步骤。此兼容页面保留旧 API guide 入口，而 endpoint、request、response、health、retry 和 automation 指南由 Administrator/DevOps 维护。</shortdesc>
+  <conbody>
+    <section id="a-administrator-guide-owner">
+      <title>管理员集成主题</title>
+      <p>请使用管理员和 DevOps 指南查看当前 API 集成步骤。此兼容页面保留旧 API guide 入口，而 endpoint、request、response、health、retry 和 automation 指南由 Administrator/DevOps 维护。</p>
+      <p>使用链接的 Administrator/DevOps 主题查看 API 受众、支持的模式、约定、限制、配置文件生命周期、Firefox 导入/导出、validation gates 以及 health/readiness 检查。control product 场景和 reusable examples 仍保留在那里，并将在后续 M12 任务中扩展。</p>
+    </section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-task-manage-profile-retirement"/>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</concept>

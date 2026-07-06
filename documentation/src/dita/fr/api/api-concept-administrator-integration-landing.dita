@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="api-concept-administrator-integration-landing" xml:lang="fr" audience="integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Le guide d’intégration API a été déplacé vers le guide administrateur</title>
+  <shortdesc>Utilisez le guide administrateur et DevOps pour les procédures actuelles d’intégration API. Cette page de compatibilité conserve l’ancien point d’entrée du guide API, tandis que les informations endpoint, request, response, health, retry et automation sont maintenues dans le périmètre Administrator/DevOps.</shortdesc>
+  <conbody>
+    <section id="a-administrator-guide-owner">
+      <title>Rubriques d’intégration administrateur</title>
+      <p>Utilisez le guide administrateur et DevOps pour les procédures actuelles d’intégration API. Cette page de compatibilité conserve l’ancien point d’entrée du guide API, tandis que les informations endpoint, request, response, health, retry et automation sont maintenues dans le périmètre Administrator/DevOps.</p>
+      <p>Utilisez les rubriques Administrator/DevOps liées pour l’audience API, les modèles pris en charge, les conventions, les limites, le cycle de vie des profils, l’import/export Firefox, les validation gates et les contrôles health/readiness. Les scénarios control product et les reusable examples restent disponibles à cet endroit et seront enrichis par les prochaines tâches M12.</p>
+    </section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-task-manage-profile-retirement"/>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</concept>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-import-failure" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Von failed import wiederherstellen</title>
+  <shortdesc>Diagnostizieren Sie failed import von JSON oder multipart policy input, ohne internen Speicher zu ändern.</shortdesc>
+  <taskbody>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Import kann fehlschlagen, wenn die Datei nicht lesbar ist, JSON malformed ist, die Firefox boundary shape falsch ist oder normalisierte Werte die Validierung nicht bestehen.</p></context>
+    <steps>
+      <step><cmd>Halten Sie die import failure message sichtbar und bestimmen Sie, ob die Eingabe JSON oder multipart war.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Bestätigen Sie bei JSON import, dass die Datei ein Firefox boundary document mit top-level policies object enthält.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Wenn die Meldung syntax meldet, beheben Sie zuerst malformed JSON.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
+      <step><cmd>Wiederholen Sie import einmal mit korrigierter Datei und prüfen Sie normalisierte Werte vor dem Speichern.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+    </steps>
+    <result><p>Der Import erzeugt entweder einen prüfbaren BPM-Profilentwurf oder bleibt mit sichtbarem Grund blockiert.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-troubleshoot-malformed-json"/>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

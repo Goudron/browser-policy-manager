@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-navigate-settings-categories" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Переходите по категориям параметров</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Navigate All Settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Open All Settings in Configured or Catalog mode.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Open the category navigation or catalog summary.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Choose the domain or cluster that matches the configuration goal.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if a category does not contain the expected control, search by policy ID or inspect raw/unmapped items.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-task-use-advanced-schema-controls"/>
+  </related-links>
+</task>

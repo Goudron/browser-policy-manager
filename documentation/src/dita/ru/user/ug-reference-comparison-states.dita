@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-comparison-states" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Состояния и типы строк сравнения</title><shortdesc>Строки показывают, является ли policy или managed preference equal, changed или missing.</shortdesc>
+  <refbody><section id="a-comparison-row-types"><title>Типы строк</title><p>Policy row представляет Firefox Enterprise policy; preference row — managed preference key и value.</p></section><section id="a-comparison-equal"><title>Equal</title><p>Оба профиля содержат настройку, и значения совпадают.</p></section><section id="a-comparison-changed"><title>Changed</title><p>Оба профиля содержат настройку, но значения отличаются.</p></section><section id="a-comparison-missing"><title>Missing</title><p>Настройка есть только с одной стороны.</p></section><section id="a-comparison-recovery"><title>Восстановление</title><p>Если состояние неожиданное, проверьте выбранные профили, сохраните изменения и откройте Compare заново.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-select-comparison-profiles"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
+</reference>

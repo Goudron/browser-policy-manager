@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-filter-settings-by-source" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Filter settings by source</title>
+  <shortdesc>Filter configured settings by baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
+  <taskbody>
+    <prereq><p>Open All Settings in Configured mode or a source-aware list.</p></prereq>
+    <context><p>Source filters explain why a value exists. They help distinguish generated baselines, CIS layers, manual edits, imported policies, and raw fallback values.</p></context>
+    <steps>
+      <step><cmd>Open the source filter controls.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose baseline, CIS, manual, imported, or raw depending on the question you are answering.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Review the list count and visible badges after each filter change.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Clear the filter before switching to a different investigation path.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
+    </steps>
+    <result><p>The visible list contains only settings from the selected source category.</p></result>
+    <postreq><p>Recovery: if a setting disappears, clear source filters and inspect its detail panel for the recorded source.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+    <link keyref="topic.ug-task-inspect-configured-settings"/>
+  </related-links>
+</task>

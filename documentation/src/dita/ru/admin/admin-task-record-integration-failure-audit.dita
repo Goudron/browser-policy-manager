@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-record-integration-failure-audit" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Восстановиться после ошибок интеграции и записать audit evidence</title>
+  <shortdesc>Обрабатывайте validation, import/export, readiness и revision failures без unsafe retries и скрытых transaction assumptions.</shortdesc>
+  <taskbody>
+    <prereq><p>Используйте процедуру, когда внешний продукт получил failed BPM API response, timeout, unexpected response body, устаревший <codeph>expected_revision</codeph> или mismatch export evidence.</p></prereq>
+    <context><p>Процедура связывает <codeph>API-HEALTH-001</codeph>, <codeph>API-HEALTH-002</codeph>, <codeph>API-PROFILE-003</codeph>, <codeph>API-PROFILE-005</codeph>, <codeph>API-FF-001</codeph>, <codeph>API-FF-002</codeph> и <codeph>API-VAL-001</codeph>. Она определяет operator evidence; BPM не предоставляет distributed tracing, automatic rollback, bulk transaction recovery или webhook notifications.</p></context>
+    <steps>
+      <step><cmd>Классифицируйте failure перед retry.</cmd><info><p>Record whether the failure is health/readiness, validation, import, export, read, patch, conflict, timeout, or transport. Preserve HTTP status such as <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph>, <codeph>415</codeph>, <codeph>422</codeph>, or <codeph>503</codeph>.</p></info></step>
+  <step><cmd>Зафиксируйте external desired state и BPM observation.</cmd><info><p>Сохраните request method, path, sanitized payload hash, profile ID, observed <codeph>revision</codeph>, schema channel, response body, response time, and control-product run ID. Never include secrets or private host names in shared evidence.</p></info></step>
+  <step><cmd>Повторно проверьте health и перечитайте profile при recoverable failure.</cmd><info><p>Request examples: <codeph>GET $BPM_BASE_URL/health</codeph>, <codeph>GET $BPM_BASE_URL/health/ready</codeph>, and <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>. If the profile revision changed, return to comparison and approval.</p></info></step>
+  <step><cmd>Повторяйте validate или export только после operator-approved decision.</cmd><info><p>For validation, repeat <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with the same candidate document. For export, repeat <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> and compare the exported document hash.</p></info></step>
+  <step><cmd>Остановите mutation retries при stale revision или ambiguous evidence.</cmd><info><p>If <codeph>expected_revision</codeph> returns <codeph>409</codeph>, if export hash differs, or if validation errors changed, do not continue the old run. Open a new external run with fresh read, comparison, and reviewer approval.</p></info></step>
+  <step><cmd>Опубликуйте audit record во внешнюю system of record.</cmd><info><note type="warning">BPM stores profile state but does not store a complete integration audit trail. The external product must record owner, decision, ticket, retry count, stop reason, old and new revisions, hashes, and operator notes.</note></info></step>
+    </steps>
+    <result><p>Failures are recoverable only through explicit evidence, fresh reads, and operator-approved retry decisions, not through blind replay. Результат фиксируется с теми же API identifiers и evidence boundaries.</p></result>
+    <postreq><p>After recovery, link the audit record to the successful profile revision or mark the integration run as stopped. Следующий шаг выполняется только после сохранения audit evidence.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-concept-api-limitations"/>
+<link keyref="topic.admin-task-check-health-readiness"/>
+<link keyref="topic.admin-task-run-validate-before-apply-update"/>
+<link keyref="topic.admin-task-run-import-review-export-handoff"/>
+  </related-links>
+</task>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-cis-layer-merge" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Starter presets and CIS layers</title>
+  <shortdesc>Starter presets and CIS layers help create an initial profile before manual review and editing.</shortdesc>
+  <conbody>
+    <p>A starter preset gives a profile an initial purpose, such as corporate, classroom, or security-oriented use. A CIS layer adds BPM's mapped security baseline choices where BPM supports them.</p>
+    <p>Layered sources remain visible in All Settings so you can distinguish baseline, CIS, imported, manual, and raw values. Some CIS-related items require manual review instead of automatic acceptance.</p>
+    <p>BPM documentation describes BPM mappings and workflow behavior. It does not claim CIS certification or endorsement.</p>
+  </conbody>
+</concept>

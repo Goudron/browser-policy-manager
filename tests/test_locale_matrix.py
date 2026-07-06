@@ -162,21 +162,18 @@ def test_readme_documents_target_and_active_locale_sets():
     readme = README_PATH.read_text(encoding="utf-8")
     readme_single_line = " ".join(readme.split())
 
-    assert "**Version:** `0.8.8`" in readme
-    assert "## What's Included In 0.8.8" in readme
-    assert "BPM 0.8.8 completes the All settings architecture" in readme
-    assert "comparison and clone workflow polish from the 0.8.7.1 patch line" in readme
-    assert "All settings opens in Review mode" in readme
-    assert "Configured mode summarizes what the profile applies" in readme
-    assert "Catalog mode exposes" in readme
+    assert "**Version:** `0.9.0`" not in readme
+    assert "## What's Included In 0.9.0" not in readme
+    assert "0.8.8" not in readme
+    assert "0.8.7.1" not in readme
+    assert "Triage-first All settings workflow with Review, Configured, and Catalog modes" in readme
     assert "Permanent deletion requires an explicit irreversible confirmation." in readme
-    assert "Compare does not render a redundant return-to-Library action" in readme
-    assert "Saved-profile comparison lives only in the dedicated `/profiles/compare` interface." in readme
-    assert "Compare table setting labels render policy and managed-preference identities without duplicated" in readme
+    assert "dedicated `/profiles/compare` interface" in readme
+    assert "setting column keeps policy/preference identity readable" in readme
     assert "English source UI with six active runtime locale catalogs." in readme
     assert "The primary project and UI source language is English." in readme
     assert "`app/i18n/en.json`" in readme
-    assert "BPM 0.8.8 keeps a six-locale UI matrix:" in readme
+    assert "BPM keeps a six-locale UI matrix:" in readme
     assert "| `de` | Deutsch | Active localized catalog |" in readme
     assert "| `zh-CN` | 简体中文 | Active localized catalog |" in readme
     assert "| `fr` | Français | Active localized catalog |" in readme

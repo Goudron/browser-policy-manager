@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-filter-profile-library" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Filter the Profile Library</title>
+  <shortdesc>Combine schema, lifecycle, and validation filters to focus the saved profile list.</shortdesc>
+  <taskbody>
+    <prereq><p>The Profile Library is open and you know which profile state you need to inspect.</p></prereq>
+    <context><p>Filters are view controls. They do not change profile content, validation state, or lifecycle state.</p></context>
+    <steps>
+      <step><cmd>Choose a Firefox schema channel filter when you need Release, ESR, or all profiles.</cmd><info><p>Expected result: the filtered count reflects only rows for the selected channel.</p></info></step>
+      <step><cmd>Choose a lifecycle filter to show active, archived, or all profiles.</cmd><info><p>Use archived when you are preparing to restore or permanently delete a retained profile.</p></info></step>
+      <step><cmd>Choose a validation filter to show passed, failed, or not-yet-validated profiles.</cmd><info><note type="warning">A validation filter does not run validation. It only shows the last saved validation state.</note></info></step>
+      <step><cmd>Reset filters to all states when you need the complete Library view.</cmd><info><p>This reset changes only the visible list, not the saved profile data.</p></info></step>
+    </steps>
+    <result><p>The Library shows the profile subset that matches the selected schema, lifecycle, validation, and search criteria.</p></result>
+    <postreq><p>Recovery: if a profile seems missing, reset filters and search before treating it as absent.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-find-profile"/>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+  </related-links>
+</task>

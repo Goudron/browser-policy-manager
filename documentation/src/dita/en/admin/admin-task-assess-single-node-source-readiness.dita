@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-assess-single-node-source-readiness" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Assess current single-node source readiness</title>
+  <shortdesc>Decide whether the current source-run BPM instance is ready for controlled single-node operation and name the evidence that supports that decision.</shortdesc>
+  <taskbody>
+    <prereq><p>Linux or Windows 10/11 through WSL source deployment is complete, dependencies are installed, and the intended <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, and <codeph>BPM_SCHEMA_CACHE_DIR</codeph> values are known.</p></prereq>
+    <context><p>BPM 0.9.0 can be prepared for current-state single-node source operation. This assessment is not a production hardening certificate, an HA design, or a packaged service acceptance.</p></context>
+    <steps>
+      <step><cmd>Record the exact source and runtime configuration.</cmd><info><p>Capture <codeph>git rev-parse --short HEAD</codeph>, the BPM version, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, and whether the process is started with <codeph>make dev</codeph> or a directly owned <codeph>uvicorn app.main:app</codeph> command.</p></info></step>
+      <step><cmd>Run liveness and readiness checks from the same network boundary users will use.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+make dev
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Record the result as <codeph>GET /health</codeph> and <codeph>GET /health/ready</codeph> evidence. Passing probes prove only source process liveness and readiness.</p></info></step>
+      <step><cmd>Check the data and documentation evidence before sharing the instance.</cmd><info><p>Confirm that <codeph>data/bpm.db</codeph> is the intended database, that at least one profile can be exported as <codeph>policies.json</codeph>, and that <codeph>/help/</codeph> opens the built documentation artifact or a documented unavailable state.</p></info></step>
+      <step><cmd>Classify the instance as current-state source operation.</cmd><info><note type="warning">Do not label the instance as packaged, hardened, load balanced, or highly available. If external controls add those properties, record them as external responsibilities and keep BPM 0.9.0 evidence limited to single-node source operation.</note></info></step>
+    </steps>
+    <result><p>The readiness note says what can be safely done today from source, which checks passed, and which decisions must wait for distribution and runtime support.</p></result>
+    <postreq><p>Use the network exposure and proxy-readiness topic before exposing the instance beyond a local administrator workstation or controlled lab host.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-review-devops-configuration-sources"/>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+    <link keyref="topic.admin-task-review-devops-network-cors-security"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</task>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-schema-dependent-guided-controls" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Зависимые от схемы элементы Guided</title>
+  <shortdesc>Некоторые элементы Guided появляются только тогда, когда выбранная схема Firefox их поддерживает, включая Release-only политики AI &amp; smart features.</shortdesc>
+  <refbody>
+    <section id="a-release-controls"><title>Release</title><p>В Firefox Release 152 шаг 5 может показывать поддерживаемые политики AI &amp; smart features, visual search и smart-функций, если они есть в схеме.</p></section>
+    <section id="a-esr-unavailable"><title>ESR 140.12</title><p>В ESR 140.12 неподдерживаемые AI/smart-feature controls отсутствуют или недоступны. Не добавляйте их вручную как будто они поддерживаются ESR.</p></section>
+    <section id="a-no-documentation-ai"><title>Documentation AI boundary</title><p>Эта справка описывает существующие продуктовые политики Firefox. Она не добавляет RAG, embeddings, генеративный поиск или ответы в документационный портал 0.9.0.</p></section>
+    <section id="a-recovery"><title>Recovery</title><p>Если контроль отсутствует, подтвердите канал схемы, проверьте границу поддержки в All Settings и зафиксируйте неподдерживаемое состояние при review.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-configure-firefox-ai-policies"/>
+    <link keyref="topic.ug-task-search-guided-settings"/>
+  </related-links>
+</reference>

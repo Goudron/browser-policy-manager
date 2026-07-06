@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-import-failure" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Récupérer après un failed import</title>
+  <shortdesc>Diagnostiquez un failed import JSON ou multipart policy input sans modifier le stockage interne.</shortdesc>
+  <taskbody>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
+    <context><p>L’import peut échouer si le fichier est illisible, le JSON malformed, la Firefox boundary shape incorrecte ou les valeurs normalisées invalides.</p></context>
+    <steps>
+      <step><cmd>Gardez import failure message visible et identifiez si l’entrée était JSON ou multipart.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Confirmez que le fichier contient un Firefox boundary document avec top-level policies object lorsque JSON import est utilisé.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Si le message signale syntax, récupérez d’abord le malformed JSON.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Réessayez import une fois avec le fichier corrigé puis examinez les normalized values avant d’enregistrer.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+    </steps>
+    <result><p>L’import réussit dans un BPM profile draft révisable ou reste bloqué avec une raison visible conservée.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-troubleshoot-malformed-json"/>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

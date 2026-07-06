@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M5-06",
+  "target_bpm_version": "0.9.0",
+  "description": "Synthetic representative policy family configurations used by Firefox Policy Guide contracts.",
+  "examples": [
+    {
+      "id": "updates-baseline",
+      "family": "updates",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "DisableAppUpdate": true,
+        "AppAutoUpdate": false,
+        "DisableSystemAddonUpdate": true
+      }
+    },
+    {
+      "id": "extensions-baseline",
+      "family": "extensions",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "ExtensionSettings": {
+          "*": {
+            "installation_mode": "blocked"
+          },
+          "uBlock0@raymondhill.net": {
+            "installation_mode": "force_installed",
+            "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
+          }
+        }
+      }
+    },
+    {
+      "id": "permissions-baseline",
+      "family": "permissions",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "Permissions": {
+          "Camera": {
+            "Allow": ["https://classroom.example.invalid"]
+          },
+          "Microphone": {
+            "BlockNewRequests": true
+          },
+          "Location": {
+            "Block": ["https://tracking.example.invalid"]
+          }
+        }
+      }
+    },
+    {
+      "id": "certificates-baseline",
+      "family": "certificates",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "Certificates": {
+          "ImportEnterpriseRoots": true,
+          "Install": ["/etc/pki/anchors/org-rootCA.crt"]
+        }
+      }
+    },
+    {
+      "id": "proxy-baseline",
+      "family": "proxy",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "Proxy": {
+          "Mode": "manual",
+          "HTTPProxy": "proxy.example.invalid:3128",
+          "SSLProxy": "proxy.example.invalid:3128",
+          "UseHTTPProxyForAllProtocols": true
+        }
+      }
+    },
+    {
+      "id": "search-baseline",
+      "family": "search",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "SearchEngines": {
+          "Add": [
+            {
+              "Name": "Example Search",
+              "URLTemplate": "https://search.example.invalid/?q={searchTerms}"
+            }
+          ],
+          "Default": "Example Search"
+        }
+      }
+    },
+    {
+      "id": "homepage-baseline",
+      "family": "homepage",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "Homepage": {
+          "URL": "https://intranet.example.invalid/",
+          "Locked": true,
+          "StartPage": "homepage"
+        }
+      }
+    },
+    {
+      "id": "privacy-baseline",
+      "family": "privacy",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "EnableTrackingProtection": {
+          "Value": true,
+          "Locked": true,
+          "Cryptomining": true,
+          "Fingerprinting": true
+        },
+        "Cookies": {
+          "Block": ["https://tracking.example.invalid/"]
+        }
+      }
+    },
+    {
+      "id": "ai-controls-baseline",
+      "family": "ai-controls",
+      "channels": ["release-152"],
+      "policies": {
+        "AIControls": {
+          "Default": {
+            "Value": "blocked",
+            "Locked": true
+          },
+          "SidebarChatbot": {
+            "Value": "blocked",
+            "Locked": true
+          }
+        }
+      }
+    },
+    {
+      "id": "managed-preference-locking-baseline",
+      "family": "managed-preferences",
+      "channels": ["esr-140.12", "release-152"],
+      "policies": {
+        "Preferences": {
+          "browser.download.useDownloadDir": {
+            "Value": false,
+            "Status": "locked",
+            "Type": "boolean"
+          },
+          "security.tls.version.min": {
+            "Value": 3,
+            "Status": "locked",
+            "Type": "number"
+          }
+        }
+      }
+    }
+  ]
+}

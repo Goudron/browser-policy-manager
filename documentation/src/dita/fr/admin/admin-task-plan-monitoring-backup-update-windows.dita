@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Planifier monitoring inputs, backup evidence et update windows</title>
+  <shortdesc>Préparez l’operational evidence current-state pour une instance source-run sans revendiquer managed monitoring, official restore automation ou rolling upgrades.</shortdesc>
+  <taskbody>
+    <prereq><p>L’instance a passé source readiness et network exposure review, et un administrator ou DevOps owner unique est responsable de l’evaluation window.</p></prereq>
+    <context><p>Jusqu’aux décisions distributions et runtime service, operations planning doit se concentrer sur observable inputs, manual backup/export evidence et update windows explicites pour un source node.</p></context>
+    <steps>
+      <step><cmd>Listez les monitoring inputs disponibles aujourd’hui.</cmd><info><p>Consignez process status, foreground terminal output, <codeph>stdout</codeph>, <codeph>stderr</codeph>, <codeph>GET /health</codeph>, <codeph>GET /health/ready</codeph>, selected API example results, accès documentation via <codeph>/help/</codeph>, et source revision depuis <codeph>git rev-parse --short HEAD</codeph>.</p></info></step>
+      <step><cmd>Collectez backup et export evidence avant la window.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p backups
+cp data/bpm.db backups/bpm-pre-update.db
+sha256sum backups/bpm-pre-update.db
+]]></codeblock><p>Exportez aussi des representative Firefox documents comme <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> et conservez la <codeph>policies.json</codeph> evidence avec checksums.</p></info></step>
+      <step><cmd>Planifiez une stop-the-world update window pour les source changes.</cmd><info><p>Pour 0.9.0, prévoyez one-node downtime avant <codeph>git fetch --tags</codeph>, dependency refresh, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> et <codeph>make docs-build</codeph>. Rolling upgrades are planned but not implemented yet.</p></info></step>
+      <step><cmd>Consignez les gaps comme blockers, pas comme hidden assumptions.</cmd><info><note type="warning">BPM 0.9.0 ne fournit pas managed monitoring, automated backup scheduling, official restore automation, point-in-time recovery, managed secrets, token rotation ou rolling upgrade orchestration. Utilisez manual evidence et stop conditions du update runbook.</note></info></step>
+    </steps>
+    <result><p>L’operation plan contient monitoring inputs, backup/export evidence et une update window réaliste pour current source operation.</p></result>
+    <postreq><p>Attachez cette evidence au HA and deferred-boundary record pour que le futur distribution work réutilise la checklist.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-source-update-evidence"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+    <link keyref="topic.admin-troubleshoot-documentation-portal-build-links"/>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+  </related-links>
+</task>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-trace-cis-source" xml:lang="es-ES" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Rastrear un valor CIS hasta su fuente</title>
+  <shortdesc>Rastree un configured value hasta el starter preset, la CIS layer, la merge decision y edits posteriores antes del export.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra un profile creado desde un starter preset o con una CIS Level 1 o Level 2 layer aplicada.</p></prereq>
+    <context><p>Rastrear un value es útil cuando un reviewer pregunta si un setting vino de original baseline, CIS layer, import, manual edit o raw fallback.</p></context>
+    <steps>
+      <step><cmd>Abra All Settings y filtre por configured values o por CIS source badge.</cmd><info><p>Resultado esperado: la policy o managed preference relevante permanece visible con su source attribution.</p></info></step>
+      <step><cmd>Lea source attribution e identifique si el current value es baseline, CIS, manual, imported o raw.</cmd><info><p>Resultado esperado: puede nombrar la fuente inmediata del valor.</p></info></step>
+      <step><cmd>Abra el CIS recommendation o Firefox policy topic relacionado cuando una generated layer aportó el value.</cmd><info><p>Resultado esperado: puede ver recommendation ID, path, value, channel support y merge rule.</p></info></step>
+      <step><cmd>Compruebe la merge decision: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter o manual_review_kept_base.</cmd><info><p>Resultado esperado: sabe si CIS añadió, confirmó, sustituyó el valor o dejó un base value para review.</p></info></step>
+      <step><cmd>Resuelva manual-review o conflict states antes de guardar.</cmd><info><note type="warning">No oculte una manual_review_kept_base decision con una manual edit no relacionada; registre primero el review reason.</note></info></step>
+      <step><cmd>Valide y exporte solo después de que source y decision sean comprensibles para otro reviewer.</cmd><info><p>Resultado esperado: el <codeph>policies.json</codeph> exportado refleja un reviewed choice, mientras BPM-only attribution permanece en el profile.</p></info></step>
+    </steps>
+    <result><p>El configured value puede explicarse como baseline, CIS, manual, imported o raw, con merge decision y review status visibles.</p></result>
+    <postreq><p>Si attribution es ambigua, compare el profile con un blank profile más la misma CIS layer y luego inspeccione imports y manual changes.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.ug-task-filter-settings-by-source"/>
+    <link keyref="topic.ug-task-review-profile-context"/>
+  </related-links>
+</task>

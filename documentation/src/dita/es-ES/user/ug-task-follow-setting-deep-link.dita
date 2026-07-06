@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-follow-setting-deep-link" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Seguir un enlace profundo de ajuste</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. Confirm the destination editor and focused setting or state.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Seguir un enlace profundo de ajuste. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. The linked setting opens in the correct surface with focus preserved.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

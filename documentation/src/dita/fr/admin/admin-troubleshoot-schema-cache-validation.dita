@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-schema-cache-validation" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Diagnostic: Troubleshoot schema cache and API validation errors</title>
+  <shortdesc>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Diagnose unavailable schema cache, unknown schema channel, and Firefox policies validation failures without patching generated schema artifacts.</shortdesc>
+  <taskbody>
+    <prereq><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Use this procedure when <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>, <codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph>, or user-facing validation returns <codeph>400</codeph>, <codeph>404</codeph>, <codeph>422</codeph>, or <codeph>503</codeph>; a non-object document can return <codeph>200 ok=false</codeph> with <codeph>Expected object with policy mappings</codeph>.</p></prereq>
+    <context><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. BPM validation depends on maintained schema channels and local schema/cache configuration. The diagnostic records whether the issue is request shape, unknown profile, invalid Firefox policy data, or unavailable schema cache.</p></context>
+    <steps>
+      <step><cmd>Diagnostic 1: Record the exact validation request and response.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Store sanitized request body hash, schema channel, HTTP status, <codeph>detail</codeph>, <codeph>message</codeph>, <codeph>error</codeph>, and <codeph>issues</codeph>. Keep the candidate <codeph>policies.json</codeph> outside logs if it contains customer values.</p></info></step>
+  <step><cmd>Diagnostic 2: Classify request-shape failures first.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. A non-object <codeph>document</codeph> or missing <codeph>document.policies</codeph> is operator input, not a schema-cache defect; current BPM can report this as <codeph>200 ok=false</codeph>. Focused rerun: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph>.</p></info></step>
+  <step><cmd>Diagnostic 3: Classify schema-channel and cache failures.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. A profile such as <codeph>beta-999</codeph> can return <codeph>404</codeph>; an unavailable registered schema can return <codeph>503</codeph>. Check <codeph>BPM_SCHEMA_BASE_URL</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, and <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph> before any broader rebuild.</p></info></step>
+  <step><cmd>Diagnostic 4: Use maintained refresh and validation checks.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Focused rerun: <codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_openapi_drift.py</codeph> for API documentation drift, or product schema tests when the API behavior changed. Do not hand-edit <codeph>app/schemas/cache</codeph> or generated Firefox skeletons.</p></info></step>
+  <step><cmd>Diagnostic 5: Stop unsafe recovery and preserve evidence.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. If the same valid request changes status across runs, preserve response bodies, source revision, cache path, and environment variables. </p><note type="warning">Do not edit generated schema artifacts or database rows as routine recovery; separate product defects from operator payload errors.</note></info></step>
+    </steps>
+    <result><p>L’opérateur obtient un diagnostic classifié, préserve user data et connaît le prochain smallest rerun. The operator has a classified validation failure with a smallest rerun and no hidden schema mutation.</p></result>
+    <postreq><p>Après correction, revenez au workflow Administrator/DevOps lié et relancez seulement les checks affectés. After validation succeeds, return to validate-before-apply or import-review-export workflows.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+<link keyref="topic.admin-task-review-devops-configuration-sources"/>
+<link keyref="topic.admin-task-record-integration-failure-audit"/>
+<link keyref="topic.ug-troubleshoot-policy-validation"/>
+  </related-links>
+</task>

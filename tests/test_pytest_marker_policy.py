@@ -17,7 +17,59 @@ from tests.marker_policy import LAYER_MARKERS, markers_for_path
         ("tests/test_db_harness_unit.py", {"unit"}),
         ("tests/test_frontend_vendor_rebuild_contract.py", {"unit"}),
         ("tests/test_makefile_test_targets.py", {"unit"}),
+        (
+            "tests/test_api_documentation_inventory.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_cis_documentation_inventory.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_documentation_identifiers_and_url_conventions.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_documentation_runtime_route.py",
+            {"contract", "docs_contract"},
+        ),
         ("tests/test_docs_index.py", {"contract", "docs_contract"}),
+        (
+            "tests/test_firefox_policy_documentation_inventory.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_ownership_boundary.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_manifest_schema.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_accessibility_security_contract.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_context_guide.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_provenance_review.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_scaffold.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_documentation_release_contract.py",
+            {"contract", "docs_contract"},
+        ),
+        (
+            "tests/test_product_user_capability_inventory.py",
+            {"contract", "docs_contract"},
+        ),
         ("tests/test_pytest_app_state_isolation_contract.py", {"contract"}),
         ("tests/test_pytest_db_isolation_contract.py", {"contract"}),
         (

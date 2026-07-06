@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-database-storage" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Troubleshoot database and storage issues</title>
+  <shortdesc>Diagnose local SQLite, storage path, backup, and profile visibility issues without editing database rows directly.</shortdesc>
+  <taskbody>
+    <prereq><p>Use this procedure when profiles disappear, writes fail, migration evidence is unclear, backup checksums do not match, or <codeph>BPM_DATABASE_URL</codeph> points to an unexpected location.</p></prereq>
+    <context><p>Current source deployment uses local storage such as <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph> and repository-owned files under <codeph>data/</codeph>, schema cache paths, and documentation site paths. There is no managed backup or restore orchestration in BPM 0.9.0.</p></context>
+    <steps>
+      <step><cmd>Confirm the active database URL and working directory.</cmd><info><p>Record <codeph>BPM_DATABASE_URL</codeph>, current directory, source revision, and whether the process runs from Linux filesystem or <codeph>/mnt/c</codeph>. Do not assume two shells point at the same <codeph>data/bpm.db</codeph>.</p></info></step>
+  <step><cmd>Check migration and profile API evidence before opening storage files.</cmd><info><p>Focused rerun: <codeph>alembic upgrade head</codeph>, then <codeph>curl -fsS http://127.0.0.1:8000/api/profiles?limit=50</codeph>. If the API returns expected profiles, the symptom may be filter, lifecycle, or browser state.</p></info></step>
+  <step><cmd>Verify backup evidence before destructive recovery.</cmd><info><p>Check <codeph>mkdir -p backups</codeph>, <codeph>cp data/bpm.db backups/bpm-pre-update.db</codeph>, and <codeph>sha256sum backups/bpm-pre-update.db</codeph> records. Keep exports of critical <codeph>policies.json</codeph> profiles as separate evidence.</p></info></step>
+  <step><cmd>Avoid direct database row edits.</cmd><info><p>Do not edit SQLite rows, generated artifacts, or schema cache files as routine recovery. Use documented profile archive, restore, import, export, or update-from-source procedures instead.</p></info></step>
+  <step><cmd>Escalate with storage evidence when recovery is unsafe.</cmd><info><p>Include database URL, file path, checksum, migration command, API response, and backup/export evidence. </p><note type="warning">If no verified pre-failure backup exists, stop before deleting or replacing <codeph>data/bpm.db</codeph>; BPM does not provide point-in-time recovery.</note></info></step>
+    </steps>
+    <result><p>The operator has a storage diagnosis that preserves user data and separates database state from UI or filter symptoms.</p></result>
+    <postreq><p>After storage is stable, rerun health/readiness and the smallest affected API workflow.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+<link keyref="topic.admin-task-prepare-source-update-evidence"/>
+<link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+<link keyref="topic.ug-troubleshoot-missing-profile"/>
+  </related-links>
+</task>

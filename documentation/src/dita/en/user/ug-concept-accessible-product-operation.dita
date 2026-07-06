@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-accessible-product-operation" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Accessible product operation</title>
+  <shortdesc>Use BPM with localized status, error, focus, keyboard feedback, and responsive layouts.</shortdesc>
+  <conbody>
+    <section id="a-keyboard"><title>Keyboard</title><p>Keyboard behavior must keep primary actions, navigation, filters, editor controls, confirmations, and links reachable without a pointer.</p></section>
+    <section id="a-focus"><title>Focus</title><p>Focus indicators show where the next action applies after navigation, mode switching, validation, and dialogs.</p></section>
+    <section id="a-status-feedback"><title>Status feedback</title><p>Localized status and error feedback explain save, validation, import, export, archive, restore, and deletion outcomes.</p></section>
+    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>Responsive layouts preserve the same tasks on narrow screens; theme and locale changes must not hide warnings or destructive confirmations.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-change-interface-theme"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</concept>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-plan-devops-storage-logs-backups" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Plan storage, logs, and backup evidence</title>
+  <shortdesc>Locate the source-deployment database, schema cache, documentation site, foreground logs, and manual backup evidence without claiming managed backup or restore support.</shortdesc>
+  <taskbody>
+    <prereq><p>The deployment configuration inventory includes <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, and <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>.</p></prereq>
+    <context><p>The default source deployment stores application data in SQLite at <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>, corresponding to <codeph>data/bpm.db</codeph> under the repository root. Schema cache files live under <codeph>app/schemas/mozilla</codeph> by default, and an installed documentation artifact is read from <codeph>app/documentation/site</codeph> when present.</p></context>
+    <steps>
+      <step><cmd>Identify the files and directories that hold operational state.</cmd><info><p>Record the repository path, <codeph>data/</codeph>, <codeph>data/bpm.db</codeph>, <codeph>app/schemas/mozilla</codeph>, and <codeph>app/documentation/site</codeph>. In WSL, keep these paths in the Linux filesystem rather than under <codeph>/mnt/c</codeph>.</p></info></step>
+      <step><cmd>Define a manual backup evidence step before risky work.</cmd><info><p>Stop the foreground BPM process, copy <codeph>data/bpm.db</codeph> to a controlled backup location, and record timestamp, source revision, database URL, file size, and checksum. BPM 0.9.0 does not provide automated backup, point-in-time recovery, or tested restore orchestration.</p></info></step>
+      <step><cmd>Capture logs from the current source process.</cmd><info><p>Source runs write startup messages, Uvicorn access output, tracebacks, migration errors, port conflicts, and documentation-site warnings to the foreground terminal, stdout, or stderr. No dedicated BPM application log directory, log rotation policy, request ID, audit log, or Event Viewer integration is documented in this release.</p></info></step>
+      <step><cmd>Pair file backup evidence with export evidence when profile handoff matters.</cmd><info><p>Use existing API export examples to export relevant Firefox <codeph>policies.json</codeph> documents and store response status, profile ID, revision, schema channel, and exported-document hash. Do not treat export evidence as a complete database restore.</p></info></step>
+    </steps>
+    <result><p>The administrator knows where current source-deployment state lives and which manual evidence can be collected before updates or troubleshooting.</p></result>
+    <postreq><p>Before changing source revisions or database schemas, use the future update-from-source runbook and stop when backup or restore evidence is incomplete.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-review-devops-configuration-sources"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

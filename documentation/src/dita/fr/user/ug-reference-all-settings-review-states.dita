@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-all-settings-review-states" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>États de revue All Settings</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Use this reference to interpret clean, invalid, CIS manual-review, raw, unknown, deprecated, and imported review states.</shortdesc>
+  <refbody>
+    <section id="a-overview"><title>États de revue All Settings</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Review states explain why All Settings asks for attention before the user edits routine values.</p></section>
+    <section id="a-clean-profile"><title>Clean profile</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. A clean profile has no remaining Review items. It can still contain configured settings; it simply has no attention states that BPM can detect.</p></section>
+    <section id="a-invalid-items"><title>Invalid items</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Invalid items have values that fail current validation for the selected schema channel and should be fixed or removed before handoff.</p></section>
+    <section id="a-cis-manual-review"><title>CIS manual review</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. CIS manual-review items need a human decision or external verification. BPM can surface the item without claiming certified compliance.</p></section>
+    <section id="a-raw-unknown-imported"><title>Raw, unknown, and imported items</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Raw fallback, unknown, and imported items should be preserved or removed deliberately because BPM may not be able to model their intent visually.</p></section>
+    <section id="a-deprecated-items"><title>Deprecated items</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Deprecated settings may still exist in a profile, but the user should confirm current Release/ESR support before relying on them.</p></section>
+    <section id="a-recovery"><title>Recovery</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. If a state is unexpected, clear filters, confirm the schema channel, refresh the profile, and inspect the setting detail before editing.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-review-attention-items"/>
+    <link keyref="topic.ug-task-handle-raw-unknown-settings"/>
+  </related-links>
+</reference>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-policies-and-managed-preferences" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Политики и управляемые preferences</title>
+  <shortdesc>BPM разделяет политики Firefox Enterprise и значения управляемых preferences, сохраняя их в одном профиле.</shortdesc>
+  <conbody>
+    <p>Политики — это именованные элементы управления Firefox Enterprise для поведения браузера, доступа, разрешений или функций. Управляемые preferences — это ключи preferences со значениями и, при необходимости, блокировкой.</p>
+    <p>Мастер покрывает типовые цели политик. Все настройки открывают более широкий поддерживаемый каталог. JSON-редактор показывает точную границу документа для импорта и экспорта.</p>
+    <p>Подробности по отдельным политикам относятся к руководству по политикам Firefox; это руководство пользователя объясняет, как найти и безопасно редактировать такие элементы в BPM.</p>
+  </conbody>
+</concept>

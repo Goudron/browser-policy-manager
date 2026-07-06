@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-prepare-source-update-evidence" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Préparer l’evidence avant une mise à jour depuis les sources</title>
+  <shortdesc>Collectez source revision, configuration, database backup, profile export evidence et stop conditions avant de déplacer BPM vers une source revision plus récente.</shortdesc>
+  <taskbody>
+    <prereq><p>BPM fonctionne depuis un Linux ou WSL source checkout, et l’administrateur a terminé les reviews configuration, storage, backup et operational-boundary.</p></prereq>
+    <context><p>Une update-from-source procedure modifie code, dependencies, database schema et documentation output expectations. BPM 0.9.0 ne fournit pas automatic rollback, database downgrade guarantees, managed backup ni packaged upgrade tooling. Traitez evidence collection comme un pre-update gate obligatoire.</p></context>
+    <steps>
+      <step><cmd>Arrêtez le foreground BPM process et consignez le source state actuel.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git status --short
+git rev-parse --short HEAD
+]]></codeblock><p>Continuez seulement lorsque le working tree state est compris et que la current source revision est consignée comme rollback reference.</p></info></step>
+      <step><cmd>Consignez effective configuration et runtime paths.</cmd><info><p>Capturez les valeurs actives <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph> et indiquez si les values viennent de shell exports ou de <codeph>.env</codeph>. Ne copiez pas de secrets dans l’update note.</p></info></step>
+      <step><cmd>Créez manual database backup evidence pendant que BPM est arrêté.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p backups
+cp data/bpm.db backups/bpm-pre-update.db
+sha256sum backups/bpm-pre-update.db
+]]></codeblock><p>Consignez timestamp, current revision, database URL, file size et checksum. Si le déploiement n’utilise pas <codeph>data/bpm.db</codeph>, sauvegardez plutôt le path résolu depuis <codeph>BPM_DATABASE_URL</codeph>.</p></info></step>
+      <step><cmd>Exportez critical profile evidence avant de changer le code.</cmd><info><p>Utilisez les API export examples existants pour enregistrer les Firefox <codeph>policies.json</codeph> documents requis et consignez response status, profile ID, revision, schema channel et exported-document hash.</p><note type="warning">Si database backup ou export evidence manque, arrêtez l’update. Ne remplacez pas backup evidence manquante par l’hypothèse que Git rollback ou <codeph>alembic downgrade</codeph> sera sûr.</note></info></step>
+    </steps>
+    <result><p>L’update dispose d’un pre-change evidence set vérifié et d’une previous source reference connue.</p></result>
+    <postreq><p>Passez au refresh de source revision et dependencies uniquement après revue complète de l’evidence set.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-refresh-source-revision-dependencies"/>
+  </related-links>
+</task>

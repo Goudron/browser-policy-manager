@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.9.0
+
+### Added
+- Added the packaged BPM product documentation portal under `/help/` with DITA-authored source,
+  deterministic static publication, manifest/target-map validation, locale-aware routing, and
+  offline operation.
+- Added five documentation guide families for User Guide, Firefox Policy Guide, CIS Settings Guide,
+  API/DevOps integration guidance, and Administrator/DevOps source-deployment guidance.
+- Added complete six-locale documentation coverage for `en`, `ru`, `de`, `zh-CN`, `fr`, and
+  `es-ES`, with parity checks that prevent reduced localized topic content.
+- Added a deterministic non-AI documentation search experience with per-locale indexes,
+  normalization, aliases, facets, typo-tolerant ranking, quality fixtures, and integrity gates.
+- Added a visible documentation link in the BPM product header plus contextual help icons that open
+  relevant documentation pages in a new browser tab while preserving FastAPI/OpenAPI `/docs`.
+- Added Administrator/DevOps runbooks for Linux source deployment, Windows 10/11 source deployment
+  through WSL, source-update procedures, operational boundaries, health/readiness checks, API
+  integration workflows, reusable examples, and troubleshooting.
+- Added documentation-specific test boundaries, focused Make targets, compact fixtures, browser
+  smoke coverage, isolated documentation coverage reporting, failure diagnostics, and a compact
+  documentation subsystem snapshot.
+
+### Changed
+- Updated active package, runtime, README, changelog, documentation-index, architecture-map, and
+  version-contract test surfaces to the 0.9.0 product documentation portal release line.
+- Refreshed README as current-state product documentation rather than release history; versioned
+  change summaries remain in this changelog.
+- Updated the backlog-creation runbook so the first milestone includes editable-environment
+  metadata refresh, external component currency checks, and dependency/toolchain review.
+- Updated Python dependency minimums and the local editable environment metadata for BPM 0.9.0;
+  refreshed frontend vendor pins and rebuilt vendored Monaco assets with clean npm audit results.
+
+### Quality
+- Kept static typing and lint gates green with `make typecheck` and `make lint`.
+- Completed full default pytest, full app coverage, documentation release validation, and
+  browser-backed BPM/documentation smoke gates during the final 0.9.0 quality milestone.
+- Confirmed the documentation release gate covers DITA publication, six-locale parity, content,
+  manifests, target maps, deterministic search, provenance, API examples, accessibility/security,
+  and non-browser portal contracts.
+- Confirmed npm audit reports zero vulnerabilities after frontend vendor refresh.
+
+### Known non-goals and deferred work
+- Documentation search is deterministic and non-AI; conversational search, embeddings, RAG, or
+  learning behavior remain outside 0.9.0.
+- Packaged installers, official service units, supported HA clustering, production hardening,
+  managed secrets, official reverse-proxy recipes, rolling upgrades, and automatic restore
+  automation remain deferred until distribution/runtime decisions exist.
+- System Python remains on the available 3.14 patch line in the local environment because the
+  package manager did not provide Python 3.14.6; the project requirement remains `>=3.14`.
+- Maintainer manual documentation QA found issues accepted for deferral to a later version rather
+  than blocking the 0.9.0 final quality milestone.
+
 ## 0.8.8
 
 ### Added

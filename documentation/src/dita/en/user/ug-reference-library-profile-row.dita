@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-library-profile-row" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Profile Library row fields</title>
+  <shortdesc>Each Library row summarizes identity, schema, note, validation state, lifecycle state, and update time for one saved profile.</shortdesc>
+  <refbody>
+    <section id="a-row-identity"><title>Identity</title><p>The row name, ID, note, and update time help confirm that you are acting on the intended saved profile.</p></section>
+    <section id="a-row-state"><title>State</title><p>The schema channel, validation state, and lifecycle state explain which editor actions, lifecycle actions, and export-related actions are currently suitable.</p></section>
+    <section id="a-row-warning"><title>Warning</title><p>Do not rely on row position alone after sorting or filtering. Confirm identity fields before duplicate, archive, restore, or permanent delete actions.</p></section>
+    <section id="a-row-recovery"><title>Recovery</title><p>If row information appears stale, refresh the Library before repeating the action.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-refresh-profile-library"/>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+  </related-links>
+</reference>

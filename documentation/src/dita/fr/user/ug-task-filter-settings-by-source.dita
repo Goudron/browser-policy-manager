@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-filter-settings-by-source" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Filtrer les paramètres par source</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Filter configured settings by baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Open All Settings in Configured mode or a source-aware list.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Source filters explain why a value exists. They help distinguish generated baselines, CIS layers, manual edits, imported policies, and raw fallback values.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Open the source filter controls.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Choose baseline, CIS, manual, imported, or raw depending on the question you are answering.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Review the list count and visible badges after each filter change.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer les paramètres par source. Clear the filter before switching to a different investigation path.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The visible list contains only settings from the selected source category.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if a setting disappears, clear source filters and inspect its detail panel for the recorded source.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+    <link keyref="topic.ug-task-inspect-configured-settings"/>
+  </related-links>
+</task>

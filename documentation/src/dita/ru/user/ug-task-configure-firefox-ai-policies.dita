@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-firefox-ai-policies" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Настройте политики Firefox AI и smart-функций</title>
+  <shortdesc>Используйте шаг 5 для существующих политик Firefox, связанных с AI &amp; smart features, visual search и smart-поверхностями, когда они поддерживаются схемой Release.</shortdesc>
+  <taskbody>
+    <prereq><p>Выберите схему Release, где эти политики поддерживаются, или заранее учитывайте, что в ESR 140.12 часть контролов отсутствует.</p></prereq>
+    <context><p>Эта тема описывает существующие политики Firefox для AI/smart-функций как часть основного продукта. Она не добавляет AI-функциональность в документационный портал: RAG, embeddings, генеративный поиск или ответы не входят в 0.9.0.</p></context>
+    <steps>
+      <step><cmd>Откройте шаг 5 «AI &amp; smart features».</cmd><info><p>Ожидаемый результат: профиль остаётся согласованным, а действие можно объяснить при проверке.</p></info></step>
+      <step><cmd>Проверьте встроенные поверхности браузера, связанные с AI, visual search и smart-функциями, которые перечислены для выбранной схемы Release.</cmd><info><p>Ожидаемый результат: профиль остаётся согласованным, а действие можно объяснить при проверке.</p></info></step>
+      <step><cmd>Для каждой поддерживаемой политики выберите включение, отключение или отсутствие изменения в соответствии с целью профиля.</cmd><info><p>Ожидаемый результат: профиль остаётся согласованным, а действие можно объяснить при проверке.</p></info></step>
+      <step><cmd>Если контроль отсутствует в ESR 140.12, считайте его неподдерживаемым в ESR и не добавляйте его вручную как настройку Guided.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, состояние профиля и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>Поддерживаемые политики Firefox AI/smart-функций проверены как продуктовые настройки, а граница документационного портала без RAG/embeddings/generative answers сохранена.</p></result>
+    <postreq><p>Восстановление: если ожидаемый контроль не виден в ESR, переключитесь на поддерживаемую Release-схему для проверки или зафиксируйте отсутствие поддержки ESR.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

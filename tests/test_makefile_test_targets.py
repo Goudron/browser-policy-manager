@@ -12,7 +12,11 @@ def _makefile_source() -> str:
 
 
 def _target_body(source: str, target: str) -> str:
-    match = re.search(rf"^{re.escape(target)}:\n(?P<body>(?:\t.*\n)+)", source, re.M)
+    match = re.search(
+        rf"^{re.escape(target)}:(?:[^\n]*)\n(?P<body>(?:\t.*\n)+)",
+        source,
+        re.M,
+    )
     assert match, f"Missing Makefile target: {target}"
     return match.group("body")
 
@@ -60,6 +64,8 @@ def test_makefile_test_targets_use_named_marker_expressions():
         body = _target_body(source, target)
         assert "-o addopts= -q" in body
         assert f'$({variable})' in body
+
+    assert "test-release: docs-release-check" in source
 
 
 def test_makefile_declares_opt_in_xdist_pilot_targets():

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+  <title>验证通过 WSL 的 BPM source deployment</title>
+  <shortdesc>从 WSL 和 Windows 检查 probes，确认 UI route，检查 logs，并排查常见 WSL networking 和 filesystem issues。</shortdesc>
+  <taskbody>
+    <prereq><p>BPM 已从 WSL checkout 运行，并使用目标 <codeph>BPM_DATABASE_URL</codeph>、host、port 和 documentation-site settings。</p></prereq>
+    <context><p>验证必须同时证明 Linux process 响应和 Windows browser access path。它不认证 native Windows installation、production hardening、reverse proxy behavior、backup readiness 或 Firefox runtime enforcement。</p></context>
+    <steps>
+      <step><cmd>在 WSL 内检查 health 和 readiness。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>预期 responses 为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
+      <step><cmd>从 Windows PowerShell 检查相同 probes。</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+Invoke-WebRequest http://localhost:8000/health
+Invoke-WebRequest http://localhost:8000/health/ready
+]]></codeblock><p>如果 localhost 不工作，请用 <codeph>hostname -I</codeph> 中的 WSL IP 重试，并记录成功的地址。</p></info></step>
+      <step><cmd>从 Windows browser 打开 UI route。</cmd><info><p>使用 <codeph>http://localhost:8000/profiles</codeph> 或 <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>。Profile Library route 应加载 BPM interface 或有意设计的 empty/error state，而不是 traceback。</p></info></step>
+      <step><cmd>在修改 BPM code 之前排查 WSL-specific failures。</cmd><info><p>对于 connection failures，确认 <codeph>make dev</codeph> 仍在运行，检查 <codeph>BPM_HOST</codeph>，运行 <codeph>wsl --list --verbose</codeph>，并在重启 distribution 后刷新 WSL IP。对于缓慢 file watching 或 permission errors，将 checkout 从 <codeph>/mnt/c</codeph> 移到 <codeph>/home/&lt;linux-user&gt;</codeph>。只有在 environment path 和 network route 稳定后才运行 <codeph>make test-fast</codeph>。</p><note type="warning">通过 WSL 的 health checks 不证明 production readiness、Windows service behavior、managed backups 或 HA support。</note></info></step>
+    </steps>
+    <result><p>管理员获得 evidence，证明 BPM 在 WSL 内启动、响应 probes、可从 Windows 访问，并且没有 immediate WSL networking 或 filesystem blockers。</p></result>
+    <postreq><p>将 PowerShell output、WSL shell commands、<codeph>BPM_*</codeph> variables 名称、probe responses 和 foreground logs 放在一起用于 troubleshooting，不复制 secrets。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+    <link keyref="topic.admin-task-verify-linux-source-deployment"/>
+  </related-links>
+</task>

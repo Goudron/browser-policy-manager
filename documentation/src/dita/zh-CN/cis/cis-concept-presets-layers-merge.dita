@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-presets-layers-merge" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>presets、CIS layers 和 source attribution 如何合并</title>
+  <shortdesc>本主题说明 BPM 在 export 前如何组合 starter preset、CIS layer、imported data、manual edits 和 raw fallback。</shortdesc>
+  <conbody>
+    <section id="a-source-order"><title>来源顺序</title><p>BPM 将 starter preset 作为初始 baseline，按所选 Firefox schema channel 应用 CIS layer，然后把后续 imported、manual 或 raw fallback values 作为独立 source attribution 保持可见。Export 前请在 All Settings 中 review value，因为 source attribution 解释 configured value 为什么存在，以及更改是否会覆盖 baseline、CIS、manual、imported 或 raw source。</p></section>
+    <section id="a-starter-presets"><title>Starter presets</title><p>已记录的 starter choices 是 blank、keep_current、basic_corporate、classroom_kiosk 和 soc_hard。Basic corporate 从 office governance 开始，classroom_kiosk 从 constrained shared browsing 开始，soc_hard 从 protected-station assumptions 开始。未选择 CIS layer 时，这些 preset 仍会贡献自己的 policy top-level counts：basic_corporate 为 23，classroom_kiosk 为 22，soc_hard 为 28。</p></section>
+    <section id="a-layer-decisions"><title>Layer decision types</title><p>CIS merging 会记录 added_from_cis、already_satisfied、cis_replaced_base、kept_base_only、kept_base_stricter 和 manual_review_kept_base decisions。例如 blank 加 CIS Level 1 会添加 30 个 policy top-level values，blank 加 CIS Level 2 会添加 33 个。Basic corporate 加 CIS Level 1 在每个受支持 channel 中记录 17 个 added_from_cis、15 个 already_satisfied、20 个 kept_base_only 和 4 个 manual_review_kept_base decisions。</p></section>
+    <section id="a-conflicts-manual-review"><title>Conflicts 和 manual review</title><p>Manual-review decisions 表示 BPM 保留 starter 或 base value 可见，而不是静默接受通用 CIS result。应用 CIS layer 时，basic_corporate 保留 4 个 manual-review decisions，classroom_kiosk 保留 1 个，soc_hard 保留 7 个。最常见的 conflict areas 是 update governance、proxy mode and lock state，以及部分 sanitize-on-shutdown values。</p></section>
+    <section id="a-attribution-boundary"><title>Attribution boundary</title><p>Source attribution 是 BPM review aid，不是 certification statement。Value 可追溯到 baseline、CIS、manual、imported 或 raw source；BPM 可以解释 merge decision 和 generated layer，但不证明 CIS compliance，不导出 BPM profile metadata，也不复制官方 CIS benchmark expression。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-task-trace-cis-source"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+    <link keyref="topic.ug-task-resolve-cis-manual-review"/>
+  </related-links>
+</concept>

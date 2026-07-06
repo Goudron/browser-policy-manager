@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-review-devops-network-cors-security" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Проверить network, CORS и security limits</title>
+  <shortdesc>Проверьте host, port, reload, health probes, CORS defaults и security limits перед тем, как сделать source-run BPM instance доступным.</shortdesc>
+  <taskbody>
+    <prereq><p>Source process можно запустить через <codeph>make dev</codeph>, а администратор может изменить <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_RELOAD</codeph>, <codeph>BPM_ENABLE_CORS</codeph> и <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>.</p></prereq>
+    <context><p>Текущие defaults ориентированы на local source operation: <codeph>BPM_HOST="0.0.0.0"</codeph>, <codeph>BPM_PORT="8000"</codeph>, <codeph>BPM_RELOAD="true"</codeph>, <codeph>BPM_ENABLE_CORS="true"</codeph> и permissive origins, эквивалентные <codeph>["*"]</codeph>. Эти defaults не являются hardened network exposure policy.</p></context>
+    <steps>
+      <step><cmd>Выберите самый узкий bind address для текущей среды.</cmd><info><p>Используйте <codeph>127.0.0.1</codeph> для локальных Linux checks. Используйте <codeph>0.0.0.0</codeph> только если WSL browser forwarding или controlled lab network требуют этого. Фиксируйте причину любого non-loopback binding.</p></info></step>
+      <step><cmd>Ограничьте operational access через health и readiness probes.</cmd><info><p>Используйте <codeph>GET /health</codeph> и <codeph>GET /health/ready</codeph> до API examples или UI smoke checks. Успешные probes показывают только process liveness/readiness; они не доказывают database backup status, Firefox enforcement, authentication, authorization или production topology.</p></info></step>
+      <step><cmd>Ограничьте CORS для любой shared evaluation.</cmd><info><p>Для local experiments permissive <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> может быть допустим. Для shared host задавайте explicit origins и фиксируйте владельца browser origin. Документация BPM 0.9.0 не определяет credentialed CORS, CSRF protections, API authentication или tenant isolation.</p></info></step>
+      <step><cmd>Не включайте неподдерживаемые security controls в BPM claim.</cmd><info><note type="warning">Этот релиз не поставляет TLS termination, reverse proxy recipes, firewall policy, rate limiting, request signing, audit logging, SSO, OAuth/OIDC setup, role-based access control, vulnerability scanning или HA failover. Документируйте их как external controls, если среда добавляет их сама.</note></info></step>
+    </steps>
+    <result><p>Network posture source-run BPM описана как controlled local или lab exposure, а не production security architecture.</p></result>
+    <postreq><p>Если probes не проходят или exposure неясен, используйте source-deployment verification topics перед продолжением API integration examples.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-verify-linux-source-deployment"/>
+    <link keyref="topic.admin-task-verify-windows-wsl-source-deployment"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</task>

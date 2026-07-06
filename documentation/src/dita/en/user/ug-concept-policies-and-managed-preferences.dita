@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-policies-and-managed-preferences" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Policies and managed preferences</title>
+  <shortdesc>BPM separates Firefox Enterprise policies from managed preference values while keeping both in one profile.</shortdesc>
+  <conbody>
+    <p>Policies are named Firefox Enterprise controls such as browser behavior, access, permissions, or feature settings. Managed preferences are preference keys with values and optional lock behavior.</p>
+    <p>Guided Editor covers common policy goals. All Settings exposes the broader supported catalog. JSON Editor shows the exact document boundary used for import and export.</p>
+    <p>Policy-by-policy reference details belong to the Firefox Policy Guide; this User Guide explains how a user reaches and safely edits those controls in BPM.</p>
+  </conbody>
+</concept>

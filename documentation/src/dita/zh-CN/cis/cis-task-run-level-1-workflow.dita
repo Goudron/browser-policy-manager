@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-run-level-1-workflow" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>运行 Level 1 CIS 工作流</title>
+  <shortdesc>创建、检查、比较、导出并独立验证一个代表性的 Level 1 CIS profile。</shortdesc>
+  <taskbody>
+    <prereq><p>使用 fixture <codeph>cis-workflow-level-1-esr-fixture</codeph>：Firefox ESR 140.12、layer <codeph>cis-l1.esr-140.12</codeph>、starter preset <codeph>basic_corporate</codeph>，以及 comparison profile <codeph>blank-esr-140.12</codeph>。</p></prereq>
+    <context><p>该 workflow 是确定性的，因为每次都使用相同 route order：Library、Guided Editor、All Settings、Profile Comparison、Export 和 external verification。Recommendation rows 通过 generated mapping tables 指向 affected Firefox policy topics。</p></context>
+    <steps>
+      <step><cmd>在 Library 中创建 profile，选择 Firefox ESR 140.12，应用 Basic corporate starter preset，然后应用 Level 1 CIS layer。</cmd><info><p>预期结果：profile 显示 <codeph>cis-l1.esr-140.12</codeph> 为 active CIS layer，并保持 starter-preset source attribution 可见。</p></info></step>
+      <step><cmd>打开 Guided Editor，检查 CIS-related summary、schema channel、profile identity，以及 Level 1 layer 影响的主要 security/privacy groups。</cmd><info><p>预期结果：Guided Editor 将 Level 1 profile 显示为可审查配置，而不是 CIS compliance 的证明。</p></info></step>
+      <step><cmd>打开 All Settings，按 CIS/source attribution 过滤，检查 configured rows，并从每个 recommendation row 跟踪到 generated mapping table 和 affected Firefox policy topic。</cmd><info><p>预期结果：reviewer 可以通过 <codeph>baseline</codeph>、<codeph>CIS</codeph>、<codeph>manual</codeph>、<codeph>imported</codeph> 或 raw source states 追踪 values。</p></info></step>
+      <step><cmd>处理 attention items 和 manual-review rows，为 update governance、proxy routing、evidence-retention、unsupported mapping research、deprecated targets 或 local deployment requirements 记录 owner 和 decision。</cmd><info><note type="warning">不要用 compliance 声明关闭 manual-review item；当决定依赖 BPM 外部的 runtime、network、operating-system 或 audit checks 时，必须记录 external evidence。</note></info></step>
+      <step><cmd>将 Level 1 profile 与 blank ESR fixture profile 比较，并检查 equal、changed、missing-left 和 missing-right rows。</cmd><info><p>预期结果：comparison 确认 Level 1 layer 引入了预期的 configured policy 和 preference differences。</p></info></step>
+      <step><cmd>验证 profile，导出 <codeph>policies.json</codeph>，并在 BPM 外执行 approved independent deployment verification。</cmd><info><p>预期结果：exported document、validation result、comparison note 和 external verification record 可以一起审查。</p></info></step>
+    </steps>
+    <result><p>代表性的 Level 1 hardened profile 已创建，在 Guided 和 All Settings 中检查，完成比较、导出，并用 traceable evidence 独立验证。</p></result>
+    <postreq><p>如果任何 recommendation row 缺少 generated mapping table、affected Firefox policy topic path、export path 或 external verification record，请保持 workflow 未关闭。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.cis-task-trace-cis-source"/>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

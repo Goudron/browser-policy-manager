@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-product-version" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Produktversionsreferenz</title>
+  <shortdesc>Nutzen Sie BPM-Kopfzeile und version context, um Produkt- und Dokumentationsversion zu bestätigen.</shortdesc>
+  <refbody>
+    <section id="a-version-location"><title>Versionsort</title><p>Die Seitenkopfzeile zeigt die running BPM version, und das Dokumentationspaket ist für BPM 0.9.0 gebaut.</p></section>
+    <section id="a-version-scope"><title>Versionsumfang</title><p>Die Produktversion beschreibt BPM-Verhalten, nicht die Firefox browser-Version auf einem Endgerät.</p></section>
+    <section id="a-schema-version"><title>Schemaversion</title><p>Firefox-Schema-Kanäle wie ESR 140.12 und Release 152 sind getrennte Entscheidungen und beeinflussen validation und available controls.</p></section>
+    <section id="a-version-recovery"><title>Wiederherstellung</title><p>Wenn Produktverhalten nicht zum guide passt, notieren Sie BPM version, schema channel, route, locale und visible status, bevor Sie den mismatch melden.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+  </related-links>
+</reference>

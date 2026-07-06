@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-policy-selection" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Choose a Firefox policy to configure</title>
+  <shortdesc>Choose policies by user outcome, schema channel, value shape, and the BPM surface that gives the safest edit path.</shortdesc>
+  <conbody>
+    <section id="a-start-with-outcome"><title>Start with the outcome</title><p>Begin with the browser behavior you need, such as updates, homepage, extensions, privacy, permissions, search, certificates, proxy, or AI and smart-feature controls. Then use the Firefox Policy Guide reference skeletons and User Guide workflows to find the stable policy ID.</p></section>
+    <section id="a-check-channel"><title>Check Release and ESR support</title><p>Some policies exist in both Firefox Release 152 and ESR 140.12, while others are Release-only. Select the BPM schema channel before relying on a policy, and treat an unavailable policy as a validation blocker rather than a documentation gap.</p></section>
+    <section id="a-pick-edit-surface"><title>Pick the edit surface</title><p>Use Guided Editor for common task-first choices, All Settings for the full catalog and source tracing, and JSON Editor when you need exact Firefox boundary document control. Export only after validation is clean for the selected channel.</p></section>
+    <section id="a-review-value-shape"><title>Review value shape</title><p>Simple boolean, string, and integer policies are usually safe to edit directly. Complex object, array, extension, permission, search, certificate, proxy, and preference-locking policies need extra review because nested fields, unknown preservation, and raw fallback can affect the exported <codeph>policies.json</codeph>.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+  </related-links>
+</concept>

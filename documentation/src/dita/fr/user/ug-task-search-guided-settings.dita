@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-search-guided-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Rechercher des paramètres Guided</title>
+  <shortdesc>Cette tâche décrit le scénario complet « Rechercher des paramètres Guided » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
+    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <steps>
+      <step><cmd>Ouvrez la zone BPM correspondant à « Rechercher des paramètres Guided ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+    </steps>
+    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+  </related-links>
+</task>

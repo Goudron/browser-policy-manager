@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-choose-firefox-schema" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>选择 Firefox 架构通道</title>
+  <shortdesc>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. Choose between Firefox ESR 140.12 and Firefox Release 152 before importing, validating, or editing a profile.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. Start this task before creating a profile, importing policies.json, or validating a raw JSON document.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. The schema channel decides which Firefox policies BPM can validate and which controls are shown as supported. ESR 140.12 is the default long-support channel; Release 152 is the current mainstream channel and includes newer policy controls such as AIControls and VisualSearchEnabled.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. Compare the target browser fleet with the supported channels: ESR 140.12 or Release 152.</cmd><info><p>预期结果：所选架构通道与目标 Firefox 和后续验证匹配。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. Choose ESR 140.12 when the profile is intended for the supported Extended Support Release deployment.</cmd><info><p>预期结果：所选架构通道与目标 Firefox 和后续验证匹配。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. Choose Release 152 when the profile needs current Release-only controls, including supported AI and visual search policies.</cmd><info><p>预期结果：所选架构通道与目标 Firefox 和后续验证匹配。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明架构通道工作流：选择 Firefox 架构通道. Validate after choosing the channel and before saving, export, or handoff.</cmd><info><note type="warning">警告：保存或导出前请检查架构通道和验证错误。</note></info></step>
+    </steps>
+    <result><p>继续处理配置文件前，架构通道和验证状态已经明确。 The profile uses the schema channel that matches the intended Firefox deployment.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请确认通道、检查 affected policy path，并打开相关主题。 Recovery: if validation reports unsupported, unavailable, deprecated, or unknown settings, confirm the schema channel before editing policy values.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-library-profile-row" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Felder einer Profilzeile</title><shortdesc>Eine Bibliothekszeile zeigt Identität, Schema, Notiz, Validierung, Lebenszyklus und Aktualisierungszeit.</shortdesc>
+  <refbody><section id="a-row-identity"><title>Identität</title><p>Name, ID, Notiz und Aktualisierungszeit bestätigen das Zielprofil.</p></section><section id="a-row-state"><title>Status</title><p>Schemakanal, Validierung und Lebenszyklus erklären verfügbare Aktionen.</p></section><section id="a-row-warning"><title>Warnung</title><p>Verlassen Sie sich nach Sortierung oder Filterung nicht nur auf die Zeilenposition.</p></section><section id="a-row-recovery"><title>Wiederherstellung</title><p>Aktualisieren Sie die Bibliothek, wenn Angaben veraltet wirken.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-refresh-profile-library"/><link keyref="topic.ug-reference-archived-profile-behavior"/></related-links>
+</reference>

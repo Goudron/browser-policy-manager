@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="fx-policy-AIControls" audience="user" product="bpm-0-9-0" platform="web" props="firefox-release" otherprops="policy(AIControls)">
+  <title>AIControls</title>
+  <shortdesc>Schema-grounded skeleton for the Firefox <codeph>AIControls</codeph> policy.</shortdesc>
+  <refbody>
+    <section id="a-purpose">
+      <title>Purpose</title>
+    <!-- BPM-HAND-REGION-START purpose -->
+      <p><codeph>AIControls</codeph> has a generated schema skeleton. Reviewed runtime guidance is added in the authored Firefox Policy Guide tasks.</p>
+    <!-- BPM-HAND-REGION-END purpose -->
+    </section>
+    <section id="a-bpm-location">
+      <title>BPM location</title>
+      <p>UI target: <codeph>policy:AIControls</codeph>.</p>
+      <dl>
+        <dlentry><dt><codeph>release-152</codeph></dt><dd>Section <codeph>ai_smart</codeph>, subsection <codeph>availability</codeph>, support <codeph>mapped</codeph>, widget <codeph>object-card</codeph>, complexity <codeph>basic</codeph>.</dd></dlentry>
+      </dl>
+    </section>
+    <section id="a-value-shape">
+      <title>Value shape</title>
+      <p>Schema value type: <codeph>object</codeph>. Unknown nested fields preserved by BPM UI metadata: <codeph>false</codeph>.</p>
+    </section>
+    <section id="a-channel-support">
+      <title>Release and ESR support</title>
+      <p outputclass="channel-support-badge channel-scope-release-only">Supported in Firefox Release 152 only; absent from Firefox ESR 140.12.</p>
+      <p>Channel scope: <codeph>release-only</codeph>.</p>
+      <p props="firefox-release">Release 152 supports this policy.</p>
+      <p props="firefox-esr">ESR 140.12 does not include this policy in the bundled schema.</p>
+      <ul>
+        <li><codeph>release-152</codeph>: type <codeph>object</codeph>, min <codeph>149.0</codeph>, max <codeph>none</codeph>, deprecated <codeph>false</codeph>, UI <codeph>ai_smart/availability</codeph> as <codeph>mapped</codeph> with <codeph>object-card</codeph>.</li>
+        <li outputclass="esr-absence-note">This policy is absent from the supported ESR schema and must not be documented as ESR-supported.</li>
+      </ul>
+    </section>
+    <section id="a-examples">
+      <title>Examples</title>
+      <sectiondiv outputclass="schema-valid-example"><p><codeph>release-152</codeph> schema-valid example <codeph>fx-policy-AIControls-release-152</codeph>:</p><codeblock outputclass="language-json">{
+  &quot;policies&quot;: {
+    &quot;AIControls&quot;: {
+      &quot;Default&quot;: {
+        &quot;Value&quot;: &quot;available&quot;
+      }
+    }
+  }
+}</codeblock></sectiondiv>
+    <!-- BPM-HAND-REGION-START reviewed-examples -->
+      <p>Reviewed example guidance can add practical notes without changing the schema-valid generated examples above.</p>
+    <!-- BPM-HAND-REGION-END reviewed-examples -->
+    </section>
+    <section id="a-validation">
+      <title>Validation</title>
+    <!-- BPM-HAND-REGION-START validation -->
+      <p>BPM validates this policy at <codeph>policies.AIControls</codeph> against the selected Firefox schema channel. Reviewed validation guidance is pending.</p>
+    <!-- BPM-HAND-REGION-END validation -->
+    </section>
+    <section id="a-caveats">
+      <title>Caveats</title>
+    <!-- BPM-HAND-REGION-START caveats -->
+      <p>Reviewed deployment, schema, unsupported-channel, and raw fallback caveats are pending.</p>
+    <!-- BPM-HAND-REGION-END caveats -->
+    </section>
+    <section id="a-interactions">
+      <title>Interactions</title>
+    <!-- BPM-HAND-REGION-START interactions -->
+      <p>Reviewed related-policy, managed-preference, conflict, and override guidance is pending.</p>
+    <!-- BPM-HAND-REGION-END interactions -->
+    </section>
+    <section id="a-cis-links">
+      <title>CIS links</title>
+    <!-- BPM-HAND-REGION-START cis-links -->
+      <p>No reviewed CIS recommendation links are assigned in this skeleton.</p>
+    <!-- BPM-HAND-REGION-END cis-links -->
+    </section>
+    <section id="a-provenance">
+      <title>Provenance</title>
+      <ul>
+        <li>Source family: <codeph>mozilla-policy-schema-facts</codeph>.</li>
+        <li>Reuse mode: <codeph>generated-facts</codeph> with BPM-authored guidance regions.</li>
+        <li>License: <codeph>MPL-2.0</codeph>.</li>
+        <li>Mozilla source locator: <codeph>https://github.com/mozilla/policy-templates/releases/tag/v7.12</codeph>.</li>
+        <li>Source retrieved on: <codeph>2026-03-24</codeph>.</li>
+        <li>BPM is not affiliated with or endorsed by Mozilla.</li>
+        <li>Inventory backlog item: <codeph>BPM090-M2-03</codeph>.</li>
+        <li>Generated for BPM: <codeph>0.9.0</codeph>.</li>
+        <li><codeph>release-152</codeph>: Mozilla version <codeph>152.0</codeph>, schema source <codeph>mozilla-policy-templates-v7.12</codeph>, schema SHA-256 <codeph>e11c4002061a30ee21b55ed1f2c93ceec498290f33df67cc6a27dd5ab622457c</codeph>.</li>
+      </ul>
+    </section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</reference>

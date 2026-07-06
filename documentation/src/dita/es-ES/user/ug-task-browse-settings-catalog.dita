@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-browse-settings-catalog" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Explorar el catálogo de ajustes</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Use Catalog mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Open a saved profile in All Settings.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Catalog mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Switch to Catalog mode.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Browse categories for supported policies and known managed preferences.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Use category cards or search to narrow the inventory.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Select a setting before applying, editing, or resetting a value.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. You can find supported policies and known preferences without using raw JSON first.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the catalog is large, use search, filters, or bounded-list controls instead of scrolling blindly.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-reference-large-settings-inventories"/>
+  </related-links>
+</task>

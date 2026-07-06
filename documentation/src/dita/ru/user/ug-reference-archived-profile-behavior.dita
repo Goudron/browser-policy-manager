@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-archived-profile-behavior" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Поведение архивных профилей</title>
+  <shortdesc>Архивные профили видны через lifecycle filters, но имеют ограничения по сравнению с активными профилями.</shortdesc>
+  <refbody><section id="a-archived-purpose"><title>Назначение</title><p>Archive сохраняет профиль для просмотра или последующего restore.</p></section><section id="a-archived-limits"><title>Ограничения</title><p>Архивные строки не являются обычными активными целями экспорта, и часть действий недоступна до восстановления.</p></section><section id="a-archived-warning"><title>Предупреждение</title><p>Permanent delete может удалить и архивный профиль.</p></section><section id="a-archived-recovery"><title>Восстановление</title><p>Используйте Restore, чтобы вернуть обычное редактирование и активное поведение.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-restore-profile"/><link keyref="topic.ug-task-permanently-delete-profile"/></related-links>
+</reference>

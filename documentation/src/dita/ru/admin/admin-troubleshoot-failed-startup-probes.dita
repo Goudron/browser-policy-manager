@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-failed-startup-probes" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Диагностика: Troubleshoot failed startup and unreachable probes</title>
+  <shortdesc>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. Diagnose a source-run BPM process that does not start or does not answer health and readiness probes.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. Use this procedure when <codeph>make dev</codeph>, <codeph>uvicorn app.main:app --reload --port 8000</codeph>, <codeph>GET /health</codeph>, or <codeph>GET /health/ready</codeph> fails during source deployment or integration startup.</p></prereq>
+    <context><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. This diagnostic keeps process, environment, and probe evidence separate. It does not create a systemd unit, Windows service, reverse proxy, TLS endpoint, or production restart policy.</p></context>
+    <steps>
+      <step><cmd>Диагностика 1: Capture the failing command and foreground log.</cmd><info><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. Run or copy the exact command, then record stdout and stderr from the foreground terminal. Include <codeph>make dev</codeph>, <codeph>uvicorn app.main:app --reload --port 8000</codeph>, Python traceback summary, working directory, and source revision from <codeph>git rev-parse --short HEAD</codeph>.</p></info></step>
+  <step><cmd>Диагностика 2: Verify the configured host and port before changing code.</cmd><info><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. Check <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_RELOAD</codeph>, <codeph>BPM_DATABASE_URL</codeph>, and <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>. Focused rerun: <codeph>curl -fsS http://127.0.0.1:8000/health</codeph> and <codeph>curl -fsS http://127.0.0.1:8000/health/ready</codeph>.</p></info></step>
+  <step><cmd>Диагностика 3: Separate process startup from probe reachability.</cmd><info><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. If the process is not running, fix dependency, environment, or migration evidence first. If the process is running but probes are unreachable, check local firewall, bind address, WSL port forwarding, and whether the request targets <codeph>127.0.0.1</codeph>, <codeph>0.0.0.0</codeph>, or a Windows host route.</p></info></step>
+  <step><cmd>Диагностика 4: Preserve user data while collecting evidence.</cmd><info><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. Copy logs, environment names, and probe responses only. Do not edit generated artifacts, database rows, schema cache files, or source code as routine recovery. Do not delete <codeph>data/bpm.db</codeph> to make startup pass.</p></info></step>
+  <step><cmd>Диагностика 5: Choose the smallest rerun and escalation path.</cmd><info><p>Эта процедура сохраняет evidence, защищает пользовательские данные и отделяет operator action от product defect. Focused rerun: <codeph>make test-fast</codeph> for product smoke, <codeph>make docs-validate</codeph> only if documentation output is involved, and <codeph>make test-docs-contract</codeph> only for documentation contracts. </p><note type="warning">If probes remain unreachable after configuration and process checks, stop automated integration runs and escalate with command, logs, config names, and probe evidence.</note></info></step>
+    </steps>
+    <result><p>Оператор получает классифицированную диагностику, сохраняет user data и знает следующий smallest rerun. The operator can distinguish a failed process, an unreachable probe, and a deployment boundary without mutating user data.</p></result>
+    <postreq><p>После устранения вернитесь к связанному Administrator/DevOps workflow и повторите только затронутые checks. After probes pass, return to the health-gated startup or reusable API examples topic before running mutating integrations.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-configure-linux-source-runtime"/>
+<link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+<link keyref="topic.admin-task-check-health-readiness"/>
+<link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+  </related-links>
+</task>

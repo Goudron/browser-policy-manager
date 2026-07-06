@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-all-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>使用 All Settings</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. Open All Settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. A saved profile exists. New unsaved drafts must be saved before All Settings can open.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. All Settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. Open the saved profile from the Library.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. Choose the All Settings editor surface.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：使用 All Settings. Use the mode that matches the task: Review for attention, Configured for applied values, or Catalog for every supported setting.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The saved profile is open in All Settings with the correct mode available.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if All Settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-choose-editor-surface"/>
+    <link keyref="topic.ug-task-review-attention-items"/>
+  </related-links>
+</task>

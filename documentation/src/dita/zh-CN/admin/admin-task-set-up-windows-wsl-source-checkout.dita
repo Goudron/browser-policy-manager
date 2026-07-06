@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+  <title>在 WSL 内设置 BPM source checkout</title>
+  <shortdesc>在 WSL 中安装 Linux prerequisites，将 BPM 克隆到 Linux filesystem，创建 virtual environment，安装 dependencies，并应用 migrations。</shortdesc>
+  <taskbody>
+    <prereq><p>WSL 2 Linux distribution 已安装并打开，管理员拥有批准的 BPM repository URL 以及 0.9.0 branch 或 tag。</p></prereq>
+    <context><p>除非步骤明确说明 PowerShell，本主题中的所有命令都在 WSL Linux shell 内运行。这样 setup 与 Linux source deployment runbook 保持一致，并避免 native-Windows path ambiguity。</p></context>
+    <steps>
+      <step><cmd>在 WSL distribution 中安装 Linux prerequisites。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+sudo apt-get update
+sudo apt-get install -y git make curl python3 python3-venv python3-pip
+python3 --version
+]]></codeblock><p>使用所选 WSL distribution 批准的 package manager 和 package names。</p></info></step>
+      <step><cmd>将 BPM 克隆到 Linux home filesystem。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+cd ~
+git clone <repository-url> browser-policy-manager
+cd browser-policy-manager
+git checkout <approved-0.9.0-ref>
+]]></codeblock><p>对于受支持的 WSL source workflow，不要把 working checkout 放在 <codeph>/mnt/c</codeph> 下。</p></info></step>
+      <step><cmd>创建并激活本地 Python environment。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+]]></codeblock><p>如果 distribution 只以 <codeph>python3</codeph> 提供 Python，请使用 <codeph>python3 -m venv .venv</codeph> 创建环境，然后使用已激活的环境。</p></info></step>
+      <step><cmd>在 WSL checkout 中应用 database migrations。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+]]></codeblock><note type="warning">SQLite file 是 WSL 内的 Linux file。BPM 运行时不要用 Windows tools 编辑或移动 <codeph>data/bpm.db</codeph>。</note></info></step>
+    </steps>
+    <result><p>WSL checkout 已包含 Linux prerequisites、repository-local virtual environment、installed dependencies 和 migrated local database。</p></result>
+    <postreq><p>启动 BPM 之前，配置 runtime variables 和 browser access。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-windows-wsl-source-deployment"/>
+    <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+  </related-links>
+</task>

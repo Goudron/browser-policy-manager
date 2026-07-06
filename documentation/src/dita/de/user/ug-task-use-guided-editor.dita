@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-guided-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Die sechs Schritte des Guided Editor durchlaufen</title>
+  <shortdesc>Durchlaufen Sie die sechs Schritte des Guided Editor: Profil und Basislinie, Zugriff und Standardwerte, Sicherheit und Datenschutz, Benutzer/Add-ons/Websites, AI &amp; smart features sowie Prüfen und Exportieren.</shortdesc>
+  <taskbody>
+    <prereq><p>Öffnen Sie BPM und prüfen Sie den passenden Arbeitskontext, das Firefox-Schema oder den Profilstatus für diese Aufgabe.</p></prereq>
+    <context><p>Der Guided Editor macht die Profilkonfiguration zu sechs aufgabenorientierten Schritten und hält die Validierung des gewählten Schemas sichtbar.</p></context>
+    <steps>
+      <step><cmd>Beginnen Sie mit Schritt 1 „Profil und Basislinie“: Name, Schemakanal, Szenario, Starter-Preset und CIS-Ebene prüfen.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
+      <step><cmd>Gehen Sie zu Schritt 2 „Browserzugriff und Standardwerte“ für Netzwerkzugriff, Browserverhalten, Startseite, Suche und Navigation.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
+      <step><cmd>Nutzen Sie Schritt 3 für Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheits-Härtung.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
+      <step><cmd>Nutzen Sie Schritt 4 für Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung, Add-ons und Website-Behandlung.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
+      <step><cmd>Nutzen Sie Schritt 5 nur für vorhandene Firefox-Richtlinien zu KI- und Smart-Funktionen, die das gewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
+      <step><cmd>Schließen Sie mit Schritt 6 „Prüfen und exportieren“ ab: validieren, speichern und das geprüfte Profil herunterladen.</cmd><info><note type="warning">Warnung: Prüfen Sie Schema, Profilstatus und Folgen der Änderung, bevor Sie speichern.</note></info></step>
+    </steps>
+    <result><p>Das BPM-Profil oder die Ansicht befindet sich im erwarteten Zustand für diesen Ablauf.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, kehren Sie zum zuständigen Bereich zurück, machen Sie die letzte Änderung rückgängig oder öffnen Sie das verknüpfte Thema.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-search-guided-settings"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

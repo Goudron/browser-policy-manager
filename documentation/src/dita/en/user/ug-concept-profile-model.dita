@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-profile-model" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Profile model and lifecycle</title>
+  <shortdesc>A BPM profile is one saved Firefox policy workspace shared by the Library, Guided Editor, All Settings, JSON Editor, and Compare.</shortdesc>
+  <conbody>
+    <p>Use a profile to collect Firefox policies, managed preferences, validation state, source attribution, and lifecycle state in one place. The same profile can be opened through different BPM surfaces without changing its identity.</p>
+    <section id="a-lifecycle-states">
+      <title>Lifecycle states</title>
+      <p>An unsaved draft exists only until its first save. A saved active profile can be edited, validated, exported, archived, duplicated, or compared. An archived profile is retained for review and restore workflows but is not the normal export target.</p>
+    </section>
+    <section id="a-status-context">
+      <title>Status context</title>
+      <p>Profile name, ID, Firefox schema channel, lifecycle, saved/dirty state, validation result, and source summaries tell you whether the profile is ready to review, edit, export, or recover.</p>
+    </section>
+  </conbody>
+</concept>

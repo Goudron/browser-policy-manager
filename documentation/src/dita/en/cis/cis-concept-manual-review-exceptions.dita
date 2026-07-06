@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-manual-review-exceptions" xml:lang="en" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Manual review, deviations, and exception boundaries</title>
+  <shortdesc>BPM surfaces CIS-related manual review when local governance can change the correct deployment decision.</shortdesc>
+  <conbody>
+    <section id="a-manual-review-scope"><title>Manual-review scope</title><p>BPM marks manual review for nine paths: AppAutoUpdate, BackgroundAppUpdate, DisableAppUpdate, DisableSystemAddonUpdate, Proxy.Locked, Proxy.Mode, SanitizeOnShutdown.FormData, SanitizeOnShutdown.History, and SanitizeOnShutdown.Sessions. These paths are review points because enterprise patch management, proxy routing, and evidence-retention rules can legitimately differ between deployments.</p></section>
+    <section id="a-update-governance"><title>Update governance</title><p>Review AppAutoUpdate, BackgroundAppUpdate, DisableAppUpdate, and DisableSystemAddonUpdate with the owner of enterprise patch management. Verify whether browser updates are governed by Firefox, an operating-system tool, a software-management platform, or a separate maintenance window. BPM can preserve the selected value and source attribution, but it does not decide which update process is operationally correct.</p></section>
+    <section id="a-proxy-routing"><title>Proxy routing</title><p>Review Proxy.Locked and Proxy.Mode with the network owner. Verify whether the profile must preserve system proxy behavior, enforce a manual proxy, or leave routing to another control. Do not treat a BPM value as proof that traffic actually used the intended route after deployment.</p></section>
+    <section id="a-evidence-retention"><title>Evidence retention</title><p>Review SanitizeOnShutdown.FormData, SanitizeOnShutdown.History, and SanitizeOnShutdown.Sessions with the security and privacy owner. Some hardened scenarios clear local data, while some investigations require retaining evidence. BPM records the choice and conflict state; it does not determine the legal or incident-response requirement.</p></section>
+    <section id="a-exception-boundary"><title>Exception boundary</title><p>BPM 0.9.0 has no separate persisted CIS exception or waiver model. Record intentional deviations in an external ticket, deployment note, or change-control record, then keep the BPM profile source attribution and manual_review_kept_base decision visible for later review.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.cis-task-trace-cis-source"/>
+    <link keyref="topic.ug-task-resolve-cis-manual-review"/>
+    <link keyref="topic.ug-reference-all-settings-review-states"/>
+  </related-links>
+</concept>

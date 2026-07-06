@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-missing-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>从 missing profile route 中恢复</title>
+  <shortdesc>当 bookmark、stale tab 或 editor URL 报告 Profile not found 时恢复。</shortdesc>
+  <taskbody>
+    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败操作表明当前 workflow 无法安全继续。</p></prereq>
+    <context><p>Missing profile route 表示 URL 不再解析到 active profile；配置文件可能已 archived、deleted、被筛选隐藏或已 removed。</p></context>
+    <steps>
+      <step><cmd>返回 Library，而不是编辑 failed route。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>清除 search and filters，然后按名称、schema channel 和最后已知 status 查找配置文件。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>如果配置文件可能被 deliberate archived，请包含 archived profiles。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>如果配置文件仍然 missing，请停止使用 stale URL，只从 visible Library row 或 known export 继续。</cmd><info><note type="warning">不要编辑 internal storage、browser local data、数据库行或 generated build artifacts 来恢复面向用户的配置文件工作。</note></info></step>
+    </steps>
+    <result><p>您要么从可见 Library 状态重新打开配置文件，要么确认 bookmarked route 不再可用。</p></result>
+    <postreq><p>恢复：如果同一错误在一次干净重试后仍然重复，请停止 workflow，并保留可见消息、配置文件名称、架构通道和当前界面供 maintainer review。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-use-profile-library"/>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+  </related-links>
+</task>

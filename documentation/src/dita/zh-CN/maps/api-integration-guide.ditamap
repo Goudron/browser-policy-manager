@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="map-api-integration-guide" xml:lang="zh-CN">
+  <title>API 集成指南</title>
+  <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
+  <topicref keyref="topic.api-concept-administrator-integration-landing"/>
+</map>

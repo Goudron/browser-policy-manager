@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-format-json-document" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Format the JSON document</title>
+  <shortdesc>Format the current JSON document before review, validation, or handoff.</shortdesc>
+  <taskbody>
+    <prereq><p>Open JSON Editor with a JSON document in the editor.</p></prereq>
+    <context><p>Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
+    <steps>
+      <step><cmd>Choose the JSON format action.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>Review the resulting indentation and object layout.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>Confirm no policy value changed during formatting.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>Validate the document after formatting if you plan to save.</cmd><info><note type="warning">Saving raw JSON can change the canonical BPM profile. Validate syntax and policy values before saving.</note></info></step>
+    </steps>
+    <result><p>The JSON document is easier to review and remains semantically unchanged.</p></result>
+    <postreq><p>Recovery: if formatting fails, fix JSON syntax first; trailing commas and missing braces are common causes.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</task>

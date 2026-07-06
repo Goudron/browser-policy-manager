@@ -114,8 +114,10 @@ These scenarios intentionally focus on the Firefox policy engine itself:
 ## CI jobs
 
 - `.github/workflows/ci.yml`
-  Runs the main deterministic `firefox_live` suite after the regular lint/unit test job.
+  Does not run live Firefox suites.
 - `.github/workflows/firefox-live.yml`
-  Runs the same deterministic live suite on a nightly schedule.
+  Runs the deterministic live suite only by manual dispatch when `run_live_tests`
+  is set to `RUN`.
 - `.github/workflows/firefox-live-amo.yml`
-  Runs the separate AMO canary suite on a nightly schedule and by manual dispatch.
+  Runs the separate AMO canary suite only by manual dispatch when
+  `run_live_tests` is set to `RUN`.

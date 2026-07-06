@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-comparison-states" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Estados de comparación y tipos de fila</title><shortdesc>Las filas indican si una policy o managed preference es equal, changed o missing.</shortdesc>
+  <refbody><section id="a-comparison-row-types"><title>Tipos de fila</title><p>Una fila policy representa una política Firefox Enterprise; una fila preference representa una clave y valor de preferencia administrada.</p></section><section id="a-comparison-equal"><title>Equal</title><p>Ambos perfiles contienen el ajuste y los valores coinciden.</p></section><section id="a-comparison-changed"><title>Changed</title><p>Ambos perfiles contienen el ajuste, pero los valores difieren.</p></section><section id="a-comparison-missing"><title>Missing</title><p>El ajuste existe solo en un lado.</p></section><section id="a-comparison-recovery"><title>Recuperación</title><p>Si el estado es inesperado, confirme los perfiles seleccionados, guarde cambios y abra Compare de nuevo.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-select-comparison-profiles"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
+</reference>

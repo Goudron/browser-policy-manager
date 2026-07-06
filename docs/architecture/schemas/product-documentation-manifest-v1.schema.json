@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://browser-policy-manager.invalid/schemas/product-documentation-manifest-v1.schema.json",
+  "title": "BPM product documentation artifact manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "artifact",
+    "locales",
+    "default_locale",
+    "guides",
+    "topics",
+    "assets",
+    "search",
+    "aliases",
+    "tombstones",
+    "ui_target_map"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": 1 },
+    "artifact": { "$ref": "#/$defs/artifact" },
+    "locales": { "$ref": "#/$defs/localeList" },
+    "default_locale": { "const": "en" },
+    "guides": { "$ref": "#/$defs/guides" },
+    "topics": {
+      "type": "object",
+      "minProperties": 4,
+      "propertyNames": { "$ref": "#/$defs/xmlId" },
+      "additionalProperties": { "$ref": "#/$defs/topic" }
+    },
+    "assets": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/xmlId" },
+      "additionalProperties": { "$ref": "#/$defs/asset" }
+    },
+    "search": { "$ref": "#/$defs/searchLocales" },
+    "aliases": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/publicPath" },
+      "additionalProperties": { "$ref": "#/$defs/alias" }
+    },
+    "tombstones": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/publicPath" },
+      "additionalProperties": { "$ref": "#/$defs/tombstone" }
+    },
+    "ui_target_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "schema_version"],
+      "properties": {
+        "path": { "$ref": "#/$defs/filePath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "schema_version": { "const": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "xmlId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "lowerSlug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "topicUrlPath": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "publicPath": {
+      "type": "string",
+      "pattern": "^(?:user|firefox|cis|api|admin)/(?:[a-z0-9]+(?:-[a-z0-9]+)*/)*[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "filePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)[A-Za-z0-9._/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "localeList": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "en" },
+        { "const": "ru" },
+        { "const": "de" },
+        { "const": "zh-CN" },
+        { "const": "fr" },
+        { "const": "es-ES" }
+      ],
+      "items": false,
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "localizedText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+      "properties": {
+        "en": { "type": "string", "minLength": 1 },
+        "ru": { "type": "string", "minLength": 1 },
+        "de": { "type": "string", "minLength": 1 },
+        "zh-CN": { "type": "string", "minLength": 1 },
+        "fr": { "type": "string", "minLength": 1 },
+        "es-ES": { "type": "string", "minLength": 1 }
+      }
+    },
+    "localeFiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+      "properties": {
+        "en": { "$ref": "#/$defs/filePath" },
+        "ru": { "$ref": "#/$defs/filePath" },
+        "de": { "$ref": "#/$defs/filePath" },
+        "zh-CN": { "$ref": "#/$defs/filePath" },
+        "fr": { "$ref": "#/$defs/filePath" },
+        "es-ES": { "$ref": "#/$defs/filePath" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bpm_version",
+        "documentation_version",
+        "build_id",
+        "source_revision",
+        "dita_ot_version"
+      ],
+      "properties": {
+        "bpm_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "documentation_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$" },
+        "build_id": { "$ref": "#/$defs/sha256" },
+        "source_revision": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "dita_ot_version": { "const": "4.4" }
+      }
+    },
+    "guide": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url_root", "home_topic_id", "title"],
+      "properties": {
+        "url_root": { "enum": ["user", "firefox", "cis", "api", "admin"] },
+        "home_topic_id": { "$ref": "#/$defs/xmlId" },
+        "title": { "$ref": "#/$defs/localizedText" }
+      }
+    },
+    "guides": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "user-guide",
+        "firefox-policy-guide",
+        "cis-settings-guide",
+        "api-integration-guide",
+        "administrator-guide"
+      ],
+      "properties": {
+        "user-guide": { "$ref": "#/$defs/guide" },
+        "firefox-policy-guide": { "$ref": "#/$defs/guide" },
+        "cis-settings-guide": { "$ref": "#/$defs/guide" },
+        "api-integration-guide": { "$ref": "#/$defs/guide" },
+        "administrator-guide": { "$ref": "#/$defs/guide" }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "aliases"],
+      "properties": {
+        "title": { "$ref": "#/$defs/localizedText" },
+        "aliases": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^a-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "topic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guide_id",
+        "dita_key",
+        "source_slug",
+        "url_path",
+        "kind",
+        "title",
+        "anchors",
+        "output"
+      ],
+      "properties": {
+        "guide_id": {
+          "enum": ["user-guide", "firefox-policy-guide", "cis-settings-guide", "api-integration-guide", "administrator-guide"]
+        },
+        "dita_key": { "type": "string", "pattern": "^topic\\.[A-Za-z][A-Za-z0-9._-]*$" },
+        "source_slug": { "$ref": "#/$defs/lowerSlug" },
+        "url_path": { "$ref": "#/$defs/topicUrlPath" },
+        "kind": { "enum": ["task", "concept", "reference", "troubleshooting", "landing"] },
+        "title": { "$ref": "#/$defs/localizedText" },
+        "anchors": {
+          "type": "object",
+          "propertyNames": { "pattern": "^a-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "additionalProperties": { "$ref": "#/$defs/anchor" }
+        },
+        "output": { "$ref": "#/$defs/localeFiles" }
+      }
+    },
+    "assetVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/filePath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "assetVariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+      "properties": {
+        "en": { "$ref": "#/$defs/assetVariant" },
+        "ru": { "$ref": "#/$defs/assetVariant" },
+        "de": { "$ref": "#/$defs/assetVariant" },
+        "zh-CN": { "$ref": "#/$defs/assetVariant" },
+        "fr": { "$ref": "#/$defs/assetVariant" },
+        "es-ES": { "$ref": "#/$defs/assetVariant" }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "media_type", "localization", "reuse_approved", "topic_ids", "variants"],
+      "properties": {
+        "kind": { "enum": ["screenshot", "example", "download"] },
+        "media_type": { "type": "string", "pattern": "^[a-z0-9.+-]+/[a-z0-9.+-]+$" },
+        "localization": { "enum": ["per-locale", "shared-approved"] },
+        "reuse_approved": { "type": "boolean" },
+        "topic_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/xmlId" }
+        },
+        "variants": { "$ref": "#/$defs/assetVariants" }
+      }
+    },
+    "searchEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "format_version", "document_count"],
+      "properties": {
+        "path": { "$ref": "#/$defs/filePath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "format_version": { "const": 1 },
+        "document_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "searchLocales": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+      "properties": {
+        "en": { "$ref": "#/$defs/searchEntry" },
+        "ru": { "$ref": "#/$defs/searchEntry" },
+        "de": { "$ref": "#/$defs/searchEntry" },
+        "zh-CN": { "$ref": "#/$defs/searchEntry" },
+        "fr": { "$ref": "#/$defs/searchEntry" },
+        "es-ES": { "$ref": "#/$defs/searchEntry" }
+      }
+    },
+    "alias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic_id", "canonical_url_path", "reason", "since_bpm_version"],
+      "properties": {
+        "topic_id": { "$ref": "#/$defs/xmlId" },
+        "anchor_id": { "type": "string", "pattern": "^a-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "canonical_url_path": { "$ref": "#/$defs/publicPath" },
+        "reason": { "type": "string", "minLength": 1 },
+        "since_bpm_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+      }
+    },
+    "tombstone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retired_topic_id", "reason", "since_bpm_version", "status"],
+      "properties": {
+        "retired_topic_id": { "$ref": "#/$defs/xmlId" },
+        "reason": { "type": "string", "minLength": 1 },
+        "since_bpm_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "status": { "const": 410 }
+      }
+    }
+  }
+}

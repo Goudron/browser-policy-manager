@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-release-esr-differences" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Diferencias entre políticas Firefox Release y ESR</title>
+  <shortdesc>Use channel badges y el canal de esquema activo para evitar configurar políticas no disponibles en la familia Firefox elegida.</shortdesc>
+  <conbody>
+    <section id="a-current-channels"><title>Canales actuales</title><p>BPM 0.9.0 documenta Firefox Release 152 y Firefox ESR 140.12. Las policy references generadas llevan channel metadata para que la navegación, los search indexes y futuros filters puedan mostrar honestamente el canal activo.</p></section>
+    <section id="a-support-badges"><title>Support badges</title><p>Un support badge en cada policy reference generada indica si la política se admite en ambos canales o solo en Release. El badge se genera desde el Firefox policy inventory mantenido, no desde prosa traducida.</p></section>
+    <section id="a-release-only"><title>Políticas Release-only</title><p>Ocho políticas actuales son Release-only: <codeph>AIControls</codeph>, <codeph>BrowserDataBackup</codeph>, <codeph>DisableRemoteImprovements</codeph>, <codeph>GenerativeAI</codeph>, <codeph>IPProtectionAvailable</codeph>, <codeph>LocalNetworkAccess</codeph>, <codeph>VisualSearchEnabled</codeph> y <codeph>XSLTEnabled</codeph>. Cuando el esquema activo es ESR 140.12, BPM debe tratarlas como no disponibles.</p></section>
+    <section id="a-changed-definitions"><title>Definiciones cambiadas</title><p>El inventario actual no tiene ninguna política común cuya definición de esquema difiera entre Release 152 y ESR 140.12. Las futuras actualizaciones de esquema deben cambiar esta afirmación mediante el generated channel-differences artifact.</p></section>
+    <section id="a-user-action"><title>Acción del usuario</title><p>Seleccione el Firefox schema channel antes de elegir una política, compruebe el channel badge y vuelva a validar antes de exportar. No use un topic Release-only como prueba de soporte ESR.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</concept>

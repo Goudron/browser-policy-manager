@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-switch-editor-mode" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Cambiar modo de editor</title>
+  <shortdesc>Muévase deliberadamente entre Guided, All Settings y JSON para el mismo perfil guardado.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
+    <context><p>Cambiar de modo cambia la superficie de edición, no el perfil guardado subyacente; los cambios sin guardar deben guardarse antes de confiar en otra superficie.</p></context>
+    <steps>
+      <step><cmd>Confirme que el perfil actual está guardado y tiene un ID visible.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Elija el modo destino: Guided para flujos comunes, All Settings para inspección completa o JSON para trabajo de documento bruto.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Abra el modo destino y verifique el nombre del perfil y el canal de esquema.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Vuelva al modo anterior solo después de guardar o descartar intencionalmente los cambios.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+    </steps>
+    <result><p>Está trabajando en el mismo perfil en el modo de editor que encaja con la tarea actual.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-choose-editor-surface"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

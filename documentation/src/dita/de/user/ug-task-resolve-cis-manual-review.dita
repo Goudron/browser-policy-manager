@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-resolve-cis-manual-review" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>CIS-Manual-Review-Elemente klären</title>
+  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Find CIS recommendations requiring manual review and decide whether to configure, document, or leave them for external verification.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Open All Settings Review mode for a profile that includes a CIS layer or CIS-derived source metadata.</p></prereq>
+    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Some CIS recommendations cannot be fully automated by BPM. Review mode surfaces those items so the user can make an explicit decision without claiming certification.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Open Review mode and filter for CIS manual-review items if needed.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Read the recommendation identifiers, affected policy or preference, and current value.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Configure a supported value, document why manual verification remains, or leave the item intentionally unresolved.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Revalidate and record the decision before export or handoff.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+    </steps>
+    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. CIS manual-review items are configured, documented, or intentionally left for external verification.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the recommendation cannot be mapped to a visible setting, keep the item in review and consult the CIS guide when that guide is authored.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-review-attention-items"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</task>

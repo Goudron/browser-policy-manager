@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-advanced-schema-controls" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Erweiterte Schema-Steuerelemente verwenden</title>
+  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Reach advanced schema-shell and preference controls from All Settings without treating Guided as the complete editor.</shortdesc>
+  <taskbody>
+    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Open All Settings in Catalog mode.</p></prereq>
+    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Advanced controls remain deliberate. All Settings is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
+    <steps>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Switch to Catalog mode and open the advanced schema or preference disclosure.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Edit only the advanced control needed for the profile goal.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
+      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Erweiterte Schema-Steuerelemente verwenden. Validate and save before returning to Guided, JSON, or the Library.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+    </steps>
+    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The advanced setting is reached and changed deliberately without duplicate default editors.</p></result>
+    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the control is unsupported in the selected schema, leave it unchanged and document the schema boundary.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</task>

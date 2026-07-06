@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-bpm-firefox-boundary" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Where BPM validation ends and Firefox runtime begins</title>
+  <shortdesc>BPM validates and exports a Firefox Enterprise policy document; Firefox applies the document at runtime outside BPM.</shortdesc>
+  <conbody>
+    <section id="a-profile-model"><title>BPM profile model</title><p>A BPM profile is a saved editing model. It can contain policy values, managed preferences, source information, validation state, preset or CIS-derived values, and raw imported data before export.</p></section>
+    <section id="a-boundary-document"><title>Firefox boundary document</title><p>The exported boundary is a <codeph>policies.json</codeph> document with a top-level <codeph>policies</codeph> object. BPM validation checks shape, supported policy IDs, channel availability, and known value constraints, but it does not prove how a deployed Firefox installation will behave in every environment.</p></section>
+    <section id="a-runtime-responsibility"><title>Firefox runtime responsibility</title><p>Firefox owns policy loading, operating-system deployment paths, extension installation, certificate trust behavior, network access, and user-visible browser effects. BPM documentation describes the configuration path and known schema facts, not administrator rollout procedures.</p></section>
+    <section id="a-managed-preferences"><title>Managed preferences</title><p>Managed preferences are configured through the Firefox <codeph>Preferences</codeph> policy. BPM can expose known preferences and preserve advanced values, but preference effects still depend on Firefox runtime support and the selected schema channel.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-policy-selection"/>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</concept>

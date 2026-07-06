@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+  <title>BPM-Source-Checkout innerhalb von WSL einrichten</title>
+  <shortdesc>Installieren Sie Linux prerequisites in WSL, klonen Sie BPM in das Linux filesystem, erstellen Sie die virtual environment, installieren Sie dependencies und wenden Sie migrations an.</shortdesc>
+  <taskbody>
+    <prereq><p>Eine WSL 2 Linux distribution ist installiert und geöffnet, und der Administrator besitzt die freigegebene BPM repository URL sowie den branch oder tag für 0.9.0.</p></prereq>
+    <context><p>Alle Befehle in diesem Thema laufen in der WSL Linux shell, sofern ein Schritt nicht ausdrücklich PowerShell nennt. So bleibt das setup mit dem Linux source deployment runbook abgestimmt und vermeidet native-Windows path ambiguity.</p></context>
+    <steps>
+      <step><cmd>Installieren Sie Linux prerequisites in der WSL distribution.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+sudo apt-get update
+sudo apt-get install -y git make curl python3 python3-venv python3-pip
+python3 --version
+]]></codeblock><p>Verwenden Sie den package manager und die package names, die für Ihre WSL distribution freigegeben sind.</p></info></step>
+      <step><cmd>Klonen Sie BPM in das Linux home filesystem.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+cd ~
+git clone <repository-url> browser-policy-manager
+cd browser-policy-manager
+git checkout <approved-0.9.0-ref>
+]]></codeblock><p>Legen Sie den working checkout für den unterstützten WSL source workflow nicht unter <codeph>/mnt/c</codeph> ab.</p></info></step>
+      <step><cmd>Erstellen und aktivieren Sie die lokale Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+]]></codeblock><p>Wenn die distribution Python nur als <codeph>python3</codeph> bereitstellt, erstellen Sie die Umgebung mit <codeph>python3 -m venv .venv</codeph> und verwenden danach die aktivierte Umgebung.</p></info></step>
+      <step><cmd>Wenden Sie database migrations im WSL checkout an.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+]]></codeblock><note type="warning">Die SQLite file ist eine Linux file innerhalb von WSL. Bearbeiten oder verschieben Sie <codeph>data/bpm.db</codeph> nicht mit Windows tools, solange BPM läuft.</note></info></step>
+    </steps>
+    <result><p>Der WSL checkout enthält Linux prerequisites, eine repository-local virtual environment, installed dependencies und eine migrated local database.</p></result>
+    <postreq><p>Konfigurieren Sie runtime variables und browser access, bevor BPM gestartet wird.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-windows-wsl-source-deployment"/>
+    <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+  </related-links>
+</task>

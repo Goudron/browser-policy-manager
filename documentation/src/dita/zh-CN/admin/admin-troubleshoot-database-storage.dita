@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-database-storage" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>诊断: Troubleshoot database and storage issues</title>
+  <shortdesc>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Diagnose local SQLite, storage path, backup, and profile visibility issues without editing database rows directly.</shortdesc>
+  <taskbody>
+    <prereq><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Use this procedure when profiles disappear, writes fail, migration evidence is unclear, backup checksums do not match, or <codeph>BPM_DATABASE_URL</codeph> points to an unexpected location.</p></prereq>
+    <context><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Current source deployment uses local storage such as <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph> and repository-owned files under <codeph>data/</codeph>, schema cache paths, and documentation site paths. There is no managed backup or restore orchestration in BPM 0.9.0.</p></context>
+    <steps>
+      <step><cmd>诊断 1: Confirm the active database URL and working directory.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Record <codeph>BPM_DATABASE_URL</codeph>, current directory, source revision, and whether the process runs from Linux filesystem or <codeph>/mnt/c</codeph>. Do not assume two shells point at the same <codeph>data/bpm.db</codeph>.</p></info></step>
+  <step><cmd>诊断 2: Check migration and profile API evidence before opening storage files.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Focused rerun: <codeph>alembic upgrade head</codeph>, then <codeph>curl -fsS http://127.0.0.1:8000/api/profiles?limit=50</codeph>. If the API returns expected profiles, the symptom may be filter, lifecycle, or browser state.</p></info></step>
+  <step><cmd>诊断 3: Verify backup evidence before destructive recovery.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Check <codeph>mkdir -p backups</codeph>, <codeph>cp data/bpm.db backups/bpm-pre-update.db</codeph>, and <codeph>sha256sum backups/bpm-pre-update.db</codeph> records. Keep exports of critical <codeph>policies.json</codeph> profiles as separate evidence.</p></info></step>
+  <step><cmd>诊断 4: Avoid direct database row edits.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Do not edit SQLite rows, generated artifacts, or schema cache files as routine recovery. Use documented profile archive, restore, import, export, or update-from-source procedures instead.</p></info></step>
+  <step><cmd>诊断 5: Escalate with storage evidence when recovery is unsafe.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Include database URL, file path, checksum, migration command, API response, and backup/export evidence. </p><note type="warning">If no verified pre-failure backup exists, stop before deleting or replacing <codeph>data/bpm.db</codeph>; BPM does not provide point-in-time recovery.</note></info></step>
+    </steps>
+    <result><p>操作员获得分类诊断，保护 user data，并知道下一个 smallest rerun。 The operator has a storage diagnosis that preserves user data and separates database state from UI or filter symptoms.</p></result>
+    <postreq><p>修复后返回相关 Administrator/DevOps workflow，只重跑受影响的 checks。 After storage is stable, rerun health/readiness and the smallest affected API workflow.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+<link keyref="topic.admin-task-prepare-source-update-evidence"/>
+<link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+<link keyref="topic.ug-troubleshoot-missing-profile"/>
+  </related-links>
+</task>

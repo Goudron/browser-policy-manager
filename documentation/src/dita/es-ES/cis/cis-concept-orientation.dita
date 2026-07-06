@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="cis-concept-orientation" xml:lang="es-ES" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Comprender la guía CIS en BPM</title>
+  <shortdesc>BPM documenta sus propios mappings de endurecimiento de Firefox para CIS Mozilla Firefox ESR GPO Benchmark sin copiar prosa restringida del benchmark ni reclamar certificación.</shortdesc>
+  <conbody>
+    <section id="a-benchmark"><title>Benchmark usado por BPM</title><p>BPM 0.9.0 identifica los mappings frente a CIS Mozilla Firefox ESR GPO Benchmark versión 1.0.0, publicado el 2024-07-19 y probado por CIS con Mozilla Firefox 115.10 ESR en Windows 11 Release 23H2. BPM también valida la forma de la policy exportada contra sus schemas integrados Firefox ESR 140.12 y Firefox Release 152, por lo que el channel elegido en BPM sigue siendo importante.</p></section>
+    <section id="a-what-bpm-publishes"><title>Qué publica BPM</title><p>La guía publica descripciones redactadas por BPM sobre recommendation IDs, levels, generated layers, destinos policy o managed preference, comportamiento de merge, estados manual-review y handoffs de verification. Puede mostrar que BPM mapea 55 recommendation records, planifica 53 recommendation topics y mantiene dos registros no resueltos solo como provenance-only.</p></section>
+    <section id="a-what-bpm-does-not-prove"><title>Qué no prueba BPM</title><p>BPM es una implementación independiente y no está autorizado, patrocinado, respaldado, certificado ni aprobado por CIS. La guía no sustituye al CIS benchmark oficial, y un export de BPM no prueba CIS compliance ni comportamiento runtime de Firefox en todos los entornos.</p></section>
+    <section id="a-when-appropriate"><title>Cuándo usar CIS guidance</title><p>Use CIS guidance cuando un profile necesite una security baseline documentada para enterprise review, preparación kiosk, protected workstations o comparación entre starter preset y hardened layer. No la use como única aprobación de deployment: revise requisitos locales de updates, proxy, certificates, extensions, privacy y evidence retention antes del export.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.ug-task-apply-cis-layer"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+  </related-links>
+</concept>

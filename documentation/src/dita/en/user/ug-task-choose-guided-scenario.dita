@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-choose-guided-scenario" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Choose a Guided scenario</title>
+  <shortdesc>Select the scenario that best matches the profile goal so Guided Editor can present a useful starting point.</shortdesc>
+  <taskbody>
+    <prereq><p>You know the profile purpose you want to support.</p></prereq>
+    <context><p>Scenarios keep the first pass task-oriented and make the baseline easier to explain during review.</p></context>
+    <steps>
+      <step><cmd>Open Step 1, Profile &amp; baseline.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Review the scenario choices and their plain-language descriptions.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose the scenario closest to the deployment goal.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Check the affected baseline summary before adding presets or CIS layers.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The profile starts from an intentional scenario instead of an accidental blank baseline.</p></result>
+    <postreq><p>Recovery: if the scenario is wrong, switch it before fine-tuning later steps.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-apply-starter-preset"/>
+    <link keyref="topic.ug-task-review-guided-profile"/>
+  </related-links>
+</task>

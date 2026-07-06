@@ -1,0 +1,14 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "Homepage": {
+      "URL": "https://example.invalid/start"
+    },
+    "Preferences": {
+      "browser.startup.homepage": {
+        "Value": "https://example.invalid/start",
+        "Status": "locked"
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="fx-policy-reference-topic-template" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web" props="firefox-release" otherprops="policy(AIControls)">
+  <title>Firefox policy reference topic template</title>
+  <shortdesc>Template for generated and reviewed Firefox Policy Guide reference topics.</shortdesc>
+  <refbody>
+    <section id="a-purpose">
+      <title>Purpose</title>
+      <p>Explain what the Firefox policy controls at runtime and why a BPM user would configure it.</p>
+    </section>
+    <section id="a-bpm-location">
+      <title>BPM location</title>
+      <p>Identify the BPM UI target, section, support level, and widget used to configure or inspect the policy.</p>
+    </section>
+    <section id="a-value-shape">
+      <title>Value shape</title>
+      <p>Describe the JSON value type, nested fields, arrays, dictionaries, required fields, and unknown-field preservation rule.</p>
+    </section>
+    <section id="a-channel-support">
+      <title>Release and ESR support</title>
+      <p>State whether the policy is available in Firefox ESR 140.12, Firefox Release 152, both channels, or only one channel.</p>
+    </section>
+    <section id="a-examples">
+      <title>Examples</title>
+      <p>Provide a channel-valid Firefox <codeph>policies.json</codeph> example or a reviewed no-example marker.</p>
+    </section>
+    <section id="a-validation">
+      <title>Validation</title>
+      <p>Document accepted values, required fields, common validation errors, and the affected policy path shown by BPM.</p>
+    </section>
+    <section id="a-caveats">
+      <title>Caveats</title>
+      <p>Capture deployment caveats, schema caveats, raw fallback behavior, and unsupported-channel behavior.</p>
+    </section>
+    <section id="a-interactions">
+      <title>Interactions</title>
+      <p>List related policies, managed preferences, conflicts, overrides, and handoff points to user tasks.</p>
+    </section>
+    <section id="a-cis-links">
+      <title>CIS links</title>
+      <p>Link mapped CIS recommendations, levels, and manual-review states without copying restricted benchmark prose.</p>
+    </section>
+    <section id="a-provenance">
+      <title>Provenance</title>
+      <p>Record schema source, Mozilla version, schema version, inventory revision, schema hash, and review status.</p>
+    </section>
+  </refbody>
+</reference>

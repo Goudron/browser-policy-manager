@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-schema-mismatch" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Résoudre un schema mismatch</title>
+  <shortdesc>Traitez unsupported schema channel, ESR/Release mismatch ou schema-dependent setting sans forcer de changements cachés.</shortdesc>
+  <taskbody>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
+    <context><p>Schema mismatch signifie généralement qu’un setting existe dans un Firefox channel mais est unavailable, deprecated ou formé différemment dans le channel sélectionné.</p></context>
+    <steps>
+      <step><cmd>Confirmez si le profil cible ESR 140.12 ou Release 152.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Identifiez le setting unavailable, unsupported, deprecated ou schema-dependent dans ce channel.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Choisissez de changer schema channel ou de retirer/modifier affected setting pour la cible Firefox prévue.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Refaites revalidate et review export readiness après la décision de channel ou setting.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+    </steps>
+    <result><p>Le profil cible le Firefox channel prévu et ne masque plus de schema-dependent mismatch.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

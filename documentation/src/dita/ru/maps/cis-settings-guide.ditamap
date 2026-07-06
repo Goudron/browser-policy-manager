@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="map-cis-settings-guide" xml:lang="ru">
+  <title>Руководство по настройкам CIS</title>
+  <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
+  <topicref keyref="topic.cis-concept-orientation"/>
+  <topicref keyref="topic.cis-concept-levels-channels-layers"/>
+  <topicref keyref="topic.cis-task-select-cis-baseline"/>
+  <topicref keyref="topic.cis-concept-presets-layers-merge"/>
+  <topicref keyref="topic.cis-task-trace-cis-source"/>
+  <topicref keyref="topic.cis-concept-manual-review-exceptions"/>
+  <topicref keyref="topic.cis-task-verify-cis-deviation"/>
+  <topicref keyref="topic.cis-task-run-level-1-workflow"/>
+  <topicref keyref="topic.cis-task-run-level-2-hardened-workflow"/>
+</map>

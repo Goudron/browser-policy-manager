@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-sync-profile-lifecycle" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>同步配置文件生命周期数据</title>
+  <shortdesc>Use profile list, stats, read, create, and update endpoints without assuming bulk or transactional behavior.</shortdesc>
+  <taskbody>
+    <prereq><p>Set <codeph>$BPM_BASE_URL</codeph> and read <codeph>/openapi.json</codeph> for the current ProfileCreate, ProfileUpdate, and ProfileRead shapes.</p></prereq>
+    <context><p>This task covers <codeph>API-PROFILE-001</codeph>, <codeph>API-PROFILE-002</codeph>, <codeph>API-PROFILE-003</codeph>, <codeph>API-PROFILE-004</codeph>, and <codeph>API-PROFILE-005</codeph>. Store returned <codeph>id</codeph> and <codeph>revision</codeph>; do not infer identity from name alone.</p></context>
+    <steps>
+      <step><cmd>List profiles with filters before choosing a profile to synchronize.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph>. Response example: <codeph>200 ProfileRead[]</codeph>. Error example: <codeph>422</codeph> for invalid typed or ranged query input.</p></info></step>
+      <step><cmd>Read profile statistics for the same filter context when you need counts.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph>. Response example: <codeph>200 {"filtered":1,"total":3}</codeph>. Error example: <codeph>422</codeph> for invalid query input.</p></info></step>
+      <step><cmd>Read the selected profile by integer ID and include archived records only when required.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph>. Response example: <codeph>200 ProfileRead</codeph> with <codeph>id</codeph>, <codeph>revision</codeph>, timestamps, lifecycle, and validation state. Error example: <codeph>404</codeph> for a missing or not-visible profile; <codeph>422</codeph> for invalid path or query input.</p></info></step>
+      <step><cmd>Create a normalized BPM profile only when the integration owns the new profile name.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/profiles</codeph> with JSON <codeph>{"name":"corp-baseline","schema_version":"firefox-152","flags":{},"compliance":{}}</codeph>. Response example: <codeph>201 ProfileRead</codeph>. Error examples: <codeph>400</codeph> invalid schema/profile, <codeph>409</codeph> duplicate name, or <codeph>422</codeph> request or policy validation.</p></info></step>
+      <step><cmd>Update mutable fields with PATCH and send <codeph>expected_revision</codeph> when you need optimistic concurrency.</cmd><info><p>Request example: <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> with JSON <codeph>{"description":"Reviewed by control plane","expected_revision":7}</codeph>. Response example: <codeph>200 ProfileRead</codeph> with incremented revision after a material update. Error examples: <codeph>400</codeph> invalid schema/profile, <codeph>404</codeph> missing or archived profile, <codeph>409</codeph> stale <codeph>expected_revision</codeph>, or <codeph>422</codeph> validation error.</p></info></step>
+      <step><cmd>Record the synchronized profile ID, revision, validation state, schema channel, and any opaque compliance metadata in the integrating product.</cmd><info><note type="warning">BPM does not provide a multi-operation transaction. If a later step fails, the integrating product owns recovery, audit records, and retry decisions.</note></info></step>
+    </steps>
+    <result><p>The integration has a reproducible profile synchronization path for list, stats, read, create, and update operations.</p></result>
+    <postreq><p>Use the destructive lifecycle task before archive, restore, permanent delete, or reset operations.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.admin-task-manage-profile-retirement"/>
+    <link keyref="topic.ug-task-use-profile-library"/>
+  </related-links>
+</task>

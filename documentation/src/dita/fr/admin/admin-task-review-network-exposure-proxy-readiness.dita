@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-review-network-exposure-proxy-readiness" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Examiner network exposure et proxy-readiness</title>
+  <shortdesc>Préparez les network exposure notes et questions reverse-proxy sans publier de TLS ou proxy recipes non supportées comme comportement BPM 0.9.0.</shortdesc>
+  <taskbody>
+    <prereq><p>L’évaluation current single-node source readiness est terminée, et l’opérateur sait si BPM sera atteint via loopback, WSL forwarded address, lab host ou proxy externe.</p></prereq>
+    <context><p>BPM peut fonctionner sur un host et un port configurés, mais la documentation BPM 0.9.0 ne fournit pas official reverse proxy, TLS termination, authentication gateway, header policy ou rate-limiting recipe.</p></context>
+    <steps>
+      <step><cmd>Choisissez la plus petite network exposure suffisante pour l’evaluation.</cmd><info><p>Préférez <codeph>127.0.0.1</codeph>. Utilisez <codeph>BPM_HOST="0.0.0.0"</codeph> uniquement si WSL forwarding ou controlled lab network l’exige, et notez pourquoi <codeph>BPM_PORT="8000"</codeph> doit être accessible.</p></info></step>
+      <step><cmd>Rédigez les proxy-readiness questions avant tout proxy externe.</cmd><info><p>Répondez à qui possède TLS certificates, hostname routing, request size limits, timeout values, CORS origins via <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, forwarded headers, access logs et incident response. Ces questions peuvent être préparées maintenant; official TLS/proxy recipes are planned but not implemented yet.</p></info></step>
+      <step><cmd>Vérifiez que les probes fonctionnent toujours à travers la boundary choisie.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Si un proxy externe est utilisé en lab, consignez direct source probes et proxy-side probes. Ne traitez pas une proxy 200 response comme preuve de BPM authentication, authorization ou HA.</p></info></step>
+      <step><cmd>Marquez explicitement les unsupported network claims.</cmd><info><note type="warning">BPM 0.9.0 ne livre pas packaged services, official TLS/proxy recipes, supported HA clustering, WAF rules, request signing, rate limiting, SSO, OAuth/OIDC, role-based access control ou production hardening. Gardez-les comme external controls ou deferred requirements.</note></info></step>
+    </steps>
+    <result><p>La network note sépare ce qui peut être configuré maintenant des décisions reverse-proxy et TLS qui restent external ou deferred.</p></result>
+    <postreq><p>Utilisez le topic monitoring, backup et update windows avant une shared evaluation window.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-review-devops-network-cors-security"/>
+    <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+    <link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+  </related-links>
+</task>

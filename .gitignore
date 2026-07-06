@@ -102,6 +102,8 @@ pytestdebug.log
 *.sqlite-wal
 /data/
 /app/schemas/cache/
+/app/documentation/site/
+/app/documentation/.site-dev-install.json
 
 # -----------------------------------------------------------------------------
 # Local deployment helpers

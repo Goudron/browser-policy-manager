@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE subjectScheme PUBLIC "-//OASIS//DTD DITA Subject Scheme Map//EN" "subjectScheme.dtd">
+<subjectScheme id="scheme-bpm-documentation-metadata">
+  <subjectdef keys="audiences">
+    <subjectdef keys="user"/>
+    <subjectdef keys="administrator"/>
+    <subjectdef keys="devops"/>
+    <subjectdef keys="integrator"/>
+    <subjectdef keys="security-reviewer"/>
+    <subjectdef keys="support"/>
+  </subjectdef>
+  <subjectdef keys="platforms">
+    <subjectdef keys="web"/>
+    <subjectdef keys="linux"/>
+    <subjectdef keys="windows"/>
+    <subjectdef keys="macos"/>
+  </subjectdef>
+  <subjectdef keys="bpm-versions">
+    <subjectdef keys="bpm-0-9-0"/>
+  </subjectdef>
+  <subjectdef keys="locales">
+    <subjectdef keys="locale-en"/>
+    <subjectdef keys="locale-ru"/>
+    <subjectdef keys="locale-de"/>
+    <subjectdef keys="locale-zh-CN"/>
+    <subjectdef keys="locale-fr"/>
+    <subjectdef keys="locale-es-ES"/>
+  </subjectdef>
+  <subjectdef keys="conditions">
+    <subjectdef keys="firefox-release"/>
+    <subjectdef keys="firefox-esr"/>
+    <subjectdef keys="cis-level-1"/>
+    <subjectdef keys="cis-level-2"/>
+  </subjectdef>
+  <subjectdef keys="registry-groups">
+    <subjectdef keys="policy"/>
+    <subjectdef keys="cis"/>
+    <subjectdef keys="api-operation"/>
+  </subjectdef>
+  <enumerationdef>
+    <attributedef name="audience"/>
+    <subjectdef keyref="audiences"/>
+  </enumerationdef>
+  <enumerationdef>
+    <attributedef name="platform"/>
+    <subjectdef keyref="platforms"/>
+  </enumerationdef>
+  <enumerationdef>
+    <attributedef name="product"/>
+    <subjectdef keyref="bpm-versions"/>
+  </enumerationdef>
+  <enumerationdef>
+    <attributedef name="deliveryTarget"/>
+    <subjectdef keyref="locales"/>
+  </enumerationdef>
+  <enumerationdef>
+    <attributedef name="props"/>
+    <subjectdef keyref="conditions"/>
+  </enumerationdef>
+</subjectScheme>

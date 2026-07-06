@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-profile-model" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Profilmodell und Lebenszyklus</title>
+  <shortdesc>Ein BPM-Profil ist ein gespeicherter Firefox-Richtlinienarbeitsbereich für Bibliothek, Geführten Editor, Alle Einstellungen, JSON-Editor und Vergleich.</shortdesc>
+  <conbody>
+    <p>Nutzen Sie ein Profil, um Firefox-Richtlinien, verwaltete Preferences, Validierungsstatus, Quellenangaben und Lebenszyklusstatus zusammenzuführen. Dasselbe Profil kann über verschiedene BPM-Oberflächen geöffnet werden, ohne seine Identität zu ändern.</p>
+    <section id="a-lifecycle-states">
+      <title>Lebenszyklusstatus</title>
+      <p>Ein ungespeicherter Entwurf besteht nur bis zum ersten Speichern. Ein gespeichertes aktives Profil kann bearbeitet, validiert, exportiert, archiviert, dupliziert oder verglichen werden. Ein archiviertes Profil bleibt für Prüfung und Wiederherstellung erhalten, ist aber nicht das normale Exportziel.</p>
+    </section>
+    <section id="a-status-context">
+      <title>Statuskontext</title>
+      <p>Profilname, ID, Firefox-Schemakanal, Lebenszyklus, Speicherzustand, Validierungsergebnis und Quellenzusammenfassungen zeigen, ob das Profil bereit zum Prüfen, Bearbeiten, Exportieren oder Wiederherstellen ist.</p>
+    </section>
+  </conbody>
+</concept>

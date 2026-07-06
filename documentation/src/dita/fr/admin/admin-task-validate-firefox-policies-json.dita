@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-validate-firefox-policies-json" xml:lang="fr" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Valider un candidate Firefox policies.json via l’API</title>
+  <shortdesc>Use the validation endpoint as a preflight gate for candidate Firefox Enterprise <codeph>policies.json</codeph> documents and structured error handling.</shortdesc>
+  <taskbody>
+    <prereq><p>Choose the target schema channel, such as <codeph>release-152</codeph> or <codeph>esr-140.12</codeph>, and prepare a <codeph>ValidationRequest</codeph> body with a full Firefox document in <codeph>document.policies</codeph>.</p></prereq>
+    <context><p>This task covers <codeph>API-VAL-001</codeph>. BPM validates candidate <codeph>policies.json</codeph> content before import, export handoff, or an external policy-review gate. A plain policy mapping is still accepted for compatibility, but new integration examples use the full Firefox <codeph>policies.json</codeph> shape.</p></context>
+    <steps>
+      <step><cmd>Submit a successful validation request for the selected schema channel.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with JSON <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>. Response example: <codeph>200 {"ok":true,"profile":"release-152"}</codeph>.</p></info></step>
+      <step><cmd>Treat <codeph>ok=false</codeph> as a failed gate even when HTTP status is <codeph>200</codeph>.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with JSON <codeph>{"document":123}</codeph>. Response example: <codeph>200 {"ok":false,"profile":"release-152","detail":"Expected object with policy mappings","error":"Expected object with policy mappings"}</codeph>. Check the response body, not HTTP status alone.</p></info></step>
+      <step><cmd>Handle malformed canonical Firefox document errors as request-shape failures.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with JSON <codeph>{"document":{"policies":[]}}</codeph>. Error example: <codeph>400</codeph> with <codeph>detail.message="Firefox policies.json validation failed"</codeph> and <codeph>detail.issues[].path</codeph> pointing to <codeph>policies</codeph>.</p></info></step>
+      <step><cmd>Reject unsupported schema channels before trusting validation results.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph> with JSON <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph>. Error example: <codeph>404</codeph> with detail text <codeph>Unknown profile 'beta-999'</codeph>. A registered but unavailable schema returns <codeph>503</codeph>.</p></info></step>
+      <step><cmd>Map policy validation failures to actionable reviewer feedback.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with JSON <codeph>{"document":{"policies":{"Proxy":{"Mode":"bogus"}}}}</codeph>. Error example: <codeph>422</codeph> with <codeph>detail.message="Policy validation failed"</codeph> and issue fields <codeph>policy</codeph>, <codeph>path</codeph>, and <codeph>message</codeph>.</p></info></step>
+      <step><cmd>Record the validation decision in the integrating product.</cmd><info><note type="warning">Validation is a schema and policy-shape gate only. It does not deploy Firefox, prove runtime enforcement, authenticate callers, reserve a profile revision, or provide an idempotency key. Store the channel, candidate document hash, response status, <codeph>ok</codeph> value, structured issues, and reviewer decision externally.</note></info></step>
+    </steps>
+    <result><p>The integration can block unsafe candidate <codeph>policies.json</codeph> handoffs and preserve structured evidence for success and failure decisions.</p></result>
+    <postreq><p>If validation succeeds, continue to import, profile update, or export handoff using the same schema channel and recorded candidate hash.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

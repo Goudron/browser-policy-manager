@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-troubleshoot-import-export-failures" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Diagnostic: Troubleshoot Firefox import and export failures</title>
+  <shortdesc>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Diagnose JSON import, multipart import, and Firefox policies export failures while preserving source and exported evidence.</shortdesc>
+  <taskbody>
+    <prereq><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Use this procedure when <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> or <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> returns <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph>, <codeph>415</codeph>, or <codeph>422</codeph>.</p></prereq>
+    <context><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Import/export troubleshooting separates source document validity, multipart field shape, duplicate profile names, archived profile access, and canonical Firefox export from downstream deployment tooling.</p></context>
+    <steps>
+      <step><cmd>Diagnostic 1: Identify the operation and content type.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Record whether the request was JSON <codeph>FirefoxPoliciesJsonImportRequest</codeph>, <codeph>multipart/form-data</codeph> with <codeph>file=@policies.json</codeph>, or export with <codeph>download=1</codeph>, <codeph>pretty=1</codeph>, or <codeph>include_deleted=true</codeph>.</p></info></step>
+  <step><cmd>Diagnostic 2: Validate the source Firefox document before retrying import.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Focused rerun: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with the same <codeph>document.policies</codeph>. If validation fails, fix the source document outside BPM before another import.</p></info></step>
+  <step><cmd>Diagnostic 3: Check import-specific operator errors.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. For <codeph>409</codeph>, choose a new synthetic profile name or archive/restore intentionally. For <codeph>415</codeph>, verify <codeph>application/json</codeph> or multipart upload fields. For <codeph>422</codeph>, record field-level errors and do not rewrite profile storage directly.</p></info></step>
+  <step><cmd>Diagnostic 4: Check export-specific state.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. For <codeph>404</codeph>, re-read <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=true</codeph>. For archived profiles, decide whether <codeph>include_deleted=true</codeph> is appropriate. Compare exported document hash with the reviewed source hash; BPM profile metadata and compliance metadata are not exported.</p></info></step>
+  <step><cmd>Diagnostic 5: Record recovery and stop conditions.</cmd><info><p>Cette procédure conserve les evidence, protège les données utilisateur et sépare operator action de product defect. Focused rerun: <codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_integration_topics.py</codeph> for documented examples. </p><note type="warning">Do not retry blindly after mismatched import/export evidence; store source hash, export hash, profile ID, revision, HTTP status, and operator decision.</note></info></step>
+    </steps>
+    <result><p>L’opérateur obtient un diagnostic classifié, préserve user data et connaît le prochain smallest rerun. The operator can identify whether the failure belongs to source JSON, multipart fields, profile lifecycle state, or export evidence.</p></result>
+    <postreq><p>Après correction, revenez au workflow Administrator/DevOps lié et relancez seulement les checks affectés. After recovery, attach the evidence to the external control-product audit record.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+<link keyref="topic.admin-task-export-firefox-policies-json"/>
+<link keyref="topic.admin-task-run-import-review-export-handoff"/>
+<link keyref="topic.ug-troubleshoot-import-failure"/>
+  </related-links>
+</task>

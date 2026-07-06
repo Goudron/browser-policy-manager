@@ -11,10 +11,10 @@ def test_frontend_vendor_has_npm_lockfile_for_ci_rebuilds():
 
     assert package_lock["lockfileVersion"] == 3
     assert package_lock["packages"][""]["dependencies"] == {
-        "js-yaml": "4.2.0",
-        "monaco-editor": "0.52.0",
+        "js-yaml": "5.2.1",
+        "monaco-editor": "0.53.0",
     }
-    assert package_lock["packages"][""]["devDependencies"] == {"esbuild": "0.25.3"}
+    assert package_lock["packages"][""]["devDependencies"] == {"esbuild": "0.28.1"}
 
 
 def test_package_scripts_expose_monaco_build_and_vendor_rebuild():

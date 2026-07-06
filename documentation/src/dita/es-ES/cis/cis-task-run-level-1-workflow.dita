@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-run-level-1-workflow" xml:lang="es-ES" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Ejecutar el workflow CIS Level 1</title>
+  <shortdesc>Cree, inspeccione, compare, exporte y verifique independientemente un perfil CIS Level 1 representativo.</shortdesc>
+  <taskbody>
+    <prereq><p>Use el fixture <codeph>cis-workflow-level-1-esr-fixture</codeph>: Firefox ESR 140.12, layer <codeph>cis-l1.esr-140.12</codeph>, starter preset <codeph>basic_corporate</codeph> y comparison profile <codeph>blank-esr-140.12</codeph>.</p></prereq>
+    <context><p>El workflow es determinista porque sigue siempre el mismo route order: Library, Guided Editor, All Settings, Profile Comparison, Export y external verification. Las recommendation rows llevan a los affected Firefox policy topics mediante sus generated mapping tables.</p></context>
+    <steps>
+      <step><cmd>Cree un profile desde Library, elija Firefox ESR 140.12, aplique el Basic corporate starter preset y después aplique el CIS layer Level 1.</cmd><info><p>Resultado esperado: el profile muestra <codeph>cis-l1.esr-140.12</codeph> como active CIS layer y mantiene visible la source attribution del starter preset.</p></info></step>
+      <step><cmd>Abra Guided Editor y revise el CIS-related summary, schema channel, profile identity y los principales security/privacy groups afectados por el Level 1 layer.</cmd><info><p>Resultado esperado: Guided Editor presenta el Level 1 profile como una configuración revisable, no como prueba de CIS compliance.</p></info></step>
+      <step><cmd>Abra All Settings, filtre por CIS/source attribution, inspeccione configured rows y siga cada recommendation row hasta la generated mapping table y el affected Firefox policy topic.</cmd><info><p>Resultado esperado: el reviewer puede trazar values mediante <codeph>baseline</codeph>, <codeph>CIS</codeph>, <codeph>manual</codeph>, <codeph>imported</codeph> o raw source states.</p></info></step>
+      <step><cmd>Resuelva attention items y manual-review rows registrando owner y decision para update governance, proxy routing, evidence-retention, unsupported mapping research, deprecated targets o local deployment requirements.</cmd><info><note type="warning">No cierre un manual-review item con una afirmación de compliance; registre external evidence cuando la decisión dependa de runtime, network, operating-system o audit checks fuera de BPM.</note></info></step>
+      <step><cmd>Compare el Level 1 profile con el blank ESR fixture profile e inspeccione equal, changed, missing-left y missing-right rows.</cmd><info><p>Resultado esperado: la comparación confirma que el Level 1 layer introdujo las configured policy y preference differences esperadas.</p></info></step>
+      <step><cmd>Valide el profile, exporte <codeph>policies.json</codeph> y realice la approved independent deployment verification fuera de BPM.</cmd><info><p>Resultado esperado: el exported document, validation result, comparison note y external verification record pueden revisarse juntos.</p></info></step>
+    </steps>
+    <result><p>El representative Level 1 hardened profile queda creado, inspeccionado en Guided y All Settings, comparado, exportado y verificado independientemente con traceable evidence.</p></result>
+    <postreq><p>Si alguna recommendation row no tiene generated mapping table, affected Firefox policy topic path, export path o external verification record, mantenga abierto el workflow.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-task-select-cis-baseline"/>
+    <link keyref="topic.cis-task-trace-cis-source"/>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

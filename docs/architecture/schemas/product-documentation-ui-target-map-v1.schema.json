@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://browser-policy-manager.invalid/schemas/product-documentation-ui-target-map-v1.schema.json",
+  "title": "BPM documentation UI target map v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "manifest_schema_version",
+    "bpm_version",
+    "locales",
+    "targets"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": 1 },
+    "manifest_schema_version": { "const": 1 },
+    "bpm_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "locales": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "en" },
+        { "const": "ru" },
+        { "const": "de" },
+        { "const": "zh-CN" },
+        { "const": "fr" },
+        { "const": "es-ES" }
+      ],
+      "items": false,
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "targets": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^(?:topic:[A-Za-z][A-Za-z0-9._-]*|policy:[A-Za-z0-9][A-Za-z0-9._-]*|known-preference:[a-z0-9][a-z0-9._-]*|cis:[0-9]+(?:\\.[0-9]+)*|api-operation:API-[A-Z0-9-]+|capability:CAP-[A-Z0-9-]+)$"
+      },
+      "additionalProperties": { "$ref": "#/$defs/target" }
+    }
+  },
+  "$defs": {
+    "xmlId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source_id", "source_inventory", "topic_id"],
+      "properties": {
+        "kind": {
+          "enum": ["topic", "policy", "known-preference", "cis", "api-operation", "capability"]
+        },
+        "source_id": { "type": "string", "minLength": 1 },
+        "source_inventory": { "type": "string", "minLength": 1 },
+        "topic_id": { "$ref": "#/$defs/xmlId" },
+        "anchor_id": { "type": "string", "pattern": "^a-[a-z0-9]+(?:-[a-z0-9]+)*$" }
+      }
+    }
+  }
+}

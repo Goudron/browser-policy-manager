@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-malformed-json" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Восстановиться после malformed JSON</title>
+  <shortdesc>Диагностируйте malformed JSON syntax перед сохранением, импортом или валидацией policy document.</shortdesc>
+  <taskbody>
+    <prereq><p>Видимый статус BPM, сообщение валидации, предупреждение браузера или неуспешное действие показывает, что текущий workflow нельзя безопасно продолжать.</p></prereq>
+    <context><p>Malformed JSON — это синтаксическая проблема: BPM не может разобрать документ достаточно, чтобы проверять имена или значения политик.</p></context>
+    <steps>
+      <step><cmd>Оставьте JSON editor или import error открытым, чтобы были видны line, column или parse message.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Проверьте ближайшие braces, brackets, commas, quotation marks и escaped characters около указанного места.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Снова выполните format или validate документа после исправления синтаксиса.</cmd><info><p>Ожидаемый результат: состояние профиля сохранено, а следующий безопасный шаг восстановления понятен.</p></info></step>
+      <step><cmd>Переходите к schema validation только после успешного разбора JSON.</cmd><info><note type="warning">Не редактируйте internal storage, browser local data, строки базы данных или generated build artifacts для восстановления пользовательской работы с профилем.</note></info></step>
+    </steps>
+    <result><p>Документ разбирается как JSON и может перейти к обычной валидации политик.</p></result>
+    <postreq><p>Восстановление: если та же ошибка повторяется после одной чистой попытки, остановите workflow и сохраните видимое сообщение, имя профиля, канал схемы и текущую поверхность для maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-json-document"/>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+  </related-links>
+</task>

@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from app.api import export, health, profiles, validation
 from app.core.config import get_settings
 from app.db import get_session, init_db
+from app.documentation import router as documentation_router
 from app.middleware.security import SecurityHeadersMiddleware
 from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
 from app.web import profiles as web_profiles
@@ -80,6 +81,7 @@ def create_app() -> FastAPI:
     app.include_router(profiles.router)
     app.include_router(export.router)
     app.include_router(validation.router)
+    app.include_router(documentation_router.router)
 
     @app.get("/i18n/{locale}.json", include_in_schema=False)
     async def locale_catalog(locale: str) -> Response:

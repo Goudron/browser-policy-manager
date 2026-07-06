@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "bpm_version": "0.9.0",
+  "reviewed_on": "2026-06-21",
+  "decision_status": "approved",
+  "default_rule": "block-unregistered-or-unclear-source",
+  "guide_owners": {
+    "user-guide": {
+      "functional_owner": "BPM product maintainer",
+      "required_reviewers": ["BPM documentation maintainer", "BPM localization maintainer"]
+    },
+    "firefox-policy-guide": {
+      "functional_owner": "BPM Firefox schema maintainer",
+      "required_reviewers": ["BPM documentation maintainer", "BPM localization maintainer"]
+    },
+    "cis-settings-guide": {
+      "functional_owner": "BPM CIS data maintainer",
+      "required_reviewers": [
+        "BPM documentation maintainer",
+        "BPM distribution-rights approver",
+        "BPM localization maintainer"
+      ]
+    },
+    "api-integration-guide": {
+      "functional_owner": "BPM API contract maintainer",
+      "required_reviewers": ["BPM documentation maintainer", "BPM localization maintainer"]
+    },
+    "administrator-guide": {
+      "functional_owner": "BPM administrator and DevOps documentation maintainer",
+      "required_reviewers": ["BPM documentation maintainer", "BPM localization maintainer"]
+    }
+  },
+  "localization_contract": {
+    "source_locale": "en",
+    "published_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "mode": "human-reviewed-ai-assisted-allowed",
+    "inherits_source_provenance": true,
+    "license_may_not_be_relicensed_by_translation": true,
+    "owner": "BPM localization maintainer"
+  },
+  "required_topic_provenance_fields": [
+    "source_family_id",
+    "source_locator",
+    "source_version_or_revision",
+    "source_retrieved_on",
+    "source_content_sha256_when_snapshotted",
+    "license_id",
+    "reuse_mode",
+    "authoring_owner",
+    "reviewed_by",
+    "rights_approval_id_when_required",
+    "localized_from_topic_id_when_not_en"
+  ],
+  "publication_policies": [
+    "allow",
+    "allow-with-notice",
+    "link-only",
+    "approval-required",
+    "inherit"
+  ],
+  "source_families": [
+    {
+      "id": "bpm-product-source",
+      "classification": "project-original",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": [
+        "app/",
+        "README.md",
+        "docs/architecture/product-user-capability-inventory-0.9.0.md"
+      ],
+      "guide_families": ["user-guide", "firefox-policy-guide", "cis-settings-guide", "administrator-guide"],
+      "publication_policy": "allow",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Describe verified BPM UI and API-adjacent product behavior in original prose.",
+        "Reuse stable product labels, identifiers, warnings, and tested workflow facts.",
+        "Generate examples only from deterministic BPM fixtures."
+      ],
+      "required_attribution": ["BPM MPL-2.0 license in the artifact legal page."],
+      "forbidden_reuse": [
+        "Unverified implementation inference presented as user-visible behavior.",
+        "Secrets, personal data, local machine paths, or production profile content."
+      ],
+      "update_owner": "BPM product maintainer",
+      "update_trigger": "Any user-visible BPM behavior, route, label, or validation contract change."
+    },
+    {
+      "id": "bpm-ui-screenshots",
+      "classification": "project-original-visual",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": [
+        "BPM UI rendered from deterministic synthetic fixtures in each supported locale"
+      ],
+      "guide_families": ["user-guide"],
+      "publication_policy": "allow",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Capture BPM-owned UI only with synthetic non-sensitive data.",
+        "Publish one reviewed visual variant per locale unless the locale-neutral exception is recorded."
+      ],
+      "required_attribution": ["BPM artifact license; locale and capture metadata in the screenshot manifest."],
+      "forbidden_reuse": [
+        "Real user, organization, host, token, profile, or filesystem data.",
+        "Mozilla, CIS, or third-party logos added as decoration.",
+        "Screenshots of external sites or vendor products without a separate rights review."
+      ],
+      "update_owner": "BPM documentation screenshot maintainer",
+      "update_trigger": "Visible BPM UI, theme, locale copy, fixture, or viewport contract change."
+    },
+    {
+      "id": "bpm-openapi-contract",
+      "classification": "project-generated-facts",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": [
+        "create_app().openapi()",
+        "docs/architecture/api-documentation-inventory-0.9.0.md",
+        "focused BPM API contract tests"
+      ],
+      "guide_families": ["api-integration-guide", "administrator-guide"],
+      "publication_policy": "allow",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Generate operation, parameter, model, status, and limitation facts.",
+        "Publish BPM-authored curl and Python examples tested against synthetic fixtures."
+      ],
+      "required_attribution": ["BPM source revision and OpenAPI document SHA-256."],
+      "forbidden_reuse": [
+        "Invented authentication, rate-limit, idempotency, stability, or compatibility guarantees.",
+        "Credentials, real hosts, or third-party proprietary API examples."
+      ],
+      "update_owner": "BPM API contract maintainer",
+      "update_trigger": "OpenAPI document, route behavior, model, error, or limitation change."
+    },
+    {
+      "id": "mozilla-policy-schema-facts",
+      "classification": "external-open-source-facts",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": [
+        "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
+        "app/schemas/policies/firefox-release-152.json",
+        "app/schemas/policies/firefox-esr-140.12.json"
+      ],
+      "guide_families": ["firefox-policy-guide", "cis-settings-guide"],
+      "publication_policy": "allow-with-notice",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Generate policy IDs, exact key names, types, required fields, enum values, defaults, compatibility metadata, and channel differences.",
+        "Publish independently authored BPM guidance and schema-valid synthetic examples."
+      ],
+      "required_attribution": [
+        "Mozilla policy-templates repository and exact release tag.",
+        "MPL-2.0 notice and retained source/version/hash metadata.",
+        "Statement that BPM is not affiliated with or endorsed by Mozilla."
+      ],
+      "forbidden_reuse": [
+        "Dropping x-bpm-source, source tag, schema fingerprint, or license notice.",
+        "Presenting a schema-derived fact as live-browser verification.",
+        "Using Mozilla logos or visual identity as BPM branding."
+      ],
+      "update_owner": "BPM Firefox schema maintainer",
+      "update_trigger": "Mozilla policy-templates tag or BPM Release/ESR schema change."
+    },
+    {
+      "id": "mozilla-policy-documentation-prose",
+      "classification": "external-open-source-expression",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": [
+        "https://mozilla.github.io/policy-templates/",
+        "https://github.com/mozilla/policy-templates"
+      ],
+      "guide_families": ["firefox-policy-guide"],
+      "publication_policy": "allow-with-notice",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Use official documentation to verify independently written BPM explanations.",
+        "Incorporate verbatim or adapted prose only in an explicitly source-tagged MPL-covered topic region with retained notice and source link."
+      ],
+      "required_attribution": [
+        "Mozilla Contributors or repository attribution as stated by the source.",
+        "Exact page/repository URL, revision or release tag, retrieval date, and MPL-2.0 notice."
+      ],
+      "forbidden_reuse": [
+        "Unmarked copy/paste of policy descriptions, tables, or examples.",
+        "Bulk mirroring of the Mozilla documentation site into BPM topics.",
+        "Assuming a moving web page matches the bundled v7.12 schemas."
+      ],
+      "update_owner": "BPM Firefox documentation maintainer",
+      "update_trigger": "Upstream page migration, policy semantics change, or schema refresh."
+    },
+    {
+      "id": "mozilla-official-web-docs-unclassified",
+      "classification": "external-license-page-specific",
+      "license_id": "NOASSERTION",
+      "authoritative_sources": [
+        "https://firefox-admin-docs.mozilla.org/",
+        "https://support.mozilla.org/"
+      ],
+      "guide_families": ["firefox-policy-guide", "user-guide"],
+      "publication_policy": "link-only",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Link to an official page and use it as review evidence after recording URL and retrieval date."
+      ],
+      "required_attribution": ["Visible external source link and page title."],
+      "forbidden_reuse": [
+        "Copy or adapt page prose, images, examples, or layout until that page's license is captured in a new matrix entry."
+      ],
+      "update_owner": "BPM Firefox documentation maintainer",
+      "update_trigger": "Need to reproduce rather than merely link to official web content."
+    },
+    {
+      "id": "mdn-web-docs",
+      "classification": "external-sharealike-content",
+      "license_id": "CC-BY-SA-2.5+",
+      "authoritative_sources": [
+        "https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Attrib_copyright_license"
+      ],
+      "guide_families": ["user-guide", "firefox-policy-guide", "api-integration-guide"],
+      "publication_policy": "link-only",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Link to MDN and use it as technical review evidence.",
+        "Use a CC0 code sample only after a separate page-level provenance record proves that classification."
+      ],
+      "required_attribution": ["MDN page link when cited as review evidence."],
+      "forbidden_reuse": [
+        "Copy or adapt MDN documentation prose into 0.9.0 topics by default.",
+        "Treat MDN prose as MPL-2.0 or omit ShareAlike attribution."
+      ],
+      "update_owner": "BPM documentation maintainer",
+      "update_trigger": "Any proposal to incorporate MDN prose or code rather than link to it."
+    },
+    {
+      "id": "mozilla-trademarks",
+      "classification": "trademark-policy",
+      "license_id": "LicenseRef-Mozilla-Trademark-Policy",
+      "authoritative_sources": [
+        "https://www.mozilla.org/en-US/foundation/trademarks/policy/"
+      ],
+      "guide_families": ["user-guide", "firefox-policy-guide", "cis-settings-guide"],
+      "publication_policy": "allow-with-notice",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Use the Firefox wordmark in truthful descriptive text about compatibility and managed policies."
+      ],
+      "required_attribution": [
+        "Firefox is a trademark of the Mozilla Foundation in the U.S. and other countries.",
+        "Clear statement that BPM is not affiliated with, sponsored, endorsed, or approved by Mozilla."
+      ],
+      "forbidden_reuse": [
+        "Mozilla or Firefox logos, icons, visual identity, or trade dress as BPM branding.",
+        "Any wording that implies Mozilla certification, sponsorship, affiliation, or endorsement."
+      ],
+      "update_owner": "BPM product maintainer",
+      "update_trigger": "Branding, logo, publication title, compatibility claim, or Mozilla policy change."
+    },
+    {
+      "id": "cis-benchmark-pdf",
+      "classification": "restricted-external-benchmark-content",
+      "license_id": "CC-BY-NC-SA-4.0",
+      "authoritative_sources": [
+        "https://www.cisecurity.org/terms-of-use-for-non-member-cis-products",
+        "app/compliance/firefox/cis/sources.yaml",
+        "local ignored official CIS PDF"
+      ],
+      "guide_families": ["cis-settings-guide"],
+      "publication_policy": "approval-required",
+      "may_publish_without_rights_approval": false,
+      "allowed_reuse": [
+        "Use the official PDF locally to review BPM mapping accuracy.",
+        "Publish benchmark-derived expression only when a recorded distribution-rights approval states scope, license, attribution, ShareAlike, and commercial-use treatment."
+      ],
+      "required_attribution": [
+        "Exact CIS benchmark name, version, official URL, and applicable license/terms.",
+        "Recorded rights_approval_id for any published benchmark-derived expression.",
+        "Independent-publication and no-endorsement disclaimer required by the applicable CIS policy."
+      ],
+      "forbidden_reuse": [
+        "Commit, package, index, or publish the official PDF.",
+        "Copy recommendation titles, rationale, impact, audit, remediation, defaults, tables, screenshots, or substantial prose without recorded approval.",
+        "Use third-party mirrors as authoritative sources.",
+        "Claim CIS certification, endorsement, authorization, or complete compliance."
+      ],
+      "update_owner": "BPM CIS data maintainer and BPM distribution-rights approver",
+      "update_trigger": "New benchmark/version, changed CIS terms, or any proposed publication of benchmark-derived expression."
+    },
+    {
+      "id": "cis-trademarks-and-certification-marks",
+      "classification": "trademark-and-ip-policy",
+      "license_id": "LicenseRef-CIS-Trademark-IP-Policy",
+      "authoritative_sources": [
+        "https://www.cisecurity.org/cis-logos-and-trademark-use-policy",
+        "https://www.cisecurity.org/cis-logos-and-trademark-use-policy/cis-trademark-list"
+      ],
+      "guide_families": ["cis-settings-guide", "user-guide"],
+      "publication_policy": "allow-with-notice",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Use the applicable CIS wordmark accurately and only to identify the referenced benchmark or mapping context."
+      ],
+      "required_attribution": [
+        "CIS trademark ownership notice in the legal/credits page.",
+        "Statement that the guide is an independent publication and has not been authorized, sponsored, or otherwise approved by CIS."
+      ],
+      "forbidden_reuse": [
+        "CIS logos, icons, certified badges, certification marks, or trade dress without express written authorization.",
+        "Any claim or presentation implying CIS certification, membership, sponsorship, affiliation, endorsement, authorization, or approval."
+      ],
+      "update_owner": "BPM product maintainer and BPM distribution-rights approver",
+      "update_trigger": "CIS naming, branding, badge, certification, marketing, attribution, or trademark-policy change."
+    },
+    {
+      "id": "bpm-cis-mapping-implementation",
+      "classification": "project-authored-mapping-with-external-references",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": [
+        "app/compliance/firefox/cis/mappings.yaml",
+        "app/compliance/firefox/cis/merge_rules.yaml",
+        "app/compliance/firefox/cis/generated/",
+        "docs/architecture/cis-documentation-inventory-0.9.0.json"
+      ],
+      "guide_families": ["cis-settings-guide", "user-guide"],
+      "publication_policy": "allow-with-notice",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Describe BPM-authored mapping targets, configured values, merge outcomes, manual-review states, limitations, and UI workflows in original prose.",
+        "Use recommendation ID, benchmark identity/version, level, and source link solely to identify the mapping context."
+      ],
+      "required_attribution": [
+        "CIS benchmark identity/version and official source link.",
+        "Notice that benchmark source material is separate from BPM's MPL-2.0 implementation.",
+        "Independent implementation, no certification, no endorsement, and verify-against-official-source disclaimer."
+      ],
+      "forbidden_reuse": [
+        "Import source title/rationale/audit/remediation/default prose from curated benchmark records into published topics.",
+        "Describe BPM mappings as the complete benchmark or a substitute for licensed CIS material.",
+        "Turn an unresolved/non-publishable provenance record into guidance."
+      ],
+      "update_owner": "BPM CIS data maintainer",
+      "update_trigger": "Mapping, layer, preset, merge rule, manual-review state, benchmark identity, or source terms change."
+    },
+    {
+      "id": "third-party-product-documentation",
+      "classification": "external-vendor-content",
+      "license_id": "NOASSERTION",
+      "authoritative_sources": ["Vendor-owned official product documentation selected per integration scenario"],
+      "guide_families": ["api-integration-guide", "administrator-guide"],
+      "publication_policy": "link-only",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Link to the official vendor page and describe a generic BPM API integration pattern without claiming a shipped connector."
+      ],
+      "required_attribution": ["Vendor name and official external source link when needed for context."],
+      "forbidden_reuse": [
+        "Vendor prose, examples, screenshots, logos, schemas, or trademarks beyond truthful nominative reference.",
+        "Claims of partnership, certification, endorsement, support, or an implemented connector."
+      ],
+      "update_owner": "BPM API documentation maintainer",
+      "update_trigger": "Any named third-party scenario or proposal to copy vendor-owned material."
+    },
+    {
+      "id": "synthetic-documentation-examples",
+      "classification": "project-original-test-generated",
+      "license_id": "MPL-2.0",
+      "authoritative_sources": ["Versioned BPM documentation fixtures and focused example tests"],
+      "guide_families": [
+        "user-guide",
+        "firefox-policy-guide",
+        "cis-settings-guide",
+        "api-integration-guide",
+        "administrator-guide"
+      ],
+      "publication_policy": "allow",
+      "may_publish_without_rights_approval": true,
+      "allowed_reuse": [
+        "Publish deterministic, schema-valid, fictional JSON, curl, Python, profile, policy, and error examples."
+      ],
+      "required_attribution": ["BPM source revision and fixture/test ID."],
+      "forbidden_reuse": [
+        "Real credentials, tokens, hosts, domains, users, organization names, profile names, or exported customer data.",
+        "Unvalidated examples copied from an external source."
+      ],
+      "update_owner": "BPM documentation test maintainer",
+      "update_trigger": "Schema, API, validation, fixture, or example behavior change."
+    },
+    {
+      "id": "localized-documentation-content",
+      "classification": "derived-localization",
+      "license_id": "INHERIT",
+      "authoritative_sources": ["Approved English DITA topic and its complete provenance record"],
+      "guide_families": [
+        "user-guide",
+        "firefox-policy-guide",
+        "cis-settings-guide",
+        "api-integration-guide",
+        "administrator-guide"
+      ],
+      "publication_policy": "inherit",
+      "may_publish_without_rights_approval": false,
+      "allowed_reuse": [
+        "Create a human-reviewed locale peer only after the English source and its reuse mode are approved."
+      ],
+      "required_attribution": [
+        "All source-family, license, notice, and rights-approval metadata inherited unchanged.",
+        "localized_from_topic_id and human reviewer identity."
+      ],
+      "forbidden_reuse": [
+        "Unreviewed AI or machine-generated translation in the 0.9.0 documentation scope.",
+        "Removing attribution, changing license classification, translating stable IDs, or localizing blocked English content."
+      ],
+      "update_owner": "BPM localization maintainer",
+      "update_trigger": "English source/provenance change or locale content update."
+    },
+    {
+      "id": "generated-documentation-output",
+      "classification": "derived-build-artifact",
+      "license_id": "INHERIT",
+      "authoritative_sources": ["Reviewed DITA topics, approved assets, source records, and generated manifest"],
+      "guide_families": [
+        "user-guide",
+        "firefox-policy-guide",
+        "cis-settings-guide",
+        "api-integration-guide",
+        "administrator-guide"
+      ],
+      "publication_policy": "inherit",
+      "may_publish_without_rights_approval": false,
+      "allowed_reuse": [
+        "Generate HTML, search entries, manifests, examples, and packages only from publishable inputs."
+      ],
+      "required_attribution": ["Aggregate legal/notices page plus topic/source metadata required by every input."],
+      "forbidden_reuse": [
+        "Treat generation, translation, indexing, hashing, or format conversion as removing source restrictions.",
+        "Index or package an approval-required source that lacks rights_approval_id."
+      ],
+      "update_owner": "BPM documentation build maintainer",
+      "update_trigger": "Any input provenance, build transformation, packaging, or notice change."
+    }
+  ]
+}

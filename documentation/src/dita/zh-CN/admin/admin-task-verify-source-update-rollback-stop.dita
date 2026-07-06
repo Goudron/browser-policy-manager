@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-verify-source-update-rollback-stop" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>验证 update 并应用 rollback stop conditions</title>
+  <shortdesc>启动更新后的 BPM process，验证 probes、UI、API evidence 和 documentation status，然后决定 accept、stop 或 restore from backup。</shortdesc>
+  <taskbody>
+    <prereq><p>Migrations、source smoke 和 documentation rebuild checks 已完成，或 failure point 已记录。</p></prereq>
+    <context><p>Post-update verification 证明更新后的 source run 对当前 controlled environment 可用。它不证明 production readiness、reverse proxy behavior、HA、managed backup 或 Firefox runtime enforcement。</p></context>
+    <steps>
+      <step><cmd>启动更新后的 source process 并检查 probes。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+make dev
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+]]></codeblock><p>Expected responses 仍为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
+      <step><cmd>验证 product UI、API evidence 和 documentation status。</cmd><info><p>打开 <codeph>http://127.0.0.1:8000/profiles</codeph>，运行 required reusable API examples，在需要时确认 exported <codeph>policies.json</codeph> evidence，并检查 <codeph>/help/</codeph> 对 installed artifact 没有报告 stale、incompatible 或 missing documentation。</p></info></step>
+      <step><cmd>只有在每个 required check 都已记录时才接受 update。</cmd><info><p>记录 previous revision、target revision、migration result、source smoke result、documentation validation/build result、health/readiness responses、UI smoke result、API/export evidence 和任何 known deferred production controls。</p></info></step>
+      <step><cmd>应用 rollback 或 stop conditions，不编造 automatic recovery。</cmd><info><p>如果 failure 发生在 migrations 之前，返回 previous source revision 并重新安装 dependencies。如果 failure 发生在 migrations 之后，停止 BPM，恢复 verified pre-update database backup，返回 previous source revision，重新安装 dependencies，并重复 health/UI smoke checks。如果 backup evidence 缺失、restore 未验证或 data 在 migration 后发生变化，请停止并 escalate，而不是声称 rollback success。</p><note type="warning">当 probes fail、documentation stale、exports 异常不同、migrations uncertain 或 rollback evidence incomplete 时，不要把 update 标记为 complete。</note></info></step>
+    </steps>
+    <result><p>Update 要么 accepted with complete evidence，要么 stopped at a known blocker，要么 restored from the pre-update backup with explicit proof。</p></result>
+    <postreq><p>将 resulting evidence 用于 operations handoff note 和 future production/HA/reverse-proxy planning。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-run-source-update-migrations-docs"/>
+    <link keyref="topic.admin-task-record-devops-operational-boundaries"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

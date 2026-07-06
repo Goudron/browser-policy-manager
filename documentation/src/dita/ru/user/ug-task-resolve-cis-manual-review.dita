@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-resolve-cis-manual-review" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Разберите CIS manual-review items</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Find CIS recommendations requiring manual review and decide whether to configure, document, or leave them for external verification.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Open All Settings Review mode for a profile that includes a CIS layer or CIS-derived source metadata.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Some CIS recommendations cannot be fully automated by BPM. Review mode surfaces those items so the user can make an explicit decision without claiming certification.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Open Review mode and filter for CIS manual-review items if needed.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Read the recommendation identifiers, affected policy or preference, and current value.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Configure a supported value, document why manual verification remains, or leave the item intentionally unresolved.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Разберите CIS manual-review items. Revalidate and record the decision before export or handoff.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. CIS manual-review items are configured, documented, or intentionally left for external verification.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the recommendation cannot be mapped to a visible setting, keep the item in review and consult the CIS guide when that guide is authored.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-review-attention-items"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</task>

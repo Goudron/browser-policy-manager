@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-malformed-json" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Recover from malformed JSON</title>
+  <shortdesc>Diagnose malformed JSON syntax before saving, importing, or validating a policy document.</shortdesc>
+  <taskbody>
+    <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
+    <context><p>Malformed JSON is a syntax problem: BPM cannot parse the document far enough to validate policy names or values.</p></context>
+    <steps>
+      <step><cmd>Keep the JSON editor or import error open so the line, column, or parse message remains visible.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Check the nearest braces, brackets, commas, quotation marks, and escaped characters around the reported location.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Format or validate the document again after the syntax correction.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Continue to schema validation only after the JSON parses successfully.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
+    </steps>
+    <result><p>The document parses as JSON and can move to normal policy validation.</p></result>
+    <postreq><p>Recovery: if the same error repeats after one clean retry, stop the workflow, preserve the visible message, profile name, schema channel, and current surface for maintainer review.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-validate-json-document"/>
+    <link keyref="topic.ug-task-edit-raw-policies-json"/>
+  </related-links>
+</task>

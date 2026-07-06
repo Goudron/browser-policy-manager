@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-apply-starter-preset" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>应用起始预设</title>
+  <shortdesc>本任务完整说明“应用起始预设”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <taskbody>
+    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
+    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <steps>
+      <step><cmd>打开与“应用起始预设”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+    </steps>
+    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-guided-scenario"/>
+    <link keyref="topic.ug-task-use-guided-fine-tuning"/>
+  </related-links>
+</task>

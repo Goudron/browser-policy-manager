@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-inspect-configured-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Inspeccionar ajustes configurados</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Use Configured mode to understand what the profile currently applies by domain, category, and source.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Open a saved profile in All Settings.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Configured mode focuses on values already present in the profile, not on every possible policy. Domain summaries help you explain the active configuration.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Switch to Configured mode.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Review the configured summary cards by domain or category.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Open a category to inspect the settings applied there.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar ajustes configurados. Use source filters if you need to separate baseline, CIS, manual, imported, or raw values.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. You can describe the active policy and managed preference values applied by the profile.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if a value is missing, switch to Catalog mode or clear source filters before deciding it is absent.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-filter-settings-by-source"/>
+    <link keyref="topic.ug-task-inspect-setting-details"/>
+  </related-links>
+</task>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-review-archived-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Archiviertes Profil prüfen</title>
+  <shortdesc>Öffnen Sie ein archived profile bewusst mit archived context vor Entscheidungen zu restore oder permanent delete.</shortdesc>
+  <taskbody>
+    <prereq><p>Das archived profile ist noch über Library lifecycle filter oder include_deleted route sichtbar.</p></prereq>
+    <context><p>Archived profiles können über include-deleted routes und Library lifecycle filters geprüft werden, sind aber keine normalen active editing/export targets.</p></context>
+    <steps>
+      <step><cmd>Setzen Sie den Library lifecycle filter auf Archived oder All states.</cmd><info><p>Erwartetes Ergebnis: archived lifecycle context bleibt vor restore oder destructive action sichtbar.</p></info></step>
+      <step><cmd>Prüfen Sie archived badge, profile name, schema channel, validation state und update time vor dem Öffnen der Zeile.</cmd><info><p>Erwartetes Ergebnis: archived lifecycle context bleibt vor restore oder destructive action sichtbar.</p></info></step>
+      <step><cmd>Öffnen Sie archived profile nur für review context, restore planning, comparison oder deletion decision.</cmd><info><p>Erwartetes Ergebnis: archived lifecycle context bleibt vor restore oder destructive action sichtbar.</p></info></step>
+      <step><cmd>Stellen Sie das Profil vor normalem editing/export wieder her oder brechen Sie ab, wenn archived context nicht das Ziel ist.</cmd><info><note type="warning">Aktionen an archived profile können Profile betreffen, die absichtlich aus der normalen active Library view ausgeblendet sind.</note></info></step>
+    </steps>
+    <result><p>Sie prüfen das archived profile mit sichtbarem lifecycle context und behandeln es nicht versehentlich als active profile.</p></result>
+    <postreq><p>Wiederherstellung: Wenn eine bookmarked archived route Profile not found meldet, kehren Sie zur Library mit eingeschlossenen archived profiles zurück und öffnen Sie aus der visible row.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-archived-profile-behavior"/>
+    <link keyref="topic.ug-task-restore-profile"/>
+  </related-links>
+</task>

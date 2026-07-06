@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-plan-devops-storage-logs-backups" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>规划 storage、logs 和 backup evidence</title>
+  <shortdesc>定位 source-deployment database、schema cache、documentation site、foreground logs 和 manual backup evidence，同时不声称 managed backup 或 restore support。</shortdesc>
+  <taskbody>
+    <prereq><p>deployment configuration inventory 包含 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。</p></prereq>
+    <context><p>default source deployment 使用 SQLite 保存 application data，地址为 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，对应 repository root 下的 <codeph>data/bpm.db</codeph>。Schema cache files 默认位于 <codeph>app/schemas/mozilla</codeph>；已安装的 documentation artifact 可用时从 <codeph>app/documentation/site</codeph> 读取。</p></context>
+    <steps>
+      <step><cmd>识别保存 operational state 的 files 和 directories。</cmd><info><p>记录 repository path、<codeph>data/</codeph>、<codeph>data/bpm.db</codeph>、<codeph>app/schemas/mozilla</codeph> 和 <codeph>app/documentation/site</codeph>。在 WSL 中，将这些 paths 保持在 Linux filesystem 中，而不是 <codeph>/mnt/c</codeph> 下。</p></info></step>
+      <step><cmd>在风险操作前定义 manual backup evidence step。</cmd><info><p>停止 foreground BPM process，将 <codeph>data/bpm.db</codeph> 复制到受控 backup location，并记录 timestamp、source revision、database URL、file size 和 checksum。BPM 0.9.0 不提供 automated backup、point-in-time recovery 或 tested restore orchestration。</p></info></step>
+      <step><cmd>捕获当前 source process 的 logs。</cmd><info><p>Source runs 会把 startup messages、Uvicorn access output、tracebacks、migration errors、port conflicts 和 documentation-site warnings 写入 foreground terminal、stdout 或 stderr。本版本不记录 dedicated BPM application log directory、log rotation policy、request ID、audit log 或 Event Viewer integration。</p></info></step>
+      <step><cmd>当 profile handoff 重要时，把 file backup evidence 与 export evidence 配对。</cmd><info><p>使用现有 API export examples 导出相关 Firefox <codeph>policies.json</codeph> documents，并保存 response status、profile ID、revision、schema channel 和 exported-document hash。不要把 export evidence 当作完整 database restore。</p></info></step>
+    </steps>
+    <result><p>管理员知道当前 source-deployment state 位于何处，以及在 updates 或 troubleshooting 前可收集哪些 manual evidence。</p></result>
+    <postreq><p>更改 source revisions 或 database schemas 前，使用未来 update-from-source runbook；当 backup 或 restore evidence 不完整时停止。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-review-devops-configuration-sources"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

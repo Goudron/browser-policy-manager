@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-navigate-settings-categories" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>浏览设置类别</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Navigate All Settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Open All Settings in Configured or Catalog mode.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Open the category navigation or catalog summary.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Choose the domain or cluster that matches the configuration goal.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if a category does not contain the expected control, search by policy ID or inspect raw/unmapped items.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-task-use-advanced-schema-controls"/>
+  </related-links>
+</task>

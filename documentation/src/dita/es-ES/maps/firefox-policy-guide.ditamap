@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="map-firefox-policy-guide" xml:lang="es-ES">
+  <title>Guía de políticas de Firefox</title>
+  <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
+  <topicref keyref="topic.fx-concept-policy-selection"/>
+  <topicref keyref="topic.fx-concept-release-esr-differences"/>
+  <topicref keyref="topic.fx-concept-bpm-firefox-boundary"/>
+  <topicref keyref="topic.fx-concept-starter-presets"/>
+  <topicref keyref="topic.fx-concept-complex-policy-families"/>
+  <topicref keyref="topic.fx-task-review-complex-policy-configuration"/>
+  <topicref keyref="topic.fx-reference-managed-preference-locking"/>
+</map>

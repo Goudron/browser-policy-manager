@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-check-health-readiness" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Check BPM health and readiness</title>
+  <shortdesc>Use the current liveness and readiness probes as a lightweight operational handshake before API workflows.</shortdesc>
+  <taskbody>
+    <prereq><p>Set <codeph>$BPM_BASE_URL</codeph>. For host setup, service start, logs, updates from source, and operating-system details, use the source-deployment Administrator Guide; this API topic only documents the integration handshake.</p></prereq>
+    <context><p>This task covers <codeph>API-HEALTH-001</codeph> and <codeph>API-HEALTH-002</codeph>. BPM 0.9.0 exposes prefix-free probes at <codeph>/health</codeph> and <codeph>/health/ready</codeph>. BPM does not expose dependency diagnostics through these probes; they are not versioned and do not replace product-specific retry or incident policy.</p></context>
+    <steps>
+      <step><cmd>Call the liveness probe before starting a short API sequence.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/health</codeph>. Response example: <codeph>200 {"status":"ok"}</codeph>. Error example: no application error is currently declared; transport, gateway, or process failures are handled outside BPM.</p></info></step>
+      <step><cmd>Call the readiness probe before operations that depend on application startup being complete.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/health/ready</codeph>. Response example: <codeph>200 {"status":"ready","ready":true}</codeph>. Error example: no degraded-state or dependency-detail body is currently exposed.</p></info></step>
+      <step><cmd>Use readiness as a gate, not as a complete dependency inventory.</cmd><info><p>When <codeph>ready</codeph> is <codeph>true</codeph>, the integrating product may continue with discovery, validation, import, export, or profile lifecycle calls. It must not infer database health details, schema cache details, documentation portal status, queue state, or deployment topology from this response.</p></info></step>
+      <step><cmd>Keep polling and retry decisions in the integrating product.</cmd><info><p>BPM does not declare a polling interval, retry-after header, service-level objective, circuit-breaker contract, request ID, or webhook for probe changes. Store your own timestamp, observed status, timeout, and retry decision.</p></info></step>
+      <step><cmd>Separate API handshake checks from source deployment troubleshooting.</cmd><info><p>If probes are unreachable or the response differs from the examples, switch to the source-deployment Administrator Guide for process, environment, database, log, and update-from-source checks instead of expanding this API integration task into deployment instructions.</p></info></step>
+      <step><cmd>Record the operational handshake result with the downstream API action.</cmd><info><note type="warning">A successful health or readiness response does not authenticate callers, authorize operations, reserve profile revisions, guarantee later API success, or prove Firefox runtime enforcement. Treat it as one small preflight signal.</note></info></step>
+    </steps>
+    <result><p>The integrating product has a minimal and current BPM operational handshake for liveness and readiness without depending on undocumented deployment behavior.</p></result>
+    <postreq><p>After a successful readiness check, continue with OpenAPI discovery or the specific API workflow topic for validation, import/export, or profile lifecycle operations.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

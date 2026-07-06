@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "guide_id": "user-guide",
+  "navigation_model": "case-oriented-user-intent",
+  "source_inventory": "docs/architecture/product-user-capability-inventory-0.9.0.md",
+  "sections": [
+    {
+      "id": "orient-and-plan",
+      "title": "Orient and plan profile work",
+      "outcome": "A user can understand BPM's profile model and choose the right surface, schema, language, theme, and accessibility expectations before editing.",
+      "topics": [
+        { "topic_id": "ug-concept-profile-model", "kind": "concept", "capability_ids": ["CAP-GLOBAL-001"] },
+        { "topic_id": "ug-concept-choose-editor-surface", "kind": "concept", "capability_ids": ["CAP-GLOBAL-002"] },
+        { "topic_id": "ug-reference-profile-status", "kind": "reference", "capability_ids": ["CAP-GLOBAL-009"] },
+        { "topic_id": "ug-reference-product-version", "kind": "reference", "capability_ids": ["CAP-GLOBAL-008"] },
+        { "topic_id": "ug-task-change-interface-language", "kind": "task", "capability_ids": ["CAP-GLOBAL-005"] },
+        { "topic_id": "ug-concept-language-detection-fallback", "kind": "concept", "capability_ids": ["CAP-GLOBAL-006"] },
+        { "topic_id": "ug-task-change-interface-theme", "kind": "task", "capability_ids": ["CAP-GLOBAL-007"] },
+        { "topic_id": "ug-concept-accessible-product-operation", "kind": "concept", "capability_ids": ["CAP-GLOBAL-015"] },
+        { "topic_id": "ug-task-work-across-editor-tabs", "kind": "task", "capability_ids": ["CAP-GLOBAL-003"] }
+      ]
+    },
+    {
+      "id": "create-and-start",
+      "title": "Create and start a profile",
+      "outcome": "A user can start from a draft, preset, imported file, or saved profile and make the first safe editing decision.",
+      "topics": [
+        { "topic_id": "ug-task-create-first-profile", "kind": "task", "capability_ids": ["CAP-GLOBAL-004", "CAP-LIB-008"] },
+        { "topic_id": "ug-task-choose-profile-identity-schema", "kind": "task", "capability_ids": ["CAP-GUIDED-003"] },
+        { "topic_id": "ug-task-choose-firefox-schema", "kind": "task", "capability_ids": ["CAP-BOUNDARY-001"] },
+        { "topic_id": "ug-concept-schema-aware-behavior", "kind": "concept", "capability_ids": ["CAP-BOUNDARY-002"] },
+        { "topic_id": "ug-task-choose-guided-scenario", "kind": "task", "capability_ids": ["CAP-GUIDED-004"] },
+        { "topic_id": "ug-task-apply-starter-preset", "kind": "task", "capability_ids": ["CAP-GUIDED-005", "CAP-CIS-001"] },
+        { "topic_id": "ug-task-apply-cis-layer", "kind": "task", "capability_ids": ["CAP-GUIDED-006", "CAP-CIS-002"] },
+        { "topic_id": "ug-concept-cis-layer-merge", "kind": "concept", "capability_ids": ["CAP-CIS-003"] },
+        { "topic_id": "ug-task-import-policies-json", "kind": "task", "capability_ids": ["CAP-LIB-009", "CAP-BOUNDARY-003"] },
+        { "topic_id": "ug-task-open-saved-profile", "kind": "task", "capability_ids": ["CAP-LIB-011", "CAP-LIB-012", "CAP-LIB-013"] }
+      ]
+    },
+    {
+      "id": "configure-with-guidance",
+      "title": "Configure with Guided Editor",
+      "outcome": "A user can move through the guided workflow, configure common policy goals, understand schema-dependent controls, and prepare a reviewed profile.",
+      "topics": [
+        { "topic_id": "ug-task-use-guided-editor", "kind": "task", "capability_ids": ["CAP-GUIDED-001"] },
+        { "topic_id": "ug-task-search-guided-settings", "kind": "task", "capability_ids": ["CAP-GUIDED-002"] },
+        { "topic_id": "ug-task-configure-browser-access-defaults", "kind": "task", "capability_ids": ["CAP-GUIDED-007"] },
+        { "topic_id": "ug-task-configure-home-search-navigation", "kind": "task", "capability_ids": ["CAP-GUIDED-008"] },
+        { "topic_id": "ug-task-configure-security-privacy", "kind": "task", "capability_ids": ["CAP-GUIDED-009"] },
+        { "topic_id": "ug-task-configure-users-addons-sites", "kind": "task", "capability_ids": ["CAP-GUIDED-010"] },
+        { "topic_id": "ug-task-configure-firefox-ai-policies", "kind": "task", "capability_ids": ["CAP-GUIDED-011"] },
+        { "topic_id": "ug-reference-schema-dependent-guided-controls", "kind": "reference", "capability_ids": ["CAP-GUIDED-012"] },
+        { "topic_id": "ug-task-use-guided-fine-tuning", "kind": "task", "capability_ids": ["CAP-GUIDED-013"] },
+        { "topic_id": "ug-task-review-guided-profile", "kind": "task", "capability_ids": ["CAP-GUIDED-014"] },
+        { "topic_id": "ug-task-save-export-guided-profile", "kind": "task", "capability_ids": ["CAP-GUIDED-015"] }
+      ]
+    },
+    {
+      "id": "review-validate-and-finish",
+      "title": "Review, validate, and finish profile changes",
+      "outcome": "A user can save, validate, switch editing modes, inspect context, export, and resolve routine completion decisions.",
+      "topics": [
+        { "topic_id": "ug-task-save-profile", "kind": "task", "capability_ids": ["CAP-GLOBAL-010"] },
+        { "topic_id": "ug-task-validate-profile", "kind": "task", "capability_ids": ["CAP-GLOBAL-011"] },
+        { "topic_id": "ug-task-switch-editor-mode", "kind": "task", "capability_ids": ["CAP-GLOBAL-012"] },
+        { "topic_id": "ug-task-review-profile-context", "kind": "task", "capability_ids": ["CAP-GLOBAL-014"] },
+        { "topic_id": "ug-task-export-policies-json", "kind": "task", "capability_ids": ["CAP-LIB-016", "CAP-JSON-006", "CAP-BOUNDARY-004"] },
+        { "topic_id": "ug-concept-policies-and-managed-preferences", "kind": "concept", "capability_ids": ["CAP-BOUNDARY-005"] }
+      ]
+    },
+    {
+      "id": "inspect-and-edit-complete-settings",
+      "title": "Inspect and edit complete settings",
+      "outcome": "A user can use All Settings to review attention items, inspect configured values, browse the full catalog, and safely edit detailed settings.",
+      "topics": [
+        { "topic_id": "ug-task-use-all-settings", "kind": "task", "capability_ids": ["CAP-SET-001"] },
+        { "topic_id": "ug-task-review-attention-items", "kind": "task", "capability_ids": ["CAP-SET-002", "CAP-SET-003"] },
+        { "topic_id": "ug-reference-all-settings-review-states", "kind": "reference", "capability_ids": ["CAP-SET-004"] },
+        { "topic_id": "ug-task-inspect-configured-settings", "kind": "task", "capability_ids": ["CAP-SET-005", "CAP-SET-006"] },
+        { "topic_id": "ug-task-filter-settings-by-source", "kind": "task", "capability_ids": ["CAP-SET-007"] },
+        { "topic_id": "ug-task-browse-settings-catalog", "kind": "task", "capability_ids": ["CAP-SET-008"] },
+        { "topic_id": "ug-task-search-all-settings", "kind": "task", "capability_ids": ["CAP-SET-009"] },
+        { "topic_id": "ug-task-filter-all-settings", "kind": "task", "capability_ids": ["CAP-SET-010"] },
+        { "topic_id": "ug-reference-large-settings-inventories", "kind": "reference", "capability_ids": ["CAP-SET-011"] },
+        { "topic_id": "ug-task-inspect-setting-details", "kind": "task", "capability_ids": ["CAP-SET-012"] },
+        { "topic_id": "ug-task-edit-setting-detail", "kind": "task", "capability_ids": ["CAP-SET-013"] },
+        { "topic_id": "ug-task-remove-reset-setting", "kind": "task", "capability_ids": ["CAP-SET-014"] },
+        { "topic_id": "ug-task-add-managed-preference", "kind": "task", "capability_ids": ["CAP-SET-015"] },
+        { "topic_id": "ug-task-navigate-settings-categories", "kind": "task", "capability_ids": ["CAP-SET-016"] },
+        { "topic_id": "ug-task-use-advanced-schema-controls", "kind": "task", "capability_ids": ["CAP-SET-017"] },
+        { "topic_id": "ug-task-handle-raw-unknown-settings", "kind": "task", "capability_ids": ["CAP-SET-018", "CAP-RECOVERY-005"] },
+        { "topic_id": "ug-task-follow-setting-deep-link", "kind": "task", "capability_ids": ["CAP-SET-019", "CAP-JSON-008"] },
+        { "topic_id": "ug-task-trace-setting-source", "kind": "task", "capability_ids": ["CAP-CIS-004"] },
+        { "topic_id": "ug-task-resolve-cis-manual-review", "kind": "task", "capability_ids": ["CAP-CIS-005"] }
+      ]
+    },
+    {
+      "id": "work-with-json-and-interchange",
+      "title": "Work with JSON and interchange",
+      "outcome": "A user can choose JSON editing deliberately, edit or format raw policy JSON, validate it, and preserve the Firefox import/export boundary.",
+      "topics": [
+        { "topic_id": "ug-task-use-json-editor", "kind": "task", "capability_ids": ["CAP-JSON-001"] },
+        { "topic_id": "ug-concept-when-to-use-json-editor", "kind": "concept", "capability_ids": ["CAP-JSON-007"] },
+        { "topic_id": "ug-task-edit-raw-policies-json", "kind": "task", "capability_ids": ["CAP-JSON-002"] },
+        { "topic_id": "ug-task-format-json-document", "kind": "task", "capability_ids": ["CAP-JSON-003"] },
+        { "topic_id": "ug-task-validate-json-document", "kind": "task", "capability_ids": ["CAP-JSON-004"] },
+        { "topic_id": "ug-task-save-json-document", "kind": "task", "capability_ids": ["CAP-JSON-005"] }
+      ]
+    },
+    {
+      "id": "find-organize-and-compare-profiles",
+      "title": "Find, organize, and compare profiles",
+      "outcome": "A user can operate the Library, manage profile lifecycle, and compare two saved profiles without losing orientation.",
+      "topics": [
+        { "topic_id": "ug-task-use-profile-library", "kind": "task", "capability_ids": ["CAP-LIB-001"] },
+        { "topic_id": "ug-task-find-profile", "kind": "task", "capability_ids": ["CAP-LIB-002"] },
+        { "topic_id": "ug-task-filter-profile-library", "kind": "task", "capability_ids": ["CAP-LIB-003", "CAP-LIB-004", "CAP-LIB-005"] },
+        { "topic_id": "ug-task-sort-profile-library", "kind": "task", "capability_ids": ["CAP-LIB-006"] },
+        { "topic_id": "ug-task-refresh-profile-library", "kind": "task", "capability_ids": ["CAP-LIB-007"] },
+        { "topic_id": "ug-reference-library-profile-row", "kind": "reference", "capability_ids": ["CAP-LIB-010"] },
+        { "topic_id": "ug-task-duplicate-profile", "kind": "task", "capability_ids": ["CAP-LIB-015"] },
+        { "topic_id": "ug-task-archive-profile", "kind": "task", "capability_ids": ["CAP-LIB-017"] },
+        { "topic_id": "ug-task-restore-profile", "kind": "task", "capability_ids": ["CAP-LIB-018"] },
+        { "topic_id": "ug-task-permanently-delete-profile", "kind": "task", "capability_ids": ["CAP-LIB-019"] },
+        { "topic_id": "ug-reference-archived-profile-behavior", "kind": "reference", "capability_ids": ["CAP-LIB-020"] },
+        { "topic_id": "ug-task-review-archived-profile", "kind": "task", "capability_ids": ["CAP-RECOVERY-012"] },
+        { "topic_id": "ug-task-compare-profiles", "kind": "task", "capability_ids": ["CAP-LIB-014", "CAP-CMP-001"] },
+        { "topic_id": "ug-concept-comparison-workflow", "kind": "concept", "capability_ids": ["CAP-CMP-006"] },
+        { "topic_id": "ug-task-select-comparison-profiles", "kind": "task", "capability_ids": ["CAP-CMP-002", "CAP-CMP-003"] },
+        { "topic_id": "ug-task-interpret-profile-comparison", "kind": "task", "capability_ids": ["CAP-CMP-004"] },
+        { "topic_id": "ug-reference-comparison-states", "kind": "reference", "capability_ids": ["CAP-CMP-005"] }
+      ]
+    },
+    {
+      "id": "recover-safely",
+      "title": "Recover safely",
+      "outcome": "A user can diagnose visible failures, preserve work, and confirm destructive operations safely.",
+      "topics": [
+        { "topic_id": "ug-troubleshoot-save-conflict", "kind": "troubleshooting", "capability_ids": ["CAP-GLOBAL-013", "CAP-RECOVERY-007"] },
+        { "topic_id": "ug-troubleshoot-library-operation", "kind": "troubleshooting", "capability_ids": ["CAP-LIB-021"] },
+        { "topic_id": "ug-troubleshoot-malformed-json", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-001"] },
+        { "topic_id": "ug-troubleshoot-import-failure", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-002"] },
+        { "topic_id": "ug-troubleshoot-policy-validation", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-003"] },
+        { "topic_id": "ug-troubleshoot-schema-mismatch", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-004"] },
+        { "topic_id": "ug-troubleshoot-profile-name", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-006"] },
+        { "topic_id": "ug-troubleshoot-missing-profile", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-008"] },
+        { "topic_id": "ug-troubleshoot-product-connection", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-009"] },
+        { "topic_id": "ug-task-manage-destructive-actions", "kind": "task", "capability_ids": ["CAP-RECOVERY-010"] },
+        { "topic_id": "ug-troubleshoot-unsaved-changes", "kind": "troubleshooting", "capability_ids": ["CAP-RECOVERY-011"] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-schema-mismatch" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>解决 schema mismatch</title>
+  <shortdesc>处理 unsupported schema channel、ESR/Release mismatch 或 schema-dependent setting，而不强制隐藏数据更改。</shortdesc>
+  <taskbody>
+    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败操作表明当前 workflow 无法安全继续。</p></prereq>
+    <context><p>Schema mismatch 通常表示某个 setting 存在于一个 Firefox channel，但在所选 channel 中 unavailable、deprecated 或结构不同。</p></context>
+    <steps>
+      <step><cmd>确认配置文件目标是 ESR 140.12 还是 Release 152。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>识别在该 channel 中 unavailable、unsupported、deprecated 或 schema-dependent 的 setting。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>决定切换 schema channel，还是为目标 Firefox 删除/更改 affected setting。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
+      <step><cmd>在 channel 或 setting 决策后重新 revalidate 并 review export readiness。</cmd><info><note type="warning">不要编辑 internal storage、browser local data、数据库行或 generated build artifacts 来恢复面向用户的配置文件工作。</note></info></step>
+    </steps>
+    <result><p>配置文件面向预期 Firefox channel，并且不再隐藏 schema-dependent mismatch。</p></result>
+    <postreq><p>恢复：如果同一错误在一次干净重试后仍然重复，请停止 workflow，并保留可见消息、配置文件名称、架构通道和当前界面供 maintainer review。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+  </related-links>
+</task>

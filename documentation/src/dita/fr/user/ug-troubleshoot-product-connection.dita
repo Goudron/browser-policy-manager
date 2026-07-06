@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-product-connection" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Récupérer après product connection failure</title>
+  <shortdesc>Récupérez après network, browser ou BPM API operation failure visible dans Library ou editor surfaces.</shortdesc>
+  <taskbody>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
+    <context><p>Connection failures peut être temporary browser testing caveats, network interruptions, server restarts ou API operation failures ; la réponse sûre est de préserver le contexte avant retry.</p></context>
+    <steps>
+      <step><cmd>Lisez le status visible et identifiez si l’opération échouée était load, save, import, export, archive, restore, delete, validation ou comparison.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Vérifiez si les autres BPM surfaces de la même browser session répondent encore avant de répéter l’action.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Réessayez failed action une fois après avoir préservé unsaved changes et profile context.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
+      <step><cmd>Si browser testing caveat ou API failure persiste, arrêtez user edits et conservez visible error details pour revue mainteneur.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+    </steps>
+    <result><p>Le workflow reprend après clean retry ou s’arrête avec assez de visible context pour diagnostiquer product connection problem.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-troubleshoot-library-operation"/>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

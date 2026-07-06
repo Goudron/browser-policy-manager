@@ -1,0 +1,8 @@
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "Homepage": {
+      "URL": "https://example.invalid/start"
+    }
+  }
+}

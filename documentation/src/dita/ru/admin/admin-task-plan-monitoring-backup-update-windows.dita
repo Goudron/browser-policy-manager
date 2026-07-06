@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+  <title>Спланировать monitoring inputs, backup evidence и update windows</title>
+  <shortdesc>Подготовьте current-state operational evidence для source-run экземпляра без заявлений о managed monitoring, official restore automation или rolling upgrades.</shortdesc>
+  <taskbody>
+    <prereq><p>Экземпляр прошёл source readiness и network exposure review, а за evaluation window отвечает один administrator или DevOps owner.</p></prereq>
+    <context><p>Пока нет решений по distributions и runtime service, operations planning должен опираться на observable inputs, manual backup/export evidence и явные update windows для одного source node.</p></context>
+    <steps>
+      <step><cmd>Перечислите monitoring inputs, доступные сегодня.</cmd><info><p>Зафиксируйте process status, foreground terminal output, <codeph>stdout</codeph>, <codeph>stderr</codeph>, <codeph>GET /health</codeph>, <codeph>GET /health/ready</codeph>, selected API example results, доступ к documentation через <codeph>/help/</codeph> и source revision из <codeph>git rev-parse --short HEAD</codeph>.</p></info></step>
+      <step><cmd>Соберите backup и export evidence перед window.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+mkdir -p backups
+cp data/bpm.db backups/bpm-pre-update.db
+sha256sum backups/bpm-pre-update.db
+]]></codeblock><p>Также экспортируйте representative Firefox documents, например <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph>, и храните полученный <codeph>policies.json</codeph> evidence с checksums.</p></info></step>
+      <step><cmd>Запланируйте stop-the-world update window для source changes.</cmd><info><p>Для 0.9.0 планируйте downtime одного узла перед <codeph>git fetch --tags</codeph>, dependency refresh, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> и <codeph>make docs-build</codeph>. Rolling upgrades planned but not implemented yet.</p></info></step>
+      <step><cmd>Записывайте gaps как blockers, а не скрытые assumptions.</cmd><info><note type="warning">BPM 0.9.0 не предоставляет managed monitoring, automated backup scheduling, official restore automation, point-in-time recovery, managed secrets, token rotation или rolling upgrade orchestration. Используйте manual evidence и stop conditions из update runbook.</note></info></step>
+    </steps>
+    <result><p>Operation plan содержит monitoring inputs, backup/export evidence и реалистичное update window для текущей source operation.</p></result>
+    <postreq><p>Приложите эти evidence к HA/deferred-boundary record, чтобы будущая distribution work могла переиспользовать checklist.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-prepare-source-update-evidence"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+    <link keyref="topic.admin-troubleshoot-documentation-portal-build-links"/>
+    <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>
+  </related-links>
+</task>

@@ -1,0 +1,5889 @@
+{
+  "backlog_item": "BPM090-M5-02",
+  "channel_differences_backlog_item": "BPM090-M5-05",
+  "example_backlog_item": "BPM090-M5-04",
+  "example_count": 232,
+  "generated_by": "documentation/tools/generate_firefox_policy_skeletons.py",
+  "map": "documentation/src/generated/firefox/firefox-policy-skeletons.ditamap",
+  "policies": [
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-3rdparty",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "3rdparty": {
+                "Extensions": {}
+              }
+            }
+          },
+          "id": "fx-policy-3rdparty-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "3rdparty": {
+                "Extensions": {}
+              }
+            }
+          },
+          "id": "fx-policy-3rdparty-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-3rdparty.dita",
+      "policy_id": "3rdparty"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AIControls",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AIControls": {
+                "Default": {
+                  "Value": "available"
+                }
+              }
+            }
+          },
+          "id": "fx-policy-AIControls-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AIControls.dita",
+      "policy_id": "AIControls"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AllowedDomainsForApps",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AllowedDomainsForApps": "managedfirefox.com,example.com"
+            }
+          },
+          "id": "fx-policy-AllowedDomainsForApps-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AllowedDomainsForApps": "managedfirefox.com,example.com"
+            }
+          },
+          "id": "fx-policy-AllowedDomainsForApps-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AllowedDomainsForApps.dita",
+      "policy_id": "AllowedDomainsForApps"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AllowFileSelectionDialogs",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AllowFileSelectionDialogs": true
+            }
+          },
+          "id": "fx-policy-AllowFileSelectionDialogs-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AllowFileSelectionDialogs": true
+            }
+          },
+          "id": "fx-policy-AllowFileSelectionDialogs-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AllowFileSelectionDialogs.dita",
+      "policy_id": "AllowFileSelectionDialogs"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AppAutoUpdate",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AppAutoUpdate": true
+            }
+          },
+          "id": "fx-policy-AppAutoUpdate-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AppAutoUpdate": true
+            }
+          },
+          "id": "fx-policy-AppAutoUpdate-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AppAutoUpdate.dita",
+      "policy_id": "AppAutoUpdate"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AppUpdatePin",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AppUpdatePin": "106."
+            }
+          },
+          "id": "fx-policy-AppUpdatePin-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AppUpdatePin": "106."
+            }
+          },
+          "id": "fx-policy-AppUpdatePin-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AppUpdatePin.dita",
+      "policy_id": "AppUpdatePin"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AppUpdateURL",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AppUpdateURL": "https://yoursite.com"
+            }
+          },
+          "id": "fx-policy-AppUpdateURL-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AppUpdateURL": "https://yoursite.com"
+            }
+          },
+          "id": "fx-policy-AppUpdateURL-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AppUpdateURL.dita",
+      "policy_id": "AppUpdateURL"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Authentication",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Authentication": {
+                "SPNEGO": [
+                  "mydomain.com",
+                  "https://myotherdomain.com"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Authentication-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Authentication": {
+                "SPNEGO": [
+                  "mydomain.com",
+                  "https://myotherdomain.com"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Authentication-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Authentication.dita",
+      "policy_id": "Authentication"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AutofillAddressEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AutofillAddressEnabled": true
+            }
+          },
+          "id": "fx-policy-AutofillAddressEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AutofillAddressEnabled": true
+            }
+          },
+          "id": "fx-policy-AutofillAddressEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AutofillAddressEnabled.dita",
+      "policy_id": "AutofillAddressEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AutofillCreditCardEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AutofillCreditCardEnabled": true
+            }
+          },
+          "id": "fx-policy-AutofillCreditCardEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AutofillCreditCardEnabled": true
+            }
+          },
+          "id": "fx-policy-AutofillCreditCardEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AutofillCreditCardEnabled.dita",
+      "policy_id": "AutofillCreditCardEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-AutoLaunchProtocolsFromOrigins",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "AutoLaunchProtocolsFromOrigins": [
+                {
+                  "protocol": "zoommtg"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-AutoLaunchProtocolsFromOrigins-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "AutoLaunchProtocolsFromOrigins": [
+                {
+                  "protocol": "zoommtg"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-AutoLaunchProtocolsFromOrigins-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-AutoLaunchProtocolsFromOrigins.dita",
+      "policy_id": "AutoLaunchProtocolsFromOrigins"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-BackgroundAppUpdate",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "BackgroundAppUpdate": true
+            }
+          },
+          "id": "fx-policy-BackgroundAppUpdate-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "BackgroundAppUpdate": true
+            }
+          },
+          "id": "fx-policy-BackgroundAppUpdate-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-BackgroundAppUpdate.dita",
+      "policy_id": "BackgroundAppUpdate"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-BlockAboutAddons",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "BlockAboutAddons": true
+            }
+          },
+          "id": "fx-policy-BlockAboutAddons-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "BlockAboutAddons": true
+            }
+          },
+          "id": "fx-policy-BlockAboutAddons-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-BlockAboutAddons.dita",
+      "policy_id": "BlockAboutAddons"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-BlockAboutConfig",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "BlockAboutConfig": true
+            }
+          },
+          "id": "fx-policy-BlockAboutConfig-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "BlockAboutConfig": true
+            }
+          },
+          "id": "fx-policy-BlockAboutConfig-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-BlockAboutConfig.dita",
+      "policy_id": "BlockAboutConfig"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-BlockAboutProfiles",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "BlockAboutProfiles": true
+            }
+          },
+          "id": "fx-policy-BlockAboutProfiles-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "BlockAboutProfiles": true
+            }
+          },
+          "id": "fx-policy-BlockAboutProfiles-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-BlockAboutProfiles.dita",
+      "policy_id": "BlockAboutProfiles"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-BlockAboutSupport",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "BlockAboutSupport": true
+            }
+          },
+          "id": "fx-policy-BlockAboutSupport-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "BlockAboutSupport": true
+            }
+          },
+          "id": "fx-policy-BlockAboutSupport-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-BlockAboutSupport.dita",
+      "policy_id": "BlockAboutSupport"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Bookmarks",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Bookmarks": [
+                {
+                  "Title": "Example",
+                  "URL": "https://example.com"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-Bookmarks-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Bookmarks": [
+                {
+                  "Title": "Example",
+                  "URL": "https://example.com"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-Bookmarks-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Bookmarks.dita",
+      "policy_id": "Bookmarks"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-BrowserDataBackup",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "BrowserDataBackup": {
+                "AllowBackup": true
+              }
+            }
+          },
+          "id": "fx-policy-BrowserDataBackup-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-BrowserDataBackup.dita",
+      "policy_id": "BrowserDataBackup"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-CaptivePortal",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "CaptivePortal": true
+            }
+          },
+          "id": "fx-policy-CaptivePortal-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "CaptivePortal": true
+            }
+          },
+          "id": "fx-policy-CaptivePortal-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-CaptivePortal.dita",
+      "policy_id": "CaptivePortal"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Certificates",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Certificates": {
+                "Install": [
+                  "cert1.der",
+                  "/home/username/cert2.pem"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Certificates-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Certificates": {
+                "Install": [
+                  "cert1.der",
+                  "/home/username/cert2.pem"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Certificates-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Certificates.dita",
+      "policy_id": "Certificates"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Containers",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Containers": {
+                "Default": [
+                  {
+                    "name": "My container"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Containers-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Containers": {
+                "Default": [
+                  {
+                    "name": "My container"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Containers-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Containers.dita",
+      "policy_id": "Containers"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ContentAnalysis",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ContentAnalysis": {
+                "AgentName": "My DLP Product"
+              }
+            }
+          },
+          "id": "fx-policy-ContentAnalysis-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ContentAnalysis": {
+                "AgentName": "My DLP Product"
+              }
+            }
+          },
+          "id": "fx-policy-ContentAnalysis-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ContentAnalysis.dita",
+      "policy_id": "ContentAnalysis"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Cookies",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Cookies": {
+                "Allow": [
+                  "http://example.org/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Cookies-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Cookies": {
+                "Allow": [
+                  "http://example.org/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Cookies-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Cookies.dita",
+      "policy_id": "Cookies"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DefaultDownloadDirectory",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DefaultDownloadDirectory": "${home}/Downloads"
+            }
+          },
+          "id": "fx-policy-DefaultDownloadDirectory-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DefaultDownloadDirectory": "${home}/Downloads"
+            }
+          },
+          "id": "fx-policy-DefaultDownloadDirectory-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DefaultDownloadDirectory.dita",
+      "policy_id": "DefaultDownloadDirectory"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DefaultSerialGuardSetting",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DefaultSerialGuardSetting": 2
+            }
+          },
+          "id": "fx-policy-DefaultSerialGuardSetting-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DefaultSerialGuardSetting": 2
+            }
+          },
+          "id": "fx-policy-DefaultSerialGuardSetting-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DefaultSerialGuardSetting.dita",
+      "policy_id": "DefaultSerialGuardSetting"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableAppUpdate",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableAppUpdate": true
+            }
+          },
+          "id": "fx-policy-DisableAppUpdate-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableAppUpdate": true
+            }
+          },
+          "id": "fx-policy-DisableAppUpdate-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableAppUpdate.dita",
+      "policy_id": "DisableAppUpdate"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableBuiltinPDFViewer",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableBuiltinPDFViewer": true
+            }
+          },
+          "id": "fx-policy-DisableBuiltinPDFViewer-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableBuiltinPDFViewer": true
+            }
+          },
+          "id": "fx-policy-DisableBuiltinPDFViewer-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableBuiltinPDFViewer.dita",
+      "policy_id": "DisableBuiltinPDFViewer"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisabledCiphers",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisabledCiphers": {}
+            }
+          },
+          "id": "fx-policy-DisabledCiphers-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisabledCiphers": {}
+            }
+          },
+          "id": "fx-policy-DisabledCiphers-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisabledCiphers.dita",
+      "policy_id": "DisabledCiphers"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableDefaultBrowserAgent",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableDefaultBrowserAgent": true
+            }
+          },
+          "id": "fx-policy-DisableDefaultBrowserAgent-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableDefaultBrowserAgent": true
+            }
+          },
+          "id": "fx-policy-DisableDefaultBrowserAgent-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableDefaultBrowserAgent.dita",
+      "policy_id": "DisableDefaultBrowserAgent"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableDeveloperTools",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableDeveloperTools": true
+            }
+          },
+          "id": "fx-policy-DisableDeveloperTools-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableDeveloperTools": true
+            }
+          },
+          "id": "fx-policy-DisableDeveloperTools-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableDeveloperTools.dita",
+      "policy_id": "DisableDeveloperTools"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableEncryptedClientHello",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableEncryptedClientHello": true
+            }
+          },
+          "id": "fx-policy-DisableEncryptedClientHello-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableEncryptedClientHello": true
+            }
+          },
+          "id": "fx-policy-DisableEncryptedClientHello-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableEncryptedClientHello.dita",
+      "policy_id": "DisableEncryptedClientHello"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableFeedbackCommands",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableFeedbackCommands": true
+            }
+          },
+          "id": "fx-policy-DisableFeedbackCommands-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableFeedbackCommands": true
+            }
+          },
+          "id": "fx-policy-DisableFeedbackCommands-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableFeedbackCommands.dita",
+      "policy_id": "DisableFeedbackCommands"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableFirefoxAccounts",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableFirefoxAccounts": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxAccounts-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableFirefoxAccounts": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxAccounts-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableFirefoxAccounts.dita",
+      "policy_id": "DisableFirefoxAccounts"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableFirefoxScreenshots",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableFirefoxScreenshots": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxScreenshots-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableFirefoxScreenshots": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxScreenshots-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableFirefoxScreenshots.dita",
+      "policy_id": "DisableFirefoxScreenshots"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableFirefoxStudies",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableFirefoxStudies": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxStudies-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableFirefoxStudies": true
+            }
+          },
+          "id": "fx-policy-DisableFirefoxStudies-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableFirefoxStudies.dita",
+      "policy_id": "DisableFirefoxStudies"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableForgetButton",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableForgetButton": true
+            }
+          },
+          "id": "fx-policy-DisableForgetButton-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableForgetButton": true
+            }
+          },
+          "id": "fx-policy-DisableForgetButton-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableForgetButton.dita",
+      "policy_id": "DisableForgetButton"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableFormHistory",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableFormHistory": true
+            }
+          },
+          "id": "fx-policy-DisableFormHistory-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableFormHistory": true
+            }
+          },
+          "id": "fx-policy-DisableFormHistory-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableFormHistory.dita",
+      "policy_id": "DisableFormHistory"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableMasterPasswordCreation",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableMasterPasswordCreation": true
+            }
+          },
+          "id": "fx-policy-DisableMasterPasswordCreation-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableMasterPasswordCreation": true
+            }
+          },
+          "id": "fx-policy-DisableMasterPasswordCreation-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableMasterPasswordCreation.dita",
+      "policy_id": "DisableMasterPasswordCreation"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisablePasswordReveal",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisablePasswordReveal": true
+            }
+          },
+          "id": "fx-policy-DisablePasswordReveal-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisablePasswordReveal": true
+            }
+          },
+          "id": "fx-policy-DisablePasswordReveal-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisablePasswordReveal.dita",
+      "policy_id": "DisablePasswordReveal"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisablePocket",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisablePocket": true
+            }
+          },
+          "id": "fx-policy-DisablePocket-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisablePocket": true
+            }
+          },
+          "id": "fx-policy-DisablePocket-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisablePocket.dita",
+      "policy_id": "DisablePocket"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisablePrivateBrowsing",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisablePrivateBrowsing": true
+            }
+          },
+          "id": "fx-policy-DisablePrivateBrowsing-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisablePrivateBrowsing": true
+            }
+          },
+          "id": "fx-policy-DisablePrivateBrowsing-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisablePrivateBrowsing.dita",
+      "policy_id": "DisablePrivateBrowsing"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableProfileImport",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableProfileImport": true
+            }
+          },
+          "id": "fx-policy-DisableProfileImport-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableProfileImport": true
+            }
+          },
+          "id": "fx-policy-DisableProfileImport-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableProfileImport.dita",
+      "policy_id": "DisableProfileImport"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableProfileRefresh",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableProfileRefresh": true
+            }
+          },
+          "id": "fx-policy-DisableProfileRefresh-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableProfileRefresh": true
+            }
+          },
+          "id": "fx-policy-DisableProfileRefresh-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableProfileRefresh.dita",
+      "policy_id": "DisableProfileRefresh"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableRemoteImprovements",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableRemoteImprovements": true
+            }
+          },
+          "id": "fx-policy-DisableRemoteImprovements-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableRemoteImprovements.dita",
+      "policy_id": "DisableRemoteImprovements"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableSafeMode",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableSafeMode": true
+            }
+          },
+          "id": "fx-policy-DisableSafeMode-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableSafeMode": true
+            }
+          },
+          "id": "fx-policy-DisableSafeMode-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableSafeMode.dita",
+      "policy_id": "DisableSafeMode"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableSecurityBypass",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableSecurityBypass": {
+                "InvalidCertificate": true
+              }
+            }
+          },
+          "id": "fx-policy-DisableSecurityBypass-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableSecurityBypass": {
+                "InvalidCertificate": true
+              }
+            }
+          },
+          "id": "fx-policy-DisableSecurityBypass-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableSecurityBypass.dita",
+      "policy_id": "DisableSecurityBypass"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableSetDesktopBackground",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableSetDesktopBackground": true
+            }
+          },
+          "id": "fx-policy-DisableSetDesktopBackground-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableSetDesktopBackground": true
+            }
+          },
+          "id": "fx-policy-DisableSetDesktopBackground-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableSetDesktopBackground.dita",
+      "policy_id": "DisableSetDesktopBackground"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableSystemAddonUpdate",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableSystemAddonUpdate": true
+            }
+          },
+          "id": "fx-policy-DisableSystemAddonUpdate-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableSystemAddonUpdate": true
+            }
+          },
+          "id": "fx-policy-DisableSystemAddonUpdate-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableSystemAddonUpdate.dita",
+      "policy_id": "DisableSystemAddonUpdate"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableTelemetry",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableTelemetry": true
+            }
+          },
+          "id": "fx-policy-DisableTelemetry-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableTelemetry": true
+            }
+          },
+          "id": "fx-policy-DisableTelemetry-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableTelemetry.dita",
+      "policy_id": "DisableTelemetry"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisableThirdPartyModuleBlocking",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisableThirdPartyModuleBlocking": {}
+            }
+          },
+          "id": "fx-policy-DisableThirdPartyModuleBlocking-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisableThirdPartyModuleBlocking": {}
+            }
+          },
+          "id": "fx-policy-DisableThirdPartyModuleBlocking-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisableThirdPartyModuleBlocking.dita",
+      "policy_id": "DisableThirdPartyModuleBlocking"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisplayBookmarksToolbar",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisplayBookmarksToolbar": "always"
+            }
+          },
+          "id": "fx-policy-DisplayBookmarksToolbar-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisplayBookmarksToolbar": "always"
+            }
+          },
+          "id": "fx-policy-DisplayBookmarksToolbar-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisplayBookmarksToolbar.dita",
+      "policy_id": "DisplayBookmarksToolbar"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DisplayMenuBar",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DisplayMenuBar": "always"
+            }
+          },
+          "id": "fx-policy-DisplayMenuBar-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DisplayMenuBar": "always"
+            }
+          },
+          "id": "fx-policy-DisplayMenuBar-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DisplayMenuBar.dita",
+      "policy_id": "DisplayMenuBar"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DNSOverHTTPS",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DNSOverHTTPS": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-DNSOverHTTPS-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DNSOverHTTPS": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-DNSOverHTTPS-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DNSOverHTTPS.dita",
+      "policy_id": "DNSOverHTTPS"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DontCheckDefaultBrowser",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DontCheckDefaultBrowser": true
+            }
+          },
+          "id": "fx-policy-DontCheckDefaultBrowser-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DontCheckDefaultBrowser": true
+            }
+          },
+          "id": "fx-policy-DontCheckDefaultBrowser-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DontCheckDefaultBrowser.dita",
+      "policy_id": "DontCheckDefaultBrowser"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-DownloadDirectory",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "DownloadDirectory": "${home}/Downloads"
+            }
+          },
+          "id": "fx-policy-DownloadDirectory-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "DownloadDirectory": "${home}/Downloads"
+            }
+          },
+          "id": "fx-policy-DownloadDirectory-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-DownloadDirectory.dita",
+      "policy_id": "DownloadDirectory"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-EnableTrackingProtection",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "EnableTrackingProtection": {
+                "Value": true
+              }
+            }
+          },
+          "id": "fx-policy-EnableTrackingProtection-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "EnableTrackingProtection": {
+                "Value": true
+              }
+            }
+          },
+          "id": "fx-policy-EnableTrackingProtection-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-EnableTrackingProtection.dita",
+      "policy_id": "EnableTrackingProtection"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-EncryptedMediaExtensions",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "EncryptedMediaExtensions": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-EncryptedMediaExtensions-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "EncryptedMediaExtensions": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-EncryptedMediaExtensions-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-EncryptedMediaExtensions.dita",
+      "policy_id": "EncryptedMediaExtensions"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-EnterprisePoliciesEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "EnterprisePoliciesEnabled": {}
+            }
+          },
+          "id": "fx-policy-EnterprisePoliciesEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "EnterprisePoliciesEnabled": {}
+            }
+          },
+          "id": "fx-policy-EnterprisePoliciesEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-EnterprisePoliciesEnabled.dita",
+      "policy_id": "EnterprisePoliciesEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ExemptDomainFileTypePairsFromFileTypeDownloadWarnings",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ExemptDomainFileTypePairsFromFileTypeDownloadWarnings": [
+                {
+                  "file_extension": "jnlp"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-ExemptDomainFileTypePairsFromFileTypeDownloadWarnings-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ExemptDomainFileTypePairsFromFileTypeDownloadWarnings": [
+                {
+                  "file_extension": "jnlp"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-ExemptDomainFileTypePairsFromFileTypeDownloadWarnings-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ExemptDomainFileTypePairsFromFileTypeDownloadWarnings.dita",
+      "policy_id": "ExemptDomainFileTypePairsFromFileTypeDownloadWarnings"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Extensions",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Extensions": {
+                "Install": [
+                  "https://addons.mozilla.org/firefox/downloads/somefile.xpi",
+                  "//path/to/xpi"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Extensions-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Extensions": {
+                "Install": [
+                  "https://addons.mozilla.org/firefox/downloads/somefile.xpi",
+                  "//path/to/xpi"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-Extensions-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Extensions.dita",
+      "policy_id": "Extensions"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ExtensionSettings",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ExtensionSettings": {}
+            }
+          },
+          "id": "fx-policy-ExtensionSettings-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ExtensionSettings": {}
+            }
+          },
+          "id": "fx-policy-ExtensionSettings-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ExtensionSettings.dita",
+      "policy_id": "ExtensionSettings"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ExtensionUpdate",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ExtensionUpdate": true
+            }
+          },
+          "id": "fx-policy-ExtensionUpdate-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ExtensionUpdate": true
+            }
+          },
+          "id": "fx-policy-ExtensionUpdate-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ExtensionUpdate.dita",
+      "policy_id": "ExtensionUpdate"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-FirefoxHome",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "FirefoxHome": {
+                "Search": true
+              }
+            }
+          },
+          "id": "fx-policy-FirefoxHome-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "FirefoxHome": {
+                "Search": true
+              }
+            }
+          },
+          "id": "fx-policy-FirefoxHome-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-FirefoxHome.dita",
+      "policy_id": "FirefoxHome"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-FirefoxSuggest",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "FirefoxSuggest": {
+                "WebSuggestions": true
+              }
+            }
+          },
+          "id": "fx-policy-FirefoxSuggest-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "FirefoxSuggest": {
+                "WebSuggestions": true
+              }
+            }
+          },
+          "id": "fx-policy-FirefoxSuggest-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-FirefoxSuggest.dita",
+      "policy_id": "FirefoxSuggest"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-GenerativeAI",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "GenerativeAI": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-GenerativeAI-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-GenerativeAI.dita",
+      "policy_id": "GenerativeAI"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-GoToIntranetSiteForSingleWordEntryInAddressBar",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "GoToIntranetSiteForSingleWordEntryInAddressBar": true
+            }
+          },
+          "id": "fx-policy-GoToIntranetSiteForSingleWordEntryInAddressBar-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "GoToIntranetSiteForSingleWordEntryInAddressBar": true
+            }
+          },
+          "id": "fx-policy-GoToIntranetSiteForSingleWordEntryInAddressBar-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-GoToIntranetSiteForSingleWordEntryInAddressBar.dita",
+      "policy_id": "GoToIntranetSiteForSingleWordEntryInAddressBar"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Handlers",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Handlers": {
+                "mimeTypes": {}
+              }
+            }
+          },
+          "id": "fx-policy-Handlers-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Handlers": {
+                "mimeTypes": {}
+              }
+            }
+          },
+          "id": "fx-policy-Handlers-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Handlers.dita",
+      "policy_id": "Handlers"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-HardwareAcceleration",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "HardwareAcceleration": true
+            }
+          },
+          "id": "fx-policy-HardwareAcceleration-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "HardwareAcceleration": true
+            }
+          },
+          "id": "fx-policy-HardwareAcceleration-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-HardwareAcceleration.dita",
+      "policy_id": "HardwareAcceleration"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Homepage",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Homepage": {
+                "URL": "http://example.com/"
+              }
+            }
+          },
+          "id": "fx-policy-Homepage-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Homepage": {
+                "URL": "http://example.com/"
+              }
+            }
+          },
+          "id": "fx-policy-Homepage-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Homepage.dita",
+      "policy_id": "Homepage"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-HttpAllowlist",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "HttpAllowlist": [
+                "http://example.org",
+                "http://example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-HttpAllowlist-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "HttpAllowlist": [
+                "http://example.org",
+                "http://example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-HttpAllowlist-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-HttpAllowlist.dita",
+      "policy_id": "HttpAllowlist"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-HttpsOnlyMode",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "HttpsOnlyMode": "allowed"
+            }
+          },
+          "id": "fx-policy-HttpsOnlyMode-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "HttpsOnlyMode": "allowed"
+            }
+          },
+          "id": "fx-policy-HttpsOnlyMode-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-HttpsOnlyMode.dita",
+      "policy_id": "HttpsOnlyMode"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-InstallAddonsPermission",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "InstallAddonsPermission": {
+                "Allow": [
+                  "http://example.org/",
+                  "http://example.edu/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-InstallAddonsPermission-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "InstallAddonsPermission": {
+                "Allow": [
+                  "http://example.org/",
+                  "http://example.edu/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-InstallAddonsPermission-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-InstallAddonsPermission.dita",
+      "policy_id": "InstallAddonsPermission"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-IPProtectionAvailable",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "IPProtectionAvailable": true
+            }
+          },
+          "id": "fx-policy-IPProtectionAvailable-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-IPProtectionAvailable.dita",
+      "policy_id": "IPProtectionAvailable"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-LegacyProfiles",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "LegacyProfiles": {}
+            }
+          },
+          "id": "fx-policy-LegacyProfiles-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "LegacyProfiles": {}
+            }
+          },
+          "id": "fx-policy-LegacyProfiles-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-LegacyProfiles.dita",
+      "policy_id": "LegacyProfiles"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-LegacySameSiteCookieBehaviorEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "LegacySameSiteCookieBehaviorEnabled": true
+            }
+          },
+          "id": "fx-policy-LegacySameSiteCookieBehaviorEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "LegacySameSiteCookieBehaviorEnabled": true
+            }
+          },
+          "id": "fx-policy-LegacySameSiteCookieBehaviorEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-LegacySameSiteCookieBehaviorEnabled.dita",
+      "policy_id": "LegacySameSiteCookieBehaviorEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-LegacySameSiteCookieBehaviorEnabledForDomainList",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "LegacySameSiteCookieBehaviorEnabledForDomainList": [
+                "example.org",
+                "example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-LegacySameSiteCookieBehaviorEnabledForDomainList-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "LegacySameSiteCookieBehaviorEnabledForDomainList": [
+                "example.org",
+                "example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-LegacySameSiteCookieBehaviorEnabledForDomainList-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-LegacySameSiteCookieBehaviorEnabledForDomainList.dita",
+      "policy_id": "LegacySameSiteCookieBehaviorEnabledForDomainList"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-LocalFileLinks",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "LocalFileLinks": [
+                "http://example.org/",
+                "http://example.edu/"
+              ]
+            }
+          },
+          "id": "fx-policy-LocalFileLinks-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "LocalFileLinks": [
+                "http://example.org/",
+                "http://example.edu/"
+              ]
+            }
+          },
+          "id": "fx-policy-LocalFileLinks-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-LocalFileLinks.dita",
+      "policy_id": "LocalFileLinks"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-LocalNetworkAccess",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "LocalNetworkAccess": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-LocalNetworkAccess-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-LocalNetworkAccess.dita",
+      "policy_id": "LocalNetworkAccess"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ManagedBookmarks",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ManagedBookmarks": [
+                {
+                  "toplevel_name": "My managed bookmarks folder"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-ManagedBookmarks-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ManagedBookmarks": [
+                {
+                  "toplevel_name": "My managed bookmarks folder"
+                }
+              ]
+            }
+          },
+          "id": "fx-policy-ManagedBookmarks-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ManagedBookmarks.dita",
+      "policy_id": "ManagedBookmarks"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ManualAppUpdateOnly",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ManualAppUpdateOnly": true
+            }
+          },
+          "id": "fx-policy-ManualAppUpdateOnly-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ManualAppUpdateOnly": true
+            }
+          },
+          "id": "fx-policy-ManualAppUpdateOnly-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ManualAppUpdateOnly.dita",
+      "policy_id": "ManualAppUpdateOnly"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-MicrosoftEntraSSO",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "MicrosoftEntraSSO": true
+            }
+          },
+          "id": "fx-policy-MicrosoftEntraSSO-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "MicrosoftEntraSSO": true
+            }
+          },
+          "id": "fx-policy-MicrosoftEntraSSO-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-MicrosoftEntraSSO.dita",
+      "policy_id": "MicrosoftEntraSSO"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-NetworkPrediction",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "NetworkPrediction": true
+            }
+          },
+          "id": "fx-policy-NetworkPrediction-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "NetworkPrediction": true
+            }
+          },
+          "id": "fx-policy-NetworkPrediction-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-NetworkPrediction.dita",
+      "policy_id": "NetworkPrediction"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-NewTabPage",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "NewTabPage": true
+            }
+          },
+          "id": "fx-policy-NewTabPage-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "NewTabPage": true
+            }
+          },
+          "id": "fx-policy-NewTabPage-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-NewTabPage.dita",
+      "policy_id": "NewTabPage"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-NoDefaultBookmarks",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "NoDefaultBookmarks": true
+            }
+          },
+          "id": "fx-policy-NoDefaultBookmarks-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "NoDefaultBookmarks": true
+            }
+          },
+          "id": "fx-policy-NoDefaultBookmarks-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-NoDefaultBookmarks.dita",
+      "policy_id": "NoDefaultBookmarks"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-OfferToSaveLogins",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "OfferToSaveLogins": true
+            }
+          },
+          "id": "fx-policy-OfferToSaveLogins-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "OfferToSaveLogins": true
+            }
+          },
+          "id": "fx-policy-OfferToSaveLogins-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-OfferToSaveLogins.dita",
+      "policy_id": "OfferToSaveLogins"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-OfferToSaveLoginsDefault",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "OfferToSaveLoginsDefault": true
+            }
+          },
+          "id": "fx-policy-OfferToSaveLoginsDefault-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "OfferToSaveLoginsDefault": true
+            }
+          },
+          "id": "fx-policy-OfferToSaveLoginsDefault-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-OfferToSaveLoginsDefault.dita",
+      "policy_id": "OfferToSaveLoginsDefault"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-OverrideFirstRunPage",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "OverrideFirstRunPage": "http://example.org"
+            }
+          },
+          "id": "fx-policy-OverrideFirstRunPage-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "OverrideFirstRunPage": "http://example.org"
+            }
+          },
+          "id": "fx-policy-OverrideFirstRunPage-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-OverrideFirstRunPage.dita",
+      "policy_id": "OverrideFirstRunPage"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-OverridePostUpdatePage",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "OverridePostUpdatePage": "http://example.org"
+            }
+          },
+          "id": "fx-policy-OverridePostUpdatePage-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "OverridePostUpdatePage": "http://example.org"
+            }
+          },
+          "id": "fx-policy-OverridePostUpdatePage-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-OverridePostUpdatePage.dita",
+      "policy_id": "OverridePostUpdatePage"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PasswordManagerEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PasswordManagerEnabled": true
+            }
+          },
+          "id": "fx-policy-PasswordManagerEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PasswordManagerEnabled": true
+            }
+          },
+          "id": "fx-policy-PasswordManagerEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PasswordManagerEnabled.dita",
+      "policy_id": "PasswordManagerEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PasswordManagerExceptions",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PasswordManagerExceptions": [
+                "https://example.org",
+                "https://example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-PasswordManagerExceptions-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PasswordManagerExceptions": [
+                "https://example.org",
+                "https://example.edu"
+              ]
+            }
+          },
+          "id": "fx-policy-PasswordManagerExceptions-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PasswordManagerExceptions.dita",
+      "policy_id": "PasswordManagerExceptions"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PDFjs",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PDFjs": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-PDFjs-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PDFjs": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-PDFjs-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PDFjs.dita",
+      "policy_id": "PDFjs"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Permissions",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Permissions": {
+                "Camera": {
+                  "Allow": [
+                    "https://example.org",
+                    "https://example.org:1234"
+                  ]
+                }
+              }
+            }
+          },
+          "id": "fx-policy-Permissions-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Permissions": {
+                "Camera": {
+                  "Allow": [
+                    "https://example.org",
+                    "https://example.org:1234"
+                  ]
+                }
+              }
+            }
+          },
+          "id": "fx-policy-Permissions-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Permissions.dita",
+      "policy_id": "Permissions"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PictureInPicture",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PictureInPicture": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-PictureInPicture-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PictureInPicture": {
+                "Enabled": true
+              }
+            }
+          },
+          "id": "fx-policy-PictureInPicture-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PictureInPicture.dita",
+      "policy_id": "PictureInPicture"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PopupBlocking",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PopupBlocking": {
+                "Allow": [
+                  "http://example.org/",
+                  "http://example.edu/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-PopupBlocking-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PopupBlocking": {
+                "Allow": [
+                  "http://example.org/",
+                  "http://example.edu/"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-PopupBlocking-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PopupBlocking.dita",
+      "policy_id": "PopupBlocking"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PostQuantumKeyAgreementEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PostQuantumKeyAgreementEnabled": true
+            }
+          },
+          "id": "fx-policy-PostQuantumKeyAgreementEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PostQuantumKeyAgreementEnabled": true
+            }
+          },
+          "id": "fx-policy-PostQuantumKeyAgreementEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PostQuantumKeyAgreementEnabled.dita",
+      "policy_id": "PostQuantumKeyAgreementEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Preferences",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Preferences": {}
+            }
+          },
+          "id": "fx-policy-Preferences-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Preferences": {}
+            }
+          },
+          "id": "fx-policy-Preferences-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Preferences.dita",
+      "policy_id": "Preferences"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PrimaryPassword",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PrimaryPassword": true
+            }
+          },
+          "id": "fx-policy-PrimaryPassword-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PrimaryPassword": true
+            }
+          },
+          "id": "fx-policy-PrimaryPassword-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PrimaryPassword.dita",
+      "policy_id": "PrimaryPassword"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PrintingEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PrintingEnabled": true
+            }
+          },
+          "id": "fx-policy-PrintingEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PrintingEnabled": true
+            }
+          },
+          "id": "fx-policy-PrintingEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PrintingEnabled.dita",
+      "policy_id": "PrintingEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PrivateBrowsingModeAvailability",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PrivateBrowsingModeAvailability": 0
+            }
+          },
+          "id": "fx-policy-PrivateBrowsingModeAvailability-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PrivateBrowsingModeAvailability": 0
+            }
+          },
+          "id": "fx-policy-PrivateBrowsingModeAvailability-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PrivateBrowsingModeAvailability.dita",
+      "policy_id": "PrivateBrowsingModeAvailability"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-PromptForDownloadLocation",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "PromptForDownloadLocation": true
+            }
+          },
+          "id": "fx-policy-PromptForDownloadLocation-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "PromptForDownloadLocation": true
+            }
+          },
+          "id": "fx-policy-PromptForDownloadLocation-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-PromptForDownloadLocation.dita",
+      "policy_id": "PromptForDownloadLocation"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-Proxy",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "Proxy": {
+                "Mode": "none"
+              }
+            }
+          },
+          "id": "fx-policy-Proxy-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "Proxy": {
+                "Mode": "none"
+              }
+            }
+          },
+          "id": "fx-policy-Proxy-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-Proxy.dita",
+      "policy_id": "Proxy"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-RequestedLocales",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "RequestedLocales": "de,en-US"
+            }
+          },
+          "id": "fx-policy-RequestedLocales-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "RequestedLocales": "de,en-US"
+            }
+          },
+          "id": "fx-policy-RequestedLocales-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-RequestedLocales.dita",
+      "policy_id": "RequestedLocales"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SanitizeOnShutdown",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SanitizeOnShutdown": {
+                "Cache": true
+              }
+            }
+          },
+          "id": "fx-policy-SanitizeOnShutdown-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SanitizeOnShutdown": {
+                "Cache": true
+              }
+            }
+          },
+          "id": "fx-policy-SanitizeOnShutdown-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SanitizeOnShutdown.dita",
+      "policy_id": "SanitizeOnShutdown"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SearchBar",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SearchBar": "unified"
+            }
+          },
+          "id": "fx-policy-SearchBar-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SearchBar": "unified"
+            }
+          },
+          "id": "fx-policy-SearchBar-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SearchBar.dita",
+      "policy_id": "SearchBar"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SearchEngines",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SearchEngines": {
+                "Add": [
+                  {
+                    "Name": "example",
+                    "URLTemplate": "https://search.example.invalid/?q={searchTerms}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-SearchEngines-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SearchEngines": {
+                "Add": [
+                  {
+                    "Name": "example",
+                    "URLTemplate": "https://search.example.invalid/?q={searchTerms}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-SearchEngines-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SearchEngines.dita",
+      "policy_id": "SearchEngines"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SearchSuggestEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SearchSuggestEnabled": true
+            }
+          },
+          "id": "fx-policy-SearchSuggestEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SearchSuggestEnabled": true
+            }
+          },
+          "id": "fx-policy-SearchSuggestEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SearchSuggestEnabled.dita",
+      "policy_id": "SearchSuggestEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SecurityDevices",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SecurityDevices": {}
+            }
+          },
+          "id": "fx-policy-SecurityDevices-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SecurityDevices": {}
+            }
+          },
+          "id": "fx-policy-SecurityDevices-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SecurityDevices.dita",
+      "policy_id": "SecurityDevices"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-ShowHomeButton",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "ShowHomeButton": true
+            }
+          },
+          "id": "fx-policy-ShowHomeButton-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "ShowHomeButton": true
+            }
+          },
+          "id": "fx-policy-ShowHomeButton-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-ShowHomeButton.dita",
+      "policy_id": "ShowHomeButton"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SkipTermsOfUse",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SkipTermsOfUse": true
+            }
+          },
+          "id": "fx-policy-SkipTermsOfUse-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SkipTermsOfUse": true
+            }
+          },
+          "id": "fx-policy-SkipTermsOfUse-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SkipTermsOfUse.dita",
+      "policy_id": "SkipTermsOfUse"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SSLVersionMax",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SSLVersionMax": "tls1"
+            }
+          },
+          "id": "fx-policy-SSLVersionMax-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SSLVersionMax": "tls1"
+            }
+          },
+          "id": "fx-policy-SSLVersionMax-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SSLVersionMax.dita",
+      "policy_id": "SSLVersionMax"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SSLVersionMin",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SSLVersionMin": "tls1"
+            }
+          },
+          "id": "fx-policy-SSLVersionMin-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SSLVersionMin": "tls1"
+            }
+          },
+          "id": "fx-policy-SSLVersionMin-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SSLVersionMin.dita",
+      "policy_id": "SSLVersionMin"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-StartDownloadsInTempDirectory",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "StartDownloadsInTempDirectory": true
+            }
+          },
+          "id": "fx-policy-StartDownloadsInTempDirectory-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "StartDownloadsInTempDirectory": true
+            }
+          },
+          "id": "fx-policy-StartDownloadsInTempDirectory-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-StartDownloadsInTempDirectory.dita",
+      "policy_id": "StartDownloadsInTempDirectory"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-SupportMenu",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "SupportMenu": {
+                "Title": "Support Menu"
+              }
+            }
+          },
+          "id": "fx-policy-SupportMenu-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "SupportMenu": {
+                "Title": "Support Menu"
+              }
+            }
+          },
+          "id": "fx-policy-SupportMenu-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-SupportMenu.dita",
+      "policy_id": "SupportMenu"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-TranslateEnabled",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "TranslateEnabled": true
+            }
+          },
+          "id": "fx-policy-TranslateEnabled-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "TranslateEnabled": true
+            }
+          },
+          "id": "fx-policy-TranslateEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-TranslateEnabled.dita",
+      "policy_id": "TranslateEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-UserMessaging",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "UserMessaging": {
+                "ExtensionRecommendations": true
+              }
+            }
+          },
+          "id": "fx-policy-UserMessaging-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "UserMessaging": {
+                "ExtensionRecommendations": true
+              }
+            }
+          },
+          "id": "fx-policy-UserMessaging-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-UserMessaging.dita",
+      "policy_id": "UserMessaging"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-UseSystemPrintDialog",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "UseSystemPrintDialog": true
+            }
+          },
+          "id": "fx-policy-UseSystemPrintDialog-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "UseSystemPrintDialog": true
+            }
+          },
+          "id": "fx-policy-UseSystemPrintDialog-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-UseSystemPrintDialog.dita",
+      "policy_id": "UseSystemPrintDialog"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-VisualSearchEnabled",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "VisualSearchEnabled": true
+            }
+          },
+          "id": "fx-policy-VisualSearchEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-VisualSearchEnabled.dita",
+      "policy_id": "VisualSearchEnabled"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-WebsiteFilter",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "WebsiteFilter": {
+                "Block": [
+                  "<all_urls>"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-WebsiteFilter-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "WebsiteFilter": {
+                "Block": [
+                  "<all_urls>"
+                ]
+              }
+            }
+          },
+          "id": "fx-policy-WebsiteFilter-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-WebsiteFilter.dita",
+      "policy_id": "WebsiteFilter"
+    },
+    {
+      "channel_scope": "both",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": true,
+        "release_supported": true,
+        "scope": "both",
+        "supported_channels": [
+          "esr-140.12",
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-WindowsSSO",
+      "examples": [
+        {
+          "channel": "esr-140.12",
+          "document": {
+            "policies": {
+              "WindowsSSO": true
+            }
+          },
+          "id": "fx-policy-WindowsSSO-esr-140.12",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        },
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "WindowsSSO": true
+            }
+          },
+          "id": "fx-policy-WindowsSSO-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-WindowsSSO.dita",
+      "policy_id": "WindowsSSO"
+    },
+    {
+      "channel_scope": "release-only",
+      "channel_support": {
+        "definition_changed_across_channels": false,
+        "esr_supported": false,
+        "release_supported": true,
+        "scope": "release-only",
+        "supported_channels": [
+          "release-152"
+        ]
+      },
+      "doc_id": "fx-policy-XSLTEnabled",
+      "examples": [
+        {
+          "channel": "release-152",
+          "document": {
+            "policies": {
+              "XSLTEnabled": true
+            }
+          },
+          "id": "fx-policy-XSLTEnabled-release-152",
+          "notes": [
+            "Synthetic documentation fixture; replace example.invalid values before deployment.",
+            "Schema source: mozilla-policy-templates-v7.12."
+          ],
+          "purpose": "Minimal schema-valid Firefox boundary document.",
+          "validates": true
+        }
+      ],
+      "path": "documentation/src/generated/firefox/policies/fx-policy-XSLTEnabled.dita",
+      "policy_id": "XSLTEnabled"
+    }
+  ],
+  "policy_count": 120,
+  "provenance_review_backlog_item": "BPM090-M5-09",
+  "schema_refresh_runbook_backlog_item": "BPM090-M5-08",
+  "schema_version": 1,
+  "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+  "source_inventory_sha256": "7dc1e50e6401211f45818c4dc2161acfff4d9a40d78f6ff38a75c998fb6eb31a",
+  "source_model": "documentation/config/firefox-policy-topic-model-0.9.0.json",
+  "source_model_sha256": "9aaa44f43ef4db25ac0485a2351f3a398e01377b0ed12df544074a0996d8e8b5",
+  "target_bpm_version": "0.9.0"
+}

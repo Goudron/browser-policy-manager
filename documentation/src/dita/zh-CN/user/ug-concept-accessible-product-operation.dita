@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-accessible-product-operation" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>可访问的产品操作</title>
+  <shortdesc>通过本地化状态、错误、焦点、键盘反馈和响应式布局使用 BPM。</shortdesc>
+  <conbody>
+    <section id="a-keyboard"><title>Keyboard</title><p>键盘行为必须让主要操作、导航、筛选器、编辑器控件、确认和链接在没有指针设备时也可访问。</p></section>
+    <section id="a-focus"><title>Focus</title><p>焦点指示器会显示导航、模式切换、验证和对话框之后下一个操作作用的位置。</p></section>
+    <section id="a-status-feedback"><title>Status feedback</title><p>本地化状态和错误反馈会说明保存、验证、导入、导出、归档、恢复和删除结果。</p></section>
+    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>响应式布局在窄屏上保留相同任务；主题和区域设置变更不得隐藏警告或破坏性确认。</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-change-interface-theme"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</concept>

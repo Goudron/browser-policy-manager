@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-profile-status" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>配置文件状态参考</title>
+  <shortdesc>操作前读取 profile name、ID、schema、lifecycle、dirty/saved state 和 validation context。</shortdesc>
+  <refbody>
+    <section id="a-profile-identity"><title>身份</title><p>Profile name 和 ID 确认当前 editor、Library row 或 Compare selection 指向预期 saved profile 或 draft。</p></section>
+    <section id="a-profile-lifecycle"><title>生命周期</title><p>Lifecycle state 区分 active、archived、draft、restored 以及 deletion-sensitive 配置文件工作。</p></section>
+    <section id="a-profile-validation"><title>验证</title><p>Validation context 显示当前 policy 和 managed-preference values 是否已准备好 save、comparison 或 export。</p></section>
+    <section id="a-profile-dirty-state"><title>脏状态</title><p>Dirty/saved state 告诉您在 navigation、export 或信任另一个标签页前，是否仍需保存可见 editor changes。</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-review-profile-context"/>
+    <link keyref="topic.ug-reference-library-profile-row"/>
+  </related-links>
+</reference>

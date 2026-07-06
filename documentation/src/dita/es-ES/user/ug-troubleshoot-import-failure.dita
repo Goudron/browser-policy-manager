@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-import-failure" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Recuperarse de failed import</title>
+  <shortdesc>Diagnostique failed import de JSON o multipart policy input sin cambiar internal storage.</shortdesc>
+  <taskbody>
+    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
+    <context><p>La importación puede fallar si el archivo no se lee, JSON malformed, Firefox boundary shape es incorrecta o los valores normalizados no pasan validation.</p></context>
+    <steps>
+      <step><cmd>Mantenga import failure message visible e identifique si la entrada era JSON o multipart.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Confirme que el archivo contiene un Firefox boundary document con top-level policies object cuando se usa JSON import.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Si el mensaje indica syntax, recupere primero malformed JSON.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
+      <step><cmd>Reintente import una vez con el archivo corregido y revise normalized values antes de guardar.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+    </steps>
+    <result><p>La importación crea un BPM profile draft revisable o permanece bloqueada con una razón visible conservada.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-troubleshoot-malformed-json"/>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-use-reusable-api-examples"/>
+  </related-links>
+</task>

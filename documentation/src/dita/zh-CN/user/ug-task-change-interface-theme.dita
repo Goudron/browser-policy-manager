@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-change-interface-theme" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>更改界面主题</title>
+  <shortdesc>选择系统、浅色或深色主题，而不更改配置文件内容。</shortdesc>
+  <taskbody>
+    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
+    <context><p>主题选择只影响 BPM 界面，有助于舒适地查看表格、代码块、验证状态和警告。</p></context>
+    <steps>
+      <step><cmd>打开页面标题栏中的主题选择器。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>选择系统、浅色或深色。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>检查编辑器面板、表格、备注、焦点指示器和验证状态是否仍然清晰可读。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>确认未保存的配置文件数据仍然存在后继续编辑。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+    </steps>
+    <result><p>BPM 在支持的界面中使用所选视觉主题。</p></result>
+    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

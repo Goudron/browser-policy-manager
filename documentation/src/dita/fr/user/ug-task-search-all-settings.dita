@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-search-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Rechercher dans All Settings</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Search configured settings, available policies, known preferences, and setting actions from All Settings.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Open All Settings in any mode.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Search is shared across Review, Configured, and Catalog work. It can lead to a setting, an action, or a filtered group.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Place focus in the All Settings search field.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Enter a policy ID, preference key, category, source, or plain-language term.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Choose a grouped result and confirm the target setting or action.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Rechercher dans All Settings. Clear the search when you return to browsing or filtering.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The matching setting or action is selected without losing the current profile context.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if no result appears, confirm the schema channel and try a policy ID or preference key.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-follow-setting-deep-link"/>
+    <link keyref="topic.ug-task-filter-all-settings"/>
+  </related-links>
+</task>

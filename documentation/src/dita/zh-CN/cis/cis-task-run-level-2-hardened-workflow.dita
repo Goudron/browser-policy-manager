@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-run-level-2-hardened-workflow" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>运行 Level 2 hardened CIS 工作流</title>
+  <shortdesc>使用 Level 2 fixture，在 deployment 前审查更严格的 CIS profile。</shortdesc>
+  <taskbody>
+    <prereq><p>使用 fixture <codeph>cis-workflow-level-2-release-fixture</codeph>：Firefox Release 152、layer <codeph>cis-l2.release-152</codeph>、starter preset <codeph>soc_hard</codeph>，以及 comparison profile <codeph>cis-workflow-level-1-release-reference</codeph>。</p></prereq>
+    <context><p>Level 2 是 hardened path。它可能比 Level 1 兼容性更低，因此 reviewer 必须检查 Guided 和 All Settings、处理 attention items、与 Level 1 reference 比较、导出并独立验证结果。</p></context>
+    <steps>
+      <step><cmd>创建或复制一个 Release 152 profile，应用 SOC-style hardened starter preset，并应用 Level 2 CIS layer。</cmd><info><p>预期结果：profile 在 source trail 中记录 <codeph>soc_hard</codeph> 和 <codeph>cis-l2.release-152</codeph>。</p></info></step>
+      <step><cmd>在 Guided Editor 中审查 profile，重点关注 stricter security/privacy defaults，以及可能影响 usability、add-ons、browsing data、network behavior 或 enterprise operations 的 controls。</cmd><info><p>预期结果：在 profile export 前识别 high-impact settings。</p></info></step>
+      <step><cmd>使用 All Settings 过滤 configured CIS rows，打开 attention items，并将每一 row 跟踪到 generated recommendation topic、mapping table、UI target 和 affected Firefox policy topic。</cmd><info><p>预期结果：每个 stricter value 都有可见 source path 和用于 review 的 policy-topic route。</p></info></step>
+      <step><cmd>使用 deviation task 处理 manual-review rows 和 intentional deviations，包括 owner、reason、review date、external record，以及该 value 是否保持 baseline、CIS、manual、imported 或 raw。</cmd><info><note type="warning">BPM 0.9.0 不保存 dedicated exception 或 waiver object；在将 deviation 视为 reviewed 之前，请保留 external record。</note></info></step>
+      <step><cmd>将 Level 2 profile 与 Level 1 reference fixture 比较，并检查所有 changed 或 newly configured rows。</cmd><info><p>预期结果：reviewer 可以在 approval 前说明 Level 2 与 Level 1 的差异原因。</p></info></step>
+      <step><cmd>验证并导出 <codeph>policies.json</codeph>，然后使用 owner-approved runtime、operating-system、network 或 audit method 执行 independent deployment verification。</cmd><info><p>预期结果：hardened profile 具有 export artifact、validation result、comparison evidence 和 external verification evidence。</p></info></step>
+    </steps>
+    <result><p>代表性的 Level 2 hardened profile 可 end to end 审查，并保持在 BPM mapping、export 和 source-attribution evidence 边界内。</p></result>
+    <postreq><p>如果 independent verification 发现 deployment risk，请将 profile 保持为 draft，并在 reuse 前更新 external decision record。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.cis-concept-manual-review-exceptions"/>
+    <link keyref="topic.cis-task-verify-cis-deviation"/>
+    <link keyref="topic.ug-task-review-attention-items"/>
+    <link keyref="topic.ug-task-compare-profiles"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+  </related-links>
+</task>

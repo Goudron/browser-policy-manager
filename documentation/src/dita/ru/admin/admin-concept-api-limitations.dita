@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-api-limitations" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Текущие API limitations и security constraints</title>
+  <shortdesc>BPM 0.9.0 честно документирует текущие limitations, чтобы integrations не выводили guarantees, которых API не предоставляет.</shortdesc>
+  <conbody>
+    <section id="a-security"><title>Security constraints</title><p>В текущем API нет authentication или authorization layer. CORS по умолчанию использует <codeph>*</codeph> origins, если deployment settings это не переопределяют. Документация не должна подразумевать API token authentication, OAuth, role-based access control, tenant isolation или production authorization behavior.</p></section>
+    <section id="a-versioning"><title>Versioning and compatibility</title><p>У API нет version prefix, compatibility policy, deprecation header или media-type version. Integrations должны фиксировать BPM release, с которым они тестируются, и отслеживать <codeph>/openapi.json</codeph>, API inventory и release notes, а не предполагать guaranteed backward compatibility.</p></section>
+    <section id="a-concurrency"><title>Concurrency, idempotency, and retry</title><p>Только PATCH поддерживает optimistic concurrency через optional <codeph>expected_revision</codeph>. Create, import, delete, restore, reset и export не предоставляют ETags, precondition headers, idempotency keys или retry contracts. Consumers проектируют собственное safe retry и duplicate-name recovery behavior.</p></section>
+    <section id="a-bulk-transactions"><title>Bulk and transaction boundaries</title><p>BPM 0.9.0 не предоставляет bulk profile CRUD endpoint, bulk export endpoint, cursor pagination или multi-operation transaction contract. Failed multi-step integration не откатывается BPM автоматически; integrating product отвечает за recovery sequencing и audit records.</p></section>
+    <section id="a-errors"><title>Error envelope limitations</title><p>Error responses не используют единый stable versioned envelope. Status <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph>, <codeph>415</codeph>, <codeph>422</codeph> и <codeph>503</codeph> могут иметь разные <codeph>detail</codeph> shapes. Consumers должны ветвиться по operation, status и documented body shape.</p></section>
+    <section id="a-exclusions"><title>Excluded and HTML surfaces</title><p>Шесть OpenAPI <codeph>web</codeph> operations — HTML product routes, а не stable machine-integration APIs. <codeph>/i18n/{locale}.json</codeph>, <codeph>/favicon.ico</codeph>, <codeph>/static/*</codeph>, generated schema UIs и underscore-prefixed Python helpers исключены из integration operation topics.</p></section>
+    <section id="a-health"><title>Health response limits</title><p><codeph>/health</codeph> и <codeph>/health/ready</codeph> раскрывают только compact status fields. Readiness не сообщает per-dependency diagnostics, database details, schema health, documentation portal status или deployment approval. Operational monitors должны считать их minimal handshake endpoints.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.ug-troubleshoot-product-connection"/>
+    <link keyref="topic.ug-troubleshoot-save-conflict"/>
+  </related-links>
+</concept>

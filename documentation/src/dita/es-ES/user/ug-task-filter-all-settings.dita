@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-filter-all-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Filtrar la lista de All Settings</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. Filter by configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown state.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. Open All Settings with a visible settings list.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. State filters narrow a large inventory by the decision the user needs to make. They are different from source filters, which explain where a value came from.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. Open the list filter toolbar.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. Choose the state filter that matches the task: configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. Inspect the filtered count and representative rows.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Filtrar la lista de All Settings. Clear the state filter before applying unrelated edits.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. The list shows settings with the selected state only.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if a row is missing, clear state filters and search by exact policy or preference identifier.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-reference-large-settings-inventories"/>
+    <link keyref="topic.ug-task-search-all-settings"/>
+  </related-links>
+</task>

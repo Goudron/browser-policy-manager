@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-change-interface-theme" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Cambiar el tema de la interfaz</title>
+  <shortdesc>Seleccione el tema del sistema, claro u oscuro sin cambiar el contenido del perfil.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
+    <context><p>La selección de tema solo afecta a la interfaz de BPM y ayuda a revisar tablas, bloques de código, estados de validación y advertencias cómodamente.</p></context>
+    <steps>
+      <step><cmd>Abra el selector de tema en el encabezado de la página.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Elija Sistema, Claro u Oscuro.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Compruebe que paneles del editor, tablas, notas, indicadores de foco y estados de validación siguen siendo legibles.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Continúe editando después de confirmar que los datos no guardados del perfil siguen presentes.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+    </steps>
+    <result><p>BPM usa el tema visual seleccionado en las superficies compatibles.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

@@ -116,7 +116,12 @@
             {% endcall %}
             <div class="wizard-baseline-group wizard-baseline-group--cis">
                 <div class="wizard-baseline-group-head">
-                    <div class="field-label" data-i18n="profiles.wizard_cis_title">{{ tr("profiles.wizard_cis_title") }}</div>
+                    <div class="field-label inline-help-label">
+                        <span data-i18n="profiles.wizard_cis_title">{{ tr("profiles.wizard_cis_title") }}</span>
+                        {% set context_help_icon_target = "cis-baseline-selection" %}
+                        {% set context_help_icon_label_key = "profiles.help_cis_baseline_selection" %}
+                        {% include "profiles/_context_help_icon.html" %}
+                    </div>
                     <div class="wizard-input-hint" data-i18n="profiles.wizard_cis_body">{{ tr("profiles.wizard_cis_body") }}</div>
                 </div>
                 <div class="wizard-cis-selector" role="group" aria-label="{{ tr('profiles.wizard_cis_title') }}">

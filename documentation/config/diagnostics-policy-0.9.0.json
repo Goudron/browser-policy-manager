@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M11-06",
+  "target_bpm_version": "0.9.0",
+  "status": "accepted",
+  "purpose": "Make documentation failures point to the smallest rerunnable check and retain debug artifacts outside maintained source.",
+  "artifact_root": "documentation/reports/diagnostics/",
+  "required_fields": [
+    "topic_id",
+    "locale",
+    "guide",
+    "source_line",
+    "target_url",
+    "query",
+    "screenshot_state",
+    "focused_rerun"
+  ],
+  "focused_entry_points": [
+    "make docs-fast-check",
+    "make test-docs-contract",
+    "make docs-validate"
+  ],
+  "retention_rules": {
+    "ignored_by_git": true,
+    "source_controlled": false,
+    "may_contain_generated_debug_output": true,
+    "must_not_contain_secrets_or_customer_data": true
+  }
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-when-to-use-json-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Wann JSON Editor verwenden</title>
+  <shortdesc>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Wann JSON Editor verwenden. Use JSON Editor for exact raw review, migration checks, troubleshooting, and values that are easier to handle as raw policies.json.</shortdesc>
+  <conbody>
+    <p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Wann JSON Editor verwenden. JSON Editor is powerful but less guided than the visual editors. It should be a deliberate choice when the user needs boundary-document precision.</p>
+    <section id="a-good-fit"><title>Good fit</title><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Wann JSON Editor verwenden. Use JSON Editor for exact policies.json review, migration checks, raw fallback values, or troubleshooting malformed import/export documents.</p></section>
+    <section id="a-not-first-choice"><title>Not the first choice</title><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Wann JSON Editor verwenden. Use Guided Editor for common workflows and All Settings for full visual inspection before choosing raw JSON for routine edits.</p></section>
+    <section id="a-validation-boundary"><title>Validation boundary</title><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Wann JSON Editor verwenden. Valid JSON syntax is not enough. BPM also validates Firefox policy values, schema channel support, and the canonical normalized model before save.</p></section>
+    <section id="a-examples"><title>Examples</title><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: Wann JSON Editor verwenden. A valid example keeps a top-level policies object. A valid example keeps a top-level policies object with entries such as DisableTelemetry and Preferences, including a locked browser.startup.homepage value. Invalid examples include malformed JSON syntax and schema-invalid policy values such as a string where a boolean is required.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-use-json-editor"/>
+    <link keyref="topic.ug-task-validate-json-document"/>
+  </related-links>
+</concept>

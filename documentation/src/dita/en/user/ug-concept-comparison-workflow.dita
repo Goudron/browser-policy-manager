@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-comparison-workflow" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Profile comparison workflow</title>
+  <shortdesc>Compare helps review the saved setting differences between two profiles without changing either profile.</shortdesc>
+  <conbody>
+    <p>The workflow is: open Compare from the Library, search independently for Profile A and Profile B, review each selected profile summary, then read the comparison table.</p>
+    <p>The table uses the union of policy and managed-preference settings from both profiles. A row can be equal, changed, or missing on one side. Compare is read-only and does not merge values.</p>
+    <p>Use Compare when deciding whether two saved profiles are equivalent, whether one profile missed a setting, or whether a policy or preference changed between versions.</p>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-reference-comparison-states"/>
+    <link keyref="topic.ug-task-interpret-profile-comparison"/>
+  </related-links>
+</concept>

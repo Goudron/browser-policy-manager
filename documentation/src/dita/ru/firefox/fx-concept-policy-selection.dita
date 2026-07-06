@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="fx-concept-policy-selection" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Выбор политики Firefox для настройки</title>
+  <shortdesc>Выбирайте политики по пользовательскому результату, каналу схемы, форме значения и поверхности BPM, где правка будет самой безопасной.</shortdesc>
+  <conbody>
+    <section id="a-start-with-outcome"><title>Начните с результата</title><p>Сначала определите нужное поведение браузера: обновления, домашняя страница, расширения, приватность, разрешения, поиск, сертификаты, прокси либо controls для AI и smart-функций. Затем используйте справочные skeletons Firefox Policy Guide и рабочие сценарии User Guide, чтобы найти стабильный policy ID.</p></section>
+    <section id="a-check-channel"><title>Проверьте поддержку Release и ESR</title><p>Некоторые политики есть и в Firefox Release 152, и в ESR 140.12, а часть доступна только в Release. Выберите канал схемы BPM до того, как полагаться на политику; недоступная политика является блокером валидации, а не пробелом документации.</p></section>
+    <section id="a-pick-edit-surface"><title>Выберите поверхность редактирования</title><p>Используйте Guided Editor для типовых задач, All Settings для полного каталога и отслеживания источников, а JSON Editor — когда нужен точный контроль boundary-документа Firefox. Экспортируйте только после чистой валидации выбранного канала.</p></section>
+    <section id="a-review-value-shape"><title>Проверьте форму значения</title><p>Простые boolean, string и integer политики обычно безопасно редактировать напрямую. Сложные object, array, extension, permission, search, certificate, proxy и preference-locking политики требуют дополнительной проверки, потому что вложенные поля, сохранение неизвестных значений и raw fallback могут повлиять на экспортируемый <codeph>policies.json</codeph>.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.fx-concept-bpm-firefox-boundary"/>
+    <link keyref="topic.fx-concept-starter-presets"/>
+    <link keyref="topic.ug-task-use-all-settings"/>
+    <link keyref="topic.ug-task-choose-firefox-schema"/>
+  </related-links>
+</concept>

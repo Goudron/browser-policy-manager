@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+    <task id="admin-task-use-reusable-api-examples" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+      <title>复用 DevOps API 示例和环境模板</title>
+      <shortdesc>使用语言中立的 environment templates、curl snippets、multipart samples 和紧凑 Python assertions 来覆盖当前 BPM API workflows。</shortdesc>
+      <taskbody>
+        <prereq><p>为待测 BPM 实例设置 <codeph>BPM_BASE_URL</codeph>。不要把 credentials、tenant names、个人 host names、private hosts 或 production profile IDs 放入 reusable examples；BPM 0.9.0 当前不记录 API authentication。</p></prereq>
+        <context><p>本主题覆盖 <codeph>API-HEALTH-001</codeph>、<codeph>API-HEALTH-002</codeph>、<codeph>API-PROFILE-001</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-PROFILE-004</codeph>、<codeph>API-PROFILE-005</codeph>、<codeph>API-FF-001</codeph>、<codeph>API-VAL-001</codeph> 和 <codeph>API-FF-002</codeph>。示例刻意使用 <codeph>$BPM_BASE_URL</codeph>、synthetic names、<codeph>release-152</codeph>、response assertions 和 disposable fixture IDs，而不是 environment-specific hosts 或 secrets。</p></context>
+        <steps>
+          <step><cmd>在复制 curl 请求之前创建 reusable environment template。</cmd><info><p>Request example: <codeph>export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"</codeph>. Response example: shell 为整个运行保存一个 base URL、schema channel、synthetic profile name 和 optional import path。Error example: 缺少必填值时 shell 会终止赋值。</p><codeblock outputclass="language-bash"><![CDATA[
+# .env.devops-example.template
+BPM_BASE_URL=
+BPM_SCHEMA_CHANNEL=release-152
+BPM_PROFILE_NAME=docs-api-example
+BPM_JSON_IMPORT_PATH=./policies.json
+
+export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"
+export BPM_SCHEMA_CHANNEL="${BPM_SCHEMA_CHANNEL:-release-152}"
+export BPM_PROFILE_NAME="${BPM_PROFILE_NAME:-docs-api-example}"
+export BPM_JSON_IMPORT_PATH="${BPM_JSON_IMPORT_PATH:-./policies.json}"
+]]></codeblock></info></step>
+      <step><cmd>用 health 和 readiness probes 为每个 reusable sequence 设门。</cmd><info><p>Request example: <codeph>curl -fsS "$BPM_BASE_URL/health"</codeph> 和 <codeph>curl -fsS "$BPM_BASE_URL/health/ready"</codeph>. Response example: <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>. Error example: 使用 <codeph>-f</codeph> 时，transport errors 或 non-2xx responses 会让 curl 返回 non-zero。</p><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS "$BPM_BASE_URL/health"
+curl -fsS "$BPM_BASE_URL/health/ready"
+]]></codeblock></info></step>
+      <step><cmd>复用 profile lifecycle snippets：create、list、read 和 guarded update。</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/profiles</codeph>、<codeph>GET $BPM_BASE_URL/api/profiles</codeph>、<codeph>GET $BPM_BASE_URL/api/profiles/$PROFILE_ID</codeph> 和 <codeph>PATCH $BPM_BASE_URL/api/profiles/$PROFILE_ID</codeph>. Response example: <codeph>201 ProfileRead</codeph>、<codeph>200 ProfileRead[]</codeph>、<codeph>200 ProfileRead</codeph> 和递增的 <codeph>revision</codeph>. Error examples: <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph> stale <codeph>expected_revision</codeph> 或 <codeph>422</codeph>.</p><codeblock outputclass="language-bash"><![CDATA[
+PROFILE_JSON="$(curl -fsS -H 'Content-Type: application/json' \
+  -d '{"name":"docs-api-example","schema_version":"release-152","flags":{"DisableTelemetry":true}}' \
+  "$BPM_BASE_URL/api/profiles")"
+PROFILE_ID="$(python -c 'import json,sys; print(json.load(sys.stdin)["id"])' <<<"$PROFILE_JSON")"
+PROFILE_REVISION="$(python -c 'import json,sys; print(json.load(sys.stdin)["revision"])' <<<"$PROFILE_JSON")"
+
+curl -fsS "$BPM_BASE_URL/api/profiles?q=docs-api-example&lifecycle=active&limit=50&offset=0"
+curl -fsS "$BPM_BASE_URL/api/profiles/$PROFILE_ID"
+curl -fsS -X PATCH -H 'Content-Type: application/json' \
+  -d "{\"flags\":{\"DisableTelemetry\":true,\"BlockAboutConfig\":true},\"expected_revision\":$PROFILE_REVISION}" \
+  "$BPM_BASE_URL/api/profiles/$PROFILE_ID"
+]]></codeblock></info></step>
+      <step><cmd>复用 validation 和 JSON import snippets，并保持明确 payload shape。</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> 和 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>. Response example: <codeph>200 {"ok":true,"profile":"release-152"}</codeph> 和 <codeph>201 ProfileRead</codeph>. Error examples: <codeph>400</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>.</p><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS -H 'Content-Type: application/json' \
+  -d '{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}' \
+  "$BPM_BASE_URL/api/validate/$BPM_SCHEMA_CHANNEL"
+
+curl -fsS -H 'Content-Type: application/json' \
+  -d '{"name":"docs-json-import-example","schema_version":"release-152","compliance":{"source":"docs-devops-template"},"document":{"policies":{"DisableTelemetry":true}}}' \
+  "$BPM_BASE_URL/api/profiles/import/firefox/policies.json"
+]]></codeblock></info></step>
+      <step><cmd>复用 multipart import 和 export snippets 进行 file-based handoff。</cmd><info><p>Request example: <codeph>multipart/form-data</codeph> upload 到 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>，随后调用 <codeph>GET $BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1</codeph>. Response example: import 返回 <codeph>201 ProfileRead</codeph>，export 返回包含 canonical Firefox <codeph>policies</codeph> 的 <codeph>200 application/json</codeph>. Error example: <codeph>404</codeph> missing profile 或 <codeph>422</codeph> invalid profile ID.</p><codeblock outputclass="language-bash"><![CDATA[
+curl -fsS \
+  -F "name=docs-multipart-import-example" \
+  -F "schema_version=$BPM_SCHEMA_CHANNEL" \
+  -F 'compliance={"source":"docs-devops-template"}' \
+  -F "file=@$BPM_JSON_IMPORT_PATH;type=application/json" \
+  "$BPM_BASE_URL/api/profiles/import/firefox/policies.json"
+
+curl -fsS "$BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1"
+]]></codeblock></info></step>
+      <step><cmd>当集成需要 reusable response assertions 时，使用紧凑 Python helper。</cmd><info><p>Request example: <codeph>session.post(f"{base_url}/api/validate/{schema_channel}", json=payload, timeout=10)</codeph>. Response example: 只有 status 和 JSON body 匹配 assertion 时 helper 才会继续。Error example: assertion failures、timeout exceptions、stale <codeph>expected_revision</codeph> 或 structured API errors 必须由 integrating product 记录。</p><codeblock outputclass="language-python"><![CDATA[
+import os
+import requests
+
+base_url = os.environ["BPM_BASE_URL"].rstrip("/")
+schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-152")
+session = requests.Session()
+
+ready = session.get(f"{base_url}/health/ready", timeout=10)
+ready.raise_for_status()
+assert ready.json() == {"status": "ready", "ready": True}
+
+payload = {"document": {"policies": {"DisableTelemetry": True, "BlockAboutConfig": True}}}
+validation = session.post(f"{base_url}/api/validate/{schema_channel}", json=payload, timeout=10)
+validation.raise_for_status()
+assert validation.json() == {"ok": True, "profile": schema_channel}
+
+created = session.post(
+    f"{base_url}/api/profiles",
+    json={"name": "docs-python-example", "schema_version": schema_channel, "flags": payload["document"]["policies"]},
+    timeout=10,
+)
+created.raise_for_status()
+profile = created.json()
+assert profile["schema_version"] == schema_channel
+
+exported = session.get(
+    f"{base_url}/api/export/profiles/{profile['id']}/firefox/policies.json?pretty=1",
+    timeout=10,
+)
+exported.raise_for_status()
+assert exported.json() == {"policies": payload["document"]["policies"]}
+]]></codeblock><note type="warning">在外部 evidence 中保存 response status、profile ID、revision、schema channel、exported document hash 和 assertion result。不要把 real host names、secrets、API keys、secret values 或 production identifiers 复制到 documentation examples。</note></info></step>
+        </steps>
+        <result><p>集成产品获得可安全复制、独立于 deployment hosts、与当前 BPM API behavior 同步并绑定 explicit response assertions 的 reusable curl 和 Python examples。</p></result>
+        <postreq><p>构建完整外部 control-product workflows 时，将这些 examples 与 pull/list/read、validate-before-apply、import-review-export 和 failure-audit runbooks 组合使用。</p></postreq>
+      </taskbody>
+      <related-links>
+        <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-run-control-product-inventory-pull"/>
+    <link keyref="topic.admin-task-run-validate-before-apply-update"/>
+    <link keyref="topic.admin-task-run-import-review-export-handoff"/>
+      </related-links>
+    </task>

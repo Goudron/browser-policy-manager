@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-remove-reset-setting" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>移除或重置设置</title>
+  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Remove a configured value or reset it back to the inherited baseline, preset, or unconfigured state.</shortdesc>
+  <taskbody>
+    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Open the setting detail panel for a configured value.</p></prereq>
+    <context><p>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Remove and reset actions are destructive for the selected value, so the user should understand source and downstream effects first.</p></context>
+    <steps>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Inspect the current value and source badge.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Choose Remove or Reset only for the setting you intend to change.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Read any warning or validation message shown by the detail panel.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
+      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：移除或重置设置. Save the profile after confirming the value is absent, reset, or inherited as expected.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+    </steps>
+    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The setting no longer applies from the previous configured value.</p></result>
+    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if the removal was unintended, reapply the previous value from history, import, comparison, or a saved source document.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-setting-detail"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</task>

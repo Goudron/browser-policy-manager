@@ -66,7 +66,7 @@ Use this task table shape:
 
 | ID | Task | Essence | Minimal reasoning | Acceptance |
 | --- | --- | --- | --- | --- |
-| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move all user-visible and package metadata to the target version. | low | Version surfaces, README, changelog, and package metadata agree. |
+| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | low | Version surfaces, changelog, package metadata, and version assertions agree; README remains current-state product documentation rather than release history. |
 
 Task IDs must use:
 
@@ -96,8 +96,14 @@ The first milestone must include the target-version transition. It should cover 
 product surface for that epic:
 
 - package/project metadata such as `pyproject.toml`, `package.json`, and lockfiles when present;
-- README version copy and supported-version notes;
+- local environment metadata for the editable BPM package, so `pip show browser-policy-manager`
+  and equivalent environment probes report the target version after the version transition;
+- supported external component pins and minimum dependency requirements, including Python,
+  frontend vendor packages, documentation toolchain components, and test/dev dependencies that are
+  part of the product workflow;
 - changelog entry for the target version;
+- README current-state product copy when the target version changes what users can do, without
+  turning README into release notes or version history;
 - docs index, active architecture notes, and release-readiness docs when they name the current
   release;
 - UI-visible version strings if the product exposes them;
@@ -106,21 +112,36 @@ product surface for that epic:
 By the end of the backlog, the repository should not describe the new work as belonging to the
 previous target version except in historical notes, archive files, or explicit migration context.
 
-## README And Changelog
+## README, Product Documentation, And Changelog
 
-Every epic backlog must include README and changelog work for the target version.
+Every epic backlog must include README, product-documentation, and changelog work.
 
 README must be updated after the main backlog implementation is complete, not only at backlog
-creation time. It should describe the actual current product state after the epic, including changed
-surfaces, commands, supported versions, test workflow, and user-facing behavior.
+creation time. It should describe the actual current product state after the epic, including current
+surfaces, commands, supported external/runtime versions where they are product facts, test workflow,
+and user-facing behavior.
+
+README must not summarize what changed in a specific BPM version or list which earlier BPM version
+introduced a feature. Release history, "what changed", and target-version completion notes belong in
+`CHANGELOG.md`.
 
 When editing README:
 
 - keep the maintainer copyright at the bottom;
 - keep the existing information about email topics / message themes;
 - keep the primary product language English;
+- remove release-note phrasing such as "what's included in <version>", "planned for <version>", or
+  "introduced in <version>";
 - remove or revise stale feature descriptions that no longer match the product;
 - do not delete historical or legal footer material while refreshing the main product copy.
+
+Product documentation must be updated after the epic changes functionality. Add a dedicated
+documentation-update milestone before the final quality milestone whenever the epic changes
+user-visible behavior, administrator/operator procedures, API behavior, supported schemas, locale
+behavior, security posture, deployment steps, or troubleshooting flow. That milestone should update
+the DITA/User/Admin/API/CIS/Firefox topics, screenshots or screenshot blockers, manifests/search
+targets, and documentation tests needed to make the documentation describe the product after the
+epic.
 
 `CHANGELOG.md` must receive an entry for the target version. Preserve older version history; append
 or insert the new version entry without overwriting previous release notes.
@@ -132,7 +153,9 @@ Prefer milestones like these when applicable:
 - M1: version transition and release anchors;
 - M2: current-state audit and safety contracts;
 - M3..N: implementation milestones grouped by product or subsystem ownership;
-- final milestone: quality, coverage, visual smoke, README, changelog, commit, push handoff, and
+- pre-final documentation milestone: update README current-state copy and maintained product
+  documentation so they reflect the functionality after the epic;
+- final milestone: quality, coverage, visual smoke, changelog, commit, push handoff, and
   release-readiness checks.
 
 Do not create one large "implementation" milestone. If a milestone mixes backend, frontend,
@@ -160,12 +183,14 @@ Every backlog must end with a final quality milestone. Include tasks for:
 4. Run coverage with code-surface reporting.
 5. Bring covered code surface to 100% if it is below 100%.
 6. Run Chromium/Selenium smoke tests for BPM product logic.
-7. Update README so it matches the actual product after the main epic work, while preserving the
-   maintainer copyright and email-topic information.
+7. Verify the dedicated documentation-update milestone is complete and its focused documentation
+   checks have passed.
 8. Update `CHANGELOG.md` for the target version while preserving older version history.
 9. Update docs index if final verification changes maintained documentation.
-10. Create a git commit for the completed epic.
-11. Provide the maintainer with the exact `git push` command to run manually.
+10. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
+    release procedures include documentation drift gates when the epic changed those areas.
+11. Create a git commit for the completed epic.
+12. Provide the maintainer with the exact `git push` command to run manually.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -211,12 +236,21 @@ Before calling a new backlog ready, confirm:
 - milestones are grouped by meaning;
 - every task has `low`, `medium`, `high`, or `extra high` as minimal reasoning;
 - first milestone includes version transition across product surfaces;
+- first milestone includes local editable-package metadata refresh and external dependency
+  currency checks for Python, frontend vendor packages, documentation toolchain components, and
+  test/dev dependencies;
+- a dedicated documentation-update milestone appears before the final quality milestone when the
+  epic changes product behavior or operating procedures;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;
-- final milestone includes README refresh, changelog entry, git commit, and maintainer-run push
-  command;
-- README instructions preserve maintainer copyright and email-topic information;
+- final milestone verifies documentation-update completion and includes changelog entry, git commit,
+  and maintainer-run push command;
+- final milestone verifies maintained runbooks and docs index include documentation drift gates for
+  changed schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
+  release procedures;
+- README instructions preserve maintainer copyright and email-topic information and forbid release
+  history/version-change summaries in README;
 - changelog instructions preserve previous version history;
 - runbook notes that product language is English while maintainer chat may be Russian;
 - docs index includes the new backlog;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-accessible-product-operation" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Доступная работа с продуктом</title>
+  <shortdesc>Используйте BPM с локализованными статусами, ошибками, фокусом, keyboard feedback и адаптивными макетами.</shortdesc>
+  <conbody>
+    <section id="a-keyboard"><title>Keyboard</title><p>Клавиатурное поведение должно оставлять основные действия, навигацию, фильтры, элементы редакторов, подтверждения и ссылки доступными без указателя.</p></section>
+    <section id="a-focus"><title>Focus</title><p>Индикаторы фокуса показывают, к чему относится следующее действие после навигации, переключения режима, валидации и диалогов.</p></section>
+    <section id="a-status-feedback"><title>Status feedback</title><p>Локализованные статусы и ошибки объясняют результаты сохранения, валидации, импорта, экспорта, архивации, восстановления и удаления.</p></section>
+    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>Адаптивные макеты сохраняют те же задачи на узких экранах; смена темы и локали не должна скрывать предупреждения или разрушительные подтверждения.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.ug-task-change-interface-theme"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</concept>

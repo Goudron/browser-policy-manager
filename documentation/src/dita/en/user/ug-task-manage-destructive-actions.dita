@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-manage-destructive-actions" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Manage destructive actions safely</title>
+  <shortdesc>Cancel or confirm archive, restore, reset, remove, and permanent-delete actions deliberately.</shortdesc>
+  <taskbody>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <context><p>Destructive actions can hide a profile, remove settings, reset values, or permanently delete a row after confirmation.</p></context>
+    <steps>
+      <step><cmd>Read the action label and affected profile or setting before confirming.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Cancel if the visible profile, lifecycle state, schema channel, or source attribution does not match the intended target.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>For permanent delete, confirm that export, comparison, and review are no longer needed.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>After confirmation, wait for the status message and refresh the Library or editor once before repeating the action.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
+    </steps>
+    <result><p>The action is either canceled safely or completed with a visible status and understood impact.</p></result>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-archive-profile"/>
+    <link keyref="topic.ug-task-permanently-delete-profile"/>
+  </related-links>
+</task>

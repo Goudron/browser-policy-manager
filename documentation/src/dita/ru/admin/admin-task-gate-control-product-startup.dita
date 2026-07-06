@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-gate-control-product-startup" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Ограничить запуск продукта контроля проверками BPM health и readiness</title>
+  <shortdesc>Используйте текущие health probes как startup gate перед началом API-синхронизации внешним продуктом контроля.</shortdesc>
+  <taskbody>
+    <prereq><p>BPM source deployment уже запущен. Настройте внешний продукт: <codeph>$BPM_BASE_URL</codeph>, timeout, polling interval, maximum wait и действие при ошибке gate.</p></prereq>
+    <context><p>Процедура использует <codeph>API-HEALTH-001</codeph> и <codeph>API-HEALTH-002</codeph>. Probes являются только малыми preflight signals; они не раскрывают authentication, authorization, database diagnostics, schema-cache diagnostics, request IDs или service-level objectives. Этот набор runbook M12-08 явно фиксирует health-gated startup, data ownership, failure recovery и правило do not retry blindly, если evidence устарела.</p></context>
+    <steps>
+      <step><cmd>Проверьте basic liveness перед открытием synchronization queue.</cmd><info><p>Пример запроса: <codeph>GET $BPM_BASE_URL/health</codeph>. Пример ответа: <codeph>200 {"status":"ok"}</codeph>. Transport errors are handled by the external product because no BPM application error body is declared for this probe.</p></info></step>
+  <step><cmd>Проверьте readiness перед profile или validation calls.</cmd><info><p>Пример запроса: <codeph>GET $BPM_BASE_URL/health/ready</codeph>. Пример ответа: <codeph>200 {"status":"ready","ready":true}</codeph>. If <codeph>ready</codeph> is not true, hold the queue and do not start mutations.</p></info></step>
+  <step><cmd>Запишите startup gate decision.</cmd><info><p>Сохраните timestamp, base URL label, timeout, probe status, observed body, control-product version, and chosen next action. Не store private hosts in shared runbook examples.</p></info></step>
+  <step><cmd>После успешного gate начните с read-only inventory.</cmd><info><p>Call <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> before import, export, validation, or patch operations. This keeps initial synchronization observable and recoverable.</p></info></step>
+  <step><cmd>Переходите к mutation workflows только после успешных read-only calls.</cmd><info><p>Continue to validate-before-apply, import-review-export, or export workflows according to the external product schedule. Keep retry and backoff policy outside BPM.</p></info></step>
+  <step><cmd>Fail closed, если gate ambiguous.</cmd><info><note type="warning">A successful probe does not reserve revisions or guarantee later API success. A failed or ambiguous probe must stop automated mutations until an operator checks logs, source deployment state, and network/CORS boundaries.</note></info></step>
+    </steps>
+    <result><p>The external control product starts synchronization only when BPM responds to the current health and readiness handshake. Результат фиксируется с теми же API identifiers и evidence boundaries.</p></result>
+    <postreq><p>If the startup gate fails, use the Administrator/DevOps troubleshooting and source-deployment topics rather than adding undocumented probe assumptions. Следующий шаг выполняется только после сохранения audit evidence.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+<link keyref="topic.admin-task-review-devops-network-cors-security"/>
+<link keyref="topic.admin-task-use-reusable-api-examples"/>
+<link keyref="topic.admin-concept-api-limitations"/>
+  </related-links>
+</task>

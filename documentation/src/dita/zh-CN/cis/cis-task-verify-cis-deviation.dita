@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-verify-cis-deviation" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>验证并记录 CIS deviation</title>
+  <shortdesc>当 CIS-related value 被保留、修改或留给 manual verification，而不是自动接受时，使用此任务。</shortdesc>
+  <taskbody>
+    <prereq><p>打开显示 CIS manual-review item、conflict 或 intentional deviation from generated layer 的 profile。</p></prereq>
+    <context><p>Verification 表示检查 BPM value、schema channel、exported path 和 local review evidence。它不表示 BPM 已在 target environment 中测试 Firefox runtime behavior。</p></context>
+    <steps>
+      <step><cmd>打开 affected setting，并记录 recommendation ID、path、current value、source attribution 和 schema channel。</cmd><info><p>预期结果：reviewer 可以准确识别正在 review 的 BPM-controlled value。</p></info></step>
+      <step><cmd>将 reason 分类为 update governance、proxy routing、evidence retention、unsupported mapping research、deprecated target 或 local deployment requirement。</cmd><info><p>预期结果：deviation 有具体原因，而不是 generic exception label。</p></info></step>
+      <step><cmd>在 BPM 中 validate profile，并检查将承载该 value 的 exported <codeph>policies.json</codeph> path。</cmd><info><p>预期结果：external verification 开始前已知 schema validation 和 export shape。</p></info></step>
+      <step><cmd>使用 deployment owner 批准的方法，在 BPM 外执行 runtime、operating-system、network 或 audit verification。</cmd><info><p>预期结果：收集 external evidence，但不声称 BPM 自身证明了 Firefox behavior。</p></info></step>
+      <step><cmd>在 external ticket、deployment note 或 change-control record 中记录 decision，包括 BPM profile name、schema channel、recommendation ID、value、reason、owner 和 review date。</cmd><info><note type="warning">BPM 0.9.0 不持久化 dedicated CIS exception 或 waiver object；不要只依赖 profile 作为 exception record。</note></info></step>
+      <step><cmd>重新打开 profile，确认 source attribution 仍显示该 value 是 baseline、CIS、manual、imported 还是 raw。</cmd><info><p>预期结果：后续 reviewers 可以追踪 configured value 并找到 external record。</p></info></step>
+    </steps>
+    <result><p>CIS deviation 具有 actionable verification evidence、external exception record 和可见 BPM source attribution。</p></result>
+    <postreq><p>如果 reviewer 无法验证 exported path 或 external evidence，请将 item 保持在 manual review 中，不要描述为 compliant。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-manual-review-exceptions"/>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.ug-task-validate-profile"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

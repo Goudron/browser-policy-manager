@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-switch-editor-mode" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Changer de mode d’édition</title>
+  <shortdesc>Passez volontairement entre Guided, All Settings et JSON pour le même profil enregistré.</shortdesc>
+  <taskbody>
+    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
+    <context><p>Le changement de mode modifie la surface d’édition, pas le profil enregistré sous-jacent ; les modifications non enregistrées doivent être enregistrées avant de faire confiance à une autre surface.</p></context>
+    <steps>
+      <step><cmd>Confirmez que le profil courant est enregistré et possède un ID visible.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Choisissez le mode cible : Guided pour les flux courants, All Settings pour l’inspection complète ou JSON pour le document brut.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Ouvrez le mode cible et vérifiez le nom du profil et le canal de schéma.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
+      <step><cmd>Revenez au mode précédent uniquement après enregistrement ou abandon volontaire des modifications.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+    </steps>
+    <result><p>Vous travaillez sur le même profil dans le mode d’édition adapté à la tâche actuelle.</p></result>
+    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-choose-editor-surface"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

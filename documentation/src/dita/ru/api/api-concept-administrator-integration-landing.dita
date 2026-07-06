@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="api-concept-administrator-integration-landing" xml:lang="ru" audience="integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Руководство по API-интеграции перенесено в руководство администратора</title>
+  <shortdesc>Используйте руководство администратора и DevOps для текущих процедур API-интеграции. Эта страница совместимости сохраняет прежнюю точку входа API guide, а сведения об endpoint, request, response, health, retry и automation поддерживаются в зоне Administrator/DevOps.</shortdesc>
+  <conbody>
+    <section id="a-administrator-guide-owner">
+      <title>Разделы интеграции администратора</title>
+      <p>Используйте руководство администратора и DevOps для текущих процедур API-интеграции. Эта страница совместимости сохраняет прежнюю точку входа API guide, а сведения об endpoint, request, response, health, retry и automation поддерживаются в зоне Administrator/DevOps.</p>
+      <p>Используйте связанные разделы Administrator/DevOps для аудитории API, поддерживаемых паттернов, соглашений, ограничений, жизненного цикла профилей, импорта/экспорта Firefox, validation gates и проверок health/readiness. Сценарии control product и reusable examples остаются там и будут расширены в следующих задачах M12.</p>
+    </section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.admin-concept-api-conventions"/>
+    <link keyref="topic.admin-concept-api-limitations"/>
+    <link keyref="topic.admin-task-sync-profile-lifecycle"/>
+    <link keyref="topic.admin-task-manage-profile-retirement"/>
+    <link keyref="topic.admin-task-import-firefox-policies-json"/>
+    <link keyref="topic.admin-task-export-firefox-policies-json"/>
+    <link keyref="topic.admin-task-validate-firefox-policies-json"/>
+    <link keyref="topic.admin-task-check-health-readiness"/>
+  </related-links>
+</concept>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-handle-raw-unknown-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Gestionar ajustes raw y desconocidos</title>
+  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Inspect imported unknown keys and raw-fallback values without losing them accidentally.</shortdesc>
+  <taskbody>
+    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Open Review mode or a raw/unknown filtered list in All Settings.</p></prereq>
+    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Raw and unknown settings may come from import, schema differences, or values BPM cannot model visually. Treat them as preservation and review items, not routine edits.</p></context>
+    <steps>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Filter or open Review items for raw, unknown, or imported settings.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Decide whether to preserve, remove, reset, or inspect the value in JSON Editor.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
+      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Gestionar ajustes raw y desconocidos. Save only after confirming the value should remain or be removed.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+    </steps>
+    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. Raw and unknown values are preserved or removed intentionally.</p></result>
+    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the value might be important, export or compare the profile before removing it.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-follow-setting-deep-link"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</task>

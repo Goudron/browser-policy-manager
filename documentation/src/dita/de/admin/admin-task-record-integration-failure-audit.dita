@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-record-integration-failure-audit" xml:lang="de" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>Integrationsfehler beheben und audit evidence aufzeichnen</title>
+  <shortdesc>Behandeln Sie Validation-, Import/Export-, Readiness- und Revision-Fehler ohne unsafe retries oder versteckte Transaktionsannahmen.</shortdesc>
+  <taskbody>
+    <prereq><p>Nutzen Sie diesen Ablauf bei failed BPM API response, Timeout, unerwartetem Body, stale <codeph>expected_revision</codeph> oder abweichender Export-Evidenz.</p></prereq>
+    <context><p>Dieser Ablauf verbindet <codeph>API-HEALTH-001</codeph>, <codeph>API-HEALTH-002</codeph>, <codeph>API-PROFILE-003</codeph>, <codeph>API-PROFILE-005</codeph>, <codeph>API-FF-001</codeph>, <codeph>API-FF-002</codeph> und <codeph>API-VAL-001</codeph>. BPM does not provide distributed tracing, automatic rollback, bulk transaction recovery oder Webhooks.</p></context>
+    <steps>
+      <step><cmd>Fehler vor einem Retry klassifizieren.</cmd><info><p>Erfassen Sie health/readiness, validation, import, export, read, patch, conflict, timeout oder transport sowie Status <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph>, <codeph>415</codeph>, <codeph>422</codeph> oder <codeph>503</codeph>.</p></info></step>
+  <step><cmd>Desired State und BPM-Beobachtung einfrieren.</cmd><info><p>Speichern Sie Methode, Pfad, Payload-Hash, profile ID, beobachtete <codeph>revision</codeph>, Schema-Kanal, Response Body, Response Time und Run-ID; keine Secrets oder privaten Hosts.</p></info></step>
+  <step><cmd>Health erneut prüfen und Profil lesen.</cmd><info><p>Anfragebeispiele: <codeph>GET $BPM_BASE_URL/health</codeph>, <codeph>GET $BPM_BASE_URL/health/ready</codeph> und <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>. Bei geänderter Revision zurück zu Vergleich und Freigabe.</p></info></step>
+  <step><cmd>Validation oder Export nur nach Operator-Freigabe wiederholen.</cmd><info><p>Für Validation wiederholen Sie <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>. Für Export wiederholen Sie <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> und vergleichen Hashes.</p></info></step>
+  <step><cmd>Mutation bei stale revision oder unklarer Evidenz stoppen.</cmd><info><p>Bei <codeph>expected_revision</codeph> mit <codeph>409</codeph>, anderem Export-Hash oder geänderten Validation Errors alten Lauf stoppen und neuen Lauf mit frischem Read starten.</p></info></step>
+  <step><cmd>Audit Record im externen System veröffentlichen.</cmd><info><note type="warning">BPM speichert Profilzustand, aber keinen vollständigen Integrationsaudit. Das externe Produkt speichert Owner, Entscheidung, Ticket, Retry Count, Stop-Grund, alte und neue Revision, Hashes und Operator Notes.</note></info></step>
+    </steps>
+    <result><p>Failure recovery erfolgt nur über Evidenz, frische Reads und operator-approved Retry-Entscheidungen, nicht durch Blind Replay.</p></result>
+    <postreq><p>Verknüpfen Sie nach Recovery den Audit Record mit der erfolgreichen Profilrevision oder markieren Sie den Lauf als gestoppt.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-concept-api-limitations"/>
+<link keyref="topic.admin-task-check-health-readiness"/>
+<link keyref="topic.admin-task-run-validate-before-apply-update"/>
+<link keyref="topic.admin-task-run-import-review-export-handoff"/>
+  </related-links>
+</task>

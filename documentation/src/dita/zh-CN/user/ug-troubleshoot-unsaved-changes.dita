@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-troubleshoot-unsaved-changes" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>从未保存更改中恢复</title>
+  <shortdesc>在导航、关闭标签页、刷新或切换模式时避免丢失未保存的编辑器更改。</shortdesc>
+  <taskbody>
+    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
+    <context><p>BPM 会警告 dirty editor state，但用户仍需要决定保存、放弃还是留在页面。</p></context>
+    <steps>
+      <step><cmd>当浏览器或 BPM 报告未保存更改时停止操作。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>确定包含草稿的活动标签页、配置文件名称、架构通道和编辑器模式。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>如果更改应成为新的配置文件状态，请保存配置文件；否则取消导航并先进行复查。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
+      <step><cmd>如果您有意放弃更改，请从库中重新打开配置文件，并在继续前确认保存状态。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+    </steps>
+    <result><p>您要么通过保存保留草稿，要么明确返回到最后保存的配置文件状态。</p></result>
+    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-save-profile"/>
+    <link keyref="topic.ug-task-work-across-editor-tabs"/>
+  </related-links>
+</task>

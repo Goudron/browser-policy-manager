@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "policy-preference-states",
+  "synthetic": true,
+  "policy_examples": [
+    {
+      "id": "policy-ai-release-only",
+      "policy_id": "AIControls",
+      "schema_channel": "release-152",
+      "expected_state": "valid-release-only",
+      "documentation_topic": "fx-concept-complex-policy-families"
+    },
+    {
+      "id": "policy-homepage-locked",
+      "policy_id": "Homepage",
+      "schema_channel": "esr-140.12",
+      "expected_state": "valid-cross-channel",
+      "documentation_topic": "ug-task-use-all-settings"
+    }
+  ],
+  "preference_examples": [
+    {
+      "id": "pref-download-dir-locked",
+      "preference_id": "browser.download.useDownloadDir",
+      "value_type": "boolean",
+      "status": "locked",
+      "value": false
+    },
+    {
+      "id": "pref-tls-minimum-invalid",
+      "preference_id": "security.tls.version.min",
+      "value_type": "number",
+      "status": "invalid-type",
+      "value": "three"
+    }
+  ]
+}

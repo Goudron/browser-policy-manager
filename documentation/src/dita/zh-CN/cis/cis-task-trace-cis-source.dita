@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="cis-task-trace-cis-source" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>追踪 CIS value 的来源</title>
+  <shortdesc>在 export 前，将一个 configured value 追踪到 starter preset、CIS layer、merge decision 和后续 edits。</shortdesc>
+  <taskbody>
+    <prereq><p>打开一个由 starter preset 创建，或已应用 CIS Level 1 或 Level 2 layer 的 profile。</p></prereq>
+    <context><p>当 reviewer 询问某个 setting 来自 original baseline、CIS layer、import、manual edit 还是 raw fallback 时，tracing value 很有用。</p></context>
+    <steps>
+      <step><cmd>打开 All Settings，并按 configured values 或 CIS source badge 过滤。</cmd><info><p>预期结果：相关 policy 或 managed preference 带着 source attribution 保持可见。</p></info></step>
+      <step><cmd>读取 source attribution，并判断 current value 是 baseline、CIS、manual、imported 还是 raw。</cmd><info><p>预期结果：你可以说出 value 的直接 source。</p></info></step>
+      <step><cmd>如果 generated layer 贡献了 value，打开相关 CIS recommendation 或 Firefox policy topic。</cmd><info><p>预期结果：可以看到 recommendation ID、path、value、channel support 和 merge rule。</p></info></step>
+      <step><cmd>检查 merge decision：added_from_cis、already_satisfied、cis_replaced_base、kept_base_only、kept_base_stricter 或 manual_review_kept_base。</cmd><info><p>预期结果：你知道 CIS 是添加、确认、替换 value，还是保留 base value 供 review。</p></info></step>
+      <step><cmd>保存前解决 manual-review 或 conflict states。</cmd><info><note type="warning">不要用无关的 manual edit 掩盖 manual_review_kept_base decision；先记录 review reason。</note></info></step>
+      <step><cmd>只有当 source 和 decision 对另一位 reviewer 也可理解时，才执行 validation 和 export。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 反映 reviewed choice，而 BPM-only attribution 留在 profile 中。</p></info></step>
+    </steps>
+    <result><p>Configured value 可以解释为 baseline、CIS、manual、imported 或 raw，并带有可见 merge decision 和 review status。</p></result>
+    <postreq><p>如果 attribution 不明确，请将该 profile 与 blank profile 加同一 CIS layer 进行比较，然后检查 imports 和 manual changes。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.cis-concept-presets-layers-merge"/>
+    <link keyref="topic.cis-concept-levels-channels-layers"/>
+    <link keyref="topic.ug-task-filter-settings-by-source"/>
+    <link keyref="topic.ug-task-review-profile-context"/>
+  </related-links>
+</task>

@@ -27,6 +27,7 @@
             resolveBrowserLanguage,
             updateThemeColorMeta,
             syncThemeSensitiveControls,
+            updateDocumentationLinks,
             libraryCountLabel,
         } = platform;
         const {
@@ -279,6 +280,7 @@
                 documentRef.documentElement.lang = lang;
                 windowRef.__BPM_INITIAL_LANG__ = lang;
                 windowRef.__BPM_INITIAL_LOCALE__ = nextLocale;
+                updateDocumentationLinks?.(documentRef, lang);
                 applyLocaleText(nextLocale);
             } catch (error) {
                 console.warn("library i18n load failed:", error);

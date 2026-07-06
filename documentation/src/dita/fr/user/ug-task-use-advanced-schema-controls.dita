@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-advanced-schema-controls" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Utiliser les contrôles de schéma avancés</title>
+  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Reach advanced schema-shell and preference controls from All Settings without treating Guided as the complete editor.</shortdesc>
+  <taskbody>
+    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Open All Settings in Catalog mode.</p></prereq>
+    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Advanced controls remain deliberate. All Settings is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
+    <steps>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Switch to Catalog mode and open the advanced schema or preference disclosure.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Edit only the advanced control needed for the profile goal.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
+      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser les contrôles de schéma avancés. Validate and save before returning to Guided, JSON, or the Library.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+    </steps>
+    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The advanced setting is reached and changed deliberately without duplicate default editors.</p></result>
+    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if the control is unsupported in the selected schema, leave it unchanged and document the schema boundary.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-browse-settings-catalog"/>
+    <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>
+  </related-links>
+</task>

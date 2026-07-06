@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="fx-reference-managed-preference-locking" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Managed preference 锁定参考</title>
+  <shortdesc>Managed preferences 通过 Firefox <codeph>Preferences</codeph> policy 导出，并且需要明确审查 value、type 和 status。</shortdesc>
+  <refbody>
+    <section id="a-container-policy"><title>Container policy</title><p>Firefox 将 managed preferences 存放在 <codeph>Preferences</codeph> 下。BPM 会单独记录已知 preferences，但导出时会将它们作为该 container policy 中的 entries。</p></section>
+    <section id="a-status-values"><title>Status values</title><p>在 Firefox 支持该 preference 的位置，<codeph>locked</codeph> 会阻止用户更改。<codeph>default</codeph>、<codeph>user</codeph> 和 <codeph>clear</codeph> 具有不同的 runtime meanings，不应作为同义词使用。</p></section>
+    <section id="a-type-values"><title>Type values</title><p>当 BPM 需要精确的 value shape 时，请将 <codeph>Type</codeph> 设置为 <codeph>boolean</codeph>、<codeph>number</codeph> 或 <codeph>string</codeph>。<codeph>Value</codeph> 的类型必须与声明的 type 匹配。</p></section>
+    <section id="a-source-conflicts"><title>Source conflicts</title><p>Preference 可能来自 preset、CIS layer、import、manual edit 或 raw fallback。请在 locking 前审查来源，因为 locked preference 可能比 unlocked policy default 更强地覆盖用户预期。</p></section>
+    <section id="a-safe-review"><title>Safe review</title><p>如果配置文件可能跨通道复用，请同时验证 Release 和 ESR，并保持 preference IDs 不变。BPM 可以验证 container shape，但最终效果由 Firefox runtime 决定。</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.fx-task-review-complex-policy-configuration"/>
+    <link keyref="topic.ug-task-add-managed-preference"/>
+    <link keyref="topic.ug-concept-policies-and-managed-preferences"/>
+    <link keyref="topic.ug-task-trace-setting-source"/>
+  </related-links>
+</reference>

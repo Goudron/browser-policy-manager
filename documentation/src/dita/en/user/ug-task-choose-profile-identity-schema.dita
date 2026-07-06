@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-choose-profile-identity-schema" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Set the profile identity and schema channel</title>
+  <shortdesc>Choose the saved profile name and the Firefox schema channel before you configure guided settings.</shortdesc>
+  <taskbody>
+    <prereq><p>Open a new or saved profile in Guided Editor.</p></prereq>
+    <context><p>Use Step 1, Profile &amp; baseline, to set the name and schema channel that will drive validation and available controls.</p></context>
+    <steps>
+      <step><cmd>Confirm that you are editing the intended profile draft.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Enter a clear profile name.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose the Firefox schema channel, such as Release 152 or ESR 140.12.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Review whether the selected channel changes the visible controls before continuing.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The Guided draft has a stable identity and schema channel.</p></result>
+    <postreq><p>Recovery: if controls look different than expected, return to Step 1 and confirm the schema channel before changing settings.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-concept-schema-aware-behavior"/>
+    <link keyref="topic.ug-task-use-guided-editor"/>
+  </related-links>
+</task>

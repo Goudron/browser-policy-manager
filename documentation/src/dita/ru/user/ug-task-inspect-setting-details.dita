@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-inspect-setting-details" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Проверьте детали параметра</title>
+  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. Select a setting and inspect its value, source, validation, schema support, and product location.</shortdesc>
+  <taskbody>
+    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. Open All Settings and select a setting row from Review, Configured, Catalog, search, or a deep link.</p></prereq>
+    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. The detail panel is the safe place to understand a single setting before editing it. It shows value shape, source attribution, validation issues, and navigation context.</p></context>
+    <steps>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. Select the setting row you need to understand.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. Read the current value, source badge, validation messages, and schema/channel support.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. Check the product location or related surface link if the setting is also covered elsewhere.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
+      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте детали параметра. Decide whether to edit, remove, reset, or leave the value unchanged.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+    </steps>
+    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. You understand what the setting does in this profile and what action is safe next.</p></result>
+    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the value shape is unclear, compare with JSON Editor or leave the setting unchanged until validation guidance is available.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-edit-setting-detail"/>
+    <link keyref="topic.ug-task-follow-setting-deep-link"/>
+  </related-links>
+</task>

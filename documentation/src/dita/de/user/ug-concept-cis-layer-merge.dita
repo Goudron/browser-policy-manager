@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="ug-concept-cis-layer-merge" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Starter-Presets und CIS-Ebenen</title>
+  <shortdesc>Starter-Presets und CIS-Ebenen helfen, ein Anfangsprofil vor manueller Prüfung und Bearbeitung zu erstellen.</shortdesc>
+  <conbody>
+    <p>Ein Starter-Preset gibt einem Profil einen anfänglichen Zweck, etwa Unternehmens-, Unterrichts- oder sicherheitsorientierte Nutzung. Eine CIS-Ebene ergänzt von BPM abgebildete Sicherheitsbasiswerte, wo BPM sie unterstützt.</p>
+    <p>Geschichtete Quellen bleiben in Alle Einstellungen sichtbar, damit Baseline-, CIS-, importierte, manuelle und Rohwerte unterscheidbar bleiben. Einige CIS-bezogene Elemente erfordern manuelle Prüfung statt automatischer Annahme.</p>
+    <p>Die BPM-Dokumentation beschreibt BPM-Zuordnungen und Workflow-Verhalten. Sie beansprucht keine CIS-Zertifizierung oder Empfehlung.</p>
+  </conbody>
+</concept>

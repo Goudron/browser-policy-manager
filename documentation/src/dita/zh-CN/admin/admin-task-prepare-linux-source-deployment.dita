@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-prepare-linux-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+  <title>准备用于源码部署的 Linux 主机</title>
+  <shortdesc>在从仓库 checkout 安装 BPM 之前，确认受支持的 source-deployment 边界、主机前置条件以及延后的生产能力。</shortdesc>
+  <taskbody>
+    <prereq><p>使用可以安装 Python 3.14+、Git、构建工具和 curl 的 Linux 主机。本 runbook 假定使用 source checkout，而不是 packaged installer。</p></prereq>
+    <context><p>BPM 0.9.0 可以从源码运行，用于开发、审查和受控的管理员评估。本版本不交付 packaged installers、native service units、官方 systemd recipes、reverse proxy and TLS recipes、HA clustering、managed secrets 和 production hardening，因此不能把这些内容描述为受支持的部署行为。</p></context>
+    <steps>
+      <step><cmd>确认部署目的，并记录这是 source-based Linux deployment。</cmd><info><p>预期结果：运维记录说明 BPM 从 Git checkout 启动，并说明 distribution-specific installers 已延后。</p></info></step>
+      <step><cmd>安装或检查主机前置条件。</cmd><info><p>需要 Git、Python 3.14+、pip、make、curl，以及能够运行 <codeph>source .venv/bin/activate</codeph> 的 shell。仓库命令使用本地虚拟环境，不需要全局 BPM package。</p></info></step>
+      <step><cmd>创建与 production data 和 secrets 分离的工作目录。</cmd><info><p>将 repository checkout、<codeph>.venv</codeph> 和本地 SQLite data 放在受控路径中。不要把真实 secrets 写入文档示例或 committed files。</p></info></step>
+      <step><cmd>继续之前，确认当前说明有意不覆盖的内容。</cmd><info><note type="warning">本 runbook 不提供 packaged installer、native service、supported systemd unit、reverse proxy recipe、TLS termination、HA topology、managed secret store、backup automation 或 production-hardening checklist。</note></info></step>
+    </steps>
+    <result><p>主机和运行假设已经准备好，可执行受支持的 BPM 0.9.0 source checkout workflow。</p></result>
+    <postreq><p>在配置 runtime variables 之前，继续执行 Linux source checkout 主题。</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.admin-task-set-up-linux-source-checkout"/>
+  </related-links>
+</task>

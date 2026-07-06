@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-configure-browser-access-defaults" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Configure browser access and defaults</title>
+  <shortdesc>Use Step 2 to configure browser access, network behavior, and baseline defaults.</shortdesc>
+  <taskbody>
+    <prereq><p>A Guided profile draft is open.</p></prereq>
+    <context><p>Browser access &amp; defaults collects controls that shape whether Firefox can reach resources and how it behaves before content-specific policy choices.</p></context>
+    <steps>
+      <step><cmd>Open Step 2, Browser access &amp; defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Review network access and browser behavior controls for the deployment.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Set baseline defaults before adding home, search, or navigation-specific choices.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Validate warnings shown next to schema-dependent controls.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
+    </steps>
+    <result><p>The profile has intentional browser access and default-behavior settings.</p></result>
+    <postreq><p>Recovery: if validation flags a value, undo the last change or use All Settings to inspect the raw policy shape.</p></postreq>
+  </taskbody>
+  <related-links>
+    <link keyref="topic.ug-task-configure-home-search-navigation"/>
+    <link keyref="topic.ug-task-use-guided-fine-tuning"/>
+  </related-links>
+</task>

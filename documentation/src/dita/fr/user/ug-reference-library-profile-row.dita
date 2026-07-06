@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-library-profile-row" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Champs d’une ligne de profil</title><shortdesc>Une ligne de Bibliothèque résume l’identité, le schéma, la note, la validation, le cycle de vie et la mise à jour d’un profil.</shortdesc>
+  <refbody><section id="a-row-identity"><title>Identité</title><p>Le nom, l’ID, la note et l’heure de mise à jour confirment le profil cible.</p></section><section id="a-row-state"><title>État</title><p>Le canal de schéma, la validation et le cycle de vie expliquent les actions disponibles.</p></section><section id="a-row-warning"><title>Avertissement</title><p>Ne vous fiez pas seulement à la position d’une ligne après tri ou filtre.</p></section><section id="a-row-recovery"><title>Récupération</title><p>Actualisez la Bibliothèque si les informations semblent obsolètes.</p></section></refbody>
+  <related-links><link keyref="topic.ug-task-refresh-profile-library"/><link keyref="topic.ug-reference-archived-profile-behavior"/></related-links>
+</reference>

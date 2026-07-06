@@ -6,6 +6,8 @@
                 <div class="library-panel-intro">
                     <div class="section-kicker" data-i18n="profiles.sidebar_title">{{ tr("profiles.sidebar_title") }}</div>
                     <p class="text-sm leading-6 text-slate-600" data-i18n="profiles.sidebar_hint">{{ tr("profiles.sidebar_hint") }}</p>
+                    {% set context_help_surface = "library" %}
+                    {% include "profiles/_context_help_link.html" %}
                 </div>
                 <div class="library-panel-badges flex flex-wrap items-center justify-end gap-2 text-xs font-semibold">
                     <div class="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
@@ -105,6 +107,9 @@
                     aria-describedby="import-firefox-policies-status">
                     <span data-i18n="profiles.import_firefox_policies_json">{{ tr("profiles.import_firefox_policies_json") }}</span>
                 </button>
+                {% set context_help_icon_target = "import-firefox-policies" %}
+                {% set context_help_icon_label_key = "profiles.help_import_firefox_policies" %}
+                {% include "profiles/_context_help_icon.html" %}
                 <input
                     id="import-firefox-policies-file"
                     class="support-hidden"

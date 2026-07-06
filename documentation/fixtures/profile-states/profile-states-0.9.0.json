@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "profile-states",
+  "synthetic": true,
+  "profiles": [
+    {
+      "id": "doc-profile-release-baseline",
+      "name": "Documentation release baseline",
+      "schema_channel": "release-152",
+      "state": "active",
+      "source": "manual",
+      "policy_count": 3,
+      "preference_count": 2,
+      "expected_surfaces": ["Library", "Guided Editor", "All Settings", "JSON Editor", "Export"]
+    },
+    {
+      "id": "doc-profile-esr-archived",
+      "name": "Documentation ESR archived",
+      "schema_channel": "esr-140.12",
+      "state": "archived",
+      "source": "imported-policies-json",
+      "policy_count": 2,
+      "preference_count": 1,
+      "expected_surfaces": ["Library", "Profile Comparison", "Restore", "Permanent Delete"]
+    }
+  ]
+}

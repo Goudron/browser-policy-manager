@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="admin-concept-api-conventions" xml:lang="fr" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+  <title>API conventions</title>
+  <shortdesc>Utilisez ces conventions pour lire les BPM 0.9.0 OpenAPI contracts et construire des integration requests.</shortdesc>
+  <conbody>
+    <section id="a-base-url"><title>Base URLs and discovery</title><p>Les exemples utilisent <codeph>$BPM_BASE_URL</codeph> comme deployment placeholder. Découvrez le current contract dans <codeph>/openapi.json</codeph> et, pour interactive inspection seulement, les FastAPI schema UIs <codeph>/docs</codeph> et <codeph>/redoc</codeph>. Le futur product documentation portal est réservé à <codeph>/help/</codeph> ; ne traitez donc pas <codeph>/docs</codeph> comme la DITA documentation route.</p></section>
+    <section id="a-content-types"><title>Content types</title><p>La plupart des programmatic operations utilisent JSON request et response bodies. Firefox import accepte <codeph>application/json</codeph> et <codeph>multipart/form-data</codeph> ; unsupported media types peuvent renvoyer <codeph>415</codeph>. Firefox export renvoie <codeph>application/json</codeph> et peut ajouter <codeph>Content-Disposition</codeph> lorsqu’un download output est demandé.</p></section>
+    <section id="a-identifiers"><title>Identifiers and lifecycle</title><p>Les Profile IDs sont des integer path identifiers appartenant à BPM. Conservez les <codeph>id</codeph> et <codeph>revision</codeph> retournés après create, import, read et update operations. Les Profile names sont uniques et ne peuvent pas être modifiés via <codeph>ProfileUpdate</codeph>. Les Lifecycle values sont active, archived et all ; <codeph>include_deleted</codeph> est un compatibility flag à interpréter avec lifecycle.</p></section>
+    <section id="a-schemas"><title>Models and schema channels</title><p><codeph>ProfileCreate</codeph>, <codeph>ProfileUpdate</codeph> et <codeph>ProfileRead</codeph> sont les BPM normalized profile shapes. Firefox import/export utilise le canonical <codeph>policies.json</codeph> avec top-level <codeph>policies</codeph>. Validation utilise <codeph>ValidationRequest</codeph> et les supported schema channels comme Firefox ESR et Release ; plain policy mapping reste compatibility behavior et non preferred external shape.</p></section>
+    <section id="a-query"><title>Filtering, sorting, and pagination</title><p>Les opérations profile list et stats prennent en charge search, schema, validation state, lifecycle et include-deleted filters. List pagination est offset/limit avec default <codeph>limit=50</codeph>, maximum <codeph>200</codeph> et <codeph>offset=0</codeph>. Sorting utilise les champs décrits comme <codeph>created_at</codeph>, <codeph>updated_at</codeph>, <codeph>name</codeph>, <codeph>schema_version</codeph> et <codeph>id</codeph>, avec order <codeph>asc</codeph> ou <codeph>desc</codeph>.</p></section>
+    <section id="a-errors"><title>Status and error handling</title><p>Utilisez ensemble status codes et body shape. <codeph>200</codeph>, <codeph>201</codeph> et <codeph>204</codeph> sont des success families, mais validation peut renvoyer <codeph>200</codeph> avec <codeph>ok=false</codeph>. Error bodies utilisent FastAPI <codeph>detail</codeph> et peuvent contenir string, validation list ou un BPM object avec <codeph>message</codeph>, <codeph>error</codeph> ou <codeph>issues</codeph>.</p></section>
+  </conbody>
+  <related-links>
+    <link keyref="topic.admin-concept-integration-audience"/>
+    <link keyref="topic.admin-concept-supported-integration-patterns"/>
+    <link keyref="topic.ug-task-import-policies-json"/>
+    <link keyref="topic.ug-task-export-policies-json"/>
+  </related-links>
+</concept>

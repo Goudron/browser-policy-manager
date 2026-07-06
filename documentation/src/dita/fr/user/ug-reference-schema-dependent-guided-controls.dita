@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="ug-reference-schema-dependent-guided-controls" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Contrôles Guided dépendants du schéma</title>
+  <shortdesc>Certains contrôles Guided apparaissent uniquement lorsque le schéma Firefox choisi les prend en charge, y compris les stratégies AI &amp; smart features propres à Release.</shortdesc>
+  <refbody>
+    <section id="a-release-controls"><title>Release</title><p>Dans Firefox Release 152, l’étape 5 peut afficher les stratégies prises en charge pour AI &amp; smart features, la recherche visuelle et les fonctions intelligentes si elles existent dans le schéma.</p></section>
+    <section id="a-esr-unavailable"><title>ESR 140.12</title><p>Dans ESR 140.12, les contrôles AI/smart-feature non pris en charge sont absents ou indisponibles. Ne les ajoutez pas manuellement comme s’ils étaient pris en charge dans ESR.</p></section>
+    <section id="a-no-documentation-ai"><title>Documentation AI boundary</title><p>Cette référence décrit les stratégies produit Firefox existantes. Elle n’ajoute ni RAG, ni embeddings, ni recherche ou réponses génératives au portail documentaire 0.9.0.</p></section>
+    <section id="a-recovery"><title>Recovery</title><p>Si un contrôle manque, confirmez le canal de schéma, vérifiez la limite de prise en charge dans All Settings et consignez l’état non pris en charge lors de la revue.</p></section>
+  </refbody>
+  <related-links>
+    <link keyref="topic.ug-task-configure-firefox-ai-policies"/>
+    <link keyref="topic.ug-task-search-guided-settings"/>
+  </related-links>
+</reference>

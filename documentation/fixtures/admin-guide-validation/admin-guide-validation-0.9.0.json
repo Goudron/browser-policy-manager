@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM090-M12-12",
+  "target_bpm_version": "0.9.0",
+  "fixture_kind": "administrator-guide-validation",
+  "synthetic": true,
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "admin_topic_groups": {
+    "linux_source_deployment": [
+      "admin-task-prepare-linux-source-deployment",
+      "admin-task-set-up-linux-source-checkout",
+      "admin-task-configure-linux-source-runtime",
+      "admin-task-verify-linux-source-deployment"
+    ],
+    "windows_wsl_deployment": [
+      "admin-task-prepare-windows-wsl-source-deployment",
+      "admin-task-set-up-windows-wsl-source-checkout",
+      "admin-task-configure-windows-wsl-network-runtime",
+      "admin-task-verify-windows-wsl-source-deployment"
+    ],
+    "devops_operations": [
+      "admin-task-review-devops-configuration-sources",
+      "admin-task-plan-devops-storage-logs-backups",
+      "admin-task-review-devops-network-cors-security",
+      "admin-task-record-devops-operational-boundaries"
+    ],
+    "update_from_source": [
+      "admin-task-prepare-source-update-evidence",
+      "admin-task-refresh-source-revision-dependencies",
+      "admin-task-run-source-update-migrations-docs",
+      "admin-task-verify-source-update-rollback-stop"
+    ],
+    "migrated_api": [
+      "admin-concept-integration-audience",
+      "admin-concept-supported-integration-patterns",
+      "admin-concept-api-conventions",
+      "admin-concept-api-limitations",
+      "admin-task-sync-profile-lifecycle",
+      "admin-task-manage-profile-retirement",
+      "admin-task-import-firefox-policies-json",
+      "admin-task-export-firefox-policies-json",
+      "admin-task-validate-firefox-policies-json",
+      "admin-task-check-health-readiness",
+      "admin-task-run-pull-compare-update-scenario",
+      "admin-task-run-import-review-export-scenario",
+      "admin-task-use-reusable-api-examples"
+    ],
+    "control_product_runbooks": [
+      "admin-task-run-control-product-inventory-pull",
+      "admin-task-run-validate-before-apply-update",
+      "admin-task-run-import-review-export-handoff",
+      "admin-task-gate-control-product-startup",
+      "admin-task-record-integration-failure-audit"
+    ],
+    "troubleshooting": [
+      "admin-troubleshoot-failed-startup-probes",
+      "admin-troubleshoot-schema-cache-validation",
+      "admin-troubleshoot-import-export-failures",
+      "admin-troubleshoot-database-storage",
+      "admin-troubleshoot-wsl-networking-dependencies",
+      "admin-troubleshoot-documentation-portal-build-links"
+    ],
+    "production_boundaries": [
+      "admin-task-assess-single-node-source-readiness",
+      "admin-task-review-network-exposure-proxy-readiness",
+      "admin-task-plan-monitoring-backup-update-windows",
+      "admin-task-record-ha-production-deferred-boundaries"
+    ]
+  },
+  "required_make_targets": ["dev", "test-fast", "docs-validate", "docs-build"],
+  "required_commands": [
+    "make dev",
+    "make test-fast",
+    "make docs-validate",
+    "make docs-build",
+    "alembic upgrade head",
+    "pip install -e \".[dev]\"",
+    "git status --short",
+    "git rev-parse --short HEAD",
+    "git fetch --tags",
+    "git checkout <approved-new-ref>",
+    "python -m venv .venv",
+    "source .venv/bin/activate"
+  ],
+  "required_config_names": [
+    "APP_NAME",
+    "APP_VERSION",
+    "DEBUG",
+    "HOST",
+    "PORT",
+    "RELOAD",
+    "DATABASE_URL",
+    "DB_ECHO",
+    "DEFAULT_LOCALE",
+    "SUPPORTED_LOCALES",
+    "I18N_DIR",
+    "API_PREFIX",
+    "ENABLE_CORS",
+    "CORS_ALLOW_ORIGINS",
+    "SCHEMA_BASE_URL",
+    "SCHEMA_CACHE_DIR",
+    "SCHEMA_HTTP_TIMEOUT",
+    "DOCUMENTATION_SITE_DIR"
+  ],
+  "required_env_vars": [
+    "BPM_HOST",
+    "BPM_PORT",
+    "BPM_RELOAD",
+    "BPM_DATABASE_URL",
+    "BPM_DOCUMENTATION_SITE_DIR",
+    "BPM_SCHEMA_CACHE_DIR",
+    "BPM_CORS_ALLOW_ORIGINS",
+    "BPM_SCHEMA_HTTP_TIMEOUT"
+  ],
+  "required_paths": [
+    "data/bpm.db",
+    "app/documentation/site",
+    "app/schemas/mozilla",
+    "/home/&lt;linux-user&gt;/browser-policy-manager",
+    "/mnt/c",
+    "backups/bpm-pre-update.db"
+  ],
+  "required_health_endpoints": ["/health", "/health/ready"],
+  "required_api_examples": [
+    "GET $BPM_BASE_URL/api/profiles",
+    "GET $BPM_BASE_URL/api/profiles/42?include_deleted=false",
+    "POST $BPM_BASE_URL/api/validate/release-152",
+    "POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json",
+    "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json"
+  ],
+  "required_api_ids": [
+    "API-PROFILE-001",
+    "API-PROFILE-003",
+    "API-PROFILE-005",
+    "API-FF-001",
+    "API-FF-002",
+    "API-VAL-001",
+    "API-HEALTH-001",
+    "API-HEALTH-002"
+  ],
+  "required_wsl_caveats": [
+    "Windows 10",
+    "Windows 11",
+    "WSL 2",
+    "Ubuntu LTS",
+    "/mnt/c",
+    "Windows service"
+  ],
+  "required_english_wsl_caveats": [
+    "not a native Windows installation",
+    "localhost forwarding",
+    "inside WSL"
+  ],
+  "required_deferred_warnings": [
+    "packaged installers",
+    "packaged services",
+    "official reverse-proxy recipes",
+    "official TLS/proxy recipes",
+    "supported HA clustering",
+    "rolling upgrades",
+    "managed secrets",
+    "production hardening",
+    "official restore automation"
+  ],
+  "forbidden_supported_claims": [
+    "production-ready",
+    "packaged installers are provided",
+    "packaged services are provided",
+    "official reverse-proxy recipes are provided",
+    "official TLS/proxy recipes are provided",
+    "HA is supported",
+    "supported HA is available",
+    "rolling upgrades are supported",
+    "managed secrets are supported",
+    "production hardening is complete"
+  ]
+}
