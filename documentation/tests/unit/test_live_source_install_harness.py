@@ -105,6 +105,9 @@ def test_rendered_script_records_adapter_documented_runtime_and_shutdown_events(
     )
     assert "container_adapter 'cd \"$HOME\"'" in script
     assert "adapter-stop-probe" in script
+    assert "! curl -fsS http://127.0.0.1:8000/health" in script
+    assert "then exit 1" not in script
+    assert "else exit 0" not in script
     assert "adapter-complete" in script
     assert 'completed\"' in script
     assert '"exit_code"' in script

@@ -320,8 +320,7 @@ def render_execution_script(plan: dict[str, Any], run_id: str) -> str:
             + " || exit $?",
             "run_foreground adapter-stop-probe runtime container_adapter "
             + shlex.quote(
-                "if curl -fsS http://127.0.0.1:8000/health >/dev/null 2>&1; "
-                "then exit 1; else exit 0; fi"
+                "! curl -fsS http://127.0.0.1:8000/health >/dev/null 2>&1"
             )
             + " || exit $?",
             'cat "$runtime_log"',
