@@ -40,6 +40,8 @@ def test_harness_contract_is_scoped_to_m11_03_and_the_accepted_boundaries() -> N
     assert harness["execution"]["network"] == privileged["container_isolation"]["network"][
         "name"
     ]
+    assert harness["execution"]["runtime_readiness_attempts"] == 300
+    assert harness["execution"]["runtime_readiness_interval_seconds"] == 2
 
 
 def test_five_profiles_match_command_and_image_contracts_exactly() -> None:
@@ -71,6 +73,8 @@ def test_container_adapter_is_visible_and_documented_commands_remain_source_owne
     assert ownership["container_only_setup_class"] == "container_adapter"
     assert "OCI bases omit" in ownership["container_only_setup_rule"]
     assert "no-new-privileges" in ownership["container_only_setup_rule"]
+    assert "without exiting the parent script" in ownership["runtime_rule"]
+    assert "completion marker" in ownership["runtime_rule"]
     assert ownership["hidden_setup"] == "forbidden"
 
 
@@ -95,6 +99,7 @@ def test_retention_keeps_golden_images_and_retry_reuses_no_installed_state() -> 
     assert '["stop", "--timeout", "30", name]' in tool
     assert '"--time"' not in tool
     assert "trap 'exit 0' TERM INT" in tool
+    assert '"verify-completion-marker"' in tool
     forbidden = " ".join(privileged_cleanup["forbidden_cleanup"])
     assert "removing a clean target golden image" in forbidden
     assert "before evidence handoff" in forbidden

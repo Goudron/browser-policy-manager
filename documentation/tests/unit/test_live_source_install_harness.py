@@ -44,6 +44,10 @@ def test_plan_extracts_each_dita_stage_and_command_in_source_order(profile: dict
     assert plan["target_id"] == profile["id"]
     assert plan["stage_order"] == profile["stage_order"]
     assert plan["executable"] is True
+    assert plan["runtime_adapter"] == {
+        "readiness_attempts": 300,
+        "readiness_interval_seconds": 2,
+    }
     assert len(plan["source_sha256"]) == 64
     assert [command["sequence"] for command in plan["commands"]] == list(
         range(1, len(plan["commands"]) + 1)
@@ -92,12 +96,17 @@ def test_rendered_script_records_adapter_documented_runtime_and_shutdown_events(
     assert "run_background checkout" not in script
     assert "run_background start-04 start documented 'make dev'" in script
     assert "adapter-wait-ready" in script
+    assert "seq 1 300" in script
+    assert 'test \"$ready\" -eq 1' in script
+    assert "&& exit 0" not in script
     assert script.count("adapter-second-terminal") == 1
     assert script.index("adapter-second-terminal") < script.index(
         "run_foreground verify-01 verify documented"
     )
     assert "container_adapter 'cd \"$HOME\"'" in script
     assert "adapter-stop-probe" in script
+    assert "adapter-complete" in script
+    assert 'completed\"' in script
     assert '"exit_code"' in script
     assert "command-output" in script
     assert "docker rm" not in script

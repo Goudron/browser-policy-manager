@@ -22,6 +22,8 @@
       "--security-opt=no-new-privileges"
     ],
     "network": "bpm091-m11-net",
+    "runtime_readiness_attempts": 300,
+    "runtime_readiness_interval_seconds": 2,
     "published_ports": "none",
     "host_bind_mounts": "forbidden",
     "docker_socket_mount": "forbidden",
@@ -36,7 +38,7 @@
     "substitution_rule": "Replace only the placeholder assignment with a shell-quoted maintainer-supplied ref; retain both documented and effective forms in the plan.",
     "container_only_setup_class": "container_adapter",
     "container_only_setup_rule": "OCI bases omit the documented pre-existing sudo-capable host user. Install sudo as root, keep no-new-privileges, execute the unchanged sudo commands as root, and record this reduced user-boundary fidelity separately from documentation evidence.",
-    "runtime_rule": "Run the exact make dev command in the background only for orchestration, preserve its foreground log, wait from inside the container for readiness, execute documented probes, send SIGINT, and verify shutdown.",
+    "runtime_rule": "Run the exact make dev command in the background only for orchestration, preserve its foreground log, wait from inside the container for readiness without exiting the parent script, execute documented probes, send SIGINT, verify shutdown, and require a final completion marker before reporting pass.",
     "hidden_setup": "forbidden"
   },
   "retention": {

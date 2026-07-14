@@ -150,6 +150,11 @@ def build_plan(
     if placeholder_count != 1:
         raise HarnessError(f"Expected one BPM_REF placeholder for {target_id}, found {placeholder_count}")
 
+    readiness_attempts = int(config["execution"]["runtime_readiness_attempts"])
+    readiness_interval = int(config["execution"]["runtime_readiness_interval_seconds"])
+    if readiness_attempts <= 0 or readiness_interval <= 0:
+        raise HarnessError("Runtime readiness attempts and interval must be positive")
+
     return {
         "schema_version": 1,
         "harness_id": config["harness_id"],
@@ -163,6 +168,10 @@ def build_plan(
             "classification": config["command_ownership"]["container_only_setup_class"],
             "reason": config["command_ownership"]["container_only_setup_rule"],
             "command": profile["container_adapter_command"],
+        },
+        "runtime_adapter": {
+            "readiness_attempts": readiness_attempts,
+            "readiness_interval_seconds": readiness_interval,
         },
         "identity_probe": profile["identity_probe"],
         "commands": commands,
@@ -286,10 +295,14 @@ def render_execution_script(plan: dict[str, Any], run_id: str) -> str:
         )
         if command["mode"] == "background":
             lines.append(f"run_background {args}")
+            runtime_adapter = plan["runtime_adapter"]
             wait_command = (
-                "for attempt in $(seq 1 120); do "
-                "curl -fsS http://127.0.0.1:8000/health >/dev/null && exit 0; "
-                "sleep 2; done; exit 1"
+                "ready=0; "
+                f"for attempt in $(seq 1 {runtime_adapter['readiness_attempts']}); do "
+                "if curl -fsS http://127.0.0.1:8000/health >/dev/null 2>&1; "
+                "then ready=1; break; fi; "
+                f"sleep {runtime_adapter['readiness_interval_seconds']}; done; "
+                'test "$ready" -eq 1'
             )
             lines.append(
                 "run_foreground adapter-wait-ready runtime container_adapter "
@@ -312,6 +325,9 @@ def render_execution_script(plan: dict[str, Any], run_id: str) -> str:
             )
             + " || exit $?",
             'cat "$runtime_log"',
+            "run_foreground adapter-complete runtime container_adapter "
+            + shlex.quote('printf "complete\\n" > "$evidence_dir/completed"')
+            + " || exit $?",
         ]
     )
     return "\n".join(lines) + "\n"
@@ -778,6 +794,16 @@ def _run_documented_install(
         client.run(
             "execute-documented-install",
             ["exec", name, "/bin/bash", f"{remote_root}/run.sh"],
+        )
+        client.run(
+            "verify-completion-marker",
+            [
+                "exec",
+                name,
+                "/bin/sh",
+                "-lc",
+                f"test \"$(cat {shlex.quote(remote_root + '/completed')})\" = complete",
+            ],
         )
         result = "pass"
     except HarnessError as exc:
