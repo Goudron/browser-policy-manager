@@ -11,7 +11,7 @@
     <section id="a-state-meanings"><title>Supported, unavailable, deprecated, unknown, and raw states</title><p>Supported settings can be edited and validated for the selected schema. Unavailable or unknown settings should be reviewed before handoff; deprecated settings may still exist but require current-channel confirmation; raw fallback values should be preserved or removed deliberately.</p></section>
     <section id="a-migration-expectations"><title>Migration expectations</title><p>Switching schema channels is a review decision, not a silent migration. Revalidate after switching and inspect Release-only, ESR-absent, imported, raw, or deprecated values before saving or exporting.</p></section>
     <section id="a-example-boundary"><title>Example boundary</title><p>A common valid example uses DisableTelemetry. A Release-only valid example can use AIControls or VisualSearchEnabled. The same AIControls document is unsupported on ESR 140.12, and wrong value types such as a string value for DisableTelemetry are schema-invalid.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>If validation fails, read the affected policy path, confirm the schema channel, inspect the setting in All Settings or JSON Editor, and only then edit, remove, or preserve the value.</p></section>
+    <section id="a-recovery"><title>Recovery</title><p>If validation fails, read the affected policy path, confirm the schema channel, inspect the setting in All settings or JSON editor, and only then edit, remove, or preserve the value.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

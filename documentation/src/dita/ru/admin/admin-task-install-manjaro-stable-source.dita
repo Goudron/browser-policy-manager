@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-install-manjaro-stable-source" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux"><title>Установка BPM из исходников в стабильной ветке Manjaro</title><shortdesc>Полная установка после обновления всей стабильной ветки и проверки Python 3.14.</shortdesc><taskbody><prereq><p>Нужна стабильная ветка Manjaro не старее обновления 2026-06-26, sudo, HTTPS и согласованная ссылка BPM 0.9.1.</p></prereq><context><p>Manjaro обновляется непрерывно, поэтому в свидетельстве обязательны ветка и полностью обновлённое состояние пакетов.</p></context><steps>
+<step><cmd>Обновите систему и подготовьте BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+. /etc/os-release
+test "$ID" = "manjaro"
+test "$(pacman-mirrors -G)" = "stable"
+sudo pacman -Syu --needed base-devel ca-certificates curl git python python-pip
+pacman-mirrors -G
+uname -r
+export BPM_PYTHON=/usr/bin/python
+"$BPM_PYTHON" --version
+cd "$HOME"
+export BPM_REPOSITORY_URL="https://github.com/Goudron/browser-policy-manager.git"
+export BPM_REF="<approved-0.9.1-ref>"
+test "$BPM_REF" != "<approved-0.9.1-ref>"
+git clone "$BPM_REPOSITORY_URL" browser-policy-manager
+cd browser-policy-manager
+git checkout --detach "$BPM_REF"
+git status --short
+git rev-parse --short HEAD
+"$BPM_PYTHON" -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+make setup-docs-toolchain
+make docs-validate
+make docs-build
+]]></codeblock><p>Остановитесь, если ветка не stable, полное обновление не удалось или Python не 3.14.x.</p></info></step>
+<step><cmd>Запустите BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+make dev
+]]></codeblock></info></step>
+<step><cmd>Проверьте результат.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+cd "$HOME/browser-policy-manager"
+source .venv/bin/activate
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
+]]></codeblock></info></step>
+<step><cmd>Остановитесь безопасно.</cmd><info><p>При сбое нажмите <codeph>Ctrl+C</codeph>, сохраните сведения о ветке, пакетах и журналы; не выполняйте частичное понижение пакетов или схемы БД.</p></info></step>
+</steps><result><p>BPM установлен после полного обновления, документация собрана, зонды и интерфейс отвечают.</p></result><postreq><p>Зафиксируйте дату stable и подтвердите команды на чистом узле.</p></postreq></taskbody><related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links></task>

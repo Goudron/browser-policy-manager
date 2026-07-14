@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-control-product-inventory-pull" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>DevOps 流程: BPM-Profile aus einem externen Steuerungsprodukt abrufen und lesen</title>
-  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <title>从外部控制产品中提取并读取 BPM 配置文件</title>
+  <shortdesc>构建具有显式所有权、过滤器和证据边界的控制产品集成的拉取/列表/读取端。</shortdesc>
   <taskbody>
-    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
-    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></context>
+    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>。决定哪个外部控制产品拥有库存选择、比对存储、重试策略和审核证据； BPM 仅拥有其 API 返回的配置文件记录。</p></prereq>
+    <context><p>此工作流程使用 <codeph>API-PROFILE-001</codeph>、<codeph>API-PROFILE-002</codeph> 和 <codeph>API-PROFILE-003</codeph>。它是比较/更新、应用前验证、导入-审核-导出或合规性元数据移交工作流程之前的安全只读入口点。</p></context>
     <steps>
-      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph> <codeph>revision</codeph> <codeph>include_deleted=true</codeph></note></info></step>
+      <step><cmd>在读取 BPM 状态之前确认控制产品范围。</cmd><info><p>记录外部所有者、用途、模式通道、过滤规则以及是否排除存档的配置文件。使用 <codeph>lifecycle=active</codeph> 除非恢复过程明确需要 <codeph>include_deleted=true</codeph>。</p></info></step>
+  <step><cmd>列出具有确定性过滤器和分页的配置文件。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/profiles?q=corp&amp;lifecycle=active&amp;limit=50&amp;offset=0&amp;sort=updated_at&amp;order=desc</codeph>。响应示例：<codeph>200 ProfileRead[]</codeph>。错误示例：<codeph>422</codeph> 表示查询参数无效。</p></info></step>
+  <step><cmd>从配置文件数据中单独捕获可选库存计数。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/profiles/stats?q=corp&amp;lifecycle=active</codeph>。响应示例：<codeph>200 application/json</codeph>。将计数证据存储为咨询库存上下文，而不是锁或事务边界。</p></info></step>
+  <step><cmd>在比较之前读取 ID 所选择的每个配置文件。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=false</codeph>。响应示例：<codeph>200 ProfileRead</codeph> 与 <codeph>id</codeph>、<codeph>revision</codeph>、<codeph>schema_version</codeph>、<codeph>flags</codeph> 和 <codeph>compliance</codeph>。错误示例：<codeph>404</codeph> 或 <codeph>422</codeph>。</p></info></step>
+  <step><cmd>在 BPM 外部保留控制产品的读取快照。</cmd><info><p>存储配置文件 ID、修订、架构通道、过滤器查询、读取时间戳、源 URL、选定的策略密钥和控制产品运行 ID。不要在共享文档示例中存储机密或私有主机名。</p></info></step>
+  <step><cmd>如果拉取结果不可信，则停止。</cmd><info><note type="warning">如果分页、过滤或回读证据不完整，请在更新之前停止。 BPM 不会公开游标分页、快照隔离、比较锁、Webhooks 或用于读取工作流的安全重播协定。</note></info></step>
     </steps>
-    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
-    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+    <result><p>外部控制产品具有可重现的拉取/列出/读取快照，并且知道哪些证据属于 BPM，哪些证据属于外部系统。</p></result>
+    <postreq><p>仅在外部系统记录了所选配置文件 ID 和修订后才继续应用前验证或比较/更新。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-sync-profile-lifecycle"/>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fx-task-review-complex-policy-configuration" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Examiner une configuration de stratégie complexe avant l’export</title>
-  <shortdesc>Utilisez un review flow répétable pour les nested objects, arrays, raw fallback, conflicts et channel-specific availability.</shortdesc>
+  <title>Examiner une configuration de stratégie complexe avant l'exportation</title>
+  <shortdesc>Utilisez un flux de révision reproductible pour les objets imbriqués, les tableaux, les solutions de secours brutes, les conflits et la disponibilité spécifique au canal.</shortdesc>
   <taskbody>
-    <prereq><p>Un profil est ouvert et contient au moins une famille de stratégies complexe ou une managed preference.</p></prereq>
-    <context><p>Les stratégies complexes sont plus sûres lorsqu’elles sont examinées par famille, source, schema channel et forme de boundary document exportée.</p></context>
+    <prereq><p>Un profil est ouvert et contient au moins une famille de stratégies complexes ou une préférence gérée.</p></prereq>
+    <context><p>Les stratégies complexes sont plus sûres lorsqu'elles sont examinées par famille, source, canal de schéma et forme de limite exportée.</p></context>
     <steps>
-      <step><cmd>Ouvrez All Settings et filtrez sur la famille concernée.</cmd><info><p>Résultat attendu : les policies, preferences et source labels liés sont visibles ensemble.</p></info></step>
-      <step><cmd>Vérifiez le badge Release/ESR pour chaque policy de la famille.</cmd><info><note type="warning">Une Release-only policy ne doit pas être exportée pour un profil ciblant ESR.</note></info></step>
-      <step><cmd>Inspectez les nested object et array values, y compris les unknown preserved fields.</cmd><info><p>Résultat attendu : les raw fallback values sont conservées ou supprimées intentionnellement avant l’enregistrement.</p></info></step>
-      <step><cmd>Comparez les preset, CIS, imported, manual et raw sources.</cmd><info><p>Résultat attendu : les conflicts sont résolus explicitement au lieu d’être masqués par des modifications ultérieures.</p></info></step>
-      <step><cmd>Validez le profil et examinez la forme du <codeph>policies.json</codeph> généré.</cmd><info><p>Résultat attendu : BPM ne signale aucune schema error pour le canal sélectionné.</p></info></step>
+      <step><cmd>Ouvrez Tous les paramètres et filtrez sur la famille concernée.</cmd><info><p>Résultat attendu : les stratégies, préférences et étiquettes de source associées sont visibles ensemble.</p></info></step>
+      <step><cmd>Vérifiez le badge Release/ESR pour chaque police de la famille.</cmd><info><note type="warning">Une stratégie de version uniquement ne doit pas être exportée pour un profil ciblé par ESR.</note></info></step>
+      <step><cmd>Inspectez les valeurs des objets et des tableaux imbriqués, y compris les champs préservés inconnus.</cmd><info><p>Résultat attendu : les valeurs de secours brutes sont intentionnellement conservées ou supprimées avant l'enregistrement.</p></info></step>
+      <step><cmd>Comparez les sources prédéfinies, CIS, importées, manuelles et brutes.</cmd><info><p>Résultat attendu : les conflits sont résolus délibérément plutôt que masqués par des modifications ultérieures.</p></info></step>
+      <step><cmd>Validez le profil et examinez la forme <codeph>policies.json</codeph> générée.</cmd><info><p>Résultat attendu : BPM ne signale aucune erreur de schéma pour le canal sélectionné.</p></info></step>
     </steps>
-    <result><p>La famille complexe possède des nested values, source decisions et channel support examinés, ainsi qu’un résultat de validation propre.</p></result>
-    <postreq><p>Si la validation échoue, revenez à la famille, supprimez les unsupported keys ou passez au canal qui prend réellement en charge la policy.</p></postreq>
+    <result><p>La famille complexe a examiné les valeurs imbriquées, les décisions de source, la prise en charge des canaux et un résultat de validation propre.</p></result>
+    <postreq><p>Si la validation échoue, revenez à la famille, supprimez les clés non prises en charge ou passez au canal qui prend réellement en charge la stratégie.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.fx-concept-complex-policy-families"/>

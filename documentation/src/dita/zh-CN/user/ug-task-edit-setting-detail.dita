@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>编辑设置详细信息</title>
-  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Apply or edit a Firefox policy or managed preference value from the All Settings detail panel.</shortdesc>
+  <shortdesc>从 所有设置 详细信息面板应用或编辑 Firefox 策略或托管首选项值。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Open a setting detail panel for a supported editable value.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Detail editing keeps the change focused on one setting while reusing shared validation and save behavior.</p></context>
+    <prereq><p>打开支持的可编辑值的设置详细信息面板。</p></prereq>
+    <context><p>详细信息编辑使更改集中在一项设置上，同时重用共享验证和保存行为。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Inspect the current value and validation state.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Enter or choose the new policy or managed preference value.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Apply the detail edit and watch for validation feedback.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：编辑设置详细信息. Save the profile when the edited value is valid and intentional.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+      <step><cmd>检查当前值和验证状态。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>输入或选择新策略或托管首选项值。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>应用详细编辑并观察验证反馈。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>当编辑的值有效且有意时保存配置文件。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The selected policy or managed preference has the new value in the profile.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if validation fails, correct the value shape or reset the detail before saving.</p></postreq>
+    <result><p>所选策略或托管首选项在配置文件中具有新值。</p></result>
+    <postreq><p>恢复：如果验证失败，请在保存之前更正值形状或重置详细信息。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-inspect-setting-details"/>

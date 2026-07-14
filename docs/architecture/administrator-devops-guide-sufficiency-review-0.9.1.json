@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "review_id": "bpm-0.9.1-administrator-devops-guide-sufficiency-review",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M6-03",
+  "guide_id": "administrator-guide",
+  "status": "accepted-with-release-blockers",
+  "review_date": "2026-07-11",
+  "inherits_from": [
+    "documentation/config/documentation-sufficiency-review-protocol-0.9.1.json",
+    "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
+    "documentation/config/topic-section-taxonomy-0.9.1.json",
+    "docs/architecture/api-integration-rehome-audit-0.9.0.json"
+  ],
+  "scope": {
+    "locale_scope": "source-locale-plus-parity",
+    "source_locale": "en",
+    "parity_locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+    "topic_count": 49,
+    "task_topic_count": 45,
+    "concept_topic_count": 4,
+    "execution_method": "Committed API execution plus deterministic DITA, repository-command, configuration, update, diagnostics, production-boundary, and six-locale parity simulation.",
+    "honesty_rule": "Source-install procedures cannot pass from static command presence alone. Missing exact operating-system releases, five-distribution command sequences, documentation-build steps, rollback or stop conditions, or hands-on/simulation transcripts remain release blockers."
+  },
+  "normalization": {
+    "rule": "Each section_reviews entry expands to one protocol review item for every topic_id in topic_ids. Task fields resolve from the localized DITA task body; concept claims resolve from title, shortdesc, conbody, and related links.",
+    "field_resolution": {
+      "review_id": "{section.review_id}:{topic_id}",
+      "guide_id": "section.guide_id",
+      "topic_id": "section.topic_ids[]",
+      "locale_scope": "scope.locale_scope",
+      "task_or_claim": "section.task_or_claim plus the localized topic title/shortdesc",
+      "prerequisites": "task/taskbody/prereq for tasks; section.prerequisites for concepts",
+      "exact_steps": "task/taskbody/steps/step/cmd in document order for tasks; section.exact_steps for concepts",
+      "expected_result": "task/taskbody/result for tasks; section.expected_result for concepts",
+      "recovery_path": "task/taskbody/postreq, section.recovery_path, and related-links",
+      "drift_source": "section.drift_source",
+      "focused_verification": "section.focused_verification",
+      "evidence_type": "section.evidence_type",
+      "evidence_artifact": "section.evidence_artifact",
+      "review_disposition": "section.review_disposition"
+    }
+  },
+  "section_reviews": [
+    {
+      "review_id": "ADMIN-SUFF-LINUX",
+      "guide_id": "administrator-guide",
+      "section_id": "linux-source-deployment",
+      "topic_ids": [
+        "admin-task-prepare-linux-source-deployment",
+        "admin-task-set-up-linux-source-checkout",
+        "admin-task-configure-linux-source-runtime",
+        "admin-task-verify-linux-source-deployment",
+        "admin-task-install-ubuntu-26-04-source",
+        "admin-task-install-debian-13-source",
+        "admin-task-install-fedora-44-source",
+        "admin-task-install-linux-mint-22-3-source",
+        "admin-task-install-manjaro-stable-source"
+      ],
+      "task_or_claim": "An administrator can prepare, install, configure, start, and verify BPM from a Linux source checkout.",
+      "prerequisites": "A named Linux distribution/release, Python 3.14+, Git, build tooling, curl, repository access, and an isolated target database.",
+      "exact_steps": "Five localized target topics now provide exact package/Python, guarded checkout, virtual environment, editable install, migration, documentation build, foreground start, probe/UI, log, and stop-boundary commands.",
+      "expected_result": "A source-run process answers /health and /health/ready and serves /profiles after migration; authoring is complete, but execution remains unverified per selected distribution until BPM091-M6-06.",
+      "recovery_path": ["admin-troubleshoot-failed-startup-probes", "admin-troubleshoot-database-storage", "admin-troubleshoot-documentation-portal-build-links"],
+      "drift_source": ["README.md", "Makefile", "pyproject.toml", "app/core/config.py", "app/api/health.py", "docs/architecture/linux-distribution-selection-0.9.1.md"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_linux_deployment_topics.py", "./.venv/bin/pytest -q tests/test_linux_distribution_selection_091.py"],
+      "evidence_type": ["documented_simulation_evidence", "api_or_unit_test"],
+      "evidence_artifact": ["documentation/tests/contract/test_administrator_linux_deployment_topics.py", "docs/architecture/linux-distribution-selection-0.9.1.md"],
+      "review_disposition": "blocked",
+      "blocking_finding_ids": ["ADMIN091-SOURCE-INSTALL-EVIDENCE"]
+    },
+    {
+      "review_id": "ADMIN-SUFF-WSL",
+      "guide_id": "administrator-guide",
+      "section_id": "windows-wsl-source-deployment",
+      "topic_ids": [
+        "admin-task-prepare-windows-wsl-source-deployment",
+        "admin-task-set-up-windows-wsl-source-checkout",
+        "admin-task-configure-windows-wsl-network-runtime",
+        "admin-task-verify-windows-wsl-source-deployment"
+      ],
+      "task_or_claim": "An administrator can run the Linux source workflow inside WSL 2 and verify access from Windows without inferring native-Windows support.",
+      "prerequisites": "Windows 10 or 11, WSL 2, a named Ubuntu LTS release, PowerShell, a WSL shell, repository access, and permission to install prerequisites.",
+      "exact_steps": "Current topics provide WSL setup, apt prerequisites, Linux-filesystem checkout, environment, migration, process start, Linux/PowerShell probes, and networking recovery, but do not name an exact Ubuntu release or include a complete docs-build and rollback transcript.",
+      "expected_result": "BPM runs inside WSL and responds from both WSL and Windows; this remains simulated rather than evidenced on an exact host/release pair.",
+      "recovery_path": ["admin-troubleshoot-wsl-networking-dependencies", "admin-troubleshoot-failed-startup-probes"],
+      "drift_source": ["documentation/src/dita/en/admin/admin-task-set-up-windows-wsl-source-checkout.dita", "Makefile", "app/api/health.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py"],
+      "evidence_type": ["documented_simulation_evidence", "api_or_unit_test"],
+      "evidence_artifact": ["documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py", "documentation/src/dita/en/admin/admin-task-verify-windows-wsl-source-deployment.dita"],
+      "review_disposition": "blocked",
+      "blocking_finding_ids": ["ADMIN091-SOURCE-INSTALL-EVIDENCE"]
+    },
+    {
+      "review_id": "ADMIN-SUFF-OPS",
+      "guide_id": "administrator-guide",
+      "section_id": "devops-operations",
+      "topic_ids": [
+        "admin-task-review-devops-configuration-sources",
+        "admin-task-plan-devops-storage-logs-backups",
+        "admin-task-review-devops-network-cors-security",
+        "admin-task-record-devops-operational-boundaries"
+      ],
+      "task_or_claim": "Operators can identify effective configuration, storage, logs, backup evidence, network exposure, CORS, and unsupported operational capabilities.",
+      "prerequisites": "A source-run instance and access to its BPM_* configuration, working directory, foreground logs, data path, and documentation path.",
+      "exact_steps": "Review configuration sources, inventory persistent and generated paths, assess bind/CORS exposure, and record supported and deferred boundaries.",
+      "expected_result": "An operational record identifies current settings and evidence without claiming managed secrets, service packaging, reverse proxy, TLS, backup automation, or HA support.",
+      "recovery_path": ["admin-troubleshoot-database-storage", "admin-troubleshoot-failed-startup-probes"],
+      "drift_source": ["app/core/config.py", "Makefile", "app/db.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_devops_operational_boundaries.py"],
+      "evidence_type": ["static_source_simulation", "api_or_unit_test"],
+      "evidence_artifact": ["documentation/tests/contract/test_administrator_devops_operational_boundaries.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-UPDATE",
+      "guide_id": "administrator-guide",
+      "section_id": "source-update",
+      "topic_ids": [
+        "admin-task-prepare-source-update-evidence",
+        "admin-task-refresh-source-revision-dependencies",
+        "admin-task-run-source-update-migrations-docs",
+        "admin-task-verify-source-update-rollback-stop"
+      ],
+      "task_or_claim": "Operators can update a source checkout with pre-change evidence, guarded dependency refresh, forward migrations, documentation checks, probes, and explicit rollback stop conditions.",
+      "prerequisites": "A running source checkout, approved target ref, clean or understood worktree, stopped process, database backup, export evidence, and previous revision.",
+      "exact_steps": "Record revision/configuration, back up data, export critical profiles, fetch and checkout the approved ref, reinstall dependencies, run tests/migrations/docs, restart, probe, and stop rather than assume database downgrade safety.",
+      "expected_result": "The update either reaches a verified source-run state or stops at a documented boundary without destructive rollback assumptions.",
+      "recovery_path": ["admin-troubleshoot-database-storage", "admin-troubleshoot-documentation-portal-build-links", "admin-task-verify-source-update-rollback-stop"],
+      "drift_source": ["Makefile", "README.md", "alembic/versions", "documentation/tools/build_docs.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_update_from_source_topics.py"],
+      "evidence_type": ["documented_simulation_evidence", "api_or_unit_test"],
+      "evidence_artifact": ["documentation/tests/contract/test_administrator_update_from_source_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-API-FOUNDATIONS",
+      "guide_id": "administrator-guide",
+      "section_id": "api-integration-foundations",
+      "topic_ids": [
+        "admin-concept-integration-audience",
+        "admin-concept-supported-integration-patterns",
+        "admin-concept-api-conventions",
+        "admin-concept-api-limitations"
+      ],
+      "task_or_claim": "Integrators can select a supported synchronous HTTP pattern and understand current OpenAPI, concurrency, authentication, retry, webhook, and runtime-enforcement boundaries.",
+      "prerequisites": "An integration owner, BPM base URL, current OpenAPI document, and an external audit/retry policy.",
+      "exact_steps": ["Identify the integration audience and ownership boundary.", "Choose a documented request/response pattern.", "Apply API conventions and stop at explicit limitations before implementing downstream behavior."],
+      "expected_result": "The integration design uses only current BPM API guarantees and keeps unsupported orchestration outside BPM.",
+      "recovery_path": ["admin-task-use-reusable-api-examples", "admin-task-record-integration-failure-audit"],
+      "drift_source": ["app/main.py", "app/api", "docs/architecture/api-integration-rehome-audit-0.9.0.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_api_integration_topics.py"],
+      "evidence_type": ["static_source_simulation", "api_or_unit_test"],
+      "evidence_artifact": ["documentation/tests/contract/test_api_integration_topics.py", "docs/architecture/api-integration-rehome-audit-0.9.0.json"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-PROFILE-API",
+      "guide_id": "administrator-guide",
+      "section_id": "profile-api-lifecycle",
+      "topic_ids": [
+        "admin-task-sync-profile-lifecycle",
+        "admin-task-manage-profile-retirement",
+        "admin-task-import-firefox-policies-json",
+        "admin-task-export-firefox-policies-json",
+        "admin-task-validate-firefox-policies-json"
+      ],
+      "task_or_claim": "An integrating product can read and update profiles safely, manage retirement, and validate/import/export Firefox policies JSON.",
+      "prerequisites": "A reachable BPM instance, current OpenAPI, schema channel, deterministic profile identity/revision, and synthetic policies.json input.",
+      "exact_steps": "Execute documented profile lifecycle, validation, import, export, archive/restore, and conflict paths with the stated content types and response states.",
+      "expected_result": "API responses and exported Firefox documents match current FastAPI behavior without bypassing revision, validation, or lifecycle controls.",
+      "recovery_path": ["admin-troubleshoot-import-export-failures", "admin-task-record-integration-failure-audit"],
+      "drift_source": ["app/api/profiles.py", "app/api/validation.py", "app/api/export.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_api_integration_topics.py::test_firefox_import_export_documented_examples_execute_against_api_test_app documentation/tests/contract/test_api_integration_topics.py::test_validation_gate_documented_examples_execute_against_api_test_app"],
+      "evidence_type": ["api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["documentation/tests/contract/test_api_integration_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-HEALTH-SCENARIOS",
+      "guide_id": "administrator-guide",
+      "section_id": "api-health-and-scenarios",
+      "topic_ids": [
+        "admin-task-check-health-readiness",
+        "admin-task-run-pull-compare-update-scenario",
+        "admin-task-run-import-review-export-scenario",
+        "admin-task-use-reusable-api-examples"
+      ],
+      "task_or_claim": "Integrators can gate work on current probes and execute representative pull/compare/update and import/review/export workflows.",
+      "prerequisites": "A test BPM instance, base URL, known profiles or synthetic input, and an external record for retries and audit evidence.",
+      "exact_steps": "Call liveness/readiness, execute the selected end-to-end scenario, preserve statuses/revisions/hashes, and handle documented failure boundaries.",
+      "expected_result": "The scenario reaches the documented API state while probes remain a minimal handshake rather than dependency diagnostics.",
+      "recovery_path": ["admin-troubleshoot-failed-startup-probes", "admin-task-record-integration-failure-audit"],
+      "drift_source": ["app/api/health.py", "app/api/profiles.py", "documentation/fixtures/api-states/api-integration-states-0.9.0.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_api_integration_topics.py::test_health_handshake_documented_examples_execute_against_api_test_app documentation/tests/contract/test_api_integration_topics.py::test_pull_compare_update_scenario_executes_against_api_test_app documentation/tests/contract/test_api_integration_topics.py::test_import_review_export_compliance_scenario_executes_against_api_test_app"],
+      "evidence_type": ["api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["documentation/tests/contract/test_api_integration_topics.py", "documentation/fixtures/api-states/api-integration-states-0.9.0.json"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-CONTROL-PRODUCT",
+      "guide_id": "administrator-guide",
+      "section_id": "control-product-workflows",
+      "topic_ids": [
+        "admin-task-run-control-product-inventory-pull",
+        "admin-task-run-validate-before-apply-update",
+        "admin-task-run-import-review-export-handoff",
+        "admin-task-gate-control-product-startup",
+        "admin-task-record-integration-failure-audit"
+      ],
+      "task_or_claim": "A control product can pull inventory, validate before update, hand off import/review/export, gate startup, and retain failure evidence.",
+      "prerequisites": "A deterministic test instance, current schema channel, external control-product state, and a policy for retries, idempotency, and audit retention.",
+      "exact_steps": "Run each control-product sequence against current endpoints and preserve request, response, revision, status, and decision evidence.",
+      "expected_result": "The external product can complete or safely stop each orchestration without relying on undocumented BPM queues, webhooks, authentication, or audit storage.",
+      "recovery_path": ["admin-task-record-integration-failure-audit", "admin-troubleshoot-import-export-failures"],
+      "drift_source": ["app/api", "documentation/fixtures/api-states/api-integration-states-0.9.0.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_api_devops_integration_runbooks.py"],
+      "evidence_type": ["api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["documentation/tests/contract/test_api_devops_integration_runbooks.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-TROUBLESHOOT",
+      "guide_id": "administrator-guide",
+      "section_id": "troubleshooting",
+      "topic_ids": [
+        "admin-troubleshoot-failed-startup-probes",
+        "admin-troubleshoot-schema-cache-validation",
+        "admin-troubleshoot-import-export-failures",
+        "admin-troubleshoot-database-storage",
+        "admin-troubleshoot-wsl-networking-dependencies",
+        "admin-troubleshoot-documentation-portal-build-links"
+      ],
+      "task_or_claim": "Operators can classify startup/probe, schema, import/export, storage, WSL, and documentation-portal failures and stop before unsafe recovery.",
+      "prerequisites": "The failing command, source revision, non-secret configuration names, response status/body, relevant paths/checksums, and sanitized logs.",
+      "exact_steps": "Reproduce with the smallest probe or focused test, classify the owning layer, preserve evidence, use documented recovery, and stop before direct database/generated-output edits or unsupported rollback.",
+      "expected_result": "The operator reaches a bounded diagnosis and either restores the documented workflow or records a safe escalation package.",
+      "recovery_path": ["admin-task-record-integration-failure-audit", "admin-task-verify-source-update-rollback-stop"],
+      "drift_source": ["app/api/health.py", "app/core/schemas_loader.py", "app/api/export.py", "app/db.py", "documentation/tools/build_docs.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py"],
+      "evidence_type": ["api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "ADMIN-SUFF-PRODUCTION",
+      "guide_id": "administrator-guide",
+      "section_id": "production-readiness",
+      "topic_ids": [
+        "admin-task-assess-single-node-source-readiness",
+        "admin-task-review-network-exposure-proxy-readiness",
+        "admin-task-plan-monitoring-backup-update-windows",
+        "admin-task-record-ha-production-deferred-boundaries"
+      ],
+      "task_or_claim": "Maintainers can assess current single-node source operation and explicitly separate preparation evidence from deferred production capabilities.",
+      "prerequisites": "Completed source-operation, configuration, storage, network, update, probe, and backup/export evidence reviews.",
+      "exact_steps": "Assess single-node evidence, review exposure and proxy questions, plan monitoring/backup/update windows, and record deferred HA, TLS/proxy, managed-secret, rolling-upgrade, and restore boundaries.",
+      "expected_result": "The record describes current source operation without claiming production readiness or support for deferred topology and automation features.",
+      "recovery_path": ["admin-task-record-devops-operational-boundaries", "admin-troubleshoot-failed-startup-probes"],
+      "drift_source": ["app/core/config.py", "app/api/health.py", "Makefile"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_administrator_production_readiness_boundaries.py"],
+      "evidence_type": ["static_source_simulation", "documented_simulation_evidence"],
+      "evidence_artifact": ["documentation/tests/contract/test_administrator_production_readiness_boundaries.py"],
+      "review_disposition": "pass"
+    }
+  ],
+  "release_blockers": [
+    {
+      "finding_id": "ADMIN091-SOURCE-INSTALL-EVIDENCE",
+      "severity": "release-blocker",
+      "affected_topic_count": 13,
+      "finding": "BPM091-M6-06 validates syntax, ordering, shared CPython integrity, and Ubuntu 26.04 runtime behavior, and records deterministic simulations for the other four targets. No target yet has a complete clean-host transcript from package installation through stop verification.",
+      "missing_evidence": ["complete Ubuntu 26.04 clean-host transcript", "complete Debian 13.5 clean-host transcript", "complete Fedora 44 clean-host transcript", "complete Linux Mint 22.3 clean-host transcript", "complete Manjaro stable clean-host transcript"],
+      "closure_tasks": [],
+      "closure_evidence": "docs/architecture/linux-source-install-validation-0.9.1.json must be updated with five clean-target passes before release.",
+      "release_rule": "Do not claim Administrator source-install sufficiency while the validation report has release_ready=false. WSL must reuse or name the validated Ubuntu LTS sequence and retain Windows/WSL-specific probe evidence."
+    },
+    {
+      "finding_id": "ADMIN091-VERSION-DRIFT",
+      "severity": "release-blocker",
+      "affected_topic_count": 44,
+      "finding": "Administrator DITA metadata and visible source-deployment/update wording still identify BPM 0.9.0 while this review targets BPM 0.9.1.",
+      "missing_evidence": ["0.9.1 product metadata", "0.9.1 checkout/reference wording", "absence of stale 0.9.0 Administrator portal instructions"],
+      "closure_tasks": ["BPM091-M12-02"],
+      "release_rule": "Behavioral simulations may remain useful, but the 0.9.1 portal cannot ship these topics until version wording is refreshed and locale parity gates pass."
+    }
+  ],
+  "execution_record": {
+    "linux_source_install_validation": {
+      "date": "2026-07-11",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_linux_source_install_validation.py documentation/tests/contract/test_linux_source_install_command_topics.py",
+      "result": "pass-with-release-blocker",
+      "result_summary": "19 passed; Ubuntu 26.04 runtime/migration/probes/UI/stop and CPython 3.14.6 checksum passed; four targets remain simulation-only.",
+      "evidence": "docs/architecture/linux-source-install-validation-0.9.1.json"
+    },
+    "linux_source_install_authoring": {
+      "date": "2026-07-11",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_linux_source_install_command_topics.py documentation/tests/contract/test_metadata_contract.py documentation/tests/contract/test_guide_maps.py documentation/tests/contract/test_administrator_guide_scope.py documentation/tests/contract/test_administrator_guide_validation_fixtures.py documentation/tests/contract/test_administrator_linux_deployment_topics.py documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py documentation/tests/contract/test_administrator_devops_operational_boundaries.py documentation/tests/contract/test_administrator_update_from_source_topics.py documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py documentation/tests/contract/test_administrator_production_readiness_boundaries.py documentation/tests/contract/test_topic_section_taxonomy.py documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py",
+      "result": "pass",
+      "result_summary": "282 passed; make docs-validate and make docs-build also passed for all six locales.",
+      "boundary": "Static authoring, DITA publication, links, metadata, and repository behavior are verified. Distribution execution belongs to BPM091-M6-06."
+    },
+    "administrator_contracts": {
+      "date": "2026-07-11",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py documentation/tests/contract/test_administrator_guide_scope.py documentation/tests/contract/test_administrator_guide_validation_fixtures.py documentation/tests/contract/test_administrator_linux_deployment_topics.py documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py documentation/tests/contract/test_administrator_devops_operational_boundaries.py documentation/tests/contract/test_administrator_update_from_source_topics.py documentation/tests/contract/test_administrator_troubleshooting_diagnostics_topics.py documentation/tests/contract/test_administrator_production_readiness_boundaries.py",
+      "result": "pass",
+      "result_summary": "235 passed"
+    },
+    "integration_contracts": {
+      "date": "2026-07-11",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_api_integration_topics.py documentation/tests/contract/test_api_devops_integration_runbooks.py",
+      "result": "pass",
+      "result_summary": "16 passed"
+    }
+  },
+  "summary": {
+    "section_review_count": 10,
+    "reviewed_topic_count": 49,
+    "task_topic_count": 45,
+    "concept_topic_count": 4,
+    "procedure_pass_topic_count": 36,
+    "procedure_blocked_topic_count": 13,
+    "release_blocker_count": 2,
+    "result": "Current operations, update, health, troubleshooting, integration, and production-boundary procedures agree with repository behavior under deterministic simulation. Source-install evidence and 0.9.1 version wording remain explicit release blockers."
+  },
+  "unverified_boundaries": [
+    "No clean-host Linux distribution or Windows/WSL installation was executed during this review.",
+    "The health and readiness endpoints prove only the current application responses, not database dependency detail, production topology, or service-level readiness.",
+    "No production reverse proxy, TLS termination, service manager, managed secret store, HA cluster, rolling upgrade, or automated restore behavior is claimed or verified.",
+    "Database downgrade safety is not guaranteed; update recovery must stop at the documented backup and source-reference boundaries."
+  ]
+}

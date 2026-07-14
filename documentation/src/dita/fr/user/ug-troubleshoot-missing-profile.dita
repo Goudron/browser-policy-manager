@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-missing-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Récupérer après une missing profile route</title>
-  <shortdesc>Récupérez lorsqu’un bookmark, stale tab ou editor URL signale Profile not found.</shortdesc>
+  <title>Récupérer à partir d'un itinéraire de profil manquant</title>
+  <shortdesc>Récupérer lorsqu'un signet, un onglet obsolète ou une URL d'éditeur signale un profil introuvable.</shortdesc>
   <taskbody>
-    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
-    <context><p>Une missing profile route signifie que l’URL ne résout plus un active profile ; le profil peut être archived, deleted, filtré ou déjà removed.</p></context>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
+    <context><p>Un itinéraire de profil manquant signifie que l'URL ne correspond plus à un profil actif ; le profil peut être archivé, supprimé, filtré ou déjà supprimé.</p></context>
     <steps>
-      <step><cmd>Revenez à la Library au lieu de modifier failed route.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Réinitialisez search and filters puis cherchez le profil par nom, schema channel et dernier status connu.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Incluez archived profiles si le profil a pu être archivé volontairement.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Si le profil reste missing, cessez d’utiliser stale URL et continuez seulement depuis une visible Library row ou known export.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+      <step><cmd>Revenez à la bibliothèque au lieu de modifier la route ayant échoué.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Effacez la recherche et les filtres, puis recherchez le profil par nom, canal de schéma et dernier statut connu.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Inclut les profils archivés lorsque le profil peut avoir été archivé délibérément.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Si le profil est toujours manquant, arrêtez d'utiliser l'URL obsolète et continuez uniquement à partir d'une ligne visible de la bibliothèque ou d'une exportation connue.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
     </steps>
-    <result><p>Vous rouvrez le profil depuis un état visible de Library ou confirmez que bookmarked route n’est plus utilisable.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+    <result><p>Soit vous rouvrez le profil à partir d'un état de bibliothèque visible, soit vous confirmez que l'itinéraire marqué n'est plus utilisable.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-profile-library"/>

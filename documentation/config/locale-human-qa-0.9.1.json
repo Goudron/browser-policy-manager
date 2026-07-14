@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "qa_id": "bpm-0.9.1-locale-human-qa",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M7-05",
+  "status": "accepted",
+  "locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+  "review_scope": {
+    "rendered_surfaces": [
+      "User Guide screenshot contact sheet for all 36 matrix rows",
+      "full-size localized guided editor and guided settings search screenshots",
+      "full-size localized all-settings narrow screenshots",
+      "full-size localized JSON editor dark screenshots",
+      "localized product runtime strings visible in the minimal User Guide screenshot matrix"
+    ],
+    "source_surfaces": [
+      "app/i18n_src/{locale}/common.json",
+      "app/i18n_src/{locale}/library.json",
+      "app/i18n_src/{locale}/settings.json",
+      "app/i18n_src/{locale}/wizard.json",
+      "app/i18n_src/{locale}/json.json",
+      "app/i18n/{locale}.json",
+      "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+      "documentation/reports/screenshots/visual-qa/contact-sheet.png"
+    ]
+  },
+  "review_methods": [
+    "manual full-contact-sheet review after regenerating all User Guide screenshots",
+    "full-size visual spot review for ru, de, zh-CN, fr, and es-ES screenshots",
+    "focused bad-fragment scan for release-blocking and newly found visible UI fragments",
+    "locale catalog rebuild and runtime/source catalog sync checks",
+    "contract review of remaining English as brand, abbreviation, identifier, command/path/API, or false positive"
+  ],
+  "screenshot_visual_qa": "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+  "capture_report": "documentation/reports/screenshots/user-guide-screenshots-0.9.1.json",
+  "contact_sheet": "documentation/reports/screenshots/visual-qa/contact-sheet.png",
+  "blocked_items_closed": [
+    "SHOT-QA-LOC-DE-001",
+    "SHOT-QA-LOC-FR-001",
+    "SHOT-QA-LOC-ES-001",
+    "SHOT-QA-LOC-ZH-001"
+  ],
+  "fixed_visible_findings": [
+    {
+      "locale": "de",
+      "surface": "minimal_user_guide_screenshots",
+      "examples_before": [
+        "Profil Name",
+        "Direction",
+        "Einstellungen dass gehoeren",
+        "High-Wert Einstellungen",
+        "Validierung Ergebnisse wird appear hier."
+      ],
+      "source_refs": [
+        "app/i18n_src/de/common.json",
+        "app/i18n_src/de/library.json",
+        "app/i18n_src/de/wizard.json",
+        "app/i18n_src/de/json.json"
+      ],
+      "verification": "Fresh 36-row screenshot capture, contact-sheet review, full-size German guided-search review, and bad-fragment scan."
+    },
+    {
+      "locale": "fr",
+      "surface": "minimal_user_guide_screenshots",
+      "examples_before": [
+        "guide flux",
+        "but toujours travail",
+        "Profil name",
+        "Filtrered",
+        "JSON editeur"
+      ],
+      "source_refs": [
+        "app/i18n_src/fr/common.json",
+        "app/i18n_src/fr/library.json",
+        "app/i18n_src/fr/wizard.json",
+        "app/i18n_src/fr/json.json"
+      ],
+      "verification": "Fresh 36-row screenshot capture, contact-sheet review, full-size French guided-search review, and bad-fragment scan."
+    },
+    {
+      "locale": "es-ES",
+      "surface": "minimal_user_guide_screenshots",
+      "examples_before": [
+        "control control",
+        "but todavía trabajo",
+        "paso-by-paso",
+        "Sin ajustes match",
+        "Perfil name"
+      ],
+      "source_refs": [
+        "app/i18n_src/es-ES/common.json",
+        "app/i18n_src/es-ES/library.json",
+        "app/i18n_src/es-ES/wizard.json",
+        "app/i18n_src/es-ES/json.json",
+        "app/i18n_src/es-ES/settings.json"
+      ],
+      "verification": "Fresh 36-row screenshot capture, contact-sheet review, full-size Spanish guided-search review, and bad-fragment scan."
+    }
+  ],
+  "locale_results": {
+    "ru": {
+      "status": "accepted",
+      "remaining_english": "allowlisted only in reviewed surfaces",
+      "notes": [
+        "Visual review confirms Cyrillic UI text is readable in the User Guide screenshots.",
+        "Remaining Latin text is limited to brands, abbreviations, document names, policy/preference identifiers, URLs, and JSON literals."
+      ]
+    },
+    "de": {
+      "status": "accepted",
+      "remaining_english": "allowlisted only in reviewed surfaces",
+      "notes": [
+        "Fresh screenshots no longer show the previous German screenshot blocker examples.",
+        "Visible guided-search result copy was corrected after manual review."
+      ]
+    },
+    "zh-CN": {
+      "status": "accepted",
+      "remaining_english": "allowlisted only in reviewed surfaces",
+      "notes": [
+        "Visual review confirms CJK UI text is readable in the User Guide screenshots.",
+        "Remaining Latin text is limited to brands, abbreviations, schema channels, policy/preference identifiers, URLs, and JSON literals."
+      ]
+    },
+    "fr": {
+      "status": "accepted",
+      "remaining_english": "allowlisted only in reviewed surfaces",
+      "notes": [
+        "Fresh screenshots no longer show the previous French screenshot blocker examples.",
+        "Visible guided-search result copy was corrected after manual review."
+      ]
+    },
+    "es-ES": {
+      "status": "accepted",
+      "remaining_english": "allowlisted only in reviewed surfaces",
+      "notes": [
+        "Fresh screenshots no longer show the previous Spanish screenshot blocker examples.",
+        "Visible guided-search result copy was corrected after manual review."
+      ]
+    }
+  },
+  "remaining_allowlisted_rationale": [
+    {
+      "term": "Browser Policy Manager",
+      "category": "brand",
+      "rationale": "Product brand remains unchanged across localized UI."
+    },
+    {
+      "term": "Firefox",
+      "category": "brand",
+      "rationale": "Browser brand follows Mozilla product naming."
+    },
+    {
+      "term": "BPM",
+      "category": "abbreviation",
+      "rationale": "Product abbreviation is stable and language-neutral."
+    },
+    {
+      "term": "CIS",
+      "category": "abbreviation",
+      "rationale": "Security benchmark abbreviation is stable and language-neutral."
+    },
+    {
+      "term": "ESR",
+      "category": "abbreviation",
+      "rationale": "Firefox channel abbreviation is stable and language-neutral."
+    },
+    {
+      "term": "JSON",
+      "category": "abbreviation",
+      "rationale": "File format abbreviation is stable and appears in editor names and validation states."
+    },
+    {
+      "term": "Release",
+      "category": "schema channel identifier",
+      "rationale": "Firefox schema channel label is a product/channel identifier in the reviewed screenshots."
+    },
+    {
+      "term": "Homepage",
+      "category": "policy identifier",
+      "rationale": "Firefox policy name is a literal identifier and is not translated in policy rows."
+    },
+    {
+      "term": "policies.json",
+      "category": "command/path/API",
+      "rationale": "Boundary document filename remains literal."
+    },
+    {
+      "term": "browser.startup.homepage",
+      "category": "managed preference identifier",
+      "rationale": "Firefox preference IDs remain literal technical identifiers."
+    }
+  ],
+  "known_not_closed_by_this_item": [
+    "This QA closes the localized User Guide screenshot release blocker and reviewed screenshot-visible UI strings.",
+    "Broader non-screenshot locale phrasing debt remains outside this acceptance and is governed by the M7-04 known-debt policy until scheduled separately."
+  ]
+}

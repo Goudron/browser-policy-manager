@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-linux-source-deployment" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Préparer un hôte Linux pour un déploiement depuis les sources</title>
-  <shortdesc>Vérifiez la limite du source deployment pris en charge, les prérequis de l’hôte et les capacités de production différées avant d’installer BPM depuis un repository checkout.</shortdesc>
+  <title>Préparer un hôte Linux pour le déploiement source</title>
+  <shortdesc>Confirmez les limites de déploiement source prises en charge, les prérequis de l'hôte et les capacités de production différée avant d'installer BPM à partir d'une extraction de référentiel.</shortdesc>
   <taskbody>
-    <prereq><p>Utilisez un hôte Linux sur lequel vous pouvez installer Python 3.14+, Git, les outils de build et curl. Ce runbook suppose un source checkout, pas un packaged installer.</p></prereq>
-    <context><p>BPM 0.9.0 peut être exécuté depuis les sources pour le développement, la revue et l’évaluation administrative contrôlée. Les packaged installers, native service units, recettes systemd officielles, reverse proxy and TLS recipes, HA clustering, managed secrets et production hardening ne sont pas livrés dans cette version et ne doivent pas être présentés comme un comportement de déploiement pris en charge.</p></context>
+    <prereq><p>Utilisez un hôte Linux sur lequel vous pouvez installer Python 3.14+, Git, créer des outils et curl. Ce runbook suppose une extraction de source, et non un programme d'installation packagé.</p></prereq>
+    <context><p>BPM 0.9.0 peut être exécuté à partir des sources pour le développement, la révision et l'évaluation administrative contrôlée. Les programmes d'installation packagés, les unités de service natives, les recettes systemd officielles, les recettes de proxy inverse et TLS, le clustering HA, les secrets gérés et le renforcement de la production ne sont pas fournis dans cette version et ne doivent pas être présentés comme un comportement de déploiement pris en charge.</p></context>
     <steps>
-      <step><cmd>Identifiez l’objectif du déploiement et notez qu’il s’agit d’un source-based Linux deployment.</cmd><info><p>Résultat attendu : la note d’exploitation indique que BPM démarre depuis un Git checkout et que les distribution-specific installers sont différés.</p></info></step>
-      <step><cmd>Installez ou vérifiez les prérequis de l’hôte.</cmd><info><p>Les outils requis sont Git, Python 3.14+, pip, make, curl et un shell capable d’exécuter <codeph>source .venv/bin/activate</codeph>. Les commandes du dépôt utilisent l’environnement virtuel local et ne nécessitent pas de BPM package global.</p></info></step>
-      <step><cmd>Créez un répertoire de travail séparé des production data et des secrets.</cmd><info><p>Conservez le repository checkout, <codeph>.venv</codeph> et les SQLite data locales dans un chemin contrôlé. Ne placez pas de vrais secrets dans les exemples de documentation ni dans les committed files.</p></info></step>
-      <step><cmd>Confirmez ce qui est volontairement hors périmètre avant de continuer.</cmd><info><note type="warning">Ce runbook ne fournit pas de packaged installer, native service, supported systemd unit, reverse proxy recipe, TLS termination, HA topology, managed secret store, backup automation ni production-hardening checklist.</note></info></step>
+      <step><cmd>Identifiez l'objectif du déploiement et notez qu'il s'agit d'un déploiement Linux basé sur la source.</cmd><info><p>Résultat attendu : la note d'opérations indique que BPM est démarré à partir d'une extraction Git et que les installateurs spécifiques à la distribution sont différés.</p></info></step>
+      <step><cmd>Installez ou vérifiez les prérequis de l'hôte.</cmd><info><p>Les outils requis sont Git, Python 3.14+, pip, make, curl et un shell pouvant exécuter <codeph>source .venv/bin/activate</codeph>. Les commandes du référentiel utilisent l'environnement virtuel local et ne nécessitent pas de package BPM global.</p></info></step>
+      <step><cmd>Créez un répertoire de travail distinct des données et des secrets de production.</cmd><info><p>Conservez l'extraction du référentiel, <codeph>.venv</codeph> et les données locales SQLite sous un chemin contrôlé. Ne stockez pas de vrais secrets dans des exemples de documentation ou des fichiers validés.</p></info></step>
+      <step><cmd>Confirmez ce qui n'est pas intentionnellement couvert avant de continuer.</cmd><info><note type="warning">Ce runbook ne fournit pas de programme d'installation packagé, de service natif, d'unité systemd prise en charge, de recette de proxy inverse, de terminaison TLS, de topologie HA, de magasin secret géré, d'automatisation de sauvegarde ou de liste de contrôle de renforcement de la production.</note></info></step>
     </steps>
-    <result><p>L’hôte et les hypothèses d’exploitation sont prêts pour un workflow BPM 0.9.0 pris en charge depuis un source checkout.</p></result>
-    <postreq><p>Poursuivez avec le sujet Linux source checkout avant de configurer les runtime variables.</p></postreq>
+    <result><p>Les hypothèses d'hôte et de fonctionnement sont prêtes pour un processus d'extraction de source BPM 0.9.0 pris en charge.</p></result>
+    <postreq><p>Continuez avec la rubrique sur l'extraction des sources Linux avant de configurer les variables d'exécution.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-linux-source-checkout"/>

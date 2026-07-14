@@ -4,7 +4,7 @@
   <title>Change the interface theme</title>
   <shortdesc>Select system, light, or dark theme without changing profile content.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Theme selection affects only the BPM interface and helps review tables, code blocks, validation states, and warnings comfortably.</p></context>
     <steps>
       <step><cmd>Open the theme selector in the page header.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

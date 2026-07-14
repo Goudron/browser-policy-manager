@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-comparison-workflow" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Workflow für Profilvergleich</title><shortdesc>Compare zeigt Unterschiede gespeicherter Einstellungen zwischen zwei Profilen, ohne eines zu ändern.</shortdesc>
-  <conbody><p>Der Ablauf: Compare aus der Bibliothek öffnen, Profile A und Profile B unabhängig suchen, beide Zusammenfassungen prüfen und dann die Vergleichstabelle lesen.</p><p>Die Tabelle nutzt die Vereinigung von Policy- und Managed-Preference-Einstellungen. Eine Zeile kann equal, changed oder auf einer Seite missing sein. Compare ist schreibgeschützt und führt keine Werte zusammen.</p></conbody>
+  <title>Ablauf für den Profilvergleich</title><shortdesc>Der Vergleich zeigt Unterschiede gespeicherter Einstellungen zwischen zwei Profilen, ohne eines zu ändern.</shortdesc>
+  <conbody><p>Öffnen Sie „Profileinstellungen vergleichen“ aus der Bibliothek, suchen Sie „Profil A“ und „Profil B“ getrennt, prüfen Sie beide Zusammenfassungen und lesen Sie anschließend die Vergleichstabelle.</p><p>Die Tabelle vereinigt die Richtlinien und verwalteten Einstellungen beider Profile. Eine Zeile zeigt „Gleicher Wert“, „Anderer Wert“ oder auf einer Seite „Fehlt“. Der Vergleich ist schreibgeschützt und führt keine Werte zusammen.</p></conbody>
   <related-links><link keyref="topic.ug-reference-comparison-states"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
 </concept>

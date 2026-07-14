@@ -11,5 +11,5 @@
     "profiles.validation_idle": "验证 将 此处.",
     "profiles.validation_ready": "可验证或下载。",
     "profiles.editor_formatted": "文档 。",
-    "profiles.editor_mode_switched": "文档 到 {mode}."
+    "profiles.editor_mode_switched": "已切换到 {mode}。"
 }

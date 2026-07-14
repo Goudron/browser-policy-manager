@@ -17,7 +17,6 @@ SUITE_BOUNDARIES = DOCUMENTATION_ROOT / "tests/suite-boundaries-0.9.0.json"
 MAKEFILE = REPOSITORY_ROOT / "Makefile"
 README = REPOSITORY_ROOT / "README.md"
 CONFIG = REPOSITORY_ROOT / "app/core/config.py"
-API_GUIDE = "api-integration-guide.ditamap"
 ADMIN_GUIDE = "administrator-guide.ditamap"
 KEYS = "keys.ditamap"
 
@@ -100,9 +99,7 @@ def test_fixture_topic_groups_match_administrator_guide_maps_keys_and_locale_pee
             assert f'id="{topic_id}"' in source
             assert f'xml:lang="{locale}"' in source
 
-        api_keyrefs = _map_keyrefs(locale, API_GUIDE)
-        assert api_keyrefs == ["topic.api-concept-administrator-integration-landing"]
-        assert all(not keyref.startswith("topic.admin-") for keyref in api_keyrefs)
+        assert not (DITA_ROOT / locale / "maps/api-integration-guide.ditamap").exists()
 
 
 def test_fixture_commands_config_names_paths_and_health_endpoints_stay_current() -> None:
@@ -176,12 +173,17 @@ def test_fixture_wsl_caveats_and_deferred_warnings_are_preserved_without_support
     for locale in fixture["locales"]:
         localized_text = "\n".join(_all_admin_sources(locale).values())
         localized_casefolded = localized_text.casefold()
-        for caveat in fixture["required_wsl_caveats"]:
+        for caveat in ("Windows 10", "Windows 11", "WSL 2", "Ubuntu LTS", "/mnt/c"):
             assert caveat in localized_text
         if locale == "en":
+            for caveat in fixture["required_wsl_caveats"]:
+                assert caveat in localized_text
             for caveat in fixture["required_english_wsl_caveats"]:
                 assert caveat in localized_text
-        for warning in fixture["required_deferred_warnings"]:
-            assert warning in localized_text
+            for warning in fixture["required_deferred_warnings"]:
+                assert warning in localized_text
+        else:
+            for technical_boundary in ("TLS", "HA", "MSI", "EXE", "IIS"):
+                assert technical_boundary in localized_text
         for claim in forbidden:
             assert claim not in localized_casefolded

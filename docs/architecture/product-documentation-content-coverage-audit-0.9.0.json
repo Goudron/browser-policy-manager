@@ -53,7 +53,7 @@
       "id": "administrator_linux_source_deployment",
       "disposition": "covered",
       "release_gates": ["DOC090-G12"],
-      "summary": {"topic_count": 4},
+      "summary": {"topic_count": 9},
       "source_inventories": ["documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"],
       "evidence_files": ["documentation/tests/contract/test_administrator_linux_deployment_topics.py"],
       "gate_tests": ["documentation/tests/contract/test_administrator_linux_deployment_topics.py"]

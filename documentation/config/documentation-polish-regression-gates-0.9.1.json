@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "gate_id": "bpm-0.9.1-documentation-polish-regression-gates",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M10-08",
+  "status": "accepted",
+  "purpose": "Fail the documentation release when retired guide structure, stale navigation artifacts, locale fallback, UI-name drift, or unreviewed English visible prose returns.",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "non_english_locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+  "release_gates": [
+    "make test-docs-contract",
+    "make docs-release-check",
+    "make test-release"
+  ],
+  "approved_technical_token_classes": [
+    "brand",
+    "established abbreviation",
+    "identifier",
+    "command",
+    "path or file name",
+    "API route or schema literal",
+    "reviewed locale-language homograph"
+  ],
+  "allowlist_policy": {
+    "ordinary_english_prose": "never allowlisted",
+    "exact_peer_entries": "Every entry must still exist in the recorded localized visible block and in the corresponding English peer block; otherwise the gate fails as stale.",
+    "technical_candidates": "Every remaining high-signal candidate must match a maintained technical marker or an exact reviewed locale-language false-positive path.",
+    "new_entries": "A new exception requires a maintained authority class, exact source ownership, and human review; scanner suppression alone is forbidden."
+  },
+  "gates": [
+    {
+      "id": "standalone-api-guide-absent",
+      "fails_when": "Any locale republishes the standalone API map, landing topic, portal reference, guide selector, navigation node, search guide, manifest guide, or contextual target.",
+      "source_files": [
+        "documentation/src/dita/{locale}/maps/portal.ditamap",
+        "documentation/tools/build_docs.py"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_api_integration_topics.py::test_standalone_api_guide_and_compatibility_landing_are_retired"
+      ]
+    },
+    {
+      "id": "administrator-api-ownership-complete",
+      "fails_when": "Any migrated API topic loses its unique Administrator Guide owner, localized source, key definition, map reachability, manifest topic, or API contextual target.",
+      "source_files": [
+        "docs/architecture/api-integration-rehome-audit-0.9.0.json",
+        "documentation/src/dita/{locale}/maps/administrator-guide.ditamap",
+        "documentation/src/dita/{locale}/maps/keys.ditamap"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_api_rehome_audit.py::test_every_migrated_api_topic_has_one_current_admin_destination",
+        "documentation/tests/contract/test_api_integration_topics.py::test_api_integration_topics_are_keyed_and_reachable_from_administrator_guide_maps"
+      ]
+    },
+    {
+      "id": "locale-navigation-source-complete",
+      "fails_when": "A locale navigation source is missing, uses the wrong schema/version/locale, or loses a required document, section, or topic node.",
+      "source_files": [
+        "docs/architecture/schemas/product-documentation-navigation-v1.schema.json",
+        "documentation/config/navigation-tree-contract-0.9.1.json",
+        "documentation/tools/build_docs.py"
+      ],
+      "checks": [
+        "documentation/tools/build_docs.py::validate_manifest_files",
+        "documentation/tools/build_docs.py::validate_manifest_payloads",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_semantic_mutations"
+      ]
+    },
+    {
+      "id": "navigation-manifest-integrity",
+      "fails_when": "A navigation source hash, format version, node count, localized label, hierarchy, ordering, or URL diverges from the manifest and maintained navigation authority, even when an altered hash is also written into the manifest.",
+      "source_files": [
+        "docs/architecture/schemas/product-documentation-manifest-v1.schema.json",
+        "docs/architecture/schemas/product-documentation-navigation-v1.schema.json",
+        "documentation/tools/build_docs.py"
+      ],
+      "checks": [
+        "documentation/tools/build_docs.py::_validate_navigation_artifact_record",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_stale_hash",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_semantic_mutations"
+      ]
+    },
+    {
+      "id": "embedded-navigation-tree-absent",
+      "fails_when": "Generated topic HTML contains a role=tree or data-docs-tree copy instead of exactly one compact data-docs-tree-host.",
+      "source_files": [
+        "documentation/tools/build_docs.py",
+        "documentation/assets/theme/bpm-docs-search.js"
+      ],
+      "checks": [
+        "documentation/tools/build_docs.py::validate_output",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_generated_html_rejects_embedded_tree_copy"
+      ]
+    },
+    {
+      "id": "localized-safe-navigation-labels",
+      "fails_when": "A tree label falls back to English, differs from its locale-owned manifest/section/shell authority, contains unsafe substituted markup, or points outside the locale artifact.",
+      "source_files": [
+        "documentation/config/topic-section-labels-0.9.1.json",
+        "documentation/config/navigation-tree-contract-0.9.1.json",
+        "documentation/tools/build_docs.py"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_topic_section_labels.py::test_non_english_section_labels_do_not_contain_canonical_english_phrases",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_navigation_artifact_record_rejects_semantic_mutations"
+      ]
+    },
+    {
+      "id": "ui-term-catalog-parity",
+      "fails_when": "A visible documentation interface name or navigation/search title returns to an English alias or diverges from the maintained locale runtime catalog.",
+      "source_files": [
+        "documentation/config/interface-name-authority-0.9.1.json",
+        "documentation/config/interface-name-replacement-0.9.1.json",
+        "app/i18n/{locale}.json"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_interface_name_replacement.py::test_no_localized_visible_dita_text_contains_a_forbidden_ui_alias",
+        "documentation/tests/contract/test_interface_name_replacement.py::test_all_authority_catalog_findings_and_additional_corrections_are_resolved"
+      ]
+    },
+    {
+      "id": "visible-english-leakage-absent",
+      "fails_when": "A non-English visible block contains a new high-signal English sentence or exact English peer carryover that is not an approved technical literal or locale-language false positive.",
+      "source_files": [
+        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/config/locale-anti-anglicism-guard-0.9.1.json"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_has_no_release_blocking_exact_peer_carryover",
+        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_residual_candidates_are_technical_or_false_positive",
+        "documentation/tests/contract/test_locale_anti_anglicism_guard.py::test_locale_anti_anglicism_guard_rejects_ordinary_english_fixtures",
+        "documentation/tests/contract/test_locale_anti_anglicism_guard.py::test_locale_anti_anglicism_guard_accepts_allowlisted_technical_fixtures"
+      ]
+    },
+    {
+      "id": "locale-review-coverage-complete",
+      "fails_when": "Any active non-English DITA or map source is absent from the accepted visible-prose review scope, or a generated locale silently consumes another locale's visible content.",
+      "source_files": [
+        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/src/dita/{locale}"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_records_complete_source_scope",
+        "documentation/tests/contract/test_navigation_tree_contract.py::test_navigation_contract_defines_accessible_keyboard_tree_and_localization"
+      ]
+    },
+    {
+      "id": "allowlist-entries-live-and-bounded",
+      "fails_when": "A reviewed exact-peer exception no longer matches a live localized and English source block, an ordinary English sentence is allowlisted, or a residual candidate lacks a maintained technical classification.",
+      "source_files": [
+        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/config/locale-terminology-authority-0.9.1.json"
+      ],
+      "checks": [
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py::test_exact_peer_allowlist_entries_are_live_and_bounded",
+        "documentation/tests/contract/test_visible_english_prose_review.py::test_visible_english_review_residual_candidates_are_technical_or_false_positive",
+        "documentation/tests/contract/test_locale_anti_anglicism_guard.py::test_locale_anti_anglicism_guard_accepts_allowlisted_technical_fixtures"
+      ]
+    }
+  ]
+}

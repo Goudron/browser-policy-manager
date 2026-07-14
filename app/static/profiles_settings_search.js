@@ -10,6 +10,8 @@
         searchEnginePresets = {},
         wizardSchemaShellCatalog = {},
         settingsTargetAliases = {},
+        documentationRowHelpLinks = {},
+        documentationRowHelpStatus = "available",
     }) {
         const {
             t,
@@ -70,6 +72,8 @@
             searchGroup = "actions",
             searchScopes = [],
             keywords = [],
+            documentationTargetId = "",
+            documentationNoLinkDisposition = "",
         }) {
             const stepMeta = wizardSearchSectionSteps[sectionId] || { step: 0, key: "", fallback: "" };
             const stepLabel = t(stepMeta.key, stepMeta.fallback);
@@ -109,6 +113,8 @@
                 stepLabel,
                 kindLabel: kindLabelMap[kind] || kind,
                 searchText: normalizeSearchText(searchFields.filter(Boolean).join(" ")),
+                documentationTargetId,
+                documentationNoLinkDisposition,
             };
         }
 
@@ -174,6 +180,14 @@
                             entry.target || "",
                             ...reviewFlags,
                         ],
+                        documentationTargetId: entry.unknown
+                            ? ""
+                            : (entry.kind === "policy"
+                                ? `policy:${entry.id}`
+                                : (entry.knownPreference ? `known-preference:${entry.id}` : "")),
+                        documentationNoLinkDisposition: entry.unknown
+                            ? "unsupported_unknown"
+                            : (entry.rawFallback && !entry.target ? "not_applicable_raw" : ""),
                     });
                 });
         }
@@ -468,6 +482,8 @@
         }
 
         function createResultButton(entry) {
+            const shell = documentRef.createElement("div");
+            shell.className = "wizard-settings-search-result-shell";
             const button = documentRef.createElement("button");
             button.type = "button";
             button.className = "button-base ghost-button wizard-settings-search-result";
@@ -483,7 +499,63 @@
                 </span>
                 <span class="wizard-settings-search-result-meta">${escapeHtml([entry.kindLabel, entry.areaLabel, entry.description].filter(Boolean).join(" • "))}</span>
             `;
-            return button;
+            shell.appendChild(button);
+
+            const match = /^all-settings-entry:(policy|preference):(.+)$/.exec(entry.target || "");
+            if (isAllSettingsRoute && match) {
+                const targetId = entry.documentationTargetId || "";
+                const links = documentationRowHelpLinks[targetId];
+                const locale = getCurrentLang?.() || "en";
+                const href = links && typeof links[locale] === "string" ? links[locale] : "";
+                const disposition = entry.documentationNoLinkDisposition
+                    || (href
+                        ? "linked"
+                        : (String(documentationRowHelpStatus).startsWith("artifact_")
+                            ? documentationRowHelpStatus
+                            : "missing_documentation"));
+                const labelKey = disposition === "linked"
+                    ? "profiles.all_settings.row_help.open"
+                    : (disposition === "not_applicable_raw"
+                        ? "profiles.all_settings.row_help.raw_not_applicable"
+                        : (disposition === "unsupported_unknown"
+                            ? "profiles.all_settings.row_help.unknown_not_supported"
+                            : (String(disposition).startsWith("artifact_")
+                                ? "profiles.all_settings.row_help.unavailable"
+                                : "profiles.all_settings.row_help.missing")));
+                const label = t(labelKey).replace("{setting}", entry.title);
+                if (href) {
+                    const link = documentRef.createElement("a");
+                    link.className = "context-help-icon-link all-settings-row-help-link";
+                    link.href = href;
+                    link.target = "_blank";
+                    link.rel = "noopener noreferrer";
+                    link.title = label;
+                    link.setAttribute("aria-label", label);
+                    link.dataset.documentationLink = "";
+                    link.dataset.documentationLinks = JSON.stringify(links);
+                    link.dataset.allSettingsHelpTarget = targetId;
+                    link.dataset.allSettingsHelpLocation = "search";
+                    link.dataset.settingsEntryId = match[2];
+                    link.dataset.settingsEntryKind = match[1];
+                    link.dataset.settingsEntryHelpDisposition = "linked";
+                    link.innerHTML = '<span aria-hidden="true">i</span>';
+                    shell.appendChild(link);
+                } else {
+                    const indicator = documentRef.createElement("span");
+                    indicator.className = "context-help-icon-link all-settings-row-help-link is-unavailable";
+                    indicator.title = label;
+                    indicator.setAttribute("role", "img");
+                    indicator.setAttribute("aria-label", label);
+                    indicator.setAttribute("aria-disabled", "true");
+                    indicator.dataset.allSettingsHelpLocation = "search";
+                    indicator.dataset.settingsEntryId = match[2];
+                    indicator.dataset.settingsEntryKind = match[1];
+                    indicator.dataset.settingsEntryHelpDisposition = disposition;
+                    indicator.innerHTML = '<span aria-hidden="true">i</span>';
+                    shell.appendChild(indicator);
+                }
+            }
+            return shell;
         }
 
         function renderFlatResults(matches) {

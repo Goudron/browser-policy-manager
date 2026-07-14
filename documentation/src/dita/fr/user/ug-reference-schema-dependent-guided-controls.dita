@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-schema-dependent-guided-controls" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Contrôles Guided dépendants du schéma</title>
-  <shortdesc>Certains contrôles Guided apparaissent uniquement lorsque le schéma Firefox choisi les prend en charge, y compris les stratégies AI &amp; smart features propres à Release.</shortdesc>
+  <title>Contrôles guidés dépendants du schéma</title>
+  <shortdesc>Certains contrôles guidés apparaissent uniquement lorsque le schéma Firefox sélectionné les prend en charge, y compris les stratégies de fonctionnalités intelligentes AI &amp; Release-only.</shortdesc>
   <refbody>
-    <section id="a-release-controls"><title>Release</title><p>Dans Firefox Release 152, l’étape 5 peut afficher les stratégies prises en charge pour AI &amp; smart features, la recherche visuelle et les fonctions intelligentes si elles existent dans le schéma.</p></section>
-    <section id="a-esr-unavailable"><title>ESR 140.12</title><p>Dans ESR 140.12, les contrôles AI/smart-feature non pris en charge sont absents ou indisponibles. Ne les ajoutez pas manuellement comme s’ils étaient pris en charge dans ESR.</p></section>
-    <section id="a-no-documentation-ai"><title>Documentation AI boundary</title><p>Cette référence décrit les stratégies produit Firefox existantes. Elle n’ajoute ni RAG, ni embeddings, ni recherche ou réponses génératives au portail documentaire 0.9.0.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Si un contrôle manque, confirmez le canal de schéma, vérifiez la limite de prise en charge dans All Settings et consignez l’état non pris en charge lors de la revue.</p></section>
+    <section id="a-release-controls"><title>Contrôles pris en charge par la version</title><p>Sur Firefox version 152, l'étape 5 peut afficher les fonctionnalités intelligentes AI &amp; prises en charge, la recherche visuelle et les stratégies de fonctionnalités de navigateur intelligent lorsqu'elles existent dans le schéma.</p></section>
+    <section id="a-esr-unavailable"><title>Contrôles ESR indisponibles</title><p>Sur ESR 140.12, les contrôles de stratégie AI du navigateur non pris en charge sont absents ou indisponibles. Ne les forcez pas dans Éditeur guidé comme s'ils étaient pris en charge.</p></section>
+    <section id="a-no-documentation-ai"><title>Aucune fonctionnalité de documentation AI</title><p>Cette référence explique uniquement les contrôles de stratégie du navigateur Firefox existants ; il n'ajoute pas de fonctionnalité AI au portail de documentation 0.9.0, y compris RAG, les intégrations, la recherche générative ou les réponses génératives.</p></section>
+    <section id="a-recovery"><title>Récupération</title><p>Si un contrôle est manquant, confirmez le canal de schéma, vérifiez Tous les paramètres pour la limite de prise en charge brute et enregistrez l'état non pris en charge lors de l'examen.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

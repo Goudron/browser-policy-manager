@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Follow a setting deep link</title>
-  <shortdesc>Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <shortdesc>Follow focused links between search, All settings, Guided context, and JSON locations.</shortdesc>
   <taskbody>
     <prereq><p>A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
     <context><p>Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
     <steps>
-      <step><cmd>Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Confirm the destination editor and focused setting or state.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Confirm the destination editor and focused setting or state.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>The linked setting opens in the correct surface with focus preserved.</p></result>

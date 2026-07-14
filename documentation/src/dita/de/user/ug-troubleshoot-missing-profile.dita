@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-missing-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Von missing profile route wiederherstellen</title>
-  <shortdesc>Stellen Sie wieder her, wenn bookmark, stale tab oder editor URL Profile not found meldet.</shortdesc>
+  <title>Wiederherstellung nach einer fehlenden Profilroute</title>
+  <shortdesc>Wiederherstellung, wenn ein Lesezeichen, eine veraltete Registerkarte oder eine Editor-URL meldet, dass das Profil nicht gefunden wurde.</shortdesc>
   <taskbody>
-    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
-    <context><p>Eine missing profile route bedeutet, dass die URL nicht mehr auf ein active profile zeigt; das Profil kann archived, deleted, ausgefiltert oder bereits removed sein.</p></context>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Eine fehlende Profilroute bedeutet, dass die URL nicht mehr in ein aktives Profil aufgelöst wird; Das Profil kann archiviert, gelöscht, herausgefiltert oder bereits entfernt sein.</p></context>
     <steps>
-      <step><cmd>Kehren Sie zur Library zurück, statt die failed route zu bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Setzen Sie search and filters zurück und suchen Sie nach Name, schema channel und letztem bekanntem status.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Schließen Sie archived profiles ein, wenn das Profil bewusst archiviert worden sein könnte.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Wenn das Profil weiterhin missing ist, verwenden Sie die stale URL nicht weiter und fahren nur von sichtbarer Library row oder known export fort.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+      <step><cmd>Kehren Sie zur Bibliothek zurück, anstatt die fehlgeschlagene Route zu bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Löschen Sie Suche und Filter und suchen Sie dann nach dem Profil nach Name, Schemakanal und letztem bekannten Status.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Schließen Sie archivierte Profile ein, wenn das Profil möglicherweise absichtlich archiviert wurde.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Wenn das Profil immer noch fehlt, verwenden Sie die veraltete URL nicht mehr und fahren Sie nur von einer sichtbaren Bibliothekszeile oder einem bekannten Export fort.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
     </steps>
-    <result><p>Sie öffnen das Profil aus einem sichtbaren Library-Zustand oder bestätigen, dass die bookmarked route nicht mehr nutzbar ist.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+    <result><p>Sie öffnen entweder das Profil erneut aus einem sichtbaren Bibliotheksstatus heraus oder bestätigen, dass die mit einem Lesezeichen versehene Route nicht mehr verwendbar ist.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-profile-library"/>

@@ -55,3 +55,59 @@ def test_product_documentation_release_contract_names_quality_commands():
         "make test-release",
     ):
         assert f"`{command}`" in contract
+
+
+def test_product_documentation_release_contract_091_is_active_and_complete():
+    contract = doc_path_from_index(
+        "architecture/product-documentation-release-contract-0.9.1.md",
+        status="active",
+    ).read_text(encoding="utf-8")
+
+    assert "Backlog item: `BPM091-M1-06`" in contract
+    assert "Every gate below is release-blocking." in contract
+    assert "README is not a version surface." in contract
+
+    gate_rows = [line for line in contract.splitlines() if line.startswith("| `DOC091-G")]
+    assert len(gate_rows) == 14
+    assert len({row.split("|")[1].strip() for row in gate_rows}) == 14
+    assert all("Project maintainer" in row for row in gate_rows)
+    assert all("`make " in row or "`pytest " in row for row in gate_rows)
+
+    for required_scope in (
+        "minimal User Guide screenshot matrix",
+        "light, dark, and system theme modes",
+        "comfortable light-gray primary surfaces",
+        "compact one-line control",
+        "hierarchical tree",
+        "Documentation sufficiency review",
+        "five selected worldwide-popular distributions",
+        "Mozilla Pontoon and SUMO terminology",
+        "circled-info documentation links",
+        "no README version anchor",
+        "LLMs, embeddings, vector databases, RAG",
+    ):
+        assert required_scope in contract
+
+
+def test_product_documentation_release_contract_091_names_quality_commands():
+    contract = doc_path_from_index(
+        "architecture/product-documentation-release-contract-0.9.1.md",
+        status="active",
+    ).read_text(encoding="utf-8")
+
+    for command in (
+        "make docs-screenshots-check",
+        "make docs-release-check",
+        "make test-docs",
+        "make test-docs-contract",
+        "make test-docs-ui",
+        "make test-docs-browser",
+        "make test-locale-contract",
+        "make typecheck",
+        "make lint",
+        "pytest -q",
+        "make coverage",
+        "make test-ui",
+        "make test-release",
+    ):
+        assert f"`{command}`" in contract

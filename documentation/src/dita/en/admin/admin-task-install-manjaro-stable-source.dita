@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-install-manjaro-stable-source" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Install BPM from source on the Manjaro stable branch</title>
+  <shortdesc>Run the complete BPM 0.9.1 source-install sequence after fully updating the Manjaro stable branch and verifying Python 3.14.</shortdesc>
+  <taskbody>
+    <prereq><p>Use the Manjaro stable branch at or after the 2026-06-26 update with sudo access, outbound HTTPS, and an approved BPM 0.9.1 Git ref.</p></prereq>
+    <context><p>Manjaro is rolling-release. The transcript must record the branch and fully updated package state; a desktop image version alone is not sufficient evidence.</p></context>
+    <steps>
+      <step><cmd>Verify the stable branch, update the system, and install prerequisites.</cmd><info><codeblock id="distro-prep" outputclass="language-bash"><![CDATA[
+. /etc/os-release
+test "$ID" = "manjaro"
+test "$(pacman-mirrors -G)" = "stable"
+sudo pacman -Syu --needed base-devel ca-certificates curl git python python-pip
+pacman-mirrors -G
+uname -r
+export BPM_PYTHON=/usr/bin/python
+"$BPM_PYTHON" --version
+]]></codeblock><p>Stop unless the branch is stable, the full update succeeds, and Python 3.14.x is reported. Do not perform a partial upgrade.</p></info></step>
+      <step><cmd>Check out the approved BPM source ref.</cmd><info><codeblock id="checkout" outputclass="language-bash"><![CDATA[
+export BPM_REPOSITORY_URL="https://github.com/Goudron/browser-policy-manager.git"
+export BPM_REF="<approved-0.9.1-ref>"
+test "$BPM_REF" != "<approved-0.9.1-ref>"
+cd "$HOME"
+git clone "$BPM_REPOSITORY_URL" browser-policy-manager
+cd "$HOME/browser-policy-manager"
+git checkout --detach "$BPM_REF"
+git status --short
+git rev-parse --short HEAD
+]]></codeblock></info></step>
+      <step><cmd>Create the environment, install BPM, and migrate.</cmd><info><codeblock id="install" outputclass="language-bash"><![CDATA[
+"$BPM_PYTHON" -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+python --version
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+]]></codeblock></info></step>
+      <step><cmd>Bootstrap and build documentation.</cmd><info><codeblock id="docs" outputclass="language-bash"><![CDATA[
+make setup-docs-toolchain
+make docs-validate
+make docs-build
+]]></codeblock></info></step>
+      <step><cmd>Start BPM in the foreground.</cmd><info><codeblock id="start" outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+make dev
+]]></codeblock></info></step>
+      <step><cmd>Verify probes, UI, and logs from a second terminal.</cmd><info><codeblock id="verify" outputclass="language-bash"><![CDATA[
+cd browser-policy-manager
+source .venv/bin/activate
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
+]]></codeblock></info></step>
+      <step><cmd>Apply the stop boundary.</cmd><info><p>On failure, press <codeph>Ctrl+C</codeph>, preserve branch, package, migration, build, probe, and log evidence, and do not downgrade individual Manjaro packages or run <codeph>alembic downgrade</codeph> as an ad hoc rollback.</p></info></step>
+    </steps>
+    <result><p>The fully updated Manjaro stable host has a migrated BPM source checkout, built documentation, passing probes, responding UI, and foreground logs.</p></result>
+    <postreq><p>Record the stable-branch date and validate the complete sequence on a clean target before release.</p></postreq>
+  </taskbody>
+  <related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links>
+</task>

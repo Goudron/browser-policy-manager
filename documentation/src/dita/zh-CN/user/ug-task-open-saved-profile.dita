@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>在编辑器中打开已保存配置文件</title>
-  <shortdesc>本任务完整说明“在编辑器中打开已保存配置文件”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>在编辑器中打开保存的配置文件</title>
+  <shortdesc>根据您需要的更改，在 引导式编辑器、所有设置 或 JSON 编辑器 中打开相同的已保存配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>该配置文件在库中可见，并且其行标识与您要编辑或检查的配置文件相匹配。</p></prereq>
+    <context><p>打开已保存的配置文件不会重复它。每个编辑器界面都使用相同的已保存的 配置档案身份。</p></context>
     <steps>
-      <step><cmd>打开与“在编辑器中打开已保存配置文件”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>使用行标题或引导操作进行面向任务的编辑。</cmd><info><p>预期结果：BPM 在 引导式编辑器 中打开配置文件。</p></info></step>
+      <step><cmd>当您需要完整的支持目录和来源/注意详细信息时，请使用 所有设置。</cmd><info><p>这是详细策略和偏好检查的最安全选择。</p></info></step>
+      <step><cmd>当您需要检查或编辑原始边界文档时，请使用 JSON 编辑器。</cmd><info><note type="warning">在导出或比较之前应验证原始 JSON 更改。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>所选编辑器在其自己的配置文件上下文中打开，并保留相同的配置文件 ID。</p></result>
+    <postreq><p>恢复：如果您打开了错误的编辑器，请返回到“库”行或使用同一配置文件的另一个编辑器链接。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

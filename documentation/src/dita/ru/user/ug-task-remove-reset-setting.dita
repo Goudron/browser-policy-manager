@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-remove-reset-setting" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Удалите или сбросьте параметр</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Remove a configured value or reset it back to the inherited baseline, preset, or unconfigured state.</shortdesc>
+  <title>Удаление или сброс настройки</title>
+  <shortdesc>Удалить настроенное значение или вернуть его в унаследованное базовое, заданное или ненастроенное состояние.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Open the setting detail panel for a configured value.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Remove and reset actions are destructive for the selected value, so the user should understand source and downstream effects first.</p></context>
+    <prereq><p>Откройте панель сведений о настройке для настроенного значения.</p></prereq>
+    <context><p>Действия удаления и сброса разрушительны для выбранного значения, поэтому пользователь должен сначала понять исходные и последующие эффекты.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Inspect the current value and source badge.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Choose Remove or Reset only for the setting you intend to change.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Read any warning or validation message shown by the detail panel.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Удалите или сбросьте параметр. Save the profile after confirming the value is absent, reset, or inherited as expected.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Проверьте текущее значение и значок источника.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Выберите «Удалить» или «Сбросить» только для того параметра, который вы хотите изменить.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Прочтите любое предупреждение или сообщение проверки, отображаемое на панели сведений.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Сохраните профиль после того, как убедитесь, что значение отсутствует, сброшено или унаследовано, как ожидалось.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The setting no longer applies from the previous configured value.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the removal was unintended, reapply the previous value from history, import, comparison, or a saved source document.</p></postreq>
+    <result><p>Этот параметр больше не применяется по сравнению с предыдущим настроенным значением.</p></result>
+    <postreq><p>Восстановление: если удаление было непреднамеренным, повторно примените предыдущее значение из истории, импорта, сравнения или сохраненного исходного документа.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-setting-detail"/>

@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-02-docker-engine-20260714",
+  "run_id": "m11-02-docker-engine-20260714",
+  "backlog_item": "BPM091-M11-02",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "started_at": "2026-07-14T01:04:45+03:00",
+  "completed_at": "2026-07-14T01:15:48+03:00",
+  "contract": {
+    "path": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "contract_id": "bpm-0.9.1-live-source-install-privileged-validation",
+    "status": "accepted"
+  },
+  "preflight": {
+    "result": "pass",
+    "host": "Ubuntu 26.04 LTS",
+    "architecture": "x86_64",
+    "docker_cli": "absent",
+    "docker_packages": "none",
+    "docker_service": "not-found/inactive",
+    "containerd_service": "not-found/inactive",
+    "docker_socket": "absent",
+    "docker_group": "absent",
+    "docker_repository_and_key": "absent",
+    "docker_data_and_configuration": "absent",
+    "root_available_bytes": 224904531968,
+    "memory_available_bytes": 2321604608,
+    "swap_free_bytes": 4175400960,
+    "stop_condition_triggered": false
+  },
+  "privilege": {
+    "sudo_noninteractive_probe": "exit 1: interactive authentication is required",
+    "transport": "bounded pkexec root scripts with graphical system authentication",
+    "maintainer_approval": "The maintainer approved every graphical authentication dialog after being told its exact purpose.",
+    "password_requested_or_recorded": false,
+    "docker_group_membership_granted": false
+  },
+  "repository": {
+    "method": "official Docker Ubuntu apt repository",
+    "suite": "resolute",
+    "architecture": "amd64",
+    "component": "stable",
+    "source_path": "/etc/apt/sources.list.d/docker.sources",
+    "source_sha256": "47be0f749c19273936c7e56fff5a29b9108bcce8137ee677cc736523fb876e71",
+    "key_path": "/etc/apt/keyrings/docker.asc",
+    "key_sha256": "1500c1f56fa9e26b9b8f42452a553675796ade0807cdce11975eb98170b3a570",
+    "key_fingerprints": [
+      "9DC858229FC7DD38854AE2D88D81803C0EBFCD88",
+      "D3306A018370199E527AE7997EA0A9C3F273FCD8"
+    ],
+    "convenience_script_used": false,
+    "docker_desktop_used": false
+  },
+  "packages": {
+    "install_flags": ["--no-install-recommends"],
+    "candidate_and_installed_versions": {
+      "docker-ce": "5:29.6.1-1~ubuntu.26.04~resolute",
+      "docker-ce-cli": "5:29.6.1-1~ubuntu.26.04~resolute",
+      "containerd.io": "2.2.6-1~ubuntu.26.04~resolute",
+      "docker-buildx-plugin": "0.35.0-1~ubuntu.26.04~resolute",
+      "docker-compose-plugin": "5.3.1-1~ubuntu.26.04~resolute"
+    },
+    "new_package_count": 5,
+    "removed_packages": [],
+    "recommended_packages_installed": [],
+    "unrelated_packages_changed": []
+  },
+  "daemon": {
+    "docker_client_version": "29.6.1",
+    "docker_server_version": "29.6.1",
+    "api_version": "1.55",
+    "buildx_version": "0.35.0",
+    "compose_version": "5.3.1",
+    "docker_service": {"load": "loaded", "active": "active", "sub": "running", "enabled": true},
+    "containerd_service": {"load": "loaded", "active": "active", "sub": "running", "enabled": true},
+    "storage_driver": "overlayfs",
+    "cgroup_driver": "systemd",
+    "cgroup_version": 2,
+    "docker_root_dir": "/var/lib/docker",
+    "socket": {"path": "/run/docker.sock", "owner": "root", "group": "docker", "mode": "0660"},
+    "docker_group": {"gid": 984, "members": []},
+    "maintainer_groups": ["valery", "adm", "cdrom", "sudo", "dip", "plugdev", "users", "lpadmin", "ollama"],
+    "unprivileged_docker_access": "denied"
+  },
+  "smoke": {
+    "result": "pass",
+    "image_tag": "docker.io/library/hello-world:latest",
+    "image_id": "sha256:96498ffd522e70807ab6384a5c0485a79b9c7c08ca79ba08623edcad1054e62d",
+    "repo_digest": "hello-world@sha256:96498ffd522e70807ab6384a5c0485a79b9c7c08ca79ba08623edcad1054e62d",
+    "container_id": "20f4e2f736b814437cea3e89890b40b0cc44a1c63eead3d933af8e71484d9966",
+    "container_name": "bpm091-m11-02-smoke",
+    "network": "bpm091-m11-net",
+    "network_id": "45fdf33785f37df2427df03b91553cefecba522d050499e1bc728b0cd866d47b",
+    "platform": "linux/amd64",
+    "exit_code": 0,
+    "expected_output_observed": "Hello from Docker!",
+    "limits": {
+      "nano_cpus": 2000000000,
+      "memory_bytes": 1610612736,
+      "memory_swap_bytes": 2684354560,
+      "pids_limit": 512,
+      "nofile": "4096:4096",
+      "security_options": ["no-new-privileges"]
+    },
+    "isolation": {
+      "privileged": false,
+      "cap_add": null,
+      "binds": null,
+      "published_ports": {},
+      "host_network": false,
+      "restart_policy": "no"
+    },
+    "required_labels": {
+      "com.browser-policy-manager.validation": "BPM091-M11",
+      "com.browser-policy-manager.owner": "live-source-install",
+      "com.browser-policy-manager.run-id": "m11-02-docker-engine-20260714",
+      "com.browser-policy-manager.target": "smoke"
+    }
+  },
+  "smoke_cleanup": {
+    "container_removed": true,
+    "image_removed": true,
+    "network_removed": true,
+    "remaining_m11_containers": 0,
+    "remaining_m11_networks": 0,
+    "remaining_m11_volumes": 0,
+    "daemon_container_count": 0,
+    "daemon_image_count": 0
+  },
+  "host_change_review": {
+    "firewall_configuration_hashes_unchanged": true,
+    "manual_firewall_or_network_configuration_changes": false,
+    "new_running_services": ["docker.service", "containerd.service"],
+    "transient_observation": {
+      "service": "packagekit.service",
+      "disposition": "Existing static D-Bus service was activated during apt work and returned to inactive/dead through its own idle lifecycle; its package and unit enablement were unchanged and no stop/start/configuration command was issued against it.",
+      "unit_file_state": "static",
+      "final_active_state": "inactive",
+      "final_sub_state": "dead",
+      "package_version": "1.3.4-3ubuntu1.1",
+      "dpkg_verify_findings": []
+    },
+    "unrelated_persistent_service_changes": [],
+    "unrelated_host_settings_changed": []
+  },
+  "capacity_after": {
+    "captured_at": "2026-07-14T01:09:57+03:00",
+    "root_available_bytes": 224467726336,
+    "root_used_bytes": 251776106496,
+    "memory_available_bytes": 2372993024,
+    "swap_free_bytes": 3641163776,
+    "storage_floor_pass": true
+  },
+  "retention": {
+    "docker_engine_retained": true,
+    "repository_and_key_retained": true,
+    "services_retained": true,
+    "data_roots_retained": true,
+    "memberless_docker_group_retained": true,
+    "reason": "Maintainer-approved persistent project tooling under BPM091-M11-01."
+  },
+  "local_uncommitted_transcripts": "documentation/build/live-source-install/0.9.1/m11-02-docker-engine-20260714",
+  "result": "Docker Engine installation and isolated smoke passed. Only the approved Docker tooling remains; the disposable smoke resources were removed and no user, production, firewall configuration, or unrelated persistent service setting was changed."
+}

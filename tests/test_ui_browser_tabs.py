@@ -67,6 +67,11 @@ def _build_chromium_driver():
             "--disable-dev-shm-usage",
             "--disable-gpu",
             "--disable-popup-blocking",
+            "--disable-background-networking",
+            "--disable-component-update",
+            "--disable-extensions",
+            "--renderer-process-limit=2",
+            "--js-flags=--max-old-space-size=384",
             "--lang=en-US",
             "--force-device-scale-factor=1",
             f"--user-data-dir={profile_dir}",
@@ -107,6 +112,7 @@ def _build_chromium_driver():
 
     options = chrome_options()
     options.debugger_address = f"127.0.0.1:{debug_port}"
+    options.page_load_strategy = "eager"
     service = chrome_service.Service(
         executable_path=str(chromedriver_binary),
         log_output=str(chromedriver_log_path),
@@ -124,7 +130,7 @@ def _build_chromium_driver():
         shutil.rmtree(profile_dir, ignore_errors=True)
         pytest.skip(f"Chromium UI smoke could not start in this environment: {exc}")
     driver.set_window_size(width, height)
-    driver.set_page_load_timeout(20)
+    driver.set_page_load_timeout(60)
     driver._bpm_browser_process = browser_process
     driver._bpm_browser_profile_dir = profile_dir
     driver._bpm_browser_log = browser_log

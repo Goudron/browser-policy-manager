@@ -41,6 +41,7 @@ def _docs_html(locale: str, title: str) -> str:
 
 def _write_packaged_site(root: Path) -> None:
     locales = ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
+    current_bpm_version = get_settings().APP_VERSION
     topic_specs = {
         "ug-concept-choose-editor-surface": ("user-guide", "user", {}),
         "ug-task-use-profile-library": ("user-guide", "user", {}),
@@ -55,6 +56,11 @@ def _write_packaged_site(root: Path) -> None:
             "firefox-policy-guide",
             "firefox",
             {"a-privacy-ai": "Privacy and AI controls"},
+        ),
+        "fx-reference-managed-preference-locking": (
+            "firefox-policy-guide",
+            "firefox",
+            {"a-safe-review": "Safe review"},
         ),
         "cis-settings-guide": (
             "cis-settings-guide",
@@ -88,7 +94,7 @@ def _write_packaged_site(root: Path) -> None:
     target_map = {
         "schema_version": 1,
         "manifest_schema_version": 1,
-        "bpm_version": "0.9.0",
+        "bpm_version": current_bpm_version,
         "locales": locales,
         "targets": {
             "topic:user-guide": {
@@ -120,6 +126,13 @@ def _write_packaged_site(root: Path) -> None:
                 "topic_id": "fx-concept-complex-policy-families",
                 "anchor_id": "a-privacy-ai",
             },
+            "known-preference:browser.download.dir": {
+                "kind": "known-preference",
+                "source_id": "browser.download.dir",
+                "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+                "topic_id": "fx-reference-managed-preference-locking",
+                "anchor_id": "a-safe-review",
+            },
             "cis:1.1.1.1": {
                 "kind": "cis",
                 "source_id": "1.1.1.1",
@@ -134,8 +147,8 @@ def _write_packaged_site(root: Path) -> None:
     manifest = {
         "schema_version": 1,
         "artifact": {
-            "bpm_version": "0.9.0",
-            "documentation_version": "0.9.0",
+            "bpm_version": current_bpm_version,
+            "documentation_version": current_bpm_version,
             "build_id": "test-build",
             "source_revision": "0" * 40,
             "dita_ot_version": "4.4",
@@ -193,7 +206,7 @@ def _write_packaged_site(root: Path) -> None:
                 "topic_id": "ug-concept-choose-editor-surface",
                 "canonical_url_path": "user/ug-concept-choose-editor-surface",
                 "reason": "stable short alias",
-                "since_bpm_version": "0.9.0",
+                "since_bpm_version": current_bpm_version,
             }
         },
         "ui_target_map": {
@@ -761,9 +774,9 @@ def test_help_route_handles_manifest_without_locale_list_and_empty_catalog(
 
     _write_packaged_site(tmp_path)
     monkeypatch.setattr(
-        docs_router,
-        "_catalog",
-        lambda site_root: docs_manifest.DocumentationCatalog(
+        docs_manifest,
+        "load_documentation_catalog",
+        lambda site_root=None: docs_manifest.DocumentationCatalog(
             site_root=site_root,
             manifest={},
             target_map={},
@@ -822,6 +835,7 @@ def test_documentation_resolvers_fail_closed_for_missing_or_partial_catalogs(
         assert docs_manifest.resolve_documentation_home_links() is None
         assert docs_manifest.resolve_documentation_contextual_help_links() == {}
         assert docs_manifest.resolve_documentation_deep_help_links() == {}
+        assert docs_manifest.resolve_all_settings_row_help_links() == {}
         assert docs_router._settings_site_root() == get_settings().ROOT_DIR / "missing-relative-docs"
     finally:
         get_settings.cache_clear()
@@ -836,11 +850,42 @@ def test_documentation_resolvers_fail_closed_for_missing_or_partial_catalogs(
 
     contextual = docs_manifest.resolve_documentation_contextual_help_links(tmp_path)
     deep = docs_manifest.resolve_documentation_deep_help_links(tmp_path)
+    row_help = docs_manifest.resolve_all_settings_row_help_links(tmp_path)
 
     assert "library" not in contextual
     assert "guided" in contextual
     assert "policy-ai-controls" not in deep
     assert "validation" in deep
+    assert "known-preference:browser.download.dir" in row_help
+    assert "policy:AIControls" not in row_help
+
+
+def test_documentation_artifact_dispositions_match_help_status_states(tmp_path: Path) -> None:
+    assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == (
+        "artifact_unavailable"
+    )
+
+    _write_packaged_site(tmp_path)
+    assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == "available"
+
+    manifest = _read_manifest(tmp_path)
+    artifact = manifest["artifact"]
+    assert isinstance(artifact, dict)
+    artifact["bpm_version"] = "0.0.0"
+    _write_manifest(tmp_path, manifest)
+    assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == "artifact_stale"
+
+    _write_packaged_site(tmp_path)
+    (tmp_path / "fr/index.html").unlink()
+    assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == (
+        "artifact_incomplete"
+    )
+
+    _write_packaged_site(tmp_path)
+    (tmp_path / "manifest.json").write_text("{", encoding="utf-8")
+    assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == (
+        "artifact_incompatible"
+    )
 
 
 def test_help_status_pages_use_query_and_cookie_locales_for_missing_artifact(
@@ -873,9 +918,9 @@ def test_help_artifact_problem_and_public_path_helpers_cover_remaining_edges(
     _write_packaged_site(tmp_path)
     (tmp_path / "ru/index.html").unlink()
     monkeypatch.setattr(
-        docs_router,
-        "_catalog",
-        lambda site_root: docs_manifest.DocumentationCatalog(
+        docs_manifest,
+        "load_documentation_catalog",
+        lambda site_root=None: docs_manifest.DocumentationCatalog(
             site_root=site_root,
             manifest={},
             target_map={},

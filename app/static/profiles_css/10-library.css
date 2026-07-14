@@ -234,7 +234,7 @@
             padding: 0 12px;
             border-radius: 999px;
             border: 1px solid var(--surface-soft-border);
-            background: rgba(255, 255, 255, 0.58);
+            background: var(--neutral-surface-bg);
             color: var(--ink);
             font-size: 0.78rem;
             font-weight: 700;
@@ -764,7 +764,7 @@
             background:
                 radial-gradient(circle at 50% 35%, rgba(15, 118, 110, 0.16), transparent 54%),
                 radial-gradient(circle at 50% 72%, rgba(198, 111, 50, 0.12), transparent 58%),
-                linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.92));
+                linear-gradient(180deg, var(--raised-surface-strong-bg), var(--neutral-surface-muted-bg));
         }
 
         html[data-theme="dark"] .list-empty-illustration {

@@ -182,7 +182,11 @@ def test_all_settings_search_runtime_groups_scopes_and_dedupes_targets():
 
         function resultTargets(resultsEl) {{
             return resultsEl.children.flatMap((group) =>
-                group.children.filter((child) => child.dataset.settingsSearchTarget)
+                group.children.flatMap((child) =>
+                    child.dataset.settingsSearchTarget
+                        ? [child]
+                        : child.children.filter((nested) => nested.dataset.settingsSearchTarget)
+                )
             ).map((button) => button.dataset.settingsSearchTarget);
         }}
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-theme" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Changer le thème de l’interface</title>
+  <title>Changer le thème de l'interface</title>
   <shortdesc>Sélectionnez le thème système, clair ou sombre sans modifier le contenu du profil.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
-    <context><p>Le choix du thème concerne uniquement l’interface BPM et facilite la lecture des tableaux, blocs de code, états de validation et avertissements.</p></context>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <context><p>La sélection du thème affecte uniquement l'interface BPM et permet de consulter confortablement les tableaux, les blocs de code, les états de validation et les avertissements.</p></context>
     <steps>
-      <step><cmd>Ouvrez le sélecteur de thème dans l’en-tête de page.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Choisissez Système, Clair ou Sombre.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Vérifiez que les panneaux d’édition, tableaux, notes, indicateurs de focus et états de validation restent lisibles.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Reprenez l’édition après avoir confirmé que les données non enregistrées du profil sont toujours présentes.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+      <step><cmd>Ouvrez le sélecteur de thème dans l'en-tête de la page.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Choisissez Système, Clair ou Sombre.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Vérifiez que les panneaux de l'éditeur, les tableaux, les notes, les indicateurs de focus et les états de validation restent lisibles.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Poursuivez la modification après avoir confirmé que les données de profil non enregistrées sont toujours présentes.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>
     <result><p>BPM utilise le thème visuel sélectionné sur les surfaces prises en charge.</p></result>
-    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+    <postreq><p>Récupération : si l'état visible n'est pas clair, arrêtez l'édition, lisez le message d'état actuel, actualisez une fois et rouvrez le profil depuis la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>

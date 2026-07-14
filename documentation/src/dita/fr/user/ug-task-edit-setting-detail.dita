@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Modifier le détail d’un paramètre</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Apply or edit a Firefox policy or managed preference value from the All Settings detail panel.</shortdesc>
+  <title>Modifier les détails d'un paramètre</title>
+  <shortdesc>Appliquez ou modifiez une stratégie Firefox ou une valeur de préférence gérée à partir du panneau de détails Tous les paramètres.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Open a setting detail panel for a supported editable value.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Detail editing keeps the change focused on one setting while reusing shared validation and save behavior.</p></context>
+    <prereq><p>Ouvrez un panneau de détails de paramètre pour une valeur modifiable prise en charge.</p></prereq>
+    <context><p>La modification détaillée permet de concentrer les modifications sur un paramètre tout en réutilisant le comportement de validation et d'enregistrement partagé.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Inspect the current value and validation state.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Enter or choose the new policy or managed preference value.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Apply the detail edit and watch for validation feedback.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Modifier le détail d’un paramètre. Save the profile when the edited value is valid and intentional.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Inspectez la valeur actuelle et l'état de validation.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Saisissez ou choisissez la nouvelle valeur de stratégie ou de préférence gérée.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Appliquez la modification détaillée et surveillez les commentaires de validation.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Enregistrez le profil lorsque la valeur modifiée est valide et intentionnelle.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The selected policy or managed preference has the new value in the profile.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if validation fails, correct the value shape or reset the detail before saving.</p></postreq>
+    <result><p>La stratégie sélectionnée ou la préférence gérée a la nouvelle valeur dans le profil.</p></result>
+    <postreq><p>Récupération : si la validation échoue, corrigez la forme de la valeur ou réinitialisez les détails avant de sauvegarder.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-inspect-setting-details"/>

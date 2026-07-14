@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>保存并下载 Guided 配置文件</title>
-  <shortdesc>本任务完整说明“保存并下载 Guided 配置文件”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>保存并下载引导配置文件</title>
+  <shortdesc>保存已审核的引导配置文件，并在配置准备就绪后下载切换工件。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>第 6 步审核已完成，验证警告已理解。</p></prereq>
+    <context><p>保存记录BPM配置文件；下载提供了用于政策移交的审阅版本。</p></context>
     <steps>
-      <step><cmd>打开与“保存并下载 Guided 配置文件”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>选择保存以存储当前配置文件状态。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在关闭编辑器之前确认保存的状态出现在库中。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>选择切换所需的下载或导出操作。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>与识别模式通道和配置文件用途所需的上下文共享导出的文件。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>已审核的配置文件已保存，并且可以下载所需的内容。</p></result>
+    <postreq><p>恢复：如果下载已过时，请再次保存并从已审核的配置文件中重复导出。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-review-guided-profile"/>

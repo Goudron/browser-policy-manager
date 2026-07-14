@@ -2,10 +2,10 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-cis-layer-merge" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>入门预设和 CIS 层</title>
-  <shortdesc>入门预设和 CIS 层帮助在人工查看和编辑前创建初始配置文件。</shortdesc>
+  <shortdesc>入门预设和 CIS 图层有助于在手动检查和编辑之前创建初始配置文件。</shortdesc>
   <conbody>
-    <p>入门预设为配置文件提供初始用途，例如企业、课堂或安全导向用例。CIS 层会在 BPM 支持的位置加入 BPM 映射的安全基线选择。</p>
-    <p>分层来源会在所有设置中保持可见，便于区分基线、CIS、导入、手动和原始值。部分 CIS 相关项目需要人工查看，而不是自动接受。</p>
-    <p>BPM 文档描述 BPM 映射和工作流行为。它不声明 CIS 认证或认可。</p>
+    <p>入门预设为配置文件提供初始用途，例如公司、课堂或面向安全的用途。 CIS 层在 BPM 支持的情况下添加 BPM 映射的安全基线选择。</p>
+    <p>分层源在 所有设置 中保持可见，因此您可以区分基线、CIS、导入、手动和原始值。一些CIS相关项目需要人工审核，而不是自动接受。</p>
+    <p>BPM 文档描述了 BPM 映射和工作流程行为。它不要求 CIS 认证或认可。</p>
   </conbody>
 </concept>

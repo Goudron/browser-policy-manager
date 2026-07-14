@@ -4,7 +4,7 @@
   <title>Format the JSON document</title>
   <shortdesc>Format the current JSON document before review, validation, or handoff.</shortdesc>
   <taskbody>
-    <prereq><p>Open JSON Editor with a JSON document in the editor.</p></prereq>
+    <prereq><p>Open JSON editor with a JSON document in the editor.</p></prereq>
     <context><p>Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
     <steps>
       <step><cmd>Choose the JSON format action.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>

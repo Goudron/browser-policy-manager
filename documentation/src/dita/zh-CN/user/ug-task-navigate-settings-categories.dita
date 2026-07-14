@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>浏览设置类别</title>
-  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Navigate All Settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <title>导航设置类别</title>
+  <shortdesc>导航 所有设置 类别和映射的控制集群以查找相关的策略和首选项控制。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Open All Settings in Configured or Catalog mode.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
+    <prereq><p>在配置中打开 所有设置 或 目录。</p></prereq>
+    <context><p>按产品域而不是按文件位置对设置进行分类。它们帮助用户在浏览器访问、隐私、搜索、扩展、原始/未映射和其他集群之间移动。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Open the category navigation or catalog summary.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Choose the domain or cluster that matches the configuration goal.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：浏览设置类别. Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+      <step><cmd>打开类别导航或目录摘要。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择与配置目标匹配的域或集群。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>查看已配置、关注、原始或已弃用设置的类别计数。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开设置详细信息或切换过滤器，而不会丢失类别上下文。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if a category does not contain the expected control, search by policy ID or inspect raw/unmapped items.</p></postreq>
+    <result><p>您可以按产品域浏览 设置清单 并到达相关的详细信息面板。</p></result>
+    <postreq><p>恢复：如果类别不包含预期的控制，则按策略 ID 搜索或检查原始/未映射的项目。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

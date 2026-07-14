@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-check-health-readiness" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>检查 BPM health 和 readiness</title>
-  <shortdesc>Use the current liveness and readiness probes as a lightweight operational handshake before API workflows.</shortdesc>
+  <title>检查 BPM 运行状况和准备情况</title>
+  <shortdesc>使用当前的存活探测和就绪探测作为 API 工作流程之前的轻量级运行状态预检。</shortdesc>
   <taskbody>
-    <prereq><p>Set <codeph>$BPM_BASE_URL</codeph>. For host setup, service start, logs, updates from source, and operating-system details, use the source-deployment Administrator Guide; this API topic only documents the integration handshake.</p></prereq>
-    <context><p>This task covers <codeph>API-HEALTH-001</codeph> and <codeph>API-HEALTH-002</codeph>. BPM 0.9.0 exposes prefix-free probes at <codeph>/health</codeph> and <codeph>/health/ready</codeph>. BPM does not expose dependency diagnostics through these probes; they are not versioned and do not replace product-specific retry or incident policy.</p></context>
+    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>。有关主机设置、服务启动、日志、源更新和操作系统详细信息，请使用源部署管理员指南；此 API 主题仅记录集成状态预检。</p></prereq>
+    <context><p>此任务涵盖 <codeph>API-HEALTH-001</codeph> 和 <codeph>API-HEALTH-002</codeph>。 BPM 0.9.0 在 <codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 处公开了无前缀探针。 BPM 不会通过这些探测器公开依赖性诊断；它们没有版本控制，并且不会取代特定于产品的重试或事件策略。</p></context>
     <steps>
-      <step><cmd>Call the liveness probe before starting a short API sequence.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/health</codeph>. Response example: <codeph>200 {"status":"ok"}</codeph>. Error example: no application error is currently declared; transport, gateway, or process failures are handled outside BPM.</p></info></step>
-      <step><cmd>Call the readiness probe before operations that depend on application startup being complete.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/health/ready</codeph>. Response example: <codeph>200 {"status":"ready","ready":true}</codeph>. Error example: no degraded-state or dependency-detail body is currently exposed.</p></info></step>
-      <step><cmd>Use readiness as a gate, not as a complete dependency inventory.</cmd><info><p>When <codeph>ready</codeph> is <codeph>true</codeph>, the integrating product may continue with discovery, validation, import, export, or profile lifecycle calls. It must not infer database health details, schema cache details, documentation portal status, queue state, or deployment topology from this response.</p></info></step>
-      <step><cmd>Keep polling and retry decisions in the integrating product.</cmd><info><p>BPM does not declare a polling interval, retry-after header, service-level objective, circuit-breaker contract, request ID, or webhook for probe changes. Store your own timestamp, observed status, timeout, and retry decision.</p></info></step>
-      <step><cmd>Separate API handshake checks from source deployment troubleshooting.</cmd><info><p>If probes are unreachable or the response differs from the examples, switch to the source-deployment Administrator Guide for process, environment, database, log, and update-from-source checks instead of expanding this API integration task into deployment instructions.</p></info></step>
-      <step><cmd>Record the operational handshake result with the downstream API action.</cmd><info><note type="warning">A successful health or readiness response does not authenticate callers, authorize operations, reserve profile revisions, guarantee later API success, or prove Firefox runtime enforcement. Treat it as one small preflight signal.</note></info></step>
+      <step><cmd>在开始简短的 API 序列之前调用存活探测。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health</codeph>。响应示例：<codeph>200 {"status":"ok"}</codeph>。错误示例：当前未声明应用程序错误；传输、网关或流程故障在 BPM 外部处理。</p></info></step>
+      <step><cmd>在依赖于应用程序启动完成的操作之前调用就绪探测。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health/ready</codeph>。响应示例：<codeph>200 {"status":"ready","ready":true}</codeph>。错误示例：当前未公开任何降级状态或依赖项详细信息主体。</p></info></step>
+      <step><cmd>使用就绪性作为门，而不是作为完整的依赖项清单。</cmd><info><p>当 <codeph>ready</codeph> 为 <codeph>true</codeph> 时，集成产品可以继续进行发现、验证、导入、导出或配置文件生命周期调用。它不得从此响应推断数据库运行状况详细信息、架构缓存详细信息、文档门户状态、队列状态或部署拓扑。</p></info></step>
+      <step><cmd>在集成产品中保持轮询并重试决策。</cmd><info><p>BPM 不声明轮询间隔、重试标头、服务级别目标、断路器合约、请求 ID 或用于探测更改的 Webhook。存储您自己的时间戳、观察到的状态、超时和重试决策。</p></info></step>
+      <step><cmd>将 API 握手检查与源部署故障排除分开。</cmd><info><p>如果探测器无法访问或响应与示例不同，请切换到源部署管理员指南以进行流程、环境、数据库、日志和从源更新检查，而不是将此 API 集成任务扩展为部署说明。</p></info></step>
+      <step><cmd>记录与下游 API 操作的运行状态预检结果。</cmd><info><note type="warning">成功的运行状况或就绪响应不会验证调用者、授权操作、保留配置文件修订、保证以后 API 成功或证明 Firefox 运行时强制执行。将其视为一个小的飞行前信号。</note></info></step>
     </steps>
-    <result><p>The integrating product has a minimal and current BPM operational handshake for liveness and readiness without depending on undocumented deployment behavior.</p></result>
-    <postreq><p>After a successful readiness check, continue with OpenAPI discovery or the specific API workflow topic for validation, import/export, or profile lifecycle operations.</p></postreq>
+    <result><p>集成产品具有最小且最新的 BPM 运行状态预检，以实现活跃性和就绪性，而不依赖于未记录的部署行为。</p></result>
+    <postreq><p>成功完成就绪检查后，继续进行 OpenAPI 发现或特定 API 工作流程主题以进行验证、导入/导出或配置文件生命周期操作。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-concept-supported-integration-patterns"/>

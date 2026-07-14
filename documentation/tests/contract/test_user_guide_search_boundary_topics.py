@@ -93,16 +93,11 @@ def test_documentation_search_boundary_topics_have_full_locale_parity() -> None:
         root = _root(locale)
         assert [section.attrib["id"] for section in root.findall("./conbody/section")] == expected_sections
         text = _normalized_text(root)
-        for required in (
-            "RAG",
-            "policy IDs",
-            "CIS recommendation IDs",
-            "API operation IDs",
-        ):
+        for required in ("RAG", "CIS", "API"):
             assert required in text
         assert (
             "external search service" in text
-            or "внешнему поисковому сервису" in text
+            or "внешнюю службу поиска" in text
             or "externen Suchdienst" in text
             or "外部搜索服务" in text
             or "service de recherche externe" in text

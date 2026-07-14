@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-source-update-rollback-stop" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Vérifier l’update et appliquer les rollback stop conditions</title>
-  <shortdesc>Démarrez le BPM process mis à jour, vérifiez probes, UI, API evidence et documentation status, puis décidez accept, stop ou restore from backup.</shortdesc>
+  <title>Vérifier la mise à jour et appliquer les conditions d'arrêt de restauration</title>
+  <shortdesc>Démarrez le processus BPM mis à jour, vérifiez les sondes, UI, les preuves API et l'état de la documentation, puis décidez d'accepter, d'arrêter ou de restaurer à partir d'une sauvegarde.</shortdesc>
   <taskbody>
-    <prereq><p>Migrations, source smoke et documentation rebuild checks sont terminés ou un failure point a été consigné.</p></prereq>
-    <context><p>Post-update verification prouve que le source run mis à jour est utilisable dans la controlled environment courante. Elle ne prouve pas production readiness, reverse proxy behavior, HA, managed backup ni Firefox runtime enforcement.</p></context>
+    <prereq><p>Les vérifications des migrations, de la source de fumée et de la reconstruction de la documentation sont terminées ou un point de défaillance a été enregistré.</p></prereq>
+    <context><p>La vérification post-mise à jour prouve que l'exécution source mise à jour est utilisable pour l'environnement contrôlé actuel. Cela ne prouve pas la préparation à la production, le comportement du proxy inverse, HA, la sauvegarde gérée ou l'application de l'exécution de Firefox.</p></context>
     <steps>
-      <step><cmd>Démarrez le source process mis à jour et vérifiez probes.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Démarrez le processus source mis à jour et vérifiez les sondes.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Les expected responses restent <codeph>{"status":"ok"}</codeph> et <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
-      <step><cmd>Vérifiez product UI, API evidence et documentation status.</cmd><info><p>Ouvrez <codeph>http://127.0.0.1:8000/profiles</codeph>, exécutez les required reusable API examples, confirmez exported <codeph>policies.json</codeph> evidence si nécessaire et vérifiez que <codeph>/help/</codeph> ne signale pas stale, incompatible ou missing documentation pour l’installed artifact.</p></info></step>
-      <step><cmd>Acceptez l’update seulement lorsque chaque required check est consigné.</cmd><info><p>Consignez previous revision, target revision, migration result, source smoke result, documentation validation/build result, health/readiness responses, UI smoke result, API/export evidence et tout known deferred production controls.</p></info></step>
-      <step><cmd>Appliquez rollback ou stop conditions sans inventer automatic recovery.</cmd><info><p>Si failure survient avant migrations, revenez à la previous source revision et réinstallez dependencies. Si failure survient après migrations, arrêtez BPM, restaurez le verified pre-update database backup, revenez à la previous source revision, réinstallez dependencies et répétez health/UI smoke checks. Si backup evidence manque, restore est unverified ou data a changé après migration, stoppez et escaladez au lieu de revendiquer rollback success.</p><note type="warning">Ne marquez pas l’update complete lorsque probes fail, documentation stale, exports diffèrent de façon inattendue, migrations sont uncertain ou rollback evidence incomplete.</note></info></step>
+]]></codeblock><p>Les réponses attendues restent <codeph>{"status":"ok"}</codeph> et <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Vérifiez le produit UI, les preuves API et l'état de la documentation.</cmd><info><p>Ouvrez <codeph>http://127.0.0.1:8000/profiles</codeph>, exécutez les exemples d'API réutilisables requis, confirmez les preuves <codeph>policies.json</codeph> exportées si nécessaire et vérifiez que <codeph>/help/</codeph> ne signale pas de documentation obsolète, incompatible ou manquante pour l'artefact installé.</p></info></step>
+      <step><cmd>Acceptez la mise à jour uniquement lorsque chaque vérification requise est enregistrée.</cmd><info><p>Enregistrez la révision précédente, la révision cible, le résultat de la migration, le résultat de la fumée source, le résultat de la validation/construction de la documentation, les réponses d'intégrité/préparation, le résultat de la fumée UI, les preuves d'API/d'exportation et tout contrôle de production différé connu.</p></info></step>
+      <step><cmd>Appliquez des conditions de restauration ou d'arrêt sans inventer la récupération automatique.</cmd><info><p>Si un échec se produit avant les migrations, revenez à la révision source précédente et réinstallez les dépendances. Si un échec se produit après les migrations, arrêtez BPM, restaurez la sauvegarde de base de données vérifiée avant la mise à jour, revenez à la révision source précédente, réinstallez les dépendances et répétez les vérifications d'état/UI. Si des preuves de sauvegarde sont manquantes, si la restauration n'est pas vérifiée ou si les données ont été modifiées après la migration, arrêtez et faites remonter au lieu de prétendre que la restauration a réussi.</p><note type="warning">Ne marquez pas la mise à jour comme terminée lorsque les vérifications échouent, que la documentation est obsolète, que les exportations diffèrent de manière inattendue, que les migrations sont incertaines ou que les preuves d'annulation sont incomplètes.</note></info></step>
     </steps>
-    <result><p>L’update est soit accepted with complete evidence, soit stopped at a known blocker, soit restored from the pre-update backup with explicit proof.</p></result>
-    <postreq><p>Utilisez la resulting evidence dans l’operations handoff note et la future production/HA/reverse-proxy planning.</p></postreq>
+    <result><p>La mise à jour est soit acceptée avec des preuves complètes, soit arrêtée auprès d'un bloqueur connu, soit restaurée à partir de la sauvegarde préalable à la mise à jour avec une preuve explicite.</p></result>
+    <postreq><p>Utilisez les preuves obtenues dans la note de transfert des opérations et dans la planification future de la production/HA/proxy inverse.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-run-source-update-migrations-docs"/>

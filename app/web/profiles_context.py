@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import urllib.parse
 from collections.abc import Callable
 from datetime import UTC, datetime
 from functools import cache
@@ -16,6 +17,11 @@ from app.core.locales import (
 )
 from app.core.schema_channels import build_schema_channels_catalog
 from app.documentation.manifest import (
+    DOCUMENTATION_CONTEXTUAL_HELP_TARGET_IDS,
+    DOCUMENTATION_DEEP_HELP_TARGET_IDS,
+    DOCUMENTATION_LOCALES,
+    resolve_all_settings_row_help_links,
+    resolve_documentation_artifact_disposition,
     resolve_documentation_contextual_help_links,
     resolve_documentation_deep_help_links,
     resolve_documentation_home_links,
@@ -115,6 +121,29 @@ def resolve_request_locale(request: Request, settings_obj: Any) -> str:
     return weighted_locales[0][1]
 
 
+def _documentation_status_links() -> dict[str, str]:
+    return {
+        locale: f"/help/?locale={urllib.parse.quote(locale, safe='-')}"
+        for locale in DOCUMENTATION_LOCALES
+    }
+
+
+def _documentation_status_contextual_help_links() -> dict[str, dict[str, str]]:
+    status_links = _documentation_status_links()
+    return {
+        surface_id: dict(status_links)
+        for surface_id in DOCUMENTATION_CONTEXTUAL_HELP_TARGET_IDS
+    }
+
+
+def _documentation_status_deep_help_links() -> dict[str, dict[str, str]]:
+    status_links = _documentation_status_links()
+    return {
+        target_id: dict(status_links)
+        for target_id in DOCUMENTATION_DEEP_HELP_TARGET_IDS
+    }
+
+
 def build_profiles_page_context(
     request: Request,
     *,
@@ -145,6 +174,16 @@ def build_profiles_page_context(
     documentation_home_links = resolve_documentation_home_links()
     documentation_context_help_links = resolve_documentation_contextual_help_links()
     documentation_deep_help_links = resolve_documentation_deep_help_links()
+    documentation_all_settings_row_help_links = (
+        resolve_all_settings_row_help_links() if route_mode == "settings" else {}
+    )
+    documentation_all_settings_row_help_status = (
+        resolve_documentation_artifact_disposition() if route_mode == "settings" else "available"
+    )
+    if documentation_home_links is None:
+        documentation_home_links = _documentation_status_links()
+        documentation_context_help_links = _documentation_status_contextual_help_links()
+        documentation_deep_help_links = _documentation_status_deep_help_links()
 
     def tr(key: str, fallback: str = "") -> str:
         value = initial_locale.get(key)
@@ -190,9 +229,11 @@ def build_profiles_page_context(
         "locale_picker_options": LOCALE_MATRIX,
         "initial_lang": initial_lang,
         "initial_locale": initial_locale,
-        "documentation_home_links": documentation_home_links or {},
-        "documentation_home_href": (documentation_home_links or {}).get(initial_lang),
+        "documentation_home_links": documentation_home_links,
+        "documentation_home_href": documentation_home_links.get(initial_lang),
         "documentation_context_help_links": documentation_context_help_links,
         "documentation_deep_help_links": documentation_deep_help_links,
+        "documentation_all_settings_row_help_links": documentation_all_settings_row_help_links,
+        "documentation_all_settings_row_help_status": documentation_all_settings_row_help_status,
         "tr": tr,
     }

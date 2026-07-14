@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-product-version" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Référence de version produit</title>
-  <shortdesc>Utilisez l’en-tête BPM et version context pour confirmer la version du produit et de la documentation.</shortdesc>
+  <title>Référence de la version du produit</title>
+  <shortdesc>Utilisez l'en-tête BPM et le contexte de version pour confirmer la version du produit et de la documentation que vous utilisez.</shortdesc>
   <refbody>
-    <section id="a-version-location"><title>Emplacement de version</title><p>L’en-tête de page affiche la running BPM version, et le paquet de documentation est construit pour BPM 0.9.0.</p></section>
-    <section id="a-version-scope"><title>Périmètre de version</title><p>La version produit identifie le comportement BPM, pas la version du Firefox browser installé sur un poste.</p></section>
-    <section id="a-schema-version"><title>Version de schéma</title><p>Les canaux de schéma Firefox comme ESR 140.12 et Release 152 sont des choix séparés qui influencent validation et available controls.</p></section>
-    <section id="a-version-recovery"><title>Récupération</title><p>Si le comportement produit ne correspond pas au guide, relevez BPM version, schema channel, route, locale et visible status avant de signaler le mismatch.</p></section>
+    <section id="a-version-location"><title>Emplacement de la version</title><p>L'en-tête de page affiche la version BPM en cours d'exécution et le package de documentation est conçu pour BPM 0.9.0.</p></section>
+    <section id="a-version-scope"><title>Portée de la version</title><p>La version du produit identifie le comportement BPM, et non la version du navigateur Firefox installée sur un point de terminaison.</p></section>
+    <section id="a-schema-version"><title>Version du schéma</title><p>Les canaux de schéma Firefox tels que ESR 140.12 et Release 152 sont des choix distincts qui affectent la validation et les contrôles disponibles.</p></section>
+    <section id="a-version-recovery"><title>Récupération</title><p>Si le comportement du produit ne correspond pas au guide, enregistrez la version BPM, le canal de schéma, l'itinéraire, les paramètres régionaux et l'état visible avant de signaler l'incompatibilité.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

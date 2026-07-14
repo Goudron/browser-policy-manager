@@ -2,12 +2,12 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-profile-status" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置文件状态参考</title>
-  <shortdesc>操作前读取 profile name、ID、schema、lifecycle、dirty/saved state 和 validation context。</shortdesc>
+  <shortdesc>在执行操作之前读取配置文件名称、ID、架构、生命周期、脏/已保存状态和验证上下文。</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>身份</title><p>Profile name 和 ID 确认当前 editor、Library row 或 Compare selection 指向预期 saved profile 或 draft。</p></section>
-    <section id="a-profile-lifecycle"><title>生命周期</title><p>Lifecycle state 区分 active、archived、draft、restored 以及 deletion-sensitive 配置文件工作。</p></section>
-    <section id="a-profile-validation"><title>验证</title><p>Validation context 显示当前 policy 和 managed-preference values 是否已准备好 save、comparison 或 export。</p></section>
-    <section id="a-profile-dirty-state"><title>脏状态</title><p>Dirty/saved state 告诉您在 navigation、export 或信任另一个标签页前，是否仍需保存可见 editor changes。</p></section>
+    <section id="a-profile-identity"><title>身份</title><p>配置文件名称和 ID 确认当前编辑器、库行或比较选择引用了预期保存的配置文件或草稿。</p></section>
+    <section id="a-profile-lifecycle"><title>生命周期</title><p>生命周期状态区分活动、存档、草稿、恢复和删除敏感的配置文件工作。</p></section>
+    <section id="a-profile-validation"><title>验证</title><p>验证上下文显示当前策略和托管首选项值是否已准备好保存、比较或导出。</p></section>
+    <section id="a-profile-dirty-state"><title>脏状态</title><p>脏/已保存状态告诉您在导航、导出或信任另一个选项卡之前是否仍需要保存可见的编辑器更改。</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-profile-context"/>

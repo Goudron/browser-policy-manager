@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Dupliquer un profil</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Dupliquer un profil » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Créez un brouillon guidé nommé à partir d'un profil enregistré existant lorsque vous souhaitez un point de départ sûr pour les modifications.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Le profil source est visible dans la bibliothèque et vous avez confirmé son identité de ligne.</p></prereq>
+    <context><p>Dupliquer crée un brouillon de profil distinct basé sur le profil enregistré sélectionné. Cela ne modifie pas le profil source.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Dupliquer un profil ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Choisissez Dupliquer sur la ligne du profil source.</cmd><info><p>Résultat attendu : BPM ouvre un panneau de nom de clone.</p></info></step>
+      <step><cmd>Entrez un nom clair qui diffère des noms de profil existants.</cmd><info><p>BPM nécessite un nom et signale une validation de nom en double avant de confirmer.</p></info></step>
+      <step><cmd>Confirmez l'action en double.</cmd><info><note type="warning">Un doublon est distinct de la source. Les modifications ultérieures apportées à un profil ne mettent pas à jour l'autre.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>BPM ouvre ou crée le profil dupliqué en tant que brouillon guidé nommé ou profil enregistré en fonction du flux de travail actuel.</p></result>
+    <postreq><p>Récupération : annulez le panneau de nom de clone si la ligne source sélectionnée ou le nouveau nom est incorrect.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

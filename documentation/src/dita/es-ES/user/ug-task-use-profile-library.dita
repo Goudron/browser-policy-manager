@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-profile-library" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Usar la Biblioteca de perfiles</title>
-  <shortdesc>Esta tarea describe el escenario completo «Usar la Biblioteca de perfiles»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Usar la biblioteca</title>
+  <shortdesc>Abra la biblioteca y utilice sus recuentos, estados y acciones de fila como punto de partida para el trabajo del perfil guardado.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>BPM está abierto y está trabajando con registros de perfil guardados, no con un borrador del editor no guardado.</p></prereq>
+    <context><p>La biblioteca enumera los perfiles guardados y muestra los recuentos totales y filtrados para que sepa si los filtros o la búsqueda ocultan filas.</p>
+      <fig id="screenshot-library-overview">
+        <title>Descripción general de la biblioteca</title>
+        <image keyref="screenshot.library-overview" placement="break">
+          <alt>Biblioteca que muestra filas de perfil guardadas, recuentos y acciones de perfil.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Usar la Biblioteca de perfiles».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra la biblioteca.</cmd><info><p>Resultado esperado: la biblioteca carga filas de perfil o un mensaje de estado vacío si no existen perfiles guardados.</p></info></step>
+      <step><cmd>Lea los recuentos totales y filtrados antes de actuar en las filas.</cmd><info><p>Si el recuento filtrado es inferior al recuento total, el texto de búsqueda o los filtros están activos.</p></info></step>
+      <step><cmd>Utilice acciones de fila solo después de confirmar el nombre de la fila, el canal del esquema, el estado del ciclo de vida y el estado de validación.</cmd><info><note type="warning">Una acción de fila se aplica a ese perfil guardado, no a un borrador del editor temporal.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>Puede identificar la vista de Biblioteca activa y elegir la siguiente acción de perfil sin perder contexto.</p></result>
+    <postreq><p>Recuperación: si las filas no se cargan o el estado de una acción sigue fallando, actualice la biblioteca y luego use el tema de solución de problemas de la biblioteca.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

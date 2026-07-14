@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Référence du locking des managed preferences</title>
-  <shortdesc>Les managed preferences sont exportées via la policy Firefox <codeph>Preferences</codeph> et nécessitent une vérification explicite de value, type et status.</shortdesc>
+  <title>Référence de verrouillage des préférences gérées</title>
+  <shortdesc>Préférences gérées sont exportés via la stratégie Firefox <codeph>Preferences</codeph> et nécessitent un examen explicite de la valeur, du type et de l'état.</shortdesc>
   <refbody>
-    <section id="a-container-policy"><title>Container policy</title><p>Firefox stocke les managed preferences dans <codeph>Preferences</codeph>. BPM documente les preferences connues séparément, mais les exporte comme entries dans cette container policy.</p></section>
-    <section id="a-status-values"><title>Status values</title><p><codeph>locked</codeph> empêche les modifications utilisateur lorsque Firefox prend en charge la preference. <codeph>default</codeph>, <codeph>user</codeph> et <codeph>clear</codeph> ont des runtime meanings différents et ne doivent pas être utilisés comme synonymes.</p></section>
-    <section id="a-type-values"><title>Type values</title><p>Définissez <codeph>Type</codeph> sur <codeph>boolean</codeph>, <codeph>number</codeph> ou <codeph>string</codeph> lorsque BPM a besoin d’une value shape exacte. Le type de <codeph>Value</codeph> doit correspondre au type déclaré.</p></section>
-    <section id="a-source-conflicts"><title>Source conflicts</title><p>Une preference peut venir d’un preset, d’un CIS layer, d’un import, d’une manual edit ou d’un raw fallback. Vérifiez la source avant le locking, car une locked preference peut remplacer l’attente utilisateur plus fortement qu’un unlocked policy default.</p></section>
-    <section id="a-safe-review"><title>Safe review</title><p>Validez Release et ESR lorsqu’un profil peut être réutilisé entre canaux, et gardez les preference IDs inchangés. BPM peut valider la container shape, mais le Firefox runtime décide de l’effet final.</p></section>
+    <section id="a-container-policy"><title>Politique de conteneur</title><p>Firefox stocke Préférences gérées sous <codeph>Preferences</codeph>. BPM documente les préférences connues séparément mais les exporte sous forme d'entrées dans cette stratégie de conteneur.</p></section>
+    <section id="a-status-values"><title>Valeurs d'état</title><p><codeph>locked</codeph> empêche les modifications utilisateur là où Firefox prend en charge la préférence. <codeph>default</codeph>, <codeph>user</codeph> et <codeph>clear</codeph> ont des significations d'exécution différentes et ne doivent pas être utilisés comme synonymes.</p></section>
+    <section id="a-type-values"><title>Tapez les valeurs</title><p>Ensemble <codeph>Type</codeph> à <codeph>boolean</codeph>, <codeph>number</codeph>, ou <codeph>string</codeph> lorsque BPM a besoin d'une forme de valeur exacte. Le Le type <codeph>Value</codeph> doit correspondre au type déclaré.</p></section>
+    <section id="a-source-conflicts"><title>Conflits de sources</title><p>Une préférence peut provenir d'un préréglage, d'une couche CIS, d'une importation, d'une modification manuelle ou d'une solution de secours brute. Vérifiez la source avant de verrouiller, car une préférence verrouillée peut remplacer les attentes de l'utilisateur plus fortement qu'une stratégie par défaut déverrouillée.</p></section>
+    <section id="a-safe-review"><title>Révision sécurisée</title><p>Validez à la fois la version et l'ESR lorsqu'un profil peut être réutilisé sur plusieurs canaux et conservez la préférence identifiants inchangée. BPM peut valider la forme du conteneur mais le runtime Firefox décide de l'effet final.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.fx-task-review-complex-policy-configuration"/>

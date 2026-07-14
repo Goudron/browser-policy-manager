@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Planifier monitoring inputs, backup evidence et update windows</title>
-  <shortdesc>Préparez l’operational evidence current-state pour une instance source-run sans revendiquer managed monitoring, official restore automation ou rolling upgrades.</shortdesc>
+  <title>Planifier les entrées de surveillance, les preuves de sauvegarde et les fenêtres de mise à jour</title>
+  <shortdesc>Préparez des preuves opérationnelles de l'état actuel pour une instance exécutée à la source tout en évitant les réclamations concernant la surveillance gérée, l'automatisation officielle de la restauration ou les mises à niveau propagées.</shortdesc>
   <taskbody>
-    <prereq><p>L’instance a passé source readiness et network exposure review, et un administrator ou DevOps owner unique est responsable de l’evaluation window.</p></prereq>
-    <context><p>Jusqu’aux décisions distributions et runtime service, operations planning doit se concentrer sur observable inputs, manual backup/export evidence et update windows explicites pour un source node.</p></context>
+    <prereq><p>L'instance a réussi l'examen de préparation des sources et d'exposition du réseau, et un seul administrateur ou propriétaire DevOps est responsable de la fenêtre d'évaluation.</p></prereq>
+    <context><p>Jusqu'à ce que les décisions relatives aux distributions et aux services d'exécution soient prises, la planification des opérations doit se concentrer sur les entrées observables, les preuves de sauvegarde et d'exportation manuelles, ainsi que les fenêtres de mise à jour explicites pour un nœud source.</p></context>
     <steps>
-      <step><cmd>Listez les monitoring inputs disponibles aujourd’hui.</cmd><info><p>Consignez process status, foreground terminal output, <codeph>stdout</codeph>, <codeph>stderr</codeph>, <codeph>GET /health</codeph>, <codeph>GET /health/ready</codeph>, selected API example results, accès documentation via <codeph>/help/</codeph>, et source revision depuis <codeph>git rev-parse --short HEAD</codeph>.</p></info></step>
-      <step><cmd>Collectez backup et export evidence avant la window.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Répertoriez les entrées de surveillance qui existent aujourd'hui.</cmd><info><p>Enregistrez l'état du processus, la sortie du terminal de premier plan, <codeph>stdout</codeph>, <codeph>stderr</codeph>, <codeph>GET /health</codeph>, <codeph>GET /health/ready</codeph>, les exemples de résultats d'API sélectionnés, l'accès à la documentation via <codeph>/help/</codeph> et la révision source de <codeph>git rev-parse --short HEAD</codeph>.</p></info></step>
+      <step><cmd>Collectez les preuves de sauvegarde et d'exportation avant la fenêtre.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
-]]></codeblock><p>Exportez aussi des representative Firefox documents comme <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> et conservez la <codeph>policies.json</codeph> evidence avec checksums.</p></info></step>
-      <step><cmd>Planifiez une stop-the-world update window pour les source changes.</cmd><info><p>Pour 0.9.0, prévoyez one-node downtime avant <codeph>git fetch --tags</codeph>, dependency refresh, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> et <codeph>make docs-build</codeph>. Rolling upgrades are planned but not implemented yet.</p></info></step>
-      <step><cmd>Consignez les gaps comme blockers, pas comme hidden assumptions.</cmd><info><note type="warning">BPM 0.9.0 ne fournit pas managed monitoring, automated backup scheduling, official restore automation, point-in-time recovery, managed secrets, token rotation ou rolling upgrade orchestration. Utilisez manual evidence et stop conditions du update runbook.</note></info></step>
+]]></codeblock><p>Exportez également des documents Firefox représentatifs tels que <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> et stockez les preuves <codeph>policies.json</codeph> obtenues avec des sommes de contrôle.</p></info></step>
+      <step><cmd>Planifiez une fenêtre de mise à jour d'arrêt du monde pour les modifications de source.</cmd><info><p>Pour la version 0.9.0, planifiez le temps d'arrêt d'un nœud avant <codeph>git fetch --tags</codeph>, l'actualisation des dépendances, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> et <codeph>make docs-build</codeph>. Des mises à niveau progressives sont prévues mais pas encore mises en œuvre.</p></info></step>
+      <step><cmd>Enregistrez les lacunes comme des bloqueurs et non comme des hypothèses cachées.</cmd><info><note type="warning">BPM 0.9.0 ne fournit pas de surveillance gérée, de planification de sauvegarde automatisée, d'automatisation de restauration officielle, de récupération à un moment précis, de secrets gérés, de rotation de jetons ou d'orchestration de mise à niveau continue. Utilisez des preuves manuelles et des conditions d’arrêt du runbook de mise à jour.</note></info></step>
     </steps>
-    <result><p>L’operation plan contient monitoring inputs, backup/export evidence et une update window réaliste pour current source operation.</p></result>
-    <postreq><p>Attachez cette evidence au HA and deferred-boundary record pour que le futur distribution work réutilise la checklist.</p></postreq>
+    <result><p>Le plan d'opération contient des entrées de surveillance, des preuves de sauvegarde/exportation et une fenêtre de mise à jour réaliste pour l'opération source actuelle.</p></result>
+    <postreq><p>Joignez ces preuves au HA et à l'enregistrement à limites différées afin que les travaux de distribution ultérieurs puissent réutiliser la même liste de contrôle.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

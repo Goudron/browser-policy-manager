@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>验证 JSON 文档</title>
-  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. Validate raw JSON syntax and Firefox policy values before saving.</shortdesc>
+  <shortdesc>在保存之前验证原始 JSON 语法和 Firefox 策略值。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. Open JSON Editor with the document you want to check.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. Validation distinguishes malformed JSON from policy or schema errors. A document can parse as JSON and still fail policy validation.</p></context>
+    <prereq><p>使用您要检查的文档打开 JSON 编辑器。</p></prereq>
+    <context><p>验证将格式错误的 JSON 与策略或架构错误区分开。文档可以解析为 JSON，但策略验证仍然失败。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. Choose the shared Validate action.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. If validation reports malformed JSON, fix syntax such as trailing commas or missing braces.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. If validation reports policy errors, correct unsupported keys, wrong value types, or schema-channel mismatches.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：验证 JSON 文档. Validate again until the status explains that the document is acceptable or the remaining issue is intentional for raw review.</cmd><info><note type="warning">警告：保存前请检查 JSON 语法、top-level policies 和策略验证错误。</note></info></step>
+      <step><cmd>选择共享验证操作。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>如果验证报告 JSON 格式错误，请修复语法，例如尾随逗号或缺少大括号。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>如果验证报告策略错误，请更正不受支持的键、错误的值类型或模式通道不匹配。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>再次验证，直到状态说明文档可接受或剩余问题有意进行原始审核。</cmd><info><note type="warning">保存原始 JSON 可以更改规范的 BPM 配置文件。保存之前验证语法和策略值。</note></info></step>
     </steps>
-    <result><p>JSON Editor 处于预期状态，并且该操作可在审查时解释。 The document has a known validation state before save or export.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请验证文档、返回 All Settings 或打开相关主题。 Recovery: if errors are hard to read, use All Settings to inspect the affected policy or preference visually.</p></postreq>
+    <result><p>文档在保存或导出之前具有已知的验证状态。</p></result>
+    <postreq><p>恢复：如果错误难以阅读，请使用 所有设置 直观地检查受影响的策略或首选项。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

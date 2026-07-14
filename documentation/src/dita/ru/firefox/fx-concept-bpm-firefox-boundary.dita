@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-bpm-firefox-boundary" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Где заканчивается валидация BPM и начинается runtime Firefox</title>
-  <shortdesc>BPM валидирует и экспортирует документ Firefox Enterprise policies; Firefox применяет этот документ в runtime вне BPM.</shortdesc>
+  <title>Когда заканчивается проверка BPM и начинается среда выполнения Firefox</title>
+  <shortdesc>BPM проверяет и экспортирует документ политики Firefox Enterprise; Firefox применяет документ во время выполнения вне BPM.</shortdesc>
   <conbody>
-    <section id="a-profile-model"><title>Модель профиля BPM</title><p>Профиль BPM — это сохранённая модель редактирования. Он может содержать значения политик, managed preferences, сведения об источниках, состояние валидации, значения из пресета или CIS, а также raw imported data до экспорта.</p></section>
-    <section id="a-boundary-document"><title>Boundary-документ Firefox</title><p>Экспортируемая граница — это <codeph>policies.json</codeph> с объектом верхнего уровня <codeph>policies</codeph>. BPM проверяет форму, поддерживаемые policy IDs, доступность по каналу и известные ограничения значений, но не доказывает поведение развёрнутой установки Firefox в каждой среде.</p></section>
-    <section id="a-runtime-responsibility"><title>Ответственность runtime Firefox</title><p>Firefox отвечает за загрузку политик, пути развёртывания в операционной системе, установку расширений, доверие сертификатам, сетевой доступ и видимые эффекты в браузере. Документация BPM описывает путь настройки и известные факты схемы, а не процедуры администраторского rollout.</p></section>
-    <section id="a-managed-preferences"><title>Managed preferences</title><p>Managed preferences настраиваются через политику Firefox <codeph>Preferences</codeph>. BPM может показывать известные preferences и сохранять advanced values, но эффект preference всё равно зависит от поддержки Firefox runtime и выбранного канала схемы.</p></section>
+    <section id="a-profile-model"><title>Модель профиля BPM</title><p>Профиль BPM — это сохраненная модель редактирования. Он может содержать значения политики, Управляемые параметры, исходную информацию, состояние проверки, заданные значения или значения, полученные из CIS, а также необработанные импортированные данные перед экспортом.</p></section>
+    <section id="a-boundary-document"><title>Граничный документ Firefox</title><p>Экспортируемая граница представляет собой документ <codeph>policies.json</codeph> с объектом верхнего уровня <codeph>policies</codeph>. Проверка BPM проверяет форму, поддерживаемую политику идентификаторы, доступность канала и ограничения известных значений, но не доказывает, как развернутая установка Firefox будет вести себя в каждой среде.</p></section>
+    <section id="a-runtime-responsibility"><title>Ответственность за время выполнения Firefox</title><p>Firefox владеет загрузкой политик, путями развертывания операционной системы, установкой расширений, поведением доверия сертификатам, доступом к сети и видимыми пользователем эффектами браузера. Документация BPM описывает путь настройки и известные факты схемы, а не процедуры развертывания администратором.</p></section>
+    <section id="a-managed-preferences"><title>Управляемые параметры</title><p>Управляемые параметры настраиваются с помощью политики Firefox <codeph>Preferences</codeph>. BPM может предоставлять известные предпочтения и сохранять дополнительные значения, но эффекты предпочтений по-прежнему зависят от поддержки среды выполнения Firefox и выбранного канала схемы.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-concept-policy-selection"/>

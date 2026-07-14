@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-configured-settings" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Проверьте настроенные параметры</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Use Configured mode to understand what the profile currently applies by domain, category, and source.</shortdesc>
+  <title>Проверка настроенных настроек</title>
+  <shortdesc>Используйте Настроенные, чтобы понять, какой профиль в настоящее время применяется по домену, категории и источнику.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Open a saved profile in All Settings.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Configured mode focuses on values already present in the profile, not on every possible policy. Domain summaries help you explain the active configuration.</p></context>
+    <prereq><p>Откройте сохраненный профиль в Все настройки.</p></prereq>
+    <context><p>Настроенные фокусируется на значениях, уже присутствующих в профиле, а не на всех возможных политиках. Сводки доменов помогут вам объяснить активную конфигурацию.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Switch to Configured mode.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Review the configured summary cards by domain or category.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Open a category to inspect the settings applied there.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Проверьте настроенные параметры. Use source filters if you need to separate baseline, CIS, manual, imported, or raw values.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Переключитесь на Настроенные.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Просмотрите настроенные сводные карточки по домену или категории.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Откройте категорию, чтобы проверить примененные там настройки.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Используйте фильтры источника, если вам нужно разделить базовые, CIS, введенные вручную, импортированные или необработанные значения.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. You can describe the active policy and managed preference values applied by the profile.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if a value is missing, switch to Catalog mode or clear source filters before deciding it is absent.</p></postreq>
+    <result><p>Вы можете описать активную политику и значения управляемых предпочтений, применяемые профилем.</p></result>
+    <postreq><p>Восстановление: если значение отсутствует, переключитесь на Каталог или очистите фильтры источника, прежде чем решить, что оно отсутствует.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-settings-by-source"/>

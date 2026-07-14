@@ -244,7 +244,7 @@ def test_all_settings_list_runtime_budgets_long_visible_lists_per_mode():
                 }},
                 set innerHTML(value) {{
                     html = String(value || "");
-                    rows = Array.from(html.matchAll(/data-settings-entry-id="([^"]+)"[\\s\\S]*?data-settings-entry-kind="([^"]+)"/g))
+                    rows = Array.from(html.matchAll(/data-settings-entry-select[\\s\\S]*?data-settings-entry-id="([^"]+)"[\\s\\S]*?data-settings-entry-kind="([^"]+)"/g))
                         .map((match) => ({{
                             hidden: false,
                             dataset: {{

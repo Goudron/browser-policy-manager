@@ -5,7 +5,7 @@
   <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Profilarbeit verstehen und planen</navtitle>
+      <navtitle>Profilarbeit orientieren und planen</navtitle>
       <data name="intent-id" value="orient-and-plan"/>
     </topicmeta>
     <topicref keyref="topic.ug-reference-product-version"/>
@@ -21,7 +21,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Ein Profil erstellen und beginnen</navtitle>
+      <navtitle>Erstellen und starten Sie ein Profil</navtitle>
       <data name="intent-id" value="create-and-start"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-choose-firefox-schema"/>
@@ -37,7 +37,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Mit dem Guided Editor konfigurieren</navtitle>
+      <navtitle>Konfigurieren mit Geführter Editor</navtitle>
       <data name="intent-id" value="configure-with-guidance"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-guided-editor"/>
@@ -54,7 +54,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Änderungen prüfen, validieren und abschließen</navtitle>
+      <navtitle>Profiländerungen überprüfen, validieren und abschließen</navtitle>
       <data name="intent-id" value="review-validate-and-finish"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-save-profile"/>
@@ -66,7 +66,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Vollständige Einstellungen prüfen und bearbeiten</navtitle>
+      <navtitle>Überprüfen und bearbeiten Sie die vollständigen Einstellungen</navtitle>
       <data name="intent-id" value="inspect-and-edit-complete-settings"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-all-settings"/>
@@ -91,7 +91,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Mit JSON und Austausch arbeiten</navtitle>
+      <navtitle>Mit JSON arbeiten und austauschen</navtitle>
       <data name="intent-id" value="work-with-json-and-interchange"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-json-editor"/>
@@ -103,7 +103,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Profile finden, organisieren und vergleichen</navtitle>
+      <navtitle>Suchen, organisieren und Profileinstellungen vergleichen</navtitle>
       <data name="intent-id" value="find-organize-and-compare-profiles"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-review-archived-profile"/>

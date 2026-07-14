@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navigate the six Guided Editor steps</title>
+  <title>Navigate the six Guided editor steps</title>
   <shortdesc>Move through Profile &amp; baseline, Browser access &amp; defaults, Security &amp; privacy, Users, add-ons &amp; sites, AI &amp; smart features, and Review &amp; export.</shortdesc>
   <taskbody>
-    <prereq><p>Open a profile in Guided Editor from the Library or creation flow.</p></prereq>
-    <context><p>Guided Editor turns profile configuration into six task-first steps and keeps schema validation visible while you work.</p></context>
+    <prereq><p>Open a profile in Guided editor from the Library or creation flow.</p></prereq>
+    <context><p>Guided editor turns profile configuration into six task-first steps and keeps schema validation visible while you work.</p>
+      <fig id="screenshot-guided-editor-overview">
+        <title>Guided editor overview</title>
+        <image keyref="screenshot.guided-editor-overview" placement="break">
+          <alt>Guided editor showing the step navigation and validation state for a saved profile.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>Start with Step 1, Profile &amp; baseline, to confirm name, schema channel, scenario, starter preset, and CIS layer.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Continue through Step 2, Browser access &amp; defaults, for network access, browser behavior, home, search, and navigation defaults.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>

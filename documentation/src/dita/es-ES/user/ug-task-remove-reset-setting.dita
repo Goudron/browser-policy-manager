@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-remove-reset-setting" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Eliminar o restablecer un ajuste</title>
-  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Remove a configured value or reset it back to the inherited baseline, preset, or unconfigured state.</shortdesc>
+  <title>Eliminar o restablecer una configuración</title>
+  <shortdesc>Elimina un valor configurado o lo restablece al estado de referencia, preestablecido o no configurado heredado.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Open the setting detail panel for a configured value.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Remove and reset actions are destructive for the selected value, so the user should understand source and downstream effects first.</p></context>
+    <prereq><p>Abra el panel de detalles de configuración para un valor configurado.</p></prereq>
+    <context><p>Las acciones de eliminación y restablecimiento son destructivas para el valor seleccionado, por lo que el usuario debe comprender primero los efectos de origen y posteriores.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Inspect the current value and source badge.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Choose Remove or Reset only for the setting you intend to change.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Read any warning or validation message shown by the detail panel.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Eliminar o restablecer un ajuste. Save the profile after confirming the value is absent, reset, or inherited as expected.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+      <step><cmd>Inspeccione el valor actual y la insignia de origen.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija Eliminar o Restablecer solo para la configuración que desea cambiar.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Leer cualquier mensaje de advertencia o validación mostrado en el panel de detalles.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Guarde el perfil después de confirmar que el valor está ausente, restablecido o heredado como se esperaba.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
-    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. The setting no longer applies from the previous configured value.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the removal was unintended, reapply the previous value from history, import, comparison, or a saved source document.</p></postreq>
+    <result><p>La configuración ya no se aplica desde el valor configurado anteriormente.</p></result>
+    <postreq><p>Recuperación: si la eliminación no fue intencionada, vuelva a aplicar el valor anterior del historial, importación, comparación o un documento fuente guardado.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-setting-detail"/>

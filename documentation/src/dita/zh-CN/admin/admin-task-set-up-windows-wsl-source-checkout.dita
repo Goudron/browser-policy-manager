@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>在 WSL 内设置 BPM source checkout</title>
-  <shortdesc>在 WSL 中安装 Linux prerequisites，将 BPM 克隆到 Linux filesystem，创建 virtual environment，安装 dependencies，并应用 migrations。</shortdesc>
+  <title>在 WSL 内设置 BPM 源签出</title>
+  <shortdesc>在 WSL 中安装 Linux 先决条件，将 BPM 克隆到 Linux 文件系统中，创建虚拟环境，安装依赖项并应用迁移。</shortdesc>
   <taskbody>
-    <prereq><p>WSL 2 Linux distribution 已安装并打开，管理员拥有批准的 BPM repository URL 以及 0.9.0 branch 或 tag。</p></prereq>
-    <context><p>除非步骤明确说明 PowerShell，本主题中的所有命令都在 WSL Linux shell 内运行。这样 setup 与 Linux source deployment runbook 保持一致，并避免 native-Windows path ambiguity。</p></context>
+    <prereq><p>安装并打开 WSL 2 Linux 发行版，并且管理员拥有批准的 BPM 存储库 URL 和 0.9.0 分支或标签。</p></prereq>
+    <context><p>本主题中的所有命令都在 WSL Linux shell 内运行，除非该步骤明确指出 PowerShell。这使设置与 Linux 源部署 操作手册 保持一致，并避免本机 Windows 路径歧义。</p></context>
     <steps>
-      <step><cmd>在 WSL distribution 中安装 Linux prerequisites。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>在 WSL 发行版中安装 Linux 必备组件。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 sudo apt-get update
 sudo apt-get install -y git make curl python3 python3-venv python3-pip
 python3 --version
-]]></codeblock><p>使用所选 WSL distribution 批准的 package manager 和 package names。</p></info></step>
-      <step><cmd>将 BPM 克隆到 Linux home filesystem。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>使用为您所选的 WSL 发行版批准的包管理器和包名称。</p></info></step>
+      <step><cmd>将 BPM 克隆到 Linux 主文件系统中。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 cd ~
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
 git checkout <approved-0.9.0-ref>
-]]></codeblock><p>对于受支持的 WSL source workflow，不要把 working checkout 放在 <codeph>/mnt/c</codeph> 下。</p></info></step>
-      <step><cmd>创建并激活本地 Python environment。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>不要将受支持的 WSL 源工作流的工作签出放在 <codeph>/mnt/c</codeph> 下。</p></info></step>
+      <step><cmd>创建并激活本地Python环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-]]></codeblock><p>如果 distribution 只以 <codeph>python3</codeph> 提供 Python，请使用 <codeph>python3 -m venv .venv</codeph> 创建环境，然后使用已激活的环境。</p></info></step>
-      <step><cmd>在 WSL checkout 中应用 database migrations。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>如果发行版仅将 Python 公开为 <codeph>python3</codeph>，请使用 <codeph>python3 -m venv .venv</codeph> 创建环境，然后使用激活的环境。</p></info></step>
+      <step><cmd>在 WSL 结帐内应用数据库迁移。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-]]></codeblock><note type="warning">SQLite file 是 WSL 内的 Linux file。BPM 运行时不要用 Windows tools 编辑或移动 <codeph>data/bpm.db</codeph>。</note></info></step>
+]]></codeblock><note type="warning">SQLite 文件是 WSL 内的 Linux 文件。 BPM 运行时，请勿从 Windows 工具编辑或移动 <codeph>data/bpm.db</codeph>。</note></info></step>
     </steps>
-    <result><p>WSL checkout 已包含 Linux prerequisites、repository-local virtual environment、installed dependencies 和 migrated local database。</p></result>
-    <postreq><p>启动 BPM 之前，配置 runtime variables 和 browser access。</p></postreq>
+    <result><p>WSL 签出具有 Linux 先决条件、存储库本地虚拟环境、已安装的依赖项和迁移的本地数据库。</p></result>
+    <postreq><p>在启动 BPM 之前配置运行时变量和浏览器访问。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-windows-wsl-source-deployment"/>

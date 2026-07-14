@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-install-linux-mint-22-3-source" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux"><title>Установка BPM из исходников в Linux Mint 22.3</title><shortdesc>Полная установка с проверенной пользовательской сборкой CPython 3.14.6.</shortdesc><taskbody><prereq><p>Нужны Linux Mint 22.3, sudo, HTTPS, 4 ГБ места и согласованная ссылка BPM 0.9.1.</p></prereq><context><p>Системный Python не заменяется; CPython устанавливается в <codeph>$HOME/.local</codeph>.</p></context><steps>
+<step><cmd>Соберите Python и подготовьте BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+. /etc/os-release
+test "$ID" = "linuxmint" && test "$VERSION_ID" = "22.3"
+sudo apt-get update
+sudo apt-get install -y build-essential ca-certificates curl git make libbz2-dev libffi-dev libgdbm-dev liblzma-dev libncurses-dev libreadline-dev libsqlite3-dev libssl-dev tk-dev uuid-dev xz-utils zlib1g-dev
+export PYTHON_VERSION="3.14.6"
+export PYTHON_SHA256="143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63"
+export PYTHON_PREFIX="$HOME/.local/python-$PYTHON_VERSION"
+mkdir -p "$HOME/src" && cd "$HOME/src"
+curl -fLO "https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.xz"
+printf '%s  %s\n' "$PYTHON_SHA256" "Python-$PYTHON_VERSION.tar.xz" | sha256sum -c -
+tar -xf "Python-$PYTHON_VERSION.tar.xz"
+cd "Python-$PYTHON_VERSION"
+./configure --prefix="$PYTHON_PREFIX" --with-ensurepip=install
+make -j"$(nproc)"
+make altinstall
+export BPM_PYTHON="$PYTHON_PREFIX/bin/python3.14"
+"$BPM_PYTHON" --version
+cd "$HOME"
+export BPM_REPOSITORY_URL="https://github.com/Goudron/browser-policy-manager.git"
+export BPM_REF="<approved-0.9.1-ref>"
+test "$BPM_REF" != "<approved-0.9.1-ref>"
+git clone "$BPM_REPOSITORY_URL" browser-policy-manager
+cd browser-policy-manager
+git checkout --detach "$BPM_REF"
+"$BPM_PYTHON" -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+make setup-docs-toolchain
+make docs-validate
+make docs-build
+]]></codeblock></info></step>
+<step><cmd>Запустите BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+make dev
+]]></codeblock></info></step>
+<step><cmd>Проверьте результат.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+cd "$HOME/browser-policy-manager"
+source .venv/bin/activate
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
+]]></codeblock></info></step>
+<step><cmd>Остановитесь безопасно.</cmd><info><p>При сбое нажмите <codeph>Ctrl+C</codeph>, сохраните контрольную сумму и журналы и не понижайте схему БД.</p></info></step>
+</steps><result><p>Python 3.14.6, BPM, документация, зонды и интерфейс подготовлены.</p></result><postreq><p>Подтвердите команды на чистой Linux Mint 22.3.</p></postreq></taskbody><related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links></task>

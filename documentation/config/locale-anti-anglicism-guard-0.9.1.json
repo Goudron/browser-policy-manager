@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "guard_id": "bpm-0.9.1-locale-anti-anglicism-guard",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M7-04",
+  "status": "accepted",
+  "inherits_from": [
+    "documentation/config/locale-terminology-authority-0.9.1.json",
+    "documentation/config/locale-anglicism-replacement-0.9.1.json"
+  ],
+  "locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+  "enforcement": {
+    "product_catalogs": [
+      "app/i18n_src/{locale}/*.json",
+      "app/i18n/{locale}.json"
+    ],
+    "documentation_sources": [
+      "documentation/src/dita/{locale}/user/ug-task-filter-all-settings.dita",
+      "documentation/src/dita/{locale}/user/ug-task-use-advanced-schema-controls.dita"
+    ],
+    "product_forbidden_fragments_source": "documentation/config/locale-anglicism-replacement-0.9.1.json#/forbidden_fragments_by_locale",
+    "documentation_forbidden_fragments": [
+      "Filter by configured",
+      "Choose the state filter",
+      "Review whether the control",
+      "Open All Settings",
+      "Recovery:",
+      "The list shows settings",
+      "The advanced setting",
+      "Guided-covered",
+      "All-Settings-only"
+    ],
+    "known_debt_policy": "Existing non-M7-03 locale debt is not converted into allowlist. M7-04 prevents regressions for closed findings and high-signal ordinary English; M7-05 remains responsible for human-oriented full-locale QA."
+  },
+  "allowlist_categories": [
+    "brand",
+    "abbreviation",
+    "identifier",
+    "command/path/API",
+    "placeholder"
+  ],
+  "ordinary_english_fragments": [
+    "Open profile",
+    "Save changes",
+    "Updated",
+    "Importered",
+    "Filtrered",
+    "Guided-covered",
+    "Filter by configured",
+    "Review whether the control"
+  ],
+  "fixture_expectations": {
+    "reject": [
+      {
+        "locale": "de",
+        "text": "Profil gespeichert. Updated 07.07.2026.",
+        "expected_fragment": "Updated"
+      },
+      {
+        "locale": "fr",
+        "text": "Filtrered par état actuel.",
+        "expected_fragment": "Filtrered"
+      },
+      {
+        "locale": "es-ES",
+        "text": "Sin ajustes match este filtro.",
+        "expected_fragment": "Sin ajustes match"
+      },
+      {
+        "locale": "zh-CN",
+        "text": "Filter by configured, available, invalid.",
+        "expected_fragment": "Filter by configured"
+      }
+    ],
+    "accept": [
+      {
+        "locale": "ru",
+        "text": "Firefox экспортирует policies.json с JSON и URL."
+      },
+      {
+        "locale": "de",
+        "text": "Richtlinie DisableTelemetry setzt browser.startup.homepage auf true."
+      },
+      {
+        "locale": "fr",
+        "text": "GET /api/profiles retourne le profil BPM."
+      },
+      {
+        "locale": "es-ES",
+        "text": "El archivo policies.json conserva {name} y {file}."
+      }
+    ]
+  }
+}

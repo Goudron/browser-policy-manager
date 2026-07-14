@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configurar inicio, búsqueda y navegación</title>
-  <shortdesc>Esta tarea describe el escenario completo «Configurar inicio, búsqueda y navegación»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Configure las superficies de inicio, el comportamiento de navegación, los motores de búsqueda administrados y las sugerencias de búsqueda del Paso 2.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>El paso 2 está abierto y el canal del esquema es correcto.</p></prereq>
+    <context><p>Estos controles afectan lo que los usuarios ven primero y cómo Firefox resuelve la actividad de navegación y búsqueda.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Configurar inicio, búsqueda y navegación».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abre las secciones de inicio, búsqueda y navegación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Establecer la página de inicio o el comportamiento de nueva pestaña requerido por el perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Configurar motores de búsqueda administrados y sugerencias de búsqueda según la política.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revise los valores predeterminados de navegación antes de pasar a la configuración de seguridad.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil define el inicio, la búsqueda administrada, las sugerencias y el comportamiento de navegación.</p></result>
+    <postreq><p>Recuperación: si los usuarios pierden una ruta de búsqueda esperada, ajuste la entrada del motor de búsqueda administrado antes de guardar.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

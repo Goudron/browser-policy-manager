@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M5-05",
+  "status": "accepted",
+  "release_ready": true,
+  "source_matrix": "documentation/config/user-guide-screenshot-matrix-0.9.1.json",
+  "qa_artifacts": {
+    "contact_sheet": "documentation/reports/screenshots/visual-qa/contact-sheet.png",
+    "ocr_directory": "documentation/reports/screenshots/visual-qa/ocr/"
+  },
+  "review_methods": [
+    "manual contact-sheet review of all 36 localized User Guide screenshots",
+    "full-size visual spot review for narrow all-settings rows and localized guided-editor/search screenshots",
+    "matrix reconciliation against locale, scenario, viewport, theme, filename, and asset path",
+    "focused full-size review of German, French, and Spanish guided settings search screenshots after M7-05 locale fixes",
+    "bad-fragment scan across localized source and runtime catalogs for the M7-05 screenshot findings"
+  ],
+  "coverage": {
+    "rows_expected": 36,
+    "rows_reviewed": 36,
+    "locales_reviewed": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "scenarios_reviewed": [
+      "library-overview",
+      "guided-editor-overview",
+      "guided-settings-search",
+      "all-settings-review",
+      "json-editor",
+      "compare-profiles"
+    ],
+    "viewports_reviewed": ["desktop", "narrow"],
+    "themes_reviewed": ["light", "dark"]
+  },
+  "criteria": {
+    "asset_presence": "pass",
+    "dimensions_match_matrix": "pass",
+    "readability": "pass",
+    "clipped_labels": "pass",
+    "stale_ui": "pass",
+    "locale_correctness": "pass",
+    "non_english_accidental_english": "pass"
+  },
+  "allowlisted_english": [
+    "AI",
+    "BPM",
+    "Browser Policy Manager",
+    "CIS",
+    "ESR",
+    "Firefox",
+    "Homepage",
+    "JSON",
+    "Release",
+    "URL",
+    "policies.json",
+    "policy identifiers",
+    "managed preference identifiers",
+    "schema channel identifiers"
+  ],
+  "release_blockers": [],
+  "source_terminology_cleanup": {
+    "backlog_item": "BPM091-M7-03",
+    "status": "accepted",
+    "evidence": "documentation/config/locale-anglicism-replacement-0.9.1.json",
+    "note": "Source and runtime catalog replacements are present before screenshot regeneration."
+  },
+  "screenshot_regeneration": {
+    "backlog_item": "BPM091-M7-05",
+    "status": "accepted",
+    "capture_command": "./.venv/bin/python documentation/tools/capture_user_guide_screenshots.py",
+    "capture_report": "documentation/reports/screenshots/user-guide-screenshots-0.9.1.json",
+    "contact_sheet": "documentation/reports/screenshots/visual-qa/contact-sheet.png",
+    "rows_captured": 36,
+    "rows_expected": 36,
+    "last_reviewed_locales": ["ru", "de", "zh-CN", "fr", "es-ES"]
+  },
+  "blocked_by_backlog_items": [],
+  "required_follow_up": []
+}

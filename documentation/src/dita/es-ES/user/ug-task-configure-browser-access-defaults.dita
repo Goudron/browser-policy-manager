@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configurar el acceso del navegador y los valores predeterminados</title>
-  <shortdesc>Esta tarea describe el escenario completo «Configurar el acceso del navegador y los valores predeterminados»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Configurar el acceso y los valores predeterminados del navegador</title>
+  <shortdesc>Utilice el Paso 2 para configurar el acceso al navegador, el comportamiento de la red y los valores predeterminados básicos.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Hay abierto un borrador de perfil guiado.</p></prereq>
+    <context><p>Los valores predeterminados de acceso al navegador &amp; recopilan controles que determinan si Firefox puede acceder a los recursos y cómo se comporta antes de las elecciones de políticas específicas de contenido.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Configurar el acceso del navegador y los valores predeterminados».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra el Paso 2, Acceso al navegador predeterminado &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revisar el acceso a la red y los controles de comportamiento del navegador para la implementación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Establezca valores predeterminados de referencia antes de agregar opciones específicas de inicio, búsqueda o navegación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Validar las advertencias que se muestran junto a los controles dependientes del esquema.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil tiene acceso intencional al navegador y configuración de comportamiento predeterminado.</p></result>
+    <postreq><p>Recuperación: si la validación marca un valor, deshaga el último cambio o use Todos los ajustes para inspeccionar la forma de la política sin procesar.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

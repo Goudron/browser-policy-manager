@@ -5,9 +5,9 @@
   <shortdesc>Some Guided controls appear only when the selected Firefox schema supports them, including Release-only AI &amp; smart-feature policies.</shortdesc>
   <refbody>
     <section id="a-release-controls"><title>Release-supported controls</title><p>On Firefox Release 152, Step 5 can show supported AI &amp; smart features, visual search, and smart browser feature policies when they exist in the schema.</p></section>
-    <section id="a-esr-unavailable"><title>ESR unavailable controls</title><p>On ESR 140.12, unsupported browser AI-policy controls are absent or unavailable. Do not force them into Guided Editor as if they were supported.</p></section>
+    <section id="a-esr-unavailable"><title>ESR unavailable controls</title><p>On ESR 140.12, unsupported browser AI-policy controls are absent or unavailable. Do not force them into Guided editor as if they were supported.</p></section>
     <section id="a-no-documentation-ai"><title>No documentation AI functionality</title><p>This reference explains existing Firefox browser policy controls only; it does not add AI functionality to the 0.9.0 documentation portal, including RAG, embeddings, generative search, or generative answers.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>If a control is missing, confirm the schema channel, check All Settings for the raw support boundary, and record the unsupported state during review.</p></section>
+    <section id="a-recovery"><title>Recovery</title><p>If a control is missing, confirm the schema channel, check All settings for the raw support boundary, and record the unsupported state during review.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

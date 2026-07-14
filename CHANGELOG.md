@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.9.1
+
+Status: **In progress.**
+
+### Planned
+- Complete the documentation polish release for BPM 0.9.1: localized User Guide screenshots,
+  documentation theme alignment, compact search, hierarchical navigation, documentation
+  sufficiency review, localization terminology cleanup, and All Settings per-setting help links.
+
+### Changed
+- Removed the obsolete standalone API Integration Guide from the six-locale portal, navigation,
+  search, and manifests; API workflows and contextual targets now resolve through the
+  Administrator Guide.
+- Made the six runtime locale catalogs the documented authority for BPM interface names, with
+  explicit historical aliases, non-UI technical-term boundaries, and catalog defects that must be
+  corrected before localized documentation replacement.
+- Replaced historical English BPM interface names across all six documentation locales and
+  generated navigation/search surfaces, while correcting malformed French, Spanish, German, and
+  Chinese runtime labels and retaining former terminology only as non-visible search queries.
+- Completed the full five-locale visible-prose review across all 805 non-English DITA/map sources,
+  replacing English and mixed-language sentences while retaining only reviewed technical literals,
+  identifiers, brands, and established abbreviations.
+- Replaced per-page embedded documentation trees with one deterministic, manifest-backed
+  `navigation.json` per locale and a shared same-origin runtime that preserves accessible tree
+  navigation, direct-topic reveal, independent scrolling, and localized failure recovery.
+- Added fail-closed documentation regression gates for retired API-guide structure, Administrator
+  API ownership, navigation artifact/manifest semantics, compact tree hosts, locale-owned UI terms,
+  visible-English review coverage, and bounded live technical exceptions.
+- Completed six-locale Chromium QA for successful and failed asynchronous navigation loading,
+  desktop/narrow long-tree wheel and keyboard scrolling, direct-topic/root return, retired API-guide
+  absence, exact BPM interface terms, and representative localized prose.
+- Accepted the maintainer-approved contract for bounded five-distribution Docker validation,
+  including a Docker-absent host baseline, immutable image/ISO provenance, strict CPU/RAM/storage
+  limits, no user-data or production access, retained transcripts, failed-install rollback,
+  M11-resource inventory/handoff, and persistent Docker Engine retention for future project work.
+- Installed the five approved Docker Engine components from Docker's signed Ubuntu 26.04
+  repository, verified the daemon/socket/group boundary with an isolated resource-limited smoke
+  container, removed all smoke resources, and retained the empty Docker runtime for live Linux
+  source-install validation and future project work.
+- Added the retained clean-container source-install harness with attempt-isolated evidence,
+  DITA-owned command extraction, bounded CPU/RAM/storage, deterministic probes, and no deletion
+  path; accepted Ubuntu lifecycle checks and a signed-official-ISO-derived Linux Mint 22.3 image
+  while retaining all stopped validation containers, target images, and the dedicated network.
+
 ## 0.9.0
 
 ### Added

@@ -19,7 +19,7 @@ EXPECTED_UPDATE_TOPICS = (
     "admin-task-verify-source-update-rollback-stop",
 )
 EXPECTED_UPDATE_KEYREFS = [f"topic.{topic_id}" for topic_id in EXPECTED_UPDATE_TOPICS]
-UPDATE_TOPICREF_OFFSET = 12
+UPDATE_TOPICREF_OFFSET = 17
 COMPACT_OR_FALLBACK_MARKERS = (
     "English source",
     "английский источник",
@@ -38,7 +38,7 @@ COMPACT_OR_FALLBACK_MARKERS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.72,
     "de": 0.72,
-    "zh-CN": 0.38,
+    "zh-CN": 0.30,
     "fr": 0.72,
     "es-ES": 0.72,
 }

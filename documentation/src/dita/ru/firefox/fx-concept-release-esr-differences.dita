@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-release-esr-differences" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Различия политик Firefox Release и ESR</title>
-  <shortdesc>Используйте channel badges и активный канал схемы, чтобы не настраивать политики, недоступные в выбранной ветке Firefox.</shortdesc>
+  <title>Различия в политике Firefox и политиках ESR</title>
+  <shortdesc>Используйте значки каналов и активный канал схемы, чтобы избежать настройки политик, недоступных в выбранном семействе Firefox.</shortdesc>
   <conbody>
-    <section id="a-current-channels"><title>Текущие каналы</title><p>BPM 0.9.0 документирует Firefox Release 152 и Firefox ESR 140.12. Сгенерированные policy references несут channel metadata, чтобы navigation, search indexes и будущие filters могли честно показывать активный канал.</p></section>
-    <section id="a-support-badges"><title>Support badges</title><p>Support badge в каждой сгенерированной policy reference показывает, поддерживается ли политика в обоих каналах или только в Release. Badge генерируется из поддерживаемого Firefox policy inventory, а не из переведённого текста.</p></section>
-    <section id="a-release-only"><title>Release-only политики</title><p>Сейчас восемь политик доступны только в Release: <codeph>AIControls</codeph>, <codeph>BrowserDataBackup</codeph>, <codeph>DisableRemoteImprovements</codeph>, <codeph>GenerativeAI</codeph>, <codeph>IPProtectionAvailable</codeph>, <codeph>LocalNetworkAccess</codeph>, <codeph>VisualSearchEnabled</codeph> и <codeph>XSLTEnabled</codeph>. Когда активная схема — ESR 140.12, BPM должен считать их недоступными.</p></section>
-    <section id="a-changed-definitions"><title>Изменённые определения</title><p>В текущем inventory нет общей политики, определение схемы которой отличается между Release 152 и ESR 140.12. Будущие обновления схем должны менять это утверждение через generated channel-differences artifact.</p></section>
-    <section id="a-user-action"><title>Действие пользователя</title><p>Выберите Firefox schema channel до выбора политики, проверьте channel badge и выполните повторную валидацию перед экспортом. Не используйте Release-only topic как доказательство поддержки той же политики в ESR.</p></section>
+    <section id="a-current-channels"><title>Текущие каналы</title><p>BPM 0.9.0 документирует Firefox Release 152 и Firefox ESR 140.12. Сгенерированные ссылки на политику содержат метаданные канала, поэтому навигация, поисковые индексы и будущие фильтры могут честно отображать активный канал.</p></section>
+    <section id="a-support-badges"><title>Значки поддержки</title><p>Значок поддержки в каждой созданной ссылке на политику указывает, поддерживается ли политика в обоих каналах или только в версии. Значок создается на основе поддерживаемого списка политик Firefox, а не на основе переведенной прозы.</p></section>
+    <section id="a-release-only"><title>Политики только для выпуска</title><p>Восемь текущих политик предназначены только для выпуска: <codeph>AIControls</codeph>, <codeph>BrowserDataBackup</codeph>, <codeph>DisableRemoteImprovements</codeph>, <codeph>GenerativeAI</codeph>, <codeph>IPProtectionAvailable</codeph>, <codeph>LocalNetworkAccess</codeph>, <codeph>VisualSearchEnabled</codeph> и <codeph>XSLTEnabled</codeph>. Если активной схемой является ESR 140.12, BPM должен рассматривать их как недоступные.</p></section>
+    <section id="a-changed-definitions"><title>Измененные определения</title><p>Текущая инвентаризация не имеет общей политики, определение схемы которой различается в версии 152 и ESR 140.12. Будущие обновления схемы должны обновлять этот оператор с помощью созданного артефакта различий в каналах.</p></section>
+    <section id="a-user-action"><title>Действие пользователя</title><p>Перед выбором политики выберите канал схемы Firefox, проверьте значок канала и повторите проверку перед экспортом. Не используйте тему «Только для выпуска» в качестве доказательства того, что ESR поддерживает ту же политику.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-concept-policy-selection"/>

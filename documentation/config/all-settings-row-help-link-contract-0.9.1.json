@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-all-settings-row-help-link-contract-0.9.1",
+  "backlog_item": "BPM091-M2-08",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "inherits_from": [
+    "docs/architecture/product-documentation-manifest-and-ui-target-schema-0.9.0.md",
+    "documentation/config/firefox-policy-context-targets-0.9.0.json",
+    "documentation/config/navigation-tree-contract-0.9.1.json",
+    "documentation/config/documentation-sufficiency-review-protocol-0.9.1.json"
+  ],
+  "audit_evidence": "documentation/config/all-settings-documentation-target-audit-0.9.1.json",
+  "purpose": "Define how every visible All Settings policy or setting row receives a manifest-backed documentation-help disposition and, when available, a localized row-level help link to the Firefox settings documentation.",
+  "source_authority": {
+    "row_inventory": "app/static/profiles_settings_inventory.js and app/static/profiles_settings_search.js identify visible All Settings entries; app/static/profiles_all_settings_list.js renders rows.",
+    "policy_targets": "documentation/config/firefox-policy-context-targets-0.9.0.json plus the generated ui-target-map policy:{exact_policy_id} entries.",
+    "known_preference_targets": "The Firefox documentation inventory declares known-preference:{exact.preference.id}; BPM091-M9-01 records that the current ui-target-map generator does not yet publish these entries, and BPM091-M9-02 owns closure.",
+    "urls": "app.documentation.manifest resolves links from target IDs and active locale; runtime code must never construct documentation URLs from labels.",
+    "visual_style": "app/templates/profiles/_context_help_icon.html and the .context-help-icon-link responsive contract provide the existing circled-i pattern.",
+    "labels": "locale-owned BPM UI catalogs for row help action, unavailable, missing, raw, and unknown dispositions."
+  },
+  "source_surfaces": [
+    "app/web/profiles_context.py",
+    "app/static/profiles_catalogs.js",
+    "app/static/profiles_bootstrap_core.js",
+    "app/static/profiles_all_settings_list.js",
+    "app/static/profiles_settings_inventory.js",
+    "app/static/profiles_settings_search.js",
+    "app/templates/profiles/_context_help_icon.html",
+    "app/templates/profiles/_page_catalog_scripts.html",
+    "app/documentation/manifest.py",
+    "documentation/tools/build_docs.py",
+    "app/static/profiles_css/20-editor-wizard.css",
+    "app/static/profiles_css/30-responsive.css"
+  ],
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "row_scope": {
+    "visible_surfaces": [
+      "review rows in All Settings mode",
+      "configured rows in All Settings mode",
+      "catalog rows in All Settings mode",
+      "search-result rows in All Settings mode",
+      "budgeted, paginated, or incrementally appended All Settings rows",
+      "rows rendered with long localized labels in every supported locale"
+    ],
+    "must_cover": [
+      "Firefox policy rows",
+      "known managed-preference rows",
+      "generated policy or preference rows with exact identifiers",
+      "raw fallback rows",
+      "unknown imported rows",
+      "invalid rows",
+      "deprecated rows",
+      "rows whose target exists but the installed documentation artifact is unavailable, stale, incomplete, or incompatible",
+      "rows whose target is missing from the manifest ui-target-map"
+    ],
+    "must_not_depend_on": [
+      "translated row labels",
+      "visible category text",
+      "row order",
+      "search ranking",
+      "DOM text content",
+      "external Firefox web URLs"
+    ]
+  },
+  "target_resolution": {
+    "rules": [
+      {
+        "entry_kind": "firefox_policy",
+        "identity_source": "exact Firefox policy ID",
+        "target_id": "policy:{exact_policy_id}",
+        "fallback_disposition": "missing_documentation"
+      },
+      {
+        "entry_kind": "known_managed_preference",
+        "identity_source": "exact dotted preference ID",
+        "target_id": "known-preference:{exact.preference.id}",
+        "fallback_disposition": "missing_documentation"
+      },
+      {
+        "entry_kind": "generated_policy_or_preference",
+        "identity_source": "generated entry metadata exact ID",
+        "target_id": "policy:{exact_policy_id} or known-preference:{exact.preference.id}",
+        "fallback_disposition": "missing_documentation"
+      },
+      {
+        "entry_kind": "raw_fallback",
+        "identity_source": "raw imported key without a recognized policy/preference identity",
+        "target_id": null,
+        "fallback_disposition": "not_applicable_raw"
+      },
+      {
+        "entry_kind": "unknown_imported",
+        "identity_source": "unknown imported key without a recognized policy/preference identity",
+        "target_id": null,
+        "fallback_disposition": "unsupported_unknown"
+      }
+    ],
+    "valid_dispositions": [
+      "linked",
+      "not_applicable_raw",
+      "unsupported_unknown",
+      "missing_documentation",
+      "artifact_unavailable",
+      "artifact_stale",
+      "artifact_incomplete",
+      "artifact_incompatible"
+    ],
+    "invalid_rows": "Invalid rows still resolve by exact identity when possible; the link label and state must not imply that the setting value is valid.",
+    "deprecated_rows": "Deprecated rows still link when a manifest target exists; deprecation remains a row/status concern and must not suppress valid documentation.",
+    "missing_docs": "Rows with no ui-target-map entry must render a stable no-link disposition and must not emit broken anchors.",
+    "unavailable_artifacts": "If the installed documentation artifact is unavailable, stale, incomplete, or incompatible, every affected row uses the corresponding no-link disposition and follows existing localized documentation-unavailable states."
+  },
+  "ui_contract": {
+    "control": "A row-level documentation action is displayed as the same circled letter i pattern used by existing BPM context-help icon links.",
+    "class_name": "all-settings-row-help-link",
+    "style_source": ".context-help-icon-link",
+    "placement": "right side of the setting or policy row, aligned with row metadata and value columns without covering labels or status badges",
+    "interactive_markup": "The help link must not be nested inside an all-settings row button; implementation must split row selection and row help into sibling interactive controls or place the link outside the row button.",
+    "linked_state": {
+      "element": "a",
+      "target": "_blank",
+      "rel": "noopener noreferrer",
+      "text": "i",
+      "data_attributes": [
+        "data-documentation-links",
+        "data-all-settings-help-target",
+        "data-settings-entry-id",
+        "data-settings-entry-kind",
+        "data-settings-entry-help-disposition"
+      ]
+    },
+    "no_link_state": {
+      "element": "span or button-free status indicator",
+      "aria": "localized unavailable or not-applicable description",
+      "data_attributes": [
+        "data-settings-entry-id",
+        "data-settings-entry-kind",
+        "data-settings-entry-help-disposition"
+      ]
+    },
+    "layout_stability": [
+      "Adding the control must not change row height when the link appears, disappears, gains focus, or changes theme.",
+      "The control must remain visible in light, dark, system, forced-colors, compact, and narrow layouts.",
+      "Long localized labels must wrap or truncate according to existing row rules without overlapping the help link.",
+      "The row selection target must remain large enough for pointer users after the help link is added."
+    ]
+  },
+  "accessibility": {
+    "localized_accessible_names": [
+      "profiles.all_settings.row_help.open",
+      "profiles.all_settings.row_help.missing",
+      "profiles.all_settings.row_help.unavailable",
+      "profiles.all_settings.row_help.raw_not_applicable",
+      "profiles.all_settings.row_help.unknown_not_supported"
+    ],
+    "keyboard": [
+      "Tab reaches row selection and the help link as separate controls.",
+      "Enter or Space on the row selection control selects the row.",
+      "Enter on the linked help action opens the manifest-resolved documentation URL.",
+      "The help link must not steal selection focus when navigating rows.",
+      "Focus indicators remain visible in light, dark, system, and forced-colors modes."
+    ],
+    "screen_reader": [
+      "The accessible name includes the localized row label or exact policy/preference ID.",
+      "Unavailable and missing-documentation states are announced without exposing raw target-map internals.",
+      "The visible letter i is aria-hidden when a stronger localized accessible name is present."
+    ]
+  },
+  "manifest_validation": {
+    "target_namespaces": [
+      "policy:",
+      "known-preference:"
+    ],
+    "requirements": [
+      "Every linked row target ID must exist in the installed ui-target-map for the active documentation version.",
+      "Target validation must run against manifest target IDs, not translated labels or generated URLs.",
+      "Rows with no valid target must still expose one of the valid no-link dispositions.",
+      "Locale switching must re-resolve the same target ID to the active locale output when available.",
+      "Build-time and UI tests must fail closed for broken target IDs, missing dispositions, and anchors emitted for missing documentation."
+    ]
+  },
+  "implementation_tasks": [
+    "BPM091-M9-01",
+    "BPM091-M9-02",
+    "BPM091-M9-03",
+    "BPM091-M9-04",
+    "BPM091-M9-05",
+    "BPM091-M9-06",
+    "BPM091-M13-06"
+  ],
+  "implementation_evidence": {
+    "BPM091-M9-01": "documentation/config/all-settings-documentation-target-audit-0.9.1.json",
+    "BPM091-M9-02": "documentation/config/all-settings-help-target-map-0.9.1.json",
+    "BPM091-M9-03": {
+      "status": "accepted",
+      "resolver": "app/documentation/manifest.py::resolve_all_settings_row_help_links",
+      "renderers": [
+        "app/static/profiles_all_settings_list.js",
+        "app/static/profiles_settings_search.js"
+      ],
+      "layout": [
+        "app/static/profiles_css/20-editor-wizard.css",
+        "app/static/profiles_css/30-responsive.css"
+      ],
+      "focused_test": "tests/test_all_settings_row_help_rendering_contract.py",
+      "result": "42 focused/runtime/layout tests passed; make lint passed."
+    },
+    "BPM091-M9-04": {
+      "status": "accepted",
+      "source_catalogs": "app/i18n_src/{en,ru,de,zh-CN,fr,es-ES}/common.json",
+      "runtime_catalogs": "app/i18n/{en,ru,de,zh-CN,fr,es-ES}.json",
+      "keys": [
+        "profiles.all_settings.row_help.open",
+        "profiles.all_settings.row_help.missing",
+        "profiles.all_settings.row_help.unavailable",
+        "profiles.all_settings.row_help.raw_not_applicable",
+        "profiles.all_settings.row_help.unknown_not_supported"
+      ],
+      "focused_test": "tests/test_all_settings_row_help_localization.py",
+      "result": "41 localization/rendering/anti-anglicism tests passed; locale catalogs are reproducible; locale-quality and make lint passed."
+    },
+    "BPM091-M9-05": {
+      "status": "accepted",
+      "artifact_disposition_resolver": "app/documentation/manifest.py::resolve_documentation_artifact_disposition",
+      "renderers": [
+        "app/static/profiles_all_settings_list.js",
+        "app/static/profiles_settings_search.js"
+      ],
+      "no_link_dispositions": [
+        "not_applicable_raw",
+        "unsupported_unknown",
+        "missing_documentation",
+        "artifact_unavailable",
+        "artifact_stale",
+        "artifact_incomplete",
+        "artifact_incompatible"
+      ],
+      "focused_test": "tests/test_all_settings_row_help_states.py",
+      "result": "58 All Settings runtime/layout contracts passed; 21 documentation runtime-route tests and make lint passed."
+    },
+    "BPM091-M9-06": {
+      "status": "accepted",
+      "dom_test": "tests/test_all_settings_row_help_states.py",
+      "browser_test": "documentation/tests/browser/test_documentation_portal_browser_smoke.py::test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard",
+      "browser_coverage": [
+        "Review, Configured, and Catalog modes",
+        "manifest-backed policy and known-preference links",
+        "unknown and raw no-link rows",
+        "list and search-result controls",
+        "Russian and long-label German localization",
+        "separate keyboard focus and Enter activation",
+        "noopener new-tab navigation to the localized documentation target"
+      ],
+      "result": "Expanded DOM contracts and the dedicated Chromium smoke passed; make lint passed."
+    }
+  },
+  "verification": {
+    "focused_contracts": [
+      "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_all_settings_row_help_link_contract.py",
+      "./.venv/bin/pytest -q tests/web_profiles_page/test_static_responsive_contracts.py::test_deep_help_icon_links_are_manifest_backed_and_responsive_contract",
+      "./.venv/bin/pytest -q -m browser_ui documentation/tests/browser/test_documentation_portal_browser_smoke.py::test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard"
+    ],
+    "release_gates": [
+      "make test-docs-contract",
+      "make test-docs-ui",
+      "make test-docs-browser",
+      "make test-release"
+    ],
+    "browser_required_for": [
+      "separate row-selection and help-link keyboard behavior",
+      "manifest-resolved localized links in all six locales",
+      "no overlap in compact, narrow, light, dark, and forced-colors layouts",
+      "documentation artifact unavailable, stale, incomplete, and incompatible states"
+    ]
+  },
+  "non_goals": [
+    "This contract does not implement the All Settings row help-link UI.",
+    "This contract does not add Firefox documentation topics or generate ui-target-map entries.",
+    "This contract does not link to external Firefox websites.",
+    "This contract does not hand-edit generated documentation output, manifests, search indexes, or installed app/documentation/site artifacts."
+  ]
+}

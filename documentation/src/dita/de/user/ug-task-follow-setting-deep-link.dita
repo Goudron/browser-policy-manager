@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Deep Link zu einer Einstellung folgen</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <title>Folgen Sie einem Einstellungs-Deep-Link</title>
+  <shortdesc>Folgen Sie fokussierten Links zwischen Suche, Alle Einstellungen, geführtem Kontext und JSON-Speicherorten.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <prereq><p>Ein Link oder ein Suchergebnis verweist auf eine Einstellung, einen Überprüfungsstatus, einen Rohschlüssel, ein veraltetes Element oder einen JSON-Speicherort.</p></prereq>
+    <context><p>Deep Links bewahren die Orientierung, indem sie den richtigen Editor öffnen und die relevante Einstellung oder Rohposition fokussieren.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. Confirm the destination editor and focused setting or state.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Deep Link zu einer Einstellung folgen. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Öffnen Sie den fokussierten Link im Such-, Überprüfungs-, Vergleichs-, geführten oder JSON-Kontext.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Bestätigen Sie den Zieleditor und die fokussierte Einstellung oder den Status.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Verwenden Sie das Detailfenster, den Filter oder den JSON-Speicherort, um die Aufgabe abzuschließen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Rückkehr zur vorherigen Oberfläche nur nach bewusstem Speichern oder Verwerfen von Änderungen.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The linked setting opens in the correct surface with focus preserved.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+    <result><p>Die verknüpfte Einstellung wird in der richtigen Oberfläche geöffnet, wobei der Fokus erhalten bleibt.</p></result>
+    <postreq><p>Wiederherstellung: Wenn der Link nicht aufgelöst werden kann, suchen Sie nach der genauen Richtlinie ID, dem Präferenzschlüssel oder dem Rohpfad.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

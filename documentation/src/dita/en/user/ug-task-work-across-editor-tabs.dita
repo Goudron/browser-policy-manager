@@ -4,8 +4,8 @@
   <title>Work across editor tabs</title>
   <shortdesc>Use separate browser tabs for saved-profile modes without confusing drafts or losing unsaved changes.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
-    <context><p>BPM opens saved profile modes and comparison surfaces in separate tabs so users can inspect Guided, All Settings, JSON, and Compare side by side.</p></context>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <context><p>BPM opens saved profile modes and comparison surfaces in separate tabs so users can inspect Guided, All settings, JSON, and Compare side by side.</p></context>
     <steps>
       <step><cmd>Open a saved profile from the Library in the required editor mode.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Keep the profile name, schema channel, and lifecycle badge visible in each tab.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

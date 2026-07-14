@@ -2,10 +2,10 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-large-settings-inventories" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Large settings inventories</title>
-  <shortdesc>Use bounded-list behavior, search, filters, and categories when All Settings contains a large policy and preference inventory.</shortdesc>
+  <shortdesc>Use bounded-list behavior, search, filters, and categories when All settings contains a large policy and preference inventory.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Overview</title><p>All Settings can expose many schema-backed policies and known preferences. Bounded lists keep the interface usable and make the next narrowing action explicit.</p></section>
-    <section id="a-list-budget"><title>List budget</title><p>All Settings may show a bounded subset, count, or continuation action instead of rendering every row at once.</p></section>
+    <section id="a-overview"><title>Overview</title><p>All settings can expose many schema-backed policies and known preferences. Bounded lists keep the interface usable and make the next narrowing action explicit.</p></section>
+    <section id="a-list-budget"><title>List budget</title><p>All settings may show a bounded subset, count, or continuation action instead of rendering every row at once.</p></section>
     <section id="a-narrowing-tools"><title>Narrowing tools</title><p>Search, category navigation, source filters, and state filters are the supported ways to reduce a large inventory.</p></section>
     <section id="a-performance-boundary"><title>Performance boundary</title><p>Large-inventory handling is a UI boundary, not a signal that settings are missing from the profile or catalog.</p></section>
     <section id="a-recovery"><title>Recovery</title><p>If the expected row is not visible, search by exact ID, clear filters, or switch between Configured and Catalog mode.</p></section>

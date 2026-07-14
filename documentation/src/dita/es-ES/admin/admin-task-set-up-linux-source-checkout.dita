@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-linux-source-checkout" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Configurar el checkout Linux del código fuente</title>
-  <shortdesc>Clone el repositorio BPM, cree el Python virtual environment, instale development dependencies y prepare la database schema local.</shortdesc>
+  <title>Configurar el pago del código fuente de Linux</title>
+  <shortdesc>Clonar el repositorio BPM, crear el entorno virtual Python, instalar dependencias de desarrollo y preparar el esquema de la base de datos local.</shortdesc>
   <taskbody>
-    <prereq><p>El host Linux está preparado y el administrador tiene acceso a la BPM repository URL y al branch o tag objetivo para la versión 0.9.0.</p></prereq>
-    <context><p>El README del repositorio define la source setup sequence admitida. Use repository-local commands para que la solución de problemas posterior pueda comparar el entorno con los committed scripts.</p></context>
+    <prereq><p>El host Linux está preparado y el administrador tiene acceso a la URL del repositorio BPM y a la rama o etiqueta de destino para la versión 0.9.0.</p></prereq>
+    <context><p>El repositorio README define la secuencia de configuración de origen admitida. Utilice comandos locales del repositorio para que la resolución de problemas posterior pueda comparar el entorno con los scripts confirmados.</p></context>
     <steps>
-      <step><cmd>Clone el repositorio y entre en el checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Clona el repositorio e ingresa al checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
 git checkout <approved-0.9.0-ref>
-]]></codeblock><p>Sustituya los placeholders por la repository URL interna aprobada y la release reference.</p></info></step>
+]]></codeblock><p>Reemplace los marcadores de posición con la URL del repositorio interno aprobado y la referencia de la versión.</p></info></step>
       <step><cmd>Cree y active el entorno Python local.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-]]></codeblock><p>El virtual environment permanece dentro del checkout y no se committed.</p></info></step>
-      <step><cmd>Instale las BPM source dependencies desde el checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>El entorno virtual permanece dentro del proceso de pago y no se confirma.</p></info></step>
+      <step><cmd>Instale las dependencias de origen de BPM desde la caja.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 pip install -e ".[dev]"
-]]></codeblock><p>La editable install mantiene el runtime code y los tests alineados con el source tree actual.</p></info></step>
-      <step><cmd>Aplique database migrations a la runtime database seleccionada.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>La instalación editable mantiene el código de ejecución y las pruebas alineados con el árbol fuente actual.</p></info></step>
+      <step><cmd>Aplicar migraciones de bases de datos para la base de datos en tiempo de ejecución seleccionada.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 alembic upgrade head
-]]></codeblock><note type="warning">Ejecute migrations solo contra la BPM database prevista. Para el default source workflow, esta es la SQLite database local, no una production service database.</note></info></step>
+]]></codeblock><note type="warning">Ejecute migraciones solo en la base de datos BPM prevista. Para el flujo de trabajo de origen predeterminado, esta es la base de datos local SQLite, no una base de datos del servicio de producción.</note></info></step>
     </steps>
-    <result><p>El checkout tiene un Python environment activado, dependencies instaladas y una database schema migrada.</p></result>
-    <postreq><p>Configure la runtime environment antes de iniciar el application process.</p></postreq>
+    <result><p>La caja tiene un entorno Python activado, dependencias instaladas y un esquema de base de datos migrado.</p></result>
+    <postreq><p>Configure el entorno de ejecución antes de iniciar el proceso de solicitud.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-linux-source-deployment"/>

@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Créer un premier profil depuis la Bibliothèque</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Créer un premier profil depuis la Bibliothèque » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Démarrez une nouvelle ébauche de profil guidé à partir de la bibliothèque lorsqu'aucun profil enregistré ne peut être réutilisé.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Vous êtes dans la bibliothèque et souhaitez créer un nouveau profil plutôt que d'ouvrir ou de dupliquer un profil existant.</p></prereq>
+    <context><p>L'action de création ouvre un brouillon Éditeur guidé. Le brouillon devient un profil enregistré uniquement après l'avoir enregistré.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Créer un premier profil depuis la Bibliothèque ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Choisissez l'action Bibliothèque pour créer un nouveau profil.</cmd><info><p>Résultat attendu : BPM ouvre le Éditeur guidé pour un nouveau brouillon.</p></info></step>
+      <step><cmd>Choisissez l'objectif du profil, le canal de schéma et les options de démarrage affichés par l'éditeur.</cmd><info><p>Le canal de schéma affecte les contrôles disponibles et le comportement de validation.</p></info></step>
+      <step><cmd>Enregistrez le brouillon lorsqu'il porte le nom et les paramètres initiaux souhaités.</cmd><info><note type="warning">La fermeture d'un brouillon non enregistré peut entraîner la perte des modifications apportées uniquement au brouillon.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le nouveau profil est enregistré et peut être retrouvé à partir de la bibliothèque.</p></result>
+    <postreq><p>Récupération : si vous vouliez réutiliser un profil existant, annulez le brouillon et dupliquez plutôt le profil enregistré.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

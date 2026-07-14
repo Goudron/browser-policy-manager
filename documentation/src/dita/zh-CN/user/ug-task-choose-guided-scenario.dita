@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>选择 Guided 场景</title>
-  <shortdesc>本任务完整说明“选择 Guided 场景”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>选择引导场景</title>
+  <shortdesc>选择最符合配置文件目标的场景，以便 引导式编辑器 可以提供一个有用的起点。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>您知道您想要支持的配置文件目的。</p></prereq>
+    <context><p>场景使第一遍以任务为导向，并使基线在审查期间更容易解释。</p></context>
     <steps>
-      <step><cmd>打开与“选择 Guided 场景”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开步骤 1，配置文件 &amp; 基线。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>查看场景选择及其简单语言描述。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>选择最接近部署目标的场景。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在添加预设或 CIS 图层之前检查受影响的基线摘要。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>配置文件从有意的场景开始，而不是从意外的空白基线开始。</p></result>
+    <postreq><p>恢复：如果场景错误，请先进行切换，然后再微调后续步骤。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-apply-starter-preset"/>

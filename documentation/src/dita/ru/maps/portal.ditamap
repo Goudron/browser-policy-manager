@@ -6,6 +6,5 @@
   <mapref href="user-guide.ditamap" format="ditamap"/>
   <mapref href="firefox-policy-guide.ditamap" format="ditamap"/>
   <mapref href="cis-settings-guide.ditamap" format="ditamap"/>
-  <mapref href="api-integration-guide.ditamap" format="ditamap"/>
   <mapref href="administrator-guide.ditamap" format="ditamap"/>
 </map>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-install-fedora-44-source" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux"><title>Установка BPM из исходников в Fedora Linux 44</title><shortdesc>Полная установка BPM 0.9.1 с системным Python 3.14.</shortdesc><taskbody><prereq><p>Нужны Fedora 44, sudo, HTTPS и согласованная ссылка BPM 0.9.1.</p></prereq><context><p>Процедура предназначена для запуска из исходников на одном узле, а не для systemd или промышленной среды.</p></context><steps>
+<step><cmd>Установите и подготовьте BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+. /etc/os-release
+test "$ID" = "fedora" && test "$VERSION_ID" = "44"
+sudo dnf install -y ca-certificates curl gcc gcc-c++ git make python3 python3-devel
+export BPM_PYTHON=/usr/bin/python3
+"$BPM_PYTHON" --version
+cd "$HOME"
+export BPM_REPOSITORY_URL="https://github.com/Goudron/browser-policy-manager.git"
+export BPM_REF="<approved-0.9.1-ref>"
+test "$BPM_REF" != "<approved-0.9.1-ref>"
+git clone "$BPM_REPOSITORY_URL" browser-policy-manager
+cd browser-policy-manager
+git checkout --detach "$BPM_REF"
+git status --short
+git rev-parse --short HEAD
+"$BPM_PYTHON" -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+make setup-docs-toolchain
+make docs-validate
+make docs-build
+]]></codeblock></info></step>
+<step><cmd>Запустите BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+make dev
+]]></codeblock></info></step>
+<step><cmd>Проверьте зонды и интерфейс.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+cd "$HOME/browser-policy-manager"
+source .venv/bin/activate
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
+]]></codeblock></info></step>
+<step><cmd>Остановитесь безопасно.</cmd><info><p>При сбое нажмите <codeph>Ctrl+C</codeph>, сохраните вывод DNF, pip, миграции, сборки и журналов; не понижайте схему БД.</p></info></step>
+</steps><result><p>BPM мигрирован, документация собрана, зонды и интерфейс отвечают.</p></result><postreq><p>Подтвердите команды на чистой Fedora 44.</p></postreq></taskbody><related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links></task>

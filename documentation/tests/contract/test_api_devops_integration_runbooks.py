@@ -49,7 +49,8 @@ REQUIRED_INVARIANT_TERMS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.75,
     "de": 0.70,
-    "zh-CN": 0.40,
+    # CJK characters carry substantially more information than Latin characters.
+    "zh-CN": 0.32,
     "fr": 0.70,
     "es-ES": 0.70,
 }

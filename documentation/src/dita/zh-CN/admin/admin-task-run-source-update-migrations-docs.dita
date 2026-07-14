@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-source-update-migrations-docs" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>运行 migrations 和 documentation rebuild checks</title>
-  <shortdesc>在 source revision 变化后，应用 database migrations，验证 documentation source，并重建 static documentation output。</shortdesc>
+  <title>运行迁移和文档重建检查</title>
+  <shortdesc>应用数据库迁移，验证文档源，并在源修订更改后重建静态文档输出。</shortdesc>
   <taskbody>
-    <prereq><p>checkout 和 dependencies 已成功刷新，并且 database backup evidence 是在 BPM 停止时收集的。</p></prereq>
-    <context><p>Updates 可能引入 database migrations 和 documentation changes。BPM 0.9.0 记录的 forward migration 是 <codeph>alembic upgrade head</codeph>；它不承诺 automatic downgrade 或 safe schema rollback。</p></context>
+    <prereq><p>签出和依赖项已成功刷新，并且在 BPM 停止时收集了数据库备份证据。</p></prereq>
+    <context><p>更新可能会引入数据库迁移和文档更改。 BPM 0.9.0 记录了使用 <codeph>alembic upgrade head</codeph> 进行正向迁移；它不承诺自动降级或安全架构回滚。</p></context>
     <steps>
-      <step><cmd>对目标 database 应用 database migrations。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>将数据库迁移应用到目标数据库。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-]]></codeblock><p>为 <codeph>BPM_DATABASE_URL</codeph> 使用实际 deployment value。如果 migration output 不清楚或失败，请立即停止。</p></info></step>
-      <step><cmd>在服务 users 前运行窄范围 source smoke check。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>使用 <codeph>BPM_DATABASE_URL</codeph> 的实际部署值。如果迁移输出不清楚或失败，请立即停止。</p></info></step>
+      <step><cmd>在为用户提供服务之前运行窄源烟雾检查。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make test-fast
-]]></codeblock><p>此检查是 source smoke，不是 production certification 或 HA validation。</p></info></step>
-      <step><cmd>验证并重建更新 revision 的 documentation output。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>此检查是烟雾源，而不是生产认证或 HA 验证。</p></info></step>
+      <step><cmd>验证并重建更新版本的文档输出。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make docs-validate
 make docs-build
-]]></codeblock><p><codeph>make docs-validate</codeph> 检查 DITA、metadata、source links 和 generated links。<codeph>make docs-build</codeph> 重建 ignored static output；它本身不会把 default documentation artifact 安装到 application runtime。</p></info></step>
-      <step><cmd>在 migration、smoke 或 documentation rebuild failures 时停止。</cmd><info><note type="warning">migration 运行后，不要假定 Git checkout rollback 已经足够。除非 reviewed release note 明确说明精确 revision pair 支持，否则不要运行 <codeph>alembic downgrade</codeph>。当需要 rollback 时，将 pre-update database backup 作为 safe recovery baseline。</note></info></step>
+]]></codeblock><p><codeph>make docs-validate</codeph> 检查 DITA、元数据、源链接和生成的链接。 <codeph>make docs-build</codeph> 重建忽略的静态输出；它本身不会将默认文档工件安装到应用程序运行时中。</p></info></step>
+      <step><cmd>在迁移、冒烟或文档重建失败时停止。</cmd><info><note type="warning">迁移运行后，不要认为 Git 签出回滚就足够了。请勿运行 <codeph>alembic downgrade</codeph>，除非已审核的发行说明明确表示确切的修订版对支持它。当需要回滚时，使用更新前的数据库备份作为安全恢复基线。</note></info></step>
     </steps>
-    <result><p>更新后的 source revision 已完成 migrations、source smoke 和 documentation rebuild checks，或者 update 已在 named failure point 停止。</p></result>
-    <postreq><p>在把 instance 交还给 users 或 integrators 前，启动 BPM 并运行 post-update verification topic。</p></postreq>
+    <result><p>更新的源版本已完成迁移、源烟雾和文档重建检查，或者更新已在指定故障点停止。</p></result>
+    <postreq><p>在将实例交还给用户或集成商之前启动 BPM 并运行更新后验证主题。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-refresh-source-revision-dependencies"/>

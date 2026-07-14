@@ -168,9 +168,13 @@ def _minimal_site(root: Path) -> None:
     for locale in build_docs.LOCALES:
         locale_root = root / locale
         locale_root.mkdir(parents=True)
+        guide_anchors = "".join(
+            f'<section id="{anchor}"><h2>{guide_id}</h2></section>'
+            for guide_id, _filename, anchor, _url_root in build_docs.GUIDE_MAPS
+        )
         (locale_root / "index.html").write_text(
             f'<!doctype html><html lang="{locale}"><head><title>{locale}</title></head>'
-            '<body><h1>Home</h1><a id="top" href="page.html#detail">Page</a></body></html>',
+            f'<body><h1>Home</h1><a id="top" href="page.html#detail">Page</a>{guide_anchors}</body></html>',
             encoding="utf-8",
         )
         (locale_root / "page.html").write_text(
@@ -191,6 +195,18 @@ def _minimal_site(root: Path) -> None:
                     f"<body><h1>{topic_id}</h1></body></html>",
                     encoding="utf-8",
                 )
+
+
+def _navigation_nodes(payload: dict[str, object]) -> dict[str, dict[str, object]]:
+    nodes: dict[str, dict[str, object]] = {}
+
+    def visit(node: dict[str, object], parent: str, level: int) -> None:
+        nodes[str(node["node_id"])] = {"node": node, "parent": parent, "level": level}
+        for child in node["children"]:
+            visit(child, str(node["node_id"]), level + 1)
+
+    visit(payload["root"], "", 1)
+    return nodes
 
 
 def test_generated_link_validation_accepts_complete_six_locale_site(tmp_path: Path) -> None:
@@ -222,6 +238,26 @@ def test_locale_root_link_normalization_keeps_dita_outputs_inside_locale_root(tm
     assert 'href="commonltr.css"' in index
     assert 'href="user/topic.html#top"' in index
     assert 'href="../commonltr.css"' in topic
+
+
+def test_screenshot_link_normalization_points_to_locale_assets(tmp_path: Path) -> None:
+    locale_root = tmp_path / "en"
+    screenshot = locale_root / "assets/screenshots/ug-library-overview-desktop-light.png"
+    topic = locale_root / "user/ug-task-use-profile-library.html"
+    screenshot.parent.mkdir(parents=True)
+    topic.parent.mkdir(parents=True)
+    screenshot.write_bytes(b"png")
+    topic.write_text(
+        '<!doctype html><html lang="en"><body><h1>Topic</h1>'
+        '<img src="file:/tmp/dita/input/assets/screenshots/en/ug-library-overview-desktop-light.png">'
+        "</body></html>",
+        encoding="utf-8",
+    )
+
+    build_docs._normalize_screenshot_links(tmp_path)
+
+    html = topic.read_text(encoding="utf-8")
+    assert 'src="../assets/screenshots/ug-library-overview-desktop-light.png"' in html
 
 
 def test_generated_link_validation_rejects_missing_fragment(tmp_path: Path) -> None:
@@ -256,16 +292,137 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert 'data-search-index-href="../search/' in html or 'data-search-index-href="search/' in html
         assert 'role="status" aria-live="polite"' in html
         assert 'bpm-docs-search.js" defer' in html
+        assert '<meta name="theme-color" content="#edf2f7">' in html
+        assert 'class="bpm-docs-theme-control"' in html
+        assert 'data-docs-theme-select' in html
+        assert '<option value="system">' in html
+        assert '<option value="light">' in html
+        assert '<option value="dark">' in html
         assert 'class="bpm-docs-breadcrumbs"' in html
         assert 'aria-label=' in html
         assert f'hreflang="{locale}" lang="{locale}" aria-current="true"' in html
-        assert 'href="#a-user-guide"' in html
-        assert 'BPM 0.9.0' in html
+        header = html[
+            html.index('<header class="bpm-docs-header">') : html.index("</header>")
+        ]
+        sidebar = html[
+            html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")
+        ]
+        assert 'href="#a-user-guide"' not in header
+        assert 'href="#a-firefox-policy-guide"' not in header
+        assert 'data-docs-tree-host' in sidebar
+        assert 'data-navigation-href="navigation.json"' in sidebar
+        assert 'data-navigation-locale=' in sidebar
+        assert 'data-current-tree-node="documentation-root"' in sidebar
+        assert 'aria-busy="true"' in sidebar
+        assert 'data-docs-tree-status' in sidebar
+        assert '<noscript>' in sidebar
+        assert 'role="tree"' not in sidebar
+        assert 'data-tree-node=' not in sidebar
+        for _guide_id, _filename, anchor, _url_root in build_docs.GUIDE_MAPS:
+            assert f'id="{anchor}"' in html
+        navigation = json.loads(
+            (tmp_path / locale / "navigation.json").read_text(encoding="utf-8")
+        )
+        nodes = _navigation_nodes(navigation)
+        assert navigation["locale"] == locale
+        assert navigation["node_count"] == len(nodes)
+        assert list(nodes)[:3] == ["documentation-root", "user-guide", "section:user-guide:orient-and-plan"]
+        assert nodes["user-guide"]["node"]["anchor"] == "a-user-guide"
+        assert nodes["firefox-policy-guide"]["node"]["anchor"] == "a-firefox-policy-guide"
+        if locale == "ru":
+            assert nodes["documentation-root"]["node"]["label"] == "Документы"
+            assert nodes["section:user-guide:orient-and-plan"]["node"]["label"] == (
+                "Ориентируйтесь и планируйте работу с профилями"
+            )
+        assert 'BPM 0.9.1' in html
         assert (tmp_path / locale / "assets/bpm-docs.css").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-print.css").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-search.js").is_file()
+        assert (
+            tmp_path / locale / "assets/screenshots/ug-library-overview-desktop-light.png"
+        ).is_file()
 
     build_docs.validate_output(tmp_path)
+
+
+def test_portal_navigation_tree_expands_current_topic_without_translated_paths(
+    tmp_path: Path,
+) -> None:
+    _minimal_site(tmp_path)
+    build_docs.apply_portal_shell(tmp_path)
+
+    first_topic_id = build_docs._navigation_topic_order("user-guide.ditamap")[0]
+    first_topic_title = build_docs._navigation_model(tmp_path)["topics"][first_topic_id]["title"]["ru"]
+    html = (tmp_path / "ru" / "user" / f"{first_topic_id}.html").read_text(encoding="utf-8")
+    sidebar = html[
+        html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")
+    ]
+    navigation = json.loads((tmp_path / "ru/navigation.json").read_text(encoding="utf-8"))
+    nodes = _navigation_nodes(navigation)
+
+    assert 'aria-label="Дерево документации"' in sidebar
+    assert 'href="../index.html"' in sidebar
+    assert 'data-navigation-href="../navigation.json"' in sidebar
+    assert f'data-current-tree-node="{first_topic_id}"' in sidebar
+    assert 'role="tree"' not in sidebar
+    assert nodes["user-guide"]["node"]["href"] == "index.html#a-user-guide"
+    assert nodes["section:user-guide:orient-and-plan"]["node"]["label"] == (
+        "Ориентируйтесь и планируйте работу с профилями"
+    )
+    assert nodes[first_topic_id]["node"]["href"] == f"user/{first_topic_id}.html"
+    assert nodes[first_topic_id]["parent"] == "section:user-guide:orient-and-plan"
+    assert nodes[first_topic_id]["level"] == 4
+    assert "ug-reference-product-version_ru" not in sidebar
+
+    breadcrumbs_start = html.index('<nav class="bpm-docs-breadcrumbs"')
+    breadcrumbs = html[breadcrumbs_start : html.index("</nav>", breadcrumbs_start)]
+    assert 'href="../index.html">Документы</a>' in breadcrumbs
+    assert 'href="../index.html#a-user-guide"' in breadcrumbs
+    assert f'<li aria-current="page">{first_topic_title}</li>' in breadcrumbs
+
+
+def test_portal_navigation_tree_keeps_short_guides_flat(tmp_path: Path) -> None:
+    _minimal_site(tmp_path)
+    build_docs.apply_portal_shell(tmp_path)
+
+    first_topic_id = build_docs._navigation_topic_order("firefox-policy-guide.ditamap")[0]
+    navigation = json.loads((tmp_path / "en/navigation.json").read_text(encoding="utf-8"))
+    nodes = _navigation_nodes(navigation)
+
+    assert nodes[first_topic_id]["parent"] == "firefox-policy-guide"
+    assert nodes[first_topic_id]["level"] == 3
+    assert not any(node_id.startswith("section:firefox-policy-guide:") for node_id in nodes)
+
+
+def test_portal_navigation_tree_supports_hash_guide_activation_script(
+    tmp_path: Path,
+) -> None:
+    _minimal_site(tmp_path)
+    build_docs.apply_portal_shell(tmp_path)
+
+    html = (tmp_path / "en" / "index.html").read_text(encoding="utf-8")
+    sidebar = html[
+        html.index('<aside class="bpm-docs-sidebar"') : html.index("</aside>")
+    ]
+    script = (tmp_path / "en" / "assets" / "bpm-docs-search.js").read_text(encoding="utf-8")
+    navigation = json.loads((tmp_path / "en/navigation.json").read_text(encoding="utf-8"))
+    nodes = _navigation_nodes(navigation)
+
+    assert 'data-docs-tree-host' in sidebar
+    assert 'role="tree"' not in sidebar
+    assert nodes["documentation-root"]["node"]["label"] == "Documents"
+    assert nodes["user-guide"]["node"]["anchor"] == "a-user-guide"
+    assert nodes["administrator-guide"]["node"]["anchor"] == "a-administrator-guide"
+    assert "setupNavigationHost" in script
+    assert "validatedNavigationNodes" in script
+    assert "renderNavigationTree" in script
+    assert 'guideItemForHash' in script
+    assert 'window.location.hash' in script
+    assert 'hashchange' in script
+    assert 'setCurrentTreeItem(tree, guide)' in script
+    assert 'tree.querySelectorAll("[data-tree-branch]")' in script
+    assert 'event.key === "Enter" && item.hasAttribute("data-tree-branch")' in script
+    assert 'requiredExpandedTreeNodes(tree).has(item.dataset.treeNode || "")' in script
 
 
 def test_portal_shell_validation_rejects_inline_styles_and_active_content(tmp_path: Path) -> None:
@@ -349,10 +506,18 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         "user-guide",
         "firefox-policy-guide",
         "cis-settings-guide",
-        "api-integration-guide",
         "administrator-guide",
     }
-    assert len(manifest["topics"]) == 156
+    assert len(manifest["topics"]) == 159
+    assert set(manifest["navigation"]) == set(build_docs.LOCALES)
+    for locale, record in manifest["navigation"].items():
+        navigation_path = tmp_path / record["path"]
+        navigation = json.loads(navigation_path.read_text(encoding="utf-8"))
+        assert record["path"] == f"{locale}/navigation.json"
+        assert record["sha256"] == build_docs._file_sha256(navigation_path)
+        assert record["format_version"] == 1
+        assert record["node_count"] == navigation["node_count"]
+        assert navigation["locale"] == locale
     assert set(manifest["search"]) == set(build_docs.LOCALES)
     search_payload = json.loads((tmp_path / manifest["search"]["en"]["path"]).read_text(encoding="utf-8"))
     assert search_payload["contract_id"] == "bpm-doc-search-corpus-results-0.9.0"
@@ -368,7 +533,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["integrity_contract_id"] == "bpm-doc-search-integrity-drift-0.9.0"
     assert search_payload["integrity_schema_version"] == 1
     assert search_payload["result_schema_version"] == 1
-    assert search_payload["target_bpm_version"] == "0.9.0"
+    assert search_payload["target_bpm_version"] == "0.9.1"
     assert search_payload["search_mode"] == "deterministic-local-static"
     assert search_payload["non_ai_boundary"] == "no-ai-no-rag-no-embeddings-no-generative-answers"
     assert search_payload["status"] == "ready"
@@ -479,7 +644,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert first_document["topic_id"] in first_document["searchable"]["identifiers"]
     assert first_document["filter_facets"]["locale"] == ["en"]
     assert first_document["filter_facets"]["guide_id"] == [first_document["guide_id"]]
-    assert first_document["filter_facets"]["bpm_version"] == ["0.9.0"]
+    assert first_document["filter_facets"]["bpm_version"] == ["0.9.1"]
     assert set(first_document["normalized"]["fields"]) == set(search_payload["searchable_fields"])
     assert first_document["normalized"]["tokens"]
     assert first_document["topic_id"] in first_document["normalized"]["fields"]["identifiers"]
@@ -523,11 +688,22 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert manifest["ui_target_map"]["sha256"] == build_docs._file_sha256(
         tmp_path / "ui-target-map.json"
     )
-    assert len(target_map["targets"]) == 452
+    assert len(target_map["targets"]) == 517
     assert "policy:AIControls" in target_map["targets"]
+    assert "known-preference:network.IDN_show_punycode" in target_map["targets"]
     assert "capability:CAP-SET-001" in target_map["targets"]
     assert "cis:1.1.1.1" in target_map["targets"]
     assert "api-operation:API-VAL-001" in target_map["targets"]
+    api_targets = {
+        target_id: target
+        for target_id, target in target_map["targets"].items()
+        if target_id.startswith("api-operation:")
+    }
+    assert len(api_targets) == 15
+    assert all(target["topic_id"].startswith("admin-") for target in api_targets.values())
+    assert all(target["topic_id"] in manifest["topics"] for target in api_targets.values())
+    assert "topic:api-integration-guide" not in target_map["targets"]
+    assert "topic:api-concept-administrator-integration-landing" not in target_map["targets"]
     build_docs.validate_manifest_files(tmp_path)
 
 
@@ -565,6 +741,14 @@ def test_package_removes_stale_outputs_before_validation(
 
     assert not archive.exists()
     assert not checksum.exists()
+
+
+def test_source_fingerprint_tracks_portal_script(monkeypatch: pytest.MonkeyPatch) -> None:
+    fingerprint = build_docs._source_fingerprint()
+
+    monkeypatch.setattr(build_docs, "SEARCH_SCRIPT", "bpm-docs-print.css")
+
+    assert build_docs._source_fingerprint() != fingerprint
 
 
 def test_makefile_exposes_only_the_implemented_documentation_build_targets() -> None:

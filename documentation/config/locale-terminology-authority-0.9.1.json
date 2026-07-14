@@ -1,0 +1,766 @@
+{
+    "schema_version": 1,
+    "authority_id": "bpm-0.9.1-locale-terminology-authority",
+    "target_bpm_version": "0.9.1",
+    "backlog_item": "BPM091-M7-02",
+    "status": "accepted",
+    "inherits_from": [
+        "documentation/config/locale-visible-english-inventory-0.9.1.json",
+        "documentation/config/search-ui-filter-contract-0.9.1.json",
+        "documentation/config/navigation-tree-contract-0.9.1.json"
+    ],
+    "purpose": "Define reviewed terminology sources, replacement terms, and visible-English allowlists for BPM 0.9.1 localization cleanup before source string replacement.",
+    "authority_policy": {
+        "priority_order": [
+            "mozilla_pontoon",
+            "mozilla_sumo",
+            "maintainer_fallback"
+        ],
+        "mozilla_pontoon": "Primary source for Firefox UI terminology, localized product nouns, and common action labels.",
+        "mozilla_sumo": "Secondary source for user-facing help vocabulary; use only reviewed localized terms and repeated UI nouns, not untranslated English leaked by machine translation.",
+        "maintainer_fallback": "Allowed only when BPM has a product-specific concept absent from Pontoon/SUMO or when source evidence conflicts; the note must explain the fallback.",
+        "do_not_translate": "Brands, stable abbreviations, commands, paths, APIs, Firefox policy IDs, preference IDs, JSON literals, filenames, URLs, and placeholders stay language-neutral."
+    },
+    "authority_sources": {
+        "pontoon_lookup_template": "https://pontoon.mozilla.org/{locale}/firefox/all-resources/?search={source_term}",
+        "sumo_lookup_template": "https://support.mozilla.org/{locale}/kb/{article_slug}",
+        "verified_sumo_examples": [
+            {
+                "locale": "de",
+                "url": "https://support.mozilla.org/de/kb/firefox-profile-erstellen-und-loeschen",
+                "terms_seen": [
+                    "Profil",
+                    "Profilverwaltung",
+                    "Einstellungen",
+                    "Neues Profil erstellen"
+                ]
+            },
+            {
+                "locale": "es-ES",
+                "url": "https://support.mozilla.org/es/kb/usar-el-administrador-de-perfiles-para-crear-y-eli",
+                "terms_seen": [
+                    "perfil",
+                    "Administrador de perfiles",
+                    "Configuración",
+                    "Crear un perfil"
+                ]
+            }
+        ]
+    },
+    "locales": [
+        "ru",
+        "de",
+        "zh-CN",
+        "fr",
+        "es-ES"
+    ],
+    "concepts": {
+        "profile": {
+            "source_terms": [
+                "profile",
+                "Profile"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "профиль",
+                    "authority": "mozilla_sumo",
+                    "note": "Standard Firefox/SUMO noun for a browser profile."
+                },
+                "de": {
+                    "term": "Profil",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in German SUMO profile-management article."
+                },
+                "zh-CN": {
+                    "term": "配置档案",
+                    "authority": "mozilla_sumo",
+                    "note": "Use BPM’s established Chinese profile term without machine spacing or English word order."
+                },
+                "fr": {
+                    "term": "profil",
+                    "authority": "mozilla_sumo",
+                    "note": "Standard Firefox help noun."
+                },
+                "es-ES": {
+                    "term": "perfil",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in Spanish SUMO profile-management article."
+                }
+            }
+        },
+        "profile_name": {
+            "source_terms": [
+                "profile name",
+                "name"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "имя профиля",
+                    "authority": "mozilla_sumo",
+                    "note": "Composes the approved profile noun with the standard UI noun for name."
+                },
+                "de": {
+                    "term": "Profilname",
+                    "authority": "mozilla_sumo",
+                    "note": "Matches German Firefox profile-management wording."
+                },
+                "zh-CN": {
+                    "term": "配置档案名称",
+                    "authority": "mozilla_sumo",
+                    "note": "Natural Chinese UI label for the name of a BPM/Firefox profile."
+                },
+                "fr": {
+                    "term": "nom du profil",
+                    "authority": "mozilla_sumo",
+                    "note": "Natural French Firefox help wording."
+                },
+                "es-ES": {
+                    "term": "nombre del perfil",
+                    "authority": "mozilla_sumo",
+                    "note": "Matches Spanish SUMO explanatory wording."
+                }
+            }
+        },
+        "settings": {
+            "source_terms": [
+                "settings",
+                "All settings"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "настройки",
+                    "authority": "mozilla_pontoon",
+                    "note": "Existing BPM and Firefox UI term."
+                },
+                "de": {
+                    "term": "Einstellungen",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in German SUMO navigation and article table of contents."
+                },
+                "zh-CN": {
+                    "term": "设置",
+                    "authority": "mozilla_pontoon",
+                    "note": "Firefox UI term; remove machine spacing around it."
+                },
+                "fr": {
+                    "term": "paramètres",
+                    "authority": "mozilla_pontoon",
+                    "note": "Firefox UI term for settings/preferences surfaces."
+                },
+                "es-ES": {
+                    "term": "ajustes",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use BPM's established Spanish UI term; SUMO also uses Configuración as a broader category."
+                }
+            }
+        },
+        "all_settings": {
+            "source_terms": [
+                "All settings"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "Все настройки",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM mode name already established in the Russian UI."
+                },
+                "de": {
+                    "term": "Alle Einstellungen",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM mode name composed from approved settings term."
+                },
+                "zh-CN": {
+                    "term": "所有设置",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM mode name composed from approved settings term."
+                },
+                "fr": {
+                    "term": "Tous les paramètres",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM mode name composed from approved settings term."
+                },
+                "es-ES": {
+                    "term": "Todos los ajustes",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM mode name composed from approved settings term."
+                }
+            }
+        },
+        "guided_mode": {
+            "source_terms": [
+                "guided",
+                "guided-covered"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "пошаговый режим",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM-specific editor mode; avoid literal English guided."
+                },
+                "de": {
+                    "term": "geführter Modus",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM-specific editor mode."
+                },
+                "zh-CN": {
+                    "term": "引导模式",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM-specific editor mode."
+                },
+                "fr": {
+                    "term": "mode guidé",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM-specific editor mode."
+                },
+                "es-ES": {
+                    "term": "modo guiado",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM-specific editor mode."
+                }
+            }
+        },
+        "search": {
+            "source_terms": [
+                "search",
+                "find"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "поиск",
+                    "authority": "mozilla_pontoon",
+                    "note": "Firefox UI noun for search."
+                },
+                "de": {
+                    "term": "Suche",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in German SUMO site search labels."
+                },
+                "zh-CN": {
+                    "term": "搜索",
+                    "authority": "mozilla_pontoon",
+                    "note": "Firefox UI search noun."
+                },
+                "fr": {
+                    "term": "recherche",
+                    "authority": "mozilla_pontoon",
+                    "note": "Firefox UI search noun."
+                },
+                "es-ES": {
+                    "term": "búsqueda",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in Spanish SUMO site search labels."
+                }
+            }
+        },
+        "filter": {
+            "source_terms": [
+                "filter",
+                "filters",
+                "filtered"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "фильтр",
+                    "authority": "mozilla_pontoon",
+                    "note": "Established UI noun; verb forms should be inflected in context."
+                },
+                "de": {
+                    "term": "Filter",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use Filter/filtern, never Filterned or filterns."
+                },
+                "zh-CN": {
+                    "term": "筛选",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use without unnatural spaces."
+                },
+                "fr": {
+                    "term": "filtre",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use filtre/filtrer, never filters or Filtrered."
+                },
+                "es-ES": {
+                    "term": "filtro",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use filtro/filtrar, never match/filters."
+                }
+            }
+        },
+        "sort_ascending": {
+            "source_terms": [
+                "Ascending"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "по возрастанию",
+                    "authority": "mozilla_pontoon",
+                    "note": "Standard sort direction."
+                },
+                "de": {
+                    "term": "aufsteigend",
+                    "authority": "mozilla_pontoon",
+                    "note": "Replace English Ascending in sort controls."
+                },
+                "zh-CN": {
+                    "term": "升序",
+                    "authority": "mozilla_pontoon",
+                    "note": "Standard sort direction."
+                },
+                "fr": {
+                    "term": "croissant",
+                    "authority": "mozilla_pontoon",
+                    "note": "Standard sort direction."
+                },
+                "es-ES": {
+                    "term": "ascendente",
+                    "authority": "mozilla_pontoon",
+                    "note": "Standard sort direction."
+                }
+            }
+        },
+        "validation_results": {
+            "source_terms": [
+                "validation results",
+                "validation"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "результаты проверки",
+                    "authority": "maintainer_fallback",
+                    "note": "BPM validation outcome wording already used in Russian UI."
+                },
+                "de": {
+                    "term": "Prüfergebnisse",
+                    "authority": "maintainer_fallback",
+                    "note": "Natural German UI noun for BPM validation results."
+                },
+                "zh-CN": {
+                    "term": "验证结果",
+                    "authority": "maintainer_fallback",
+                    "note": "Natural Chinese UI noun for BPM validation results."
+                },
+                "fr": {
+                    "term": "résultats de validation",
+                    "authority": "maintainer_fallback",
+                    "note": "Natural French UI noun for BPM validation results."
+                },
+                "es-ES": {
+                    "term": "resultados de validación",
+                    "authority": "maintainer_fallback",
+                    "note": "Natural Spanish UI noun for BPM validation results."
+                }
+            }
+        },
+        "updated": {
+            "source_terms": [
+                "Updated",
+                "updated"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "обновлено",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use inflected forms as needed."
+                },
+                "de": {
+                    "term": "aktualisiert",
+                    "authority": "mozilla_pontoon",
+                    "note": "Replace English updated in status messages."
+                },
+                "zh-CN": {
+                    "term": "已更新",
+                    "authority": "mozilla_pontoon",
+                    "note": "Replace English updated in status messages."
+                },
+                "fr": {
+                    "term": "mis à jour",
+                    "authority": "mozilla_pontoon",
+                    "note": "Replace updated/modifiering in status messages."
+                },
+                "es-ES": {
+                    "term": "actualizado",
+                    "authority": "mozilla_pontoon",
+                    "note": "Replace updated/actualización hybrids in status messages."
+                }
+            }
+        },
+        "import": {
+            "source_terms": [
+                "import",
+                "imported",
+                "Importered",
+                "Importarando",
+                "Importeration"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "импорт",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use verb/noun forms in context."
+                },
+                "de": {
+                    "term": "Import",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use Import/importieren/importiert, never Importierening."
+                },
+                "zh-CN": {
+                    "term": "导入",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use without English word order."
+                },
+                "fr": {
+                    "term": "importation",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use importer/importé/importation, never Importered/Importeration."
+                },
+                "es-ES": {
+                    "term": "importación",
+                    "authority": "mozilla_pontoon",
+                    "note": "Use importar/importado/importación, never Importared/Importarando."
+                }
+            }
+        },
+        "create": {
+            "source_terms": [
+                "create",
+                "creation",
+                "creers",
+                "crears"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "создать",
+                    "authority": "mozilla_sumo",
+                    "note": "Firefox profile actions use create wording."
+                },
+                "de": {
+                    "term": "erstellen",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in German SUMO profile-management actions."
+                },
+                "zh-CN": {
+                    "term": "创建",
+                    "authority": "mozilla_sumo",
+                    "note": "Standard Firefox help action."
+                },
+                "fr": {
+                    "term": "créer",
+                    "authority": "mozilla_sumo",
+                    "note": "Standard Firefox help action."
+                },
+                "es-ES": {
+                    "term": "crear",
+                    "authority": "mozilla_sumo",
+                    "note": "Verified in Spanish SUMO profile-management headings."
+                }
+            }
+        },
+        "json_editor": {
+            "source_terms": [
+                "JSON editor",
+                "raw policies.json"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "редактор JSON",
+                    "authority": "maintainer_fallback",
+                    "note": "JSON is an allowed format abbreviation; editor is localized."
+                },
+                "de": {
+                    "term": "JSON-Editor",
+                    "authority": "maintainer_fallback",
+                    "note": "JSON remains as format abbreviation; Editor is established German technical UI term."
+                },
+                "zh-CN": {
+                    "term": "JSON 编辑器",
+                    "authority": "maintainer_fallback",
+                    "note": "JSON remains as format abbreviation; 编辑器 is localized."
+                },
+                "fr": {
+                    "term": "éditeur JSON",
+                    "authority": "maintainer_fallback",
+                    "note": "JSON remains as format abbreviation; éditeur is localized."
+                },
+                "es-ES": {
+                    "term": "editor JSON",
+                    "authority": "maintainer_fallback",
+                    "note": "JSON remains as format abbreviation; editor is standard Spanish UI noun."
+                }
+            }
+        },
+        "no_matches": {
+            "source_terms": [
+                "no settings match",
+                "no profiles match"
+            ],
+            "terms": {
+                "ru": {
+                    "term": "нет совпадений",
+                    "authority": "maintainer_fallback",
+                    "note": "Use full contextual sentence in source replacement."
+                },
+                "de": {
+                    "term": "keine Treffer",
+                    "authority": "maintainer_fallback",
+                    "note": "Use full contextual sentence in source replacement."
+                },
+                "zh-CN": {
+                    "term": "没有匹配项",
+                    "authority": "maintainer_fallback",
+                    "note": "Use full contextual sentence without machine spacing."
+                },
+                "fr": {
+                    "term": "aucun résultat",
+                    "authority": "maintainer_fallback",
+                    "note": "Use full contextual sentence in source replacement."
+                },
+                "es-ES": {
+                    "term": "sin coincidencias",
+                    "authority": "maintainer_fallback",
+                    "note": "Use full contextual sentence in source replacement."
+                }
+            }
+        }
+    },
+    "allowlist": {
+        "brand": {
+            "examples": [
+                "Browser Policy Manager",
+                "Firefox",
+                "Mozilla",
+                "SUMO"
+            ],
+            "rationale": "Brand and product names stay stable across locales."
+        },
+        "abbreviation": {
+            "examples": [
+                "AI",
+                "API",
+                "BPM",
+                "CIS",
+                "ESR",
+                "JSON",
+                "URL",
+                "WSL"
+            ],
+            "rationale": "Technical abbreviations remain visible when they name formats, standards, product modes, or guide families."
+        },
+        "identifier": {
+            "examples": [
+                "DisableTelemetry",
+                "Homepage",
+                "Locked",
+                "browser.startup.homepage",
+                "browser.tabs.warnOnClose",
+                "true",
+                "false"
+            ],
+            "rationale": "Firefox policy IDs, managed preference IDs, schema enum values, and JSON literals are identifiers, not prose."
+        },
+        "command/path/API": {
+            "examples": [
+                "policies.json",
+                "about:profiles",
+                "https://portal.example.test/",
+                "GET /api/profiles",
+                "firefox -P"
+            ],
+            "rationale": "Commands, paths, URLs, API routes, and boundary filenames must remain exact."
+        },
+        "placeholder": {
+            "examples": [
+                "{name}",
+                "{file}",
+                "{count}"
+            ],
+            "rationale": "Runtime placeholders are contract identifiers and must not be localized."
+        }
+    },
+    "replacement_plan": [
+        {
+            "finding_id": "LOC-EN-DE-REPLACE-001",
+            "locale": "de",
+            "concept_refs": [
+                "validation_results",
+                "updated",
+                "profile",
+                "create"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-DE-REPLACE-002",
+            "locale": "de",
+            "concept_refs": [
+                "filter",
+                "sort_ascending",
+                "updated"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-DE-REPLACE-003",
+            "locale": "de",
+            "concept_refs": [
+                "settings",
+                "updated"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-DE-REPLACE-004",
+            "locale": "de",
+            "concept_refs": [
+                "import",
+                "profile",
+                "json_editor"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-DE-REPLACE-005",
+            "locale": "de",
+            "concept_refs": [
+                "settings",
+                "filter",
+                "validation_results"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ZH-REPLACE-001",
+            "locale": "zh-CN",
+            "concept_refs": [
+                "settings",
+                "filter",
+                "import",
+                "profile",
+                "create"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ZH-REPLACE-002",
+            "locale": "zh-CN",
+            "concept_refs": [
+                "guided_mode",
+                "json_editor",
+                "settings"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-FR-REPLACE-001",
+            "locale": "fr",
+            "concept_refs": [
+                "updated",
+                "filter",
+                "profile_name",
+                "create"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-FR-REPLACE-002",
+            "locale": "fr",
+            "concept_refs": [
+                "updated",
+                "import"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-FR-REPLACE-003",
+            "locale": "fr",
+            "concept_refs": [
+                "import",
+                "json_editor",
+                "profile",
+                "create"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-FR-REPLACE-004",
+            "locale": "fr",
+            "concept_refs": [
+                "profile_name",
+                "filter",
+                "guided_mode"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-FR-REPLACE-005",
+            "locale": "fr",
+            "concept_refs": [
+                "settings",
+                "filter",
+                "json_editor"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ES-REPLACE-001",
+            "locale": "es-ES",
+            "concept_refs": [
+                "guided_mode",
+                "profile_name",
+                "create",
+                "validation_results"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ES-REPLACE-002",
+            "locale": "es-ES",
+            "concept_refs": [
+                "updated",
+                "import"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ES-REPLACE-003",
+            "locale": "es-ES",
+            "concept_refs": [
+                "settings",
+                "filter",
+                "guided_mode",
+                "json_editor"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ES-REPLACE-004",
+            "locale": "es-ES",
+            "concept_refs": [
+                "import",
+                "json_editor",
+                "profile",
+                "create"
+            ],
+            "status": "ready_for_M7-03"
+        },
+        {
+            "finding_id": "LOC-EN-ES-REPLACE-005",
+            "locale": "es-ES",
+            "concept_refs": [
+                "profile_name",
+                "filter",
+                "updated"
+            ],
+            "status": "ready_for_M7-03"
+        }
+    ],
+    "next_actions": [
+        {
+            "backlog_item": "BPM091-M7-03",
+            "action": "Replace source strings using this concept map and the M7-01 inventory."
+        },
+        {
+            "backlog_item": "BPM091-M7-04",
+            "action": "Wire this allowlist into regression checks for localized product and documentation strings."
+        }
+    ]
+}

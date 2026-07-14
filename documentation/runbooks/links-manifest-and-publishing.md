@@ -31,9 +31,10 @@ search files, build output, or release packaging.
 2. Run `make docs-validate` for source/HTML/link/manifest validation.
 3. Run `make docs-reproducibility-check` for map, shell, manifest, search, theme, or generator
    changes.
-4. Run `make docs-install-dev` when a maintainer needs to inspect the current local build through
-   `make dev` and `/help/`; the installed copy is ignored dev evidence, not release package
-   extraction.
+4. Run `make dev` when a maintainer needs to inspect the current local build through `/help/`;
+   the target refreshes the ignored `app/documentation/site` copy via `make docs-install-dev`
+   before starting the app. Use `make run` only when the app must start without documentation
+   refresh. The installed copy is ignored dev evidence, not release package extraction.
 5. Run `make docs-package` and `make docs-package-verify` for release-candidate evidence.
 6. Inspect the package only through generated artifact checks or a targeted archive listing; do not
    patch extracted output.

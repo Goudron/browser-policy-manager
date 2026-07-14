@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-raw-policies-json" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>编辑 raw policies JSON</title>
-  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. Edit the raw policies.json document with the locally bundled Monaco editor.</shortdesc>
+  <title>编辑原始策略 JSON</title>
+  <shortdesc>使用本地捆绑的 Monaco 编辑器编辑原始 policies.json 文档。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. Open JSON Editor for a saved profile.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. The Monaco editor is bundled locally and edits the raw JSON text. BPM still validates before saving to the normalized profile model.</p></context>
+    <prereq><p>打开 JSON 编辑器 以获取已保存的配置文件。</p></prereq>
+    <context><p>Monaco 编辑器在本地捆绑并编辑原始 JSON 文本。 BPM 在保存到规范化配置文件模型之前仍会进行验证。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. Place focus in the JSON editor.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. Edit only the policy, preference, or raw value required by the task.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. Keep the top-level policies object and valid JSON syntax.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：编辑 raw policies JSON. Use validation before saving the raw edit.</cmd><info><note type="warning">警告：保存前请检查 JSON 语法、top-level policies 和策略验证错误。</note></info></step>
+      <step><cmd>将焦点置于 JSON 编辑器 中。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>仅编辑任务所需的策略、首选项或原始值。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>保留顶级策略对象和有效的 JSON 语法。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>在保存原始编辑之前使用验证。</cmd><info><note type="warning">保存原始 JSON 可以更改规范的 BPM 配置文件。保存之前验证语法和策略值。</note></info></step>
     </steps>
-    <result><p>JSON Editor 处于预期状态，并且该操作可在审查时解释。 The editor contains the intended raw JSON change and is ready for validation.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请验证文档、返回 All Settings 或打开相关主题。 Recovery: if the edit becomes confusing, format the document or discard changes before saving.</p></postreq>
+    <result><p>编辑器包含预期的原始 JSON 更改并已准备好进行验证。</p></result>
+    <postreq><p>恢复：如果编辑变得混乱，请在保存之前格式化文档或放弃更改。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-format-json-document"/>

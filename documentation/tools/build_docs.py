@@ -34,34 +34,51 @@ DIAGNOSTICS_ROOT = REPORTS_ROOT / "diagnostics"
 DEV_SITE_ROOT = REPOSITORY_ROOT / "app/documentation/site"
 DEV_SITE_METADATA = REPOSITORY_ROOT / "app/documentation/.site-dev-install.json"
 ARTIFACT_POLICY = DOCUMENTATION_ROOT / "config/artifact-policy.json"
-FIREFOX_POLICY_CONTEXT_TARGETS = DOCUMENTATION_ROOT / "config/firefox-policy-context-targets-0.9.0.json"
-FIREFOX_POLICY_INDEX = DOCUMENTATION_ROOT / "src/generated/firefox/firefox-policy-skeletons-0.9.0.json"
-CIS_RECOMMENDATION_INDEX = DOCUMENTATION_ROOT / "src/generated/cis/cis-recommendation-skeletons-0.9.0.json"
+FIREFOX_POLICY_CONTEXT_TARGETS = (
+    DOCUMENTATION_ROOT / "config/firefox-policy-context-targets-0.9.0.json"
+)
+ALL_SETTINGS_HELP_TARGET_MAP = DOCUMENTATION_ROOT / "config/all-settings-help-target-map-0.9.1.json"
+FIREFOX_POLICY_INDEX = (
+    DOCUMENTATION_ROOT / "src/generated/firefox/firefox-policy-skeletons-0.9.0.json"
+)
+CIS_RECOMMENDATION_INDEX = (
+    DOCUMENTATION_ROOT / "src/generated/cis/cis-recommendation-skeletons-0.9.0.json"
+)
 SEARCH_CORPUS_CONTRACT = DOCUMENTATION_ROOT / "config/search-corpus-and-results-0.9.0.json"
 SEARCH_NORMALIZATION_ALIASES = DOCUMENTATION_ROOT / "config/search-normalization-aliases-0.9.0.json"
 SEARCH_RANKING_TYPO = DOCUMENTATION_ROOT / "config/search-ranking-typo-0.9.0.json"
 SEARCH_FACETS_FILTERS = DOCUMENTATION_ROOT / "config/search-facets-filters-0.9.0.json"
 SEARCH_QUALITY_PERFORMANCE = DOCUMENTATION_ROOT / "config/search-quality-performance-0.9.0.json"
 SEARCH_INTEGRITY_DRIFT = DOCUMENTATION_ROOT / "config/search-integrity-drift-0.9.0.json"
+TOPIC_SECTION_TAXONOMY = DOCUMENTATION_ROOT / "config/topic-section-taxonomy-0.9.1.json"
+TOPIC_SECTION_LABELS = DOCUMENTATION_ROOT / "config/topic-section-labels-0.9.1.json"
 FIXTURE_CATALOG = DOCUMENTATION_ROOT / "fixtures/fixture-catalog-0.9.0.json"
 SEARCH_STATE_FIXTURE = DOCUMENTATION_ROOT / "fixtures/search-states/search-query-states-0.9.0.json"
-SCREENSHOT_STATE_FIXTURE = DOCUMENTATION_ROOT / "fixtures/screenshot-states/screenshot-states-0.9.0.json"
-FIREFOX_POLICY_INVENTORY = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+SCREENSHOT_STATE_FIXTURE = (
+    DOCUMENTATION_ROOT / "fixtures/screenshot-states/screenshot-states-0.9.0.json"
+)
+FIREFOX_POLICY_INVENTORY = (
+    REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+)
 CIS_INVENTORY = REPOSITORY_ROOT / "docs/architecture/cis-documentation-inventory-0.9.0.json"
 API_INVENTORY = REPOSITORY_ROOT / "docs/architecture/api-documentation-inventory-0.9.0.md"
-CAPABILITY_INVENTORY = REPOSITORY_ROOT / "docs/architecture/product-user-capability-inventory-0.9.0.md"
+CAPABILITY_INVENTORY = (
+    REPOSITORY_ROOT / "docs/architecture/product-user-capability-inventory-0.9.0.md"
+)
 MANIFEST_SCHEMA = (
-    REPOSITORY_ROOT
-    / "docs/architecture/schemas/product-documentation-manifest-v1.schema.json"
+    REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-manifest-v1.schema.json"
 )
 UI_TARGET_SCHEMA = (
-    REPOSITORY_ROOT
-    / "docs/architecture/schemas/product-documentation-ui-target-map-v1.schema.json"
+    REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-ui-target-map-v1.schema.json"
+)
+NAVIGATION_SCHEMA = (
+    REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-navigation-v1.schema.json"
 )
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 SOURCE_SUFFIXES = {".dita", ".ditamap"}
 LINK_ATTRIBUTES = {"href", "src"}
 THEME_ROOT = DOCUMENTATION_ROOT / "assets/theme"
+SCREENSHOT_ROOT = DOCUMENTATION_ROOT / "assets/screenshots"
 THEME_FILES = ("bpm-docs.css", "bpm-docs-print.css")
 SEARCH_SCRIPT = "bpm-docs-search.js"
 SEARCH_TOKEN_PATTERN = re.compile(
@@ -72,10 +89,11 @@ GUIDE_MAPS = (
     ("user-guide", "user-guide.ditamap", "a-user-guide", "user"),
     ("firefox-policy-guide", "firefox-policy-guide.ditamap", "a-firefox-policy-guide", "firefox"),
     ("cis-settings-guide", "cis-settings-guide.ditamap", "a-cis-settings-guide", "cis"),
-    ("api-integration-guide", "api-integration-guide.ditamap", "a-api-integration-guide", "api"),
     ("administrator-guide", "administrator-guide.ditamap", "a-administrator-guide", "admin"),
 )
-GUIDE_OUTPUT_ROOT_BY_MAP = {filename: url_root for _guide_id, filename, _anchor, url_root in GUIDE_MAPS}
+GUIDE_OUTPUT_ROOT_BY_MAP = {
+    filename: url_root for _guide_id, filename, _anchor, url_root in GUIDE_MAPS
+}
 GUIDE_OUTPUT_ROOT_BY_SOURCE_DIR = {
     "api": "api",
     "admin": "admin",
@@ -84,6 +102,7 @@ GUIDE_OUTPUT_ROOT_BY_SOURCE_DIR = {
     "json": "user",
     "user": "user",
 }
+_NAVIGATION_MODEL_CACHE: dict[str, dict[str, Any]] = {}
 SHELL_LABELS = {
     "en": {
         "skip": "Skip to content",
@@ -91,8 +110,21 @@ SHELL_LABELS = {
         "locales": "Languages",
         "breadcrumbs": "Breadcrumbs",
         "home": "Documentation home",
-        "version": "BPM 0.9.0 · Documentation 0.9.0",
+        "version": "BPM 0.9.1 · Documentation 0.9.1",
         "status": "Runtime package pending manifest, search, and UI target metadata.",
+        "theme": "Theme",
+        "theme_system": "System",
+        "theme_light": "Light",
+        "theme_dark": "Dark",
+        "navigation_root": "Documents",
+        "navigation_tree_label": "Documentation tree",
+        "navigation_expand": "Expand",
+        "navigation_collapse": "Collapse",
+        "navigation_current": "Current page",
+        "navigation_parent": "Parent",
+        "navigation_back_to_root": "Back to documentation home",
+        "navigation_loading": "Loading the documentation tree…",
+        "navigation_unavailable": "Documentation navigation is unavailable.",
         "search": "Search documentation",
         "search_query": "Search query",
         "search_placeholder": "Search topics, policies, CIS IDs, or API operations",
@@ -114,8 +146,21 @@ SHELL_LABELS = {
         "locales": "Языки",
         "breadcrumbs": "Навигационная цепочка",
         "home": "Главная страница документации",
-        "version": "BPM 0.9.0 · Документация 0.9.0",
+        "version": "BPM 0.9.1 · Документация 0.9.1",
         "status": "Пакет для runtime ожидает манифест, поиск и метаданные UI-целей.",
+        "theme": "Тема",
+        "theme_system": "Системная",
+        "theme_light": "Светлая",
+        "theme_dark": "Тёмная",
+        "navigation_root": "Документы",
+        "navigation_tree_label": "Дерево документации",
+        "navigation_expand": "Развернуть",
+        "navigation_collapse": "Свернуть",
+        "navigation_current": "Текущая страница",
+        "navigation_parent": "Родительский раздел",
+        "navigation_back_to_root": "Вернуться на главную страницу документации",
+        "navigation_loading": "Загружается дерево документации…",
+        "navigation_unavailable": "Навигация по документации недоступна.",
         "search": "Поиск по документации",
         "search_query": "Поисковый запрос",
         "search_placeholder": "Ищите разделы, политики, CIS ID или операции API",
@@ -137,8 +182,21 @@ SHELL_LABELS = {
         "locales": "Sprachen",
         "breadcrumbs": "Breadcrumbs",
         "home": "Startseite der Dokumentation",
-        "version": "BPM 0.9.0 · Dokumentation 0.9.0",
+        "version": "BPM 0.9.1 · Dokumentation 0.9.1",
         "status": "Das Runtime-Paket wartet auf Manifest, Suche und UI-Zielmetadaten.",
+        "theme": "Design",
+        "theme_system": "System",
+        "theme_light": "Hell",
+        "theme_dark": "Dunkel",
+        "navigation_root": "Dokumente",
+        "navigation_tree_label": "Dokumentationsbaum",
+        "navigation_expand": "Aufklappen",
+        "navigation_collapse": "Zuklappen",
+        "navigation_current": "Aktuelle Seite",
+        "navigation_parent": "Übergeordneter Abschnitt",
+        "navigation_back_to_root": "Zur Startseite der Dokumentation",
+        "navigation_loading": "Dokumentationsbaum wird geladen…",
+        "navigation_unavailable": "Die Dokumentationsnavigation ist nicht verfügbar.",
         "search": "Dokumentation durchsuchen",
         "search_query": "Suchanfrage",
         "search_placeholder": "Themen, Richtlinien, CIS-IDs oder API-Vorgänge suchen",
@@ -160,8 +218,21 @@ SHELL_LABELS = {
         "locales": "语言",
         "breadcrumbs": "面包屑导航",
         "home": "文档主页",
-        "version": "BPM 0.9.0 · 文档 0.9.0",
+        "version": "BPM 0.9.1 · 文档 0.9.1",
         "status": "运行时包仍需清单、搜索和 UI 目标元数据。",
+        "theme": "主题",
+        "theme_system": "跟随系统",
+        "theme_light": "浅色",
+        "theme_dark": "深色",
+        "navigation_root": "文档",
+        "navigation_tree_label": "文档树",
+        "navigation_expand": "展开",
+        "navigation_collapse": "折叠",
+        "navigation_current": "当前页面",
+        "navigation_parent": "父级部分",
+        "navigation_back_to_root": "返回文档主页",
+        "navigation_loading": "正在加载文档树…",
+        "navigation_unavailable": "文档导航不可用。",
         "search": "搜索文档",
         "search_query": "搜索查询",
         "search_placeholder": "搜索主题、策略、CIS ID 或 API 操作",
@@ -183,8 +254,21 @@ SHELL_LABELS = {
         "locales": "Langues",
         "breadcrumbs": "Fil d’Ariane",
         "home": "Accueil de la documentation",
-        "version": "BPM 0.9.0 · Documentation 0.9.0",
+        "version": "BPM 0.9.1 · Documentation 0.9.1",
         "status": "Le paquet d’exécution attend le manifeste, la recherche et les métadonnées des cibles UI.",
+        "theme": "Thème",
+        "theme_system": "Système",
+        "theme_light": "Clair",
+        "theme_dark": "Sombre",
+        "navigation_root": "Documents",
+        "navigation_tree_label": "Arborescence de la documentation",
+        "navigation_expand": "Développer",
+        "navigation_collapse": "Réduire",
+        "navigation_current": "Page actuelle",
+        "navigation_parent": "Section parente",
+        "navigation_back_to_root": "Revenir à l’accueil de la documentation",
+        "navigation_loading": "Chargement de l’arborescence de la documentation…",
+        "navigation_unavailable": "La navigation dans la documentation est indisponible.",
         "search": "Rechercher dans la documentation",
         "search_query": "Requête de recherche",
         "search_placeholder": "Rechercher des rubriques, politiques, ID CIS ou opérations API",
@@ -206,8 +290,21 @@ SHELL_LABELS = {
         "locales": "Idiomas",
         "breadcrumbs": "Ruta de navegación",
         "home": "Inicio de la documentación",
-        "version": "BPM 0.9.0 · Documentación 0.9.0",
+        "version": "BPM 0.9.1 · Documentación 0.9.1",
         "status": "El paquete de runtime espera el manifiesto, la búsqueda y los metadatos de objetivos de UI.",
+        "theme": "Tema",
+        "theme_system": "Sistema",
+        "theme_light": "Claro",
+        "theme_dark": "Oscuro",
+        "navigation_root": "Documentos",
+        "navigation_tree_label": "Árbol de documentación",
+        "navigation_expand": "Expandir",
+        "navigation_collapse": "Contraer",
+        "navigation_current": "Página actual",
+        "navigation_parent": "Sección superior",
+        "navigation_back_to_root": "Volver al inicio de la documentación",
+        "navigation_loading": "Cargando el árbol de documentación…",
+        "navigation_unavailable": "La navegación por la documentación no está disponible.",
         "search": "Buscar en la documentación",
         "search_query": "Consulta de búsqueda",
         "search_placeholder": "Buscar temas, políticas, ID de CIS u operaciones de API",
@@ -222,6 +319,354 @@ SHELL_LABELS = {
         "search_unavailable": "La búsqueda no está disponible porque no se pudo cargar el índice local.",
         "search_result_singular": "1 resultado",
         "search_result_plural": "resultados",
+    },
+}
+
+SEARCH_FILTER_FIELD_LABELS = {
+    "en": {
+        "locale": "Documentation locale",
+        "guide_id": "Guide",
+        "topic_kind": "Topic type",
+        "firefox_channel": "Firefox channel",
+        "policy_category": "Policy category",
+        "cis_level": "CIS level",
+        "cis_control_state": "CIS status",
+        "api_area": "API area",
+        "bpm_version": "BPM version",
+    },
+    "ru": {
+        "locale": "Локаль документации",
+        "guide_id": "Руководство",
+        "topic_kind": "Тип раздела",
+        "firefox_channel": "Канал Firefox",
+        "policy_category": "Категория политики",
+        "cis_level": "Уровень CIS",
+        "cis_control_state": "Состояние CIS",
+        "api_area": "Область API",
+        "bpm_version": "Версия BPM",
+    },
+    "de": {
+        "locale": "Dokumentationssprache",
+        "guide_id": "Handbuch",
+        "topic_kind": "Seitentyp",
+        "firefox_channel": "Firefox-Kanal",
+        "policy_category": "Richtlinienkategorie",
+        "cis_level": "CIS-Stufe",
+        "cis_control_state": "CIS-Status",
+        "api_area": "API-Bereich",
+        "bpm_version": "BPM-Version",
+    },
+    "zh-CN": {
+        "locale": "文档语言",
+        "guide_id": "指南",
+        "topic_kind": "页面类型",
+        "firefox_channel": "Firefox 频道",
+        "policy_category": "策略类别",
+        "cis_level": "CIS 级别",
+        "cis_control_state": "CIS 状态",
+        "api_area": "API 区域",
+        "bpm_version": "BPM 版本",
+    },
+    "fr": {
+        "locale": "Langue de documentation",
+        "guide_id": "Guide",
+        "topic_kind": "Type de page",
+        "firefox_channel": "Canal Firefox",
+        "policy_category": "Catégorie de règle",
+        "cis_level": "Niveau CIS",
+        "cis_control_state": "État CIS",
+        "api_area": "Domaine API",
+        "bpm_version": "Version BPM",
+    },
+    "es-ES": {
+        "locale": "Idioma de la documentación",
+        "guide_id": "Guía",
+        "topic_kind": "Tipo de página",
+        "firefox_channel": "Canal de Firefox",
+        "policy_category": "Categoría de política",
+        "cis_level": "Nivel CIS",
+        "cis_control_state": "Estado CIS",
+        "api_area": "Área de API",
+        "bpm_version": "Versión de BPM",
+    },
+}
+
+SEARCH_FILTER_VALUE_LABELS = {
+    "en": {
+        "guide_id": {
+            "user-guide": "User Guide",
+            "firefox-policy-guide": "Firefox Policy Guide",
+            "cis-settings-guide": "CIS Settings Guide",
+            "administrator-guide": "Administrator/DevOps Guide",
+        },
+        "topic_kind": {
+            "concept": "Concept",
+            "task": "Task",
+            "reference": "Reference",
+            "troubleshooting": "Troubleshooting",
+            "landing": "Landing page",
+        },
+        "firefox_channel": {
+            "esr-140.12": "Firefox ESR 140.12",
+            "release-152": "Firefox Release 152",
+        },
+        "policy_category": {
+            "advanced": "Advanced",
+            "ai_smart": "AI features",
+            "browser_behavior": "Browser behavior",
+            "extensions_integrations": "Extensions and integrations",
+            "home_startup": "Home and startup",
+            "network_access": "Network access",
+            "privacy_security": "Privacy and security",
+            "search": "Search",
+        },
+        "cis_level": {"level-1": "CIS Level 1", "level-2": "CIS Level 2"},
+        "cis_control_state": {
+            "mapped": "Mapped",
+            "preference_mapped": "Mapped preference",
+            "needs_research": "Needs research",
+            "deprecated_or_removed": "Deprecated or removed",
+            "manual-review": "Manual review",
+            "provenance-only": "Provenance only",
+        },
+        "api_area": {
+            "service": "Service",
+            "health": "Health",
+            "profiles": "Profiles",
+            "validation": "Validation",
+            "import-export": "Import and export",
+            "ui": "User interface",
+        },
+    },
+    "ru": {
+        "guide_id": {
+            "user-guide": "Руководство пользователя",
+            "firefox-policy-guide": "Руководство по политикам Firefox",
+            "cis-settings-guide": "Руководство по настройкам CIS",
+            "administrator-guide": "Руководство администратора и DevOps",
+        },
+        "topic_kind": {
+            "concept": "Обзор",
+            "task": "Задача",
+            "reference": "Справка",
+            "troubleshooting": "Устранение неполадок",
+            "landing": "Начальная страница",
+        },
+        "firefox_channel": {
+            "esr-140.12": "Firefox ESR 140.12",
+            "release-152": "Firefox Release 152",
+        },
+        "policy_category": {
+            "advanced": "Расширенные настройки",
+            "ai_smart": "Возможности ИИ",
+            "browser_behavior": "Поведение браузера",
+            "extensions_integrations": "Расширения и интеграции",
+            "home_startup": "Домашняя страница и запуск",
+            "network_access": "Доступ к сети",
+            "privacy_security": "Приватность и безопасность",
+            "search": "Поиск",
+        },
+        "cis_level": {"level-1": "CIS уровень 1", "level-2": "CIS уровень 2"},
+        "cis_control_state": {
+            "mapped": "Сопоставлено",
+            "preference_mapped": "Сопоставлено с настройкой",
+            "needs_research": "Требует уточнения",
+            "deprecated_or_removed": "Устарело или удалено",
+            "manual-review": "Ручная проверка",
+            "provenance-only": "Только происхождение",
+        },
+        "api_area": {
+            "service": "Служба",
+            "health": "Состояние",
+            "profiles": "Профили",
+            "validation": "Проверка",
+            "import-export": "Импорт и экспорт",
+            "ui": "Интерфейс",
+        },
+    },
+    "de": {
+        "guide_id": {
+            "user-guide": "Benutzerhandbuch",
+            "firefox-policy-guide": "Handbuch zu Firefox-Richtlinien",
+            "cis-settings-guide": "Handbuch zu CIS-Einstellungen",
+            "administrator-guide": "Administrator- und DevOps-Handbuch",
+        },
+        "topic_kind": {
+            "concept": "Überblick",
+            "task": "Aufgabe",
+            "reference": "Referenz",
+            "troubleshooting": "Fehlerbehebung",
+            "landing": "Startseite",
+        },
+        "firefox_channel": {
+            "esr-140.12": "Firefox ESR 140.12",
+            "release-152": "Firefox Release 152",
+        },
+        "policy_category": {
+            "advanced": "Erweiterte Einstellungen",
+            "ai_smart": "KI-Funktionen",
+            "browser_behavior": "Browserverhalten",
+            "extensions_integrations": "Erweiterungen und Integrationen",
+            "home_startup": "Startseite und Start",
+            "network_access": "Netzwerkzugriff",
+            "privacy_security": "Datenschutz und Sicherheit",
+            "search": "Suche",
+        },
+        "cis_level": {"level-1": "CIS-Stufe 1", "level-2": "CIS-Stufe 2"},
+        "cis_control_state": {
+            "mapped": "Zugeordnet",
+            "preference_mapped": "Einstellung zugeordnet",
+            "needs_research": "Klärung erforderlich",
+            "deprecated_or_removed": "Veraltet oder entfernt",
+            "manual-review": "Manuelle Prüfung",
+            "provenance-only": "Nur Herkunftsnachweis",
+        },
+        "api_area": {
+            "service": "Dienst",
+            "health": "Status",
+            "profiles": "Profile",
+            "validation": "Validierung",
+            "import-export": "Import und Export",
+            "ui": "Benutzeroberfläche",
+        },
+    },
+    "zh-CN": {
+        "guide_id": {
+            "user-guide": "用户指南",
+            "firefox-policy-guide": "Firefox 策略指南",
+            "cis-settings-guide": "CIS 设置指南",
+            "administrator-guide": "管理员和 DevOps 指南",
+        },
+        "topic_kind": {
+            "concept": "概念",
+            "task": "任务",
+            "reference": "参考",
+            "troubleshooting": "故障排除",
+            "landing": "首页",
+        },
+        "firefox_channel": {
+            "esr-140.12": "Firefox ESR 140.12",
+            "release-152": "Firefox Release 152",
+        },
+        "policy_category": {
+            "advanced": "高级设置",
+            "ai_smart": "AI 功能",
+            "browser_behavior": "浏览器行为",
+            "extensions_integrations": "扩展和集成",
+            "home_startup": "主页和启动",
+            "network_access": "网络访问",
+            "privacy_security": "隐私和安全",
+            "search": "搜索",
+        },
+        "cis_level": {"level-1": "CIS 级别 1", "level-2": "CIS 级别 2"},
+        "cis_control_state": {
+            "mapped": "已映射",
+            "preference_mapped": "已映射到首选项",
+            "needs_research": "需要核实",
+            "deprecated_or_removed": "已弃用或已移除",
+            "manual-review": "人工审核",
+            "provenance-only": "仅保留来源",
+        },
+        "api_area": {
+            "service": "服务",
+            "health": "状态",
+            "profiles": "配置文件",
+            "validation": "验证",
+            "import-export": "导入和导出",
+            "ui": "用户界面",
+        },
+    },
+    "fr": {
+        "guide_id": {
+            "user-guide": "Guide utilisateur",
+            "firefox-policy-guide": "Guide des règles Firefox",
+            "cis-settings-guide": "Guide des paramètres CIS",
+            "administrator-guide": "Guide administrateur et DevOps",
+        },
+        "topic_kind": {
+            "concept": "Présentation",
+            "task": "Tâche",
+            "reference": "Référence",
+            "troubleshooting": "Dépannage",
+            "landing": "Page d’accueil",
+        },
+        "firefox_channel": {
+            "esr-140.12": "Firefox ESR 140.12",
+            "release-152": "Firefox Release 152",
+        },
+        "policy_category": {
+            "advanced": "Paramètres avancés",
+            "ai_smart": "Fonctionnalités d’IA",
+            "browser_behavior": "Comportement du navigateur",
+            "extensions_integrations": "Extensions et intégrations",
+            "home_startup": "Accueil et démarrage",
+            "network_access": "Accès réseau",
+            "privacy_security": "Vie privée et sécurité",
+            "search": "Recherche",
+        },
+        "cis_level": {"level-1": "Niveau CIS 1", "level-2": "Niveau CIS 2"},
+        "cis_control_state": {
+            "mapped": "Mappé",
+            "preference_mapped": "Préférence mappée",
+            "needs_research": "À vérifier",
+            "deprecated_or_removed": "Obsolète ou supprimé",
+            "manual-review": "Examen manuel",
+            "provenance-only": "Provenance uniquement",
+        },
+        "api_area": {
+            "service": "Service",
+            "health": "État",
+            "profiles": "Profils",
+            "validation": "Validation",
+            "import-export": "Importation et exportation",
+            "ui": "Interface utilisateur",
+        },
+    },
+    "es-ES": {
+        "guide_id": {
+            "user-guide": "Guía de usuario",
+            "firefox-policy-guide": "Guía de políticas de Firefox",
+            "cis-settings-guide": "Guía de ajustes CIS",
+            "administrator-guide": "Guía de administración y DevOps",
+        },
+        "topic_kind": {
+            "concept": "Descripción general",
+            "task": "Tarea",
+            "reference": "Referencia",
+            "troubleshooting": "Solución de problemas",
+            "landing": "Página inicial",
+        },
+        "firefox_channel": {
+            "esr-140.12": "Firefox ESR 140.12",
+            "release-152": "Firefox Release 152",
+        },
+        "policy_category": {
+            "advanced": "Ajustes avanzados",
+            "ai_smart": "Funciones de IA",
+            "browser_behavior": "Comportamiento del navegador",
+            "extensions_integrations": "Extensiones e integraciones",
+            "home_startup": "Inicio y arranque",
+            "network_access": "Acceso de red",
+            "privacy_security": "Privacidad y seguridad",
+            "search": "Búsqueda",
+        },
+        "cis_level": {"level-1": "Nivel CIS 1", "level-2": "Nivel CIS 2"},
+        "cis_control_state": {
+            "mapped": "Asignado",
+            "preference_mapped": "Preferencia asignada",
+            "needs_research": "Requiere revisión",
+            "deprecated_or_removed": "Obsoleto o eliminado",
+            "manual-review": "Revisión manual",
+            "provenance-only": "Solo procedencia",
+        },
+        "api_area": {
+            "service": "Servicio",
+            "health": "Estado",
+            "profiles": "Perfiles",
+            "validation": "Validación",
+            "import-export": "Importación y exportación",
+            "ui": "Interfaz de usuario",
+        },
     },
 }
 
@@ -241,12 +686,7 @@ def toolchain() -> tuple[Path, Path]:
     lock = _load_lock()
     cache = REPOSITORY_ROOT / lock["cache_directory"]
     dita = cache / "installs" / f"dita-ot-{lock['components']['dita_ot']['version']}" / "bin/dita"
-    java = (
-        cache
-        / "installs"
-        / f"temurin-jre-{lock['components']['java']['version']}"
-        / "bin/java"
-    )
+    java = cache / "installs" / f"temurin-jre-{lock['components']['java']['version']}" / "bin/java"
     for executable in (dita, java):
         if not executable.is_file() or not os.access(executable, os.X_OK):
             raise BuildError(
@@ -407,7 +847,15 @@ def _git_changed_paths() -> list[Path]:
     paths: list[Path] = []
     commands = (
         ["git", "diff", "--name-only", "--", "documentation", "docs/architecture"],
-        ["git", "ls-files", "--others", "--exclude-standard", "--", "documentation", "docs/architecture"],
+        [
+            "git",
+            "ls-files",
+            "--others",
+            "--exclude-standard",
+            "--",
+            "documentation",
+            "docs/architecture",
+        ],
     )
     for command in commands:
         completed = subprocess.run(
@@ -420,9 +868,7 @@ def _git_changed_paths() -> list[Path]:
         if completed.returncode:
             raise BuildError((completed.stdout + "\n" + completed.stderr).strip())
         paths.extend(
-            _resolve_changed_path(line)
-            for line in completed.stdout.splitlines()
-            if line.strip()
+            _resolve_changed_path(line) for line in completed.stdout.splitlines() if line.strip()
         )
     return sorted(set(paths))
 
@@ -477,7 +923,9 @@ def _fast_scope(path: Path) -> dict[str, Any] | None:
             "path": relative.as_posix(),
         }
     if parts[:2] == ("src", "generated"):
-        guide_root = {"firefox": "firefox", "cis": "cis"}.get(parts[2] if len(parts) > 2 else "", "")
+        guide_root = {"firefox": "firefox", "cis": "cis"}.get(
+            parts[2] if len(parts) > 2 else "", ""
+        )
         return {
             "kind": "generated-source",
             "locales": set(LOCALES),
@@ -525,7 +973,7 @@ def _topic_id(path: Path) -> str | None:
         return None
     try:
         root = ET.parse(path).getroot()
-    except (OSError, ET.ParseError):
+    except OSError, ET.ParseError:
         return None
     return root.attrib.get("id")
 
@@ -535,7 +983,7 @@ def _source_line_hint(path: Path, topic_id: str | None = None) -> int | None:
         return None
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
-    except (OSError, UnicodeDecodeError):
+    except OSError, UnicodeDecodeError:
         return None
     patterns = [f'id="{topic_id}"', f"id='{topic_id}'"] if topic_id else []
     patterns.extend(["<topic", "<map", "<section"])
@@ -548,7 +996,7 @@ def _source_line_hint(path: Path, topic_id: str | None = None) -> int | None:
 def _first_fixture_entry(path: Path, collection: str) -> dict[str, Any] | None:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+    except OSError, json.JSONDecodeError:
         return None
     entries = payload.get(collection)
     if isinstance(entries, list) and entries and isinstance(entries[0], dict):
@@ -568,7 +1016,9 @@ def _diagnostic_context(path: Path) -> dict[str, Any]:
     topic_id = _topic_id(path)
     locale = locales[0] if locales else None
     guide = guide_roots[0] if guide_roots else None
-    target_url = f"/help/{locale}/{guide}/{topic_id}.html" if locale and guide and topic_id else None
+    target_url = (
+        f"/help/{locale}/{guide}/{topic_id}.html" if locale and guide and topic_id else None
+    )
     search_hint = _first_fixture_entry(SEARCH_STATE_FIXTURE, "queries")
     screenshot_hint = _first_fixture_entry(SCREENSHOT_STATE_FIXTURE, "capture_matrix")
     return {
@@ -597,12 +1047,12 @@ def _diagnostic_payload(error: BaseException, changed_arguments: list[str]) -> d
     focused_rerun = (
         "make docs-fast-check"
         if not changed_arguments
-        else "make docs-fast-check DOCS_CHANGED=\"" + " ".join(changed_arguments) + "\""
+        else 'make docs-fast-check DOCS_CHANGED="' + " ".join(changed_arguments) + '"'
     )
     return {
         "schema_version": 1,
         "backlog_item": "BPM090-M11-06",
-        "target_bpm_version": "0.9.0",
+        "target_bpm_version": "0.9.1",
         "status": "failed",
         "error_summary": str(error).splitlines()[0],
         "focused_rerun": focused_rerun,
@@ -640,7 +1090,9 @@ def _affected_output_paths(scopes: list[dict[str, Any]], dita_paths: list[Path])
                     if guide_root == "index":
                         outputs.add(f"documentation/build/site/{locale}/index.html")
                     else:
-                        outputs.add(f"documentation/build/site/{locale}/{guide_root}/{topic_id}.html")
+                        outputs.add(
+                            f"documentation/build/site/{locale}/{guide_root}/{topic_id}.html"
+                        )
             for search_locale in scope["search_indexes"]:
                 outputs.add(f"documentation/build/site/search/{search_locale}/index.json")
     for scope in scopes:
@@ -720,7 +1172,9 @@ def fast_check(changed_arguments: list[str] | None = None, *, emit: bool = True)
         for path in report["checked"]:
             print(f"  {path}", flush=True)
         print(f"Affected locales: {', '.join(locales) if locales else 'none'}", flush=True)
-        print(f"Affected guide roots: {', '.join(guide_roots) if guide_roots else 'none'}", flush=True)
+        print(
+            f"Affected guide roots: {', '.join(guide_roots) if guide_roots else 'none'}", flush=True
+        )
         print(
             f"Affected search indexes: {', '.join(search_indexes) if search_indexes else 'none'}",
             flush=True,
@@ -744,6 +1198,8 @@ class _HTMLLinks(HTMLParser):
         self.h1_count = 0
         self.html_lang = ""
         self.main_count = 0
+        self.tree_host_count = 0
+        self.embedded_tree_count = 0
         self.body_classes: set[str] = set()
         self.nav_labels: set[str] = set()
         self.forbidden: list[str] = []
@@ -759,6 +1215,10 @@ class _HTMLLinks(HTMLParser):
             self.h1_count += 1
         if tag == "main" and attributes.get("id") == "main-content":
             self.main_count += 1
+        if "data-docs-tree-host" in attributes:
+            self.tree_host_count += 1
+        if attributes.get("role") == "tree" or "data-docs-tree" in attributes:
+            self.embedded_tree_count += 1
         if tag == "body":
             self.body_classes.update(attributes.get("class", "").split())
         if tag == "nav" and attributes.get("aria-label"):
@@ -824,6 +1284,10 @@ def validate_output(root: Path) -> None:
                 errors.append(f"{page}: generated page must contain one main#main-content landmark")
             if "bpm-docs-shell" not in document.body_classes:
                 errors.append(f"{page}: portal shell class is missing")
+            if document.tree_host_count != 1:
+                errors.append(f"{page}: portal shell must contain one navigation tree host")
+            if document.embedded_tree_count:
+                errors.append(f"{page}: portal shell must not embed navigation tree nodes")
             if len(document.nav_labels) < 3:
                 errors.append(f"{page}: portal shell must expose distinct navigation labels")
         errors.extend(f"{page}: {issue}" for issue in document.forbidden)
@@ -869,6 +1333,336 @@ def _relative_href(from_html: Path, target: Path) -> str:
     return os.path.relpath(target, from_html.parent).replace(os.sep, "/")
 
 
+def _navigation_topic_order(filename: str) -> list[str]:
+    topic_ids: list[str] = []
+    for keyref in _guide_topic_keyrefs("en", filename):
+        if not keyref.startswith("topic."):
+            raise BuildError(f"guide map uses unsupported topic key: {keyref}")
+        topic_ids.append(keyref.removeprefix("topic."))
+    return topic_ids
+
+
+def _navigation_section_labels(taxonomy: dict[str, Any]) -> dict[str, dict[str, str]]:
+    catalog = _read_json_file(TOPIC_SECTION_LABELS)
+    if catalog.get("locales") != list(LOCALES):
+        raise BuildError("topic section label catalog must use the exact locale matrix")
+    expected = {
+        section["label_key"]
+        for document in taxonomy["documents"]
+        for section in document["sections"]
+    }
+    labels = catalog.get("labels", {})
+    if set(labels) != expected:
+        raise BuildError("topic section label catalog must match the taxonomy label keys exactly")
+    for document in taxonomy["documents"]:
+        for section in document["sections"]:
+            label_key = section["label_key"]
+            localized = labels[label_key]
+            if set(localized) != set(LOCALES):
+                raise BuildError(f"topic section label {label_key} must own every locale")
+            if any(
+                not isinstance(localized[locale], str) or not localized[locale].strip()
+                for locale in LOCALES
+            ):
+                raise BuildError(
+                    f"topic section label {label_key} must be non-empty in every locale"
+                )
+            if localized["en"] != section["canonical_label"]:
+                raise BuildError(
+                    f"topic section label {label_key} must preserve its canonical English value"
+                )
+            if any(localized[locale] == localized["en"] for locale in LOCALES if locale != "en"):
+                raise BuildError(f"topic section label {label_key} must not fall back to English")
+    return labels
+
+
+def _navigation_sections() -> dict[str, list[dict[str, Any]]]:
+    taxonomy = _read_json_file(TOPIC_SECTION_TAXONOMY)
+    labels = _navigation_section_labels(taxonomy)
+    return {
+        document["guide_id"]: [
+            {
+                **section,
+                "labels": labels[section["label_key"]],
+                "node_id": (f"section:{document['guide_id']}:{section['section_id']}"),
+            }
+            for section in document["sections"]
+        ]
+        for document in taxonomy["documents"]
+    }
+
+
+def _navigation_model(site_root: Path) -> dict[str, Any]:
+    cache_key = str(site_root.resolve())
+    cached = _NAVIGATION_MODEL_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+    model = {
+        "topics": _build_topics(site_root),
+        "topic_order": {
+            filename: _navigation_topic_order(filename)
+            for _guide_id, filename, _anchor, _url_root in GUIDE_MAPS
+        },
+        "sections": _navigation_sections(),
+    }
+    _NAVIGATION_MODEL_CACHE[cache_key] = model
+    return model
+
+
+def _current_navigation_topic(
+    topics: dict[str, dict[str, Any]],
+    page: Path,
+    site_root: Path,
+    locale: str,
+) -> tuple[str, str] | None:
+    try:
+        page_output = page.relative_to(site_root).as_posix()
+    except ValueError as exc:
+        raise BuildError(f"documentation page is outside site root: {page}") from exc
+    guide_ids = {guide_id for guide_id, *_rest in GUIDE_MAPS}
+    for topic_id, topic in topics.items():
+        if topic_id in guide_ids:
+            continue
+        if topic["output"].get(locale) == page_output:
+            return topic["guide_id"], topic_id
+    return None
+
+
+def _locale_navigation_href(output: str, locale: str) -> str:
+    prefix = f"{locale}/"
+    if not output.startswith(prefix):
+        raise BuildError(f"navigation output is outside locale root: {output}")
+    return output.removeprefix(prefix)
+
+
+def _navigation_topic_node(
+    topics: dict[str, dict[str, Any]], topic_id: str, locale: str
+) -> dict[str, Any]:
+    topic = topics[topic_id]
+    return {
+        "node_id": topic_id,
+        "node_type": "topic",
+        "label": topic["title"][locale],
+        "href": _locale_navigation_href(topic["output"][locale], locale),
+        "anchor": None,
+        "label_key": None,
+        "children": [],
+    }
+
+
+def _navigation_payload(site_root: Path, locale: str) -> dict[str, Any]:
+    model = _navigation_model(site_root)
+    topics = model["topics"]
+    guide_ids = {guide_id for guide_id, *_rest in GUIDE_MAPS}
+    guide_nodes = []
+    for guide_id, filename, anchor, _url_root in GUIDE_MAPS:
+        guide = topics[guide_id]
+        sections = model["sections"].get(guide_id, [])
+        if sections:
+            children = [
+                {
+                    "node_id": section["node_id"],
+                    "node_type": "section",
+                    "label": section["labels"][locale],
+                    "href": None,
+                    "anchor": None,
+                    "label_key": section["label_key"],
+                    "children": [
+                        _navigation_topic_node(topics, topic_id, locale)
+                        for topic_id in section["topics"]
+                    ],
+                }
+                for section in sections
+            ]
+        else:
+            children = [
+                _navigation_topic_node(topics, topic_id, locale)
+                for topic_id in model["topic_order"][filename]
+                if topic_id not in guide_ids
+            ]
+        guide_nodes.append(
+            {
+                "node_id": guide_id,
+                "node_type": "guide",
+                "label": guide["title"][locale],
+                "href": (f"{_locale_navigation_href(guide['output'][locale], locale)}#{anchor}"),
+                "anchor": anchor,
+                "label_key": None,
+                "children": children,
+            }
+        )
+    root = {
+        "node_id": "documentation-root",
+        "node_type": "root",
+        "label": SHELL_LABELS[locale]["navigation_root"],
+        "href": "index.html",
+        "anchor": None,
+        "label_key": "navigation.root",
+        "children": guide_nodes,
+    }
+
+    def count_nodes(node: dict[str, Any]) -> int:
+        return 1 + sum(count_nodes(child) for child in node["children"])
+
+    return {
+        "$schema": "../schemas/product-documentation-navigation-v1.schema.json",
+        "schema_version": 1,
+        "documentation_version": "0.9.1",
+        "locale": locale,
+        "node_count": count_nodes(root),
+        "root": root,
+    }
+
+
+def generate_navigation_files(site_root: Path) -> None:
+    for locale in LOCALES:
+        payload = _navigation_payload(site_root, locale)
+        _validate_schema(payload, NAVIGATION_SCHEMA)
+        _write_json(site_root / locale / "navigation.json", payload)
+
+
+def _manifest_navigation_root(manifest: dict[str, Any], locale: str) -> dict[str, Any]:
+    topics = manifest["topics"]
+    sections_by_guide = _navigation_sections()
+    guide_ids = {guide_id for guide_id, *_rest in GUIDE_MAPS}
+
+    def topic_node(topic_id: str) -> dict[str, Any]:
+        topic = topics[topic_id]
+        return {
+            "node_id": topic_id,
+            "node_type": "topic",
+            "label": topic["title"][locale],
+            "href": _locale_navigation_href(topic["output"][locale], locale),
+            "anchor": None,
+            "label_key": None,
+            "children": [],
+        }
+
+    guide_nodes = []
+    for guide_id, filename, anchor, _url_root in GUIDE_MAPS:
+        guide = manifest["guides"][guide_id]
+        sections = sections_by_guide.get(guide_id, [])
+        if sections:
+            children = [
+                {
+                    "node_id": section["node_id"],
+                    "node_type": "section",
+                    "label": section["labels"][locale],
+                    "href": None,
+                    "anchor": None,
+                    "label_key": section["label_key"],
+                    "children": [topic_node(topic_id) for topic_id in section["topics"]],
+                }
+                for section in sections
+            ]
+        else:
+            children = [
+                topic_node(topic_id)
+                for topic_id in _navigation_topic_order(filename)
+                if topic_id not in guide_ids
+            ]
+        home_topic = topics[guide["home_topic_id"]]
+        guide_nodes.append(
+            {
+                "node_id": guide_id,
+                "node_type": "guide",
+                "label": guide["title"][locale],
+                "href": (
+                    f"{_locale_navigation_href(home_topic['output'][locale], locale)}#{anchor}"
+                ),
+                "anchor": anchor,
+                "label_key": None,
+                "children": children,
+            }
+        )
+    return {
+        "node_id": "documentation-root",
+        "node_type": "root",
+        "label": SHELL_LABELS[locale]["navigation_root"],
+        "href": "index.html",
+        "anchor": None,
+        "label_key": "navigation.root",
+        "children": guide_nodes,
+    }
+
+
+def _validate_navigation_manifest_alignment(
+    locale: str, navigation_payload: dict[str, Any], manifest: dict[str, Any]
+) -> None:
+    if navigation_payload.get("locale") != locale:
+        raise BuildError(f"navigation locale mismatch for {locale}")
+    expected_root = _manifest_navigation_root(manifest, locale)
+    if navigation_payload.get("root") != expected_root:
+        raise BuildError(f"navigation source diverges from manifest authority for {locale}")
+
+    def count_nodes(node: dict[str, Any]) -> int:
+        return 1 + sum(count_nodes(child) for child in node["children"])
+
+    expected_count = count_nodes(expected_root)
+    if navigation_payload.get("node_count") != expected_count:
+        raise BuildError(f"navigation node count diverges from manifest authority for {locale}")
+
+
+def _validate_navigation_artifact_record(
+    locale: str,
+    record: dict[str, Any],
+    payload: bytes,
+    manifest: dict[str, Any],
+    *,
+    context: str,
+) -> dict[str, Any]:
+    if _payload_sha256(payload) != record["sha256"]:
+        raise BuildError(f"{context} navigation SHA-256 mismatch for {locale}")
+    navigation_payload = _read_json_bytes(payload, record["path"])
+    _validate_schema(navigation_payload, NAVIGATION_SCHEMA)
+    if record["format_version"] != navigation_payload["schema_version"]:
+        raise BuildError(f"{context} navigation format version mismatch for {locale}")
+    if record["node_count"] != navigation_payload["node_count"]:
+        raise BuildError(f"{context} navigation node count mismatch for {locale}")
+    _validate_navigation_manifest_alignment(locale, navigation_payload, manifest)
+    return navigation_payload
+
+
+def _navigation_host(site_root: Path, page: Path, locale: str) -> str:
+    labels = SHELL_LABELS[locale]
+    current = _current_navigation_topic(
+        _navigation_model(site_root)["topics"], page, site_root, locale
+    )
+    current_node_id = current[1] if current else "documentation-root"
+    navigation_href = _relative_href(page, site_root / locale / "navigation.json")
+    root_href = _relative_href(page, site_root / locale / "index.html")
+    return f"""            <div class="bpm-docs-tree-host" data-docs-tree-host aria-busy="true" data-navigation-href="{_escape(navigation_href)}" data-navigation-locale="{_escape(locale)}" data-current-tree-node="{_escape(current_node_id)}" data-tree-storage-key="bpm-docs-tree:{_escape(locale)}:0.9.1" data-label-tree="{_escape(labels["navigation_tree_label"])}" data-label-expand="{_escape(labels["navigation_expand"])}" data-label-collapse="{_escape(labels["navigation_collapse"])}" data-label-current="{_escape(labels["navigation_current"])}" data-label-parent="{_escape(labels["navigation_parent"])}" data-label-back-to-root="{_escape(labels["navigation_back_to_root"])}" data-label-loading="{_escape(labels["navigation_loading"])}" data-label-unavailable="{_escape(labels["navigation_unavailable"])}" data-root-href="{_escape(root_href)}">
+               <p class="bpm-docs-tree-status" role="status" aria-live="polite" data-docs-tree-status>{_escape(labels["navigation_loading"])}</p>
+               <noscript><p class="bpm-docs-tree-status"><a href="{_escape(root_href)}">{_escape(labels["navigation_back_to_root"])}</a></p></noscript>
+            </div>"""
+
+
+def _navigation_breadcrumbs(site_root: Path, page: Path, locale: str) -> str:
+    labels = SHELL_LABELS[locale]
+    model = _navigation_model(site_root)
+    topics = model["topics"]
+    current = _current_navigation_topic(topics, page, site_root, locale)
+    root_href = _relative_href(page, site_root / locale / "index.html")
+    if not current:
+        return f'            <li aria-current="page">{_escape(labels["navigation_root"])}</li>'
+    guide_id, topic_id = current
+    guide = topics[guide_id]
+    topic = topics[topic_id]
+    guide_anchor = next(
+        anchor
+        for candidate_guide_id, _filename, anchor, _url_root in GUIDE_MAPS
+        if candidate_guide_id == guide_id
+    )
+    guide_href = f"{root_href}#{guide_anchor}"
+    return "\n".join(
+        [
+            f'            <li><a href="{_escape(root_href)}">{_escape(labels["navigation_root"])}</a></li>',
+            f'            <li><a href="{_escape(guide_href)}">{_escape(guide["title"][locale])}</a></li>',
+            f'            <li aria-current="page">{_escape(topic["title"][locale])}</li>',
+        ]
+    )
+
+
 def _normalize_locale_root_links(site_root: Path) -> None:
     for locale in LOCALES:
         locale_root = site_root / locale
@@ -907,6 +1701,58 @@ def _normalize_locale_root_links(site_root: Path) -> None:
                 page.write_text(updated, encoding="utf-8")
 
 
+def _normalize_screenshot_links(site_root: Path) -> None:
+    attribute_pattern = re.compile(
+        r'(?P<attribute>href|src)=(?P<quote>["\'])(?P<value>.*?)(?P=quote)',
+        flags=re.IGNORECASE,
+    )
+    for locale in LOCALES:
+        locale_root = site_root / locale
+        screenshot_root = locale_root / "assets/screenshots"
+        if not screenshot_root.is_dir():
+            continue
+        screenshot_names = {path.name for path in screenshot_root.glob("*.png")}
+        for page in sorted(locale_root.rglob("*.html")):
+            content = page.read_text(encoding="utf-8")
+
+            def replace_link(
+                match: re.Match[str],
+                *,
+                page: Path = page,
+                locale: str = locale,
+                screenshot_names: set[str] = screenshot_names,
+                screenshot_root: Path = screenshot_root,
+            ) -> str:
+                attribute = match.group("attribute")
+                quote = match.group("quote")
+                value = match.group("value")
+                parsed = urllib.parse.urlsplit(value)
+                if (parsed.scheme and parsed.scheme != "file") or parsed.netloc:
+                    return match.group(0)
+                parts = [urllib.parse.unquote(part) for part in parsed.path.split("/") if part]
+                filename = ""
+                for index in range(0, len(parts) - 3):
+                    if parts[index : index + 3] == ["assets", "screenshots", locale]:
+                        filename = parts[index + 3]
+                        break
+                if filename not in screenshot_names:
+                    return match.group(0)
+                normalized = urllib.parse.urlunsplit(
+                    (
+                        "",
+                        "",
+                        _relative_href(page, screenshot_root / filename),
+                        parsed.query,
+                        parsed.fragment,
+                    )
+                )
+                return f"{attribute}={quote}{_escape(normalized)}{quote}"
+
+            updated = attribute_pattern.sub(replace_link, content)
+            if updated != content:
+                page.write_text(updated, encoding="utf-8")
+
+
 def _body_with_shell_class(body_tag: str) -> str:
     class_match = re.search(r'\sclass=(["\'])(.*?)\1', body_tag, flags=re.IGNORECASE)
     if class_match:
@@ -941,49 +1787,57 @@ def _locale_peer(site_root: Path, page: Path, source_locale: str, target_locale:
     return peer if peer.is_file() else site_root / target_locale / "index.html"
 
 
+def _portal_root_anchor_targets(site_root: Path, page: Path, locale: str, body_inner: str) -> str:
+    if page != site_root / locale / "index.html":
+        return ""
+    anchors = []
+    for _guide_id, _filename, anchor, _url_root in GUIDE_MAPS:
+        if re.search(rf'\sid=(["\']){re.escape(anchor)}\1', body_inner):
+            continue
+        anchors.append(
+            f'            <span id="{_escape(anchor)}" class="bpm-docs-guide-anchor" aria-hidden="true"></span>'
+        )
+    return "\n".join(anchors)
+
+
 def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> str:
     labels = SHELL_LABELS[locale]
     portal_title = _map_title(locale, "portal.ditamap")
-    guide_items = [
-        (_map_title(locale, filename), anchor) for _guide, filename, anchor, _root in GUIDE_MAPS
-    ]
-    guide_links = "\n".join(
-        f'               <li><a href="#{anchor}">{_escape(title)}</a></li>'
-        for title, anchor in guide_items
-    )
-    guide_sidebar = "\n".join(
-        f'            <li id="{anchor}"><a href="#{anchor}">{_escape(title)}</a></li>'
-        for title, anchor in guide_items
-    )
+    guide_sidebar = _navigation_host(site_root, page, locale)
+    breadcrumbs = _navigation_breadcrumbs(site_root, page, locale)
     locale_links = "\n".join(
         "               <li>"
         f'<a href="{_escape(_relative_href(page, _locale_peer(site_root, page, locale, peer)))}"'
         f' hreflang="{peer}" lang="{peer}"'
-        f'{" aria-current=\"true\"" if peer == locale else ""}>{peer}</a>'
+        f"{' aria-current="true"' if peer == locale else ''}>{peer}</a>"
         "</li>"
         for peer in LOCALES
     )
     search_index_href = _relative_href(page, site_root / "search" / locale / "index.json")
+    root_anchor_targets = _portal_root_anchor_targets(site_root, page, locale, body_inner)
     search_shell = f"""            <section class="bpm-docs-search" role="search" aria-labelledby="bpm-docs-search-heading" data-search-locale="{_escape(locale)}" data-search-index-href="{_escape(search_index_href)}" data-label-loading="{_escape(labels["search_loading"])}" data-label-ready="{_escape(labels["search_ready"])}" data-label-no-results="{_escape(labels["search_no_results"])}" data-label-unavailable="{_escape(labels["search_unavailable"])}" data-label-result-singular="{_escape(labels["search_result_singular"])}" data-label-result-plural="{_escape(labels["search_result_plural"])}">
-               <h2 id="bpm-docs-search-heading">{_escape(labels["search"])}</h2>
+               <h2 id="bpm-docs-search-heading" class="bpm-docs-visually-hidden">{_escape(labels["search"])}</h2>
                <div class="bpm-docs-search-form">
-                  <label for="bpm-docs-search-query">{_escape(labels["search_query"])}</label>
+                  <label class="bpm-docs-visually-hidden" for="bpm-docs-search-query">{_escape(labels["search_query"])}</label>
                   <div class="bpm-docs-search-row">
                      <input id="bpm-docs-search-query" class="bpm-docs-search-input" name="q" type="search" inputmode="search" maxlength="256" autocomplete="off" placeholder="{_escape(labels["search_placeholder"])}">
                      <button class="bpm-docs-search-submit" type="button" data-search-submit>{_escape(labels["search_submit"])}</button>
                      <button class="bpm-docs-search-clear" type="button" data-search-clear>{_escape(labels["search_clear"])}</button>
+                     <button class="bpm-docs-search-advanced-toggle" type="button" aria-expanded="false" aria-controls="bpm-docs-search-advanced-panel" data-search-advanced-toggle>{_escape(labels["search_filters"])}</button>
                   </div>
                </div>
-               <p class="bpm-docs-search-help" id="bpm-docs-search-help">{_escape(labels["search_help"])}</p>
-               <details class="bpm-docs-search-filters">
-                  <summary>{_escape(labels["search_filters"])}</summary>
-                  <div class="bpm-docs-search-filter-grid" data-search-filters></div>
-               </details>
-               <p class="bpm-docs-search-status" role="status" aria-live="polite" data-search-status>{_escape(labels["search_loading"])}</p>
-               <section class="bpm-docs-search-results" aria-labelledby="bpm-docs-search-results-heading">
+               <div id="bpm-docs-search-advanced-panel" class="bpm-docs-search-advanced-panel" data-search-advanced-panel hidden>
+                  <p class="bpm-docs-search-help" id="bpm-docs-search-help">{_escape(labels["search_help"])}</p>
+                  <div class="bpm-docs-search-filters">
+                     <h3>{_escape(labels["search_filters"])}</h3>
+                     <div class="bpm-docs-search-filter-grid" data-search-filters></div>
+                  </div>
+                  <p class="bpm-docs-search-status" role="status" aria-live="polite" data-search-status>{_escape(labels["search_loading"])}</p>
+                  <section class="bpm-docs-search-results" aria-labelledby="bpm-docs-search-results-heading">
                   <h3 id="bpm-docs-search-results-heading">{_escape(labels["search_results"])}</h3>
                   <ol class="bpm-docs-search-result-list" data-search-results></ol>
-               </section>
+                  </section>
+               </div>
             </section>"""
     return f"""      <a class="bpm-docs-skip-link" href="#main-content">{_escape(labels["skip"])}</a>
       <header class="bpm-docs-header">
@@ -993,33 +1847,36 @@ def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> 
             <p class="bpm-docs-version">{_escape(labels["version"])}</p>
          </div>
          <div class="bpm-docs-header-nav">
-            <nav aria-label="{_escape(labels["guides"])}">
-               <ul>
-{guide_links}
-               </ul>
-            </nav>
             <nav aria-label="{_escape(labels["locales"])}">
                <ul>
 {locale_links}
                </ul>
             </nav>
+            <div class="bpm-docs-theme-control">
+               <label for="bpm-docs-theme">{_escape(labels["theme"])}</label>
+               <select id="bpm-docs-theme" name="theme" data-docs-theme-select>
+                  <option value="system">{_escape(labels["theme_system"])}</option>
+                  <option value="light">{_escape(labels["theme_light"])}</option>
+                  <option value="dark">{_escape(labels["theme_dark"])}</option>
+               </select>
+            </div>
          </div>
       </header>
       <nav class="bpm-docs-breadcrumbs" aria-label="{_escape(labels["breadcrumbs"])}">
          <ol>
-            <li><a href="{_escape(_relative_href(page, site_root / locale / "index.html"))}">{_escape(labels["home"])}</a></li>
-            <li aria-current="page">{_escape(portal_title)}</li>
+{breadcrumbs}
          </ol>
       </nav>
       <div class="bpm-docs-content-grid">
          <aside class="bpm-docs-sidebar" aria-labelledby="bpm-docs-guides-heading">
             <h2 id="bpm-docs-guides-heading">{_escape(labels["guides"])}</h2>
-            <ol class="bpm-docs-guide-list">
+            <nav class="bpm-docs-tree-nav" aria-label="{_escape(labels["navigation_tree_label"])}">
 {guide_sidebar}
-            </ol>
+            </nav>
          </aside>
          <main id="main-content" class="bpm-docs-main" tabindex="-1">
 {search_shell}
+{root_anchor_targets}
 {body_inner.rstrip()}
          </main>
       </div>
@@ -1043,6 +1900,17 @@ def _install_theme_assets(locale_root: Path) -> None:
     shutil.copyfile(script, assets_root / SEARCH_SCRIPT)
 
 
+def _install_screenshot_assets(locale_root: Path) -> None:
+    locale = locale_root.name
+    source_root = SCREENSHOT_ROOT / locale
+    if not source_root.is_dir():
+        raise BuildError(f"missing localized screenshot assets: {source_root}")
+    target_root = locale_root / "assets/screenshots"
+    target_root.mkdir(parents=True, exist_ok=True)
+    for source in sorted(source_root.glob("*.png")):
+        shutil.copyfile(source, target_root / source.name)
+
+
 def _apply_portal_shell_to_page(site_root: Path, page: Path, locale: str) -> None:
     content = _html_with_locale(page.read_text(encoding="utf-8"), locale)
     head_end = re.search(r"</head\s*>", content, flags=re.IGNORECASE)
@@ -1051,6 +1919,7 @@ def _apply_portal_shell_to_page(site_root: Path, page: Path, locale: str) -> Non
     if not head_end or not body_start or not body_end:
         raise BuildError(f"generated page lacks head/body shell anchors: {page}")
     css_links = (
+        '      <meta name="theme-color" content="#edf2f7">\n'
         f'      <link rel="stylesheet" type="text/css" href="'
         f'{_escape(_relative_href(page, site_root / locale / "assets" / THEME_FILES[0]))}">\n'
         f'      <link rel="stylesheet" type="text/css" media="print" href="'
@@ -1080,6 +1949,8 @@ def apply_portal_shell(site_root: Path) -> None:
         if not locale_root.is_dir():
             raise BuildError(f"generated locale root is missing: {locale_root}")
         _install_theme_assets(locale_root)
+        _install_screenshot_assets(locale_root)
+    generate_navigation_files(site_root)
     for locale in LOCALES:
         for page in sorted((site_root / locale).rglob("*.html")):
             _apply_portal_shell_to_page(site_root, page, locale)
@@ -1131,7 +2002,9 @@ def _validate_schema(instance: dict[str, Any], schema_path: Path) -> None:
         jsonschema.Draft202012Validator(_schema(schema_path)).validate(instance)
     except jsonschema.ValidationError as exc:
         location = "/".join(str(part) for part in exc.absolute_path) or "<root>"
-        raise BuildError(f"schema validation failed for {schema_path.name} at {location}: {exc.message}") from exc
+        raise BuildError(
+            f"schema validation failed for {schema_path.name} at {location}: {exc.message}"
+        ) from exc
 
 
 def _read_json_file(path: Path) -> dict[str, Any]:
@@ -1183,7 +2056,9 @@ def _guide_topic_keyrefs(locale: str, filename: str) -> list[str]:
     return _topicrefs(root)
 
 
-def _localized_topic_roots(key: str, hrefs_by_locale: dict[str, dict[str, Path]]) -> dict[str, ET.Element]:
+def _localized_topic_roots(
+    key: str, hrefs_by_locale: dict[str, dict[str, Path]]
+) -> dict[str, ET.Element]:
     roots = {}
     for locale in LOCALES:
         try:
@@ -1230,6 +2105,27 @@ def _search_facets_filters() -> dict[str, Any]:
     return _read_json_file(SEARCH_FACETS_FILTERS)
 
 
+def _localized_search_facet_fields(
+    locale: str,
+    config: dict[str, Any],
+) -> dict[str, dict[str, Any]]:
+    field_labels = SEARCH_FILTER_FIELD_LABELS[locale]
+    value_labels = SEARCH_FILTER_VALUE_LABELS[locale]
+    localized: dict[str, dict[str, Any]] = {}
+    for field, definition in config["facet_fields"].items():
+        field_value_labels = value_labels.get(field, {})
+        localized[field] = {
+            **definition,
+            "label": field_labels[field],
+            "value_labels": {
+                str(value): field_value_labels.get(str(value), str(value))
+                for value in definition["values"]
+                if value is not None
+            },
+        }
+    return localized
+
+
 def _search_quality_performance() -> dict[str, Any]:
     return _read_json_file(SEARCH_QUALITY_PERFORMANCE)
 
@@ -1274,7 +2170,9 @@ def _cjk_expansions(token: str) -> list[str]:
     return expansions
 
 
-def _normalize_search_text(locale: str, text: str, config: dict[str, Any] | None = None) -> list[str]:
+def _normalize_search_text(
+    locale: str, text: str, config: dict[str, Any] | None = None
+) -> list[str]:
     if locale not in LOCALES:
         raise BuildError(f"unsupported search locale: {locale}")
     rules = (config or _search_normalization_aliases())["normalization"]
@@ -1356,19 +2254,11 @@ def _resolve_search_query_aliases(
 
 
 def _query_fixtures_for_locale(locale: str, config: dict[str, Any]) -> list[dict[str, Any]]:
-    return [
-        fixture
-        for fixture in config["query_fixtures"]
-        if fixture["locale"] == locale
-    ]
+    return [fixture for fixture in config["query_fixtures"] if fixture["locale"] == locale]
 
 
 def _ranking_fixtures_for_locale(locale: str, config: dict[str, Any]) -> list[dict[str, Any]]:
-    return [
-        fixture
-        for fixture in config["ranking_fixtures"]
-        if fixture["locale"] == locale
-    ]
+    return [fixture for fixture in config["ranking_fixtures"] if fixture["locale"] == locale]
 
 
 def _max_typo_distance(token: str, ranking_config: dict[str, Any]) -> int:
@@ -1416,11 +2306,7 @@ def _bounded_typo_matches(
     ranking_config: dict[str, Any],
 ) -> list[dict[str, Any]]:
     fields = document["normalized"]["fields"]
-    exact_pool = {
-        token
-        for field_tokens in fields.values()
-        for token in field_tokens
-    }
+    exact_pool = {token for field_tokens in fields.values() for token in field_tokens}
     matches: list[dict[str, Any]] = []
     for query_token in query_tokens:
         if query_token in exact_pool or _is_typo_excluded(query_token, ranking_config):
@@ -1485,7 +2371,8 @@ def _score_search_document(
     components = {
         "exact_identifier": len(exact_identifier_matches) * weights["exact_identifier"],
         "title": len(title_matches) * weights["title"],
-        "alias": (len(alias_token_matches) + len(alias_id_matches) + len(direct_alias_matches)) * weights["alias"],
+        "alias": (len(alias_token_matches) + len(alias_id_matches) + len(direct_alias_matches))
+        * weights["alias"],
         "heading": len(heading_matches) * weights["heading"],
         "body": len(body_matches) * weights["body"],
         "bounded_typo": len(typo_matches) * weights["bounded_typo"],
@@ -1545,7 +2432,9 @@ def _ranking_fixture_results(
 ) -> list[dict[str, Any]]:
     results = []
     for fixture in _ranking_fixtures_for_locale(locale, ranking_config):
-        ranked = _rank_search_documents(locale, fixture["query"], documents, alias_config, ranking_config)
+        ranked = _rank_search_documents(
+            locale, fixture["query"], documents, alias_config, ranking_config
+        )
         top = ranked[0] if ranked else None
         results.append(
             {
@@ -1586,8 +2475,7 @@ def _topic_anchor_titles(roots: dict[str, ET.Element]) -> dict[str, dict[str, An
     for anchor_id in sorted(anchor_ids):
         anchors[anchor_id] = {
             "title": {
-                locale: titles_by_locale[locale].get(anchor_id, anchor_id)
-                for locale in LOCALES
+                locale: titles_by_locale[locale].get(anchor_id, anchor_id) for locale in LOCALES
             },
             "aliases": [],
         }
@@ -1661,10 +2549,7 @@ def _target_identifiers_by_topic(target_map: dict[str, Any]) -> dict[str, dict[s
         if field:
             topic_identifiers[field].append(target["source_id"])
     return {
-        topic_id: {
-            field: sorted(set(values))
-            for field, values in identifiers.items()
-        }
+        topic_id: {field: sorted(set(values)) for field, values in identifiers.items()}
         for topic_id, identifiers in by_topic.items()
     }
 
@@ -1691,13 +2576,17 @@ def _policy_facet_metadata() -> dict[str, dict[str, list[str]]]:
     metadata: dict[str, dict[str, set[str]]] = {}
     for policy in index["policies"]:
         policy_id = policy["policy_id"]
-        fields = metadata.setdefault(policy_id, {"firefox_channel": set(), "policy_category": set()})
+        fields = metadata.setdefault(
+            policy_id, {"firefox_channel": set(), "policy_category": set()}
+        )
         channel_support = policy.get("channel_support", {})
         fields["firefox_channel"].update(channel_support.get("supported_channels", []))
 
     for policy in inventory["policies"]:
         policy_id = policy["policy_id"]
-        fields = metadata.setdefault(policy_id, {"firefox_channel": set(), "policy_category": set()})
+        fields = metadata.setdefault(
+            policy_id, {"firefox_channel": set(), "policy_category": set()}
+        )
         for channel_id, channel in policy.get("channels", {}).items():
             fields["firefox_channel"].add(channel_id)
             ui = channel.get("ui", {})
@@ -1706,10 +2595,7 @@ def _policy_facet_metadata() -> dict[str, dict[str, list[str]]]:
             fields["policy_category"].update(channel.get("categories", []))
 
     return {
-        policy_id: {
-            field: sorted(values)
-            for field, values in fields.items()
-        }
+        policy_id: {field: sorted(values) for field, values in fields.items()}
         for policy_id, fields in metadata.items()
     }
 
@@ -1720,7 +2606,9 @@ def _cis_facet_metadata() -> dict[str, dict[str, list[str]]]:
     metadata: dict[str, dict[str, set[str]]] = {}
     for topic in index["topics"]:
         recommendation_id = topic["recommendation_id"]
-        fields = metadata.setdefault(recommendation_id, {"cis_level": set(), "cis_control_state": set()})
+        fields = metadata.setdefault(
+            recommendation_id, {"cis_level": set(), "cis_control_state": set()}
+        )
         if topic.get("level"):
             fields["cis_level"].add(f"level-{topic['level']}")
         if topic.get("mapping_status"):
@@ -1728,14 +2616,18 @@ def _cis_facet_metadata() -> dict[str, dict[str, list[str]]]:
 
     for record in index.get("provenance_only_records", []):
         recommendation_id = record["recommendation_id"]
-        fields = metadata.setdefault(recommendation_id, {"cis_level": set(), "cis_control_state": set()})
+        fields = metadata.setdefault(
+            recommendation_id, {"cis_level": set(), "cis_control_state": set()}
+        )
         if record.get("level"):
             fields["cis_level"].add(f"level-{record['level']}")
         fields["cis_control_state"].add("provenance-only")
 
     for recommendation in inventory["recommendations"]:
         recommendation_id = recommendation["recommendation_id"]
-        fields = metadata.setdefault(recommendation_id, {"cis_level": set(), "cis_control_state": set()})
+        fields = metadata.setdefault(
+            recommendation_id, {"cis_level": set(), "cis_control_state": set()}
+        )
         if recommendation.get("level"):
             fields["cis_level"].add(f"level-{recommendation['level']}")
         if recommendation.get("mapping_status"):
@@ -1744,28 +2636,22 @@ def _cis_facet_metadata() -> dict[str, dict[str, list[str]]]:
             fields["cis_control_state"].add("manual-review")
 
     return {
-        recommendation_id: {
-            field: sorted(values)
-            for field, values in fields.items()
-        }
+        recommendation_id: {field: sorted(values) for field, values in fields.items()}
         for recommendation_id, fields in metadata.items()
     }
 
 
 def _facet_values_from_config(config: dict[str, Any], field: str) -> set[str]:
-    return {
-        value
-        for value in config["facet_fields"][field]["values"]
-        if value is not None
-    }
+    return {value for value in config["facet_fields"][field]["values"] if value is not None}
 
 
-def _target_facets_by_topic(target_map: dict[str, Any], config: dict[str, Any]) -> dict[str, dict[str, list[str]]]:
+def _target_facets_by_topic(
+    target_map: dict[str, Any], config: dict[str, Any]
+) -> dict[str, dict[str, list[str]]]:
     policy_metadata = _policy_facet_metadata()
     cis_metadata = _cis_facet_metadata()
     allowed_values = {
-        field: _facet_values_from_config(config, field)
-        for field in config["facet_fields"]
+        field: _facet_values_from_config(config, field) for field in config["facet_fields"]
     }
     by_topic: dict[str, dict[str, set[str]]] = {}
     for target in target_map["targets"].values():
@@ -1826,13 +2712,11 @@ def _document_filter_facets(document: dict[str, Any]) -> dict[str, list[str]]:
     return values
 
 
-def _facet_counts(documents: list[dict[str, Any]], config: dict[str, Any]) -> dict[str, dict[str, int]]:
+def _facet_counts(
+    documents: list[dict[str, Any]], config: dict[str, Any]
+) -> dict[str, dict[str, int]]:
     counts = {
-        field: {
-            str(value): 0
-            for value in definition["values"]
-            if value is not None
-        }
+        field: {str(value): 0 for value in definition["values"] if value is not None}
         for field, definition in config["facet_fields"].items()
     }
     for document in documents:
@@ -1848,17 +2732,15 @@ def _filter_search_documents(
     documents: list[dict[str, Any]],
     filters: dict[str, list[str]],
 ) -> list[dict[str, Any]]:
-    active_filters = {
-        field: set(values)
-        for field, values in filters.items()
-        if values
-    }
+    active_filters = {field: set(values) for field, values in filters.items() if values}
     if not active_filters:
         return documents
     filtered = []
     for document in documents:
         filter_facets = _document_filter_facets(document)
-        if all(set(filter_facets.get(field, [])) & values for field, values in active_filters.items()):
+        if all(
+            set(filter_facets.get(field, [])) & values for field, values in active_filters.items()
+        ):
             filtered.append(document)
     return filtered
 
@@ -1882,10 +2764,7 @@ def _filter_fixture_results(
     for fixture in config["filter_fixtures"]:
         if fixture["locale"] != locale:
             continue
-        filters = {
-            field: sorted(values)
-            for field, values in fixture["filters"].items()
-        }
+        filters = {field: sorted(values) for field, values in fixture["filters"].items()}
         filtered = _filter_search_documents(documents, filters)
         results.append(
             {
@@ -1904,11 +2783,7 @@ def _filter_fixture_results(
 
 
 def _quality_fixtures_for_locale(locale: str, config: dict[str, Any]) -> list[dict[str, Any]]:
-    return [
-        fixture
-        for fixture in config["quality_fixtures"]
-        if fixture["locale"] == locale
-    ]
+    return [fixture for fixture in config["quality_fixtures"] if fixture["locale"] == locale]
 
 
 def _quality_fixture_results(
@@ -1921,10 +2796,7 @@ def _quality_fixture_results(
     visible_limit = quality_config["performance_budget"]["max_visible_results_per_query"]
     results = []
     for fixture in _quality_fixtures_for_locale(locale, quality_config):
-        filters = {
-            field: sorted(values)
-            for field, values in fixture.get("filters", {}).items()
-        }
+        filters = {field: sorted(values) for field, values in fixture.get("filters", {}).items()}
         filtered_documents = _filter_search_documents(documents, filters)
         ranked = _rank_search_documents(
             locale,
@@ -1948,10 +2820,7 @@ def _quality_fixture_results(
                 "expected_count": fixture.get("expected_count"),
                 "result_count": len(ranked),
                 "visible_result_count": len(visible_ranked),
-                "top_topic_ids": [
-                    result["document"]["topic_id"]
-                    for result in visible_ranked[:5]
-                ],
+                "top_topic_ids": [result["document"]["topic_id"] for result in visible_ranked[:5]],
                 "required_score_component": required_component,
                 "required_score_component_value": top["score_breakdown"].get(required_component, 0)
                 if top and required_component
@@ -2000,7 +2869,10 @@ def _validate_quality_fixture_coverage(config: dict[str, Any]) -> None:
             for fixture in config["quality_fixtures"]
             if fixture["locale"] == locale
         }
-        if len(_quality_fixtures_for_locale(locale, config)) < coverage["minimum_locale_fixture_count"]:
+        if (
+            len(_quality_fixtures_for_locale(locale, config))
+            < coverage["minimum_locale_fixture_count"]
+        ):
             raise BuildError(f"search quality fixture count is too low for {locale}")
         if not common_categories <= locale_categories:
             raise BuildError(f"search quality fixture categories are incomplete for {locale}")
@@ -2081,7 +2953,10 @@ def _search_integrity_report(
             for value in document.get("searchable", {}).values()
             for value in (value if isinstance(value, list) else [value])
         ]
-        if any(_contains_control_character(str(value)) for value in [snippet_source, *searchable_values]):
+        if any(
+            _contains_control_character(str(value))
+            for value in [snippet_source, *searchable_values]
+        ):
             control_character_document_ids.append(document_id)
 
     stale_target_anchors = []
@@ -2115,7 +2990,9 @@ def _search_integrity_report(
     inventory_gap_integrity = {
         "firefox_policy": _inventory_gap_report(_policy_ids(), source_ids_by_kind["policy"]),
         "cis": _inventory_gap_report(_cis_recommendation_ids(), source_ids_by_kind["cis"]),
-        "api": _inventory_gap_report(set(_api_operation_topic_ids()), source_ids_by_kind["api-operation"]),
+        "api": _inventory_gap_report(
+            set(_api_operation_topic_ids()), source_ids_by_kind["api-operation"]
+        ),
     }
 
     document_integrity = {
@@ -2207,24 +3084,14 @@ def _topic_search_document(
         alias_config,
     )
     aliases = sorted(
-        {
-            alias
-            for anchor in topic["anchors"].values()
-            for alias in anchor.get("aliases", [])
-        }
-        | {
-            alias
-            for alias_group in document_alias_groups
-            for alias in alias_group["terms"]
-        }
+        {alias for anchor in topic["anchors"].values() for alias in anchor.get("aliases", [])}
+        | {alias for alias_group in document_alias_groups for alias in alias_group["terms"]}
     )
     searchable = {
         "title": title,
         "shortdesc": _topic_shortdesc(root),
-        "headings": _topic_headings(root, title) or [
-            topic["anchors"][anchor_id]["title"][locale]
-            for anchor_id in anchor_ids
-        ],
+        "headings": _topic_headings(root, title)
+        or [topic["anchors"][anchor_id]["title"][locale] for anchor_id in anchor_ids],
         "body": _topic_body(root, title),
         "keywords": _topic_keywords(root),
         "identifiers": identifiers,
@@ -2248,7 +3115,7 @@ def _topic_search_document(
         "cis_level": target_facets.get("cis_level", []),
         "cis_control_state": target_facets.get("cis_control_state", []),
         "api_area": target_facets.get("api_area", []),
-        "bpm_version": ["0.9.0"],
+        "bpm_version": ["0.9.1"],
     }
     return {
         "document_id": f"{locale}:{topic_id}",
@@ -2268,16 +3135,11 @@ def _topic_search_document(
         "normalized": {
             "alias_ids": sorted({group["alias_id"] for group in document_alias_groups}),
             "alias_match_sources": {
-                group["alias_id"]: group["match_sources"]
-                for group in document_alias_groups
+                group["alias_id"]: group["match_sources"] for group in document_alias_groups
             },
             "fields": normalized_fields,
             "tokens": _unique_non_empty(
-                [
-                    token
-                    for field_tokens in normalized_fields.values()
-                    for token in field_tokens
-                ]
+                [token for field_tokens in normalized_fields.values() for token in field_tokens]
             ),
         },
         "identifier_groups": identifier_groups,
@@ -2290,12 +3152,12 @@ def _topic_search_document(
             "cis_level": filter_facets["cis_level"] or None,
             "cis_control_state": filter_facets["cis_control_state"] or None,
             "api_area": filter_facets["api_area"] or None,
-            "bpm_version": "0.9.0",
+            "bpm_version": "0.9.1",
         },
         "filter_facets": filter_facets,
         "versions": {
-            "bpm_version": "0.9.0",
-            "documentation_version": "0.9.0",
+            "bpm_version": "0.9.1",
+            "documentation_version": "0.9.1",
             "source_revision": source_revision,
         },
     }
@@ -2365,7 +3227,7 @@ def _search_document(
         "integrity_contract_id": integrity_config["contract_id"],
         "integrity_schema_version": integrity_config["schema_version"],
         "result_schema_version": contract["result_schema"]["schema_version"],
-        "target_bpm_version": contract["target_bpm_version"],
+        "target_bpm_version": _artifact_policy()["target_bpm_version"],
         "locale": locale,
         "format_version": 1,
         "generated_by": "documentation/tools/build_docs.py",
@@ -2387,12 +3249,16 @@ def _search_document(
             "ranking_fixture_count": len(_ranking_fixtures_for_locale(locale, ranking_config)),
         },
         "filtering": {
-            "facet_fields": facets_config["facet_fields"],
+            "facet_fields": _localized_search_facet_fields(locale, facets_config),
             "composition": facets_config["filter_contract"]["composition"],
             "url_state": facets_config["url_state"],
             "empty_result": facets_config["empty_result"]["messages"][locale],
             "filter_fixture_count": len(
-                [fixture for fixture in facets_config["filter_fixtures"] if fixture["locale"] == locale]
+                [
+                    fixture
+                    for fixture in facets_config["filter_fixtures"]
+                    if fixture["locale"] == locale
+                ]
             ),
         },
         "quality": {
@@ -2412,10 +3278,7 @@ def _search_document(
         "filter_fixture_results": filter_fixture_results,
         "quality_fixture_results": quality_fixture_results,
         "document_required_fields": contract["document_schema"]["required_fields"],
-        "searchable_fields": [
-            field["field"]
-            for field in contract["corpus"]["searchable_fields"]
-        ],
+        "searchable_fields": [field["field"] for field in contract["corpus"]["searchable_fields"]],
         "result_required_fields": contract["result_schema"]["required_fields"],
         "documents": documents,
     }
@@ -2429,6 +3292,36 @@ def _policy_ids() -> set[str]:
 def _managed_preference_ids() -> set[str]:
     inventory = _read_json_file(FIREFOX_POLICY_INVENTORY)
     return {preference["preference_id"] for preference in inventory["managed_preferences"]}
+
+
+def _all_settings_help_target_contract() -> dict[str, Any]:
+    contract = _read_json_file(ALL_SETTINGS_HELP_TARGET_MAP)
+    if contract.get("schema_version") != 1:
+        raise BuildError("unsupported All Settings help target map contract schema")
+    if contract.get("target_bpm_version") != "0.9.1":
+        raise BuildError("All Settings help target map contract has the wrong BPM version")
+    return contract
+
+
+def _validate_all_settings_help_target_coverage(targets: dict[str, dict[str, Any]]) -> None:
+    expected_policy_targets = {f"policy:{policy_id}" for policy_id in _policy_ids()}
+    expected_preference_targets = {
+        f"known-preference:{preference_id}" for preference_id in _managed_preference_ids()
+    }
+    actual_policy_targets = {target_id for target_id in targets if target_id.startswith("policy:")}
+    actual_preference_targets = {
+        target_id for target_id in targets if target_id.startswith("known-preference:")
+    }
+    for kind, expected, actual in (
+        ("policy", expected_policy_targets, actual_policy_targets),
+        ("known preference", expected_preference_targets, actual_preference_targets),
+    ):
+        missing = sorted(expected - actual)
+        extra = sorted(actual - expected)
+        if missing:
+            raise BuildError(f"All Settings help target map is missing {kind} targets: {missing}")
+        if extra:
+            raise BuildError(f"All Settings help target map has unknown {kind} targets: {extra}")
 
 
 def _cis_recommendation_ids() -> set[str]:
@@ -2474,14 +3367,20 @@ def _policy_context_assignments(context: dict[str, Any] | None = None) -> dict[s
     assignments: dict[str, dict[str, Any]] = {}
     context_targets = [context["default_policy_target"], *context["family_targets"]]
     for target in context_targets:
-        if target["topic_id"] not in known_capability_topics and not target["topic_id"].startswith("fx-"):
+        if target["topic_id"] not in known_capability_topics and not target["topic_id"].startswith(
+            "fx-"
+        ):
             raise BuildError(f"policy context references unknown user topic: {target['topic_id']}")
         validation_topic_id = target.get("validation_topic_id")
         if validation_topic_id and validation_topic_id not in known_capability_topics:
-            raise BuildError(f"policy context references unknown validation topic: {validation_topic_id}")
+            raise BuildError(
+                f"policy context references unknown validation topic: {validation_topic_id}"
+            )
         for task_topic_id in target.get("user_task_topic_ids", []):
             if task_topic_id not in known_capability_topics:
-                raise BuildError(f"policy context references unknown user task topic: {task_topic_id}")
+                raise BuildError(
+                    f"policy context references unknown user task topic: {task_topic_id}"
+                )
         for operation_id in target.get("api_operation_ids", []):
             if operation_id not in known_api_operation_ids:
                 raise BuildError(f"policy context references unknown API operation: {operation_id}")
@@ -2498,11 +3397,15 @@ def _policy_context_assignments(context: dict[str, Any] | None = None) -> dict[s
             assignments[policy_id] = family
         for related_policy_id in family.get("related_policy_ids", []):
             if related_policy_id not in known_policy_ids:
-                raise BuildError(f"policy context references unknown related policy: {related_policy_id}")
+                raise BuildError(
+                    f"policy context references unknown related policy: {related_policy_id}"
+                )
     return assignments
 
 
-def _target(topic_id: str, kind: str, source_id: str, source_inventory: str, anchor_id: str | None = None) -> dict[str, Any]:
+def _target(
+    topic_id: str, kind: str, source_id: str, source_inventory: str, anchor_id: str | None = None
+) -> dict[str, Any]:
     target = {
         "kind": kind,
         "source_id": source_id,
@@ -2517,6 +3420,7 @@ def _target(topic_id: str, kind: str, source_id: str, source_inventory: str, anc
 def _build_target_map(topics: dict[str, dict[str, Any]]) -> dict[str, Any]:
     targets = {}
     policy_context = _read_json_file(FIREFOX_POLICY_CONTEXT_TARGETS)
+    help_target_contract = _all_settings_help_target_contract()
     policy_assignments = _policy_context_assignments(policy_context)
     default_policy_target = policy_context["default_policy_target"]
 
@@ -2550,6 +3454,16 @@ def _build_target_map(topics: dict[str, dict[str, Any]]) -> dict[str, Any]:
             assignment["anchor_id"],
         )
 
+    preference_target = help_target_contract["known_preference_targets"]
+    for preference_id in sorted(_managed_preference_ids()):
+        targets[f"known-preference:{preference_id}"] = _target(
+            preference_target["topic_id"],
+            "known-preference",
+            preference_id,
+            help_target_contract["source_inventory"],
+            preference_target["anchor_id"],
+        )
+
     for recommendation_id in sorted(_cis_recommendation_ids()):
         targets[f"cis:{recommendation_id}"] = _target(
             "cis-settings-guide",
@@ -2560,14 +3474,16 @@ def _build_target_map(topics: dict[str, dict[str, Any]]) -> dict[str, Any]:
         )
 
     for operation_id, planned_topic_id in sorted(_api_operation_topic_ids().items()):
-        topic_id = planned_topic_id if planned_topic_id in topics else "api-integration-guide"
-        anchor_id = None if planned_topic_id in topics else "a-api-integration-guide"
+        if planned_topic_id not in topics:
+            raise BuildError(
+                "API operation target is missing its Administrator Guide topic: "
+                f"{operation_id} -> {planned_topic_id}"
+            )
         targets[f"api-operation:{operation_id}"] = _target(
-            topic_id,
+            planned_topic_id,
             "api-operation",
             operation_id,
             "docs/architecture/api-documentation-inventory-0.9.0.md",
-            anchor_id,
         )
 
     for capability_id, topic_id in sorted(_capability_topic_ids().items()):
@@ -2578,11 +3494,12 @@ def _build_target_map(topics: dict[str, dict[str, Any]]) -> dict[str, Any]:
             "docs/architecture/product-user-capability-inventory-0.9.0.md",
         )
 
+    _validate_all_settings_help_target_coverage(targets)
     return {
         "$schema": "schemas/product-documentation-ui-target-map-v1.schema.json",
         "schema_version": 1,
         "manifest_schema_version": 1,
-        "bpm_version": "0.9.0",
+        "bpm_version": "0.9.1",
         "locales": list(LOCALES),
         "targets": targets,
     }
@@ -2630,7 +3547,9 @@ def _build_topics(site_root: Path) -> dict[str, dict[str, Any]]:
                 topic_path = hrefs_by_locale[locale][keyref]
                 output_path = site_root / locale / topic_path.parent.name / f"{child_topic_id}.html"
                 if not output_path.is_file():
-                    raise BuildError(f"missing topic output for {locale}/{child_topic_id}: {output_path}")
+                    raise BuildError(
+                        f"missing topic output for {locale}/{child_topic_id}: {output_path}"
+                    )
                 child_output[locale] = output_path.relative_to(site_root).as_posix()
             topics[child_topic_id] = {
                 "guide_id": guide_id,
@@ -2639,17 +3558,13 @@ def _build_topics(site_root: Path) -> dict[str, dict[str, Any]]:
                 "url_path": child_topic_id,
                 "kind": _topic_kind(roots["en"]),
                 "title": {
-                    locale: _element_text(root.find("title"))
-                    for locale, root in roots.items()
+                    locale: _element_text(root.find("title")) for locale, root in roots.items()
                 },
                 "anchors": _topic_anchor_titles(roots),
                 "output": child_output,
                 "_url_root": url_root,
                 "_roots": roots,
-                "_source_paths": {
-                    locale: hrefs_by_locale[locale][keyref]
-                    for locale in LOCALES
-                },
+                "_source_paths": {locale: hrefs_by_locale[locale][keyref] for locale in LOCALES},
             }
     return topics
 
@@ -2691,6 +3606,24 @@ def generate_manifest_files(site_root: Path) -> None:
     _validate_schema(target_map, UI_TARGET_SCHEMA)
     _write_json(site_root / "ui-target-map.json", target_map)
 
+    navigation = {}
+    for locale in LOCALES:
+        navigation_path = site_root / locale / "navigation.json"
+        if not navigation_path.is_file():
+            raise BuildError(f"generated navigation source is missing for {locale}")
+        navigation_payload = json.loads(navigation_path.read_text(encoding="utf-8"))
+        _validate_schema(navigation_payload, NAVIGATION_SCHEMA)
+        if navigation_payload != _navigation_payload(site_root, locale):
+            raise BuildError(
+                f"generated navigation source diverges from manifest topics for {locale}"
+            )
+        navigation[locale] = {
+            "path": navigation_path.relative_to(site_root).as_posix(),
+            "sha256": _file_sha256(navigation_path),
+            "format_version": 1,
+            "node_count": navigation_payload["node_count"],
+        }
+
     search = {}
     for locale in LOCALES:
         search_payload = _search_document(locale, topics_with_private, target_map)
@@ -2707,8 +3640,8 @@ def generate_manifest_files(site_root: Path) -> None:
         "$schema": "schemas/product-documentation-manifest-v1.schema.json",
         "schema_version": 1,
         "artifact": {
-            "bpm_version": "0.9.0",
-            "documentation_version": "0.9.0",
+            "bpm_version": "0.9.1",
+            "documentation_version": "0.9.1",
             "build_id": _manifest_build_id(site_root),
             "source_revision": _source_revision(),
             "dita_ot_version": _load_lock()["components"]["dita_ot"]["version"],
@@ -2718,6 +3651,7 @@ def generate_manifest_files(site_root: Path) -> None:
         "guides": _build_guides(topics),
         "topics": topics,
         "assets": {},
+        "navigation": navigation,
         "search": search,
         "aliases": {},
         "tombstones": {},
@@ -2802,7 +3736,9 @@ def _validate_manifest_semantics(manifest: dict[str, Any], target_map: dict[str,
             raise BuildError(f"topic {topic_id} has inconsistent DITA key")
         slug_key = topic["source_slug"].casefold()
         if slug_key in seen_slugs:
-            raise BuildError(f"duplicate topic source slug after case-folding: {topic['source_slug']}")
+            raise BuildError(
+                f"duplicate topic source slug after case-folding: {topic['source_slug']}"
+            )
         seen_slugs.add(slug_key)
         guide_root = manifest["guides"][topic["guide_id"]]["url_root"]
         public_path = f"{guide_root}/{topic['url_path']}".casefold()
@@ -2882,11 +3818,9 @@ def _validate_search_index_semantics(
         raise BuildError(f"search index ranking fixture count mismatch for {locale}")
     filtering = search_payload.get("filtering", {})
     expected_filter_fixtures = [
-        fixture
-        for fixture in facets_config["filter_fixtures"]
-        if fixture["locale"] == locale
+        fixture for fixture in facets_config["filter_fixtures"] if fixture["locale"] == locale
     ]
-    if filtering.get("facet_fields") != facets_config["facet_fields"]:
+    if filtering.get("facet_fields") != _localized_search_facet_fields(locale, facets_config):
         raise BuildError(f"search index facet fields mismatch for {locale}")
     if filtering.get("composition") != facets_config["filter_contract"]["composition"]:
         raise BuildError(f"search index filter composition mismatch for {locale}")
@@ -2907,10 +3841,16 @@ def _validate_search_index_semantics(
     for fixture in expected_fixtures:
         query_tokens = _normalize_search_text(locale, fixture["query"], alias_config)
         if not set(fixture["expected_tokens"]) <= set(query_tokens):
-            raise BuildError(f"search fixture expected tokens are not resolved: {fixture['fixture_id']}")
-        resolved_aliases = set(_resolve_search_query_aliases(locale, fixture["query"], alias_config))
+            raise BuildError(
+                f"search fixture expected tokens are not resolved: {fixture['fixture_id']}"
+            )
+        resolved_aliases = set(
+            _resolve_search_query_aliases(locale, fixture["query"], alias_config)
+        )
         if not set(fixture["expected_alias_ids"]) <= resolved_aliases:
-            raise BuildError(f"search fixture expected aliases are not resolved: {fixture['fixture_id']}")
+            raise BuildError(
+                f"search fixture expected aliases are not resolved: {fixture['fixture_id']}"
+            )
 
     documents = search_payload.get("documents")
     if not isinstance(documents, list) or len(documents) != len(manifest["topics"]):
@@ -2933,7 +3873,10 @@ def _validate_search_index_semantics(
         document_ids.add(document_id)
         if document_id != f"{locale}:{topic_id}" or document.get("locale") != locale:
             raise BuildError(f"search document identity mismatch for {locale}/{topic_id}")
-        if document.get("guide_id") != topic["guide_id"] or document.get("topic_kind") != topic["kind"]:
+        if (
+            document.get("guide_id") != topic["guide_id"]
+            or document.get("topic_kind") != topic["kind"]
+        ):
             raise BuildError(f"search document manifest metadata mismatch for {locale}/{topic_id}")
         if document.get("url") != expected_url or not expected_url.startswith(f"/help/{locale}/"):
             raise BuildError(f"search document URL mismatch for {locale}/{topic_id}")
@@ -2951,7 +3894,10 @@ def _validate_search_index_semantics(
         for field in ("headings", "keywords", "identifiers", "aliases"):
             if not isinstance(searchable.get(field), list):
                 raise BuildError(f"search document {field} is not a list for {locale}/{topic_id}")
-        if topic_id not in searchable["identifiers"] or topic["guide_id"] not in searchable["identifiers"]:
+        if (
+            topic_id not in searchable["identifiers"]
+            or topic["guide_id"] not in searchable["identifiers"]
+        ):
             raise BuildError(f"search document identifiers are incomplete for {locale}/{topic_id}")
         normalized = document.get("normalized", {})
         normalized_fields = normalized.get("fields", {})
@@ -2960,9 +3906,13 @@ def _validate_search_index_semantics(
         if set(normalized_fields) != required_searchable:
             raise BuildError(f"search document normalized fields mismatch for {locale}/{topic_id}")
         if not isinstance(normalized_tokens, list) or not normalized_tokens:
-            raise BuildError(f"search document normalized tokens are missing for {locale}/{topic_id}")
+            raise BuildError(
+                f"search document normalized tokens are missing for {locale}/{topic_id}"
+            )
         if not set(alias_ids) <= known_alias_ids:
-            raise BuildError(f"search document aliases reference unknown group for {locale}/{topic_id}")
+            raise BuildError(
+                f"search document aliases reference unknown group for {locale}/{topic_id}"
+            )
 
         facets = document.get("facets", {})
         if set(facets) != required_facets:
@@ -2974,7 +3924,9 @@ def _validate_search_index_semantics(
             raise BuildError(f"search document filter facets mismatch for {locale}/{topic_id}")
         for field, values in filter_facets.items():
             if not isinstance(values, list):
-                raise BuildError(f"search document filter facet is not a list for {locale}/{topic_id}/{field}")
+                raise BuildError(
+                    f"search document filter facet is not a list for {locale}/{topic_id}/{field}"
+                )
             allowed_values = _facet_values_from_config(facets_config, field)
             unknown_values = set(values) - allowed_values
             if unknown_values:
@@ -2983,7 +3935,9 @@ def _validate_search_index_semantics(
                     f"{sorted(unknown_values)}"
                 )
         if filter_facets["locale"] != [locale] or filter_facets["guide_id"] != [topic["guide_id"]]:
-            raise BuildError(f"search document filter identity facets mismatch for {locale}/{topic_id}")
+            raise BuildError(
+                f"search document filter identity facets mismatch for {locale}/{topic_id}"
+            )
 
     if search_payload.get("facet_counts") != _facet_counts(documents, facets_config):
         raise BuildError(f"search index facet counts mismatch for {locale}")
@@ -2997,7 +3951,10 @@ def _validate_search_index_semantics(
     )
     if search_payload.get("integrity_report") != expected_integrity_report:
         raise BuildError(f"search index integrity report mismatch for {locale}")
-    if expected_integrity_report["status"] != "pass" or expected_integrity_report["failure_count"] != 0:
+    if (
+        expected_integrity_report["status"] != "pass"
+        or expected_integrity_report["failure_count"] != 0
+    ):
         raise BuildError(f"search index integrity drift detected for {locale}")
 
     expected_results = _ranking_fixture_results(
@@ -3017,15 +3974,14 @@ def _validate_search_index_semantics(
             raise BuildError(f"ranking fixture top result mismatch: {fixture['fixture_id']}")
         component = fixture["required_score_component"]
         if result["score_breakdown"].get(component, 0) <= 0:
-            raise BuildError(f"ranking fixture component missing: {fixture['fixture_id']}/{component}")
+            raise BuildError(
+                f"ranking fixture component missing: {fixture['fixture_id']}/{component}"
+            )
 
     expected_filter_results = _filter_fixture_results(locale, documents, facets_config)
     if search_payload.get("filter_fixture_results") != expected_filter_results:
         raise BuildError(f"search index filter fixture results mismatch for {locale}")
-    filter_results_by_id = {
-        result["fixture_id"]: result
-        for result in expected_filter_results
-    }
+    filter_results_by_id = {result["fixture_id"]: result for result in expected_filter_results}
     for fixture in expected_filter_fixtures:
         result = filter_results_by_id.get(fixture["fixture_id"])
         if result is None:
@@ -3039,7 +3995,9 @@ def _validate_search_index_semantics(
         if fixture.get("expected_empty") and (
             result["result_count"] != 0 or not result["empty_result_message"]
         ):
-            raise BuildError(f"filter fixture empty-result recovery mismatch: {fixture['fixture_id']}")
+            raise BuildError(
+                f"filter fixture empty-result recovery mismatch: {fixture['fixture_id']}"
+            )
         if fixture["filters"] and not result["url_query"]:
             raise BuildError(f"filter fixture URL state is missing: {fixture['fixture_id']}")
 
@@ -3052,25 +4010,34 @@ def _validate_search_index_semantics(
     )
     if search_payload.get("quality_fixture_results") != expected_quality_results:
         raise BuildError(f"search index quality fixture results mismatch for {locale}")
-    quality_results_by_id = {
-        result["fixture_id"]: result
-        for result in expected_quality_results
-    }
+    quality_results_by_id = {result["fixture_id"]: result for result in expected_quality_results}
     for fixture in expected_quality_fixtures:
         result = quality_results_by_id.get(fixture["fixture_id"])
         if result is None:
             raise BuildError(f"missing quality fixture result: {fixture['fixture_id']}")
         if "expected_count" in fixture and result["result_count"] != fixture["expected_count"]:
             raise BuildError(f"quality fixture count mismatch: {fixture['fixture_id']}")
-        if fixture.get("expected_top_topic_id") and result["top_topic_id"] != fixture["expected_top_topic_id"]:
+        if (
+            fixture.get("expected_top_topic_id")
+            and result["top_topic_id"] != fixture["expected_top_topic_id"]
+        ):
             raise BuildError(f"quality fixture top result mismatch: {fixture['fixture_id']}")
         component = fixture.get("required_score_component")
         if component and result["required_score_component_value"] <= 0:
-            raise BuildError(f"quality fixture score component missing: {fixture['fixture_id']}/{component}")
-        if result["visible_result_count"] > quality_config["performance_budget"]["max_visible_results_per_query"]:
-            raise BuildError(f"quality fixture visible result budget exceeded: {fixture['fixture_id']}")
+            raise BuildError(
+                f"quality fixture score component missing: {fixture['fixture_id']}/{component}"
+            )
+        if (
+            result["visible_result_count"]
+            > quality_config["performance_budget"]["max_visible_results_per_query"]
+        ):
+            raise BuildError(
+                f"quality fixture visible result budget exceeded: {fixture['fixture_id']}"
+            )
 
-    expected_performance = _quality_performance_report(documents, expected_quality_results, quality_config)
+    expected_performance = _quality_performance_report(
+        documents, expected_quality_results, quality_config
+    )
     if search_payload.get("performance_report") != expected_performance:
         raise BuildError(f"search index performance report mismatch for {locale}")
     budget = quality_config["performance_budget"]
@@ -3078,7 +4045,10 @@ def _validate_search_index_semantics(
         raise BuildError(f"search index document performance budget exceeded for {locale}")
     if expected_performance["quality_fixture_count"] > budget["max_quality_fixtures_per_locale"]:
         raise BuildError(f"search index quality fixture budget exceeded for {locale}")
-    if expected_performance["deterministic_scan_units"] > budget["max_deterministic_scan_units_per_locale"]:
+    if (
+        expected_performance["deterministic_scan_units"]
+        > budget["max_deterministic_scan_units_per_locale"]
+    ):
         raise BuildError(f"search index deterministic scan budget exceeded for {locale}")
 
 
@@ -3095,6 +4065,21 @@ def validate_manifest_files(site_root: Path) -> None:
     if _file_sha256(target_map_path) != manifest["ui_target_map"]["sha256"]:
         raise BuildError("ui-target-map.json SHA-256 does not match manifest")
     quality_config = _search_quality_performance()
+    for locale, navigation in manifest["navigation"].items():
+        navigation_path = _safe_artifact_path(site_root, navigation["path"])
+        if not navigation_path.is_file():
+            raise BuildError(
+                f"manifest navigation source is missing for {locale}: {navigation['path']}"
+            )
+        navigation_payload = _validate_navigation_artifact_record(
+            locale,
+            navigation,
+            navigation_path.read_bytes(),
+            manifest,
+            context="manifest",
+        )
+        if navigation_payload != _navigation_payload(site_root, locale):
+            raise BuildError(f"manifest navigation source diverges for {locale}")
     max_search_index_bytes = quality_config["performance_budget"]["max_index_bytes_per_locale"]
     for locale, search in manifest["search"].items():
         search_path = _safe_artifact_path(site_root, search["path"])
@@ -3127,6 +4112,17 @@ def validate_manifest_payloads(payloads: dict[str, bytes]) -> None:
     if _payload_sha256(payloads["ui-target-map.json"]) != manifest["ui_target_map"]["sha256"]:
         raise BuildError("archived ui-target-map.json SHA-256 does not match manifest")
     quality_config = _search_quality_performance()
+    for locale, navigation in manifest["navigation"].items():
+        path = navigation["path"]
+        if path not in payloads:
+            raise BuildError(f"archived navigation source is missing for {locale}: {path}")
+        _validate_navigation_artifact_record(
+            locale,
+            navigation,
+            payloads[path],
+            manifest,
+            context="archived",
+        )
     max_search_index_bytes = quality_config["performance_budget"]["max_index_bytes_per_locale"]
     for locale, search in manifest["search"].items():
         path = search["path"]
@@ -3201,6 +4197,7 @@ def build_tree(destination: Path) -> None:
         raise BuildError("DITA transform mutated maintained documentation source or assets")
     _normalize_locale_root_links(destination)
     apply_portal_shell(destination)
+    _normalize_screenshot_links(destination)
     generate_manifest_files(destination)
     validate_output(destination)
 
@@ -3215,11 +4212,16 @@ def tree_hashes(root: Path) -> dict[str, str]:
 
 def source_hashes() -> dict[str, str]:
     roots = (DOCUMENTATION_ROOT / "src", DOCUMENTATION_ROOT / "assets")
+    paths = [
+        *(path for root in roots for path in sorted(root.rglob("*")) if path.is_file()),
+        TOPIC_SECTION_TAXONOMY,
+        TOPIC_SECTION_LABELS,
+    ]
     return {
-        path.relative_to(DOCUMENTATION_ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
-        for root in roots
-        for path in sorted(root.rglob("*"))
-        if path.is_file()
+        path.relative_to(DOCUMENTATION_ROOT).as_posix(): hashlib.sha256(
+            path.read_bytes()
+        ).hexdigest()
+        for path in paths
     }
 
 
@@ -3238,10 +4240,14 @@ def _source_fingerprint() -> str:
         *dita_sources(),
         *sorted((DOCUMENTATION_ROOT / "src/shared/filters").glob("*.ditaval")),
         *sorted(THEME_ROOT.glob("*.css")),
+        THEME_ROOT / SEARCH_SCRIPT,
         MANIFEST_SCHEMA,
         UI_TARGET_SCHEMA,
+        NAVIGATION_SCHEMA,
         DOCUMENTATION_ROOT / "config/metadata-vocabulary.json",
         DOCUMENTATION_ROOT / "config/user-guide-map-0.9.0.json",
+        TOPIC_SECTION_TAXONOMY,
+        TOPIC_SECTION_LABELS,
         LOCK_PATH,
         Path(__file__),
     ]
@@ -3383,7 +4389,7 @@ def _dev_site_is_current(source_fingerprint: str) -> bool:
         return False
     try:
         metadata = json.loads(DEV_SITE_METADATA.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+    except OSError, json.JSONDecodeError:
         return False
     if metadata.get("source_fingerprint") != source_fingerprint:
         return False

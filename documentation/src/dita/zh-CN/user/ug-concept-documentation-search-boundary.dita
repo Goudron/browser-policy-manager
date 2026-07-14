@@ -2,11 +2,11 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-documentation-search-boundary" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>了解文档搜索边界</title>
-  <shortdesc>将文档搜索用作已发布帮助主题的本地确定性索引，而不是 AI 助手。</shortdesc>
+  <shortdesc>使用文档搜索作为已发布帮助主题的本地确定性索引，而不是作为 AI 助手。</shortdesc>
   <conbody>
-    <section id="a-local-offline"><title>本地且离线</title><p>文档门户搜索与同一帮助工件一起打包的静态索引。它不会调用外部搜索服务，不需要互联网访问，不会发送查询用于遥测，也不会从用户行为中学习。</p></section>
-    <section id="a-deterministic-results"><title>确定性结果</title><p>搜索匹配本地化 DITA 主题标题、简短说明、标题层级、正文、已审核 aliases，以及稳定的技术标识符，例如 policy IDs、CIS recommendation IDs 和 API operation IDs。排序使用固定权重、facets、filters 和有限的 typo tolerance，因此同一工件和同一查询会得到相同的结果顺序。</p></section>
-    <section id="a-not-ai"><title>没有 AI 回答</title><p>搜索不提供 conversational answers、semantic embeddings、vector retrieval、RAG、generative summaries 或 automatic recommendations。没有结果时，请使用指南导航、精确标识符或 filters，而不是期待门户推断答案。</p></section>
-    <section id="a-product-ai-policies"><title>产品 AI 策略仍会记录</title><p>某些 Firefox Release 策略控制浏览器 AI 和智能功能行为。这些策略是普通 BPM 产品设置并继续记录在文档中；说明这些策略不会向文档门户添加 AI 功能。</p></section>
+    <section id="a-local-offline"><title>本地和离线</title><p>文档门户搜索使用相同帮助工件打包的静态索引。它不调用外部搜索服务、不需要互联网访问、发送遥测查询或从用户行为中学习。</p></section>
+    <section id="a-deterministic-results"><title>确定性结果</title><p>搜索匹配本地化的 DITA 主题标题、简短说明、标题、正文、经过审核的别名以及稳定的技术标识符，例如政策 ID、CIS 建议 ID 和 API 操作 ID。排名使用固定权重、方面、过滤器和有限的拼写错误容限，因此相同的工件和查询会产生相同的结果顺序。</p></section>
+    <section id="a-not-ai"><title>没有 AI 个答案</title><p>搜索不提供会话答案、语义嵌入、向量检索、RAG、生成摘要或自动推荐。如果没有出现结果，请使用指南导航、精确标识符或过滤器，而不是期望门户推断答案。</p></section>
+    <section id="a-product-ai-policies"><title>产品 AI 政策仍记录在案</title><p>某些 Firefox 版本策略控制浏览器 AI 和智能功能行为。这些策略是普通的 BPM 产品设置并保留记录；记录它们不会将 AI 功能添加到文档门户。</p></section>
   </conbody>
 </concept>

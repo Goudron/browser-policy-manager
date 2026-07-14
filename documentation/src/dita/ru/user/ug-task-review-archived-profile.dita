@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-archived-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Просмотреть архивный профиль</title>
-  <shortdesc>Откройте archived profile осознанно с archived context перед решением о restore или permanent delete.</shortdesc>
+  <title>Просмотр архивного профиля</title>
+  <shortdesc>Намеренно откройте архивный профиль с архивным контекстом, прежде чем принимать решения о восстановлении или окончательном удалении.</shortdesc>
   <taskbody>
-    <prereq><p>Archived profile всё ещё виден через Library lifecycle filter или include_deleted route.</p></prereq>
-    <context><p>Archived profiles можно просматривать через include-deleted routes и Library lifecycle filters, но это не обычные active editing/export targets.</p></context>
+    <prereq><p>Архивированный профиль по-прежнему виден через фильтр жизненного цикла библиотеки или маршрут include_deleted.</p></prereq>
+    <context><p>Архивированные профили можно просматривать с помощью маршрутов включения-удаления и фильтров жизненного цикла библиотеки, но они не являются обычными объектами активного редактирования/экспорта.</p></context>
     <steps>
-      <step><cmd>Установите в Library lifecycle filter значение Archived или All states.</cmd><info><p>Ожидаемый результат: archived lifecycle context остаётся видимым перед restore или destructive action.</p></info></step>
-      <step><cmd>Проверьте archived badge, profile name, schema channel, validation state и update time перед открытием строки.</cmd><info><p>Ожидаемый результат: archived lifecycle context остаётся видимым перед restore или destructive action.</p></info></step>
-      <step><cmd>Открывайте archived profile только для review context, restore planning, comparison или deletion decision.</cmd><info><p>Ожидаемый результат: archived lifecycle context остаётся видимым перед restore или destructive action.</p></info></step>
-      <step><cmd>Восстановите профиль перед обычным editing/export или отмените действие, если archived context не является целью.</cmd><info><note type="warning">Действия с archived profile могут затронуть профили, намеренно скрытые из обычного active Library view.</note></info></step>
+      <step><cmd>Установите для фильтра жизненного цикла библиотеки состояние «Архивировано» или «Все».</cmd><info><p>Ожидаемый результат: заархивированный контекст жизненного цикла остается видимым перед любым действием по восстановлению или разрушению.</p></info></step>
+      <step><cmd>Прежде чем открывать строку, подтвердите заархивированный значок, имя профиля, канал схемы, состояние проверки и время обновления.</cmd><info><p>Ожидаемый результат: заархивированный контекст жизненного цикла остается видимым перед любым действием по восстановлению или разрушению.</p></info></step>
+      <step><cmd>Открывайте заархивированный профиль только тогда, когда вам нужно просмотреть контекст, восстановить планирование, сравнение или принять решение об удалении.</cmd><info><p>Ожидаемый результат: заархивированный контекст жизненного цикла остается видимым перед любым действием по восстановлению или разрушению.</p></info></step>
+      <step><cmd>Восстановите профиль перед обычным редактированием/экспортом или отмените его, если заархивированный контекст не является целевой целью.</cmd><info><note type="warning">Действия с заархивированным профилем могут повлиять на профили, которые намеренно скрыты от обычного активного представления библиотеки.</note></info></step>
     </steps>
-    <result><p>Вы просматриваете archived profile с видимым lifecycle context и не принимаете его за active profile по ошибке.</p></result>
-    <postreq><p>Восстановление: если bookmarked archived route сообщает Profile not found, вернитесь в Library с включёнными archived profiles и откройте профиль из visible row.</p></postreq>
+    <result><p>Вы просматриваете заархивированный профиль с видимым контекстом его жизненного цикла и не считаете его по ошибке активным профилем.</p></result>
+    <postreq><p>Восстановление: если добавленный в закладки архивный маршрут сообщает, что профиль не найден, вернитесь в библиотеку с включенными архивными профилями и снова откройте его из видимой строки.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-archived-profile-behavior"/>

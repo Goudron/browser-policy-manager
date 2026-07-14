@@ -4,7 +4,7 @@
   <title>Save profile changes</title>
   <shortdesc>Create the first saved profile from a draft or persist changes to an existing profile.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Saving establishes the profile ID for a new draft and makes the latest policy and managed-preference values available to other BPM surfaces.</p></context>
     <steps>
       <step><cmd>Review the profile name, schema channel, and validation state before saving.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

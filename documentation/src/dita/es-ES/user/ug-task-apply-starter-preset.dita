@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-apply-starter-preset" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Aplicar un preajuste inicial</title>
-  <shortdesc>Esta tarea describe el escenario completo «Aplicar un preajuste inicial»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Aplicar un ajuste preestablecido de inicio</title>
+  <shortdesc>Utilice un ajuste preestablecido inicial para generar opciones de políticas comunes de Firefox antes de la edición detallada.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Un borrador de perfil está abierto en el Paso 1.</p></prereq>
+    <context><p>Los ajustes preestablecidos iniciales proporcionan una línea de base conocida que aún puede cambiar en Editor guiado, Todos los ajustes o Editor JSON.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Aplicar un preajuste inicial».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra el área preestablecida de inicio en la línea base del perfil &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Compare los ajustes preestablecidos disponibles con el escenario del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Aplique el ajuste preestablecido que coincida con el comportamiento previsto del navegador.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revise el resumen modificado antes de pasar al siguiente paso.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El borrador contiene la configuración preestablecida como punto de partida.</p></result>
+    <postreq><p>Recuperación: si un ajuste preestablecido agregó configuraciones no deseadas, elija un ajuste preestablecido diferente o restablezca los controles afectados antes de guardar.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-choose-guided-scenario"/>

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-validate-before-apply-update" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>DevOps 流程: Profilupdate mit expected_revision validieren und anwenden</title>
-  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <title>使用 expected_revision 验证并应用配置文件更新</title>
+  <shortdesc>运行验证优先的更新工作流，该工作流使用当前修订版保护 BPM 状态，并在过时或无效数据时停止。</shortdesc>
   <taskbody>
-    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
-    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></context>
+    <prereq><p>外部产品已读取目标配置文件并存储其当前的 <codeph>revision</codeph>。在发送任何配置文件补丁之前准备候选 Firefox <codeph>policies.json</codeph> 文档。</p></prereq>
+    <context><p>此工作流程使用 <codeph>API-VAL-001</codeph>、<codeph>API-PROFILE-003</codeph> 和 <codeph>API-PROFILE-005</codeph>。它记录了当前乐观的更新路径； BPM 不提供 ETags、前提条件标头、幂等性密钥或多操作事务。</p></context>
     <steps>
-      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph> <codeph>expected_revision</codeph> <codeph>409</codeph> <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph></note></info></step>
+      <step><cmd>在 BPM 之外构建候选 Firefox 文档。</cmd><info><p>记录所需的策略密钥、源系统、审阅者、票证和模式通道。候选示例：<codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>。</p></info></step>
+  <step><cmd>在修补配置文件之前验证候选者。</cmd><info><p>请求示例：<codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-152"}</codeph>。错误示例：<codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p></info></step>
+  <step><cmd>当批准窗口很长时，在应用更新之前立即重新读取配置文件。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>。响应示例：<codeph>200 ProfileRead</codeph>。如果 <codeph>revision</codeph> 发生更改，请重新运行比较和批准，而不是修补陈旧状态。</p></info></step>
+  <step><cmd>仅用观察到的修订版修补可变字段。</cmd><info><p>请求示例：带有 JSON <codeph>{"flags":{"DisableTelemetry":true,"BlockAboutConfig":true},"expected_revision":7,"compliance":{"source":"control-product","decision":"approved"}}</codeph> 的 <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph>。响应示例：带有递增的 <codeph>revision</codeph> 的 <codeph>200 ProfileRead</codeph>。</p></info></step>
+  <step><cmd>将冲突响应视为停止信号。</cmd><info><p>错误示例：<codeph>400</codeph> 无效负载、<codeph>404</codeph> 缺少配置文件、<codeph>409</codeph> 过时的 <codeph>expected_revision</codeph> 和 <codeph>422</codeph> 架构级请求错误。 <codeph>409</codeph>意味着必须重新计算外部期望状态。</p></info></step>
+  <step><cmd>记录更新证据并避免盲目重放。</cmd><info><note type="warning">不要盲目地重试相同的 PATCH。在 BPM 之外存储旧修订版、新修订版、验证主体、补丁主体哈希、响应状态、审阅者批准和重试决策。</note></info></step>
     </steps>
-    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
-    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+    <result><p>配置文件更新仅在验证和修订检查后应用，并具有成功或冲突的明确审计证据。</p></result>
+    <postreq><p>仅在读回配置文件与批准的所需状态匹配后导出配置文件或移交合规性元数据。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-validate-firefox-policies-json"/>

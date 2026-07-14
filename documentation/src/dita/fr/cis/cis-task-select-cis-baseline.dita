@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-select-cis-baseline" xml:lang="fr" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Sélectionner une baseline CIS et un starter preset</title>
-  <shortdesc>Sélectionnez le Firefox schema channel, le starter preset et la CIS layer correspondant à l’objectif de deployment avant la revue détaillée.</shortdesc>
+  <title>Sélectionnez une ligne de base CIS et un préréglage de démarrage</title>
+  <shortdesc>Sélectionnez le canal de schéma Firefox, le préréglage de démarrage et la couche CIS qui correspondent à l'objectif de déploiement avant un examen détaillé.</shortdesc>
   <taskbody>
-    <prereq><p>Vous disposez d’un profile draft, vous savez si le navigateur cible suit le comportement de schéma Firefox ESR 140.12 ou Firefox Release 152, et vous pouvez revoir les valeurs avant export.</p></prereq>
-    <context><p>Un starter preset exprime la forme de l’environnement, tandis qu’une CIS layer ajoute la hardening baseline mappée par BPM. Utilisez les deux comme entrées revues, pas comme approbation automatique de deployment.</p></context>
+    <prereq><p>Vous disposez d'un brouillon de profil, savez si le navigateur cible suit le comportement du schéma Firefox ESR 140.12 ou Firefox Release 152 et pouvez vérifier les valeurs avant l'exportation.</p></prereq>
+    <context><p>Un préréglage de départ exprime la forme de l'environnement, tandis qu'une couche CIS ajoute la ligne de base de durcissement cartographiée de BPM. Utilisez les deux comme entrées examinées, et non comme approbation de déploiement automatique.</p></context>
     <steps>
-      <step><cmd>Sélectionnez le Firefox schema channel correspondant au target deployment : ESR 140.12 ou Release 152.</cmd><info><p>Résultat attendu : BPM valide les policies et managed preferences disponibles avec le channel prévu.</p></info></step>
-      <step><cmd>Choisissez un starter preset : Basic corporate pour les profils office gérés, classroom ou kiosk pour shared browsing contraint, ou protected station pour des postes hardened SOC-style.</cmd><info><p>Résultat attendu : le profile possède une environment baseline initiale avant l’application du CIS hardening.</p></info></step>
-      <step><cmd>Choisissez CIS Level 1 pour un baseline hardening large ou CIS Level 2 lorsque le deployment accepte des controls plus stricts et une revue supplémentaire.</cmd><info><p>Résultat attendu : BPM applique la generated layer correspondant au Firefox channel choisi.</p></info></step>
-      <step><cmd>Vérifiez la source attribution des valeurs ajoutées par le preset, la CIS layer, les imports, les manual edits ou le raw fallback.</cmd><info><p>Résultat attendu : chaque configured value peut être tracée avant export.</p></info></step>
-      <step><cmd>Résolvez les manual-review paths et conflicts avant d’enregistrer le profile.</cmd><info><note type="warning">Ne traitez pas le profil obtenu comme CIS certification ni comme remplacement du benchmark officiel et de l’approbation sécurité locale.</note></info></step>
-      <step><cmd>Validez et exportez seulement après avoir documenté le channel, le preset, le CIS level et les manual decisions sélectionnés.</cmd><info><p>Résultat attendu : le <codeph>policies.json</codeph> exporté est reviewable et lié à la BPM baseline choisie.</p></info></step>
+      <step><cmd>Sélectionnez le canal de schéma Firefox qui correspond au déploiement cible : ESR 140.12 ou Release 152.</cmd><info><p>Résultat attendu : BPM valide les stratégies disponibles et Préférences gérées par rapport au canal prévu.</p></info></step>
+      <step><cmd>Choisissez un préréglage de départ : Entreprise de base pour les profils de bureau gérés, salle de classe ou kiosque pour une navigation partagée contrainte, ou station protégée pour les postes de travail renforcés de style SOC.</cmd><info><p>Résultat attendu : le profil a une référence d'environnement initiale avant l'application du durcissement CIS.</p></info></step>
+      <step><cmd>Choisissez le niveau CIS 1 pour un renforcement de base général ou le niveau CIS 2 lorsque le déploiement accepte des contrôles plus stricts et un examen supplémentaire.</cmd><info><p>Résultat attendu : BPM applique la couche générée correspondante pour le canal Firefox sélectionné.</p></info></step>
+      <step><cmd>Examinez l'attribution de la source pour les valeurs ajoutées par le préréglage, la couche CIS, les importations, les modifications manuelles ou la solution de secours brute.</cmd><info><p>Résultat attendu : chaque valeur configurée peut être tracée avant l'export.</p></info></step>
+      <step><cmd>Résolvez les chemins de révision manuelle et les conflits avant d'enregistrer le profil.</cmd><info><note type="warning">Ne traitez pas le profil résultant comme une certification CIS ou comme un remplacement de la référence officielle et de l'approbation de sécurité locale.</note></info></step>
+      <step><cmd>Validez et exportez uniquement après que le canal sélectionné, le préréglage, le niveau CIS et les décisions manuelles soient documentés.</cmd><info><p>Résultat attendu : le <codeph>policies.json</codeph> exporté est révisable et lié à la ligne de base BPM choisie.</p></info></step>
     </steps>
-    <result><p>Le profile possède un starter preset volontaire, une CIS layer prise en charge, une source attribution visible et une liste claire des manual verification duties restantes.</p></result>
-    <postreq><p>Si la baseline est trop stricte ou trop permissive, supprimez la CIS layer ou changez le starter preset, revalidez et répétez la revue avant export.</p></postreq>
+    <result><p>Le profil a un préréglage de départ délibéré, une couche CIS prise en charge, une attribution de source visible et une liste claire des tâches de vérification manuelle restantes.</p></result>
+    <postreq><p>Si la ligne de base est trop stricte ou trop permissive, supprimez la couche CIS ou changez le préréglage de démarrage, revalidez et répétez la révision avant l'exportation.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-orientation"/>

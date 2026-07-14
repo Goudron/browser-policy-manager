@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Open a saved profile in an editor</title>
-  <shortdesc>Open the same saved profile in Guided Editor, All Settings, or JSON Editor depending on the change you need.</shortdesc>
+  <shortdesc>Open the same saved profile in Guided editor, All settings, or JSON editor depending on the change you need.</shortdesc>
   <taskbody>
     <prereq><p>The profile is visible in the Library and its row identity matches the profile you intend to edit or inspect.</p></prereq>
     <context><p>Opening a saved profile does not duplicate it. Each editor surface works with the same saved profile identity.</p></context>
     <steps>
-      <step><cmd>Use the row title or guided action for task-oriented edits.</cmd><info><p>Expected result: BPM opens the profile in Guided Editor.</p></info></step>
-      <step><cmd>Use All Settings when you need the complete supported catalog and source/attention details.</cmd><info><p>This is the safest choice for detailed policy and preference inspection.</p></info></step>
-      <step><cmd>Use JSON Editor when you need to inspect or edit the raw boundary document.</cmd><info><note type="warning">Raw JSON changes should be validated before export or comparison.</note></info></step>
+      <step><cmd>Use the row title or guided action for task-oriented edits.</cmd><info><p>Expected result: BPM opens the profile in Guided editor.</p></info></step>
+      <step><cmd>Use All settings when you need the complete supported catalog and source/attention details.</cmd><info><p>This is the safest choice for detailed policy and preference inspection.</p></info></step>
+      <step><cmd>Use JSON editor when you need to inspect or edit the raw boundary document.</cmd><info><note type="warning">Raw JSON changes should be validated before export or comparison.</note></info></step>
     </steps>
     <result><p>The selected editor opens in its own profile context and keeps the same profile ID.</p></result>
     <postreq><p>Recovery: if you opened the wrong editor, return to the Library row or use another editor link for the same profile.</p></postreq>

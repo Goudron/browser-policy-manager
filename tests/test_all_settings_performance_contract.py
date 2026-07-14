@@ -20,6 +20,24 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
         schema_version=CURRENT_RELEASE_SCHEMA_CHANNEL,
     )
     wizard_preferences_catalog = get_wizard_preferences_catalog()
+    documentation_inventory = json.loads(
+        (
+            REPO_ROOT
+            / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+        ).read_text(encoding="utf-8")
+    )
+    documentation_row_help_links = {
+        **{
+            f"policy:{item['policy_id']}": {"en": f"/help/en/policy/{item['policy_id']}"}
+            for item in documentation_inventory["policies"]
+        },
+        **{
+            f"known-preference:{item['preference_id']}": {
+                "en": f"/help/en/preference/{item['preference_id']}"
+            }
+            for item in documentation_inventory["managed_preferences"]
+        },
+    }
     script = textwrap.dedent(
         f"""
         const fs = require("fs");
@@ -37,6 +55,7 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
         const allSettingsCategoryCatalog = {json.dumps(get_all_settings_category_catalog())};
         const wizardPreferencesCatalog = {json.dumps(wizard_preferences_catalog)};
         const wizardSchemaShellCatalog = {json.dumps(get_wizard_schema_shell_catalog(wizard_preferences_catalog))};
+        const documentationRowHelpLinks = {json.dumps(documentation_row_help_links)};
         const t = (key) => ({{
             "profiles.settings_list_kind_policy": "Policy",
             "profiles.settings_list_kind_preference": "Preference",
@@ -81,7 +100,7 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
                 }},
                 set innerHTML(value) {{
                     html = String(value || "");
-                    rows = Array.from(html.matchAll(/data-settings-entry-id="([^"]+)"[\\s\\S]*?data-settings-entry-kind="([^"]+)"/g))
+                    rows = Array.from(html.matchAll(/<button[\\s\\S]*?data-settings-entry-select[\\s\\S]*?data-settings-entry-id="([^"]+)"[\\s\\S]*?data-settings-entry-kind="([^"]+)"[\\s\\S]*?<\\/button>/g))
                         .map((match) => ({{
                             hidden: false,
                             dataset: {{
@@ -90,10 +109,13 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
                             }},
                         }}));
                 }},
-                querySelectorAll: (selector) => selector === "[data-settings-entry-id]" ? rows : [],
+                querySelectorAll: (selector) => selector === "[data-settings-entry-select]" ? rows : [],
                 querySelector: () => null,
                 renderedRows: () => rows.length,
                 visibleRows: () => rows.filter((row) => !row.hidden).length,
+                renderedHelpLinks: () => Array.from(
+                    html.matchAll(/data-all-settings-help-target="([^"]+)"/g)
+                ).length,
             }};
         }}
 
@@ -163,6 +185,7 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
                 onSelectionChange: () => {{}},
                 allSettingsRouteState: routeState,
                 settingsInventory: inventory,
+                documentationRowHelpLinks,
             }},
         }});
 
@@ -170,14 +193,17 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
         const catalogTotal = routeState.getVisibleEntries().length;
         if (catalogTotal < 145) throw new Error(`heavy catalog too small: ${{catalogTotal}}`);
         if (listEl.renderedRows() > 7) throw new Error(`collapsed catalog rendered ${{listEl.renderedRows()}} rows`);
+        if (listEl.renderedHelpLinks() !== listEl.renderedRows()) throw new Error("collapsed catalog help-link count mismatch");
         if (!budgetEl.innerHTML.includes("Show ")) throw new Error("catalog show-more control missing");
 
         budgetEl.clickAction("expand");
         if (listEl.renderedRows() > 50) throw new Error(`expanded catalog rendered ${{listEl.renderedRows()}} rows`);
+        if (listEl.renderedHelpLinks() !== listEl.renderedRows()) throw new Error("expanded catalog help-link count mismatch");
         if (!budgetEl.innerHTML.includes("Showing 1-50")) throw new Error("catalog first page range missing");
 
         budgetEl.clickAction("next");
         if (listEl.renderedRows() > 50) throw new Error(`paged catalog rendered ${{listEl.renderedRows()}} rows`);
+        if (listEl.renderedHelpLinks() !== listEl.renderedRows()) throw new Error("paged catalog help-link count mismatch");
         if (!budgetEl.innerHTML.includes("Showing 51-100")) throw new Error("catalog second page range missing");
 
         routeState.setActiveMode("configured");
@@ -190,6 +216,7 @@ def test_all_settings_heavy_fixture_keeps_rendered_rows_bounded():
         }}
         if (configuredTotal <= 7) throw new Error(`configured domain view is not a long-list probe: ${{configuredTotal}}`);
         if (listEl.renderedRows() > 7) throw new Error(`collapsed configured rendered ${{listEl.renderedRows()}} rows`);
+        if (listEl.renderedHelpLinks() !== listEl.renderedRows()) throw new Error("configured help-link count mismatch");
         """
     )
 

@@ -6,9 +6,9 @@
   "description": "Compact deterministic fixtures for representative CIS Level 1 and Level 2 documentation workflows.",
   "route_order": [
     "Library",
-    "Guided Editor",
-    "All Settings",
-    "Profile Comparison",
+    "Guided editor",
+    "All settings",
+    "Compare profile settings",
     "Export",
     "External verification"
   ],
@@ -31,9 +31,9 @@
       ],
       "required_user_surfaces": [
         "Library",
-        "Guided Editor",
-        "All Settings",
-        "Profile Comparison",
+        "Guided editor",
+        "All settings",
+        "Compare profile settings",
         "Export"
       ],
       "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external."
@@ -56,9 +56,9 @@
       ],
       "required_user_surfaces": [
         "Library",
-        "Guided Editor",
-        "All Settings",
-        "Profile Comparison",
+        "Guided editor",
+        "All settings",
+        "Compare profile settings",
         "Export"
       ],
       "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external."

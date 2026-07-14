@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Profiländerungen speichern</title>
-  <shortdesc>Erstellen Sie den ersten gespeicherten Zustand aus einem Entwurf oder speichern Sie Änderungen an einem bestehenden Profil.</shortdesc>
+  <shortdesc>Erstellen Sie das erste gespeicherte Profil aus einem Entwurf oder behalten Sie Änderungen an einem vorhandenen Profil bei.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie die benötigte Oberfläche bereit: Bibliothek, Guided Editor, All Settings, JSON oder Compare.</p></prereq>
-    <context><p>Speichern erzeugt die Profil-ID für einen neuen Entwurf und stellt die aktuellen Policy- und Managed-Preference-Werte anderen BPM-Oberflächen bereit.</p></context>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <context><p>Durch das Speichern wird das Profil ID für einen neuen Entwurf erstellt und die neuesten Richtlinien- und verwalteten Präferenzwerte für andere BPM-Oberflächen verfügbar gemacht.</p></context>
     <steps>
-      <step><cmd>Prüfen Sie Profilname, Schema-Kanal und Validierungszustand vor dem Speichern.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
-      <step><cmd>Wählen Sie Speichern auf der aktiven Editor-Oberfläche.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
-      <step><cmd>Warten Sie auf die sichtbare Statusmeldung, die den Abschluss bestätigt.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
-      <step><cmd>Wenn Validierungs- oder Verbindungsfeedback erscheint, lesen Sie es vor Navigation oder erneutem Versuch.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie bewusst, bevor Sie einen Editor verlassen, einen Tab schließen oder eine unumkehrbare Aktion bestätigen.</note></info></step>
+      <step><cmd>Überprüfen Sie vor dem Speichern den Profilnamen, den Schemakanal und den Validierungsstatus.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Wählen Sie „Speichern“ auf der aktiven Editoroberfläche.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Warten Sie auf die sichtbare Statusmeldung, die bestätigt, dass die Speicherung abgeschlossen ist.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Wenn eine Validierungs- oder Verbindungsrückmeldung angezeigt wird, lesen Sie diese, bevor Sie fortfahren oder es erneut versuchen.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
-    <result><p>Das Profil besitzt einen gespeicherten Zustand, der erneut geöffnet, validiert, exportiert oder verglichen werden kann.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Zustand unklar ist, stoppen Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <result><p>Das Profil hat einen gespeicherten Status, der erneut geöffnet, validiert, exportiert oder verglichen werden kann.</p></result>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

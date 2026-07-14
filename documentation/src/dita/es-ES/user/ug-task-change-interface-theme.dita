@@ -4,16 +4,16 @@
   <title>Cambiar el tema de la interfaz</title>
   <shortdesc>Seleccione el tema del sistema, claro u oscuro sin cambiar el contenido del perfil.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
-    <context><p>La selección de tema solo afecta a la interfaz de BPM y ayuda a revisar tablas, bloques de código, estados de validación y advertencias cómodamente.</p></context>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, Biblioteca, Todos los ajustes, Guiado, JSON o Superficie de comparación.</p></prereq>
+    <context><p>La selección de temas afecta solo a la interfaz BPM y ayuda a revisar tablas, bloques de código, estados de validación y advertencias cómodamente.</p></context>
     <steps>
-      <step><cmd>Abra el selector de tema en el encabezado de la página.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Elija Sistema, Claro u Oscuro.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Compruebe que paneles del editor, tablas, notas, indicadores de foco y estados de validación siguen siendo legibles.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Continúe editando después de confirmar que los datos no guardados del perfil siguen presentes.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+      <step><cmd>Abra el selector de temas en el encabezado de la página.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Elija Sistema, Claro u Oscuro.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Compruebe que los paneles del editor, tablas, notas, indicadores de enfoque y estados de validación sigan siendo legibles.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Continúe editando después de confirmar que los datos del perfil no guardados todavía están presentes.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
-    <result><p>BPM usa el tema visual seleccionado en las superficies compatibles.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <result><p>BPM utiliza el tema visual seleccionado en las superficies compatibles.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>

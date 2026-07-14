@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-trace-cis-source" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>追踪 CIS value 的来源</title>
-  <shortdesc>在 export 前，将一个 configured value 追踪到 starter preset、CIS layer、merge decision 和后续 edits。</shortdesc>
+  <title>追踪 CIS 值的来源</title>
+  <shortdesc>将一个配置值跟踪回起始预设、CIS 层、合并决策以及导出前的后续编辑。</shortdesc>
   <taskbody>
-    <prereq><p>打开一个由 starter preset 创建，或已应用 CIS Level 1 或 Level 2 layer 的 profile。</p></prereq>
-    <context><p>当 reviewer 询问某个 setting 来自 original baseline、CIS layer、import、manual edit 还是 raw fallback 时，tracing value 很有用。</p></context>
+    <prereq><p>打开从入门预设创建的配置文件或应用了 CIS 1 级或 2 级图层的配置文件。</p></prereq>
+    <context><p>当审阅者询问设置是否来自原始基线、CIS 层、导入、手动编辑或原始回退时，跟踪值非常有用。</p></context>
     <steps>
-      <step><cmd>打开 All Settings，并按 configured values 或 CIS source badge 过滤。</cmd><info><p>预期结果：相关 policy 或 managed preference 带着 source attribution 保持可见。</p></info></step>
-      <step><cmd>读取 source attribution，并判断 current value 是 baseline、CIS、manual、imported 还是 raw。</cmd><info><p>预期结果：你可以说出 value 的直接 source。</p></info></step>
-      <step><cmd>如果 generated layer 贡献了 value，打开相关 CIS recommendation 或 Firefox policy topic。</cmd><info><p>预期结果：可以看到 recommendation ID、path、value、channel support 和 merge rule。</p></info></step>
-      <step><cmd>检查 merge decision：added_from_cis、already_satisfied、cis_replaced_base、kept_base_only、kept_base_stricter 或 manual_review_kept_base。</cmd><info><p>预期结果：你知道 CIS 是添加、确认、替换 value，还是保留 base value 供 review。</p></info></step>
-      <step><cmd>保存前解决 manual-review 或 conflict states。</cmd><info><note type="warning">不要用无关的 manual edit 掩盖 manual_review_kept_base decision；先记录 review reason。</note></info></step>
-      <step><cmd>只有当 source 和 decision 对另一位 reviewer 也可理解时，才执行 validation 和 export。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 反映 reviewed choice，而 BPM-only attribution 留在 profile 中。</p></info></step>
+      <step><cmd>打开 所有设置 并按配置值或 CIS 源徽章进行过滤。</cmd><info><p>预期结果：相关政策或管理偏好及其来源属性仍然可见。</p></info></step>
+      <step><cmd>读取源属性并确定当前值是基线、CIS、手动、导入还是原始。</cmd><info><p>预期结果：您可以命名该值的直接来源。</p></info></step>
+      <step><cmd>当生成的图层贡献了值时，打开相关的 CIS 建议或 Firefox 策略主题。</cmd><info><p>预期结果：可以看到推荐ID、路径、值、渠道支持和合并规则。</p></info></step>
+      <step><cmd>检查合并决策：added_from_cis、already_satisfied、cis_replaced_base、kept_base_only、kept_base_stricter 或 manual_review_kept_base。</cmd><info><p>预期结果：您知道 CIS 是否添加了该值、确认了该值、替换了该值，还是留下了基值以供审核。</p></info></step>
+      <step><cmd>在保存之前解决手动审核或冲突状态。</cmd><info><note type="warning">不要通过进行不相关的手动编辑来隐藏 manual_review_kept_base 决定；先记录审核原因。</note></info></step>
+      <step><cmd>仅在其他审阅者可以理解来源和决策后才进行验证和导出。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 反映经过审核的选择，而仅 BPM 归因保留在配置文件中。</p></info></step>
     </steps>
-    <result><p>Configured value 可以解释为 baseline、CIS、manual、imported 或 raw，并带有可见 merge decision 和 review status。</p></result>
-    <postreq><p>如果 attribution 不明确，请将该 profile 与 blank profile 加同一 CIS layer 进行比较，然后检查 imports 和 manual changes。</p></postreq>
+    <result><p>配置的值可以解释为基线、CIS、手动、导入或原始，并具有可见的合并决策和审核状态。</p></result>
+    <postreq><p>如果归属不明确，请将配置文件与空白配置文件加上相同的 CIS 层进行比较，然后检查导入和手动更改。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-presets-layers-merge"/>

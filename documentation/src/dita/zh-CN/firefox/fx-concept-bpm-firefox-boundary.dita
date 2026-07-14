@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-bpm-firefox-boundary" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>BPM 验证结束与 Firefox runtime 开始的位置</title>
-  <shortdesc>BPM 验证并导出 Firefox Enterprise policy document；Firefox 在 BPM 之外的 runtime 中应用该文档。</shortdesc>
+  <title>BPM 验证结束且 Firefox 运行时开始的位置</title>
+  <shortdesc>BPM 验证并导出 Firefox Enterprise 策略文档； Firefox 在运行时在 BPM 之外应用该文档。</shortdesc>
   <conbody>
-    <section id="a-profile-model"><title>BPM 配置文件模型</title><p>BPM profile 是已保存的编辑模型。它可以在导出前包含策略值、managed preferences、来源信息、验证状态、来自 preset 或 CIS 的值，以及 raw imported data。</p></section>
-    <section id="a-boundary-document"><title>Firefox 边界文档</title><p>导出的边界是带有顶层 <codeph>policies</codeph> 对象的 <codeph>policies.json</codeph>。BPM 检查形状、受支持的 policy IDs、通道可用性和已知值限制，但不证明已部署 Firefox 在每种环境中的实际行为。</p></section>
-    <section id="a-runtime-responsibility"><title>Firefox runtime 责任</title><p>Firefox 负责策略加载、操作系统部署路径、扩展安装、证书信任、网络访问和用户可见的浏览器效果。BPM 文档描述配置路径和已知 schema facts，不描述管理员 rollout 流程。</p></section>
-    <section id="a-managed-preferences"><title>Managed preferences</title><p>Managed preferences 通过 Firefox <codeph>Preferences</codeph> 策略配置。BPM 可以显示已知 preferences 并保留 advanced values，但 preference 效果仍取决于 Firefox runtime 支持和所选架构通道。</p></section>
+    <section id="a-profile-model"><title>BPM 配置文件模型</title><p>BPM 配置文件是保存的编辑模型。它可以包含策略值、托管首选项、源信息、验证状态、预设或 CIS 派生值以及导出前的原始导入数据。</p></section>
+    <section id="a-boundary-document"><title>Firefox 边界文档</title><p>导出的边界是一个带有顶级 <codeph>policies</codeph> 对象的 <codeph>policies.json</codeph> 文档。 BPM 验证检查形状、支持的策略 ID、渠道可用性和已知值约束，但它不能证明已部署的 Firefox 安装在每个环境中的行为方式。</p></section>
+    <section id="a-runtime-responsibility"><title>Firefox 运行时责任</title><p>Firefox 拥有策略加载、操作系统部署路径、扩展安装、证书信任行为、网络访问和用户可见的浏览器效果。 BPM 文档描述了配置路径和已知架构事实，而不是管理员部署过程。</p></section>
+    <section id="a-managed-preferences"><title>托管首选项</title><p>托管首选项 通过 Firefox <codeph>Preferences</codeph> 策略进行配置。 BPM 可以公开已知的首选项并保留高级值，但首选项效果仍然取决于 Firefox 运行时支持和所选的架构通道。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-concept-policy-selection"/>

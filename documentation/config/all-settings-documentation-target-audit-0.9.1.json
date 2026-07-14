@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "audit_id": "bpm-all-settings-documentation-target-audit-0.9.1",
+  "backlog_item": "BPM091-M9-01",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted-with-open-findings",
+  "audited_sources": {
+    "row_inventory": "app/static/profiles_settings_inventory.js",
+    "policy_and_preference_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+    "policy_topic_index": "documentation/src/generated/firefox/firefox-policy-skeletons-0.9.0.json",
+    "context_targets": "documentation/config/firefox-policy-context-targets-0.9.0.json",
+    "target_map_generator": "documentation/tools/build_docs.py::_build_target_map",
+    "row_help_contract": "documentation/config/all-settings-row-help-link-contract-0.9.1.json"
+  },
+  "coverage": {
+    "firefox_policies": {
+      "inventory_count": 120,
+      "both_channel_count": 112,
+      "release_only_count": 8,
+      "expected_target_pattern": "policy:{exact_policy_id}",
+      "generated_target_count": 120,
+      "current_disposition": "linked",
+      "fallback_disposition": "missing_documentation",
+      "rule": "Every schema-known policy keeps its exact policy identity, including raw-fallback, invalid, and deprecated row states."
+    },
+    "known_managed_preferences": {
+      "inventory_count": 62,
+      "declared_inventory_target_count": 62,
+      "expected_target_pattern": "known-preference:{exact.preference.id}",
+      "observed_at_m9_01_generated_target_count": 0,
+      "generated_target_count": 62,
+      "current_disposition": "linked",
+      "linked_disposition_owner": "BPM091-M9-02",
+      "fallback_target": "topic:fx-reference-managed-preference-locking",
+      "fallback_rule": "M9-02 must either generate an exact manifest target backed by the managed-preference reference or retain missing_documentation; row code must not invent a URL."
+    }
+  },
+  "row_classes": [
+    {
+      "row_class": "schema_known_policy",
+      "identity": "kind=policy, unknown=false, exact policy ID",
+      "documentation_target": "policy:{exact_policy_id}",
+      "disposition": "linked"
+    },
+    {
+      "row_class": "schema_known_raw_fallback_policy",
+      "identity": "kind=policy, unknown=false, rawFallback=true, exact policy ID",
+      "documentation_target": "policy:{exact_policy_id}",
+      "disposition": "linked",
+      "note": "Raw-fallback presentation does not erase a schema-known policy identity."
+    },
+    {
+      "row_class": "known_managed_preference",
+      "identity": "kind=preference, knownPreference is present, exact dotted preference ID",
+      "documentation_target": "known-preference:{exact.preference.id}",
+      "disposition": "linked",
+      "closure_task": "BPM091-M9-02"
+    },
+    {
+      "row_class": "unknown_imported_policy",
+      "identity": "kind=policy, unknown=true",
+      "documentation_target": null,
+      "disposition": "unsupported_unknown",
+      "editor_navigation_target": "settings-schema-shell-step-8"
+    },
+    {
+      "row_class": "unknown_imported_preference",
+      "identity": "kind=preference, knownPreference is null, unknown=true",
+      "documentation_target": null,
+      "disposition": "unsupported_unknown",
+      "editor_navigation_target": "pref-section:{resolved_section_or_general}"
+    },
+    {
+      "row_class": "invalid_known_entry",
+      "identity": "Preserve the recognized policy or preference identity regardless of invalid state.",
+      "documentation_target": "Resolve by recognized exact identity.",
+      "disposition": "linked or missing_documentation"
+    },
+    {
+      "row_class": "deprecated_known_entry",
+      "identity": "Preserve the recognized policy or preference identity regardless of deprecated state.",
+      "documentation_target": "Resolve by recognized exact identity.",
+      "disposition": "linked or missing_documentation"
+    },
+    {
+      "row_class": "generated_inventory_entry",
+      "identity": "Inherit the exact generated policy ID or known preference ID.",
+      "documentation_target": "policy:{exact_policy_id} or known-preference:{exact.preference.id}",
+      "disposition": "Use the owning identity class disposition; never use a translated label."
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "ASDOC091-MISSING-KNOWN-PREFERENCE-TARGETS",
+      "severity": "implementation-gap",
+      "status": "closed",
+      "affected_entry_count": 62,
+      "finding": "The source inventory declares 62 known-preference target IDs, but _build_target_map publishes none of them.",
+      "closure_task": "BPM091-M9-02",
+      "closure_evidence": "documentation/config/all-settings-help-target-map-0.9.1.json and documentation/tools/build_docs.py generate and validate all 62 exact targets."
+    },
+    {
+      "finding_id": "ASDOC091-EDITOR-TARGET-NOT-DOCUMENTATION-TARGET",
+      "severity": "implementation-guard",
+      "status": "closed",
+      "affected_row_classes": ["unknown_imported_policy", "unknown_imported_preference"],
+      "finding": "Current entry.target values for unknown rows navigate inside the editor and must never be treated as documentation target IDs.",
+      "closure_tasks": ["BPM091-M9-02", "BPM091-M9-03", "BPM091-M9-05"],
+      "closure_evidence": "BPM091-M9-03 renders links only from the separately embedded manifest-resolved map and ignores editor targets. BPM091-M9-05 assigns explicit unsupported_unknown and not_applicable_raw states before target lookup, maps missing targets and unavailable/stale/incomplete/incompatible artifacts to noninteractive no-link indicators, and emits no href for any no-link disposition."
+    }
+  ],
+  "summary": {
+    "policy_inventory_count": 120,
+    "policy_linked_count": 120,
+    "known_preference_inventory_count": 62,
+    "known_preference_linked_count": 62,
+    "known_preference_missing_documentation_count": 0,
+    "explicit_no_link_row_class_count": 2,
+    "open_finding_count": 0,
+    "closed_finding_count": 2
+  },
+  "verification": {
+    "focused_command": "./.venv/bin/pytest -q documentation/tests/contract/test_all_settings_documentation_target_audit.py"
+  },
+  "execution_record": {
+    "date": "2026-07-11",
+    "command": "./.venv/bin/pytest -q documentation/tests/contract/test_all_settings_documentation_target_audit.py documentation/tests/contract/test_all_settings_row_help_link_contract.py documentation/tests/contract/test_091_documentation_polish_guardrails.py",
+    "result": "pass",
+    "result_summary": "18 passed"
+  }
+}

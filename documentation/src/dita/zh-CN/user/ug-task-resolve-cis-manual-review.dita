@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-resolve-cis-manual-review" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>处理 CIS manual-review 项</title>
-  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Find CIS recommendations requiring manual review and decide whether to configure, document, or leave them for external verification.</shortdesc>
+  <title>解决 CIS 手动审核项目</title>
+  <shortdesc>查找需要手动审核的 CIS 建议，并决定是否配置、记录或将其留作外部验证。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Open All Settings Review mode for a profile that includes a CIS layer or CIS-derived source metadata.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Some CIS recommendations cannot be fully automated by BPM. Review mode surfaces those items so the user can make an explicit decision without claiming certification.</p></context>
+    <prereq><p>打开包含 CIS 层或 CIS 派生源元数据的配置文件的 所有设置 检查。</p></prereq>
+    <context><p>某些 CIS 建议无法通过 BPM 完全自动化。 检查 会显示这些项目，以便用户无需声明认证即可做出明确的决定。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Open Review mode and filter for CIS manual-review items if needed.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Read the recommendation identifiers, affected policy or preference, and current value.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Configure a supported value, document why manual verification remains, or leave the item intentionally unresolved.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：处理 CIS manual-review 项. Revalidate and record the decision before export or handoff.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+      <step><cmd>打开 检查 并根据需要过滤 CIS 手动审核项目。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>读取建议标识符、受影响的策略或首选项以及当前值。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>配置受支持的值，记录仍需手动验证的原因，或有意保留该项目的未解决状态。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>在导出或移交之前重新验证并记录决策。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 CIS manual-review items are configured, documented, or intentionally left for external verification.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if the recommendation cannot be mapped to a visible setting, keep the item in review and consult the CIS guide when that guide is authored.</p></postreq>
+    <result><p>CIS 手动审核项目已配置、记录或有意留作外部验​​证。</p></result>
+    <postreq><p>恢复：如果建议无法映射到可见设置，请继续审查该项目，并在编写 CIS 指南时查阅该指南。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-review-attention-items"/>

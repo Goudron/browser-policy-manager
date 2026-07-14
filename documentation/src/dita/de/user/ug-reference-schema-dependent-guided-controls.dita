@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-schema-dependent-guided-controls" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Schemaabhängige Guided-Steuerelemente</title>
-  <shortdesc>Einige Guided-Steuerelemente erscheinen nur, wenn das gewählte Firefox-Schema sie unterstützt, einschließlich Release-only Richtlinien für AI &amp; smart features.</shortdesc>
+  <title>Schemaabhängige geführte Steuerelemente</title>
+  <shortdesc>Einige geführte Steuerelemente werden nur angezeigt, wenn das ausgewählte Firefox-Schema sie unterstützt, einschließlich der nur für die Veröffentlichung geltenden Smart-Feature-Richtlinien AI &amp;.</shortdesc>
   <refbody>
-    <section id="a-release-controls"><title>Release</title><p>In Firefox Release 152 kann Schritt 5 unterstützte Richtlinien für AI &amp; smart features, visuelle Suche und Smart-Funktionen anzeigen, wenn sie im Schema vorhanden sind.</p></section>
-    <section id="a-esr-unavailable"><title>ESR 140.12</title><p>In ESR 140.12 fehlen nicht unterstützte AI/smart-feature controls oder sind nicht verfügbar. Fügen Sie sie nicht manuell hinzu, als wären sie in ESR unterstützt.</p></section>
-    <section id="a-no-documentation-ai"><title>Documentation AI boundary</title><p>Diese Referenz beschreibt vorhandene Firefox-Produktrichtlinien. Sie fügt dem Dokumentationsportal 0.9.0 kein RAG, keine Embeddings und keine generative Suche oder Antworten hinzu.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Wenn ein Steuerelement fehlt, prüfen Sie den Schemakanal, kontrollieren Sie die Support-Grenze in All Settings und dokumentieren Sie den nicht unterstützten Zustand im Review.</p></section>
+    <section id="a-release-controls"><title>Release-unterstützte Steuerelemente</title><p>In Firefox Version 152 kann Schritt 5 unterstützte intelligente AI &amp;-Funktionen, visuelle Suche und Richtlinien für intelligente Browserfunktionen anzeigen, sofern diese im Schema vorhanden sind.</p></section>
+    <section id="a-esr-unavailable"><title>ESR nicht verfügbare Steuerelemente</title><p>Unter ESR 140.12 fehlen nicht unterstützte Browser-AI-Richtlinienkontrollen oder sind nicht verfügbar. Erzwingen Sie sie nicht in Geführter Editor, als ob sie unterstützt würden.</p></section>
+    <section id="a-no-documentation-ai"><title>Keine Dokumentation der AI-Funktionalität</title><p>In dieser Referenz werden nur die vorhandenen Firefox-Browserrichtlinienkontrollen erläutert. Es fügt dem 0.9.0-Dokumentationsportal keine AI-Funktionalität hinzu, einschließlich RAG, Einbettungen, generative Suche oder generative Antworten.</p></section>
+    <section id="a-recovery"><title>Wiederherstellung</title><p>Wenn ein Steuerelement fehlt, bestätigen Sie den Schemakanal, überprüfen Sie Alle Einstellungen auf die Rohunterstützungsgrenze und notieren Sie den nicht unterstützten Status während der Überprüfung.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

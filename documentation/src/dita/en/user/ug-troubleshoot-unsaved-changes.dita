@@ -4,7 +4,7 @@
   <title>Recover from unsaved changes</title>
   <shortdesc>Avoid losing unsaved editor changes during navigation, tab close, refresh, or mode switching.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>BPM warns about dirty editor state, but users still need to decide whether to save, discard, or stay on the page.</p></context>
     <steps>
       <step><cmd>Stop when the browser or BPM reports unsaved changes.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

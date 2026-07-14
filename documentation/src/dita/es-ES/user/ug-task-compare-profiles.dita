@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-compare-profiles" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Abrir Compare desde la Biblioteca</title>
-  <shortdesc>Esta tarea describe el escenario completo «Abrir Compare desde la Biblioteca»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Abrir Comparar desde la Biblioteca</title>
+  <shortdesc>Abra la página de comparación en una nueva pestaña antes de seleccionar dos perfiles guardados.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>La biblioteca está abierta y existen al menos dos perfiles guardados.</p></prereq>
+    <context><p>«Comparar ajustes de perfiles» es una página dedicada a los perfiles guardados. Mantiene el idioma y el tema actuales y no reemplaza la pestaña Biblioteca.</p>
+      <fig id="screenshot-compare-profiles">
+        <title>Página «Comparar ajustes de perfiles»</title>
+        <image keyref="screenshot.compare-profiles" placement="break">
+          <alt>Vista de comparación que muestra dos perfiles guardados seleccionados para revisión en paralelo.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Abrir Compare desde la Biblioteca».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Elija la acción «Comparar ajustes de perfiles» en la Biblioteca.</cmd><info><p>Resultado esperado: BPM abre la interfaz de comparación en una nueva pestaña del navegador.</p></info></step>
+      <step><cmd>Utilice los campos de búsqueda izquierdo y derecho para elegir el Perfil A y el Perfil B.</cmd><info><note type="warning">Comparar lee el estado del perfil guardado. Guarde los cambios del editor antes de confiar en la comparación.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>La superficie de comparación está lista para la selección independiente de Perfil A y Perfil B.</p></result>
+    <postreq><p>Recuperación: si la pestaña Comparar se abre sin los perfiles esperados, regrese a la Biblioteca, actualícela y confirme que ambos perfiles estén guardados y sean visibles.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-comparison-workflow"/>

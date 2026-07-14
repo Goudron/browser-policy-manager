@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-restore-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Restaurar un perfil archivado</title>
-  <shortdesc>Esta tarea describe el escenario completo «Restaurar un perfil archivado»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Devuelve un perfil archivado al ciclo de vida activo de la biblioteca cuando deba editarse o usarse nuevamente.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>El filtro de ciclo de vida muestra los perfiles archivados o todos, y la fila del perfil de destino es visible.</p></prereq>
+    <context><p>Restaurar archivo de reversiones. No revalida el perfil ni cambia los valores de la política.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Restaurar un perfil archivado».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
+      <step><cmd>Confirme la identidad de la fila archivada y la hora de actualización.</cmd><info><p>Resultado esperado: identificas el perfil archivado que deseas recuperar.</p></info></step>
+      <step><cmd>Elija Restaurar en esa fila.</cmd><info><note type="warning">La restauración activa nuevamente el perfil, pero es posible que aún sea necesario revisar su estado de validación anterior.</note></info></step>
+      <step><cmd>Cambie al filtro de ciclo de vida activo o a todos los perfiles para confirmar la fila restaurada.</cmd><info><p>Actualizar si el estado indica éxito pero la fila permanece oculta.</p></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil está activo nuevamente y disponible para los flujos de trabajo normales del editor.</p></result>
+    <postreq><p>Recuperación: archiva el perfil nuevamente si fue restaurado por error.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-archive-profile"/>

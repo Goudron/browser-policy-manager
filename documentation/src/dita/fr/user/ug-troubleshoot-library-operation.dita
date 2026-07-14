@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-library-operation" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Dépanner une opération de Bibliothèque</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Dépanner une opération de Bibliothèque » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Dépanner une opération de bibliothèque</title>
+  <shortdesc>Récupérez en toute sécurité après les échecs de chargement, de cycle de vie, de suppression et d'état d'action de la bibliothèque.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Une action de chargement de bibliothèque ou de ligne a signalé une erreur, a expiré ou a laissé les lignes visibles dans un état inattendu.</p></prereq>
+    <context><p>Le dépannage commence par la préservation du contexte et la lecture de l'état visible avant de réessayer.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Dépanner une opération de Bibliothèque ».</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Ne répétez pas une action destructrice tant que l'état actuel n'est pas clair.</cmd><info><note type="warning">La répétition de l'archivage ou de la suppression définitive après un échec partiel peut masquer l'action réellement réussie.</note></info></step>
+      <step><cmd>Enregistrez le nom du profil, l'état de la ligne, l'état du filtre et le message d'état visible.</cmd><info><p>Résultat attendu : vous pouvez expliquer ce que BPM a montré avant de réessayer.</p></info></step>
+      <step><cmd>Actualisez la bibliothèque une fois.</cmd><info><p>Si l'état actualisé correspond au résultat attendu, continuez à partir de la liste de lignes actualisées.</p></info></step>
+      <step><cmd>Si l'état actualisé est toujours erroné, réinitialisez la recherche et les filtres et inspectez le profil sous tous les états du cycle de vie.</cmd><info><p>Cela distingue une ligne masquée d'une opération ayant échoué ou terminée.</p></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Vous savez s'il faut réessayer l'opération, restaurer le profil, arrêter avant la suppression ou continuer à partir de la vue actualisée de la bibliothèque.</p></result>
+    <postreq><p>Récupération : en cas de connexions répétées ou d'échecs d'API, arrêtez les modifications de la bibliothèque et conservez l'état visible pour l'assistance ou l'examen du responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-refresh-profile-library"/>

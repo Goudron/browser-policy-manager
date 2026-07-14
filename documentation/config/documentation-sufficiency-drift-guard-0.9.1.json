@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-sufficiency-drift-guard-0.9.1",
+  "backlog_item": "BPM091-M6-07",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "protocol": "documentation/config/documentation-sufficiency-review-protocol-0.9.1.json",
+  "review_sources": [
+    {
+      "guide_ids": ["user-guide"],
+      "path": "docs/architecture/user-guide-sufficiency-review-0.9.1.json",
+      "collection": "workflow_reviews",
+      "topic_field": "topic_ids",
+      "topic_directory": "user"
+    },
+    {
+      "guide_ids": ["firefox-policy-guide", "cis-settings-guide"],
+      "path": "docs/architecture/firefox-cis-guide-sufficiency-review-0.9.1.json",
+      "collection": "review_items",
+      "topic_field": "topic_id"
+    },
+    {
+      "guide_ids": ["administrator-guide"],
+      "path": "docs/architecture/administrator-devops-guide-sufficiency-review-0.9.1.json",
+      "collection": "section_reviews",
+      "topic_field": "topic_ids",
+      "topic_directory": "admin"
+    }
+  ],
+  "procedure_contract": {
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "required_task_elements": ["prereq", "steps/step/cmd", "result", "postreq", "related-links/link"],
+    "minimum_step_count": 1,
+    "linux_command_contract": "documentation/config/linux-source-install-command-contract-0.9.1.json",
+    "minimum_linux_codeblock_count": 3,
+    "codeblock_content_rule": "Each command block must contain source text or a DITA conref to the canonical English block."
+  },
+  "drift_checks": [
+    "Every normalized review item resolves every field required by the sufficiency protocol.",
+    "Every reviewed localized task retains prerequisites, ordered commands, an observable result, recovery guidance, and related guide links.",
+    "Every Linux distribution procedure retains all executable command blocks from the command contract.",
+    "Every repository drift source, evidence artifact, focused pytest path, and focused pytest node still exists.",
+    "Every DITA related-link and topic-like review recovery target resolves through every supported locale key map."
+  ],
+  "verification": {
+    "focused_command": "./.venv/bin/pytest -q documentation/tests/contract/test_documentation_sufficiency_drift.py",
+    "release_gate": "make test-docs-contract"
+  },
+  "execution_record": {
+    "date": "2026-07-11",
+    "command": "./.venv/bin/pytest -q documentation/tests/contract/test_documentation_sufficiency_drift.py documentation/tests/contract/test_documentation_sufficiency_review_protocol.py documentation/tests/contract/test_user_guide_sufficiency_review.py documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py documentation/tests/contract/test_linux_source_install_command_topics.py documentation/tests/contract/test_linux_source_install_validation.py",
+    "result": "pass",
+    "result_summary": "66 passed",
+    "corrected_drift": [
+      "Replaced the removed All Settings state source with app/static/profiles_all_settings_state.js.",
+      "Replaced a missing unknown-policy recovery target with ug-task-handle-raw-unknown-settings.",
+      "Replaced removed Firefox schema-cache paths with the current ESR 140.12 and Release 152 policy schema paths."
+    ]
+  }
+}

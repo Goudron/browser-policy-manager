@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-interpret-profile-comparison" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Interpréter le tableau de comparaison</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Interpréter le tableau de comparaison » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Lire les lignes de stratégie et de préférences gérées dans les états égaux, modifiés et manquants.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Le profil A et le profil B sont sélectionnés et le tableau de comparaison est visible.</p></prereq>
+    <context><p>Le tableau compare l'union des paramètres des deux profils. Les lignes de stratégie et les lignes de préférences gérées peuvent apparaître ensemble car les deux peuvent affecter le comportement de Firefox.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Interpréter le tableau de comparaison ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Analysez le type de ligne pour distinguer les lignes de stratégie des lignes de préférences gérées.</cmd><info><p>Résultat attendu : vous savez si la ligne représente une politique Firefox Enterprise ou une clé de préférence gérée.</p></info></step>
+      <step><cmd>Lisez la valeur et l'état de chaque côté.</cmd><info><p>Les lignes égales ont des valeurs correspondantes, les lignes modifiées ont des valeurs différentes et les lignes manquantes n'existent que d'un côté.</p></info></step>
+      <step><cmd>Utilisez les lignes manquantes ou modifiées pour décider quel profil doit être révisé.</cmd><info><note type="warning">La comparaison n'applique pas les modifications. Ouvrez l'éditeur de profil approprié pour mettre à jour les valeurs.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Vous pouvez expliquer si les profils sélectionnés sont équivalents, différents ou des paramètres manquants d'un côté.</p></result>
+    <postreq><p>Récupération : si les lignes semblent obsolètes, enregistrez d'abord les modifications de l'éditeur et rouvrez la comparaison à partir de la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

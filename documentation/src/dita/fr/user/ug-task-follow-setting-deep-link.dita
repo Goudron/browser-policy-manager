@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Suivre un lien profond de paramètre</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <shortdesc>Suivez les liens ciblés entre la recherche, Tous les paramètres, le contexte guidé et les emplacements JSON.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <prereq><p>Un lien ou un résultat de recherche pointe vers un paramètre, un état de révision, une clé brute, un élément obsolète ou un emplacement JSON.</p></prereq>
+    <context><p>Les liens profonds préservent l'orientation en ouvrant le bon éditeur et en focalisant le paramètre ou l'emplacement brut pertinent.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Confirm the destination editor and focused setting or state.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Ouvrez le lien ciblé à partir d'un contexte de recherche, de révision, de comparaison, guidé ou JSON.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Confirmez l'éditeur de destination et le paramètre ou l'état ciblé.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Utilisez le panneau de détails, le filtre ou l'emplacement JSON pour terminer la tâche.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Revenez à la surface précédente uniquement après avoir délibérément enregistré ou ignoré les modifications.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The linked setting opens in the correct surface with focus preserved.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+    <result><p>Le paramètre lié s'ouvre dans la surface appropriée avec le focus préservé.</p></result>
+    <postreq><p>Récupération : si le lien ne parvient pas à être résolu, recherchez par stratégie exacte ID, clé de préférence ou chemin brut.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

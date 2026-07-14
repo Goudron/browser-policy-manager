@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-schema-dependent-guided-controls" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Зависимые от схемы элементы Guided</title>
-  <shortdesc>Некоторые элементы Guided появляются только тогда, когда выбранная схема Firefox их поддерживает, включая Release-only политики AI &amp; smart features.</shortdesc>
+  <title>Зависящие от схемы управляемые элементы управления</title>
+  <shortdesc>Некоторые управляемые элементы управления появляются только в том случае, если выбранная схема Firefox их поддерживает, включая политики интеллектуальных функций только для выпуска AI &amp;.</shortdesc>
   <refbody>
-    <section id="a-release-controls"><title>Release</title><p>В Firefox Release 152 шаг 5 может показывать поддерживаемые политики AI &amp; smart features, visual search и smart-функций, если они есть в схеме.</p></section>
-    <section id="a-esr-unavailable"><title>ESR 140.12</title><p>В ESR 140.12 неподдерживаемые AI/smart-feature controls отсутствуют или недоступны. Не добавляйте их вручную как будто они поддерживаются ESR.</p></section>
-    <section id="a-no-documentation-ai"><title>Documentation AI boundary</title><p>Эта справка описывает существующие продуктовые политики Firefox. Она не добавляет RAG, embeddings, генеративный поиск или ответы в документационный портал 0.9.0.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Если контроль отсутствует, подтвердите канал схемы, проверьте границу поддержки в All Settings и зафиксируйте неподдерживаемое состояние при review.</p></section>
+    <section id="a-release-controls"><title>Элементы управления, поддерживаемые выпуском</title><p>В Firefox версии 152 на шаге 5 можно отобразить поддерживаемые интеллектуальные функции AI &amp;, визуальный поиск и политики функций интеллектуальных браузеров, если они существуют в схеме.</p></section>
+    <section id="a-esr-unavailable"><title>Элементы управления СОЭ недоступны</title><p>В ESR 140.12 неподдерживаемые элементы управления политикой браузера AI отсутствуют или недоступны. Не заставляйте их использовать Пошаговый редактор, как будто они поддерживаются.</p></section>
+    <section id="a-no-documentation-ai"><title>Нет документации по функциональности AI</title><p>В этой ссылке описаны только существующие элементы управления политикой браузера Firefox; он не добавляет функциональность AI на портал документации 0.9.0, включая RAG, встраивания, генеративный поиск или генеративные ответы.</p></section>
+    <section id="a-recovery"><title>Восстановление</title><p>Если элемент управления отсутствует, подтвердите канал схемы, проверьте Все настройки на наличие необработанной границы поддержки и запишите неподдерживаемое состояние во время проверки.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

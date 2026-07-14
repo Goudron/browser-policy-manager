@@ -4,7 +4,7 @@
   <title>Change the interface language</title>
   <shortdesc>Select English, Russian, German, Simplified Chinese, French, Spanish, or the system language for BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Use the language selector when screenshots, labels, validation messages, and documentation examples must match the operator locale.</p></context>
     <steps>
       <step><cmd>Open the language selector in the page header.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

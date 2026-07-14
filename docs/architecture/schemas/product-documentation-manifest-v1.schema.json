@@ -13,6 +13,7 @@
     "guides",
     "topics",
     "assets",
+    "navigation",
     "search",
     "aliases",
     "tombstones",
@@ -36,6 +37,7 @@
       "propertyNames": { "$ref": "#/$defs/xmlId" },
       "additionalProperties": { "$ref": "#/$defs/asset" }
     },
+    "navigation": { "$ref": "#/$defs/navigationLocales" },
     "search": { "$ref": "#/$defs/searchLocales" },
     "aliases": {
       "type": "object",
@@ -126,6 +128,30 @@
         "es-ES": { "$ref": "#/$defs/filePath" }
       }
     },
+    "navigationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "format_version", "node_count"],
+      "properties": {
+        "path": { "$ref": "#/$defs/filePath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "format_version": { "const": 1 },
+        "node_count": { "type": "integer", "minimum": 5 }
+      }
+    },
+    "navigationLocales": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+      "properties": {
+        "en": { "$ref": "#/$defs/navigationRecord" },
+        "ru": { "$ref": "#/$defs/navigationRecord" },
+        "de": { "$ref": "#/$defs/navigationRecord" },
+        "zh-CN": { "$ref": "#/$defs/navigationRecord" },
+        "fr": { "$ref": "#/$defs/navigationRecord" },
+        "es-ES": { "$ref": "#/$defs/navigationRecord" }
+      }
+    },
     "artifact": {
       "type": "object",
       "additionalProperties": false,
@@ -161,7 +187,6 @@
         "user-guide",
         "firefox-policy-guide",
         "cis-settings-guide",
-        "api-integration-guide",
         "administrator-guide"
       ],
       "properties": {

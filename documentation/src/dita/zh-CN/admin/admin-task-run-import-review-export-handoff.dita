@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-import-review-export-handoff" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>DevOps 流程: Import, Review, Export und compliance metadata handoff ausführen</title>
-  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <title>运行导入、审核、导出和合规性元数据移交</title>
+  <shortdesc>将外部审核或合规性产品连接到 BPM 导入和导出 API，而不将 BPM 元数据视为 Firefox 部署内容。</shortdesc>
   <taskbody>
-    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
-    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></p></context>
+    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph> 并准备经过审核的 Firefox <codeph>policies.json</codeph> 源文档以及外部合规性元数据，例如扫描仪、票证、审核者和决策。</p></prereq>
+    <context><p>此工作流程使用 <codeph>API-FF-001</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-VAL-001</codeph> 和 <codeph>API-FF-002</codeph>。 BPM 在配置文件上存储不透明的合规性元数据，但导出的 Firefox JSON 仅包含可部署的 <codeph>policies</codeph>。</p></context>
     <steps>
-      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph> <codeph>policies</codeph></note></info></step>
+      <step><cmd>将审阅的源文档导入 BPM 配置文件中。</cmd><info><p>请求示例：带有 JSON <codeph>{"name":"reviewed-corp-baseline","schema_version":"release-152","compliance":{"scanner":"external-control","ticket":"SEC-42"},"document":{"policies":{"DisableTelemetry":true}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>。响应示例：<codeph>201 ProfileRead</codeph>。</p></info></step>
+  <step><cmd>读回创建的配置文件并将 BPM 字段与外部证据分开。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>。响应示例：<codeph>200 ProfileRead</codeph> 与 <codeph>revision</codeph>、<codeph>flags</codeph> 和不透明的 <codeph>compliance</codeph>。错误示例：<codeph>404</codeph> 或 <codeph>422</codeph>。</p></info></step>
+  <step><cmd>在导出之前检查规范化策略集。</cmd><info><p>审核者检查导入的密钥、模式通道、源文档哈希、合规性元数据以及任何 BPM 规范化警告。 BPM 不验证外部扫描仪结果或 Firefox 运行时强制执行。</p></info></step>
+  <step><cmd>验证将导出的部署文档。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。响应示例：<codeph>200 {"ok":true}</codeph>。错误示例：<codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p></info></step>
+  <step><cmd>导出规范的 Firefox 策略文档。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1&amp;pretty=1</codeph>。响应示例：<codeph>200 application/json</codeph> 与 <codeph>Content-Disposition</codeph> 和顶级 <codeph>policies</codeph>。不导出合规性元数据。</p></info></step>
+  <step><cmd>在下游部署之前写入切换记录。</cmd><info><note type="warning">在 BPM 之外存储源哈希、配置文件 ID、修订、验证响应、导出哈希、扫描结果、审阅者和下游所有者。不要将 BPM 导出视为 Firefox 已应用该策略的证据。</note></info></step>
     </steps>
-    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
-    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+    <result><p>外部产品收到规范的 Firefox 部署文档和具有明确所有权边界的单独合规性移交记录。</p></result>
+    <postreq><p>使用 BPM 外部的部署工具将导出的 <codeph>policies.json</codeph> 放置在托管 Firefox 系统上。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-import-firefox-policies-json"/>

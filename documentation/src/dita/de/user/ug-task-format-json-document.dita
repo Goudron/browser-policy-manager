@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-format-json-document" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>JSON-Dokument formatieren</title>
-  <shortdesc>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Format the current JSON document before review, validation, or handoff.</shortdesc>
+  <title>Formatieren Sie das JSON-Dokument</title>
+  <shortdesc>Formatieren Sie das aktuelle JSON-Dokument vor der Überprüfung, Validierung oder Übergabe.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Open JSON Editor with a JSON document in the editor.</p></prereq>
-    <context><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
+    <prereq><p>Öffnen Sie JSON-Editor mit einem JSON-Dokument im Editor.</p></prereq>
+    <context><p>Durch die Formatierung werden nur Leerzeichen und Einrückungen geändert. Es sollte die Überprüfung erleichtern, ohne die Bedeutung der Richtlinie zu ändern.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Choose the JSON format action.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Review the resulting indentation and object layout.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Confirm no policy value changed during formatting.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON-Dokument formatieren. Validate the document after formatting if you plan to save.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern JSON-Syntax, top-level policies und Policy-Validierungsfehler.</note></info></step>
+      <step><cmd>Wählen Sie die JSON-Formataktion.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie die resultierende Einrückung und das Objektlayout.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Bestätigen Sie, dass sich während der Formatierung kein Richtlinienwert geändert hat.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie das Dokument nach der Formatierung, wenn Sie es speichern möchten.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>
     </steps>
-    <result><p>JSON Editor befindet sich im erwarteten Zustand, und die Aktion ist bei der Prüfung erklärbar. The JSON document is easier to review and remains semantically unchanged.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, validieren Sie das Dokument, kehren Sie zu All Settings zurück oder öffnen Sie das verknüpfte Thema. Recovery: if formatting fails, fix JSON syntax first; trailing commas and missing braces are common causes.</p></postreq>
+    <result><p>Das JSON-Dokument ist einfacher zu überprüfen und bleibt semantisch unverändert.</p></result>
+    <postreq><p>Wiederherstellung: Wenn die Formatierung fehlschlägt, korrigieren Sie zuerst die JSON-Syntax. Nachgestellte Kommas und fehlende Klammern sind häufige Ursachen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

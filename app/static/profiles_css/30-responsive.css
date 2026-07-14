@@ -243,6 +243,11 @@
                 padding: 14px;
             }
 
+            .all-settings-list-row-shell,
+            .wizard-settings-search-result-shell {
+                grid-template-columns: minmax(0, 1fr) 2.5rem;
+            }
+
             .all-settings-list-cell {
                 display: grid;
                 gap: 3px;

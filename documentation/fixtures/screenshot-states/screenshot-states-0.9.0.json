@@ -7,7 +7,7 @@
     {
       "id": "library-ru-desktop-dark",
       "locale": "ru",
-      "surface": "Profile Library",
+      "surface": "Library",
       "viewport": "desktop",
       "theme": "dark",
       "source_profile_fixture": "doc-profile-release-baseline",
@@ -16,7 +16,7 @@
     {
       "id": "settings-en-narrow-light",
       "locale": "en",
-      "surface": "All Settings",
+      "surface": "All settings",
       "viewport": "narrow",
       "theme": "light",
       "source_profile_fixture": "doc-profile-release-baseline",

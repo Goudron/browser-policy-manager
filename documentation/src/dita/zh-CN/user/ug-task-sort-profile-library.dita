@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-sort-profile-library" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>排序库行</title>
-  <shortdesc>本任务完整说明“排序库行”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>对库行进行排序</title>
+  <shortdesc>按更新时间、创建时间、名称、模式通道或 ID 按升序或降序对保存的配置文件进行排序。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>库已打开并包含至少两个可见的轮廓行。</p></prereq>
+    <context><p>排序更改当前搜索和过滤结果内的行顺序。</p></context>
     <steps>
-      <step><cmd>打开与“排序库行”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>选择排序依据的字段。</cmd><info><p>预期结果：行按更新时间、创建时间、名称、架构或 ID 重新排序。</p></info></step>
+      <step><cmd>选择订单方向。</cmd><info><p>使用降序更新时间表示最近的工作，或使用升序名称进行字母顺序浏览。</p></info></step>
+      <step><cmd>在对第一行进行操作之前检查过滤计数和总计数。</cmd><info><note type="warning">排序不会删除过滤器。行仍然可以通过搜索或过滤器隐藏。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>可见的库行按选定的顺序出现。</p></result>
+    <postreq><p>恢复：如果行顺序不再与您的工作上下文匹配，则切换回更新时间排序。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-profile-library"/>

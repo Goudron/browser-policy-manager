@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-archive-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>归档活动配置文件</title>
-  <shortdesc>本任务完整说明“归档活动配置文件”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>将活动配置文件移出正常活动列表，而不将其永久删除。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>配置文件处于活动状态，在库中可见，正常编辑或导出工作流程不再需要。</p></prereq>
+    <context><p>归档是可逆的。它通过存档或所有生命周期过滤器保持配置文件可用。</p></context>
     <steps>
-      <step><cmd>打开与“归档活动配置文件”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>确认行名称、架构、验证状态和更新时间。</cmd><info><p>预期结果：您确切地知道哪个配置文件将更改生命周期状态。</p></info></step>
+      <step><cmd>选择存档生命周期操作。</cmd><info><note type="warning">存档的配置文件将被保留，但行为不再像正常的活动导出目标一样。</note></info></step>
+      <step><cmd>等待操作状态并根据需要刷新库。</cmd><info><p>操作完成后，该行将显示在已存档或所有生命周期过滤器下。</p></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>配置文件已存档，稍后可以恢复。</p></result>
+    <postreq><p>恢复：如果您归档了错误的行，则恢复配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-restore-profile"/>

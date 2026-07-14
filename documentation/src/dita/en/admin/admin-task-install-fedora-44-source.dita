@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-install-fedora-44-source" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Install BPM from source on Fedora Linux 44</title>
+  <shortdesc>Run the complete BPM 0.9.1 source-install sequence on Fedora Linux 44 with its distribution Python 3.14 runtime.</shortdesc>
+  <taskbody>
+    <prereq><p>Use Fedora Linux 44 with sudo access, outbound HTTPS, and an approved BPM 0.9.1 Git ref.</p></prereq>
+    <context><p>This is a foreground single-node source workflow, not a systemd or production deployment recipe.</p></context>
+    <steps>
+      <step><cmd>Verify Fedora and install prerequisites.</cmd><info><codeblock id="distro-prep" outputclass="language-bash"><![CDATA[
+. /etc/os-release
+test "$ID" = "fedora" && test "$VERSION_ID" = "44"
+sudo dnf install -y ca-certificates curl gcc gcc-c++ git make python3 python3-devel
+export BPM_PYTHON=/usr/bin/python3
+"$BPM_PYTHON" --version
+]]></codeblock><p>Stop unless Python 3.14.x is reported.</p></info></step>
+      <step><cmd>Check out the approved BPM source ref.</cmd><info><codeblock id="checkout" outputclass="language-bash"><![CDATA[
+export BPM_REPOSITORY_URL="https://github.com/Goudron/browser-policy-manager.git"
+export BPM_REF="<approved-0.9.1-ref>"
+test "$BPM_REF" != "<approved-0.9.1-ref>"
+cd "$HOME"
+git clone "$BPM_REPOSITORY_URL" browser-policy-manager
+cd "$HOME/browser-policy-manager"
+git checkout --detach "$BPM_REF"
+git status --short
+git rev-parse --short HEAD
+]]></codeblock></info></step>
+      <step><cmd>Create the environment, install BPM, and migrate.</cmd><info><codeblock id="install" outputclass="language-bash"><![CDATA[
+"$BPM_PYTHON" -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+python --version
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+]]></codeblock></info></step>
+      <step><cmd>Bootstrap and build documentation.</cmd><info><codeblock id="docs" outputclass="language-bash"><![CDATA[
+make setup-docs-toolchain
+make docs-validate
+make docs-build
+]]></codeblock></info></step>
+      <step><cmd>Start BPM in the foreground.</cmd><info><codeblock id="start" outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+make dev
+]]></codeblock><p>Use a second terminal for checks.</p></info></step>
+      <step><cmd>Verify probes, UI, and foreground logs.</cmd><info><codeblock id="verify" outputclass="language-bash"><![CDATA[
+cd browser-policy-manager
+source .venv/bin/activate
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
+]]></codeblock></info></step>
+      <step><cmd>Apply the stop boundary.</cmd><info><p>On failure, press <codeph>Ctrl+C</codeph>, preserve DNF, pip, migration, build, probe, and log evidence, and do not run <codeph>alembic downgrade</codeph>.</p></info></step>
+    </steps>
+    <result><p>The Fedora Linux 44 host has a migrated BPM source checkout, built documentation, passing probes, responding UI, and foreground logs.</p></result>
+    <postreq><p>Validate the complete sequence on a clean Fedora 44 target before release.</p></postreq>
+  </taskbody>
+  <related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links>
+</task>

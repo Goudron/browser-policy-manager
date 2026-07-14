@@ -2,16 +2,16 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Modelo de perfil y ciclo de vida</title>
-  <shortdesc>Un perfil de BPM es un espacio de trabajo guardado de políticas de Firefox compartido por Biblioteca, Editor guiado, Todos los ajustes, Editor JSON y Comparar.</shortdesc>
+  <shortdesc>Un perfil BPM es un espacio de trabajo de políticas de Firefox guardado y compartido por la Biblioteca, Editor guiado, Todos los ajustes, Editor JSON y Comparar.</shortdesc>
   <conbody>
-    <p>Use un perfil para reunir políticas de Firefox, preferencias administradas, estado de validación, atribución de fuentes y estado del ciclo de vida. El mismo perfil puede abrirse desde distintas superficies de BPM sin cambiar su identidad.</p>
+    <p>Utilice un perfil para recopilar políticas de Firefox, Preferencias gestionadas, estado de validación, atribución de fuente y estado del ciclo de vida en un solo lugar. Un mismo perfil se puede abrir a través de diferentes superficies BPM sin cambiar su identidad.</p>
     <section id="a-lifecycle-states">
       <title>Estados del ciclo de vida</title>
-      <p>Un borrador sin guardar existe solo hasta el primer guardado. Un perfil activo guardado se puede editar, validar, exportar, archivar, duplicar o comparar. Un perfil archivado se conserva para revisión y restauración, pero no es el destino normal de exportación.</p>
+      <p>Un borrador no guardado existe solo hasta que se guarda por primera vez. Un perfil activo guardado se puede editar, validar, exportar, archivar, duplicar o comparar. Un perfil archivado se conserva para revisar y restaurar flujos de trabajo, pero no es el destino de exportación normal.</p>
     </section>
     <section id="a-status-context">
       <title>Contexto de estado</title>
-      <p>El nombre, ID, canal de esquema de Firefox, ciclo de vida, estado guardado o modificado, resultado de validación y resúmenes de fuente indican si el perfil está listo para revisar, editar, exportar o recuperar.</p>
+      <p>El nombre del perfil, ID, el canal del esquema de Firefox, el ciclo de vida, el estado guardado/sucio, el resultado de la validación y los resúmenes de fuentes le indican si el perfil está listo para revisar, editar, exportar o recuperar.</p>
     </section>
   </conbody>
 </concept>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-import-export-failures" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>诊断: Troubleshoot Firefox import and export failures</title>
-  <shortdesc>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Diagnose JSON import, multipart import, and Firefox policies export failures while preserving source and exported evidence.</shortdesc>
+  <title>Firefox 导入和导出失败故障排除</title>
+  <shortdesc>诊断 JSON 导入、多部分导入和 Firefox 策略导出失败，同时保留源和导出的证据。</shortdesc>
   <taskbody>
-    <prereq><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Use this procedure when <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> or <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> returns <codeph>400</codeph>, <codeph>404</codeph>, <codeph>409</codeph>, <codeph>415</codeph>, or <codeph>422</codeph>.</p></prereq>
-    <context><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Import/export troubleshooting separates source document validity, multipart field shape, duplicate profile names, archived profile access, and canonical Firefox export from downstream deployment tooling.</p></context>
+    <prereq><p>当 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> 或 <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> 返回 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph> 或 <codeph>422</codeph> 时，使用此过程。</p></prereq>
+    <context><p>导入/导出故障排除将源文档有效性、多部分字段形状、重复的配置文件名称、存档的配置文件访问以及规范的 Firefox 导出与下游部署工具分开。</p></context>
     <steps>
-      <step><cmd>诊断 1: Identify the operation and content type.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Record whether the request was JSON <codeph>FirefoxPoliciesJsonImportRequest</codeph>, <codeph>multipart/form-data</codeph> with <codeph>file=@policies.json</codeph>, or export with <codeph>download=1</codeph>, <codeph>pretty=1</codeph>, or <codeph>include_deleted=true</codeph>.</p></info></step>
-  <step><cmd>诊断 2: Validate the source Firefox document before retrying import.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Focused rerun: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with the same <codeph>document.policies</codeph>. If validation fails, fix the source document outside BPM before another import.</p></info></step>
-  <step><cmd>诊断 3: Check import-specific operator errors.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 For <codeph>409</codeph>, choose a new synthetic profile name or archive/restore intentionally. For <codeph>415</codeph>, verify <codeph>application/json</codeph> or multipart upload fields. For <codeph>422</codeph>, record field-level errors and do not rewrite profile storage directly.</p></info></step>
-  <step><cmd>诊断 4: Check export-specific state.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 For <codeph>404</codeph>, re-read <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=true</codeph>. For archived profiles, decide whether <codeph>include_deleted=true</codeph> is appropriate. Compare exported document hash with the reviewed source hash; BPM profile metadata and compliance metadata are not exported.</p></info></step>
-  <step><cmd>诊断 5: Record recovery and stop conditions.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Focused rerun: <codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_integration_topics.py</codeph> for documented examples. </p><note type="warning">Do not retry blindly after mismatched import/export evidence; store source hash, export hash, profile ID, revision, HTTP status, and operator decision.</note></info></step>
+      <step><cmd>标识操作和内容类型。</cmd><info><p>记录请求是 JSON <codeph>FirefoxPoliciesJsonImportRequest</codeph>、带有 <codeph>file=@policies.json</codeph> 的 <codeph>multipart/form-data</codeph>，还是带有 <codeph>download=1</codeph>、<codeph>pretty=1</codeph> 或 <codeph>include_deleted=true</codeph> 的导出。</p></info></step>
+  <step><cmd>在重试导入之前验证源 Firefox 文档。</cmd><info><p>重点重新运行：具有相同 <codeph>document.policies</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。如果验证失败，请在再次导入之前修复 BPM 之外的源文档。</p></info></step>
+  <step><cmd>检查导入特定的运算符错误。</cmd><info><p>对于 <codeph>409</codeph>，选择新的合成配置文件名称或有意存档/恢复。对于 <codeph>415</codeph>，验证 <codeph>application/json</codeph> 或多部分上传字段。对于<codeph>422</codeph>，记录字段级错误，不要直接重写配置文件存储。</p></info></step>
+  <step><cmd>检查特定于导出的状态。</cmd><info><p>对于 <codeph>404</codeph>，重新读取 <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=true</codeph>。对于存档的配置文件，确定 <codeph>include_deleted=true</codeph> 是否合适。将导出的文档哈希值与审核后的源哈希值进行比较； BPM 配置文件元数据和合规性元数据不会导出。</p></info></step>
+  <step><cmd>记录恢复和停止条件。</cmd><info><p>重点重新运行：<codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_integration_topics.py</codeph> 用于记录示例。</p><note type="warning">导入/导出证据不匹配后不要盲目重试；存储源哈希、导出哈希、配置文件 ID、修订、HTTP 状态和操作员决策。</note></info></step>
     </steps>
-    <result><p>操作员获得分类诊断，保护 user data，并知道下一个 smallest rerun。 The operator can identify whether the failure belongs to source JSON, multipart fields, profile lifecycle state, or export evidence.</p></result>
-    <postreq><p>修复后返回相关 Administrator/DevOps workflow，只重跑受影响的 checks。 After recovery, attach the evidence to the external control-product audit record.</p></postreq>
+    <result><p>操作员可以识别故障是否属于源 JSON、多部分字段、配置文件生命周期状态或导出证据。</p></result>
+    <postreq><p>恢复后，将证据附加到外部控制产品审核记录中。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-import-firefox-policies-json"/>

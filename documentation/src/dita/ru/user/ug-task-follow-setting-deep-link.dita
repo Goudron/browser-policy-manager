@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Откройте deep link параметра</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <title>Перейдите по глубокой ссылке настройки.</title>
+  <shortdesc>Следуйте целенаправленным ссылкам между поиском, Все настройки, управляемым контекстом и местоположениями JSON.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <prereq><p>Ссылка или результат поиска указывают на настройку, состояние проверки, необработанный ключ, устаревший элемент или расположение JSON.</p></prereq>
+    <context><p>Глубокие ссылки сохраняют ориентацию, открывая нужный редактор и фокусируясь на соответствующей настройке или необработанном местоположении.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Confirm the destination editor and focused setting or state.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Откройте выделенную ссылку из контекста поиска, обзора, сравнения, управляемого или JSON.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Подтвердите целевой редактор и выбранную настройку или состояние.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Для выполнения задачи используйте панель сведений, фильтр или расположение JSON.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Возвращайтесь к предыдущей поверхности только после намеренного сохранения или отмены изменений.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The linked setting opens in the correct surface with focus preserved.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+    <result><p>Связанная настройка открывается на правильной поверхности с сохранением фокуса.</p></result>
+    <postreq><p>Восстановление: если ссылку не удается разрешить, выполните поиск по точной политике ID, предпочтительному ключу или необработанному пути.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Ищите в All Settings</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Search configured settings, available policies, known preferences, and setting actions from All Settings.</shortdesc>
+  <title>Поиск Все настройки</title>
+  <shortdesc>Поиск настроенных параметров, доступных политик, известных предпочтений и действий по настройке из Все настройки.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Open All Settings in any mode.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Search is shared across Review, Configured, and Catalog work. It can lead to a setting, an action, or a filtered group.</p></context>
+    <prereq><p>Откройте Все настройки в любом режиме.</p></prereq>
+    <context><p>Поиск используется совместно при просмотре, настройке и каталоге. Это может привести к настройке, действию или отфильтрованной группе.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Place focus in the All Settings search field.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Enter a policy ID, preference key, category, source, or plain-language term.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Choose a grouped result and confirm the target setting or action.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Ищите в All Settings. Clear the search when you return to browsing or filtering.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Переместите фокус в поле поиска Все настройки.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Введите политику ID, ключ предпочтения, категорию, источник или термин открытым текстом.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Выберите сгруппированный результат и подтвердите целевую настройку или действие.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Очистите поиск, когда вернетесь к просмотру или фильтрации.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The matching setting or action is selected without losing the current profile context.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if no result appears, confirm the schema channel and try a policy ID or preference key.</p></postreq>
+    <result><p>Соответствующий параметр или действие выбирается без потери контекста текущего профиля.</p></result>
+    <postreq><p>Восстановление: если результат не отображается, подтвердите канал схемы и попробуйте использовать политику ID или ключ предпочтения.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-follow-setting-deep-link"/>

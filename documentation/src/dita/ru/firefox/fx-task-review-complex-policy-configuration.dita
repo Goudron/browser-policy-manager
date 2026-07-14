@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fx-task-review-complex-policy-configuration" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Проверка сложной конфигурации политики перед экспортом</title>
-  <shortdesc>Используйте повторяемый review flow для nested objects, arrays, raw fallback, conflicts и channel-specific availability.</shortdesc>
+  <title>Перед экспортом проверьте сложную конфигурацию политики.</title>
+  <shortdesc>Используйте повторяющийся поток проверки для вложенных объектов, массивов, необработанного резервного варианта, конфликтов и доступности для конкретного канала.</shortdesc>
   <taskbody>
-    <prereq><p>Профиль открыт и содержит хотя бы одно сложное семейство политик или managed preference.</p></prereq>
-    <context><p>Сложные политики безопаснее проверять по семейству, источнику, каналу схемы и форме экспортируемого boundary document.</p></context>
+    <prereq><p>Профиль открыт и содержит как минимум одно сложное семейство политик или управляемое предпочтение.</p></prereq>
+    <context><p>Сложные политики безопаснее всего просматривать по семейству, источнику, каналу схемы и экспортированной форме границы.</p></context>
     <steps>
-      <step><cmd>Откройте All Settings и отфильтруйте затронутое семейство.</cmd><info><p>Ожидаемый результат: связанные policies, preferences и source labels видны вместе.</p></info></step>
-      <step><cmd>Проверьте Release/ESR badge для каждой политики семейства.</cmd><info><note type="warning">Release-only policy нельзя экспортировать для профиля, ориентированного на ESR.</note></info></step>
-      <step><cmd>Просмотрите nested object и array values, включая unknown preserved fields.</cmd><info><p>Ожидаемый результат: raw fallback values намеренно сохранены или удалены перед сохранением.</p></info></step>
-      <step><cmd>Сравните preset, CIS, imported, manual и raw sources.</cmd><info><p>Ожидаемый результат: conflicts решены явно, а не скрыты более поздними правками.</p></info></step>
-      <step><cmd>Выполните валидацию профиля и проверьте форму generated <codeph>policies.json</codeph>.</cmd><info><p>Ожидаемый результат: BPM не сообщает schema errors для выбранного канала.</p></info></step>
+      <step><cmd>Откройте Все настройки и отфильтруйте затронутое семейство.</cmd><info><p>Ожидаемый результат: связанные политики, настройки и метки источников отображаются вместе.</p></info></step>
+      <step><cmd>Проверьте значок Release/ESR для каждой политики в семействе.</cmd><info><note type="warning">Политику «Только выпуск» нельзя экспортировать для профиля, ориентированного на ESR.</note></info></step>
+      <step><cmd>Проверьте значения вложенных объектов и массивов, включая неизвестные сохраненные поля.</cmd><info><p>Ожидаемый результат: необработанные резервные значения намеренно сохраняются или удаляются перед сохранением.</p></info></step>
+      <step><cmd>Сравните предустановленные, CIS, импортированные, ручные и необработанные источники.</cmd><info><p>Ожидаемый результат: конфликты разрешаются намеренно, а не скрываются последующими изменениями.</p></info></step>
+      <step><cmd>Подтвердите профиль и просмотрите созданную фигуру <codeph>policies.json</codeph>.</cmd><info><p>Ожидаемый результат: BPM не сообщает об ошибках схемы для выбранного канала.</p></info></step>
     </steps>
-    <result><p>Сложное семейство имеет проверенные nested values, source decisions, channel support и чистый результат валидации.</p></result>
-    <postreq><p>Если валидация не проходит, вернитесь к семейству, удалите unsupported keys или переключитесь на канал, который действительно поддерживает политику.</p></postreq>
+    <result><p>В сложном семействе проверены вложенные значения, решения об источниках, поддержка каналов и чистый результат проверки.</p></result>
+    <postreq><p>Если проверка не удалась, вернитесь в семью, удалите неподдерживаемые ключи или переключитесь на канал, который действительно поддерживает политику.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.fx-concept-complex-policy-families"/>

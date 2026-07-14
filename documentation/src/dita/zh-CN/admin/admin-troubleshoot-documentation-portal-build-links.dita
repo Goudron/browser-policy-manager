@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-documentation-portal-build-links" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>诊断: Troubleshoot documentation portal build and link failures</title>
-  <shortdesc>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Diagnose /help/ build, manifest, search, source-link, and generated-link failures without patching built artifacts.</shortdesc>
+  <title>对文档门户构建和链接故障进行故障排除</title>
+  <shortdesc>诊断 /help/ 构建、清单、搜索、源链接和生成链接故障，无需修补构建的工件。</shortdesc>
   <taskbody>
-    <prereq><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Use this procedure when <codeph>make docs-validate</codeph>, <codeph>make docs-build</codeph>, <codeph>make test-docs-contract</codeph>, <codeph>/help/</codeph>, or generated documentation links fail during source operation or update-from-source checks.</p></prereq>
-    <context><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Documentation portal troubleshooting belongs to source DITA, maps, keys, config, tools, and focused tests. Built output under <codeph>documentation/build/</codeph>, reports, manifests, search indexes, and packages are regenerated evidence, not hand-edited source.</p></context>
+    <prereq><p>当 <codeph>make docs-validate</codeph>、<codeph>make docs-build</codeph>、<codeph>make test-docs-contract</codeph>、<codeph>/help/</codeph> 或生成的文档链接在源操作或从源更新检查期间失败时，请使用此过程。</p></prereq>
+    <context><p>文档门户故障排除属于源 DITA、地图、密钥、配置、工具和重点测试。 <codeph>documentation/build/</codeph>下的构建输出、报告、清单、搜索索引和包是重新生成的证据，而不是手工编辑的源。</p></context>
     <steps>
-      <step><cmd>诊断 1: Start with the smallest documentation command named by the failure.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 For one changed topic, run <codeph>make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/admin/example.dita"</codeph>. For contracts, run the named <codeph>documentation/tests/contract/...</codeph> file. For full link validation, run <codeph>make docs-validate</codeph>.</p></info></step>
-  <step><cmd>诊断 2: Classify source-link versus generated-link failures.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Source failures usually name a DITA topic, key, or fragment. Generated-link failures appear after DITA publish and can involve manifest, target map, search, or normalized output path. Preserve the failing path and target URL.</p></info></step>
-  <step><cmd>诊断 3: Fix source, map, key, config, or generator input only.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Do not patch <codeph>documentation/build/</codeph>, <codeph>documentation/dist/</codeph>, <codeph>documentation/reports/</codeph>, generated search indexes, or packaged artifacts by hand. Update the DITA topic, map, keydef, config, or build tool, then rebuild.</p></info></step>
-  <step><cmd>诊断 4: Verify /help/ runtime boundaries separately.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 If the static build passes but BPM <codeph>/help/</codeph> reports missing, stale, incompatible, incomplete, or not-found states, check installed artifact path and manifest digest. Preserve FastAPI <codeph>/docs</codeph> and <codeph>/openapi.json</codeph> separately.</p></info></step>
-  <step><cmd>诊断 5: Record the focused rerun and remaining gates.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Use <codeph>make test-docs-contract</codeph>, <codeph>make docs-validate</codeph>, and <codeph>make docs-build</codeph> for this troubleshooting slice. </p><note type="warning">Browser-backed docs checks, screenshots, manual QA, package verification, and product release tests remain separate gates unless explicitly run.</note></info></step>
+      <step><cmd>从故障命名的最小文档命令开始。</cmd><info><p>对于一个已更改的主题，运行 <codeph>make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/admin/example.dita"</codeph>。对于合约，运行名为 <codeph>documentation/tests/contract/...</codeph> 文件。要进行完整链接验证，请运行 <codeph>make docs-validate</codeph>。</p></info></step>
+  <step><cmd>对源链接与生成链接故障进行分类。</cmd><info><p>源失败通常会命名 DITA 主题、键或片段。生成的链接失败出现在 DITA 发布后，可能涉及清单、目标映射、搜索或规范化输出路径。保留失败的路径和目标 URL。</p></info></step>
+  <step><cmd>仅修复源、映射、键、配置或生成器输入。</cmd><info><p>不要手动修补 <codeph>documentation/build/</codeph>、<codeph>documentation/dist/</codeph>、<codeph>documentation/reports/</codeph>、生成的搜索索引或打包的工件。更新 DITA 主题、映射、keydef、配置或构建工具，然后重建。</p></info></step>
+  <step><cmd>单独验证 /help/ 运行时边界。</cmd><info><p>如果静态构建通过，但 BPM <codeph>/help/</codeph> 报告丢失、陈旧、不兼容、不完整或未找到状态，请检查已安装的工件路径和清单摘要。分别保留FastAPI、<codeph>/docs</codeph>和<codeph>/openapi.json</codeph>。</p></info></step>
+  <step><cmd>记录重点重运行和剩余门。</cmd><info><p>使用 <codeph>make test-docs-contract</codeph>、<codeph>make docs-validate</codeph> 和 <codeph>make docs-build</codeph> 进行此故障排除切片。</p><note type="warning">浏览器支持的文档检查、屏幕截图、手册 QA、包验证和产品发布测试仍然是单独的门，除非显式运行。</note></info></step>
     </steps>
-    <result><p>操作员获得分类诊断，保护 user data，并知道下一个 smallest rerun。 The operator can diagnose documentation portal failures from source and regenerate output without hand-editing disposable artifacts.</p></result>
-    <postreq><p>修复后返回相关 Administrator/DevOps workflow，只重跑受影响的 checks。 After the portal build passes, rerun the update-from-source verification topic and any affected contextual help route checks.</p></postreq>
+    <result><p>操作员可以从源头诊断文档门户故障并重新生成输出，而无需手动编辑一次性工件。</p></result>
+    <postreq><p>门户构建通过后，重新运行源更新验证主题和任何受影响的上下文帮助路由检查。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-run-source-update-migrations-docs"/>

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-gate-control-product-startup" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>DevOps 流程: Start des Steuerungsprodukts mit BPM health und readiness gaten</title>
-  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <title>门控产品启动，BPM 运行状况良好且准备就绪</title>
+  <shortdesc>在外部控制产品开始 API 同步之前，使用当前运行状况探测作为启动门。</shortdesc>
   <taskbody>
-    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
-    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></context>
+    <prereq><p>BPM 源部署已启动。使用 <codeph>$BPM_BASE_URL</codeph>、超时、轮询间隔、最长等待时间以及门发生故障时要采取的操作来配置外部产品。</p></prereq>
+    <context><p>此工作流程使用 <codeph>API-HEALTH-001</codeph> 和 <codeph>API-HEALTH-002</codeph>。探头只是小的飞行前信号；它们不公开身份验证、授权、数据库诊断、模式缓存诊断、请求 ID 或服务级别目标。此 M12-08 操作手册集命名了健康门控启动、数据所有权、故障恢复以及证据过时时不要盲目重试的规则。</p></context>
     <steps>
-      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>GET $BPM_BASE_URL/health</codeph> <codeph>GET $BPM_BASE_URL/health/ready</codeph> <codeph>{"status":"ready","ready":true}</codeph> <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph> <codeph>ready</codeph></note></info></step>
+      <step><cmd>在打开同步队列之前检查基本活性。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health</codeph>。响应示例：<codeph>200 {"status":"ok"}</codeph>。传输错误由外部产品处理，因为没有为此探测器声明 BPM 应用程序错误主体。</p></info></step>
+  <step><cmd>在配置文件或验证调用之前检查准备情况。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health/ready</codeph>。响应示例：<codeph>200 {"status":"ready","ready":true}</codeph>。如果 <codeph>ready</codeph> 不是 true，则保留队列并且不启动突变。</p></info></step>
+  <step><cmd>记录启动门决策。</cmd><info><p>存储时间戳、基本 URL 标签、超时、探测状态、观察到的主体、控制产品版本和选择的下一步操作。不要将私有主机存储在共享 操作手册 示例中。</p></info></step>
+  <step><cmd>在门通过后从只读库存开始。</cmd><info><p>在导入、导出、验证或修补操作之前调用 <codeph>GET $BPM_BASE_URL/api/profiles?limit=50</codeph>。这使得初始同步保持可观察和可恢复。</p></info></step>
+  <step><cmd>仅在只读调用成功后才移至突变工作流程。</cmd><info><p>根据外部产品计划继续应用前验证、导入-审核-导出或导出工作流程。将重试和退避策略保留在 BPM 之外。</p></info></step>
+  <step><cmd>当门不明确时关闭失败。</cmd><info><note type="warning">成功的探测不保留修订或保证以后 API 成功。失败或不明确的探测必须停止自动突变，直到操作员检查日志、源部署状态和网络/CORS边界。</note></info></step>
     </steps>
-    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
-    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+    <result><p>仅当 BPM 响应当前运行状况和就绪握手时，外部控制产品才开始同步。</p></result>
+    <postreq><p>如果启动门失败，请使用管理员/DevOps 故障排除和源部署主题，而不是添加未记录的探测假设。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-check-health-readiness"/>

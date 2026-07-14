@@ -229,12 +229,7 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
         "owner",
         "cis-workflow-level-1-esr-fixture",
         "cis-workflow-level-2-release-fixture",
-        "Library",
-        "Guided Editor",
-        "All Settings",
-        "Profile Comparison",
-        "Export",
-        "External verification",
+            "External verification",
         "cis-l1.esr-140.12",
         "cis-l2.release-152",
         "basic_corporate",
@@ -287,14 +282,17 @@ def test_cis_workflows_are_backed_by_deterministic_fixtures() -> None:
 
     assert fixture["backlog_item"] == "BPM090-M6-07"
     assert fixture["target_bpm_version"] == "0.9.0"
-    assert fixture["route_order"] == [
-        "Library",
-        "Guided Editor",
-        "All Settings",
-        "Profile Comparison",
-        "Export",
-        "External verification",
+    english_catalog = json.loads(
+        (REPOSITORY_ROOT / "app/i18n/en.json").read_text(encoding="utf-8")
+    )
+    expected_surfaces = [
+        english_catalog["profiles.nav_library"],
+        english_catalog["profiles.editor_chrome_title"],
+        english_catalog["profiles.editor_chrome_settings_link"],
+        english_catalog["profiles.compare_route_title"],
+        english_catalog["profiles.library_action_export"],
     ]
+    assert fixture["route_order"] == [*expected_surfaces, "External verification"]
 
     workflows = {workflow["workflow_id"]: workflow for workflow in fixture["workflows"]}
     assert workflows["cis-workflow-level-1-esr-fixture"] == {
@@ -313,13 +311,7 @@ def test_cis_workflows_are_backed_by_deterministic_fixtures() -> None:
             "deprecated target",
             "local deployment requirement",
         ],
-        "required_user_surfaces": [
-            "Library",
-            "Guided Editor",
-            "All Settings",
-            "Profile Comparison",
-            "Export",
-        ],
+        "required_user_surfaces": expected_surfaces,
         "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external.",
     }
     assert workflows["cis-workflow-level-2-release-fixture"]["level"] == 2

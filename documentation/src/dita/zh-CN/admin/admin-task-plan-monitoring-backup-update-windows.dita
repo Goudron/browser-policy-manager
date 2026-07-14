@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>规划 monitoring inputs、backup evidence 和 update windows</title>
-  <shortdesc>为 source-run 实例准备 current-state operational evidence，同时避免声称 managed monitoring、official restore automation 或 rolling upgrades。</shortdesc>
+  <title>计划监控输入、备份证据和更新窗口</title>
+  <shortdesc>为源运行实例准备当前状态操作证据，同时避免有关托管监控、官方恢复自动化或滚动升级的声明。</shortdesc>
   <taskbody>
-    <prereq><p>实例已通过 source readiness 和 network exposure review，并且由一个 administrator 或 DevOps owner 负责 evaluation window。</p></prereq>
-    <context><p>在 distributions 和 runtime service decisions 出现之前，operations planning 应关注 observable inputs、manual backup/export evidence，以及一个 source node 的明确 update windows。</p></context>
+    <prereq><p>实例已通过源就绪和网络暴露审核，并且单个管理员或 DevOps 所有者负责评估窗口。</p></prereq>
+    <context><p>在分布和运行时服务决策存在之前，运营规划应重点关注可观察的输入、手动备份和导出证据以及一个源节点的显式更新窗口。</p></context>
     <steps>
-      <step><cmd>列出当前存在的 monitoring inputs。</cmd><info><p>记录 process status、foreground terminal output、<codeph>stdout</codeph>、<codeph>stderr</codeph>、<codeph>GET /health</codeph>、<codeph>GET /health/ready</codeph>、selected API example results、通过 <codeph>/help/</codeph> 的 documentation access，以及来自 <codeph>git rev-parse --short HEAD</codeph> 的 source revision。</p></info></step>
-      <step><cmd>在 window 前收集 backup 和 export evidence。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>列出当前存在的监控输入。</cmd><info><p>记录进程状态、前台终端输出、<codeph>stdout</codeph>、<codeph>stderr</codeph>、<codeph>GET /health</codeph>、<codeph>GET /health/ready</codeph>、选定的 API 示例结果、通过 <codeph>/help/</codeph> 访问文档以及来自 <codeph>git rev-parse --short HEAD</codeph> 的源修订。</p></info></step>
+      <step><cmd>在窗口之前收集备份和导出证据。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
-]]></codeblock><p>还要导出 representative Firefox documents，例如 <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph>，并把生成的 <codeph>policies.json</codeph> evidence 与 checksums 一起保存。</p></info></step>
-      <step><cmd>为 source changes 安排 stop-the-world update window。</cmd><info><p>对于 0.9.0，在 <codeph>git fetch --tags</codeph>、dependency refresh、<codeph>alembic upgrade head</codeph>、<codeph>make docs-validate</codeph> 和 <codeph>make docs-build</codeph> 前规划 one-node downtime。Rolling upgrades are planned but not implemented yet。</p></info></step>
-      <step><cmd>将 gaps 记录为 blockers，而不是 hidden assumptions。</cmd><info><note type="warning">BPM 0.9.0 不提供 managed monitoring、automated backup scheduling、official restore automation、point-in-time recovery、managed secrets、token rotation 或 rolling upgrade orchestration。使用 update runbook 中的 manual evidence 和 stop conditions。</note></info></step>
+]]></codeblock><p>还导出代表性 Firefox 文档，例如 <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> 并存储生成的 <codeph>policies.json</codeph> 证据以及校验和。</p></info></step>
+      <step><cmd>为源更改安排一个停止世界更新窗口。</cmd><info><p>对于 0.9.0，请在 <codeph>git fetch --tags</codeph>、依赖项刷新、<codeph>alembic upgrade head</codeph>、<codeph>make docs-validate</codeph> 和 <codeph>make docs-build</codeph> 之前计划单节点停机时间。滚动升级已计划但尚未实施。</p></info></step>
+      <step><cmd>将差距记录为阻碍因素，而不是隐藏的假设。</cmd><info><note type="warning">BPM 0.9.0 不提供托管监控、自动备份调度、官方恢复自动化、时间点恢复、托管机密、令牌轮换或滚动升级编排。使用更新操作手册中的手动证据和停止条件。</note></info></step>
     </steps>
-    <result><p>operation plan 包含 current source operation 的 monitoring inputs、backup/export evidence 和现实的 update window。</p></result>
-    <postreq><p>将这些 evidence 附加到 HA and deferred-boundary record，便于后续 distribution work 复用同一 checklist。</p></postreq>
+    <result><p>操作计划包含监控输入、备份/导出证据以及当前源操作的实际更新窗口。</p></result>
+    <postreq><p>将此证据附加到 HA 和延迟边界记录，以便以后的分发工作可以重用相同的清单。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

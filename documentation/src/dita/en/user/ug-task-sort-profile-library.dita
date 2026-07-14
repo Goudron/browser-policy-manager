@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-sort-profile-library" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Sort Profile Library rows</title>
+  <title>Sort Library rows</title>
   <shortdesc>Sort saved profiles by update time, creation time, name, schema channel, or ID in ascending or descending order.</shortdesc>
   <taskbody>
-    <prereq><p>The Profile Library is open and contains at least two visible profile rows.</p></prereq>
+    <prereq><p>The Library is open and contains at least two visible profile rows.</p></prereq>
     <context><p>Sorting changes the row order inside the current search and filter result.</p></context>
     <steps>
       <step><cmd>Select the field to sort by.</cmd><info><p>Expected result: rows reorder by updated time, created time, name, schema, or ID.</p></info></step>

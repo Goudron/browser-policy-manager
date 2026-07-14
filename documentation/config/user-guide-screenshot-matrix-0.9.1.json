@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M2-02",
+  "guide_id": "user-guide",
+  "status": "defined",
+  "matrix_id": "bpm-0.9.1-minimal-user-guide-screenshots",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "scope": {
+    "included": "Minimal BPM User Guide screenshots only.",
+    "excluded_guides": [
+      "firefox-policy-guide",
+      "cis-settings-guide",
+      "api-integration-guide",
+      "administrator-guide"
+    ],
+    "non_goals": [
+      "full screenshot coverage for every User Guide topic",
+      "Firefox Policy reference screenshots",
+      "CIS recommendation screenshots",
+      "API or Administrator/DevOps screenshots"
+    ]
+  },
+  "source_asset_root": "documentation/assets/screenshots/{locale}/",
+  "temporary_output_root": "documentation/reports/screenshots/",
+  "capture_rules": [
+    "Use synthetic fixture data only.",
+    "Capture every matrix row for every listed locale.",
+    "Keep the same filename stem in every locale directory.",
+    "Do not reuse a screenshot across locales unless a later task records a language-neutral exception.",
+    "Captions and alt text are localized in DITA topics by the integration task."
+  ],
+  "capture_execution": {
+    "backlog_item": "BPM091-M5-02",
+    "command": "./.venv/bin/python documentation/tools/capture_user_guide_screenshots.py",
+    "browser": "Chromium/Selenium",
+    "sandbox": "requires immediate sandbox escalation",
+    "writes_assets": "documentation/assets/screenshots/{locale}/",
+    "writes_reports": "documentation/reports/screenshots/"
+  },
+  "asset_normalization": {
+    "backlog_item": "BPM091-M5-03",
+    "status": "accepted",
+    "storage_root": "documentation/assets/screenshots/{locale}/",
+    "format": "png",
+    "allowed_chunks": ["IHDR", "IDAT", "IEND"],
+    "metadata_policy": "no ancillary PNG metadata chunks",
+    "filename_pattern": "^ug-[a-z0-9]+(?:-[a-z0-9]+)*-(desktop|narrow)-(light|dark)\\.png$",
+    "max_bytes_by_viewport": {
+      "desktop": 358400,
+      "narrow": 102400
+    },
+    "orphan_policy": "every PNG under documentation/assets/screenshots must be referenced by exactly one matrix row",
+    "cross_locale_policy": "same-scenario screenshots must have distinct SHA-256 hashes across locales unless an explicit exception is added later"
+  },
+  "topic_integration": {
+    "backlog_item": "BPM091-M5-04",
+    "status": "accepted",
+    "source_key_pattern": "screenshot.{scenario_id}",
+    "source_figure_id_pattern": "screenshot-{scenario_id}",
+    "published_asset_root": "{locale}/assets/screenshots/",
+    "caption_policy": "each integrated figure title is authored in the topic locale",
+    "alt_text_policy": "each integrated image alt text is authored in the topic locale",
+    "fallback_policy": "no localized topic may resolve a screenshot, caption, or alt text from another locale"
+  },
+  "capture_state_contract": {
+    "backlog_item": "BPM091-M5-01",
+    "status": "frozen",
+    "profile_fixture_source": "documentation/fixtures/profile-states/profile-states-0.9.0.json",
+    "runtime": {
+      "database": "temporary sqlite database under documentation/reports/screenshots/runtime/",
+      "browser_profile": "temporary browser profile under documentation/reports/screenshots/browser-profiles/",
+      "seed_mode": "recreate from synthetic fixtures for every capture run",
+      "network": "localhost only",
+      "forbidden_sources": [
+        "production databases",
+        "local user browser profiles",
+        "customer profiles",
+        "secrets",
+        "private hosts"
+      ]
+    },
+    "viewports": {
+      "desktop": { "width": 1440, "height": 1000, "device_scale_factor": 1 },
+      "narrow": { "width": 390, "height": 900, "device_scale_factor": 1 }
+    },
+    "required_failure_context_fields": [
+      "locale",
+      "topic_id",
+      "route",
+      "state_id",
+      "matrix_row_id",
+      "scenario_id",
+      "viewport",
+      "theme",
+      "schema_channel",
+      "fixture_state",
+      "asset_path"
+    ],
+    "scenario_ui_states": {
+      "library-overview": {
+        "state_id": "shot-state-library-overview",
+        "primary_profile_id": "doc-profile-release-baseline",
+        "schema_channel": "release-152",
+        "route_parameters": {},
+        "ui_state": {
+          "surface": "profile-library",
+          "search_query": "",
+          "sort": "name-ascending",
+          "selected_profile_id": "doc-profile-release-baseline"
+        },
+        "wait_for_selectors": ["#list", ".compact-toolbar-docs-link"]
+      },
+      "guided-editor-overview": {
+        "state_id": "shot-state-guided-editor-overview",
+        "primary_profile_id": "doc-profile-release-baseline",
+        "schema_channel": "release-152",
+        "route_parameters": { "profile_id": "doc-profile-release-baseline" },
+        "ui_state": {
+          "surface": "guided-editor",
+          "active_step": "overview",
+          "search_query": "",
+          "validation_panel": "ready"
+        },
+        "wait_for_selectors": ["#wizard-panel", ".context-help-link"]
+      },
+      "guided-settings-search": {
+        "state_id": "shot-state-guided-settings-search",
+        "primary_profile_id": "doc-profile-release-baseline",
+        "schema_channel": "release-152",
+        "route_parameters": { "profile_id": "doc-profile-release-baseline" },
+        "ui_state": {
+          "surface": "guided-editor",
+          "active_step": "settings",
+          "search_query": "homepage",
+          "expected_result_count": "at-least-one"
+        },
+        "wait_for_selectors": [
+          "#wizard-panel",
+          "#wizard-settings-search-results [data-settings-search-target]"
+        ]
+      },
+      "all-settings-review": {
+        "state_id": "shot-state-all-settings-review",
+        "primary_profile_id": "doc-profile-release-baseline",
+        "schema_channel": "release-152",
+        "route_parameters": { "profile_id": "doc-profile-release-baseline" },
+        "ui_state": {
+          "surface": "all-settings",
+          "mode": "configured",
+          "filter": "configured",
+          "selected_setting": "Homepage"
+        },
+        "wait_for_selectors": [
+          "#settings-panel",
+          "#all-settings-list [data-settings-entry-id]"
+        ]
+      },
+      "json-editor": {
+        "state_id": "shot-state-json-editor",
+        "primary_profile_id": "doc-profile-release-baseline",
+        "schema_channel": "release-152",
+        "route_parameters": { "profile_id": "doc-profile-release-baseline" },
+        "ui_state": {
+          "surface": "json-editor",
+          "document_state": "valid",
+          "validation_status": "ready",
+          "cursor": "hidden-before-capture"
+        },
+        "wait_for_selectors": ["#editor-panel", "#editor"]
+      },
+      "compare-profiles": {
+        "state_id": "shot-state-compare-profiles",
+        "primary_profile_id": "doc-profile-release-baseline",
+        "secondary_profile_id": "doc-profile-esr-archived",
+        "schema_channel": "release-152",
+        "secondary_schema_channel": "esr-140.12",
+        "route_parameters": {},
+        "ui_state": {
+          "surface": "profile-comparison",
+          "left_profile_id": "doc-profile-release-baseline",
+          "right_profile_id": "doc-profile-esr-archived",
+          "difference_filter": "all"
+        },
+        "wait_for_selectors": ["#compare-page", ".context-help-link"]
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "scenario_id": "library-overview",
+      "topic_id": "ug-task-use-profile-library",
+      "route": "/profiles",
+      "viewport": "desktop",
+      "theme": "light",
+      "fixture_state": "doc-profile-release-baseline",
+      "filename": "ug-library-overview-desktop-light.png",
+      "caption_key": "screenshots.user_guide.library_overview.caption",
+      "caption_intent": "Show the Profile Library list, search/filter controls, profile status, and the main path into editing.",
+      "alt_text_key": "screenshots.user_guide.library_overview.alt"
+    },
+    {
+      "scenario_id": "guided-editor-overview",
+      "topic_id": "ug-task-use-guided-editor",
+      "route": "/profiles/{profile_id}/edit",
+      "viewport": "desktop",
+      "theme": "light",
+      "fixture_state": "doc-profile-release-baseline",
+      "filename": "ug-guided-editor-overview-desktop-light.png",
+      "caption_key": "screenshots.user_guide.guided_editor_overview.caption",
+      "caption_intent": "Show the Guided Editor step layout, profile context, and save/validate actions.",
+      "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt"
+    },
+    {
+      "scenario_id": "guided-settings-search",
+      "topic_id": "ug-task-search-guided-settings",
+      "route": "/profiles/{profile_id}/edit",
+      "viewport": "desktop",
+      "theme": "light",
+      "fixture_state": "doc-profile-release-baseline",
+      "filename": "ug-guided-settings-search-desktop-light.png",
+      "caption_key": "screenshots.user_guide.guided_settings_search.caption",
+      "caption_intent": "Show a Guided settings search result so the reader can identify where to find a setting.",
+      "alt_text_key": "screenshots.user_guide.guided_settings_search.alt"
+    },
+    {
+      "scenario_id": "all-settings-review",
+      "topic_id": "ug-task-use-all-settings",
+      "route": "/profiles/{profile_id}/settings",
+      "viewport": "narrow",
+      "theme": "light",
+      "fixture_state": "doc-profile-release-baseline",
+      "filename": "ug-all-settings-review-narrow-light.png",
+      "caption_key": "screenshots.user_guide.all_settings_review.caption",
+      "caption_intent": "Show All Settings on a narrow viewport with configured rows and selected-setting detail visible.",
+      "alt_text_key": "screenshots.user_guide.all_settings_review.alt"
+    },
+    {
+      "scenario_id": "json-editor",
+      "topic_id": "ug-task-use-json-editor",
+      "route": "/profiles/{profile_id}/json",
+      "viewport": "desktop",
+      "theme": "dark",
+      "fixture_state": "doc-profile-release-baseline",
+      "filename": "ug-json-editor-desktop-dark.png",
+      "caption_key": "screenshots.user_guide.json_editor.caption",
+      "caption_intent": "Show JSON Editor with the policy document, validation state, and export-oriented controls.",
+      "alt_text_key": "screenshots.user_guide.json_editor.alt"
+    },
+    {
+      "scenario_id": "compare-profiles",
+      "topic_id": "ug-task-compare-profiles",
+      "route": "/profiles/compare",
+      "viewport": "desktop",
+      "theme": "light",
+      "fixture_state": "doc-profile-release-baseline",
+      "secondary_fixture_state": "doc-profile-esr-archived",
+      "filename": "ug-compare-profiles-desktop-light.png",
+      "caption_key": "screenshots.user_guide.compare_profiles.caption",
+      "caption_intent": "Show the two-profile comparison surface with selected profiles and the settings difference table.",
+      "alt_text_key": "screenshots.user_guide.compare_profiles.alt"
+    }
+  ],
+  "matrix": [
+    { "id": "library-overview-en", "scenario_id": "library-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-profile-library", "locale": "en", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles", "filename": "ug-library-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/en/ug-library-overview-desktop-light.png", "caption_key": "screenshots.user_guide.library_overview.caption", "alt_text_key": "screenshots.user_guide.library_overview.alt" },
+    { "id": "library-overview-ru", "scenario_id": "library-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-profile-library", "locale": "ru", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles", "filename": "ug-library-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/ru/ug-library-overview-desktop-light.png", "caption_key": "screenshots.user_guide.library_overview.caption", "alt_text_key": "screenshots.user_guide.library_overview.alt" },
+    { "id": "library-overview-de", "scenario_id": "library-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-profile-library", "locale": "de", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles", "filename": "ug-library-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/de/ug-library-overview-desktop-light.png", "caption_key": "screenshots.user_guide.library_overview.caption", "alt_text_key": "screenshots.user_guide.library_overview.alt" },
+    { "id": "library-overview-zh-CN", "scenario_id": "library-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-profile-library", "locale": "zh-CN", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles", "filename": "ug-library-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/zh-CN/ug-library-overview-desktop-light.png", "caption_key": "screenshots.user_guide.library_overview.caption", "alt_text_key": "screenshots.user_guide.library_overview.alt" },
+    { "id": "library-overview-fr", "scenario_id": "library-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-profile-library", "locale": "fr", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles", "filename": "ug-library-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/fr/ug-library-overview-desktop-light.png", "caption_key": "screenshots.user_guide.library_overview.caption", "alt_text_key": "screenshots.user_guide.library_overview.alt" },
+    { "id": "library-overview-es-ES", "scenario_id": "library-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-profile-library", "locale": "es-ES", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles", "filename": "ug-library-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/es-ES/ug-library-overview-desktop-light.png", "caption_key": "screenshots.user_guide.library_overview.caption", "alt_text_key": "screenshots.user_guide.library_overview.alt" },
+    { "id": "guided-editor-overview-en", "scenario_id": "guided-editor-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-guided-editor", "locale": "en", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-editor-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/en/ug-guided-editor-overview-desktop-light.png", "caption_key": "screenshots.user_guide.guided_editor_overview.caption", "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt" },
+    { "id": "guided-editor-overview-ru", "scenario_id": "guided-editor-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-guided-editor", "locale": "ru", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-editor-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/ru/ug-guided-editor-overview-desktop-light.png", "caption_key": "screenshots.user_guide.guided_editor_overview.caption", "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt" },
+    { "id": "guided-editor-overview-de", "scenario_id": "guided-editor-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-guided-editor", "locale": "de", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-editor-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/de/ug-guided-editor-overview-desktop-light.png", "caption_key": "screenshots.user_guide.guided_editor_overview.caption", "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt" },
+    { "id": "guided-editor-overview-zh-CN", "scenario_id": "guided-editor-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-guided-editor", "locale": "zh-CN", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-editor-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/zh-CN/ug-guided-editor-overview-desktop-light.png", "caption_key": "screenshots.user_guide.guided_editor_overview.caption", "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt" },
+    { "id": "guided-editor-overview-fr", "scenario_id": "guided-editor-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-guided-editor", "locale": "fr", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-editor-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/fr/ug-guided-editor-overview-desktop-light.png", "caption_key": "screenshots.user_guide.guided_editor_overview.caption", "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt" },
+    { "id": "guided-editor-overview-es-ES", "scenario_id": "guided-editor-overview", "guide_id": "user-guide", "topic_id": "ug-task-use-guided-editor", "locale": "es-ES", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-editor-overview-desktop-light.png", "asset_path": "documentation/assets/screenshots/es-ES/ug-guided-editor-overview-desktop-light.png", "caption_key": "screenshots.user_guide.guided_editor_overview.caption", "alt_text_key": "screenshots.user_guide.guided_editor_overview.alt" },
+    { "id": "guided-settings-search-en", "scenario_id": "guided-settings-search", "guide_id": "user-guide", "topic_id": "ug-task-search-guided-settings", "locale": "en", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-settings-search-desktop-light.png", "asset_path": "documentation/assets/screenshots/en/ug-guided-settings-search-desktop-light.png", "caption_key": "screenshots.user_guide.guided_settings_search.caption", "alt_text_key": "screenshots.user_guide.guided_settings_search.alt" },
+    { "id": "guided-settings-search-ru", "scenario_id": "guided-settings-search", "guide_id": "user-guide", "topic_id": "ug-task-search-guided-settings", "locale": "ru", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-settings-search-desktop-light.png", "asset_path": "documentation/assets/screenshots/ru/ug-guided-settings-search-desktop-light.png", "caption_key": "screenshots.user_guide.guided_settings_search.caption", "alt_text_key": "screenshots.user_guide.guided_settings_search.alt" },
+    { "id": "guided-settings-search-de", "scenario_id": "guided-settings-search", "guide_id": "user-guide", "topic_id": "ug-task-search-guided-settings", "locale": "de", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-settings-search-desktop-light.png", "asset_path": "documentation/assets/screenshots/de/ug-guided-settings-search-desktop-light.png", "caption_key": "screenshots.user_guide.guided_settings_search.caption", "alt_text_key": "screenshots.user_guide.guided_settings_search.alt" },
+    { "id": "guided-settings-search-zh-CN", "scenario_id": "guided-settings-search", "guide_id": "user-guide", "topic_id": "ug-task-search-guided-settings", "locale": "zh-CN", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-settings-search-desktop-light.png", "asset_path": "documentation/assets/screenshots/zh-CN/ug-guided-settings-search-desktop-light.png", "caption_key": "screenshots.user_guide.guided_settings_search.caption", "alt_text_key": "screenshots.user_guide.guided_settings_search.alt" },
+    { "id": "guided-settings-search-fr", "scenario_id": "guided-settings-search", "guide_id": "user-guide", "topic_id": "ug-task-search-guided-settings", "locale": "fr", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-settings-search-desktop-light.png", "asset_path": "documentation/assets/screenshots/fr/ug-guided-settings-search-desktop-light.png", "caption_key": "screenshots.user_guide.guided_settings_search.caption", "alt_text_key": "screenshots.user_guide.guided_settings_search.alt" },
+    { "id": "guided-settings-search-es-ES", "scenario_id": "guided-settings-search", "guide_id": "user-guide", "topic_id": "ug-task-search-guided-settings", "locale": "es-ES", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/edit", "filename": "ug-guided-settings-search-desktop-light.png", "asset_path": "documentation/assets/screenshots/es-ES/ug-guided-settings-search-desktop-light.png", "caption_key": "screenshots.user_guide.guided_settings_search.caption", "alt_text_key": "screenshots.user_guide.guided_settings_search.alt" },
+    { "id": "all-settings-review-en", "scenario_id": "all-settings-review", "guide_id": "user-guide", "topic_id": "ug-task-use-all-settings", "locale": "en", "viewport": "narrow", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/settings", "filename": "ug-all-settings-review-narrow-light.png", "asset_path": "documentation/assets/screenshots/en/ug-all-settings-review-narrow-light.png", "caption_key": "screenshots.user_guide.all_settings_review.caption", "alt_text_key": "screenshots.user_guide.all_settings_review.alt" },
+    { "id": "all-settings-review-ru", "scenario_id": "all-settings-review", "guide_id": "user-guide", "topic_id": "ug-task-use-all-settings", "locale": "ru", "viewport": "narrow", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/settings", "filename": "ug-all-settings-review-narrow-light.png", "asset_path": "documentation/assets/screenshots/ru/ug-all-settings-review-narrow-light.png", "caption_key": "screenshots.user_guide.all_settings_review.caption", "alt_text_key": "screenshots.user_guide.all_settings_review.alt" },
+    { "id": "all-settings-review-de", "scenario_id": "all-settings-review", "guide_id": "user-guide", "topic_id": "ug-task-use-all-settings", "locale": "de", "viewport": "narrow", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/settings", "filename": "ug-all-settings-review-narrow-light.png", "asset_path": "documentation/assets/screenshots/de/ug-all-settings-review-narrow-light.png", "caption_key": "screenshots.user_guide.all_settings_review.caption", "alt_text_key": "screenshots.user_guide.all_settings_review.alt" },
+    { "id": "all-settings-review-zh-CN", "scenario_id": "all-settings-review", "guide_id": "user-guide", "topic_id": "ug-task-use-all-settings", "locale": "zh-CN", "viewport": "narrow", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/settings", "filename": "ug-all-settings-review-narrow-light.png", "asset_path": "documentation/assets/screenshots/zh-CN/ug-all-settings-review-narrow-light.png", "caption_key": "screenshots.user_guide.all_settings_review.caption", "alt_text_key": "screenshots.user_guide.all_settings_review.alt" },
+    { "id": "all-settings-review-fr", "scenario_id": "all-settings-review", "guide_id": "user-guide", "topic_id": "ug-task-use-all-settings", "locale": "fr", "viewport": "narrow", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/settings", "filename": "ug-all-settings-review-narrow-light.png", "asset_path": "documentation/assets/screenshots/fr/ug-all-settings-review-narrow-light.png", "caption_key": "screenshots.user_guide.all_settings_review.caption", "alt_text_key": "screenshots.user_guide.all_settings_review.alt" },
+    { "id": "all-settings-review-es-ES", "scenario_id": "all-settings-review", "guide_id": "user-guide", "topic_id": "ug-task-use-all-settings", "locale": "es-ES", "viewport": "narrow", "theme": "light", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/settings", "filename": "ug-all-settings-review-narrow-light.png", "asset_path": "documentation/assets/screenshots/es-ES/ug-all-settings-review-narrow-light.png", "caption_key": "screenshots.user_guide.all_settings_review.caption", "alt_text_key": "screenshots.user_guide.all_settings_review.alt" },
+    { "id": "json-editor-en", "scenario_id": "json-editor", "guide_id": "user-guide", "topic_id": "ug-task-use-json-editor", "locale": "en", "viewport": "desktop", "theme": "dark", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/json", "filename": "ug-json-editor-desktop-dark.png", "asset_path": "documentation/assets/screenshots/en/ug-json-editor-desktop-dark.png", "caption_key": "screenshots.user_guide.json_editor.caption", "alt_text_key": "screenshots.user_guide.json_editor.alt" },
+    { "id": "json-editor-ru", "scenario_id": "json-editor", "guide_id": "user-guide", "topic_id": "ug-task-use-json-editor", "locale": "ru", "viewport": "desktop", "theme": "dark", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/json", "filename": "ug-json-editor-desktop-dark.png", "asset_path": "documentation/assets/screenshots/ru/ug-json-editor-desktop-dark.png", "caption_key": "screenshots.user_guide.json_editor.caption", "alt_text_key": "screenshots.user_guide.json_editor.alt" },
+    { "id": "json-editor-de", "scenario_id": "json-editor", "guide_id": "user-guide", "topic_id": "ug-task-use-json-editor", "locale": "de", "viewport": "desktop", "theme": "dark", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/json", "filename": "ug-json-editor-desktop-dark.png", "asset_path": "documentation/assets/screenshots/de/ug-json-editor-desktop-dark.png", "caption_key": "screenshots.user_guide.json_editor.caption", "alt_text_key": "screenshots.user_guide.json_editor.alt" },
+    { "id": "json-editor-zh-CN", "scenario_id": "json-editor", "guide_id": "user-guide", "topic_id": "ug-task-use-json-editor", "locale": "zh-CN", "viewport": "desktop", "theme": "dark", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/json", "filename": "ug-json-editor-desktop-dark.png", "asset_path": "documentation/assets/screenshots/zh-CN/ug-json-editor-desktop-dark.png", "caption_key": "screenshots.user_guide.json_editor.caption", "alt_text_key": "screenshots.user_guide.json_editor.alt" },
+    { "id": "json-editor-fr", "scenario_id": "json-editor", "guide_id": "user-guide", "topic_id": "ug-task-use-json-editor", "locale": "fr", "viewport": "desktop", "theme": "dark", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/json", "filename": "ug-json-editor-desktop-dark.png", "asset_path": "documentation/assets/screenshots/fr/ug-json-editor-desktop-dark.png", "caption_key": "screenshots.user_guide.json_editor.caption", "alt_text_key": "screenshots.user_guide.json_editor.alt" },
+    { "id": "json-editor-es-ES", "scenario_id": "json-editor", "guide_id": "user-guide", "topic_id": "ug-task-use-json-editor", "locale": "es-ES", "viewport": "desktop", "theme": "dark", "fixture_state": "doc-profile-release-baseline", "route": "/profiles/{profile_id}/json", "filename": "ug-json-editor-desktop-dark.png", "asset_path": "documentation/assets/screenshots/es-ES/ug-json-editor-desktop-dark.png", "caption_key": "screenshots.user_guide.json_editor.caption", "alt_text_key": "screenshots.user_guide.json_editor.alt" },
+    { "id": "compare-profiles-en", "scenario_id": "compare-profiles", "guide_id": "user-guide", "topic_id": "ug-task-compare-profiles", "locale": "en", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "secondary_fixture_state": "doc-profile-esr-archived", "route": "/profiles/compare", "filename": "ug-compare-profiles-desktop-light.png", "asset_path": "documentation/assets/screenshots/en/ug-compare-profiles-desktop-light.png", "caption_key": "screenshots.user_guide.compare_profiles.caption", "alt_text_key": "screenshots.user_guide.compare_profiles.alt" },
+    { "id": "compare-profiles-ru", "scenario_id": "compare-profiles", "guide_id": "user-guide", "topic_id": "ug-task-compare-profiles", "locale": "ru", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "secondary_fixture_state": "doc-profile-esr-archived", "route": "/profiles/compare", "filename": "ug-compare-profiles-desktop-light.png", "asset_path": "documentation/assets/screenshots/ru/ug-compare-profiles-desktop-light.png", "caption_key": "screenshots.user_guide.compare_profiles.caption", "alt_text_key": "screenshots.user_guide.compare_profiles.alt" },
+    { "id": "compare-profiles-de", "scenario_id": "compare-profiles", "guide_id": "user-guide", "topic_id": "ug-task-compare-profiles", "locale": "de", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "secondary_fixture_state": "doc-profile-esr-archived", "route": "/profiles/compare", "filename": "ug-compare-profiles-desktop-light.png", "asset_path": "documentation/assets/screenshots/de/ug-compare-profiles-desktop-light.png", "caption_key": "screenshots.user_guide.compare_profiles.caption", "alt_text_key": "screenshots.user_guide.compare_profiles.alt" },
+    { "id": "compare-profiles-zh-CN", "scenario_id": "compare-profiles", "guide_id": "user-guide", "topic_id": "ug-task-compare-profiles", "locale": "zh-CN", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "secondary_fixture_state": "doc-profile-esr-archived", "route": "/profiles/compare", "filename": "ug-compare-profiles-desktop-light.png", "asset_path": "documentation/assets/screenshots/zh-CN/ug-compare-profiles-desktop-light.png", "caption_key": "screenshots.user_guide.compare_profiles.caption", "alt_text_key": "screenshots.user_guide.compare_profiles.alt" },
+    { "id": "compare-profiles-fr", "scenario_id": "compare-profiles", "guide_id": "user-guide", "topic_id": "ug-task-compare-profiles", "locale": "fr", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "secondary_fixture_state": "doc-profile-esr-archived", "route": "/profiles/compare", "filename": "ug-compare-profiles-desktop-light.png", "asset_path": "documentation/assets/screenshots/fr/ug-compare-profiles-desktop-light.png", "caption_key": "screenshots.user_guide.compare_profiles.caption", "alt_text_key": "screenshots.user_guide.compare_profiles.alt" },
+    { "id": "compare-profiles-es-ES", "scenario_id": "compare-profiles", "guide_id": "user-guide", "topic_id": "ug-task-compare-profiles", "locale": "es-ES", "viewport": "desktop", "theme": "light", "fixture_state": "doc-profile-release-baseline", "secondary_fixture_state": "doc-profile-esr-archived", "route": "/profiles/compare", "filename": "ug-compare-profiles-desktop-light.png", "asset_path": "documentation/assets/screenshots/es-ES/ug-compare-profiles-desktop-light.png", "caption_key": "screenshots.user_guide.compare_profiles.caption", "alt_text_key": "screenshots.user_guide.compare_profiles.alt" }
+  ]
+}

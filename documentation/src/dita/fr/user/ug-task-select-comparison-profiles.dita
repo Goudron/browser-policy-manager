@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-select-comparison-profiles" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Sélectionner les profils à comparer</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Sélectionner les profils à comparer » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Sélectionnez les profils à comparer</title>
+  <shortdesc>Recherchez indépendamment le profil A et le profil B, sélectionnez des lignes dans les listes de résultats délimitées et examinez chaque résumé.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>La surface Comparer est ouverte depuis la bibliothèque.</p></prereq>
+    <context><p>Chaque camp possède son propre champ de recherche et sa propre liste de résultats afin que vous puissiez choisir des profils portant des noms similaires sans mélanger les camps.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Sélectionner les profils à comparer ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Recherchez le profil A dans le champ de recherche de gauche et sélectionnez la ligne souhaitée.</cmd><info><p>Résultat attendu : le résumé du profil sélectionné à gauche affiche le nom du profil, le canal de schéma, le cycle de vie et le contexte d'état.</p></info></step>
+      <step><cmd>Recherchez le profil B dans le champ de recherche de droite et sélectionnez la ligne souhaitée.</cmd><info><p>Résultat attendu : le bon résumé se met à jour indépendamment.</p></info></step>
+      <step><cmd>Confirmez les deux résumés avant de lire le tableau comparatif.</cmd><info><note type="warning">Ne vous fiez pas uniquement à la position des résultats de recherche. Confirmez l'identité et le schéma des deux côtés.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le profil A et le profil B sont sélectionnés et prêts à être comparés.</p></result>
+    <postreq><p>Récupération : si un profil est manquant, effacez la recherche de ce côté, actualisez la bibliothèque dans l'onglet d'origine et confirmez que le profil est enregistré.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-compare-profiles"/>

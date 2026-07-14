@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-guided-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Buscar ajustes Guided</title>
-  <shortdesc>Esta tarea describe el escenario completo «Buscar ajustes Guided»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Búsqueda de configuraciones guiadas</title>
+  <shortdesc>Busque controles guiados y salte a la configuración correspondiente sin escanear cada paso.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Hay un perfil abierto en Editor guiado.</p></prereq>
+    <context><p>La búsqueda guiada es útil cuando conoce el objetivo de la política pero no el paso que contiene la familia de controles.</p>
+      <fig id="screenshot-guided-settings-search">
+        <title>Resultados de búsqueda de configuración guiada</title>
+        <image keyref="screenshot.guided-settings-search" placement="break">
+          <alt>Editor guiado búsqueda que muestra resultados de configuración relacionados con la página de inicio.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Buscar ajustes Guided».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Coloque el cursor en el campo de búsqueda de configuraciones guiadas.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Escriba una política, preferencia o término en lenguaje sencillo, como búsqueda, cookies, marcadores o permisos.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija un resultado para saltar al paso correspondiente y controlarlo.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Confirme el canal del esquema si falta el resultado esperado.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>La configuración coincidente está visible y lista para revisar o editar.</p></result>
+    <postreq><p>Recuperación: si no aparece ningún resultado, borre los filtros y confirme que el esquema de Firefox seleccionado admite el control.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>

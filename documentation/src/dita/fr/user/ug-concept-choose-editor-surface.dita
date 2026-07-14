@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Choisir la bonne surface BPM</title>
-  <shortdesc>BPM propose cinq surfaces utilisateur : Bibliothèque, Éditeur guidé, Tous les paramètres, Éditeur JSON et Comparer.</shortdesc>
+  <title>Choisissez la bonne surface BPM</title>
+  <shortdesc>BPM comporte cinq surfaces utilisateur : Bibliothèque, Éditeur guidé, Tous les paramètres, Éditeur JSON et Comparer.</shortdesc>
   <conbody>
-    <p>Choisissez la surface selon le résultat recherché, pas selon le module interne du produit.</p>
+    <p>Choisissez la surface en fonction du résultat souhaité, et non en fonction du module produit interne.</p>
     <dl>
       <dlentry><dt>Bibliothèque</dt><dd>Rechercher, créer, importer, dupliquer, archiver, restaurer, supprimer, exporter et ouvrir des profils.</dd></dlentry>
       <dlentry><dt>Éditeur guidé</dt><dd>Créer ou mettre à jour des configurations de politiques courantes avec des étapes orientées tâche et des choix de départ.</dd></dlentry>

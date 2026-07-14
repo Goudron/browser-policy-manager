@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>保存配置文件更改</title>
-  <shortdesc>从草稿创建第一个已保存配置文件，或保存现有配置文件的更改。</shortdesc>
+  <shortdesc>从草稿创建第一个保存的配置文件或将更改保留到现有配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
-    <context><p>保存会为新草稿建立配置文件 ID，并使最新的策略和托管首选项值可供其他 BPM 界面使用。</p></context>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <context><p>保存为新草稿建立配置文件 ID，并使最新的策略和托管首选项值可用于其他 BPM 界面。</p></context>
     <steps>
-      <step><cmd>保存前检查配置文件名称、架构通道和验证状态。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>在当前编辑界面选择保存。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>等待显示确认保存完成的状态消息。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>如果出现验证或连接反馈，请在离开页面或重试前先阅读。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+      <step><cmd>在保存之前检查配置文件名称、模式通道和验证状态。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>在活动编辑器界面上选择“保存”。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>等待确认保存完成的可见状态消息。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>如果出现验证或连接反馈，请在离开或重试之前阅读它。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
-    <result><p>配置文件拥有已保存状态，可重新打开、验证、导出或比较。</p></result>
-    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <result><p>配置文件具有可以重新打开、验证、导出或比较的已保存状态。</p></result>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

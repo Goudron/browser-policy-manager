@@ -2,12 +2,12 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-accessible-product-operation" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Zugängliche Produktbedienung</title>
-  <shortdesc>Nutzen Sie BPM mit lokalisierten Status-, Fehler-, Fokus- und Tastatur-Rückmeldungen sowie responsiven Layouts.</shortdesc>
+  <shortdesc>Verwenden Sie BPM mit lokalisiertem Status, Fehler, Fokus, Tastatur-Feedback und reaktionsfähigen Layouts.</shortdesc>
   <conbody>
-    <section id="a-keyboard"><title>Keyboard</title><p>Tastaturverhalten muss Hauptaktionen, Navigation, Filter, Editor-Steuerelemente, Bestätigungen und Links ohne Zeigegerät erreichbar halten.</p></section>
-    <section id="a-focus"><title>Focus</title><p>Fokusmarkierungen zeigen, worauf die nächste Aktion nach Navigation, Moduswechsel, Validierung und Dialogen wirkt.</p></section>
-    <section id="a-status-feedback"><title>Status feedback</title><p>Lokalisierte Status- und Fehlerrückmeldungen erklären Ergebnisse von Speichern, Validierung, Import, Export, Archivierung, Wiederherstellung und Löschung.</p></section>
-    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>Responsive Layouts erhalten dieselben Aufgaben auf schmalen Bildschirmen; Theme- und Locale-Wechsel dürfen Warnungen oder destruktive Bestätigungen nicht verdecken.</p></section>
+    <section id="a-keyboard"><title>Tastatur</title><p>Das Tastaturverhalten muss dafür sorgen, dass primäre Aktionen, Navigation, Filter, Editor-Steuerelemente, Bestätigungen und Links ohne Zeiger erreichbar sind.</p></section>
+    <section id="a-focus"><title>Fokus</title><p>Fokusindikatoren zeigen an, wo die nächste Aktion nach Navigation, Moduswechsel, Validierung und Dialogen angewendet wird.</p></section>
+    <section id="a-status-feedback"><title>Status-Feedback</title><p>Lokalisierte Status- und Fehlerrückmeldungen erläutern die Ergebnisse beim Speichern, Validieren, Importieren, Exportieren, Archivieren, Wiederherstellen und Löschen.</p></section>
+    <section id="a-responsive-layouts"><title>Responsive Layouts</title><p>Responsive Layouts bewahren die gleichen Aufgaben auf schmalen Bildschirmen; Theme- und Gebietsschemaänderungen dürfen keine Warnungen oder destruktiven Bestätigungen verbergen.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-change-interface-theme"/>

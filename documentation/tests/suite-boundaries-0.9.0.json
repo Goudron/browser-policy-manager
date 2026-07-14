@@ -137,6 +137,64 @@
     }
   },
   "domains": {
+    "live_source_install_harness": {
+      "primary_suite": "unit",
+      "path_globs": [
+        "documentation/tests/unit/test_live_source_install_harness.py"
+      ],
+      "fixtures": [
+        "documentation/config/live-source-install-harness-0.9.1.json",
+        "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q documentation/tests/unit/test_live_source_install_harness.py"
+    },
+    "bpm_0_9_1_completion": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_091_documentation_polish_guardrails.py",
+        "documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py",
+        "documentation/tests/contract/test_all_settings_documentation_target_audit.py",
+        "documentation/tests/contract/test_all_settings_help_target_map.py",
+        "documentation/tests/contract/test_all_settings_row_help_link_contract.py",
+        "documentation/tests/contract/test_documentation_navigation_locale_completion_audit.py",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py",
+        "documentation/tests/contract/test_documentation_sufficiency_drift.py",
+        "documentation/tests/contract/test_documentation_sufficiency_review_protocol.py",
+        "documentation/tests/contract/test_docker_engine_installation_evidence.py",
+        "documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py",
+        "documentation/tests/contract/test_linux_source_install_command_topics.py",
+        "documentation/tests/contract/test_live_source_install_privileged_validation_contract.py",
+        "documentation/tests/contract/test_live_source_install_harness_contract.py",
+        "documentation/tests/contract/test_live_source_install_harness_evidence.py",
+        "documentation/tests/contract/test_linux_source_install_validation.py",
+        "documentation/tests/contract/test_locale_anglicism_replacement.py",
+        "documentation/tests/contract/test_locale_anti_anglicism_guard.py",
+        "documentation/tests/contract/test_locale_human_qa.py",
+        "documentation/tests/contract/test_interface_name_replacement.py",
+        "documentation/tests/contract/test_locale_terminology_authority.py",
+        "documentation/tests/contract/test_locale_visible_english_inventory.py",
+        "documentation/tests/contract/test_visible_english_prose_review.py",
+        "documentation/tests/contract/test_navigation_tree_contract.py",
+        "documentation/tests/contract/test_topic_section_hierarchy_audit.py",
+        "documentation/tests/contract/test_topic_section_labels.py",
+        "documentation/tests/contract/test_topic_section_taxonomy.py"
+      ],
+      "fixtures": [
+        "documentation/config/documentation-navigation-locale-completion-audit-0.9.1.json",
+        "documentation/config/documentation-navigation-language-browser-qa-0.9.1.json",
+        "documentation/config/documentation-polish-regression-gates-0.9.1.json",
+        "documentation/config/interface-name-authority-0.9.1.json",
+        "documentation/config/interface-name-replacement-0.9.1.json",
+        "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+        "documentation/config/live-source-install-harness-0.9.1.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-02-docker-engine-20260714/host-state.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-02-docker-engine-20260714/run-manifest.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-03-harness-20260714/run-manifest.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-03-harness-20260714/retained-inventory.json",
+        "documentation/config/visible-english-prose-review-0.9.1.json"
+      ],
+      "focused_rerun": "make test-docs-contract"
+    },
     "dita": {
       "primary_suite": "contract",
       "path_globs": [
@@ -175,7 +233,8 @@
       "path_globs": [
         "documentation/tests/contract/test_*_locale_parity.py",
         "documentation/tests/contract/test_user_guide_locale_parity.py",
-        "documentation/tests/contract/test_api_locale_parity.py"
+        "documentation/tests/contract/test_api_locale_parity.py",
+        "documentation/tests/contract/test_interface_name_authority.py"
       ],
       "fixtures": ["documentation/fixtures/metadata-filter/"],
       "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_user_guide_locale_parity.py"
@@ -232,7 +291,6 @@
       "fixtures": [
         "docs/architecture/api-integration-rehome-audit-0.9.0.json",
         "docs/architecture/api-integration-rehome-audit-0.9.0.md",
-        "documentation/src/dita/en/maps/api-integration-guide.ditamap",
         "documentation/src/dita/en/maps/administrator-guide.ditamap",
         "documentation/src/dita/en/maps/user-guide.ditamap"
       ],
@@ -338,7 +396,6 @@
       "fixtures": [
         "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
         "documentation/src/dita/en/maps/administrator-guide.ditamap",
-        "documentation/src/dita/en/maps/api-integration-guide.ditamap",
         "app/core/config.py",
         "app/api/health.py",
         "Makefile",

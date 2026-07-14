@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-assess-single-node-source-readiness" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Evaluar la readiness source single-node actual</title>
-  <shortdesc>Decida si la instancia BPM source-run actual está lista para operación single-node controlada y nombre la evidence que respalda la decisión.</shortdesc>
+  <title>Evaluar la preparación actual de la fuente de un solo nodo</title>
+  <shortdesc>Decida si la instancia BPM actual ejecutada en origen está lista para la operación controlada de un solo nodo y nombre la evidencia que respalda esa decisión.</shortdesc>
   <taskbody>
-    <prereq><p>El source deployment de Linux o Windows 10/11 mediante WSL está completo, las dependencies están instaladas y se conocen los valores previstos de <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> y <codeph>BPM_SCHEMA_CACHE_DIR</codeph>.</p></prereq>
-    <context><p>BPM 0.9.0 puede prepararse para current-state single-node source operation. Esta evaluación no es un production hardening certificate, un HA design ni una packaged service acceptance.</p></context>
+    <prereq><p>Linux o Windows 10/11 a través de la implementación del código fuente WSL está completa, las dependencias están instaladas y se conocen los valores <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> y <codeph>BPM_SCHEMA_CACHE_DIR</codeph> previstos.</p></prereq>
+    <context><p>BPM 0.9.0 se puede preparar para la operación de fuente de un solo nodo en el estado actual. Esta evaluación no es un certificado de refuerzo de la producción, un diseño HA ni una aceptación de servicio empaquetado.</p></context>
     <steps>
-      <step><cmd>Registre la source y runtime configuration exactas.</cmd><info><p>Capture <codeph>git rev-parse --short HEAD</codeph>, la versión de BPM, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> y si el proceso arranca con <codeph>make dev</codeph> o con un comando <codeph>uvicorn app.main:app</codeph> de propiedad directa.</p></info></step>
-      <step><cmd>Ejecute liveness y readiness checks desde la misma network boundary que usarán los usuarios.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Registre la fuente exacta y la configuración del tiempo de ejecución.</cmd><info><p>Capture <codeph>git rev-parse --short HEAD</codeph>, la versión de BPM, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> y si el proceso se inicia con <codeph>make dev</codeph> o con un comando <codeph>uvicorn app.main:app</codeph> de propiedad directa.</p></info></step>
+      <step><cmd>Ejecute comprobaciones de actividad y preparación desde el mismo límite de red que utilizarán los usuarios.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Registre el resultado como evidence de <codeph>GET /health</codeph> y <codeph>GET /health/ready</codeph>. Los probes correctos solo prueban liveness/readiness del source process.</p></info></step>
-      <step><cmd>Compruebe data y documentation evidence antes de compartir la instancia.</cmd><info><p>Confirme que <codeph>data/bpm.db</codeph> es la base prevista, que al menos un perfil puede exportarse como <codeph>policies.json</codeph> y que <codeph>/help/</codeph> abre el documentation artifact generado o un unavailable state documentado.</p></info></step>
-      <step><cmd>Clasifique la instancia como current-state source operation.</cmd><info><note type="warning">No describa la instancia como packaged, hardened, load balanced o highly available. Si external controls añaden esas propiedades, regístrelas como external responsibilities y limite la evidence de BPM 0.9.0 a single-node source operation.</note></info></step>
+]]></codeblock><p>Registre el resultado como evidencia <codeph>GET /health</codeph> y <codeph>GET /health/ready</codeph>. Las pruebas aprobadas sólo demuestran la vitalidad y preparación del proceso fuente.</p></info></step>
+      <step><cmd>Verifique los datos y la evidencia documental antes de compartir la instancia.</cmd><info><p>Confirme que <codeph>data/bpm.db</codeph> es la base de datos deseada, que al menos un perfil se puede exportar como <codeph>policies.json</codeph> y que <codeph>/help/</codeph> abre el artefacto de documentación compilado o un estado documentado no disponible.</p></info></step>
+      <step><cmd>Clasifica la instancia como operación de origen del estado actual.</cmd><info><note type="warning">No etiquete la instancia como empaquetada, reforzada, con carga equilibrada o de alta disponibilidad. Si los controles externos agregan esas propiedades, regístrelas como responsabilidades externas y mantenga la evidencia de BPM 0.9.0 limitada a la operación de origen de un solo nodo.</note></info></step>
     </steps>
-    <result><p>La readiness note indica qué puede hacerse hoy de forma segura desde source, qué checks pasaron y qué decisiones esperan distribution y runtime support.</p></result>
-    <postreq><p>Use el topic network exposure y proxy-readiness antes de exponer la instancia más allá de una estación local de administrador o controlled lab host.</p></postreq>
+    <result><p>La nota de preparación dice qué se puede hacer hoy de manera segura desde el código fuente, qué comprobaciones se aprobaron y qué decisiones deben esperar hasta la distribución y el soporte de tiempo de ejecución.</p></result>
+    <postreq><p>Utilice el tema exposición de la red y preparación del proxy antes de exponer la instancia más allá de una estación de trabajo de administrador local o un host de laboratorio controlado.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-configuration-sources"/>

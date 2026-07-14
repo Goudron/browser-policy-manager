@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-product-connection" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Von product connection failure wiederherstellen</title>
-  <shortdesc>Stellen Sie nach network, browser oder BPM API operation failure wieder her, die in Library oder editor surfaces sichtbar ist.</shortdesc>
+  <title>Wiederherstellung nach Produktverbindungsfehler</title>
+  <shortdesc>Wiederherstellung nach einem Netzwerk-, Browser- oder BPM-API-Vorgangsfehler, der in Bibliotheks- oder Editoroberflächen sichtbar ist.</shortdesc>
   <taskbody>
-    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
-    <context><p>Connection failures können temporary browser testing caveats, network interruptions, server restarts oder API operation failures sein; sicher ist, Kontext vor retry zu bewahren.</p></context>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Verbindungsfehler können vorübergehende Einschränkungen beim Browsertest, Netzwerkunterbrechungen, Serverneustarts oder API-Betriebsfehler sein; Die sichere Antwort besteht darin, den Kontext beizubehalten, bevor Sie es erneut versuchen.</p></context>
     <steps>
-      <step><cmd>Lesen Sie den sichtbaren status und bestimmen Sie, ob load, save, import, export, archive, restore, delete, validation oder comparison fehlgeschlagen ist.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Prüfen Sie, ob andere BPM surfaces in derselben browser session noch reagieren, bevor dieselbe Aktion wiederholt wird.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Wiederholen Sie die failed action einmal, nachdem unsaved changes und profile context gesichert sind.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Wenn browser testing caveat oder API failure anhält, stoppen Sie user edits und bewahren visible error details für Maintainer-Review auf.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+      <step><cmd>Lesen Sie den sichtbaren Status und ermitteln Sie, ob der fehlgeschlagene Vorgang Laden, Speichern, Importieren, Exportieren, Archivieren, Wiederherstellen, Löschen, Validieren oder Vergleichen war.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Überprüfen Sie, ob andere BPM-Oberflächen in derselben Browsersitzung noch reagieren, bevor Sie dieselbe Aktion erneut versuchen.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Wiederholen Sie die fehlgeschlagene Aktion einmal, nachdem nicht gespeicherte Änderungen und Profilkontext erhalten geblieben sind.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Wenn der Vorbehalt beim Browsertest oder der API-Fehler weiterhin besteht, beenden Sie die Benutzerbearbeitung und bewahren Sie die sichtbaren Fehlerdetails zur Überprüfung durch den Betreuer auf.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
     </steps>
-    <result><p>Der Workflow wird nach clean retry fortgesetzt oder stoppt mit genug visible context zur Diagnose des product connection problem.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+    <result><p>Der Arbeitsablauf wird entweder nach einem sauberen Wiederholungsversuch fortgesetzt oder stoppt mit genügend sichtbarem Kontext, um das Produktverbindungsproblem zu diagnostizieren.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

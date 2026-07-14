@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Guardar el documento JSON</title>
-  <shortdesc>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. Save a valid raw JSON document back to the canonical BPM profile.</shortdesc>
+  <shortdesc>Guarde un documento JSON sin formato válido en el perfil BPM canónico.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. The JSON document has been validated or the remaining warnings are understood.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All Settings, Compare, or export workflows.</p></context>
+    <prereq><p>El documento JSON ha sido validado o se entienden las advertencias restantes.</p></prereq>
+    <context><p>Al guardar se escribe el documento sin formato a través de la normalización BPM. Luego, el perfil guardado se puede abrir en flujos de trabajo guiados, Todos los ajustes, comparar o exportar.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. Validate the JSON document.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. Choose Save only when the top-level policies object and policy values are correct.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. Wait for the saved status before leaving the route.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Guardar el documento JSON. Reopen the profile or export policies.json when you need handoff evidence.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe la sintaxis JSON, top-level policies y los errores de validación de políticas.</note></info></step>
+      <step><cmd>Validar el documento JSON.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija Guardar solo cuando el objeto de políticas de nivel superior y los valores de política sean correctos.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Espere el estado guardado antes de abandonar la ruta.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Vuelva a abrir el perfil o exporte policies.json cuando necesite evidencia de transferencia.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
     </steps>
-    <result><p>JSON Editor queda en el estado esperado y la acción se puede explicar durante la revisión. The BPM profile stores the JSON changes in the canonical profile model.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, valide el documento, vuelva a All Settings o abra el tema relacionado. Recovery: if save fails, fix validation errors or return to a previous saved profile before editing again.</p></postreq>
+    <result><p>El perfil BPM almacena los cambios JSON en el modelo de perfil canónico.</p></result>
+    <postreq><p>Recuperación: si falla el guardado, corrija los errores de validación o regrese a un perfil guardado anteriormente antes de volver a editarlo.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

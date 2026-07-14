@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-linux-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Linux-Host für die Bereitstellung aus dem Quellcode vorbereiten</title>
-  <shortdesc>Prüfen Sie die unterstützte Source-Deployment-Grenze, die Host-Voraussetzungen und die zurückgestellten Produktionsfunktionen, bevor BPM aus einem Repository-Checkout installiert wird.</shortdesc>
+  <title>Bereiten Sie einen Linux-Host für die Quellbereitstellung vor</title>
+  <shortdesc>Bestätigen Sie die unterstützte Quellbereitstellungsgrenze, Hostvoraussetzungen und verzögerte Produktionsfunktionen, bevor Sie BPM aus einem Repository-Checkout installieren.</shortdesc>
   <taskbody>
-    <prereq><p>Verwenden Sie einen Linux-Host, auf dem Python 3.14+, Git, Build-Werkzeuge und curl installiert werden können. Dieser Runbook-Pfad setzt einen Source Checkout voraus, keinen packaged installer.</p></prereq>
-    <context><p>BPM 0.9.0 kann aus dem Quellcode für Entwicklung, Prüfung und kontrollierte administrative Bewertung ausgeführt werden. Packaged installers, native service units, offizielle systemd recipes, reverse proxy and TLS recipes, HA clustering, managed secrets und production hardening werden in diesem Release nicht geliefert und dürfen nicht als unterstütztes Deployment-Verhalten beschrieben werden.</p></context>
+    <prereq><p>Verwenden Sie einen Linux-Host, auf dem Sie Python 3.14+, Git, Build-Tools und curl installieren können. Dieses Betriebsanleitung geht von einem Quell-Checkout und nicht von einem gepackten Installationsprogramm aus.</p></prereq>
+    <context><p>BPM 0.9.0 kann zur Entwicklung, Überprüfung und kontrollierten administrativen Evaluierung aus dem Quellcode ausgeführt werden. Gepackte Installationsprogramme, native Serviceeinheiten, offizielle Systemd-Rezepte, Reverse-Proxy- und TLS-Rezepte, HA-Clustering, verwaltete Geheimnisse und Produktionshärtung werden in dieser Version nicht bereitgestellt und dürfen nicht als unterstütztes Bereitstellungsverhalten dargestellt werden.</p></context>
     <steps>
-      <step><cmd>Bestimmen Sie den Bereitstellungszweck und dokumentieren Sie, dass es sich um ein source-based Linux deployment handelt.</cmd><info><p>Erwartetes Ergebnis: Die Betriebsnotiz nennt den Start aus einem Git checkout und hält fest, dass distribution-specific installers zurückgestellt sind.</p></info></step>
-      <step><cmd>Installieren oder prüfen Sie die Host-Voraussetzungen.</cmd><info><p>Erforderlich sind Git, Python 3.14+, pip, make, curl und eine Shell, die <codeph>source .venv/bin/activate</codeph> ausführen kann. Die Repository-Befehle nutzen die lokale virtuelle Umgebung und benötigen kein globales BPM package.</p></info></step>
-      <step><cmd>Legen Sie ein Arbeitsverzeichnis getrennt von production data und secrets an.</cmd><info><p>Bewahren Sie repository checkout, <codeph>.venv</codeph> und lokale SQLite data unter einem kontrollierten Pfad auf. Reale secrets gehören nicht in Dokumentationsbeispiele oder committed files.</p></info></step>
-      <step><cmd>Bestätigen Sie vor dem Fortfahren, was absichtlich nicht abgedeckt ist.</cmd><info><note type="warning">Dieser Runbook-Pfad liefert keinen packaged installer, native service, supported systemd unit, reverse proxy recipe, TLS termination, HA topology, managed secret store, backup automation oder production-hardening checklist.</note></info></step>
+      <step><cmd>Identifizieren Sie den Bereitstellungszweck und notieren Sie, dass es sich um eine quellbasierte Linux-Bereitstellung handelt.</cmd><info><p>Erwartetes Ergebnis: Der Betriebshinweis besagt, dass BPM von einem Git-Checkout gestartet wird und dass verteilungsspezifische Installationsprogramme zurückgestellt werden.</p></info></step>
+      <step><cmd>Hostvoraussetzungen installieren oder überprüfen.</cmd><info><p>Erforderliche Tools sind Git, Python 3.14+, pip, make, curl und eine Shell, die <codeph>source .venv/bin/activate</codeph> ausführen kann. Die Repository-Befehle nutzen die lokale virtuelle Umgebung und erfordern kein globales BPM-Paket.</p></info></step>
+      <step><cmd>Erstellen Sie ein Arbeitsverzeichnis, das von Produktionsdaten und Geheimnissen getrennt ist.</cmd><info><p>Halten Sie die Repository-Checkout-, <codeph>.venv</codeph>- und lokalen SQLite-Daten unter einem kontrollierten Pfad. Speichern Sie keine echten Geheimnisse in Dokumentationsbeispielen oder festgeschriebenen Dateien.</p></info></step>
+      <step><cmd>Bestätigen Sie, was absichtlich nicht abgedeckt ist, bevor Sie fortfahren.</cmd><info><note type="warning">Dieses Betriebsanleitung bietet kein gepacktes Installationsprogramm, keinen nativen Dienst, keine unterstützte Systemd-Einheit, kein Reverse-Proxy-Rezept, keine TLS-Beendigung, keine HA-Topologie, keinen verwalteten geheimen Speicher, keine Sicherungsautomatisierung oder keine Checkliste zur Produktionshärtung.</note></info></step>
     </steps>
-    <result><p>Host und Betriebsannahmen sind für einen unterstützten BPM 0.9.0 Workflow aus einem source checkout vorbereitet.</p></result>
-    <postreq><p>Fahren Sie mit dem Linux source checkout fort, bevor runtime variables konfiguriert werden.</p></postreq>
+    <result><p>Die Host- und Betriebsannahmen sind für einen unterstützten BPM 0.9.0-Quell-Checkout-Arbeitsablauf bereit.</p></result>
+    <postreq><p>Fahren Sie mit dem Thema zum Auschecken der Linux-Quelle fort, bevor Sie Laufzeitvariablen konfigurieren.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-linux-source-checkout"/>

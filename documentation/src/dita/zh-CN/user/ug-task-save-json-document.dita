@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>保存 JSON 文档</title>
-  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. Save a valid raw JSON document back to the canonical BPM profile.</shortdesc>
+  <shortdesc>将有效的原始 JSON 文档保存回规范的 BPM 配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. The JSON document has been validated or the remaining warnings are understood.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All Settings, Compare, or export workflows.</p></context>
+    <prereq><p>JSON 文档已被验证或其余警告已被理解。</p></prereq>
+    <context><p>保存通过 BPM 规范化写回原始文档。然后可以在引导、所有设置、比较或导出工作流程中打开保存的配置文件。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. Validate the JSON document.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. Choose Save only when the top-level policies object and policy values are correct.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. Wait for the saved status before leaving the route.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：保存 JSON 文档. Reopen the profile or export policies.json when you need handoff evidence.</cmd><info><note type="warning">警告：保存前请检查 JSON 语法、top-level policies 和策略验证错误。</note></info></step>
+      <step><cmd>验证 JSON 文档。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>仅当顶级策略对象和策略值正确时才选择“保存”。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>在离开路线之前等待保存的状态。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>当您需要移交证据时，重新打开配置文件或导出 policies.json。</cmd><info><note type="warning">保存原始 JSON 可以更改规范的 BPM 配置文件。保存之前验证语法和策略值。</note></info></step>
     </steps>
-    <result><p>JSON Editor 处于预期状态，并且该操作可在审查时解释。 The BPM profile stores the JSON changes in the canonical profile model.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请验证文档、返回 All Settings 或打开相关主题。 Recovery: if save fails, fix validation errors or return to a previous saved profile before editing again.</p></postreq>
+    <result><p>BPM 配置文件将 JSON 更改存储在规范配置文件模型中。</p></result>
+    <postreq><p>恢复：如果保存失败，请修复验证错误或在再次编辑之前返回到以前保存的配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

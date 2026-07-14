@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-linux-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>验证 Linux 源码部署</title>
-  <shortdesc>使用 health probes、web UI、logs 和窄范围 test command，确认从源码运行的 BPM instance 可用。</shortdesc>
+  <title>验证 Linux 源部署</title>
+  <shortdesc>使用运行状况探测、Web UI、日志和狭义测试命令来确认源运行的 BPM 实例可用。</shortdesc>
   <taskbody>
-    <prereq><p>BPM process 已从 repository checkout 运行，并使用目标 <codeph>BPM_DATABASE_URL</codeph>、host、port 和 documentation-site settings。</p></prereq>
-    <context><p>当前应用在 <codeph>/health</codeph> 提供 liveness，在 <codeph>/health/ready</codeph> 提供 readiness。这些 probes 只确认 running process 的响应；它们不能证明 production hardening、Firefox enforcement、backup readiness 或 HA behavior。</p></context>
+    <prereq><p>BPM 流程从存储库签出运行，具有预期的 <codeph>BPM_DATABASE_URL</codeph>、主机、端口和文档站点设置。</p></prereq>
+    <context><p>当前应用程序在 <codeph>/health</codeph> 处公开活动状态，在 <codeph>/health/ready</codeph> 处公开就绪状态。这些探测器仅确认正在运行的进程响应；它们不能证明生产强化、Firefox 强制执行、备份准备情况或 HA 行为。</p></context>
     <steps>
-      <step><cmd>从 Linux 主机检查 liveness 和 readiness。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>检查 Linux 主机的活跃度和准备情况。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>预期 responses 为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
-      <step><cmd>打开 product UI，并确认 Profile Library route 有响应。</cmd><info><p>使用 <codeph>http://127.0.0.1:8000/profiles</codeph>。该 route 应加载 BPM interface 或显示有意设计的 application state，而不是 server traceback。</p></info></step>
-      <step><cmd>检查 foreground application logs。</cmd><info><p>查看运行 <codeph>make dev</codeph> 或 <codeph>uvicorn app.main:app --reload --port 8000</codeph> 的终端。记录 startup errors、migration errors、port conflicts 和 documentation-site warnings，但不要把 secrets 复制到 tickets。</p></info></step>
-      <step><cmd>当代码或环境变更需要确认时，运行窄范围 source smoke suite。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>预期响应为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
+      <step><cmd>打开产品 UI 并确认库路由有响应。</cmd><info><p>使用 <codeph>http://127.0.0.1:8000/profiles</codeph>。该路由应加载 BPM 界面或显示有意的应用程序状态，而不是服务器回溯。</p></info></step>
+      <step><cmd>检查前台应用程序日志。</cmd><info><p>检查运行 <codeph>make dev</codeph> 或 <codeph>uvicorn app.main:app --reload --port 8000</codeph> 的终端。记录启动错误、迁移错误、端口冲突和文档站点警告，而无需将机密复制到票证中。</p></info></step>
+      <step><cmd>当代码或环境更改需要确认时运行窄源烟雾套件。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make test-fast
-]]></codeblock><note type="warning">通过 source smoke 并不认证 production readiness、reverse proxy behavior、managed backups 或 Firefox runtime policy enforcement。</note></info></step>
+]]></codeblock><note type="warning">传递的源烟雾并不能证明生产准备情况、反向代理行为、托管备份或 Firefox 运行时策略实施。</note></info></step>
     </steps>
-    <result><p>管理员获得 evidence，证明 Linux source deployment 可以启动、响应 health/readiness probes、服务 UI route，并且没有立即可见的 foreground-log blockers。</p></result>
-    <postreq><p>如果验证失败，请把 command、environment variables 名称、probe responses 和 relevant log lines 放在一起用于 troubleshooting。不要把此 runbook 扩展成已延后的 installer 或 production-topology instructions。</p></postreq>
+    <result><p>管理员有证据表明 Linux 源部署已启动、应答运行状况/就绪探测、为 UI 路由提供服务，并且没有立即的前台日志阻止程序。</p></result>
+    <postreq><p>如果验证失败，请将命令、环境变量名称、探测响应和相关日志行放在一起以进行故障排除。请勿将此操作手册扩展为延迟安装程序或生产拓扑说明。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-configure-linux-source-runtime"/>

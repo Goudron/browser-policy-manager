@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-schema-dependent-guided-controls" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Controles Guided dependientes del esquema</title>
-  <shortdesc>Algunos controles Guided aparecen solo cuando el esquema de Firefox elegido los admite, incluidas políticas AI &amp; smart features exclusivas de Release.</shortdesc>
+  <title>Controles guiados dependientes del esquema</title>
+  <shortdesc>Algunos controles guiados aparecen solo cuando el esquema de Firefox seleccionado los admite, incluidas las políticas de funciones inteligentes AI &amp; de solo versión.</shortdesc>
   <refbody>
-    <section id="a-release-controls"><title>Release</title><p>En Firefox Release 152, el paso 5 puede mostrar políticas admitidas para AI &amp; smart features, búsqueda visual y funciones inteligentes si existen en el esquema.</p></section>
-    <section id="a-esr-unavailable"><title>ESR 140.12</title><p>En ESR 140.12, los controles AI/smart-feature no admitidos están ausentes o no disponibles. No los añada manualmente como si ESR los admitiera.</p></section>
-    <section id="a-no-documentation-ai"><title>Documentation AI boundary</title><p>Esta referencia describe políticas existentes del producto Firefox. No añade RAG, embeddings, búsqueda generativa ni respuestas generativas al portal de documentación 0.9.0.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Si falta un control, confirme el canal de esquema, revise el límite de soporte en All Settings y registre el estado no admitido durante la revisión.</p></section>
+    <section id="a-release-controls"><title>Controles compatibles con la versión</title><p>En Firefox versión 152, el paso 5 puede mostrar las funciones inteligentes AI &amp; compatibles, la búsqueda visual y las políticas de funciones del navegador inteligente cuando existen en el esquema.</p></section>
+    <section id="a-esr-unavailable"><title>Controles ESR no disponibles</title><p>En ESR 140.12, los controles de políticas AI del navegador no compatibles están ausentes o no están disponibles. No los fuerces a entrar en Editor guiado como si fueran compatibles.</p></section>
+    <section id="a-no-documentation-ai"><title>Sin documentación funcionalidad AI</title><p>Esta referencia explica únicamente los controles de políticas del navegador Firefox existentes; no agrega la funcionalidad AI al portal de documentación 0.9.0, incluyendo RAG, incrustaciones, búsqueda generativa o respuestas generativas.</p></section>
+    <section id="a-recovery"><title>Recuperación</title><p>Si falta un control, confirme el canal del esquema, verifique Todos los ajustes para conocer el límite de soporte sin procesar y registre el estado no compatible durante la revisión.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

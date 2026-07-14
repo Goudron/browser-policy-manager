@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-export-firefox-policies-json" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>通过 API 导出 Firefox policies.json</title>
-  <shortdesc>Render one BPM profile as the Firefox Enterprise deployment document with optional download and pretty-print parameters.</shortdesc>
+  <title>通过 API 导出规范 Firefox policies.json</title>
+  <shortdesc>将一个 BPM 配置文件呈现为 Firefox Enterprise 部署文档，并具有可选的下载和漂亮打印参数。</shortdesc>
   <taskbody>
-    <prereq><p>Store the BPM profile ID returned by create or import. If the profile is archived, decide explicitly whether the integration is allowed to export it with <codeph>include_deleted=true</codeph>.</p></prereq>
-    <context><p>This task covers <codeph>API-FF-002</codeph>. Export reads BPM's normalized <codeph>flags</codeph> and returns canonical Firefox JSON with a top-level <codeph>policies</codeph> object. BPM profile metadata and opaque <codeph>compliance</codeph> metadata are not exported into the Firefox deployment document.</p></context>
+    <prereq><p>存储创建或导入返回的 BPM 配置文件 ID。如果配置文件已存档，请明确决定是否允许集成使用 <codeph>include_deleted=true</codeph> 导出它。</p></prereq>
+    <context><p>此任务涵盖 <codeph>API-FF-002</codeph>。 导出 读取 BPM 的规范化 <codeph>flags</codeph> 并返回带有顶级 <codeph>policies</codeph> 对象的规范 Firefox JSON。 BPM 配置文件元数据和不透明的 <codeph>compliance</codeph> 元数据不会导出到 Firefox 部署文档中。</p></context>
     <steps>
-      <step><cmd>Export the active profile as canonical Firefox JSON.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph>. Response example: <codeph>200 application/json</codeph> with JSON <codeph>{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}</codeph>.</p></info></step>
-      <step><cmd>Add download mode when the caller needs an attachment filename.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1</codeph>. Response example: <codeph>200 application/json</codeph> plus <codeph>Content-Disposition: attachment; filename="profile-42-policies.json"</codeph>. The JSON body is the same deployment document.</p></info></step>
-      <step><cmd>Choose formatting parameters deliberately.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> selects indentation of two spaces when <codeph>indent</codeph> is omitted. Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?indent=0</codeph> uses the explicit indentation parameter. Error example: <codeph>422</codeph> for invalid constrained query values.</p></info></step>
-      <step><cmd>Export an archived profile only when the external workflow has a review reason.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?include_deleted=true&amp;download=1&amp;pretty=1</codeph>. Response example: <codeph>200 application/json</codeph>. Error examples: <codeph>404</codeph> when a missing or archived profile is not visible; <codeph>422</codeph> for invalid path or query input.</p></info></step>
-      <step><cmd>Validate the exported document before handing it to another system.</cmd><info><p>Request example: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with JSON <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>. Response example: <codeph>200 {"ok":true,"profile":"release-152"}</codeph>. Validation confirms schema shape, not Firefox runtime deployment success.</p></info></step>
-      <step><cmd>Record the exact exported artifact externally.</cmd><info><note type="warning">Export has no ETag, precondition header, bulk endpoint, or transaction wrapper. Record the profile ID, revision observed before export, schema channel, query parameters, exported document hash, and downstream handoff decision outside BPM.</note></info></step>
+      <step><cmd>将活动配置文件导出为规范的 Firefox JSON。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph>。响应示例：带有 JSON <codeph>{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}</codeph> 的 <codeph>200 application/json</codeph>。</p></info></step>
+      <step><cmd>当调用者需要附件文件名时添加下载模式。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1</codeph>。响应示例：<codeph>200 application/json</codeph> 加 <codeph>Content-Disposition: attachment; filename="profile-42-policies.json"</codeph>。 JSON 主体是相同的部署文档。</p></info></step>
+      <step><cmd>有意选择格式化参数。</cmd><info><p>请求示例：当省略 <codeph>indent</codeph> 时，<codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> 选择两个空格的缩进。请求示例：<codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?indent=0</codeph> 使用显式缩进参数。错误示例：<codeph>422</codeph> 表示无效的约束查询值。</p></info></step>
+      <step><cmd>仅当外部工作流程有审核原因时才导出存档的配置文件。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?include_deleted=true&amp;download=1&amp;pretty=1</codeph>。响应示例：<codeph>200 application/json</codeph>。错误示例：<codeph>404</codeph> 当丢失或存档的配置文件不可见时； <codeph>422</codeph> 表示路径或查询输入无效。</p></info></step>
+      <step><cmd>在将导出的文档交给另一个系统之前对其进行验证。</cmd><info><p>请求示例：带有 JSON <codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-152"}</codeph>。验证确认架构形状，而不是 Firefox 运行时部署是否成功。</p></info></step>
+      <step><cmd>在外部记录准确导出的工件。</cmd><info><note type="warning">导出没有 ETag、前提条件标头、批量端点或事务包装器。记录配置文件 ID、导出前观察到的修订、架构通道、查询参数、导出的文档哈希以及 BPM 之外的下游切换决策。</note></info></step>
     </steps>
-    <result><p>The integration has a canonical Firefox <codeph>policies.json</codeph> artifact that excludes BPM-only metadata and can be supplied to deployment tooling.</p></result>
-    <postreq><p>If validation fails or the profile revision changed between read and export, stop the handoff and refresh the profile state.</p></postreq>
+    <result><p>该集成具有规范的 Firefox <codeph>policies.json</codeph> 工件，该工件排除仅限 BPM 的元数据，并且可以提供给部署工具。</p></result>
+    <postreq><p>如果验证失败或配置文件修订版在读取和导出之间发生更改，请停止切换并刷新配置文件状态。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-import-firefox-policies-json"/>

@@ -7,7 +7,7 @@
     <prereq><p>A profile is open and contains at least one complex policy family or managed preference.</p></prereq>
     <context><p>Complex policies are safest when reviewed by family, source, schema channel, and exported boundary shape.</p></context>
     <steps>
-      <step><cmd>Open All Settings and filter to the affected family.</cmd><info><p>Expected result: related policies, preferences, and source labels are visible together.</p></info></step>
+      <step><cmd>Open All settings and filter to the affected family.</cmd><info><p>Expected result: related policies, preferences, and source labels are visible together.</p></info></step>
       <step><cmd>Check the Release/ESR badge for every policy in the family.</cmd><info><note type="warning">A Release-only policy must not be exported for an ESR-targeted profile.</note></info></step>
       <step><cmd>Inspect nested object and array values, including unknown preserved fields.</cmd><info><p>Expected result: raw fallback values are intentionally kept or removed before save.</p></info></step>
       <step><cmd>Compare preset, CIS, imported, manual, and raw sources.</cmd><info><p>Expected result: conflicts are resolved deliberately rather than hidden by later edits.</p></info></step>

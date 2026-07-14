@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-03-harness-20260714",
+  "backlog_item": "BPM091-M11-03",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "validation_started_at": "2026-07-14T09:34:22+03:00",
+  "validation_completed_at": "2026-07-14T10:01:52+03:00",
+  "contracts": {
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json"
+  },
+  "implementation": {
+    "runner": "documentation/tools/live_source_install_harness.py",
+    "commands": ["plan", "self-test", "run", "prepare-mint", "inventory"],
+    "privileged_transport": "bounded pkexec invocation with graphical system authentication",
+    "password_requested_or_recorded": false,
+    "attempt_evidence_rule": "Each mutating attempt uses <run-id>/<target-id>/attempt-<nn> and refuses to reuse an existing evidence directory or container name.",
+    "deletion_commands_exposed": false,
+    "container_only_setup_recorded_separately": true,
+    "documented_command_source": "English DITA codeblocks, with only the approved BPM_REF placeholder substituted at execution time."
+  },
+  "plan_coverage": [
+    {
+      "target_id": "ubuntu-26-04",
+      "source_sha256": "20ac9548464bb2dbefd28f923dd953f6251375d2b60a7d5751366a56ed44180c",
+      "documented_command_count": 35
+    },
+    {
+      "target_id": "debian-13-5",
+      "source_sha256": "291df352620bab300d71fb41933c59429daf3b0c643cd5654f0f4ffb9a33bffa",
+      "documented_command_count": 46
+    },
+    {
+      "target_id": "fedora-44",
+      "source_sha256": "fed6829a8382aeb5c928e91eb30c7fd8a1c47f9948f57abee2e35771dfea104a",
+      "documented_command_count": 34
+    },
+    {
+      "target_id": "linux-mint-22-3",
+      "source_sha256": "c3c9f4896eb55c61b16ac4be11edb7ed6605c327efa267061d8a9e367ef2acfd",
+      "documented_command_count": 46
+    },
+    {
+      "target_id": "manjaro-stable-2026-06-26",
+      "source_sha256": "08c04011fdae0ad306679ad321938af22cde8d0a1abee262dabd6d376aeea825",
+      "documented_command_count": 37
+    }
+  ],
+  "isolation": {
+    "platform": "linux/amd64",
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "published_ports": "none",
+    "host_bind_mounts": "none",
+    "docker_socket_mount": "none",
+    "privileged": false,
+    "cap_add": "none"
+  },
+  "ubuntu_self_test": {
+    "image_ref": "docker.io/library/ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+    "linux_amd64_manifest_digest": "sha256:c6c0067e0e45b7a826eaebb193cef957be28045380963a9b1eeb2a5d3c70a1b9",
+    "attempts": [
+      {
+        "attempt": 1,
+        "container_id": "199a2081f6a90e7cf6f118a05d83a9e9590f766b689d5ff3ccf07dd1eb45fbcf",
+        "exit_code": 137,
+        "result": "retained-harness-lifecycle-defect",
+        "finding": "The initial sleep-infinity PID 1 did not handle SIGTERM and exposed the deprecated docker stop --time flag; the container and transcript were retained."
+      },
+      {
+        "attempt": 2,
+        "container_id": "d4385396d9ef6c0f4fe10a3d1b9d3863599fb7777e5c72bfc2f0b821162bcccc",
+        "exit_code": 0,
+        "result": "pass",
+        "identity": {"ID": "ubuntu", "VERSION_ID": "26.04"},
+        "host_command_events": 29,
+        "event_records": 58
+      }
+    ],
+    "retry_reused_installed_state": false
+  },
+  "mint_image_construction": {
+    "result": "pass",
+    "official_iso": "https://mirrors.edge.kernel.org/linuxmint/stable/22.3/linuxmint-22.3-cinnamon-64bit.iso",
+    "iso_sha256": "a081ab202cfda17f6924128dbd2de8b63518ac0531bcfe3f1a1b88097c459bd4",
+    "signed_checksum_result": "good-signature-and-pinned-checksum-match",
+    "signing_key_fingerprint": "27DEB15644C6B3CF3BD7D291300F846BA25BAE09",
+    "rootfs_identity": {"ID": "linuxmint", "VERSION_ID": "22.3", "VERSION_CODENAME": "zena"},
+    "rootfs_apparent_bytes": 7320582583,
+    "numeric_owner_tar_sha256": "0b7f4b02f469f00bd1d4cfa9f662d7c80c194672eb699b156d4a90df42e52fbf",
+    "image_id": "sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+    "image_layer_digest": "sha256:0b7f4b02f469f00bd1d4cfa9f662d7c80c194672eb699b156d4a90df42e52fbf",
+    "image_inspect_size_bytes": 3118921329,
+    "helper_container_id": "d5a015d9fe41058223c6adf23b9bbe2b13b9966bcc6b9588ab2b2848d463bd02",
+    "helper_exit_code": 0,
+    "helper_retained": true,
+    "transient_iso_squashfs_and_unpacked_rootfs_released": true,
+    "host_command_events": 120,
+    "event_records": 240
+  },
+  "mint_identity_self_test": {
+    "result": "pass",
+    "container_id": "be7cfa08853c649f55f1b0e6685a43f58ac79f92d4e3b0dd2aea93344e8c3075",
+    "container_exit_code": 0,
+    "image_id": "sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+    "identity": {"ID": "linuxmint", "VERSION_ID": "22.3", "VERSION_CODENAME": "zena"},
+    "host_command_events": 32,
+    "event_records": 64
+  },
+  "local_transcripts": [
+    "documentation/build/live-source-install/0.9.1/m11-03-harness-self-test-20260714",
+    "documentation/build/live-source-install/0.9.1/m11-03-mint-image-20260714",
+    "documentation/build/live-source-install/0.9.1/m11-03-mint-self-test-20260714"
+  ],
+  "verification": {
+    "focused_unit_and_contract": "pass",
+    "full_documentation_contract": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  },
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-03-harness-20260714/retained-inventory.json",
+  "result": "The five-target fresh-container harness is accepted. Ubuntu lifecycle and faithful signed-ISO-derived Mint identity self-tests pass, every attempt is stopped and retained, retry evidence is isolated, and no Docker resource was removed."
+}

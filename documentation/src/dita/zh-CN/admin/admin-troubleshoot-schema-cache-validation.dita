@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-schema-cache-validation" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>诊断: Troubleshoot schema cache and API validation errors</title>
-  <shortdesc>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Diagnose unavailable schema cache, unknown schema channel, and Firefox policies validation failures without patching generated schema artifacts.</shortdesc>
+  <title>排查架构缓存和 API 验证错误</title>
+  <shortdesc>诊断不可用的模式缓存、未知的模式通道和 Firefox 策略验证失败，而无需修补生成的模式工件。</shortdesc>
   <taskbody>
-    <prereq><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Use this procedure when <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>, <codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph>, or user-facing validation returns <codeph>400</codeph>, <codeph>404</codeph>, <codeph>422</codeph>, or <codeph>503</codeph>; a non-object document can return <codeph>200 ok=false</codeph> with <codeph>Expected object with policy mappings</codeph>.</p></prereq>
-    <context><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 BPM validation depends on maintained schema channels and local schema/cache configuration. The diagnostic records whether the issue is request shape, unknown profile, invalid Firefox policy data, or unavailable schema cache.</p></context>
+    <prereq><p>当 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>、<codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph> 或面向用户的验证返回 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph> 时使用此过程；非对象文档可以返回 <codeph>200 ok=false</codeph> 和 <codeph>Expected object with policy mappings</codeph>。</p></prereq>
+    <context><p>BPM 验证取决于维护的模式通道和本地模式/缓存配置。诊断记录问题是否是请求形状、未知配置文件、无效的 Firefox 策略数据或不可用的架构缓存。</p></context>
     <steps>
-      <step><cmd>诊断 1: Record the exact validation request and response.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Store sanitized request body hash, schema channel, HTTP status, <codeph>detail</codeph>, <codeph>message</codeph>, <codeph>error</codeph>, and <codeph>issues</codeph>. Keep the candidate <codeph>policies.json</codeph> outside logs if it contains customer values.</p></info></step>
-  <step><cmd>诊断 2: Classify request-shape failures first.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 A non-object <codeph>document</codeph> or missing <codeph>document.policies</codeph> is operator input, not a schema-cache defect; current BPM can report this as <codeph>200 ok=false</codeph>. Focused rerun: <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> with <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph>.</p></info></step>
-  <step><cmd>诊断 3: Classify schema-channel and cache failures.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 A profile such as <codeph>beta-999</codeph> can return <codeph>404</codeph>; an unavailable registered schema can return <codeph>503</codeph>. Check <codeph>BPM_SCHEMA_BASE_URL</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, and <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph> before any broader rebuild.</p></info></step>
-  <step><cmd>诊断 4: Use maintained refresh and validation checks.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 Focused rerun: <codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_openapi_drift.py</codeph> for API documentation drift, or product schema tests when the API behavior changed. Do not hand-edit <codeph>app/schemas/cache</codeph> or generated Firefox skeletons.</p></info></step>
-  <step><cmd>诊断 5: Stop unsafe recovery and preserve evidence.</cmd><info><p>此流程保留 evidence，保护用户数据，并区分 operator action 与 product defect。 If the same valid request changes status across runs, preserve response bodies, source revision, cache path, and environment variables. </p><note type="warning">Do not edit generated schema artifacts or database rows as routine recovery; separate product defects from operator payload errors.</note></info></step>
+      <step><cmd>记录准确的验证请求和响应。</cmd><info><p>存储清理后的请求正文哈希、模式通道、HTTP 状态、<codeph>detail</codeph>、<codeph>message</codeph>、<codeph>error</codeph> 和 <codeph>issues</codeph>。如果候选 <codeph>policies.json</codeph> 包含客户值，请将其保留在日志之外。</p></info></step>
+  <step><cmd>首先对请求形状故障进行分类。</cmd><info><p>非对象 <codeph>document</codeph> 或缺失 <codeph>document.policies</codeph> 是操作员输入，而不是模式缓存缺陷；当前的 BPM 可以将其报告为 <codeph>200 ok=false</codeph>。重点重播： <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> 与 <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph>。</p></info></step>
+  <step><cmd>对模式通道和缓存故障进行分类。</cmd><info><p><codeph>beta-999</codeph> 等配置文件可以返回 <codeph>404</codeph>；不可用的注册模式可以返回 <codeph>503</codeph>。在进行更广泛的重建之前，请检查 <codeph>BPM_SCHEMA_BASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph>。</p></info></step>
+  <step><cmd>使用维护的刷新和验证检查。</cmd><info><p>重点重新运行：<codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_openapi_drift.py</codeph> 用于 API 文档漂移或 API 行为更改时的产品架构测试。不要手动编辑 <codeph>app/schemas/cache</codeph> 或生成的 Firefox 框架。</p></info></step>
+  <step><cmd>停止不安全的恢复并保存证据。</cmd><info><p>如果相同的有效请求在运行期间更改状态，则保留响应正文、源版本、缓存路径和环境变量。</p><note type="warning">不要将生成的模式工件或数据库行作为例行恢复进行编辑；将产品缺陷与操作员有效载荷错误分开。</note></info></step>
     </steps>
-    <result><p>操作员获得分类诊断，保护 user data，并知道下一个 smallest rerun。 The operator has a classified validation failure with a smallest rerun and no hidden schema mutation.</p></result>
-    <postreq><p>修复后返回相关 Administrator/DevOps workflow，只重跑受影响的 checks。 After validation succeeds, return to validate-before-apply or import-review-export workflows.</p></postreq>
+    <result><p>运算符具有分类验证失败，重新运行次数最少且没有隐藏模式突变。</p></result>
+    <postreq><p>验证成功后，返回到“应用前验证”或“导入-审核-导出”工作流程。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-validate-firefox-policies-json"/>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-language-detection-fallback" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Определение языка и fallback</title>
-  <shortdesc>Поймите, как BPM выбирает поддерживаемую локаль и что происходит, если язык браузера не поддерживается.</shortdesc>
+  <title>Обнаружение языка и резервный вариант</title>
+  <shortdesc>Узнайте, как BPM выбирает поддерживаемый языковой стандарт и что происходит, когда язык браузера не поддерживается.</shortdesc>
   <conbody>
-    <section id="a-supported-locales"><title>Supported locales</title><p>BPM поддерживает en, ru, de, zh-CN, fr и es-ES как полноценные локали интерфейса.</p></section>
-    <section id="a-system-language"><title>System language</title><p>Системный язык следует языку браузера, когда он совпадает с поддерживаемой локалью BPM.</p></section>
-    <section id="a-fallback"><title>Fallback</title><p>Если язык браузера не поддерживается, BPM использует поддерживаемую локаль вместо частично переведённых строк.</p></section>
-    <section id="a-content-parity"><title>Content parity</title><p>Документация продукта и скриншоты должны оставаться равноценными по содержанию во всех шести локалях, даже если UI-подписи различаются.</p></section>
+    <section id="a-supported-locales"><title>Поддерживаемые локали</title><p>BPM поддерживает en, ru, de, zh-CN, fr и es-ES как первоклассные локали интерфейса.</p></section>
+    <section id="a-system-language"><title>Системный язык</title><p>Системный язык соответствует языку браузера, если он соответствует поддерживаемому языковому стандарту BPM.</p></section>
+    <section id="a-fallback"><title>Резервный вариант</title><p>Если язык браузера не поддерживается, BPM возвращается к поддерживаемому языковому стандарту, а не отображает частичные строки.</p></section>
+    <section id="a-content-parity"><title>Четность контента</title><p>Документация по продукту и снимки экрана должны оставаться эквивалентными по содержанию во всех шести языковых стандартах, даже если метки UI различаются в зависимости от языка.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-change-interface-language"/>

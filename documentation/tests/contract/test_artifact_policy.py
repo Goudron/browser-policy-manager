@@ -26,7 +26,7 @@ def test_artifact_policy_separates_committed_generated_built_and_shipped_materia
         (DOCUMENTATION_ROOT / "config/artifact-policy.json").read_text(encoding="utf-8")
     )
 
-    assert policy["target_bpm_version"] == "0.9.0"
+    assert policy["target_bpm_version"] == "0.9.1"
     assert policy["commit_policy"] == {
         "reviewed_sources": "commit",
         "localized_screenshots": "commit-after-review",
@@ -41,8 +41,8 @@ def test_artifact_policy_separates_committed_generated_built_and_shipped_materia
         "final manual QA and defect disposition for the installed documentation flow",
     ]
     assert policy["current_runtime_contract"]["runtime_source"] == (
-        "make docs-install-dev may promote a local build for maintainer dev review; "
-        "release still requires verified package extraction"
+        "make dev refreshes the ignored runtime copy through make docs-install-dev "
+        "for maintainer dev review; release still requires verified package extraction"
     )
 
 
@@ -50,8 +50,8 @@ def test_generated_build_and_distribution_paths_are_ignored_but_sources_are_not(
     for ignored in (
         "src/generated/probe.dita",
         "build/site/en/index.html",
-        "dist/bpm-documentation-0.9.0.tar.gz",
-        "dist/bpm-documentation-0.9.0.tar.gz.sha256",
+        "dist/bpm-documentation-0.9.1.tar.gz",
+        "dist/bpm-documentation-0.9.1.tar.gz.sha256",
     ):
         assert _ignored(f"documentation/{ignored}"), ignored
     assert _ignored("app/documentation/site/")

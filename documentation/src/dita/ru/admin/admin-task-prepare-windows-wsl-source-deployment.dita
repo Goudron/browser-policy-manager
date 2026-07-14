@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>Подготовить Windows 10/11 для развёртывания из исходников через WSL</title>
-  <shortdesc>Включите WSL, выберите допущение по поддерживаемому Linux-дистрибутиву и подтвердите, что BPM будет работать внутри Linux, а не как native Windows service.</shortdesc>
+  <title>Подготовьте Windows 10/11 к развертыванию исходного кода WSL</title>
+  <shortdesc>Включите WSL, выберите поддерживаемый дистрибутив Linux и подтвердите, что BPM будет работать внутри Linux, а не как собственная служба Windows.</shortdesc>
   <taskbody>
-    <prereq><p>Используйте Windows 10 или Windows 11 с правами на включение WSL 2, установку Linux distribution, например Ubuntu LTS, и запуск команд в PowerShell и WSL shell.</p></prereq>
-    <context><p>Этот ранбук описывает BPM 0.9.0 source deployment через WSL. Поддерживаемый application process остаётся Linux source workflow внутри WSL; native Windows installers, Windows services, MSI packages, scheduled tasks, IIS hosting и production Windows service management в этом релизе не поставляются.</p></context>
+    <prereq><p>Используйте Windows 10 или Windows 11 с разрешением на включение WSL 2, установите дистрибутив Linux, например Ubuntu LTS, и запускайте команды как в PowerShell, так и в оболочке WSL.</p></prereq>
+    <context><p>В этом модуле руководство описано развертывание исходного кода BPM 0.9.0 через WSL. Поддерживаемый процесс приложения по-прежнему является рабочим процессом исходного кода Linux внутри WSL; В этом выпуске не представлены собственные установщики Windows, службы Windows, пакеты MSI, запланированные задачи, хостинг IIS и средства управления производственными службами Windows.</p></context>
     <steps>
-      <step><cmd>Проверьте доступность WSL из PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+      <step><cmd>Подтвердите доступность WSL от PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 wsl --status
 wsl --list --verbose
-]]></codeblock><p>Ожидаемый результат: WSL установлен, WSL 2 доступен, а выбранный Linux distribution отображается в списке.</p></info></step>
-      <step><cmd>Установите WSL и утверждённый Linux distribution, если они отсутствуют.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+]]></codeblock><p>Ожидаемый результат: WSL установлен, WSL 2 доступен, выбранный дистрибутив Linux виден.</p></info></step>
+      <step><cmd>Установите WSL и одобренный дистрибутив Linux, если они отсутствуют.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 wsl --install
 wsl --install -d Ubuntu
-]]></codeblock><p>Используйте имя distribution, утверждённое вашей организацией. Перезагрузите Windows, если это потребуется, затем создайте Linux user при первом запуске distribution.</p></info></step>
-      <step><cmd>Зафиксируйте distribution и filesystem boundary.</cmd><info><p>Размещайте BPM в Linux filesystem WSL, например <codeph>/home/&lt;linux-user&gt;/browser-policy-manager</codeph>. Не запускайте checkout из <codeph>/mnt/c</codeph>: Windows filesystem semantics и antivirus scanning могут сделать Python environments, file watching и permissions нестабильными.</p></info></step>
-      <step><cmd>Подтвердите, чего этот Windows-путь пока не поддерживает.</cmd><info><note type="warning">Это не native Windows installation. Ранбук не предоставляет MSI/EXE packaging, Windows service, service account model, Event Viewer integration, Windows firewall policy, reverse proxy/TLS recipe, HA topology, managed secrets, backup automation или production hardening.</note></info></step>
+]]></codeblock><p>Используйте имя распространения, одобренное вашей организацией. Перезагрузитесь, если Windows запросит это, затем создайте пользователя Linux при первом запуске дистрибутива.</p></info></step>
+      <step><cmd>Запишите границу дистрибутива и файловой системы.</cmd><info><p>Поместите BPM в файловую систему WSL Linux, например <codeph>/home/&lt;linux-user&gt;/browser-policy-manager</codeph>. Не запускайте проверку из <codeph>/mnt/c</codeph>, поскольку семантика файловой системы Windows и антивирусное сканирование могут сделать среду Python, просмотр файлов и разрешения ненадежными.</p></info></step>
+      <step><cmd>Подтвердите, что этот путь Windows еще не поддерживает.</cmd><info><note type="warning">Это не собственная установка Windows. руководство не предоставляет упаковку MSI/EXE, службу Windows, модель учетной записи службы, интеграцию средства просмотра событий, политику брандмауэра Windows, обратный прокси-сервер/рецепт TLS, топологию HA, управляемые секреты, автоматизацию резервного копирования или усиление безопасности производства.</note></info></step>
     </steps>
-    <result><p>Windows и WSL готовы к Linux-based BPM source deployment с явными platform и filesystem boundaries.</p></result>
-    <postreq><p>Продолжите, открыв WSL distribution shell и настроив source checkout в Linux home directory.</p></postreq>
+    <result><p>Windows и WSL готовы к развертыванию исходного кода BPM на базе Linux с четкими границами платформы и файловой системы.</p></result>
+    <postreq><p>Продолжайте, открыв оболочку дистрибутива WSL и настроив получение исходного кода в домашнем каталоге Linux.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-windows-wsl-source-checkout"/>

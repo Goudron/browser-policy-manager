@@ -5,13 +5,22 @@
   <keydef keys="guide.user-guide" />
   <keydef keys="guide.firefox-policy-guide" />
   <keydef keys="guide.cis-settings-guide" />
-  <keydef keys="guide.api-integration-guide" />
   <keydef keys="guide.administrator-guide" />
-  <keydef keys="topic.api-concept-administrator-integration-landing" href="../api/api-concept-administrator-integration-landing.dita" />
+  <keydef keys="screenshot.library-overview" href="../../../../assets/screenshots/zh-CN/ug-library-overview-desktop-light.png" format="png" />
+  <keydef keys="screenshot.guided-editor-overview" href="../../../../assets/screenshots/zh-CN/ug-guided-editor-overview-desktop-light.png" format="png" />
+  <keydef keys="screenshot.guided-settings-search" href="../../../../assets/screenshots/zh-CN/ug-guided-settings-search-desktop-light.png" format="png" />
+  <keydef keys="screenshot.all-settings-review" href="../../../../assets/screenshots/zh-CN/ug-all-settings-review-narrow-light.png" format="png" />
+  <keydef keys="screenshot.json-editor" href="../../../../assets/screenshots/zh-CN/ug-json-editor-desktop-dark.png" format="png" />
+  <keydef keys="screenshot.compare-profiles" href="../../../../assets/screenshots/zh-CN/ug-compare-profiles-desktop-light.png" format="png" />
   <keydef keys="topic.admin-task-prepare-linux-source-deployment" href="../admin/admin-task-prepare-linux-source-deployment.dita" />
   <keydef keys="topic.admin-task-set-up-linux-source-checkout" href="../admin/admin-task-set-up-linux-source-checkout.dita" />
   <keydef keys="topic.admin-task-configure-linux-source-runtime" href="../admin/admin-task-configure-linux-source-runtime.dita" />
   <keydef keys="topic.admin-task-verify-linux-source-deployment" href="../admin/admin-task-verify-linux-source-deployment.dita" />
+  <keydef keys="topic.admin-task-install-ubuntu-26-04-source" href="../admin/admin-task-install-ubuntu-26-04-source.dita" />
+  <keydef keys="topic.admin-task-install-debian-13-source" href="../admin/admin-task-install-debian-13-source.dita" />
+  <keydef keys="topic.admin-task-install-fedora-44-source" href="../admin/admin-task-install-fedora-44-source.dita" />
+  <keydef keys="topic.admin-task-install-linux-mint-22-3-source" href="../admin/admin-task-install-linux-mint-22-3-source.dita" />
+  <keydef keys="topic.admin-task-install-manjaro-stable-source" href="../admin/admin-task-install-manjaro-stable-source.dita" />
   <keydef keys="topic.admin-task-prepare-windows-wsl-source-deployment" href="../admin/admin-task-prepare-windows-wsl-source-deployment.dita" />
   <keydef keys="topic.admin-task-set-up-windows-wsl-source-checkout" href="../admin/admin-task-set-up-windows-wsl-source-checkout.dita" />
   <keydef keys="topic.admin-task-configure-windows-wsl-network-runtime" href="../admin/admin-task-configure-windows-wsl-network-runtime.dita" />

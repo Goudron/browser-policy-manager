@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "validation_id": "bpm-0.9.1-linux-source-install-validation",
+  "backlog_item": "BPM091-M6-06",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted-with-release-blocker",
+  "validation_date": "2026-07-11",
+  "command_contract": "documentation/config/linux-source-install-command-contract-0.9.1.json",
+  "method": {
+    "hands_on_target": "ubuntu-26-04",
+    "simulation_targets": ["debian-13-5", "fedora-44", "linux-mint-22-3", "manjaro-stable-2026-06-26"],
+    "static_checks": ["DITA command extraction", "bash -n per English command block", "required-stage ordering", "six-locale conref resolution", "forbidden production-claim scan", "official release/package evidence comparison"],
+    "isolation_probe": {
+      "docker": "unavailable",
+      "podman": "unavailable",
+      "distrobox": "unavailable",
+      "proot": "unavailable",
+      "user_namespace": "unavailable: unshare could not write /proc/self/uid_map",
+      "decision": "Do not install a new privileged container runtime or modify the maintainer host merely to strengthen this documentation review."
+    }
+  },
+  "shared_evidence": {
+    "python_source_url": "https://www.python.org/ftp/python/3.14.6/Python-3.14.6.tar.xz",
+    "documented_sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+    "observed_sha256_result": "pass",
+    "observed_archive_result": "tar archive listed Python-3.14.6/ entries",
+    "documentation_validation": "make docs-validate passed for en, ru, de, zh-CN, fr, and es-ES",
+    "documentation_build": "make docs-build passed and published documentation/build/site",
+    "focused_contracts": "282 Administrator/source-install contracts passed during BPM091-M6-05; BPM091-M6-06 adds syntax, evidence, and blocker checks."
+  },
+  "targets": [
+    {
+      "target_id": "ubuntu-26-04",
+      "release": "Ubuntu 26.04 LTS (Resolute Raccoon)",
+      "shell": "bash",
+      "evidence_type": ["hands_on_command_transcript", "documented_simulation_evidence"],
+      "execution_scope": "Current maintainer host, existing source checkout and virtual environment, disposable SQLite database /tmp/bpm-m6-06-ubuntu.db, localhost port 8791.",
+      "observed": {
+        "release_assertion": "pass: ID=ubuntu VERSION_ID=26.04",
+        "packages": ["build-essential 12.12ubuntu2.26.04.1", "ca-certificates 20260601~26.04.1", "curl 8.18.0-1ubuntu2.2", "git 1:2.53.0-1ubuntu1", "make 4.4.1-3", "python3.14 3.14.4-1ubuntu0.1", "python3.14-dev 3.14.4-1ubuntu0.1", "python3.14-venv 3.14.4-1ubuntu0.1"],
+        "python": "pass: Python 3.14.4",
+        "editable_install": "pass: browser-policy-manager 0.9.1 from the repository virtual environment",
+        "migration": "pass: empty disposable SQLite database upgraded through 20260620_upgrade_profiles_to_firefox152",
+        "documentation": "pass: six-locale validation and build",
+        "startup_log": "pass: application startup complete on http://127.0.0.1:8791",
+        "health": "pass: 200 {\"status\":\"ok\"}",
+        "readiness": "pass: 200 {\"status\":\"ready\",\"ready\":true}",
+        "profiles": "pass: GET /profiles returned 200",
+        "stop": "pass: Ctrl+C produced application shutdown complete; subsequent health request failed to connect"
+      },
+      "skipped": [
+        "apt-get update/install was not rerun because required packages were already installed on the maintainer host; dpkg-query recorded exact installed versions.",
+        "git clone and editable install were not repeated in a clean checkout because the approved 0.9.1 ref does not exist yet and the reviewed worktree contains the uncommitted 0.9.1 documentation changes.",
+        "make dev was represented by the same repository virtual environment and uvicorn app.main:app on port 8791 so verification could use an isolated port without rebuilding the portal again."
+      ],
+      "disposition": "partial-hands-on-pass-not-clean-host"
+    },
+    {
+      "target_id": "debian-13-5",
+      "release": "Debian 13.5 (trixie)",
+      "shell": "bash",
+      "evidence_type": ["documented_simulation_evidence", "static_source_simulation"],
+      "official_evidence": ["https://www.debian.org/releases/", "https://packages.debian.org/trixie/python/python3", "https://www.python.org/downloads/release/python-3146/"],
+      "simulation": "Release guard, apt build prerequisites, verified CPython source build, guarded checkout, venv/install, migration, docs, runtime, probes, UI, and stop boundary are ordered and bash-valid. Debian 13 default Python 3.13 makes the user-owned CPython 3.14.6 path necessary.",
+      "unverified": "No Debian 13.5 host executed apt, CPython compilation, BPM installation, migration, or runtime probes.",
+      "disposition": "simulation-pass-clean-target-required"
+    },
+    {
+      "target_id": "fedora-44",
+      "release": "Fedora Linux 44",
+      "shell": "bash",
+      "evidence_type": ["documented_simulation_evidence", "static_source_simulation"],
+      "official_evidence": ["https://fedoraproject.org/", "https://packages.fedoraproject.org/pkgs/python3.14/python3/fedora-44.html"],
+      "simulation": "Release guard, dnf prerequisites, Python 3.14 assertion, guarded checkout, venv/install, migration, docs, runtime, probes, UI, and stop boundary are ordered and bash-valid.",
+      "unverified": "No Fedora 44 host executed dnf, BPM installation, migration, documentation build, or runtime probes.",
+      "disposition": "simulation-pass-clean-target-required"
+    },
+    {
+      "target_id": "linux-mint-22-3",
+      "release": "Linux Mint 22.3 (Zena)",
+      "shell": "bash",
+      "evidence_type": ["documented_simulation_evidence", "static_source_simulation"],
+      "official_evidence": ["https://linuxmint.com/download.php", "https://linuxmint.com/rel_zena_whatsnew.php", "https://www.python.org/downloads/release/python-3146/"],
+      "simulation": "Release guard, apt build prerequisites, verified CPython source build, guarded checkout, venv/install, migration, docs, runtime, probes, UI, and stop boundary are ordered and bash-valid. The documented Python archive checksum was independently verified.",
+      "unverified": "No Linux Mint 22.3 host executed apt, CPython compilation, BPM installation, migration, or runtime probes.",
+      "disposition": "simulation-pass-clean-target-required"
+    },
+    {
+      "target_id": "manjaro-stable-2026-06-26",
+      "release": "Manjaro stable branch after the 2026-06-26 update",
+      "shell": "bash",
+      "evidence_type": ["documented_simulation_evidence", "static_source_simulation"],
+      "official_evidence": ["https://wiki.manjaro.org/index.php?title=The_Rolling_Release_Development_Model", "https://wiki.manjaro.org/index.php?title=Switching_Branches", "https://forum.manjaro.org/c/announcements/stable-updates/12"],
+      "simulation": "Manjaro ID and stable-branch guards, full pacman -Syu transaction, Python 3.14 assertion, guarded checkout, venv/install, migration, docs, runtime, probes, UI, and no-partial-downgrade boundary are ordered and bash-valid.",
+      "unverified": "No fully updated Manjaro stable host executed pacman, BPM installation, migration, documentation build, or runtime probes.",
+      "disposition": "simulation-pass-clean-target-required"
+    }
+  ],
+  "release_blocker": {
+    "finding_id": "ADMIN091-SOURCE-INSTALL-CLEAN-TARGET-EVIDENCE",
+    "severity": "release-blocker",
+    "affected_targets": ["ubuntu-26-04", "debian-13-5", "fedora-44", "linux-mint-22-3", "manjaro-stable-2026-06-26"],
+    "reason": "The Ubuntu runtime path passed on the current host, but no target has a complete clean-host transcript from package installation through stop verification. Four targets have simulation evidence only.",
+    "closure": "Run each documented sequence on the frozen clean target (or an equivalent disposable image), record command exit statuses and observable results, and update this report before release."
+  },
+  "summary": {
+    "target_count": 5,
+    "partial_hands_on_count": 1,
+    "simulation_only_count": 4,
+    "syntax_pass_count": 5,
+    "clean_target_pass_count": 0,
+    "release_ready": false,
+    "result": "No command defect was found. Ubuntu runtime behavior and shared CPython integrity passed, but clean-target execution evidence remains insufficient for release."
+  },
+  "production_boundaries": ["No packaged service or installer was tested.", "No systemd, reverse proxy, TLS termination, managed secrets, backup automation, HA, rolling upgrade, or production hardening is claimed.", "Health/readiness responses do not prove dependency health or production readiness."]
+}

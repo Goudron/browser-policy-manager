@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Переходите по категориям параметров</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Navigate All Settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <title>Переход по категориям настроек</title>
+  <shortdesc>Перемещайтесь по категориям Все настройки и сопоставленным кластерам элементов управления, чтобы найти соответствующие элементы управления политиками и предпочтениями.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Open All Settings in Configured or Catalog mode.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
+    <prereq><p>Откройте Все настройки в разделе Настроено или Каталог.</p></prereq>
+    <context><p>Настройки группировки категорий по домену продукта, а не по местоположению файла. Они помогают пользователям переключаться между доступом через браузер, конфиденциальностью, поиском, расширениями, необработанными/несопоставленными и другими кластерами.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Open the category navigation or catalog summary.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Choose the domain or cluster that matches the configuration goal.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Переходите по категориям параметров. Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Откройте навигацию по категориям или сводку каталога.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Выберите домен или кластер, соответствующий цели конфигурации.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Категория просмотра учитывается для настроенных, предупреждающих, необработанных или устаревших параметров.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Откройте сведения о настройке или переключите фильтры, не теряя контекст категории.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if a category does not contain the expected control, search by policy ID or inspect raw/unmapped items.</p></postreq>
+    <result><p>Вы можете перемещаться по Каталог настроек по доменам продуктов и переходить на соответствующую панель сведений.</p></result>
+    <postreq><p>Восстановление: если категория не содержит ожидаемого элемента управления, выполните поиск по политике ID или проверьте необработанные/несопоставленные элементы.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

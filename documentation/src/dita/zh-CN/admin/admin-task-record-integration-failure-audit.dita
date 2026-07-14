@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-integration-failure-audit" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>DevOps 流程: Integrationsfehler beheben und audit evidence aufzeichnen</title>
-  <shortdesc>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。</shortdesc>
+  <title>从集成失败中恢复并记录审计证据</title>
+  <shortdesc>处理验证、导入/导出、准备和修订失败，而无需不安全的重试或隐藏的事务假设。</shortdesc>
   <taskbody>
-    <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，并记录外部 owner、schema channel、ticket、retry decision 与证据。</p></prereq>
-    <context><p>该流程使用下面列出的 BPM operations，并保留 API names、payloads 与 URLs 作为稳定技术标识。它覆盖 health-gated startup、data ownership、failure recovery 和 do not retry blindly 规则。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> <codeph>API-PROFILE-001</codeph> <codeph>API-PROFILE-002</codeph> <codeph>API-PROFILE-003</codeph> <codeph>API-PROFILE-005</codeph> <codeph>API-FF-001</codeph> <codeph>API-FF-002</codeph> <codeph>API-VAL-001</codeph> <codeph>API-HEALTH-001</codeph> <codeph>API-HEALTH-002</codeph>.</p></context>
+    <prereq><p>当外部产品收到失败的 BPM API 响应、超时、意外的响应正文、过时的 <codeph>expected_revision</codeph> 或不匹配的导出证据时，请使用此工作流程。</p></prereq>
+    <context><p>此工作流连接 <codeph>API-HEALTH-001</codeph>、<codeph>API-HEALTH-002</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-PROFILE-005</codeph>、<codeph>API-FF-001</codeph>、<codeph>API-FF-002</codeph> 和 <codeph>API-VAL-001</codeph>。它定义了操作员证据； BPM 不提供分布式跟踪、自动回滚、批量事务恢复或 Webhook 通知。</p></context>
     <steps>
-      <step><cmd>执行并记录步骤 1</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 2</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 3</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 4</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 5</cmd><info><p>在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph></p></info></step>
-  <step><cmd>执行并记录步骤 6</cmd><info><note type="warning">如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。 <codeph>400</codeph> <codeph>404</codeph> <codeph>409</codeph> <codeph>422</codeph> <codeph>503</codeph> <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph> <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph></note></info></step>
+      <step><cmd>在重试之前对失败进行分类。</cmd><info><p>记录故障是否为运行状况/就绪、验证、导入、导出、读取、修补、冲突、超时或传输。保留 HTTP 状态，例如 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p></info></step>
+  <step><cmd>冻结外部期望状态和 BPM 观察。</cmd><info><p>存储请求方法、路径、净化的有效负载哈希、配置文件 ID、观察到的 <codeph>revision</codeph>、模式通道、响应正文、响应时间和控制产品运行 ID。切勿在共享证据中包含秘密或私有主机名。</p></info></step>
+  <step><cmd>当故障可恢复时，重新检查 BPM 运行状况并重新读取配置文件。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health</codeph>、<codeph>GET $BPM_BASE_URL/health/ready</codeph> 和 <codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>。如果配置文件修订发生更改，请返回比较和批准。</p></info></step>
+  <step><cmd>仅在操作员批准的决定后再次验证或导出。</cmd><info><p>为了进行验证，请使用相同的候选文档重复 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。对于导出，重复 <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1</codeph> 并比较导出的文档哈希。</p></info></step>
+  <step><cmd>停止对过时的修订或不明确的证据进行突变重试。</cmd><info><p>如果 <codeph>expected_revision</codeph> 返回 <codeph>409</codeph>，如果导出哈希不同，或者如果验证错误发生更改，则不要继续旧的运行。打开新的外部运行，进行新的阅读、比较和审阅者批准。</p></info></step>
+  <step><cmd>将审核记录发布到外部记录系统。</cmd><info><note type="warning">BPM 存储配置文件状态，但不存储完整的集成审核跟踪。外部产品必须记录所有者、决策、票证、重试计数、停止原因、新旧修订、哈希值和操作员注释。</note></info></step>
     </steps>
-    <result><p>面向外部控制产品的完整流程，明确 data ownership、audit evidence 和 retry 边界。 在外部产品中保存证据，核对 BPM 响应，不假设未记录的 transaction、webhook 或 safe retry。</p></result>
-    <postreq><p>如果证据不完整或已过期，请停止流程，重新读取 BPM，并创建新的 operator-approved decision。</p></postreq>
+    <result><p>故障只能通过明确的证据、新的读取和操作员批准的重试决策来恢复，而不是通过盲目重放。</p></result>
+    <postreq><p>恢复后，将审核记录链接到成功的配置文件修订或将集成运行标记为已停止。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-concept-api-limitations"/>

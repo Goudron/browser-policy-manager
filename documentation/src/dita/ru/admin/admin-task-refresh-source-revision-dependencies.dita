@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-refresh-source-revision-dependencies" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Обновить source revision и dependencies</title>
-  <shortdesc>Переведите checkout на утверждённую более новую revision и переустановите Python environment, не скрывая dependency или worktree failures.</shortdesc>
+  <title>Обновить исходную версию и зависимости.</title>
+  <shortdesc>Переместите извлечение в утвержденную новую версию и переустановите среду Python, не скрывая зависимости или сбои рабочего дерева.</shortdesc>
   <taskbody>
-    <prereq><p>Pre-update evidence set существует, previous revision записана, а утверждённый target branch, tag или commit известен.</p></prereq>
-    <context><p>BPM source updates — это Git и Python-environment operations в существующем checkout. Процедура не устанавливает packaged distribution, native service или production upgrade manager.</p></context>
+    <prereq><p>Набор свидетельств перед обновлением существует, предыдущая версия записана, и известна утвержденная целевая ветвь, тег или фиксация.</p></prereq>
+    <context><p>Обновления исходного кода BPM — это операции в среде Git и Python, выполняемые в существующем извлечении. Эта процедура не устанавливает пакетный дистрибутив, встроенную службу или менеджер обновления рабочей среды.</p></context>
     <steps>
-      <step><cmd>Получите утверждённую source reference.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Получите утвержденную ссылку на источник.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git fetch --tags
 git status --short
-]]></codeblock><p>Остановитесь, если local changes неожиданны. Сохраняйте user-owned или site-owned changes, не перезаписывая их.</p></info></step>
-      <step><cmd>Перейдите на утверждённую более новую source revision.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Остановиться, если локальные изменения оказались неожиданными. Сохраняйте изменения, принадлежащие пользователю или сайту, вместо того, чтобы перезаписывать их.</p></info></step>
+      <step><cmd>Перейти к утвержденной новой версии исходного кода.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git checkout <approved-new-ref>
 git rev-parse --short HEAD
-]]></codeblock><p>Запишите target revision и сравните её с approved change ticket или release note.</p></info></step>
-      <step><cmd>Обновите repository-local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Запишите целевую версию и сравните ее с утвержденной заявкой на изменение или примечанием к выпуску.</p></info></step>
+      <step><cmd>Обновите локальную среду Python в репозитории.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-]]></codeblock><p>Используйте существующий <codeph>.venv</codeph>, если update note явно не требует пересоздания. Зафиксируйте dependency failures до изменения database.</p></info></step>
-      <step><cmd>Остановитесь при unresolved source или dependency failures.</cmd><info><note type="warning">Если checkout, dependency installation или virtual-environment activation fails, не запускайте migrations. Возвращайтесь к recorded previous revision только если database ещё не изменена, затем переустановите previous dependency set и повторите pre-update smoke checks.</note></info></step>
+]]></codeblock><p>Используйте существующий <codeph>.venv</codeph>, если примечание к обновлению явно не требует его пересоздания. Записывайте ошибки зависимостей перед изменением базы данных.</p></info></step>
+      <step><cmd>Останавливается при неразрешенных ошибках источника или зависимостей.</cmd><info><note type="warning">Если при извлечении, установке зависимостей или активации виртуальной среды произошел сбой, не запускайте миграцию. Вернитесь к записанной предыдущей версии только в том случае, если база данных не была изменена, затем переустановите предыдущий набор зависимостей и повторно запустите дымовые проверки перед обновлением.</note></info></step>
     </steps>
-    <result><p>Checkout и Python environment находятся на утверждённой target revision, либо update остановлен до database changes.</p></result>
-    <postreq><p>Запускайте database migrations и documentation checks только после успешного dependency refresh.</p></postreq>
+    <result><p>Извлечение и среда Python имеют утвержденную целевую версию, или обновление остановлено до внесения изменений в базу данных.</p></result>
+    <postreq><p>Запускайте миграцию базы данных и проверку документации только после успешного обновления зависимостей.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

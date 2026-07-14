@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-sort-profile-library" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Trier les lignes de la Bibliothèque</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Trier les lignes de la Bibliothèque » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Trier les lignes de la bibliothèque</title>
+  <shortdesc>Triez les profils enregistrés par heure de mise à jour, heure de création, nom, canal de schéma ou ID par ordre croissant ou décroissant.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>La bibliothèque est ouverte et contient au moins deux lignes de profil visibles.</p></prereq>
+    <context><p>Le tri modifie l'ordre des lignes dans le résultat actuel de la recherche et du filtre.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Trier les lignes de la Bibliothèque ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Sélectionnez le champ selon lequel effectuer le tri.</cmd><info><p>Résultat attendu : les lignes sont réorganisées par heure de mise à jour, heure de création, nom, schéma ou ID.</p></info></step>
+      <step><cmd>Sélectionnez le sens de la commande.</cmd><info><p>Utilisez l'heure de mise à jour décroissante pour les travaux récents ou le nom ascendant pour la navigation alphabétique.</p></info></step>
+      <step><cmd>Vérifiez les décomptes filtrés et totaux avant d'agir sur la première ligne.</cmd><info><note type="warning">Le tri ne supprime pas les filtres. Une ligne peut toujours être masquée par la recherche ou les filtres.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Les lignes visibles de la bibliothèque apparaissent dans l'ordre sélectionné.</p></result>
+    <postreq><p>Récupération : revenez au tri à l'heure de mise à jour si l'ordre des lignes ne correspond plus à votre contexte de travail.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-profile-library"/>

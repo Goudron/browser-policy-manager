@@ -1,4 +1,6 @@
 # ruff: noqa: F403,F405
+import json
+
 from tests.test_documentation_runtime_route import _write_packaged_site
 from tests.web_profiles_page_helpers import *
 
@@ -585,6 +587,43 @@ def test_profiles_header_documentation_link_is_six_locale_and_runtime_locale_awa
         assert "updateDocumentationLinks?.(documentRef, lang);" in source
 
 
+def test_profiles_documentation_links_remain_visible_for_stale_dev_artifact(
+    tmp_path,
+    monkeypatch,
+):
+    _write_packaged_site(tmp_path)
+    manifest_path = tmp_path / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["artifact"]["bpm_version"] = "0.8.0"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    monkeypatch.setenv("BPM_DOCUMENTATION_SITE_DIR", str(tmp_path))
+    get_settings.cache_clear()
+    client = make_test_client(app)
+
+    try:
+        response = client.get(
+            "/profiles",
+            headers={"Accept-Language": "ru-RU,ru;q=0.9,en;q=0.8"},
+        )
+    finally:
+        get_settings.cache_clear()
+
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html.parser")
+    header_link = soup.find("a", {"class": "compact-toolbar-docs-link"})
+    context_link = soup.find("a", {"data-context-help-surface": "library"})
+    import_link = soup.find("a", {"data-context-help-target": "import-firefox-policies"})
+
+    assert header_link is not None
+    assert context_link is not None
+    assert import_link is not None
+    assert header_link["href"] == "/help/?locale=ru"
+    assert context_link["href"] == "/help/?locale=ru"
+    assert import_link["href"] == "/help/?locale=ru"
+    assert '"/help/?locale=en"' in header_link["data-documentation-links"]
+    assert '"/help/?locale=zh-CN"' in import_link["data-documentation-links"]
+
+
 def test_profiles_contextual_help_links_resolve_from_manifest_for_five_surfaces(
     tmp_path,
     monkeypatch,
@@ -696,6 +735,59 @@ def test_profiles_deep_help_icon_links_resolve_from_manifest_targets(
                 assert link["aria-label"] == title
                 assert link["data-documentation-link"] == ""
                 assert '"/help/ru/' in link["data-documentation-links"]
+    finally:
+        get_settings.cache_clear()
+
+
+def test_all_settings_route_embeds_manifest_resolved_row_help_links(tmp_path, monkeypatch):
+    _write_packaged_site(tmp_path)
+    monkeypatch.setenv("BPM_DOCUMENTATION_SITE_DIR", str(tmp_path))
+    get_settings.cache_clear()
+
+    try:
+        with make_test_client(app) as client:
+            profile_response = client.post(
+                "/api/profiles",
+                json=build_profile_payload(name="All Settings Row Help Profile"),
+            )
+            profile_id = profile_response.json()["id"]
+            response = client.get(f"/profiles/{profile_id}/settings")
+            library = client.get("/profiles")
+            assert response.status_code == 200
+            soup = BeautifulSoup(response.text, "html.parser")
+            payload = json.loads(soup.find(id="all-settings-row-help-links").get_text())
+            status = json.loads(soup.find(id="all-settings-row-help-status").get_text())
+            assert set(payload) == {
+                "policy:AIControls",
+                "policy:VisualSearchEnabled",
+                "known-preference:browser.download.dir",
+            }
+            assert payload["known-preference:browser.download.dir"]["ru"].endswith(
+                "/firefox/fx-reference-managed-preference-locking.html#a-safe-review"
+            )
+            assert status == "available"
+            assert 'id="all-settings-row-help-links"' not in library.text
+    finally:
+        get_settings.cache_clear()
+
+
+def test_all_settings_route_embeds_unavailable_status_without_links(tmp_path, monkeypatch):
+    missing_site = tmp_path / "missing-docs"
+    monkeypatch.setenv("BPM_DOCUMENTATION_SITE_DIR", str(missing_site))
+    get_settings.cache_clear()
+
+    try:
+        with make_test_client(app) as client:
+            profile_response = client.post(
+                "/api/profiles",
+                json=build_profile_payload(name="Unavailable Row Help Profile"),
+            )
+            response = client.get(f"/profiles/{profile_response.json()['id']}/settings")
+        soup = BeautifulSoup(response.text, "html.parser")
+        assert json.loads(soup.find(id="all-settings-row-help-links").get_text()) == {}
+        assert json.loads(soup.find(id="all-settings-row-help-status").get_text()) == (
+            "artifact_unavailable"
+        )
     finally:
         get_settings.cache_clear()
 

@@ -16,6 +16,11 @@ ADMIN_GUIDE_KEYREFS = [
     "topic.admin-task-set-up-linux-source-checkout",
     "topic.admin-task-configure-linux-source-runtime",
     "topic.admin-task-verify-linux-source-deployment",
+    "topic.admin-task-install-ubuntu-26-04-source",
+    "topic.admin-task-install-debian-13-source",
+    "topic.admin-task-install-fedora-44-source",
+    "topic.admin-task-install-linux-mint-22-3-source",
+    "topic.admin-task-install-manjaro-stable-source",
     "topic.admin-task-prepare-windows-wsl-source-deployment",
     "topic.admin-task-set-up-windows-wsl-source-checkout",
     "topic.admin-task-configure-windows-wsl-network-runtime",
@@ -87,7 +92,6 @@ def test_administrator_guide_has_stable_map_key_and_portal_slot_in_every_locale(
             "user-guide.ditamap",
             "firefox-policy-guide.ditamap",
             "cis-settings-guide.ditamap",
-            "api-integration-guide.ditamap",
             "administrator-guide.ditamap",
         ]
 

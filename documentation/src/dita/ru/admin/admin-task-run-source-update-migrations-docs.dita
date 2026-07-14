@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-source-update-migrations-docs" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Запустить migrations и documentation rebuild checks</title>
-  <shortdesc>Примените database migrations, проверьте documentation source и пересоберите static documentation output после изменения source revision.</shortdesc>
+  <title>Выполните миграцию и проверки перестроения документации.</title>
+  <shortdesc>Примените миграцию базы данных, проверьте источник документации и перестройте выходные данные статической документации после изменения исходной версии.</shortdesc>
   <taskbody>
-    <prereq><p>Checkout и dependencies успешно обновлены, а database backup evidence собрана, пока BPM был остановлен.</p></prereq>
-    <context><p>Updates могут добавлять database migrations и documentation changes. BPM 0.9.0 документирует forward migration через <codeph>alembic upgrade head</codeph>; automatic downgrade или safe schema rollback не обещаются.</p></context>
+    <prereq><p>Извлечение и зависимости были успешно обновлены, а свидетельства резервной копии базы данных были собраны, пока BPM был остановлен.</p></prereq>
+    <context><p>Обновления могут привести к миграции баз данных и изменениям в документации. BPM 0.9.0 документирует прямую миграцию с помощью <codeph>alembic upgrade head</codeph>; он не обещает автоматического перехода на более раннюю версию или безопасного отката схемы.</p></context>
     <steps>
-      <step><cmd>Примените database migrations к целевой database.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Примените миграцию базы данных к намеченной базе данных.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-]]></codeblock><p>Используйте фактическое deployment value для <codeph>BPM_DATABASE_URL</codeph>. Немедленно остановитесь, если migration output неясен или failed.</p></info></step>
-      <step><cmd>Запустите узкий source smoke check перед возвратом пользователей.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Используйте фактическое значение развертывания для <codeph>BPM_DATABASE_URL</codeph>. Немедленно остановитесь, если результаты миграции неясны или не удались.</p></info></step>
+      <step><cmd>Перед обслуживанием пользователей выполните проверку дыма с узким источником.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make test-fast
-]]></codeblock><p>Этот check является source smoke, а не production certification или HA validation.</p></info></step>
-      <step><cmd>Проверьте и пересоберите documentation output для обновлённой revision.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Эта проверка является источником дыма, а не производственной сертификацией или проверкой HA.</p></info></step>
+      <step><cmd>Проверить и перестроить выходные данные документации для обновленной версии.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make docs-validate
 make docs-build
-]]></codeblock><p><codeph>make docs-validate</codeph> проверяет DITA, metadata, source links и generated links. <codeph>make docs-build</codeph> пересобирает ignored static output; сам по себе он не устанавливает default documentation artifact в application runtime.</p></info></step>
-      <step><cmd>Остановитесь при migration, smoke или documentation rebuild failures.</cmd><info><note type="warning">После запуска migration не предполагайте, что Git checkout rollback достаточен. Не запускайте <codeph>alembic downgrade</codeph>, если reviewed release note явно не говорит, что это supported для точной пары revisions. Используйте pre-update database backup как safe recovery baseline, когда требуется rollback.</note></info></step>
+]]></codeblock><p><codeph>make docs-validate</codeph> проверяет DITA, метаданные, ссылки на источники и сгенерированные ссылки. <codeph>make docs-build</codeph> перестраивает игнорируемый статический вывод; он сам по себе не устанавливает артефакт документации по умолчанию в среду выполнения приложения.</p></info></step>
+      <step><cmd>Остановка в случае сбоев миграции, дыма или перестроения документации.</cmd><info><note type="warning">После завершения миграции не думайте, что отката проверки Git достаточно. Не запускайте <codeph>alembic downgrade</codeph>, если в проверенных примечаниях к выпуску явно не указано, что он поддерживается для конкретной пары ревизий. Используйте резервную копию базы данных перед обновлением в качестве базовой линии безопасного восстановления, когда требуется откат.</note></info></step>
     </steps>
-    <result><p>Обновлённая source revision прошла migrations, source smoke и documentation rebuild checks, либо update остановлен на named failure point.</p></result>
-    <postreq><p>Запустите BPM и выполните post-update verification topic перед возвратом instance пользователям или integrators.</p></postreq>
+    <result><p>Обновленная версия исходного кода завершила миграцию, проверку исходного кода и перестройку документации, либо обновление остановлено в именованной точке сбоя.</p></result>
+    <postreq><p>Запустите BPM и запустите тему проверки после обновления, прежде чем возвращать экземпляр пользователям или интеграторам.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-refresh-source-revision-dependencies"/>

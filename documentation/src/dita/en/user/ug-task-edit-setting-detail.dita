@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Edit a setting detail</title>
-  <shortdesc>Apply or edit a Firefox policy or managed preference value from the All Settings detail panel.</shortdesc>
+  <shortdesc>Apply or edit a Firefox policy or managed preference value from the All settings detail panel.</shortdesc>
   <taskbody>
     <prereq><p>Open a setting detail panel for a supported editable value.</p></prereq>
     <context><p>Detail editing keeps the change focused on one setting while reusing shared validation and save behavior.</p></context>
     <steps>
-      <step><cmd>Inspect the current value and validation state.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Enter or choose the new policy or managed preference value.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Apply the detail edit and watch for validation feedback.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Inspect the current value and validation state.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Enter or choose the new policy or managed preference value.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Apply the detail edit and watch for validation feedback.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Save the profile when the edited value is valid and intentional.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>The selected policy or managed preference has the new value in the profile.</p></result>

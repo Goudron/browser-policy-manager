@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-configured-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Inspecter les paramètres configurés</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Use Configured mode to understand what the profile currently applies by domain, category, and source.</shortdesc>
+  <shortdesc>Utilisez Configurés pour comprendre ce que le profil s'applique actuellement par domaine, catégorie et source.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Open a saved profile in All Settings.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Configured mode focuses on values already present in the profile, not on every possible policy. Domain summaries help you explain the active configuration.</p></context>
+    <prereq><p>Ouvrez un profil enregistré dans Tous les paramètres.</p></prereq>
+    <context><p>Configurés se concentre sur les valeurs déjà présentes dans le profil, et non sur toutes les stratégies possibles. Les résumés de domaine vous aident à expliquer la configuration active.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Switch to Configured mode.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Review the configured summary cards by domain or category.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Open a category to inspect the settings applied there.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Inspecter les paramètres configurés. Use source filters if you need to separate baseline, CIS, manual, imported, or raw values.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Passez à Configurés.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Examinez les cartes récapitulatives configurées par domaine ou catégorie.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez une catégorie pour inspecter les paramètres qui y sont appliqués.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Utilisez des filtres source si vous devez séparer les valeurs de référence, CIS, manuelles, importées ou brutes.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. You can describe the active policy and managed preference values applied by the profile.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if a value is missing, switch to Catalog mode or clear source filters before deciding it is absent.</p></postreq>
+    <result><p>Vous pouvez décrire la stratégie active et les valeurs de préférence gérées appliquées par le profil.</p></result>
+    <postreq><p>Récupération : si une valeur est manquante, passez à Catalogue ou effacez les filtres source avant de décider qu'elle est absente.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-settings-by-source"/>

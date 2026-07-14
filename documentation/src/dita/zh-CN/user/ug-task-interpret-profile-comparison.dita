@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-interpret-profile-comparison" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>解读比较表</title>
-  <shortdesc>本任务完整说明“解读比较表”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>解释比较表</title>
+  <shortdesc>读取相等、已更改和缺失状态中的策略和托管首选项行。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>配置文件 A 和配置文件 B 已选择，并且比较表可见。</p></prereq>
+    <context><p>该表比较两个配置文件的设置并集。策略行和托管首选项行可能会一起出现，因为两者都会影响 Firefox 的行为。</p></context>
     <steps>
-      <step><cmd>打开与“解读比较表”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>扫描行类型以区分策略行和托管首选项行。</cmd><info><p>预期结果：您知道该行是否代表 Firefox Enterprise 策略或托管首选项键。</p></info></step>
+      <step><cmd>读取每一侧的值和状态。</cmd><info><p>相等的行具有匹配的值，更改的行具有不同的值，并且缺失的行仅存在于一侧。</p></info></step>
+      <step><cmd>使用缺失或更改的行来决定哪个配置文件需要检查。</cmd><info><note type="warning">比较不应用更改。打开相关的配置文件编辑器以更新值。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>您可以解释所选配置文件在一侧是否相同、不同或缺少设置。</p></result>
+    <postreq><p>恢复：如果行看起来过时，请先保存编辑器更改，然后从库中重新打开比较。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-policy-validation" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Interpretar policy validation errors</title>
-  <shortdesc>Diagnostique validation errors para unsupported policy, wrong value type, unknown entry, raw fallback o affected policy path.</shortdesc>
+  <title>Interpretar errores de validación de políticas</title>
+  <shortdesc>Diagnostica errores de validación para políticas no admitidas, tipo de valor incorrecto, entrada desconocida, reserva sin procesar o ruta de política afectada.</shortdesc>
   <taskbody>
-    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
-    <context><p>Validation errors son información estructurada sobre el Firefox schema channel seleccionado y la policy o managed preference exacta que BPM no puede aceptar como lista.</p></context>
+    <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
+    <context><p>Los errores de validación son comentarios estructurados sobre el canal de esquema de Firefox seleccionado y la política exacta o preferencia administrada que BPM no puede aceptar como lista.</p></context>
     <steps>
-      <step><cmd>Lea affected policy path y message antes de cambiar valores.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Clasifique el problema como unsupported policy, wrong value type, deprecated setting, unknown entry, imported value o raw fallback.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Use All Settings o JSON para ir a affected location y corregir solo el valor informado.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Ejecute revalidate profile en el mismo schema channel antes de guardar o exportar.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+      <step><cmd>Lea la ruta de la política afectada y el mensaje antes de cambiar los valores.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Clasifique el problema como política no compatible, tipo de valor incorrecto, configuración obsoleta, entrada desconocida, valor importado o reserva sin formato.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Utilice Todos los ajustes o JSON para navegar a la ubicación afectada y corregir solo el valor informado.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Vuelva a validar el perfil en el mismo canal de esquema antes de guardarlo o exportarlo.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
     </steps>
-    <result><p>La validation error queda resuelta o documentada como deliberate raw/unsupported value que no puede tratarse como release-ready.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+    <result><p>El error de validación se resuelve o se documenta como un valor sin procesar/no admitido deliberado que no se puede tratar como listo para su lanzamiento.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-assess-single-node-source-readiness" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Оценить текущую готовность single-node source</title>
-  <shortdesc>Определите, готов ли текущий source-run экземпляр BPM к контролируемой single-node эксплуатации, и перечислите подтверждающие evidence.</shortdesc>
+  <title>Оценить текущую готовность одноузлового источника</title>
+  <shortdesc>Решите, готов ли текущий экземпляр BPM с исходным кодом к управляемой работе с одним узлом, и назовите доказательства, подтверждающие это решение.</shortdesc>
   <taskbody>
-    <prereq><p>Source deployment для Linux или Windows 10/11 через WSL завершён, зависимости установлены, а целевые значения <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> и <codeph>BPM_SCHEMA_CACHE_DIR</codeph> известны.</p></prereq>
-    <context><p>BPM 0.9.0 можно подготовить к current-state single-node source operation. Такая оценка не является сертификатом production hardening, HA-дизайном или acceptance для packaged service.</p></context>
+    <prereq><p>Развертывание исходного кода Linux или Windows 10/11 через WSL завершено, зависимости установлены, и предполагаемые значения <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> и <codeph>BPM_SCHEMA_CACHE_DIR</codeph> известны.</p></prereq>
+    <context><p>BPM 0.9.0 может быть подготовлен для работы с одним узлом в текущем состоянии. Эта оценка не является сертификатом повышения эффективности производства, проектом HA или приемкой комплексных услуг.</p></context>
     <steps>
-      <step><cmd>Зафиксируйте точный source и runtime configuration.</cmd><info><p>Сохраните <codeph>git rev-parse --short HEAD</codeph>, версию BPM, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> и способ запуска: <codeph>make dev</codeph> или явно сопровождаемая команда <codeph>uvicorn app.main:app</codeph>.</p></info></step>
-      <step><cmd>Выполните liveness и readiness checks из той же network boundary, которой будут пользоваться пользователи.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Запишите точную конфигурацию источника и среды выполнения.</cmd><info><p>Захватите <codeph>git rev-parse --short HEAD</codeph>, версию BPM, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, а также информацию о том, запускается ли процесс с помощью <codeph>make dev</codeph> или команды <codeph>uvicorn app.main:app</codeph>, принадлежащей непосредственному владельцу.</p></info></step>
+      <step><cmd>Запускайте проверки работоспособности и готовности из той же границы сети, которую будут использовать пользователи.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Запишите результат как evidence для <codeph>GET /health</codeph> и <codeph>GET /health/ready</codeph>. Успешные probes доказывают только liveness/readiness source process.</p></info></step>
-      <step><cmd>Проверьте data и documentation evidence перед совместным доступом.</cmd><info><p>Убедитесь, что <codeph>data/bpm.db</codeph> является нужной базой, что хотя бы один профиль экспортируется как <codeph>policies.json</codeph>, и что <codeph>/help/</codeph> открывает собранный documentation artifact или документированное unavailable state.</p></info></step>
-      <step><cmd>Классифицируйте экземпляр как current-state source operation.</cmd><info><note type="warning">Не называйте экземпляр packaged, hardened, load balanced или highly available. Если внешние controls добавляют эти свойства, фиксируйте их как external responsibilities, а evidence BPM 0.9.0 ограничивайте single-node source operation.</note></info></step>
+]]></codeblock><p>Запишите результат как свидетельство <codeph>GET /health</codeph> и <codeph>GET /health/ready</codeph>. Проходящие проверки доказывают только жизнеспособность и готовность исходного процесса.</p></info></step>
+      <step><cmd>Прежде чем предоставить общий доступ к экземпляру, проверьте данные и документацию.</cmd><info><p>Подтвердите, что <codeph>data/bpm.db</codeph> — это предполагаемая база данных, что по крайней мере один профиль можно экспортировать как <codeph>policies.json</codeph> и что <codeph>/help/</codeph> открывает созданный артефакт документации или задокументированное недоступное состояние.</p></info></step>
+      <step><cmd>Классифицировать экземпляр как операцию источника текущего состояния.</cmd><info><note type="warning">Не помечайте экземпляр как упакованный, защищенный, сбалансированный по нагрузке или высокодоступный. Если внешние элементы управления добавляют эти свойства, запишите их как внешние обязанности и ограничьте свидетельства BPM 0.9.0 работой с источником с одним узлом.</note></info></step>
     </steps>
-    <result><p>Readiness note описывает, что можно безопасно делать сегодня из исходников, какие checks пройдены и какие решения ждут distribution/runtime support.</p></result>
-    <postreq><p>Перед доступом за пределами локальной рабочей станции администратора или controlled lab host используйте topic про network exposure и proxy-readiness.</p></postreq>
+    <result><p>В примечании о готовности указано, что можно безопасно сделать сегодня из исходного кода, какие проверки пройдены и какие решения должны дождаться распространения и поддержки во время выполнения.</p></result>
+    <postreq><p>Прежде чем предоставлять доступ к экземпляру за пределами рабочей станции локального администратора или контролируемого хоста лаборатории, ознакомьтесь с разделом «Воздействие сети и готовность прокси-сервера».</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-configuration-sources"/>

@@ -4,7 +4,7 @@
   <title>Review profile context</title>
   <shortdesc>Check profile identity, lifecycle, schema channel, validation state, and source context before finishing work.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Profile context prevents accidental edits to the wrong profile, wrong Firefox channel, archived row, imported source, or stale tab.</p></context>
     <steps>
       <step><cmd>Read the profile name, lifecycle status, schema channel, and last updated context.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

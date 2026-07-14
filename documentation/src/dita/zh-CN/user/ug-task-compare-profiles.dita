@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-compare-profiles" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>从库打开比较</title>
-  <shortdesc>本任务完整说明“从库打开比较”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>从库中打开比较</title>
+  <shortdesc>选择两个已保存的配置档案之前，请在新标签页中打开专用比较页面。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>库已打开并且至少存在两个已保存的配置文件。</p></prereq>
+    <context><p>“比较配置档案设置”是用于已保存配置档案的专用页面。它保留当前语言和主题，并且不会替换“库”标签页。</p>
+      <fig id="screenshot-compare-profiles">
+        <title>“比较配置档案设置”页面</title>
+        <image keyref="screenshot.compare-profiles" placement="break">
+          <alt>比较视图显示选择用于并排审查的两个已保存配置文件。</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>打开与“从库打开比较”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>在库中选择“比较配置档案设置”操作。</cmd><info><p>预期结果：BPM 在新的浏览器标签页中打开比较界面。</p></info></step>
+      <step><cmd>使用左右搜索字段选择配置文件 A 和配置文件 B。</cmd><info><note type="warning">比较读取保存的配置文件状态。在进行比较之前保存编辑器更改。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>比较页面已准备好分别选择配置档案甲和配置档案乙。</p></result>
+    <postreq><p>恢复：如果“比较”选项卡打开时没有预期的配置文件，请返回到库，刷新它，并确认两个配置文件均已保存且可见。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-comparison-workflow"/>

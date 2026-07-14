@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-devops-operational-boundaries" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>记录 source-operation boundaries</title>
-  <shortdesc>创建 operations handoff note，说明 runtime user、process model、supported checks 和 deferred production capabilities。</shortdesc>
+  <title>记录源操作边界</title>
+  <shortdesc>创建操作移交注释，说明运行时用户、流程模型、支持的检查和延迟的生产功能。</shortdesc>
   <taskbody>
-    <prereq><p>已为 source-run instance 完成 configuration、storage、backup、network 和 CORS reviews。</p></prereq>
-    <context><p>BPM 0.9.0 Administrator/DevOps 文档目前支持用于 controlled evaluation 的 source-run operation。它尚未提供 distribution installers、native services、official daemonization、production topology 或覆盖所有 enterprise controls 的完整 operational runbooks。</p></context>
+    <prereq><p>源运行实例的配置、存储、备份、网络和 CORS 审核已完成。</p></prereq>
+    <context><p>BPM 0.9.0 管理员/DevOps 文档当前支持源运行操作以进行受控评估。它尚未为每个企业控件提供分发安装程序、本机服务、官方守护进程、生产拓扑或完整的操作运行手册。</p></context>
     <steps>
-      <step><cmd>记录 runtime user 和 process model。</cmd><info><p>识别拥有 checkout、<codeph>.venv</codeph>、<codeph>data/</codeph> 以及正在运行的 <codeph>make dev</codeph> 或 <codeph>uvicorn app.main:app --reload --port 8000</codeph> process 的 shell user。除非 external platform 提供并拥有，否则不要声称 supported service account、systemd unit、Windows service 或 restart policy。</p></info></step>
-      <step><cmd>记录当前支持的 checks。</cmd><info><p>包括 source revision、active configuration values、migration status、<codeph>/health</codeph>、<codeph>/health/ready</codeph>、UI route smoke、API example status、foreground-log review 和 manual backup evidence。把 API evidence 链接到 reusable API examples，而不是复制 endpoint procedures。</p></info></step>
-      <step><cmd>把 deferred capabilities 记录为 blockers 或 external responsibilities。</cmd><info><p>说明 packaged installers、native Linux 或 Windows services、reverse proxy and TLS recipes、HA clustering、managed secrets、authentication configuration、backup automation、restore orchestration、monitoring dashboards、log rotation 和 production hardening 不由 BPM 0.9.0 source documentation 提供。</p></info></step>
-      <step><cmd>附加 user-facing recovery references，但不转移 ownership。</cmd><info><p>当 operator 需要理解 UI symptoms 时，链接到 user-facing troubleshooting，例如 product connection recovery。Deployment、API、backup 和 network ownership 保留在 Administrator/DevOps Guide。</p></info></step>
+      <step><cmd>记录运行时用户和流程模型。</cmd><info><p>识别拥有结账、<codeph>.venv</codeph>、<codeph>data/</codeph> 以及正在运行的 <codeph>make dev</codeph> 或 <codeph>uvicorn app.main:app --reload --port 8000</codeph> 进程的 shell 用户。不要声明受支持的服务帐户、systemd 单元、Windows 服务或重新启动策略，除非您的外部平台提供并拥有它。</p></info></step>
+      <step><cmd>记录今天支持的检查。</cmd><info><p>包括源修订、活动配置值、迁移状态、<codeph>/health</codeph>、<codeph>/health/ready</codeph>、UI 路由烟雾、API 示例状态、前台日志审查和手动备份证据。将 API 证据链接到可重用的 API 示例，而不是重复端点过程。</p></info></step>
+      <step><cmd>将延迟功能记录为阻碍因素或外部责任。</cmd><info><p>调出打包安装程序、本机 Linux 或 Windows 服务、反向代理和 TLS 配方、HA 集群、托管机密、身份验证配置、备份自动化、恢复编排、监控仪表板、日志轮换和生产强化（BPM 0.9.0 源文档未提供）。</p></info></step>
+      <step><cmd>附加面向用户的恢复引用而不移动所有权。</cmd><info><p>当操作员需要了解 UI 症状时，请链接到面向用户的故障排除，例如产品连接恢复。将部署、API、备份和网络所有权保留在管理员/DevOps指南中。</p></info></step>
     </steps>
-    <result><p>handoff note 说明当前 source deployment 能支持什么、哪些 evidence 能证明它，以及哪些 production responsibilities 仍在 BPM 0.9.0 之外。</p></result>
-    <postreq><p>将此 boundary note 作为 update-from-source runbook 以及后续 production/HA/reverse-proxy documentation tasks 的起点。</p></postreq>
+    <result><p>移交说明说明了当前源部署可以支持什么、有什么证据证明这一点，以及哪些生产责任仍处于 BPM 0.9.0 之外。</p></result>
+    <postreq><p>使用此边界注释作为从源更新 操作手册 和后续生产/HA/反向代理文档任务的起点。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-configuration-sources"/>

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Enregistrer les modifications du profil</title>
-  <shortdesc>Créez le premier profil enregistré depuis un brouillon ou persistez les modifications d’un profil existant.</shortdesc>
+  <shortdesc>Créez le premier profil enregistré à partir d'un brouillon ou conservez les modifications apportées à un profil existant.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
-    <context><p>L’enregistrement établit l’ID du profil pour un nouveau brouillon et rend les dernières valeurs de politiques et préférences gérées disponibles aux autres surfaces BPM.</p></context>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <context><p>L'enregistrement établit le profil ID pour un nouveau brouillon et met les dernières valeurs de stratégie et de préférences gérées à la disposition des autres surfaces BPM.</p></context>
     <steps>
-      <step><cmd>Vérifiez le nom du profil, le canal de schéma et l’état de validation avant d’enregistrer.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Sélectionnez Enregistrer sur la surface d’édition active.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Attendez le message d’état visible qui confirme la fin de l’enregistrement.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Si une validation ou un retour de connexion apparaît, lisez-le avant de naviguer ou réessayer.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+      <step><cmd>Vérifiez le nom du profil, le canal de schéma et l'état de validation avant d'enregistrer.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Sélectionnez Enregistrer sur la surface active de l'éditeur.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Attendez le message d'état visible qui confirme la sauvegarde terminée.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Si un retour de validation ou de connexion apparaît, lisez-le avant de quitter ou de réessayer.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>
-    <result><p>Le profil possède un état enregistré qui peut être rouvert, validé, exporté ou comparé.</p></result>
-    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+    <result><p>Le profil a un état enregistré qui peut être rouvert, validé, exporté ou comparé.</p></result>
+    <postreq><p>Récupération : si l'état visible n'est pas clair, arrêtez l'édition, lisez le message d'état actuel, actualisez une fois et rouvrez le profil depuis la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

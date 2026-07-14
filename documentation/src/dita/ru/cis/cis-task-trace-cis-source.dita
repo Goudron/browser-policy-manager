@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-trace-cis-source" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Отследить CIS value до источника</title>
-  <shortdesc>Отследите одно configured value до starter preset, CIS layer, merge decision и последующих edits перед export.</shortdesc>
+  <title>Проследить значение CIS до его источника</title>
+  <shortdesc>Проследите одно настроенное значение до начальной предустановки, уровня CIS, решения о слиянии и последующих изменений перед экспортом.</shortdesc>
   <taskbody>
-    <prereq><p>Откройте профиль, созданный из starter preset или с применённым CIS Level 1 или Level 2 layer.</p></prereq>
-    <context><p>Tracing value полезен, когда reviewer спрашивает, пришла ли настройка из original baseline, CIS layer, import, manual edit или raw fallback.</p></context>
+    <prereq><p>Откройте профиль, созданный на основе стартового стиля или к которому применен слой CIS уровня 1 или уровня 2.</p></prereq>
+    <context><p>Отслеживание значения полезно, когда рецензент спрашивает, получен ли параметр из исходного базового состояния, слоя CIS, импорта, редактирования вручную или необработанного резервного варианта.</p></context>
     <steps>
-      <step><cmd>Откройте All Settings и отфильтруйте configured values или CIS source badge.</cmd><info><p>Ожидаемый результат: нужная policy или managed preference остаётся видимой вместе с source attribution.</p></info></step>
-      <step><cmd>Прочитайте source attribution и определите, является ли current value baseline, CIS, manual, imported или raw.</cmd><info><p>Ожидаемый результат: можно назвать непосредственный source значения.</p></info></step>
-      <step><cmd>Откройте связанный CIS recommendation или Firefox policy topic, если generated layer добавил value.</cmd><info><p>Ожидаемый результат: видны recommendation ID, path, value, channel support и merge rule.</p></info></step>
-      <step><cmd>Проверьте merge decision: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter или manual_review_kept_base.</cmd><info><p>Ожидаемый результат: понятно, добавил ли CIS значение, подтвердил его, заменил его или оставил base value для review.</p></info></step>
-      <step><cmd>Разберите manual-review или conflict states перед сохранением.</cmd><info><note type="warning">Не скрывайте manual_review_kept_base decision несвязанной manual edit; сначала зафиксируйте review reason.</note></info></step>
-      <step><cmd>Выполняйте validation и export только после того, как source и decision понятны другому reviewer.</cmd><info><p>Ожидаемый результат: exported <codeph>policies.json</codeph> отражает reviewed choice, а BPM-only attribution остаётся в profile.</p></info></step>
+      <step><cmd>Откройте Все настройки и отфильтруйте по настроенным значениям или по значку источника CIS.</cmd><info><p>Ожидаемый результат: соответствующая политика или управляемое предпочтение остается видимым с указанием источника.</p></info></step>
+      <step><cmd>Прочитайте атрибуцию источника и определите, является ли текущее значение базовым, CIS, ручным, импортированным или необработанным.</cmd><info><p>Ожидаемый результат: вы можете указать непосредственный источник значения.</p></info></step>
+      <step><cmd>Откройте соответствующую рекомендацию CIS или раздел политики Firefox, когда сгенерированный слой внес значение.</cmd><info><p>Ожидаемый результат: вы можете увидеть рекомендацию ID, путь, значение, поддержку канала и правило слияния.</p></info></step>
+      <step><cmd>Проверьте решение о слиянии: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter или manual_review_kept_base.</cmd><info><p>Ожидаемый результат: вы знаете, добавил ли CIS значение, подтвердил его, заменил или оставил базовое значение для проверки.</p></info></step>
+      <step><cmd>Устраните состояния проверки вручную или конфликты перед сохранением.</cmd><info><note type="warning">Не скрывайте решение manual_review_kept_base, внося несвязанное редактирование вручную; сначала запишите причину отзыва.</note></info></step>
+      <step><cmd>Проверяйте и экспортируйте только после того, как источник и решение станут понятны другому рецензенту.</cmd><info><p>Ожидаемый результат: экспортированный <codeph>policies.json</codeph> отражает проверенный выбор, а атрибуция только BPM остается в профиле.</p></info></step>
     </steps>
-    <result><p>Configured value можно объяснить как baseline, CIS, manual, imported или raw, с видимым merge decision и review status.</p></result>
-    <postreq><p>Если attribution неоднозначна, сравните профиль с blank profile плюс тот же CIS layer, затем проверьте imports и manual changes.</p></postreq>
+    <result><p>Настроенное значение можно объяснить как базовое, CIS, ручное, импортированное или необработанное, с видимым решением о слиянии и статусом проверки.</p></result>
+    <postreq><p>Если атрибуция неоднозначна, сравните профиль с пустым профилем и тем же слоем CIS, затем проверьте импорт и изменения вручную.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-presets-layers-merge"/>

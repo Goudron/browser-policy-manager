@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>打开设置深层链接</title>
-  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <title>关注设置深层链接</title>
+  <shortdesc>遵循搜索、所有设置、引导上下文和 JSON 位置之间的集中链接。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <prereq><p>链接或搜索结果指向设置、审核状态、原始密钥、已弃用的项目或 JSON 位置。</p></prereq>
+    <context><p>深层链接通过打开正确的编辑器并聚焦相关设置或原始位置来保留方向。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Confirm the destination editor and focused setting or state.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：打开设置深层链接. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+      <step><cmd>从搜索、评论、比较、引导或 JSON 上下文中打开焦点链接。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>确认目标编辑器和焦点设置或状态。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>使用详细信息面板、过滤器或 JSON 位置来完成任务。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>仅在故意保存或放弃更改后返回到先前的表面。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The linked setting opens in the correct surface with focus preserved.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+    <result><p>链接的设置将在正确的表面中打开，并保留焦点。</p></result>
+    <postreq><p>恢复：如果链接无法解析，则按确切策略 ID、首选项键或原始路径进行搜索。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Abrir un perfil guardado en un editor</title>
-  <shortdesc>Esta tarea describe el escenario completo «Abrir un perfil guardado en un editor»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Abra el mismo perfil guardado en Editor guiado, Todos los ajustes o Editor JSON según el cambio que necesite.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>El perfil es visible en la Biblioteca y su identidad de fila coincide con el perfil que desea editar o inspeccionar.</p></prereq>
+    <context><p>Abrir un perfil guardado no lo duplica. Cada superficie del editor funciona con el mismo Identidad del perfil guardado.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Abrir un perfil guardado en un editor».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Utilice el título de la fila o la acción guiada para ediciones orientadas a tareas.</cmd><info><p>Resultado esperado: BPM abre el perfil en Editor guiado.</p></info></step>
+      <step><cmd>Utilice Todos los ajustes cuando necesite el catálogo completo compatible y los detalles de fuente/atención.</cmd><info><p>Esta es la opción más segura para una inspección detallada de políticas y preferencias.</p></info></step>
+      <step><cmd>Utilice Editor JSON cuando necesite inspeccionar o editar el documento de límites sin formato.</cmd><info><note type="warning">Los cambios JSON sin formato deben validarse antes de exportarlos o compararlos.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El editor seleccionado se abre en su propio contexto de perfil y mantiene el mismo perfil ID.</p></result>
+    <postreq><p>Recuperación: si abrió el editor incorrecto, regrese a la fila Biblioteca o use otro enlace de editor para el mismo perfil.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

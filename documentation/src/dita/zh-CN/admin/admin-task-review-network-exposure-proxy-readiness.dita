@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-network-exposure-proxy-readiness" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>检查 network exposure 和 proxy-readiness 问题</title>
-  <shortdesc>准备 network exposure notes 和 reverse-proxy questions，但不要把未支持的 TLS 或 proxy recipes 写成 BPM 0.9.0 行为。</shortdesc>
+  <title>查看网络暴露和代理准备情况问题</title>
+  <shortdesc>准备网络暴露说明和反向代理问题，而无需将不受支持的 TLS 或代理配方发布为 BPM 0.9.0 行为。</shortdesc>
   <taskbody>
-    <prereq><p>current single-node source readiness assessment 已完成，并且 operator 知道用户会通过 loopback、WSL forwarded address、lab host 或外部 proxy 访问 BPM。</p></prereq>
-    <context><p>BPM 可以运行在 configured host and port，但 BPM 0.9.0 文档不提供 official reverse proxy、TLS termination、authentication gateway、header policy 或 rate-limiting recipe。</p></context>
+    <prereq><p>当前单节点源准备情况评估已完成，操作员知道用户是否将通过环回、WSL 转发地址、实验室主机或外部拥有的代理到达 BPM。</p></prereq>
+    <context><p>BPM 可以在配置的主机和端口上运行，但 BPM 0.9.0 文档不提供官方反向代理、TLS 终止、身份验证网关、标头策略或速率限制配方。</p></context>
     <steps>
-      <step><cmd>选择满足当前 evaluation 的最小 network exposure。</cmd><info><p>优先使用 <codeph>127.0.0.1</codeph>。只有 WSL forwarding 或 controlled lab network 需要时才使用 <codeph>BPM_HOST="0.0.0.0"</codeph>，并记录为什么 <codeph>BPM_PORT="8000"</codeph> 需要可达。</p></info></step>
-      <step><cmd>在添加任何外部 proxy 前写下 proxy-readiness questions。</cmd><info><p>回答谁拥有 TLS certificates、hostname routing、request size limits、timeout values、通过 <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 的 CORS origins、forwarded headers、access logs 和 incident response。这些问题现在可以准备；official TLS/proxy recipes are planned but not implemented yet。</p></info></step>
-      <step><cmd>验证 probes 仍能通过所选 boundary 工作。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>选择满足当前评估的最小网络暴露。</cmd><info><p>更喜欢 <codeph>127.0.0.1</codeph>。仅当 WSL 转发或受控实验室网络需要时才使用 <codeph>BPM_HOST="0.0.0.0"</codeph>，并记录为什么 <codeph>BPM_PORT="8000"</codeph> 可达。</p></info></step>
+      <step><cmd>在添加任何外部代理之前记下代理准备情况问题。</cmd><info><p>回答谁拥有 TLS 证书、主机名路由、请求大小限制、超时值、通过 <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 的 CORS 来源、转发标头、访问日志和事件响应。这些问题现在就可以准备；官方的 TLS/代理配方已计划但尚未实施。</p></info></step>
+      <step><cmd>验证探头是否仍然可以通过所选边界工作。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>如果在 lab 使用外部 proxy，请记录 direct source probes 和 proxy-side probes。不要把 proxy 200 response 当成 BPM authentication、authorization 或 HA 的证明。</p></info></step>
-      <step><cmd>明确标记 unsupported network claims。</cmd><info><note type="warning">BPM 0.9.0 不交付 packaged services、official TLS/proxy recipes、supported HA clustering、WAF rules、request signing、rate limiting、SSO、OAuth/OIDC、role-based access control 或 production hardening。将这些作为 external controls 或 deferred requirements。</note></info></step>
+]]></codeblock><p>如果在实验室中使用外部拥有的代理，请记录直接源探测和代理端探测。请勿将代理 200 响应视为 BPM 身份验证、授权或 HA 的证明。</p></info></step>
+      <step><cmd>明确标记不支持的网络声明。</cmd><info><note type="warning">BPM 0.9.0 不提供打包服务、官方 TLS/代理配方、支持的 HA 集群、WAF 规则、请求签名、速率限制、SSO、OAuth/OIDC、基于角色的访问控制或生产强化。将这些保留为外部控制或延期要求。</note></info></step>
     </steps>
-    <result><p>network note 区分现在可以配置的内容，以及仍属 external 或 deferred 的 reverse-proxy 和 TLS decisions。</p></result>
-    <postreq><p>在 shared evaluation window 开始前，使用 monitoring、backup 和 update windows topic。</p></postreq>
+    <result><p>网络注释将现在可以配置的内容与仍然外部或延迟的反向代理和 TLS 决策分开。</p></result>
+    <postreq><p>在共享评估窗口启动之前使用监视、备份和更新窗口主题。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-network-cors-security"/>
