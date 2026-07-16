@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-source-update-evidence" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Подготовить evidence перед обновлением из исходников</title>
-  <shortdesc>Соберите source revision, configuration, database backup, profile export evidence и stop conditions перед переходом BPM на более новую source revision.</shortdesc>
+<task id="admin-task-prepare-source-update-evidence" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Подготовьте доказательства перед обновлением источника</title>
+  <shortdesc>Соберите исходную версию, конфигурацию, резервную копию базы данных, данные экспорта профиля и условия остановки, прежде чем переносить BPM на более новую исходную версию.</shortdesc>
   <taskbody>
-    <prereq><p>BPM работает из Linux или WSL source checkout, а администратор завершил reviews по configuration, storage, backup и operational-boundary.</p></prereq>
-    <context><p>Update-from-source procedure меняет code, dependencies, database schema и ожидания по documentation output. BPM 0.9.0 не предоставляет automatic rollback, database downgrade guarantees, managed backup или packaged upgrade tooling. Рассматривайте evidence collection как обязательный pre-update gate.</p></context>
+    <prereq><p>BPM запускается из исходного кода Linux или WSL, и администратор выполнил проверку конфигурации, хранения, резервного копирования и операционных границ.</p></prereq>
+    <context><p>Процедура обновления из исходного кода изменяет код, зависимости, схему базы данных и ожидаемые выходные данные документации. BPM не обеспечивает автоматический откат, гарантии перехода на более раннюю версию базы данных, управляемое резервное копирование или пакетные инструменты обновления. Относитесь к сбору доказательств как к обязательному этапу подготовки к обновлению.</p></context>
     <steps>
-      <step><cmd>Остановите foreground BPM process и зафиксируйте текущий source state.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Остановите основной процесс BPM и запишите текущее исходное состояние.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git status --short
 git rev-parse --short HEAD
-]]></codeblock><p>Продолжайте только когда working tree state понятен, а current source revision записана как rollback reference.</p></info></step>
-      <step><cmd>Зафиксируйте effective configuration и runtime paths.</cmd><info><p>Сохраните активные <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph> и источник значений: shell exports или <codeph>.env</codeph>. Не копируйте secrets в update note.</p></info></step>
-      <step><cmd>Создайте manual database backup evidence, пока BPM остановлен.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Продолжайте только тогда, когда понятно состояние рабочего дерева и текущая исходная версия записана как ссылка на откат.</p></info></step>
+      <step><cmd>Запишите действующие пути конфигурации и среды выполнения.</cmd><info><p>Захватите активные <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph> и укажите, получены ли значения из экспорта оболочки или <codeph>.env</codeph>. Не копируйте секреты в примечание об обновлении.</p></info></step>
+      <step><cmd>Создайте свидетельство резервного копирования базы данных вручную, пока BPM остановлен.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
-]]></codeblock><p>Запишите timestamp, current revision, database URL, file size и checksum. Если deployment использует не <codeph>data/bpm.db</codeph>, сохраните path, resolved from <codeph>BPM_DATABASE_URL</codeph>.</p></info></step>
-      <step><cmd>Экспортируйте critical profile evidence до изменения code.</cmd><info><p>Используйте существующие API export examples, чтобы сохранить нужные Firefox <codeph>policies.json</codeph> documents и зафиксировать response status, profile ID, revision, schema channel и exported-document hash.</p><note type="warning">Если database backup или export evidence отсутствует, остановите update. Не заменяйте backup evidence предположением, что Git rollback или <codeph>alembic downgrade</codeph> будет безопасным.</note></info></step>
+]]></codeblock><p>Запишите временную метку, текущую версию, URL-адрес базы данных, размер файла и контрольную сумму. Если при развертывании не используется <codeph>data/bpm.db</codeph>, вместо этого создайте резервную копию пути, определенного из <codeph>BPM_DATABASE_URL</codeph>.</p></info></step>
+      <step><cmd>Экспортируйте данные критического профиля перед изменением кода.</cmd><info><p>Используйте существующие примеры экспорта API, чтобы сохранить необходимые документы Firefox <codeph>policies.json</codeph> и записать статус ответа, профиль ID, версию, канал схемы и хэш экспортированного документа.</p><note type="warning">Если резервная копия базы данных или свидетельства экспорта отсутствуют, остановите обновление. Не заменяйте отсутствующие доказательства резервной копии предположением, что откат Git или <codeph>alembic downgrade</codeph> будет безопасным.</note></info></step>
     </steps>
-    <result><p>У update есть проверенный pre-change evidence set и известная previous source reference.</p></result>
-    <postreq><p>Переходите к refreshing source revision и dependencies только после завершения и проверки evidence set.</p></postreq>
+    <result><p>Обновление содержит проверенный набор доказательств перед изменением и известную ссылку на предыдущий источник.</p></result>
+    <postreq><p>Приступайте к обновлению исходной версии и зависимостей только после того, как набор доказательств будет завершен и проверен.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>

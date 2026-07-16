@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-find-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>按名称查找配置文件</title>
-  <shortdesc>本任务完整说明“按名称查找配置文件”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>在打开、复制或更改生命周期状态之前，使用库搜索按名称缩小已保存的配置文件的范围。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>库已打开，配置文件行已完成加载。</p></prereq>
+    <context><p>搜索缩小当前库视图的范围。它与架构、生命周期、验证和排序控件一起工作。</p></context>
     <steps>
-      <step><cmd>打开与“按名称查找配置文件”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>将光标置于库搜索字段中。</cmd><info><p>预期结果：在您键入时当前行列表保持可见。</p></info></step>
+      <step><cmd>输入配置文件名称的独特部分。</cmd><info><p>过滤后的计数会更新以匹配仍然可见的行。</p></info></step>
+      <step><cmd>在选择操作之前确认行标识。</cmd><info><note type="warning">搜索不会保存或更改配置文件。它只会改变图书馆显示的内容。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>库仅显示与搜索文本和任何活动过滤器匹配的行。</p></result>
+    <postreq><p>恢复：如果缺少预期的配置文件，则清除搜索文本，如果该行仍未出现，则刷新。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-profile-library"/>

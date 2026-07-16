@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-03-retained-inventory-20260714",
+  "backlog_item": "BPM091-M11-03",
+  "status": "accepted",
+  "captured_at": "2026-07-14T10:01:52+03:00",
+  "containers": [
+    {
+      "name": "bpm091-ubuntu-26-04-m11-03-harness-self-test-20260714-a01",
+      "id": "199a2081f6a90e7cf6f118a05d83a9e9590f766b689d5ff3ccf07dd1eb45fbcf",
+      "target": "ubuntu-26-04",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 137,
+      "size_rw_bytes": 4096,
+      "disposition": "retained-harness-lifecycle-defect"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-03-harness-self-test-20260714-a02",
+      "id": "d4385396d9ef6c0f4fe10a3d1b9d3863599fb7777e5c72bfc2f0b821162bcccc",
+      "target": "ubuntu-26-04",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 4096,
+      "disposition": "accepted-harness-self-test"
+    },
+    {
+      "name": "bpm091-linux-mint-rootfs-helper-m11-03-mint-image-20260714-a01",
+      "id": "d5a015d9fe41058223c6adf23b9bbe2b13b9966bcc6b9588ab2b2848d463bd02",
+      "target": "linux-mint-rootfs-helper",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 68804608,
+      "disposition": "accepted-mint-image-construction"
+    },
+    {
+      "name": "bpm091-linux-mint-22-3-m11-03-mint-self-test-20260714-a01",
+      "id": "be7cfa08853c649f55f1b0e6685a43f58ac79f92d4e3b0dd2aea93344e8c3075",
+      "target": "linux-mint-22-3",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 4096,
+      "disposition": "accepted-mint-identity-self-test"
+    }
+  ],
+  "images": [
+    {
+      "target": "ubuntu-26-04",
+      "ref": "docker.io/library/ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "id": "sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "inspect_size_bytes": 41575117,
+      "disposition": "retained"
+    },
+    {
+      "target": "linux-mint-22-3",
+      "ref": "bpm091/linux-mint:22.3-zena-amd64",
+      "id": "sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+      "repo_digest": "bpm091/linux-mint@sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+      "layer_digest": "sha256:0b7f4b02f469f00bd1d4cfa9f662d7c80c194672eb699b156d4a90df42e52fbf",
+      "inspect_size_bytes": 3118921329,
+      "disposition": "retained"
+    }
+  ],
+  "network": {
+    "name": "bpm091-m11-net",
+    "id": "490615366b5447703d8ee9f895299b0bfd6fbb9ccd08b1b826dd80e058593266",
+    "driver": "bridge",
+    "retained": true
+  },
+  "storage": {
+    "approximate_unique_image_bytes": 3160496446,
+    "approximate_container_writable_bytes": 68816896,
+    "approximate_task_owned_docker_bytes": 3229313342,
+    "maximum_task_owned_docker_bytes": 37580963840,
+    "host_free_bytes": 212977311744,
+    "minimum_host_free_bytes": 42949672960,
+    "within_contract": true
+  },
+  "retention": {
+    "all_containers_stopped": true,
+    "container_count": 4,
+    "image_count": 2,
+    "network_count": 1,
+    "containers_removed": 0,
+    "images_removed": 0,
+    "networks_removed": 0,
+    "docker_engine_retained": true
+  }
+}

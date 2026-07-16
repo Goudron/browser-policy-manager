@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+<task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
   <title>Set up the BPM source checkout inside WSL</title>
   <shortdesc>Install Linux prerequisites in WSL, clone BPM into the Linux filesystem, create the virtual environment, install dependencies, and apply migrations.</shortdesc>
   <taskbody>
-    <prereq><p>A WSL 2 Linux distribution is installed and opened, and the administrator has the approved BPM repository URL and 0.9.0 branch or tag.</p></prereq>
+    <prereq><p>A WSL 2 Linux distribution is installed and opened, and the administrator has the approved BPM repository URL and 0.9.1 branch or tag.</p></prereq>
     <context><p>All commands in this topic run inside the WSL Linux shell unless the step explicitly says PowerShell. This keeps the setup aligned with the Linux source deployment runbook and avoids native-Windows path ambiguity.</p></context>
     <steps>
       <step><cmd>Install Linux prerequisites in the WSL distribution.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
@@ -16,7 +16,7 @@ python3 --version
 cd ~
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
-git checkout <approved-0.9.0-ref>
+git checkout <approved-0.9.1-ref>
 ]]></codeblock><p>Do not place the working checkout under <codeph>/mnt/c</codeph> for the supported WSL source workflow.</p></info></step>
       <step><cmd>Create and activate the local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv

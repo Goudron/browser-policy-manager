@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-raw-policies-json" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Modifier le JSON policies brut</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. Edit the raw policies.json document with the locally bundled Monaco editor.</shortdesc>
+  <title>Modifier les stratégies brutes JSON</title>
+  <shortdesc>Modifiez le document brut policies.json avec l'éditeur Monaco fourni localement.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. Open JSON Editor for a saved profile.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. The Monaco editor is bundled locally and edits the raw JSON text. BPM still validates before saving to the normalized profile model.</p></context>
+    <prereq><p>Ouvrez Éditeur JSON pour un profil enregistré.</p></prereq>
+    <context><p>L'éditeur Monaco est fourni localement et édite le texte JSON brut. BPM est toujours validé avant d'être enregistré dans le modèle de profil normalisé.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. Place focus in the JSON editor.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. Edit only the policy, preference, or raw value required by the task.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. Keep the top-level policies object and valid JSON syntax.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Modifier le JSON policies brut. Use validation before saving the raw edit.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez la syntaxe JSON, top-level policies et les erreurs de validation des stratégies.</note></info></step>
+      <step><cmd>Placez le focus sur Éditeur JSON.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Modifiez uniquement la stratégie, la préférence ou la valeur brute requise par la tâche.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Conservez l'objet de stratégie de niveau supérieur et la syntaxe JSON valide.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Utilisez la validation avant d'enregistrer la modification brute.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>
     </steps>
-    <result><p>JSON Editor affiche l’état attendu, et l’action peut être expliquée lors de la revue. The editor contains the intended raw JSON change and is ready for validation.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, validez le document, revenez à All Settings ou ouvrez le sujet associé. Recovery: if the edit becomes confusing, format the document or discard changes before saving.</p></postreq>
+    <result><p>L'éditeur contient la modification JSON brute prévue et est prêt pour la validation.</p></result>
+    <postreq><p>Récupération : si la modification devient confuse, formatez le document ou annulez les modifications avant de l'enregistrer.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-format-json-document"/>

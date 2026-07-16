@@ -87,7 +87,8 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
     assert 'html[data-theme="dark"] [class~="decoration-slate-300"]' in css
     assert 'html[data-theme="dark"] [class~="hover:text-slate-900"]:hover' in css
     assert ".wizard-search-engine-preset:hover {" in css
-    assert "background: rgba(255, 255, 255, 0.86);" in css
+    assert "background: var(--control-hover-bg);" in css
+    assert "background: rgba(255, 255, 255, 0.86);" not in css
     assert "appearance: none;" in css
     assert "color-scheme: light;" in css
     assert "color-scheme: dark;" in css

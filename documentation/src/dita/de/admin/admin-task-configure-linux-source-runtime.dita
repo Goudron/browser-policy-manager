@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-configure-linux-source-runtime" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Linux-Source-Runtime-Einstellungen konfigurieren</title>
-  <shortdesc>Setzen Sie database URL, host, port, reload mode, CORS und documentation-site path für den aus dem Quellcode gestarteten BPM process.</shortdesc>
+<task id="admin-task-configure-linux-source-runtime" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Konfigurieren Sie die Laufzeiteinstellungen der Linux-Quelle</title>
+  <shortdesc>Legen Sie die Datenbank-URL, den Host, den Port, den Neulademodus, CORS und den Dokumentations-Site-Pfad fest, der vom von der Quelle ausgeführten BPM-Prozess verwendet wird.</shortdesc>
   <taskbody>
-    <prereq><p>Die Checkout-dependencies sind installiert, und die migrations wurden für die vorgesehene Datenbank angewendet.</p></prereq>
-    <context><p>BPM liest environment variables mit dem Präfix <codeph>BPM_</codeph> und unterstützt außerdem eine repository-local Datei <codeph>.env</codeph>. Die default database URL lautet <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph> und speichert Daten in <codeph>data/bpm.db</codeph>.</p></context>
+    <prereq><p>Die Checkout-Abhängigkeiten sind installiert und Migrationen wurden für die Datenbank angewendet, die Sie verwenden möchten.</p></prereq>
+    <context><p>BPM liest Umgebungsvariablen mit dem Präfix <codeph>BPM_</codeph> und unterstützt auch eine Repository-lokale <codeph>.env</codeph>-Datei. Die Standarddatenbank-URL ist <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>, die Daten in <codeph>data/bpm.db</codeph> speichert.</p></context>
     <steps>
-      <step><cmd>Erstellen Sie das lokale Datenverzeichnis und definieren Sie die database URL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Erstellen Sie das lokale Datenverzeichnis und definieren Sie die Datenbank-URL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
-]]></codeblock><p>Für wiederholbare source runs kann derselbe Wert in einer lokalen, nicht committed <codeph>.env</codeph> abgelegt werden.</p></info></step>
-      <step><cmd>Setzen Sie network und reload values für den lokalen source process.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Für wiederholbare Quellausführungen kann derselbe Wert in einer lokalen <codeph>.env</codeph>-Datei gespeichert werden, die nicht festgeschrieben wird.</p></info></step>
+      <step><cmd>Legen Sie Netzwerk- und Neuladewerte für den lokalen Quellprozess fest.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
 export BPM_RELOAD="true"
-]]></codeblock><p>Nutzen Sie loopback für die lokale Prüfung. Eine Bindung an ein shared interface ist eine Betriebsentscheidung außerhalb dieser source-runbook boundary.</p></info></step>
-      <step><cmd>Prüfen Sie CORS und documentation-site settings.</cmd><info><p>Die source defaults enthalten <codeph>BPM_ENABLE_CORS</codeph>, <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> und <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>. Behalten Sie permissive CORS nur für kontrollierte local evaluation bei und richten Sie <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> auf eine installierte static documentation site, sobald diese verfügbar ist.</p></info></step>
+]]></codeblock><p>Verwenden Sie Loopback für die lokale Überprüfung. Die Bindung an eine gemeinsam genutzte Schnittstelle ist eine betriebliche Entscheidung außerhalb dieser Quell-Betriebsanleitung-Grenze.</p></info></step>
+      <step><cmd>Überprüfen Sie die Einstellungen für CORS und die Dokumentationsseite.</cmd><info><p>Zu den Quellstandardwerten gehören <codeph>BPM_ENABLE_CORS</codeph>, <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> und <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>. Behalten Sie die Erlaubnis von CORS nur für kontrollierte lokale Auswertungen bei und verweisen Sie <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> auf eine installierte statische Dokumentationsseite, sofern eine verfügbar ist.</p></info></step>
       <step><cmd>Starten Sie BPM über das Repository-Skript.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
-]]></codeblock><p>Das Makefile führt <codeph>uvicorn app.main:app --reload --port 8000</codeph> aus. Lassen Sie das foreground terminal geöffnet, damit startup messages und tracebacks sichtbar bleiben.</p></info></step>
+]]></codeblock><p>Das Makefile führt <codeph>uvicorn app.main:app --reload --port 8000</codeph> aus. Lassen Sie das Vordergrundterminal geöffnet, damit Startmeldungen und Rückverfolgungen sichtbar sind.</p></info></step>
     </steps>
-    <result><p>BPM läuft aus dem Quellcode mit expliziten local runtime settings.</p></result>
-    <postreq><p>Prüfen Sie health, readiness, product UI und die ersten administrative smoke checks.</p></postreq>
+    <result><p>BPM wird von der Quelle mit expliziten lokalen Laufzeiteinstellungen ausgeführt.</p></result>
+    <postreq><p>Überprüfen Sie den Gesundheitszustand, die Bereitschaft, das Produkt UI und die ersten administrativen Rauchkontrollen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-linux-source-checkout"/>

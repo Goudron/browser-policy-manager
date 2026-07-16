@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-interpret-profile-comparison" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Interpretar la tabla de comparación</title>
-  <shortdesc>Esta tarea describe el escenario completo «Interpretar la tabla de comparación»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Leer políticas y filas de preferencias administradas en estados iguales, modificados y faltantes.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Se seleccionan el perfil A y el perfil B y la tabla de comparación es visible.</p></prereq>
+    <context><p>La tabla compara la unión de configuraciones de ambos perfiles. Las filas de políticas y las filas de preferencias administradas pueden aparecer juntas porque ambas pueden afectar el comportamiento de Firefox.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Interpretar la tabla de comparación».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Escanee el tipo de fila para distinguir las filas de políticas de las filas de preferencias administradas.</cmd><info><p>Resultado esperado: sabe si la fila representa una política de Firefox Enterprise o una clave de preferencia administrada.</p></info></step>
+      <step><cmd>Lee el valor y el estado de cada lado.</cmd><info><p>Las filas iguales tienen valores coincidentes, las filas modificadas tienen valores diferentes y las filas faltantes existen solo en un lado.</p></info></step>
+      <step><cmd>Utilice filas faltantes o modificadas para decidir qué perfil necesita revisión.</cmd><info><note type="warning">Comparar no aplica cambios. Abra el editor de perfil correspondiente para actualizar los valores.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>Puede explicar si los perfiles seleccionados son equivalentes, diferentes o faltan configuraciones en un lado.</p></result>
+    <postreq><p>Recuperación: si las filas parecen obsoletas, primero guarde los cambios del editor y vuelva a abrir Comparar desde la Biblioteca.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

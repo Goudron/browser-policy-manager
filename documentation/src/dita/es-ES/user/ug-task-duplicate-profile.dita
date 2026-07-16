@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Duplicar un perfil</title>
-  <shortdesc>Esta tarea describe el escenario completo «Duplicar un perfil»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Cree un borrador guiado con nombre a partir de un perfil guardado existente cuando desee un punto de partida seguro para los cambios.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>El perfil de origen está visible en la Biblioteca y usted ha confirmado su identidad de fila.</p></prereq>
+    <context><p>Duplicar crea un borrador de perfil separado basado en el perfil guardado seleccionado. No cambia el perfil de origen.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Duplicar un perfil».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Elija Duplicar en la fila del perfil de origen.</cmd><info><p>Resultado esperado: BPM abre un panel de nombre de clon.</p></info></step>
+      <step><cmd>Introduzca un nombre claro que difiera de los nombres de perfil existentes.</cmd><info><p>BPM requiere un nombre e informa la validación del nombre duplicado antes de confirmar.</p></info></step>
+      <step><cmd>Confirma la acción duplicada.</cmd><info><note type="warning">Un duplicado está separado de la fuente. Las ediciones posteriores de un perfil no actualizan el otro.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>BPM abre o crea el perfil duplicado como un borrador guiado con nombre o un perfil guardado de acuerdo con el flujo de trabajo actual.</p></result>
+    <postreq><p>Recuperación: cancele el panel de nombre de clonación si la fila de origen seleccionada o el nuevo nombre es incorrecto.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm-0.9.1-interface-name-replacement",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M10-05",
+  "status": "accepted",
+  "authority": "documentation/config/interface-name-authority-0.9.1.json",
+  "locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+  "scope": [
+    "DITA topic titles and section headings",
+    "navigation and breadcrumb source titles",
+    "search result source titles",
+    "captions and alternative text",
+    "visible prose that names BPM UI",
+    "runtime locale catalogs for authority defects"
+  ],
+  "baseline": {
+    "method": "Exact case-sensitive scan of the ten authority aliases in all localized DITA topics before BPM091-M10-05.",
+    "affected_file_count": 234,
+    "occurrences_by_locale": {
+      "ru": 403,
+      "de": 255,
+      "zh-CN": 403,
+      "fr": 401,
+      "es-ES": 402
+    },
+    "total_occurrences": 1864
+  },
+  "late_discovered_contextual_baseline": {
+    "profile_comparison_occurrences": 5,
+    "contextual_export_action_occurrences": 5,
+    "disposition": "resolved_through_runtime_catalog_keys"
+  },
+  "english_source_baseline": {
+    "primary_affected_file_count": 68,
+    "primary_authority_alias_occurrences": 203,
+    "additional_compare_alias_occurrences": 1,
+    "lowercase_profile_library_occurrences": 2,
+    "total_occurrences": 206,
+    "disposition": "resolved_to_exact_runtime_casing_and_labels"
+  },
+  "forbidden_source_terms": [
+    "All Settings",
+    "All settings",
+    "Guided Editor",
+    "Guided editor",
+    "JSON Editor",
+    "JSON editor",
+    "Profile Library",
+    "profile library",
+    "Review mode",
+    "Configured mode",
+    "Catalog mode",
+    "Managed preferences",
+    "managed preferences",
+    "Advanced schema controls",
+    "advanced schema controls",
+    "Compare profiles",
+    "profile comparison",
+    "Profile Comparison"
+  ],
+  "english_forbidden_source_terms": [
+    "All Settings",
+    "Guided Editor",
+    "JSON Editor",
+    "Profile Library",
+    "profile library",
+    "Profile Comparison",
+    "Compare profiles",
+    "profile comparison"
+  ],
+  "replacement_rule": "Resolve each visible BPM interface name through the authority catalog key in the current locale; preserve approved abbreviations such as JSON and never replace identifiers, commands, paths, API names, or file names.",
+  "ambiguous_prose_boundary": {
+    "terms": ["Review", "System", "Details"],
+    "rule": "A bare ordinary-language word is not treated as a UI-name leak without UI context. English sentences and anglicisms containing these words remain release-blocking input to BPM091-M10-06. Exact multiword UI aliases and mode-name contexts are prohibited here."
+  },
+  "search_alias_boundary": {
+    "allowed_historical_query": "profile library",
+    "allowed_locations": ["normalization alias", "quality query fixture"],
+    "forbidden_locations": ["search document title", "search document body", "navigation label", "breadcrumb", "topic heading"],
+    "reason": "Users may still search with the former interface name, but generated documentation results must display the current runtime-catalog name."
+  },
+  "catalog_corrections": {
+    "authority_findings_resolved": 3,
+    "additional_malformed_values_resolved": 7,
+    "source_boundary": "app/i18n_src/{locale}/*.json",
+    "generated_boundary": "app/i18n/{locale}.json",
+    "catalog_reproducibility_required": true
+  },
+  "closure": {
+    "forbidden_source_term_occurrences": 0,
+    "total_ui_name_replacements": 2080,
+    "unresolved_authority_catalog_findings": 0,
+    "runtime_catalogs_reproducible": true,
+    "dita_xml_parse_failures": 0,
+    "remaining_visible_english_owner": "BPM091-M10-06",
+    "drift_gate_owner": "BPM091-M10-08"
+  }
+}

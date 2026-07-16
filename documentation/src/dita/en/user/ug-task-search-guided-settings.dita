@@ -4,8 +4,15 @@
   <title>Search Guided settings</title>
   <shortdesc>Search Guided controls and jump to the matching setting without scanning every step.</shortdesc>
   <taskbody>
-    <prereq><p>A profile is open in Guided Editor.</p></prereq>
-    <context><p>Guided search is useful when you know the policy goal but not the step that contains the control family.</p></context>
+    <prereq><p>A profile is open in Guided editor.</p></prereq>
+    <context><p>Guided search is useful when you know the policy goal but not the step that contains the control family.</p>
+      <fig id="screenshot-guided-settings-search">
+        <title>Guided settings search results</title>
+        <image keyref="screenshot.guided-settings-search" placement="break">
+          <alt>Guided editor search showing homepage-related setting results.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>Place the cursor in the Guided settings search field.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Type a policy, preference, or plain-language term such as search, cookies, bookmarks, or permissions.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>

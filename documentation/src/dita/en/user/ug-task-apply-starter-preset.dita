@@ -5,7 +5,7 @@
   <shortdesc>Use a starter preset to seed common Firefox policy choices before detailed editing.</shortdesc>
   <taskbody>
     <prereq><p>A profile draft is open in Step 1.</p></prereq>
-    <context><p>Starter presets provide a known baseline that you can still change in Guided Editor, All Settings, or JSON Editor.</p></context>
+    <context><p>Starter presets provide a known baseline that you can still change in Guided editor, All settings, or JSON editor.</p></context>
     <steps>
       <step><cmd>Open the starter preset area in Profile &amp; baseline.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Compare the available presets against the profile scenario.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>

@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-06-fedora-source-install-20260714",
+  "backlog_item": "BPM091-M11-06",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "pass",
+  "target": {
+    "id": "fedora-44",
+    "name": "Fedora Linux 44",
+    "identity": {
+      "ID": "fedora",
+      "VERSION_ID": "44"
+    },
+    "source_topic": "documentation/src/dita/en/admin/admin-task-install-fedora-44-source.dita",
+    "source_sha256": "fed6829a8382aeb5c928e91eb30c7fd8a1c47f9948f57abee2e35771dfea104a"
+  },
+  "validation_started_at": "2026-07-14T10:17:02Z",
+  "validation_completed_at": "2026-07-14T10:33:22Z",
+  "contracts": {
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json"
+  },
+  "source_snapshot": {
+    "repository": "https://github.com/Goudron/browser-policy-manager.git",
+    "validation_branch": "validation/bpm-0.9.1-m11",
+    "accepted_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+    "accepted_ref_parent": "a208de6aa6035bbc4673dfc0e228edb7b2cda0dd",
+    "accepted_ref_version": "0.9.1",
+    "remote_ref_fetched_and_verified": true,
+    "normal_development_branch_changed": false
+  },
+  "golden_image": {
+    "ref": "docker.io/library/fedora@sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+    "id": "sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+    "amd64_manifest_digest": "sha256:89f61a124414261868224666aa7fb8df1b78397a53623774bdfb105d1612b48b",
+    "platform": "linux/amd64",
+    "initial_registry_pull_performed": true,
+    "retained": true
+  },
+  "isolation": {
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "network": "bpm091-m11-net",
+    "published_ports": "none",
+    "host_bind_mounts": "none",
+    "docker_socket_mount": "none",
+    "privileged": false,
+    "cap_add": "none"
+  },
+  "inherited_harness_guards": {
+    "fresh_container_per_attempt": true,
+    "parent_shell_exit_forbidden_in_adapters": true,
+    "readiness_attempts": 300,
+    "readiness_interval_seconds": 2,
+    "runtime_exit_stops_readiness_wait": true,
+    "activated_environment_preserved_for_background_runtime": true,
+    "second_terminal_working_directory_restored": true,
+    "negative_stop_probe_required": true,
+    "completion_marker_required": true,
+    "host_completion_guard_required": true
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "container_name": "bpm091-fedora-44-m11-06-fedora-source-install-20260714-a01",
+      "container_id": "e29a80f76507c72dc7bcb1e40af2f1bf568ac43bf92fe59986dafb056541d405",
+      "started_at": "2026-07-14T10:17:02Z",
+      "completed_at": "2026-07-14T10:33:04Z",
+      "raw_harness_result": "pass",
+      "accepted_disposition": "accepted-clean-source-install-pass",
+      "command_start_events": 40,
+      "command_end_events": 40,
+      "documented_commands_completed": 34,
+      "documented_command_failures": 0,
+      "documented_stage_counts": {
+        "distro-prep": 5,
+        "checkout": 9,
+        "install": 8,
+        "docs": 3,
+        "start": 4,
+        "verify": 5
+      },
+      "adapter_commands_completed": [
+        "adapter-setup",
+        "adapter-wait-ready",
+        "adapter-second-terminal",
+        "adapter-stop",
+        "adapter-stop-probe",
+        "adapter-complete"
+      ],
+      "completion_marker_present": true,
+      "host_completion_guard_passed": true,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "56bc0a718331c7d8dd0594526d4aeb6226d7c2d4c3446b0e99ce05fee5e966fc",
+        "summary.json": "025aadd099a7b651b4692166284b9bcbeb7125fbcab67973d3004395d85a86c0",
+        "events.jsonl": "cce0bdef400c68dea1ca88823887e4dfba268751dab8a85e2a843d78c98bfba7",
+        "container-inspect.json": "60eb5ac71986107584edf12cafe4c1c9ef1207eabd9abe80920af11800e8ae70",
+        "container-evidence/events.jsonl": "ece1733fac0ea59c4737ed60b17b14811d0015c56bdaad5232c8746fe68bcc91",
+        "container-evidence/runtime.log": "38eb8dc7f743563dde44a1676bd2d8ce63b3cf7190681866938f701ae04f71ff",
+        "container-evidence/run.sh": "97bf3f9f4632ea206b70b4f34820994f7e55474a37427f0191a6004ff0a56279",
+        "container-evidence/completed": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+      }
+    }
+  ],
+  "accepted_attempt": {
+    "attempt": 1,
+    "prerequisites": "pass",
+    "clean_detached_checkout": "pass",
+    "python_version": "3.14.6",
+    "python_source": "fedora-44-updates-repository",
+    "editable_bpm_install": "0.9.1",
+    "alembic_upgrade_head": "pass",
+    "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+    "docs_validate_all_six_locales": "pass",
+    "docs_build_all_six_locales": "pass",
+    "docs_install_dev_all_six_locales": "pass",
+    "runtime_start": "pass",
+    "runtime_log_sha256": "38eb8dc7f743563dde44a1676bd2d8ce63b3cf7190681866938f701ae04f71ff",
+    "probes": [
+      {
+        "command_id": "verify-03",
+        "path": "/health",
+        "status": 200,
+        "body": "{\"status\":\"ok\"}",
+        "body_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      {
+        "command_id": "verify-04",
+        "path": "/health/ready",
+        "status": 200,
+        "body": "{\"status\":\"ready\",\"ready\":true}",
+        "body_sha256": "78aa039c7aaf6b957621f1adf8854b80f4ae56832053b914c5dfeefe41cad936"
+      },
+      {
+        "command_id": "verify-05",
+        "path": "/profiles",
+        "status": 200,
+        "body_recording": "discarded-by-documented-curl-command"
+      }
+    ],
+    "runtime_log_inspection": "clean-startup-probes-and-shutdown",
+    "runtime_shutdown": "pass",
+    "post_shutdown_health_probe": "connection-refused-as-required",
+    "completion_marker": "complete"
+  },
+  "retry": {
+    "required": false,
+    "fresh_container_per_attempt": true,
+    "installed_state_reused": false,
+    "inherited_ubuntu_and_debian_guards_effective": true
+  },
+  "local_transcript": "documentation/build/live-source-install/0.9.1/m11-06-fedora-source-install-20260714",
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-06-fedora-source-install-20260714/retained-inventory.json",
+  "verification": {
+    "focused_unit_and_contract": "pass-35",
+    "full_documentation_contract": "pass-682-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

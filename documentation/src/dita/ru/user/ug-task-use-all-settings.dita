@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Используйте All Settings</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. Open All Settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
+  <title>Используйте Все настройки</title>
+  <shortdesc>Откройте Все настройки для сохраненного профиля, если вам нужен полный визуальный контроль помимо более короткого управляемого рабочего процесса.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. A saved profile exists. New unsaved drafts must be saved before All Settings can open.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. All Settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p></context>
+    <prereq><p>Существует сохраненный профиль. Прежде чем Все настройки сможет открыться, необходимо сохранить новые несохраненные черновики.</p></prereq>
+    <context><p>Все настройки — это полноценный визуальный редактор политик Firefox и известного Управляемые параметры. Он открывается в Проверка, поэтому элементы внимания видны перед широким просмотром каталога.</p>
+      <fig id="screenshot-all-settings-review">
+        <title>Все настройки Проверка</title>
+        <image keyref="screenshot.all-settings-review" placement="break">
+          <alt>Все настройки показывает список проверки, настроенные параметры и панель сведений о настройках на узком экране.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. Open the saved profile from the Library.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. Choose the All Settings editor surface.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Используйте All Settings. Use the mode that matches the task: Review for attention, Configured for applied values, or Catalog for every supported setting.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Откройте сохраненный профиль из библиотеки.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Выберите поверхность редактора Все настройки.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Подтвердите, что просмотр, настроенный и Каталог доступны.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Используйте режим, соответствующий задаче: «Просмотр на внимание», «Настройка для примененных значений» или «Каталог» для каждого поддерживаемого параметра.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The saved profile is open in All Settings with the correct mode available.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if All Settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
+    <result><p>Сохраненный профиль открыт в Все настройки и доступен правильный режим.</p></result>
+    <postreq><p>Восстановление: если Все настройки недоступен, сначала сохраните пошаговый черновик или повторно откройте сохраненный профиль из библиотеки.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

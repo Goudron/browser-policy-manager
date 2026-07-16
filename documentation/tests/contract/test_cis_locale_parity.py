@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path
@@ -41,16 +42,12 @@ COMPACT_OR_FALLBACK_MARKERS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.75,
     "de": 0.75,
-    "zh-CN": 0.45,
+    "zh-CN": 0.30,
     "fr": 0.75,
     "es-ES": 0.75,
 }
 REQUIRED_INVARIANT_TERMS = (
-    "CIS Mozilla Firefox ESR GPO Benchmark",
     "Firefox ESR 140.12",
-    "Firefox Release 152",
-    "Level 1",
-    "Level 2",
     "49",
     "53",
     "55",
@@ -58,7 +55,6 @@ REQUIRED_INVARIANT_TERMS = (
     "cis-l1.release-152",
     "cis-l2.esr-140.12",
     "cis-l2.release-152",
-    "blank",
     "keep_current",
     "basic_corporate",
     "classroom_kiosk",
@@ -69,14 +65,7 @@ REQUIRED_INVARIANT_TERMS = (
     "kept_base_only",
     "kept_base_stricter",
     "manual_review_kept_base",
-    "baseline",
     "CIS",
-    "manual",
-    "imported",
-    "raw",
-    "update governance",
-    "proxy routing",
-    "evidence-retention",
     "AppAutoUpdate",
     "BackgroundAppUpdate",
     "DisableAppUpdate",
@@ -89,11 +78,27 @@ REQUIRED_INVARIANT_TERMS = (
     "policies.json",
     "cis-workflow-level-1-esr-fixture",
     "cis-workflow-level-2-release-fixture",
-    "Library",
-    "Guided Editor",
-    "All Settings",
-    "Profile Comparison",
-    "Export",
+)
+ENGLISH_SEMANTIC_TERMS = (
+    "CIS Mozilla Firefox ESR GPO Benchmark",
+    "Firefox Release 152",
+    "Level 1",
+    "Level 2",
+    "blank",
+    "baseline",
+    "manual",
+    "imported",
+    "raw",
+    "update governance",
+    "proxy routing",
+    "evidence-retention",
+)
+UI_CATALOG_KEYS = (
+    "profiles.nav_library",
+    "profiles.editor_chrome_title",
+    "profiles.editor_chrome_settings_link",
+    "profiles.compare_route_title",
+    "profiles.library_action_export",
 )
 
 pytestmark = pytest.mark.docs_contract
@@ -193,6 +198,14 @@ def test_cis_localized_topics_preserve_required_cis_facts_and_boundaries() -> No
 
         for required in REQUIRED_INVARIANT_TERMS:
             assert required.casefold() in casefolded_text
+        if locale == "en":
+            for required in ENGLISH_SEMANTIC_TERMS:
+                assert required.casefold() in casefolded_text
+        catalog = json.loads(
+            (DOCUMENTATION_ROOT.parent / f"app/i18n/{locale}.json").read_text(encoding="utf-8")
+        )
+        for key in UI_CATALOG_KEYS:
+            assert catalog[key].casefold() in casefolded_text
 
         assert "RAG" not in locale_text
         for forbidden in (

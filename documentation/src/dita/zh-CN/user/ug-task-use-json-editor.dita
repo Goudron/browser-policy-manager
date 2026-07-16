@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>使用 JSON Editor</title>
-  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
+  <title>使用 JSON 编辑器</title>
+  <shortdesc>将完整的配置文件作为 Firefox policies.json 文档打开，以进行精确审阅或原始编辑。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Open a saved profile. JSON Editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. JSON Editor is the raw document surface. Use it when Guided or All Settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p></context>
+    <prereq><p>打开保存的配置文件。 JSON 编辑器 适用于已保存的配置文件，并将该配置文件表示为 Firefox 边界文档。</p></prereq>
+    <context><p>JSON 编辑器 是原始文档表面。当 引导式编辑器 或 所有设置 级别太高而无法进行精确审查、迁移检查、故障排除或原始值时，请使用它。</p>
+      <fig id="screenshot-json-editor">
+        <title>JSON 编辑器</title>
+        <image keyref="screenshot.json-editor" placement="break">
+          <alt>JSON 编辑器 显示已保存配置文件的可编辑 Firefox 策略 JSON。</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Open the saved profile from the Library or another editor.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Switch to JSON Editor.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Confirm the editor shows a top-level policies object and the download action is available.</cmd><info><p>预期结果：JSON Editor 保留配置文件上下文并显示可理解状态。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 JSON Editor 场景：使用 JSON Editor. Use JSON Editor only when exact raw document control is needed.</cmd><info><note type="warning">警告：保存前请检查 JSON 语法、top-level policies 和策略验证错误。</note></info></step>
+      <step><cmd>从库或其他编辑器中打开保存的配置文件。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>切换到 JSON 编辑器。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>确认编辑器显示顶级策略对象并且下载操作可用。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>仅当需要精确的原始文档控制时才使用 JSON 编辑器。</cmd><info><note type="warning">保存原始 JSON 可以更改规范的 BPM 配置文件。保存之前验证语法和策略值。</note></info></step>
     </steps>
-    <result><p>JSON Editor 处于预期状态，并且该操作可在审查时解释。 The current profile is visible as editable Firefox policies.json content.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请验证文档、返回 All Settings 或打开相关主题。 Recovery: if the route cannot open, save the profile first or return to All Settings for visual editing.</p></postreq>
+    <result><p>当前配置文件作为可编辑的 Firefox policies.json 内容可见。</p></result>
+    <postreq><p>恢复：如果路线无法打开，请先保存配置文件或返回所有设置进行可视化编辑。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

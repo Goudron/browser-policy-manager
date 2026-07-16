@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-malformed-json" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Récupérer après un malformed JSON</title>
-  <shortdesc>Diagnostiquez malformed JSON syntax avant d’enregistrer, importer ou valider un document de politiques.</shortdesc>
+  <title>Récupérer à partir d'un JSON mal formé</title>
+  <shortdesc>Diagnostiquez la syntaxe JSON mal formée avant d'enregistrer, d'importer ou de valider un document de stratégie.</shortdesc>
   <taskbody>
-    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
-    <context><p>Malformed JSON est un problème de syntaxe : BPM ne peut pas analyser le document assez loin pour valider les noms ou valeurs de politiques.</p></context>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
+    <context><p>Un JSON mal formé est un problème de syntaxe : BPM ne peut pas analyser le document suffisamment loin pour valider les noms ou les valeurs des stratégies.</p></context>
     <steps>
-      <step><cmd>Gardez JSON editor ou import error ouvert afin que la ligne, la colonne ou le parse message reste visible.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Vérifiez les braces, brackets, commas, quotation marks et escaped characters proches de l’emplacement signalé.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Formatez ou validez à nouveau le document après correction de syntaxe.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Passez à schema validation seulement après analyse réussie du JSON.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+      <step><cmd>Gardez le Éditeur JSON ou l'erreur d'importation ouverte afin que la ligne, la colonne ou le message d'analyse reste visible.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Vérifiez les accolades, crochets, virgules, guillemets et caractères d'échappement les plus proches autour de l'emplacement signalé.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Formatez ou validez à nouveau le document après la correction de la syntaxe.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Poursuivez la validation du schéma uniquement après l'analyse réussie du JSON.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
     </steps>
-    <result><p>Le document est analysé comme JSON et peut passer à la validation normale des politiques.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+    <result><p>Le document est analysé au format JSON et peut passer à la validation de stratégie normale.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

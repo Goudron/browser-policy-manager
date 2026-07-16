@@ -21,6 +21,8 @@
             getCurrentLang,
             onSelectionChange,
             onModeChange,
+            documentationRowHelpLinks = {},
+            documentationRowHelpStatus = "available",
             allSettingsRouteState = window.BPMProfilesAllSettingsState?.create?.(),
             settingsInventory = window.BPMProfilesSettingsInventory?.create?.({
                 dependencies: {
@@ -52,6 +54,96 @@
 
         function entryKey(entry) {
             return `${entry.kind}:${entry.id}`;
+        }
+
+        function documentationTargetId(entry) {
+            if (!entry || entry.unknown) return "";
+            if (entry.kind === "policy") return `policy:${entry.id}`;
+            if (entry.kind === "preference" && entry.knownPreference) {
+                return `known-preference:${entry.id}`;
+            }
+            return "";
+        }
+
+        function rowHelpState(entry) {
+            const targetId = documentationTargetId(entry);
+            if (entry?.unknown) {
+                return { disposition: "unsupported_unknown", targetId: "", href: "", links: null };
+            }
+            if (!targetId && entry?.rawFallback) {
+                return { disposition: "not_applicable_raw", targetId: "", href: "", links: null };
+            }
+            if (!targetId) {
+                return { disposition: "missing_documentation", targetId: "", href: "", links: null };
+            }
+            const links = targetId && documentationRowHelpLinks[targetId];
+            const locale = getCurrentLang?.() || "en";
+            const href = links && typeof links[locale] === "string" ? links[locale] : "";
+            if (href) return { disposition: "linked", targetId, href, links };
+            if (String(documentationRowHelpStatus).startsWith("artifact_")) {
+                return {
+                    disposition: documentationRowHelpStatus,
+                    targetId,
+                    href: "",
+                    links: null,
+                };
+            }
+            return { disposition: "missing_documentation", targetId, href: "", links: null };
+        }
+
+        function rowHelpLabelKey(disposition) {
+            if (disposition === "linked") return "profiles.all_settings.row_help.open";
+            if (disposition === "not_applicable_raw") {
+                return "profiles.all_settings.row_help.raw_not_applicable";
+            }
+            if (disposition === "unsupported_unknown") {
+                return "profiles.all_settings.row_help.unknown_not_supported";
+            }
+            if (String(disposition).startsWith("artifact_")) {
+                return "profiles.all_settings.row_help.unavailable";
+            }
+            return "profiles.all_settings.row_help.missing";
+        }
+
+        function renderRowHelp(entry, location) {
+            const state = rowHelpState(entry);
+            const label = formatText(rowHelpLabelKey(state.disposition), {
+                setting: entry.label || entry.id,
+            });
+            if (state.disposition !== "linked") {
+                return `
+                    <span
+                        class="context-help-icon-link all-settings-row-help-link is-unavailable"
+                        role="img"
+                        title="${escapeHtml(label)}"
+                        aria-label="${escapeHtml(label)}"
+                        aria-disabled="true"
+                        data-all-settings-help-location="${escapeHtml(location)}"
+                        data-settings-entry-id="${escapeHtml(entry.id)}"
+                        data-settings-entry-kind="${escapeHtml(entry.kind)}"
+                        data-settings-entry-help-disposition="${escapeHtml(state.disposition)}">
+                        <span aria-hidden="true">i</span>
+                    </span>
+                `;
+            }
+            return `
+                <a
+                    class="context-help-icon-link all-settings-row-help-link"
+                    href="${escapeHtml(state.href)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="${escapeHtml(label)}"
+                    aria-label="${escapeHtml(label)}"
+                    data-documentation-link
+                    data-documentation-links='${escapeHtml(JSON.stringify(state.links))}'
+                    data-all-settings-help-target="${escapeHtml(state.targetId)}"
+                    data-all-settings-help-location="${escapeHtml(location)}"
+                    data-settings-entry-id="${escapeHtml(entry.id)}"
+                    data-settings-entry-kind="${escapeHtml(entry.kind)}"
+                    data-settings-entry-help-disposition="linked">
+                    <span aria-hidden="true">i</span>
+                </a>
+            `;
         }
 
         function getFilterValues() {
@@ -525,10 +617,13 @@
                 .map((entry) => {
                     const currentEntryKey = entryKey(entry);
                     const selected = currentEntryKey === routeState.getSnapshot().selectedEntryKey;
+                    const helpLink = renderRowHelp(entry, "list");
                     return `
+                    <div class="all-settings-list-row-shell${selected ? " is-selected" : ""}">
                     <button
                         type="button"
                         class="all-settings-list-row${selected ? " is-selected" : ""}"
+                        data-settings-entry-select
                         data-settings-entry-id="${escapeHtml(entry.id)}"
                         data-settings-entry-kind="${escapeHtml(entry.kind)}"
                         data-settings-entry-category="${escapeHtml(entry.categoryId)}"
@@ -549,6 +644,8 @@
                             ${escapeHtml(entry.value)}
                         </span>
                     </button>
+                    ${helpLink}
+                    </div>
                 `;
                 })
                 .join("");
@@ -937,7 +1034,7 @@
             const entriesByKey = new Map(entries.map((entry) => [`${entry.kind}:${entry.id}`, entry]));
             renderRows(listWindow.entries);
             if (allSettingsListEl) {
-                allSettingsListEl.querySelectorAll("[data-settings-entry-id]").forEach((row) => {
+                allSettingsListEl.querySelectorAll("[data-settings-entry-select]").forEach((row) => {
                     const entry = entriesByKey.get(
                         `${row.dataset.settingsEntryKind || ""}:${row.dataset.settingsEntryId || ""}`,
                     );
@@ -999,7 +1096,7 @@
         }
 
         function findRenderedRow(kind, id) {
-            return Array.from(allSettingsListEl?.querySelectorAll("[data-settings-entry-id]") || [])
+            return Array.from(allSettingsListEl?.querySelectorAll("[data-settings-entry-select]") || [])
                 .find((row) =>
                     row.dataset.settingsEntryKind === kind
                     && row.dataset.settingsEntryId === id
@@ -1047,16 +1144,18 @@
         }
 
         allSettingsListEl?.addEventListener("click", (event) => {
-            const row = event.target.closest("[data-settings-entry-id]");
+            if (event.target.closest("[data-all-settings-help-target]")) return;
+            const row = event.target.closest("[data-settings-entry-select]");
             if (!row) return;
             routeState.setSelectedEntryKey(`${row.dataset.settingsEntryKind || ""}:${row.dataset.settingsEntryId || ""}`, {
                 categoryId: row.dataset.settingsEntryCategory || "",
                 target: `all-settings-entry:${row.dataset.settingsEntryKind || ""}:${row.dataset.settingsEntryId || ""}`,
             });
-            allSettingsListEl.querySelectorAll("[data-settings-entry-id]").forEach((entryRow) => {
+            allSettingsListEl.querySelectorAll("[data-settings-entry-select]").forEach((entryRow) => {
                 const isSelected = entryRow === row;
                 entryRow.classList.toggle("is-selected", isSelected);
                 entryRow.setAttribute("aria-current", isSelected ? "true" : "false");
+                entryRow.closest(".all-settings-list-row-shell")?.classList.toggle("is-selected", isSelected);
             });
             render();
         });

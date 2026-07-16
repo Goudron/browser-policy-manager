@@ -12,7 +12,6 @@ GUIDES = {
     "user-guide.ditamap": "map-user-guide",
     "firefox-policy-guide.ditamap": "map-firefox-policy-guide",
     "cis-settings-guide.ditamap": "map-cis-settings-guide",
-    "api-integration-guide.ditamap": "map-api-integration-guide",
     "administrator-guide.ditamap": "map-administrator-guide",
 }
 PORTAL_REFERENCES = tuple(GUIDES)
@@ -36,14 +35,16 @@ CIS_GUIDE_KEYREFS = [
     "topic.cis-task-run-level-1-workflow",
     "topic.cis-task-run-level-2-hardened-workflow",
 ]
-API_GUIDE_KEYREFS = [
-    "topic.api-concept-administrator-integration-landing",
-]
 ADMIN_GUIDE_KEYREFS = [
     "topic.admin-task-prepare-linux-source-deployment",
     "topic.admin-task-set-up-linux-source-checkout",
     "topic.admin-task-configure-linux-source-runtime",
     "topic.admin-task-verify-linux-source-deployment",
+    "topic.admin-task-install-ubuntu-26-04-source",
+    "topic.admin-task-install-debian-13-source",
+    "topic.admin-task-install-fedora-44-source",
+    "topic.admin-task-install-linux-mint-22-3-source",
+    "topic.admin-task-install-manjaro-stable-source",
     "topic.admin-task-prepare-windows-wsl-source-deployment",
     "topic.admin-task-set-up-windows-wsl-source-checkout",
     "topic.admin-task-configure-windows-wsl-network-runtime",
@@ -135,12 +136,6 @@ def test_guide_maps_are_independent_localized_dita_inputs(locale: str) -> None:
             topicrefs = root.findall("topicref")
             assert [topicref.attrib for topicref in topicrefs] == [
                 {"keyref": keyref} for keyref in CIS_GUIDE_KEYREFS
-            ]
-            assert list(root) == [title, key_map, *topicrefs]
-        elif filename == "api-integration-guide.ditamap":
-            topicrefs = root.findall("topicref")
-            assert [topicref.attrib for topicref in topicrefs] == [
-                {"keyref": keyref} for keyref in API_GUIDE_KEYREFS
             ]
             assert list(root) == [title, key_map, *topicrefs]
         elif filename == "administrator-guide.ditamap":

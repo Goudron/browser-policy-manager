@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-source-update-rollback-stop" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>验证 update 并应用 rollback stop conditions</title>
-  <shortdesc>启动更新后的 BPM process，验证 probes、UI、API evidence 和 documentation status，然后决定 accept、stop 或 restore from backup。</shortdesc>
+<task id="admin-task-verify-source-update-rollback-stop" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>验证更新并应用回滚停止条件</title>
+  <shortdesc>启动更新的 BPM 流程，验证探针、UI、API 证据和文档状态，然后决定是否接受、停止或从备份恢复。</shortdesc>
   <taskbody>
-    <prereq><p>Migrations、source smoke 和 documentation rebuild checks 已完成，或 failure point 已记录。</p></prereq>
-    <context><p>Post-update verification 证明更新后的 source run 对当前 controlled environment 可用。它不证明 production readiness、reverse proxy behavior、HA、managed backup 或 Firefox runtime enforcement。</p></context>
+    <prereq><p>迁移、源烟雾和文档重建检查已完成或已记录故障点。</p></prereq>
+    <context><p>更新后验证证明更新后的源运行可用于当前受控环境。它不证明生产准备情况、反向代理行为、HA、托管备份或 Firefox 运行时强制。</p></context>
     <steps>
-      <step><cmd>启动更新后的 source process 并检查 probes。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>启动更新的源进程并检查探测器。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Expected responses 仍为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
-      <step><cmd>验证 product UI、API evidence 和 documentation status。</cmd><info><p>打开 <codeph>http://127.0.0.1:8000/profiles</codeph>，运行 required reusable API examples，在需要时确认 exported <codeph>policies.json</codeph> evidence，并检查 <codeph>/help/</codeph> 对 installed artifact 没有报告 stale、incompatible 或 missing documentation。</p></info></step>
-      <step><cmd>只有在每个 required check 都已记录时才接受 update。</cmd><info><p>记录 previous revision、target revision、migration result、source smoke result、documentation validation/build result、health/readiness responses、UI smoke result、API/export evidence 和任何 known deferred production controls。</p></info></step>
-      <step><cmd>应用 rollback 或 stop conditions，不编造 automatic recovery。</cmd><info><p>如果 failure 发生在 migrations 之前，返回 previous source revision 并重新安装 dependencies。如果 failure 发生在 migrations 之后，停止 BPM，恢复 verified pre-update database backup，返回 previous source revision，重新安装 dependencies，并重复 health/UI smoke checks。如果 backup evidence 缺失、restore 未验证或 data 在 migration 后发生变化，请停止并 escalate，而不是声称 rollback success。</p><note type="warning">当 probes fail、documentation stale、exports 异常不同、migrations uncertain 或 rollback evidence incomplete 时，不要把 update 标记为 complete。</note></info></step>
+]]></codeblock><p>预期响应仍然是 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
+      <step><cmd>验证产品 UI、API 证据和文档状态。</cmd><info><p>打开 <codeph>http://127.0.0.1:8000/profiles</codeph>，运行所需的可重用 API 示例，在需要时确认导出的 <codeph>policies.json</codeph> 证据，并检查 <codeph>/help/</codeph> 是否未报告已安装工件的陈旧、不兼容或丢失文档。</p></info></step>
+      <step><cmd>仅当记录了每个必需的检查后才接受更新。</cmd><info><p>记录以前的修订、目标修订、迁移结果、源烟雾结果、文档验证/构建结果、运行状况/就绪响应、UI 烟雾结果、API/导出证据以及任何已知的延期生产控制。</p></info></step>
+      <step><cmd>应用回滚或停止条件而不发明自动恢复。</cmd><info><p>如果在迁移之前发生故障，请返回到先前的源版本并重新安装依赖项。如果迁移后发生故障，请停止 BPM，恢复已验证的更新前数据库备份，返回到先前的源版本，重新安装依赖项，并重复运行状况/UI 烟雾检查。如果备份证据丢失、恢复未经验证或迁移后数据发生更改，请停止并升级，而不是声明回滚成功。</p><note type="warning">当探测失败、文档过时、导出意外不同、迁移不确定或回滚证据不完整时，不要将更新标记为完成。</note></info></step>
     </steps>
-    <result><p>Update 要么 accepted with complete evidence，要么 stopped at a known blocker，要么 restored from the pre-update backup with explicit proof。</p></result>
-    <postreq><p>将 resulting evidence 用于 operations handoff note 和 future production/HA/reverse-proxy planning。</p></postreq>
+    <result><p>更新要么在完整证据的情况下被接受，在已知的阻止程序处停止，要么从具有明确证据的更新前备份中恢复。</p></result>
+    <postreq><p>在操作移交记录和未来生产/HA/反向代理规划中使用生成的证据。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-run-source-update-migrations-docs"/>

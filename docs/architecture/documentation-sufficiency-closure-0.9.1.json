@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "closure_id": "bpm-0.9.1-documentation-sufficiency-closure",
+  "backlog_item": "BPM091-M12-05",
+  "target_bpm_version": "0.9.1",
+  "closed_at": "2026-07-15",
+  "status": "accepted",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "guide_families": [
+    "user-guide",
+    "firefox-policy-guide",
+    "cis-settings-guide",
+    "administrator-guide"
+  ],
+  "guide_reviews": [
+    {
+      "guide_ids": ["user-guide"],
+      "review": "docs/architecture/user-guide-sufficiency-review-0.9.1.json",
+      "status": "accepted",
+      "reviewed_topic_count": 72,
+      "release_blockers": []
+    },
+    {
+      "guide_ids": ["firefox-policy-guide", "cis-settings-guide"],
+      "review": "docs/architecture/firefox-cis-guide-sufficiency-review-0.9.1.json",
+      "status": "accepted",
+      "review_item_count": 8,
+      "release_blockers": []
+    },
+    {
+      "guide_ids": ["administrator-guide"],
+      "review": "docs/architecture/administrator-devops-guide-sufficiency-review-0.9.1.json",
+      "status": "accepted",
+      "reviewed_topic_count": 49,
+      "release_blockers": [],
+      "conditional_boundary": "Windows 10/11 WSL procedures are deferred non-goals with no actual-host validation claim."
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "minimal-localized-user-guide-screenshots",
+      "disposition": "accepted",
+      "evidence": [
+        "documentation/config/user-guide-screenshot-matrix-0.9.1.json",
+        "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+        "documentation/config/locale-human-qa-0.9.1.json"
+      ],
+      "result": "All 36 approved rows cover six User Guide scenarios in all six locales with locale-owned normalized PNGs, captions, alt text, and accepted visual QA.",
+      "boundaries": [
+        "No screenshot coverage is claimed outside the approved minimal User Guide matrix."
+      ]
+    },
+    {
+      "id": "application-and-documentation-themes",
+      "disposition": "accepted",
+      "evidence": [
+        "docs/architecture/product-documentation-visual-theme-contract-0.9.1.md",
+        "tests/test_light_theme_surface_contract_091.py",
+        "tests/test_documentation_theme_alignment_091.py",
+        "tests/test_documentation_system_theme_091.py"
+      ],
+      "result": "BPM and documentation use comfortable non-white light surfaces, aligned dark styling, and explicit light/dark/system behavior with maintained contrast and browser checks.",
+      "boundaries": []
+    },
+    {
+      "id": "compact-localized-documentation-search",
+      "disposition": "accepted",
+      "evidence": [
+        "documentation/config/search-ui-filter-contract-0.9.1.json",
+        "documentation/tests/contract/test_search_ui_filter_contract.py",
+        "tests/test_documentation_search_filter_localization_091.py"
+      ],
+      "result": "Search defaults to one line, expands without losing filter state, keeps deterministic offline ranking, and localizes every visible filter label.",
+      "boundaries": [
+        "Hosted search, telemetry, LLMs, embeddings, vector databases, RAG, and generated answers are not supported."
+      ]
+    },
+    {
+      "id": "single-hierarchical-navigation",
+      "disposition": "accepted",
+      "evidence": [
+        "documentation/config/navigation-tree-contract-0.9.1.json",
+        "documentation/config/topic-section-taxonomy-0.9.1.json",
+        "documentation/config/documentation-navigation-language-browser-qa-0.9.1.json",
+        "documentation/config/documentation-polish-regression-gates-0.9.1.json"
+      ],
+      "result": "One locale-owned Documents/guide/section/topic hierarchy provides independent sidebar scrolling, direct-topic reveal, active focus, and reliable parent/root return without per-page tree copies.",
+      "boundaries": []
+    },
+    {
+      "id": "four-guide-consolidation",
+      "disposition": "accepted",
+      "evidence": [
+        "docs/architecture/api-integration-rehome-audit-0.9.0.json",
+        "documentation/config/documentation-navigation-locale-completion-audit-0.9.1.json",
+        "documentation/tests/contract/test_documentation_polish_regression_gates.py"
+      ],
+      "result": "The standalone API guide is absent from source publication, navigation, search, and manifests; all maintained API procedures are owned by the Administrator Guide.",
+      "boundaries": [
+        "FastAPI OpenAPI remains available at /docs and is not the retired product-documentation guide."
+      ]
+    },
+    {
+      "id": "locale-terminology-and-visible-prose",
+      "disposition": "accepted",
+      "evidence": [
+        "documentation/config/interface-name-replacement-0.9.1.json",
+        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/config/locale-anti-anglicism-guard-0.9.1.json",
+        "documentation/config/locale-human-qa-0.9.1.json"
+      ],
+      "result": "All six locales use runtime UI-catalog names, reviewed Pontoon/SUMO terminology, complete localized prose, and only occurrence-owned technical-English exceptions.",
+      "boundaries": [
+        "Brands, stable abbreviations, identifiers, commands, paths, APIs, and placeholders remain language-neutral only where explicitly reviewed."
+      ]
+    },
+    {
+      "id": "all-settings-contextual-help",
+      "disposition": "accepted",
+      "evidence": [
+        "documentation/config/all-settings-documentation-target-audit-0.9.1.json",
+        "documentation/config/all-settings-help-target-map-0.9.1.json",
+        "documentation/config/all-settings-row-help-link-contract-0.9.1.json"
+      ],
+      "result": "All 120 supported policy rows and all 62 known managed-preference rows have exact manifest-backed localized documentation targets; unknown/raw and unavailable artifacts use explicit non-link dispositions.",
+      "boundaries": []
+    },
+    {
+      "id": "five-linux-source-install-procedures",
+      "disposition": "accepted",
+      "evidence": [
+        "docs/architecture/linux-source-install-validation-0.9.1.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-14-evidence-closure-20260715/closure.json"
+      ],
+      "result": "Ubuntu 26.04, Debian 13.5, Fedora 44, Linux Mint 22.3, and Manjaro stable source procedures passed against retained clean userspace containers with migrations, six-locale documentation, runtime probes, and clean stop.",
+      "boundaries": [
+        "OCI userspace evidence does not validate native boot, kernel, systemd, desktop, hardware, host firewall, host networking, or production operation."
+      ]
+    },
+    {
+      "id": "windows-wsl-conditional-validation",
+      "disposition": "deferred-non-goal",
+      "evidence": [
+        "documentation/evidence/live-source-install/0.9.1/m11-11-windows10-wsl-20260715/run-manifest.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-12-windows11-wsl-20260715/run-manifest.json",
+        "documentation/evidence/live-source-install/0.9.1/m11-14-evidence-closure-20260715/closure.json"
+      ],
+      "result": "Neither actual Windows 10 nor Windows 11 host was supplied; both outcomes remain unverified-no-actual-host-supplied, claim no WSL validation, do not block the bounded documentation outcome, and allow a future actual-host rerun.",
+      "boundaries": [
+        "Docker, Linux containers, ISO inspection, and static documentation checks do not validate WSL host integration."
+      ]
+    },
+    {
+      "id": "maintained-drift-gates",
+      "disposition": "accepted",
+      "evidence": [
+        "documentation/runbooks/localization-and-screenshots.md",
+        "documentation/runbooks/inventory-refresh.md",
+        "documentation/runbooks/links-manifest-and-publishing.md",
+        "docs/firefox-schema-update-runbook.md",
+        "docs/cis_firefox_update_runbook_2026-04-13.md",
+        "docs/locale_update_runbook_2026-06-01.md"
+      ],
+      "result": "Screenshot, locale, schema, CIS, navigation, search, theme, help-link, deployment, update, integration, and live-evidence drift all have maintained fail-closed procedures.",
+      "boundaries": []
+    }
+  ],
+  "retained_linux_transcripts": [
+    "documentation/evidence/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714/run-manifest.json",
+    "documentation/evidence/live-source-install/0.9.1/m11-05-debian-source-install-20260714/run-manifest.json",
+    "documentation/evidence/live-source-install/0.9.1/m11-06-fedora-source-install-20260714/run-manifest.json",
+    "documentation/evidence/live-source-install/0.9.1/m11-07-mint-source-install-20260715/run-manifest.json",
+    "documentation/evidence/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715/run-manifest.json"
+  ],
+  "environment_handoff": {
+    "manifest": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/run-manifest.json",
+    "inventory": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json",
+    "docker_engine_retained": true,
+    "clean_images_retained": 5,
+    "stopped_containers_retained": 13,
+    "network_retained": 1,
+    "deletion_performed": false
+  },
+  "release_blockers": [],
+  "remaining_non_goals": [
+    "Screenshot coverage beyond the approved minimal User Guide matrix.",
+    "Validated Windows 10/11 WSL behavior without a successful maintained runner execution on each actual host.",
+    "Native-host Linux boot, kernel, systemd, desktop, hardware, firewall, and network validation.",
+    "Packaged installers, native Windows service support, official service units, production hardening, reverse-proxy/TLS recipes, HA, rolling upgrades, managed secrets, and automated restore guarantees.",
+    "AI-assisted runtime documentation search or question answering."
+  ],
+  "release_readiness": {
+    "documentation_outcomes_ready": true,
+    "implementation_and_maintained_documentation_milestones_verified": true,
+    "overall_bpm_0_9_1_release_ready_claimed": false,
+    "remaining_required_work": [
+      "BPM091-M13-10 reviewed commit and M13-11 maintainer-run push handoff"
+    ]
+  },
+  "focused_checks": [
+    "documentation/tests/contract/test_documentation_sufficiency_closure.py",
+    "documentation/tests/contract/test_user_guide_sufficiency_review.py",
+    "documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py",
+    "documentation/tests/contract/test_administrator_devops_guide_sufficiency_review.py",
+    "documentation/tests/contract/test_user_guide_screenshot_visual_qa.py",
+    "documentation/tests/contract/test_locale_human_qa.py",
+    "documentation/tests/contract/test_documentation_navigation_locale_completion_audit.py",
+    "documentation/tests/contract/test_all_settings_help_target_map.py",
+    "documentation/tests/contract/test_live_source_install_evidence_closure.py"
+  ],
+  "verification": {
+    "focused_closure_and_source_contracts": "pass-49",
+    "linked_outcome_contracts": "pass-131",
+    "full_documentation_contracts": "pass-752-with-4-deselected",
+    "m13_07_milestone_handoff": "pass-45",
+    "m13_09_release_procedures": "pass-754-with-4-deselected",
+    "docs_release_check": "pass-six-locales",
+    "docs_snapshot": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false,
+    "docker_resources_modified": false
+  }
+}

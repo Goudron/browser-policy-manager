@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Configurar usuarios, complementos y sitios</title>
-  <shortdesc>Esta tarea describe el escenario completo «Configurar usuarios, complementos y sitios»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Utilice el Paso 4 para cuentas, extensiones, complementos, marcadores, idioma, traducción y manejo del sitio.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Un borrador guiado está abierto.</p></prereq>
+    <context><p>Este paso recopila controles que afectan las superficies de identidad del usuario, la gobernanza de extensiones, la localización y el comportamiento específico del sitio web.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Configurar usuarios, complementos y sitios».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra el Paso 4, Usuarios, sitios de complementos &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revisar las cuentas de Mozilla y las superficies del navegador relacionadas con la identidad.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Configure extensiones, complementos y marcadores de acuerdo con las reglas de implementación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Establecer opciones de idioma, traducción y manejo del sitio web.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil contiene usuarios revisados, complementos, marcadores, idiomas y controles de manejo del sitio.</p></result>
+    <postreq><p>Recuperación: si una extensión o sitio se bloquea inesperadamente, inspecciona la sección coincidente y valida nuevamente.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-security-privacy"/>

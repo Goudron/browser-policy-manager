@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>搜索 All Settings</title>
-  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Search configured settings, available policies, known preferences, and setting actions from All Settings.</shortdesc>
+  <title>搜索 所有设置</title>
+  <shortdesc>从 所有设置 搜索配置的设置、可用策略、已知首选项和设置操作。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Open All Settings in any mode.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Search is shared across Review, Configured, and Catalog work. It can lead to a setting, an action, or a filtered group.</p></context>
+    <prereq><p>在任何模式下打开 所有设置。</p></prereq>
+    <context><p>搜索在审阅、配置和编录工作之间共享。它可以导致设置、操作或过滤组。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Place focus in the All Settings search field.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Enter a policy ID, preference key, category, source, or plain-language term.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Choose a grouped result and confirm the target setting or action.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：搜索 All Settings. Clear the search when you return to browsing or filtering.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+      <step><cmd>将焦点置于 所有设置 搜索字段中。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>输入策略 ID、首选项键、类别、来源或简单语言术语。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择分组结果并确认目标设置或操作。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>返回浏览或过滤时清除搜索。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 The matching setting or action is selected without losing the current profile context.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if no result appears, confirm the schema channel and try a policy ID or preference key.</p></postreq>
+    <result><p>选择匹配的设置或操作，而不会丢失当前配置文件上下文。</p></result>
+    <postreq><p>恢复：如果没有出现结果，请确认架构通道并尝试策略 ID 或首选项键。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-follow-setting-deep-link"/>

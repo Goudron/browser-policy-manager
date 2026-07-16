@@ -634,6 +634,8 @@
                 },
                 allSettingsRouteState,
                 settingsInventory,
+                documentationRowHelpLinks: catalogs.allSettingsRowHelpLinks || {},
+                documentationRowHelpStatus: catalogs.allSettingsRowHelpStatus || "available",
             },
             allSettingsCategoryCatalog,
             wizardPreferencesCatalog,
@@ -669,6 +671,8 @@
             searchEnginePresets,
             wizardSchemaShellCatalog,
             settingsTargetAliases: catalogs.settingsTargetAliases || {},
+            documentationRowHelpLinks: catalogs.allSettingsRowHelpLinks || {},
+            documentationRowHelpStatus: catalogs.allSettingsRowHelpStatus || "available",
         });
         setBuildWizardSettingsSearchIndex(settingsSearch.buildIndex);
         setRenderWizardSettingsSearchResults(settingsSearch.renderResults);

@@ -35,7 +35,6 @@ def test_guide_landing_topics_are_manifest_ready_without_product_topics() -> Non
         "user-guide",
         "firefox-policy-guide",
         "cis-settings-guide",
-        "api-integration-guide",
         "administrator-guide",
     ]
     assert all(anchor.startswith("a-") for anchor in anchors)

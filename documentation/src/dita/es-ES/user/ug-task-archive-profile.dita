@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-archive-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Archivar un perfil activo</title>
-  <shortdesc>Esta tarea describe el escenario completo «Archivar un perfil activo»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Mueve un perfil activo fuera de la lista activa normal sin eliminarlo permanentemente.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>El perfil está activo, visible en la Biblioteca y ya no es necesario para los flujos de trabajo normales de edición o exportación.</p></prereq>
+    <context><p>El archivado es reversible. Mantiene el perfil disponible a través de filtros archivados o de todo el ciclo de vida.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Archivar un perfil activo».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
+      <step><cmd>Confirme el nombre de la fila, el esquema, el estado de validación y la hora de actualización.</cmd><info><p>Resultado esperado: sabe exactamente qué perfil cambiará el estado del ciclo de vida.</p></info></step>
+      <step><cmd>Elija la acción del ciclo de vida del archivo.</cmd><info><note type="warning">Los perfiles archivados se conservan pero ya no se comportan como objetivos de exportación activos normales.</note></info></step>
+      <step><cmd>Espere el estado de la acción y actualice la biblioteca si es necesario.</cmd><info><p>La fila aparece en archivados o en todos los filtros del ciclo de vida una vez que se completa la acción.</p></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil se archiva y se puede restaurar más tarde.</p></result>
+    <postreq><p>Recuperación: restaure el perfil si archivó la fila incorrecta.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-restore-profile"/>

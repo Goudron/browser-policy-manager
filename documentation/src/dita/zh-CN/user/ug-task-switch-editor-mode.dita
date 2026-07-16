@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>切换编辑器模式</title>
-  <shortdesc>在同一个已保存配置文件的 Guided、All Settings 和 JSON 之间有意识地切换。</shortdesc>
+  <shortdesc>对于同一保存的配置文件，有意在 引导式编辑器、所有设置 和 JSON 之间移动。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
-    <context><p>切换模式只改变编辑界面，不改变底层已保存配置文件；在信任其他界面之前必须保存未保存更改。</p></context>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <context><p>切换模式更改编辑表面，而不是底层保存的配置文件；在信任另一个表面之前，必须保存未保存的更改。</p></context>
     <steps>
-      <step><cmd>确认当前配置文件已保存并具有可见 ID。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>选择目标模式：Guided 用于常见流程，All Settings 用于完整检查，JSON 用于原始文档工作。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>打开目标模式并确认配置文件名称和架构通道。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>只有在保存或明确放弃更改之后，才返回之前的模式。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+      <step><cmd>确认当前配置文件已保存并具有可见的 ID。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>选择目标模式：针对常见工作流程的引导模式、针对完整检查的 所有设置 或针对原始文档工作的 JSON。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>打开目标模式并验证配置文件名称和模式通道。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>仅在保存或有意放弃更改后返回到之前的模式。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
-    <result><p>您正在适合当前任务的编辑器模式中处理同一个配置文件。</p></result>
-    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <result><p>您正在编辑器模式下处理适合当前任务的相同配置文件。</p></result>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

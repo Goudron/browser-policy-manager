@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-format-json-document" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Formatear el documento JSON</title>
-  <shortdesc>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Format the current JSON document before review, validation, or handoff.</shortdesc>
+  <shortdesc>Formatee el documento JSON actual antes de su revisión, validación o transferencia.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Open JSON Editor with a JSON document in the editor.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
+    <prereq><p>Abra Editor JSON con un documento JSON en el editor.</p></prereq>
+    <context><p>El formato cambia únicamente los espacios en blanco y la sangría. Debería facilitar la revisión sin cambiar el significado de la política.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Choose the JSON format action.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Review the resulting indentation and object layout.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Confirm no policy value changed during formatting.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Formatear el documento JSON. Validate the document after formatting if you plan to save.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe la sintaxis JSON, top-level policies y los errores de validación de políticas.</note></info></step>
+      <step><cmd>Elija la acción de formato JSON.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Revise la sangría resultante y el diseño del objeto.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Confirme que no se haya modificado ningún valor de política durante el formateo.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Valide el documento después de formatear si planea guardarlo.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
     </steps>
-    <result><p>JSON Editor queda en el estado esperado y la acción se puede explicar durante la revisión. The JSON document is easier to review and remains semantically unchanged.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, valide el documento, vuelva a All Settings o abra el tema relacionado. Recovery: if formatting fails, fix JSON syntax first; trailing commas and missing braces are common causes.</p></postreq>
+    <result><p>El documento JSON es más fácil de revisar y permanece semánticamente sin cambios.</p></result>
+    <postreq><p>Recuperación: si el formateo falla, corrija primero la sintaxis JSON; Las comas finales y las llaves faltantes son causas comunes.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

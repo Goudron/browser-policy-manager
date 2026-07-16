@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-import-failure" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Récupérer après un failed import</title>
-  <shortdesc>Diagnostiquez un failed import JSON ou multipart policy input sans modifier le stockage interne.</shortdesc>
+  <title>Récupérer après un échec d'importation</title>
+  <shortdesc>Diagnostiquer l'échec de l'importation de JSON ou d'une entrée de stratégie en plusieurs parties sans modifier le stockage interne.</shortdesc>
   <taskbody>
-    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
-    <context><p>L’import peut échouer si le fichier est illisible, le JSON malformed, la Firefox boundary shape incorrecte ou les valeurs normalisées invalides.</p></context>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
+    <context><p>L'importation peut échouer car le fichier n'est pas lisible, le JSON est mal formé, la forme des limites de Firefox est incorrecte ou les valeurs normalisées ne peuvent pas passer la validation.</p></context>
     <steps>
-      <step><cmd>Gardez import failure message visible et identifiez si l’entrée était JSON ou multipart.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Confirmez que le fichier contient un Firefox boundary document avec top-level policies object lorsque JSON import est utilisé.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Si le message signale syntax, récupérez d’abord le malformed JSON.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Réessayez import une fois avec le fichier corrigé puis examinez les normalized values avant d’enregistrer.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+      <step><cmd>Gardez le message d'échec de l'importation visible et identifiez si l'entrée était JSON ou multipart.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Confirmez que le fichier contient un document de limites Firefox avec un objet de stratégie de niveau supérieur lorsque l'importation JSON est utilisée.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Si le message signale une syntaxe, récupérez d'abord le JSON mal formé.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Réessayez d'importer une fois avec le fichier corrigé, puis vérifiez les valeurs normalisées avant de sauvegarder.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
     </steps>
-    <result><p>L’import réussit dans un BPM profile draft révisable ou reste bloqué avec une raison visible conservée.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+    <result><p>L'importation réussit dans un brouillon de profil BPM révisable ou reste bloquée avec une raison visible préservée.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-import-policies-json"/>

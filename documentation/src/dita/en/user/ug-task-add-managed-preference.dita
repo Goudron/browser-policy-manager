@@ -4,12 +4,12 @@
   <title>Add a managed preference</title>
   <shortdesc>Add a known managed preference that is not yet configured in the profile.</shortdesc>
   <taskbody>
-    <prereq><p>Open All Settings with the correct schema channel selected.</p></prereq>
+    <prereq><p>Open All settings with the correct schema channel selected.</p></prereq>
     <context><p>Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
     <steps>
-      <step><cmd>Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Choose the known preference key and review its expected value type.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Enter the value and lock state required by the profile.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose the known preference key and review its expected value type.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Enter the value and lock state required by the profile.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Apply, validate, and save the managed preference.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>The profile contains the new managed preference with the intended value and lock behavior.</p></result>

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import html
-import json
 import urllib.parse
 from pathlib import Path
 from typing import Final
@@ -11,7 +10,11 @@ from fastapi.responses import RedirectResponse, Response
 
 from app.core.config import get_settings
 from app.core.locales import ACTIVE_CATALOG_LOCALES, resolve_active_catalog_locale_code
-from app.documentation.manifest import DocumentationCatalog, load_documentation_catalog
+from app.documentation.manifest import (
+    DocumentationCatalog,
+    documentation_artifact_problem,
+    load_documentation_catalog,
+)
 
 router = APIRouter(include_in_schema=False)
 
@@ -387,30 +390,7 @@ def _site_is_available(site_root: Path) -> bool:
 
 
 def _artifact_problem(site_root: Path) -> str | None:
-    manifest_path = site_root / "manifest.json"
-    if not manifest_path.is_file():
-        return "missing"
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return "incompatible"
-    artifact = manifest.get("artifact")
-    bpm_version = artifact.get("bpm_version") if isinstance(artifact, dict) else None
-    if isinstance(bpm_version, str) and bpm_version and bpm_version != get_settings().APP_VERSION:
-        return "stale"
-    locales = manifest.get("locales")
-    if isinstance(locales, list) and locales and all(isinstance(locale, str) for locale in locales):
-        if not all((site_root / locale / "index.html").is_file() for locale in locales):
-            return "incomplete"
-
-    catalog = _catalog(site_root)
-    if catalog is None:
-        return "incompatible"
-    if not catalog.locales:
-        return "incomplete"
-    if not all((site_root / locale / "index.html").is_file() for locale in catalog.locales):
-        return "incomplete"
-    return None
+    return documentation_artifact_problem(site_root)
 
 
 def _safe_relative_path(raw_path: str) -> Path | None:

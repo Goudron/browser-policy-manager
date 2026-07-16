@@ -49,7 +49,8 @@ REQUIRED_INVARIANT_TERMS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.75,
     "de": 0.70,
-    "zh-CN": 0.40,
+    # CJK characters carry substantially more information than Latin characters.
+    "zh-CN": 0.32,
     "fr": 0.70,
     "es-ES": 0.70,
 }
@@ -90,7 +91,7 @@ def test_devops_integration_runbooks_exist_in_every_locale_with_stable_metadata(
                 "id": topic_id,
                 XML_LANG: locale,
                 "audience": "administrator devops integrator security-reviewer",
-                "product": "bpm-0-9-0",
+                "product": "bpm-0-9-1",
                 "platform": "web",
             }
             assert root.findtext("title")

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>Configurer le runtime WSL et l’accès navigateur</title>
-  <shortdesc>Définissez les BPM runtime variables dans WSL, choisissez une bind address sûre, démarrez le source process et identifiez la browser URL depuis Windows.</shortdesc>
+<task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
+  <title>Configurer le runtime WSL et l'accès au navigateur</title>
+  <shortdesc>Définissez les variables d'exécution BPM dans WSL, choisissez une adresse de liaison sécurisée, démarrez le processus source et identifiez l'URL du navigateur à partir de Windows.</shortdesc>
   <taskbody>
-    <prereq><p>Le BPM checkout, la virtual environment, les dependencies et les migrations sont prêts dans le WSL Linux filesystem.</p></prereq>
-    <context><p>BPM lit les <codeph>BPM_</codeph> environment variables depuis le Linux process. WSL moderne transmet généralement <codeph>localhost</codeph> à Windows, mais il faut vérifier la WSL IP lorsque le browser access ou le firewall behavior est ambigu.</p></context>
+    <prereq><p>La récupération BPM, l'environnement virtuel, les dépendances et les migrations sont prêts dans le système de fichiers WSL Linux.</p></prereq>
+    <context><p>BPM lit les variables d'environnement <codeph>BPM_</codeph> du processus Linux. Le WSL moderne transmet normalement <codeph>localhost</codeph> à Windows, mais le WSL IP peut être vérifié lorsque l'accès au navigateur ou le comportement du pare-feu n'est pas clair.</p></context>
     <steps>
-      <step><cmd>Définissez les local runtime variables dans le WSL shell.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Définissez les variables d'exécution locales dans le shell WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 source .venv/bin/activate
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 export BPM_HOST="0.0.0.0"
 export BPM_PORT="8000"
 export BPM_RELOAD="true"
-]]></codeblock><p><codeph>BPM_HOST="0.0.0.0"</codeph> permet au Windows browser d’atteindre le WSL process via localhost forwarding. Utilisez <codeph>127.0.0.1</codeph> seulement si le browser est aussi dans WSL ou si le forwarding a été vérifié.</p></info></step>
-      <step><cmd>Démarrez BPM depuis le WSL checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p><codeph>BPM_HOST="0.0.0.0"</codeph> permet au navigateur Windows d'atteindre le processus WSL via le transfert localhost. Utilisez <codeph>127.0.0.1</codeph> uniquement lorsque le navigateur est également dans WSL ou que le transfert a été vérifié.</p></info></step>
+      <step><cmd>Démarrez BPM à partir de la caisse WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
-]]></codeblock><p>Le Makefile lance <codeph>uvicorn app.main:app --reload --port 8000</codeph>. Gardez le WSL terminal ouvert pour voir les startup messages, tracebacks et file-watcher output.</p></info></step>
-      <step><cmd>Identifiez la Windows browser URL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Le Makefile démarre <codeph>uvicorn app.main:app --reload --port 8000</codeph>. Gardez le terminal WSL ouvert pour les messages de démarrage, les traçages et la sortie de l'observateur de fichiers.</p></info></step>
+      <step><cmd>Identifiez l'URL du navigateur Windows.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 hostname -I
-]]></codeblock><p>Essayez d’abord <codeph>http://localhost:8000/profiles</codeph> depuis Windows. Si localhost forwarding est indisponible, utilisez la première WSL IP renvoyée par <codeph>hostname -I</codeph>, par exemple <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>.</p></info></step>
-      <step><cmd>Gardez les security boundaries explicites.</cmd><info><note type="warning">Ouvrir le WSL port à d’autres hosts, modifier les Windows firewall rules, ajouter TLS ou placer un reverse proxy devant BPM sort de ce sujet WSL source-deployment et doit attendre la production-readiness guidance.</note></info></step>
+]]></codeblock><p>Essayez d'abord <codeph>http://localhost:8000/profiles</codeph> depuis Windows. Si le transfert localhost n'est pas disponible, utilisez le premier WSL IP signalé par <codeph>hostname -I</codeph>, par exemple <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>.</p></info></step>
+      <step><cmd>Gardez les limites de sécurité explicites.</cmd><info><note type="warning">L'ouverture du port WSL sur d'autres hôtes, la modification des règles de pare-feu Windows, l'ajout de TLS ou le placement d'un proxy inverse devant BPM ne relèvent pas de cette rubrique de déploiement de sources WSL et doivent attendre les conseils de préparation à la production.</note></info></step>
     </steps>
-    <result><p>Le BPM source process fonctionne dans WSL et le Windows browser access path est identifié.</p></result>
-    <postreq><p>Vérifiez health, readiness, UI access et les WSL-specific failure modes.</p></postreq>
+    <result><p>Le processus source BPM s'exécute dans WSL et dispose d'un chemin d'accès au navigateur Windows identifié.</p></result>
+    <postreq><p>Vérifiez l'état, la préparation, l'accès UI et les modes de défaillance spécifiques à WSL.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-windows-wsl-source-checkout"/>

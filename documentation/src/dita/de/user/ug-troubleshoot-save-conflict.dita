@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-save-conflict" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Speicherkonflikt lösen</title>
-  <shortdesc>Stellen Sie nach concurrent update oder stale tab wieder her, ohne Profiländerungen stillschweigend zu verlieren.</shortdesc>
+  <title>Einen Speicherkonflikt lösen</title>
+  <shortdesc>Wiederherstellung nach einem gleichzeitigen Update oder einem veralteten Tab, ohne dass Profiländerungen stillschweigend verloren gehen.</shortdesc>
   <taskbody>
-    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
-    <context><p>Ein Speicherkonflikt bedeutet, dass ein anderer Tab oder eine andere Sitzung das gespeicherte Profil nach dem Laden des aktuellen Editors geändert hat.</p></context>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Ein Speicherkonflikt bedeutet, dass eine andere Registerkarte oder Sitzung das gespeicherte Profil geändert hat, nachdem der aktuelle Editor es geladen hat.</p></context>
     <steps>
-      <step><cmd>Stoppen Sie am save-conflict-Panel und überschreiben Sie nicht sofort.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Vergleichen Sie sichtbaren Profilnamen, Schema-Kanal, Editor-Modus und letzten Speicherzustand mit dem Tab, der den Konflikt erzeugte.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Kopieren Sie ungespeicherte Entwurfswerte, die erhalten bleiben müssen, bevor Sie das Profil neu laden.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Laden Sie das Profil neu oder wiederholen Sie das Speichern erst nach der Entscheidung, ob aktueller Entwurf oder neuerer Speicherzustand gelten soll.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+      <step><cmd>Stoppen Sie im Speicherkonfliktbereich und überschreiben Sie nicht sofort.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Vergleichen Sie den sichtbaren Profilnamen, den Schemakanal, den Editormodus und den zuletzt gespeicherten Status mit der Registerkarte, die den Konflikt verursacht hat.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Kopieren Sie alle nicht gespeicherten Entwurfswerte, die vor dem erneuten Laden des Profils beibehalten werden müssen.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Laden Sie das Profil neu oder versuchen Sie es erneut, zu speichern, nachdem Sie ausgewählt haben, ob der aktuelle Entwurf oder der neuere gespeicherte Status beibehalten werden soll.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
     </steps>
-    <result><p>Der stale tab ist gelöst, ohne aktuellen Entwurf oder neueres gespeichertes Profil stillschweigend zu verwerfen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+    <result><p>Die veraltete Registerkarte wird aufgelöst, ohne dass der aktuelle Entwurf oder das neuere gespeicherte Profil stillschweigend verworfen wird.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

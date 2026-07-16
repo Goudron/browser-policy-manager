@@ -1,5 +1,139 @@
 # Changelog
 
+## 0.9.1
+
+### Added
+- Added the approved minimal User Guide screenshot set: six workflow screenshots in each of the
+  `en`, `ru`, `de`, `zh-CN`, `fr`, and `es-ES` locales, with deterministic capture states,
+  localized captions and alt text, normalized PNG assets, and visual/freshness/orphan checks.
+- Added manifest-backed circled-information documentation links for all 120 supported Firefox
+  policy rows and all 62 known managed-preference rows in All Settings, including localized
+  labels, new-tab deep links, keyboard behavior, and explicit unavailable/stale/incomplete states.
+
+### Changed
+- Aligned the documentation portal with the BPM interface and added light, dark, and system theme
+  modes; changed the primary light surfaces in both BPM and documentation from harsh white to
+  accessible light gray.
+- Collapsed documentation search to one line by default with deliberate expansion, retained query
+  and filter state, deterministic offline results, and localized filter labels in all six locales.
+- Replaced duplicated document headings and long flat topic lists with one generated
+  Documents/guide/section/topic tree that supports direct-topic reveal, reliable parent/root
+  return, keyboard navigation, and independent sidebar scrolling.
+- Removed the obsolete standalone API Integration Guide from the six-locale portal, navigation,
+  search, and manifests; API workflows and contextual targets now resolve through the
+  Administrator Guide.
+- Made the six runtime locale catalogs the documented authority for BPM interface names, with
+  explicit historical aliases, non-UI technical-term boundaries, and catalog defects that must be
+  corrected before localized documentation replacement.
+- Replaced historical English BPM interface names across all six documentation locales and
+  generated navigation/search surfaces, while correcting malformed French, Spanish, German, and
+  Chinese runtime labels and retaining former terminology only as non-visible search queries.
+- Completed the full five-locale visible-prose review across all 805 non-English DITA/map sources,
+  replacing English and mixed-language sentences while retaining only reviewed technical literals,
+  identifiers, brands, and established abbreviations.
+- Replaced per-page embedded documentation trees with one deterministic, manifest-backed
+  `navigation.json` per locale and a shared same-origin runtime that preserves accessible tree
+  navigation, direct-topic reveal, independent scrolling, and localized failure recovery.
+- Added fail-closed documentation regression gates for retired API-guide structure, Administrator
+  API ownership, navigation artifact/manifest semantics, compact tree hosts, locale-owned UI terms,
+  visible-English review coverage, and bounded live technical exceptions.
+- Completed six-locale Chromium QA for successful and failed asynchronous navigation loading,
+  desktop/narrow long-tree wheel and keyboard scrolling, direct-topic/root return, retired API-guide
+  absence, exact BPM interface terms, and representative localized prose.
+- Accepted the maintainer-approved contract for bounded five-distribution Docker validation,
+  including a Docker-absent host baseline, immutable image/ISO provenance, strict CPU/RAM/storage
+  limits, no user-data or production access, retained transcripts, failed-install rollback,
+  M11-resource inventory/handoff, and persistent Docker Engine retention for future project work.
+- Installed the five approved Docker Engine components from Docker's signed Ubuntu 26.04
+  repository, verified the daemon/socket/group boundary with an isolated resource-limited smoke
+  container, removed all smoke resources, and retained the empty Docker runtime for live Linux
+  source-install validation and future project work.
+- Added the retained clean-container source-install harness with attempt-isolated evidence,
+  DITA-owned command extraction, bounded CPU/RAM/storage, deterministic probes, and no deletion
+  path; accepted Ubuntu lifecycle checks and a signed-official-ISO-derived Linux Mint 22.3 image
+  while retaining all stopped validation containers, target images, and the dedicated network.
+- Completed the live Ubuntu 26.04 LTS source-install procedure from the retained clean golden image
+  against an immutable BPM 0.9.1 ref, including prerequisites, migrations, six-locale documentation
+  publication, BPM health/readiness/UI probes, and clean shutdown; hardened completion detection
+  after two retained diagnostic attempts and accepted only the fresh third-container transcript.
+- Completed the live Debian 13.5 source-install procedure against the same immutable BPM 0.9.1 ref,
+  including checksum-verified CPython 3.14.6, migrations, six-locale documentation publication,
+  BPM probes, and shutdown; retained the first diagnostic container, corrected the shared runtime
+  adapter to preserve the activated environment and fail early, and accepted a fresh second run.
+- Completed the live Fedora Linux 44 source-install procedure on the first clean container against
+  the immutable BPM 0.9.1 ref, using Fedora's Python 3.14.6 packages and the inherited Ubuntu/Debian
+  harness protections; migrations, six-locale documentation publication, BPM probes, completion
+  guards, and clean shutdown passed while the Fedora image and stopped container were retained.
+- Completed the live Linux Mint 22.3 Zena source-install procedure on the first clean container
+  derived from the verified signed official ISO, including the real Mint Zena package repository,
+  checksum-verified CPython 3.14.6, migrations, six-locale documentation publication, BPM probes,
+  completion guards, and clean shutdown; the clean image and stopped container remain retained.
+- Completed the live Manjaro stable source-install procedure from the pinned March seed after a
+  full stable-branch update to the July 2026 package state; corrected the documented pacman command
+  to confirm non-interactively after the retained first diagnostic attempt, then passed BPM 0.9.1
+  installation, migrations, six-locale documentation, probes, guards, and shutdown in a fresh retry.
+- Reconciled all five Linux source-install procedures and six locale peers with their retained live
+  transcripts, including exact Russian command parity and reviewed CPython optional-module results;
+  closed the Linux userspace evidence blocker while explicitly retaining OCI, native-host,
+  production, Windows, and WSL boundaries.
+- Added a fail-closed PowerShell validation runner and feasibility contract for genuine Windows
+  10/11 WSL 2 hosts, covering host/build identity, Ubuntu 26.04 source assertions, systemd and
+  filesystem state, Windows/WSL localhost and Edge access, clean stop, WSL restart, and hashed
+  evidence while retaining both actual-host outcomes as unverified until those hosts are supplied.
+- Closed the conditional Windows 10 WSL validation task as unverified because no actual Windows 10
+  host was supplied, retaining an explicit machine-readable no-run record and making no Windows,
+  WSL, localhost, Edge, shutdown, restart, native-support, or production-readiness claim.
+- Closed the equivalent conditional Windows 11 WSL task as unverified without creating a VM because
+  neither an actual Windows 11 host nor installation media was supplied; retained the no-run record
+  and left a future supported-host rerun explicitly available.
+- Completed the retained Docker-environment handoff with all 13 validation containers stopped, all
+  five clean target images and the dedicated network preserved, zero volumes/build cache, unchanged
+  package/repository/key/socket/group and firewall boundaries, and no cleanup deletion or unrelated
+  host mutation.
+- Closed the live-install evidence record with five mandatory Linux userspace procedures accepted
+  against exact retained command/result transcripts, no unresolved mandatory failure, Windows
+  10/11 WSL outcomes explicitly unverified without actual hosts or validation claims, and the
+  retained Docker environment handed off intact; later milestones still own overall 0.9.1 release
+  readiness.
+- Refreshed README current-state documentation for the four-guide portal, application-aligned
+  themes, compact search, generated independently scrolling hierarchy, localized screenshots and
+  terminology, five Linux source-install procedures, conditional WSL boundary, and per-policy and
+  per-preference All Settings help links without adding version-specific release history.
+- Updated all six localized User Guide peers to explain the independently scrolling documentation
+  tree, direct-topic reveal, compact expandable search and filters, documentation theme behavior,
+  and All Settings policy/preference help links; removed visible 0.9.0 portal wording and standalone
+  API-guide naming, and moved maintained Administrator topics to current product metadata.
+- Updated the maintained localization and screenshot runbook with explicit 36-row User Guide
+  matrix drift gates, localized caption/alt-text checks, runtime UI-catalog authority,
+  Pontoon/SUMO terminology review, and narrowly evidenced visible-English allowlists.
+- Extended Firefox schema, CIS, locale, Administrator/DevOps, update, integration, publishing, and
+  release procedures with navigation/search/theme/help-link drift checks, retained-image Linux
+  live-evidence invalidation, honest actual-host WSL boundaries, and implemented release commands.
+- Closed the documentation sufficiency record across all four maintained guides, localized
+  screenshots and terminology, themes/search/navigation, API-guide consolidation, All Settings
+  targets, and five retained Linux runs while preserving explicit unverified Windows/WSL and
+  overall release-readiness boundaries.
+- Reconciled the maintained documentation index to all 119 active, runbook, audit, backlog, and
+  archive files with no missing, stale, duplicate, generated, local, or container-state entries.
+
+### Quality
+- Passed static typing and Ruff lint, the complete default pytest suite, and branch-aware coverage
+  of all 3,268 maintained application statements and 1,072 branches at `TOTAL 100%`.
+- Passed clean six-locale DITA publication and all 752 non-browser documentation release
+  contracts, plus 256 UI contracts/browser scenarios, six dedicated documentation Selenium
+  scenarios, and 17 focused screenshot/visual-QA contracts.
+- Verified the maintained M10-M12 handoff across navigation/localization, guide consolidation,
+  five-distribution live evidence, conditional WSL boundaries, retained environment inventory,
+  README, product documentation, runbooks, docs index, sufficiency, and drift gates.
+
+### Known boundaries
+- Windows 10 and Windows 11 WSL behavior remains unverified because no actual Windows hosts were
+  supplied; Linux containers and static checks do not substitute for actual-host validation.
+- Screenshot coverage remains intentionally limited to the approved minimal User Guide matrix;
+  screenshots for every guide family and topic remain outside this release.
+- Documentation search remains deterministic and non-AI. Packaged installers, production
+  hardening, HA, managed secrets, and automated restore guarantees remain deferred.
+
 ## 0.9.0
 
 ### Added

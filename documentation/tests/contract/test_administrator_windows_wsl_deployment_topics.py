@@ -123,7 +123,7 @@ def test_administrator_guide_maps_include_windows_wsl_runbook_topics(locale: str
     maps = DITA_ROOT / locale / "maps"
     admin_map = ET.parse(maps / "administrator-guide.ditamap").getroot()
     topicrefs = [topicref.attrib for topicref in admin_map.findall("topicref")]
-    assert topicrefs[4 : 4 + len(EXPECTED_WSL_KEYREFS)] == [
+    assert topicrefs[9 : 9 + len(EXPECTED_WSL_KEYREFS)] == [
         {"keyref": keyref} for keyref in EXPECTED_WSL_KEYREFS
     ]
 
@@ -149,7 +149,7 @@ def test_windows_wsl_runbook_topics_are_full_localized_dita_tasks(locale: str, t
         "id": topic_id,
         XML_LANG: locale,
         "audience": "administrator devops",
-        "product": "bpm-0-9-0",
+        "product": "bpm-0-9-1",
         "platform": "windows linux",
     }
     assert root.findtext("title", "").strip()

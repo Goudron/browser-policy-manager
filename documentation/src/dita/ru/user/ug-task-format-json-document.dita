@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-format-json-document" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Форматируйте JSON-документ</title>
-  <shortdesc>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Format the current JSON document before review, validation, or handoff.</shortdesc>
+  <title>Отформатируйте документ JSON.</title>
+  <shortdesc>Отформатируйте текущий документ JSON перед просмотром, проверкой или передачей.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Open JSON Editor with a JSON document in the editor.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Formatting changes whitespace and indentation only. It should make review easier without changing the policy meaning.</p></context>
+    <prereq><p>Откройте JSON-редактор с документом JSON в редакторе.</p></prereq>
+    <context><p>При форматировании изменяются только пробелы и отступы. Это должно облегчить обзор без изменения смысла политики.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Choose the JSON format action.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Review the resulting indentation and object layout.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Confirm no policy value changed during formatting.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Форматируйте JSON-документ. Validate the document after formatting if you plan to save.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте синтаксис JSON, top-level policies и ошибки policy validation.</note></info></step>
+      <step><cmd>Выберите действие формата JSON.</cmd><info><p>Ожидаемый результат: документ JSON остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Просмотрите полученный отступ и макет объекта.</cmd><info><p>Ожидаемый результат: документ JSON остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Убедитесь, что значение политики не изменилось во время форматирования.</cmd><info><p>Ожидаемый результат: документ JSON остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Проверьте документ после форматирования, если планируете сохранить.</cmd><info><note type="warning">Сохранение необработанного JSON может изменить канонический профиль BPM. Перед сохранением проверьте синтаксис и значения политики.</note></info></step>
     </steps>
-    <result><p>JSON Editor находится в ожидаемом состоянии, а действие можно объяснить при проверке. The JSON document is easier to review and remains semantically unchanged.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, валидируйте документ, вернитесь в All Settings или откройте связанный раздел. Recovery: if formatting fails, fix JSON syntax first; trailing commas and missing braces are common causes.</p></postreq>
+    <result><p>Документ JSON легче просматривать, и он остается семантически неизменным.</p></result>
+    <postreq><p>Восстановление: если форматирование не удалось, сначала исправьте синтаксис JSON; распространенными причинами являются конечные запятые и отсутствие фигурных скобок.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

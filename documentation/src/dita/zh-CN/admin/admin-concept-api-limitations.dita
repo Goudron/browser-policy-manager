@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="admin-concept-api-limitations" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>当前 API limitations 和 security constraints</title>
-  <shortdesc>BPM 0.9.0 明确记录当前 limitations，避免 integrations 推断 API 未暴露的 guarantees。</shortdesc>
+<concept id="admin-concept-api-limitations" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
+  <title>当前 API 限制和安全约束</title>
+  <shortdesc>BPM 清楚地记录了当前的限制，因此集成不会推断出未暴露的保证。</shortdesc>
   <conbody>
-    <section id="a-security"><title>Security constraints</title><p>当前 API 没有 authentication 或 authorization layer。除非 deployment settings 覆盖，CORS 默认使用 <codeph>*</codeph> origins。文档不得暗示 API token authentication、OAuth、role-based access control、tenant isolation 或 production authorization behavior。</p></section>
-    <section id="a-versioning"><title>Versioning and compatibility</title><p>API 没有 version prefix、compatibility policy、deprecation header 或 media-type version。Integrations 应固定其测试的 BPM release，并监控 <codeph>/openapi.json</codeph>、API inventory 和 release notes，而不是假设 guaranteed backward compatibility。</p></section>
-    <section id="a-concurrency"><title>Concurrency, idempotency, and retry</title><p>只有 PATCH 通过 optional <codeph>expected_revision</codeph> 支持 optimistic concurrency。Create、import、delete、restore、reset 和 export 不暴露 ETags、precondition headers、idempotency keys 或 retry contracts。Consumers 必须设计自己的 safe retry 和 duplicate-name recovery behavior。</p></section>
-    <section id="a-bulk-transactions"><title>Bulk and transaction boundaries</title><p>BPM 0.9.0 不暴露 bulk profile CRUD endpoint、bulk export endpoint、cursor pagination 或 multi-operation transaction contract。Failed multi-step integration 不会由 BPM 自动回滚；integrating product 拥有 recovery sequencing 和 audit records。</p></section>
-    <section id="a-errors"><title>Error envelope limitations</title><p>Error responses 不使用单一 stable versioned envelope。Status <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 和 <codeph>503</codeph> 可携带不同 <codeph>detail</codeph> shapes。Consumers 必须按 operation、status 和 documented body shape 分支处理。</p></section>
-    <section id="a-exclusions"><title>Excluded and HTML surfaces</title><p>六个 OpenAPI <codeph>web</codeph> operations 是 HTML product routes，不是 stable machine-integration APIs。<codeph>/i18n/{locale}.json</codeph>、<codeph>/favicon.ico</codeph>、<codeph>/static/*</codeph>、generated schema UIs 和 underscore-prefixed Python helpers 不属于 integration operation topics。</p></section>
-    <section id="a-health"><title>Health response limits</title><p><codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 只暴露 compact status fields。Readiness 不报告 per-dependency diagnostics、database details、schema health、documentation portal status 或 deployment approval。Operational monitors 应将它们视为 minimal handshake endpoints。</p></section>
+    <section id="a-security"><title>安全约束</title><p>当前 API 没有身份验证或授权层。 CORS 默认为 <codeph>*</codeph> 来源，除非部署设置覆盖它。文档不得暗示 API 令牌身份验证、OAuth、基于角色的访问控制、租户隔离或生产授权行为。</p></section>
+    <section id="a-versioning"><title>版本控制和兼容性</title><p>API 没有版本前缀、兼容性策略、弃用标头或媒体类型版本。集成应该固定他们测试的 BPM 版本并观察 <codeph>/openapi.json</codeph>、API 库存和发行说明，而不是假设有保证的向后兼容性。</p></section>
+    <section id="a-concurrency"><title>并发性、幂等性和重试</title><p>只有 PATCH 通过可选的 <codeph>expected_revision</codeph> 支持乐观并发。创建、导入、删除、恢复、重置和导出不会公开 ETags、前提条件标头、幂等性密钥或重试合约。消费者必须设计自己的安全重试和重名恢复行为。</p></section>
+    <section id="a-bulk-transactions"><title>批量和事务边界</title><p>BPM 不公开批量配置文件 CRUD 端点、批量导出端点、游标分页和多操作事务合约。 BPM 不会自动回滚失败的多步骤集成；集成产品拥有恢复排序和审计记录。</p></section>
+    <section id="a-errors"><title>误差包络限制</title><p>错误响应不使用一种稳定版本化的信封。状态 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 和 <codeph>503</codeph> 可以携带不同的 <codeph>detail</codeph> 形状。消费者必须根据操作、状态和记录的体型进行分类。</p></section>
+    <section id="a-exclusions"><title>排除和 HTML 曲面</title><p>六个 OpenAPI <codeph>web</codeph> 操作是 HTML 产品路线，而不是稳定的机器集成 API。 <codeph>/i18n/{locale}.json</codeph>、<codeph>/favicon.ico</codeph>、<codeph>/static/*</codeph>、生成的架构 界面 和以下划线前缀的 Python 帮助程序不包含在集成操作主题中。</p></section>
+    <section id="a-health"><title>健康反应限制</title><p><codeph>/health</codeph> 和 <codeph>/health/ready</codeph> 仅公开紧凑状态字段。就绪情况不会报告每个依赖项的诊断、数据库详细信息、架构运行状况、文档门户状态或部署批准。操作监视器应将它们视为最小握手端点。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.admin-concept-api-conventions"/>

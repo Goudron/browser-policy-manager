@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-archive-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Archiver un profil actif</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Archiver un profil actif » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Déplacez un profil actif hors de la liste active normale sans le supprimer définitivement.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Le profil est actif, visible dans la bibliothèque et n'est plus nécessaire pour les flux de travail normaux d'édition ou d'exportation.</p></prereq>
+    <context><p>L'archivage est réversible. Il maintient le profil disponible via les filtres archivés ou tous les filtres de cycle de vie.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Archiver un profil actif ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Confirmez le nom de la ligne, le schéma, l'état de validation et l'heure de mise à jour.</cmd><info><p>Résultat attendu : vous savez exactement quel profil changera d'état du cycle de vie.</p></info></step>
+      <step><cmd>Choisissez l'action de cycle de vie Archiver.</cmd><info><note type="warning">Les profils archivés sont conservés mais ne se comportent plus comme des cibles d'exportation actives normales.</note></info></step>
+      <step><cmd>Attendez l'état de l'action et actualisez la bibliothèque si nécessaire.</cmd><info><p>La ligne apparaît sous les filtres archivés ou tous les filtres de cycle de vie une fois l'action terminée.</p></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le profil est archivé et peut être restauré ultérieurement.</p></result>
+    <postreq><p>Récupération : restaurez le profil si vous avez archivé la mauvaise ligne.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-restore-profile"/>

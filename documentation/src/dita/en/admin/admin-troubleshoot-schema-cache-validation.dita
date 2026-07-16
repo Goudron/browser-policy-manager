@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-troubleshoot-schema-cache-validation" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-troubleshoot-schema-cache-validation" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Troubleshoot schema cache and API validation errors</title>
   <shortdesc>Diagnose unavailable schema cache, unknown schema channel, and Firefox policies validation failures without patching generated schema artifacts.</shortdesc>
   <taskbody>

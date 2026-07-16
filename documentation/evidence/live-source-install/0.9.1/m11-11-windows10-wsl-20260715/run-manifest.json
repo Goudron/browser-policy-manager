@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-11-windows10-wsl-20260715",
+  "backlog_item": "BPM091-M11-11",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted-unverified-boundary",
+  "result": "not-run",
+  "recorded_at": "2026-07-15T10:50:57Z",
+  "acceptance_basis": "No suitable actual Windows 10 host was supplied. The backlog explicitly accepts a recorded unverified boundary when no host is available, provided no Windows 10 validation claim is made.",
+  "target": {
+    "windows_target": "Windows10",
+    "actual_windows_host_required": true,
+    "actual_windows_host_supplied": false,
+    "required_wsl_generation": 2,
+    "required_distribution": {
+      "ID": "ubuntu",
+      "VERSION_ID": "26.04"
+    }
+  },
+  "observed_executor": {
+    "suitability": "unsuitable-non-windows-host",
+    "os_family": "Linux",
+    "kernel": "7.0.0-27-generic",
+    "architecture": "x86_64",
+    "distribution": {
+      "ID": "ubuntu",
+      "VERSION_ID": "26.04",
+      "PRETTY_NAME": "Ubuntu 26.04 LTS"
+    },
+    "command_availability": {
+      "pwsh": "absent",
+      "powershell": "absent",
+      "powershell.exe": "absent",
+      "wsl": "absent",
+      "wsl.exe": "absent"
+    },
+    "reason": "A Linux executor cannot provide a Windows build, WSL kernel/integration, Windows localhost forwarding, or Windows Edge evidence."
+  },
+  "contracts": {
+    "wsl_validation": "documentation/config/wsl-source-install-validation-contract-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "feasibility_record": "docs/architecture/wsl-source-install-validation-feasibility-0.9.1.md"
+  },
+  "runner": {
+    "path": "documentation/tools/wsl_source_install_validation.ps1",
+    "sha256": "6f82f1515ae1fec5c85609eb7c892a7174b3464a8a1335ffd39036e4ef1d62b4",
+    "preflight_attempted": false,
+    "full_validation_attempted": false,
+    "reason_not_executed": "The runner is fail-closed for Windows and must not be executed or simulated on the current Linux host."
+  },
+  "source_install_reference": {
+    "topic": "documentation/src/dita/en/admin/admin-task-install-ubuntu-26-04-source.dita",
+    "sha256": "8ebdf3f5670065c0100260ea1bc72ff2afcaa5394bfd64c449cf03abdc526fc6",
+    "execution_reused": false,
+    "reason": "M11-11 had no actual Windows 10 plus WSL environment in which to reuse the accepted Linux userspace procedure."
+  },
+  "check_outcomes": [
+    {"id": "windows-build", "status": "not-run-no-actual-host"},
+    {"id": "wsl-version", "status": "not-run-no-actual-host"},
+    {"id": "distribution-identity", "status": "not-run-no-actual-host"},
+    {"id": "systemd-mode", "status": "not-run-no-actual-host"},
+    {"id": "filesystem-location", "status": "not-run-no-actual-host"},
+    {"id": "installed-source-assertions", "status": "not-run-no-actual-host"},
+    {"id": "localhost-behavior", "status": "not-run-no-actual-host"},
+    {"id": "browser-access", "status": "not-run-no-actual-host"},
+    {"id": "shutdown", "status": "not-run-no-actual-host"},
+    {"id": "wsl-restart", "status": "not-run-no-actual-host"},
+    {"id": "evidence-capture", "status": "not-run-no-actual-host"}
+  ],
+  "claims": {
+    "windows_10_validated": false,
+    "wsl_2_validated": false,
+    "ubuntu_26_04_on_wsl_validated": false,
+    "windows_localhost_validated": false,
+    "windows_edge_validated": false,
+    "shutdown_restart_validated": false,
+    "native_windows_support_claimed": false,
+    "production_readiness_claimed": false,
+    "linux_container_used_as_substitute": false
+  },
+  "disposition": {
+    "windows_10": "unverified-no-actual-host-supplied",
+    "release_interpretation": "conditional-outcome-recorded-without-validation-claim",
+    "actual_host_evidence_present": false,
+    "future_rerun_allowed": true,
+    "handoff_task": "BPM091-M11-14",
+    "next_backlog_item": "BPM091-M11-12"
+  },
+  "safety": {
+    "bpm_server_started": false,
+    "wsl_distribution_started_or_terminated": false,
+    "docker_inspected": false,
+    "docker_modified": false,
+    "host_network_or_firewall_modified": false,
+    "host_services_or_registry_modified": false,
+    "credentials_or_user_data_accessed": false
+  },
+  "verification": {
+    "focused_contract": "pass-16",
+    "full_documentation_contract": "pass-718-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_validate": "pass-six-locales",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

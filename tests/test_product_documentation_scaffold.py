@@ -31,6 +31,7 @@ def test_product_documentation_scaffold_has_owned_source_tool_and_test_boundarie
     expected_directories = {
         "assets",
         "config",
+        "evidence",
         "fixtures",
         "runbooks",
         "src",

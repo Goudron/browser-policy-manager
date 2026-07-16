@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fx-task-review-complex-policy-configuration" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Revisar una configuración compleja de políticas antes de exportar</title>
-  <shortdesc>Use un review flow repetible para nested objects, arrays, raw fallback, conflicts y channel-specific availability.</shortdesc>
+  <title>Revisar una configuración de política compleja antes de exportar</title>
+  <shortdesc>Utilice un flujo de revisión repetible para objetos anidados, matrices, respaldo sin formato, conflictos y disponibilidad específica del canal.</shortdesc>
   <taskbody>
-    <prereq><p>Hay un perfil abierto y contiene al menos una familia compleja de políticas o una managed preference.</p></prereq>
-    <context><p>Las políticas complejas son más seguras cuando se revisan por familia, origen, schema channel y forma del boundary document exportado.</p></context>
+    <prereq><p>Un perfil está abierto y contiene al menos una familia de políticas compleja o una preferencia administrada.</p></prereq>
+    <context><p>Las políticas complejas son más seguras cuando se revisan por familia, fuente, canal de esquema y forma de límite exportado.</p></context>
     <steps>
-      <step><cmd>Abra All Settings y filtre la familia afectada.</cmd><info><p>Resultado esperado: las policies, preferences y source labels relacionadas se ven juntas.</p></info></step>
-      <step><cmd>Compruebe el badge Release/ESR de cada policy de la familia.</cmd><info><note type="warning">Una Release-only policy no debe exportarse para un perfil orientado a ESR.</note></info></step>
-      <step><cmd>Inspeccione los nested object y array values, incluidos los unknown preserved fields.</cmd><info><p>Resultado esperado: los raw fallback values se conservan o eliminan intencionadamente antes de guardar.</p></info></step>
-      <step><cmd>Compare preset, CIS, imported, manual y raw sources.</cmd><info><p>Resultado esperado: los conflicts se resuelven deliberadamente y no quedan ocultos por ediciones posteriores.</p></info></step>
-      <step><cmd>Valide el perfil y revise la forma del <codeph>policies.json</codeph> generado.</cmd><info><p>Resultado esperado: BPM no informa schema errors para el canal seleccionado.</p></info></step>
+      <step><cmd>Abra Todos los ajustes y filtre por la familia afectada.</cmd><info><p>Resultado esperado: las políticas, preferencias y etiquetas de origen relacionadas son visibles juntas.</p></info></step>
+      <step><cmd>Verifique la insignia de Versión/ESR para cada póliza de la familia.</cmd><info><note type="warning">No se debe exportar una política de solo versión para un perfil dirigido a ESR.</note></info></step>
+      <step><cmd>Inspecciona los valores de matriz y objetos anidados, incluidos los campos preservados desconocidos.</cmd><info><p>Resultado esperado: los valores de reserva sin procesar se mantienen o eliminan intencionalmente antes de guardarlos.</p></info></step>
+      <step><cmd>Compara fuentes preestablecidas, CIS, importadas, manuales y sin procesar.</cmd><info><p>Resultado esperado: los conflictos se resuelven deliberadamente en lugar de ocultarse mediante ediciones posteriores.</p></info></step>
+      <step><cmd>Valide el perfil y revise la forma <codeph>policies.json</codeph> generada.</cmd><info><p>Resultado esperado: BPM no informa errores de esquema para el canal seleccionado.</p></info></step>
     </steps>
-    <result><p>La familia compleja tiene nested values, source decisions y channel support revisados, además de un resultado de validación limpio.</p></result>
-    <postreq><p>Si la validación falla, vuelva a la familia, elimine unsupported keys o cambie al canal que realmente admite la policy.</p></postreq>
+    <result><p>La familia compleja ha revisado los valores anidados, las decisiones de origen, el soporte del canal y un resultado de validación limpio.</p></result>
+    <postreq><p>Si la validación falla, regrese a la familia, elimine las claves no admitidas o cambie al canal que realmente admite la política.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.fx-concept-complex-policy-families"/>

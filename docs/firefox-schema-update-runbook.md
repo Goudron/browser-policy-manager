@@ -219,6 +219,26 @@ Treat Firefox schema documentation as part of the schema bump, not as a later cl
    localized summaries or English fallback prose.
 4. Run the focused Firefox documentation inventory/skeleton/manifest contracts before the release
    gate, then run `make docs-release-check` when generated documentation artifacts changed.
+5. Reconcile every added, removed, or renamed policy and managed preference with
+   `documentation/config/all-settings-help-target-map-0.9.1.json` and the target audit. A supported
+   All Settings row must resolve to its current Firefox documentation topic or retain an explicit
+   reviewed no-link disposition; a schema bump may not leave a stale circled-information link.
+6. If topic ownership, labels, or routes change, rebuild and review each locale's generated
+   `navigation.json`, deterministic search index, manifest, and UI target map. Direct links must
+   expand the Documents/guide/section/topic tree to the active topic, and root/parent return must
+   remain valid.
+7. If the bump changes one of the six approved User Guide screenshot scenarios, update the matrix
+   row first, recapture all affected locales, and review localized captions and alt text. Do not
+   expand the minimal screenshot matrix as an incidental part of a schema update.
+8. Run the applicable drift contracts before the broad release gate:
+
+```bash
+./.venv/bin/pytest -q -m docs_contract \
+  documentation/tests/contract/test_all_settings_documentation_target_audit.py \
+  documentation/tests/contract/test_all_settings_help_target_map.py \
+  documentation/tests/contract/test_documentation_polish_regression_gates.py \
+  documentation/tests/contract/test_user_guide_screenshot_matrix.py
+```
 
 Important: only the migration, runtime normalizer, and their tests should keep references to the previous channels.
 
@@ -409,6 +429,12 @@ Before calling the bump finished, confirm all of the following:
 - new schema-generated policy-label keys are present in catalog order, all six override catalogs,
   generated segments, and runtime catalogs
 - glossary and Pontoon/SUMO evidence are updated when the schema bump introduces or renames Mozilla/Firefox user-facing terms
+- All Settings policy/preference help targets and reviewed no-link dispositions match the new
+  schema, with no stale target IDs
+- changed documentation routes remain present in locale navigation/search artifacts and reveal the
+  active topic in the hierarchical tree
+- any affected approved User Guide screenshot rows, localized captions, and alt text have been
+  regenerated and reviewed without expanding the matrix implicitly
 - `README.md` mentions the current supported Release / ESR versions
 
 ## Common Failure Modes

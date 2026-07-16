@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "guardrail_id": "bpm-0.9.1-documentation-polish-guardrails",
+  "backlog_item": "BPM091-M2-09",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "purpose": "Collect the focused guardrails that make the BPM 0.9.1 documentation-polish contracts fail closed before implementation work starts.",
+  "guards": [
+    {
+      "id": "user-guide-screenshot-matrix-complete",
+      "failure_mode": "missing screenshot matrix rows",
+      "fails_when": "Any approved User Guide screenshot scenario is missing for any active locale, or a row loses topic, route, fixture, caption, alt-text, or asset-path metadata.",
+      "source_files": [
+        "documentation/config/user-guide-screenshot-matrix-0.9.1.json"
+      ],
+      "current_check": "documentation/tests/contract/test_091_documentation_polish_guardrails.py::test_guardrail_fails_for_missing_screenshot_matrix_rows",
+      "implementation_tasks": ["BPM091-M5-01", "BPM091-M5-02", "BPM091-M5-04", "BPM091-M5-05"],
+      "release_gates": ["make test-docs-contract", "make test-docs-browser", "make test-release"]
+    },
+    {
+      "id": "localized-search-filter-labels",
+      "failure_mode": "English filter labels in localized search",
+      "fails_when": "A non-English locale uses a raw facet key, inherited English visible filter label, or unlabeled visible search facet.",
+      "source_files": [
+        "documentation/config/search-ui-filter-contract-0.9.1.json",
+        "documentation/config/search-facets-filters-0.9.0.json"
+      ],
+      "current_check": "documentation/tests/contract/test_091_documentation_polish_guardrails.py::test_guardrail_fails_for_localized_search_filter_english_fallback",
+      "implementation_tasks": ["BPM091-M4-01", "BPM091-M4-02", "BPM091-M7-03", "BPM091-M7-04"],
+      "release_gates": ["make test-docs-contract", "make test-docs-ui", "make test-release"]
+    },
+    {
+      "id": "navigation-tree-no-duplicate-guide-titles",
+      "failure_mode": "duplicate guide titles and broken root return",
+      "fails_when": "Guide names are rendered as competing header and left-tree titles, current state is derived from translated labels, or root/parent return behavior no longer resolves through manifest URLs.",
+      "source_files": [
+        "documentation/config/navigation-tree-contract-0.9.1.json"
+      ],
+      "current_check": "documentation/tests/contract/test_091_documentation_polish_guardrails.py::test_guardrail_fails_for_duplicate_titles_and_broken_root_return",
+      "implementation_tasks": ["BPM091-M4-04", "BPM091-M4-05", "BPM091-M4-06", "BPM091-M4-07"],
+      "release_gates": ["make test-docs-contract", "make test-docs-browser", "make test-release"]
+    },
+    {
+      "id": "light-theme-no-pure-white-primary-surfaces",
+      "failure_mode": "pure-white light theme surfaces",
+      "fails_when": "Light-mode primary surfaces use #ffffff, white, rgb(255,255,255), or equivalent pure-white backgrounds instead of BPM-aligned light-gray surfaces.",
+      "source_files": [
+        "docs/architecture/product-documentation-visual-theme-contract-0.9.1.md",
+        "documentation/assets/theme/bpm-docs.css",
+        "app/static/profiles_css/00-foundation.css"
+      ],
+      "current_check": "documentation/tests/contract/test_091_documentation_polish_guardrails.py::test_guardrail_registers_pure_white_source_checks_for_theme_implementation",
+      "current_mode": "contract-fixture-before-m3-source-scan",
+      "forbidden_primary_surface_tokens": ["#ffffff", "white", "rgb(255, 255, 255)"],
+      "primary_surface_scope": [
+        "page background",
+        "shell header",
+        "sidebar",
+        "main content surface",
+        "search surface",
+        "cards",
+        "table containers",
+        "code-adjacent panels",
+        "form controls"
+      ],
+      "implementation_tasks": ["BPM091-M3-01", "BPM091-M3-02", "BPM091-M3-03", "BPM091-M3-05"],
+      "release_gates": ["make test-docs-contract", "make test-docs-ui", "make test-ui", "make test-release"]
+    },
+    {
+      "id": "all-settings-row-help-disposition",
+      "failure_mode": "All Settings rows without valid help-link disposition",
+      "fails_when": "A visible All Settings row has neither a manifest-backed documentation link nor a valid no-link disposition for raw, unknown, missing, unavailable, stale, incomplete, or incompatible documentation.",
+      "source_files": [
+        "documentation/config/all-settings-row-help-link-contract-0.9.1.json"
+      ],
+      "current_check": "documentation/tests/contract/test_091_documentation_polish_guardrails.py::test_guardrail_fails_for_all_settings_rows_without_valid_help_disposition",
+      "implementation_tasks": ["BPM091-M8-01", "BPM091-M8-02", "BPM091-M8-03", "BPM091-M8-05", "BPM091-M8-06"],
+      "release_gates": ["make test-docs-contract", "make test-docs-ui", "make test-docs-browser", "make test-release"]
+    }
+  ]
+}

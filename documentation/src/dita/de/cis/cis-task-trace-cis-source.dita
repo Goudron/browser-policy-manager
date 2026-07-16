@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-trace-cis-source" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Einen CIS-Wert zur Quelle zurückverfolgen</title>
-  <shortdesc>Verfolgen Sie einen configured value vor dem Export zum starter preset, CIS layer, merge decision und späteren edits zurück.</shortdesc>
+  <title>Verfolgen Sie einen CIS-Wert zu seiner Quelle</title>
+  <shortdesc>Verfolgen Sie einen konfigurierten Wert auf die Startervoreinstellung, die CIS-Ebene, die Zusammenführungsentscheidung und spätere Änderungen vor dem Export zurück.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein Profil, das aus einem starter preset erstellt wurde oder einen CIS Level 1 oder Level 2 layer enthält.</p></prereq>
-    <context><p>Tracing ist nützlich, wenn ein Reviewer fragt, ob eine Einstellung aus original baseline, CIS layer, import, manual edit oder raw fallback stammt.</p></context>
+    <prereq><p>Öffnen Sie ein Profil, das aus einer Starter-Voreinstellung erstellt wurde oder auf das eine CIS Level 1- oder Level 2-Ebene angewendet wurde.</p></prereq>
+    <context><p>Das Verfolgen eines Werts ist nützlich, wenn ein Prüfer fragt, ob eine Einstellung von der ursprünglichen Baseline, der CIS-Ebene, einem Import, einer manuellen Bearbeitung oder einem Roh-Fallback stammt.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie All Settings und filtern Sie nach configured values oder nach dem CIS source badge.</cmd><info><p>Erwartetes Ergebnis: Die relevante policy oder managed preference bleibt mit source attribution sichtbar.</p></info></step>
-      <step><cmd>Lesen Sie source attribution und bestimmen Sie, ob der current value baseline, CIS, manual, imported oder raw ist.</cmd><info><p>Erwartetes Ergebnis: Sie können die unmittelbare Quelle des Werts benennen.</p></info></step>
-      <step><cmd>Öffnen Sie das zugehörige CIS recommendation oder Firefox policy topic, wenn ein generated layer den value beigetragen hat.</cmd><info><p>Erwartetes Ergebnis: Recommendation ID, path, value, channel support und merge rule sind sichtbar.</p></info></step>
-      <step><cmd>Prüfen Sie die merge decision: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter oder manual_review_kept_base.</cmd><info><p>Erwartetes Ergebnis: Sie wissen, ob CIS den Wert hinzugefügt, bestätigt, ersetzt oder einen base value für review behalten hat.</p></info></step>
-      <step><cmd>Klären Sie manual-review oder conflict states vor dem Speichern.</cmd><info><note type="warning">Verdecken Sie eine manual_review_kept_base decision nicht durch eine nicht zusammenhängende manual edit; dokumentieren Sie zuerst den review reason.</note></info></step>
-      <step><cmd>Validieren und exportieren Sie erst, wenn source und decision für einen anderen Reviewer nachvollziehbar sind.</cmd><info><p>Erwartetes Ergebnis: Das exportierte <codeph>policies.json</codeph> spiegelt eine reviewed choice wider, während BPM-only attribution im profile verbleibt.</p></info></step>
+      <step><cmd>Öffnen Sie Alle Einstellungen und filtern Sie nach konfigurierten Werten oder nach dem CIS-Quell-Badge.</cmd><info><p>Erwartetes Ergebnis: Die relevante Richtlinie oder verwaltete Präferenz bleibt mit ihrer Quellenangabe sichtbar.</p></info></step>
+      <step><cmd>Lesen Sie die Quellenangabe und ermitteln Sie, ob der aktuelle Wert Baseline, CIS, manuell, importiert oder roh ist.</cmd><info><p>Erwartetes Ergebnis: Sie können die unmittelbare Quelle des Werts benennen.</p></info></step>
+      <step><cmd>Öffnen Sie die zugehörige CIS-Empfehlung oder das Firefox-Richtlinienthema, wenn ein generierter Layer den Wert beigetragen hat.</cmd><info><p>Erwartetes Ergebnis: Sie können die Empfehlung ID, den Pfad, den Wert, die Kanalunterstützung und die Zusammenführungsregel sehen.</p></info></step>
+      <step><cmd>Überprüfen Sie die Zusammenführungsentscheidung: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter oder manual_review_kept_base.</cmd><info><p>Erwartetes Ergebnis: Sie wissen, ob CIS den Wert hinzugefügt, bestätigt, ersetzt oder einen Basiswert zur Überprüfung hinterlassen hat.</p></info></step>
+      <step><cmd>Lösen Sie manuelle Überprüfungs- oder Konfliktzustände vor dem Speichern.</cmd><info><note type="warning">Verbergen Sie eine manual_review_kept_base-Entscheidung nicht, indem Sie eine unabhängige manuelle Bearbeitung vornehmen. Notieren Sie zunächst den Überprüfungsgrund.</note></info></step>
+      <step><cmd>Validieren und exportieren Sie erst, nachdem die Quelle und die Entscheidung für einen anderen Prüfer verständlich sind.</cmd><info><p>Erwartetes Ergebnis: Der exportierte <codeph>policies.json</codeph> spiegelt eine überprüfte Auswahl wider, während die reine BPM-Attribution im Profil verbleibt.</p></info></step>
     </steps>
-    <result><p>Der configured value kann als baseline, CIS, manual, imported oder raw erklärt werden, mit sichtbarer merge decision und review status.</p></result>
-    <postreq><p>Wenn attribution uneindeutig ist, vergleichen Sie das Profil mit einem blank profile plus demselben CIS layer und prüfen Sie anschließend imports und manual changes.</p></postreq>
+    <result><p>Der konfigurierte Wert kann als Baseline, CIS, manuell, importiert oder roh erklärt werden, mit einer sichtbaren Zusammenführungsentscheidung und einem Überprüfungsstatus.</p></result>
+    <postreq><p>Wenn die Zuordnung nicht eindeutig ist, vergleichen Sie das Profil mit einem leeren Profil plus derselben CIS-Ebene und überprüfen Sie dann Importe und manuelle Änderungen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-presets-layers-merge"/>

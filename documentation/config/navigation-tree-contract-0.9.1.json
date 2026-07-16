@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-navigation-tree-contract-0.9.1",
+  "backlog_item": "BPM091-M2-05",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "inherits_from": [
+    "docs/architecture/documentation-identifiers-and-url-conventions-0.9.0.md",
+    "docs/architecture/product-documentation-manifest-and-ui-target-schema-0.9.0.md",
+    "docs/architecture/product-documentation-accessibility-security-contract-0.9.0.md",
+    "documentation/config/search-ui-filter-contract-0.9.1.json"
+  ],
+  "purpose": "Define the single hierarchical navigation model that replaces duplicated guide/document headings in the documentation portal.",
+  "source_authority": {
+    "guide_order": "manifest.navigation locale records generated from documentation/tools/build_docs.py::GUIDE_MAPS",
+    "guide_titles": "manifest.guides.{guide_id}.title.{locale}",
+    "guide_home_topics": "manifest.guides.{guide_id}.home_topic_id",
+    "section_nodes": "documentation/config/topic-section-taxonomy-0.9.1.json for affected guides",
+    "section_labels": "documentation/config/topic-section-labels-0.9.1.json for the exact locale matrix",
+    "topic_nodes": "manifest.topics plus the stable topic order from each guide DITA map",
+    "urls": "manifest guides/topics output paths and canonical URL conventions",
+    "labels": "locale-owned shell/navigation catalogs"
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "guide_node_order": [
+    "user-guide",
+    "firefox-policy-guide",
+    "cis-settings-guide",
+    "administrator-guide"
+  ],
+  "tree_model": {
+    "root_node": {
+      "node_id": "documentation-root",
+      "node_type": "root",
+      "label_key": "navigation.root",
+      "href": "/help/{locale}/",
+      "children": "guide_node_order"
+    },
+    "guide_node": {
+      "node_type": "guide",
+      "node_id": "{guide_id}",
+      "label_source": "manifest.guides.{guide_id}.title.{locale}",
+      "href_source": "manifest topic output for manifest.guides.{guide_id}.home_topic_id",
+      "children": "section nodes for taxonomy-owned guides; otherwise topic nodes in DITA map order"
+    },
+    "section_node": {
+      "node_type": "section",
+      "node_id": "section:{guide_id}:{section_id}",
+      "label_source": "topic-section label catalog value for label_key and active locale",
+      "label_key_source": "topic-section taxonomy label_key",
+      "href_source": null,
+      "children": "taxonomy-owned topic nodes in unchanged DITA map order"
+    },
+    "topic_node": {
+      "node_type": "topic",
+      "node_id": "{topic_id}",
+      "label_source": "manifest.topics.{topic_id}.title.{locale}",
+      "href_source": "manifest.topics.{topic_id}.output.{locale}",
+      "children": "an empty group",
+      "parent": "the owning section node for taxonomy-owned guides; otherwise the guide node"
+    }
+  },
+  "shared_source": {
+    "implementation_task": "BPM091-M10-07",
+    "path": "{locale}/navigation.json",
+    "schema": "docs/architecture/schemas/product-documentation-navigation-v1.schema.json",
+    "manifest_owner": "manifest.navigation.{locale} records path, SHA-256, format version, and node count",
+    "html_host": "Each page contains one bounded data-docs-tree-host with current node identity, localized loading/failure labels, and a no-script root link; it does not embed tree nodes.",
+    "runtime": "The shared self-hosted bpm-docs-search.js fetches the same-origin locale source, validates identity and hierarchy, constructs escaped DOM nodes, and then enables the existing tree interactions.",
+    "failure": "A missing, malformed, cross-origin, wrong-locale, duplicate-node, unsafe-path, or divergent source leaves a localized unavailable message and working root link.",
+    "security": "Navigation rendering uses DOM textContent and validated same-origin locale-relative URLs without innerHTML, inline script/style, CSP relaxation, or external network dependencies.",
+    "layout": "The host reserves stable sidebar space; successful or failed loading does not change the article column or create horizontal overflow."
+  },
+  "display_rules": {
+    "primary_left_navigation": "The left navigation is the authoritative place for guide/document names and topic hierarchy.",
+    "no_duplicate_guide_title": "A guide/document name must not be repeated as both a page-header title and the left-tree selected guide label.",
+    "topic_heading_rule": "The main content heading remains the topic title or documentation home title, not an additional guide label.",
+    "breadcrumbs": "Breadcrumbs may remain only as a compact location aid built from the same tree path.",
+    "header": "The shell header may keep product and documentation identity, but not a second guide/document list that competes with the tree."
+  },
+  "active_state": {
+    "root_page": {
+      "current_node": "documentation-root",
+      "expanded_nodes": ["documentation-root"],
+      "aria_current": "page on the root link"
+    },
+    "guide_page": {
+      "current_node": "{guide_id}",
+      "expanded_nodes": ["documentation-root", "{guide_id}"],
+      "aria_current": "page on the guide link"
+    },
+    "topic_page": {
+      "current_node": "{topic_id}",
+      "expanded_nodes": ["documentation-root", "{guide_id}", "{section_node_id}", "topic ancestors"],
+      "aria_current": "page on the topic link"
+    },
+    "must_not": [
+      "highlight more than one current page node",
+      "derive current state from translated labels",
+      "lose current state when opening a direct URL",
+      "collapse the current topic's ancestors"
+    ]
+  },
+  "return_behavior": {
+    "root_link": "Every page exposes a tree root link that returns to the locale documentation root.",
+    "guide_link": "Every topic page exposes its guide node as a parent link that returns to that guide's landing topic.",
+    "section_node": "Section nodes group topics without introducing a new canonical page or URL; Enter, Space, click, and the adjacent control toggle expansion.",
+    "parent_topic_link": "Nested topic nodes return to their nearest topic parent before returning to the guide.",
+    "browser_history": "Tree clicks use ordinary links so browser Back and Forward preserve expected navigation.",
+    "direct_url": "Opening a direct topic URL expands the root, guide, and topic ancestors without requiring previous state.",
+    "locale_switch": "Locale switching preserves the logical topic ID through manifest resolution; it must not reuse a translated path string."
+  },
+  "url_behavior": {
+    "canonical_identity": "Navigation URLs remain manifest-resolved topic outputs and canonical /help/{locale}/{guide-root}/{url-path}/ routes when served by BPM.",
+    "state_parameters": "Expand/collapse state may use in-page state or local storage, but must not change canonical topic URLs.",
+    "forbidden": [
+      "translated filenames",
+      "title-derived URLs",
+      "hash-only guide navigation as the only route to a guide",
+      "JavaScript-only return to root",
+      "alias chains for navigation"
+    ]
+  },
+  "keyboard_tree": {
+    "roles": ["tree", "treeitem", "group"],
+    "required_keys": [
+      "Tab enters and leaves the tree",
+      "ArrowDown moves to the next visible node",
+      "ArrowUp moves to the previous visible node",
+      "ArrowRight expands a collapsed parent or moves to the first child",
+      "ArrowLeft collapses an expanded parent or moves to its parent",
+      "Home moves to the root node",
+      "End moves to the last visible node",
+      "Enter activates the focused link",
+      "Space toggles expansion for parent nodes"
+    ],
+    "focus_rules": [
+      "Only one tree item has tabindex=0 at a time.",
+      "Collapsed descendants are not tabbable.",
+      "Focus remains visible in light, dark, system, and forced-colors modes."
+    ]
+  },
+  "collapse_state": {
+    "default": "Root is expanded; current guide and current section are expanded; unrelated guides and sections may start collapsed.",
+    "persistence": "User expand/collapse choices may persist per locale and documentation version, but direct URLs always expand current ancestors.",
+    "summary": "Collapsed guide and section nodes show their labels and do not hide the current topic when they are selected ancestors.",
+    "must_not": [
+      "persist state across incompatible documentation versions",
+      "hide the root node",
+      "hide selected ancestors",
+      "resize the main content while moving focus"
+    ]
+  },
+  "sidebar_scroll": {
+    "implementation_task": "BPM091-M10-02",
+    "container": ".bpm-docs-sidebar",
+    "desktop": "The sticky sidebar has a viewport-relative maximum block size and its own vertical scrollbar.",
+    "narrow": "The non-sticky narrow sidebar remains height-bounded and independently vertically scrollable.",
+    "active_item": "Direct topic URLs and hash guide activation scroll the current treeitem into the sidebar viewport without scrolling the article viewport.",
+    "keyboard": "Roving-focus Arrow, Home, and End movement keeps the focused visible treeitem inside the sidebar viewport.",
+    "pointer": "Wheel, touch, scrollbar-thumb, and track interaction scroll the sidebar independently while it can consume vertical movement.",
+    "layout": [
+      "Long localized labels wrap without horizontal scrolling.",
+      "Tree controls and focus outlines remain fully visible inside the padded scroll container.",
+      "Expanding or collapsing branches does not change the article column width or scroll position."
+    ]
+  },
+  "localization": {
+    "label_ownership": "Root, tree controls, expanded/collapsed state, and optional breadcrumb labels are locale-owned.",
+    "no_fallback": "Non-English locales must not fall back to English navigation labels except allowlisted identifiers, brands, product names, commands, paths, and API abbreviations.",
+    "required_locale_keys": [
+      "navigation.root",
+      "navigation.tree_label",
+      "navigation.expand",
+      "navigation.collapse",
+      "navigation.current",
+      "navigation.parent",
+      "navigation.back_to_root",
+      "navigation.section.{guide_id}.{section_id}"
+    ]
+  },
+  "browser_qa": {
+    "implementation_task": "BPM091-M10-09",
+    "matrix": "documentation/config/documentation-navigation-language-browser-qa-0.9.1.json",
+    "locale_scope": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "language_sample_topic": "ug-task-use-all-settings",
+    "required_inputs": ["native wheel", "keyboard", "pointer"],
+    "required_failure_scope": "missing navigation.json in every locale",
+    "forbidden_guide_node": "api-integration-guide"
+  },
+  "implementation_tasks": [
+    "BPM091-M4-04",
+    "BPM091-M4-05",
+    "BPM091-M4-06",
+    "BPM091-M4-07",
+    "BPM091-M8-03",
+    "BPM091-M8-04",
+    "BPM091-M8-05",
+    "BPM091-M10-02",
+    "BPM091-M10-07",
+    "BPM091-M10-08",
+    "BPM091-M10-09"
+  ],
+  "verification": {
+    "focused_contracts": [
+      "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_navigation_tree_contract.py",
+      "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_polish_regression_gates.py",
+      "./.venv/bin/pytest -q documentation/tests/contract/test_manifest_generation.py tests/test_product_documentation_manifest_schema.py"
+    ],
+    "release_gates": [
+      "make test-docs-contract",
+      "make test-docs-ui",
+      "make test-docs-browser",
+      "make test-release"
+    ],
+    "browser_required_for": [
+      "real keyboard tree movement",
+      "root-to-guide-to-section-to-topic navigation",
+      "current document and section ancestor expansion",
+      "flat navigation for documents excluded from the section taxonomy",
+      "return to parent and root",
+      "localized label rendering",
+      "independent desktop and narrow sidebar scrolling",
+      "direct-topic and keyboard-focus auto-reveal without article scrolling",
+      "successful and failed shared navigation-source loading",
+      "absence of embedded full-tree copies and incoherent loading shift",
+      "native wheel and keyboard scrolling in every locale",
+      "absence of the retired standalone API guide node",
+      "exact locale-owned interface names and representative visible prose",
+      "absence of frozen English prose in non-English locale samples",
+      "responsive no-overlap checks"
+    ]
+  },
+  "non_goals": [
+    "The tree UI is generated from this contract, the topic-section taxonomy, and the section label catalog; generated output remains non-authoritative.",
+    "This contract does not change topic IDs, DITA keys, source slugs, canonical paths, manifest schema, or target-map schema.",
+    "This contract does not hand-edit generated HTML, manifests, search indexes, or installed app/documentation/site artifacts."
+  ]
+}

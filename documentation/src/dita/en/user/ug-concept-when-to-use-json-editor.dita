@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>When to use JSON Editor</title>
-  <shortdesc>Use JSON Editor for exact raw review, migration checks, troubleshooting, and values that are easier to handle as raw policies.json.</shortdesc>
+  <title>When to use JSON editor</title>
+  <shortdesc>Use JSON editor for exact raw review, migration checks, troubleshooting, and values that are easier to handle as raw policies.json.</shortdesc>
   <conbody>
-    <p>JSON Editor is powerful but less guided than the visual editors. It should be a deliberate choice when the user needs boundary-document precision.</p>
-    <section id="a-good-fit"><title>Good fit</title><p>Use JSON Editor for exact policies.json review, migration checks, raw fallback values, or troubleshooting malformed import/export documents.</p></section>
-    <section id="a-not-first-choice"><title>Not the first choice</title><p>Use Guided Editor for common workflows and All Settings for full visual inspection before choosing raw JSON for routine edits.</p></section>
+    <p>JSON editor is powerful but less guided than the visual editors. It should be a deliberate choice when the user needs boundary-document precision.</p>
+    <section id="a-good-fit"><title>Good fit</title><p>Use JSON editor for exact policies.json review, migration checks, raw fallback values, or troubleshooting malformed import/export documents.</p></section>
+    <section id="a-not-first-choice"><title>Not the first choice</title><p>Use Guided editor for common workflows and All settings for full visual inspection before choosing raw JSON for routine edits.</p></section>
     <section id="a-validation-boundary"><title>Validation boundary</title><p>Valid JSON syntax is not enough. BPM also validates Firefox policy values, schema channel support, and the canonical normalized model before save.</p></section>
     <section id="a-examples"><title>Examples</title><p>A valid example keeps a top-level policies object with entries such as DisableTelemetry and Preferences, including a locked browser.startup.homepage value. Invalid examples include malformed JSON syntax and schema-invalid policy values such as a string where a boolean is required.</p></section>
   </conbody>

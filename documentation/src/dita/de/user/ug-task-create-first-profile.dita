@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Erstes Profil aus der Bibliothek erstellen</title>
-  <shortdesc>Diese Aufgabe beschreibt den vollständigen Ablauf „Erstes Profil aus der Bibliothek erstellen“ mit Entscheidungen, Schritten, Ergebnis, Warnungen und Wiederherstellung.</shortdesc>
+  <title>Erstellen Sie ein erstes Profil aus der Bibliothek</title>
+  <shortdesc>Starten Sie einen neuen geführten Profilentwurf aus der Bibliothek, wenn kein gespeichertes Profil zur Wiederverwendung geeignet ist.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM und prüfen Sie den passenden Arbeitskontext, das Firefox-Schema oder den Profilstatus für diese Aufgabe.</p></prereq>
-    <context><p>Dieses Thema beschreibt den vollständigen Benutzerablauf für die deutsche Lokalisierung ohne Kurzfassung.</p></context>
+    <prereq><p>Sie befinden sich in der Bibliothek und möchten ein neues Profil, anstatt ein vorhandenes zu öffnen oder zu duplizieren.</p></prereq>
+    <context><p>Die Aktion „Erstellen“ öffnet einen Geführter Editor-Entwurf. Der Entwurf wird erst zu einem gespeicherten Profil, nachdem Sie ihn gespeichert haben.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie den BPM-Bereich für „Erstes Profil aus der Bibliothek erstellen“.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Prüfen Sie aktuelle Werte, Profilstatus, Hinweise und Einschränkungen des gewählten Schemas.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Ändern Sie nur Werte, die zum Profilziel gehören, und vermeiden Sie unbeabsichtigte Nachbaränderungen.</cmd><info><note type="warning">Warnung: Prüfen Sie Schema, Profilstatus und Folgen der Änderung, bevor Sie speichern.</note></info></step>
+      <step><cmd>Wählen Sie die Bibliotheksaktion aus, um ein neues Profil zu erstellen.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet die Geführter Editor für einen neuen Entwurf.</p></info></step>
+      <step><cmd>Wählen Sie den Profilzweck, den Schemakanal und die vom Editor angezeigten Starteroptionen aus.</cmd><info><p>Der Schemakanal wirkt sich auf die verfügbaren Steuerelemente und das Validierungsverhalten aus.</p></info></step>
+      <step><cmd>Speichern Sie den Entwurf, wenn er den gewünschten Namen und die gewünschten Anfangseinstellungen hat.</cmd><info><note type="warning">Durch das Schließen eines nicht gespeicherten Entwurfs können nur Entwurfsänderungen verloren gehen.</note></info></step>
     </steps>
-    <result><p>Das BPM-Profil oder die Ansicht befindet sich im erwarteten Zustand für diesen Ablauf.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, kehren Sie zum zuständigen Bereich zurück, machen Sie die letzte Änderung rückgängig oder öffnen Sie das verknüpfte Thema.</p></postreq>
+    <result><p>Das neue Profil wird gespeichert und kann in der Bibliothek wieder gefunden werden.</p></result>
+    <postreq><p>Wiederherstellung: Wenn Sie ein vorhandenes Profil wiederverwenden wollten, brechen Sie den Entwurf ab und duplizieren Sie stattdessen das gespeicherte Profil.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

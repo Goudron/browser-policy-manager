@@ -2,12 +2,12 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-profile-status" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Referencia de estado del perfil</title>
-  <shortdesc>Lea profile name, ID, schema, lifecycle, dirty/saved state y validation context antes de actuar.</shortdesc>
+  <shortdesc>Lea el nombre del perfil, ID, el esquema, el ciclo de vida, el estado sucio/guardado y el contexto de validación antes de actuar.</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>Identidad</title><p>Profile name e ID confirman que el editor, Library row o Compare selection actual se refiere al saved profile o draft previsto.</p></section>
-    <section id="a-profile-lifecycle"><title>Ciclo de vida</title><p>Lifecycle state distingue active, archived, draft, restored y trabajo de perfil deletion-sensitive.</p></section>
-    <section id="a-profile-validation"><title>Validación</title><p>Validation context muestra si los policy y managed-preference values actuales están listos para save, comparison o export.</p></section>
-    <section id="a-profile-dirty-state"><title>Dirty state</title><p>Dirty/saved state indica si los editor changes visibles aún deben guardarse antes de navigation, export o confiar en otra pestaña.</p></section>
+    <section id="a-profile-identity"><title>Identidad</title><p>Nombre del perfil y ID confirman que el editor actual, la fila de la biblioteca o la selección de comparación se refieren al perfil o borrador guardado deseado.</p></section>
+    <section id="a-profile-lifecycle"><title>Ciclo de vida</title><p>El estado del ciclo de vida distingue el trabajo de perfil activo, archivado, borrador, restaurado y sensible a la eliminación.</p></section>
+    <section id="a-profile-validation"><title>Validación</title><p>El contexto de validación muestra si la política actual y los valores de preferencias administradas están listos para guardar, comparar o exportar.</p></section>
+    <section id="a-profile-dirty-state"><title>Estado sucio</title><p>El estado sucio/guardado le indica si aún es necesario guardar los cambios visibles del editor antes de que se confíe en la navegación, exportación u otra pestaña.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-profile-context"/>

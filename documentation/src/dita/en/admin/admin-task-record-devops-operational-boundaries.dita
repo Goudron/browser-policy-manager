@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-record-devops-operational-boundaries" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-task-record-devops-operational-boundaries" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Record source-operation boundaries</title>
   <shortdesc>Create an operations handoff note that states the runtime user, process model, supported checks, and deferred production capabilities.</shortdesc>
   <taskbody>
     <prereq><p>The configuration, storage, backup, network, and CORS reviews have been completed for the source-run instance.</p></prereq>
-    <context><p>BPM 0.9.0 Administrator/DevOps documentation currently supports source-run operation for controlled evaluation. It does not yet provide distribution installers, native services, official daemonization, production topology, or full operational runbooks for every enterprise control.</p></context>
+    <context><p>BPM Administrator/DevOps documentation currently supports source-run operation for controlled evaluation. It does not yet provide distribution installers, native services, official daemonization, production topology, or full operational runbooks for every enterprise control.</p></context>
     <steps>
       <step><cmd>Record the runtime user and process model.</cmd><info><p>Identify the shell user that owns the checkout, <codeph>.venv</codeph>, <codeph>data/</codeph>, and the running <codeph>make dev</codeph> or <codeph>uvicorn app.main:app --reload --port 8000</codeph> process. Do not claim a supported service account, systemd unit, Windows service, or restart policy unless your external platform provides and owns it.</p></info></step>
       <step><cmd>Record the checks that are supported today.</cmd><info><p>Include source revision, active configuration values, migration status, <codeph>/health</codeph>, <codeph>/health/ready</codeph>, UI route smoke, API example status, foreground-log review, and manual backup evidence. Link API evidence to reusable API examples rather than duplicating endpoint procedures.</p></info></step>
-      <step><cmd>Record deferred capabilities as blockers or external responsibilities.</cmd><info><p>Call out packaged installers, native Linux or Windows services, reverse proxy and TLS recipes, HA clustering, managed secrets, authentication configuration, backup automation, restore orchestration, monitoring dashboards, log rotation, and production hardening as not provided by BPM 0.9.0 source documentation.</p></info></step>
+      <step><cmd>Record deferred capabilities as blockers or external responsibilities.</cmd><info><p>Call out packaged installers, native Linux or Windows services, reverse proxy and TLS recipes, HA clustering, managed secrets, authentication configuration, backup automation, restore orchestration, monitoring dashboards, log rotation, and production hardening as not provided by BPM source documentation.</p></info></step>
       <step><cmd>Attach user-facing recovery references without moving ownership.</cmd><info><p>When an operator needs to understand UI symptoms, link to user-facing troubleshooting such as product connection recovery. Keep deployment, API, backup, and network ownership in the Administrator/DevOps Guide.</p></info></step>
     </steps>
-    <result><p>The handoff note states what the current source deployment can support, what evidence proves it, and which production responsibilities remain outside BPM 0.9.0.</p></result>
+    <result><p>The handoff note states what the current source deployment can support, what evidence proves it, and which production responsibilities remain outside BPM.</p></result>
     <postreq><p>Use this boundary note as the starting point for the update-from-source runbook and later production/HA/reverse-proxy documentation tasks.</p></postreq>
   </taskbody>
   <related-links>

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-verify-cis-deviation" xml:lang="es-ES" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Verificar y registrar una CIS deviation</title>
-  <shortdesc>Use esta tarea cuando un CIS-related value se conserva, cambia o queda para manual verification en lugar de aceptarse automáticamente.</shortdesc>
+  <title>Verificar y registrar una desviación CIS</title>
+  <shortdesc>Utilice esta tarea cuando un valor relacionado con CIS se mantenga, cambie o se deje para verificación manual en lugar de aceptarse automáticamente.</shortdesc>
   <taskbody>
-    <prereq><p>Abra un profile que muestre un CIS manual-review item, conflict o intentional deviation de la generated layer.</p></prereq>
-    <context><p>Verification significa comprobar BPM value, schema channel, exported path y local review evidence. No significa que BPM haya probado Firefox runtime behavior en el target environment.</p></context>
+    <prereq><p>Abra un perfil que muestre un elemento de revisión manual de CIS, un conflicto o una desviación intencional de la capa generada.</p></prereq>
+    <context><p>Verificación significa verificar el valor de BPM, el canal del esquema, la ruta exportada y la evidencia de revisión local. Esto no significa que BPM haya probado el comportamiento del tiempo de ejecución de Firefox en el entorno de destino.</p></context>
     <steps>
-      <step><cmd>Abra el affected setting y registre recommendation ID, path, current value, source attribution y schema channel.</cmd><info><p>Resultado esperado: el reviewer identifica exactamente qué BPM-controlled value está en review.</p></info></step>
-      <step><cmd>Clasifique el reason como update governance, proxy routing, evidence retention, unsupported mapping research, deprecated target o local deployment requirement.</cmd><info><p>Resultado esperado: la deviation tiene una razón concreta y no un generic exception label.</p></info></step>
-      <step><cmd>Valide el profile en BPM e inspeccione el exported <codeph>policies.json</codeph> path que llevaría el value.</cmd><info><p>Resultado esperado: schema validation y export shape son conocidos antes de external verification.</p></info></step>
-      <step><cmd>Realice cualquier runtime, operating-system, network o audit verification fuera de BPM con el método aprobado por el deployment owner.</cmd><info><p>Resultado esperado: external evidence se recopila sin afirmar que BPM probó Firefox behavior.</p></info></step>
-      <step><cmd>Registre la decision en external ticket, deployment note o change-control record, incluyendo BPM profile name, schema channel, recommendation ID, value, reason, owner y review date.</cmd><info><note type="warning">BPM 0.9.0 no persiste un dedicated CIS exception o waiver object; no dependa solo del profile como exception record.</note></info></step>
-      <step><cmd>Vuelva a abrir el profile y confirme que source attribution todavía muestra si el value es baseline, CIS, manual, imported o raw.</cmd><info><p>Resultado esperado: reviewers posteriores pueden rastrear el configured value y encontrar el external record.</p></info></step>
+      <step><cmd>Abra la configuración afectada y registre la recomendación ID, la ruta, el valor actual, la atribución de origen y el canal de esquema.</cmd><info><p>Resultado esperado: el revisor puede identificar exactamente qué valor controlado por BPM está bajo revisión.</p></info></step>
+      <step><cmd>Clasifique el motivo como control de actualizaciones, enrutamiento de proxy, retención de evidencia, investigación de mapeo no compatible, destino obsoleto o requisito de implementación local.</cmd><info><p>Resultado esperado: la desviación tiene un motivo concreto en lugar de una etiqueta de excepción genérica.</p></info></step>
+      <step><cmd>Valide el perfil en BPM e inspeccione la ruta <codeph>policies.json</codeph> exportada que llevaría el valor.</cmd><info><p>Resultado esperado: la validación del esquema y la forma de exportación se conocen antes de que comience la verificación externa.</p></info></step>
+      <step><cmd>Realice cualquier verificación de auditoría, sistema operativo, red o tiempo de ejecución fuera de BPM utilizando el método aprobado por el propietario de la implementación.</cmd><info><p>Resultado esperado: se recopila evidencia externa sin afirmar que BPM haya demostrado el comportamiento de Firefox.</p></info></step>
+      <step><cmd>Registre la decisión en el ticket externo, nota de implementación o registro de control de cambios, incluido el nombre del perfil de BPM, el canal del esquema, la recomendación ID, el valor, el motivo, el propietario y la fecha de revisión.</cmd><info><note type="warning">BPM no conserva una excepción CIS dedicada ni un objeto de exención; no confíe únicamente en el perfil como registro de excepción.</note></info></step>
+      <step><cmd>Vuelva a abrir el perfil y confirme que la atribución de fuente aún muestra si el valor es de referencia, CIS, manual, importado o sin procesar.</cmd><info><p>Resultado esperado: los revisores posteriores pueden rastrear el valor configurado y encontrar el registro externo.</p></info></step>
     </steps>
-    <result><p>La CIS deviation tiene actionable verification evidence, external exception record y BPM source attribution visible.</p></result>
-    <postreq><p>Si el reviewer no puede verificar exported path o external evidence, mantenga el item en manual review y no lo describa como compliant.</p></postreq>
+    <result><p>La desviación CIS tiene evidencia de verificación procesable, un registro de excepción externo y atribución de fuente BPM visible.</p></result>
+    <postreq><p>Si el revisor no puede verificar la ruta exportada o la evidencia externa, mantenga el elemento en revisión manual y no lo describa como conforme.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-manual-review-exceptions"/>

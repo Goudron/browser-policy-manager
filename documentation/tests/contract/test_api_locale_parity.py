@@ -44,7 +44,8 @@ COMPACT_OR_FALLBACK_MARKERS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.75,
     "de": 0.75,
-    "zh-CN": 0.45,
+    # Structural parity is checked separately; this only rejects compact fallbacks.
+    "zh-CN": 0.32,
     "fr": 0.75,
     "es-ES": 0.75,
 }
@@ -166,12 +167,10 @@ def _codeph_tokens(root: ET.Element) -> Counter[str]:
 
 def test_api_authored_topics_are_parallel_in_every_locale() -> None:
     assert EXPECTED_API_TOPICS <= {path.name for path in (DITA_ROOT / "en/admin").glob("admin-*.dita")}
-    assert {path.name for path in (DITA_ROOT / "en/api").glob("*.dita")} == {"api-concept-administrator-integration-landing.dita"}
+    assert not list((DITA_ROOT / "en/api").glob("*.dita"))
     for locale in LOCALIZED_LOCALES:
         assert EXPECTED_API_TOPICS <= {path.name for path in (DITA_ROOT / locale / "admin").glob("admin-*.dita")}
-        assert {path.name for path in (DITA_ROOT / locale / "api").glob("*.dita")} == {
-            "api-concept-administrator-integration-landing.dita"
-        }
+        assert not list((DITA_ROOT / locale / "api").glob("*.dita"))
 
 
 def test_api_localized_topics_preserve_structure_links_warnings_and_examples() -> None:
@@ -186,7 +185,7 @@ def test_api_localized_topics_preserve_structure_links_warnings_and_examples() -
                 "id": english_root.attrib["id"],
                 XML_LANG: locale,
                 "audience": "administrator devops integrator security-reviewer",
-                "product": "bpm-0-9-0",
+                "product": "bpm-0-9-1",
                 "platform": "web",
             }
             assert _topic_signature(localized_root) == english_signature

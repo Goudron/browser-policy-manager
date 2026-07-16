@@ -277,6 +277,51 @@ def load_documentation_catalog(site_root: Path | None = None) -> DocumentationCa
     )
 
 
+def documentation_artifact_problem(site_root: Path | None = None) -> str | None:
+    """Classify an unavailable documentation artifact without exposing parser errors."""
+
+    root = site_root or Path(get_settings().DOCUMENTATION_SITE_DIR)
+    if not root.is_absolute():
+        root = get_settings().ROOT_DIR / root
+
+    manifest_path = root / "manifest.json"
+    if not manifest_path.is_file():
+        return "missing"
+    try:
+        manifest = _load_json_object(manifest_path)
+    except (OSError, ValueError, json.JSONDecodeError):
+        return "incompatible"
+
+    bpm_version = _manifest_bpm_version(manifest)
+    if bpm_version and bpm_version != get_settings().APP_VERSION:
+        return "stale"
+
+    locales = manifest.get("locales")
+    if isinstance(locales, list) and locales and all(isinstance(locale, str) for locale in locales):
+        if not all((root / locale / "index.html").is_file() for locale in locales):
+            return "incomplete"
+
+    catalog = load_documentation_catalog(root)
+    if catalog is None:
+        return "incompatible"
+    if not catalog.locales:
+        return "incomplete"
+    if not all((root / locale / "index.html").is_file() for locale in catalog.locales):
+        return "incomplete"
+    return None
+
+
+def resolve_documentation_artifact_disposition(site_root: Path | None = None) -> str:
+    """Return the All Settings no-link disposition for the installed artifact."""
+
+    problem = documentation_artifact_problem(site_root)
+    if problem is None:
+        return "available"
+    if problem == "missing":
+        return "artifact_unavailable"
+    return f"artifact_{problem}"
+
+
 def resolve_documentation_home_links(site_root: Path | None = None) -> dict[str, str] | None:
     """Resolve the product documentation home target for every supported locale."""
 
@@ -317,4 +362,27 @@ def resolve_documentation_deep_help_links(
         urls = catalog.locale_urls_for_target(target_id)
         if urls is not None:
             resolved[control_id] = urls
+    return resolved
+
+
+def resolve_all_settings_row_help_links(
+    site_root: Path | None = None,
+) -> dict[str, dict[str, str]]:
+    """Resolve policy and known-preference row-help targets for every locale."""
+
+    catalog = load_documentation_catalog(site_root)
+    if catalog is None:
+        return {}
+
+    targets = catalog.target_map.get("targets")
+    if not isinstance(targets, dict):
+        return {}
+
+    resolved: dict[str, dict[str, str]] = {}
+    for target_id, target in targets.items():
+        if not isinstance(target, dict) or target.get("kind") not in {"policy", "known-preference"}:
+            continue
+        urls = catalog.locale_urls_for_target(target_id)
+        if urls is not None:
+            resolved[target_id] = urls
     return resolved

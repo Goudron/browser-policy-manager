@@ -2,12 +2,12 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-profile-status" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Profilstatusreferenz</title>
-  <shortdesc>Lesen Sie profile name, ID, schema, lifecycle, dirty/saved state und validation context vor einer Aktion.</shortdesc>
+  <shortdesc>Lesen Sie Profilnamen, ID, Schema, Lebenszyklus, geänderten/gespeicherten Status und Validierungskontext, bevor Sie handeln.</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>Identität</title><p>Profile name und ID bestätigen, dass aktueller editor, Library row oder Compare selection zum beabsichtigten saved profile oder draft gehört.</p></section>
-    <section id="a-profile-lifecycle"><title>Lifecycle</title><p>Lifecycle state unterscheidet active, archived, draft, restored und deletion-sensitive Profilarbeit.</p></section>
-    <section id="a-profile-validation"><title>Validierung</title><p>Validation context zeigt, ob aktuelle policy und managed-preference values für save, comparison oder export bereit sind.</p></section>
-    <section id="a-profile-dirty-state"><title>Dirty state</title><p>Dirty/saved state zeigt, ob sichtbare editor changes vor navigation, export oder Vertrauen in einen anderen Tab gespeichert werden müssen.</p></section>
+    <section id="a-profile-identity"><title>Identität</title><p>Profilname und ID bestätigen, dass sich der aktuelle Editor, die aktuelle Bibliothekszeile oder die Vergleichsauswahl auf das beabsichtigte gespeicherte Profil oder den Entwurf bezieht.</p></section>
+    <section id="a-profile-lifecycle"><title>Lebenszyklus</title><p>Der Lebenszyklusstatus unterscheidet aktive, archivierte, Entwurfs-, wiederhergestellte und löschempfindliche Profilarbeiten.</p></section>
+    <section id="a-profile-validation"><title>Validierung</title><p>Der Validierungskontext zeigt an, ob die aktuellen Richtlinien- und verwalteten Einstellungswerte zum Speichern, Vergleichen oder Exportieren bereit sind.</p></section>
+    <section id="a-profile-dirty-state"><title>Fehlerhafter Zustand</title><p>Der Status „Dirty/Saved“ gibt an, ob sichtbare Editoränderungen noch gespeichert werden müssen, bevor Navigation, Export oder eine andere Registerkarte vertrauenswürdig ist.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-profile-context"/>

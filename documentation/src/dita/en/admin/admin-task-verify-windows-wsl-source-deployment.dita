@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
   <title>Verify BPM source deployment through WSL</title>
   <shortdesc>Check probes from WSL and Windows, confirm the UI route, inspect logs, and troubleshoot common WSL networking and filesystem issues.</shortdesc>
   <taskbody>
@@ -15,7 +15,7 @@ curl -fsS http://127.0.0.1:8000/health/ready
 Invoke-WebRequest http://localhost:8000/health
 Invoke-WebRequest http://localhost:8000/health/ready
 ]]></codeblock><p>If localhost does not work, retry with the WSL IP from <codeph>hostname -I</codeph>. Record which address succeeded.</p></info></step>
-      <step><cmd>Open the UI route from the Windows browser.</cmd><info><p>Use <codeph>http://localhost:8000/profiles</codeph> or <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. The Profile Library route should load the BPM interface or an intentional empty/error state, not a traceback.</p></info></step>
+      <step><cmd>Open the UI route from the Windows browser.</cmd><info><p>Use <codeph>http://localhost:8000/profiles</codeph> or <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. The Library route should load the BPM interface or an intentional empty/error state, not a traceback.</p></info></step>
       <step><cmd>Troubleshoot WSL-specific failures before changing BPM code.</cmd><info><p>For connection failures, confirm <codeph>make dev</codeph> is still running, check <codeph>BPM_HOST</codeph>, run <codeph>wsl --list --verbose</codeph>, and refresh the WSL IP after restarting the distribution. For slow file watching or permission errors, move the checkout from <codeph>/mnt/c</codeph> into <codeph>/home/&lt;linux-user&gt;</codeph>. Run <codeph>make test-fast</codeph> only after the environment path and network route are stable.</p><note type="warning">Passing health checks through WSL does not prove production readiness, Windows service behavior, managed backups, or HA support.</note></info></step>
     </steps>
     <result><p>The administrator has evidence that BPM starts inside WSL, responds to probes, is reachable from Windows, and has no immediate WSL networking or filesystem blockers.</p></result>

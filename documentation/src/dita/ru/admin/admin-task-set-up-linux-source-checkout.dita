@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-set-up-linux-source-checkout" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Настроить Linux checkout исходников</title>
-  <shortdesc>Склонируйте репозиторий BPM, создайте Python virtual environment, установите development dependencies и подготовьте локальную database schema.</shortdesc>
+<task id="admin-task-set-up-linux-source-checkout" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Настройте получение исходного кода Linux</title>
+  <shortdesc>Клонируйте репозиторий BPM, создайте виртуальную среду Python, установите зависимости разработки и подготовьте схему локальной базы данных.</shortdesc>
   <taskbody>
-    <prereq><p>Linux-хост подготовлен, а у администратора есть доступ к BPM repository URL и целевой branch или tag для версии 0.9.0.</p></prereq>
-    <context><p>README репозитория задаёт поддерживаемую последовательность source setup. Используйте repository-local commands, чтобы последующая диагностика могла сравнить окружение с committed scripts.</p></context>
+    <prereq><p>Хост Linux подготовлен, и администратор имеет доступ к URL-адресу репозитория BPM и целевой ветке или тегу для версии 0.9.1.</p></prereq>
+    <context><p>Репозиторий README определяет поддерживаемую последовательность установки источника. Используйте локальные команды репозитория, чтобы при последующем устранении неполадок можно было сравнить среду с зафиксированными сценариями.</p></context>
     <steps>
-      <step><cmd>Склонируйте репозиторий и перейдите в checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Клонируйте репозиторий и войдите в кассу.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
-git checkout <approved-0.9.0-ref>
-]]></codeblock><p>Замените placeholders на утверждённый внутренний repository URL и release reference.</p></info></step>
-      <step><cmd>Создайте и активируйте локальное Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git checkout <approved-0.9.1-ref>
+]]></codeblock><p>Замените заполнители URL-адресом утвержденного внутреннего репозитория и ссылкой на выпуск.</p></info></step>
+      <step><cmd>Создайте и активируйте локальную среду Python.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-]]></codeblock><p>Virtual environment остаётся внутри checkout и не коммитится.</p></info></step>
-      <step><cmd>Установите BPM source dependencies из checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Виртуальная среда остается внутри кассы и не фиксируется.</p></info></step>
+      <step><cmd>Установите исходные зависимости BPM из извлечения.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 pip install -e ".[dev]"
-]]></codeblock><p>Editable install сохраняет runtime code и tests синхронизированными с текущим source tree.</p></info></step>
-      <step><cmd>Примените database migrations для выбранной runtime database.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Редактируемая установка обеспечивает соответствие кода времени выполнения и тестов текущему дереву исходного кода.</p></info></step>
+      <step><cmd>Применить миграцию базы данных для выбранной рабочей базы данных.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 alembic upgrade head
-]]></codeblock><note type="warning">Запускайте migrations только для целевой BPM database. Для default source workflow это локальная SQLite database, а не production service database.</note></info></step>
+]]></codeblock><note type="warning">Выполняйте миграцию только для предполагаемой базы данных BPM. Для исходного рабочего процесса по умолчанию это локальная база данных SQLite, а не база данных производственной службы.</note></info></step>
     </steps>
-    <result><p>Checkout содержит активированное Python environment, установленные dependencies и migrated database schema.</p></result>
-    <postreq><p>Настройте runtime environment перед запуском application process.</p></postreq>
+    <result><p>На кассе активирована среда Python, установлены зависимости и перенесенная схема базы данных.</p></result>
+    <postreq><p>Настройте среду выполнения перед запуском процесса приложения.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-linux-source-deployment"/>

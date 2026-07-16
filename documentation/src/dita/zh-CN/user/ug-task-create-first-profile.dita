@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>从库创建第一个配置文件</title>
-  <shortdesc>本任务完整说明“从库创建第一个配置文件”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>从库中创建第一个配置文件</title>
+  <shortdesc>当没有保存的配置文件适合重复使用时，从库中启动新的引导配置文件草稿。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>您在图书馆中，想要一个新的配置文件，而不是打开或复制现有的配置文件。</p></prereq>
+    <context><p>创建操作会打开 引导式编辑器 草稿。仅在保存后，草稿才会成为已保存的配置文件。</p></context>
     <steps>
-      <step><cmd>打开与“从库创建第一个配置文件”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>选择库操作以创建新配置文件。</cmd><info><p>预期结果：BPM 打开新草稿的 引导式编辑器。</p></info></step>
+      <step><cmd>选择编辑器显示的配置文件用途、模式通道和启动选项。</cmd><info><p>模式通道影响可用的控件和验证行为。</p></info></step>
+      <step><cmd>当草稿具有所需的名称和初始设置时，保存草稿。</cmd><info><note type="warning">关闭未保存的草稿可能会丢失仅草稿的更改。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>新配置文件已保存并可以从库中再次找到。</p></result>
+    <postreq><p>恢复：如果您打算重复使用现有配置文件，请取消草稿并复制保存的配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

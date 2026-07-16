@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-source-update-evidence" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Evidence vor dem Update aus dem Quellcode vorbereiten</title>
-  <shortdesc>Sammeln Sie source revision, configuration, database backup, profile export evidence und stop conditions, bevor BPM auf eine neuere source revision bewegt wird.</shortdesc>
+<task id="admin-task-prepare-source-update-evidence" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Bereiten Sie Beweise vor, bevor Sie von der Quelle aktualisieren</title>
+  <shortdesc>Sammeln Sie die Quellrevision, Konfiguration, Datenbanksicherung, Profilexportnachweise und Stoppbedingungen, bevor Sie BPM auf eine neuere Quellrevision verschieben.</shortdesc>
   <taskbody>
-    <prereq><p>BPM läuft aus einem Linux- oder WSL source checkout, und der Administrator hat die configuration, storage, backup und operational-boundary reviews abgeschlossen.</p></prereq>
-    <context><p>Eine update-from-source procedure ändert code, dependencies, database schema und documentation output expectations. BPM 0.9.0 bietet kein automatic rollback, keine database downgrade guarantees, kein managed backup und kein packaged upgrade tooling. Behandeln Sie evidence collection als verpflichtenden pre-update gate.</p></context>
+    <prereq><p>BPM wird von einem Linux- oder WSL-Quellen-Checkout ausgeführt und der Administrator hat die Konfigurations-, Speicher-, Sicherungs- und Betriebsgrenzenüberprüfungen abgeschlossen.</p></prereq>
+    <context><p>Eine Update-from-Source-Prozedur ändert Code, Abhängigkeiten, Datenbankschema und Dokumentationsausgabeerwartungen. BPM bietet kein automatisches Rollback, Datenbank-Downgrade-Garantien, verwaltetes Backup oder Paket-Upgrade-Tools. Behandeln Sie die Beweissammlung als ein erforderliches Pre-Update-Gate.</p></context>
     <steps>
-      <step><cmd>Stoppen Sie den foreground BPM process und erfassen Sie den aktuellen source state.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Stoppen Sie den BPM-Prozess im Vordergrund und zeichnen Sie den aktuellen Quellstatus auf.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git status --short
 git rev-parse --short HEAD
-]]></codeblock><p>Fahren Sie nur fort, wenn der working tree state verstanden ist und die current source revision als rollback reference erfasst wurde.</p></info></step>
-      <step><cmd>Erfassen Sie effective configuration und runtime paths.</cmd><info><p>Erfassen Sie aktive <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph> und ob values aus shell exports oder <codeph>.env</codeph> stammen. Kopieren Sie keine secrets in die update note.</p></info></step>
-      <step><cmd>Erstellen Sie manual database backup evidence, während BPM gestoppt ist.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Fahren Sie nur fort, wenn der Arbeitsbaumstatus verstanden und die aktuelle Quellrevision als Rollback-Referenz aufgezeichnet ist.</p></info></step>
+      <step><cmd>Zeichnen Sie effektive Konfigurations- und Laufzeitpfade auf.</cmd><info><p>Erfassen Sie die aktiven Werte <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph> und ob Werte aus Shell-Exporten oder <codeph>.env</codeph> stammen. Kopieren Sie keine Geheimnisse in die Update-Notiz.</p></info></step>
+      <step><cmd>Erstellen Sie manuelle Datenbanksicherungsnachweise, während BPM gestoppt ist.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
-]]></codeblock><p>Erfassen Sie timestamp, current revision, database URL, file size und checksum. Wenn das Deployment nicht <codeph>data/bpm.db</codeph> verwendet, sichern Sie stattdessen den aus <codeph>BPM_DATABASE_URL</codeph> aufgelösten path.</p></info></step>
-      <step><cmd>Exportieren Sie critical profile evidence, bevor code geändert wird.</cmd><info><p>Nutzen Sie bestehende API export examples, um erforderliche Firefox <codeph>policies.json</codeph> documents zu speichern, und erfassen Sie response status, profile ID, revision, schema channel und exported-document hash.</p><note type="warning">Wenn database backup oder export evidence fehlt, stoppen Sie das Update. Ersetzen Sie fehlende backup evidence nicht durch die Annahme, dass Git rollback oder <codeph>alembic downgrade</codeph> sicher sein wird.</note></info></step>
+]]></codeblock><p>Zeichnen Sie Zeitstempel, aktuelle Revision, Datenbank-URL, Dateigröße und Prüfsumme auf. Wenn die Bereitstellung nicht <codeph>data/bpm.db</codeph> verwendet, sichern Sie stattdessen den von <codeph>BPM_DATABASE_URL</codeph> aufgelösten Pfad.</p></info></step>
+      <step><cmd>Exportieren Sie kritische Profilnachweise, bevor Sie den Code ändern.</cmd><info><p>Verwenden Sie die vorhandenen API-Exportbeispiele, um erforderliche Firefox-<codeph>policies.json</codeph>-Dokumente zu speichern und den Antwortstatus, das Profil ID, die Revision, den Schemakanal und den Hash des exportierten Dokuments aufzuzeichnen.</p><note type="warning">Wenn Datenbanksicherungs- oder Exportnachweise fehlen, stoppen Sie die Aktualisierung. Ersetzen Sie fehlende Sicherungsnachweise nicht durch die Annahme, dass Git-Rollback oder <codeph>alembic downgrade</codeph> sicher sind.</note></info></step>
     </steps>
-    <result><p>Das Update besitzt ein geprüftes pre-change evidence set und eine bekannte previous source reference.</p></result>
-    <postreq><p>Fahren Sie mit refresh von source revision und dependencies erst fort, wenn das evidence set vollständig und geprüft ist.</p></postreq>
+    <result><p>Das Update verfügt über einen verifizierten Beweissatz vor der Änderung und einen bekannten früheren Quellenverweis.</p></result>
+    <postreq><p>Fahren Sie mit der Aktualisierung der Quellrevision und der Abhängigkeiten erst fort, nachdem der Beweissatz vollständig und überprüft ist.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>

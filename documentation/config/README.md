@@ -15,6 +15,9 @@ This hand-authored directory contains the reviewed documentation toolchain autho
 - `user-guide-coverage-closure-0.9.0.json` records the closed User Guide release-readiness mapping
   across README capabilities, routes, templates, locale catalogs, API boundaries, and browser-smoke
   evidence;
+- `user-guide-screenshot-matrix-0.9.1.json` defines the minimal BPM 0.9.1 User Guide screenshot
+  matrix across all six locales without expanding into Firefox Policy, CIS, API, or
+  Administrator/DevOps screenshots;
 - `firefox-policy-topic-model-0.9.0.json` defines the Firefox Policy Guide DITA reference topic
   model used by schema-grounded policy topic generation;
 - `cis-settings-topic-model-0.9.0.json` defines the CIS Settings Guide DITA reference topic model,
@@ -30,6 +33,38 @@ This hand-authored directory contains the reviewed documentation toolchain autho
 - `search-facets-filters-0.9.0.json` defines deterministic search facet fields, filter
   composition, URL-state preservation, corpus count expectations, and localized empty-result
   recovery without AI/RAG/embeddings/generative answers;
+- `search-ui-filter-contract-0.9.1.json` defines the compact default search UI, deliberate
+  expansion behavior, locale-owned visible filter labels, selected-filter persistence, keyboard
+  access, and empty-result recovery rules for the BPM 0.9.1 documentation polish work;
+- `navigation-tree-contract-0.9.1.json` defines the BPM 0.9.1 hierarchical documentation tree,
+  root/guide/section/topic node model, one manifest-backed navigation source per locale, compact
+  page hosts, safe shared-runtime rendering and failure behavior, active state, return behavior,
+  URL invariants, keyboard semantics, collapse state, and locale-owned navigation labels;
+- `documentation-polish-regression-gates-0.9.1.json` binds the retired API guide, Administrator
+  API ownership, navigation artifact integrity, compact tree hosts, locale-owned UI terminology,
+  visible-English review coverage, and live bounded allowlists to fail-closed release checks;
+- `documentation-navigation-language-browser-qa-0.9.1.json` freezes the six-locale desktop/narrow
+  navigation, failure fallback, long-tree wheel/keyboard scrolling, retired API-node absence, and
+  exact All settings interface-name/visible-prose assertions for the final M10 browser QA;
+- `interface-name-authority-0.9.1.json` maps documentation names for BPM surfaces, modes,
+  workflows, settings categories, appearance, and locale controls to the same maintained runtime
+  catalog key in all six locales, while classifying historical aliases, non-UI technical terms,
+  and catalog defects that must be corrected before documentation replacement;
+- `interface-name-replacement-0.9.1.json` records the five-locale DITA replacement baseline,
+  forbidden source UI aliases, resolved runtime-catalog defects, ambiguous ordinary-prose
+  boundary, and zero-residual closure evidence for BPM091-M10-05;
+- `visible-english-prose-review-0.9.1.json` records the full 805-source M10-06 review, the
+  10,410-block structural pass, separate review of 36 nonparallel sources, zero release-blocking
+  exact English carryover, reviewed locale homographs, and the bounded technical-literal residual set;
+- `all-settings-row-help-link-contract-0.9.1.json` defines the BPM 0.9.1 All Settings row-level
+  documentation-help target resolution, no-link dispositions, circled-info layout, localized
+  accessible labels, keyboard behavior, and manifest target validation;
+- `documentation-polish-guardrails-0.9.1.json` registers the BPM 0.9.1 guardrails that fail closed
+  for missing screenshot matrix rows, localized search-filter English fallback, duplicate
+  navigation titles, pure-white primary light-theme surfaces, and All Settings rows without valid
+  help-link dispositions;
+- `documentation-sufficiency-review-protocol-0.9.1.json` defines the BPM 0.9.1 review checklist
+  and evidence types proving that documented tasks can be completed and reach their stated result;
 - `search-quality-performance-0.9.0.json` defines deterministic search quality fixtures,
   top-result expectations, no-result/adversarial coverage, index-size limits, and CI-stable
   scan-unit performance budgets;

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Referenz zum Sperren von managed preferences</title>
-  <shortdesc>Managed preferences werden über die Firefox-Richtlinie <codeph>Preferences</codeph> exportiert und benötigen eine explizite Prüfung von value, type und status.</shortdesc>
+  <title>Verwaltete Einstellungssperrreferenz</title>
+  <shortdesc>Verwaltete Einstellungen werden über die Firefox-Richtlinie <codeph>Preferences</codeph> exportiert und erfordern eine explizite Wert-, Typ- und Statusüberprüfung.</shortdesc>
   <refbody>
-    <section id="a-container-policy"><title>Container policy</title><p>Firefox speichert managed preferences unter <codeph>Preferences</codeph>. BPM dokumentiert bekannte preferences separat, exportiert sie aber als Einträge in dieser container policy.</p></section>
-    <section id="a-status-values"><title>Status values</title><p><codeph>locked</codeph> verhindert Benutzeränderungen dort, wo Firefox die preference unterstützt. <codeph>default</codeph>, <codeph>user</codeph> und <codeph>clear</codeph> haben unterschiedliche runtime meanings und sollten nicht als Synonyme verwendet werden.</p></section>
-    <section id="a-type-values"><title>Type values</title><p>Setzen Sie <codeph>Type</codeph> auf <codeph>boolean</codeph>, <codeph>number</codeph> oder <codeph>string</codeph>, wenn BPM eine exakte value shape benötigt. Der Typ von <codeph>Value</codeph> muss zum deklarierten type passen.</p></section>
-    <section id="a-source-conflicts"><title>Source conflicts</title><p>Eine preference kann aus preset, CIS layer, import, manual edit oder raw fallback stammen. Prüfen Sie die Quelle vor dem locking, weil eine locked preference die Benutzererwartung stärker überschreiben kann als ein unlocked policy default.</p></section>
-    <section id="a-safe-review"><title>Safe review</title><p>Validieren Sie Release und ESR, wenn ein Profil kanalübergreifend wiederverwendet werden kann, und ändern Sie preference IDs nicht. BPM kann die container shape validieren, aber der Firefox runtime entscheidet über die endgültige Wirkung.</p></section>
+    <section id="a-container-policy"><title>Containerrichtlinie</title><p>Firefox speichert Verwaltete Einstellungen unter <codeph>Preferences</codeph>. BPM dokumentiert bekannte Präferenzen separat, exportiert sie jedoch als Einträge in dieser Containerrichtlinie.</p></section>
+    <section id="a-status-values"><title>Statuswerte</title><p><codeph>locked</codeph> verhindert Benutzeränderungen, wenn Firefox die Einstellung unterstützt. <codeph>default</codeph>, <codeph>user</codeph> und <codeph>clear</codeph> haben unterschiedliche Laufzeitbedeutungen und sollten nicht als Synonyme verwendet werden.</p></section>
+    <section id="a-type-values"><title>Geben Sie Werte ein</title><p>Setzen Sie <codeph>Type</codeph> auf <codeph>boolean</codeph>, <codeph>number</codeph> oder <codeph>string</codeph>, wenn BPM eine exakte Wertform benötigt. Der Typ <codeph>Value</codeph> muss mit dem deklarierten Typ übereinstimmen.</p></section>
+    <section id="a-source-conflicts"><title>Quellkonflikte</title><p>Eine Voreinstellung kann aus einer Voreinstellung, einem CIS-Layer, einem Import, einer manuellen Bearbeitung oder einem Roh-Fallback stammen. Überprüfen Sie die Quelle vor dem Sperren, da eine gesperrte Einstellung die Benutzererwartungen stärker außer Kraft setzen kann als ein nicht gesperrter Richtlinienstandard.</p></section>
+    <section id="a-safe-review"><title>Sichere Bewertung</title><p>Validieren Sie sowohl Release als auch ESR, wenn ein Profil kanalübergreifend wiederverwendet werden kann, und lassen Sie die Präferenz Kennungen unverändert. BPM kann die Containerform validieren, aber die Firefox-Laufzeitumgebung entscheidet über den endgültigen Effekt.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.fx-task-review-complex-policy-configuration"/>

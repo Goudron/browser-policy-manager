@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-13-validation-environment-handoff-20260715",
+  "backlog_item": "BPM091-M11-13",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "pass",
+  "completed_at": "2026-07-15T15:18:04Z",
+  "contract": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json",
+  "capture": {
+    "mode": "read-only",
+    "privilege_transport": "bounded-pkexec-after-maintainer-accepted-system-authentication",
+    "privileged_read_only_attempts": 3,
+    "successful_privileged_read_only_attempts": 2,
+    "failed_formatting_attempts": 1,
+    "failed_formatting_disposition": "Docker template requested an absent optional Labels field; no state-changing command ran and the corrected read-only capture succeeded.",
+    "local_transcript": "documentation/build/live-source-install/0.9.1/m11-13-handoff-20260715/docker-read-only-inventory.txt",
+    "local_transcript_sha256": "63644d28cbb76bcbcaebd7d3c2e0c5551b6c7e38e52ade8185c7fd234502b9a6",
+    "local_firewall_hash_record": "documentation/build/live-source-install/0.9.1/m11-13-handoff-20260715/firewall-config-current.sha256",
+    "local_firewall_hash_record_sha256": "7715f50ac9cd400c480b4a690fa6aed0a905fc08d3a315a25ea6bd98932f9b11",
+    "raw_transcripts_committed": false
+  },
+  "observations": {
+    "containers_total": 13,
+    "containers_running": 0,
+    "containers_stopped": 13,
+    "images_total": 5,
+    "m11_networks": 1,
+    "volumes_total": 0,
+    "build_cache_bytes": 0,
+    "container_stop_required": false,
+    "reason_no_stop_command": "Every M11 container was already stopped and the runtime reported no running validation container.",
+    "docker_engine_healthy": true,
+    "storage_boundary_pass": true,
+    "host_integrity_pass": true
+  },
+  "mutations": {
+    "container_start_commands": 0,
+    "container_stop_commands": 0,
+    "container_remove_commands": 0,
+    "image_remove_commands": 0,
+    "network_remove_commands": 0,
+    "volume_remove_commands": 0,
+    "prune_commands": 0,
+    "package_or_repository_changes": 0,
+    "service_or_daemon_configuration_changes": 0,
+    "firewall_or_network_configuration_changes": 0,
+    "user_or_group_changes": 0
+  },
+  "retention_decision": {
+    "docker_engine": "retain",
+    "official_repository_and_key": "retain",
+    "services_and_data_roots": "retain",
+    "memberless_docker_group": "retain",
+    "five_clean_golden_images": "retain",
+    "thirteen_stopped_validation_containers": "retain",
+    "dedicated_network": "retain",
+    "local_transcripts": "retain-ignored",
+    "committed_evidence": "retain",
+    "deletion_performed": false
+  },
+  "handoff": {
+    "next_backlog_item": "BPM091-M11-14",
+    "environment_ready_for_future_experiments": true,
+    "future_privileged_access_requires_existing_contract": true
+  },
+  "verification": {
+    "focused_contract": "pass-15",
+    "full_documentation_contract": "pass-733-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_validate": "pass-six-locales",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

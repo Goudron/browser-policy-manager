@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-profile-name" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Corriger les erreurs de nom de profil</title>
-  <shortdesc>Corrigez empty, duplicate ou unclear profile name pendant la création ou le clone.</shortdesc>
+  <title>Résoudre les erreurs de nom de profil</title>
+  <shortdesc>Corrigez un nom de profil vide, en double ou peu clair lors de la création ou du clonage.</shortdesc>
   <taskbody>
-    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
-    <context><p>Les noms de profils identifient Library rows, editor tabs, comparison choices, imports et recovery messages ; name validation bloque donc les enregistrements ambigus.</p></context>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
+    <context><p>Les noms de profil identifient les lignes de la bibliothèque, les onglets de l'éditeur, les choix de comparaison, les importations et les messages de récupération, de sorte que la validation du nom bloque les sauvegardes ambiguës.</p></context>
     <steps>
-      <step><cmd>Lisez le name validation hint avant de modifier d’autres champs du profil.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Saisissez un non-empty name qui distingue l’objectif du profil, Firefox channel ou source file.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Dans clone workflows, modifiez suggested clone name avant confirmation s’il duplique une row existante.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Relancez save ou duplicate après disparition du name hint.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+      <step><cmd>Lisez l'indice de validation du nom avant de modifier d'autres champs de profil.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Saisissez un nom non vide qui distingue l'objectif du profil, le canal Firefox ou le fichier source.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Pour les processus de clonage, modifiez le nom de clone suggéré avant de confirmer s'il duplique une ligne existante.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Enregistrez ou dupliquez à nouveau une fois l'indication de nom effacée.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
     </steps>
-    <result><p>Le profil ou clone possède un nom visible unique retrouvable plus tard dans la Library.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+    <result><p>Le profil ou le clone a un nom visible unique qui peut être trouvé plus tard dans la bibliothèque.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-create-first-profile"/>

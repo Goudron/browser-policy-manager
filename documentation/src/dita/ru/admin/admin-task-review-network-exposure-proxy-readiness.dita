@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-review-network-exposure-proxy-readiness" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Проверить network exposure и proxy-readiness вопросы</title>
-  <shortdesc>Подготовьте network exposure notes и reverse-proxy вопросы, не публикуя неподдерживаемые TLS или proxy recipes как поведение BPM 0.9.0.</shortdesc>
+<task id="admin-task-review-network-exposure-proxy-readiness" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Просмотрите вопросы о уязвимости сети и готовности прокси-сервера.</title>
+  <shortdesc>Подготовьте заметки о рисках в сети и обратные вопросы без публикации неподдерживаемых TLS или прокси-рецептов, как поведение BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Оценка current single-node source readiness завершена, и оператор знает, будет ли доступ к BPM через loopback, WSL forwarded address, lab host или внешний proxy.</p></prereq>
-    <context><p>BPM может запускаться на настроенных host и port, но документация BPM 0.9.0 не предоставляет official reverse proxy, TLS termination, authentication gateway, header policy или rate-limiting recipe.</p></context>
+    <prereq><p>Текущая оценка готовности источника с одним узлом завершена, и оператор знает, получат ли пользователи доступ к BPM через петлю, переадресованный адрес WSL, лабораторный хост или внешний прокси-сервер.</p></prereq>
+    <context><p>BPM может работать на настроенном хосте и порту, но документация BPM не предоставляет официальный обратный прокси-сервер, завершение TLS, шлюз аутентификации, политику заголовка или рецепт ограничения скорости.</p></context>
     <steps>
-      <step><cmd>Выберите минимальную network exposure для текущей evaluation.</cmd><info><p>Предпочитайте <codeph>127.0.0.1</codeph>. Используйте <codeph>BPM_HOST="0.0.0.0"</codeph> только когда этого требует WSL forwarding или controlled lab network, и запишите, почему <codeph>BPM_PORT="8000"</codeph> должен быть доступен.</p></info></step>
-      <step><cmd>Запишите proxy-readiness questions до добавления внешнего proxy.</cmd><info><p>Ответьте, кто владеет TLS certificates, hostname routing, request size limits, timeout values, CORS origins через <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, forwarded headers, access logs и incident response. Эти вопросы можно подготовить сейчас; official TLS/proxy recipes planned but not implemented yet.</p></info></step>
-      <step><cmd>Проверьте probes через выбранную boundary.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Выберите наименьшее воздействие на сеть, соответствующее текущей оценке.</cmd><info><p>Предпочитаю <codeph>127.0.0.1</codeph>. Используйте <codeph>BPM_HOST="0.0.0.0"</codeph> только тогда, когда этого требует переадресация WSL или контролируемая лабораторная сеть, и запишите, почему <codeph>BPM_PORT="8000"</codeph> доступен.</p></info></step>
+      <step><cmd>Запишите вопросы о готовности прокси-сервера перед добавлением внешнего прокси-сервера.</cmd><info><p>Ответьте, кому принадлежат сертификаты TLS, маршрутизация имени хоста, ограничения размера запроса, значения времени ожидания, происхождение CORS через <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, пересылаемые заголовки, журналы доступа и реагирование на инциденты. Эти вопросы можно подготовить уже сейчас; официальные рецепты TLS/прокси запланированы, но еще не реализованы.</p></info></step>
+      <step><cmd>Убедитесь, что датчики по-прежнему проходят через выбранную границу.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Если в lab используется внешний proxy, фиксируйте direct source probes и proxy-side probes. Не считайте proxy 200 response доказательством BPM authentication, authorization или HA.</p></info></step>
-      <step><cmd>Явно отметьте unsupported network claims.</cmd><info><note type="warning">BPM 0.9.0 не поставляет packaged services, official TLS/proxy recipes, supported HA clustering, WAF rules, request signing, rate limiting, SSO, OAuth/OIDC, role-based access control или production hardening. Оставляйте это как external controls или deferred requirements.</note></info></step>
+]]></codeblock><p>Если в лаборатории используется внешний прокси-сервер, запишите как зонды с прямым источником, так и зонды на стороне прокси. Не рассматривайте ответ прокси-сервера 200 как доказательство аутентификации, авторизации BPM или HA.</p></info></step>
+      <step><cmd>Явно отмечать неподдерживаемые сетевые утверждения.</cmd><info><note type="warning">BPM не предоставляет пакетные службы, официальные рецепты TLS/прокси, поддерживаемую кластеризацию HA, правила WAF, подпись запросов, ограничение скорости, SSO, OAuth/OIDC, управление доступом на основе ролей или усиление безопасности производства. Оставьте их в качестве внешнего контроля или отложенных требований.</note></info></step>
     </steps>
-    <result><p>Network note отделяет то, что можно настроить сейчас, от reverse-proxy и TLS решений, которые остаются external или deferred.</p></result>
-    <postreq><p>Перед shared evaluation window используйте topic про monitoring, backup и update windows.</p></postreq>
+    <result><p>Сетевое примечание отделяет то, что можно настроить сейчас, от решений обратного прокси и TLS, которые остаются внешними или отложенными.</p></result>
+    <postreq><p>Используйте раздел об окнах мониторинга, резервного копирования и обновления перед запуском общего окна оценки.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-network-cors-security"/>

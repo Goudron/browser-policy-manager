@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-manual-review-exceptions" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Manual review、deviations 和 exception boundaries</title>
-  <shortdesc>当本地 governance 可能改变正确 deployment decision 时，BPM 会显示 CIS-related manual review。</shortdesc>
+  <title>手动审查、偏差和异常边界 当地方治理可以更改正确的部署决策时，</title>
+  <shortdesc>当地方治理可以更改正确的部署决策时，BPM 会显示 CIS 相关的手动审核。</shortdesc>
   <conbody>
-    <section id="a-manual-review-scope"><title>Manual-review scope</title><p>BPM 为九个 paths 标记 manual review：AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate、DisableSystemAddonUpdate、Proxy.Locked、Proxy.Mode、SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.Sessions。这些 paths 是 review points，因为 enterprise patch management、proxy routing 和 evidence-retention rules 在不同 deployments 中可能合理不同。</p></section>
-    <section id="a-update-governance"><title>Update governance</title><p>请与 enterprise patch management owner 一起 review AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate 和 DisableSystemAddonUpdate。确认 browser updates 是由 Firefox、operating-system tool、software-management platform 还是单独 maintenance window 管理。BPM 可以保留 selected value 和 source attribution，但不决定哪种 update process 在运营上正确。</p></section>
-    <section id="a-proxy-routing"><title>Proxy routing</title><p>请与 network owner 一起 review Proxy.Locked 和 Proxy.Mode。确认 profile 是否必须保留 system proxy behavior、强制 manual proxy，或把 routing 留给其他 control。不要把 BPM value 当作 deployment 后 traffic 实际使用预期 route 的 proof。</p></section>
-    <section id="a-evidence-retention"><title>Evidence retention</title><p>请与 security 和 privacy owner 一起 review SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.Sessions。有些 hardened scenarios 会清除 local data，而有些 investigations 需要 retaining evidence。BPM 记录 choice 和 conflict state；它不决定 legal 或 incident-response requirement。</p></section>
-    <section id="a-exception-boundary"><title>Exception boundary</title><p>BPM 0.9.0 没有单独 persisted CIS exception 或 waiver model。请将 intentional deviations 记录到 external ticket、deployment note 或 change-control record，然后在 BPM profile 中保持 source attribution 和 manual_review_kept_base decision 可见，供后续 review。</p></section>
+    <section id="a-manual-review-scope"><title>手动审核范围</title><p>BPM 标记九个路径的手动审核：AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate、DisableSystemAddonUpdate、Proxy.Locked、Proxy.Mode、SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.Sessions。这些路径是审查点，因为企业补丁管理、代理路由和证据保留规则在部署之间可能存在合理的差异。</p></section>
+    <section id="a-update-governance"><title>更新治理</title><p>与企业补丁管理所有者一起审核 AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate 和 DisableSystemAddonUpdate。验证浏览器更新是否由 Firefox、操作系统工具、软件管理平台或单独的维护时段管理。 BPM 可以保留所选值和源属性，但它不能决定哪个更新过程在操作上是正确的。</p></section>
+    <section id="a-proxy-routing"><title>代理路由</title><p>与网络所有者一起检查 Proxy.Locked 和 Proxy.Mode。验证配置文件是否必须保留系统代理行为、强制执行手动代理或将路由留给另一个控制。不要将 BPM 值视为流量在部署后实际使用预期路由的证据。</p></section>
+    <section id="a-evidence-retention"><title>证据保留</title><p>与安全和隐私所有者一起查看 SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.会话。一些强化场景会清除本地数据，而一些调查则需要保留证据。 BPM记录选择和冲突状态；它不确定法律或事件响应要求。</p></section>
+    <section id="a-exception-boundary"><title>异常边界</title><p>BPM 没有单独的持续 CIS 例外或豁免模型。在外部票证、部署说明或变更控制记录中记录故意偏差，然后保持 BPM 配置文件源归因和 manual_review_kept_base 决策可见，以供以后查看。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.cis-task-verify-cis-deviation"/>

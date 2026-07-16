@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>Verificar BPM source deployment mediante WSL</title>
-  <shortdesc>Compruebe probes desde WSL y Windows, confirme la UI route, inspeccione logs y solucione problemas comunes de WSL networking y filesystem.</shortdesc>
+<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
+  <title>Verificar la implementación del origen BPM a través de WSL</title>
+  <shortdesc>Verifique las sondas de WSL y Windows, confirme la ruta UI, inspeccione los registros y solucione problemas comunes de redes y sistemas de archivos de WSL.</shortdesc>
   <taskbody>
-    <prereq><p>BPM se ejecuta desde el WSL checkout con los <codeph>BPM_DATABASE_URL</codeph>, host, port y documentation-site settings previstos.</p></prereq>
-    <context><p>La verificación debe probar tanto la respuesta del Linux process como la Windows browser access path. No certifica native Windows installation, production hardening, reverse proxy behavior, backup readiness ni Firefox runtime enforcement.</p></context>
+    <prereq><p>BPM se está ejecutando desde el proceso de pago de WSL con la configuración prevista de <codeph>BPM_DATABASE_URL</codeph>, host, puerto y sitio de documentación.</p></prereq>
+    <context><p>La verificación debe demostrar tanto la respuesta del proceso de Linux como la ruta de acceso del navegador de Windows. No certifica la instalación nativa de Windows, el refuerzo de la producción, el comportamiento del proxy inverso, la preparación de la copia de seguridad ni la aplicación del tiempo de ejecución de Firefox.</p></context>
     <steps>
-      <step><cmd>Compruebe health y readiness dentro de WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Verificar el estado y la preparación dentro de WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Las responses esperadas son <codeph>{"status":"ok"}</codeph> y <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
-      <step><cmd>Compruebe las mismas probes desde Windows PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+]]></codeblock><p>Las respuestas esperadas son <codeph>{"status":"ok"}</codeph> y <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Verifique las mismas sondas desde Windows PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 Invoke-WebRequest http://localhost:8000/health
 Invoke-WebRequest http://localhost:8000/health/ready
-]]></codeblock><p>Si localhost no funciona, repita con la WSL IP de <codeph>hostname -I</codeph>. Registre qué dirección tuvo éxito.</p></info></step>
-      <step><cmd>Abra la UI route desde el Windows browser.</cmd><info><p>Use <codeph>http://localhost:8000/profiles</codeph> o <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. La Profile Library route debe cargar la BPM interface o un empty/error state intencional, no un traceback.</p></info></step>
-      <step><cmd>Solucione WSL-specific failures antes de cambiar BPM code.</cmd><info><p>Para connection failures, confirme que <codeph>make dev</codeph> sigue ejecutándose, revise <codeph>BPM_HOST</codeph>, ejecute <codeph>wsl --list --verbose</codeph> y actualice la WSL IP tras reiniciar la distribution. Para file watching lento o permission errors, mueva el checkout desde <codeph>/mnt/c</codeph> a <codeph>/home/&lt;linux-user&gt;</codeph>. Ejecute <codeph>make test-fast</codeph> solo cuando environment path y network route estén estables.</p><note type="warning">Health checks correctos mediante WSL no prueban production readiness, Windows service behavior, managed backups ni HA support.</note></info></step>
+]]></codeblock><p>Si localhost no funciona, vuelva a intentarlo con el WSL IP de <codeph>hostname -I</codeph>. Registre qué dirección tuvo éxito.</p></info></step>
+      <step><cmd>Abra la ruta UI desde el navegador de Windows.</cmd><info><p>Utilice <codeph>http://localhost:8000/profiles</codeph> o <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. La ruta de la Biblioteca debe cargar la interfaz BPM o un estado vacío/error intencional, no un rastreo.</p></info></step>
+      <step><cmd>Solucionar fallas específicas de WSL antes de cambiar el código BPM.</cmd><info><p>En caso de fallas de conexión, confirme que <codeph>make dev</codeph> aún se esté ejecutando, verifique <codeph>BPM_HOST</codeph>, ejecute <codeph>wsl --list --verbose</codeph> y actualice el WSL IP después de reiniciar la distribución. Para ver archivos lentamente o errores de permisos, mueva el proceso de pago de <codeph>/mnt/c</codeph> a <codeph>/home/&lt;linux-user&gt;</codeph>. Ejecute <codeph>make test-fast</codeph> solo después de que la ruta del entorno y la ruta de la red sean estables.</p><note type="warning">Pasar las comprobaciones de estado a través de WSL no prueba la preparación para la producción, el comportamiento del servicio de Windows, las copias de seguridad administradas ni la compatibilidad con HA.</note></info></step>
     </steps>
-    <result><p>El administrador tiene evidence de que BPM inicia dentro de WSL, responde a probes, es accesible desde Windows y no presenta WSL networking o filesystem blockers inmediatos.</p></result>
-    <postreq><p>Mantenga juntos PowerShell output, WSL shell commands, nombres de <codeph>BPM_*</codeph> variables, probe responses y foreground logs para troubleshooting sin copiar secrets.</p></postreq>
+    <result><p>El administrador tiene evidencia de que BPM se inicia dentro de WSL, responde a sondeos, es accesible desde Windows y no tiene bloqueadores inmediatos de redes WSL ni de sistemas de archivos.</p></result>
+    <postreq><p>Mantenga la salida de PowerShell, los comandos de shell WSL, los nombres de variables de <codeph>BPM_*</codeph>, las respuestas de la sonda y los registros de primer plano juntos para solucionar problemas sin copiar secretos.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>

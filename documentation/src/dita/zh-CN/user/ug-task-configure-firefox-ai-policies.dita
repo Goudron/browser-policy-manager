@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置 Firefox AI 和智能功能策略</title>
-  <shortdesc>当 Release 架构支持时，使用步骤 5 配置与 AI &amp; smart features、视觉搜索和智能表面相关的现有 Firefox 策略。</shortdesc>
+  <shortdesc>对与受支持的发布模式上的 AI &amp; 智能功能、视觉搜索和智能界面相关的现有 Firefox 浏览器策略控制使用步骤 5。</shortdesc>
   <taskbody>
-    <prereq><p>请选择支持这些策略的 Release 架构，或预先确认 ESR 140.12 中部分控制不存在。</p></prereq>
-    <context><p>本主题把现有 Firefox AI 和智能功能策略作为产品功能来说明。它不会向文档门户添加 AI 功能；RAG、嵌入、生成式搜索或生成式回答不属于 0.9.0。</p></context>
+    <prereq><p>选择支持控件的发布模式，或者您了解 ESR 140.12 可能会省略它们。</p></prereq>
+    <context><p>本主题将现有 Firefox 策略设置记录为产品功能。它不会将 AI 功能添加到 0.9.1 文档门户：RAG、嵌入、生成搜索和生成答案仍然超出范围。</p></context>
     <steps>
-      <step><cmd>打开步骤 5“AI &amp; smart features”。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查所选 Release 架构列出的内置浏览器 AI 表面、视觉搜索和智能功能。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>根据配置文件目标，对每个受支持策略选择启用、禁用或保持不变。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>如果某个控制在 ESR 140.12 中不存在，请将其视为 ESR 不支持，不要手动把它编造成 Guided 设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开第5步，AI &amp;智能功能。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>查看为所选发布模式列出的内置浏览器 AI 界面、视觉搜索和智能浏览器功能。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>根据配置文件目标启用、禁用或保留每个支持的策略。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>如果 ESR 140.12 上缺少控件，请将其视为不受支持，而不是手动创建引导设置。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>受支持的 Firefox AI 和智能功能策略已作为产品设置审查，同时保留文档门户不使用 RAG、嵌入或生成式回答的边界。</p></result>
-    <postreq><p>恢复：如果预期控制在 ESR 中不可见，请切换到受支持的 Release 架构进行审查，或记录 ESR 不支持该控制。</p></postreq>
+    <result><p>支持的 Firefox AI 和智能功能策略将作为产品设置进行审核，而 0.9.1 的文档门户仍然为非 AI。</p></result>
+    <postreq><p>恢复：如果利益相关者期望缺少 ESR 控制，请切换到受支持的发布模式以进行审查或记录不受支持的状态。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>

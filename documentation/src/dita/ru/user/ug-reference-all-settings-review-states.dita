@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Состояния проверки All Settings</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. Use this reference to interpret clean, invalid, CIS manual-review, raw, unknown, deprecated, and imported review states.</shortdesc>
+  <title>Все настройки состояние проверки</title>
+  <shortdesc>Используйте эту ссылку для интерпретации состояний чистой, недействительной, ручной проверки CIS, необработанной, неизвестной, устаревшей и импортированной проверки.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Состояния проверки All Settings</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. Review states explain why All Settings asks for attention before the user edits routine values.</p></section>
-    <section id="a-clean-profile"><title>Clean profile</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. A clean profile has no remaining Review items. It can still contain configured settings; it simply has no attention states that BPM can detect.</p></section>
-    <section id="a-invalid-items"><title>Invalid items</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. Invalid items have values that fail current validation for the selected schema channel and should be fixed or removed before handoff.</p></section>
-    <section id="a-cis-manual-review"><title>CIS manual review</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. CIS manual-review items need a human decision or external verification. BPM can surface the item without claiming certified compliance.</p></section>
-    <section id="a-raw-unknown-imported"><title>Raw, unknown, and imported items</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. Raw fallback, unknown, and imported items should be preserved or removed deliberately because BPM may not be able to model their intent visually.</p></section>
-    <section id="a-deprecated-items"><title>Deprecated items</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. Deprecated settings may still exist in a profile, but the user should confirm current Release/ESR support before relying on them.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Состояния проверки All Settings. If a state is unexpected, clear filters, confirm the schema channel, refresh the profile, and inspect the setting detail before editing.</p></section>
+    <section id="a-overview"><title>Обзор</title><p>Состояния проверки объясняют, почему Все настройки запрашивает внимание, прежде чем пользователь редактирует стандартные значения.</p></section>
+    <section id="a-clean-profile"><title>Очистить профиль</title><p>В чистом профиле не осталось элементов проверки. Он по-прежнему может содержать настроенные параметры; он просто не обращает внимания на состояния, которые может обнаружить BPM.</p></section>
+    <section id="a-invalid-items"><title>Недопустимые элементы</title><p>Недопустимые элементы имеют значения, которые не проходят текущую проверку для выбранного канала схемы и должны быть исправлены или удалены перед передачей.</p></section>
+    <section id="a-cis-manual-review"><title>Обзор руководства CIS</title><p>Элементы CIS, просматриваемые вручную, требуют человеческого решения или внешней проверки. BPM может представить продукт, не заявляя о сертифицированном соответствии.</p></section>
+    <section id="a-raw-unknown-imported"><title>Необработанные, неизвестные и импортные предметы</title><p>Необработанные резервные, неизвестные и импортированные элементы следует сохранять или удалять намеренно, поскольку BPM может оказаться не в состоянии визуально смоделировать их намерения.</p></section>
+    <section id="a-deprecated-items"><title>Устаревшие элементы</title><p>Устаревшие настройки все еще могут существовать в профиле, но пользователь должен подтвердить текущую поддержку Release/ESR, прежде чем полагаться на них.</p></section>
+    <section id="a-recovery"><title>Восстановление</title><p>Если состояние является неожиданным, очистите фильтры, подтвердите канал схемы, обновите профиль и проверьте детали настройки перед редактированием.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-attention-items"/>

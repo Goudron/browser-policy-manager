@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM091-M6-05",
+  "target_bpm_version": "0.9.1",
+  "status": "authored-validation-attempted",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "python_source": {
+    "version": "3.14.6",
+    "sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+    "url": "https://www.python.org/ftp/python/3.14.6/Python-3.14.6.tar.xz"
+  },
+  "targets": [
+    {"id": "ubuntu-26-04", "topic_id": "admin-task-install-ubuntu-26-04-source", "release": "Ubuntu 26.04 LTS", "package_command": "apt-get", "python_strategy": "distribution-python3.14"},
+    {"id": "debian-13-5", "topic_id": "admin-task-install-debian-13-source", "release": "Debian 13.5 (trixie)", "package_command": "apt-get", "python_strategy": "checksum-verified-cpython-source"},
+    {"id": "fedora-44", "topic_id": "admin-task-install-fedora-44-source", "release": "Fedora Linux 44", "package_command": "dnf", "python_strategy": "distribution-python3.14"},
+    {"id": "linux-mint-22-3", "topic_id": "admin-task-install-linux-mint-22-3-source", "release": "Linux Mint 22.3 (Zena)", "package_command": "apt-get", "python_strategy": "checksum-verified-cpython-source"},
+    {"id": "manjaro-stable-2026-06-26", "topic_id": "admin-task-install-manjaro-stable-source", "release": "Manjaro stable branch after 2026-06-26", "package_command": "pacman", "python_strategy": "fully-updated-distribution-python3.14"}
+  ],
+  "required_command_families": ["release assertion", "package prerequisites", "Python 3.14 assertion", "approved Git ref guard", "repository checkout", "virtual environment", "editable dependency install", "database migration", "documentation toolchain bootstrap", "documentation validation and build", "foreground start", "health and readiness probes", "Profile Library request", "log inspection", "stop and rollback boundary"],
+  "validation_owner": "BPM091-M6-06",
+  "validation_report": "docs/architecture/linux-source-install-validation-0.9.1.json",
+  "validation_rule": "Authored commands and simulation evidence are not clean-target execution evidence. Keep the Administrator source-install blocker open until complete clean-target transcripts pass for all five targets."
+}

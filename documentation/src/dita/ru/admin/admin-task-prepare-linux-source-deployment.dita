@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-linux-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Подготовить Linux-хост для развёртывания из исходников</title>
-  <shortdesc>Проверьте границы поддерживаемого развёртывания из исходников, требования к хосту и отложенные production-возможности до установки BPM из клона репозитория.</shortdesc>
+<task id="admin-task-prepare-linux-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Подготовьте хост Linux для развертывания исходного кода.</title>
+  <shortdesc>Перед установкой BPM из извлечения из репозитория проверьте поддерживаемую границу развертывания исходного кода, предварительные требования хоста и возможности отложенного производства.</shortdesc>
   <taskbody>
-    <prereq><p>Используйте Linux-хост, где можно установить Python 3.14+, Git, инструменты сборки и curl. Этот ранбук предполагает checkout исходников, а не packaged installer.</p></prereq>
-    <context><p>BPM 0.9.0 можно запускать из исходников для разработки, ревью и контролируемой административной оценки. Packaged installers, native service units, официальные systemd recipes, reverse proxy and TLS recipes, HA clustering, managed secrets и production hardening в этом релизе не поставляются и не должны описываться как поддерживаемое поведение развёртывания.</p></context>
+    <prereq><p>Используйте хост Linux, на котором можно установить Python 3.14+, Git, инструменты сборки и curl. Этот модуль руководство предполагает получение исходного кода, а не пакетного установщика.</p></prereq>
+    <context><p>BPM можно запускать из исходного кода для разработки, проверки и контролируемой административной оценки. Упакованные установщики, собственные сервисные модули, официальные рецепты systemd, рецепты обратного прокси-сервера и TLS, кластеризация HA, управляемые секреты и усиление безопасности производства не включены в этот выпуск и не должны быть представлены как поддерживаемое поведение развертывания.</p></context>
     <steps>
-      <step><cmd>Определите цель развёртывания и зафиксируйте, что это source-based Linux deployment.</cmd><info><p>Ожидаемый результат: в операционной заметке указано, что BPM запускается из Git checkout, а distribution-specific installers отложены.</p></info></step>
-      <step><cmd>Установите или проверьте требования к хосту.</cmd><info><p>Нужны Git, Python 3.14+, pip, make, curl и shell, который может выполнить <codeph>source .venv/bin/activate</codeph>. Команды репозитория используют локальное виртуальное окружение и не требуют глобального BPM package.</p></info></step>
-      <step><cmd>Создайте рабочий каталог отдельно от production data и secrets.</cmd><info><p>Храните repository checkout, <codeph>.venv</codeph> и локальные SQLite data в контролируемом пути. Не помещайте реальные secrets в примеры документации или committed files.</p></info></step>
-      <step><cmd>Подтвердите, что намеренно не входит в текущую инструкцию, прежде чем продолжать.</cmd><info><note type="warning">Этот ранбук не предоставляет packaged installer, native service, supported systemd unit, reverse proxy recipe, TLS termination, HA topology, managed secret store, backup automation или production-hardening checklist.</note></info></step>
+      <step><cmd>Определите цель развертывания и запишите, что это развертывание Linux на основе исходного кода.</cmd><info><p>Ожидаемый результат: в примечаниях к эксплуатации указано, что BPM запускается из проверки Git и что установщики для конкретного дистрибутива отложены.</p></info></step>
+      <step><cmd>Установите или проверьте необходимые компоненты хоста.</cmd><info><p>Требуемые инструменты: Git, Python 3.14+, pip, make, curl и оболочка, которая может запускать <codeph>source .venv/bin/activate</codeph>. Команды репозитория используют локальную виртуальную среду и не требуют глобального пакета BPM.</p></info></step>
+      <step><cmd>Создайте рабочий каталог, отдельный от производственных данных и секретов.</cmd><info><p>Держите извлечение репозитория, <codeph>.venv</codeph> и локальные данные SQLite по контролируемому пути. Не храните настоящие секреты в примерах документации или зафиксированных файлах.</p></info></step>
+      <step><cmd>Прежде чем продолжить, подтвердите, что намеренно не описано.</cmd><info><note type="warning">Этот модуль руководство не предоставляет пакетный установщик, встроенную службу, поддерживаемый модуль systemd, рецепт обратного прокси-сервера, завершение TLS, топологию HA, управляемое секретное хранилище, автоматизацию резервного копирования или контрольный список для повышения безопасности производства.</note></info></step>
     </steps>
-    <result><p>Хост и операционные допущения готовы к поддерживаемому BPM 0.9.0 workflow из source checkout.</p></result>
-    <postreq><p>Продолжите темой Linux source checkout перед настройкой runtime variables.</p></postreq>
+    <result><p>Хост и операционные предположения готовы к поддерживаемому рабочему процессу проверки исходного кода BPM.</p></result>
+    <postreq><p>Продолжите тему проверки исходного кода Linux перед настройкой переменных времени выполнения.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-linux-source-checkout"/>

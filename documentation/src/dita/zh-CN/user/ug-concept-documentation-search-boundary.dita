@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-documentation-search-boundary" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>了解文档搜索边界</title>
-  <shortdesc>将文档搜索用作已发布帮助主题的本地确定性索引，而不是 AI 助手。</shortdesc>
+  <title>浏览和搜索产品文档</title>
+  <shortdesc>使用可独立滚动的层次结构和紧凑的确定性搜索查找已发布的帮助，无需外部服务或 AI。</shortdesc>
   <conbody>
-    <section id="a-local-offline"><title>本地且离线</title><p>文档门户搜索与同一帮助工件一起打包的静态索引。它不会调用外部搜索服务，不需要互联网访问，不会发送查询用于遥测，也不会从用户行为中学习。</p></section>
-    <section id="a-deterministic-results"><title>确定性结果</title><p>搜索匹配本地化 DITA 主题标题、简短说明、标题层级、正文、已审核 aliases，以及稳定的技术标识符，例如 policy IDs、CIS recommendation IDs 和 API operation IDs。排序使用固定权重、facets、filters 和有限的 typo tolerance，因此同一工件和同一查询会得到相同的结果顺序。</p></section>
-    <section id="a-not-ai"><title>没有 AI 回答</title><p>搜索不提供 conversational answers、semantic embeddings、vector retrieval、RAG、generative summaries 或 automatic recommendations。没有结果时，请使用指南导航、精确标识符或 filters，而不是期待门户推断答案。</p></section>
-    <section id="a-product-ai-policies"><title>产品 AI 策略仍会记录</title><p>某些 Firefox Release 策略控制浏览器 AI 和智能功能行为。这些策略是普通 BPM 产品设置并继续记录在文档中；说明这些策略不会向文档门户添加 AI 功能。</p></section>
+    <section id="a-portal-navigation"><title>文档树</title><p>侧边栏从“文档”根节点开始，列出指南、必要的章节和主题。文档树与文章分别滚动。根链接显示顶层指南列表；上下文主题链接会展开所有上级节点，将目标主题滚动到可见位置并将其标记为当前主题。</p></section>
+    <section id="a-compact-search"><title>紧凑搜索和筛选条件</title><p>搜索默认只显示查询和主要操作这一行。展开附加面板可阅读搜索说明、选择已本地化的指南、内容类型和受众筛选条件，以及查看状态或结果。折叠面板不会清除当前查询或已选筛选条件。</p></section>
+    <section id="a-local-offline"><title>本地和离线</title><p>文档门户搜索使用相同帮助工件打包的静态索引。它不调用外部搜索服务、不需要互联网访问、发送遥测查询或从用户行为中学习。</p></section>
+    <section id="a-deterministic-results"><title>确定性结果</title><p>搜索匹配本地化的 DITA 主题标题、简短说明、标题、正文、经过审核的别名以及稳定的技术标识符，例如策略 ID、CIS 建议 ID 和 API 操作 ID。排名使用固定权重、分面、筛选条件和有限的拼写错误容限，因此相同的工件和查询会产生相同的结果顺序。</p></section>
+    <section id="a-not-ai"><title>不提供 AI 答案</title><p>搜索不提供对话式答案、语义嵌入、向量检索、RAG、生成式摘要或自动建议。如果没有结果，请使用文档树、精确标识符或筛选条件，而不要期望门户推断答案。</p></section>
+    <section id="a-product-ai-policies"><title>产品 AI 政策仍记录在案</title><p>某些 Firefox 版本策略控制浏览器 AI 和智能功能行为。这些策略是普通的 BPM 产品设置并保留记录；记录它们不会将 AI 功能添加到文档门户。</p></section>
   </conbody>
 </concept>

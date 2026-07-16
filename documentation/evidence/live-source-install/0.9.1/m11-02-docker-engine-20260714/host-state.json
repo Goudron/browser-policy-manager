@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "run_id": "m11-02-docker-engine-20260714",
+  "backlog_item": "BPM091-M11-02",
+  "before": {
+    "captured_at": "2026-07-14T01:04:45+03:00",
+    "docker": "absent",
+    "containerd": "absent",
+    "docker_group": "absent",
+    "root_available_bytes": 224904531968
+  },
+  "after": {
+    "captured_at": "2026-07-14T01:09:57+03:00",
+    "docker_version": "29.6.1",
+    "containerd_package_version": "2.2.6-1~ubuntu.26.04~resolute",
+    "docker_service": "active/enabled",
+    "containerd_service": "active/enabled",
+    "socket": "root:docker 0660",
+    "docker_group_members": [],
+    "maintainer_in_docker_group": false,
+    "docker_root_dir": "/var/lib/docker",
+    "root_available_bytes": 224467726336,
+    "containers": 0,
+    "images": 0,
+    "m11_labeled_resources": 0
+  },
+  "approved_retained_differences": [
+    "five Docker packages",
+    "official Docker apt source and signing key",
+    "docker and containerd services",
+    "Docker socket and memberless docker group",
+    "Docker and containerd data roots"
+  ],
+  "unexpected_persistent_differences": [],
+  "result": "pass"
+}

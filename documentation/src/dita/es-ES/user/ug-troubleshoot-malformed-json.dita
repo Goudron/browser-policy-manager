@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-malformed-json" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Recuperarse de malformed JSON</title>
-  <shortdesc>Diagnostique malformed JSON syntax antes de guardar, importar o validar un documento de políticas.</shortdesc>
+  <title>Recuperarse de JSON con formato incorrecto</title>
+  <shortdesc>Diagnostica la sintaxis JSON con formato incorrecto antes de guardar, importar o validar un documento de política.</shortdesc>
   <taskbody>
-    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
-    <context><p>Malformed JSON es un problema de sintaxis: BPM no puede analizar el documento lo suficiente para validar nombres o valores de políticas.</p></context>
+    <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
+    <context><p>JSON con formato incorrecto es un problema de sintaxis: BPM no puede analizar el documento lo suficiente como para validar nombres o valores de políticas.</p></context>
     <steps>
-      <step><cmd>Mantenga JSON editor o import error abierto para que la línea, columna o parse message siga visible.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Revise braces, brackets, commas, quotation marks y escaped characters cerca de la ubicación indicada.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Formatee o valide el documento de nuevo después de corregir la sintaxis.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Continúe con schema validation solo cuando JSON se analice correctamente.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+      <step><cmd>Mantenga abierto el error Editor JSON o de importación para que la línea, columna o mensaje de análisis permanezca visible.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Verifique las llaves, corchetes, comas, comillas y caracteres de escape más cercanos a la ubicación informada.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Formatee o valide el documento nuevamente después de la corrección de sintaxis.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Continúe con la validación del esquema solo después de que JSON se analice correctamente.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
     </steps>
-    <result><p>El documento se analiza como JSON y puede pasar a la validación normal de políticas.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+    <result><p>El documento se analiza como JSON y puede pasar a la validación de políticas normal.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

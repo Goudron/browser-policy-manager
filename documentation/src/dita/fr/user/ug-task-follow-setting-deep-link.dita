@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Suivre un lien profond de paramètre</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <title>Ouvrir les liens de paramètre et de documentation</title>
+  <shortdesc>Ouvrez un emplacement ciblé de l'éditeur ou la rubrique exacte correspondant à une politique prise en charge ou à un paramètre géré connu.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <prereq><p>Ouvrez Tous les paramètres ou une autre interface BPM contenant un lien vers un paramètre.</p></prereq>
+    <context><p>Les liens directs de l'éditeur ciblent un paramètre ou un emplacement brut. Dans Tous les paramètres, l'icône d'information cerclée distincte ouvre la documentation résolue par le manifeste pour chaque politique prise en charge et chaque paramètre géré connu.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Confirm the destination editor and focused setting or state.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Suivre un lien profond de paramètre. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Pour une politique prise en charge ou un paramètre géré connu, activez l'icône d'information cerclée à côté de sa ligne.</cmd><info><p>Résultat attendu : la documentation localisée s'ouvre dans un nouvel onglet sans sélectionner la ligne ni modifier les données du profil.</p></info></step>
+      <step><cmd>Confirmez la destination de documentation et l'élément actif de l'arborescence.</cmd><info><p>Résultat attendu : l'arborescence se développe de « Documents » au guide et à la section propriétaires, puis à la rubrique exacte, visible et active.</p></info></step>
+      <step><cmd>Revenez à BPM et utilisez un lien direct de l'éditeur ou de la recherche si vous devez modifier le paramètre.</cmd><info><p>Résultat attendu : l'éditeur approprié s'ouvre et cible le paramètre, l'état de révision, la clé brute ou l'emplacement JSON concerné.</p></info></step>
+      <step><cmd>Revenez à la surface précédente uniquement après avoir délibérément enregistré ou ignoré les modifications.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The linked setting opens in the correct surface with focus preserved.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+    <result><p>Les liens de documentation et les liens directs de l'éditeur ouvrent leur destination exacte tout en préservant l'orientation.</p></result>
+    <postreq><p>Récupération : les paramètres bruts inconnus et la documentation absente, obsolète, incompatible ou indisponible affichent un état localisé non interactif. Ouvrez Documentation depuis l'en-tête BPM et recherchez l'identifiant exact de la politique ou la clé du paramètre géré au lieu de considérer cet état comme un lien rompu.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-concept-documentation-search-boundary"/>
     <link keyref="topic.ug-task-export-policies-json"/>
   </related-links>
 </task>

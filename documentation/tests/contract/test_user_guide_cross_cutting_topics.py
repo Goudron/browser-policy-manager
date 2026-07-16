@@ -157,6 +157,8 @@ def test_english_cross_cutting_topics_cover_required_behaviors() -> None:
         "fallback",
         "content-equivalent",
         "system, light, or dark theme",
+        "product documentation portal",
+        "light-gray primary surfaces",
         "Keyboard behavior",
         "Focus indicators",
         "responsive layouts",

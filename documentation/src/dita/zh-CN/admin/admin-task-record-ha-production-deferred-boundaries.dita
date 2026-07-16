@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>记录 HA 和 production deferred boundaries</title>
-  <shortdesc>说明当前缺少哪些 production、HA、reverse-proxy、restore 和 service-management capabilities，以及可为后续 design work 准备什么。</shortdesc>
+<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>记录 HA 和生产延期边界</title>
+  <shortdesc>说明目前缺少哪些生产、HA、反向代理、恢复和服务管理功能，以及可以为以后的设计工作做好哪些准备。</shortdesc>
   <taskbody>
-    <prereq><p>当前 source-run instance 已有 readiness、network exposure、backup/export、monitoring 和 update-window notes。</p></prereq>
-    <context><p>本 topic 记录 current single-node source operation 与未来 production architecture 之间的边界。它会明确说明 what is planned but not implemented yet。</p></context>
+    <prereq><p>当前源运行实例存在准备情况、网络暴露、备份/导出、监控和更新窗口注释。</p></prereq>
+    <context><p>该主题记录当前单节点源操作与未来生产架构之间的边界。它故意明确了计划中但尚未实施的内容。</p></context>
     <steps>
-      <step><cmd>命名 supported current shape。</cmd><info><p>写明 BPM 0.9.0 Administrator/DevOps 文档支持 source deployment、manual configuration、health/readiness checks、API examples、manual backup evidence、documentation rebuild checks 和 single-node update windows。</p></info></step>
-      <step><cmd>命名缺失的 service 和 proxy capabilities。</cmd><info><p>列出 packaged services、native Linux service units、Windows services、official reverse-proxy recipes、TLS/proxy recipes、managed secrets、authentication gateway configuration 和 production hardening，作为 BPM 0.9.0 source documentation 中缺失的能力。</p></info></step>
-      <step><cmd>命名缺失的 HA 和 upgrade capabilities。</cmd><info><p>列出 supported HA clustering、multi-node coordination、load balancer session affinity guidance、shared storage locking、zero-downtime migration、rolling upgrades、automatic failover 和 official restore automation，作为 future work 而不是 current behavior。</p></info></step>
-      <step><cmd>把 future needs 转换为 design inputs。</cmd><info><note type="warning">不要把多个 source nodes 放到 load balancer 后面并称为 supported HA。将 required RTO/RPO、backup verification、TLS ownership、secrets ownership、logging、monitoring 和 upgrade-window expectations 作为后续 distribution/runtime tasks 的 inputs。</note></info></step>
+      <step><cmd>命名支持的当前形状。</cmd><info><p>写入 BPM 管理员/DevOps 文档支持源部署、手动配置、运行状况/就绪检查、API 示例、手动备份证据、文档重建检查和单节点更新窗口。</p></info></step>
+      <step><cmd>命名缺少的服务和代理功能。</cmd><info><p>列出 BPM 源文档中缺少的打包服务、本机 Linux 服务单元、Windows 服务、官方反向代理配方、TLS/代理配方、托管机密、身份验证网关配置和生产强化。</p></info></step>
+      <step><cmd>名称缺少 HA 和升级功能。</cmd><info><p>将支持的 HA 集群、多节点协调、负载均衡器会话关联指导、共享存储锁定、零停机迁移、滚动升级、自动故障转移和官方恢复自动化列为未来工作，而不是当前行为。</p></info></step>
+      <step><cmd>将未来需求转化为设计输入。</cmd><info><note type="warning">不要将多个源节点放置在负载均衡器后面并调用支持的结果HA。捕获所需的 RTO/RPO、备份验证、TLS 所有权、秘密所有权、日志记录、监控和升级窗口期望，作为后续分发/运行时任务的输入。</note></info></step>
     </steps>
-    <result><p>boundary record 防止 unsupported production、HA 和 reverse-proxy claims，同时保留对 future releases 有用的 preparation work。</p></result>
-    <postreq><p>在 manual documentation QA，以及未来 installer、service、reverse-proxy 和 HA backlog items 获批时使用此 record。</p></postreq>
+    <result><p>边界记录可防止不受支持的生产、HA 和反向代理声明，同时保留未来版本的有用准备工作。</p></result>
+    <postreq><p>在手动文档 QA 期间以及在批准未来安装程序、服务、反向代理和 HA 积压项目时使用此记录。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-record-devops-operational-boundaries"/>

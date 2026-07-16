@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-fine-tuning" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>使用 Guided 精细调整</title>
-  <shortdesc>本任务完整说明“使用 Guided 精细调整”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>使用引导式微调控件</title>
+  <shortdesc>在基线选择明确后，有意识地扩展微调和高级控制。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>引导式配置文件草稿具有场景、预设或初始设置。</p></prereq>
+    <context><p>微调可让您实现高级控制，而无需放弃任务优先的引导工作流程。</p></context>
     <steps>
-      <step><cmd>打开与“使用 Guided 精细调整”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开拥有所需控制系列的步骤。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>扩展该系列的微调或高级区域。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>仅更改配置文件目标所需的设置。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在继续之前重新检查简单语言摘要和验证消息。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>该配置文件包含有意的高级更改，而不是意外的广泛编辑。</p></result>
+    <postreq><p>恢复：如果更改难以解释，请重置控件并使用 所有设置 或 JSON 编辑器 进行更深入的检查。 深色主题中的</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-guided-editor"/>

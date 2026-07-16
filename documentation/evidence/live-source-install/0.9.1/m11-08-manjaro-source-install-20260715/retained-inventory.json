@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-08-retained-inventory-20260715",
+  "backlog_item": "BPM091-M11-08",
+  "status": "accepted",
+  "captured_at": "2026-07-14T22:46:25Z",
+  "network": {
+    "name": "bpm091-m11-net",
+    "id": "490615366b5447703d8ee9f895299b0bfd6fbb9ccd08b1b826dd80e058593266",
+    "driver": "bridge",
+    "retained": true
+  },
+  "images": [
+    {
+      "target": "ubuntu-26-04",
+      "role": "clean-golden-image",
+      "ref": "docker.io/library/ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "id": "sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "inspect_size_bytes": 41575117,
+      "disposition": "retained-for-reuse"
+    },
+    {
+      "target": "debian-13-5",
+      "role": "clean-golden-image",
+      "ref": "docker.io/library/debian@sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+      "id": "sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+      "inspect_size_bytes": 49327660,
+      "disposition": "retained-for-reuse"
+    },
+    {
+      "target": "fedora-44",
+      "role": "clean-golden-image",
+      "ref": "docker.io/library/fedora@sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+      "id": "sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+      "inspect_size_bytes": 69320596,
+      "disposition": "retained-for-reuse"
+    },
+    {
+      "target": "linux-mint-22-3",
+      "role": "clean-golden-image",
+      "ref": "bpm091/linux-mint:22.3-zena-amd64",
+      "id": "sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+      "inspect_size_bytes": 3118921329,
+      "disposition": "retained-for-reuse"
+    },
+    {
+      "target": "manjaro-stable-2026-06-26",
+      "role": "clean-golden-image",
+      "ref": "docker.io/manjarolinux/base@sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+      "id": "sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+      "inspect_size_bytes": 335707337,
+      "disposition": "retained-for-reuse"
+    }
+  ],
+  "containers": [
+    {
+      "name": "bpm091-ubuntu-26-04-m11-03-harness-self-test-20260714-a01",
+      "id": "199a2081f6a90e7cf6f118a05d83a9e9590f766b689d5ff3ccf07dd1eb45fbcf",
+      "owner_task": "BPM091-M11-03",
+      "target": "ubuntu-26-04",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 137,
+      "size_rw_bytes": 4096,
+      "disposition": "retained-harness-lifecycle-defect"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-03-harness-self-test-20260714-a02",
+      "id": "d4385396d9ef6c0f4fe10a3d1b9d3863599fb7777e5c72bfc2f0b821162bcccc",
+      "owner_task": "BPM091-M11-03",
+      "target": "ubuntu-26-04",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 4096,
+      "disposition": "accepted-harness-self-test"
+    },
+    {
+      "name": "bpm091-linux-mint-rootfs-helper-m11-03-mint-image-20260714-a01",
+      "id": "d5a015d9fe41058223c6adf23b9bbe2b13b9966bcc6b9588ab2b2848d463bd02",
+      "owner_task": "BPM091-M11-03",
+      "target": "linux-mint-rootfs-helper",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 68804608,
+      "disposition": "accepted-mint-image-construction"
+    },
+    {
+      "name": "bpm091-linux-mint-22-3-m11-03-mint-self-test-20260714-a01",
+      "id": "be7cfa08853c649f55f1b0e6685a43f58ac79f92d4e3b0dd2aea93344e8c3075",
+      "owner_task": "BPM091-M11-03",
+      "target": "linux-mint-22-3",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 4096,
+      "disposition": "accepted-mint-identity-self-test"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a01",
+      "id": "79ab371fc56d2b59aba255e01e7e61a2efe7bacd6534b0c3624a9a19bdf804dc",
+      "owner_task": "BPM091-M11-04",
+      "target": "ubuntu-26-04",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1475092480,
+      "disposition": "rejected-diagnostic-false-pass"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a02",
+      "id": "40136e54168c39ed5769fbd752f25adc354cd2893eedfddff55eb415237c6760",
+      "owner_task": "BPM091-M11-04",
+      "target": "ubuntu-26-04",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1475121152,
+      "disposition": "retained-diagnostic-completion-guard-catch"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a03",
+      "id": "b2c8838542c64161e260d1db00fb14c31c90d19b3ab26c395dee601926667cb4",
+      "owner_task": "BPM091-M11-04",
+      "target": "ubuntu-26-04",
+      "attempt": 3,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1475129344,
+      "disposition": "accepted-clean-source-install-pass"
+    },
+    {
+      "name": "bpm091-debian-13-5-m11-05-debian-source-install-20260714-a01",
+      "id": "fa5e8a08bf6ae37cde0010cf0b5cc0df3d3d0e3526f6d8d003e2a42e6d0b030f",
+      "owner_task": "BPM091-M11-05",
+      "target": "debian-13-5",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 2497085440,
+      "disposition": "retained-diagnostic-login-shell-path-defect"
+    },
+    {
+      "name": "bpm091-debian-13-5-m11-05-debian-source-install-20260714-a02",
+      "id": "0dc5721e31ba5a1d0ed63418792e43379c91d09c2af9b112c12f70f2922adc56",
+      "owner_task": "BPM091-M11-05",
+      "target": "debian-13-5",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 2497818624,
+      "disposition": "accepted-clean-source-install-pass"
+    },
+    {
+      "name": "bpm091-fedora-44-m11-06-fedora-source-install-20260714-a01",
+      "id": "e29a80f76507c72dc7bcb1e40af2f1bf568ac43bf92fe59986dafb056541d405",
+      "owner_task": "BPM091-M11-06",
+      "target": "fedora-44",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1464041472,
+      "disposition": "accepted-clean-source-install-pass"
+    },
+    {
+      "name": "bpm091-linux-mint-22-3-m11-07-mint-source-install-20260715-a01",
+      "id": "9b8845b65977546eb3c46fbbfb208f288f1d600bff8e55712c88c539879af938",
+      "owner_task": "BPM091-M11-07",
+      "target": "linux-mint-22-3",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 2312704000,
+      "disposition": "accepted-clean-source-install-pass"
+    },
+    {
+      "name": "bpm091-manjaro-stable-2026-06-26-m11-08-manjaro-source-install-20260715-a01",
+      "id": "407eb061b1b3d9296be536251a8e1a0df4e4bbe77749b26250a63f2aee7c4b19",
+      "owner_task": "BPM091-M11-08",
+      "target": "manjaro-stable-2026-06-26",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 24150016,
+      "disposition": "retained-diagnostic-interactive-pacman-confirmation-defect"
+    },
+    {
+      "name": "bpm091-manjaro-stable-2026-06-26-m11-08-manjaro-source-install-20260715-a02",
+      "id": "3a58e6d6b084785a15995f12a921c988741f2ab8f205c88ad5e4886736452809",
+      "owner_task": "BPM091-M11-08",
+      "target": "manjaro-stable-2026-06-26",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 2376773632,
+      "disposition": "accepted-clean-source-install-pass"
+    }
+  ],
+  "retention": {
+    "all_containers_stopped": true,
+    "container_count": 13,
+    "image_count": 5,
+    "network_count": 1,
+    "containers_removed": 0,
+    "images_removed": 0,
+    "networks_removed": 0,
+    "docker_engine_retained": true,
+    "golden_images_retained_for_reuse": true,
+    "diagnostic_containers_retained": true,
+    "accepted_derivative_container_retained_until_handoff": true
+  },
+  "storage": {
+    "approximate_unique_image_bytes": 3614852039,
+    "approximate_container_writable_bytes": 15666733056,
+    "approximate_task_owned_docker_bytes": 19281585095,
+    "maximum_task_owned_docker_bytes": 200000000000,
+    "host_free_bytes": 207859154944,
+    "minimum_host_free_bytes": 21474836480,
+    "within_contract": true
+  }
+}

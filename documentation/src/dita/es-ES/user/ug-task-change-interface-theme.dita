@@ -4,19 +4,20 @@
   <title>Cambiar el tema de la interfaz</title>
   <shortdesc>Seleccione el tema del sistema, claro u oscuro sin cambiar el contenido del perfil.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
-    <context><p>La selección de tema solo afecta a la interfaz de BPM y ayuda a revisar tablas, bloques de código, estados de validación y advertencias cómodamente.</p></context>
+    <prereq><p>Abra BPM o el portal de documentación del producto en el navegador.</p></prereq>
+    <context><p>La selección del tema solo afecta a la presentación. BPM y el portal de documentación admiten Sistema, Claro y Oscuro sin cambiar el perfil ni el contenido de la ayuda.</p></context>
     <steps>
-      <step><cmd>Abra el selector de tema en el encabezado de la página.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Elija Sistema, Claro u Oscuro.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Compruebe que paneles del editor, tablas, notas, indicadores de foco y estados de validación siguen siendo legibles.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Continúe editando después de confirmar que los datos no guardados del perfil siguen presentes.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+      <step><cmd>Abra el selector de tema en el encabezado de la página actual.</cmd><info><p>Resultado esperado: Sistema, Claro y Oscuro están disponibles sin cambiar la dirección, el idioma ni el perfil seleccionado.</p></info></step>
+      <step><cmd>Elija Sistema, Claro u Oscuro.</cmd><info><p>Resultado esperado: Sistema sigue la preferencia del sistema operativo; Claro y Oscuro aplican explícitamente el modo a las interfaces compatibles de BPM y de la documentación.</p></info></step>
+      <step><cmd>Compruebe los paneles del editor, tablas, notas, bloques de código, indicadores de enfoque y estados de validación.</cmd><info><p>Resultado esperado: el contenido sigue siendo legible; el tema claro de la documentación utiliza superficies principales de color gris claro en lugar de una página blanca pura.</p></info></step>
+      <step><cmd>Continúe editando después de confirmar que los datos del perfil no guardados todavía están presentes.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
-    <result><p>BPM usa el tema visual seleccionado en las superficies compatibles.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <result><p>BPM y la documentación del producto utilizan el tema seleccionado en todas las interfaces compatibles.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-concept-documentation-search-boundary"/>
     <link keyref="topic.ug-task-work-across-editor-tabs"/>
   </related-links>
 </task>

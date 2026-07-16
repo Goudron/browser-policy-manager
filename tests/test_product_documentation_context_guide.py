@@ -133,8 +133,8 @@ def test_documentation_snapshot_is_compact_current_and_points_to_existing_contra
     snapshot = _normalized(snapshot_path)
 
     assert snapshot_path.read_text(encoding="utf-8").count("\n") < 180
-    assert "Current completed backlog item: `BPM090-M14-08`" in snapshot
-    assert "Next backlog item: `BPM090-M14-09`" in snapshot
+    assert "Current completed backlog item: `BPM091-M13-09`" in snapshot
+    assert "Next backlog item: `BPM091-M13-10`" in snapshot
     assert "five manifest-backed contextual help links" in snapshot
     assert "localized unavailable/stale/incomplete documentation states" in snapshot
     assert "focused `/help/` accessibility/responsive/CSP/theme integration contracts" in snapshot
@@ -143,6 +143,10 @@ def test_documentation_snapshot_is_compact_current_and_points_to_existing_contra
     assert "documentation-only source fast loop" in snapshot
     assert "isolated documentation coverage reporting" in snapshot
     assert "compact deterministic fixture catalog" in snapshot
+    assert "browser-verified accessible return-safe hierarchical duplicate-free static portal shell/theme" in snapshot
+    assert "frozen capture-state contract" in snapshot
+    assert "36 normalized PNG source assets" in snapshot
+    assert "capture_user_guide_screenshots.py" in snapshot
     assert "ignored failure diagnostics" in snapshot
     assert "generated subsystem snapshot" in snapshot
     assert "release-blocking documentation gate" in snapshot
@@ -164,7 +168,7 @@ def test_documentation_snapshot_is_compact_current_and_points_to_existing_contra
     assert "compact validation fixtures for stale command/API/env/path/locale/deferred-claim drift" in snapshot
     assert "final no-fallback/no-short-summary locale parity review" in snapshot
     assert "`administrator-guide`" in snapshot
-    assert "`make docs-install-dev` installs the current local build" in snapshot
+    assert "`make dev` refreshes the current local documentation build" in snapshot
     assert "maintainer manual review acceptance" in snapshot
     assert "`runtime_ready=false` blockers" in snapshot
     assert "Not implemented yet:" in snapshot
@@ -178,16 +182,25 @@ def test_documentation_snapshot_is_compact_current_and_points_to_existing_contra
         "docs/architecture/product-documentation-manifest-and-ui-target-schema-0.9.0.md",
         "docs/architecture/product-documentation-provenance-review-0.9.0.md",
         "docs/architecture/product-documentation-accessibility-security-contract-0.9.0.md",
+        "docs/architecture/product-documentation-visual-theme-contract-0.9.1.md",
+        "docs/architecture/bpm-documentation-theme-token-audit-0.9.1.md",
+        "documentation/config/documentation-sufficiency-review-protocol-0.9.1.json",
         "docs/architecture/product-user-capability-inventory-0.9.0.md",
         "documentation/config/user-guide-map-0.9.0.json",
+        "documentation/config/user-guide-screenshot-matrix-0.9.1.json",
         "documentation/config/search-corpus-and-results-0.9.0.json",
         "documentation/config/search-facets-filters-0.9.0.json",
+        "documentation/config/search-ui-filter-contract-0.9.1.json",
+        "documentation/config/navigation-tree-contract-0.9.1.json",
+        "documentation/config/all-settings-row-help-link-contract-0.9.1.json",
+        "documentation/config/documentation-polish-guardrails-0.9.1.json",
         "documentation/config/search-quality-performance-0.9.0.json",
         "documentation/config/search-integrity-drift-0.9.0.json",
         "documentation/config/coverage-policy-0.9.0.json",
         "documentation/config/diagnostics-policy-0.9.0.json",
         "documentation/fixtures/fixture-catalog-0.9.0.json",
         "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
+        "docs/architecture/linux-distribution-selection-0.9.1.md",
         "documentation/PROJECT_SNAPSHOT.generated.md",
         "documentation/tests/suite-boundaries-0.9.0.json",
         "documentation/tests/contract/test_documentation_release_gate.py",

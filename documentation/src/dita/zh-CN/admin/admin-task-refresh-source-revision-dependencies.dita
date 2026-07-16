@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-refresh-source-revision-dependencies" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>刷新 source revision 和 dependencies</title>
-  <shortdesc>将 checkout 移动到批准的更新 revision，并重新安装 Python environment，同时不隐藏 dependency 或 worktree failures。</shortdesc>
+<task id="admin-task-refresh-source-revision-dependencies" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>刷新源修订版和依赖项</title>
+  <shortdesc>将签出移至已批准的较新版本并重新安装 Python 环境，而不隐藏依赖项或工作树故障。</shortdesc>
   <taskbody>
-    <prereq><p>pre-update evidence set 已存在，previous revision 已记录，并且已知批准的 target branch、tag 或 commit。</p></prereq>
-    <context><p>BPM source updates 是在现有 checkout 中执行的 Git 和 Python-environment operations。该 procedure 不安装 packaged distribution、native service 或 production upgrade manager。</p></context>
+    <prereq><p>存在更新前证据集，记录了先前的修订，并且已知已批准的目标分支、标签或提交。</p></prereq>
+    <context><p>BPM 源更新是在现有签出中执行的 Git 和 Python 环境操作。该过程不会安装打包发行版、本机服务或生产升级管理器。</p></context>
     <steps>
-      <step><cmd>获取批准的 source reference。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>获取批准的源参考。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git fetch --tags
 git status --short
-]]></codeblock><p>如果 local changes 不符合预期，请停止。保留 user-owned 或 site-owned changes，而不是覆盖它们。</p></info></step>
-      <step><cmd>移动到批准的更新 source revision。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>如果本地更改意外发生，则停止。保留用户拥有或站点拥有的更改而不是覆盖它们。</p></info></step>
+      <step><cmd>移至已批准的较新源版本。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git checkout <approved-new-ref>
 git rev-parse --short HEAD
-]]></codeblock><p>记录 target revision，并与 approved change ticket 或 release note 对比。</p></info></step>
-      <step><cmd>刷新 repository-local Python environment。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>记录目标修订并将其与批准的变更单或发行说明进行比较。</p></info></step>
+      <step><cmd>刷新存储库本地 Python 环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-]]></codeblock><p>除非 update note 明确要求重建，否则使用现有 <codeph>.venv</codeph>。在改变 database 之前记录 dependency failures。</p></info></step>
-      <step><cmd>遇到 unresolved source 或 dependency failures 时停止。</cmd><info><note type="warning">如果 checkout、dependency installation 或 virtual-environment activation 失败，不要运行 migrations。只有在 database 尚未改变时，才返回 recorded previous revision，然后重新安装 previous dependency set 并重新运行 pre-update smoke checks。</note></info></step>
+]]></codeblock><p>使用现有的 <codeph>.venv</codeph> 除非更新说明明确要求重建它。在更改数据库之前记录依赖项失败。</p></info></step>
+      <step><cmd>在未解决的源或依赖项故障时停止。</cmd><info><note type="warning">如果签出、依赖项安装或虚拟环境激活失败，请勿运行迁移。仅当数据库未更改时才返回记录的先前版本，然后重新安装先前的依赖项集并重新运行更新前的冒烟检查。</note></info></step>
     </steps>
-    <result><p>checkout 和 Python environment 已位于批准的 target revision，或者 update 已在 database changes 前停止。</p></result>
-    <postreq><p>只有在 dependency refresh 成功后，才运行 database migrations 和 documentation checks。</p></postreq>
+    <result><p>签出和 Python 环境位于已批准的目标修订版上，或者更新在数据库更改之前已停止。</p></result>
+    <postreq><p>仅在依赖项刷新成功后才运行数据库迁移和文档检查。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

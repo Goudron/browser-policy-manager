@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-set-up-linux-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>设置 Linux 源码 checkout</title>
-  <shortdesc>克隆 BPM 仓库，创建 Python virtual environment，安装 development dependencies，并准备本地 database schema。</shortdesc>
+<task id="admin-task-set-up-linux-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>设置 Linux 源签出</title>
+  <shortdesc>克隆 BPM 存储库、创建 Python 虚拟环境、安装开发依赖项并准备本地数据库架构。</shortdesc>
   <taskbody>
-    <prereq><p>Linux 主机已准备好，管理员拥有 BPM repository URL 以及版本 0.9.0 的目标 branch 或 tag。</p></prereq>
-    <context><p>仓库 README 定义了受支持的 source setup sequence。使用 repository-local commands，便于后续排查时把环境与 committed scripts 对齐。</p></context>
+    <prereq><p>Linux 主机已准备就绪，管理员可以访问版本 0.9.1 的 BPM 存储库 URL 和目标分支或标记。</p></prereq>
+    <context><p>存储库 README 定义支持的源设置序列。使用存储库本地命令，以便以后的故障排除可以将环境与已提交的脚本进行比较。</p></context>
     <steps>
-      <step><cmd>克隆仓库并进入 checkout。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>克隆存储库并进入结账。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
-git checkout <approved-0.9.0-ref>
-]]></codeblock><p>将 placeholders 替换为已批准的内部 repository URL 和 release reference。</p></info></step>
-      <step><cmd>创建并激活本地 Python 环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git checkout <approved-0.9.1-ref>
+]]></codeblock><p>将占位符替换为已批准的内部存储库 URL 和发布参考。</p></info></step>
+      <step><cmd>创建并激活本地Python环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-]]></codeblock><p>virtual environment 保留在 checkout 内，不提交到仓库。</p></info></step>
-      <step><cmd>从 checkout 安装 BPM source dependencies。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>虚拟环境保留在结帐内且未提交。</p></info></step>
+      <step><cmd>从结账中安装 BPM 源依赖项。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 pip install -e ".[dev]"
-]]></codeblock><p>editable install 使 runtime code 和 tests 与当前 source tree 保持一致。</p></info></step>
-      <step><cmd>为选定的 runtime database 应用 database migrations。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>可编辑安装使运行时代码和测试与当前源代码树保持一致。</p></info></step>
+      <step><cmd>对选定的运行时数据库应用数据库迁移。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 alembic upgrade head
-]]></codeblock><note type="warning">只对目标 BPM database 运行 migrations。对于 default source workflow，这是本地 SQLite database，而不是 production service database。</note></info></step>
+]]></codeblock><note type="warning">仅针对预期的 BPM 数据库运行迁移。对于默认源工作流程，这是本地 SQLite 数据库，而不是生产服务数据库。</note></info></step>
     </steps>
-    <result><p>checkout 已具有激活的 Python environment、已安装的 dependencies 和已迁移的 database schema。</p></result>
-    <postreq><p>在启动 application process 之前配置 runtime environment。</p></postreq>
+    <result><p>签出具有激活的 Python 环境、安装的依赖项和迁移的数据库架构。</p></result>
+    <postreq><p>在启动应用程序流程之前配置运行时环境。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-linux-source-deployment"/>

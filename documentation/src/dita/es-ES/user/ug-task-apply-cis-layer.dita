@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-apply-cis-layer" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Aplicar una capa CIS</title>
-  <shortdesc>Esta tarea describe el escenario completo «Aplicar una capa CIS»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Agregue una capa CIS compatible cuando el perfil necesite una línea base reforzada a partir de las recomendaciones asignadas de BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Se seleccionan un borrador de perfil y un canal de esquema.</p></prereq>
+    <context><p>La capa CIS es una ayuda para el mapeo BPM; revise cada configuración resultante para la implementación y no la trate como una certificación.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Aplicar una capa CIS».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra el paso 1, Línea base del perfil &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija la capa CIS compatible que coincida con el canal y el escenario de destino.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revise los cambios de referencia relacionados con el cumplimiento en el resumen.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Mantener o ajustar la configuración que entre en conflicto con el objetivo de implementación.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil incluye la capa CIS seleccionada como parte de su línea base.</p></result>
+    <postreq><p>Recuperación: si la capa no es adecuada eliminarla y revalidar antes de guardar.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-cis-layer-merge"/>

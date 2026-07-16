@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>Проверить BPM source deployment через WSL</title>
-  <shortdesc>Проверьте probes из WSL и Windows, подтвердите UI route, изучите logs и отработайте типовые WSL networking и filesystem issues.</shortdesc>
+<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
+  <title>Проверка развертывания источника BPM через WSL</title>
+  <shortdesc>Проверяйте зонды из WSL и Windows, подтверждайте маршрут UI, просматривайте журналы и устраняйте распространенные проблемы с сетью и файловой системой WSL.</shortdesc>
   <taskbody>
-    <prereq><p>BPM работает из WSL checkout с нужными <codeph>BPM_DATABASE_URL</codeph>, host, port и documentation-site settings.</p></prereq>
-    <context><p>Проверка должна доказать и ответ Linux process, и Windows browser access path. Она не сертифицирует native Windows installation, production hardening, reverse proxy behavior, backup readiness или Firefox runtime enforcement.</p></context>
+    <prereq><p>BPM запускается из проверки WSL с заданными настройками <codeph>BPM_DATABASE_URL</codeph>, хоста, порта и сайта документации.</p></prereq>
+    <context><p>Проверка должна подтвердить как ответ процесса Linux, так и путь доступа к браузеру Windows. Он не сертифицирует встроенную установку Windows, усиление безопасности производства, поведение обратного прокси-сервера, готовность к резервному копированию или принудительное выполнение Firefox во время выполнения.</p></context>
     <steps>
-      <step><cmd>Проверьте health и readiness внутри WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Проверьте работоспособность и готовность внутри WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Ожидаемые responses: <codeph>{"status":"ok"}</codeph> и <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
-      <step><cmd>Проверьте те же probes из Windows PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+]]></codeblock><p>Ожидаемые ответы: <codeph>{"status":"ok"}</codeph> и <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Проверьте те же зонды из Windows PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 Invoke-WebRequest http://localhost:8000/health
 Invoke-WebRequest http://localhost:8000/health/ready
-]]></codeblock><p>Если localhost не работает, повторите с WSL IP из <codeph>hostname -I</codeph>. Зафиксируйте адрес, который сработал.</p></info></step>
-      <step><cmd>Откройте UI route из Windows browser.</cmd><info><p>Используйте <codeph>http://localhost:8000/profiles</codeph> или <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. Profile Library route должен загрузить BPM interface или намеренное empty/error state, а не traceback.</p></info></step>
-      <step><cmd>Устраняйте WSL-specific failures до изменения BPM code.</cmd><info><p>При connection failures проверьте, что <codeph>make dev</codeph> всё ещё работает, проверьте <codeph>BPM_HOST</codeph>, выполните <codeph>wsl --list --verbose</codeph> и обновите WSL IP после перезапуска distribution. При медленном file watching или permission errors перенесите checkout из <codeph>/mnt/c</codeph> в <codeph>/home/&lt;linux-user&gt;</codeph>. Запускайте <codeph>make test-fast</codeph> только после стабилизации environment path и network route.</p><note type="warning">Успешные health checks через WSL не доказывают production readiness, Windows service behavior, managed backups или HA support.</note></info></step>
+]]></codeblock><p>Если localhost не работает, повторите попытку с WSL IP из <codeph>hostname -I</codeph>. Запишите, какой адрес удался.</p></info></step>
+      <step><cmd>Откройте маршрут UI в браузере Windows.</cmd><info><p>Используйте <codeph>http://localhost:8000/profiles</codeph> или <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>. Маршрут библиотеки должен загружать интерфейс BPM или преднамеренное пустое состояние или состояние ошибки, а не обратную трассировку.</p></info></step>
+      <step><cmd>Устраните неполадки, связанные с WSL, перед изменением кода BPM.</cmd><info><p>В случае сбоя соединения убедитесь, что <codeph>make dev</codeph> все еще работает, проверьте <codeph>BPM_HOST</codeph>, запустите <codeph>wsl --list --verbose</codeph> и обновите WSL IP после перезапуска распространения. В случае медленного просмотра файлов или ошибок разрешения переместите извлечение из <codeph>/mnt/c</codeph> в <codeph>/home/&lt;linux-user&gt;</codeph>. Запускайте <codeph>make test-fast</codeph> только после того, как путь к среде и сетевой маршрут станут стабильными.</p><note type="warning">Прохождение проверок работоспособности через WSL не подтверждает готовность к работе, поведение служб Windows, управляемое резервное копирование или поддержку HA.</note></info></step>
     </steps>
-    <result><p>У администратора есть evidence, что BPM запускается внутри WSL, отвечает на probes, доступен из Windows и не имеет immediate WSL networking или filesystem blockers.</p></result>
-    <postreq><p>Храните PowerShell output, WSL shell commands, имена <codeph>BPM_*</codeph> variables, probe responses и foreground logs вместе для troubleshooting без копирования secrets.</p></postreq>
+    <result><p>У администратора есть доказательства того, что BPM запускается внутри WSL, отвечает на запросы, доступен из Windows и не имеет непосредственных блокировщиков сети или файловой системы WSL.</p></result>
+    <postreq><p>Храните выходные данные PowerShell, команды оболочки WSL, имена переменных <codeph>BPM_*</codeph>, ответы зондов и журналы приоритетного режима вместе для устранения неполадок без копирования секретов.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>

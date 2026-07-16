@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Choisir un scénario Guided</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Choisir un scénario Guided » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Choisissez un scénario guidé</title>
+  <shortdesc>Sélectionnez le scénario qui correspond le mieux à l'objectif du profil afin que Éditeur guidé puisse présenter un point de départ utile.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Vous connaissez l'objectif du profil que vous souhaitez soutenir.</p></prereq>
+    <context><p>Les scénarios gardent la première passe orientée vers la tâche et rendent la ligne de base plus facile à expliquer lors de la révision.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Choisir un scénario Guided ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Ouvrez l'étape 1, ligne de base du profil &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Passez en revue les choix de scénarios et leurs descriptions en langage simple.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez le scénario le plus proche de l'objectif de déploiement.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Vérifiez le résumé de la ligne de base concerné avant d'ajouter des préréglages ou des couches CIS.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le profil démarre à partir d'un scénario intentionnel au lieu d'une ligne de base vierge accidentelle.</p></result>
+    <postreq><p>Récupération : si le scénario est erroné, changez-le avant d'affiner les étapes ultérieures.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-apply-starter-preset"/>

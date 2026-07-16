@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-archived-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Examiner un profil archivé</title>
-  <shortdesc>Ouvrez volontairement un archived profile avec archived context avant les décisions restore ou permanent delete.</shortdesc>
+  <title>Consulter un profil archivé</title>
+  <shortdesc>Ouvrez délibérément un profil archivé avec un contexte archivé avant les décisions de restauration ou de suppression permanente.</shortdesc>
   <taskbody>
-    <prereq><p>Le archived profile reste visible via Library lifecycle filter ou include_deleted route.</p></prereq>
-    <context><p>Les archived profiles peuvent être examinés via include-deleted routes et Library lifecycle filters, mais ne sont pas des active editing/export targets normaux.</p></context>
+    <prereq><p>Le profil archivé est toujours visible via un filtre de cycle de vie de bibliothèque ou une route include_deleted.</p></prereq>
+    <context><p>Les profils archivés peuvent être examinés via des itinéraires d'inclusion-suppression et des filtres de cycle de vie de bibliothèque, mais ils ne sont pas des cibles d'édition/exportation actives normales.</p></context>
     <steps>
-      <step><cmd>Réglez Library lifecycle filter sur Archived ou All states.</cmd><info><p>Résultat attendu : archived lifecycle context reste visible avant restore ou destructive action.</p></info></step>
-      <step><cmd>Confirmez archived badge, profile name, schema channel, validation state et update time avant d’ouvrir la ligne.</cmd><info><p>Résultat attendu : archived lifecycle context reste visible avant restore ou destructive action.</p></info></step>
-      <step><cmd>Ouvrez archived profile seulement pour review context, restore planning, comparison ou deletion decision.</cmd><info><p>Résultat attendu : archived lifecycle context reste visible avant restore ou destructive action.</p></info></step>
-      <step><cmd>Restaurez le profil avant editing/export normal, ou annulez si archived context n’est pas la cible prévue.</cmd><info><note type="warning">Les actions sur archived profile peuvent toucher des profils volontairement masqués de la active Library view normale.</note></info></step>
+      <step><cmd>Définissez le filtre du cycle de vie de la bibliothèque sur Archivé ou Tous les états.</cmd><info><p>Résultat attendu : le contexte de cycle de vie archivé reste visible avant toute restauration ou action destructrice.</p></info></step>
+      <step><cmd>Confirmez le badge archivé, le nom du profil, le canal de schéma, l'état de validation et l'heure de mise à jour avant d'ouvrir la ligne.</cmd><info><p>Résultat attendu : le contexte de cycle de vie archivé reste visible avant toute restauration ou action destructrice.</p></info></step>
+      <step><cmd>Ouvrez le profil archivé uniquement lorsque vous avez besoin de vérifier le contexte, de planifier la restauration, de comparer ou de prendre une décision de suppression.</cmd><info><p>Résultat attendu : le contexte de cycle de vie archivé reste visible avant toute restauration ou action destructrice.</p></info></step>
+      <step><cmd>Restaurez le profil avant l'édition/exportation normale, ou annulez si le contexte archivé n'est pas la cible prévue.</cmd><info><note type="warning">Les actions de profil archivé peuvent affecter les profils intentionnellement masqués dans la vue active normale de la bibliothèque.</note></info></step>
     </steps>
-    <result><p>Vous examinez archived profile avec lifecycle context visible et évitez de le traiter par erreur comme active profile.</p></result>
-    <postreq><p>Récupération : si une bookmarked archived route signale Profile not found, revenez à Library avec archived profiles inclus puis rouvrez depuis visible row.</p></postreq>
+    <result><p>Vous examinez le profil archivé avec son contexte de cycle de vie visible et évitez de le traiter comme un profil actif par erreur.</p></result>
+    <postreq><p>Récupération : si un itinéraire archivé marqué dans vos favoris signale un profil introuvable, revenez à la bibliothèque avec les profils archivés inclus et rouvrez-la à partir de la ligne visible.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-archived-profile-behavior"/>

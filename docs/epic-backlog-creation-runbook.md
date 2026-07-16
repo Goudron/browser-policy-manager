@@ -66,7 +66,7 @@ Use this task table shape:
 
 | ID | Task | Essence | Minimal reasoning | Acceptance |
 | --- | --- | --- | --- | --- |
-| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | low | Version surfaces, changelog, package metadata, and version assertions agree; README remains current-state product documentation rather than release history. |
+| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | low | Version surfaces, package metadata, and version assertions agree; README does not receive a target-version anchor or release-history entry. |
 
 Task IDs must use:
 
@@ -102,8 +102,6 @@ product surface for that epic:
   frontend vendor packages, documentation toolchain components, and test/dev dependencies that are
   part of the product workflow;
 - changelog entry for the target version;
-- README current-state product copy when the target version changes what users can do, without
-  turning README into release notes or version history;
 - docs index, active architecture notes, and release-readiness docs when they name the current
   release;
 - UI-visible version strings if the product exposes them;
@@ -111,19 +109,29 @@ product surface for that epic:
 
 By the end of the backlog, the repository should not describe the new work as belonging to the
 previous target version except in historical notes, archive files, or explicit migration context.
+README is not a version surface for this purpose. Do not add a README task to identify the active
+target version, reserve version-specific copy, or create a release anchor. Version-specific
+planning, release status, and completed-version summaries belong in the backlog and `CHANGELOG.md`,
+not in README.
 
 ## README, Product Documentation, And Changelog
 
-Every epic backlog must include README, product-documentation, and changelog work.
+Every epic backlog must include product-documentation and changelog work. Include README work only
+when the completed epic changes the durable current product state that README describes.
 
 README must be updated after the main backlog implementation is complete, not only at backlog
 creation time. It should describe the actual current product state after the epic, including current
 surfaces, commands, supported external/runtime versions where they are product facts, test workflow,
-and user-facing behavior.
+and user-facing behavior. If the epic does not change durable README content, the backlog should
+explicitly say that no README update is needed.
 
 README must not summarize what changed in a specific BPM version or list which earlier BPM version
 introduced a feature. Release history, "what changed", and target-version completion notes belong in
 `CHANGELOG.md`.
+README must also not identify the active target version, reserve a future-version section, mention
+that something is planned for a particular version, or contain a version-specific completion
+placeholder. The only version-like facts allowed in README are durable product facts such as
+supported external/runtime versions, schema channels, command names, or compatibility constraints.
 
 When editing README:
 
@@ -132,6 +140,7 @@ When editing README:
 - keep the primary product language English;
 - remove release-note phrasing such as "what's included in <version>", "planned for <version>", or
   "introduced in <version>";
+- remove target-version anchors, active-target notes, and future-version placeholders;
 - remove or revise stale feature descriptions that no longer match the product;
 - do not delete historical or legal footer material while refreshing the main product copy.
 
@@ -153,8 +162,9 @@ Prefer milestones like these when applicable:
 - M1: version transition and release anchors;
 - M2: current-state audit and safety contracts;
 - M3..N: implementation milestones grouped by product or subsystem ownership;
-- pre-final documentation milestone: update README current-state copy and maintained product
-  documentation so they reflect the functionality after the epic;
+- pre-final documentation milestone: update maintained product documentation and, only when the
+  durable current product state changed, refresh README current-state copy without version-specific
+  release notes or target-version anchors;
 - final milestone: quality, coverage, visual smoke, changelog, commit, push handoff, and
   release-readiness checks.
 
@@ -186,11 +196,14 @@ Every backlog must end with a final quality milestone. Include tasks for:
 7. Verify the dedicated documentation-update milestone is complete and its focused documentation
    checks have passed.
 8. Update `CHANGELOG.md` for the target version while preserving older version history.
-9. Update docs index if final verification changes maintained documentation.
-10. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
+9. Verify README has no target-version anchor, release-history entry, planned-for-version copy, or
+   version-specific completion placeholder; update README only if the durable current product state
+   changed.
+10. Update docs index if final verification changes maintained documentation.
+11. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
     release procedures include documentation drift gates when the epic changed those areas.
-11. Create a git commit for the completed epic.
-12. Provide the maintainer with the exact `git push` command to run manually.
+12. Create a git commit for the completed epic.
+13. Provide the maintainer with the exact `git push` command to run manually.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -239,6 +252,8 @@ Before calling a new backlog ready, confirm:
 - first milestone includes local editable-package metadata refresh and external dependency
   currency checks for Python, frontend vendor packages, documentation toolchain components, and
   test/dev dependencies;
+- first milestone does not include README target-version anchors, active-target notes, or
+  future-version placeholders;
 - a dedicated documentation-update milestone appears before the final quality milestone when the
   epic changes product behavior or operating procedures;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
@@ -246,6 +261,8 @@ Before calling a new backlog ready, confirm:
   trial run;
 - final milestone verifies documentation-update completion and includes changelog entry, git commit,
   and maintainer-run push command;
+- final milestone verifies README has no version-specific release notes, active-target marker, or
+  planned/completion placeholder; README updates are limited to durable current-state product facts;
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
   changed schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
   release procedures;

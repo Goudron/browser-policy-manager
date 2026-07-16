@@ -50,7 +50,6 @@ def test_search_facets_contract_is_static_localized_and_non_ai() -> None:
         "user-guide",
         "firefox-policy-guide",
         "cis-settings-guide",
-        "api-integration-guide",
         "administrator-guide",
     ]
     assert facets["firefox_channel"]["values"] == ["esr-140.12", "release-152"]

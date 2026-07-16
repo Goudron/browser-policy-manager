@@ -1,0 +1,155 @@
+{
+  "schema_version": 2,
+  "validation_id": "bpm-0.9.1-linux-source-install-validation",
+  "backlog_item": "BPM091-M11-09",
+  "target_bpm_version": "0.9.1",
+  "validation_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+  "status": "accepted-with-oci-boundary",
+  "validation_date": "2026-07-15",
+  "command_contract": "documentation/config/linux-source-install-command-contract-0.9.1.json",
+  "historical_baseline": {
+    "backlog_item": "BPM091-M6-06",
+    "validation_date": "2026-07-11",
+    "status": "accepted-with-release-blocker",
+    "partial_hands_on_count": 1,
+    "simulation_only_count": 4,
+    "clean_target_pass_count": 0,
+    "note": "This baseline is retained for audit history and is superseded by the five M11 clean-userspace-container runs below."
+  },
+  "method": {
+    "execution_scope": "A fresh validation container was created from each retained clean distribution image with no BPM installation state reused.",
+    "resource_contract": {
+      "maximum_concurrent_validation_containers": 1,
+      "cpus": 2,
+      "memory_mib": 1536,
+      "memory_swap_mib": 2560,
+      "pids_limit": 512,
+      "nofile": 4096,
+      "no_new_privileges": true
+    },
+    "required_stages": [
+      "distribution identity and prerequisites",
+      "clean detached BPM checkout",
+      "Python 3.14 runtime",
+      "editable BPM installation",
+      "database migration",
+      "six-locale documentation validation and build",
+      "foreground runtime start",
+      "health, readiness, and UI probes",
+      "runtime stop and post-stop refusal"
+    ],
+    "evidence_rule": "A pass proves the documented distribution userspace, package-manager, source-install, migration, documentation, and foreground-runtime command path. It is clean-container evidence, not clean native-host evidence."
+  },
+  "targets": [
+    {
+      "target_id": "ubuntu-26-04",
+      "release": "Ubuntu 26.04 LTS",
+      "manifest": "documentation/evidence/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714/run-manifest.json",
+      "accepted_attempt": 3,
+      "accepted_transcript_artifact": "run-manifest.json#attempts[attempt=3].transcript_sha256.events.jsonl",
+      "accepted_events_sha256": "ddf613f98b4d90508d53a2598d0807b8a239da6bd7cedf811715b9f485450dab",
+      "validated_source_sha256": "20ac9548464bb2dbefd28f923dd953f6251375d2b60a7d5751366a56ed44180c",
+      "reconciled_source_sha256": "8ebdf3f5670065c0100260ea1bc72ff2afcaa5394bfd64c449cf03abdc526fc6",
+      "procedure_corrections": [],
+      "reconciliation": "Commands, expected runtime results, and recovery boundary passed unchanged. The localized postcondition now records the clean-container pass and OCI boundary.",
+      "rerun_disposition": "not-required-after-M11-09 because only explanatory postcondition text changed",
+      "disposition": "clean-userspace-container-pass"
+    },
+    {
+      "target_id": "debian-13-5",
+      "release": "Debian 13.5 (trixie)",
+      "manifest": "documentation/evidence/live-source-install/0.9.1/m11-05-debian-source-install-20260714/run-manifest.json",
+      "accepted_attempt": 2,
+      "accepted_transcript_artifact": "run-manifest.json#attempts[attempt=2].transcript_sha256.events.jsonl",
+      "accepted_events_sha256": "0caedcbea9d712be7c82c8d23fa85587a3350f3041f970f9e7ee831a1186bec7",
+      "validated_source_sha256": "291df352620bab300d71fb41933c59429daf3b0c643cd5654f0f4ffb9a33bffa",
+      "reconciled_source_sha256": "d0ae900e02c3b99535585be87b7ee28a1d0ee70f978754930efbf7914fc5773f",
+      "procedure_corrections": [],
+      "reconciliation": "The login-shell PATH failure belonged to the harness, not the documented same-shell procedure. The postcondition records that optional _dbm and _zstd modules were absent while the complete BPM workflow passed.",
+      "rerun_disposition": "not-required-after-M11-09 because commands are unchanged and attempt 2 passed them",
+      "disposition": "clean-userspace-container-pass-with-reviewed-optional-cpython-modules"
+    },
+    {
+      "target_id": "fedora-44",
+      "release": "Fedora Linux 44",
+      "manifest": "documentation/evidence/live-source-install/0.9.1/m11-06-fedora-source-install-20260714/run-manifest.json",
+      "accepted_attempt": 1,
+      "accepted_transcript_artifact": "run-manifest.json#attempts[attempt=1].transcript_sha256.events.jsonl",
+      "accepted_events_sha256": "cce0bdef400c68dea1ca88823887e4dfba268751dab8a85e2a843d78c98bfba7",
+      "validated_source_sha256": "fed6829a8382aeb5c928e91eb30c7fd8a1c47f9948f57abee2e35771dfea104a",
+      "reconciled_source_sha256": "85c6a8e4b131bb9ba25bc105f0a5ab41914cb1edd1f17522d441e4b2ebe89b78",
+      "procedure_corrections": [],
+      "reconciliation": "Commands, expected runtime results, and recovery boundary passed unchanged. The localized postcondition now records the clean-container pass and OCI boundary.",
+      "rerun_disposition": "not-required-after-M11-09 because only explanatory postcondition text changed",
+      "disposition": "clean-userspace-container-pass"
+    },
+    {
+      "target_id": "linux-mint-22-3",
+      "release": "Linux Mint 22.3 (Zena)",
+      "manifest": "documentation/evidence/live-source-install/0.9.1/m11-07-mint-source-install-20260715/run-manifest.json",
+      "accepted_attempt": 1,
+      "accepted_transcript_artifact": "run-manifest.json#attempts[attempt=1].transcript_sha256.events.jsonl",
+      "accepted_events_sha256": "049c098ef52b315af34c0fcfe5f3aa17efe4aa427407e3ed831a248f364271a8",
+      "validated_source_sha256": "c3c9f4896eb55c61b16ac4be11edb7ed6605c327efa267061d8a9e367ef2acfd",
+      "reconciled_source_sha256": "e1042a20a5bd8f4887a7a1de8a498a9d08733bd3cac760ac866842c5b862f46c",
+      "procedure_corrections": [],
+      "reconciliation": "Commands and recovery boundary passed unchanged. The postcondition records that optional _dbm and _zstd modules were absent while the complete BPM workflow passed.",
+      "rerun_disposition": "not-required-after-M11-09 because commands are unchanged and attempt 1 passed them",
+      "disposition": "clean-userspace-container-pass-with-reviewed-optional-cpython-modules"
+    },
+    {
+      "target_id": "manjaro-stable-2026-06-26",
+      "release": "Manjaro stable branch after the 2026-06-26 update",
+      "manifest": "documentation/evidence/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715/run-manifest.json",
+      "accepted_attempt": 2,
+      "diagnostic_transcript_artifact": "run-manifest.json#attempts[attempt=1].transcript_sha256.events.jsonl",
+      "diagnostic_events_sha256": "7a57b529f47985e0a247f9736a19760f4e6890bd3f68540319166fe1609d5eaa",
+      "accepted_transcript_artifact": "run-manifest.json#attempts[attempt=2].transcript_sha256.events.jsonl",
+      "accepted_events_sha256": "45628b2bf4b103bd0238b3e5e406dd637026f937ed808acceee6b2a0c2a0d96b",
+      "validated_source_sha256": "badcbf4d077871e268619cadfc8fb8f550643e10ebd79a39c088d5b7cf2a449c",
+      "reconciled_source_sha256": "94a1a7926e98f686e634006ffd3823a9bc22b57a792b0dfa21b52eb1d246e39a",
+      "procedure_corrections": [
+        {
+          "command": "sudo pacman -Syu --needed --noconfirm base-devel ca-certificates curl git python python-pip",
+          "reason": "Attempt 1 reached pacman's interactive confirmation and received EOF.",
+          "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+          "clean_rerun": "attempt 2 passed all 37 documented commands"
+        }
+      ],
+      "reconciliation": "The full-upgrade command correction passed a fresh rerun. Existing no-partial-upgrade and no-ad-hoc-downgrade recovery boundaries remain correct.",
+      "rerun_disposition": "completed by M11-08 attempt 2 after the command correction",
+      "disposition": "clean-userspace-container-pass-after-documented-command-correction"
+    }
+  ],
+  "locale_parity_reconciliation": {
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "shared_command_source_locales": ["de", "zh-CN", "fr", "es-ES"],
+    "standalone_command_source_locale": "ru",
+    "correction": "The standalone Russian topics now include the same post-install Python version checks and Git checkout-state checks as the validated English topics, in the same executable order.",
+    "rerun_disposition": "No new distribution run is required because the corrected Russian command streams are now line-for-line identical to the already accepted English command streams after blank-line normalization.",
+    "verification": "documentation/tests/contract/test_linux_source_install_command_topics.py::test_all_six_locale_peers_preserve_exact_command_parity"
+  },
+  "closed_release_blocker": {
+    "finding_id": "ADMIN091-SOURCE-INSTALL-CLEAN-TARGET-EVIDENCE",
+    "previous_severity": "release-blocker",
+    "closure_scope": "Five documented Linux distribution userspace procedures",
+    "closure_reason": "Every target has a retained fresh-container transcript from prerequisite installation through verified shutdown, and the one procedure defect has a passing clean rerun.",
+    "closed_by": "BPM091-M11-09"
+  },
+  "remaining_boundaries": [
+    "OCI containers share the host kernel and do not validate native boot, distribution kernel behavior, systemd, desktop integration, hardware, host firewall, or host networking.",
+    "No packaged service, native installer, reverse proxy, TLS termination, managed secrets, backup automation, HA, rolling upgrade, or production hardening is claimed.",
+    "Windows 10/11 and WSL behavior require actual Windows hosts and remain outside this Linux report.",
+    "Health and readiness responses prove only the observed application responses."
+  ],
+  "summary": {
+    "target_count": 5,
+    "clean_userspace_container_pass_count": 5,
+    "simulation_only_count": 0,
+    "documented_command_correction_count": 1,
+    "changed_command_clean_rerun_count": 1,
+    "linux_userspace_release_ready": true,
+    "native_clean_host_claimed": false,
+    "result": "All five documented Linux userspace source-install sequences passed in retained clean containers. This closes the Linux userspace evidence blocker without promoting OCI evidence to native clean-host evidence."
+  }
+}

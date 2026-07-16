@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>何时使用 JSON Editor</title>
-  <shortdesc>本主题面向中文本地化完整说明 JSON Editor 场景：何时使用 JSON Editor. Use JSON Editor for exact raw review, migration checks, troubleshooting, and values that are easier to handle as raw policies.json.</shortdesc>
+  <title>何时使用 JSON 编辑器</title>
+  <shortdesc>使用 JSON 编辑器 进行精确的原始审查、迁移检查、故障排除以及更容易作为原始 policies.json 处理的值。</shortdesc>
   <conbody>
-    <p>本主题面向中文本地化完整说明 JSON Editor 场景：何时使用 JSON Editor. JSON Editor is powerful but less guided than the visual editors. It should be a deliberate choice when the user needs boundary-document precision.</p>
-    <section id="a-good-fit"><title>Good fit</title><p>本主题面向中文本地化完整说明 JSON Editor 场景：何时使用 JSON Editor. Use JSON Editor for exact policies.json review, migration checks, raw fallback values, or troubleshooting malformed import/export documents.</p></section>
-    <section id="a-not-first-choice"><title>Not the first choice</title><p>本主题面向中文本地化完整说明 JSON Editor 场景：何时使用 JSON Editor. Use Guided Editor for common workflows and All Settings for full visual inspection before choosing raw JSON for routine edits.</p></section>
-    <section id="a-validation-boundary"><title>Validation boundary</title><p>本主题面向中文本地化完整说明 JSON Editor 场景：何时使用 JSON Editor. Valid JSON syntax is not enough. BPM also validates Firefox policy values, schema channel support, and the canonical normalized model before save.</p></section>
-    <section id="a-examples"><title>Examples</title><p>本主题面向中文本地化完整说明 JSON Editor 场景：何时使用 JSON Editor. A valid example keeps a top-level policies object. A valid example keeps a top-level policies object with entries such as DisableTelemetry and Preferences, including a locked browser.startup.homepage value. Invalid examples include malformed JSON syntax and schema-invalid policy values such as a string where a boolean is required.</p></section>
+    <p>JSON 编辑器 功能强大，但比可视化编辑器缺乏指导。当用户需要边界文档精度时，这应该是一个深思熟虑的选择。</p>
+    <section id="a-good-fit"><title>非常适合</title><p>使用 JSON 编辑器 进行精确的 policies.json 审核、迁移检查、原始后备值或对格式错误的导入/导出文档进行故障排除。</p></section>
+    <section id="a-not-first-choice"><title>不是首选</title><p>在选择原始 JSON 进行常规编辑之前，使用 引导式编辑器 进行常见工作流程，使用 所有设置 进行全面的目视检查。</p></section>
+    <section id="a-validation-boundary"><title>验证边界</title><p>有效的 JSON 语法是不够的。 BPM 还在保存之前验证 Firefox 策略值、模式通道支持和规范规范化模型。</p></section>
+    <section id="a-examples"><title>示例</title><p>一个有效的示例保留一个顶级策略对象，其中包含 DisableTelemetry 和 Preferences 等条目，包括锁定的 browser.startup.homepage 值。无效示例包括格式错误的 JSON 语法和架构无效的策略值，例如需要布尔值的字符串。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-use-json-editor"/>

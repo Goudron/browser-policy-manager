@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "authority_id": "bpm-0.9.1-interface-name-authority",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M10-04",
+  "status": "accepted",
+  "purpose": "Make the maintained BPM runtime locale catalogs the single authority for interface names used by product documentation.",
+  "inherits_from": [
+    "documentation/config/documentation-navigation-locale-completion-audit-0.9.1.json",
+    "documentation/config/locale-terminology-authority-0.9.1.json",
+    "app/i18n_src/catalog-order.json"
+  ],
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "authority_rule": {
+    "value_source": "app/i18n/{locale}.json::{catalog_key}",
+    "source_catalog_boundary": "app/i18n_src/{locale}/ plus generated catalog assembly",
+    "resolution": "Resolve the same catalog_key in the active documentation locale; never translate the English value independently and never fall back to another locale.",
+    "matching": "Documentation may inflect surrounding prose, but an interface name in a title, heading, navigation label, caption, alt text, or prose must preserve the locale-owned runtime term.",
+    "catalog_correction": "If a runtime value is visibly untranslated, incomplete, or malformed, correct the maintained runtime source first and then consume that same key in documentation.",
+    "technical_boundary": "Brands, abbreviations, identifiers, commands, paths, APIs, file names, schema channels, and generic structural descriptions use their reviewed non-UI authority class instead of a BPM UI key."
+  },
+  "surface_scope": [
+    "topic_title",
+    "section_heading",
+    "navigation_label",
+    "breadcrumb",
+    "search_result_title",
+    "caption",
+    "alt_text",
+    "prose"
+  ],
+  "interface_families": {
+    "primary_surfaces": [
+      "profiles.title",
+      "profiles.nav_library",
+      "profiles.editor_chrome_title",
+      "profiles.editor_chrome_settings_link",
+      "profiles.editor_chrome_json_link",
+      "profiles.compare_route_title",
+      "profiles.library_action_export",
+      "profiles.nav_overview",
+      "profiles.nav_details"
+    ],
+    "all_settings_surfaces": [
+      "profiles.settings_route_title",
+      "profiles.settings_modes_label",
+      "profiles.settings_mode_review",
+      "profiles.settings_mode_configured",
+      "profiles.settings_mode_catalog",
+      "profiles.settings_list_title",
+      "profiles.settings_review_title",
+      "profiles.settings_advanced_schema_title",
+      "profiles.settings_filters_title",
+      "profiles.settings_preferences_title",
+      "profiles.settings_search_label"
+    ],
+    "guided_workflow": [
+      "profiles.wizard_profile_identity_title",
+      "profiles.wizard_step_one",
+      "profiles.wizard_step_two",
+      "profiles.wizard_step_three",
+      "profiles.wizard_step_four",
+      "profiles.wizard_step_five",
+      "profiles.wizard_step_six"
+    ],
+    "settings_categories": [
+      "profiles.settings_category_browser_access_title",
+      "profiles.settings_category_home_startup_title",
+      "profiles.settings_category_search_navigation_title",
+      "profiles.settings_category_privacy_security_title",
+      "profiles.settings_category_users_addons_sites_title",
+      "profiles.settings_category_ai_smart_features_title",
+      "profiles.settings_category_raw_unmapped_title"
+    ],
+    "appearance_and_locale": [
+      "profiles.theme_label",
+      "profiles.theme_system",
+      "profiles.theme_light",
+      "profiles.theme_dark",
+      "profiles.locale_label"
+    ]
+  },
+  "documentation_aliases": [
+    {
+      "source_terms": ["Profile Library", "profile library"],
+      "catalog_key": "profiles.nav_library",
+      "decision": "The visible BPM navigation name is Library; documentation must use its locale-owned value instead of preserving the historical expanded English label."
+    },
+    {
+      "source_terms": ["Guided Editor", "Guided editor"],
+      "catalog_key": "profiles.editor_chrome_title",
+      "decision": "Use the exact locale-owned editor name with locale-appropriate casing."
+    },
+    {
+      "source_terms": ["All Settings", "All settings"],
+      "catalog_key": "profiles.editor_chrome_settings_link",
+      "decision": "Use the primary mode-switch label as the canonical documentation name."
+    },
+    {
+      "source_terms": ["JSON Editor", "JSON editor"],
+      "catalog_key": "profiles.editor_chrome_json_link",
+      "decision": "JSON remains an approved abbreviation; editor wording and typography come from the locale catalog."
+    },
+    {
+      "source_terms": ["Review mode", "Review"],
+      "catalog_key": "profiles.settings_mode_review",
+      "decision": "The catalog value names the mode; surrounding localized prose may add the locale's ordinary word for mode."
+    },
+    {
+      "source_terms": ["Configured mode", "Configured"],
+      "catalog_key": "profiles.settings_mode_configured",
+      "decision": "The catalog value names the mode; surrounding localized prose may add the locale's ordinary word for mode."
+    },
+    {
+      "source_terms": ["Catalog mode", "Catalog"],
+      "catalog_key": "profiles.settings_mode_catalog",
+      "decision": "The catalog value names the mode; surrounding localized prose may add the locale's ordinary word for mode."
+    },
+    {
+      "source_terms": ["Compare profiles", "Profile Comparison", "profile comparison"],
+      "catalog_key": "profiles.compare_route_title",
+      "decision": "Use the maintained comparison-page title rather than an independently translated feature name."
+    },
+    {
+      "source_terms": ["Export"],
+      "catalog_key": "profiles.library_action_export",
+      "decision": "When Export names the BPM Library action in a UI route sequence, use the locale-owned action label; API export operations remain technical prose."
+    },
+    {
+      "source_terms": ["Managed preferences", "managed preferences"],
+      "catalog_key": "profiles.settings_preferences_title",
+      "decision": "Use the locale-owned All Settings section title when the documentation names this UI section."
+    },
+    {
+      "source_terms": ["Advanced schema controls", "advanced schema controls"],
+      "catalog_key": "profiles.settings_advanced_schema_title",
+      "decision": "Use the exact locale-owned disclosure title."
+    }
+  ],
+  "reviewed_non_ui_terms": [
+    {
+      "terms": ["Browser Policy Manager", "BPM", "Firefox", "Mozilla"],
+      "classification": "brand_or_product_name",
+      "authority": "documentation/config/locale-terminology-authority-0.9.1.json"
+    },
+    {
+      "terms": ["API", "CIS", "JSON", "HTML", "HTTP", "URL", "WSL"],
+      "classification": "established_abbreviation",
+      "authority": "documentation/config/locale-terminology-authority-0.9.1.json"
+    },
+    {
+      "terms": ["policies.json", "policy ID", "preference ID", "schema channel"],
+      "classification": "technical_identifier_or_file_name",
+      "authority": "documentation/config/locale-terminology-authority-0.9.1.json"
+    },
+    {
+      "terms": ["detail panel", "sidebar", "tree", "topic", "section"],
+      "classification": "generic_structural_description_not_a_visible_ui_name",
+      "authority": "maintainer_review_2026-07-12"
+    },
+    {
+      "terms": ["command", "path", "endpoint", "request", "response"],
+      "classification": "technical_prose_not_a_visible_ui_name",
+      "authority": "documentation/config/locale-terminology-authority-0.9.1.json"
+    }
+  ],
+  "catalog_quality_findings": [
+    {
+      "id": "UI091-IDENTITY-ENGLISH-CARRYOVER",
+      "catalog_key": "profiles.wizard_profile_identity_title",
+      "affected_locales": ["de", "fr", "es-ES"],
+      "baseline_values": ["Profil identity", "Profil identity", "Perfil identity"],
+      "resolved_values": ["Profilidentität", "Identité du profil", "Identidad del perfil"],
+      "status": "resolved",
+      "resolution_task": "BPM091-M10-05"
+    },
+    {
+      "id": "UI091-ZH-AI-LABEL-INCOMPLETE",
+      "catalog_key": "profiles.wizard_step_five",
+      "affected_locales": ["zh-CN"],
+      "baseline_values": ["与智能功能"],
+      "resolved_values": ["人工智能与智能功能"],
+      "status": "resolved",
+      "resolution_task": "BPM091-M10-05"
+    },
+    {
+      "id": "UI091-ZH-AI-CATEGORY-INCOMPLETE",
+      "catalog_key": "profiles.settings_category_ai_smart_features_title",
+      "affected_locales": ["zh-CN"],
+      "baseline_values": ["和智能功能"],
+      "resolved_values": ["人工智能和智能功能"],
+      "status": "resolved",
+      "resolution_task": "BPM091-M10-05"
+    }
+  ],
+  "additional_catalog_corrections": [
+    {"catalog_key": "profiles.settings_list_title", "locale": "fr", "baseline": "Paramètres inventaire", "resolved": "Inventaire des paramètres"},
+    {"catalog_key": "profiles.settings_filters_title", "locale": "fr", "baseline": "Filtrer paramètres", "resolved": "Filtrer les paramètres"},
+    {"catalog_key": "profiles.settings_preferences_title", "locale": "fr", "baseline": "Géré préférences", "resolved": "Préférences gérées"},
+    {"catalog_key": "profiles.settings_list_title", "locale": "es-ES", "baseline": "Ajustes inventario", "resolved": "Inventario de ajustes"},
+    {"catalog_key": "profiles.settings_preferences_title", "locale": "es-ES", "baseline": "Gestionado preferencias", "resolved": "Preferencias gestionadas"},
+    {"catalog_key": "profiles.settings_route_title", "locale": "zh-CN", "baseline": "所有设置 目录", "resolved": "所有设置目录"},
+    {"catalog_key": "profiles.settings_list_title", "locale": "zh-CN", "baseline": "设置 清单", "resolved": "设置清单"}
+  ],
+  "downstream_contract": {
+    "replacement_task": "BPM091-M10-05",
+    "required_behavior": "Replace documentation-owned UI names from this key map, repair recorded runtime catalog defects before consuming their values, and regenerate navigation, breadcrumbs, search titles, captions, and alt text.",
+    "drift_gate_task": "BPM091-M10-08",
+    "fail_on": [
+      "missing catalog key in any locale",
+      "empty locale value",
+      "cross-locale fallback",
+      "documentation alias without an authority decision",
+      "runtime catalog defect consumed as approved documentation copy",
+      "unclassified UI-looking English term"
+    ]
+  },
+  "summary": {
+    "interface_family_count": 5,
+    "catalog_key_count": 39,
+    "documentation_alias_count": 11,
+    "reviewed_non_ui_class_count": 5,
+    "catalog_quality_finding_count": 3,
+    "additional_catalog_correction_count": 7,
+    "unowned_interface_names": 0
+  }
+}

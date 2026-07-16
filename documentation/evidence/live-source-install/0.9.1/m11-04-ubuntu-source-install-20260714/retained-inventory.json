@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-04-retained-inventory-20260714",
+  "backlog_item": "BPM091-M11-04",
+  "status": "accepted",
+  "captured_at": "2026-07-14T08:52:24Z",
+  "network": {
+    "name": "bpm091-m11-net",
+    "id": "490615366b5447703d8ee9f895299b0bfd6fbb9ccd08b1b826dd80e058593266",
+    "driver": "bridge",
+    "retained": true
+  },
+  "images": [
+    {
+      "target": "ubuntu-26-04",
+      "role": "clean-golden-image",
+      "ref": "docker.io/library/ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "id": "sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "inspect_size_bytes": 41575117,
+      "disposition": "retained-for-reuse"
+    },
+    {
+      "target": "linux-mint-22-3",
+      "role": "clean-golden-image",
+      "ref": "bpm091/linux-mint:22.3-zena-amd64",
+      "id": "sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+      "inspect_size_bytes": 3118921329,
+      "disposition": "retained-for-reuse"
+    }
+  ],
+  "containers": [
+    {
+      "name": "bpm091-ubuntu-26-04-m11-03-harness-self-test-20260714-a01",
+      "id": "199a2081f6a90e7cf6f118a05d83a9e9590f766b689d5ff3ccf07dd1eb45fbcf",
+      "owner_task": "BPM091-M11-03",
+      "target": "ubuntu-26-04",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 137,
+      "size_rw_bytes": 4096,
+      "disposition": "retained-harness-lifecycle-defect"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-03-harness-self-test-20260714-a02",
+      "id": "d4385396d9ef6c0f4fe10a3d1b9d3863599fb7777e5c72bfc2f0b821162bcccc",
+      "owner_task": "BPM091-M11-03",
+      "target": "ubuntu-26-04",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 4096,
+      "disposition": "accepted-harness-self-test"
+    },
+    {
+      "name": "bpm091-linux-mint-rootfs-helper-m11-03-mint-image-20260714-a01",
+      "id": "d5a015d9fe41058223c6adf23b9bbe2b13b9966bcc6b9588ab2b2848d463bd02",
+      "owner_task": "BPM091-M11-03",
+      "target": "linux-mint-rootfs-helper",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 68804608,
+      "disposition": "accepted-mint-image-construction"
+    },
+    {
+      "name": "bpm091-linux-mint-22-3-m11-03-mint-self-test-20260714-a01",
+      "id": "be7cfa08853c649f55f1b0e6685a43f58ac79f92d4e3b0dd2aea93344e8c3075",
+      "owner_task": "BPM091-M11-03",
+      "target": "linux-mint-22-3",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 4096,
+      "disposition": "accepted-mint-identity-self-test"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a01",
+      "id": "79ab371fc56d2b59aba255e01e7e61a2efe7bacd6534b0c3624a9a19bdf804dc",
+      "owner_task": "BPM091-M11-04",
+      "target": "ubuntu-26-04",
+      "attempt": 1,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1475092480,
+      "disposition": "rejected-diagnostic-false-pass"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a02",
+      "id": "40136e54168c39ed5769fbd752f25adc354cd2893eedfddff55eb415237c6760",
+      "owner_task": "BPM091-M11-04",
+      "target": "ubuntu-26-04",
+      "attempt": 2,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1475121152,
+      "disposition": "retained-diagnostic-completion-guard-catch"
+    },
+    {
+      "name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a03",
+      "id": "b2c8838542c64161e260d1db00fb14c31c90d19b3ab26c395dee601926667cb4",
+      "owner_task": "BPM091-M11-04",
+      "target": "ubuntu-26-04",
+      "attempt": 3,
+      "state": "exited",
+      "exit_code": 0,
+      "size_rw_bytes": 1475129344,
+      "disposition": "accepted-clean-source-install-pass"
+    }
+  ],
+  "retention": {
+    "all_containers_stopped": true,
+    "container_count": 7,
+    "image_count": 2,
+    "network_count": 1,
+    "containers_removed": 0,
+    "images_removed": 0,
+    "networks_removed": 0,
+    "docker_engine_retained": true,
+    "golden_images_retained_for_reuse": true,
+    "diagnostic_containers_retained": true,
+    "accepted_derivative_container_retained_until_handoff": true
+  },
+  "storage": {
+    "approximate_unique_image_bytes": 3160496446,
+    "approximate_container_writable_bytes": 4494159872,
+    "approximate_task_owned_docker_bytes": 7654656318,
+    "maximum_task_owned_docker_bytes": 200000000000,
+    "host_free_bytes": 207763156992,
+    "minimum_host_free_bytes": 21474836480,
+    "within_contract": true
+  }
+}

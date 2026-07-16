@@ -4,12 +4,12 @@
   <title>Inspect configured settings</title>
   <shortdesc>Use Configured mode to understand what the profile currently applies by domain, category, and source.</shortdesc>
   <taskbody>
-    <prereq><p>Open a saved profile in All Settings.</p></prereq>
+    <prereq><p>Open a saved profile in All settings.</p></prereq>
     <context><p>Configured mode focuses on values already present in the profile, not on every possible policy. Domain summaries help you explain the active configuration.</p></context>
     <steps>
-      <step><cmd>Switch to Configured mode.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Review the configured summary cards by domain or category.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Open a category to inspect the settings applied there.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Switch to Configured mode.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Review the configured summary cards by domain or category.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open a category to inspect the settings applied there.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Use source filters if you need to separate baseline, CIS, manual, imported, or raw values.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>You can describe the active policy and managed preference values applied by the profile.</p></result>

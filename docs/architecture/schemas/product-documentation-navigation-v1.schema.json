@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://browser-policy-manager.invalid/schemas/product-documentation-navigation-v1.schema.json",
+  "title": "BPM product documentation navigation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "documentation_version", "locale", "node_count", "root"],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": 1 },
+    "documentation_version": { "const": "0.9.1" },
+    "locale": { "enum": ["en", "ru", "de", "zh-CN", "fr", "es-ES"] },
+    "node_count": { "type": "integer", "minimum": 5 },
+    "root": {
+      "allOf": [
+        { "$ref": "#/$defs/node" },
+        {
+          "type": "object",
+          "properties": {
+            "node_id": { "const": "documentation-root" },
+            "node_type": { "const": "root" }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_type", "label", "href", "anchor", "label_key", "children"],
+      "properties": {
+        "node_id": { "type": "string", "minLength": 1, "maxLength": 192 },
+        "node_type": { "enum": ["root", "guide", "section", "topic"] },
+        "label": { "type": "string", "minLength": 1 },
+        "href": {
+          "type": ["string", "null"],
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//)[A-Za-z0-9._/#-]+$"
+        },
+        "anchor": { "type": ["string", "null"], "pattern": "^a-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "label_key": { "type": ["string", "null"], "minLength": 1 },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/node" }
+        }
+      }
+    }
+  }
+}

@@ -295,6 +295,14 @@
       }
     }
   },
+  "navigation": {
+    "en": { "path": "en/navigation.json", "sha256": "2000000000000000000000000000000000000000000000000000000000000001", "format_version": 1, "node_count": 12 },
+    "ru": { "path": "ru/navigation.json", "sha256": "2000000000000000000000000000000000000000000000000000000000000002", "format_version": 1, "node_count": 12 },
+    "de": { "path": "de/navigation.json", "sha256": "2000000000000000000000000000000000000000000000000000000000000003", "format_version": 1, "node_count": 12 },
+    "zh-CN": { "path": "zh-CN/navigation.json", "sha256": "2000000000000000000000000000000000000000000000000000000000000004", "format_version": 1, "node_count": 12 },
+    "fr": { "path": "fr/navigation.json", "sha256": "2000000000000000000000000000000000000000000000000000000000000005", "format_version": 1, "node_count": 12 },
+    "es-ES": { "path": "es-ES/navigation.json", "sha256": "2000000000000000000000000000000000000000000000000000000000000006", "format_version": 1, "node_count": 12 }
+  },
   "search": {
     "en": { "path": "search/en/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000001", "format_version": 1, "document_count": 6 },
     "ru": { "path": "search/ru/index.json", "sha256": "1000000000000000000000000000000000000000000000000000000000000002", "format_version": 1, "document_count": 6 },

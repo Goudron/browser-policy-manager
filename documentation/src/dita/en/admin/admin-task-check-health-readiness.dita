@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-check-health-readiness" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+<task id="admin-task-check-health-readiness" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
   <title>Check BPM health and readiness</title>
   <shortdesc>Use the current liveness and readiness probes as a lightweight operational handshake before API workflows.</shortdesc>
   <taskbody>
     <prereq><p>Set <codeph>$BPM_BASE_URL</codeph>. For host setup, service start, logs, updates from source, and operating-system details, use the source-deployment Administrator Guide; this API topic only documents the integration handshake.</p></prereq>
-    <context><p>This task covers <codeph>API-HEALTH-001</codeph> and <codeph>API-HEALTH-002</codeph>. BPM 0.9.0 exposes prefix-free probes at <codeph>/health</codeph> and <codeph>/health/ready</codeph>. BPM does not expose dependency diagnostics through these probes; they are not versioned and do not replace product-specific retry or incident policy.</p></context>
+    <context><p>This task covers <codeph>API-HEALTH-001</codeph> and <codeph>API-HEALTH-002</codeph>. BPM exposes prefix-free probes at <codeph>/health</codeph> and <codeph>/health/ready</codeph>. BPM does not expose dependency diagnostics through these probes; they are not versioned and do not replace product-specific retry or incident policy.</p></context>
     <steps>
       <step><cmd>Call the liveness probe before starting a short API sequence.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/health</codeph>. Response example: <codeph>200 {"status":"ok"}</codeph>. Error example: no application error is currently declared; transport, gateway, or process failures are handled outside BPM.</p></info></step>
       <step><cmd>Call the readiness probe before operations that depend on application startup being complete.</cmd><info><p>Request example: <codeph>GET $BPM_BASE_URL/health/ready</codeph>. Response example: <codeph>200 {"status":"ready","ready":true}</codeph>. Error example: no degraded-state or dependency-detail body is currently exposed.</p></info></step>

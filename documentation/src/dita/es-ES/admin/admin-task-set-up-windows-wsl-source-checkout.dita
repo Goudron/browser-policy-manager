@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>Configurar el BPM source checkout dentro de WSL</title>
-  <shortdesc>Instale Linux prerequisites en WSL, clone BPM en el Linux filesystem, cree la virtual environment, instale dependencies y aplique migrations.</shortdesc>
+<task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
+  <title>Configurar el control de origen BPM dentro de WSL</title>
+  <shortdesc>Instale los requisitos previos de Linux en WSL, clone BPM en el sistema de archivos de Linux, cree el entorno virtual, instale dependencias y aplique migraciones.</shortdesc>
   <taskbody>
-    <prereq><p>Una WSL 2 Linux distribution está instalada y abierta, y el administrador tiene la BPM repository URL aprobada y el branch o tag de 0.9.0.</p></prereq>
-    <context><p>Todos los comandos de este tema se ejecutan dentro del WSL Linux shell salvo que el paso indique explícitamente PowerShell. Esto mantiene el setup alineado con el Linux source deployment runbook y evita native-Windows path ambiguity.</p></context>
+    <prereq><p>Se instala y abre una distribución de Linux WSL 2, y el administrador tiene la URL del repositorio BPM aprobada y la rama o etiqueta 0.9.1.</p></prereq>
+    <context><p>Todos los comandos de este tema se ejecutan dentro del shell de WSL Linux a menos que el paso diga explícitamente PowerShell. Esto mantiene la configuración alineada con el runbook de implementación de origen de Linux y evita la ambigüedad de la ruta nativa de Windows.</p></context>
     <steps>
-      <step><cmd>Instale Linux prerequisites en la WSL distribution.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Instale los requisitos previos de Linux en la distribución WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 sudo apt-get update
 sudo apt-get install -y git make curl python3 python3-venv python3-pip
 python3 --version
-]]></codeblock><p>Use el package manager y los package names aprobados para la WSL distribution seleccionada.</p></info></step>
-      <step><cmd>Clone BPM en el Linux home filesystem.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Utilice el administrador de paquetes y los nombres de paquetes aprobados para su distribución WSL seleccionada.</p></info></step>
+      <step><cmd>Clonar BPM en el sistema de archivos doméstico de Linux.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 cd ~
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
-git checkout <approved-0.9.0-ref>
-]]></codeblock><p>No coloque el working checkout bajo <codeph>/mnt/c</codeph> para el WSL source workflow admitido.</p></info></step>
-      <step><cmd>Cree y active el Python environment local.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+git checkout <approved-0.9.1-ref>
+]]></codeblock><p>No coloque el pago en funcionamiento en <codeph>/mnt/c</codeph> para el flujo de trabajo de origen WSL compatible.</p></info></step>
+      <step><cmd>Cree y active el entorno Python local.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-]]></codeblock><p>Si la distribution expone Python solo como <codeph>python3</codeph>, cree el entorno con <codeph>python3 -m venv .venv</codeph> y luego use el entorno activado.</p></info></step>
-      <step><cmd>Aplique database migrations dentro del WSL checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Si la distribución expone Python solo como <codeph>python3</codeph>, cree el entorno con <codeph>python3 -m venv .venv</codeph> y luego use el entorno activado.</p></info></step>
+      <step><cmd>Aplicar migraciones de bases de datos dentro del proceso de pago de WSL.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-]]></codeblock><note type="warning">El SQLite file es un Linux file dentro de WSL. No edite ni mueva <codeph>data/bpm.db</codeph> con Windows tools mientras BPM esté ejecutándose.</note></info></step>
+]]></codeblock><note type="warning">El archivo SQLite es un archivo de Linux dentro de WSL. No edite ni mueva <codeph>data/bpm.db</codeph> desde las herramientas de Windows mientras BPM se esté ejecutando.</note></info></step>
     </steps>
-    <result><p>El WSL checkout tiene Linux prerequisites, una repository-local virtual environment, installed dependencies y una migrated local database.</p></result>
-    <postreq><p>Configure runtime variables y browser access antes de iniciar BPM.</p></postreq>
+    <result><p>El checkout de WSL tiene requisitos previos de Linux, un entorno virtual de repositorio local, dependencias instaladas y una base de datos local migrada.</p></result>
+    <postreq><p>Configure las variables de tiempo de ejecución y el acceso al navegador antes de iniciar BPM.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-windows-wsl-source-deployment"/>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-settings-by-source" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Einstellungen nach Quelle filtern</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Filter configured settings by baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
+  <title>Einstellungen filtern nach Quelle</title>
+  <shortdesc>Filtern Sie konfigurierte Einstellungen nach Baseline-, CIS-, manueller, importierter oder Rohquellenzuordnung.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Open All Settings in Configured mode or a source-aware list.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Source filters explain why a value exists. They help distinguish generated baselines, CIS layers, manual edits, imported policies, and raw fallback values.</p></context>
+    <prereq><p>Öffnen Sie Alle Einstellungen in Konfiguriert oder einer quellfähigen Liste.</p></prereq>
+    <context><p>Quellfilter erklären, warum ein Wert existiert. Sie helfen dabei, generierte Baselines, CIS-Layer, manuelle Bearbeitungen, importierte Richtlinien und rohe Fallback-Werte zu unterscheiden.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Open the source filter controls.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Choose baseline, CIS, manual, imported, or raw depending on the question you are answering.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Review the list count and visible badges after each filter change.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungen nach Quelle filtern. Clear the filter before switching to a different investigation path.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Öffnen Sie die Quellfiltersteuerelemente.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie abhängig von der Frage, die Sie beantworten, „Baseline“, „CIS“, „Manuell“, „Importiert“ oder „Roh“.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie nach jeder Filteränderung die Listenanzahl und die sichtbaren Abzeichen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Löschen Sie den Filter, bevor Sie zu einem anderen Untersuchungspfad wechseln.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The visible list contains only settings from the selected source category.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if a setting disappears, clear source filters and inspect its detail panel for the recorded source.</p></postreq>
+    <result><p>Die sichtbare Liste enthält nur Einstellungen aus der ausgewählten Quellkategorie.</p></result>
+    <postreq><p>Wiederherstellung: Wenn eine Einstellung verschwindet, löschen Sie die Quellfilter und überprüfen Sie das Detailfenster für die aufgezeichnete Quelle.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-trace-setting-source"/>

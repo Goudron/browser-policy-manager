@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-unsaved-changes" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Récupérer après des modifications non enregistrées</title>
-  <shortdesc>Évitez de perdre des modifications d’éditeur non enregistrées lors de la navigation, fermeture d’onglet, actualisation ou changement de mode.</shortdesc>
+  <title>Récupérer des modifications non enregistrées</title>
+  <shortdesc>Évitez de perdre les modifications non enregistrées de l'éditeur lors de la navigation, de la fermeture d'un onglet, de l'actualisation ou du changement de mode.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
-    <context><p>BPM avertit du dirty editor state, mais l’utilisateur doit encore décider d’enregistrer, abandonner ou rester sur la page.</p></context>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <context><p>BPM avertit de l'état de l'éditeur sale, mais les utilisateurs doivent toujours décider s'ils doivent enregistrer, supprimer ou rester sur la page.</p></context>
     <steps>
-      <step><cmd>Arrêtez-vous lorsque le navigateur ou BPM signale des modifications non enregistrées.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Identifiez l’onglet actif, le nom du profil, le canal de schéma et le mode d’édition contenant le brouillon.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Enregistrez le profil si les modifications doivent devenir le nouvel état du profil, ou annulez la navigation pour les relire d’abord.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Si vous abandonnez volontairement les modifications, rouvrez le profil depuis la Bibliothèque et confirmez l’état enregistré avant de continuer.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+      <step><cmd>Arrêtez-vous lorsque le navigateur ou BPM signale des modifications non enregistrées.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Identifiez l'onglet actif, le nom du profil, le canal de schéma et le mode éditeur qui contient le brouillon.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Enregistrez le profil si les modifications doivent devenir le nouvel état du profil, ou annulez la navigation pour les examiner en premier.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Si vous annulez intentionnellement les modifications, rouvrez le profil depuis la bibliothèque et confirmez l'état enregistré avant de continuer.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>
-    <result><p>Vous préservez le brouillon en l’enregistrant ou revenez volontairement au dernier état enregistré du profil.</p></result>
-    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+    <result><p>Soit vous conservez le brouillon en l'enregistrant, soit vous revenez sciemment au dernier état de profil enregistré.</p></result>
+    <postreq><p>Récupération : si l'état visible n'est pas clair, arrêtez l'édition, lisez le message d'état actuel, actualisez une fois et rouvrez le profil depuis la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

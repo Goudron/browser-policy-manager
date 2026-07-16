@@ -40,7 +40,7 @@
     },
     {
       "id": "configure-with-guidance",
-      "title": "Configure with Guided Editor",
+      "title": "Configure with Guided editor",
       "outcome": "A user can move through the guided workflow, configure common policy goals, understand schema-dependent controls, and prepare a reviewed profile.",
       "topics": [
         { "topic_id": "ug-task-use-guided-editor", "kind": "task", "capability_ids": ["CAP-GUIDED-001"] },

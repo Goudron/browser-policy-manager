@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-plan-devops-storage-logs-backups" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>规划 storage、logs 和 backup evidence</title>
-  <shortdesc>定位 source-deployment database、schema cache、documentation site、foreground logs 和 manual backup evidence，同时不声称 managed backup 或 restore support。</shortdesc>
+<task id="admin-task-plan-devops-storage-logs-backups" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>规划存储、日志和备份证据</title>
+  <shortdesc>找到源部署数据库、架构缓存、文档站点、前台日志和手动备份证据，而无需声明托管备份或恢复支持。</shortdesc>
   <taskbody>
-    <prereq><p>deployment configuration inventory 包含 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。</p></prereq>
-    <context><p>default source deployment 使用 SQLite 保存 application data，地址为 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，对应 repository root 下的 <codeph>data/bpm.db</codeph>。Schema cache files 默认位于 <codeph>app/schemas/mozilla</codeph>；已安装的 documentation artifact 可用时从 <codeph>app/documentation/site</codeph> 读取。</p></context>
+    <prereq><p>部署配置清单包括 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。</p></prereq>
+    <context><p>默认源部署将应用程序数据存储在位于 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph> 的 SQLite 中，对应于存储库根目录下的 <codeph>data/bpm.db</codeph>。默认情况下，架构缓存文件位于 <codeph>app/schemas/mozilla</codeph> 下，并且从 <codeph>app/documentation/site</codeph> 中读取已安装的文档工件（如果存在）。</p></context>
     <steps>
-      <step><cmd>识别保存 operational state 的 files 和 directories。</cmd><info><p>记录 repository path、<codeph>data/</codeph>、<codeph>data/bpm.db</codeph>、<codeph>app/schemas/mozilla</codeph> 和 <codeph>app/documentation/site</codeph>。在 WSL 中，将这些 paths 保持在 Linux filesystem 中，而不是 <codeph>/mnt/c</codeph> 下。</p></info></step>
-      <step><cmd>在风险操作前定义 manual backup evidence step。</cmd><info><p>停止 foreground BPM process，将 <codeph>data/bpm.db</codeph> 复制到受控 backup location，并记录 timestamp、source revision、database URL、file size 和 checksum。BPM 0.9.0 不提供 automated backup、point-in-time recovery 或 tested restore orchestration。</p></info></step>
-      <step><cmd>捕获当前 source process 的 logs。</cmd><info><p>Source runs 会把 startup messages、Uvicorn access output、tracebacks、migration errors、port conflicts 和 documentation-site warnings 写入 foreground terminal、stdout 或 stderr。本版本不记录 dedicated BPM application log directory、log rotation policy、request ID、audit log 或 Event Viewer integration。</p></info></step>
-      <step><cmd>当 profile handoff 重要时，把 file backup evidence 与 export evidence 配对。</cmd><info><p>使用现有 API export examples 导出相关 Firefox <codeph>policies.json</codeph> documents，并保存 response status、profile ID、revision、schema channel 和 exported-document hash。不要把 export evidence 当作完整 database restore。</p></info></step>
+      <step><cmd>识别保持操作状态的文件和目录。</cmd><info><p>记录存储库路径、<codeph>data/</codeph>、<codeph>data/bpm.db</codeph>、<codeph>app/schemas/mozilla</codeph> 和 <codeph>app/documentation/site</codeph>。在 WSL 中，将这些路径保留在 Linux 文件系统中，而不是在 <codeph>/mnt/c</codeph> 下。</p></info></step>
+      <step><cmd>在危险工作之前定义手动备份证据步骤。</cmd><info><p>停止前台 BPM 进程，将 <codeph>data/bpm.db</codeph> 复制到受控备份位置，并记录时间戳、源版本、数据库 URL、文件大小和校验和。 BPM 不提供自动备份、时间点恢复或经过测试的恢复编排。</p></info></step>
+      <step><cmd>从当前源进程捕获日志。</cmd><info><p>源运行将启动消息、Uvicorn 访问输出、回溯、迁移错误、端口冲突和文档站点警告写入前台终端、stdout 或 stderr。此版本中没有记录专用的 BPM 应用程序日志目录、日志轮换策略、请求 ID、审核日志或事件查看器集成。</p></info></step>
+      <step><cmd>当配置文件移交很重要时，将文件备份证据与导出证据配对。</cmd><info><p>使用现有 API 导出示例导出相关 Firefox <codeph>policies.json</codeph> 文档并存储响应状态、配置文件 ID、修订、架构通道和导出文档哈希。不要将导出证据视为完整的数据库恢复。</p></info></step>
     </steps>
-    <result><p>管理员知道当前 source-deployment state 位于何处，以及在 updates 或 troubleshooting 前可收集哪些 manual evidence。</p></result>
-    <postreq><p>更改 source revisions 或 database schemas 前，使用未来 update-from-source runbook；当 backup 或 restore evidence 不完整时停止。</p></postreq>
+    <result><p>管理员知道当前源部署状态位于何处，以及在更新或故障排除之前可以收集哪些手动证据。</p></result>
+    <postreq><p>在更改源修订或数据库架构之前，请使用未来的从源更新 操作手册，并在备份或还原证据不完整时停止。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-configuration-sources"/>

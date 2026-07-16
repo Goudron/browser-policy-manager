@@ -20,7 +20,6 @@
         "user-guide",
         "firefox-policy-guide",
         "cis-settings-guide",
-        "api-integration-guide",
         "administrator-guide"
       ]
     },
@@ -66,7 +65,7 @@
     },
     "bpm_version": {
       "label": "BPM version",
-      "values": ["0.9.0"]
+      "values": ["0.9.1"]
     }
   },
   "filter_contract": {

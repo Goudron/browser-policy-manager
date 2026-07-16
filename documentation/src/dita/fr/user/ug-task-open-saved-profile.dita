@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ouvrir un profil enregistré dans un éditeur</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Ouvrir un profil enregistré dans un éditeur » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Ouvrez le même profil enregistré dans Éditeur guidé, Tous les paramètres ou Éditeur JSON selon la modification dont vous avez besoin.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Le profil est visible dans la bibliothèque et son identité de ligne correspond au profil que vous souhaitez modifier ou inspecter.</p></prereq>
+    <context><p>L'ouverture d'un profil enregistré ne le duplique pas. Chaque surface d'éditeur fonctionne avec le même Identité du profil enregistré.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Ouvrir un profil enregistré dans un éditeur ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Utilisez le titre de la ligne ou l'action guidée pour les modifications orientées tâches.</cmd><info><p>Résultat attendu : BPM ouvre le profil dans Éditeur guidé.</p></info></step>
+      <step><cmd>Utilisez Tous les paramètres lorsque vous avez besoin du catalogue complet pris en charge et des détails de la source/attention.</cmd><info><p>Il s'agit du choix le plus sûr pour une inspection détaillée des politiques et des préférences.</p></info></step>
+      <step><cmd>Utilisez Éditeur JSON lorsque vous devez inspecter ou modifier le document de limites brut.</cmd><info><note type="warning">Les modifications JSON brutes doivent être validées avant l'exportation ou la comparaison.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>L'éditeur sélectionné s'ouvre dans son propre contexte de profil et conserve le même profil ID.</p></result>
+    <postreq><p>Récupération : si vous avez ouvert le mauvais éditeur, revenez à la ligne Bibliothèque ou utilisez un autre lien d'éditeur pour le même profil.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Filtrer la liste All Settings</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. Filter by configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown state.</shortdesc>
+  <title>Filtrer la liste Tous les paramètres</title>
+  <shortdesc>Filtrer par état configuré, disponible, couvert par guidage, tous les paramètres uniquement, invalide, obsolète, brut ou inconnu.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. Open All Settings with a visible settings list.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. State filters narrow a large inventory by the decision the user needs to make. They are different from source filters, which explain where a value came from.</p></context>
+    <prereq><p>Ouvrez Tous les paramètres avec une liste de paramètres visible.</p></prereq>
+    <context><p>Les filtres d'état réduisent un vaste inventaire en fonction de la décision que l'utilisateur doit prendre. Ils sont différents des filtres source, qui expliquent l'origine d'une valeur.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. Open the list filter toolbar.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. Choose the state filter that matches the task: configured, available, Guided-covered, All-Settings-only, invalid, deprecated, raw, or unknown.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. Inspect the filtered count and representative rows.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Filtrer la liste All Settings. Clear the state filter before applying unrelated edits.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Ouvrez la barre d'outils du filtre de liste.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez le filtre d'état qui correspond à la tâche : configuré, disponible, couvert par guidage, tous les paramètres uniquement, non valide, obsolète, brut ou inconnu.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Inspectez le nombre filtré et les lignes représentatives.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Effacez le filtre d'état avant d'appliquer des modifications sans rapport.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The list shows settings with the selected state only.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if a row is missing, clear state filters and search by exact policy or preference identifier.</p></postreq>
+    <result><p>La liste affiche uniquement les paramètres avec l'état sélectionné.</p></result>
+    <postreq><p>Récupération : si une ligne est manquante, effacez les filtres d'état et recherchez par politique exacte ou identifiant de préférence.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-large-settings-inventories"/>

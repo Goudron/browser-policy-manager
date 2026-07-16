@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-raw-policies-json" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Editar JSON policies raw</title>
-  <shortdesc>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. Edit the raw policies.json document with the locally bundled Monaco editor.</shortdesc>
+  <title>Editar políticas sin formato JSON</title>
+  <shortdesc>Edite el documento policies.json sin procesar con el editor Monaco incluido localmente.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. Open JSON Editor for a saved profile.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. The Monaco editor is bundled locally and edits the raw JSON text. BPM still validates before saving to the normalized profile model.</p></context>
+    <prereq><p>Abra Editor JSON para obtener un perfil guardado.</p></prereq>
+    <context><p>El editor Monaco se incluye localmente y edita el texto JSON sin formato. BPM aún se valida antes de guardar en el modelo de perfil normalizado.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. Place focus in the JSON editor.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. Edit only the policy, preference, or raw value required by the task.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. Keep the top-level policies object and valid JSON syntax.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Editar JSON policies raw. Use validation before saving the raw edit.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe la sintaxis JSON, top-level policies y los errores de validación de políticas.</note></info></step>
+      <step><cmd>Coloque el foco en Editor JSON.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Edite solo la política, preferencia o valor sin procesar requerido por la tarea.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Mantenga el objeto de políticas de nivel superior y la sintaxis JSON válida.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Utilice la validación antes de guardar la edición sin formato.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
     </steps>
-    <result><p>JSON Editor queda en el estado esperado y la acción se puede explicar durante la revisión. The editor contains the intended raw JSON change and is ready for validation.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, valide el documento, vuelva a All Settings o abra el tema relacionado. Recovery: if the edit becomes confusing, format the document or discard changes before saving.</p></postreq>
+    <result><p>El editor contiene el cambio JSON sin formato previsto y está listo para su validación.</p></result>
+    <postreq><p>Recuperación: si la edición se vuelve confusa, formatee el documento o descarte los cambios antes de guardar.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-format-json-document"/>

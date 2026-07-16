@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-verify-cis-deviation" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>验证并记录 CIS deviation</title>
-  <shortdesc>当 CIS-related value 被保留、修改或留给 manual verification，而不是自动接受时，使用此任务。</shortdesc>
+  <title>验证并记录 CIS 偏差</title>
+  <shortdesc>当 CIS 相关值被保留、更改或留作手动验证而不是自动接受时，请使用此任务。</shortdesc>
   <taskbody>
-    <prereq><p>打开显示 CIS manual-review item、conflict 或 intentional deviation from generated layer 的 profile。</p></prereq>
-    <context><p>Verification 表示检查 BPM value、schema channel、exported path 和 local review evidence。它不表示 BPM 已在 target environment 中测试 Firefox runtime behavior。</p></context>
+    <prereq><p>打开一个配置文件，其中显示 CIS 手动审核项目、冲突或与生成的图层的故意偏差。</p></prereq>
+    <context><p>验证是指检查 BPM 值、模式通道、导出路径和本地审核证据。这并不意味着 BPM 已在目标环境中测试了 Firefox 运行时行为。</p></context>
     <steps>
-      <step><cmd>打开 affected setting，并记录 recommendation ID、path、current value、source attribution 和 schema channel。</cmd><info><p>预期结果：reviewer 可以准确识别正在 review 的 BPM-controlled value。</p></info></step>
-      <step><cmd>将 reason 分类为 update governance、proxy routing、evidence retention、unsupported mapping research、deprecated target 或 local deployment requirement。</cmd><info><p>预期结果：deviation 有具体原因，而不是 generic exception label。</p></info></step>
-      <step><cmd>在 BPM 中 validate profile，并检查将承载该 value 的 exported <codeph>policies.json</codeph> path。</cmd><info><p>预期结果：external verification 开始前已知 schema validation 和 export shape。</p></info></step>
-      <step><cmd>使用 deployment owner 批准的方法，在 BPM 外执行 runtime、operating-system、network 或 audit verification。</cmd><info><p>预期结果：收集 external evidence，但不声称 BPM 自身证明了 Firefox behavior。</p></info></step>
-      <step><cmd>在 external ticket、deployment note 或 change-control record 中记录 decision，包括 BPM profile name、schema channel、recommendation ID、value、reason、owner 和 review date。</cmd><info><note type="warning">BPM 0.9.0 不持久化 dedicated CIS exception 或 waiver object；不要只依赖 profile 作为 exception record。</note></info></step>
-      <step><cmd>重新打开 profile，确认 source attribution 仍显示该 value 是 baseline、CIS、manual、imported 还是 raw。</cmd><info><p>预期结果：后续 reviewers 可以追踪 configured value 并找到 external record。</p></info></step>
+      <step><cmd>打开受影响的设置并记录推荐 ID、路径、当前值、源属性和架构渠道。</cmd><info><p>预期结果：审核者可以准确识别正在审核的 BPM 控制值。</p></info></step>
+      <step><cmd>将原因分类为更新治理、代理路由、证据保留、不支持的映射研究、已弃用的目标或本地部署要求。</cmd><info><p>预期结果：偏差有具体原因，而不是通用异常标签。</p></info></step>
+      <step><cmd>验证 BPM 中的配置文件并检查将携带该值的导出的 <codeph>policies.json</codeph> 路径。</cmd><info><p>预期结果：在外部验证开始之前，模式验证和导出形状已知。</p></info></step>
+      <step><cmd>使用部署所有者批准的方法在 BPM 之外执行任何运行时、操作系统、网络或审核验证。</cmd><info><p>预期结果：收集外部证据，但不声称 BPM 本身证明了 Firefox 的行为。</p></info></step>
+      <step><cmd>在外部票证、部署说明或变更控制记录中记录决策，包括 BPM 配置文件名称、架构通道、建议 ID、值、原因、所有者和审核日期。</cmd><info><note type="warning">BPM 不保留专用的 CIS 例外或豁免对象；不要单独依赖配置文件作为异常记录。</note></info></step>
+      <step><cmd>重新打开配置文件并确认源属性仍然显示该值是基线、CIS、手动、导入还是原始。</cmd><info><p>预期结果：以后的审阅者可以跟踪配置的值并找到外部记录。</p></info></step>
     </steps>
-    <result><p>CIS deviation 具有 actionable verification evidence、external exception record 和可见 BPM source attribution。</p></result>
-    <postreq><p>如果 reviewer 无法验证 exported path 或 external evidence，请将 item 保持在 manual review 中，不要描述为 compliant。</p></postreq>
+    <result><p>CIS 偏差具有可操作的验证证据、外部异常记录和可见的 BPM 源归因。</p></result>
+    <postreq><p>如果审核者无法验证导出的路径或外部证据，请将该项目保留在手动审核中，并且不要将其描述为合规。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-manual-review-exceptions"/>

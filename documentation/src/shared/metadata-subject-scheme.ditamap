@@ -17,6 +17,7 @@
   </subjectdef>
   <subjectdef keys="bpm-versions">
     <subjectdef keys="bpm-0-9-0"/>
+    <subjectdef keys="bpm-0-9-1"/>
   </subjectdef>
   <subjectdef keys="locales">
     <subjectdef keys="locale-en"/>

@@ -16,6 +16,8 @@
         const wizardSchemaShellCatalog = readEmbeddedJson(documentRef, "wizard-schema-shell-catalog");
         const allSettingsCategoryCatalog = readEmbeddedJson(documentRef, "all-settings-category-catalog");
         const schemaChannelsCatalog = readEmbeddedJson(documentRef, "schema-channels-catalog");
+        const allSettingsRowHelpLinks = readEmbeddedJson(documentRef, "all-settings-row-help-links");
+        const allSettingsRowHelpStatus = readEmbeddedJson(documentRef, "all-settings-row-help-status");
 
         const wizardPreferenceSections = Array.isArray(wizardPreferencesCatalog.sections)
             ? wizardPreferencesCatalog.sections
@@ -27,6 +29,8 @@
         return {
             wizardStarterCatalog,
             wizardManualPolicyControls,
+            allSettingsRowHelpLinks,
+            allSettingsRowHelpStatus,
             settingsTargetAliases: {
                 "field:wizard-homepage-start-page": "shell-policy:3:Homepage",
                 "field:wizard-homepage-url": "shell-policy:3:Homepage",

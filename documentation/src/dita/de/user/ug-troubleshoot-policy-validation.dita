@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-policy-validation" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Policy validation errors interpretieren</title>
-  <shortdesc>Diagnostizieren Sie validation errors für unsupported policy, wrong value type, unknown entry, raw fallback oder affected policy path.</shortdesc>
+  <title>Richtlinienvalidierungsfehler interpretieren</title>
+  <shortdesc>Diagnostizieren Sie Validierungsfehler für nicht unterstützte Richtlinien, falschen Werttyp, unbekannten Eintrag, unformatierten Fallback oder betroffenen Richtlinienpfad.</shortdesc>
   <taskbody>
-    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, Browserwarnung oder fehlgeschlagene Aktion zeigt, dass der aktuelle Workflow nicht sicher fortgesetzt werden kann.</p></prereq>
-    <context><p>Validation errors sind strukturierte Rückmeldungen zum gewählten Firefox schema channel und zur genauen Policy oder Managed Preference, die BPM nicht als bereit akzeptiert.</p></context>
+    <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
+    <context><p>Validierungsfehler sind strukturierte Rückmeldungen zum ausgewählten Firefox-Schemakanal und der genauen Richtlinie oder verwalteten Einstellung, die BPM nicht als bereit akzeptieren kann.</p></context>
     <steps>
-      <step><cmd>Lesen Sie affected policy path und message, bevor Werte geändert werden.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Klassifizieren Sie das Problem als unsupported policy, wrong value type, deprecated setting, unknown entry, imported value oder raw fallback.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Nutzen Sie All Settings oder JSON, um zur affected location zu wechseln und nur den gemeldeten Wert zu korrigieren.</cmd><info><p>Erwartetes Ergebnis: Der Profilzustand bleibt erhalten und die nächste sichere Wiederherstellungsaktion ist klar.</p></info></step>
-      <step><cmd>Führen Sie revalidate profile im selben schema channel vor Speichern oder Export erneut aus.</cmd><info><note type="warning">Bearbeiten Sie keine internen Speicher, Browser-Lokaldaten, Datenbankzeilen oder generierten Build-Artefakte, um benutzerseitige Profilarbeit wiederherzustellen.</note></info></step>
+      <step><cmd>Lesen Sie den betroffenen Richtlinienpfad und die Meldung, bevor Sie Werte ändern.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Klassifizieren Sie das Problem als nicht unterstützte Richtlinie, falscher Werttyp, veraltete Einstellung, unbekannter Eintrag, importierter Wert oder roher Fallback.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Verwenden Sie Alle Einstellungen oder JSON, um zum betroffenen Standort zu navigieren und nur den gemeldeten Wert zu korrigieren.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Überprüfen Sie das Profil erneut im selben Schemakanal, bevor Sie es speichern oder exportieren.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
     </steps>
-    <result><p>Der validation error ist behoben oder als deliberate raw/unsupported value dokumentiert, der nicht release-ready ist.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen erneuten Versuch wiederkehrt, stoppen Sie den Workflow und bewahren Sie sichtbare Meldung, Profilname, Schema-Kanal und aktuelle Oberfläche für Maintainer-Review auf.</p></postreq>
+    <result><p>Der Validierungsfehler wurde entweder behoben oder als bewusster Rohwert/nicht unterstützter Wert dokumentiert, der nicht als veröffentlichungsbereit behandelt werden kann.</p></result>
+    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

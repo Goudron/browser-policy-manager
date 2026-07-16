@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-profile-status" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Référence d’état du profil</title>
-  <shortdesc>Lisez profile name, ID, schema, lifecycle, dirty/saved state et validation context avant d’agir.</shortdesc>
+  <title>Référence de l'état du profil</title>
+  <shortdesc>Lisez le nom du profil, ID, le schéma, le cycle de vie, l'état modifié/enregistré et le contexte de validation avant d'agir.</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>Identité</title><p>Profile name et ID confirment que l’editor, Library row ou Compare selection courant vise le saved profile ou draft prévu.</p></section>
-    <section id="a-profile-lifecycle"><title>Cycle de vie</title><p>Lifecycle state distingue active, archived, draft, restored et le travail de profil deletion-sensitive.</p></section>
-    <section id="a-profile-validation"><title>Validation</title><p>Validation context indique si les policy et managed-preference values courantes sont prêtes pour save, comparison ou export.</p></section>
-    <section id="a-profile-dirty-state"><title>Dirty state</title><p>Dirty/saved state indique si les editor changes visibles doivent encore être enregistrés avant navigation, export ou confiance dans un autre onglet.</p></section>
+    <section id="a-profile-identity"><title>Identité</title><p>Nom du profil et ID confirment que l'éditeur actuel, la ligne de la bibliothèque ou la sélection de comparaison fait référence au profil ou au brouillon enregistré prévu.</p></section>
+    <section id="a-profile-lifecycle"><title>Cycle de vie</title><p>L'état du cycle de vie distingue les travaux de profil actifs, archivés, brouillons, restaurés et sensibles à la suppression.</p></section>
+    <section id="a-profile-validation"><title>Validation</title><p>Le contexte de validation indique si les valeurs actuelles de la stratégie et des préférences gérées sont prêtes à être enregistrées, comparées ou exportées.</p></section>
+    <section id="a-profile-dirty-state"><title>État sale</title><p>L'état sale/enregistré vous indique si les modifications visibles de l'éditeur doivent encore être enregistrées avant que la navigation, l'exportation ou un autre onglet ne soit approuvé.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-profile-context"/>

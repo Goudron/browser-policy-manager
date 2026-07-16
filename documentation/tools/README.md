@@ -23,11 +23,15 @@ topic model while preserving reviewed regions.
 the locked DITA-OT HTML5 transform against staged copies of maintained source with explicit
 locale/timezone/encoding/temp/output inputs; wraps generated pages in the deterministic accessible
 portal shell; copies first-party CSS theme assets into every locale output; generates and validates
-`manifest.json`, `ui-target-map.json`, and the current six placeholder search indexes; rejects
+one `navigation.json` per locale, `manifest.json`, `ui-target-map.json`, and the current six
+placeholder search indexes; rejects
 source mutation, broken generated links, invalid shell landmarks, active content, inline styles,
-manifest/target-map/schema drift, bad artifact references, and absolute workspace-path leaks;
+manifest/target-map/schema drift, navigation sources that diverge from manifest/source hierarchy,
+labels, ordering, or URLs even after hash replacement, bad artifact references, and absolute
+workspace-path leaks;
 publishes atomically to ignored `documentation/build/site`; compares two clean trees byte for byte;
 and emits a deterministic ignored release-candidate archive plus checksum under
-`documentation/dist/`. `make docs-install-dev` promotes the validated local build into ignored
-`app/documentation/site` for maintainer review through `make dev`; release package extraction remains
-separate.
+`documentation/dist/`. `make dev` refreshes the ignored `app/documentation/site` copy through
+`make docs-install-dev` before starting the app, so maintainer review sees the current local
+documentation; `make run` starts only the app when documentation refresh is intentionally skipped.
+Release package extraction remains separate.

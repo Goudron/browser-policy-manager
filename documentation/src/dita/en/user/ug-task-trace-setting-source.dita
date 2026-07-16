@@ -4,12 +4,12 @@
   <title>Trace a setting source</title>
   <shortdesc>Trace a configured setting to baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
   <taskbody>
-    <prereq><p>Open a configured setting in All Settings.</p></prereq>
+    <prereq><p>Open a configured setting in All settings.</p></prereq>
     <context><p>Source attribution helps explain why a value exists and whether changing it would override a baseline, CIS layer, manual edit, import, or raw fallback.</p></context>
     <steps>
-      <step><cmd>Open the setting detail or configured summary that shows source badges.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Identify whether the value comes from baseline, CIS, manual, imported, or raw source.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Follow related CIS or profile context links when a generated layer contributed the value.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open the setting detail or configured summary that shows source badges.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Identify whether the value comes from baseline, CIS, manual, imported, or raw source.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Follow related CIS or profile context links when a generated layer contributed the value.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Record the source before editing, removing, or resetting the setting.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>You know where the configured value came from and can explain the impact of changing it.</p></result>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-resolve-cis-manual-review" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>CIS-Manual-Review-Elemente klären</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Find CIS recommendations requiring manual review and decide whether to configure, document, or leave them for external verification.</shortdesc>
+  <title>CIS-Elemente der manuellen Überprüfung auflösen</title>
+  <shortdesc>Finden Sie CIS-Empfehlungen, die eine manuelle Überprüfung erfordern, und entscheiden Sie, ob Sie sie konfigurieren, dokumentieren oder einer externen Überprüfung überlassen möchten.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Open All Settings Review mode for a profile that includes a CIS layer or CIS-derived source metadata.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Some CIS recommendations cannot be fully automated by BPM. Review mode surfaces those items so the user can make an explicit decision without claiming certification.</p></context>
+    <prereq><p>Öffnen Sie Alle Einstellungen Prüfung für ein Profil, das eine CIS-Ebene oder von CIS abgeleitete Quellmetadaten enthält.</p></prereq>
+    <context><p>Einige CIS-Empfehlungen können durch BPM nicht vollständig automatisiert werden. Prüfung zeigt diese Elemente an, sodass der Benutzer eine explizite Entscheidung treffen kann, ohne eine Zertifizierung zu beanspruchen.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Open Review mode and filter for CIS manual-review items if needed.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Read the recommendation identifiers, affected policy or preference, and current value.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Configure a supported value, document why manual verification remains, or leave the item intentionally unresolved.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: CIS-Manual-Review-Elemente klären. Revalidate and record the decision before export or handoff.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Öffnen Sie Prüfung und filtern Sie bei Bedarf nach manuellen CIS-Überprüfungselementen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Lesen Sie die Empfehlungskennungen, die betroffene Richtlinie oder Präferenz und den aktuellen Wert.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Konfigurieren Sie einen unterstützten Wert, dokumentieren Sie, warum die manuelle Überprüfung weiterhin besteht, oder lassen Sie das Problem absichtlich ungelöst.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie die Entscheidung erneut und protokollieren Sie sie vor dem Export oder der Übergabe.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. CIS manual-review items are configured, documented, or intentionally left for external verification.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the recommendation cannot be mapped to a visible setting, keep the item in review and consult the CIS guide when that guide is authored.</p></postreq>
+    <result><p>CIS-Elemente der manuellen Überprüfung werden konfiguriert, dokumentiert oder absichtlich einer externen Überprüfung überlassen.</p></result>
+    <postreq><p>Wiederherstellung: Wenn die Empfehlung keiner sichtbaren Einstellung zugeordnet werden kann, überprüfen Sie das Element und konsultieren Sie den CIS-Leitfaden, wenn dieser Leitfaden verfasst wird.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-review-attention-items"/>

@@ -198,9 +198,10 @@ continues into the general BPM release suite.
 Use `documentation/fixtures/fixture-catalog-0.9.0.json` to find the smallest synthetic fixture for a
 documentation failure domain.
 Failed focused checks may retain compact JSON diagnostics under `documentation/reports/diagnostics/`.
-Use `make docs-install-dev` to refresh the ignored runtime copy for maintainer review through
-`make dev`; generated site/package output remains build evidence and release extraction is still a
-separate gate.
+Use `make dev` to refresh the ignored runtime copy through `make docs-install-dev` before starting
+the app for maintainer review; generated site/package output remains build evidence and release
+extraction is still a separate gate. Use `make run` only when you intentionally need to start the
+app without refreshing local documentation.
 
 Use `make docs-validate` for a disposable six-locale DITA/link validation build,
 `make docs-build` for an atomic local publish to ignored `documentation/build/site`,

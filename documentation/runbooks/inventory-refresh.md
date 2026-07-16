@@ -127,8 +127,8 @@ change, treat Administrator/DevOps documentation drift as part of the same produ
    verifies them in the same change.
 4. Re-run the narrow Administrator/DevOps contracts that match the changed area:
    - `documentation/tests/contract/test_administrator_guide_scope.py`
-   - `documentation/tests/contract/test_administrator_linux_deployment.py`
-   - `documentation/tests/contract/test_administrator_windows_wsl_deployment.py`
+   - `documentation/tests/contract/test_administrator_linux_deployment_topics.py`
+   - `documentation/tests/contract/test_administrator_windows_wsl_deployment_topics.py`
    - `documentation/tests/contract/test_administrator_devops_operational_boundaries.py`
    - `documentation/tests/contract/test_administrator_update_from_source_topics.py`
    - `documentation/tests/contract/test_api_openapi_drift.py`
@@ -142,6 +142,33 @@ change, treat Administrator/DevOps documentation drift as part of the same produ
 6. Rebuild metadata, manifest, target map, search indexes, and package evidence when topic IDs,
    anchors, examples, guide map entries, target IDs, or output paths changed. Then verify
    `docs/docs-index.md` still lists every maintained `docs/` file exactly once.
+7. Treat maintained installation commands as executable contracts. If prerequisites, checkout,
+   virtual-environment, migration, documentation publication, startup, health/readiness, or shutdown
+   commands change, the accepted live evidence for every affected Linux distribution becomes stale.
+   Re-run `documentation/tools/live_source_install_harness.py` from the retained clean target image,
+   write a new attempt-isolated transcript and manifest, and update the closure record only after
+   command/result reconciliation. Keep Docker Engine, retained clean images, stopped validation
+   containers, and the dedicated network unless a separately approved cleanup task changes that
+   handoff; never edit an accepted transcript in place.
+8. Keep the Windows boundary explicit. Docker, a Linux container, or an installation ISO does not
+   prove WSL behavior. Windows 10/11 WSL evidence may become accepted only after the maintained
+   PowerShell runner executes on the corresponding actual Windows host and records host/build,
+   systemd/filesystem, Windows and WSL localhost/Edge, clean-stop, and restart checks. Otherwise the
+   outcome remains `unverified-no-actual-host-supplied` with no Windows/WSL support claim.
+9. For deployment, update, or DevOps integration changes, review generated navigation/search and
+   contextual targets together with the DITA peers. The independently scrolling hierarchy must
+   reveal direct topics and return to Documents, API procedures must remain owned by the
+   Administrator Guide, and theme/search/help labels must stay localized from runtime UI catalogs.
+10. Run the live-evidence and documentation-polish contracts that match the change; do not infer
+    current evidence from a successful older transcript:
+
+```bash
+./.venv/bin/pytest -q -m docs_contract \
+  documentation/tests/contract/test_linux_source_install_command_topics.py \
+  documentation/tests/contract/test_live_source_install_evidence_closure.py \
+  documentation/tests/contract/test_wsl_source_install_validation_runner.py \
+  documentation/tests/contract/test_documentation_polish_regression_gates.py
+```
 
 ## Focused checks
 
@@ -171,3 +198,9 @@ verification.
   HTML or generated output.
 - Provenance and license restrictions still match the accepted matrix.
 - A future topic author can trace each fact to the maintained inventory and its focused test.
+- Changed source-install commands have fresh attempt-isolated evidence from retained clean images;
+  unchanged Docker resources remain available for later validation.
+- Windows 10/11 WSL claims remain unverified until the maintained runner succeeds on each actual
+  Windows host.
+- Deployment, update, and integration topics keep locale navigation/search, contextual targets,
+  Administrator API ownership, and localized theme/search/help behavior aligned.

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-accessible-product-operation" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Operación accesible del producto</title>
-  <shortdesc>Use BPM con estados, errores, foco, respuesta de teclado y diseños adaptables localizados.</shortdesc>
+  <title>Operación de producto accesible</title>
+  <shortdesc>Utilice BPM con estado localizado, error, enfoque, respuesta del teclado y diseños responsivos.</shortdesc>
   <conbody>
-    <section id="a-keyboard"><title>Keyboard</title><p>El comportamiento de teclado debe mantener acciones principales, navegación, filtros, controles de editor, confirmaciones y enlaces accesibles sin puntero.</p></section>
-    <section id="a-focus"><title>Focus</title><p>Los indicadores de foco muestran dónde se aplica la siguiente acción tras navegación, cambio de modo, validación y diálogos.</p></section>
-    <section id="a-status-feedback"><title>Status feedback</title><p>Los estados y errores localizados explican resultados de guardado, validación, importación, exportación, archivado, restauración y eliminación.</p></section>
-    <section id="a-responsive-layouts"><title>Responsive layouts</title><p>Los diseños adaptables preservan las mismas tareas en pantallas estrechas; cambios de tema y configuración regional no deben ocultar advertencias ni confirmaciones destructivas.</p></section>
+    <section id="a-keyboard"><title>Teclado</title><p>El comportamiento del teclado debe mantener las acciones principales, la navegación, los filtros, los controles del editor, las confirmaciones y los enlaces accesibles sin un puntero.</p></section>
+    <section id="a-focus"><title>Enfoque</title><p>Los indicadores de enfoque muestran dónde se aplica la siguiente acción después de la navegación, el cambio de modo, la validación y los diálogos.</p></section>
+    <section id="a-status-feedback"><title>Comentarios de estado</title><p>El estado localizado y los comentarios de error explican los resultados de guardar, validar, importar, exportar, archivar, restaurar y eliminar.</p></section>
+    <section id="a-responsive-layouts"><title>Diseños responsivos</title><p>Los diseños responsivos conservan las mismas tareas en pantallas estrechas; Los cambios de tema y configuración regional no deben ocultar advertencias ni confirmaciones destructivas.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-change-interface-theme"/>

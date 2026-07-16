@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Enregistrer et télécharger un profil Guided</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Enregistrer et télécharger un profil Guided » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Enregistrez et téléchargez un profil guidé</title>
+  <shortdesc>Enregistrez le profil guidé révisé et téléchargez l'artefact de transfert lorsque la configuration est prête.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>L'examen de l'étape 6 est terminé et les avertissements de validation sont compris.</p></prereq>
+    <context><p>Sauvegarde des enregistrements du profil BPM ; le téléchargement fournit la version révisée pour le transfert de la stratégie.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Enregistrer et télécharger un profil Guided ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Choisissez Enregistrer pour stocker l'état actuel du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Vérifiez que l'état enregistré apparaît dans la bibliothèque avant de fermer l'éditeur.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez l'action de téléchargement ou d'exportation nécessaire au transfert.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Partagez le fichier exporté avec le contexte nécessaire pour identifier le canal de schéma et l'objectif du profil.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le profil révisé est enregistré et le téléchargement requis est disponible.</p></result>
+    <postreq><p>Récupération : si le téléchargement est obsolète, enregistrez à nouveau et répétez l'exportation à partir du profil examiné.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-review-guided-profile"/>

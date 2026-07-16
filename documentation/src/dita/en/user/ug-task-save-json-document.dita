@@ -5,7 +5,7 @@
   <shortdesc>Save a valid raw JSON document back to the canonical BPM profile.</shortdesc>
   <taskbody>
     <prereq><p>The JSON document has been validated or the remaining warnings are understood.</p></prereq>
-    <context><p>Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All Settings, Compare, or export workflows.</p></context>
+    <context><p>Saving writes the raw document back through BPM normalization. The saved profile can then be opened in Guided, All settings, Compare, or export workflows.</p></context>
     <steps>
       <step><cmd>Validate the JSON document.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
       <step><cmd>Choose Save only when the top-level policies object and policy values are correct.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>

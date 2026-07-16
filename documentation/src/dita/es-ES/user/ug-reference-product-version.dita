@@ -2,12 +2,12 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-product-version" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Referencia de versión del producto</title>
-  <shortdesc>Use el encabezado de BPM y version context para confirmar la versión de producto y documentación.</shortdesc>
+  <shortdesc>Utilice el encabezado BPM y el contexto de versión para confirmar qué versión de producto y documentación está utilizando.</shortdesc>
   <refbody>
-    <section id="a-version-location"><title>Ubicación de versión</title><p>El encabezado de página muestra running BPM version, y el paquete de documentación se construye para BPM 0.9.0.</p></section>
-    <section id="a-version-scope"><title>Alcance de versión</title><p>La versión del producto identifica comportamiento de BPM, no la versión de Firefox browser instalada en un endpoint.</p></section>
-    <section id="a-schema-version"><title>Versión de esquema</title><p>Los canales de esquema Firefox como ESR 140.12 y Release 152 son elecciones separadas que afectan validation y available controls.</p></section>
-    <section id="a-version-recovery"><title>Recuperación</title><p>Si el comportamiento del producto no coincide con el guide, registre BPM version, schema channel, route, locale y visible status antes de informar el mismatch.</p></section>
+    <section id="a-version-location"><title>Ubicación de la versión</title><p>El encabezado de la página muestra la versión de BPM en ejecución y el paquete de documentación está creado para BPM.</p></section>
+    <section id="a-version-scope"><title>Alcance de la versión</title><p>La versión del producto identifica el comportamiento de BPM, no la versión del navegador Firefox instalada en un terminal.</p></section>
+    <section id="a-schema-version"><title>Versión del esquema</title><p>Los canales de esquema de Firefox, como ESR 140.12 y la versión 152, son opciones independientes que afectan la validación y los controles disponibles.</p></section>
+    <section id="a-version-recovery"><title>Recuperación</title><p>Si el comportamiento del producto no coincide con la guía, registre la versión de BPM, el canal del esquema, la ruta, la configuración regional y el estado visible antes de informar la discrepancia.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

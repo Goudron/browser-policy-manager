@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-all-settings-help-target-map-0.9.1",
+  "backlog_item": "BPM091-M9-02",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+  "policy_targets": {
+    "target_pattern": "policy:{exact_policy_id}",
+    "coverage": "Exact union of ESR 140.12 and Release 152 policy IDs.",
+    "channel_rule": "Release-only policies retain a target; channel availability remains inventory and row-state metadata.",
+    "deprecated_rule": "A deprecated policy retains its exact target while it remains in either current channel inventory.",
+    "removed_rule": "A policy removed from both current channel inventories must not retain a generated target."
+  },
+  "known_preference_targets": {
+    "target_pattern": "known-preference:{exact.preference.id}",
+    "topic_id": "fx-reference-managed-preference-locking",
+    "anchor_id": "a-safe-review",
+    "coverage": "Exact set of known managed preference IDs in the Firefox documentation inventory.",
+    "identity_rule": "Preference IDs are case-sensitive and must not be lowercased, translated, slugified, or derived from visible labels."
+  },
+  "alias_policy": {
+    "generated_alias_target_ids": [],
+    "rule": "Editor and field aliases must resolve to a canonical policy or preference identity before documentation lookup; aliases are not additional ui-target-map keys."
+  },
+  "missing_artifact_policy": {
+    "build_time": "Target generation fails when the target topic or anchor is absent from the manifest.",
+    "runtime": "The existing manifest resolver owns unavailable, stale, incomplete, and incompatible artifact states; row code must not construct a fallback URL."
+  },
+  "validation": {
+    "fail_on": [
+      "missing current policy target",
+      "extra removed policy target",
+      "missing known preference target",
+      "extra unknown preference target",
+      "changed preference ID case",
+      "missing target topic or anchor",
+      "alias emitted as a target-map identity"
+    ],
+    "focused_command": "./.venv/bin/pytest -q documentation/tests/contract/test_all_settings_help_target_map.py documentation/tests/unit/test_build_docs.py::test_manifest_generation_lists_guides_locales_search_and_target_map"
+  },
+  "execution_record": {
+    "date": "2026-07-11",
+    "focused_contracts": {
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_all_settings_help_target_map.py documentation/tests/contract/test_all_settings_documentation_target_audit.py documentation/tests/contract/test_all_settings_row_help_link_contract.py documentation/tests/contract/test_091_documentation_polish_guardrails.py documentation/tests/contract/test_search_quality_performance.py",
+      "result": "pass",
+      "result_summary": "28 passed"
+    },
+    "manifest_generation": {
+      "command": "./.venv/bin/pytest -q documentation/tests/unit/test_build_docs.py::test_manifest_generation_lists_guides_locales_search_and_target_map documentation/tests/contract/test_all_settings_help_target_map.py",
+      "result": "pass",
+      "result_summary": "7 passed"
+    },
+    "documentation_build": {
+      "commands": ["make docs-validate", "make docs-build"],
+      "result": "pass",
+      "target_count": 519,
+      "policy_target_count": 120,
+      "known_preference_target_count": 62
+    },
+    "incidental_drift_fixed": "Raised the deterministic per-locale search-index ceiling to 4,100,000 bytes after the M10-06 full localized-prose corpus made the 161-topic zh-CN index 3,980,853 bytes; all other search budgets remain unchanged."
+  }
+}

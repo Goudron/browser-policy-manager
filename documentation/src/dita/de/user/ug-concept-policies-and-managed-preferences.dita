@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-policies-and-managed-preferences" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Richtlinien und verwaltete Preferences</title>
-  <shortdesc>BPM trennt Firefox-Enterprise-Richtlinien von verwalteten Preference-Werten und hält beides in einem Profil zusammen.</shortdesc>
+  <title>Richtlinien und Verwaltete Einstellungen</title>
+  <shortdesc>BPM trennt Firefox Enterprise-Richtlinien von verwalteten Einstellungswerten und behält beide in einem Profil.</shortdesc>
   <conbody>
-    <p>Richtlinien sind benannte Firefox-Enterprise-Steuerelemente für Browserverhalten, Zugriff, Berechtigungen oder Funktionen. Verwaltete Preferences sind Preference-Schlüssel mit Werten und optionalem Sperrverhalten.</p>
-    <p>Der Geführte Editor deckt häufige Richtlinienziele ab. Alle Einstellungen zeigt den breiteren unterstützten Katalog. Der JSON-Editor zeigt die genaue Dokumentgrenze für Import und Export.</p>
-    <p>Details zu einzelnen Richtlinien gehören in den Firefox Policy Guide; dieses Benutzerhandbuch erklärt, wie Benutzer diese Steuerelemente in BPM erreichen und sicher bearbeiten.</p>
+    <p>Richtlinien sind sogenannte Firefox Enterprise-Steuerelemente wie Browserverhalten, Zugriff, Berechtigungen oder Funktionseinstellungen. Verwaltete Einstellungen sind Präferenzschlüssel mit Werten und optionalem Sperrverhalten.</p>
+    <p>Geführter Editor deckt gemeinsame politische Ziele ab. Alle Einstellungen macht den breiteren unterstützten Katalog verfügbar. JSON-Editor zeigt die genaue Dokumentgrenze an, die für den Import und Export verwendet wird.</p>
+    <p>Referenzdetails zu einzelnen Richtlinien gehören zum Firefox-Richtlinienhandbuch. In diesem Benutzerhandbuch wird erklärt, wie ein Benutzer diese Steuerelemente in BPM erreicht und sicher bearbeitet.</p>
   </conbody>
 </concept>

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-verify-cis-deviation" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Eine CIS deviation prüfen und dokumentieren</title>
-  <shortdesc>Nutzen Sie diese Aufgabe, wenn ein CIS-related value behalten, geändert oder für manual verification stehen gelassen wird.</shortdesc>
+  <title>Überprüfen und protokollieren Sie eine CIS-Abweichung</title>
+  <shortdesc>Verwenden Sie diese Aufgabe, wenn ein CIS-bezogener Wert beibehalten, geändert oder zur manuellen Überprüfung zurückgelassen wird, anstatt automatisch akzeptiert zu werden.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein profile mit CIS manual-review item, conflict oder intentional deviation vom generated layer.</p></prereq>
-    <context><p>Verification bedeutet, BPM value, schema channel, exported path und local review evidence zu prüfen. Es bedeutet nicht, dass BPM Firefox runtime behavior in der target environment getestet hat.</p></context>
+    <prereq><p>Öffnen Sie ein Profil, das ein CIS-Element der manuellen Überprüfung, einen Konflikt oder eine absichtliche Abweichung vom generierten Layer anzeigt.</p></prereq>
+    <context><p>Verifizierung bedeutet die Überprüfung des BPM-Werts, des Schemakanals, des exportierten Pfads und der lokalen Überprüfungsnachweise. Dies bedeutet nicht, dass BPM das Laufzeitverhalten von Firefox in der Zielumgebung getestet hat.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie das affected setting und notieren Sie recommendation ID, path, current value, source attribution und schema channel.</cmd><info><p>Erwartetes Ergebnis: Der Reviewer kann den BPM-controlled value eindeutig benennen.</p></info></step>
-      <step><cmd>Klassifizieren Sie den reason als update governance, proxy routing, evidence retention, unsupported mapping research, deprecated target oder local deployment requirement.</cmd><info><p>Erwartetes Ergebnis: Die deviation hat einen konkreten Grund statt eines generic exception label.</p></info></step>
-      <step><cmd>Validieren Sie das profile in BPM und prüfen Sie den exported <codeph>policies.json</codeph> path, der den value tragen würde.</cmd><info><p>Erwartetes Ergebnis: Schema validation und export shape sind vor external verification bekannt.</p></info></step>
-      <step><cmd>Führen Sie runtime, operating-system, network oder audit verification außerhalb von BPM mit der approved method des deployment owner aus.</cmd><info><p>Erwartetes Ergebnis: External evidence wird gesammelt, ohne zu behaupten, BPM habe Firefox behavior bewiesen.</p></info></step>
-      <step><cmd>Dokumentieren Sie die decision im externen ticket, deployment note oder change-control record, einschließlich BPM profile name, schema channel, recommendation ID, value, reason, owner und review date.</cmd><info><note type="warning">BPM 0.9.0 persistiert kein eigenes CIS exception oder waiver object; verlassen Sie sich nicht allein auf das profile als exception record.</note></info></step>
-      <step><cmd>Öffnen Sie das profile erneut und bestätigen Sie, dass source attribution weiterhin baseline, CIS, manual, imported oder raw zeigt.</cmd><info><p>Erwartetes Ergebnis: Spätere Reviewer können den configured value nachverfolgen und den external record finden.</p></info></step>
+      <step><cmd>Öffnen Sie die betroffene Einstellung und zeichnen Sie die Empfehlung ID, den Pfad, den aktuellen Wert, die Quellenzuordnung und den Schemakanal auf.</cmd><info><p>Erwartetes Ergebnis: Der Prüfer kann genau identifizieren, welcher BPM-gesteuerte Wert überprüft wird.</p></info></step>
+      <step><cmd>Klassifizieren Sie den Grund als Update-Governance, Proxy-Routing, Beweisaufbewahrung, nicht unterstützte Mapping-Recherche, veraltetes Ziel oder lokale Bereitstellungsanforderung.</cmd><info><p>Erwartetes Ergebnis: Die Abweichung hat einen konkreten Grund anstelle einer generischen Ausnahmebezeichnung.</p></info></step>
+      <step><cmd>Validieren Sie das Profil in BPM und überprüfen Sie den exportierten <codeph>policies.json</codeph>-Pfad, der den Wert tragen würde.</cmd><info><p>Erwartetes Ergebnis: Schemavalidierung und Exportform sind bekannt, bevor die externe Überprüfung beginnt.</p></info></step>
+      <step><cmd>Führen Sie alle Laufzeit-, Betriebssystem-, Netzwerk- oder Prüfüberprüfungen außerhalb von BPM mit der vom Bereitstellungseigentümer genehmigten Methode durch.</cmd><info><p>Erwartetes Ergebnis: Es werden externe Beweise gesammelt, ohne dass behauptet wird, dass BPM selbst das Firefox-Verhalten nachgewiesen hat.</p></info></step>
+      <step><cmd>Zeichnen Sie die Entscheidung im externen Ticket, in der Bereitstellungsnotiz oder im Änderungskontrolldatensatz auf, einschließlich des BPM-Profilnamens, des Schemakanals, der Empfehlung ID, des Werts, des Grunds, des Eigentümers und des Überprüfungsdatums.</cmd><info><note type="warning">BPM behält keine dedizierte CIS-Ausnahme oder ein Ausnahmeobjekt bei; Verlassen Sie sich nicht nur auf das Profil als Ausnahmedatensatz.</note></info></step>
+      <step><cmd>Öffnen Sie das Profil erneut und bestätigen Sie, dass in der Quellenangabe immer noch angezeigt wird, ob der Wert „Baseline“, „CIS“, „Manuell“, „Importiert“ oder „Roh“ ist.</cmd><info><p>Erwartetes Ergebnis: Spätere Prüfer können den konfigurierten Wert verfolgen und den externen Datensatz finden.</p></info></step>
     </steps>
-    <result><p>Die CIS deviation hat actionable verification evidence, einen external exception record und sichtbare BPM source attribution.</p></result>
-    <postreq><p>Wenn exported path oder external evidence nicht geprüft werden können, behalten Sie das item in manual review und beschreiben Sie es nicht als compliant.</p></postreq>
+    <result><p>Die CIS-Abweichung verfügt über umsetzbare Verifizierungsnachweise, einen externen Ausnahmedatensatz und eine sichtbare BPM-Quellenzuordnung.</p></result>
+    <postreq><p>Wenn der Prüfer den exportierten Pfad oder externe Beweise nicht überprüfen kann, belassen Sie das Element in der manuellen Überprüfung und beschreiben Sie es nicht als konform.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-manual-review-exceptions"/>

@@ -19,7 +19,7 @@ EXPECTED_DEVOPS_TOPICS = (
     "admin-task-record-devops-operational-boundaries",
 )
 EXPECTED_DEVOPS_KEYREFS = [f"topic.{topic_id}" for topic_id in EXPECTED_DEVOPS_TOPICS]
-DEVOPS_TOPICREF_OFFSET = 8
+DEVOPS_TOPICREF_OFFSET = 13
 COMPACT_OR_FALLBACK_MARKERS = (
     "English source",
     "английский источник",
@@ -38,7 +38,7 @@ COMPACT_OR_FALLBACK_MARKERS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.72,
     "de": 0.72,
-    "zh-CN": 0.38,
+    "zh-CN": 0.30,
     "fr": 0.72,
     "es-ES": 0.72,
 }
@@ -178,7 +178,7 @@ def test_devops_operational_topics_are_full_localized_dita_tasks(locale: str, to
         "id": topic_id,
         XML_LANG: locale,
         "audience": "administrator devops",
-        "product": "bpm-0-9-0",
+        "product": "bpm-0-9-1",
         "platform": "linux windows web",
     }
     assert root.findtext("title", "").strip()

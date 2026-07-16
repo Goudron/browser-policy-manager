@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fx-task-review-complex-policy-configuration" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>导出前审查复杂策略配置</title>
-  <shortdesc>使用可重复的 review flow 处理 nested objects、arrays、raw fallback、conflicts 和 channel-specific availability。</shortdesc>
+  <title>在导出之前检查复杂的策略配置</title>
+  <shortdesc>对嵌套对象、数组、原始回退、冲突和特定于渠道的可用性使用可重复的审核流程。</shortdesc>
   <taskbody>
-    <prereq><p>已打开一个配置文件，并且其中至少包含一个复杂策略族或 managed preference。</p></prereq>
-    <context><p>复杂策略按策略族、来源、schema channel 和导出的 boundary shape 审查时最安全。</p></context>
+    <prereq><p>配置文件是开放的，并且至少包含一个复杂的策略系列或托管首选项。</p></prereq>
+    <context><p>通过族、源、模式通道和导出的边界形状进行审查时，复杂策略是最安全的。</p></context>
     <steps>
-      <step><cmd>打开 All Settings，并筛选到受影响的策略族。</cmd><info><p>预期结果：相关 policies、preferences 和 source labels 会一起显示。</p></info></step>
-      <step><cmd>检查该策略族中每个 policy 的 Release/ESR badge。</cmd><info><note type="warning">Release-only policy 不得导出到面向 ESR 的配置文件。</note></info></step>
-      <step><cmd>检查 nested object 和 array values，包括 unknown preserved fields。</cmd><info><p>预期结果：raw fallback values 会在保存前被有意保留或删除。</p></info></step>
-      <step><cmd>比较 preset、CIS、imported、manual 和 raw sources。</cmd><info><p>预期结果：conflicts 被明确解决，而不是被后续编辑掩盖。</p></info></step>
-      <step><cmd>验证配置文件，并审查生成的 <codeph>policies.json</codeph> 结构。</cmd><info><p>预期结果：BPM 不会针对所选通道报告 schema errors。</p></info></step>
+      <step><cmd>打开 所有设置 并过滤到受影响的系列。</cmd><info><p>预期结果：相关策略、首选项和源标签一起可见。</p></info></step>
+      <step><cmd>检查系列中每项保单的发布/ESR 徽章。</cmd><info><note type="warning">不得为面向 ESR 的配置文件导出仅发布策略。</note></info></step>
+      <step><cmd>检查嵌套对象和数组值，包括未知的保留字段。</cmd><info><p>预期结果：在保存之前有意保留或删除原始后备值。</p></info></step>
+      <step><cmd>比较预设、CIS、导入、手动和原始源。</cmd><info><p>预期结果：冲突被有意解决，而不是被以后的编辑隐藏。</p></info></step>
+      <step><cmd>验证配置文件并查看生成的 <codeph>policies.json</codeph> 形状。</cmd><info><p>预期结果：BPM 报告所选通道没有架构错误。</p></info></step>
     </steps>
-    <result><p>复杂策略族拥有已审查的 nested values、source decisions、channel support 和干净的验证结果。</p></result>
-    <postreq><p>如果验证失败，请回到该策略族，删除 unsupported keys，或切换到实际支持该 policy 的通道。</p></postreq>
+    <result><p>复杂系列已审查嵌套值、源决策、渠道支持和干净的验证结果。</p></result>
+    <postreq><p>如果验证失败，请返回系列，删除不支持的密钥，或切换到实际支持该策略的通道。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.fx-concept-complex-policy-families"/>

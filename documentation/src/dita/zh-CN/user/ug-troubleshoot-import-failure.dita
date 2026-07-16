@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-import-failure" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>从 failed import 中恢复</title>
-  <shortdesc>诊断 JSON 或 multipart policy input 的 failed import，而不更改 internal storage。</shortdesc>
+  <title>从失败的导入中恢复</title>
+  <shortdesc>在不更改内部存储的情况下诊断 JSON 或多部分策略输入导入失败。</shortdesc>
   <taskbody>
-    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败操作表明当前 workflow 无法安全继续。</p></prereq>
-    <context><p>导入可能因文件不可读、JSON malformed、Firefox boundary shape 错误，或规范化值无法通过 validation 而失败。</p></context>
+    <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
+    <context><p>导入可能会失败，因为文件不可读、JSON 格式错误、Firefox 边界形状错误或标准化值无法通过验证。</p></context>
     <steps>
-      <step><cmd>保持 import failure message 可见，并确定输入是 JSON 还是 multipart。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
-      <step><cmd>使用 JSON import 时，确认文件包含具有 top-level policies object 的 Firefox boundary document。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
-      <step><cmd>如果消息报告 syntax，请先恢复 malformed JSON。</cmd><info><p>预期结果：您保留配置文件状态，并理解下一步安全恢复操作。</p></info></step>
-      <step><cmd>使用修正后的文件重试 import 一次，然后在保存前复查 normalized values。</cmd><info><note type="warning">不要编辑 internal storage、browser local data、数据库行或 generated build artifacts 来恢复面向用户的配置文件工作。</note></info></step>
+      <step><cmd>保持导入失败消息可见，并确定输入是 JSON 还是多部分。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
+      <step><cmd>使用 JSON 导入时，确认文件包含带有顶级策略对象的 Firefox 边界文档。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
+      <step><cmd>如果消息报告语法，请首先恢复格式错误的 JSON。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
+      <step><cmd>使用更正的文件重试导入一次，然后在保存之前检查标准化值。</cmd><info><note type="warning">不要编辑内部存储、浏览器本地数据、数据库行或生成的构建工件来恢复面向用户的配置文件工作。</note></info></step>
     </steps>
-    <result><p>导入要么成功生成可复查的 BPM profile draft，要么以保留的可见原因继续阻塞。</p></result>
-    <postreq><p>恢复：如果同一错误在一次干净重试后仍然重复，请停止 workflow，并保留可见消息、配置文件名称、架构通道和当前界面供 maintainer review。</p></postreq>
+    <result><p>导入要么成功进入可审查的 BPM 配置文件草稿，要么因保留的可见原因而保持阻止。</p></result>
+    <postreq><p>恢复：如果在一次干净的重试后重复出现相同的错误，则停止工作流程，保留可见消息、配置文件名称、模式通道和当前表面以供维护人员查看。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-import-policies-json"/>

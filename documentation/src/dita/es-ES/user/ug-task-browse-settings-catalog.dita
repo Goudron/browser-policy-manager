@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Explorar el catálogo de ajustes</title>
-  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Use Catalog mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
+  <title>Explorar el catálogo de configuración</title>
+  <shortdesc>Utilice Catálogo para examinar todas las políticas admitidas y las preferencias administradas conocidas para el esquema seleccionado.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Open a saved profile in All Settings.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Catalog mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
+    <prereq><p>Abra un perfil guardado en Todos los ajustes.</p></prereq>
+    <context><p>Catálogo es el inventario visual completo. Incluye configuraciones configuradas y disponibles al mismo tiempo que mantiene controles avanzados detrás de las divulgaciones deliberadas.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Switch to Catalog mode.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Browse categories for supported policies and known managed preferences.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Use category cards or search to narrow the inventory.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Explorar el catálogo de ajustes. Select a setting before applying, editing, or resetting a value.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+      <step><cmd>Cambiar a Catálogo.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Explore categorías para políticas admitidas y Preferencias gestionadas conocidas.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Utilice tarjetas de categorías o busque para limitar el inventario.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Seleccione una configuración antes de aplicar, editar o restablecer un valor.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
-    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. You can find supported policies and known preferences without using raw JSON first.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the catalog is large, use search, filters, or bounded-list controls instead of scrolling blindly.</p></postreq>
+    <result><p>Puede encontrar políticas admitidas y preferencias conocidas sin utilizar JSON sin formato primero.</p></result>
+    <postreq><p>Recuperación: si el catálogo es grande, utilice búsquedas, filtros o controles de lista limitada en lugar de desplazarse a ciegas.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

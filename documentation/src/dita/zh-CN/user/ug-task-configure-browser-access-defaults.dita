@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置浏览器访问和默认值</title>
-  <shortdesc>本任务完整说明“配置浏览器访问和默认值”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>使用步骤 2 配置浏览器访问、网络行为和基准默认值。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>引导轮廓草稿已打开。</p></prereq>
+    <context><p>浏览器访问 &amp; 默认收集控件，这些控件决定 Firefox 是否可以访问资源以及在选择特定内容的策略之前其行为方式。</p></context>
     <steps>
-      <step><cmd>打开与“配置浏览器访问和默认值”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开第2步，浏览器访问&amp;默认。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>检查部署的网络访问和浏览器行为控制。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在添加主页、搜索或特定于导航的选项之前设置基线默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>验证模式相关控件旁边显示的警告。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>该配置文件具有有意的浏览器访问权限和默认行为设置。</p></result>
+    <postreq><p>恢复：如果验证标记了一个值，则撤消最后的更改或使用 所有设置 检查原始策略形状。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

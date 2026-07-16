@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-trace-setting-source" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>追踪设置来源</title>
-  <shortdesc>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Trace a configured setting to baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
+  <title>跟踪设置源</title>
+  <shortdesc>将配置的设置跟踪到基线、CIS、手动、导入或原始源归因。</shortdesc>
   <taskbody>
-    <prereq><p>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Open a configured setting in All Settings.</p></prereq>
-    <context><p>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Source attribution helps explain why a value exists and whether changing it would override a baseline, CIS layer, manual edit, import, or raw fallback.</p></context>
+    <prereq><p>打开 所有设置 中的配置设置。</p></prereq>
+    <context><p>源归因有助于解释某个值存在的原因以及更改该值是否会覆盖基线、CIS 层、手动编辑、导入或原始后备。</p></context>
     <steps>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Open the setting detail or configured summary that shows source badges.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Identify whether the value comes from baseline, CIS, manual, imported, or raw source.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Follow related CIS or profile context links when a generated layer contributed the value.</cmd><info><p>预期结果：操作在 All Settings 中完成，并保留配置文件上下文。</p></info></step>
-      <step><cmd>本主题面向中文本地化完整说明 All Settings 场景：追踪设置来源. Record the source before editing, removing, or resetting the setting.</cmd><info><note type="warning">警告：保存前请检查架构、值来源以及更改后果。</note></info></step>
+      <step><cmd>打开显示源徽章的设置详细信息或配置的摘要。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>确定该值是否来自基线、CIS、手动、导入或原始来源。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>当生成的图层贡献了价值时，请遵循相关的 CIS 或配置文件上下文链接。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>在编辑、删除或重置设置之前记录源。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>All Settings 显示配置文件的预期状态，并且该操作可在审查时解释。 You know where the configured value came from and can explain the impact of changing it.</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请清除筛选器、返回详细信息面板或打开相关主题。 Recovery: if source attribution is ambiguous, compare the profile with a clean baseline or inspect the imported source document.</p></postreq>
+    <result><p>您知道配置的值来自哪里，并且可以解释更改它的影响。</p></result>
+    <postreq><p>恢复：如果来源归属不明确，请将配置文件与干净的基线进行比较或检查导入的源文档。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-settings-by-source"/>

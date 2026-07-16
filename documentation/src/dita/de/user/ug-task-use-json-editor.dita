@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>JSON Editor verwenden</title>
-  <shortdesc>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
+  <title>JSON-Editor verwenden</title>
+  <shortdesc>Öffnen Sie das vollständige Profil als Firefox-policies.json-Dokument zur genauen Überprüfung oder Rohbearbeitung.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. Open a saved profile. JSON Editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
-    <context><p>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. JSON Editor is the raw document surface. Use it when Guided or All Settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p></context>
+    <prereq><p>Öffnen Sie ein gespeichertes Profil. JSON-Editor arbeitet an einem gespeicherten Profil und stellt das Profil als Firefox-Grenzdokument dar.</p></prereq>
+    <context><p>JSON-Editor ist die Rohdokumentoberfläche. Verwenden Sie es, wenn Geführter Editor oder Alle Einstellungen für eine genaue Überprüfung, Migrationsprüfungen, Fehlerbehebung oder Rohwerte zu hoch ist.</p>
+      <fig id="screenshot-json-editor">
+        <title>JSON-Editor im dunklen Design</title>
+        <image keyref="screenshot.json-editor" placement="break">
+          <alt>JSON-Editor zeigt bearbeitbare Firefox-Richtlinien im JSON-Format für ein gespeichertes Profil.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. Open the saved profile from the Library or another editor.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. Switch to JSON Editor.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. Confirm the editor shows a top-level policies object and the download action is available.</cmd><info><p>Erwartetes Ergebnis: JSON Editor behält den Profilkontext und zeigt einen verständlichen Zustand.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den JSON-Editor-Ablauf vollständig für die deutsche Lokalisierung: JSON Editor verwenden. Use JSON Editor only when exact raw document control is needed.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern JSON-Syntax, top-level policies und Policy-Validierungsfehler.</note></info></step>
+      <step><cmd>Öffnen Sie das gespeicherte Profil aus der Bibliothek oder einem anderen Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wechseln Sie zu JSON-Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Bestätigen Sie, dass der Editor ein Richtlinienobjekt der obersten Ebene anzeigt und die Download-Aktion verfügbar ist.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Verwenden Sie JSON-Editor nur, wenn eine genaue Kontrolle des Rohdokuments erforderlich ist.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>
     </steps>
-    <result><p>JSON Editor befindet sich im erwarteten Zustand, und die Aktion ist bei der Prüfung erklärbar. The current profile is visible as editable Firefox policies.json content.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, validieren Sie das Dokument, kehren Sie zu All Settings zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the route cannot open, save the profile first or return to All Settings for visual editing.</p></postreq>
+    <result><p>Das aktuelle Profil ist als bearbeitbarer Firefox-policies.json-Inhalt sichtbar.</p></result>
+    <postreq><p>Wiederherstellung: Wenn die Route nicht geöffnet werden kann, speichern Sie zuerst das Profil oder kehren Sie zur visuellen Bearbeitung zu Alle Einstellungen zurück.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "closure_id": "bpm091-m11-14-live-install-evidence-closure-20260715",
+  "backlog_item": "BPM091-M11-14",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "milestone-11-live-install-scope-ready-with-conditional-wsl-boundaries",
+  "closed_at": "2026-07-15T15:37:05Z",
+  "authorities": {
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json",
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "linux_reconciliation": "docs/architecture/linux-source-install-validation-0.9.1.json",
+    "wsl_contract": "documentation/config/wsl-source-install-validation-contract-0.9.1.json",
+    "privileged_contract": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json"
+  },
+  "decision": {
+    "mandatory_linux_target_count": 5,
+    "mandatory_linux_pass_count": 5,
+    "unresolved_mandatory_failures": [],
+    "conditional_wsl_outcome_count": 2,
+    "conditional_wsl_validation_claim_count": 0,
+    "environment_handoff_complete": true,
+    "milestone_11_live_install_scope_ready": true,
+    "overall_bpm_0_9_1_release_ready_claimed": false,
+    "reason": "All five mandatory documented Linux userspace procedures have accepted clean-container evidence and no unresolved mandatory failure. Windows 10 and Windows 11 remain explicitly unverified conditional outcomes without validation claims. M11 environment handoff is complete; later milestones still own overall release readiness."
+  },
+  "command_result_evidence_contract": {
+    "source_authority": "Each English source topic owns its executable command blocks and its result/postcondition text; all five localized peers must preserve exact executable command parity.",
+    "command_link_rule": "For each target, the accepted attempt documented_commands_completed count and stage-count sum must equal the current non-empty executable command-line count. The retained plan.json and events.jsonl SHA-256 values identify the exact per-command plan, command start/end records, exit codes, output paths, byte counts, and output hashes.",
+    "expected_result_link_rule": "The source topic must retain result and postreq elements. The accepted manifest must record clean checkout, Python, editable BPM installation, migration, all six documentation locales, runtime start, health/readiness/Profile Library probes, log review, shutdown, post-stop refusal, completion marker, and host completion guard.",
+    "locale_rule": "The exact-command parity contract covers en, ru, de, zh-CN, fr, and es-ES; explanatory localized result text remains owned by the documentation locale contracts.",
+    "retention_rule": "Raw plan/events/output/runtime attachments remain in the ignored local evidence root and are addressed by committed SHA-256 values; committed manifests and reconciliation records remain the reviewable index.",
+    "required_stage_order": ["distro-prep", "python-if-required", "checkout", "install", "docs", "start", "verify"]
+  },
+  "linux_targets": [
+    {
+      "target_id": "ubuntu-26-04",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-ubuntu-26-04-source.dita",
+      "reconciled_source_sha256": "8ebdf3f5670065c0100260ea1bc72ff2afcaa5394bfd64c449cf03abdc526fc6",
+      "accepted_manifest": "documentation/evidence/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714/run-manifest.json",
+      "accepted_attempt": 3,
+      "command_evidence": {
+        "documented_command_count": 35,
+        "documented_command_failures": 0,
+        "stage_counts": {"distro-prep": 6, "checkout": 9, "install": 8, "docs": 3, "start": 4, "verify": 5},
+        "plan_sha256": "bf6a2ef3e0787f3dca6efd7c3e9017acdf6c6dc9da64eac445192ba91b1ddfa4",
+        "events_sha256": "ddf613f98b4d90508d53a2598d0807b8a239da6bd7cedf811715b9f485450dab"
+      },
+      "result_evidence": {
+        "python_version": "3.14.4",
+        "editable_bpm_install": "0.9.1",
+        "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+        "docs_all_six_locales": "pass",
+        "runtime_log_sha256": "b301d58a073c8d3937188fe08326087f43134cceb35092356046dde439acee45",
+        "probe_paths": ["/health", "/health/ready", "/profiles"],
+        "probe_status": 200,
+        "runtime_shutdown": "pass",
+        "post_stop_probe": "connection-refused-as-required",
+        "completion": "complete"
+      },
+      "disposition": "clean-userspace-container-pass"
+    },
+    {
+      "target_id": "debian-13-5",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-debian-13-source.dita",
+      "reconciled_source_sha256": "d0ae900e02c3b99535585be87b7ee28a1d0ee70f978754930efbf7914fc5773f",
+      "accepted_manifest": "documentation/evidence/live-source-install/0.9.1/m11-05-debian-source-install-20260714/run-manifest.json",
+      "accepted_attempt": 2,
+      "command_evidence": {
+        "documented_command_count": 46,
+        "documented_command_failures": 0,
+        "stage_counts": {"distro-prep": 4, "python": 13, "checkout": 9, "install": 8, "docs": 3, "start": 4, "verify": 5},
+        "plan_sha256": "ddf0514d7d4516a2b758933a9595641520f3be78b63898ee76fb907042fab623",
+        "events_sha256": "0caedcbea9d712be7c82c8d23fa85587a3350f3041f970f9e7ee831a1186bec7"
+      },
+      "result_evidence": {
+        "python_version": "3.14.6",
+        "editable_bpm_install": "0.9.1",
+        "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+        "docs_all_six_locales": "pass",
+        "runtime_log_sha256": "7f942d7daeb7a9ec8a09f9705b20c850bcaf2a5d7586eb968b0c1cb596997f3e",
+        "probe_paths": ["/health", "/health/ready", "/profiles"],
+        "probe_status": 200,
+        "runtime_shutdown": "pass",
+        "post_stop_probe": "connection-refused-as-required",
+        "completion": "complete"
+      },
+      "disposition": "clean-userspace-container-pass-with-reviewed-optional-cpython-modules"
+    },
+    {
+      "target_id": "fedora-44",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-fedora-44-source.dita",
+      "reconciled_source_sha256": "85c6a8e4b131bb9ba25bc105f0a5ab41914cb1edd1f17522d441e4b2ebe89b78",
+      "accepted_manifest": "documentation/evidence/live-source-install/0.9.1/m11-06-fedora-source-install-20260714/run-manifest.json",
+      "accepted_attempt": 1,
+      "command_evidence": {
+        "documented_command_count": 34,
+        "documented_command_failures": 0,
+        "stage_counts": {"distro-prep": 5, "checkout": 9, "install": 8, "docs": 3, "start": 4, "verify": 5},
+        "plan_sha256": "56bc0a718331c7d8dd0594526d4aeb6226d7c2d4c3446b0e99ce05fee5e966fc",
+        "events_sha256": "cce0bdef400c68dea1ca88823887e4dfba268751dab8a85e2a843d78c98bfba7"
+      },
+      "result_evidence": {
+        "python_version": "3.14.6",
+        "editable_bpm_install": "0.9.1",
+        "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+        "docs_all_six_locales": "pass",
+        "runtime_log_sha256": "38eb8dc7f743563dde44a1676bd2d8ce63b3cf7190681866938f701ae04f71ff",
+        "probe_paths": ["/health", "/health/ready", "/profiles"],
+        "probe_status": 200,
+        "runtime_shutdown": "pass",
+        "post_stop_probe": "connection-refused-as-required",
+        "completion": "complete"
+      },
+      "disposition": "clean-userspace-container-pass"
+    },
+    {
+      "target_id": "linux-mint-22-3",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-linux-mint-22-3-source.dita",
+      "reconciled_source_sha256": "e1042a20a5bd8f4887a7a1de8a498a9d08733bd3cac760ac866842c5b862f46c",
+      "accepted_manifest": "documentation/evidence/live-source-install/0.9.1/m11-07-mint-source-install-20260715/run-manifest.json",
+      "accepted_attempt": 1,
+      "command_evidence": {
+        "documented_command_count": 46,
+        "documented_command_failures": 0,
+        "stage_counts": {"distro-prep": 4, "python": 13, "checkout": 9, "install": 8, "docs": 3, "start": 4, "verify": 5},
+        "plan_sha256": "86576d5b3b7e8264768ecaa9f1c635a343a59b6139d3685e80d8cecbbebbfdfc",
+        "events_sha256": "049c098ef52b315af34c0fcfe5f3aa17efe4aa427407e3ed831a248f364271a8"
+      },
+      "result_evidence": {
+        "python_version": "3.14.6",
+        "editable_bpm_install": "0.9.1",
+        "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+        "docs_all_six_locales": "pass",
+        "runtime_log_sha256": "0ffcee7478951ae6800170bfc97d18c95e2645e050a7587219e164f7ce145a16",
+        "probe_paths": ["/health", "/health/ready", "/profiles"],
+        "probe_status": 200,
+        "runtime_shutdown": "pass",
+        "post_stop_probe": "connection-refused-as-required",
+        "completion": "complete"
+      },
+      "disposition": "clean-userspace-container-pass-with-reviewed-optional-cpython-modules"
+    },
+    {
+      "target_id": "manjaro-stable-2026-06-26",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-manjaro-stable-source.dita",
+      "reconciled_source_sha256": "94a1a7926e98f686e634006ffd3823a9bc22b57a792b0dfa21b52eb1d246e39a",
+      "accepted_manifest": "documentation/evidence/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715/run-manifest.json",
+      "accepted_attempt": 2,
+      "command_evidence": {
+        "documented_command_count": 37,
+        "documented_command_failures": 0,
+        "stage_counts": {"distro-prep": 8, "checkout": 9, "install": 8, "docs": 3, "start": 4, "verify": 5},
+        "plan_sha256": "3623f2920c7006f648049bec12bc7f42b586c5164c1a364be9e4122a440005fa",
+        "events_sha256": "45628b2bf4b103bd0238b3e5e406dd637026f937ed808acceee6b2a0c2a0d96b",
+        "diagnostic_events_sha256": "7a57b529f47985e0a247f9736a19760f4e6890bd3f68540319166fe1609d5eaa"
+      },
+      "result_evidence": {
+        "python_version": "3.14.6",
+        "editable_bpm_install": "0.9.1",
+        "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+        "docs_all_six_locales": "pass",
+        "runtime_log_sha256": "b278c2b93f558f00777062868544a18c2a89c917afe48829a9bfd719fae134df",
+        "probe_paths": ["/health", "/health/ready", "/profiles"],
+        "probe_status": 200,
+        "runtime_shutdown": "pass",
+        "post_stop_probe": "connection-refused-as-required",
+        "completion": "complete"
+      },
+      "disposition": "clean-userspace-container-pass-after-documented-command-correction"
+    }
+  ],
+  "conditional_wsl_outcomes": [
+    {
+      "target": "Windows10",
+      "owner_task": "BPM091-M11-11",
+      "status": "unverified-no-actual-host-supplied",
+      "result": "not-run",
+      "validation_claimed": false,
+      "release_blocking": false,
+      "future_actual_host_rerun_allowed": true,
+      "evidence": "documentation/evidence/live-source-install/0.9.1/m11-11-windows10-wsl-20260715/run-manifest.json"
+    },
+    {
+      "target": "Windows11",
+      "owner_task": "BPM091-M11-12",
+      "status": "unverified-no-actual-host-supplied",
+      "result": "not-run",
+      "validation_claimed": false,
+      "release_blocking": false,
+      "future_actual_host_rerun_allowed": true,
+      "evidence": "documentation/evidence/live-source-install/0.9.1/m11-12-windows11-wsl-20260715/run-manifest.json"
+    }
+  ],
+  "environment_handoff": {
+    "manifest": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/run-manifest.json",
+    "inventory": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json",
+    "status": "accepted",
+    "containers_stopped": 13,
+    "images_retained": 5,
+    "network_retained": 1,
+    "docker_engine_retained": true,
+    "deletion_performed": false,
+    "storage_boundary_pass": true,
+    "host_integrity_pass": true
+  },
+  "focused_contracts": [
+    "documentation/tests/contract/test_linux_source_install_command_topics.py",
+    "documentation/tests/contract/test_linux_source_install_validation.py",
+    "documentation/tests/contract/test_live_source_install_harness_evidence.py",
+    "documentation/tests/contract/test_ubuntu_26_04_live_source_install_evidence.py",
+    "documentation/tests/contract/test_debian_13_5_live_source_install_evidence.py",
+    "documentation/tests/contract/test_fedora_44_live_source_install_evidence.py",
+    "documentation/tests/contract/test_linux_mint_22_3_live_source_install_evidence.py",
+    "documentation/tests/contract/test_manjaro_stable_live_source_install_evidence.py",
+    "documentation/tests/contract/test_wsl_source_install_validation_runner.py",
+    "documentation/tests/contract/test_windows_10_wsl_validation_outcome.py",
+    "documentation/tests/contract/test_windows_11_wsl_validation_outcome.py",
+    "documentation/tests/contract/test_live_source_install_environment_handoff.py",
+    "documentation/tests/contract/test_live_source_install_evidence_closure.py"
+  ],
+  "verification": {
+    "focused_contract": "pass-37",
+    "full_documentation_contract": "pass-740-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_validate": "pass-six-locales",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

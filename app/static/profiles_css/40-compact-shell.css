@@ -93,7 +93,7 @@
             padding: 0.42rem 0.72rem;
             border-radius: 999px;
             border: 1px solid rgba(15, 118, 110, 0.24);
-            background: rgba(236, 253, 245, 0.76);
+            background: var(--surface-accent-bg);
             color: var(--accent-deep);
             font-size: 0.9rem;
             font-weight: 800;
@@ -140,7 +140,7 @@
             padding: 0.36rem 0.62rem;
             border-radius: 999px;
             border: 1px solid rgba(15, 118, 110, 0.2);
-            background: rgba(236, 253, 245, 0.58);
+            background: var(--surface-accent-bg);
             color: var(--accent-deep);
             font-size: 0.78rem;
             font-weight: 760;
@@ -189,7 +189,7 @@
             block-size: 1.35rem;
             border-radius: 999px;
             border: 1px solid rgba(15, 118, 110, 0.28);
-            background: rgba(236, 253, 245, 0.78);
+            background: var(--surface-accent-bg);
             color: var(--accent-deep);
             font-size: 0.8rem;
             font-weight: 850;
@@ -244,10 +244,10 @@
             border-radius: 1.2rem;
             border: 1px solid var(--line-soft);
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.82));
+                linear-gradient(180deg, var(--raised-surface-strong-bg), var(--neutral-surface-muted-bg));
             backdrop-filter: blur(14px);
             min-width: 0;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 1px 0 var(--surface-highlight);
         }
 
         .compact-toolbar-copy {
