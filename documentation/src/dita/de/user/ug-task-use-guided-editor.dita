@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Die sechs Schritte des Guided Editor durchlaufen</title>
-  <shortdesc>Durchlaufen Sie die sechs Schritte des Guided Editor: Profil und Basislinie, Zugriff und Standardwerte, Sicherheit und Datenschutz, Benutzer/Add-ons/Websites, AI &amp; smart features sowie Prüfen und Exportieren.</shortdesc>
+  <title>Navigieren Sie durch die sechs Geführter Editor-Schritte</title>
+  <shortdesc>Navigieren Sie durch die Profil-&amp;-Basislinie, die Browser-Zugriffs-&amp;-Standardeinstellungen, die Sicherheit &amp;-Privatsphäre, Benutzer, Add-ons-&amp;-Sites, AI &amp;-Smart-Funktionen und den Überprüfungs-&amp;-Export.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM und prüfen Sie den passenden Arbeitskontext, das Firefox-Schema oder den Profilstatus für diese Aufgabe.</p></prereq>
-    <context><p>Der Guided Editor macht die Profilkonfiguration zu sechs aufgabenorientierten Schritten und hält die Validierung des gewählten Schemas sichtbar.</p></context>
+    <prereq><p>Öffnen Sie ein Profil in Geführter Editor aus der Bibliothek oder dem Erstellungsablauf.</p></prereq>
+    <context><p>Geführter Editor wandelt die Profilkonfiguration in sechs aufgabenorientierte Schritte um und sorgt dafür, dass die Schemavalidierung während der Arbeit sichtbar bleibt.</p>
+      <fig id="screenshot-guided-editor-overview">
+        <title>Geführter Editor Übersicht</title>
+        <image keyref="screenshot.guided-editor-overview" placement="break">
+          <alt>Geführter Editor zeigt die Schrittnavigation und den Validierungsstatus für ein gespeichertes Profil an.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Beginnen Sie mit Schritt 1 „Profil und Basislinie“: Name, Schemakanal, Szenario, Starter-Preset und CIS-Ebene prüfen.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Gehen Sie zu Schritt 2 „Browserzugriff und Standardwerte“ für Netzwerkzugriff, Browserverhalten, Startseite, Suche und Navigation.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Nutzen Sie Schritt 3 für Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheits-Härtung.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Nutzen Sie Schritt 4 für Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung, Add-ons und Website-Behandlung.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Nutzen Sie Schritt 5 nur für vorhandene Firefox-Richtlinien zu KI- und Smart-Funktionen, die das gewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Schließen Sie mit Schritt 6 „Prüfen und exportieren“ ab: validieren, speichern und das geprüfte Profil herunterladen.</cmd><info><note type="warning">Warnung: Prüfen Sie Schema, Profilstatus und Folgen der Änderung, bevor Sie speichern.</note></info></step>
+      <step><cmd>Beginnen Sie mit Schritt 1, Profilierung der &amp;-Basislinie, um Name, Schemakanal, Szenario, Startervoreinstellung und CIS-Ebene zu bestätigen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Fahren Sie mit Schritt 2 fort, Standardeinstellungen für den Browserzugriff &amp;, für Netzwerkzugriff, Browserverhalten, Startseite, Suche und Standardeinstellungen für die Navigation.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Verwenden Sie Schritt 3 für Datenschutzkontrollen, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheitsverstärkung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Verwenden Sie Schritt 4 für Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung, Add-ons und Website-Verwaltung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Verwenden Sie Schritt 5 nur für vorhandene Firefox AI &amp; Smart-Features-Richtliniensteuerungen, die das ausgewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Beenden Sie Schritt 6, Export von &amp; überprüfen, um das überprüfte Profil zu validieren, zu speichern und herunterzuladen.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
-    <result><p>Das BPM-Profil oder die Ansicht befindet sich im erwarteten Zustand für diesen Ablauf.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, kehren Sie zum zuständigen Bereich zurück, machen Sie die letzte Änderung rückgängig oder öffnen Sie das verknüpfte Thema.</p></postreq>
+    <result><p>Sie können erklären, wo jede geführte Einstellung hingehört, und mit dem richtigen Schritt fortfahren.</p></result>
+    <postreq><p>Wiederherstellung: Wenn Sie im falschen Bereich landen, verwenden Sie den Stepper oder die Suche, anstatt nicht verwandte Steuerelemente zu ändern.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-guided-settings"/>

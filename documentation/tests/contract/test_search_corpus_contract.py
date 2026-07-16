@@ -172,7 +172,6 @@ def test_search_facet_and_integrity_contracts_are_release_gate_ready() -> None:
         "user-guide",
         "firefox-policy-guide",
         "cis-settings-guide",
-        "api-integration-guide",
         "administrator-guide",
     ]
     assert facets["firefox_channel"] == ["esr-140.12", "release-152", None]

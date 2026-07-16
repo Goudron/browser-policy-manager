@@ -7,6 +7,11 @@
   <topicref keyref="topic.admin-task-set-up-linux-source-checkout" />
   <topicref keyref="topic.admin-task-configure-linux-source-runtime" />
   <topicref keyref="topic.admin-task-verify-linux-source-deployment" />
+  <topicref keyref="topic.admin-task-install-ubuntu-26-04-source" />
+  <topicref keyref="topic.admin-task-install-debian-13-source" />
+  <topicref keyref="topic.admin-task-install-fedora-44-source" />
+  <topicref keyref="topic.admin-task-install-linux-mint-22-3-source" />
+  <topicref keyref="topic.admin-task-install-manjaro-stable-source" />
   <topicref keyref="topic.admin-task-prepare-windows-wsl-source-deployment" />
   <topicref keyref="topic.admin-task-set-up-windows-wsl-source-checkout" />
   <topicref keyref="topic.admin-task-configure-windows-wsl-network-runtime" />

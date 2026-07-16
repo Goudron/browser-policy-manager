@@ -20,7 +20,6 @@ GUIDE_KEYS = {
     "guide.user-guide",
     "guide.firefox-policy-guide",
     "guide.cis-settings-guide",
-    "guide.api-integration-guide",
     "guide.administrator-guide",
 }
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
@@ -102,7 +101,7 @@ def test_locale_key_maps_resolve_guides_and_shared_subject_scheme(locale: str) -
     assert topic_keydefs
     assert all(set(definition) == {"keys", "href"} for definition in topic_keydefs)
     for definition in topic_keydefs:
-        assert definition["href"].startswith(("../user/", "../firefox/", "../cis/", "../api/", "../admin/"))
+        assert definition["href"].startswith(("../user/", "../firefox/", "../cis/", "../admin/"))
         assert definition["href"].endswith(".dita")
         assert (DOCUMENTATION_ROOT / f"src/dita/{locale}/maps" / definition["href"]).resolve().is_file()
 
@@ -135,7 +134,7 @@ def test_metadata_validator_accepts_registered_values_and_rejects_unknown_values
     vocabulary = validate_metadata.load_vocabulary()
     valid = tmp_path / "valid.dita"
     valid.write_text(
-        '<topic id="valid" audience="user" platform="web" product="bpm-0-9-0" '
+        '<topic id="valid" audience="user" platform="web" product="bpm-0-9-1" '
         'deliveryTarget="locale-en" props="firefox-release cis-level-1" '
         'otherprops="policy(AIControls) cis(1.1.1.1) api-operation(API-SVC-001)">'
         "<title>Valid</title></topic>",

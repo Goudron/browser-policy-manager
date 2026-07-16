@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-apply-cis-layer" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Appliquer une couche CIS</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Appliquer une couche CIS » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <shortdesc>Ajoutez une couche CIS prise en charge lorsque le profil a besoin d'une base de référence renforcée à partir des recommandations mappées de BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Un brouillon de profil et un canal de schéma sont sélectionnés.</p></prereq>
+    <context><p>La couche CIS est une aide à la cartographie BPM ; examinez chaque paramètre résultant pour le déploiement et ne le traitez pas comme une certification.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Appliquer une couche CIS ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Ouvrez l'étape 1, ligne de base du profil &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez la couche CIS prise en charge qui correspond au canal cible et au scénario.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Examinez les modifications de base tenant compte de la conformité dans le résumé.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Conservez ou ajustez les paramètres qui entrent en conflit avec l'objectif de déploiement.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le profil inclut la couche CIS sélectionnée dans sa ligne de base.</p></result>
+    <postreq><p>Récupération : si la couche ne convient pas, supprimez-la et revalidez avant de sauvegarder.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-cis-layer-merge"/>

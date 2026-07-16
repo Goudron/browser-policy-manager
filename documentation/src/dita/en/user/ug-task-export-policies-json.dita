@@ -4,11 +4,11 @@
   <title>Export a profile as Firefox policies.json</title>
   <shortdesc>Download an active BPM profile as a canonical Firefox Enterprise <filepath>policies.json</filepath> boundary document.</shortdesc>
   <taskbody>
-    <prereq><p>The profile is active, saved, visible in the Library or JSON Editor, and its validation state has been reviewed for the selected Firefox schema channel.</p></prereq>
+    <prereq><p>The profile is active, saved, visible in the Library or JSON editor, and its validation state has been reviewed for the selected Firefox schema channel.</p></prereq>
     <context><p>Export crosses the boundary in the opposite direction from import: BPM renders normalized profile data as a Firefox document with a top-level <codeph>policies</codeph> object. BPM profile metadata, source attribution, notes, and opaque compliance metadata are not exported.</p></context>
     <steps>
       <step><cmd>Confirm the row identity, lifecycle state, schema channel, and validation state before export.</cmd><info><p>Expected result: you know which saved active profile will be rendered.</p></info></step>
-      <step><cmd>Choose the Library export action or the JSON Editor Firefox download action.</cmd><info><p>Expected result: BPM returns an <codeph>application/json</codeph> document suitable for Firefox Enterprise policy use.</p></info></step>
+      <step><cmd>Choose the Library export action or the JSON editor Firefox download action.</cmd><info><p>Expected result: BPM returns an <codeph>application/json</codeph> document suitable for Firefox Enterprise policy use.</p></info></step>
       <step><cmd>Use download and pretty-print options only to control delivery and formatting.</cmd><info><p>API-adjacent export supports <codeph>download=1</codeph>, <codeph>pretty=1</codeph>, and <codeph>indent</codeph>; these options do not change the policy meaning.</p><note type="warning">Archived profiles are not normal direct Library export targets. The API has an explicit <codeph>include_deleted</codeph> option for archived export scenarios.</note></info></step>
     </steps>
     <result><p>You have a canonical Firefox <filepath>policies.json</filepath> file containing only the exported <codeph>policies</codeph> document.</p></result>
@@ -27,7 +27,7 @@
       <title>API-adjacent export options</title>
       <p>Use <codeph>/api/export/profiles/{profile_id}/firefox/policies.json?download=1&amp;pretty=1</codeph> for an attachment-style, two-space formatted response, or use <codeph>indent</codeph> when a specific JSON indentation is required.</p>
     </example>
-    <postreq><p>Recovery: if export reports a missing profile, archived profile, invalid query option, or stale row context, refresh the Library, confirm lifecycle and profile ID, and retry from the active saved row or the JSON Editor for that profile.</p></postreq>
+    <postreq><p>Recovery: if export reports a missing profile, archived profile, invalid query option, or stale row context, refresh the Library, confirm lifecycle and profile ID, and retry from the active saved row or the JSON editor for that profile.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

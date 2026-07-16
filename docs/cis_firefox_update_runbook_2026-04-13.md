@@ -78,6 +78,25 @@ Treat CIS documentation as part of the benchmark or mapping refresh:
    do not claim CIS certification, endorsement, conformance, or compliance guarantee.
 4. Run the focused CIS documentation inventory/skeleton/manifest contracts before release readiness,
    then run `make docs-release-check` if generated documentation artifacts changed.
+5. Reconcile changed recommendation and policy/preference routes with the generated locale
+   navigation trees, deterministic search indexes, manifest, and UI target map. A contextual link
+   must open the current Administrator/CIS/Firefox owner, reveal the active topic in the hierarchy,
+   and never revive the retired standalone API guide.
+6. Apply `documentation/runbooks/localization-and-screenshots.md` to every visible CIS label,
+   source/review state, caption, and alt text. Runtime UI catalog terms are authoritative; remaining
+   technical English requires a live narrow allowlist entry and ordinary prose does not.
+7. If a CIS change affects an approved User Guide screenshot scenario, update the 36-row matrix
+   first and recapture the affected row for all six locales. Do not add CIS-guide or decorative
+   screenshots outside the approved minimal matrix.
+8. Run the affected navigation, locale, link, and screenshot contracts before the release gate:
+
+```bash
+./.venv/bin/pytest -q -m docs_contract \
+  documentation/tests/contract/test_documentation_polish_regression_gates.py \
+  documentation/tests/contract/test_locale_anti_anglicism_guard.py \
+  documentation/tests/contract/test_user_guide_screenshot_matrix.py \
+  documentation/tests/contract/test_all_settings_help_target_map.py
+```
 
 ## 9. Release checklist
 
@@ -87,4 +106,8 @@ Treat CIS documentation as part of the benchmark or mapping refresh:
 - Compliance metadata reflects the new version.
 - CIS documentation inventory, DITA topics, manifests, search indexes, and locale peers reflect the
   current mappings and boundaries.
+- Locale navigation trees, contextual target mappings, and direct-topic reveal point to current
+  recommendation and Firefox owner topics.
+- Visible terminology follows runtime UI catalogs plus reviewed Pontoon/SUMO evidence, and affected
+  approved screenshot rows retain six-locale caption/alt-text parity.
 - Update notes mention the benchmark version and release date.

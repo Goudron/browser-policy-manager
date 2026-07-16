@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+<task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
   <title>Configure WSL runtime and browser access</title>
   <shortdesc>Set BPM runtime variables inside WSL, choose a safe bind address, start the source process, and identify the browser URL from Windows.</shortdesc>
   <taskbody>

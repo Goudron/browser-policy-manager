@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-handle-raw-unknown-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Traiter les paramètres raw et inconnus</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Inspect imported unknown keys and raw-fallback values without losing them accidentally.</shortdesc>
+  <title>Gérer les paramètres bruts et inconnus</title>
+  <shortdesc>Inspectez les clés inconnues importées et les valeurs de secours brutes sans les perdre accidentellement.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Open Review mode or a raw/unknown filtered list in All Settings.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Raw and unknown settings may come from import, schema differences, or values BPM cannot model visually. Treat them as preservation and review items, not routine edits.</p></context>
+    <prereq><p>Ouvrez Revue ou une liste filtrée brute/inconnue dans Tous les paramètres.</p></prereq>
+    <context><p>Les paramètres bruts et inconnus peuvent provenir de l'importation, de différences de schéma ou de valeurs que BPM ne peut pas modéliser visuellement. Traitez-les comme des éléments de préservation et de révision, et non comme des modifications de routine.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Filter or open Review items for raw, unknown, or imported settings.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Decide whether to preserve, remove, reset, or inspect the value in JSON Editor.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Traiter les paramètres raw et inconnus. Save only after confirming the value should remain or be removed.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Filtrez ou ouvrez les éléments de révision pour les paramètres bruts, inconnus ou importés.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Inspectez la valeur brute, la source, l'état de validation et le canal de schéma.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Décidez si vous souhaitez conserver, supprimer, réinitialiser ou inspecter la valeur dans Éditeur JSON.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Enregistrez uniquement après avoir confirmé que la valeur doit rester ou être supprimée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. Raw and unknown values are preserved or removed intentionally.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if the value might be important, export or compare the profile before removing it.</p></postreq>
+    <result><p>Les valeurs brutes et inconnues sont conservées ou supprimées intentionnellement.</p></result>
+    <postreq><p>Récupération : si la valeur peut être importante, exportez ou comparez le profil avant de le supprimer.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-follow-setting-deep-link"/>

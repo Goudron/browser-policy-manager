@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Use All Settings</title>
-  <shortdesc>Open All Settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
+  <title>Use All settings</title>
+  <shortdesc>Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
   <taskbody>
-    <prereq><p>A saved profile exists. New unsaved drafts must be saved before All Settings can open.</p></prereq>
-    <context><p>All Settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p></context>
+    <prereq><p>A saved profile exists. New unsaved drafts must be saved before All settings can open.</p></prereq>
+    <context><p>All settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p>
+      <fig id="screenshot-all-settings-review">
+        <title>All settings review mode</title>
+        <image keyref="screenshot.all-settings-review" placement="break">
+          <alt>All settings showing the review list, configured settings, and setting detail panel on a narrow screen.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Open the saved profile from the Library.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Choose the All Settings editor surface.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Open the saved profile from the Library.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose the All settings editor surface.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Use the mode that matches the task: Review for attention, Configured for applied values, or Catalog for every supported setting.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
-    <result><p>The saved profile is open in All Settings with the correct mode available.</p></result>
-    <postreq><p>Recovery: if All Settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
+    <result><p>The saved profile is open in All settings with the correct mode available.</p></result>
+    <postreq><p>Recovery: if All settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

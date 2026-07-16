@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>All Settings verwenden</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. Open All Settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
+  <title>Alle Einstellungen verwenden</title>
+  <shortdesc>Öffnen Sie Alle Einstellungen für ein gespeichertes Profil, wenn Sie über den kürzeren geführten Arbeitsablauf hinaus eine vollständige visuelle Kontrolle benötigen.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. A saved profile exists. New unsaved drafts must be saved before All Settings can open.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. All Settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p></context>
+    <prereq><p>Ein gespeichertes Profil ist vorhanden. Neue nicht gespeicherte Entwürfe müssen gespeichert werden, bevor Alle Einstellungen geöffnet werden kann.</p></prereq>
+    <context><p>Alle Einstellungen ist der vollständige visuelle Editor für Firefox-Richtlinien und bekannt als Verwaltete Einstellungen. Es wird in Prüfung geöffnet, sodass Aufmerksamkeitselemente vor dem umfassenden Durchsuchen des Katalogs sichtbar sind.</p>
+      <fig id="screenshot-all-settings-review">
+        <title>Alle Einstellungen Prüfung</title>
+        <image keyref="screenshot.all-settings-review" placement="break">
+          <alt>Alle Einstellungen zeigt die Überprüfungsliste, die konfigurierten Einstellungen und den Einstellungsdetailbereich auf einem schmalen Bildschirm an.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. Open the saved profile from the Library.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. Choose the All Settings editor surface.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: All Settings verwenden. Use the mode that matches the task: Review for attention, Configured for applied values, or Catalog for every supported setting.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Öffnen Sie das gespeicherte Profil aus der Bibliothek.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie die Editoroberfläche Alle Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Bestätigen Sie, dass „Überprüfen“, „Konfiguriert“ und „Katalog“ verfügbar sind.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Verwenden Sie den Modus, der zur Aufgabe passt: „Auf Aufmerksamkeit prüfen“, „Konfiguriert für angewendete Werte“ oder „Katalog“ für jede unterstützte Einstellung.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The saved profile is open in All Settings with the correct mode available.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if All Settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
+    <result><p>Das gespeicherte Profil ist in Alle Einstellungen geöffnet und der richtige Modus ist verfügbar.</p></result>
+    <postreq><p>Wiederherstellung: Wenn Alle Einstellungen nicht verfügbar ist, speichern Sie zuerst den geführten Entwurf oder öffnen Sie ein gespeichertes Profil erneut aus der Bibliothek.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

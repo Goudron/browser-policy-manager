@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Registrar HA y production deferred boundaries</title>
-  <shortdesc>Indique qué capabilities de production, HA, reverse-proxy, restore y service-management faltan hoy y qué puede prepararse para design work futuro.</shortdesc>
+<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Registro HA y límites de producción diferida</title>
+  <shortdesc>Indique qué capacidades de producción, HA, proxy inverso, restauración y gestión de servicios están ausentes en la actualidad y qué se puede preparar para trabajos de diseño posteriores.</shortdesc>
   <taskbody>
-    <prereq><p>Existen readiness, network exposure, backup/export, monitoring y update-window notes para la instancia source-run actual.</p></prereq>
-    <context><p>Este topic registra la frontera entre current single-node source operation y future production architecture. Declara explícitamente what is planned but not implemented yet.</p></context>
+    <prereq><p>Existen notas de preparación, exposición de la red, copia de seguridad/exportación, monitoreo y ventana de actualización para la instancia de ejecución de origen actual.</p></prereq>
+    <context><p>Este tema registra el límite entre la operación de origen de un solo nodo actual y la arquitectura de producción futura. Es deliberadamente explícito sobre lo que está planificado pero aún no implementado.</p></context>
     <steps>
-      <step><cmd>Nombre la supported current shape.</cmd><info><p>Escriba que la documentación BPM 0.9.0 Administrator/DevOps soporta source deployment, manual configuration, health/readiness checks, API examples, manual backup evidence, documentation rebuild checks y single-node update windows.</p></info></step>
-      <step><cmd>Nombre las service y proxy capabilities ausentes.</cmd><info><p>Liste packaged services, native Linux service units, Windows services, official reverse-proxy recipes, TLS/proxy recipes, managed secrets, authentication gateway configuration y production hardening como ausentes en BPM 0.9.0 source documentation.</p></info></step>
-      <step><cmd>Nombre las HA y upgrade capabilities ausentes.</cmd><info><p>Liste supported HA clustering, multi-node coordination, load balancer session affinity guidance, shared storage locking, zero-downtime migration, rolling upgrades, automatic failover y official restore automation como future work, no como current behavior.</p></info></step>
-      <step><cmd>Convierta future needs en design inputs.</cmd><info><note type="warning">No coloque varios source nodes detrás de un load balancer llamando al resultado supported HA. Capture required RTO/RPO, backup verification, TLS ownership, secrets ownership, logging, monitoring y upgrade-window expectations como inputs para futuras distribution/runtime tasks.</note></info></step>
+      <step><cmd>Nombre la forma actual admitida.</cmd><info><p>Escriba que la documentación del Administrador de BPM/DevOps admite la implementación de origen, la configuración manual, comprobaciones de estado/preparación, ejemplos de API, evidencia de copia de seguridad manual, comprobaciones de reconstrucción de documentación y ventanas de actualización de un solo nodo.</p></info></step>
+      <step><cmd>Nombre ausente de capacidades de servicio y proxy.</cmd><info><p>Enumere los servicios empaquetados, las unidades de servicio nativas de Linux, los servicios de Windows, las recetas oficiales de proxy inverso, las recetas de TLS/proxy, los secretos administrados, la configuración de la puerta de enlace de autenticación y el refuerzo de producción como ausentes en la documentación fuente de BPM.</p></info></step>
+      <step><cmd>Nombre ausente HA y capacidades de actualización.</cmd><info><p>Lista de agrupación HA admitida, coordinación de múltiples nodos, guía de afinidad de sesión del balanceador de carga, bloqueo de almacenamiento compartido, migración sin tiempo de inactividad, actualizaciones continuas, conmutación por error automática y automatización de restauración oficial como trabajo futuro, no como comportamiento actual.</p></info></step>
+      <step><cmd>Convertir las necesidades futuras en insumos de diseño.</cmd><info><note type="warning">No coloque varios nodos de origen detrás de un equilibrador de carga y llame al resultado admitido HA. Capture RTO/RPO requerido, verificación de respaldo, propiedad de TLS, propiedad de secretos, registro, monitoreo y expectativas de ventana de actualización como entradas para tareas posteriores de distribución/tiempo de ejecución.</note></info></step>
     </steps>
-    <result><p>El boundary record evita unsupported production, HA y reverse-proxy claims mientras conserva preparation work útil para future releases.</p></result>
-    <postreq><p>Use este record durante manual documentation QA y cuando se aprueben futuros installer, service, reverse-proxy y HA backlog items.</p></postreq>
+    <result><p>El registro de límites evita la producción no compatible, HA y las reclamaciones de proxy inverso, al tiempo que preserva el trabajo de preparación útil para futuras versiones.</p></result>
+    <postreq><p>Utilice este registro durante la documentación manual QA y cuando se aprueben futuros elementos del instalador, servicio, proxy inverso y HA.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-record-devops-operational-boundaries"/>

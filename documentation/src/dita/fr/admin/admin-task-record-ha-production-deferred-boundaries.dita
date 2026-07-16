@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Enregistrer les HA et production deferred boundaries</title>
-  <shortdesc>Indiquez quelles capabilities production, HA, reverse-proxy, restore et service-management sont absentes aujourd’hui et ce qui peut être préparé pour le design work futur.</shortdesc>
+<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Enregistrement HA et limites de production différées</title>
+  <shortdesc>Indiquez quelles fonctionnalités de production, HA, de proxy inverse, de restauration et de gestion des services sont absentes aujourd'hui et ce qui peut être préparé pour un travail de conception ultérieur.</shortdesc>
   <taskbody>
-    <prereq><p>Des notes readiness, network exposure, backup/export, monitoring et update-window existent pour l’instance source-run actuelle.</p></prereq>
-    <context><p>Ce topic trace la frontière entre current single-node source operation et future production architecture. Il indique explicitement what is planned but not implemented yet.</p></context>
+    <prereq><p>Des notes sur la préparation, l'exposition du réseau, la sauvegarde/exportation, la surveillance et la fenêtre de mise à jour existent pour l'instance d'exécution source actuelle.</p></prereq>
+    <context><p>Cette rubrique enregistre la limite entre le fonctionnement actuel de la source à nœud unique et la future architecture de production. Il est délibérément explicite sur ce qui est prévu mais pas encore mis en œuvre.</p></context>
     <steps>
-      <step><cmd>Nommez la supported current shape.</cmd><info><p>Écrivez que la documentation BPM 0.9.0 Administrator/DevOps prend en charge source deployment, manual configuration, health/readiness checks, API examples, manual backup evidence, documentation rebuild checks et single-node update windows.</p></info></step>
-      <step><cmd>Nommez les service et proxy capabilities absentes.</cmd><info><p>Listez packaged services, native Linux service units, Windows services, official reverse-proxy recipes, TLS/proxy recipes, managed secrets, authentication gateway configuration et production hardening comme absents de la BPM 0.9.0 source documentation.</p></info></step>
-      <step><cmd>Nommez les HA et upgrade capabilities absentes.</cmd><info><p>Listez supported HA clustering, multi-node coordination, load balancer session affinity guidance, shared storage locking, zero-downtime migration, rolling upgrades, automatic failover et official restore automation comme future work, pas comme current behavior.</p></info></step>
-      <step><cmd>Transformez les future needs en design inputs.</cmd><info><note type="warning">Ne placez pas plusieurs source nodes derrière un load balancer en appelant cela supported HA. Capturez required RTO/RPO, backup verification, TLS ownership, secrets ownership, logging, monitoring et upgrade-window expectations comme inputs pour les futures distribution/runtime tasks.</note></info></step>
+      <step><cmd>Nommez la forme actuelle prise en charge.</cmd><info><p>Écrivez que la documentation Administrateur BPM/DevOps prend en charge le déploiement de sources, la configuration manuelle, les vérifications d'état/de préparation, les exemples d'API, les preuves de sauvegarde manuelle, les vérifications de reconstruction de la documentation et les fenêtres de mise à jour d'un seul nœud.</p></info></step>
+      <step><cmd>Nommer les capacités de service et de proxy absentes.</cmd><info><p>Répertoriez les services packagés, les unités de service Linux natives, les services Windows, les recettes officielles de proxy inverse, les recettes TLS/proxy, les secrets gérés, la configuration de la passerelle d'authentification et le renforcement de la production comme absents de la documentation source de BPM.</p></info></step>
+      <step><cmd>Nom absent HA et capacités de mise à niveau.</cmd><info><p>Liste du clustering HA pris en charge, de la coordination multi-nœuds, des conseils d'affinité de session d'équilibrage de charge, du verrouillage du stockage partagé, de la migration sans temps d'arrêt, des mises à niveau propagées, du basculement automatique et de l'automatisation officielle de la restauration en tant que travaux futurs, et non comportement actuel.</p></info></step>
+      <step><cmd>Convertissez les besoins futurs en intrants de conception.</cmd><info><note type="warning">Ne placez pas plusieurs nœuds sources derrière un équilibreur de charge et appelez le résultat pris en charge HA. Capturez les RTO/RPO requis, la vérification des sauvegardes, la propriété de TLS, la propriété des secrets, la journalisation, la surveillance et les attentes en matière de fenêtre de mise à niveau en tant qu'entrées pour les tâches de distribution/d'exécution ultérieures.</note></info></step>
     </steps>
-    <result><p>Le boundary record empêche les unsupported production, HA et reverse-proxy claims tout en conservant la preparation work utile pour future releases.</p></result>
-    <postreq><p>Utilisez ce record pendant la manual documentation QA et lorsque de futurs installer, service, reverse-proxy et HA backlog items seront approuvés.</p></postreq>
+    <result><p>L'enregistrement de limite empêche la production non prise en charge, les HA et les revendications de proxy inverse tout en préservant le travail de préparation utile pour les versions futures.</p></result>
+    <postreq><p>Utilisez cet enregistrement lors de la documentation manuelle QA et lorsque les futurs éléments d'installation, de service, de proxy inverse et HA sont approuvés.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-record-devops-operational-boundaries"/>

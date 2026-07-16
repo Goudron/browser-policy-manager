@@ -4,7 +4,7 @@
   <title>Manage destructive actions safely</title>
   <shortdesc>Cancel or confirm archive, restore, reset, remove, and permanent-delete actions deliberately.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Destructive actions can hide a profile, remove settings, reset values, or permanently delete a row after confirmation.</p></context>
     <steps>
       <step><cmd>Read the action label and affected profile or setting before confirming.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>

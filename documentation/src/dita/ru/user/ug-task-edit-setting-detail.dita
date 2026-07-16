@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Измените параметр в detail panel</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Apply or edit a Firefox policy or managed preference value from the All Settings detail panel.</shortdesc>
+  <title>Изменение сведений о настройке</title>
+  <shortdesc>Примените или отредактируйте политику Firefox или значение управляемого предпочтения на панели сведений Все настройки.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Open a setting detail panel for a supported editable value.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Detail editing keeps the change focused on one setting while reusing shared validation and save behavior.</p></context>
+    <prereq><p>Откройте панель сведений о настройке поддерживаемого редактируемого значения.</p></prereq>
+    <context><p>Детальное редактирование позволяет сосредоточить изменение на одном параметре, одновременно повторно используя общую проверку и поведение сохранения.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Inspect the current value and validation state.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Enter or choose the new policy or managed preference value.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Apply the detail edit and watch for validation feedback.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Измените параметр в detail panel. Save the profile when the edited value is valid and intentional.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Проверьте текущее значение и состояние проверки.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Введите или выберите новую политику или значение управляемого предпочтения.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Примените детальное редактирование и дождитесь результатов проверки.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Сохраните профиль, если отредактированное значение является действительным и намеренным.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The selected policy or managed preference has the new value in the profile.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if validation fails, correct the value shape or reset the detail before saving.</p></postreq>
+    <result><p>Выбранная политика или управляемое предпочтение имеет новое значение в профиле.</p></result>
+    <postreq><p>Восстановление: если проверка не удалась, исправьте форму значения или сбросьте данные перед сохранением.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-inspect-setting-details"/>

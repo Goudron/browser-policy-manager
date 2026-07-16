@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Einstellungskategorien navigieren</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Navigate All Settings categories and mapped control clusters to find related policy and preference controls.</shortdesc>
+  <title>Navigieren Sie durch die Einstellungskategorien</title>
+  <shortdesc>Navigieren Sie durch Alle Einstellungen-Kategorien und zugeordnete Kontrollcluster, um zugehörige Richtlinien- und Präferenzkontrollen zu finden.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Open All Settings in Configured or Catalog mode.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Categories group settings by product domain rather than by file location. They help users move between browser access, privacy, search, extensions, raw/unmapped, and other clusters.</p></context>
+    <prereq><p>Öffnen Sie Alle Einstellungen in Konfiguriert oder Katalog.</p></prereq>
+    <context><p>Kategorien gruppieren Einstellungen nach Produktdomäne und nicht nach Dateispeicherort. Sie helfen Benutzern beim Wechsel zwischen Browserzugriff, Datenschutz, Suche, Erweiterungen, unformatiert/nicht zugeordnet und anderen Clustern.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Open the category navigation or catalog summary.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Choose the domain or cluster that matches the configuration goal.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Review category counts for configured, attention, raw, or deprecated settings.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungskategorien navigieren. Open a setting detail or switch filters without losing the category context.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Öffnen Sie die Kategorienavigation oder Katalogzusammenfassung.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie die Domäne oder den Cluster aus, die dem Konfigurationsziel entspricht.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie die Kategorieanzahl für konfigurierte, Aufmerksamkeits-, unformatierte oder veraltete Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie ein Einstellungsdetail oder wechseln Sie Filter, ohne den Kategoriekontext zu verlieren.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. You can move through the settings inventory by product domain and reach the relevant detail panel.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if a category does not contain the expected control, search by policy ID or inspect raw/unmapped items.</p></postreq>
+    <result><p>Sie können durch die Einstellungsinventar nach Produktdomäne navigieren und zum entsprechenden Detailbereich gelangen.</p></result>
+    <postreq><p>Wiederherstellung: Wenn eine Kategorie nicht die erwartete Kontrolle enthält, suchen Sie nach der Richtlinie ID oder überprüfen Sie rohe/nicht zugeordnete Elemente.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

@@ -1,0 +1,685 @@
+{
+  "schema_version": 1,
+  "inventory_id": "bpm-0.9.1-locale-visible-english-inventory",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M7-01",
+  "status": "accepted",
+  "purpose": "Inventory visible English words, English-like machine translations, and allowlisted technical identifiers in non-English BPM UI and documentation surfaces before terminology replacement.",
+  "classification_values": [
+    "replace",
+    "allowlist",
+    "brand",
+    "identifier",
+    "command/path/API",
+    "abbreviation",
+    "false positive"
+  ],
+  "scope": {
+    "locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+    "surfaces": [
+      "product_ui_catalogs",
+      "documentation_topics",
+      "documentation_search_ui",
+      "documentation_navigation",
+      "screenshots",
+      "captions_alt_text"
+    ],
+    "source_roots": [
+      "app/i18n_src/{locale}/",
+      "app/i18n/{locale}.json",
+      "documentation/src/dita/{locale}/",
+      "documentation/tools/build_docs.py",
+      "documentation/config/search-facets-filters-0.9.0.json",
+      "documentation/config/search-ui-filter-contract-0.9.1.json",
+      "documentation/config/user-guide-screenshot-matrix-0.9.1.json",
+      "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+      "documentation/assets/screenshots/{locale}/"
+    ]
+  },
+  "summary_by_locale": {
+    "ru": {
+      "replace": 0,
+      "allowlist": 1,
+      "brand": 1,
+      "identifier": 1,
+      "command/path/API": 1,
+      "abbreviation": 1,
+      "false positive": 1
+    },
+    "de": {
+      "replace": 5,
+      "allowlist": 1,
+      "brand": 1,
+      "identifier": 1,
+      "command/path/API": 1,
+      "abbreviation": 1,
+      "false positive": 0
+    },
+    "zh-CN": {
+      "replace": 2,
+      "allowlist": 1,
+      "brand": 1,
+      "identifier": 1,
+      "command/path/API": 1,
+      "abbreviation": 1,
+      "false positive": 1
+    },
+    "fr": {
+      "replace": 5,
+      "allowlist": 1,
+      "brand": 1,
+      "identifier": 1,
+      "command/path/API": 1,
+      "abbreviation": 1,
+      "false positive": 0
+    },
+    "es-ES": {
+      "replace": 5,
+      "allowlist": 1,
+      "brand": 1,
+      "identifier": 1,
+      "command/path/API": 1,
+      "abbreviation": 1,
+      "false positive": 0
+    }
+  },
+  "findings": [
+    {
+      "id": "LOC-EN-RU-BRAND-001",
+      "locale": "ru",
+      "surface": "product_ui_catalogs",
+      "classification": "brand",
+      "decision": "keep",
+      "terms": ["Browser Policy Manager", "Firefox"],
+      "source_refs": [
+        "app/i18n_src/ru/common.json",
+        "app/i18n_src/ru/library.json",
+        "documentation/assets/screenshots/ru/"
+      ],
+      "rationale": "Product and browser brand names remain in English or established brand spelling."
+    },
+    {
+      "id": "LOC-EN-RU-ABBR-001",
+      "locale": "ru",
+      "surface": "product_ui_catalogs",
+      "classification": "abbreviation",
+      "decision": "keep",
+      "terms": ["AI", "BPM", "CIS", "ESR", "JSON", "URL"],
+      "source_refs": [
+        "app/i18n_src/ru/",
+        "documentation/src/dita/ru/",
+        "documentation/config/user-guide-screenshot-matrix-0.9.1.json"
+      ],
+      "rationale": "Stable abbreviations are allowed when they name technical concepts, formats, or standards."
+    },
+    {
+      "id": "LOC-EN-RU-ID-001",
+      "locale": "ru",
+      "surface": "screenshots",
+      "classification": "identifier",
+      "decision": "keep",
+      "terms": ["browser.startup.homepage", "browser.tabs.warnOnClose", "DisableTelemetry", "Homepage", "Locked", "true"],
+      "source_refs": [
+        "documentation/assets/screenshots/ru/ug-all-settings-review-narrow-light.png",
+        "documentation/assets/screenshots/ru/ug-json-editor-desktop-dark.png"
+      ],
+      "rationale": "Firefox policy IDs, managed preference IDs, JSON literals, and schema value names are identifiers rather than prose."
+    },
+    {
+      "id": "LOC-EN-RU-PATH-001",
+      "locale": "ru",
+      "surface": "screenshots",
+      "classification": "command/path/API",
+      "decision": "keep",
+      "terms": ["https://portal.example.test/", "policies.json"],
+      "source_refs": [
+        "documentation/assets/screenshots/ru/ug-all-settings-review-narrow-light.png",
+        "documentation/assets/screenshots/ru/ug-json-editor-desktop-dark.png"
+      ],
+      "rationale": "URLs and boundary document filenames are literal technical values."
+    },
+    {
+      "id": "LOC-EN-RU-OCR-001",
+      "locale": "ru",
+      "surface": "screenshots",
+      "classification": "false positive",
+      "decision": "ignore",
+      "terms": ["Coy", "paneHunili", "penaktop"],
+      "source_refs": [
+        "documentation/reports/screenshots/visual-qa/ocr/guided-editor-overview-ru.txt",
+        "documentation/reports/screenshots/visual-qa/ocr/json-editor-ru.txt"
+      ],
+      "rationale": "Tesseract misread Cyrillic UI text as Latin fragments; visual review did not confirm these as English strings."
+    },
+    {
+      "id": "LOC-EN-RU-ALLOW-001",
+      "locale": "ru",
+      "surface": "captions_alt_text",
+      "classification": "allowlist",
+      "decision": "keep",
+      "terms": ["Firefox", "JSON"],
+      "source_refs": [
+        "documentation/src/dita/ru/user/ug-task-use-json-editor.dita",
+        "documentation/src/dita/ru/user/ug-task-use-profile-library.dita"
+      ],
+      "rationale": "Russian captions and alt text are localized; the remaining Latin terms are brand/format terms already allowed by the screenshot integration contract."
+    },
+    {
+      "id": "LOC-EN-DE-REPLACE-001",
+      "locale": "de",
+      "surface": "screenshots",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Validierung Ergebnisse wird appear hier.", "Updated 07.07.2026", "ProfilVersion gesperrt nach creation."],
+      "source_refs": [
+        "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+        "app/i18n_src/de/json.json",
+        "app/i18n_src/de/common.json"
+      ],
+      "related_blockers": ["SHOT-QA-LOC-DE-001"],
+      "rationale": "Visible German UI contains English verbs and machine-like mixed grammar."
+    },
+    {
+      "id": "LOC-EN-DE-REPLACE-002",
+      "locale": "de",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Filterned", "Ascending", "Suchen und filterns", "Updated"],
+      "source_refs": [
+        "app/i18n_src/de/library.json",
+        "app/i18n_src/de/common.json",
+        "app/i18n/de.json"
+      ],
+      "rationale": "Library filters and sorting controls expose English fallback or English-inflected pseudo-German."
+    },
+    {
+      "id": "LOC-EN-DE-REPLACE-003",
+      "locale": "de",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Einstellung updated.", "Schema-driven Richtlinie updated.", "AI Schutzhaltung updated.", "Start, suchen, und Proxy Einstellungen updated."],
+      "source_refs": [
+        "app/i18n_src/de/settings.json",
+        "app/i18n_src/de/wizard.json",
+        "app/i18n/de.json"
+      ],
+      "rationale": "Status messages use English verbs and source wording."
+    },
+    {
+      "id": "LOC-EN-DE-REPLACE-004",
+      "locale": "de",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Importierening {file}", "Importierte neu Profil", "Ungültig JSON"],
+      "source_refs": [
+        "app/i18n_src/de/library.json",
+        "app/i18n_src/de/common.json"
+      ],
+      "rationale": "Import workflow copy contains English-inflected wording and should use established German UI terms."
+    },
+    {
+      "id": "LOC-EN-DE-REPLACE-005",
+      "locale": "de",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Keine Einstellungen Treffer diese filtern.", "Pruefen Schema Richtlinien", "Öffnen ein spezifisch Steuerung"],
+      "source_refs": [
+        "app/i18n_src/de/settings.json"
+      ],
+      "rationale": "Machine-localized German text is visible and blocks screenshot QA even when it contains few pure English tokens."
+    },
+    {
+      "id": "LOC-EN-DE-BRAND-001",
+      "locale": "de",
+      "surface": "documentation_navigation",
+      "classification": "brand",
+      "decision": "keep",
+      "terms": ["Browser Policy Manager", "Firefox"],
+      "source_refs": [
+        "app/i18n_src/de/common.json",
+        "documentation/src/dita/de/maps/portal.ditamap",
+        "documentation/config/navigation-tree-contract-0.9.1.json"
+      ],
+      "rationale": "Brand and product names can remain visible in localized navigation labels and tree context."
+    },
+    {
+      "id": "LOC-EN-DE-ID-001",
+      "locale": "de",
+      "surface": "screenshots",
+      "classification": "identifier",
+      "decision": "keep",
+      "terms": ["browser.startup.homepage", "browser.tabs.warnOnClose", "DisableTelemetry", "Homepage", "Locked", "true"],
+      "source_refs": [
+        "documentation/assets/screenshots/de/ug-all-settings-review-narrow-light.png"
+      ],
+      "rationale": "Policy IDs, preference IDs, and JSON values are intentionally language-neutral identifiers."
+    },
+    {
+      "id": "LOC-EN-DE-PATH-001",
+      "locale": "de",
+      "surface": "screenshots",
+      "classification": "command/path/API",
+      "decision": "keep",
+      "terms": ["https://portal.example.test/", "policies.json"],
+      "source_refs": [
+        "documentation/assets/screenshots/de/ug-all-settings-review-narrow-light.png",
+        "documentation/assets/screenshots/de/ug-json-editor-desktop-dark.png"
+      ],
+      "rationale": "URLs and exported Firefox boundary filenames remain literal."
+    },
+    {
+      "id": "LOC-EN-DE-ABBR-001",
+      "locale": "de",
+      "surface": "documentation_search_ui",
+      "classification": "abbreviation",
+      "decision": "keep",
+      "terms": ["AI", "BPM", "CIS", "ESR", "JSON", "URL"],
+      "source_refs": [
+        "documentation/tools/build_docs.py",
+        "documentation/config/search-facets-filters-0.9.0.json",
+        "app/i18n_src/de/"
+      ],
+      "rationale": "Abbreviations and format labels are allowed when used as technical labels, not prose."
+    },
+    {
+      "id": "LOC-EN-DE-ALLOW-001",
+      "locale": "de",
+      "surface": "captions_alt_text",
+      "classification": "allowlist",
+      "decision": "keep",
+      "terms": ["Firefox", "JSON"],
+      "source_refs": [
+        "documentation/src/dita/de/user/ug-task-use-json-editor.dita"
+      ],
+      "rationale": "Screenshot captions and alt text are otherwise localized; remaining Latin terms are accepted brand/format terms."
+    },
+    {
+      "id": "LOC-EN-ZH-REPLACE-001",
+      "locale": "zh-CN",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["无 设置 此 筛选.", "筛选 设置", "已导入 从 {name}.", "{file} 作为 新建 配置档案 {name}..."],
+      "source_refs": [
+        "app/i18n_src/zh-CN/settings.json",
+        "app/i18n_src/zh-CN/library.json",
+        "app/i18n_src/zh-CN/common.json"
+      ],
+      "rationale": "Machine-spaced Chinese text is visible and should be replaced with natural locale terms."
+    },
+    {
+      "id": "LOC-EN-ZH-REPLACE-002",
+      "locale": "zh-CN",
+      "surface": "screenshots",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["mixed English technical strings beyond identifiers in guided and JSON screenshots"],
+      "source_refs": [
+        "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+        "documentation/assets/screenshots/zh-CN/ug-guided-settings-search-desktop-light.png",
+        "documentation/assets/screenshots/zh-CN/ug-json-editor-desktop-dark.png"
+      ],
+      "related_blockers": ["SHOT-QA-LOC-ZH-001"],
+      "rationale": "Visual QA must re-check Chinese screenshots after terminology cleanup because OCR is noisy and the current evidence remains release-blocking."
+    },
+    {
+      "id": "LOC-EN-ZH-BRAND-001",
+      "locale": "zh-CN",
+      "surface": "documentation_topics",
+      "classification": "brand",
+      "decision": "keep",
+      "terms": ["Browser Policy Manager", "Firefox"],
+      "source_refs": [
+        "app/i18n_src/zh-CN/common.json",
+        "documentation/src/dita/zh-CN/"
+      ],
+      "rationale": "Brand and product names are intentionally preserved."
+    },
+    {
+      "id": "LOC-EN-ZH-ID-001",
+      "locale": "zh-CN",
+      "surface": "screenshots",
+      "classification": "identifier",
+      "decision": "keep",
+      "terms": ["browser.startup.homepage", "browser.tabs.warnOnClose", "DisableTelemetry", "Homepage", "Locked", "true"],
+      "source_refs": [
+        "documentation/assets/screenshots/zh-CN/ug-all-settings-review-narrow-light.png"
+      ],
+      "rationale": "Firefox IDs and JSON literals are language-neutral technical identifiers."
+    },
+    {
+      "id": "LOC-EN-ZH-PATH-001",
+      "locale": "zh-CN",
+      "surface": "screenshots",
+      "classification": "command/path/API",
+      "decision": "keep",
+      "terms": ["https://portal.example.test/", "policies.json"],
+      "source_refs": [
+        "documentation/assets/screenshots/zh-CN/ug-all-settings-review-narrow-light.png",
+        "documentation/assets/screenshots/zh-CN/ug-json-editor-desktop-dark.png"
+      ],
+      "rationale": "URLs and canonical Firefox document filenames stay literal."
+    },
+    {
+      "id": "LOC-EN-ZH-ABBR-001",
+      "locale": "zh-CN",
+      "surface": "documentation_search_ui",
+      "classification": "abbreviation",
+      "decision": "keep",
+      "terms": ["AI", "BPM", "CIS", "ESR", "JSON", "URL"],
+      "source_refs": [
+        "documentation/tools/build_docs.py",
+        "documentation/src/dita/zh-CN/",
+        "app/i18n_src/zh-CN/"
+      ],
+      "rationale": "Abbreviations and format labels are allowed as technical labels."
+    },
+    {
+      "id": "LOC-EN-ZH-OCR-001",
+      "locale": "zh-CN",
+      "surface": "screenshots",
+      "classification": "false positive",
+      "decision": "ignore",
+      "terms": ["FSi", "REARaa", "saznewe", "Sxteetaas"],
+      "source_refs": [
+        "documentation/reports/screenshots/visual-qa/ocr/guided-editor-overview-zh-CN.txt",
+        "documentation/reports/screenshots/visual-qa/ocr/json-editor-zh-CN.txt"
+      ],
+      "rationale": "Tesseract only has eng/rus OCR data in this environment and misreads Chinese text as Latin fragments."
+    },
+    {
+      "id": "LOC-EN-ZH-ALLOW-001",
+      "locale": "zh-CN",
+      "surface": "captions_alt_text",
+      "classification": "allowlist",
+      "decision": "keep",
+      "terms": ["Firefox", "JSON"],
+      "source_refs": [
+        "documentation/src/dita/zh-CN/user/ug-task-use-json-editor.dita"
+      ],
+      "rationale": "Chinese captions and alt text are localized; brand and format terms remain allowed."
+    },
+    {
+      "id": "LOC-EN-FR-REPLACE-001",
+      "locale": "fr",
+      "surface": "screenshots",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Le liste mises a jour comme soon comme votre filters modifier.", "Filtrered", "Profil name est verrouille apres creation."],
+      "source_refs": [
+        "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+        "app/i18n_src/fr/common.json",
+        "app/i18n_src/fr/library.json"
+      ],
+      "related_blockers": ["SHOT-QA-LOC-FR-001"],
+      "rationale": "French UI screenshots contain English words and pseudo-French grammar."
+    },
+    {
+      "id": "LOC-EN-FR-REPLACE-002",
+      "locale": "fr",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["modifiering", "replacing", "burying", "finishing"],
+      "source_refs": [
+        "app/i18n_src/fr/common.json",
+        "app/i18n_src/fr/wizard.json",
+        "app/i18n/fr.json"
+      ],
+      "rationale": "English stems with French context are visible machine translation artifacts."
+    },
+    {
+      "id": "LOC-EN-FR-REPLACE-003",
+      "locale": "fr",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Importered policies.json", "Importeration {file}", "Importer creers un nouveau profil"],
+      "source_refs": [
+        "app/i18n_src/fr/library.json",
+        "app/i18n_src/fr/common.json"
+      ],
+      "rationale": "Import workflow copy mixes English participles with French UI text."
+    },
+    {
+      "id": "LOC-EN-FR-REPLACE-004",
+      "locale": "fr",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Profil name", "scenario", "depart prereglage", "actuel filters actuel"],
+      "source_refs": [
+        "app/i18n_src/fr/common.json",
+        "app/i18n_src/fr/wizard.json"
+      ],
+      "rationale": "Profile and workflow prose needs established French UI terms instead of English source words."
+    },
+    {
+      "id": "LOC-EN-FR-REPLACE-005",
+      "locale": "fr",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Aucun paramètres correspond à ce filtre.", "JSON éditeur", "Brut policies.json modifiering"],
+      "source_refs": [
+        "app/i18n_src/fr/settings.json",
+        "app/i18n_src/fr/common.json"
+      ],
+      "rationale": "Visible French settings and mode labels contain machine grammar and English source remnants."
+    },
+    {
+      "id": "LOC-EN-FR-BRAND-001",
+      "locale": "fr",
+      "surface": "documentation_topics",
+      "classification": "brand",
+      "decision": "keep",
+      "terms": ["Browser Policy Manager", "Firefox"],
+      "source_refs": [
+        "app/i18n_src/fr/common.json",
+        "documentation/src/dita/fr/"
+      ],
+      "rationale": "Brand and product names remain unchanged."
+    },
+    {
+      "id": "LOC-EN-FR-ID-001",
+      "locale": "fr",
+      "surface": "screenshots",
+      "classification": "identifier",
+      "decision": "keep",
+      "terms": ["browser.startup.homepage", "browser.tabs.warnOnClose", "DisableTelemetry", "Homepage", "Locked", "true"],
+      "source_refs": [
+        "documentation/assets/screenshots/fr/ug-all-settings-review-narrow-light.png"
+      ],
+      "rationale": "Policy IDs, preference IDs, and JSON literals are not translated."
+    },
+    {
+      "id": "LOC-EN-FR-PATH-001",
+      "locale": "fr",
+      "surface": "screenshots",
+      "classification": "command/path/API",
+      "decision": "keep",
+      "terms": ["https://portal.example.test/", "policies.json"],
+      "source_refs": [
+        "documentation/assets/screenshots/fr/ug-all-settings-review-narrow-light.png",
+        "documentation/assets/screenshots/fr/ug-json-editor-desktop-dark.png"
+      ],
+      "rationale": "URLs and Firefox boundary filenames remain literal."
+    },
+    {
+      "id": "LOC-EN-FR-ABBR-001",
+      "locale": "fr",
+      "surface": "documentation_search_ui",
+      "classification": "abbreviation",
+      "decision": "keep",
+      "terms": ["AI", "BPM", "CIS", "ESR", "JSON", "URL"],
+      "source_refs": [
+        "documentation/tools/build_docs.py",
+        "documentation/src/dita/fr/",
+        "app/i18n_src/fr/"
+      ],
+      "rationale": "Technical abbreviations are allowed when used as labels or format names."
+    },
+    {
+      "id": "LOC-EN-FR-ALLOW-001",
+      "locale": "fr",
+      "surface": "captions_alt_text",
+      "classification": "allowlist",
+      "decision": "keep",
+      "terms": ["Firefox", "JSON"],
+      "source_refs": [
+        "documentation/src/dita/fr/user/ug-task-use-json-editor.dita"
+      ],
+      "rationale": "French captions and alt text are localized except for allowed brand/format names."
+    },
+    {
+      "id": "LOC-EN-ES-REPLACE-001",
+      "locale": "es-ES",
+      "surface": "screenshots",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Abrir another modo", "Perfil name es bloqueado despues creation.", "Losresultadosde validacion apareceran"],
+      "source_refs": [
+        "documentation/config/user-guide-screenshot-visual-qa-0.9.1.json",
+        "app/i18n_src/es-ES/common.json",
+        "app/i18n_src/es-ES/json.json"
+      ],
+      "related_blockers": ["SHOT-QA-LOC-ES-001"],
+      "rationale": "Spanish UI screenshots contain English words and machine-concatenated phrases."
+    },
+    {
+      "id": "LOC-EN-ES-REPLACE-002",
+      "locale": "es-ES",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["editaring", "replacing", "burying", "finishing"],
+      "source_refs": [
+        "app/i18n_src/es-ES/common.json",
+        "app/i18n_src/es-ES/wizard.json",
+        "app/i18n/es-ES.json"
+      ],
+      "rationale": "English stems with Spanish context are visible machine translation artifacts."
+    },
+    {
+      "id": "LOC-EN-ES-REPLACE-003",
+      "locale": "es-ES",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Sin ajustes match este filtro.", "All", "Guided-covered", "Complexity", "Could no actualización", "must ser válido JSON"],
+      "source_refs": [
+        "app/i18n_src/es-ES/settings.json",
+        "app/i18n/es-ES.json"
+      ],
+      "rationale": "Settings filters and validation messages contain visible English fallback terms."
+    },
+    {
+      "id": "LOC-EN-ES-REPLACE-004",
+      "locale": "es-ES",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Importared policies.json", "Importarando {file}", "Importar crears un nuevo perfil"],
+      "source_refs": [
+        "app/i18n_src/es-ES/library.json",
+        "app/i18n_src/es-ES/common.json"
+      ],
+      "rationale": "Import workflow copy mixes English participles with Spanish UI text."
+    },
+    {
+      "id": "LOC-EN-ES-REPLACE-005",
+      "locale": "es-ES",
+      "surface": "product_ui_catalogs",
+      "classification": "replace",
+      "decision": "fix in M7-03",
+      "terms": ["Perfil name", "Sin perfiles match el actual filters actual ahora.", "El lista actualizaciones como soon como su filters cambiar."],
+      "source_refs": [
+        "app/i18n_src/es-ES/common.json",
+        "app/i18n_src/es-ES/library.json"
+      ],
+      "rationale": "Profile and library prose needs established Spanish UI terms instead of English source words."
+    },
+    {
+      "id": "LOC-EN-ES-BRAND-001",
+      "locale": "es-ES",
+      "surface": "documentation_topics",
+      "classification": "brand",
+      "decision": "keep",
+      "terms": ["Browser Policy Manager", "Firefox"],
+      "source_refs": [
+        "app/i18n_src/es-ES/common.json",
+        "documentation/src/dita/es-ES/"
+      ],
+      "rationale": "Brand and product names remain unchanged."
+    },
+    {
+      "id": "LOC-EN-ES-ID-001",
+      "locale": "es-ES",
+      "surface": "screenshots",
+      "classification": "identifier",
+      "decision": "keep",
+      "terms": ["browser.startup.homepage", "browser.tabs.warnOnClose", "DisableTelemetry", "Homepage", "Locked", "true"],
+      "source_refs": [
+        "documentation/assets/screenshots/es-ES/ug-all-settings-review-narrow-light.png"
+      ],
+      "rationale": "Policy IDs, preference IDs, and JSON literals are not localized."
+    },
+    {
+      "id": "LOC-EN-ES-PATH-001",
+      "locale": "es-ES",
+      "surface": "screenshots",
+      "classification": "command/path/API",
+      "decision": "keep",
+      "terms": ["https://portal.example.test/", "policies.json"],
+      "source_refs": [
+        "documentation/assets/screenshots/es-ES/ug-all-settings-review-narrow-light.png",
+        "documentation/assets/screenshots/es-ES/ug-json-editor-desktop-dark.png"
+      ],
+      "rationale": "URLs and Firefox boundary filenames remain literal."
+    },
+    {
+      "id": "LOC-EN-ES-ABBR-001",
+      "locale": "es-ES",
+      "surface": "documentation_search_ui",
+      "classification": "abbreviation",
+      "decision": "keep",
+      "terms": ["AI", "BPM", "CIS", "ESR", "JSON", "URL"],
+      "source_refs": [
+        "documentation/tools/build_docs.py",
+        "documentation/src/dita/es-ES/",
+        "app/i18n_src/es-ES/"
+      ],
+      "rationale": "Technical abbreviations are allowed when used as labels or format names."
+    },
+    {
+      "id": "LOC-EN-ES-ALLOW-001",
+      "locale": "es-ES",
+      "surface": "captions_alt_text",
+      "classification": "allowlist",
+      "decision": "keep",
+      "terms": ["Firefox", "JSON"],
+      "source_refs": [
+        "documentation/src/dita/es-ES/user/ug-task-use-json-editor.dita"
+      ],
+      "rationale": "Spanish captions and alt text are localized except for allowed brand/format names."
+    }
+  ],
+  "next_actions": [
+    {
+      "backlog_item": "BPM091-M7-02",
+      "action": "Use this inventory to define locale terminology sources and allowlist policy with Pontoon/SUMO-oriented authority notes."
+    },
+    {
+      "backlog_item": "BPM091-M7-03",
+      "action": "Replace every finding classified as replace in source locale catalogs and affected DITA/search/navigation strings."
+    },
+    {
+      "backlog_item": "BPM091-M7-05",
+      "action": "Re-run human-oriented locale QA and update screenshot visual QA from blocked to accepted only after affected screenshots are regenerated."
+    }
+  ]
+}

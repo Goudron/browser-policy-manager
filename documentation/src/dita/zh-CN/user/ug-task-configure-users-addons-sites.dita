@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>配置用户、附加组件和站点</title>
-  <shortdesc>本任务完整说明“配置用户、附加组件和站点”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>配置用户、加载项和站点</title>
+  <shortdesc>使用步骤 4 进行帐户、扩展、附加组件、书签、语言、翻译和站点处理。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>指导草案已开放。</p></prereq>
+    <context><p>此步骤收集影响用户身份表面、扩展治理、本地化和网站特定行为的控件。</p></context>
     <steps>
-      <step><cmd>打开与“配置用户、附加组件和站点”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开第 4 步，用户，附加组件 &amp; 站点。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>查看 Mozilla 帐户和身份相关的浏览器界面。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>根据部署规则配置扩展、附加组件和书签。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>设置语言、翻译和网站处理选项。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>配置文件包含经过审核的用户、附加组件、书签、语言和站点处理控件。</p></result>
+    <postreq><p>恢复：如果扩展程序或站点意外被阻止，请检查匹配部分并再次验证。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-security-privacy"/>

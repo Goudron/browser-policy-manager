@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-refresh-profile-library" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Refresh the Profile Library</title>
+  <title>Refresh the Library</title>
   <shortdesc>Reload Library rows and interpret load or action status before repeating an operation.</shortdesc>
   <taskbody>
     <prereq><p>The Library is open, and you need to confirm current saved profile state after a change or failed load.</p></prereq>

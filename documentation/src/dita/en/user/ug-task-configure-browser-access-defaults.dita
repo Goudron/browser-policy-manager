@@ -13,7 +13,7 @@
       <step><cmd>Validate warnings shown next to schema-dependent controls.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>The profile has intentional browser access and default-behavior settings.</p></result>
-    <postreq><p>Recovery: if validation flags a value, undo the last change or use All Settings to inspect the raw policy shape.</p></postreq>
+    <postreq><p>Recovery: if validation flags a value, undo the last change or use All settings to inspect the raw policy shape.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

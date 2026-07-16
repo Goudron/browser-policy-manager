@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-sufficiency-review-protocol-0.9.1",
+  "backlog_item": "BPM091-M2-06",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "purpose": "Turn documentation sufficiency into repeatable evidence that a reader can complete the documented action and reach the stated result.",
+  "inherits_from": [
+    "documentation/config/user-guide-coverage-closure-0.9.0.json",
+    "docs/architecture/product-documentation-content-coverage-audit-0.9.0.md",
+    "documentation/fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json",
+    "documentation/tests/suite-boundaries-0.9.0.json"
+  ],
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "guide_families": [
+    "user-guide",
+    "firefox-policy-guide",
+    "cis-settings-guide",
+    "administrator-guide"
+  ],
+  "review_item_template": {
+    "required_fields": [
+      "review_id",
+      "guide_id",
+      "topic_id",
+      "locale_scope",
+      "task_or_claim",
+      "prerequisites",
+      "exact_steps",
+      "expected_result",
+      "recovery_path",
+      "drift_source",
+      "focused_verification",
+      "evidence_type",
+      "evidence_artifact",
+      "review_disposition"
+    ],
+    "locale_scope_values": ["all-locales", "source-locale-plus-parity", "single-locale"],
+    "review_disposition_values": ["pass", "blocked", "deferred-non-goal"]
+  },
+  "checklist": {
+    "prerequisites": [
+      "Names required product version, browser/schema channel, locale, role, fixture, profile state, API token if relevant, and whether screenshots are required.",
+      "Separates source-install prerequisites from packaged-installer or production-service assumptions."
+    ],
+    "exact_steps": [
+      "Lists the commands, clicks, API calls, file paths, and form choices in executable order.",
+      "Does not hide required setup behind summary phrases such as configure as needed.",
+      "Keeps commands copyable and avoids translated command/path/API identifiers."
+    ],
+    "expected_result": [
+      "States the observable successful end state: page, saved profile, exported file, validation response, health check, generated artifact, or documented boundary decision.",
+      "Includes the exact status, file, route, response field, or UI state needed to confirm success."
+    ],
+    "recovery_path": [
+      "Names at least one likely failure mode and the next user action.",
+      "Points to troubleshooting content when recovery exceeds the topic's normal scope."
+    ],
+    "drift_source": [
+      "Names the product file, inventory, schema, fixture, Make target, API route, DITA map, or external-source policy that can make the topic stale.",
+      "Requires a focused rerun command when the drift source changes."
+    ],
+    "focused_verification": [
+      "Uses the narrowest relevant docs contract, product unit, API, browser, command, or simulation check before release gates.",
+      "Records what remains unverified when browser, OS, network, or distribution access is not used."
+    ]
+  },
+  "evidence_types": {
+    "hands_on_browser": {
+      "description": "A maintainer performs the documented UI workflow with deterministic test state.",
+      "artifact": "test name, screenshot report, or short review note under the approved reports boundary"
+    },
+    "hands_on_command_transcript": {
+      "description": "A maintainer runs the documented shell/API commands in a disposable environment.",
+      "artifact": "sanitized command transcript, focused test log, or review note"
+    },
+    "browser_smoke": {
+      "description": "A committed browser test executes the representative path.",
+      "artifact": "pytest node id and command"
+    },
+    "api_or_unit_test": {
+      "description": "A committed unit/API/contract test executes the documented boundary.",
+      "artifact": "pytest node id and command"
+    },
+    "static_source_simulation": {
+      "description": "A deterministic source/fixture comparison proves commands, routes, keys, examples, and expected states without running the external system.",
+      "artifact": "fixture path, compared source path, and focused test command"
+    },
+    "documented_simulation_evidence": {
+      "description": "A written simulation explains why hands-on execution is unavailable and maps every step to deterministic source, fixture, or test evidence.",
+      "artifact": "review record with assumptions, unverified boundary, and release-blocking follow-up if the simulation is insufficient"
+    },
+    "explicit_waiver": {
+      "description": "A maintainer-approved non-goal or unavailable environment decision.",
+      "artifact": "dated waiver record with owner and release impact"
+    }
+  },
+  "guide_family_rules": {
+    "user-guide": {
+      "scope": "All user-visible task topics and troubleshooting topics that instruct a user to operate BPM.",
+      "minimum_evidence": ["hands_on_browser", "browser_smoke", "documented_simulation_evidence"],
+      "must_cover": [
+        "profile library",
+        "guided editor",
+        "all settings",
+        "JSON editor",
+        "comparison",
+        "import/export",
+        "validation",
+        "locale/theme"
+      ],
+      "closure_rule": "A User Guide task cannot close from topic presence or static coverage alone; it needs hands-on execution, browser smoke, or documented simulation evidence."
+    },
+    "firefox-policy-guide": {
+      "scope": "Policy and managed-preference reference topics, channel notes, examples, validation caveats, and related user tasks.",
+      "minimum_evidence": ["api_or_unit_test", "static_source_simulation", "documented_simulation_evidence"],
+      "must_cover": [
+        "policy ID",
+        "value shape",
+        "Firefox channel",
+        "schema provenance",
+        "BPM UI/API location",
+        "validation caveat"
+      ],
+      "closure_rule": "Reference topics may close with source-backed simulation when the policy cannot be safely applied in a live browser."
+    },
+    "cis-settings-guide": {
+      "scope": "CIS orientation, selection, preset/layer merge, manual-review, deviation, verification, and workflow topics.",
+      "minimum_evidence": ["static_source_simulation", "api_or_unit_test", "documented_simulation_evidence"],
+      "must_cover": [
+        "BPM mapping",
+        "layer behavior",
+        "manual review state",
+        "non-certification boundary",
+        "verification step"
+      ],
+      "closure_rule": "CIS topics must prove BPM behavior and source-attribution boundaries without copying restricted benchmark expression."
+    },
+    "administrator-guide": {
+      "scope": "Source deployment, operations, updates, API integration, troubleshooting, and production-readiness boundaries.",
+      "minimum_evidence": ["hands_on_command_transcript", "api_or_unit_test", "documented_simulation_evidence"],
+      "must_cover": [
+        "source checkout",
+        "virtual environment",
+        "editable install",
+        "database migration",
+        "health/readiness",
+        "docs build",
+        "rollback or stop condition",
+        "unsupported production boundary"
+      ],
+      "closure_rule": "Administrator source-install tasks cannot close from static text checks alone; they require hands-on command execution or documented simulation evidence."
+    }
+  },
+  "source_install_special_rule": {
+    "applies_to": [
+      "administrator-guide linux source-install tasks",
+      "administrator-guide Windows WSL source-install tasks",
+      "future five-distribution Linux source-install topics"
+    ],
+    "required_evidence": ["hands_on_command_transcript", "documented_simulation_evidence"],
+    "must_include": [
+      "exact distribution or OS name and version",
+      "shell used",
+      "Python version",
+      "commands in documented order",
+      "exit status or observable result for each verification command",
+      "known skipped step with reason",
+      "unverified external boundary if simulation was used"
+    ],
+    "blocked_if_missing": [
+      "exact command sequence",
+      "health/readiness verification",
+      "database migration or explicit no-migration statement",
+      "documentation build verification",
+      "rollback or stop condition"
+    ]
+  },
+  "review_records": {
+    "storage": "documentation/reports/diagnostics/ for disposable local review notes, or docs/architecture/ for accepted release-blocking sufficiency records.",
+    "naming": "documentation-sufficiency-{guide_id}-{topic_id}-0.9.1.json",
+    "must_not_commit": [
+      "secrets",
+      "private hostnames",
+      "production data",
+      "full external corpora",
+      "licensed benchmark source text"
+    ]
+  },
+  "implementation_tasks": [
+    "BPM091-M6-01",
+    "BPM091-M6-02",
+    "BPM091-M6-03",
+    "BPM091-M6-04",
+    "BPM091-M6-05",
+    "BPM091-M6-06",
+    "BPM091-M6-07",
+    "BPM091-M9-05"
+  ],
+  "verification": {
+    "focused_contracts": [
+      "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_sufficiency_review_protocol.py",
+      "./.venv/bin/pytest -q documentation/tests/contract/test_documentation_sufficiency_drift.py",
+      "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_coverage_closure.py documentation/tests/contract/test_administrator_guide_validation_fixtures.py"
+    ],
+    "release_gates": [
+      "make test-docs-contract",
+      "make docs-release-check",
+      "make test-docs-browser",
+      "make test-release"
+    ],
+    "manual_or_simulation_required_for": [
+      "User Guide task walkthroughs",
+      "Administrator source-install command sequences",
+      "five selected Linux distribution command topics"
+    ]
+  },
+  "non_goals": [
+    "This protocol does not perform the sufficiency review.",
+    "This protocol does not select the five Linux distributions.",
+    "This protocol does not add or rewrite DITA topics.",
+    "This protocol does not hand-edit generated HTML, manifests, search indexes, or installed app/documentation/site artifacts."
+  ]
+}

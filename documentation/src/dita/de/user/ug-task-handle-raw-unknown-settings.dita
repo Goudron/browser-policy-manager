@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-handle-raw-unknown-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Raw- und unbekannte Einstellungen behandeln</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Inspect imported unknown keys and raw-fallback values without losing them accidentally.</shortdesc>
+  <title>Behandelt rohe und unbekannte Einstellungen</title>
+  <shortdesc>Überprüfen Sie importierte unbekannte Schlüssel und Roh-Fallback-Werte, ohne sie versehentlich zu verlieren.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Open Review mode or a raw/unknown filtered list in All Settings.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Raw and unknown settings may come from import, schema differences, or values BPM cannot model visually. Treat them as preservation and review items, not routine edits.</p></context>
+    <prereq><p>Öffnen Sie Prüfung oder eine unformatierte/unbekannte gefilterte Liste in Alle Einstellungen.</p></prereq>
+    <context><p>Rohe und unbekannte Einstellungen können vom Import, Schemaunterschieden oder Werten stammen, die BPM nicht visuell modellieren kann. Behandeln Sie sie als Aufbewahrungs- und Überprüfungselemente, nicht als routinemäßige Bearbeitungen.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Filter or open Review items for raw, unknown, or imported settings.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Inspect the raw value, source, validation state, and schema channel.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Decide whether to preserve, remove, reset, or inspect the value in JSON Editor.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Raw- und unbekannte Einstellungen behandeln. Save only after confirming the value should remain or be removed.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Filtern oder öffnen Sie Überprüfungselemente für unformatierte, unbekannte oder importierte Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie den Rohwert, die Quelle, den Validierungsstatus und den Schemakanal.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Entscheiden Sie, ob der Wert in JSON-Editor beibehalten, entfernt, zurückgesetzt oder überprüft werden soll.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Speichern Sie erst, nachdem Sie bestätigt haben, dass der Wert erhalten bleiben oder entfernt werden soll.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. Raw and unknown values are preserved or removed intentionally.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if the value might be important, export or compare the profile before removing it.</p></postreq>
+    <result><p>Rohe und unbekannte Werte werden beibehalten oder absichtlich entfernt.</p></result>
+    <postreq><p>Wiederherstellung: Wenn der Wert wichtig sein könnte, exportieren oder vergleichen Sie das Profil, bevor Sie es entfernen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-follow-setting-deep-link"/>

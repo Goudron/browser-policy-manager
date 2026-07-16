@@ -2,16 +2,16 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Modèle de profil et cycle de vie</title>
-  <shortdesc>Un profil BPM est un espace de travail de politiques Firefox enregistré, partagé par la Bibliothèque, l’Éditeur guidé, Tous les paramètres, l’Éditeur JSON et Comparer.</shortdesc>
+  <shortdesc>Un profil BPM est un espace de travail de stratégie Firefox enregistré partagé par la bibliothèque, Éditeur guidé, Tous les paramètres, Éditeur JSON et Comparer les paramètres des profils.</shortdesc>
   <conbody>
-    <p>Utilisez un profil pour regrouper les politiques Firefox, les préférences gérées, l’état de validation, les informations de source et l’état du cycle de vie. Le même profil peut être ouvert dans plusieurs surfaces BPM sans changer d’identité.</p>
+    <p>Utilisez un profil pour collecter les politiques Firefox, Préférences gérées, l'état de validation, l'attribution de la source et l'état du cycle de vie en un seul endroit. Le même profil peut être ouvert via différentes surfaces BPM sans changer son identité.</p>
     <section id="a-lifecycle-states">
       <title>États du cycle de vie</title>
-      <p>Un brouillon non enregistré existe seulement jusqu’au premier enregistrement. Un profil actif enregistré peut être modifié, validé, exporté, archivé, dupliqué ou comparé. Un profil archivé reste disponible pour consultation et restauration, mais ce n’est pas la cible normale d’export.</p>
+      <p>Un brouillon non enregistré n'existe que jusqu'à son premier enregistrement. Un profil actif enregistré peut être modifié, validé, exporté, archivé, dupliqué ou comparé. Un profil archivé est conservé pour les flux de travail de révision et de restauration, mais ne constitue pas la cible d'exportation normale.</p>
     </section>
     <section id="a-status-context">
-      <title>Contexte d’état</title>
-      <p>Le nom, l’ID, le canal de schéma Firefox, le cycle de vie, l’état enregistré ou modifié, le résultat de validation et les résumés de source indiquent si le profil est prêt pour consultation, modification, export ou récupération.</p>
+      <title>Contexte d'état</title>
+      <p>Le nom du profil, ID, le canal de schéma Firefox, le cycle de vie, l'état enregistré/modifié, le résultat de la validation et les résumés des sources vous indiquent si le profil est prêt à être révisé, modifié, exporté ou récupéré.</p>
     </section>
   </conbody>
 </concept>

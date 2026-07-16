@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-review-devops-network-cors-security" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-task-review-devops-network-cors-security" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Review network, CORS, and security limits</title>
   <shortdesc>Review host, port, reload, health probes, CORS defaults, and security limits before making a source-run BPM instance reachable.</shortdesc>
   <taskbody>
@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Choose the narrowest bind address for the current environment.</cmd><info><p>Use <codeph>127.0.0.1</codeph> for local Linux checks. Use <codeph>0.0.0.0</codeph> only when WSL browser forwarding or a controlled lab network requires it. Record the reason for any non-loopback binding.</p></info></step>
       <step><cmd>Gate operational access with health and readiness probes.</cmd><info><p>Use <codeph>GET /health</codeph> and <codeph>GET /health/ready</codeph> before API examples or UI smoke checks. Successful probes show process liveness/readiness only; they do not prove database backup status, Firefox enforcement, authentication, authorization, or production topology.</p></info></step>
-      <step><cmd>Restrict CORS for any shared evaluation.</cmd><info><p>For local experiments, permissive <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> may be acceptable. For a shared host, set explicit origins and record who owns the browser origin. BPM 0.9.0 documentation does not define credentialed CORS, CSRF protections, API authentication, or tenant isolation.</p></info></step>
+      <step><cmd>Restrict CORS for any shared evaluation.</cmd><info><p>For local experiments, permissive <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> may be acceptable. For a shared host, set explicit origins and record who owns the browser origin. BPM documentation does not define credentialed CORS, CSRF protections, API authentication, or tenant isolation.</p></info></step>
       <step><cmd>Keep unsupported security controls out of the BPM claim.</cmd><info><note type="warning">This release does not ship TLS termination, reverse proxy recipes, firewall policy, rate limiting, request signing, audit logging, SSO, OAuth/OIDC setup, role-based access control, vulnerability scanning, or HA failover. Document those as external controls if your environment adds them.</note></info></step>
     </steps>
     <result><p>The source-run BPM network posture is documented as a controlled local or lab exposure rather than a production security architecture.</p></result>

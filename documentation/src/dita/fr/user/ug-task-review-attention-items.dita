@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Examiner les éléments d’attention All Settings</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Use Review mode to triage invalid, CIS manual-review, raw, unknown, deprecated, and imported items before routine editing.</shortdesc>
+  <title>Examiner Tous les paramètres éléments d'attention</title>
+  <shortdesc>Utilisez Revue pour trier les éléments non valides, à révision manuelle CIS, bruts, inconnus, obsolètes et importés avant toute modification de routine.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Open a saved profile in All Settings.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Review mode is the default attention-first view. It gathers settings that may require a decision before export, comparison, or handoff.</p></context>
+    <prereq><p>Ouvrez un profil enregistré dans Tous les paramètres.</p></prereq>
+    <context><p>Revue est la vue par défaut axée sur l'attention d'abord. Il rassemble les paramètres qui peuvent nécessiter une décision avant l'exportation, la comparaison ou le transfert.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Open All Settings and stay in Review mode.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Read the review summary and grouped action cards.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Open each invalid, CIS manual-review, raw, unknown, deprecated, or imported item that applies to the profile.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Examiner les éléments d’attention All Settings. Resolve the item, document why it remains, or move to the linked detail view for a deliberate edit.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Ouvrez Tous les paramètres et restez dans Revue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Lisez le résumé de l'examen et les fiches d'action groupées.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez chaque élément non valide, à révision manuelle CIS, brut, inconnu, obsolète ou importé qui s'applique au profil.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Résolvez l'élément, documentez pourquoi il reste ou passez à la vue détaillée liée pour une modification délibérée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. Attention items are either resolved, intentionally retained, or ready for a focused detail edit.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if Review looks empty but you expected issues, clear filters, refresh the profile, and confirm the selected schema channel.</p></postreq>
+    <result><p>Les éléments d'attention sont soit résolus, intentionnellement conservés, soit prêts pour une modification détaillée ciblée.</p></result>
+    <postreq><p>Récupération : si Revue semble vide mais que vous attendiez des problèmes, effacez les filtres, actualisez le profil et confirmez le canal de schéma sélectionné.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-all-settings-review-states"/>

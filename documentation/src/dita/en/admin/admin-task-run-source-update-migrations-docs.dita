@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-run-source-update-migrations-docs" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-task-run-source-update-migrations-docs" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Run migrations and documentation rebuild checks</title>
   <shortdesc>Apply database migrations, validate documentation source, and rebuild the static documentation output after the source revision changes.</shortdesc>
   <taskbody>
     <prereq><p>The checkout and dependencies have been refreshed successfully, and the database backup evidence was collected while BPM was stopped.</p></prereq>
-    <context><p>Updates may introduce database migrations and documentation changes. BPM 0.9.0 documents forward migration with <codeph>alembic upgrade head</codeph>; it does not promise automatic downgrade or safe schema rollback.</p></context>
+    <context><p>Updates may introduce database migrations and documentation changes. BPM documents forward migration with <codeph>alembic upgrade head</codeph>; it does not promise automatic downgrade or safe schema rollback.</p></context>
     <steps>
       <step><cmd>Apply database migrations to the intended database.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"

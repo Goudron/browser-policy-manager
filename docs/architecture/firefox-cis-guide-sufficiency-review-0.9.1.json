@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "review_id": "bpm-0.9.1-firefox-cis-guide-sufficiency-review",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M6-02",
+  "guide_ids": ["firefox-policy-guide", "cis-settings-guide"],
+  "status": "accepted",
+  "review_date": "2026-07-10",
+  "inherits_from": [
+    "documentation/config/documentation-sufficiency-review-protocol-0.9.1.json",
+    "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
+    "docs/architecture/cis-documentation-inventory-0.9.0.json"
+  ],
+  "scope": {
+    "locale_scope": "source-locale-plus-parity",
+    "source_locale": "en",
+    "parity_locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+    "execution_method": "Deterministic inventory, generated-topic, schema, mapping-layer, provenance, DITA link, and locale-parity simulation.",
+    "selection_rule": "Use the topic-model fixtures and CIS edge states so the sample includes simple and complex policies, Release/ESR differences, managed preferences, CIS Levels 1 and 2, manual review, and non-publishable provenance records. Full generated inventories remain covered by their existing exhaustive contracts."
+  },
+  "inventory_baseline": {
+    "firefox": {
+      "channels": ["esr-140.12", "release-152"],
+      "policy_count": 120,
+      "both_channels_count": 112,
+      "release_only_count": 8,
+      "managed_preference_count": 62,
+      "schema_valid_example_count": 232
+    },
+    "cis": {
+      "recommendation_count": 55,
+      "published_topic_count": 53,
+      "provenance_only_count": 2,
+      "level_1_count": 51,
+      "level_2_count": 4,
+      "policy_mapping_count": 43,
+      "preference_mapping_count": 10,
+      "manual_review_path_count": 9,
+      "mapping_example_count": 53
+    }
+  },
+  "review_items": [
+    {
+      "review_id": "FX-SUFF-SIMPLE",
+      "guide_id": "firefox-policy-guide",
+      "topic_id": "fx-policy-DisableTelemetry",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can identify a simple boolean policy, its BPM control, supported Firefox channels, and a minimal valid boundary document.",
+      "prerequisites": "Select Firefox ESR 140.12 or Release 152 and open the DisableTelemetry reference from the Firefox Policy Guide.",
+      "exact_steps": ["Confirm the policy ID and boolean value shape.", "Confirm the mapped privacy_security/data_collection toggle for the selected channel.", "Use the example declared for that channel and validate it before export."],
+      "expected_result": "Both channel examples validate and resolve to policy:DisableTelemetry without implying live Firefox activation.",
+      "recovery_path": ["fx-concept-release-esr-differences", "ug-troubleshoot-policy-validation"],
+      "drift_source": ["docs/architecture/firefox-policy-documentation-inventory-0.9.0.json", "app/schemas/policies/firefox-esr-140.12.json", "app/schemas/policies/firefox-release-152.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_firefox_policy_skeleton_generation.py::test_each_generated_policy_example_validates_against_its_declared_channel"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/firefox/policies/fx-policy-DisableTelemetry.dita", "documentation/src/generated/firefox/firefox-policy-skeletons-0.9.0.json"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "FX-SUFF-COMPLEX",
+      "guide_id": "firefox-policy-guide",
+      "topic_id": "fx-policy-Homepage",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can distinguish a complex object policy from a scalar policy and validate its nested value shape.",
+      "prerequisites": "Select Firefox ESR 140.12 or Release 152 and review the complex-policy orientation before editing Homepage.",
+      "exact_steps": ["Open the Homepage object-card target.", "Compare its nested shape with the channel schema.", "Validate the channel-specific example before saving or exporting."],
+      "expected_result": "The Homepage object and its examples agree with both current schemas and the linked complex-policy workflow.",
+      "recovery_path": ["fx-task-review-complex-policy-configuration", "ug-task-use-json-editor"],
+      "drift_source": ["documentation/config/firefox-policy-topic-model-0.9.0.json", "app/schemas/policies/firefox-esr-140.12.json", "app/schemas/policies/firefox-release-152.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_firefox_policy_concepts.py::test_complex_policy_family_fixture_is_schema_valid_for_declared_channels"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/firefox/policies/fx-policy-Homepage.dita", "documentation/tests/contract/test_firefox_policy_concepts.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "FX-SUFF-PREFERENCES",
+      "guide_id": "firefox-policy-guide",
+      "topic_id": "fx-policy-Preferences",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can distinguish the Preferences dictionary from ordinary policies and make a lock/default decision for a known managed preference.",
+      "prerequisites": "Open the managed-preference locking reference and choose a known preference from the 62-entry inventory.",
+      "exact_steps": ["Confirm the preference ID, type, status, UI target, and value control in the inventory.", "Place the entry under the Preferences policy dictionary.", "Preserve unknown dictionary entries and validate the resulting Firefox boundary document."],
+      "expected_result": "Known managed preferences retain their inventory-defined type and status, while the advanced Preferences editor preserves unknown fields for explicit review.",
+      "recovery_path": ["fx-reference-managed-preference-locking", "ug-task-handle-raw-unknown-settings"],
+      "drift_source": ["docs/architecture/firefox-policy-documentation-inventory-0.9.0.json", "app/web/firefox_preferences.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_firefox_policy_topic_model.py::test_model_includes_examples_relationships_managed_preferences_and_generation_contract"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/firefox/policies/fx-policy-Preferences.dita", "documentation/src/dita/en/firefox/fx-reference-managed-preference-locking.dita"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "FX-SUFF-CHANNEL",
+      "guide_id": "firefox-policy-guide",
+      "topic_id": "fx-policy-AIControls",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader does not apply a Release-only policy to an ESR profile.",
+      "prerequisites": "Compare Release 152 and ESR 140.12 support before selecting AIControls or VisualSearchEnabled.",
+      "exact_steps": ["Read the release-only support badge.", "Confirm that only release-152 metadata and examples are present.", "Choose an alternative or stop when the active profile uses ESR."],
+      "expected_result": "AIControls and VisualSearchEnabled are documented as Release-only and make no ESR support claim.",
+      "recovery_path": ["fx-concept-release-esr-differences", "ug-troubleshoot-schema-mismatch"],
+      "drift_source": ["documentation/src/generated/firefox/firefox-policy-channel-differences-0.9.0.json", "app/core/schema_channels.py"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_firefox_policy_skeleton_generation.py::test_release_only_policy_topics_do_not_claim_esr_support"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/firefox/policies/fx-policy-AIControls.dita", "documentation/src/generated/firefox/policies/fx-policy-VisualSearchEnabled.dita"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "CIS-SUFF-L1-POLICY",
+      "guide_id": "cis-settings-guide",
+      "topic_id": "cis-rec-1-1-1-1",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can trace a Level 1 recommendation to a policy path, value, merge rule, generated layers, and Firefox policy reference.",
+      "prerequisites": "Select the Level 1 baseline and the ESR 140.12 or Release 152 schema channel.",
+      "exact_steps": ["Open recommendation 1.1.1.1.", "Trace InstallAddonsPermission.Default=false through its generated layer checks.", "Follow the Firefox policy keyref and validate the example boundary document."],
+      "expected_result": "The recommendation maps to one schema-valid policy target in both L1 channel layers and inherited L2 layers.",
+      "recovery_path": ["cis-task-trace-cis-source", "cis-task-verify-cis-deviation"],
+      "drift_source": ["app/compliance/firefox/cis/mappings.yaml", "app/compliance/firefox/cis/generated/cis_l1.esr-140.12.json", "app/compliance/firefox/cis/generated/cis_l1.release-152.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_cis_recommendation_skeleton_generation.py::test_generated_mapping_tables_and_examples_match_current_cis_layers"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/cis/recommendations/cis-rec-1-1-1-1.dita", "documentation/src/generated/cis/cis-recommendation-skeletons-0.9.0.json"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "CIS-SUFF-L2-PREFERENCE",
+      "guide_id": "cis-settings-guide",
+      "topic_id": "cis-rec-1-1-18-9",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can identify a Level 2-only managed-preference mapping and its locked value without treating it as Level 1.",
+      "prerequisites": "Select the Level 2 baseline and either supported schema channel.",
+      "exact_steps": ["Open recommendation 1.1.18.9.", "Confirm the network.IDN_show_punycode known-preference target and locked boolean value.", "Confirm that the mapping occurs only in the two L2 generated layers."],
+      "expected_result": "The recommendation maps to a locked Preferences entry in L2 ESR and Release layers and is absent from L1 layers.",
+      "recovery_path": ["cis-concept-levels-channels-layers", "fx-reference-managed-preference-locking"],
+      "drift_source": ["app/compliance/firefox/cis/mappings.yaml", "app/compliance/firefox/cis/generated/cis_l2.esr-140.12.json", "app/compliance/firefox/cis/generated/cis_l2.release-152.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_cis_recommendation_skeleton_generation.py::test_generated_mapping_tables_and_examples_match_current_cis_layers"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/cis/recommendations/cis-rec-1-1-18-9.dita", "documentation/fixtures/cis-workflows/level-workflows-0.9.0.json"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "CIS-SUFF-MANUAL",
+      "guide_id": "cis-settings-guide",
+      "topic_id": "cis-rec-1-1-5-1",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can detect a mapped value that still requires an environment-specific manual decision.",
+      "prerequisites": "Apply a CIS layer over an existing profile and inspect source attribution and attention items.",
+      "exact_steps": ["Trace SanitizeOnShutdown.Sessions to recommendation 1.1.5.1.", "Read the manual-review reason before accepting the CIS value or keeping the base value.", "Record the decision externally because BPM 0.9.1 has no persisted CIS exception model, then independently verify the exported setting."],
+      "expected_result": "The manual-review path remains visible and the decision is not presented as automatic proof of compliance.",
+      "recovery_path": ["cis-concept-manual-review-exceptions", "ug-task-resolve-cis-manual-review"],
+      "drift_source": ["app/compliance/firefox/cis/merge_rules.yaml", "documentation/src/generated/cis/cis-provenance-review-0.9.0.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_cis_recommendation_skeleton_generation.py::test_generated_cis_topics_carry_reviewed_version_level_mapping_manual_and_source_metadata"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/generated/cis/recommendations/cis-rec-1-1-5-1.dita", "documentation/src/dita/en/cis/cis-concept-manual-review-exceptions.dita"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "CIS-SUFF-PROVENANCE",
+      "guide_id": "cis-settings-guide",
+      "topic_id": "cis-concept-orientation",
+      "locale_scope": "source-locale-plus-parity",
+      "task_or_claim": "A reader can separate BPM mapping guidance from the official benchmark and from certification or compliance claims.",
+      "prerequisites": "Use the official benchmark for authoritative source expression and BPM documentation for BPM-owned mappings and workflows.",
+      "exact_steps": ["Read the independent-implementation and non-certification boundary.", "Treat recommendations 1.1.5.3 and 1.1.12.1 as provenance-only until their unsupported mapping states change.", "Use source hashes and provenance IDs to review drift without publishing restricted benchmark prose."],
+      "expected_result": "All 53 published recommendation topics retain provenance and non-certification notices; the two unresolved records are not published as actionable topics.",
+      "recovery_path": ["cis-task-trace-cis-source", "cis-task-verify-cis-deviation"],
+      "drift_source": ["app/compliance/firefox/cis/sources.yaml", "docs/architecture/cis-documentation-inventory-0.9.0.json", "documentation/src/generated/cis/cis-provenance-review-0.9.0.json"],
+      "focused_verification": ["./.venv/bin/pytest -q documentation/tests/contract/test_cis_recommendation_skeleton_generation.py::test_generated_cis_topics_preserve_source_boundary_and_non_certification_contract"],
+      "evidence_type": ["api_or_unit_test", "static_source_simulation"],
+      "evidence_artifact": ["documentation/src/dita/en/cis/cis-concept-orientation.dita", "documentation/src/generated/cis/cis-provenance-review-0.9.0.json"],
+      "review_disposition": "pass"
+    }
+  ],
+  "execution_record": {
+    "focused_contracts": {
+      "date": "2026-07-10",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py documentation/tests/contract/test_firefox_policy_topic_model.py documentation/tests/contract/test_firefox_policy_skeleton_generation.py documentation/tests/contract/test_cis_topic_model.py documentation/tests/contract/test_cis_recommendation_skeleton_generation.py",
+      "result": "pass",
+      "result_summary": "38 passed"
+    },
+    "locale_and_workflow_contracts": {
+      "date": "2026-07-10",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_firefox_policy_concepts.py documentation/tests/contract/test_firefox_policy_locale_parity.py documentation/tests/contract/test_cis_orientation_topics.py documentation/tests/contract/test_cis_locale_parity.py",
+      "result": "pass",
+      "result_summary": "17 passed"
+    }
+  },
+  "summary": {
+    "review_item_count": 8,
+    "pass_count": 8,
+    "blocked_count": 0,
+    "release_blockers": [],
+    "result": "Representative Firefox policies, managed preferences, channel differences, CIS Levels 1 and 2, manual-review paths, mapping examples, provenance boundaries, and links agree with current schemas, inventories, and generated layers."
+  },
+  "unverified_boundaries": [
+    "Schema-valid examples prove BPM and Firefox schema compatibility; they do not prove activation or runtime effect in a live Firefox deployment.",
+    "BPM documents its independent mappings and workflows but does not certify, endorse, or prove CIS compliance.",
+    "BPM 0.9.1 does not persist a separate CIS exception or waiver record; environment-specific decisions require an external record and independent verification."
+  ]
+}

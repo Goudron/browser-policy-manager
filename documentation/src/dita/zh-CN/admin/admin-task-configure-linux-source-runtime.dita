@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-configure-linux-source-runtime" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>配置 Linux 源码运行时设置</title>
-  <shortdesc>设置从源码运行的 BPM process 使用的 database URL、host、port、reload mode、CORS 和 documentation-site path。</shortdesc>
+<task id="admin-task-configure-linux-source-runtime" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>配置 Linux 源运行时设置</title>
+  <shortdesc>设置源运行 BPM 流程使用的数据库 URL、主机、端口、重新加载模式、CORS 和文档站点路径。</shortdesc>
   <taskbody>
-    <prereq><p>checkout dependencies 已安装，并且已为计划使用的数据库应用 migrations。</p></prereq>
-    <context><p>BPM 读取带 <codeph>BPM_</codeph> 前缀的 environment variables，也支持 repository-local 的 <codeph>.env</codeph> 文件。default database URL 是 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，数据存放在 <codeph>data/bpm.db</codeph>。</p></context>
+    <prereq><p>已安装签出依赖项，并已为您计划使用的数据库应用迁移。</p></prereq>
+    <context><p>BPM 读取带有 <codeph>BPM_</codeph> 前缀的环境变量，并且还支持存储库本地 <codeph>.env</codeph> 文件。默认数据库 URL 为 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，其将数据存储在 <codeph>data/bpm.db</codeph> 中。</p></context>
     <steps>
-      <step><cmd>创建本地数据目录并定义 database URL。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>创建本地数据目录并定义数据库 URL。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
-]]></codeblock><p>为了可重复的 source runs，相同值也可以写入未提交的本地 <codeph>.env</codeph> 文件。</p></info></step>
-      <step><cmd>为本地 source process 设置 network 和 reload values。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>对于可重复的源运行，相同的值可能存储在未提交的本地 <codeph>.env</codeph> 文件中。</p></info></step>
+      <step><cmd>设置本地源进程的网络和重新加载值。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
 export BPM_RELOAD="true"
-]]></codeblock><p>本地验证使用 loopback。绑定到 shared interface 是此 source-runbook boundary 之外的运维决策。</p></info></step>
-      <step><cmd>检查 CORS 和 documentation-site settings。</cmd><info><p>source defaults 包含 <codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。只在受控 local evaluation 中保留 permissive CORS；当 installed static documentation site 可用时，将 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 指向它。</p></info></step>
-      <step><cmd>通过仓库脚本启动 BPM。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>使用环回进行本地验证。绑定到共享接口是此源运行手册边界之外的操作决策。</p></info></step>
+      <step><cmd>查看 CORS 和文档站点设置。</cmd><info><p>源默认值包括 <codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。保留允许的 CORS 仅用于受控本地评估，并在已安装的静态文档站点可用时将 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 指向该站点。</p></info></step>
+      <step><cmd>从存储库脚本启动 BPM。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
-]]></codeblock><p>Makefile 运行 <codeph>uvicorn app.main:app --reload --port 8000</codeph>。保持 foreground terminal 打开，以便查看 startup messages 和 tracebacks。</p></info></step>
+]]></codeblock><p>Makefile 运行 <codeph>uvicorn app.main:app --reload --port 8000</codeph>。保持前台终端打开，以便启动消息和回溯可见。</p></info></step>
     </steps>
-    <result><p>BPM 已使用明确的 local runtime settings 从源码运行。</p></result>
-    <postreq><p>验证 health、readiness、product UI 和第一批 administrative smoke checks。</p></postreq>
+    <result><p>BPM 从具有显式本地运行时设置的源运行。</p></result>
+    <postreq><p>验证健康状况、准备情况、产品 UI 以及首次行政烟雾检查。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-linux-source-checkout"/>

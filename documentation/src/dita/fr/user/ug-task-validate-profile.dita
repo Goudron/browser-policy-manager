@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Valider un profil</title>
-  <shortdesc>Exécutez une validation tenant compte du schéma avant d’enregistrer, exporter ou comparer des modifications de politiques.</shortdesc>
+  <shortdesc>Exécutez une validation basée sur le schéma avant d'enregistrer, d'exporter ou de comparer les modifications de stratégie.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
-    <context><p>La validation vérifie les noms de politiques, les formes de valeurs, le canal de schéma pris en charge, les différences ESR/Release et les entrées raw ou unknown visibles dans BPM.</p></context>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <context><p>La validation vérifie les noms de stratégie, les formes de valeur, le canal de schéma pris en charge, les différences ESR uniquement non prises en charge et les entrées brutes ou inconnues visibles dans BPM.</p></context>
     <steps>
-      <step><cmd>Ouvrez le profil dans Guided, All Settings ou JSON.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Confirmez le canal de schéma Firefox sélectionné avant de valider.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Lancez la validation ou consultez le panneau de validation visible sur la surface active.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Corrigez unsupported policies, wrong value types, unknown raw entries ou valeurs importées obsolètes avant de considérer le profil prêt.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+      <step><cmd>Ouvrez le profil dans Éditeur guidé, Tous les paramètres ou JSON.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Confirmez le canal de schéma Firefox sélectionné avant de valider.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Exécutez la validation ou examinez le panneau de validation visible sur la surface active.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Résolvez les stratégies non prises en charge, les types de valeurs incorrects, les entrées brutes inconnues ou les valeurs importées obsolètes avant de traiter le profil comme prêt.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>
     <result><p>Vous savez si le profil est prêt à être enregistré et exporté pour le canal Firefox sélectionné.</p></result>
-    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+    <postreq><p>Récupération : si l'état visible n'est pas clair, arrêtez l'édition, lisez le message d'état actuel, actualisez une fois et rouvrez le profil depuis la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

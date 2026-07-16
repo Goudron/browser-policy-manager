@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Choose a Guided scenario</title>
-  <shortdesc>Select the scenario that best matches the profile goal so Guided Editor can present a useful starting point.</shortdesc>
+  <shortdesc>Select the scenario that best matches the profile goal so Guided editor can present a useful starting point.</shortdesc>
   <taskbody>
     <prereq><p>You know the profile purpose you want to support.</p></prereq>
     <context><p>Scenarios keep the first pass task-oriented and make the baseline easier to explain during review.</p></context>

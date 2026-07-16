@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "qa_id": "bpm-0.9.1-documentation-navigation-language-browser-qa",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M10-09",
+  "status": "accepted",
+  "purpose": "Freeze representative six-locale browser assertions for asynchronous navigation, long-tree scrolling, corrected BPM interface names, and visible localized prose.",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "viewports": {
+    "desktop": {"width": 1366, "height": 1000},
+    "narrow": {"width": 390, "height": 900}
+  },
+  "expected_guide_node_ids": [
+    "user-guide",
+    "firefox-policy-guide",
+    "cis-settings-guide",
+    "administrator-guide"
+  ],
+  "forbidden_guide_node_ids": ["api-integration-guide"],
+  "language_sample": {
+    "topic_id": "ug-task-use-all-settings",
+    "source": "documentation/src/dita/{locale}/user/ug-task-use-all-settings.dita",
+    "runtime_catalog_key": "profiles.editor_chrome_settings_link",
+    "locales": {
+      "en": {
+        "interface_name": "All settings",
+        "title": "Use All settings",
+        "shortdesc": "Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.",
+        "first_paragraph": "A saved profile exists. New unsaved drafts must be saved before All settings can open.",
+        "forbidden_english_fragments": []
+      },
+      "ru": {
+        "interface_name": "Все настройки",
+        "title": "Используйте Все настройки",
+        "shortdesc": "Откройте Все настройки для сохраненного профиля, если вам нужен полный визуальный контроль помимо более короткого управляемого рабочего процесса.",
+        "first_paragraph": "Существует сохраненный профиль. Прежде чем Все настройки сможет открыться, необходимо сохранить новые несохраненные черновики.",
+        "forbidden_english_fragments": [
+          "Use All settings",
+          "Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.",
+          "A saved profile exists. New unsaved drafts must be saved before All settings can open."
+        ]
+      },
+      "de": {
+        "interface_name": "Alle Einstellungen",
+        "title": "Alle Einstellungen verwenden",
+        "shortdesc": "Öffnen Sie Alle Einstellungen für ein gespeichertes Profil, wenn Sie über den kürzeren geführten Arbeitsablauf hinaus eine vollständige visuelle Kontrolle benötigen.",
+        "first_paragraph": "Ein gespeichertes Profil ist vorhanden. Neue nicht gespeicherte Entwürfe müssen gespeichert werden, bevor Alle Einstellungen geöffnet werden kann.",
+        "forbidden_english_fragments": [
+          "Use All settings",
+          "Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.",
+          "A saved profile exists. New unsaved drafts must be saved before All settings can open."
+        ]
+      },
+      "zh-CN": {
+        "interface_name": "所有设置",
+        "title": "使用 所有设置",
+        "shortdesc": "当您需要在较短的引导式工作流程之外进行完整的视觉控制时，请打开 所有设置 以获取已保存的配置文件。",
+        "first_paragraph": "存在已保存的配置文件。必须先保存新的未保存草稿，然后才能打开 所有设置。",
+        "forbidden_english_fragments": [
+          "Use All settings",
+          "Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.",
+          "A saved profile exists. New unsaved drafts must be saved before All settings can open."
+        ]
+      },
+      "fr": {
+        "interface_name": "Tous les paramètres",
+        "title": "Utilisez Tous les paramètres",
+        "shortdesc": "Ouvrez Tous les paramètres pour un profil enregistré lorsque vous avez besoin d'un contrôle visuel complet au-delà du flux de travail guidé plus court.",
+        "first_paragraph": "Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que Tous les paramètres puisse s'ouvrir.",
+        "forbidden_english_fragments": [
+          "Use All settings",
+          "Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.",
+          "A saved profile exists. New unsaved drafts must be saved before All settings can open."
+        ]
+      },
+      "es-ES": {
+        "interface_name": "Todos los ajustes",
+        "title": "Utilice Todos los ajustes",
+        "shortdesc": "Abra Todos los ajustes para obtener un perfil guardado cuando necesite un control visual completo más allá del flujo de trabajo guiado más corto.",
+        "first_paragraph": "Existe un perfil guardado. Los nuevos borradores no guardados deben guardarse antes de que se pueda abrir Todos los ajustes.",
+        "forbidden_english_fragments": [
+          "Use All settings",
+          "Open All settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.",
+          "A saved profile exists. New unsaved drafts must be saved before All settings can open."
+        ]
+      }
+    }
+  },
+  "browser_requirements": [
+    "load exactly one same-locale navigation.json on every successful locale root",
+    "show a localized working root fallback for every locale when navigation.json is unavailable",
+    "expose only the four maintained guide nodes and no standalone API guide node",
+    "expand and activate the canonical root/document/section/topic path for a direct topic URL",
+    "keep desktop and narrow article layouts stable between loaded and unavailable navigation states",
+    "scroll every locale's representative long tree with native wheel input without moving the article viewport",
+    "keep keyboard End navigation visible inside the independently scrolling sidebar",
+    "render the exact locale-owned All settings interface term and representative DITA prose",
+    "render no frozen English source sentence in a non-English language sample",
+    "produce no horizontal overflow, clipped focus target, or incoherent loading shift"
+  ],
+  "execution": {
+    "test": "documentation/tests/browser/test_documentation_portal_browser_smoke.py",
+    "target": "make test-docs-browser",
+    "persistent_server": false,
+    "chromium_parallelism": 1,
+    "disk_backed_pytest_basetemp": ".cache/pytest-docs-browser"
+  }
+}

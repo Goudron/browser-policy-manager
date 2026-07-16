@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>验证通过 WSL 的 BPM source deployment</title>
-  <shortdesc>从 WSL 和 Windows 检查 probes，确认 UI route，检查 logs，并排查常见 WSL networking 和 filesystem issues。</shortdesc>
+<task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
+  <title>通过 WSL 验证 BPM 源部署</title>
+  <shortdesc>检查来自 WSL 和 Windows 的探测，确认 UI 路由，检查日志，并对常见的 WSL 网络和文件系统问题进行故障排除。</shortdesc>
   <taskbody>
-    <prereq><p>BPM 已从 WSL checkout 运行，并使用目标 <codeph>BPM_DATABASE_URL</codeph>、host、port 和 documentation-site settings。</p></prereq>
-    <context><p>验证必须同时证明 Linux process 响应和 Windows browser access path。它不认证 native Windows installation、production hardening、reverse proxy behavior、backup readiness 或 Firefox runtime enforcement。</p></context>
+    <prereq><p>BPM 正在从 WSL 签出运行，具有预期的 <codeph>BPM_DATABASE_URL</codeph>、主机、端口和文档站点设置。</p></prereq>
+    <context><p>验证必须证明Linux进程响应和Windows浏览器访问路径。它不认证本机 Windows 安装、生产强化、反向代理行为、备份准备情况或 Firefox 运行时强制。</p></context>
     <steps>
-      <step><cmd>在 WSL 内检查 health 和 readiness。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>检查 WSL 内的运行状况和准备情况。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>预期 responses 为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
-      <step><cmd>从 Windows PowerShell 检查相同 probes。</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+]]></codeblock><p>预期响应为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
+      <step><cmd>从 Windows PowerShell 检查相同的探针。</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 Invoke-WebRequest http://localhost:8000/health
 Invoke-WebRequest http://localhost:8000/health/ready
-]]></codeblock><p>如果 localhost 不工作，请用 <codeph>hostname -I</codeph> 中的 WSL IP 重试，并记录成功的地址。</p></info></step>
-      <step><cmd>从 Windows browser 打开 UI route。</cmd><info><p>使用 <codeph>http://localhost:8000/profiles</codeph> 或 <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>。Profile Library route 应加载 BPM interface 或有意设计的 empty/error state，而不是 traceback。</p></info></step>
-      <step><cmd>在修改 BPM code 之前排查 WSL-specific failures。</cmd><info><p>对于 connection failures，确认 <codeph>make dev</codeph> 仍在运行，检查 <codeph>BPM_HOST</codeph>，运行 <codeph>wsl --list --verbose</codeph>，并在重启 distribution 后刷新 WSL IP。对于缓慢 file watching 或 permission errors，将 checkout 从 <codeph>/mnt/c</codeph> 移到 <codeph>/home/&lt;linux-user&gt;</codeph>。只有在 environment path 和 network route 稳定后才运行 <codeph>make test-fast</codeph>。</p><note type="warning">通过 WSL 的 health checks 不证明 production readiness、Windows service behavior、managed backups 或 HA support。</note></info></step>
+]]></codeblock><p>如果 localhost 不起作用，请使用 <codeph>hostname -I</codeph> 中的 WSL IP 重试。记录成功的地址。</p></info></step>
+      <step><cmd>从 Windows 浏览器打开 UI 路由。</cmd><info><p>使用 <codeph>http://localhost:8000/profiles</codeph> 或 <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>。库路由应该加载 BPM 接口或有意的空/错误状态，而不是回溯。</p></info></step>
+      <step><cmd>在更改 BPM 代码之前对 WSL 特定的故障进行故障排除。</cmd><info><p>对于连接失败，请确认 <codeph>make dev</codeph> 仍在运行，检查 <codeph>BPM_HOST</codeph>，运行 <codeph>wsl --list --verbose</codeph>，并在重新启动分发后刷新 WSL IP。对于文件监视速度慢或权限错误，请将结帐从 <codeph>/mnt/c</codeph> 移至 <codeph>/home/&lt;linux-user&gt;</codeph>。请在环境路径和网络路由稳定后运行<codeph>make test-fast</codeph>。</p><note type="warning">通过 WSL 通过运行状况检查并不能证明生产准备情况、Windows 服务行为、托管备份或 HA 支持。</note></info></step>
     </steps>
-    <result><p>管理员获得 evidence，证明 BPM 在 WSL 内启动、响应 probes、可从 Windows 访问，并且没有 immediate WSL networking 或 filesystem blockers。</p></result>
-    <postreq><p>将 PowerShell output、WSL shell commands、<codeph>BPM_*</codeph> variables 名称、probe responses 和 foreground logs 放在一起用于 troubleshooting，不复制 secrets。</p></postreq>
+    <result><p>管理员有证据表明 BPM 在 WSL 内部启动、响应探测、可从 Windows 访问，并且没有直接的 WSL 网络或文件系统阻止程序。</p></result>
+    <postreq><p>将 PowerShell 输出、WSL shell 命令、<codeph>BPM_*</codeph> 变量名称、探测响应和前台日志放在一起，以便在不复制机密的情况下进行故障排除。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-configure-windows-wsl-network-runtime"/>

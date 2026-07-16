@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-security-privacy" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置安全和隐私</title>
-  <shortdesc>本任务完整说明“配置安全和隐私”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>使用步骤 3 进行隐私状态、权限、cookie、清理、DNS 和强化控制。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>指导概要草案已在预期模式通道上打开。</p></prereq>
+    <context><p>安全 &amp; 隐私设置可以改变用户体验和风险状况，因此在保存之前请查看警告。</p></context>
     <steps>
-      <step><cmd>打开与“配置安全和隐私”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开步骤 3，安全 &amp; 隐私。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>配置隐私控制和权限默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>设置配置文件所需的 cookie、清理、DNS 和安全强化选项。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>检查验证消息并解释审核中的任何异常情况。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>该配置文件经过审查的安全和隐私状况。</p></result>
+    <postreq><p>恢复：如果站点工作流程中断，请重新访问权限或 cookie 设置并与配置文件目标进行比较。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-users-addons-sites"/>

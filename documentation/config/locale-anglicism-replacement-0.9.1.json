@@ -1,0 +1,135 @@
+{
+    "schema_version": 1,
+    "replacement_id": "bpm-0.9.1-locale-anglicism-replacement",
+    "target_bpm_version": "0.9.1",
+    "backlog_item": "BPM091-M7-03",
+    "status": "accepted",
+    "inherits_from": [
+        "documentation/config/locale-visible-english-inventory-0.9.1.json",
+        "documentation/config/locale-terminology-authority-0.9.1.json"
+    ],
+    "scope": {
+        "source_catalogs": "app/i18n_src/{de,zh-CN,fr,es-ES}/*.json",
+        "runtime_catalogs": "app/i18n/{de,zh-CN,fr,es-ES}.json",
+        "generated_by": "make build-locale-catalogs",
+        "deferred": "Localized screenshots must be regenerated and visually accepted in M7-05 before the screenshot blocker can close."
+    },
+    "closed_findings": [
+        "LOC-EN-DE-REPLACE-001",
+        "LOC-EN-DE-REPLACE-002",
+        "LOC-EN-DE-REPLACE-003",
+        "LOC-EN-DE-REPLACE-004",
+        "LOC-EN-DE-REPLACE-005",
+        "LOC-EN-ZH-REPLACE-001",
+        "LOC-EN-ZH-REPLACE-002",
+        "LOC-EN-FR-REPLACE-001",
+        "LOC-EN-FR-REPLACE-002",
+        "LOC-EN-FR-REPLACE-003",
+        "LOC-EN-FR-REPLACE-004",
+        "LOC-EN-FR-REPLACE-005",
+        "LOC-EN-ES-REPLACE-001",
+        "LOC-EN-ES-REPLACE-002",
+        "LOC-EN-ES-REPLACE-003",
+        "LOC-EN-ES-REPLACE-004",
+        "LOC-EN-ES-REPLACE-005"
+    ],
+    "forbidden_fragments_by_locale": {
+        "de": [
+            "Validierung Ergebnisse wird appear hier.",
+            "ProfilVersion",
+            "Filterned",
+            "Ascending",
+            "Suchen und filterns",
+            "updated",
+            "Updated",
+            "Schema-driven Richtlinie",
+            "AI Schutzhaltung updated.",
+            "Importierening",
+            "Importierte neu Profil",
+            "Keine Einstellungen Treffer",
+            "Pruefen Schema",
+            "spezifisch Steuerung"
+        ],
+        "zh-CN": [
+            "无 设置 此 筛选.",
+            "筛选 设置",
+            "已导入 从 {name}.",
+            "{file} 作为 新建 配置档案 {name}..."
+        ],
+        "fr": [
+            "soon",
+            "filters modifier",
+            "Filtrered",
+            "Profil name",
+            "modifiering",
+            "replacing",
+            "burying",
+            "finishing",
+            "Importered",
+            "Importeration",
+            "Importer creers",
+            "depart prereglage",
+            "actuel filters",
+            "Aucun paramètres correspond",
+            "JSON éditeur",
+            "Brut policies.json modifiering",
+            "scenario"
+        ],
+        "es-ES": [
+            "Abrir another modo",
+            "Perfil name",
+            "Losresultadosde",
+            "editaring",
+            "replacing",
+            "burying",
+            "finishing",
+            "Sin ajustes match",
+            "Guided-covered",
+            "Complexity",
+            "Could no",
+            "must ser válido JSON",
+            "Importared",
+            "Importarando",
+            "Importar crears",
+            "Sin perfiles match",
+            "soon",
+            "filters cambiar"
+        ]
+    },
+    "exact_value_absent_by_locale": {
+        "fr": [
+            "All"
+        ],
+        "es-ES": [
+            "All"
+        ]
+    },
+    "placeholder_preservation_keys": [
+        "profiles.import_firefox_policies_reading",
+        "profiles.status_import_firefox_policies_done",
+        "profiles.error_import_firefox_policies_parse",
+        "profiles.settings_detail_apply_failed",
+        "profiles.meta_updated"
+    ],
+    "representative_replacements": {
+        "de": {
+            "profiles.validation_idle": "Prüfergebnisse werden hier angezeigt.",
+            "profiles.order_asc": "Aufsteigend",
+            "profiles.settings_list_filtered_empty": "Keine Einstellungen entsprechen diesem Filter."
+        },
+        "zh-CN": {
+            "profiles.settings_list_filtered_empty": "此筛选器没有匹配的设置。",
+            "profiles.import_firefox_policies_reading": "正在将 {file} 导入为新配置档案 {name}..."
+        },
+        "fr": {
+            "profiles.name_label": "Nom du profil",
+            "profiles.import_firefox_policies_reading": "Importation de {file} comme nouveau profil {name}...",
+            "profiles.settings_filter_guided_covered": "Couvert en mode guidé"
+        },
+        "es-ES": {
+            "profiles.editor_chrome_modes_title": "Abrir otro modo",
+            "profiles.settings_filter_guided_covered": "Cubierto en modo guiado",
+            "profiles.import_firefox_policies_reading": "Importando {file} como nuevo perfil {name}..."
+        }
+    }
+}

@@ -2,13 +2,13 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Switch editor mode</title>
-  <shortdesc>Move deliberately between Guided, All Settings, and JSON for the same saved profile.</shortdesc>
+  <shortdesc>Move deliberately between Guided, All settings, and JSON for the same saved profile.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Switching mode changes the editing surface, not the underlying saved profile; unsaved changes must be saved before another surface is trusted.</p></context>
     <steps>
       <step><cmd>Confirm that the current profile is saved and has a visible ID.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Choose the target mode: Guided for common workflows, All Settings for complete inspection, or JSON for raw document work.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Choose the target mode: Guided for common workflows, All settings for complete inspection, or JSON for raw document work.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Open the target mode and verify the profile name and schema channel.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Return to the previous mode only after saving or intentionally discarding changes.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>

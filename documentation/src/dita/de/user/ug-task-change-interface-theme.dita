@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-theme" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Oberflächen-Theme ändern</title>
-  <shortdesc>Wählen Sie System, Hell oder Dunkel, ohne Profilinhalte zu ändern.</shortdesc>
+  <title>Ändern Sie das Oberflächendesign</title>
+  <shortdesc>Wählen Sie System-, helles oder dunkles Design, ohne den Profilinhalt zu ändern.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie die benötigte Oberfläche bereit: Bibliothek, Guided Editor, All Settings, JSON oder Compare.</p></prereq>
-    <context><p>Die Theme-Auswahl betrifft nur die BPM-Oberfläche und erleichtert die Prüfung von Tabellen, Codeblöcken, Validierungszuständen und Warnungen.</p></context>
+    <prereq><p>Öffnen Sie BPM oder das Produktdokumentationsportal im Browser.</p></prereq>
+    <context><p>Die Designauswahl wirkt sich nur auf die Darstellung aus. BPM und das Dokumentationsportal unterstützen System, Hell und Dunkel, ohne Profil- oder Hilfeinhalte zu ändern.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie die Theme-Auswahl im Seitenkopf.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
-      <step><cmd>Wählen Sie System, Hell oder Dunkel.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
-      <step><cmd>Prüfen Sie, dass Editorbereiche, Tabellen, Hinweise, Fokusmarkierungen und Validierungszustände lesbar bleiben.</cmd><info><p>Erwartetes Ergebnis: BPM zeigt das ausgewählte Profil, die Editor-Oberfläche, die Locale und das Theme während der Arbeit eindeutig an.</p></info></step>
-      <step><cmd>Bearbeiten Sie weiter, nachdem bestätigt ist, dass ungespeicherte Profildaten erhalten geblieben sind.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie bewusst, bevor Sie einen Editor verlassen, einen Tab schließen oder eine unumkehrbare Aktion bestätigen.</note></info></step>
+      <step><cmd>Öffnen Sie die Designauswahl im Kopf der aktuellen Seite.</cmd><info><p>Erwartetes Ergebnis: System, Hell und Dunkel stehen zur Auswahl, ohne Route, Sprache oder ausgewähltes Profil zu ändern.</p></info></step>
+      <step><cmd>Wählen Sie System, Hell oder Dunkel.</cmd><info><p>Erwartetes Ergebnis: System folgt der Betriebssystemeinstellung; Hell und Dunkel wenden den gewählten Modus auf unterstützte BPM- und Dokumentationsoberflächen an.</p></info></step>
+      <step><cmd>Prüfen Sie Editorbereiche, Tabellen, Hinweise, Codeblöcke, Fokusmarkierungen und Validierungszustände.</cmd><info><p>Erwartetes Ergebnis: Der Inhalt bleibt lesbar; das helle Dokumentationsdesign verwendet angenehme hellgraue Hauptflächen statt einer rein weißen Seite.</p></info></step>
+      <step><cmd>Fahren Sie mit der Bearbeitung fort, nachdem Sie bestätigt haben, dass noch nicht gespeicherte Profildaten vorhanden sind.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
-    <result><p>BPM verwendet das gewählte visuelle Theme auf unterstützten Oberflächen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Zustand unklar ist, stoppen Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <result><p>BPM und die Produktdokumentation verwenden das ausgewählte Design auf allen unterstützten Oberflächen.</p></result>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-concept-documentation-search-boundary"/>
     <link keyref="topic.ug-task-work-across-editor-tabs"/>
   </related-links>
 </task>

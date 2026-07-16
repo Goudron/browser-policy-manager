@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-refresh-profile-library" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>刷新配置文件库</title>
-  <shortdesc>本任务完整说明“刷新配置文件库”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>刷新库</title>
+  <shortdesc>在重复操作之前重新加载库行并解释加载或操作状态。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>库已打开，您需要在更改或加载失败后确认当前保存的配置文件状态。</p></prereq>
+    <context><p>刷新从 BPM 重新加载库。它不会验证配置文件或保存未保存的编辑器更改。</p></context>
     <steps>
-      <step><cmd>打开与“刷新配置文件库”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>在库中选择“刷新”。</cmd><info><p>预期结果：状态先提示正在加载，然后显示刷新后的列表或错误。</p></info></step>
+      <step><cmd>等待状态消息出现，再开始其他库操作。</cmd><info><note type="warning">状态尚未确定时重复执行生命周期操作或删除操作，会增加判断具体失败操作的难度。</note></info></step>
+      <step><cmd>刷新后查看过滤计数和总计数。</cmd><info><p>如果另一个标签页保存、归档、恢复或删除了配置档案，计数可能会发生变化。</p></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>库视图反映了 BPM 可用的最新配置文件列表。</p></result>
+    <postreq><p>恢复：如果刷新失败，请保持当前页面打开并使用故障排除主题来决定是重试还是保留上下文。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

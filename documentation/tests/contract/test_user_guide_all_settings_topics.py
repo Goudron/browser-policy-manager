@@ -196,6 +196,10 @@ def test_english_all_settings_topics_cover_modes_states_sources_and_advanced_con
         "advanced schema",
         "preference controls",
         "deep link",
+        "circled-information control",
+        "new tab",
+        "Documents",
+        "noninteractive state",
         "JSON Editor",
     ):
         assert required.casefold() in text.casefold()

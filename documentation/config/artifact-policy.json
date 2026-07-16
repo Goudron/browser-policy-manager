@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "target_bpm_version": "0.9.0",
+  "target_bpm_version": "0.9.1",
   "commit_policy": {
     "reviewed_sources": "commit",
     "localized_screenshots": "commit-after-review",
@@ -11,11 +11,11 @@
   "paths": {
     "generated_dita": "documentation/src/generated",
     "local_site": "documentation/build/site",
-    "release_archive": "documentation/dist/bpm-documentation-0.9.0.tar.gz",
-    "release_checksum": "documentation/dist/bpm-documentation-0.9.0.tar.gz.sha256"
+    "release_archive": "documentation/dist/bpm-documentation-0.9.1.tar.gz",
+    "release_checksum": "documentation/dist/bpm-documentation-0.9.1.tar.gz.sha256"
   },
   "archive": {
-    "root": "bpm-documentation-0.9.0",
+    "root": "bpm-documentation-0.9.1",
     "format": "tar.gz",
     "mtime": 0,
     "file_mode": "0644",
@@ -30,6 +30,6 @@
       "localized screenshot capture and review",
       "final manual QA and defect disposition for the installed documentation flow"
     ],
-    "runtime_source": "make docs-install-dev may promote a local build for maintainer dev review; release still requires verified package extraction"
+    "runtime_source": "make dev refreshes the ignored runtime copy through make docs-install-dev for maintainer dev review; release still requires verified package extraction"
   }
 }

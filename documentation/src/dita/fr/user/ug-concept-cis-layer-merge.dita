@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-cis-layer-merge" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Préréglages de départ et couches CIS</title>
-  <shortdesc>Les préréglages de départ et les couches CIS aident à créer un profil initial avant examen manuel et modification.</shortdesc>
+  <title>Préréglages de démarrage et couches CIS</title>
+  <shortdesc>Les préréglages de démarrage et les couches CIS aident à créer un profil initial avant la révision et la modification manuelles.</shortdesc>
   <conbody>
-    <p>Un préréglage de départ donne au profil un objectif initial, par exemple entreprise, salle de classe ou usage orienté sécurité. Une couche CIS ajoute les choix de base de sécurité mappés par BPM lorsque BPM les prend en charge.</p>
-    <p>Les sources en couches restent visibles dans Tous les paramètres afin de distinguer les valeurs baseline, CIS, importées, manuelles et brutes. Certains éléments liés à CIS exigent un examen manuel au lieu d’une acceptation automatique.</p>
-    <p>La documentation BPM décrit les mappings BPM et le comportement des workflows. Elle ne revendique pas de certification ni d’approbation CIS.</p>
+    <p>Un préréglage de démarrage donne à un profil un objectif initial, tel qu'une utilisation en entreprise, en classe ou axée sur la sécurité. Une couche CIS ajoute les choix de base de sécurité mappés de BPM là où BPM les prend en charge.</p>
+    <p>Les sources en couches restent visibles dans Tous les paramètres afin que vous puissiez distinguer les valeurs de référence, CIS, importées, manuelles et brutes. Certains éléments liés au CIS nécessitent un examen manuel au lieu d'une acceptation automatique.</p>
+    <p>La documentation BPM décrit les mappages BPM et le comportement du flux de travail. Il ne revendique pas la certification ou l'approbation CIS.</p>
   </conbody>
 </concept>

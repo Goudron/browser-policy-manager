@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "audit_id": "bpm-0.9.1-topic-section-hierarchy-audit",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M8-01",
+  "status": "accepted",
+  "purpose": "Identify documentation guide/document nodes whose topic lists are too long for the current root -> document -> topic navigation model and must receive a section level before implementation changes.",
+  "source_authority": {
+    "maps_root": "documentation/src/dita/{locale}/maps/",
+    "canonical_locale": "en",
+    "locale_matrix": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "document_node_definition": "A document node is the guide node currently exposed under the documentation root in the portal tree.",
+    "topic_count_source": "Direct and nested topicref keyrefs in each guide DITA map; mapref resource-only entries are excluded.",
+    "section_source": "Existing topichead nodes in a guide map are treated as source section candidates, but this audit does not change portal rendering or URLs."
+  },
+  "thresholds": {
+    "max_flat_topics_without_sections": 12,
+    "max_topics_per_section_target": 12,
+    "rationale": "A document node with more than twelve immediately visible topic links is difficult to scan in the left tree, especially on narrow viewports and in locales with longer labels. Existing sections above twelve topics also need an additional split or lower-level grouping."
+  },
+  "global_invariants_for_follow_up": [
+    "Do not change topic IDs, DITA keys, canonical URLs, manifest topic IDs, UI target IDs, or search document IDs only to add grouping.",
+    "Section nodes must be locale-owned labels and must not become standalone content topics unless a later task explicitly changes the contract.",
+    "Direct topic URLs must continue to expand the root, document, section ancestors, and active topic.",
+    "The root documentation node remains the focus target when opening the documentation root."
+  ],
+  "documents": [
+    {
+      "guide_id": "user-guide",
+      "map_filename": "user-guide.ditamap",
+      "status": "needs_section_grouping",
+      "topic_count": 90,
+      "current_shape": "source_has_topicheads_but_portal_tree_needs_section_nodes",
+      "current_source_section_count": 8,
+      "largest_current_source_section_count": 19,
+      "source_sections": [
+        {
+          "section_id": "orient-and-plan",
+          "canonical_navtitle": "Orient and plan profile work",
+          "topic_count": 10,
+          "disposition": "keep_as_section_candidate"
+        },
+        {
+          "section_id": "create-and-start",
+          "canonical_navtitle": "Create and start a profile",
+          "topic_count": 10,
+          "disposition": "keep_as_section_candidate"
+        },
+        {
+          "section_id": "configure-with-guidance",
+          "canonical_navtitle": "Configure with Guided editor",
+          "topic_count": 11,
+          "disposition": "keep_as_section_candidate"
+        },
+        {
+          "section_id": "review-validate-and-finish",
+          "canonical_navtitle": "Review, validate, and finish profile changes",
+          "topic_count": 6,
+          "disposition": "keep_as_section_candidate"
+        },
+        {
+          "section_id": "inspect-and-edit-complete-settings",
+          "canonical_navtitle": "Inspect and edit complete settings",
+          "topic_count": 19,
+          "disposition": "split_or_subgroup_in_m8_02"
+        },
+        {
+          "section_id": "work-with-json-and-interchange",
+          "canonical_navtitle": "Work with JSON and interchange",
+          "topic_count": 6,
+          "disposition": "keep_as_section_candidate"
+        },
+        {
+          "section_id": "find-organize-and-compare-profiles",
+          "canonical_navtitle": "Find, organize, and compare profiles",
+          "topic_count": 17,
+          "disposition": "split_or_subgroup_in_m8_02"
+        },
+        {
+          "section_id": "recover-safely",
+          "canonical_navtitle": "Recover safely",
+          "topic_count": 11,
+          "disposition": "keep_as_section_candidate"
+        }
+      ],
+      "reasoning": "The User Guide has 90 unique topicrefs and already expresses user-intent groups in DITA. The portal tree should expose a section level instead of presenting a long topic list, and M8-02 must split or subgroup the two existing source sections that exceed the target."
+    },
+    {
+      "guide_id": "administrator-guide",
+      "map_filename": "administrator-guide.ditamap",
+      "status": "needs_section_grouping",
+      "topic_count": 49,
+      "current_shape": "flat_topicrefs",
+      "current_source_section_count": 0,
+      "largest_current_source_section_count": 49,
+      "proposed_grouping_axes_for_m8_02": [
+        "Linux source deployment",
+        "Windows WSL source deployment",
+        "DevOps operations",
+        "Update from source",
+        "API integration workflows",
+        "Troubleshooting",
+        "Production readiness boundaries"
+      ],
+      "reasoning": "The Administrator and DevOps Guide now exposes 49 direct topicrefs, including five distribution-specific Linux source-install procedures. It needs and uses a section taxonomy so operators can scan deployment, operations, integration, troubleshooting, and readiness workflows separately."
+    },
+    {
+      "guide_id": "cis-settings-guide",
+      "map_filename": "cis-settings-guide.ditamap",
+      "status": "short_enough",
+      "topic_count": 9,
+      "current_shape": "flat_topicrefs",
+      "current_source_section_count": 0,
+      "largest_current_source_section_count": 9,
+      "reasoning": "Nine topic links are below the flat-list threshold; adding section nodes here would add navigation depth without solving a scanability problem."
+    },
+    {
+      "guide_id": "firefox-policy-guide",
+      "map_filename": "firefox-policy-guide.ditamap",
+      "status": "short_enough",
+      "topic_count": 7,
+      "current_shape": "flat_topicrefs",
+      "current_source_section_count": 0,
+      "largest_current_source_section_count": 7,
+      "reasoning": "Seven topic links are below the flat-list threshold and should remain a compact document list unless later generated reference topics are promoted into this tree."
+    },
+    {
+      "guide_id": "api-integration-guide",
+      "map_filename": "api-integration-guide.ditamap",
+      "status": "short_enough",
+      "topic_count": 1,
+      "current_shape": "single_landing_topic",
+      "current_source_section_count": 0,
+      "largest_current_source_section_count": 1,
+      "reasoning": "The API Integration Guide is a compatibility landing page and does not need section grouping."
+    }
+  ],
+  "summary": {
+    "documents_reviewed": 5,
+    "documents_requiring_section_grouping": ["user-guide", "administrator-guide"],
+    "documents_excluded_as_short_enough": [
+      "cis-settings-guide",
+      "firefox-policy-guide",
+      "api-integration-guide"
+    ],
+    "next_backlog_item": "BPM091-M8-02"
+  }
+}

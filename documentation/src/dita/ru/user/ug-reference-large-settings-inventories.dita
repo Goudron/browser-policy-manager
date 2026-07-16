@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-large-settings-inventories" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Большие инвентари параметров</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Большие инвентари параметров. Use bounded-list behavior, search, filters, and categories when All Settings contains a large policy and preference inventory.</shortdesc>
+  <title>Большие реестры настроек</title>
+  <shortdesc>Используйте поведение ограниченного списка, поиск, фильтры и категории, если Все настройки содержит большой список политик и предпочтений.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Большие инвентари параметров</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Большие инвентари параметров. All Settings can expose many schema-backed policies and known preferences. Bounded lists keep the interface usable and make the next narrowing action explicit.</p></section>
-    <section id="a-list-budget"><title>List budget</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Большие инвентари параметров. All Settings may show a bounded subset, count, or continuation action instead of rendering every row at once.</p></section>
-    <section id="a-narrowing-tools"><title>Narrowing tools</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Большие инвентари параметров. Search, category navigation, source filters, and state filters are the supported ways to reduce a large inventory.</p></section>
-    <section id="a-performance-boundary"><title>Performance boundary</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Большие инвентари параметров. Large-inventory handling is a UI boundary, not a signal that settings are missing from the profile or catalog.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Большие инвентари параметров. If the expected row is not visible, search by exact ID, clear filters, or switch between Configured and Catalog mode.</p></section>
+    <section id="a-overview"><title>Обзор</title><p>Все настройки может предоставлять множество политик, поддерживаемых схемой, и известных предпочтений. Ограниченные списки сохраняют удобство использования интерфейса и делают очевидным следующее действие по сужению.</p></section>
+    <section id="a-list-budget"><title>Список бюджета</title><p>Все настройки может отображать ограниченное подмножество, счетчик или действие продолжения вместо одновременной визуализации каждой строки.</p></section>
+    <section id="a-narrowing-tools"><title>Инструменты сужения</title><p>Поиск, навигация по категориям, фильтры источников и фильтры состояний — это поддерживаемые способы сокращения большого количества ресурсов.</p></section>
+    <section id="a-performance-boundary"><title>Граница производительности</title><p>Обработка больших запасов — это граница UI, а не сигнал об отсутствии настроек в профиле или каталоге.</p></section>
+    <section id="a-recovery"><title>Восстановление</title><p>Если ожидаемая строка не отображается, выполните поиск по точному значению ID, очистите фильтры или переключитесь между Настроено и Каталог.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-library-profile-row" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>配置文件库行字段</title><shortdesc>库行显示一个已保存配置文件的身份、架构、备注、验证、生命周期和更新时间。</shortdesc>
-  <refbody><section id="a-row-identity"><title>身份</title><p>名称、ID、备注和更新时间帮助确认目标配置文件。</p></section><section id="a-row-state"><title>状态</title><p>架构通道、验证状态和生命周期说明可用操作。</p></section><section id="a-row-warning"><title>警告</title><p>排序或筛选后不要只依赖行位置。</p></section><section id="a-row-recovery"><title>恢复</title><p>如果行信息看起来过期，请刷新库。</p></section></refbody>
+  <title>库行字段</title><shortdesc>库的每一行汇总了一个已保存配置文件的身份、模式、注释、验证状态、生命周期状态和更新时间。</shortdesc>
+  <refbody><section id="a-row-identity"><title>身份</title><p>行名称、ID、注释和更新时间有助于确认您正在按照预期保存的配置文件进行操作。</p></section><section id="a-row-state"><title>状态</title><p>架构通道、验证状态和生命周期状态解释了当前适合的编辑器操作、生命周期操作和导出相关操作。</p></section><section id="a-row-warning"><title>警告</title><p>排序或过滤后不要单独依赖行位置。在执行复制、存档、恢复或永久删除操作之前确认身份字段。</p></section><section id="a-row-recovery"><title>恢复</title><p>如果行信息显得过时，请在重复该操作之前刷新库。</p></section></refbody>
   <related-links><link keyref="topic.ug-task-refresh-profile-library"/><link keyref="topic.ug-reference-archived-profile-behavior"/></related-links>
 </reference>

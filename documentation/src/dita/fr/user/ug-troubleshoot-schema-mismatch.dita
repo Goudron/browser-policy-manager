@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-schema-mismatch" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Résoudre un schema mismatch</title>
-  <shortdesc>Traitez unsupported schema channel, ESR/Release mismatch ou schema-dependent setting sans forcer de changements cachés.</shortdesc>
+  <title>Résoudre une incompatibilité de schéma</title>
+  <shortdesc>Gérez les canaux de schéma non pris en charge, les incompatibilités ESR/Release ou les paramètres dépendants du schéma sans forcer les modifications de données masquées.</shortdesc>
   <taskbody>
-    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
-    <context><p>Schema mismatch signifie généralement qu’un setting existe dans un Firefox channel mais est unavailable, deprecated ou formé différemment dans le channel sélectionné.</p></context>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
+    <context><p>L'inadéquation du schéma signifie généralement qu'un paramètre existe dans un canal Firefox mais qu'il est indisponible, obsolète ou structuré différemment dans le canal sélectionné.</p></context>
     <steps>
-      <step><cmd>Confirmez si le profil cible ESR 140.12 ou Release 152.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Identifiez le setting unavailable, unsupported, deprecated ou schema-dependent dans ce channel.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Choisissez de changer schema channel ou de retirer/modifier affected setting pour la cible Firefox prévue.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Refaites revalidate et review export readiness après la décision de channel ou setting.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+      <step><cmd>Confirmez si le profil cible ESR 140.12 ou la version 152.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Identifiez le paramètre qui est indisponible, non pris en charge, obsolète ou dépendant du schéma dans ce canal.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Choisissez si vous souhaitez changer de canal de schéma ou supprimer/modifier le paramètre affecté pour la cible Firefox prévue.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Revalidez et examinez la préparation à l'exportation après la décision de canal ou de réglage.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
     </steps>
-    <result><p>Le profil cible le Firefox channel prévu et ne masque plus de schema-dependent mismatch.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+    <result><p>Le profil cible le canal Firefox prévu et ne cache plus une incompatibilité dépendante du schéma.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

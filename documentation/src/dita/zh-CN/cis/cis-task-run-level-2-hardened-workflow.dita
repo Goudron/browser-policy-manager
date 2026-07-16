@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-run-level-2-hardened-workflow" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>运行 Level 2 hardened CIS 工作流</title>
-  <shortdesc>使用 Level 2 fixture，在 deployment 前审查更严格的 CIS profile。</shortdesc>
+  <title>运行 2 级强化 CIS 工作流程</title>
+  <shortdesc>在部署之前使用 2 级夹具检查更严格的 CIS 配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>使用 fixture <codeph>cis-workflow-level-2-release-fixture</codeph>：Firefox Release 152、layer <codeph>cis-l2.release-152</codeph>、starter preset <codeph>soc_hard</codeph>，以及 comparison profile <codeph>cis-workflow-level-1-release-reference</codeph>。</p></prereq>
-    <context><p>Level 2 是 hardened path。它可能比 Level 1 兼容性更低，因此 reviewer 必须检查 Guided 和 All Settings、处理 attention items、与 Level 1 reference 比较、导出并独立验证结果。</p></context>
+    <prereq><p>使用固定装置 <codeph>cis-workflow-level-2-release-fixture</codeph>：Firefox 版本 152、图层 <codeph>cis-l2.release-152</codeph>、入门预设 <codeph>soc_hard</codeph> 和比较配置文件 <codeph>cis-workflow-level-1-release-reference</codeph>。</p></prereq>
+    <context><p>2 级是硬化路径。它可能不如 1 级兼容，因此审核者必须检查 引导式编辑器 和 所有设置、解决注意事项、与 1 级参考进行比较、导出并独立验证结果。</p></context>
     <steps>
-      <step><cmd>创建或复制一个 Release 152 profile，应用 SOC-style hardened starter preset，并应用 Level 2 CIS layer。</cmd><info><p>预期结果：profile 在 source trail 中记录 <codeph>soc_hard</codeph> 和 <codeph>cis-l2.release-152</codeph>。</p></info></step>
-      <step><cmd>在 Guided Editor 中审查 profile，重点关注 stricter security/privacy defaults，以及可能影响 usability、add-ons、browsing data、network behavior 或 enterprise operations 的 controls。</cmd><info><p>预期结果：在 profile export 前识别 high-impact settings。</p></info></step>
-      <step><cmd>使用 All Settings 过滤 configured CIS rows，打开 attention items，并将每一 row 跟踪到 generated recommendation topic、mapping table、UI target 和 affected Firefox policy topic。</cmd><info><p>预期结果：每个 stricter value 都有可见 source path 和用于 review 的 policy-topic route。</p></info></step>
-      <step><cmd>使用 deviation task 处理 manual-review rows 和 intentional deviations，包括 owner、reason、review date、external record，以及该 value 是否保持 baseline、CIS、manual、imported 或 raw。</cmd><info><note type="warning">BPM 0.9.0 不保存 dedicated exception 或 waiver object；在将 deviation 视为 reviewed 之前，请保留 external record。</note></info></step>
-      <step><cmd>将 Level 2 profile 与 Level 1 reference fixture 比较，并检查所有 changed 或 newly configured rows。</cmd><info><p>预期结果：reviewer 可以在 approval 前说明 Level 2 与 Level 1 的差异原因。</p></info></step>
-      <step><cmd>验证并导出 <codeph>policies.json</codeph>，然后使用 owner-approved runtime、operating-system、network 或 audit method 执行 independent deployment verification。</cmd><info><p>预期结果：hardened profile 具有 export artifact、validation result、comparison evidence 和 external verification evidence。</p></info></step>
+      <step><cmd>创建或复制版本 152 配置文件，应用 SOC 样式强化启动器预设，并应用 2 级 CIS 层。</cmd><info><p>预期结果：配置档案 在源跟踪中记录了 <codeph>soc_hard</codeph> 和 <codeph>cis-l2.release-152</codeph>。</p></info></step>
+      <step><cmd>查看 引导式编辑器 中的配置文件，重点关注更严格的安全/隐私默认设置以及可能影响可用性、附加组件、浏览数据、网络行为或企业运营的任何控制。</cmd><info><p>预期结果：在导出配置文件之前识别高影响设置。</p></info></step>
+      <step><cmd>使用 所有设置 过滤配置的 CIS 行、打开注意项，并跟踪每行到其生成的推荐主题、映射表、UI 目标和受影响的 Firefox 策略主题。</cmd><info><p>预期结果：每个更严格的值都有可见的源路径和用于审查的策略主题路径。</p></info></step>
+      <step><cmd>使用偏差任务解决手动审核行和故意偏差，包括所有者、原因、审核日期、外部记录以及值是否保持基线、CIS、手动、导入或原始。</cmd><info><note type="warning">BPM 不保留专用的异常或豁免对象；在处理所审查的偏差之前保存外部记录。</note></info></step>
+      <step><cmd>将 2 级配置文件与 1 级参考夹具进行比较，并检查所有更改或新配置的行。</cmd><info><p>预期结果：审核者可以在批准之前解释为什么级别 2 与级别 1 不同。</p></info></step>
+      <step><cmd>使用所有者批准的运行时、操作系统、网络或审核方法验证、导出 <codeph>policies.json</codeph> 并运行独立的部署验证。</cmd><info><p>预期结果：强化的配置文件具有导出工件、验证结果、比较证据和外部验证证据。</p></info></step>
     </steps>
-    <result><p>代表性的 Level 2 hardened profile 可 end to end 审查，并保持在 BPM mapping、export 和 source-attribution evidence 边界内。</p></result>
-    <postreq><p>如果 independent verification 发现 deployment risk，请将 profile 保持为 draft，并在 reuse 前更新 external decision record。</p></postreq>
+    <result><p>代表性的 2 级强化配置文件可进行端到端审查，并仍受 BPM 的映射、导出和源归因证据的限制。</p></result>
+    <postreq><p>如果独立验证发现部署风险，请将配置文件保留为草稿，并在重用之前更新外部决策记录。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

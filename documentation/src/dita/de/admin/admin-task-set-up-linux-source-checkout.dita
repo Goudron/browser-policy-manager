@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-set-up-linux-source-checkout" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux">
-  <title>Linux-Source-Checkout einrichten</title>
-  <shortdesc>Klonen Sie das BPM-Repository, erstellen Sie die Python virtual environment, installieren Sie development dependencies und bereiten Sie die lokale database schema vor.</shortdesc>
+<task id="admin-task-set-up-linux-source-checkout" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Richten Sie das Auschecken der Linux-Quelle ein</title>
+  <shortdesc>Klonen Sie das BPM-Repository, erstellen Sie die virtuelle Python-Umgebung, installieren Sie Entwicklungsabhängigkeiten und bereiten Sie das lokale Datenbankschema vor.</shortdesc>
   <taskbody>
-    <prereq><p>Der Linux-Host ist vorbereitet, und der Administrator hat Zugriff auf die BPM repository URL sowie auf den Ziel-branch oder tag für Version 0.9.0.</p></prereq>
-    <context><p>Das Repository-README definiert die unterstützte source setup sequence. Verwenden Sie repository-local commands, damit spätere Fehleranalyse die Umgebung mit den committed scripts vergleichen kann.</p></context>
+    <prereq><p>Der Linux-Host ist vorbereitet und der Administrator hat Zugriff auf die BPM-Repository-URL sowie den freigegebenen Zielzweig, das Ziel-Tag oder die Zielrevision.</p></prereq>
+    <context><p>Das Repository README definiert die unterstützte Quell-Setup-Sequenz. Verwenden Sie Repository-lokale Befehle, damit die Umgebung bei der späteren Fehlerbehebung mit festgeschriebenen Skripts verglichen werden kann.</p></context>
     <steps>
-      <step><cmd>Klonen Sie das Repository und wechseln Sie in den Checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Klonen Sie das Repository und gehen Sie zum Auschecken.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
-git checkout <approved-0.9.0-ref>
-]]></codeblock><p>Ersetzen Sie die placeholders durch die freigegebene interne repository URL und release reference.</p></info></step>
+git checkout <approved-0.9.1-ref>
+]]></codeblock><p>Ersetzen Sie Platzhalter durch die genehmigte interne Repository-URL und die Release-Referenz.</p></info></step>
       <step><cmd>Erstellen und aktivieren Sie die lokale Python-Umgebung.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-]]></codeblock><p>Die virtual environment bleibt im checkout und wird nicht committed.</p></info></step>
-      <step><cmd>Installieren Sie die BPM source dependencies aus dem Checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Die virtuelle Umgebung bleibt innerhalb der Kasse und wird nicht festgeschrieben.</p></info></step>
+      <step><cmd>Installieren Sie BPM-Quellenabhängigkeiten aus dem Checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 pip install -e ".[dev]"
-]]></codeblock><p>Die editable install hält runtime code und tests mit dem aktuellen source tree synchron.</p></info></step>
-      <step><cmd>Wenden Sie database migrations für die gewählte runtime database an.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Durch die bearbeitbare Installation bleiben Laufzeitcode und Tests am aktuellen Quellbaum ausgerichtet.</p></info></step>
+      <step><cmd>Datenbankmigrationen für die ausgewählte Laufzeitdatenbank anwenden.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 alembic upgrade head
-]]></codeblock><note type="warning">Führen Sie migrations nur gegen die vorgesehene BPM database aus. Im default source workflow ist das die lokale SQLite database, nicht eine production service database.</note></info></step>
+]]></codeblock><note type="warning">Führen Sie Migrationen nur für die vorgesehene BPM-Datenbank aus. Für den Standard-Quellworkflow ist dies die lokale SQLite-Datenbank, keine Produktionsdienstdatenbank.</note></info></step>
     </steps>
-    <result><p>Der Checkout hat eine aktivierte Python environment, installierte dependencies und eine migrierte database schema.</p></result>
-    <postreq><p>Konfigurieren Sie die runtime environment, bevor der application process gestartet wird.</p></postreq>
+    <result><p>Der Checkout verfügt über eine aktivierte Python-Umgebung, installierte Abhängigkeiten und ein migriertes Datenbankschema.</p></result>
+    <postreq><p>Konfigurieren Sie die Laufzeitumgebung, bevor Sie den Anwendungsprozess starten.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-linux-source-deployment"/>

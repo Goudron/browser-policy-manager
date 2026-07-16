@@ -2,16 +2,16 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置文件模型和生命周期</title>
-  <shortdesc>BPM 配置文件是一个已保存的 Firefox 策略工作区，由库、向导编辑器、所有设置、JSON 编辑器和比较共同使用。</shortdesc>
+  <shortdesc>BPM 配置文件是由库、引导式编辑器、所有设置、JSON 编辑器 和比较共享的一个保存的 Firefox 策略工作区。</shortdesc>
   <conbody>
-    <p>使用配置文件把 Firefox 策略、受管理首选项、验证状态、来源信息和生命周期状态保存在一起。同一个配置文件可以从不同 BPM 界面打开，而不会改变其身份。</p>
+    <p>使用配置文件将 Firefox 策略、托管首选项、验证状态、源归因和生命周期状态收集到一处。可以通过不同的 BPM 界面打开相同的配置文件，而无需更改其身份。</p>
     <section id="a-lifecycle-states">
       <title>生命周期状态</title>
-      <p>未保存草稿只存在到第一次保存为止。已保存的活动配置文件可以编辑、验证、导出、归档、复制或比较。归档配置文件保留用于查看和恢复，但不是通常的导出目标。</p>
+      <p>未保存的草稿仅在第一次保存之前存在。可以编辑、验证、导出、存档、复制或比较保存的活动配置文件。保留存档的配置文件以供审查和恢复工作流程，但不是正常的导出目标。</p>
     </section>
     <section id="a-status-context">
       <title>状态上下文</title>
-      <p>配置文件名称、ID、Firefox 架构通道、生命周期、保存状态、验证结果和来源摘要会说明配置文件是否适合查看、编辑、导出或恢复。</p>
+      <p>配置文件名称、ID、Firefox 架构通道、生命周期、已保存/脏状态、验证结果和源摘要会告诉您配置文件是否已准备好查看、编辑、导出或恢复。</p>
     </section>
   </conbody>
 </concept>

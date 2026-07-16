@@ -2,14 +2,14 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Choose the right BPM surface</title>
-  <shortdesc>BPM has five user surfaces: Library, Guided Editor, All Settings, JSON Editor, and Compare.</shortdesc>
+  <shortdesc>BPM has five user surfaces: Library, Guided editor, All settings, JSON editor, and Compare.</shortdesc>
   <conbody>
     <p>Choose the surface by the outcome you want, not by the internal product module.</p>
     <dl>
       <dlentry><dt>Library</dt><dd>Find, create, import, duplicate, archive, restore, delete, export, and open profiles.</dd></dlentry>
-      <dlentry><dt>Guided Editor</dt><dd>Create or update common policy configurations through task-first steps and starter choices.</dd></dlentry>
-      <dlentry><dt>All Settings</dt><dd>Review attention items, browse the full supported policy and preference catalog, and edit detailed values.</dd></dlentry>
-      <dlentry><dt>JSON Editor</dt><dd>Inspect or edit the exact Firefox policies document when precise raw control is needed.</dd></dlentry>
+      <dlentry><dt>Guided editor</dt><dd>Create or update common policy configurations through task-first steps and starter choices.</dd></dlentry>
+      <dlentry><dt>All settings</dt><dd>Review attention items, browse the full supported policy and preference catalog, and edit detailed values.</dd></dlentry>
+      <dlentry><dt>JSON editor</dt><dd>Inspect or edit the exact Firefox policies document when precise raw control is needed.</dd></dlentry>
       <dlentry><dt>Compare</dt><dd>Compare two saved profiles and understand equal, different, or missing settings.</dd></dlentry>
     </dl>
   </conbody>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-source-update-evidence" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-task-prepare-source-update-evidence" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Prepare evidence before updating from source</title>
   <shortdesc>Collect the source revision, configuration, database backup, profile export evidence, and stop conditions before moving BPM to a newer source revision.</shortdesc>
   <taskbody>
     <prereq><p>BPM is running from a Linux or WSL source checkout, and the administrator has completed the configuration, storage, backup, and operational-boundary reviews.</p></prereq>
-    <context><p>An update-from-source procedure changes code, dependencies, database schema, and documentation output expectations. BPM 0.9.0 does not provide automatic rollback, database downgrade guarantees, managed backup, or packaged upgrade tooling. Treat evidence collection as a required pre-update gate.</p></context>
+    <context><p>An update-from-source procedure changes code, dependencies, database schema, and documentation output expectations. BPM does not provide automatic rollback, database downgrade guarantees, managed backup, or packaged upgrade tooling. Treat evidence collection as a required pre-update gate.</p></context>
     <steps>
       <step><cmd>Stop the foreground BPM process and record the current source state.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git status --short

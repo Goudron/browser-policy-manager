@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-run-level-2-hardened-workflow" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Выполнить hardened workflow CIS Level 2</title>
-  <shortdesc>Используйте Level 2 fixture, чтобы проверить более строгий CIS profile перед deployment.</shortdesc>
+  <title>Запустите усиленный рабочий процесс CIS уровня 2.</title>
+  <shortdesc>Используйте приспособление уровня 2 для проверки более строгого профиля CIS перед развертыванием.</shortdesc>
   <taskbody>
-    <prereq><p>Используйте fixture <codeph>cis-workflow-level-2-release-fixture</codeph>: Firefox Release 152, layer <codeph>cis-l2.release-152</codeph>, starter preset <codeph>soc_hard</codeph> и comparison profile <codeph>cis-workflow-level-1-release-reference</codeph>.</p></prereq>
-    <context><p>Level 2 — hardened path. Он может быть менее совместимым, чем Level 1, поэтому reviewer должен проверить Guided и All Settings, разобрать attention items, сравнить с Level 1 reference, экспортировать и независимо верифицировать результат.</p></context>
+    <prereq><p>Используйте приспособление <codeph>cis-workflow-level-2-release-fixture</codeph>: Firefox Release 152, слой <codeph>cis-l2.release-152</codeph>, начальный набор настроек <codeph>soc_hard</codeph> и профиль сравнения <codeph>cis-workflow-level-1-release-reference</codeph>.</p></prereq>
+    <context><p>Уровень 2 – усиленный путь. Он может быть менее совместимым, чем уровень 1, поэтому рецензент должен проверить Пошаговый редактор и Все настройки, разрешить элементы внимания, сравнить со ссылкой уровня 1, экспортировать и независимо проверить результат.</p></context>
     <steps>
-      <step><cmd>Создайте или дублируйте Release 152 profile, примените SOC-style hardened starter preset и примените CIS layer Level 2.</cmd><info><p>Ожидаемый результат: profile записывает <codeph>soc_hard</codeph> и <codeph>cis-l2.release-152</codeph> в source trail.</p></info></step>
-      <step><cmd>Проверьте profile в Guided Editor, уделяя внимание stricter security/privacy defaults и controls, которые могут влиять на usability, add-ons, browsing data, network behavior или enterprise operations.</cmd><info><p>Ожидаемый результат: high-impact settings определены до export profile.</p></info></step>
-      <step><cmd>В All Settings отфильтруйте configured CIS rows, откройте attention items и проследите каждую row до generated recommendation topic, mapping table, UI target и affected Firefox policy topic.</cmd><info><p>Ожидаемый результат: у каждого stricter value есть видимый source path и policy-topic route для review.</p></info></step>
-      <step><cmd>Разберите manual-review rows и intentional deviations через deviation task, включая owner, reason, review date, external record и признак, остаётся ли value baseline, CIS, manual, imported или raw.</cmd><info><note type="warning">BPM 0.9.0 не сохраняет dedicated exception или waiver object; сохраните external record до того, как считать deviation reviewed.</note></info></step>
-      <step><cmd>Сравните Level 2 profile с Level 1 reference fixture и проверьте все changed или newly configured rows.</cmd><info><p>Ожидаемый результат: reviewer может объяснить, чем Level 2 отличается от Level 1, до approval.</p></info></step>
-      <step><cmd>Валидируйте, экспортируйте <codeph>policies.json</codeph> и выполните independent deployment verification утверждённым runtime, operating-system, network или audit method.</cmd><info><p>Ожидаемый результат: hardened profile имеет export artifact, validation result, comparison evidence и external verification evidence.</p></info></step>
+      <step><cmd>Создайте или дублируйте профиль версии 152, примените усиленный стартовый набор настроек в стиле SOC и примените слой CIS уровня 2.</cmd><info><p>Ожидаемый результат: профиль записывает <codeph>soc_hard</codeph> и <codeph>cis-l2.release-152</codeph> в исходный след.</p></info></step>
+      <step><cmd>Просмотрите профиль в Пошаговый редактор, уделив особое внимание более строгим настройкам безопасности/конфиденциальности по умолчанию и любым элементам управления, которые могут повлиять на удобство использования, надстройки, данные просмотра, поведение сети или корпоративные операции.</cmd><info><p>Ожидаемый результат: важные параметры определяются до экспорта профиля.</p></info></step>
+      <step><cmd>Используйте Все настройки для фильтрации настроенных строк CIS, открытия элементов внимания и отслеживания каждой строки до созданной темы рекомендаций, таблицы сопоставления, цели UI и затронутой темы политики Firefox.</cmd><info><p>Ожидаемый результат: каждое более строгое значение имеет видимый путь к источнику и маршрут к теме политики для проверки.</p></info></step>
+      <step><cmd>Устраните строки проверки вручную и преднамеренные отклонения с помощью задачи отклонения, включая владельца, причину, дату проверки, внешнюю запись, а также то, остается ли значение базовым, CIS, ручным, импортированным или необработанным.</cmd><info><note type="warning">BPM не сохраняет выделенный объект исключения или отказа; сохраните внешнюю запись, прежде чем рассматривать отклонение как проверенное.</note></info></step>
+      <step><cmd>Сравните профиль уровня 2 с эталонным прибором уровня 1 и проверьте все измененные или вновь настроенные строки.</cmd><info><p>Ожидаемый результат: перед утверждением рецензент может объяснить, почему уровень 2 отличается от уровня 1.</p></info></step>
+      <step><cmd>Проверьте, экспортируйте <codeph>policies.json</codeph> и запустите независимую проверку развертывания с использованием одобренной владельцем среды выполнения, операционной системы, сети или метода аудита.</cmd><info><p>Ожидаемый результат: защищенный профиль содержит артефакт экспорта, результат проверки, свидетельства сравнения и доказательства внешней проверки.</p></info></step>
     </steps>
-    <result><p>Representative hardened profile Level 2 reviewable end to end и остаётся в границах BPM mapping, export и source-attribution evidence.</p></result>
-    <postreq><p>Если independent verification выявляет deployment risk, оставьте profile как draft и обновите external decision record перед reuse.</p></postreq>
+    <result><p>Репрезентативный защищенный профиль уровня 2 доступен для сквозного просмотра и остается ограниченным данными сопоставления, экспорта и атрибуции источника BPM.</p></result>
+    <postreq><p>Если независимая проверка обнаружит риск развертывания, сохраните профиль как черновик и обновите запись внешнего решения перед повторным использованием.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

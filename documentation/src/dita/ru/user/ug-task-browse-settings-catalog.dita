@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Просматривайте каталог параметров</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Use Catalog mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
+  <title>Просмотр каталога настроек</title>
+  <shortdesc>Используйте Каталог для просмотра всех поддерживаемых политик и известных управляемых предпочтений для выбранной схемы.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Open a saved profile in All Settings.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Catalog mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
+    <prereq><p>Откройте сохраненный профиль в Все настройки.</p></prereq>
+    <context><p>Каталог — это полная визуальная инвентаризация. Он включает в себя настроенные и доступные настройки, сохраняя при этом расширенный контроль за преднамеренным раскрытием информации.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Switch to Catalog mode.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Browse categories for supported policies and known managed preferences.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Use category cards or search to narrow the inventory.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Просматривайте каталог параметров. Select a setting before applying, editing, or resetting a value.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Переключитесь на Каталог.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Просмотр категорий поддерживаемых политик и известных Управляемые параметры.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Используйте карточки категорий или поиск, чтобы сузить ассортимент.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Выберите настройку перед применением, редактированием или сбросом значения.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. You can find supported policies and known preferences without using raw JSON first.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the catalog is large, use search, filters, or bounded-list controls instead of scrolling blindly.</p></postreq>
+    <result><p>Вы можете найти поддерживаемые политики и известные предпочтения, не используя сначала необработанный JSON.</p></result>
+    <postreq><p>Восстановление: если каталог большой, используйте поиск, фильтры или элементы управления ограниченным списком вместо слепой прокрутки.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-archived-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Revisar un perfil archivado</title>
-  <shortdesc>Abra un archived profile deliberadamente con archived context antes de decisiones de restore o permanent delete.</shortdesc>
+  <shortdesc>Abra un perfil archivado deliberadamente con el contexto archivado antes de tomar decisiones de restauración o eliminación permanente.</shortdesc>
   <taskbody>
-    <prereq><p>El archived profile sigue visible mediante Library lifecycle filter o include_deleted route.</p></prereq>
-    <context><p>Archived profiles pueden revisarse mediante include-deleted routes y Library lifecycle filters, pero no son active editing/export targets normales.</p></context>
+    <prereq><p>El perfil archivado aún es visible a través de un filtro de ciclo de vida de la biblioteca o una ruta include_deleted.</p></prereq>
+    <context><p>Los perfiles archivados se pueden revisar mediante rutas de inclusión eliminada y filtros del ciclo de vida de la biblioteca, pero no son objetivos de edición/exportación activos normales.</p></context>
     <steps>
-      <step><cmd>Ponga Library lifecycle filter en Archived o All states.</cmd><info><p>Resultado esperado: archived lifecycle context permanece visible antes de restore o destructive action.</p></info></step>
-      <step><cmd>Confirme archived badge, profile name, schema channel, validation state y update time antes de abrir la fila.</cmd><info><p>Resultado esperado: archived lifecycle context permanece visible antes de restore o destructive action.</p></info></step>
-      <step><cmd>Abra archived profile solo cuando necesite review context, restore planning, comparison o deletion decision.</cmd><info><p>Resultado esperado: archived lifecycle context permanece visible antes de restore o destructive action.</p></info></step>
-      <step><cmd>Restaure el perfil antes de editing/export normal, o cancele si archived context no es el objetivo previsto.</cmd><info><note type="warning">Las acciones sobre archived profile pueden afectar perfiles ocultos deliberadamente de la active Library view normal.</note></info></step>
+      <step><cmd>Establezca el filtro del ciclo de vida de la biblioteca en Archivado o Todos los estados.</cmd><info><p>Resultado esperado: el contexto del ciclo de vida archivado permanece visible antes de cualquier restauración o acción destructiva.</p></info></step>
+      <step><cmd>Confirme la insignia archivada, el nombre del perfil, el canal del esquema, el estado de validación y la hora de actualización antes de abrir la fila.</cmd><info><p>Resultado esperado: el contexto del ciclo de vida archivado permanece visible antes de cualquier restauración o acción destructiva.</p></info></step>
+      <step><cmd>Abra el perfil archivado solo cuando necesite revisar el contexto, restaurar la planificación, comparar o tomar una decisión de eliminación.</cmd><info><p>Resultado esperado: el contexto del ciclo de vida archivado permanece visible antes de cualquier restauración o acción destructiva.</p></info></step>
+      <step><cmd>Restaure el perfil antes de la edición/exportación normal, o cancele si el contexto archivado no es el objetivo previsto.</cmd><info><note type="warning">Las acciones de perfiles archivados pueden afectar perfiles que están ocultos intencionalmente de la vista normal de la Biblioteca activa.</note></info></step>
     </steps>
-    <result><p>Revisa archived profile con lifecycle context visible y evita tratarlo por error como active profile.</p></result>
-    <postreq><p>Recuperación: si una bookmarked archived route informa Profile not found, vuelva a Library con archived profiles incluidos y reabra desde visible row.</p></postreq>
+    <result><p>Revisa el perfil archivado con su contexto de ciclo de vida visible y evita tratarlo como un perfil activo por error.</p></result>
+    <postreq><p>Recuperación: si una ruta archivada marcada informa Perfil no encontrado, regrese a la Biblioteca con los perfiles archivados incluidos y vuelva a abrir desde la fila visible.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-archived-profile-behavior"/>

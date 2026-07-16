@@ -22,8 +22,32 @@ search files, build output, or release packaging.
   `artifact-integrity.json`.
 - A manifest change must validate schema and semantic constraints: locale parity, guide home topic,
   topic output paths, target-map SHA, search SHA, and referenced file existence.
-- Current search files are placeholder contract artifacts until the smart-search tasks implement the
-  real deterministic index. Do not describe them as final search behavior.
+- Search files are deterministic locale-owned release artifacts. Their source hashes, topic IDs,
+  localized titles/aliases/facets, and manifest records must agree; do not add hosted search,
+  telemetry, AI/RAG, or cross-locale fallback.
+- `navigation.json` is the single generated hierarchy source for each locale. Validate every
+  Documents/guide/section/topic node, localized label, safe same-locale URL, manifest hash, and node
+  count. Do not embed per-page tree copies or patch generated navigation output.
+
+## Release drift revalidation
+
+Reopen and re-run the affected release evidence whenever a product, schema, CIS, locale, API,
+route, theme, screenshot, search, navigation, package, deployment command, or documentation target
+changes:
+
+- Screenshot changes: reconcile the exact 36-row User Guide matrix, locale-owned PNG, caption, alt
+  text, and visual-QA record. Use the maintained capture command and focused matrix/visual tests;
+  there is no `make docs-screenshots-check` target.
+- Locale or visible UI changes: verify runtime UI-catalog authority, Pontoon/SUMO evidence,
+  occurrence-owned allowlists, generated navigation/search labels, and contextual help labels in
+  all six locales.
+- Route, tree, search, theme, or help-link changes: verify compact search state, independently
+  scrolling direct-topic reveal/root return, light/dark/system behavior, manifest/navigation/search
+  hashes, and every policy/preference target or reviewed no-link disposition.
+- Deployment, update, or integration changes: invalidate affected live-install evidence, rerun from
+  the retained clean Linux image with a new immutable transcript, keep retained Docker resources,
+  preserve Administrator API ownership, and leave Windows 10/11 WSL unverified until the actual-host
+  PowerShell runner succeeds.
 
 ## Publishing and review
 
@@ -31,9 +55,10 @@ search files, build output, or release packaging.
 2. Run `make docs-validate` for source/HTML/link/manifest validation.
 3. Run `make docs-reproducibility-check` for map, shell, manifest, search, theme, or generator
    changes.
-4. Run `make docs-install-dev` when a maintainer needs to inspect the current local build through
-   `make dev` and `/help/`; the installed copy is ignored dev evidence, not release package
-   extraction.
+4. Run `make dev` when a maintainer needs to inspect the current local build through `/help/`;
+   the target refreshes the ignored `app/documentation/site` copy via `make docs-install-dev`
+   before starting the app. Use `make run` only when the app must start without documentation
+   refresh. The installed copy is ignored dev evidence, not release package extraction.
 5. Run `make docs-package` and `make docs-package-verify` for release-candidate evidence.
 6. Inspect the package only through generated artifact checks or a targeted archive listing; do not
    patch extracted output.
@@ -47,6 +72,8 @@ search files, build output, or release packaging.
 ```bash
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/unit/test_build_docs.py
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/contract/test_manifest_generation.py
+./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_polish_regression_gates.py
+./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_live_source_install_evidence_closure.py
 make docs-validate
 make docs-install-dev
 make docs-reproducibility-check
@@ -62,7 +89,7 @@ git diff --check -- <changed_files>
 - Dev inspection can use the ignored `app/documentation/site` copy produced by
   `make docs-install-dev`.
 - Package verification proves manifest, target map, search files, output paths, hashes, locale roots,
-  licenses, and artifact integrity agree.
+  navigation trees, licenses, and artifact integrity agree.
 - `docs/docs-index.md` lists every maintained `docs/` file exactly once with the intended status.
-- `runtime_ready=false` remains accurate until release package extraction policy, localized
-  screenshot review, and final manual QA/defect disposition are complete.
+- Release readiness remains false until every reopened drift gate has current focused evidence and
+  final manual QA/defect disposition is complete.

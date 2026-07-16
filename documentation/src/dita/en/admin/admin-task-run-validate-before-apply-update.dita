@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-run-validate-before-apply-update" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+<task id="admin-task-run-validate-before-apply-update" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
   <title>Validate and apply a profile update with expected_revision</title>
   <shortdesc>Run a validation-first update workflow that protects BPM state with the current revision and stops on stale or invalid data.</shortdesc>
   <taskbody>

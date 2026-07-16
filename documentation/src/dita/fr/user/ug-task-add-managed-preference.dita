@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-add-managed-preference" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ajouter une préférence gérée</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Add a known managed preference that is not yet configured in the profile.</shortdesc>
+  <shortdesc>Ajoutez une préférence gérée connue qui n'est pas encore configurée dans le profil.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Open All Settings with the correct schema channel selected.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
+    <prereq><p>Ouvrez Tous les paramètres avec le canal de schéma correct sélectionné.</p></prereq>
+    <context><p>Préférences gérées complète les politiques de Firefox lorsque BPM expose une clé de préférence et un comportement de verrouillage connus. Ajoutez-les volontairement et validez le résultat.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Choose the known preference key and review its expected value type.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Enter the value and lock state required by the profile.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Ajouter une préférence gérée. Apply, validate, and save the managed preference.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Ouvrez le contrôle d'ajout de préférence ou recherchez la préférence dans Catalogue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez la clé de préférence connue et vérifiez son type de valeur attendue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Entrez la valeur et l'état de verrouillage requis par le profil.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Appliquez, validez et enregistrez la préférence gérée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The profile contains the new managed preference with the intended value and lock behavior.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if the preference key is unknown or validation fails, remove the draft value and use JSON only for deliberate raw review.</p></postreq>
+    <result><p>Le profil contient la nouvelle préférence gérée avec la valeur et le comportement de verrouillage prévus.</p></result>
+    <postreq><p>Récupération : si la clé de préférence est inconnue ou si la validation échoue, supprimez la valeur brouillon et utilisez JSON uniquement pour une révision brute délibérée.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-policies-and-managed-preferences"/>

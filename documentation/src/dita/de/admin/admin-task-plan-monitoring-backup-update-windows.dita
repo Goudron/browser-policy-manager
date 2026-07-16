@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Monitoring inputs, backup evidence und update windows planen</title>
-  <shortdesc>Bereiten Sie current-state operational evidence für eine source-run Instanz vor, ohne managed monitoring, official restore automation oder rolling upgrades zu behaupten.</shortdesc>
+<task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Planen Sie Überwachungseingänge, Sicherungsnachweise und Aktualisierungsfenster</title>
+  <shortdesc>Bereiten Sie den aktuellen Betriebsnachweis für eine von der Quelle ausgeführte Instanz vor und vermeiden Sie gleichzeitig Behauptungen über verwaltete Überwachung, offizielle Wiederherstellungsautomatisierung oder fortlaufende Upgrades.</shortdesc>
   <taskbody>
-    <prereq><p>Die Instanz hat source readiness und network exposure review bestanden, und ein administrator oder DevOps owner verantwortet das evaluation window.</p></prereq>
-    <context><p>Bis distributions und runtime service Entscheidungen existieren, sollte operations planning auf observable inputs, manual backup/export evidence und explizite update windows für einen source node fokussieren.</p></context>
+    <prereq><p>Die Instanz hat die Überprüfung der Quellbereitschaft und der Netzwerkgefährdung bestanden und ein einzelner Administrator oder DevOps-Eigentümer ist für das Bewertungsfenster verantwortlich.</p></prereq>
+    <context><p>Bis Verteilungen und Laufzeitdienstentscheidungen vorliegen, sollte sich die Betriebsplanung auf beobachtbare Eingaben, manuelle Sicherungs- und Exportnachweise sowie explizite Aktualisierungsfenster für einen Quellknoten konzentrieren.</p></context>
     <steps>
-      <step><cmd>Listen Sie die heute vorhandenen monitoring inputs auf.</cmd><info><p>Erfassen Sie process status, foreground terminal output, <codeph>stdout</codeph>, <codeph>stderr</codeph>, <codeph>GET /health</codeph>, <codeph>GET /health/ready</codeph>, selected API example results, documentation access über <codeph>/help/</codeph> und source revision aus <codeph>git rev-parse --short HEAD</codeph>.</p></info></step>
-      <step><cmd>Sammeln Sie backup und export evidence vor dem window.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Listen Sie die Überwachungseingänge auf, die heute vorhanden sind.</cmd><info><p>Prozessstatus, Vordergrund-Terminalausgabe, <codeph>stdout</codeph>, <codeph>stderr</codeph>, <codeph>GET /health</codeph>, <codeph>GET /health/ready</codeph>, ausgewählte API-Beispielergebnisse, Dokumentationszugriff über <codeph>/help/</codeph> und die Quellrevision von <codeph>git rev-parse --short HEAD</codeph> aufzeichnen.</p></info></step>
+      <step><cmd>Sammeln Sie Backups und exportieren Sie Beweise vor dem Fenster.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
-]]></codeblock><p>Exportieren Sie außerdem representative Firefox documents wie <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> und speichern Sie die resultierende <codeph>policies.json</codeph> evidence mit checksums.</p></info></step>
-      <step><cmd>Planen Sie ein stop-the-world update window für source changes.</cmd><info><p>Für 0.9.0 planen Sie one-node downtime vor <codeph>git fetch --tags</codeph>, dependency refresh, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> und <codeph>make docs-build</codeph>. Rolling upgrades are planned but not implemented yet.</p></info></step>
-      <step><cmd>Erfassen Sie gaps als blockers, nicht als hidden assumptions.</cmd><info><note type="warning">BPM 0.9.0 bietet kein managed monitoring, automated backup scheduling, official restore automation, point-in-time recovery, managed secrets, token rotation oder rolling upgrade orchestration. Nutzen Sie manual evidence und stop conditions aus dem update runbook.</note></info></step>
+]]></codeblock><p>Exportieren Sie außerdem repräsentative Firefox-Dokumente wie <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> und speichern Sie die resultierenden <codeph>policies.json</codeph>-Beweise mit Prüfsummen.</p></info></step>
+      <step><cmd>Planen Sie ein Stop-the-World-Update-Fenster für Quelländerungen.</cmd><info><p>Planen Sie für 0.9.1 die Ausfallzeit eines Knotens vor <codeph>git fetch --tags</codeph>, Abhängigkeitsaktualisierung, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> und <codeph>make docs-build</codeph>. Rollierende Upgrades sind geplant, aber noch nicht implementiert.</p></info></step>
+      <step><cmd>Erfassen Sie Lücken als Blocker, nicht als versteckte Annahmen.</cmd><info><note type="warning">BPM bietet keine verwaltete Überwachung, keine automatisierte Backup-Planung, keine offizielle Wiederherstellungsautomatisierung, keine Point-in-Time-Wiederherstellung, keine verwalteten Geheimnisse, keine Token-Rotation oder keine fortlaufende Upgrade-Orchestrierung. Verwenden Sie manuelle Beweise und Stoppbedingungen aus dem Update-Betriebsanleitung.</note></info></step>
     </steps>
-    <result><p>Der operation plan enthält monitoring inputs, backup/export evidence und ein realistisches update window für current source operation.</p></result>
-    <postreq><p>Hängen Sie diese evidence an den HA and deferred-boundary record, damit spätere distribution work dieselbe checklist wiederverwenden kann.</p></postreq>
+    <result><p>Der Betriebsplan enthält Überwachungseingaben, Sicherungs-/Exportnachweise und ein realistisches Aktualisierungsfenster für den aktuellen Quellbetrieb.</p></result>
+    <postreq><p>Hängen Sie diesen Nachweis an den HA- und Deferred-Boundary-Datensatz an, damit bei späteren Verteilungsarbeiten dieselbe Checkliste wiederverwendet werden kann.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

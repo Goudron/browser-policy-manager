@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-profile-library" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>筛选配置文件库</title>
-  <shortdesc>本任务完整说明“筛选配置文件库”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>过滤库</title>
+  <shortdesc>组合架构、生命周期和验证过滤器以集中保存的配置文件列表。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>库已打开，您知道需要检查哪个配置文件状态。</p></prereq>
+    <context><p>过滤器是视图控件。它们不会更改配置文件内容、验证状态或生命周期状态。</p></context>
     <steps>
-      <step><cmd>打开与“筛选配置文件库”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>当您需要发布、ESR 或所有配置文件时，选择 Firefox 架构通道过滤器。</cmd><info><p>预期结果：过滤后的计数仅反映所选通道的行。</p></info></step>
+      <step><cmd>选择生命周期过滤器以显示活动、存档或所有配置文件。</cmd><info><p>当您准备恢复或永久删除保留的配置文件时，请使用已存档。</p></info></step>
+      <step><cmd>选择验证过滤器以显示通过、失败或尚未验证的配置文件。</cmd><info><note type="warning">验证过滤器不运行验证。它仅显示最后保存的验证状态。</note></info></step>
+      <step><cmd>当您需要完整的库视图时，将过滤器重置为所有状态。</cmd><info><p>此重置仅更改可见列表，而不更改已保存的配置文件数据。</p></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>库显示与所选模式、生命周期、验证和搜索条件匹配的配置文件子集。</p></result>
+    <postreq><p>恢复：如果配置文件似乎丢失，请重置过滤器并搜索，然后将其视为不存在。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-find-profile"/>

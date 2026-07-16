@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-0.9.1-wsl-source-install-validation",
+  "backlog_item": "BPM091-M11-10",
+  "target_bpm_version": "0.9.1",
+  "status": "runner-prepared-awaiting-actual-windows-hosts",
+  "runner": "documentation/tools/wsl_source_install_validation.ps1",
+  "feasibility_record": "docs/architecture/wsl-source-install-validation-feasibility-0.9.1.md",
+  "privileged_contract": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+  "source_install_reuse": {
+    "target_id": "ubuntu-26-04",
+    "command_contract": "documentation/config/linux-source-install-command-contract-0.9.1.json",
+    "source_topic": "documentation/src/dita/en/admin/admin-task-install-ubuntu-26-04-source.dita",
+    "reconciliation_report": "docs/architecture/linux-source-install-validation-0.9.1.json",
+    "validated_source_sha256": "8ebdf3f5670065c0100260ea1bc72ff2afcaa5394bfd64c449cf03abdc526fc6",
+    "rule": "Install BPM inside Ubuntu 26.04 WSL from the exact documented Linux userspace procedure. The runner verifies the installed checkout and must not replace package, Python, Git, migration, or documentation commands with a Windows-native path.",
+    "wsl_runtime_adapter": "Bind the foreground development runtime to 0.0.0.0 only for bounded Windows-host localhost and browser validation; this does not change the documented Linux installation commands or authorize external exposure."
+  },
+  "actual_host_gate": {
+    "required": true,
+    "supported_targets": ["Windows10", "Windows11"],
+    "required_wsl_generation": 2,
+    "required_distribution": {
+      "ID": "ubuntu",
+      "VERSION_ID": "26.04"
+    },
+    "immutable_bpm_ref": "exact 40-character lowercase Git commit",
+    "linux_checkout_prefix": "/home/",
+    "forbidden_checkout_prefixes": ["/mnt/", "/media/", "/run/desktop/mnt/host/"],
+    "container_substitution_allowed": false,
+    "current_linux_host_can_satisfy_gate": false
+  },
+  "checks": [
+    {
+      "id": "windows-build",
+      "owner": "windows-host",
+      "required_evidence": ["Caption", "Version", "BuildNumber", "OSArchitecture"],
+      "pass_rule": "The observed caption identifies the requested Windows 10 or Windows 11 target."
+    },
+    {
+      "id": "wsl-version",
+      "owner": "windows-host",
+      "required_evidence": ["wsl.exe --version", "wsl.exe --status", "wsl.exe --list --verbose"],
+      "pass_rule": "The requested distribution exists and reports WSL generation 2; missing version output blocks validation."
+    },
+    {
+      "id": "distribution-identity",
+      "owner": "wsl",
+      "required_evidence": ["/etc/os-release", "uname -a", "/proc/version"],
+      "pass_rule": "ID=ubuntu and VERSION_ID=26.04 are observed inside the requested WSL distribution."
+    },
+    {
+      "id": "systemd-mode",
+      "owner": "wsl",
+      "required_evidence": ["PID 1 command", "systemctl is-system-running", "/etc/wsl.conf"],
+      "pass_rule": "The mode is recorded as enabled/running, enabled/degraded, or not enabled; BPM remains a foreground source process and no service claim is inferred."
+    },
+    {
+      "id": "filesystem-location",
+      "owner": "wsl",
+      "required_evidence": ["pwd -P", "wslpath -w", "stat -f filesystem type"],
+      "pass_rule": "The checkout resolves under /home and not through a Windows-mounted or host-shared filesystem."
+    },
+    {
+      "id": "installed-source-assertions",
+      "owner": "wsl",
+      "required_evidence": ["immutable Git ref", "clean Git state", "Python >=3.14", "Alembic current revision", "six-locale docs validation/build/dev install"],
+      "pass_rule": "The checkout matches the approved ref and the accepted Linux userspace post-install assertions pass."
+    },
+    {
+      "id": "localhost-behavior",
+      "owner": "windows-and-wsl",
+      "required_evidence": ["/health", "/health/ready", "/profiles", "WSL curl", "Windows Invoke-WebRequest"],
+      "pass_rule": "The first and post-restart runtime cycles answer from both WSL loopback and Windows localhost."
+    },
+    {
+      "id": "browser-access",
+      "owner": "windows-host",
+      "required_evidence": ["resolved msedge.exe path", "headless Edge exit code", "captured /profiles DOM"],
+      "pass_rule": "Windows Edge loads the BPM Library route and returns an HTML document in both runtime cycles."
+    },
+    {
+      "id": "shutdown",
+      "owner": "windows-and-wsl",
+      "required_evidence": ["recorded runtime PID/PGID", "TERM result", "WSL refusal after stop", "Windows refusal after stop"],
+      "pass_rule": "The foreground BPM process stops and both sides reject the health probe."
+    },
+    {
+      "id": "wsl-restart",
+      "owner": "windows-host",
+      "required_evidence": ["wsl.exe --terminate", "distribution restart", "identity recheck", "old runtime absent", "second start/probe/browser/stop cycle"],
+      "pass_rule": "The requested distribution terminates and restarts without preserving the old BPM process, then the second complete runtime cycle passes."
+    },
+    {
+      "id": "evidence-capture",
+      "owner": "runner",
+      "required_evidence": ["events.jsonl", "host.json", "wsl.json", "source-assertions.txt", "probes.json", "browser-cycle-1.html", "browser-cycle-2.html", "runtime-cycle-1.log", "runtime-cycle-2.log", "summary.json", "sha256.json"],
+      "pass_rule": "Every command, output, exit code, observable result, failure, and artifact hash is retained without credentials."
+    }
+  ],
+  "workflow": {
+    "preflight_only": "Records host, WSL, distribution, systemd, filesystem, source-ref, Python, and browser executable feasibility without starting BPM or terminating WSL.",
+    "full_validation": [
+      "Run the actual-host and installed-source preflight.",
+      "Run migration and all six-locale documentation validation/build/dev-install assertions.",
+      "Start BPM inside WSL with the bounded WSL runtime adapter.",
+      "Verify WSL probes, Windows localhost probes, and Windows Edge access.",
+      "Stop BPM and prove connection refusal from WSL and Windows.",
+      "Terminate and restart only the named WSL distribution.",
+      "Recheck identity and prove the old BPM process is absent.",
+      "Repeat start, WSL/Windows probes, Windows Edge access, and clean stop.",
+      "Write a pass or blocked summary and SHA-256 inventory."
+    ],
+    "success_claim": "Runner execution may close only the supplied Windows target. Preparing or statically testing the runner closes no Windows 10/11 or WSL evidence gap."
+  },
+  "evidence": {
+    "default_root": "%LOCALAPPDATA%/BPM/wsl-source-install-validation/0.9.1/<run-id>",
+    "run_id_pattern": "bpm091-m11-(11|12)-windows(10|11)-wsl-<YYYYMMDDTHHMMSSZ>",
+    "status_values": ["pass", "blocked"],
+    "command_record_fields": ["timestamp", "check_id", "owner", "command", "exit_code", "output_file"],
+    "sanitization": [
+      "Do not pass or record passwords, tokens, private keys, cookies, browser profiles, customer data, or production database contents.",
+      "Record environment variable names but not secret values.",
+      "Use only a fresh local SQLite database created by the documented source-install procedure.",
+      "Retain raw command output only inside the run evidence directory."
+    ],
+    "handoff": "M11-11 or M11-12 commits a sanitized manifest and hashes under documentation/evidence/live-source-install/0.9.1 while raw Windows-host transcripts remain in the recorded local evidence root."
+  },
+  "safety": {
+    "runner_may": [
+      "read Windows and WSL version/build information",
+      "run commands only in the explicitly named WSL distribution",
+      "start and stop the BPM foreground development process",
+      "terminate and restart only the explicitly named WSL distribution",
+      "launch headless Windows Edge against localhost",
+      "write the bounded evidence directory"
+    ],
+    "runner_must_not": [
+      "install, update, unregister, export, import, or remove WSL or any distribution",
+      "run Docker or treat a Linux container as WSL evidence",
+      "change Windows Firewall, portproxy, Hyper-V, virtualization, registry, service, scheduled-task, IIS, proxy, TLS, DNS, or network settings",
+      "add a Windows service or native installer",
+      "bind BPM for external-host validation",
+      "delete a checkout, database, distribution, Docker resource, or unrelated evidence",
+      "claim production readiness or native Windows support"
+    ]
+  },
+  "conditional_outcomes": {
+    "Windows10": {
+      "owner_task": "BPM091-M11-11",
+      "current_status": "unverified-no-actual-host-supplied",
+      "validation_claimed": false,
+      "evidence": "documentation/evidence/live-source-install/0.9.1/m11-11-windows10-wsl-20260715/run-manifest.json"
+    },
+    "Windows11": {
+      "owner_task": "BPM091-M11-12",
+      "current_status": "unverified-no-actual-host-supplied",
+      "validation_claimed": false,
+      "evidence": "documentation/evidence/live-source-install/0.9.1/m11-12-windows11-wsl-20260715/run-manifest.json"
+    }
+  },
+  "verification": {
+    "focused_contract": "./.venv/bin/pytest -q documentation/tests/contract/test_wsl_source_install_validation_runner.py",
+    "full_contract_gate": "make test-docs-contract",
+    "dev_install": "make docs-install-dev"
+  }
+}

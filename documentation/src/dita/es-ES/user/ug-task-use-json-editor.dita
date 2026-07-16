@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Usar JSON Editor</title>
-  <shortdesc>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
+  <title>Utilice Editor JSON</title>
+  <shortdesc>Abra el perfil completo como un documento policies.json de Firefox para una revisión exacta o edición sin formato.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. Open a saved profile. JSON Editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. JSON Editor is the raw document surface. Use it when Guided or All Settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p></context>
+    <prereq><p>Abrir un perfil guardado. Editor JSON funciona en un perfil guardado y representa el perfil como un documento de límites de Firefox.</p></prereq>
+    <context><p>Editor JSON es la superficie del documento sin formato. Úselo cuando Guiado o Todos los ajustes sea de nivel demasiado alto para una revisión exacta, comprobaciones de migración, resolución de problemas o valores sin procesar.</p>
+      <fig id="screenshot-json-editor">
+        <title>Editor JSON en tema oscuro</title>
+        <image keyref="screenshot.json-editor" placement="break">
+          <alt>Editor JSON que muestra las políticas editables de Firefox JSON para un perfil guardado.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. Open the saved profile from the Library or another editor.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. Switch to JSON Editor.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. Confirm the editor shows a top-level policies object and the download action is available.</cmd><info><p>Resultado esperado: JSON Editor conserva el contexto del perfil y muestra un estado comprensible.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de JSON Editor para la localización española: Usar JSON Editor. Use JSON Editor only when exact raw document control is needed.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe la sintaxis JSON, top-level policies y los errores de validación de políticas.</note></info></step>
+      <step><cmd>Abra el perfil guardado desde la Biblioteca u otro editor.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Cambiar a Editor JSON.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Confirme que el editor muestra un objeto de políticas de nivel superior y que la acción de descarga está disponible.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Utilice Editor JSON solo cuando sea necesario un control exacto del documento sin procesar.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
     </steps>
-    <result><p>JSON Editor queda en el estado esperado y la acción se puede explicar durante la revisión. The current profile is visible as editable Firefox policies.json content.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, valide el documento, vuelva a All Settings o abra el tema relacionado. Recovery: if the route cannot open, save the profile first or return to All Settings for visual editing.</p></postreq>
+    <result><p>El perfil actual es visible como contenido editable de Firefox policies.json.</p></result>
+    <postreq><p>Recuperación: si la ruta no se puede abrir, primero guarde el perfil o regrese a Todos los ajustes para editarlo visualmente.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

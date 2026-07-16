@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-trace-setting-source" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Tracer la source d’un paramètre</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Trace a configured setting to baseline, CIS, manual, imported, or raw source attribution.</shortdesc>
+  <title>Tracer une source de réglage</title>
+  <shortdesc>Tracez un paramètre configuré jusqu'à l'attribution de référence, CIS, manuelle, importée ou source brute.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Open a configured setting in All Settings.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Source attribution helps explain why a value exists and whether changing it would override a baseline, CIS layer, manual edit, import, or raw fallback.</p></context>
+    <prereq><p>Ouvrez un paramètre configuré dans Tous les paramètres.</p></prereq>
+    <context><p>L'attribution de la source permet d'expliquer pourquoi une valeur existe et si sa modification remplacerait une référence, une couche CIS, une modification manuelle, une importation ou une solution de secours brute.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Open the setting detail or configured summary that shows source badges.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Identify whether the value comes from baseline, CIS, manual, imported, or raw source.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Follow related CIS or profile context links when a generated layer contributed the value.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Tracer la source d’un paramètre. Record the source before editing, removing, or resetting the setting.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Ouvrez les détails des paramètres ou le résumé configuré qui affiche les badges sources.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Identifiez si la valeur provient d'une source de référence, CIS, manuelle, importée ou brute.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Suivez les liens contextuels CIS ou de profil associés lorsqu'une couche générée a contribué à la valeur.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Enregistrez la source avant de modifier, supprimer ou réinitialiser le paramètre.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. You know where the configured value came from and can explain the impact of changing it.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if source attribution is ambiguous, compare the profile with a clean baseline or inspect the imported source document.</p></postreq>
+    <result><p>Vous savez d'où vient la valeur configurée et pouvez expliquer l'impact de sa modification.</p></result>
+    <postreq><p>Récupération : si l'attribution de la source est ambiguë, comparez le profil avec une référence propre ou inspectez le document source importé.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-filter-settings-by-source"/>

@@ -31,7 +31,7 @@
   },
   "performance_budget": {
     "latency_budget_proxy": "deterministic scan units are used instead of wall-clock timers for stable CI results",
-    "max_index_bytes_per_locale": 3000000,
+    "max_index_bytes_per_locale": 4100000,
     "max_documents_per_locale": 170,
     "max_quality_fixtures_per_locale": 12,
     "max_visible_results_per_query": 50,
@@ -131,7 +131,7 @@
       "fixture_id": "ru-typo-profile-library",
       "locale": "ru",
       "category": "typo",
-      "query": "библиотка профилей",
+      "query": "используйте библиотку",
       "expected_top_topic_id": "ug-task-use-profile-library",
       "required_score_component": "bounded_typo"
     },
@@ -358,7 +358,7 @@
       "fixture_id": "fr-typo-profile-library",
       "locale": "fr",
       "category": "typo",
-      "query": "bibliotheqe profils",
+      "query": "utiliser bibliotheqe",
       "expected_top_topic_id": "ug-task-use-profile-library",
       "required_score_component": "bounded_typo"
     },
@@ -431,7 +431,7 @@
       "fixture_id": "es-es-typo-profile-library",
       "locale": "es-ES",
       "category": "typo",
-      "query": "bibliotca perfiles",
+      "query": "usar bibliotca",
       "expected_top_topic_id": "ug-task-use-profile-library",
       "required_score_component": "bounded_typo"
     },

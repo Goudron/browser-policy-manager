@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Elegir un escenario Guided</title>
-  <shortdesc>Esta tarea describe el escenario completo «Elegir un escenario Guided»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Elija un escenario guiado</title>
+  <shortdesc>Seleccione el escenario que mejor se adapte al objetivo del perfil para que Editor guiado pueda presentar un punto de partida útil.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Usted conoce el propósito del perfil que desea respaldar.</p></prereq>
+    <context><p>Los escenarios mantienen el primer paso orientado a las tareas y hacen que la línea de base sea más fácil de explicar durante la revisión.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Elegir un escenario Guided».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra el paso 1, Línea base del perfil &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revise las opciones de escenarios y sus descripciones en lenguaje sencillo.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija el escenario más cercano al objetivo de implementación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Verifique el resumen de la línea base afectada antes de agregar ajustes preestablecidos o capas CIS.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil comienza desde un escenario intencional en lugar de una línea base en blanco accidental.</p></result>
+    <postreq><p>Recuperación: si el escenario es incorrecto, cámbielo antes de realizar ajustes en pasos posteriores.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-apply-starter-preset"/>

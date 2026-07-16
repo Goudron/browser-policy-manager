@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-assess-single-node-source-readiness" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Évaluer la readiness source single-node actuelle</title>
-  <shortdesc>Déterminez si l’instance BPM source-run actuelle est prête pour une exploitation single-node contrôlée et nommez les evidence associées.</shortdesc>
+<task id="admin-task-assess-single-node-source-readiness" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Évaluer l'état de préparation actuel de la source à nœud unique</title>
+  <shortdesc>Décidez si l'instance BPM exécutée à la source actuelle est prête pour un fonctionnement contrôlé à nœud unique et nommez les preuves qui soutiennent cette décision.</shortdesc>
   <taskbody>
-    <prereq><p>Le source deployment Linux ou Windows 10/11 via WSL est terminé, les dependencies sont installées, et les valeurs prévues de <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> et <codeph>BPM_SCHEMA_CACHE_DIR</codeph> sont connues.</p></prereq>
-    <context><p>BPM 0.9.0 peut être préparé pour une current-state single-node source operation. Cette évaluation n’est pas un production hardening certificate, un HA design ni une packaged service acceptance.</p></context>
+    <prereq><p>Le déploiement de Linux ou Windows 10/11 via la source WSL est terminé, les dépendances sont installées et les valeurs <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> et <codeph>BPM_SCHEMA_CACHE_DIR</codeph> sont connues.</p></prereq>
+    <context><p>BPM peut être préparé pour le fonctionnement de la source à nœud unique dans l'état actuel. Cette évaluation ne constitue pas un certificat de renforcement de la production, une conception HA ou une acceptation de service packagé.</p></context>
     <steps>
-      <step><cmd>Enregistrez la source et la runtime configuration exactes.</cmd><info><p>Capturez <codeph>git rev-parse --short HEAD</codeph>, la version BPM, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph>, et le démarrage par <codeph>make dev</codeph> ou par une commande <codeph>uvicorn app.main:app</codeph> directement possédée.</p></info></step>
-      <step><cmd>Exécutez les liveness et readiness checks depuis la même network boundary que les utilisateurs.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Enregistrez la source exacte et la configuration d'exécution.</cmd><info><p>Capturez <codeph>git rev-parse --short HEAD</codeph>, la version BPM, <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> et indiquez si le processus est démarré avec <codeph>make dev</codeph> ou une commande <codeph>uvicorn app.main:app</codeph> appartenant directement.</p></info></step>
+      <step><cmd>Exécutez des contrôles d'activité et de préparation à partir de la même limite de réseau que les utilisateurs utiliseront.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Consignez le résultat comme evidence pour <codeph>GET /health</codeph> et <codeph>GET /health/ready</codeph>. Des probes réussies prouvent seulement la liveness/readiness du source process.</p></info></step>
-      <step><cmd>Vérifiez les data et documentation evidence avant le partage.</cmd><info><p>Confirmez que <codeph>data/bpm.db</codeph> est la base prévue, qu’au moins un profil s’exporte en <codeph>policies.json</codeph>, et que <codeph>/help/</codeph> ouvre le documentation artifact construit ou un unavailable state documenté.</p></info></step>
-      <step><cmd>Classez l’instance comme current-state source operation.</cmd><info><note type="warning">Ne décrivez pas l’instance comme packaged, hardened, load balanced ou highly available. Si des external controls ajoutent ces propriétés, consignez-les comme external responsibilities et limitez l’evidence BPM 0.9.0 à la single-node source operation.</note></info></step>
+]]></codeblock><p>Enregistrez le résultat comme preuve <codeph>GET /health</codeph> et <codeph>GET /health/ready</codeph>. Les sondes réussies prouvent uniquement la vivacité et la préparation du processus source.</p></info></step>
+      <step><cmd>Vérifiez les données et les preuves documentaires avant de partager l'instance.</cmd><info><p>Confirmez que <codeph>data/bpm.db</codeph> est la base de données prévue, qu'au moins un profil peut être exporté en tant que <codeph>policies.json</codeph> et que <codeph>/help/</codeph> ouvre l'artefact de documentation généré ou un état d'indisponibilité documenté.</p></info></step>
+      <step><cmd>Classifiez l'instance comme opération source à l'état actuel.</cmd><info><note type="warning">N'étiquetez pas l'instance comme étant packagée, renforcée, à charge équilibrée ou hautement disponible. Si les contrôles externes ajoutent ces propriétés, enregistrez-les en tant que responsabilités externes et limitez les preuves BPM au fonctionnement de source à nœud unique.</note></info></step>
     </steps>
-    <result><p>La readiness note indique ce qui peut être fait aujourd’hui depuis source, quels checks ont réussi, et quelles décisions attendent distribution et runtime support.</p></result>
-    <postreq><p>Utilisez le topic network exposure et proxy-readiness avant toute exposition hors poste administrateur local ou controlled lab host.</p></postreq>
+    <result><p>La note de préparation indique ce qui peut être fait en toute sécurité aujourd'hui à partir de la source, quelles vérifications ont réussi et quelles décisions doivent attendre la distribution et le support d'exécution.</p></result>
+    <postreq><p>Utilisez la rubrique Exposition réseau et préparation au proxy avant d'exposer l'instance au-delà d'un poste de travail d'administrateur local ou d'un hôte de laboratoire contrôlé.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-configuration-sources"/>

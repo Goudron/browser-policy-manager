@@ -2,12 +2,12 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-policy-selection" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>选择要配置的 Firefox 策略</title>
-  <shortdesc>按用户目标、架构通道、值形状以及最安全的 BPM 编辑界面来选择策略。</shortdesc>
+  <shortdesc>根据用户结果、模式通道、值形状和提供最安全编辑路径的 BPM 界面来选择策略。</shortdesc>
   <conbody>
-    <section id="a-start-with-outcome"><title>先确定目标</title><p>先明确需要的浏览器行为，例如更新、主页、扩展、隐私、权限、搜索、证书、代理，或 AI 与 smart-feature controls。然后使用 Firefox Policy Guide 的 reference skeletons 和 User Guide 工作流找到稳定的 policy ID。</p></section>
-    <section id="a-check-channel"><title>检查 Release 和 ESR 支持</title><p>有些策略同时存在于 Firefox Release 152 和 ESR 140.12，有些只存在于 Release。依赖某个策略前，先选择 BPM schema channel；不可用策略应被视为验证阻塞项，而不是文档缺口。</p></section>
-    <section id="a-pick-edit-surface"><title>选择编辑界面</title><p>常见任务优先使用 Guided Editor；完整目录和来源追踪使用 All Settings；需要精确控制 Firefox boundary document 时使用 JSON Editor。只有在所选通道验证干净后才导出。</p></section>
-    <section id="a-review-value-shape"><title>检查值形状</title><p>简单的 boolean、string 和 integer 策略通常可以直接编辑。复杂的 object、array、extension、permission、search、certificate、proxy 和 preference-locking 策略需要额外检查，因为嵌套字段、未知值保留和 raw fallback 可能影响导出的 <codeph>policies.json</codeph>。</p></section>
+    <section id="a-start-with-outcome"><title>从结果开始</title><p>从您需要的浏览器行为开始，例如更新、主页、扩展、隐私、权限、搜索、证书、代理或 AI 和智能功能控件。然后使用 Firefox 政策指南参考框架和用户指南工作流程来查找稳定政策 ID。</p></section>
+    <section id="a-check-channel"><title>检查版本和 ESR 支持</title><p>某些策略同时存在于 Firefox 版本 152 和 ESR 140.12 中，而其他策略仅适用于版本。在依赖策略之前选择 BPM 架构通道，并将不可用的策略视为验证阻止程序而不是文档差距。</p></section>
+    <section id="a-pick-edit-surface"><title>选取编辑表面</title><p>使用 引导式编辑器 进行常见的任务优先选择，使用 所有设置 进行完整的目录和源跟踪，并在需要精确的 Firefox 边界文档控制时使用 JSON 编辑器。仅在选定通道的验证干净后才导出。</p></section>
+    <section id="a-review-value-shape"><title>检查值形状</title><p>简单的布尔值、字符串和整数策略通常可以安全地直接编辑。复杂的对象、数组、扩展、权限、搜索、证书、代理和首选项锁定策略需要额外审查，因为嵌套字段、未知保留和原始回退可能会影响导出的 <codeph>policies.json</codeph>。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-concept-bpm-firefox-boundary"/>

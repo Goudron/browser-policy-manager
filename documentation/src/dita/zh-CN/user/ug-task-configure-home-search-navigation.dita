@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-home-search-navigation" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>配置主页、搜索和导航</title>
-  <shortdesc>本任务完整说明“配置主页、搜索和导航”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>从步骤 2 中设置主界面、导航行为、托管搜索引擎和搜索建议。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>步骤 2 已打开并且模式通道正确。</p></prereq>
+    <context><p>这些控件会影响用户首先看到的内容以及 Firefox 如何解析导航和搜索活动。</p></context>
     <steps>
-      <step><cmd>打开与“配置主页、搜索和导航”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开主页、搜索和导航部分。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>设置配置文件所需的主页或新选项卡行为。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>根据策略配置托管搜索引擎和搜索建议。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在转到安全设置之前检查导航默认值。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>该配置文件定义主页、托管搜索、建议和导航行为。</p></result>
+    <postreq><p>恢复：如果用户丢失预期的搜索路径，请在保存之前调整托管搜索引擎条目。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-browser-access-defaults"/>

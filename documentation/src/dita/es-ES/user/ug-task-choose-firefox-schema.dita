@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Elegir un canal de esquema de Firefox</title>
-  <shortdesc>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. Choose between Firefox ESR 140.12 and Firefox Release 152 before importing, validating, or editing a profile.</shortdesc>
+  <title>Elija un canal de esquema de Firefox</title>
+  <shortdesc>Elija entre Firefox ESR 140.12 y Firefox Release 152 antes de importar, validar o editar un perfil.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. Start this task before creating a profile, importing policies.json, or validating a raw JSON document.</p></prereq>
-    <context><p>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. The schema channel decides which Firefox policies BPM can validate and which controls are shown as supported. ESR 140.12 is the default long-support channel; Release 152 is the current mainstream channel and includes newer policy controls such as AIControls and VisualSearchEnabled.</p></context>
+    <prereq><p>Inicie esta tarea antes de crear un perfil, importar policies.json o validar un documento JSON sin formato.</p></prereq>
+    <context><p>El canal de esquema decide qué políticas de Firefox puede validar BPM y qué controles se muestran como compatibles. ESR 140.12 es el canal de soporte prolongado predeterminado; La versión 152 es el canal principal actual e incluye controles de políticas más nuevos, como AIControls y VisualSearchEnabled.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. Compare the target browser fleet with the supported channels: ESR 140.12 or Release 152.</cmd><info><p>Resultado esperado: el canal de esquema elegido coincide con el Firefox objetivo y la validación posterior.</p></info></step>
-      <step><cmd>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. Choose ESR 140.12 when the profile is intended for the supported Extended Support Release deployment.</cmd><info><p>Resultado esperado: el canal de esquema elegido coincide con el Firefox objetivo y la validación posterior.</p></info></step>
-      <step><cmd>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. Choose Release 152 when the profile needs current Release-only controls, including supported AI and visual search policies.</cmd><info><p>Resultado esperado: el canal de esquema elegido coincide con el Firefox objetivo y la validación posterior.</p></info></step>
-      <step><cmd>Este tema describe por completo el flujo de canal de esquema para la localización española: Elegir un canal de esquema de Firefox. Validate after choosing the channel and before saving, export, or handoff.</cmd><info><note type="warning">Advertencia: antes de guardar o exportar, compruebe el canal de esquema y los errores de validación.</note></info></step>
+      <step><cmd>Compare la flota de navegadores de destino con los canales admitidos: ESR 140.12 o versión 152.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Elija ESR 140.12 cuando el perfil esté destinado a la implementación de la versión de soporte extendido compatible.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Elija la versión 152 cuando el perfil necesite controles actuales de solo la versión, incluidas las políticas de búsqueda visual y AI compatibles.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Validar después de elegir el canal y antes de guardar, exportar o transferir.</cmd><info><note type="warning">La validación puede cambiar de válida a no válida cuando cambia el canal del esquema. Confirme el canal antes de guardar o exportar.</note></info></step>
     </steps>
-    <result><p>El canal de esquema y el estado de validación quedan claros antes de continuar con el perfil. The profile uses the schema channel that matches the intended Firefox deployment.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, confirme el canal, revise el affected policy path y abra el tema relacionado. Recovery: if validation reports unsupported, unavailable, deprecated, or unknown settings, confirm the schema channel before editing policy values.</p></postreq>
+    <result><p>El perfil utiliza el canal de esquema que coincide con la implementación prevista de Firefox.</p></result>
+    <postreq><p>Recuperación: si la validación informa configuraciones no compatibles, no disponibles, obsoletas o desconocidas, confirme el canal del esquema antes de editar los valores de la política.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

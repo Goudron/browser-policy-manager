@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-profile-library" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Filtrer la Bibliothèque de profils</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Filtrer la Bibliothèque de profils » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Filtrer la bibliothèque</title>
+  <shortdesc>Combinez les filtres de schéma, de cycle de vie et de validation pour cibler la liste de profils enregistrée.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>La bibliothèque est ouverte et vous savez quel état de profil vous devez inspecter.</p></prereq>
+    <context><p>Les filtres sont des contrôles de vue. Ils ne modifient pas le contenu du profil, l'état de validation ou l'état du cycle de vie.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Filtrer la Bibliothèque de profils ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Choisissez un filtre de canal de schéma Firefox lorsque vous avez besoin de Release, ESR ou de tous les profils.</cmd><info><p>Résultat attendu : le nombre filtré reflète uniquement les lignes du canal sélectionné.</p></info></step>
+      <step><cmd>Choisissez un filtre de cycle de vie pour afficher les profils actifs, archivés ou tous.</cmd><info><p>Utilisez archivé lorsque vous vous préparez à restaurer ou à supprimer définitivement un profil conservé.</p></info></step>
+      <step><cmd>Choisissez un filtre de validation pour afficher les profils réussis, échoués ou non encore validés.</cmd><info><note type="warning">Un filtre de validation n'exécute pas de validation. Il affiche uniquement le dernier état de validation enregistré.</note></info></step>
+      <step><cmd>Réinitialisez les filtres sur tous les états lorsque vous avez besoin de la vue complète de la bibliothèque.</cmd><info><p>Cette réinitialisation modifie uniquement la liste visible, pas les données de profil enregistrées.</p></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>La bibliothèque affiche le sous-ensemble de profils qui correspond au schéma, au cycle de vie, à la validation et aux critères de recherche sélectionnés.</p></result>
+    <postreq><p>Récupération : si un profil semble manquant, réinitialisez les filtres et recherchez avant de le traiter comme absent.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-find-profile"/>

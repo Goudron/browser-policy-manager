@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Use JSON Editor</title>
+  <title>Use JSON editor</title>
   <shortdesc>Open the complete profile as a Firefox policies.json document for exact review or raw editing.</shortdesc>
   <taskbody>
-    <prereq><p>Open a saved profile. JSON Editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
-    <context><p>JSON Editor is the raw document surface. Use it when Guided or All Settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p></context>
+    <prereq><p>Open a saved profile. JSON editor works on a saved profile and represents the profile as a Firefox boundary document.</p></prereq>
+    <context><p>JSON editor is the raw document surface. Use it when Guided or All settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p>
+      <fig id="screenshot-json-editor">
+        <title>JSON editor in dark theme</title>
+        <image keyref="screenshot.json-editor" placement="break">
+          <alt>JSON editor showing editable Firefox policies JSON for a saved profile.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
       <step><cmd>Open the saved profile from the Library or another editor.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
-      <step><cmd>Switch to JSON Editor.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
+      <step><cmd>Switch to JSON editor.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
       <step><cmd>Confirm the editor shows a top-level policies object and the download action is available.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>
-      <step><cmd>Use JSON Editor only when exact raw document control is needed.</cmd><info><note type="warning">Saving raw JSON can change the canonical BPM profile. Validate syntax and policy values before saving.</note></info></step>
+      <step><cmd>Use JSON editor only when exact raw document control is needed.</cmd><info><note type="warning">Saving raw JSON can change the canonical BPM profile. Validate syntax and policy values before saving.</note></info></step>
     </steps>
     <result><p>The current profile is visible as editable Firefox policies.json content.</p></result>
-    <postreq><p>Recovery: if the route cannot open, save the profile first or return to All Settings for visual editing.</p></postreq>
+    <postreq><p>Recovery: if the route cannot open, save the profile first or return to All settings for visual editing.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-source-update-rollback-stop" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Update verifizieren und Rollback-Stop-Bedingungen anwenden</title>
-  <shortdesc>Starten Sie den aktualisierten BPM process, prüfen Sie probes, UI, API evidence und documentation status und entscheiden Sie dann über accept, stop oder restore from backup.</shortdesc>
+<task id="admin-task-verify-source-update-rollback-stop" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Überprüfen Sie das Update und wenden Sie Rollback-Stopp-Bedingungen an</title>
+  <shortdesc>Starten Sie den aktualisierten BPM-Prozess, überprüfen Sie Probes, UI, API-Beweise und den Dokumentationsstatus und entscheiden Sie dann, ob Sie ihn akzeptieren, stoppen oder aus der Sicherung wiederherstellen möchten.</shortdesc>
   <taskbody>
-    <prereq><p>Migrations, source smoke und documentation rebuild checks sind abgeschlossen oder ein failure point wurde erfasst.</p></prereq>
-    <context><p>Post-update verification belegt, dass der aktualisierte source run für die aktuelle controlled environment nutzbar ist. Sie beweist keine production readiness, kein reverse proxy behavior, kein HA, kein managed backup und kein Firefox runtime enforcement.</p></context>
+    <prereq><p>Migrationen, Quellrauch und Überprüfungen zur Neuerstellung der Dokumentation wurden abgeschlossen oder es wurde ein Fehlerpunkt aufgezeichnet.</p></prereq>
+    <context><p>Die Überprüfung nach dem Update beweist, dass die aktualisierte Quellausführung für die aktuell kontrollierte Umgebung verwendbar ist. Es beweist nicht die Produktionsbereitschaft, das Reverse-Proxy-Verhalten, HA, die verwaltete Sicherung oder die Durchsetzung der Firefox-Laufzeit.</p></context>
     <steps>
-      <step><cmd>Starten Sie den aktualisierten source process und prüfen Sie probes.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Starten Sie den aktualisierten Quellprozess und prüfen Sie die Probes.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>Expected responses bleiben <codeph>{"status":"ok"}</codeph> und <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
-      <step><cmd>Prüfen Sie product UI, API evidence und documentation status.</cmd><info><p>Öffnen Sie <codeph>http://127.0.0.1:8000/profiles</codeph>, führen Sie die required reusable API examples aus, bestätigen Sie exported <codeph>policies.json</codeph> evidence bei Bedarf und prüfen Sie, dass <codeph>/help/</codeph> keine stale, incompatible oder missing documentation für das installed artifact meldet.</p></info></step>
-      <step><cmd>Akzeptieren Sie das Update nur, wenn jeder required check erfasst ist.</cmd><info><p>Erfassen Sie previous revision, target revision, migration result, source smoke result, documentation validation/build result, health/readiness responses, UI smoke result, API/export evidence und bekannte deferred production controls.</p></info></step>
-      <step><cmd>Wenden Sie rollback oder stop conditions an, ohne automatic recovery zu erfinden.</cmd><info><p>Wenn failure vor migrations auftritt, kehren Sie zur previous source revision zurück und installieren dependencies neu. Wenn failure nach migrations auftritt, stoppen Sie BPM, stellen das verified pre-update database backup wieder her, kehren zur previous source revision zurück, installieren dependencies neu und wiederholen health/UI smoke checks. Wenn backup evidence fehlt, restore unverified ist oder data nach migration geändert wurde, stoppen und eskalieren Sie, statt rollback success zu behaupten.</p><note type="warning">Markieren Sie das Update nicht als complete, wenn probes fail, documentation stale ist, exports unerwartet abweichen, migrations uncertain sind oder rollback evidence incomplete ist.</note></info></step>
+]]></codeblock><p>Die erwarteten Antworten bleiben <codeph>{"status":"ok"}</codeph> und <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
+      <step><cmd>Überprüfen Sie das Produkt UI, den API-Beweis und den Dokumentationsstatus.</cmd><info><p>Öffnen Sie <codeph>http://127.0.0.1:8000/profiles</codeph>, führen Sie die erforderlichen wiederverwendbaren API-Beispiele aus, bestätigen Sie bei Bedarf exportierte <codeph>policies.json</codeph>-Beweise und stellen Sie sicher, dass <codeph>/help/</codeph> keine veraltete, inkompatible oder fehlende Dokumentation für das installierte Artefakt meldet.</p></info></step>
+      <step><cmd>Akzeptieren Sie die Aktualisierung nur, wenn alle erforderlichen Überprüfungen aufgezeichnet wurden.</cmd><info><p>Erfassen Sie die vorherige Revision, die Zielrevision, das Migrationsergebnis, das Quell-Smoke-Ergebnis, das Dokumentationsvalidierungs-/Build-Ergebnis, die Zustands-/Bereitschaftsreaktionen, das UI-Smoke-Ergebnis, API-/Exportnachweise und alle bekannten verzögerten Produktionskontrollen.</p></info></step>
+      <step><cmd>Wenden Sie Rollback- oder Stoppbedingungen an, ohne eine automatische Wiederherstellung zu erfinden.</cmd><info><p>Wenn vor Migrationen ein Fehler auftritt, kehren Sie zur vorherigen Quellrevision zurück und installieren Sie die Abhängigkeiten neu. Wenn nach Migrationen ein Fehler auftritt, stoppen Sie BPM, stellen Sie die überprüfte Datenbanksicherung vor dem Update wieder her, kehren Sie zur vorherigen Quellrevision zurück, installieren Sie Abhängigkeiten neu und wiederholen Sie die Integritäts-/UI-Rauchprüfungen. Wenn Sicherungsnachweise fehlen, die Wiederherstellung nicht überprüft wurde oder sich Daten nach der Migration geändert haben, stoppen Sie den Vorgang und eskalieren Sie ihn, anstatt einen Rollback-Erfolg zu beanspruchen.</p><note type="warning">Markieren Sie das Update nicht als abgeschlossen, wenn Tests fehlschlagen, die Dokumentation veraltet ist, Exporte unerwartet abweichen, Migrationen unsicher sind oder Rollback-Beweise unvollständig sind.</note></info></step>
     </steps>
-    <result><p>Das Update ist entweder accepted with complete evidence, stopped at a known blocker oder restored from the pre-update backup with explicit proof.</p></result>
-    <postreq><p>Verwenden Sie die resulting evidence in der operations handoff note und in zukünftiger production/HA/reverse-proxy planning.</p></postreq>
+    <result><p>Das Update wird entweder mit vollständigem Nachweis akzeptiert, bei einem bekannten Blocker gestoppt oder mit explizitem Nachweis aus der Sicherung vor dem Update wiederhergestellt.</p></result>
+    <postreq><p>Verwenden Sie die resultierenden Beweise in der Betriebsübergabenotiz und in der zukünftigen Produktions-/HA/Reverse-Proxy-Planung.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-run-source-update-migrations-docs"/>

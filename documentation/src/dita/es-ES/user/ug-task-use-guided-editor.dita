@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Recorrer los seis pasos de Guided Editor</title>
-  <shortdesc>Recorra los seis pasos de Guided Editor: perfil y línea base, acceso y valores predeterminados, seguridad y privacidad, usuarios/complementos/sitios, AI &amp; smart features, y revisión/exportación.</shortdesc>
+  <title>Navega por los seis pasos Editor guiado</title>
+  <shortdesc>Mover a través de la línea base del perfil &amp;, acceso al navegador &amp; valores predeterminados, seguridad &amp; privacidad, usuarios, sitios de complementos &amp;, funciones inteligentes AI &amp; y revisión de exportación &amp;.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Guided Editor convierte la configuración del perfil en seis pasos orientados a tareas y mantiene visible la validación del esquema elegido.</p></context>
+    <prereq><p>Abra un perfil en Editor guiado desde la Biblioteca o el flujo de creación.</p></prereq>
+    <context><p>Editor guiado convierte la configuración del perfil en seis primeros pasos y mantiene la validación del esquema visible mientras trabaja.</p>
+      <fig id="screenshot-guided-editor-overview">
+        <title>Editor guiado descripción general</title>
+        <image keyref="screenshot.guided-editor-overview" placement="break">
+          <alt>Editor guiado que muestra el estado de validación y navegación de pasos para un perfil guardado.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Empiece por el paso 1 «Perfil y línea base»: confirme el nombre, el canal de esquema, el escenario, el preajuste inicial y la capa CIS.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Continúe con el paso 2 «Acceso del navegador y valores predeterminados» para red, comportamiento del navegador, inicio, búsqueda y navegación.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Use el paso 3 para privacidad, permisos, cookies, limpieza, DNS y endurecimiento de seguridad.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Use el paso 4 para cuentas, extensiones, marcadores, idioma, traducción, complementos y tratamiento de sitios.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Use el paso 5 solo para políticas existentes de Firefox sobre IA y funciones inteligentes que admita el esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Termine en el paso 6 «Revisar y exportar»: valide, guarde y descargue el perfil revisado.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Comience con el Paso 1, Línea base del perfil &amp;, para confirmar el nombre, el canal de esquema, el escenario, el ajuste preestablecido inicial y la capa CIS.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Continúe con el Paso 2, Valores predeterminados de acceso al navegador &amp;, para conocer los valores predeterminados de acceso a la red, comportamiento del navegador, inicio, búsqueda y navegación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Utilice el Paso 3 para controles de privacidad, permisos, cookies, limpieza, DNS y postura de refuerzo de seguridad.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Utilice el Paso 4 para cuentas, extensiones, marcadores, idioma, traducción, complementos y manejo de sitios web.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Utilice el paso 5 solo para los controles de políticas de funciones inteligentes AI &amp; de Firefox existentes que admita el esquema seleccionado.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Finalice en el Paso 6, Revisar la exportación &amp;, para validar, guardar y descargar el perfil revisado.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>Puede explicar a dónde pertenece cada configuración guiada y continuar desde el paso correcto.</p></result>
+    <postreq><p>Recuperación: si aterrizas en el área equivocada, usa el paso a paso o busca en lugar de cambiar controles no relacionados.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-guided-settings"/>

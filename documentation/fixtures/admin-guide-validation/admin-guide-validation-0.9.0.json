@@ -10,7 +10,12 @@
       "admin-task-prepare-linux-source-deployment",
       "admin-task-set-up-linux-source-checkout",
       "admin-task-configure-linux-source-runtime",
-      "admin-task-verify-linux-source-deployment"
+      "admin-task-verify-linux-source-deployment",
+      "admin-task-install-ubuntu-26-04-source",
+      "admin-task-install-debian-13-source",
+      "admin-task-install-fedora-44-source",
+      "admin-task-install-linux-mint-22-3-source",
+      "admin-task-install-manjaro-stable-source"
     ],
     "windows_wsl_deployment": [
       "admin-task-prepare-windows-wsl-source-deployment",

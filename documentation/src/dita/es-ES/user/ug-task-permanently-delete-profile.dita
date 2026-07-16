@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-permanently-delete-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Eliminar definitivamente un perfil</title>
-  <shortdesc>Esta tarea describe el escenario completo «Eliminar definitivamente un perfil»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Eliminar permanentemente un perfil</title>
+  <shortdesc>Elimine un perfil activo o archivado solo después de confirmar que no debe conservarse.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>La fila del perfil está visible y usted ha confirmado que el perfil ya no es necesario.</p></prereq>
+    <context><p>La eliminación permanente es la acción destructiva del ciclo de vida de la biblioteca. Archive primero cuando necesite una sujeción reversible.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Eliminar definitivamente un perfil».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
+      <step><cmd>Confirme el nombre de la fila, ID, el esquema, el estado del ciclo de vida y la hora de actualización.</cmd><info><p>Resultado esperado: puede distinguir el perfil de destino de filas con nombres similares.</p></info></step>
+      <step><cmd>Elija la acción de eliminación permanente.</cmd><info><note type="warning">La eliminación permanente no se puede restaurar desde la Biblioteca.</note></info></step>
+      <step><cmd>Complete la confirmación solo cuando el mensaje nombre el perfil deseado.</cmd><info><p>Cancele la confirmación si algún detalle de la fila es inesperado.</p></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El perfil se elimina de la biblioteca una vez que la acción de eliminación se realiza correctamente.</p></result>
+    <postreq><p>Recuperación: si la eliminación falla, no repita inmediatamente; actualice y utilice el tema de solución de problemas para inspeccionar el estado.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-archive-profile"/>

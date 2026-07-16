@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-library-profile-row" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Поля строки профиля в Библиотеке</title>
-  <shortdesc>Строка Библиотеки показывает идентичность, схему, заметку, валидацию, lifecycle и время обновления сохранённого профиля.</shortdesc>
-  <refbody><section id="a-row-identity"><title>Идентичность</title><p>Имя, ID, заметка и время обновления помогают подтвердить нужный профиль.</p></section><section id="a-row-state"><title>Состояние</title><p>Канал схемы, состояние валидации и lifecycle подсказывают доступные действия.</p></section><section id="a-row-warning"><title>Предупреждение</title><p>Не полагайтесь только на положение строки после сортировки или фильтрации.</p></section><section id="a-row-recovery"><title>Восстановление</title><p>Если сведения выглядят устаревшими, обновите Библиотеку.</p></section></refbody>
+  <title>Поля строк библиотеки</title>
+  <shortdesc>В каждой строке библиотеки суммируются идентификатор, схема, примечание, состояние проверки, состояние жизненного цикла и время обновления для одного сохраненного профиля.</shortdesc>
+  <refbody><section id="a-row-identity"><title>Личность</title><p>Имя строки, ID, примечание и время обновления помогают подтвердить, что вы действуете в соответствии с предполагаемым сохраненным профилем.</p></section><section id="a-row-state"><title>Состояние</title><p>Канал схемы, состояние проверки и состояние жизненного цикла объясняют, какие действия редактора, действия жизненного цикла и действия, связанные с экспортом, подходят в данный момент.</p></section><section id="a-row-warning"><title>Предупреждение</title><p>Не полагайтесь только на положение строки после сортировки или фильтрации. Подтвердите поля идентификации перед действиями по дублированию, архивированию, восстановлению или окончательному удалению.</p></section><section id="a-row-recovery"><title>Восстановление</title><p>Если информация в строке устарела, обновите библиотеку, прежде чем повторять действие.</p></section></refbody>
   <related-links><link keyref="topic.ug-task-refresh-profile-library"/><link keyref="topic.ug-reference-archived-profile-behavior"/></related-links>
 </reference>

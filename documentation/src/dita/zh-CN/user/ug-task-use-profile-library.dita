@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-profile-library" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>使用配置文件库</title>
-  <shortdesc>本任务完整说明“使用配置文件库”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>使用库</title>
+  <shortdesc>打开库并使用其计数、状态和行操作作为保存的配置文件工作的起点。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>BPM 已打开，您正在使用已保存的配置文件记录，而不是未保存的编辑器草稿。</p></prereq>
+    <context><p>库列出了已保存的配置文件并显示过滤计数和总计数，以便您了解过滤器或搜索是否隐藏行。</p>
+      <fig id="screenshot-library-overview">
+        <title>库概述</title>
+        <image keyref="screenshot.library-overview" placement="break">
+          <alt>显示保存的配置文件行、计数和配置文件操作的库。</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>打开与“使用配置文件库”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>打开库。</cmd><info><p>预期结果：库加载配置文件行，或者如果不存在已保存的配置文件，则显示空状态消息。</p></info></step>
+      <step><cmd>在对行执行操作之前读取过滤计数和总计数。</cmd><info><p>如果过滤后的计数低于总计数，则搜索文本或过滤器处于活动状态。</p></info></step>
+      <step><cmd>仅在确认行名称、模式通道、生命周期状态和验证状态后才使用行操作。</cmd><info><note type="warning">行操作适用于已保存的配置文件，而不适用于临时编辑器草稿。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>您可以识别活动的库视图并选择下一个配置文件操作，而不会丢失上下文。</p></result>
+    <postreq><p>恢复：如果行未加载或操作状态仍然失败，请刷新库，然后使用库故障排除主题。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

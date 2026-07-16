@@ -96,12 +96,14 @@ def test_english_core_topics_cover_first_time_user_decision_concepts() -> None:
         for topic_id in CORE_TOPICS
     )
 
+    catalog = json.loads(
+        (DOCUMENTATION_ROOT.parent / "app/i18n/en.json").read_text(encoding="utf-8")
+    )
     for required_term in (
-        "Library",
-        "Guided Editor",
-        "All Settings",
-        "JSON Editor",
-        "Compare",
+        catalog["profiles.nav_library"],
+        catalog["profiles.editor_chrome_title"],
+        catalog["profiles.editor_chrome_settings_link"],
+        catalog["profiles.editor_chrome_json_link"],
         "Firefox Release",
         "ESR",
         "Validation",

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-archived-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Archiviertes Profil prüfen</title>
-  <shortdesc>Öffnen Sie ein archived profile bewusst mit archived context vor Entscheidungen zu restore oder permanent delete.</shortdesc>
+  <title>Überprüfen Sie ein archiviertes Profil</title>
+  <shortdesc>Öffnen Sie ein archiviertes Profil bewusst mit archiviertem Kontext, bevor Sie Entscheidungen zur Wiederherstellung oder dauerhaften Löschung treffen.</shortdesc>
   <taskbody>
-    <prereq><p>Das archived profile ist noch über Library lifecycle filter oder include_deleted route sichtbar.</p></prereq>
-    <context><p>Archived profiles können über include-deleted routes und Library lifecycle filters geprüft werden, sind aber keine normalen active editing/export targets.</p></context>
+    <prereq><p>Das archivierte Profil ist weiterhin über einen Bibliothekslebenszyklusfilter oder eine include_deleted-Route sichtbar.</p></prereq>
+    <context><p>Archivierte Profile können über Einschluss-/Gelöscht-Routen und Bibliothekslebenszyklusfilter überprüft werden, sie sind jedoch keine normalen aktiven Bearbeitungs-/Exportziele.</p></context>
     <steps>
-      <step><cmd>Setzen Sie den Library lifecycle filter auf Archived oder All states.</cmd><info><p>Erwartetes Ergebnis: archived lifecycle context bleibt vor restore oder destructive action sichtbar.</p></info></step>
-      <step><cmd>Prüfen Sie archived badge, profile name, schema channel, validation state und update time vor dem Öffnen der Zeile.</cmd><info><p>Erwartetes Ergebnis: archived lifecycle context bleibt vor restore oder destructive action sichtbar.</p></info></step>
-      <step><cmd>Öffnen Sie archived profile nur für review context, restore planning, comparison oder deletion decision.</cmd><info><p>Erwartetes Ergebnis: archived lifecycle context bleibt vor restore oder destructive action sichtbar.</p></info></step>
-      <step><cmd>Stellen Sie das Profil vor normalem editing/export wieder her oder brechen Sie ab, wenn archived context nicht das Ziel ist.</cmd><info><note type="warning">Aktionen an archived profile können Profile betreffen, die absichtlich aus der normalen active Library view ausgeblendet sind.</note></info></step>
+      <step><cmd>Legen Sie den Lebenszyklusfilter der Bibliothek auf „Archiviert“ oder „Alle“ fest.</cmd><info><p>Erwartetes Ergebnis: Der archivierte Lebenszykluskontext bleibt vor jeder Wiederherstellung oder Zerstörungsaktion sichtbar.</p></info></step>
+      <step><cmd>Bestätigen Sie den archivierten Badge, den Profilnamen, den Schemakanal, den Validierungsstatus und die Aktualisierungszeit, bevor Sie die Zeile öffnen.</cmd><info><p>Erwartetes Ergebnis: Der archivierte Lebenszykluskontext bleibt vor jeder Wiederherstellung oder Zerstörungsaktion sichtbar.</p></info></step>
+      <step><cmd>Öffnen Sie das archivierte Profil nur, wenn Sie einen Überprüfungskontext, eine Wiederherstellungsplanung, einen Vergleich oder eine Löschentscheidung benötigen.</cmd><info><p>Erwartetes Ergebnis: Der archivierte Lebenszykluskontext bleibt vor jeder Wiederherstellung oder Zerstörungsaktion sichtbar.</p></info></step>
+      <step><cmd>Stellen Sie das Profil vor der normalen Bearbeitung/dem normalen Export wieder her oder brechen Sie ab, wenn der archivierte Kontext nicht das beabsichtigte Ziel ist.</cmd><info><note type="warning">Archivierte Profilaktionen können sich auf Profile auswirken, die absichtlich in der normalen aktiven Bibliotheksansicht ausgeblendet werden.</note></info></step>
     </steps>
-    <result><p>Sie prüfen das archived profile mit sichtbarem lifecycle context und behandeln es nicht versehentlich als active profile.</p></result>
-    <postreq><p>Wiederherstellung: Wenn eine bookmarked archived route Profile not found meldet, kehren Sie zur Library mit eingeschlossenen archived profiles zurück und öffnen Sie aus der visible row.</p></postreq>
+    <result><p>Sie überprüfen das archivierte Profil mit sichtbarem Lebenszykluskontext und vermeiden, es versehentlich als aktives Profil zu behandeln.</p></result>
+    <postreq><p>Wiederherstellung: Wenn eine mit Lesezeichen versehene archivierte Route meldet, dass „Profil nicht gefunden“ wurde, kehren Sie mit den archivierten Profilen zur Bibliothek zurück und öffnen Sie sie in der sichtbaren Zeile erneut.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-archived-profile-behavior"/>

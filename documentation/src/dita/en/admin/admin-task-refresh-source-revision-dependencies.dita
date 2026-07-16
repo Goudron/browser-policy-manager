@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-refresh-source-revision-dependencies" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-task-refresh-source-revision-dependencies" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Refresh the source revision and dependencies</title>
   <shortdesc>Move the checkout to an approved newer revision and reinstall the Python environment without hiding dependency or worktree failures.</shortdesc>
   <taskbody>

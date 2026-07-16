@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-documentation-search-boundary" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Understand documentation search boundaries</title>
-  <shortdesc>Use documentation search as a local, deterministic index of published help topics, not as an AI assistant.</shortdesc>
+  <title>Navigate and search product documentation</title>
+  <shortdesc>Use the independently scrolling hierarchy and compact deterministic search to find published help without an external or AI service.</shortdesc>
   <conbody>
+    <section id="a-portal-navigation"><title>Documentation tree</title><p>The sidebar opens at the Documents root and lists guides, sections where needed, and topics. The tree scrolls independently from the article. A root link reveals the guide list; a contextual topic link expands every ancestor, brings the topic into view, and marks it active.</p></section>
+    <section id="a-compact-search"><title>Compact search and filters</title><p>Search starts as one line for the query and primary actions. Expand the additional panel to read search guidance, choose localized guide, content-type, and audience filters, and review status or results. Collapsing the panel does not clear the current query or selected filters.</p></section>
     <section id="a-local-offline"><title>Local and offline</title><p>The documentation portal searches the static index packaged with the same help artifact. It does not call an external search service, require internet access, send queries for telemetry, or learn from user behavior.</p></section>
     <section id="a-deterministic-results"><title>Deterministic results</title><p>Search matches localized DITA topic titles, short descriptions, headings, body text, reviewed aliases, and stable technical identifiers such as policy IDs, CIS recommendation IDs, and API operation IDs. Ranking uses fixed weights, facets, filters, and bounded typo tolerance so the same artifact and query produce the same result order.</p></section>
-    <section id="a-not-ai"><title>No AI answers</title><p>Search does not provide conversational answers, semantic embeddings, vector retrieval, RAG, generative summaries, or automatic recommendations. If no result appears, use guide navigation, exact identifiers, or filters rather than expecting the portal to infer an answer.</p></section>
+    <section id="a-not-ai"><title>No AI answers</title><p>Search does not provide conversational answers, semantic embeddings, vector retrieval, RAG, generative summaries, or automatic recommendations. If no result appears, use the documentation tree, exact identifiers, or filters rather than expecting the portal to infer an answer.</p></section>
     <section id="a-product-ai-policies"><title>Product AI policies are still documented</title><p>Some Firefox Release policies control browser AI and smart-feature behavior. Those policies are ordinary BPM product settings and remain documented; documenting them does not add AI functionality to the documentation portal.</p></section>
   </conbody>
 </concept>

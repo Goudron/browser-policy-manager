@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>In All Settings suchen</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Search configured settings, available policies, known preferences, and setting actions from All Settings.</shortdesc>
+  <title>Suche nach Alle Einstellungen</title>
+  <shortdesc>Durchsuchen Sie konfigurierte Einstellungen, verfügbare Richtlinien, bekannte Einstellungen und Einstellungsaktionen von Alle Einstellungen.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Open All Settings in any mode.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Search is shared across Review, Configured, and Catalog work. It can lead to a setting, an action, or a filtered group.</p></context>
+    <prereq><p>Öffnen Sie Alle Einstellungen in einem beliebigen Modus.</p></prereq>
+    <context><p>Die Suche wird für alle Überprüfungs-, Konfigurations- und Katalogarbeiten verwendet. Es kann zu einer Einstellung, einer Aktion oder einer gefilterten Gruppe führen.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Place focus in the All Settings search field.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Enter a policy ID, preference key, category, source, or plain-language term.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Choose a grouped result and confirm the target setting or action.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: In All Settings suchen. Clear the search when you return to browsing or filtering.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Platzieren Sie den Fokus im Suchfeld Alle Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Geben Sie eine Richtlinie ID, einen Präferenzschlüssel, eine Kategorie, eine Quelle oder einen Begriff im Klartext ein.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie ein gruppiertes Ergebnis und bestätigen Sie die Zieleinstellung oder Aktion.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Löschen Sie die Suche, wenn Sie zum Durchsuchen oder Filtern zurückkehren.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The matching setting or action is selected without losing the current profile context.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if no result appears, confirm the schema channel and try a policy ID or preference key.</p></postreq>
+    <result><p>Die passende Einstellung oder Aktion wird ausgewählt, ohne dass der aktuelle Profilkontext verloren geht.</p></result>
+    <postreq><p>Wiederherstellung: Wenn kein Ergebnis angezeigt wird, bestätigen Sie den Schemakanal und versuchen Sie es mit einer Richtlinie ID oder einem Präferenzschlüssel.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-follow-setting-deep-link"/>

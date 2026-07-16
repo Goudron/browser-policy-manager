@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Read the affected policy path and message before changing values.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Classify the issue as unsupported policy, wrong value type, deprecated setting, unknown entry, imported value, or raw fallback.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Use All Settings or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Use All settings or JSON to navigate to the affected location and correct only the reported value.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Revalidate the profile in the same schema channel before saving or exporting.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
     </steps>
     <result><p>The validation error is either resolved or documented as a deliberate raw/unsupported value that cannot be treated as release-ready.</p></result>

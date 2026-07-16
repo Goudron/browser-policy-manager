@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-starter-presets" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>详细编辑策略前选择 starter preset</title>
-  <shortdesc>Starter presets 会为常见环境填充 BPM profile，然后再检查、验证并调整单个 Firefox 策略。</shortdesc>
+  <title>在详细策略编辑之前选择起始预设</title>
+  <shortdesc>在您查看、验证和调整各个 Firefox 策略之前，入门预设会为常见环境生成 BPM 配置文件。</shortdesc>
   <conbody>
-    <section id="a-purpose"><title>用途</title><p>Starter preset 是 BPM baseline，不是最终部署建议。用它创建初始策略集合后，导出前仍要在 Guided Editor、All Settings 或 JSON Editor 中检查每个变更值。</p></section>
-    <section id="a-basic-corporate"><title>Basic corporate</title><p>当 profile 需要 managed updates、减少 telemetry、限制 accounts 和 Pocket、enterprise roots、system proxy、锁定 intranet homepage、受控 downloads 以及默认阻止扩展安装时，选择 corporate preset。</p></section>
-    <section id="a-classroom-kiosk"><title>Classroom 或 kiosk</title><p>当浏览器应从锁定的学校页面启动、使用受限浏览行为、限制 private browsing 和内部页面，并可强制安装已审核 classroom extension、同时阻止其他扩展时，选择 classroom 或 kiosk preset。</p></section>
-    <section id="a-protected-station"><title>Protected station</title><p>对于 hardened workstations 或 SOC-style 环境，需要更严格的 proxy、DNS、certificate、permission、private browsing、extension 和 preference controls 时，选择 protected-station preset。导出前要检查所有网络和证书值，因为环境专用占位符必须替换。</p></section>
-    <section id="a-after-selection"><title>选择之后</title><p>应用 preset 后，验证所选 Firefox 通道，检查 source tracing，移除不需要的值，并只导出已审核的 <codeph>policies.json</codeph>。如果 profile 需要文档化 security baseline，可单独添加 CIS layer。</p></section>
+    <section id="a-purpose"><title>目的</title><p>入门预设是 BPM 基线，而不是完成的部署建议。使用它创建初始策略集，然后在导出之前检查 引导式编辑器、所有设置 或 JSON 编辑器 中的每个更改值。</p></section>
+    <section id="a-basic-corporate"><title>基本企业</title><p>当配置文件应支持托管更新、遥测缩减、帐户和 Pocket 限制、企业根、系统代理、锁定的 Intranet 主页、受控下载和阻止默认扩展安装时，请选择企业预设。</p></section>
+    <section id="a-classroom-kiosk"><title>教室信息亭</title><p>当浏览器从锁定的学校页面启动时选择教室或信息亭预设，使用受限浏览行为，限制隐私浏览和内部页面，并可以强制审查教室扩展，同时阻止其他扩展。</p></section>
+    <section id="a-protected-station"><title>受保护站</title><p>为需要更严格代理、DNS、证书、权限、私密浏览、扩展和首选项控制的强化工作站或 SOC 式环境选择受保护站预设。导出前请检查每个网络和证书值，因为必须替换特定于环境的占位符。</p></section>
+    <section id="a-after-selection"><title>选择后</title><p>应用预设后，验证所选的 Firefox 通道、检查源跟踪、删除不需要的值并仅导出经过审核的 <codeph>policies.json</codeph>。当配置文件需要记录的安全基线时，可以单独添加 CIS 层。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-concept-policy-selection"/>

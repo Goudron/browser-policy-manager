@@ -87,12 +87,11 @@ def test_api_rehome_audit_declares_completed_m12_07_scope_and_decisions() -> Non
 def test_every_migrated_api_topic_has_one_current_admin_destination() -> None:
     audit = _audit()
     keydefs = _keydefs()
-    api_map_topics = set(_topicrefs("api-integration-guide.ditamap"))
     admin_map_topics = set(_topicrefs("administrator-guide.ditamap"))
     entries = audit["api_topics_to_rehome"]
     future_topic_ids = [entry["future_topic_id"] for entry in entries]
 
-    assert api_map_topics == {"api-concept-administrator-integration-landing"}
+    assert not (DITA_ROOT / "en/maps/api-integration-guide.ditamap").exists()
     assert set(future_topic_ids) == EXPECTED_API_TOPICS
     assert set(future_topic_ids) <= admin_map_topics
     assert len(future_topic_ids) == len(set(future_topic_ids))

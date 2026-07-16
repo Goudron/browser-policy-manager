@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-set-up-linux-source-checkout" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux">
+<task id="admin-task-set-up-linux-source-checkout" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux">
   <title>Set up the Linux source checkout</title>
   <shortdesc>Clone the BPM repository, create the Python virtual environment, install development dependencies, and prepare the local database schema.</shortdesc>
   <taskbody>
-    <prereq><p>The Linux host is prepared, and the administrator has access to the BPM repository URL and target branch or tag for version 0.9.0.</p></prereq>
+    <prereq><p>The Linux host is prepared, and the administrator has access to the BPM repository URL and the approved target branch, tag, or revision.</p></prereq>
     <context><p>The repository README defines the supported source setup sequence. Use repository-local commands so later troubleshooting can compare the environment with committed scripts.</p></context>
     <steps>
       <step><cmd>Clone the repository and enter the checkout.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
-git checkout <approved-0.9.0-ref>
+git checkout <approved-0.9.1-ref>
 ]]></codeblock><p>Replace placeholders with the approved internal repository URL and release reference.</p></info></step>
       <step><cmd>Create and activate the local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv

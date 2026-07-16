@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-follow-setting-deep-link" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Откройте deep link параметра</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Follow focused links between search, All Settings, Guided context, and JSON locations.</shortdesc>
+  <title>Переход по ссылкам настройки и документации</title>
+  <shortdesc>Откройте нужное место в редакторе или точную тему документации для поддерживаемой политики либо известной управляемой настройки.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. A link or search result points to a setting, review state, raw key, deprecated item, or JSON location.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Deep links preserve orientation by opening the right editor and focusing the relevant setting or raw location.</p></context>
+    <prereq><p>Откройте режим «Все настройки» или другой интерфейс BPM со ссылкой на настройку.</p></prereq>
+    <context><p>Прямые ссылки редактора переводят фокус на настройку или необработанное расположение. В режиме «Все настройки» отдельная кнопка с буквой i в круге открывает найденную по манифесту документацию для каждой поддерживаемой политики и известной управляемой настройки.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Open the focused link from search, review, comparison, Guided, or JSON context.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Confirm the destination editor and focused setting or state.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Use the detail panel, filter, or JSON location to complete the task.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Откройте deep link параметра. Return to the previous surface only after saving or discarding changes deliberately.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Для поддерживаемой политики или известной управляемой настройки нажмите кнопку i в круге рядом со строкой.</cmd><info><p>Ожидаемый результат: локализованная документация открывается в новой вкладке, строка не выбирается, а данные профиля не меняются.</p></info></step>
+      <step><cmd>Проверьте открытую тему документации и активный элемент дерева.</cmd><info><p>Ожидаемый результат: дерево раскрыто от корня «Документы» через соответствующее руководство и раздел до точной темы, которая видна и активна.</p></info></step>
+      <step><cmd>Вернитесь в BPM и воспользуйтесь прямой ссылкой редактора или поиска, если настройку нужно изменить.</cmd><info><p>Ожидаемый результат: открывается правильный редактор, а фокус переходит на нужную настройку, состояние проверки, необработанный ключ или расположение JSON.</p></info></step>
+      <step><cmd>Возвращайтесь к предыдущей поверхности только после намеренного сохранения или отмены изменений.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The linked setting opens in the correct surface with focus preserved.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the link cannot resolve, search by exact policy ID, preference key, or raw path.</p></postreq>
+    <result><p>Ссылки документации и прямые ссылки редактора открывают точные назначения и сохраняют ориентацию пользователя.</p></result>
+    <postreq><p>Восстановление: для неизвестных необработанных настроек и отсутствующей, устаревшей, несовместимой или недоступной документации отображается локализованное неинтерактивное состояние. Откройте «Документацию» из шапки BPM и найдите точный идентификатор политики или ключ управляемой настройки; такое состояние не является неработающей ссылкой.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>
+    <link keyref="topic.ug-concept-documentation-search-boundary"/>
     <link keyref="topic.ug-task-export-policies-json"/>
   </related-links>
 </task>

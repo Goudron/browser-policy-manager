@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "harness_id": "bpm-0.9.1-live-source-install-harness",
+  "backlog_item": "BPM091-M11-03",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "command_contract": "documentation/config/linux-source-install-command-contract-0.9.1.json",
+  "privileged_contract": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+  "source_locale": "en",
+  "execution": {
+    "required_effective_uid": 0,
+    "privilege_entry": "Run one bounded CLI invocation through a maintainer-approved pkexec dialog or invoke it with sudo from a maintainer terminal.",
+    "shell": "/bin/bash",
+    "platform": "linux/amd64",
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "network": "bpm091-m11-net",
+    "runtime_readiness_attempts": 300,
+    "runtime_readiness_interval_seconds": 2,
+    "published_ports": "none",
+    "host_bind_mounts": "forbidden",
+    "docker_socket_mount": "forbidden",
+    "privileged": false,
+    "cap_add": "forbidden",
+    "restart_policy": "no"
+  },
+  "command_ownership": {
+    "source": "English DITA codeblocks in each target's source_topic, extracted in stage_order and line order.",
+    "required_ref_argument": "--bpm-ref",
+    "placeholder_command": "export BPM_REF=\"<approved-0.9.1-ref>\"",
+    "substitution_rule": "Replace only the placeholder assignment with a shell-quoted maintainer-supplied ref; retain both documented and effective forms in the plan.",
+    "container_only_setup_class": "container_adapter",
+    "container_only_setup_rule": "OCI bases omit the documented pre-existing sudo-capable host user. Install sudo as root, keep no-new-privileges, execute the unchanged sudo commands as root, and record this reduced user-boundary fidelity separately from documentation evidence.",
+    "runtime_rule": "Run the exact make dev command in the background only for orchestration while preserving the activated environment, preserve its foreground log, stop waiting immediately if the runtime exits, wait from inside the container for readiness without exiting the parent script, execute documented probes, send SIGINT, verify shutdown, and require a final completion marker before reporting pass.",
+    "hidden_setup": "forbidden"
+  },
+  "retention": {
+    "delete_subcommand": "absent",
+    "remove_after_run": false,
+    "retain_golden_images": true,
+    "golden_image_cache_rule": "Inspect the exact local digest or imported Mint tag first; use it without registry access when OS, architecture, and immutable digest match. Pull only when the approved golden image is absent.",
+    "derived_install_state_rule": "Stop every attempt and retain it through evidence review. A successful derivative container or explicitly committed derivative image may later be removed by exact recorded identity; failed or blocking attempts remain retained for diagnosis.",
+    "retain_network": true,
+    "retain_stopped_containers_until_evidence_handoff": true,
+    "stop_after_run": true,
+    "retry_rule": "Every retry increments attempt and creates a new container name; an existing container name or a running M11 container fails closed.",
+    "container_name_template": "bpm091-{target_id}-{run_id}-a{attempt}",
+    "maximum_task_owned_docker_bytes": 200000000000,
+    "minimum_host_free_bytes": 21474836480,
+    "inventory_required_before_and_after": true
+  },
+  "evidence": {
+    "local_root": "documentation/build/live-source-install/0.9.1",
+    "maintained_root": "documentation/evidence/live-source-install/0.9.1",
+    "plan": "<run-id>/<target-id>/attempt-<nn>/plan.json",
+    "events": "<run-id>/<target-id>/attempt-<nn>/events.jsonl",
+    "command_output": "<run-id>/<target-id>/attempt-<nn>/command-output/<event-id>.txt",
+    "container_evidence": "<run-id>/<target-id>/attempt-<nn>/container-evidence",
+    "inspect": "<run-id>/<target-id>/attempt-<nn>/container-inspect.json",
+    "inventory": "<run-id>/<target-id>/attempt-<nn>/inventory.json",
+    "rules": [
+      "Record exact documented and effective commands, classification, sequence, UTC start/end, exit code, output path, output byte count, and SHA-256.",
+      "Stream output while commands run and retain failed attempts.",
+      "Never record credentials, authorization headers, environment dumps, production addresses, cookies, private keys, or unrelated user data."
+    ]
+  },
+  "targets": [
+    {
+      "id": "ubuntu-26-04",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-ubuntu-26-04-source.dita",
+      "image_target": "ubuntu-26-04",
+      "stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
+      "container_adapter_command": "apt-get update && apt-get install -y --no-install-recommends sudo",
+      "identity_probe": ". /etc/os-release && test \"$ID\" = ubuntu && test \"$VERSION_ID\" = 26.04"
+    },
+    {
+      "id": "debian-13-5",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-debian-13-source.dita",
+      "image_target": "debian-13-5",
+      "stage_order": ["distro-prep", "python", "checkout", "install", "docs", "start", "verify"],
+      "container_adapter_command": "apt-get update && apt-get install -y --no-install-recommends sudo",
+      "identity_probe": ". /etc/os-release && test \"$ID\" = debian && test \"$VERSION_ID\" = 13 && test \"$(cat /etc/debian_version)\" = 13.5"
+    },
+    {
+      "id": "fedora-44",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-fedora-44-source.dita",
+      "image_target": "fedora-44",
+      "stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
+      "container_adapter_command": "dnf install -y sudo",
+      "identity_probe": ". /etc/os-release && test \"$ID\" = fedora && test \"$VERSION_ID\" = 44"
+    },
+    {
+      "id": "linux-mint-22-3",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-linux-mint-22-3-source.dita",
+      "image_target": "linux-mint-22-3",
+      "stage_order": ["distro-prep", "python", "checkout", "install", "docs", "start", "verify"],
+      "container_adapter_command": "apt-get update && apt-get install -y --no-install-recommends sudo",
+      "identity_probe": ". /etc/os-release && test \"$ID\" = linuxmint && test \"$VERSION_ID\" = 22.3 && test \"$VERSION_CODENAME\" = zena"
+    },
+    {
+      "id": "manjaro-stable-2026-06-26",
+      "source_topic": "documentation/src/dita/en/admin/admin-task-install-manjaro-stable-source.dita",
+      "image_target": "manjaro-stable-2026-06-26",
+      "stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
+      "container_adapter_command": "pacman -Sy --needed --noconfirm sudo",
+      "identity_probe": ". /etc/os-release && test \"$ID\" = manjaro"
+    }
+  ],
+  "mint_image_preparation": {
+    "owner_task": "BPM091-M11-03",
+    "helper_target": "ubuntu-26-04",
+    "helper_name_template": "bpm091-linux-mint-rootfs-helper-{run_id}-a{attempt}",
+    "helper_packages": ["ca-certificates", "curl", "gnupg", "squashfs-tools", "xorriso"],
+    "workdir": "/var/tmp/bpm091-linux-mint-22.3",
+    "iso_filename": "linuxmint-22.3-cinnamon-64bit.iso",
+    "iso_sha256": "a081ab202cfda17f6924128dbd2de8b63518ac0531bcfe3f1a1b88097c459bd4",
+    "signing_key_fingerprint": "27DEB15644C6B3CF3BD7D291300F846BA25BAE09",
+    "image_tag": "bpm091/linux-mint:22.3-zena-amd64",
+    "rules": [
+      "Verify the detached signature over the official checksum file before checking the ISO.",
+      "Extract the live squashfs without host mounts or devices inside the resource-limited retained helper container.",
+      "Import a numeric-owner tar stream through Docker CLI, assert Linux Mint 22.3 Zena identity, label the image, stop and retain the helper.",
+      "After a successful import, retain the stream checksum and evidence but release only transient ISO, squashfs, and unpacked-rootfs payloads inside the stopped helper so retained Docker storage remains bounded."
+    ]
+  },
+  "verification": {
+    "unit": "./.venv/bin/pytest -q documentation/tests/unit/test_live_source_install_harness.py",
+    "contract": "./.venv/bin/pytest -q documentation/tests/contract/test_live_source_install_harness_contract.py",
+    "self_test_target": "ubuntu-26-04"
+  }
+}

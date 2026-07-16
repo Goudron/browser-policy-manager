@@ -205,11 +205,16 @@ def _contracts() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[s
 
 def test_documentation_manifest_schemas_are_valid_draft_2020_12():
     manifest_schema, target_schema, _, _ = _contracts()
+    navigation_schema = _indexed_json(
+        "architecture/schemas/product-documentation-navigation-v1.schema.json"
+    )
 
     Draft202012Validator.check_schema(manifest_schema)
     Draft202012Validator.check_schema(target_schema)
+    Draft202012Validator.check_schema(navigation_schema)
     assert manifest_schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
     assert target_schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+    assert navigation_schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
 
 
 def test_documentation_manifest_examples_pass_structural_and_semantic_validation():

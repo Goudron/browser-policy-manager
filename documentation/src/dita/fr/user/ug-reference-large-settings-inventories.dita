@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-large-settings-inventories" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Grands inventaires de paramètres</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Grands inventaires de paramètres. Use bounded-list behavior, search, filters, and categories when All Settings contains a large policy and preference inventory.</shortdesc>
+  <title>Inventaires de paramètres volumineux</title>
+  <shortdesc>Utilisez un comportement de liste limitée, une recherche, des filtres et des catégories lorsque Tous les paramètres contient un vaste inventaire de règles et de préférences.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Grands inventaires de paramètres</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Grands inventaires de paramètres. All Settings can expose many schema-backed policies and known preferences. Bounded lists keep the interface usable and make the next narrowing action explicit.</p></section>
-    <section id="a-list-budget"><title>List budget</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Grands inventaires de paramètres. All Settings may show a bounded subset, count, or continuation action instead of rendering every row at once.</p></section>
-    <section id="a-narrowing-tools"><title>Narrowing tools</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Grands inventaires de paramètres. Search, category navigation, source filters, and state filters are the supported ways to reduce a large inventory.</p></section>
-    <section id="a-performance-boundary"><title>Performance boundary</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Grands inventaires de paramètres. Large-inventory handling is a UI boundary, not a signal that settings are missing from the profile or catalog.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Grands inventaires de paramètres. If the expected row is not visible, search by exact ID, clear filters, or switch between Configured and Catalog mode.</p></section>
+    <section id="a-overview"><title>Présentation</title><p>Tous les paramètres peut exposer de nombreuses politiques basées sur un schéma et préférences connues. Les listes limitées maintiennent l’interface utilisable et rendent explicite la prochaine action de restriction.</p></section>
+    <section id="a-list-budget"><title>Liste du budget</title><p>Tous les paramètres peut afficher un sous-ensemble limité, un nombre ou une action de continuation au lieu de restituer chaque ligne en même temps.</p></section>
+    <section id="a-narrowing-tools"><title>Outils de restriction</title><p>La recherche, la navigation par catégorie, les filtres de source et les filtres d'état sont les moyens pris en charge pour réduire un inventaire volumineux.</p></section>
+    <section id="a-performance-boundary"><title>Limite de performances</title><p>La gestion des stocks volumineux est une limite UI, et non un signal indiquant que des paramètres sont manquants dans le profil ou le catalogue.</p></section>
+    <section id="a-recovery"><title>Récupération</title><p>Si la ligne attendue n'est pas visible, recherchez par ID exact, supprimez les filtres ou basculez entre Configuré et Catalogue.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

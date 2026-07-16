@@ -45,7 +45,7 @@ LOCAL_ARTIFACT_FILES := \
 run:
 	uvicorn app.main:app --reload --port 8000
 
-dev:
+dev: docs-install-dev
 	uvicorn app.main:app --reload --port 8000
 
 test:
@@ -111,7 +111,8 @@ test-docs-browser:
 	@echo "Running browser-backed documentation portal smoke:"
 	@echo "  $(DOCS_BROWSER_PATHS)"
 	@echo "Requires immediate sandbox escalation because it launches Chromium/Selenium."
-	$(PYTEST) -o addopts= -q -m browser_ui $(DOCS_BROWSER_PATHS)
+	mkdir -p .cache
+	$(PYTEST) -o addopts= -q -m browser_ui $(DOCS_BROWSER_PATHS) --basetemp=.cache/pytest-docs-browser
 
 docs-snapshot:
 	$(PYTHON) documentation/tools/generate_subsystem_snapshot.py

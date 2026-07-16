@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-language-detection-fallback" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Detección de idioma y alternativa</title>
-  <shortdesc>Comprenda cómo BPM elige una configuración regional compatible y qué ocurre cuando el idioma del navegador no está admitido.</shortdesc>
+  <title>Detección y respaldo de idioma</title>
+  <shortdesc>Comprenda cómo BPM elige una configuración regional compatible y qué sucede cuando el idioma del navegador no es compatible.</shortdesc>
   <conbody>
-    <section id="a-supported-locales"><title>Supported locales</title><p>BPM admite en, ru, de, zh-CN, fr y es-ES como configuraciones regionales de interfaz de primera clase.</p></section>
-    <section id="a-system-language"><title>System language</title><p>El idioma del sistema sigue el idioma del navegador cuando coincide con una configuración regional compatible de BPM.</p></section>
-    <section id="a-fallback"><title>Fallback</title><p>Si el idioma del navegador no está admitido, BPM usa una configuración regional compatible en lugar de mostrar cadenas parciales.</p></section>
-    <section id="a-content-parity"><title>Content parity</title><p>La documentación del producto y las capturas deben seguir siendo equivalentes en contenido en las seis configuraciones regionales, aunque las etiquetas de UI difieran por idioma.</p></section>
+    <section id="a-supported-locales"><title>Configuraciones regionales admitidas</title><p>BPM admite en, ru, de, zh-CN, fr y es-ES como configuraciones regionales de primera clase.</p></section>
+    <section id="a-system-language"><title>Idioma del sistema</title><p>El idioma del sistema sigue el idioma del navegador cuando coincide con una configuración regional BPM compatible.</p></section>
+    <section id="a-fallback"><title>Reserva</title><p>Si el idioma del navegador no es compatible, BPM recurre a una configuración regional compatible en lugar de mostrar cadenas parciales.</p></section>
+    <section id="a-content-parity"><title>Paridad de contenido</title><p>La documentación del producto y las capturas de pantalla deben tener un contenido equivalente en las seis configuraciones regionales, incluso cuando las etiquetas UI difieran según el idioma.</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-change-interface-language"/>

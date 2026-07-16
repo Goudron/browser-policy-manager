@@ -76,6 +76,7 @@ Update documentation when the change affects terminology, QA expectations, or re
 | Runtime/browser workflow QA change | the relevant `docs/*_audit_*.md` file for that backlog item |
 | Release-facing locale support change | `README.md` and release notes/changelog when present |
 | Product documentation topic, screenshot, or search alias change | matching DITA peers under `documentation/src/dita/<locale>/`, `documentation/assets/screenshots/<locale>/`, manifest/search fixtures, and `documentation/runbooks/localization-and-screenshots.md` |
+| Product documentation navigation, theme, or contextual help change | all locale `navigation.json`/search outputs, localized Documents/guide/section/topic labels, theme/search controls, and `ui-target-map.json` plus All Settings help-link evidence |
 
 When the change affects product documentation, treat DITA localization drift as release-blocking:
 all six locale peers must remain content-equivalent in topic body, title, map label, key, metadata,
@@ -83,12 +84,25 @@ code/example, warnings, recovery paths, examples, caveats, supported/unsupported
 aliases. Do not close the change with compact localized peers unless a release-blocking follow-up is
 explicitly recorded and approved.
 
+For product documentation terminology, the exact runtime value under `app/i18n_src/<locale>/` is
+the authority for an interface name. Follow `documentation/runbooks/localization-and-screenshots.md`
+for Pontoon/SUMO review, occurrence-owned visible-English allowlists, and the 36-row minimal User
+Guide screenshot matrix. A locale change that affects an approved screenshot scenario must update
+the matrix row first, run the maintained capture command for every affected locale, and review the
+localized caption and alt text. Do not use a screenshot or generated navigation/search artifact
+from another locale as fallback.
+
 ## 5. Run Fast Locale Checks
 
 Run the narrow locale checks first:
 
 ```bash
 make test-locale-contract
+./.venv/bin/pytest -q -m docs_contract \
+  documentation/tests/contract/test_interface_name_authority.py \
+  documentation/tests/contract/test_locale_anti_anglicism_guard.py \
+  documentation/tests/contract/test_documentation_polish_regression_gates.py \
+  documentation/tests/contract/test_user_guide_screenshot_matrix.py
 ```
 
 The target covers catalog parity, accidental-English allowlists, runtime i18n keys, glossary
@@ -130,6 +144,12 @@ add or update tests before accepting the locale change.
 - Non-English catalogs do not contain accidental English prose.
 - Locale-specific English exceptions are documented in the allowlist.
 - Browser-visible strings fit primary desktop and mobile surfaces when layout is affected.
+- Localized Documents/guide/section/topic navigation, compact search/filter labels, theme controls,
+  captions, alt text, and contextual help labels contain no English fallback.
+- Generated navigation/search artifacts and contextual target mappings resolve only within the
+  same locale; direct-topic links reveal the active tree node and root return remains valid.
+- Every affected approved screenshot matrix row has current locale-owned visual, caption, and alt
+  text evidence; no unapproved matrix expansion occurred.
 - README or release notes are updated when supported-locale behavior changes.
 
 ## 9. Handoff Notes

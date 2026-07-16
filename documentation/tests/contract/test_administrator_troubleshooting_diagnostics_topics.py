@@ -111,7 +111,7 @@ def test_troubleshooting_topics_exist_in_every_locale_with_stable_metadata() -> 
                 "id": topic_id,
                 XML_LANG: locale,
                 "audience": "administrator devops",
-                "product": "bpm-0-9-0",
+                "product": "bpm-0-9-1",
                 "platform": "linux windows web",
             }
             assert root.findtext("title")

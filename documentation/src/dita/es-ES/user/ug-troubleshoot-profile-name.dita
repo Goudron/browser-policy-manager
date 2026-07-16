@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-profile-name" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Resolver errores de nombre de perfil</title>
-  <shortdesc>Corrija empty, duplicate o unclear profile name durante creación o clone.</shortdesc>
+  <shortdesc>Corrija un nombre de perfil vacío, duplicado o poco claro durante la creación o clonación.</shortdesc>
   <taskbody>
-    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
-    <context><p>Los nombres de perfil identifican Library rows, editor tabs, comparison choices, imports y recovery messages; por eso name validation bloquea guardados ambiguos.</p></context>
+    <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
+    <context><p>Los nombres de los perfiles identifican filas de la biblioteca, pestañas del editor, opciones de comparación, importaciones y mensajes de recuperación, por lo que la validación de nombres bloquea los guardados ambiguos.</p></context>
     <steps>
-      <step><cmd>Lea name validation hint antes de cambiar otros campos del perfil.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Introduzca un non-empty name que distinga propósito del perfil, Firefox channel o source file.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>En clone workflows, cambie suggested clone name antes de confirmar si duplica una row existente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Vuelva a save o duplicate cuando desaparezca name hint.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+      <step><cmd>Lea la sugerencia de validación de nombre antes de cambiar otros campos del perfil.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Introduzca un nombre no vacío que distinga el propósito del perfil, el canal de Firefox o el archivo fuente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Para flujos de trabajo de clonación, cambie el nombre del clon sugerido antes de confirmar si duplica una fila existente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Guarde o duplique nuevamente después de que se borre la sugerencia del nombre.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
     </steps>
-    <result><p>El perfil o clone tiene un nombre visible único que se puede encontrar después en Library.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+    <result><p>El perfil o clon tiene un nombre visible único que se puede encontrar más adelante en la Biblioteca.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-create-first-profile"/>

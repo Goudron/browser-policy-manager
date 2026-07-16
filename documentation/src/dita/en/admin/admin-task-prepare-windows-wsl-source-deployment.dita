@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
+<task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
   <title>Prepare Windows 10/11 for WSL source deployment</title>
   <shortdesc>Enable WSL, choose a supported Linux distribution assumption, and confirm that BPM will run inside Linux rather than as a native Windows service.</shortdesc>
   <taskbody>
     <prereq><p>Use Windows 10 or Windows 11 with permission to enable WSL 2, install a Linux distribution such as Ubuntu LTS, and run commands in both PowerShell and the WSL shell.</p></prereq>
-    <context><p>This runbook documents BPM 0.9.0 source deployment through WSL. The supported application process is still the Linux source workflow inside WSL; native Windows installers, Windows services, MSI packages, scheduled tasks, IIS hosting, and production Windows service management are not delivered in this release.</p></context>
+    <context><p>This runbook documents BPM source deployment through WSL. The supported application process is still the Linux source workflow inside WSL; native Windows installers, Windows services, MSI packages, scheduled tasks, IIS hosting, and production Windows service management are not delivered in this release.</p></context>
     <steps>
       <step><cmd>Confirm WSL availability from PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 wsl --status

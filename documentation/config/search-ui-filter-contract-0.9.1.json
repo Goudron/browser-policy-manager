@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-ui-filter-contract-0.9.1",
+  "backlog_item": "BPM091-M2-04",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "inherits_from": [
+    "documentation/config/search-corpus-and-results-0.9.0.json",
+    "documentation/config/search-facets-filters-0.9.0.json",
+    "documentation/config/search-quality-performance-0.9.0.json",
+    "documentation/config/search-integrity-drift-0.9.0.json"
+  ],
+  "search_mode": "deterministic-local-static",
+  "non_ai_boundary": {
+    "mode": "no-ai-no-rag-no-embeddings-no-generative-answers",
+    "note": "The 0.9.1 work changes presentation and localization only; ranking, corpus generation, static indexes, and local/offline search remain governed by the inherited 0.9.0 contracts."
+  },
+  "default_state": {
+    "layout": "one-line-compact",
+    "visible_controls": [
+      "query_input",
+      "submit",
+      "clear",
+      "advanced_toggle"
+    ],
+    "collapsed_by_default": [
+      "help_text",
+      "filter_groups",
+      "facet_counts",
+      "result_list"
+    ],
+    "must_not_show_by_default": [
+      "multi-row filter panel",
+      "expanded facet grid",
+      "empty result instructions before a query or selected filter",
+      "duplicated filter parameter labels"
+    ],
+    "height_rule": "The first-load search control must be visually equivalent to a single toolbar row at desktop widths; narrow viewports may wrap buttons only as needed for readable controls."
+  },
+  "expansion_behavior": {
+    "trigger": "explicit advanced-options disclosure control",
+    "state_source": "URL query parameters and in-page state only",
+    "preserve_on_expand": [
+      "query text",
+      "selected filters",
+      "current locale",
+      "keyboard focus order",
+      "aria-expanded state"
+    ],
+    "preserve_on_collapse": [
+      "query text",
+      "selected filters",
+      "result set",
+      "URL state"
+    ],
+    "must_not": [
+      "change deterministic ranking",
+      "reload from a remote service",
+      "clear query text",
+      "trap keyboard focus",
+      "hide selected filters without a visible summary"
+    ]
+  },
+  "localized_labels": {
+    "source": "locale-owned documentation shell/search catalogs generated into each locale output",
+    "fallback_policy": "fail closed for visible labels; English fallback is not allowed in non-English locales except allowlisted identifiers, brands, product names, commands, paths, and API abbreviations",
+    "hidden_facets": [
+      "locale",
+      "bpm_version"
+    ],
+    "visible_facets": [
+      "guide_id",
+      "topic_kind",
+      "firefox_channel",
+      "policy_category",
+      "cis_level",
+      "cis_control_state",
+      "api_area"
+    ],
+    "allowlisted_visible_identifiers": [
+      "API",
+      "BPM",
+      "CIS",
+      "Firefox",
+      "ESR",
+      "Release"
+    ],
+    "required_locale_keys": [
+      "search.advanced_toggle",
+      "search.advanced_toggle_expanded",
+      "search.selected_filters_summary",
+      "search.clear_filter",
+      "search.clear_all_filters",
+      "search.empty_with_filters",
+      "search.empty_without_filters",
+      "search.filter.guide_id",
+      "search.filter.topic_kind",
+      "search.filter.firefox_channel",
+      "search.filter.policy_category",
+      "search.filter.cis_level",
+      "search.filter.cis_control_state",
+      "search.filter.api_area",
+      "search.value.*"
+    ]
+  },
+  "label_examples": {
+    "en": {
+      "field_labels": {
+        "guide_id": "Guide documentaire",
+        "topic_kind": "Topic type",
+        "firefox_channel": "Firefox channel",
+        "policy_category": "Policy category",
+        "cis_level": "CIS level",
+        "cis_control_state": "CIS status",
+        "api_area": "API area"
+      },
+      "value_labels": {
+        "guide_id.user-guide": "User Guide",
+        "guide_id.firefox-policy-guide": "Firefox Policy Guide",
+        "guide_id.cis-settings-guide": "CIS Settings Guide",
+        "guide_id.administrator-guide": "Administrator/DevOps Guide",
+        "topic_kind.concept": "Concept",
+        "topic_kind.task": "Task",
+        "topic_kind.reference": "Reference",
+        "topic_kind.troubleshooting": "Troubleshooting",
+        "topic_kind.landing": "Landing page",
+        "policy_category.ai_smart": "AI features",
+        "api_area.validation": "Validation"
+      }
+    },
+    "ru": {
+      "field_labels": {
+        "guide_id": "Руководство",
+        "topic_kind": "Тип раздела",
+        "firefox_channel": "Канал Firefox",
+        "policy_category": "Категория политики",
+        "cis_level": "Уровень CIS",
+        "cis_control_state": "Состояние CIS",
+        "api_area": "Область API"
+      },
+      "value_labels": {
+        "guide_id.user-guide": "Руководство пользователя",
+        "guide_id.firefox-policy-guide": "Руководство по политикам Firefox",
+        "guide_id.cis-settings-guide": "Руководство по настройкам CIS",
+        "guide_id.administrator-guide": "Руководство администратора и DevOps",
+        "topic_kind.concept": "Обзор",
+        "topic_kind.task": "Задача",
+        "topic_kind.reference": "Справка",
+        "topic_kind.troubleshooting": "Устранение неполадок",
+        "topic_kind.landing": "Начальная страница",
+        "policy_category.ai_smart": "Возможности ИИ",
+        "api_area.validation": "Проверка"
+      }
+    },
+    "de": {
+      "field_labels": {
+        "guide_id": "Handbuch",
+        "topic_kind": "Seitentyp",
+        "firefox_channel": "Firefox-Kanal",
+        "policy_category": "Richtlinienkategorie",
+        "cis_level": "CIS-Stufe",
+        "cis_control_state": "CIS-Status",
+        "api_area": "API-Bereich"
+      },
+      "value_labels": {
+        "guide_id.user-guide": "Benutzerhandbuch",
+        "guide_id.firefox-policy-guide": "Handbuch zu Firefox-Richtlinien",
+        "guide_id.cis-settings-guide": "Handbuch zu CIS-Einstellungen",
+        "guide_id.administrator-guide": "Administrator- und DevOps-Handbuch",
+        "topic_kind.concept": "Überblick",
+        "topic_kind.task": "Aufgabe",
+        "topic_kind.reference": "Referenz",
+        "topic_kind.troubleshooting": "Fehlerbehebung",
+        "topic_kind.landing": "Startseite",
+        "policy_category.ai_smart": "KI-Funktionen",
+        "api_area.validation": "Validierung"
+      }
+    },
+    "zh-CN": {
+      "field_labels": {
+        "guide_id": "指南",
+        "topic_kind": "页面类型",
+        "firefox_channel": "Firefox 频道",
+        "policy_category": "策略类别",
+        "cis_level": "CIS 级别",
+        "cis_control_state": "CIS 状态",
+        "api_area": "API 区域"
+      },
+      "value_labels": {
+        "guide_id.user-guide": "用户指南",
+        "guide_id.firefox-policy-guide": "Firefox 策略指南",
+        "guide_id.cis-settings-guide": "CIS 设置指南",
+        "guide_id.administrator-guide": "管理员和 DevOps 指南",
+        "topic_kind.concept": "概念",
+        "topic_kind.task": "任务",
+        "topic_kind.reference": "参考",
+        "topic_kind.troubleshooting": "故障排除",
+        "topic_kind.landing": "首页",
+        "policy_category.ai_smart": "AI 功能",
+        "api_area.validation": "验证"
+      }
+    },
+    "fr": {
+      "field_labels": {
+        "guide_id": "Guide",
+        "topic_kind": "Type de page",
+        "firefox_channel": "Canal Firefox",
+        "policy_category": "Catégorie de règle",
+        "cis_level": "Niveau CIS",
+        "cis_control_state": "État CIS",
+        "api_area": "Domaine API"
+      },
+      "value_labels": {
+        "guide_id.user-guide": "Guide utilisateur",
+        "guide_id.firefox-policy-guide": "Guide des règles Firefox",
+        "guide_id.cis-settings-guide": "Guide des paramètres CIS",
+        "guide_id.administrator-guide": "Guide administrateur et DevOps",
+        "topic_kind.concept": "Présentation",
+        "topic_kind.task": "Tâche",
+        "topic_kind.reference": "Référence",
+        "topic_kind.troubleshooting": "Dépannage",
+        "topic_kind.landing": "Page d’accueil",
+        "policy_category.ai_smart": "Fonctions d’IA",
+        "api_area.validation": "Validation"
+      }
+    },
+    "es-ES": {
+      "field_labels": {
+        "guide_id": "Guía",
+        "topic_kind": "Tipo de página",
+        "firefox_channel": "Canal de Firefox",
+        "policy_category": "Categoría de directiva",
+        "cis_level": "Nivel de CIS",
+        "cis_control_state": "Estado de CIS",
+        "api_area": "Área de API"
+      },
+      "value_labels": {
+        "guide_id.user-guide": "Guía del usuario",
+        "guide_id.firefox-policy-guide": "Guía de directivas de Firefox",
+        "guide_id.cis-settings-guide": "Guía de configuración de CIS",
+        "guide_id.administrator-guide": "Guía de administración y DevOps",
+        "topic_kind.concept": "Descripción general",
+        "topic_kind.task": "Tarea",
+        "topic_kind.reference": "Referencia",
+        "topic_kind.troubleshooting": "Solución de problemas",
+        "topic_kind.landing": "Página inicial",
+        "policy_category.ai_smart": "Funciones de IA",
+        "api_area.validation": "Validación"
+      }
+    }
+  },
+  "facet_persistence": {
+    "query_parameter_contract": "Reuse the inherited repeat-parameter URL contract from search-facets-filters-0.9.0.json.",
+    "compact_summary": "When the panel is collapsed and filters are selected, show a localized summary with a clear-all action.",
+    "restore_on_load": "Restore query and selected filters from URL state before recent-query local storage.",
+    "must_preserve": [
+      "result URLs",
+      "highlighting",
+      "empty-result state",
+      "selected filter counts",
+      "direct links to filtered search states"
+    ]
+  },
+  "keyboard_access": {
+    "requirements": [
+      "Tab order reaches query input, submit, clear, advanced toggle, filter groups, clear-filter controls, and result links in DOM order.",
+      "Enter submits the query from the input.",
+      "Space and Enter toggle the advanced options disclosure.",
+      "Escape collapses advanced options only when focus remains inside the search component and does not clear the query.",
+      "Status changes are announced through the existing polite live region.",
+      "Visible selected filters remain removable with a keyboard."
+    ]
+  },
+  "empty_result_recovery": {
+    "with_filters": "Show the localized empty-with-filters message, keep selected filters visible, and offer clear-filter and clear-all controls.",
+    "without_filters": "Show the localized empty-without-filters message and keep the query editable.",
+    "must_not": [
+      "offer AI answers",
+      "send the query to a network service",
+      "drop the user's query or selected filters"
+    ]
+  },
+  "implementation_tasks": [
+    "BPM091-M4-01",
+    "BPM091-M4-02",
+    "BPM091-M4-03",
+    "BPM091-M4-07"
+  ],
+  "verification": {
+    "focused_contracts": [
+      "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_search_ui_filter_contract.py",
+      "./.venv/bin/pytest -q documentation/tests/contract/test_search_facets_filters.py documentation/tests/contract/test_search_quality_performance.py documentation/tests/contract/test_search_integrity_drift.py"
+    ],
+    "release_gates": [
+      "make test-docs-contract",
+      "make test-docs-ui",
+      "make test-docs-browser",
+      "make test-release"
+    ],
+    "browser_required_for": [
+      "real collapsed default height",
+      "keyboard traversal",
+      "localized label rendering in generated pages",
+      "responsive no-overlap checks"
+    ]
+  },
+  "non_goals": [
+    "This contract does not implement the compact search UI.",
+    "This contract does not change search ranking",
+    "This contract does not change normalization, typo tolerance, corpus generation, or static index contents.",
+    "This contract does not hand-edit generated HTML, manifests, search indexes, or installed app/documentation/site artifacts."
+  ]
+}

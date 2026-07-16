@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-08-manjaro-source-install-20260715",
+  "backlog_item": "BPM091-M11-08",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "pass",
+  "target": {
+    "id": "manjaro-stable-2026-06-26",
+    "name": "Manjaro stable branch after 2026-06-26",
+    "identity": {
+      "ID": "manjaro",
+      "branch": "stable"
+    },
+    "source_topic": "documentation/src/dita/en/admin/admin-task-install-manjaro-stable-source.dita",
+    "source_sha256": "badcbf4d077871e268619cadfc8fb8f550643e10ebd79a39c088d5b7cf2a449c"
+  },
+  "validation_started_at": "2026-07-14T22:25:45Z",
+  "validation_completed_at": "2026-07-14T22:46:25Z",
+  "contracts": {
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json"
+  },
+  "source_snapshot": {
+    "repository": "https://github.com/Goudron/browser-policy-manager.git",
+    "validation_branch": "validation/bpm-0.9.1-m11",
+    "accepted_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+    "accepted_ref_parent": "a208de6aa6035bbc4673dfc0e228edb7b2cda0dd",
+    "accepted_ref_version": "0.9.1",
+    "remote_ref_fetched_and_verified": true,
+    "normal_development_branch_changed": false
+  },
+  "golden_image": {
+    "ref": "docker.io/manjarolinux/base@sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+    "id": "sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+    "index_digest": "sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+    "amd64_manifest_digest": "sha256:a411decb8d219cb4b16b39618e9aa8ce8228acad9cba5b10420f804a20ca5c84",
+    "platform": "linux/amd64",
+    "created_at": "2026-03-22T04:32:06.242265176Z",
+    "rootfs_layer_digest": "sha256:6d0a854601cd0bbd73506712c1bfbd8b2e2fd1a7134de9c60bde2b460acccb91",
+    "inspect_size_bytes": 335707337,
+    "initial_registry_pull_performed": true,
+    "accepted_attempt_local_exact_digest_reused": true,
+    "accepted_attempt_registry_pull_performed": false,
+    "retained": true
+  },
+  "rolling_snapshot": {
+    "seed_created_at": "2026-03-22T04:32:06.242265176Z",
+    "branch_before_update": "stable",
+    "branch_after_update": "stable",
+    "full_system_update_command": "sudo pacman -Syu --needed --noconfirm base-devel ca-certificates curl git python python-pip",
+    "full_system_update_result": "pass",
+    "resolved_package_count": 160,
+    "post_update_markers": {
+      "manjaro-release": "26.1.0-1",
+      "archlinux-keyring": "20260707.1-1",
+      "python": "3.14.6-1",
+      "python-pip": "26.1.2-1",
+      "pacman": "7.1.0.r9.g54d9411-2",
+      "tzdata": "2026b-1"
+    },
+    "later_than_required_2026_06_26_snapshot": true,
+    "complete_update_transaction_sha256": "ac3b887fa8121921ca53844d6201eb898e96397cce21a0525bc44e5b5f9eeb84",
+    "branch_probe_sha256": "2b92ea252be0fbc26f70317cdaa7b6411ea634b50d55338cd8c495e4dbf25d1d",
+    "python_probe_sha256": "917601090ffb73a030e3eaa8b7a01c41400cad4b61366b4218d7756a5733b66c",
+    "mirror_timeout_disposition": "one-download-timeout-recovered-by-pacman-mirror-fallback",
+    "package_permission_warning_disposition": "reviewed-seed-rootfs-directory-mode-warnings-non-blocking-after-successful-transaction",
+    "package_state_recording": "successful full pacman transaction records all 160 resolved package versions and completed post-transaction hooks"
+  },
+  "container_fidelity_boundary": {
+    "userspace_identity_and_package_state": "validated",
+    "kernel": "shared-host-kernel-not-native-manjaro-kernel",
+    "observed_uname": "7.0.0-27-generic",
+    "systemd_hooks": "not-booted-container-skips-recorded",
+    "native_desktop_or_boot_validation_claimed": false
+  },
+  "isolation": {
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "network": "bpm091-m11-net",
+    "published_ports": "none",
+    "host_bind_mounts": "none",
+    "docker_socket_mount": "none",
+    "privileged": false,
+    "cap_add": "none"
+  },
+  "inherited_harness_guards": {
+    "fresh_container_per_attempt": true,
+    "parent_shell_exit_forbidden_in_adapters": true,
+    "readiness_attempts": 300,
+    "readiness_interval_seconds": 2,
+    "runtime_exit_stops_readiness_wait": true,
+    "activated_environment_preserved_for_background_runtime": true,
+    "second_terminal_working_directory_restored": true,
+    "negative_stop_probe_required": true,
+    "completion_marker_required": true,
+    "host_completion_guard_required": true
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "source_sha256": "08c04011fdae0ad306679ad321938af22cde8d0a1abee262dabd6d376aeea825",
+      "container_name": "bpm091-manjaro-stable-2026-06-26-m11-08-manjaro-source-install-20260715-a01",
+      "container_id": "407eb061b1b3d9296be536251a8e1a0df4e4bbe77749b26250a63f2aee7c4b19",
+      "started_at": "2026-07-14T22:27:12Z",
+      "completed_at": "2026-07-14T22:27:22Z",
+      "raw_harness_result": "blocked",
+      "accepted_disposition": "retained-diagnostic-interactive-pacman-confirmation-defect",
+      "command_start_events": 5,
+      "command_end_events": 5,
+      "documented_commands_completed": 4,
+      "documented_command_failures": 1,
+      "documented_stage_counts": {
+        "distro-prep": 4
+      },
+      "adapter_commands_completed": [
+        "adapter-setup"
+      ],
+      "last_event": "distro-prep-04:command_end:1",
+      "failure": "pacman reached Proceed with installation and received EOF because the documented command omitted --noconfirm",
+      "documentation_correction": "add --noconfirm to the full pacman transaction in English and standalone Russian command sources",
+      "completion_marker_present": false,
+      "host_completion_guard_passed": false,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "cc61b31121bd1b3ac43f0ed23cf36f7d1512a89e5939c212b9c3e6c0e980adf2",
+        "summary.json": "1e8b79d58f0211f46bad3c58b3f78e1b4d2afb23ac0770533d611e5bd959f577",
+        "events.jsonl": "7a57b529f47985e0a247f9736a19760f4e6890bd3f68540319166fe1609d5eaa",
+        "container-inspect.json": "29a3ae44e7574c31071acbe6018986863d9ae0275f1b89b5c321369843d5101c",
+        "container-evidence/events.jsonl": "0c0da5a60d5105a0655ee1e1e0a715df1d488b9bfaf70fa3c112fccbc5ac1d5f",
+        "container-evidence/run.sh": "945393aa7c052f83c9af002d36997876fe4ca217a981331eb13e8c5a6453b7ee"
+      }
+    },
+    {
+      "attempt": 2,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "source_sha256": "badcbf4d077871e268619cadfc8fb8f550643e10ebd79a39c088d5b7cf2a449c",
+      "container_name": "bpm091-manjaro-stable-2026-06-26-m11-08-manjaro-source-install-20260715-a02",
+      "container_id": "3a58e6d6b084785a15995f12a921c988741f2ab8f205c88ad5e4886736452809",
+      "started_at": "2026-07-14T22:29:13Z",
+      "completed_at": "2026-07-14T22:46:04Z",
+      "raw_harness_result": "pass",
+      "accepted_disposition": "accepted-clean-source-install-pass",
+      "command_start_events": 43,
+      "command_end_events": 43,
+      "documented_commands_completed": 37,
+      "documented_command_failures": 0,
+      "documented_stage_counts": {
+        "distro-prep": 8,
+        "checkout": 9,
+        "install": 8,
+        "docs": 3,
+        "start": 4,
+        "verify": 5
+      },
+      "adapter_commands_completed": [
+        "adapter-setup",
+        "adapter-wait-ready",
+        "adapter-second-terminal",
+        "adapter-stop",
+        "adapter-stop-probe",
+        "adapter-complete"
+      ],
+      "completion_marker_present": true,
+      "host_completion_guard_passed": true,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "3623f2920c7006f648049bec12bc7f42b586c5164c1a364be9e4122a440005fa",
+        "summary.json": "718e51696a8785091a91271900a9fb4c2f31655a9c1040e594dea5fc4cb1f563",
+        "events.jsonl": "45628b2bf4b103bd0238b3e5e406dd637026f937ed808acceee6b2a0c2a0d96b",
+        "container-inspect.json": "f3d0266bac025e49494ee5c754735776d14417b3d8ff5d0fd66279e3c7ec01fb",
+        "container-evidence/events.jsonl": "3e0c8b68fde6fe7b503ce23fccb69ab1349abc731500977671122be594aa7291",
+        "container-evidence/runtime.log": "b278c2b93f558f00777062868544a18c2a89c917afe48829a9bfd719fae134df",
+        "container-evidence/run.sh": "10a284a26da2ffd01c839572db692539e9cd7238cf34b8d2af87388ca22ca84f",
+        "container-evidence/completed": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+      }
+    }
+  ],
+  "accepted_attempt": {
+    "attempt": 2,
+    "prerequisites_and_full_update": "pass",
+    "stable_branch_before_and_after": "pass",
+    "clean_detached_checkout": "pass",
+    "python_version": "3.14.6",
+    "python_source": "manjaro-stable-repositories-after-full-system-update",
+    "editable_bpm_install": "0.9.1",
+    "alembic_upgrade_head": "pass",
+    "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+    "docs_validate_all_six_locales": "pass",
+    "docs_build_all_six_locales": "pass",
+    "docs_install_dev_all_six_locales": "pass",
+    "runtime_start": "pass",
+    "runtime_log_sha256": "b278c2b93f558f00777062868544a18c2a89c917afe48829a9bfd719fae134df",
+    "probes": [
+      {
+        "command_id": "verify-03",
+        "path": "/health",
+        "status": 200,
+        "body": "{\"status\":\"ok\"}",
+        "body_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      {
+        "command_id": "verify-04",
+        "path": "/health/ready",
+        "status": 200,
+        "body": "{\"status\":\"ready\",\"ready\":true}",
+        "body_sha256": "78aa039c7aaf6b957621f1adf8854b80f4ae56832053b914c5dfeefe41cad936"
+      },
+      {
+        "command_id": "verify-05",
+        "path": "/profiles",
+        "status": 200,
+        "body_recording": "discarded-by-documented-curl-command"
+      }
+    ],
+    "runtime_log_inspection": "clean-startup-probes-and-shutdown",
+    "runtime_shutdown": "pass",
+    "post_shutdown_health_probe": "connection-refused-as-required",
+    "completion_marker": "complete"
+  },
+  "retry": {
+    "required": true,
+    "reason": "documented pacman transaction required an explicit non-interactive confirmation flag",
+    "fresh_container_per_attempt": true,
+    "installed_state_reused": false,
+    "accepted_attempt_reused_only_clean_golden_image": true
+  },
+  "local_transcript": "documentation/build/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715",
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715/retained-inventory.json",
+  "verification": {
+    "focused_unit_and_contract": "pass-52",
+    "full_documentation_contract": "pass-693-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

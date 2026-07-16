@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-verify-source-update-rollback-stop" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-task-verify-source-update-rollback-stop" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Verify the update and apply rollback stop conditions</title>
   <shortdesc>Start the updated BPM process, verify probes, UI, API evidence, and documentation status, then decide whether to accept, stop, or restore from backup.</shortdesc>
   <taskbody>

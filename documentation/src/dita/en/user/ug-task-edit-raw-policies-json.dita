@@ -4,7 +4,7 @@
   <title>Edit raw policies JSON</title>
   <shortdesc>Edit the raw policies.json document with the locally bundled Monaco editor.</shortdesc>
   <taskbody>
-    <prereq><p>Open JSON Editor for a saved profile.</p></prereq>
+    <prereq><p>Open JSON editor for a saved profile.</p></prereq>
     <context><p>The Monaco editor is bundled locally and edits the raw JSON text. BPM still validates before saving to the normalized profile model.</p></context>
     <steps>
       <step><cmd>Place focus in the JSON editor.</cmd><info><p>Expected result: the JSON document remains focused on the selected task.</p></info></step>

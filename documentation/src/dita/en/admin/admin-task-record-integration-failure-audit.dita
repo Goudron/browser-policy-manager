@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-record-integration-failure-audit" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+<task id="admin-task-record-integration-failure-audit" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
   <title>Recover from integration failures and record audit evidence</title>
   <shortdesc>Handle validation, import/export, readiness, and revision failures without unsafe retries or hidden transaction assumptions.</shortdesc>
   <taskbody>

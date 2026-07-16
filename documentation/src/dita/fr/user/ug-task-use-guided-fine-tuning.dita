@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-fine-tuning" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utiliser l’ajustement fin Guided</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Utiliser l’ajustement fin Guided » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Utiliser les commandes de réglage précis guidées</title>
+  <shortdesc>Développez délibérément les réglages fins et les contrôles avancés une fois que les choix de base sont clairs.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Une ébauche de profil guidé comporte un scénario, un préréglage ou des paramètres initiaux.</p></prereq>
+    <context><p>Le réglage fin vous permet d'accéder à des contrôles avancés sans abandonner le flux de travail guidé axé sur les tâches en premier.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Utiliser l’ajustement fin Guided ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Ouvrez l'étape qui possède la famille de contrôles dont vous avez besoin.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Développez la zone de réglage fin ou avancée pour cette famille.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Modifiez uniquement le paramètre nécessaire à l'objectif du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Vérifiez à nouveau le résumé en langage clair et le message de validation avant de continuer.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le profil contient des modifications avancées délibérées plutôt que des modifications générales accidentelles.</p></result>
+    <postreq><p>Récupération : si le changement est difficile à expliquer, réinitialisez le contrôle et utilisez Tous les paramètres ou Éditeur JSON pour une inspection plus approfondie.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-guided-editor"/>

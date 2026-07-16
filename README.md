@@ -164,23 +164,39 @@ as a static, manifest-validated site. The BPM runtime does not import DITA tooli
 dependencies, or source topics.
 
 BPM serves an installed static documentation artifact under `/help/`, keeps FastAPI `/docs` for
-OpenAPI, exposes a locale-aware documentation link from the product header, and uses contextual help
-icons for the main product surfaces and selected policy/CIS/import/export/validation targets.
-Release package extraction, localized screenshot capture/review, and final manual QA disposition
-remain explicit release blockers rather than hidden completed claims.
+OpenAPI, and exposes a locale-aware documentation link from the product header. Contextual help
+links cover the main product surfaces, policy/CIS/import/export/validation targets, and every
+supported policy or known managed preference in All settings. Unsupported, unavailable, or unknown
+settings use localized non-link states instead of broken documentation URLs.
 
-The portal contains five guide families in all six active locales:
+The portal uses the same visual language as the BPM application. It supports light, dark, and
+system themes; the light theme uses light-gray primary surfaces instead of a pure-white page. Search
+starts as a compact one-line control and expands when filters or additional room are needed.
+
+Navigation is built from one generated source per locale. The independently scrollable sidebar
+opens at the localized Documents root and presents a guide, section, and topic hierarchy where a
+section level is useful. Opening a contextual topic link expands the complete path and activates the
+target topic, while root links expose the top-level guide list.
+
+The portal contains four guide families in all six active locales:
 
 | Guide | Scope |
 |---|---|
 | User Guide | Case-oriented help for every user-visible BPM capability and recovery path. |
 | Firefox Policy Guide | Supported Firefox Release/ESR policies, managed preferences, examples, channel differences, caveats, and provenance. |
 | CIS Settings Guide | BPM's CIS mappings, presets, merge workflow, manual-review states, and source/provenance boundaries without copying restricted benchmark prose. |
-| API Integration Guide | Thin compatibility landing page that points API readers to the Administrator/DevOps Guide. |
 | Administrator/DevOps Guide | Source deployment for Linux and Windows 10/11 through WSL, operations, update-from-source, API integration, external control-product runbooks, troubleshooting, and current production/HA/reverse-proxy boundaries. |
 
 Documentation locales match the runtime UI locale matrix: `en`, `ru`, `de`, `zh-CN`, `fr`, and
-`es-ES`. Published search is deterministic, local, offline-capable, and non-AI: no RAG,
+`es-ES`. Topic titles, navigation, search controls, captions, and prose use each locale's maintained
+BPM UI terminology. The User Guide includes a reviewed minimal set of locale-specific screenshots
+for the Library, Guided editor, All settings, JSON editor, profile comparison, and settings search.
+
+The Administrator/DevOps Guide provides exact source-install command sequences for Ubuntu 26.04
+LTS, Debian 13.5, Fedora Linux 44, Linux Mint 22.3, and the Manjaro stable branch. Windows 10 and
+Windows 11 WSL deployment guidance is available, but actual Windows-host validation is not claimed.
+
+Published search is deterministic, local, offline-capable, and non-AI: no RAG,
 embeddings, vector database, hosted search service, or generated answers are used. The static
 indexes support locale-aware lookup, aliases, bounded typo tolerance, ranking, facets, filters, and
 localized empty-result recovery.
@@ -215,8 +231,6 @@ make docs-coverage
 
 `make test-docs-browser` launches Chromium/Selenium. `make docs-install-dev` installs ignored local
 output under `app/documentation/site`; release packaging still requires the package/extraction gates.
-`make docs-screenshots-check` is not implemented yet, so complete localized screenshot
-capture/review remains a release blocker.
 
 ## UI Modes
 
@@ -279,6 +293,11 @@ policies, preferences, and actions instead of presenting ambiguous duplicate tar
 entry opens the primary detail editor with its value, source, validation state, location, and
 apply/remove/reset actions. Advanced schema-shell and preference controls remain reachable from
 Catalog/detail, but no longer compete as duplicate full-page editors.
+
+Each supported policy and known managed preference row has a localized circled-info documentation
+link. It opens the matching topic in a new tab without selecting the row. Unknown raw settings and
+missing, stale, incompatible, or unavailable documentation render a localized noninteractive state
+instead of a broken link.
 
 Long lists are budgeted or paginated, and responsive layouts keep modes, search, rows, and detail
 usable on desktop and narrow screens. Use All settings when a profile needs complete inspection,

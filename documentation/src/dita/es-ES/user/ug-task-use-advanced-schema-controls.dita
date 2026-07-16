@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Usar controles avanzados de esquema</title>
-  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Reach advanced schema-shell and preference controls from All Settings without treating Guided as the complete editor.</shortdesc>
+  <title>Utilice Controles de esquema avanzados</title>
+  <shortdesc>Acceda a controles avanzados de preferencias y esquemas desde Todos los ajustes sin tratar a Editor guiado como el editor completo.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Open All Settings in Catalog mode.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Advanced controls remain deliberate. All Settings is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
+    <prereq><p>Abra Todos los ajustes en Catálogo.</p></prereq>
+    <context><p>Los controles avanzados siguen siendo deliberados. Todos los ajustes es el superconjunto de políticas y preferencias respaldadas por esquemas que no son controles guiados de primera clase.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Switch to Catalog mode and open the advanced schema or preference disclosure.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Edit only the advanced control needed for the profile goal.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Usar controles avanzados de esquema. Validate and save before returning to Guided, JSON, or the Library.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+      <step><cmd>Cambie a Catálogo y abra el esquema avanzado o la divulgación de preferencias.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Revise si el control está cubierto por guía, solo para todas las configuraciones, sin formato, obsoleto o dependiente del esquema.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Edite solo el control avanzado necesario para el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Valide y guarde antes de regresar a Guiado, JSON o la Biblioteca.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
-    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. The advanced setting is reached and changed deliberately without duplicate default editors.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the control is unsupported in the selected schema, leave it unchanged and document the schema boundary.</p></postreq>
+    <result><p>La configuración avanzada se alcanza y cambia deliberadamente sin editores predeterminados duplicados.</p></result>
+    <postreq><p>Recuperación: si el control no es compatible con el esquema seleccionado, déjelo sin cambios y documente el límite del esquema.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>验证配置文件</title>
-  <shortdesc>在保存、导出或比较策略更改之前运行架构感知验证。</shortdesc>
+  <shortdesc>在保存、导出或比较策略更改之前运行模式感知验证。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM，并准备好需要使用的界面：库、Guided、All Settings、JSON 或 Compare。</p></prereq>
-    <context><p>验证会检查策略名称、值结构、支持的架构通道、ESR/Release 差异，以及 BPM 中可见的 raw 或 unknown entries。</p></context>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <context><p>验证检查策略名称、值形状、支持的模式通道、不支持的仅 ESR 差异以及 BPM 中可见的原始或未知条目。</p></context>
     <steps>
-      <step><cmd>在 Guided、All Settings 或 JSON 中打开配置文件。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>验证前确认所选 Firefox 架构通道。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>运行验证，或查看当前界面上的验证面板。</cmd><info><p>预期结果：BPM 会在操作期间清楚显示当前配置文件、编辑界面、区域设置和主题。</p></info></step>
-      <step><cmd>在将配置文件视为就绪之前，解决 unsupported policies、wrong value types、unknown raw entries 或过期的导入值。</cmd><info><note type="warning">离开编辑器、关闭标签页或确认不可逆操作之前，请先保存更改或明确放弃更改。</note></info></step>
+      <step><cmd>在引导式、所有设置 或 JSON 中打开配置文件。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>在验证之前确认所选的 Firefox 模式通道。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>运行验证或查看活动表面上的可见验证面板。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>在将配置文件视为就绪之前，解决不支持的策略、错误的值类型、未知的原始条目或过时的导入值。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
-    <result><p>您知道配置文件是否已准备好用于所选 Firefox 通道的保存和导出。</p></result>
-    <postreq><p>恢复：如果当前状态不清楚，请停止编辑，阅读状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <result><p>您知道配置文件是否已准备好为选定的 Firefox 频道保存和导出。</p></result>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

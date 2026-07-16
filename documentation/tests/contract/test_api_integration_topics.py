@@ -168,7 +168,7 @@ def test_api_integration_topics_exist_in_every_locale_with_stable_metadata() -> 
                 "id": topic_id,
                 XML_LANG: locale,
                 "audience": "administrator devops integrator security-reviewer",
-                "product": "bpm-0-9-0",
+                "product": "bpm-0-9-1",
                 "platform": "web",
             }
             assert root.find("title") is not None
@@ -185,12 +185,14 @@ def test_api_integration_topics_exist_in_every_locale_with_stable_metadata() -> 
                 assert taskbody.find("context") is not None
                 assert taskbody.find("result") is not None
                 assert taskbody.find("postreq") is not None
-                assert len(taskbody.findall("./steps/step")) == 6
+                steps = taskbody.findall("./steps/step")
+                assert len(steps) == 6
+                assert all(step.find("cmd") is not None for step in steps)
+                assert all(step.find("info") is not None for step in steps)
+                assert all("".join(step.itertext()).strip() for step in steps)
+                assert sum(bool(step.findall(".//codeph")) for step in steps) >= 3
                 text = "".join(root.itertext())
                 assert all(api_id in text for api_id in topic_contract["api_ids"])
-                assert "Request example:" in text
-                assert "Response example:" in text
-                assert "Error example" in text or "Error examples" in text
                 assert any(note.attrib.get("type") == "warning" for note in taskbody.findall(".//note"))
 
 
@@ -215,25 +217,16 @@ def test_api_integration_topics_are_keyed_and_reachable_from_administrator_guide
         assert topicrefs[api_block_end - len(ADMIN_API_KEYREFS) : api_block_end] == ADMIN_API_KEYREFS
 
 
-def test_api_integration_guide_is_thin_compatibility_landing() -> None:
+def test_standalone_api_guide_and_compatibility_landing_are_retired() -> None:
     for locale in LOCALES:
-        guide = ET.fromstring(
-            (DITA_ROOT / locale / "maps/api-integration-guide.ditamap").read_text(encoding="utf-8")
-        )
-        assert [topicref.attrib["keyref"] for topicref in guide.findall("topicref")] == [
-            "topic.api-concept-administrator-integration-landing"
-        ]
-
-        landing = ET.fromstring((DITA_ROOT / locale / "api/api-concept-administrator-integration-landing.dita").read_text(encoding="utf-8"))
-        assert landing.attrib == {
-            "id": "api-concept-administrator-integration-landing",
-            XML_LANG: locale,
-            "audience": "integrator security-reviewer",
-            "product": "bpm-0-9-0",
-            "platform": "web",
-        }
-        landing_links = [link.attrib["keyref"] for link in landing.findall("./related-links/link")]
-        assert landing_links == ADMIN_API_KEYREFS[:10]
+        assert not (DITA_ROOT / locale / "maps/api-integration-guide.ditamap").exists()
+        assert not (
+            DITA_ROOT / locale / "api/api-concept-administrator-integration-landing.dita"
+        ).exists()
+        portal = (DITA_ROOT / locale / "maps/portal.ditamap").read_text(encoding="utf-8")
+        keys = (DITA_ROOT / locale / "maps/keys.ditamap").read_text(encoding="utf-8")
+        assert "api-integration-guide" not in portal
+        assert "api-concept-administrator-integration-landing" not in keys
 
 
 def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries() -> None:

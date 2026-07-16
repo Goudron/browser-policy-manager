@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-library-operation" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Solucionar problemas de una operación de Biblioteca</title>
-  <shortdesc>Esta tarea describe el escenario completo «Solucionar problemas de una operación de Biblioteca»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <title>Solucionar problemas de una operación de biblioteca</title>
+  <shortdesc>Recuperarse de forma segura de errores de carga, ciclo de vida, eliminación y estado de acción de la biblioteca.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Una carga de biblioteca o una acción de fila informó un error, se agotó el tiempo de espera o dejó las filas visibles en un estado inesperado.</p></prereq>
+    <context><p>La solución de problemas comienza preservando el contexto y leyendo el estado visible antes de volver a intentarlo.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Solucionar problemas de una operación de Biblioteca».</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las advertencias, el estado final y la recuperación antes de continuar.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
+      <step><cmd>No repita una acción destructiva hasta que se aclare el estado actual.</cmd><info><note type="warning">Repetir el archivado o la eliminación permanente después de un error parcial puede ocultar qué acción realmente tuvo éxito.</note></info></step>
+      <step><cmd>Registre el nombre del perfil, el estado de la fila, el estado del filtro y el mensaje de estado visible.</cmd><info><p>Resultado esperado: puede explicar qué mostró BPM antes de volver a intentarlo.</p></info></step>
+      <step><cmd>Actualiza la biblioteca una vez.</cmd><info><p>Si el estado actualizado coincide con el resultado deseado, continúe desde la lista de filas actualizada.</p></info></step>
+      <step><cmd>Si el estado actualizado aún es incorrecto, restablezca la búsqueda y los filtros e inspeccione el perfil en todos los estados del ciclo de vida.</cmd><info><p>Esto distingue una fila oculta de una operación fallida o completada.</p></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>Usted sabe si debe volver a intentar la operación, restaurar el perfil, detenerse antes de eliminarlo o continuar desde la vista actualizada de la Biblioteca.</p></result>
+    <postreq><p>Recuperación: en caso de fallas repetidas de conexión o API, detenga los cambios de la biblioteca y conserve el estado visible para soporte o revisión del mantenedor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-refresh-profile-library"/>

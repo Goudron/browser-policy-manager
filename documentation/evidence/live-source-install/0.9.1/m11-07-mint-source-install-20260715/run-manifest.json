@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-07-mint-source-install-20260715",
+  "backlog_item": "BPM091-M11-07",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "pass",
+  "target": {
+    "id": "linux-mint-22-3",
+    "name": "Linux Mint 22.3 Zena",
+    "identity": {
+      "ID": "linuxmint",
+      "VERSION_ID": "22.3",
+      "VERSION_CODENAME": "zena"
+    },
+    "source_topic": "documentation/src/dita/en/admin/admin-task-install-linux-mint-22-3-source.dita",
+    "source_sha256": "c3c9f4896eb55c61b16ac4be11edb7ed6605c327efa267061d8a9e367ef2acfd"
+  },
+  "validation_started_at": "2026-07-14T21:47:33Z",
+  "validation_completed_at": "2026-07-14T22:12:39Z",
+  "contracts": {
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json"
+  },
+  "source_snapshot": {
+    "repository": "https://github.com/Goudron/browser-policy-manager.git",
+    "validation_branch": "validation/bpm-0.9.1-m11",
+    "accepted_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+    "accepted_ref_parent": "a208de6aa6035bbc4673dfc0e228edb7b2cda0dd",
+    "accepted_ref_version": "0.9.1",
+    "remote_ref_fetched_and_verified": true,
+    "normal_development_branch_changed": false
+  },
+  "golden_image": {
+    "ref": "bpm091/linux-mint:22.3-zena-amd64",
+    "id": "sha256:c5fa6d3fb17c13de844fd0de4135eaf17841c26867ebc0973a3f0c3762b48055",
+    "platform": "linux/amd64",
+    "construction": "signed-official-iso-derived-rootfs",
+    "official_iso": "https://mirrors.edge.kernel.org/linuxmint/stable/22.3/linuxmint-22.3-cinnamon-64bit.iso",
+    "iso_sha256": "a081ab202cfda17f6924128dbd2de8b63518ac0531bcfe3f1a1b88097c459bd4",
+    "signed_checksum_result": "good-signature-and-pinned-checksum-match",
+    "signing_key_fingerprint": "27DEB15644C6B3CF3BD7D291300F846BA25BAE09",
+    "numeric_owner_tar_sha256": "0b7f4b02f469f00bd1d4cfa9f662d7c80c194672eb699b156d4a90df42e52fbf",
+    "image_layer_digest": "sha256:0b7f4b02f469f00bd1d4cfa9f662d7c80c194672eb699b156d4a90df42e52fbf",
+    "inspect_size_bytes": 3118921329,
+    "provenance_evidence": "documentation/evidence/live-source-install/0.9.1/m11-03-harness-20260714/run-manifest.json",
+    "initial_registry_pull_performed": false,
+    "reused_local_clean_image": true,
+    "retained": true
+  },
+  "distribution_repository_observation": {
+    "mint_repository": "http://packages.linuxmint.com",
+    "mint_suite": "zena",
+    "mint_release_and_signature_index_fetched": true,
+    "ubuntu_base_repositories": [
+      "noble",
+      "noble-updates",
+      "noble-security",
+      "noble-backports"
+    ],
+    "silent_ubuntu_substitution": false,
+    "evidence": "attempt-01 command transcript records packages.linuxmint.com zena Release and Release.gpg alongside the expected Ubuntu Noble base repositories"
+  },
+  "isolation": {
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "network": "bpm091-m11-net",
+    "published_ports": "none",
+    "host_bind_mounts": "none",
+    "docker_socket_mount": "none",
+    "privileged": false,
+    "cap_add": "none"
+  },
+  "inherited_harness_guards": {
+    "fresh_container_per_attempt": true,
+    "parent_shell_exit_forbidden_in_adapters": true,
+    "readiness_attempts": 300,
+    "readiness_interval_seconds": 2,
+    "runtime_exit_stops_readiness_wait": true,
+    "activated_environment_preserved_for_background_runtime": true,
+    "second_terminal_working_directory_restored": true,
+    "negative_stop_probe_required": true,
+    "completion_marker_required": true,
+    "host_completion_guard_required": true
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "container_name": "bpm091-linux-mint-22-3-m11-07-mint-source-install-20260715-a01",
+      "container_id": "9b8845b65977546eb3c46fbbfb208f288f1d600bff8e55712c88c539879af938",
+      "started_at": "2026-07-14T21:47:45Z",
+      "completed_at": "2026-07-14T22:12:24Z",
+      "raw_harness_result": "pass",
+      "accepted_disposition": "accepted-clean-source-install-pass",
+      "command_start_events": 52,
+      "command_end_events": 52,
+      "documented_commands_completed": 46,
+      "documented_command_failures": 0,
+      "documented_stage_counts": {
+        "distro-prep": 4,
+        "python": 13,
+        "checkout": 9,
+        "install": 8,
+        "docs": 3,
+        "start": 4,
+        "verify": 5
+      },
+      "adapter_commands_completed": [
+        "adapter-setup",
+        "adapter-wait-ready",
+        "adapter-second-terminal",
+        "adapter-stop",
+        "adapter-stop-probe",
+        "adapter-complete"
+      ],
+      "completion_marker_present": true,
+      "host_completion_guard_passed": true,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "86576d5b3b7e8264768ecaa9f1c635a343a59b6139d3685e80d8cecbbebbfdfc",
+        "summary.json": "6bb377d50acfba87aec71e09002ef4dbd9aea3ae34dd72ae062e28f0c96bc84c",
+        "events.jsonl": "049c098ef52b315af34c0fcfe5f3aa17efe4aa427407e3ed831a248f364271a8",
+        "container-inspect.json": "1f799dec795b61ace58534f9f093a508c7e759edae78daf14f4482df46c618cf",
+        "container-evidence/events.jsonl": "6c0ae7619fbe32cced31a7dc648d0b0a5d0e40bdc4452d513679d5f2aab72795",
+        "container-evidence/runtime.log": "0ffcee7478951ae6800170bfc97d18c95e2645e050a7587219e164f7ce145a16",
+        "container-evidence/run.sh": "8da04c9d3f57243a1ccff01d2ae76bd564a7a09a668c1face8612854512e28cd",
+        "container-evidence/completed": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+      }
+    }
+  ],
+  "accepted_attempt": {
+    "attempt": 1,
+    "prerequisites": "pass",
+    "mint_repository_fetch": "pass",
+    "clean_detached_checkout": "pass",
+    "python_version": "3.14.6",
+    "python_source": "checksum-verified-upstream-source-archive",
+    "python_source_sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+    "python_install_prefix": "$HOME/.local/python-3.14.6",
+    "optional_python_modules_missing": [
+      "_dbm",
+      "_zstd"
+    ],
+    "optional_python_module_disposition": "reviewed-non-blocking-after-complete-bpm-workflow-pass",
+    "editable_bpm_install": "0.9.1",
+    "alembic_upgrade_head": "pass",
+    "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+    "docs_validate_all_six_locales": "pass",
+    "docs_build_all_six_locales": "pass",
+    "docs_install_dev_all_six_locales": "pass",
+    "runtime_start": "pass",
+    "runtime_log_sha256": "0ffcee7478951ae6800170bfc97d18c95e2645e050a7587219e164f7ce145a16",
+    "probes": [
+      {
+        "command_id": "verify-03",
+        "path": "/health",
+        "status": 200,
+        "body": "{\"status\":\"ok\"}",
+        "body_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      {
+        "command_id": "verify-04",
+        "path": "/health/ready",
+        "status": 200,
+        "body": "{\"status\":\"ready\",\"ready\":true}",
+        "body_sha256": "78aa039c7aaf6b957621f1adf8854b80f4ae56832053b914c5dfeefe41cad936"
+      },
+      {
+        "command_id": "verify-05",
+        "path": "/profiles",
+        "status": 200,
+        "body_recording": "discarded-by-documented-curl-command"
+      }
+    ],
+    "runtime_log_inspection": "clean-startup-probes-and-shutdown",
+    "runtime_shutdown": "pass",
+    "post_shutdown_health_probe": "connection-refused-as-required",
+    "completion_marker": "complete"
+  },
+  "retry": {
+    "required": false,
+    "fresh_container_per_attempt": true,
+    "installed_state_reused": false,
+    "inherited_ubuntu_and_debian_guards_effective": true
+  },
+  "local_transcript": "documentation/build/live-source-install/0.9.1/m11-07-mint-source-install-20260715",
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-07-mint-source-install-20260715/retained-inventory.json",
+  "verification": {
+    "focused_unit_and_contract": "pass-34",
+    "full_documentation_contract": "pass-687-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

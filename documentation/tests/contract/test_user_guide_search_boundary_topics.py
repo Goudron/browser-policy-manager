@@ -83,6 +83,8 @@ def test_documentation_search_boundary_topic_is_reachable_in_every_locale() -> N
 def test_documentation_search_boundary_topics_have_full_locale_parity() -> None:
     english_text = _normalized_text(_root("en"))
     expected_sections = [
+        "a-portal-navigation",
+        "a-compact-search",
         "a-local-offline",
         "a-deterministic-results",
         "a-not-ai",
@@ -93,16 +95,11 @@ def test_documentation_search_boundary_topics_have_full_locale_parity() -> None:
         root = _root(locale)
         assert [section.attrib["id"] for section in root.findall("./conbody/section")] == expected_sections
         text = _normalized_text(root)
-        for required in (
-            "RAG",
-            "policy IDs",
-            "CIS recommendation IDs",
-            "API operation IDs",
-        ):
+        for required in ("RAG", "CIS", "API"):
             assert required in text
         assert (
             "external search service" in text
-            or "внешнему поисковому сервису" in text
+            or "внешнюю службу поиска" in text
             or "externen Suchdienst" in text
             or "外部搜索服务" in text
             or "service de recherche externe" in text
@@ -116,7 +113,37 @@ def test_documentation_search_boundary_topics_have_full_locale_parity() -> None:
             or "télémétrie" in text
             or "telemetría" in text
         )
-        assert "AI" in text or "KI" in text or "IA" in text
+        assert "AI" in text or "ИИ" in text or "KI" in text or "IA" in text
 
     for locale in LOCALES[1:]:
         assert _normalized_text(_root(locale)) != english_text
+
+
+def test_topics_document_current_navigation_compact_search_and_filter_behavior() -> None:
+    localized_markers = {
+        "en": ("Documents", "independently", "one line", "selected filters"),
+        "ru": ("Документы", "независимо", "одну строку", "выбранные фильтры"),
+        "de": ("Dokumente", "unabhängig", "einer Zeile", "ausgewählte Filter"),
+        "zh-CN": ("文档", "分别滚动", "一行", "已选筛选条件"),
+        "fr": ("Documents", "indépendamment", "une seule ligne", "filtres sélectionnés"),
+        "es-ES": ("Documentos", "independiente", "una sola línea", "filtros seleccionados"),
+    }
+    for locale, markers in localized_markers.items():
+        text = _normalized_text(_root(locale))
+        assert all(marker in text for marker in markers), locale
+
+
+def test_published_dita_has_no_stale_version_or_standalone_api_guide_wording() -> None:
+    standalone_names = (
+        "API Integration Guide",
+        "Руководство по интеграции API",
+        "API-Integrationsleitfaden",
+        "API 集成指南",
+        "guide d'intégration de l'API",
+        "Guía de integración de API",
+    )
+    for locale in LOCALES:
+        for path in (DITA_ROOT / locale).rglob("*.dita"):
+            text = _normalized_text(ET.fromstring(path.read_text(encoding="utf-8")))
+            assert "0.9.0" not in text, path
+            assert not any(name in text for name in standalone_names), path

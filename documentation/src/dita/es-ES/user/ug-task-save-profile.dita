@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Guardar cambios del perfil</title>
-  <shortdesc>Cree el primer perfil guardado desde un borrador o persista cambios en un perfil existente.</shortdesc>
+  <title>Guardar cambios de perfil</title>
+  <shortdesc>Cree el primer perfil guardado a partir de un borrador o persista los cambios en un perfil existente.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible la superficie necesaria: Biblioteca, Guided, All Settings, JSON o Compare.</p></prereq>
-    <context><p>Guardar establece el ID de perfil para un borrador nuevo y pone los valores recientes de políticas y preferencias administradas a disposición de otras superficies de BPM.</p></context>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, Biblioteca, Todos los ajustes, Guiado, JSON o Superficie de comparación.</p></prereq>
+    <context><p>Al guardar se establece el perfil ID para un nuevo borrador y hace que la política más reciente y los valores de preferencias administradas estén disponibles para otras superficies de BPM.</p></context>
     <steps>
-      <step><cmd>Revise el nombre del perfil, el canal de esquema y el estado de validación antes de guardar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Seleccione Guardar en la superficie de editor activa.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Espere el mensaje de estado visible que confirma que el guardado terminó.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie de edición, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Si aparece validación o información de conexión, léala antes de navegar o reintentar.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
+      <step><cmd>Revise el nombre del perfil, el canal del esquema y el estado de validación antes de guardar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Seleccione Guardar en la superficie del editor activo.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Espere el mensaje de estado visible que confirma que el guardado se completó.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Si aparece información de validación o conexión, léala antes de salir o volver a intentarlo.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
-    <result><p>El perfil tiene un estado guardado que puede reabrirse, validarse, exportarse o compararse.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, detenga la edición, lea el mensaje de estado, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <result><p>El perfil tiene un estado guardado que se puede reabrir, validar, exportar o comparar.</p></result>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

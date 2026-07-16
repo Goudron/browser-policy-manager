@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utiliser All Settings</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Open All Settings for a saved profile when you need complete visual control beyond the shorter Guided workflow.</shortdesc>
+  <title>Utilisez Tous les paramètres</title>
+  <shortdesc>Ouvrez Tous les paramètres pour un profil enregistré lorsque vous avez besoin d'un contrôle visuel complet au-delà du flux de travail guidé plus court.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. A saved profile exists. New unsaved drafts must be saved before All Settings can open.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. All Settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p></context>
+    <prereq><p>Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que Tous les paramètres puisse s'ouvrir.</p></prereq>
+    <context><p>Tous les paramètres est l'éditeur visuel complet des politiques Firefox et connu Préférences gérées. Il s'ouvre dans Revue afin que les éléments d'attention soient visibles avant une navigation large dans le catalogue.</p>
+      <fig id="screenshot-all-settings-review">
+        <title>Tous les paramètres Revue</title>
+        <image keyref="screenshot.all-settings-review" placement="break">
+          <alt>Tous les paramètres affichant la liste de révision, les paramètres configurés et le panneau de détails des paramètres sur un écran étroit.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Open the saved profile from the Library.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Choose the All Settings editor surface.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Confirm that Review, Configured, and Catalog modes are available.</cmd><info><p>Résultat attendu : l’action est effectuée dans All Settings sans perdre le contexte du profil.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : Utiliser All Settings. Use the mode that matches the task: Review for attention, Configured for applied values, or Catalog for every supported setting.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez le schéma, la source de la valeur et les conséquences du changement.</note></info></step>
+      <step><cmd>Ouvrez le profil enregistré depuis la bibliothèque.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez la surface de l'éditeur Tous les paramètres.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Confirmez que les paramètres Révision, Configuré et Catalogue sont disponibles.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Utilisez le mode qui correspond à la tâche : Vérifier pour attirer l'attention, Configuré pour les valeurs appliquées ou Catalogue pour chaque paramètre pris en charge.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
-    <result><p>All Settings affiche l’état attendu du profil, et l’action peut être expliquée lors de la revue. The saved profile is open in All Settings with the correct mode available.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, effacez les filtres, revenez au panneau de détail ou ouvrez le sujet associé. Recovery: if All Settings is unavailable, save the Guided draft first or reopen a saved profile from the Library.</p></postreq>
+    <result><p>Le profil enregistré est ouvert dans Tous les paramètres avec le mode correct disponible.</p></result>
+    <postreq><p>Récupération : si Tous les paramètres n'est pas disponible, enregistrez d'abord le brouillon guidé ou rouvrez un profil enregistré à partir de la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

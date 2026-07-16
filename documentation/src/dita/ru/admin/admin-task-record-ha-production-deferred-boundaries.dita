@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="ru" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Зафиксировать HA и production deferred boundaries</title>
-  <shortdesc>Опишите, какие production, HA, reverse-proxy, restore и service-management capabilities сейчас отсутствуют и что можно подготовить для будущего design work.</shortdesc>
+<task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Запись HA и границы отложенного производства</title>
+  <shortdesc>Укажите, какие возможности производства, HA, обратного прокси-сервера, восстановления и управления услугами отсутствуют сегодня и что можно подготовить для последующих проектных работ.</shortdesc>
   <taskbody>
-    <prereq><p>Для текущего source-run экземпляра существуют readiness, network exposure, backup/export, monitoring и update-window notes.</p></prereq>
-    <context><p>Этот topic фиксирует границу между current single-node source operation и будущей production architecture. Он намеренно явно описывает what is planned but not implemented yet.</p></context>
+    <prereq><p>Примечания о готовности, доступности сети, резервном копировании/экспорте, мониторинге и окне обновления существуют для текущего экземпляра, запускаемого из исходного кода.</p></prereq>
+    <context><p>В этом разделе фиксируется граница между текущей работой с одним узлом источника и будущей производственной архитектурой. В нем намеренно открыто говорится о том, что запланировано, но еще не реализовано.</p></context>
     <steps>
-      <step><cmd>Назовите supported current shape.</cmd><info><p>Запишите, что документация BPM 0.9.0 Administrator/DevOps поддерживает source deployment, manual configuration, health/readiness checks, API examples, manual backup evidence, documentation rebuild checks и single-node update windows.</p></info></step>
-      <step><cmd>Назовите отсутствующие service и proxy capabilities.</cmd><info><p>Перечислите packaged services, native Linux service units, Windows services, official reverse-proxy recipes, TLS/proxy recipes, managed secrets, authentication gateway configuration и production hardening как отсутствующие в BPM 0.9.0 source documentation.</p></info></step>
-      <step><cmd>Назовите отсутствующие HA и upgrade capabilities.</cmd><info><p>Перечислите supported HA clustering, multi-node coordination, load balancer session affinity guidance, shared storage locking, zero-downtime migration, rolling upgrades, automatic failover и official restore automation как future work, а не current behavior.</p></info></step>
-      <step><cmd>Преобразуйте future needs в design inputs.</cmd><info><note type="warning">Не размещайте несколько source nodes за load balancer и не называйте результат supported HA. Сохраняйте required RTO/RPO, backup verification, TLS ownership, secrets ownership, logging, monitoring и upgrade-window expectations как inputs для будущих distribution/runtime tasks.</note></info></step>
+      <step><cmd>Назовите поддерживаемую текущую форму.</cmd><info><p>Напишите, что документация BPM Администратор/DevOps поддерживает развертывание исходного кода, ручную настройку, проверки работоспособности/готовности, примеры API, подтверждение резервного копирования вручную, проверки перестроения документации и окна обновления для одного узла.</p></info></step>
+      <step><cmd>Назовите отсутствующие возможности службы и прокси-сервера.</cmd><info><p>Перечислите пакетные службы, собственные сервисные модули Linux, службы Windows, официальные рецепты обратного прокси-сервера, TLS/рецепты прокси-сервера, управляемые секреты, конфигурацию шлюза аутентификации и усиление безопасности производства, которые отсутствуют в исходной документации BPM.</p></info></step>
+      <step><cmd>Отсутствует имя HA и возможности обновления.</cmd><info><p>Перечислите поддерживаемую кластеризацию HA, координацию нескольких узлов, руководство по привязке сеансов балансировщика нагрузки, блокировку общего хранилища, миграцию с нулевым временем простоя, последовательные обновления, автоматическое переключение при сбое и официальную автоматизацию восстановления как будущую работу, а не текущее поведение.</p></info></step>
+      <step><cmd>Преобразуйте будущие потребности в исходные данные для проектирования.</cmd><info><note type="warning">Не размещайте несколько исходных узлов за балансировщиком нагрузки и не вызывайте поддерживаемый результат HA. Сбор требуемых RTO/RPO, проверка резервной копии, владение TLS, владение секретами, ведение журнала, мониторинг и ожидания окна обновления в качестве входных данных для последующих задач распространения/выполнения.</note></info></step>
     </steps>
-    <result><p>Boundary record предотвращает unsupported production, HA и reverse-proxy claims, сохраняя полезную preparation work для будущих releases.</p></result>
-    <postreq><p>Используйте этот record во время manual documentation QA и при утверждении будущих installer, service, reverse-proxy и HA backlog items.</p></postreq>
+    <result><p>Запись границы предотвращает неподдерживаемое производство, HA и заявки обратного прокси, сохраняя при этом полезную подготовительную работу для будущих выпусков.</p></result>
+    <postreq><p>Используйте эту запись при документации руководства QA и при утверждении будущих элементов установщика, службы, обратного прокси-сервера и HA невыполненных работ.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-record-devops-operational-boundaries"/>

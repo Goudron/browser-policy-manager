@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Review-Zustände in All Settings</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. Use this reference to interpret clean, invalid, CIS manual-review, raw, unknown, deprecated, and imported review states.</shortdesc>
+  <title>Alle Einstellungen Überprüfungsstatus</title>
+  <shortdesc>Verwenden Sie diese Referenz, um die Status „sauber“, „ungültig“, „CIS manuelle Überprüfung“, „Roh“, „unbekannt“, „veraltet“ und „importiert“ zu interpretieren.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Review-Zustände in All Settings</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. Review states explain why All Settings asks for attention before the user edits routine values.</p></section>
-    <section id="a-clean-profile"><title>Clean profile</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. A clean profile has no remaining Review items. It can still contain configured settings; it simply has no attention states that BPM can detect.</p></section>
-    <section id="a-invalid-items"><title>Invalid items</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. Invalid items have values that fail current validation for the selected schema channel and should be fixed or removed before handoff.</p></section>
-    <section id="a-cis-manual-review"><title>CIS manual review</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. CIS manual-review items need a human decision or external verification. BPM can surface the item without claiming certified compliance.</p></section>
-    <section id="a-raw-unknown-imported"><title>Raw, unknown, and imported items</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. Raw fallback, unknown, and imported items should be preserved or removed deliberately because BPM may not be able to model their intent visually.</p></section>
-    <section id="a-deprecated-items"><title>Deprecated items</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. Deprecated settings may still exist in a profile, but the user should confirm current Release/ESR support before relying on them.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Review-Zustände in All Settings. If a state is unexpected, clear filters, confirm the schema channel, refresh the profile, and inspect the setting detail before editing.</p></section>
+    <section id="a-overview"><title>Übersicht</title><p>Überprüfungsstatus erklären, warum Alle Einstellungen um Aufmerksamkeit bittet, bevor der Benutzer Routinewerte bearbeitet.</p></section>
+    <section id="a-clean-profile"><title>Sauberes Profil</title><p>Ein sauberes Profil weist keine verbleibenden Überprüfungselemente auf. Es kann weiterhin konfigurierte Einstellungen enthalten; Es gibt einfach keine Aufmerksamkeitszustände, die BPM erkennen kann.</p></section>
+    <section id="a-invalid-items"><title>Ungültige Elemente</title><p>Ungültige Elemente haben Werte, die die aktuelle Validierung für den ausgewählten Schemakanal nicht bestehen und vor der Übergabe korrigiert oder entfernt werden sollten.</p></section>
+    <section id="a-cis-manual-review"><title>CIS-Handbuchüberprüfung</title><p>CIS-Elemente zur manuellen Überprüfung erfordern eine menschliche Entscheidung oder eine externe Überprüfung. BPM kann den Artikel aufdecken, ohne eine zertifizierte Konformität zu beanspruchen.</p></section>
+    <section id="a-raw-unknown-imported"><title>Rohe, unbekannte und importierte Elemente</title><p>Rohe Fallback-, unbekannte und importierte Elemente sollten beibehalten oder absichtlich entfernt werden, da BPM ihre Absicht möglicherweise nicht visuell modellieren kann.</p></section>
+    <section id="a-deprecated-items"><title>Veraltete Elemente</title><p>Veraltete Einstellungen sind möglicherweise noch in einem Profil vorhanden, aber der Benutzer sollte die aktuelle Release-/ESR-Unterstützung bestätigen, bevor er sich auf sie verlässt.</p></section>
+    <section id="a-recovery"><title>Wiederherstellung</title><p>Wenn ein Status unerwartet ist, löschen Sie die Filter, bestätigen Sie den Schemakanal, aktualisieren Sie das Profil und überprüfen Sie die Einstellungsdetails, bevor Sie sie bearbeiten.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-attention-items"/>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="admin-concept-supported-integration-patterns" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>支持的 integration patterns</title>
-  <shortdesc>BPM 0.9.0 支持用于 profile、validation、Firefox document、metadata、inventory 和 health workflows 的 generic API patterns。</shortdesc>
+<concept id="admin-concept-supported-integration-patterns" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
+  <title>支持的集成模式</title>
+  <shortdesc>BPM 支持配置文件、验证、Firefox 文档、元数据、库存和运行状况工作流程的通用 API 模式。</shortdesc>
   <conbody>
-    <section id="a-profile-synchronization"><title>Profile synchronization</title><p>集成产品可以 list profiles、read profile by ID、create normalized profile、patch mutable profile fields、archive、restore、permanently delete 或 reset profile library。Synchronization 必须将 profile ID 和 revision 视为 BPM-owned state，不得假设 bulk operations、name mutation 或跨多个 requests 的 automatic rollback。</p></section>
-    <section id="a-validation-gates"><title>Validation gates</title><p>Validation gate 可以在 deployment workflow 接受之前，将 candidate canonical <codeph>policies.json</codeph> document 提交到 supported validation endpoint。Gate 必须同时检查 response body 和 status code，因为 validation 可能返回成功 HTTP status 但 <codeph>ok=false</codeph>。</p></section>
-    <section id="a-import-export"><title>Policy import and export</title><p>集成可以将 Firefox <codeph>policies.json</codeph> 导入为 BPM profile，也可以将 saved BPM profile 导出回 canonical Firefox JSON。不要混用 normalized profile model 和 canonical Firefox document shape；import/export 是这两种 representations 的边界。</p></section>
-    <section id="a-compliance-metadata"><title>Compliance metadata handoff</title><p>API 在 profile create、update 和 import operations 上暴露 opaque <codeph>compliance</codeph> object。集成可以通过 BPM 传递自己的 metadata，但 BPM 0.9.0 不发布该 object 的 versioned schema，也不验证 external compliance semantics。</p></section>
-    <section id="a-inventory-and-health"><title>Inventory and health checks</title><p>Inventory-style consumers 可以 list profiles、为同一 filter context 请求 stats、read individual profiles，并调用 service、liveness 和 readiness endpoints。Health responses 有意保持 compact，不暴露 per-dependency diagnostics、documentation status 或超出现有 fixed fields 的 deployment readiness。</p></section>
-    <section id="a-unsupported-patterns"><title>Unsupported patterns</title><p>本指南不记录 authentication、authorization、rate limits、idempotency keys、request IDs、webhooks、bulk export、bulk CRUD、cursor pagination、product-specific connectors、vendor partnerships 或 transactional orchestration，因为 BPM 0.9.0 不暴露这些 guarantees。</p></section>
+    <section id="a-profile-synchronization"><title>配置文件同步</title><p>集成产品可以列出配置文件、通过 ID 读取配置文件、创建标准化配置文件、修补可变配置文件字段、存档、恢复、永久删除或重置库。同步必须将配置文件 ID 和修订视为 BPM 拥有的状态，并且不得假设跨多个请求的批量操作、名称突变或自动回滚。</p></section>
+    <section id="a-validation-gates"><title>验证门</title><p>验证门可以提交候选规范 在部署工作流接受之前，将 <codeph>policies.json</codeph> 记录到受支持的验证端点。门必须检查响应正文以及状态代码，因为验证可以返回成功 HTTP 状态 <codeph>ok=false</codeph>。</p></section>
+    <section id="a-import-export"><title>策略导入和导出</title><p>集成可以将 Firefox <codeph>policies.json</codeph> 作为 BPM 配置文件导入，并将保存的 BPM 配置文件导出回规范的 Firefox JSON。不要将规范化的配置文件模型与规范的 Firefox 文档形状互换；导入/导出是这些表示之间的边界。</p></section>
+    <section id="a-compliance-metadata"><title>合规性元数据移交</title><p>API 在配置文件创建、更新和导入操作中公开不透明的 <codeph>compliance</codeph> 对象。集成可以通过 BPM 传递自己的元数据，但 BPM 不会发布该对象的版本化模式，也不会验证外部合规性语义。</p></section>
+    <section id="a-inventory-and-health"><title>库存和健康检查</title><p>库存样式的使用者可以列出配置文件、请求同一过滤器上下文的统计信息、读取单个配置文件以及调用服务、活跃度和就绪端点。健康响应有意紧凑，并且不会暴露当前固定字段之外的每个依赖项诊断、文档状态或部署准备情况。</p></section>
+    <section id="a-unsupported-patterns"><title>不支持的模式</title><p>该指南未记录身份验证、授权、速率限制、幂等密钥、请求 ID、webhooks、批量导出、批量 CRUD、光标分页、产品特定连接器、供应商合作伙伴关系或事务编排，因为 BPM 未公开这些保证。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.admin-concept-integration-audience"/>

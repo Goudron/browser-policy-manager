@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Einstellungsdetail bearbeiten</title>
-  <shortdesc>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Apply or edit a Firefox policy or managed preference value from the All Settings detail panel.</shortdesc>
+  <title>Bearbeiten Sie ein Einstellungsdetail</title>
+  <shortdesc>Wenden Sie eine Firefox-Richtlinie oder einen verwalteten Einstellungswert im Detailbereich „Alle Einstellungen“ an oder bearbeiten Sie sie.</shortdesc>
   <taskbody>
-    <prereq><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Open a setting detail panel for a supported editable value.</p></prereq>
-    <context><p>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Detail editing keeps the change focused on one setting while reusing shared validation and save behavior.</p></context>
+    <prereq><p>Öffnen Sie ein Einstellungsdetailfenster für einen unterstützten bearbeitbaren Wert.</p></prereq>
+    <context><p>Durch die Detailbearbeitung bleibt die Änderung auf eine Einstellung konzentriert, während die gemeinsame Validierung und das Speicherverhalten wiederverwendet werden.</p></context>
     <steps>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Inspect the current value and validation state.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Enter or choose the new policy or managed preference value.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Apply the detail edit and watch for validation feedback.</cmd><info><p>Erwartetes Ergebnis: Die Aktion wird in All Settings ohne Verlust des Profilkontexts ausgeführt.</p></info></step>
-      <step><cmd>Dieses Thema beschreibt den All-Settings-Ablauf vollständig für die deutsche Lokalisierung: Einstellungsdetail bearbeiten. Save the profile when the edited value is valid and intentional.</cmd><info><note type="warning">Warnung: Prüfen Sie vor dem Speichern Schema, Wertquelle und Folgen der Änderung.</note></info></step>
+      <step><cmd>Überprüfen Sie den aktuellen Wert und den Validierungsstatus.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Geben Sie den neuen Richtlinien- oder verwalteten Präferenzwert ein oder wählen Sie ihn aus.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wenden Sie die Detailbearbeitung an und achten Sie auf Validierungsfeedback.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Speichern Sie das Profil, wenn der bearbeitete Wert gültig und beabsichtigt ist.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
-    <result><p>All Settings zeigt den erwarteten Profilzustand, und die Aktion ist bei der Prüfung erklärbar. The selected policy or managed preference has the new value in the profile.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, löschen Sie Filter, kehren Sie zum Detailbereich zurück oder öffnen Sie das verknüpfte Thema. Recovery: if validation fails, correct the value shape or reset the detail before saving.</p></postreq>
+    <result><p>Die ausgewählte Richtlinie oder verwaltete Einstellung hat den neuen Wert im Profil.</p></result>
+    <postreq><p>Wiederherstellung: Wenn die Validierung fehlschlägt, korrigieren Sie die Wertform oder setzen Sie die Details zurück, bevor Sie speichern.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-inspect-setting-details"/>

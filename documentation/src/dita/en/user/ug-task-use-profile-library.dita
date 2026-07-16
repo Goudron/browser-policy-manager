@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-profile-library" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Use the Profile Library</title>
+  <title>Use the Library</title>
   <shortdesc>Open the Library and use its counts, status, and row actions as the starting point for saved profile work.</shortdesc>
   <taskbody>
     <prereq><p>BPM is open and you are working with saved profile records, not an unsaved editor draft.</p></prereq>
-    <context><p>The Library lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows.</p></context>
+    <context><p>The Library lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows.</p>
+      <fig id="screenshot-library-overview">
+        <title>Library overview</title>
+        <image keyref="screenshot.library-overview" placement="break">
+          <alt>Library showing saved profile rows, counts, and profile actions.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Open the Profile Library.</cmd><info><p>Expected result: the Library loads profile rows, or an empty-state message if no saved profiles exist.</p></info></step>
+      <step><cmd>Open the Library.</cmd><info><p>Expected result: the Library loads profile rows, or an empty-state message if no saved profiles exist.</p></info></step>
       <step><cmd>Read the filtered and total counts before acting on rows.</cmd><info><p>If the filtered count is lower than the total count, search text or filters are active.</p></info></step>
       <step><cmd>Use row actions only after confirming the row name, schema channel, lifecycle state, and validation state.</cmd><info><note type="warning">A row action applies to that saved profile, not to a temporary editor draft.</note></info></step>
     </steps>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-work-across-editor-tabs" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Travailler avec plusieurs onglets d’édition</title>
-  <shortdesc>Utilisez des onglets de navigateur séparés pour les modes de profil enregistré sans confondre brouillons et modifications non enregistrées.</shortdesc>
+  <title>Travailler sur les onglets de l'éditeur</title>
+  <shortdesc>Utilisez des onglets de navigateur distincts pour les modes de profil enregistré sans confondre les brouillons ni perdre les modifications non enregistrées.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et gardez disponible la surface nécessaire : Bibliothèque, Guided, All Settings, JSON ou Compare.</p></prereq>
-    <context><p>BPM ouvre les modes de profil enregistré et les surfaces de comparaison dans des onglets séparés afin de consulter Guided, All Settings, JSON et Compare côte à côte.</p></context>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <context><p>BPM ouvre les modes de profil enregistrés et les surfaces de comparaison dans des onglets séparés afin que les utilisateurs puissent inspecter côte à côte Éditeur guidé, Tous les paramètres, JSON et Comparer les paramètres des profils.</p></context>
     <steps>
-      <step><cmd>Ouvrez un profil enregistré depuis la Bibliothèque dans le mode d’édition requis.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Gardez visibles le nom du profil, le canal de schéma et le badge de cycle de vie dans chaque onglet.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Enregistrez les modifications dans un onglet avant d’utiliser un autre onglet pour exporter, comparer ou valider.</cmd><info><p>Résultat attendu : BPM garde visibles le profil, la surface d’édition, la locale et le thème sélectionnés pendant le travail.</p></info></step>
-      <step><cmd>Fermez ou actualisez les onglets seulement après avoir vérifié l’avertissement de modifications non enregistrées et l’état d’enregistrement visible.</cmd><info><note type="warning">Enregistrez ou abandonnez volontairement les modifications avant de quitter un éditeur, fermer un onglet ou confirmer une action irréversible.</note></info></step>
+      <step><cmd>Ouvrez un profil enregistré à partir de la bibliothèque dans le mode éditeur requis.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Gardez le nom du profil, le canal de schéma et le badge de cycle de vie visibles dans chaque onglet.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Enregistrez les modifications dans un onglet avant de vous appuyer sur un autre onglet pour l'exportation, la comparaison ou la validation.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Fermez ou actualisez les onglets uniquement après avoir vérifié l'avertissement de modification non enregistrée et l'état d'enregistrement visible.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>
-    <result><p>Vous pouvez examiner plusieurs surfaces tout en gardant clair l’état enregistré faisant autorité.</p></result>
-    <postreq><p>Récupération : si l’état visible est ambigu, arrêtez l’édition, lisez le message d’état, actualisez une fois puis rouvrez le profil depuis la Bibliothèque.</p></postreq>
+    <result><p>Vous pouvez examiner plusieurs surfaces tout en gardant clair l'état enregistré faisant autorité.</p></result>
+    <postreq><p>Récupération : si l'état visible n'est pas clair, arrêtez l'édition, lisez le message d'état actuel, actualisez une fois et rouvrez le profil depuis la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-open-saved-profile"/>

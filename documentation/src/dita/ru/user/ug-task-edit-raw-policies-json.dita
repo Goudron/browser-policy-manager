@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-raw-policies-json" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Редактируйте raw policies JSON</title>
-  <shortdesc>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. Edit the raw policies.json document with the locally bundled Monaco editor.</shortdesc>
+  <title>Редактирование необработанных политик в формате JSON</title>
+  <shortdesc>Отредактируйте необработанный документ policies.json с помощью локального редактора Monaco.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. Open JSON Editor for a saved profile.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. The Monaco editor is bundled locally and edits the raw JSON text. BPM still validates before saving to the normalized profile model.</p></context>
+    <prereq><p>Откройте JSON-редактор для сохраненного профиля.</p></prereq>
+    <context><p>Редактор Monaco поставляется локально и редактирует необработанный текст JSON. BPM по-прежнему проверяет данные перед сохранением в нормализованную модель профиля.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. Place focus in the JSON editor.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. Edit only the policy, preference, or raw value required by the task.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. Keep the top-level policies object and valid JSON syntax.</cmd><info><p>Ожидаемый результат: JSON Editor сохраняет контекст профиля и показывает понятное состояние.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий JSON Editor для русской локали: Редактируйте raw policies JSON. Use validation before saving the raw edit.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте синтаксис JSON, top-level policies и ошибки policy validation.</note></info></step>
+      <step><cmd>Переместите фокус на JSON-редактор.</cmd><info><p>Ожидаемый результат: документ JSON остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Редактируйте только политику, предпочтение или необработанное значение, необходимые для задачи.</cmd><info><p>Ожидаемый результат: документ JSON остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Сохраните объект политики верхнего уровня и действительный синтаксис JSON.</cmd><info><p>Ожидаемый результат: документ JSON остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Используйте проверку перед сохранением необработанных изменений.</cmd><info><note type="warning">Сохранение необработанного JSON может изменить канонический профиль BPM. Перед сохранением проверьте синтаксис и значения политики.</note></info></step>
     </steps>
-    <result><p>JSON Editor находится в ожидаемом состоянии, а действие можно объяснить при проверке. The editor contains the intended raw JSON change and is ready for validation.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, валидируйте документ, вернитесь в All Settings или откройте связанный раздел. Recovery: if the edit becomes confusing, format the document or discard changes before saving.</p></postreq>
+    <result><p>Редактор содержит предполагаемое необработанное изменение JSON и готов к проверке.</p></result>
+    <postreq><p>Восстановление: если редактирование становится запутанным, отформатируйте документ или отмените изменения перед сохранением.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-format-json-document"/>

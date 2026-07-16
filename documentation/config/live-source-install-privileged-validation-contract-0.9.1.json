@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-0.9.1-live-source-install-privileged-validation",
+  "backlog_item": "BPM091-M11-01",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "purpose": "Freeze the host, privilege, image, isolation, evidence, rollback, and retained-environment handoff boundary before Docker Engine is installed for live source-install validation.",
+  "approval": {
+    "required_before": "BPM091-M11-02",
+    "status": "accepted",
+    "approved_by": "project maintainer",
+    "approved_at": "2026-07-14T01:00:29+03:00",
+    "approved_scope_note": "Approved with Docker Engine, its official apt source/key, service, data root, memberless package-created docker group, clean digest-pinned golden images, failed or evidence-needed validation containers, and the dedicated validation network retained after M11 for future project work. Successful derivative install containers or derivative images may be removed later by exact recorded identity after evidence handoff; golden images remain local and are pulled only when absent. The maintainer also approved each graphical pkexec elevation used by automation after sudo reported that interactive authentication was required and expanded the M11 storage allowance on 2026-07-14.",
+    "scope_change_rule": "Any change to privileged commands, host paths, image provenance, resource limits, network mode, or retention/handoff steps invalidates approval and returns this contract to awaiting-maintainer-approval."
+  },
+  "authoritative_sources": [
+    "https://docs.docker.com/engine/install/ubuntu/",
+    "https://docs.docker.com/engine/install/linux-postinstall/",
+    "https://hub.docker.com/_/ubuntu",
+    "https://hub.docker.com/_/debian",
+    "https://hub.docker.com/_/fedora",
+    "https://gitlab.manjaro.org/tools/development-tools/manjaro-docker",
+    "https://gitlab.manjaro.org/tools/development-tools/manjaro-docker/-/raw/master/Makefile",
+    "https://hub.docker.com/r/manjarolinux/base",
+    "https://linuxmint-installation-guide.readthedocs.io/en/latest/verify.html",
+    "https://mirrors.edge.kernel.org/linuxmint/stable/22.3/"
+  ],
+  "host_baseline": {
+    "captured_at": "2026-07-14T01:00:29+03:00",
+    "capture_mode": "read-only commands without sudo",
+    "host": {
+      "pretty_name": "Ubuntu 26.04 LTS",
+      "id": "ubuntu",
+      "version_id": "26.04",
+      "architecture": "x86_64",
+      "kernel": "Linux 7.0.0-27-generic"
+    },
+    "docker_state": {
+      "cli": "absent",
+      "packages": "none",
+      "docker_service": "LoadState=not-found; ActiveState=inactive",
+      "containerd_service": "LoadState=not-found; ActiveState=inactive",
+      "docker_group": "absent",
+      "user_in_docker_group": false,
+      "socket_var_run": "absent",
+      "socket_run": "absent",
+      "apt_source": "absent",
+      "apt_keyring": "absent",
+      "data_root": "absent",
+      "containerd_root": "absent",
+      "etc_docker": "absent",
+      "systemd_override": "absent"
+    },
+    "installed_runtime_packages_checked": [
+      "docker-ce",
+      "docker-ce-cli",
+      "containerd.io",
+      "docker-buildx-plugin",
+      "docker-compose-plugin",
+      "docker-ce-rootless-extras",
+      "docker.io",
+      "containerd",
+      "runc",
+      "podman"
+    ],
+    "user_groups": ["valery", "adm", "cdrom", "sudo", "dip", "plugdev", "users", "lpadmin", "ollama"],
+    "capacity": {
+      "root_total_bytes": 501809635328,
+      "root_used_bytes": 251336990720,
+      "root_available_bytes": 224906842112,
+      "memory_total_bytes": 7662403584,
+      "memory_available_bytes": 2307534848,
+      "swap_total_bytes": 8589930496,
+      "swap_free_bytes": 4164390912
+    },
+    "ownership_conclusion": "If the mandatory recheck is unchanged, Docker Engine is newly installed by M11 but becomes maintainer-approved retained project tooling after a successful M11-02. Images, containers, networks, volumes, build caches, and temporary validation files introduced for BPM091-M11 remain task-owned and must be stopped, inventoried, and handed off without deletion in BPM091-M11-13."
+  },
+  "mandatory_preflight_recheck": {
+    "timing": "Immediately before the first elevated command in BPM091-M11-02.",
+    "checks": [
+      "command -v docker",
+      "dpkg-query for every package in host_baseline.installed_runtime_packages_checked",
+      "systemctl show docker.service and containerd.service",
+      "test for /var/run/docker.sock and /run/docker.sock",
+      "getent group docker and id -Gn",
+      "test for Docker apt sources, keyrings, /var/lib/docker, /var/lib/containerd, /etc/docker, and systemd overrides",
+      "df -B1 / and free -b"
+    ],
+    "stop_conditions": [
+      "Docker, containerd, Podman, a Docker socket, Docker group membership, repository, key, data root, daemon configuration, or service appears after this baseline.",
+      "Available root filesystem space is below 40 GiB.",
+      "Available memory plus free swap is below 3 GiB.",
+      "The host is no longer Ubuntu 26.04 x86_64.",
+      "A conflicting package would need removal or an unrelated host setting would need modification."
+    ],
+    "decision_rule": "Stop and revise this contract for maintainer approval; never silently adopt, remove, or overwrite newly discovered state."
+  },
+  "docker_installation": {
+    "owner_task": "BPM091-M11-02",
+    "method": "Docker's official Ubuntu apt repository; no convenience script and no Docker Desktop.",
+    "minimum_packages": [
+      "docker-ce",
+      "docker-ce-cli",
+      "containerd.io",
+      "docker-buildx-plugin",
+      "docker-compose-plugin"
+    ],
+    "repository_source": "/etc/apt/sources.list.d/docker.sources",
+    "repository_key": "/etc/apt/keyrings/docker.asc",
+    "privilege_transport": {
+      "maintainer_terminal": "sudo docker",
+      "automation": "One bounded root script per operation through pkexec after the maintainer approves the graphical system authentication dialog.",
+      "credential_rule": "Never request, receive, log, cache, or store the maintainer password in repository files, command arguments, stdin, evidence, or chat.",
+      "approval_evidence": "The maintainer approved the graphical pkexec dialogs during BPM091-M11-02 after sudo -n reported that interactive authentication was required."
+    },
+    "allowed_elevated_steps": [
+      "apt update and install already-approved prerequisites ca-certificates and curl if missing",
+      "create /etc/apt/keyrings with mode 0755 if needed",
+      "download Docker's Ubuntu signing key only to /etc/apt/keyrings/docker.asc and make it world-readable",
+      "write only /etc/apt/sources.list.d/docker.sources for the official stable Ubuntu repository",
+      "apt update and install only the five minimum_packages after recording exact candidate versions",
+      "inspect or start docker.service when package installation did not start it",
+      "run Docker CLI operations through sudo in a maintainer terminal or through one bounded pkexec root script after graphical maintainer approval"
+    ],
+    "verification": [
+      "record dpkg package versions and apt repository policy",
+      "record docker version, docker info, service state, socket owner/mode, group membership, and DockerRootDir",
+      "run one labeled disposable hello-world smoke container with the approved resource and network boundary",
+      "remove the smoke container and image by recorded identity"
+    ],
+    "forbidden_host_changes": [
+      "adding any user to the docker group or changing login groups",
+      "rootless Docker setup",
+      "Docker Desktop installation",
+      "convenience-script installation",
+      "removing pre-existing conflict packages",
+      "manual firewall, nftables, iptables, routing, DNS, proxy, sysctl, AppArmor, SELinux, SSH, kernel, or boot changes",
+      "daemon TCP exposure, registry credentials, credential helpers, or persistent daemon customization",
+      "apt autoremove, apt clean, or removal of unrelated packages, keys, repositories, services, groups, or files"
+    ]
+  },
+  "target_images": [
+    {
+      "target_id": "ubuntu-26-04",
+      "m6_release": "Ubuntu 26.04 LTS",
+      "source": "Docker Official Image",
+      "tag": "docker.io/library/ubuntu:26.04",
+      "pull_ref": "docker.io/library/ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "index_digest": "sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+      "linux_amd64_manifest_digest": "sha256:c6c0067e0e45b7a826eaebb193cef957be28045380963a9b1eeb2a5d3c70a1b9",
+      "identity_assertions": {"ID": "ubuntu", "VERSION_ID": "26.04"}
+    },
+    {
+      "target_id": "debian-13-5",
+      "m6_release": "Debian 13.5 (trixie)",
+      "source": "Docker Official Image",
+      "tag": "docker.io/library/debian:13.5",
+      "pull_ref": "docker.io/library/debian@sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+      "index_digest": "sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+      "linux_amd64_manifest_digest": "sha256:3a953985c225a97dfb5a8f1ddc6a3ecefefc35ef51f537075e08941305045a1e",
+      "identity_assertions": {"ID": "debian", "VERSION_ID": "13"},
+      "version_file_assertion": "13.5"
+    },
+    {
+      "target_id": "fedora-44",
+      "m6_release": "Fedora Linux 44",
+      "source": "Docker Official Image",
+      "tag": "docker.io/library/fedora:44",
+      "pull_ref": "docker.io/library/fedora@sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+      "index_digest": "sha256:6c75d5bf57cb0fa5aa4b92c6a83c86c791644496d9ac230de7711f5b8ec3b898",
+      "linux_amd64_manifest_digest": "sha256:89f61a124414261868224666aa7fb8df1b78397a53623774bdfb105d1612b48b",
+      "identity_assertions": {"ID": "fedora", "VERSION_ID": "44"}
+    },
+    {
+      "target_id": "linux-mint-22-3",
+      "m6_release": "Linux Mint 22.3 (Zena)",
+      "source": "Locally imported root filesystem from the authenticated official Linux Mint Cinnamon ISO; no Ubuntu image substitution is allowed.",
+      "tag": "bpm091/linux-mint:22.3-zena-amd64",
+      "pull_ref": null,
+      "official_iso": "https://mirrors.edge.kernel.org/linuxmint/stable/22.3/linuxmint-22.3-cinnamon-64bit.iso",
+      "official_checksum_file": "https://mirrors.edge.kernel.org/linuxmint/stable/22.3/sha256sum.txt",
+      "official_signature_file": "https://mirrors.edge.kernel.org/linuxmint/stable/22.3/sha256sum.txt.gpg",
+      "iso_sha256": "a081ab202cfda17f6924128dbd2de8b63518ac0531bcfe3f1a1b88097c459bd4",
+      "signing_key_fingerprint": "27DEB15644C6B3CF3BD7D291300F846BA25BAE09",
+      "construction_rule": "M11-03 must verify the signed checksum, extract the ISO's live root filesystem in a resource-limited task-owned helper, import it without host bind mounts, record the resulting image ID/digest, and fail if faithful extraction is unavailable.",
+      "identity_assertions": {"ID": "linuxmint", "VERSION_ID": "22.3", "VERSION_CODENAME": "zena"}
+    },
+    {
+      "target_id": "manjaro-stable-2026-06-26",
+      "m6_release": "Manjaro stable branch after 2026-06-26",
+      "source": "The Manjaro GitLab base-Docker project's Makefile builds, tags, tests, and pushes manjarolinux/base; the Docker Hub repository is owned by the manjarolinux community organization.",
+      "tag": "docker.io/manjarolinux/base:latest",
+      "pull_ref": "docker.io/manjarolinux/base@sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+      "index_digest": "sha256:bbf1f1d746f28e138eea610e140d2f28cbb5b7c5da2fbff034b883527aa604e9",
+      "linux_amd64_manifest_digest": "sha256:a411decb8d219cb4b16b39618e9aa8ce8228acad9cba5b10420f804a20ca5c84",
+      "observed_image_created_at": "2026-03-22T04:32:06.242265176Z",
+      "update_rule": "Treat the pinned image only as a reproducible seed. Assert the stable branch, execute the documented full pacman -Syu transaction, record mirror/branch and complete post-update package state, and fail unless the resulting state is demonstrably later than the 2026-06-26 stable update.",
+      "identity_assertions": {"ID": "manjaro"}
+    }
+  ],
+  "image_resolution": {
+    "observed_at": "2026-07-14",
+    "architecture": "linux/amd64",
+    "method": "Read-only Docker Registry HTTP API manifest resolution; no image was pulled and Docker was not installed.",
+    "rules": [
+      "Pull registry images by index digest with --platform linux/amd64 and verify the resolved child manifest digest before use.",
+      "Record image ID, RepoDigests, /etc/os-release, package-manager identity, and initial package inventory in the run manifest.",
+      "A digest, release assertion, provenance, signature, or faithful-rootfs mismatch stops that target and remains a release blocker."
+    ]
+  },
+  "container_isolation": {
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "required_labels": {
+      "com.browser-policy-manager.validation": "BPM091-M11",
+      "com.browser-policy-manager.owner": "live-source-install",
+      "com.browser-policy-manager.run-id": "<recorded-run-id>",
+      "com.browser-policy-manager.target": "<target-id>"
+    },
+    "network": {
+      "name": "bpm091-m11-net",
+      "driver": "bridge",
+      "published_ports": "none",
+      "host_network": "forbidden",
+      "outbound_scope": "Only public distribution repositories, Python source, the approved BPM Git remote/ref, and the pinned documentation toolchain dependencies required by the documented install.",
+      "probe_rule": "Run health, readiness, API, UI, and shutdown probes with docker exec inside the container; do not expose BPM to the host or LAN."
+    },
+    "filesystem": {
+      "host_bind_mounts": "forbidden",
+      "docker_socket_mount": "forbidden",
+      "devices": "forbidden",
+      "source_checkout": "Fresh checkout inside the task-owned container filesystem.",
+      "evidence_export": "Copy only the allowlisted transcript and summary files out with docker cp after secret scanning."
+    },
+    "runtime": {
+      "privileged": false,
+      "cap_add": "forbidden",
+      "pid_ipc_uts_host_modes": "forbidden",
+      "secrets_credentials_tokens": "forbidden",
+      "production_endpoints_and_databases": "forbidden",
+      "restart_policy": "no",
+      "one_fresh_container_per_attempt": true
+    }
+  },
+  "storage_boundary": {
+    "maximum_task_owned_docker_bytes": 200000000000,
+    "minimum_host_free_bytes": 21474836480,
+    "rules": [
+      "Check DockerRootDir usage and host free space before and after every pull, Mint extraction/import, target run, and teardown.",
+      "Keep only one validation container running at a time; task-owned Docker state may grow to 200,000,000,000 bytes while at least 20 GiB remains free for the host operating system.",
+      "Stop before the next mutating operation if either storage threshold would be crossed.",
+      "Keep each exact clean target image as a local golden image. Resolve it locally first and contact the registry only when that immutable image is absent.",
+      "Never run docker system prune, docker image prune -a, docker volume prune, or global cache deletion."
+    ]
+  },
+  "evidence": {
+    "committed_root": "documentation/evidence/live-source-install/0.9.1",
+    "local_staging_root": "documentation/build/live-source-install/0.9.1",
+    "run_manifest": "documentation/evidence/live-source-install/0.9.1/<run-id>/run-manifest.json",
+    "target_transcript": "documentation/evidence/live-source-install/0.9.1/<run-id>/<target-id>/transcript.jsonl",
+    "target_summary": "documentation/evidence/live-source-install/0.9.1/<run-id>/<target-id>/summary.json",
+    "host_state": "documentation/evidence/live-source-install/0.9.1/<run-id>/host-state.json",
+    "required_fields": [
+      "UTC timestamp",
+      "run and target identity",
+      "image provenance and immutable digest",
+      "exact command in documented order",
+      "exit code",
+      "bounded stdout and stderr or an attached checksum-addressed output artifact",
+      "resource and disk observation",
+      "result disposition"
+    ],
+    "commit_rules": [
+      "Commit reviewed JSON/JSONL evidence needed to reproduce release claims; keep downloads, extracted rootfs files, package caches, images, databases, build output, and temporary process files in ignored staging or Docker storage.",
+      "Reject evidence containing credentials, authorization headers, cookies, private keys, user-home paths beyond the repository path, environment dumps, production addresses, or unrelated host data.",
+      "Record SHA-256 for every retained attachment and preserve failed attempts when they explain a blocker or documentation correction."
+    ]
+  },
+  "rollback": {
+    "install_failure": [
+      "Stop docker.service and containerd.service if M11-02 started them.",
+      "Purge only task-installed Docker package names recorded in the M11-02 package manifest.",
+      "Remove only /etc/apt/sources.list.d/docker.sources and /etc/apt/keyrings/docker.asc after verifying they match the task-recorded hashes.",
+      "Remove /var/lib/docker and /var/lib/containerd only when the repeated preflight proved both absent and the recorded task-owned resource inventory contains all created resources.",
+      "Remove the docker group only when the baseline proved it absent and it has no members.",
+      "Run daemon-reload if package removal requires it, then compare services, sockets, packages, groups, paths, disk, and user membership with the baseline.",
+      "Stop and report any unknown owner, changed hash, unexpected member, or residual state instead of deleting it."
+    ],
+    "target_failure": [
+      "Capture the failing command, exit code, output, container inspect data, package state, resource observation, and a blocker disposition.",
+      "Copy reviewed evidence, stop the failed attempt, label its final disposition, and retain its container and image for diagnosis.",
+      "Do not modify the maintainer checkout to hide a documentation defect; make corrections in the owning later task and rerun from a fresh container."
+    ]
+  },
+  "final_cleanup": {
+    "owner_task": "BPM091-M11-13",
+    "status": "accepted",
+    "completion_evidence": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/run-manifest.json",
+    "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json",
+    "retained_host_tooling": {
+      "decision": "retain-after-successful-installation",
+      "approved_by": "project maintainer",
+      "components": [
+        "docker-ce",
+        "docker-ce-cli",
+        "containerd.io",
+        "docker-buildx-plugin",
+        "docker-compose-plugin",
+        "/etc/apt/sources.list.d/docker.sources",
+        "/etc/apt/keyrings/docker.asc",
+        "docker.service and containerd.service",
+        "/var/lib/docker and /var/lib/containerd",
+        "memberless package-created docker group",
+        "M11 clean target golden images and imported Mint golden image",
+        "failed or evidence-needed stopped M11 validation containers",
+        "bpm091-m11-net dedicated bridge network"
+      ],
+      "user_access_rule": "Do not add the maintainer or any other user to the docker group; use sudo docker in a maintainer terminal or a bounded graphically approved pkexec runner for automation unless a separately approved future contract changes this boundary."
+    },
+    "ordered_steps": [
+      "Preserve, hash, and secret-scan all required evidence and the final task-owned resource inventory.",
+      "Stop every running M11 validation container after its evidence capture.",
+      "Retain all clean target golden images, the imported Mint golden image, failed or blocking attempts, evidence-needed containers, and the dedicated network.",
+      "After evidence handoff, successful derivative containers or explicitly committed derivative images may be removed only by exact recorded ID; never remove a golden image as part of derivative cleanup.",
+      "Verify that every retained container, image, and network has a recorded immutable identity, run owner, target, attempt, final state, and evidence path.",
+      "Keep M11-labeled build caches and temporary validation files only when their inventory entry explains a retained experiment; report all retained bytes.",
+      "Keep the successfully installed Docker packages, official apt source/key, services, data roots, memberless package-created docker group, clean target golden images, required stopped containers, and dedicated network as maintainer-approved project tooling.",
+      "Record Docker package versions, service/socket/group state, DockerRootDir usage, host free space, and the complete retained M11 resource inventory.",
+      "Compare user membership and unrelated host settings with the M11-01 baseline; the retained Docker installation is an approved expected difference, not cleanup residue."
+    ],
+    "forbidden_cleanup": [
+      "docker system prune or any unscoped prune",
+      "apt autoremove or apt clean",
+      "purging the retained Docker packages or removing their official apt source/key",
+      "removing Docker/containerd data roots, services, sockets, or the package-created docker group after successful installation",
+      "removing a clean target golden image, the imported Mint golden image, a failed or evidence-needed container, or the dedicated network",
+      "removing a successful derivative container or derivative image before evidence handoff or without its exact recorded identity",
+      "wildcard deletion outside exact M11-owned validation paths",
+      "removal of any resource absent from the recorded M11 inventory",
+      "deletion of committed evidence"
+    ],
+    "success_condition": "Every M11 validation container is stopped and inventoried with its image, labels, immutable identity, disposition, evidence path, and retention/removal decision; clean golden images, failed or evidence-needed attempts, the dedicated network, and Docker Engine remain healthy; task-owned Docker storage stays below 200,000,000,000 bytes with at least 20 GiB host-free; user group membership and unrelated host settings match the accepted baseline."
+  },
+  "wsl_boundary": {
+    "docker_linux_containers_are_wsl_evidence": false,
+    "actual_windows_host_required": true,
+    "owner_tasks": ["BPM091-M11-10", "BPM091-M11-11", "BPM091-M11-12"],
+    "rule": "No Windows 10/11, WSL kernel, systemd integration, filesystem, localhost, browser, restart, or shutdown claim may be made from these Linux Docker runs."
+  },
+  "verification": {
+    "focused_contract": "./.venv/bin/pytest -q documentation/tests/contract/test_live_source_install_privileged_validation_contract.py",
+    "full_contract_gate": "make test-docs-contract",
+    "dev_install": "make docs-install-dev"
+  }
+}

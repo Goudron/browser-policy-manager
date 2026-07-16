@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="admin-concept-api-conventions" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+<concept id="admin-concept-api-conventions" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
   <title>API conventions</title>
-  <shortdesc>Use these conventions when reading BPM 0.9.0 OpenAPI contracts and building integration requests.</shortdesc>
+  <shortdesc>Use these conventions when reading BPM OpenAPI contracts and building integration requests.</shortdesc>
   <conbody>
     <section id="a-base-url"><title>Base URLs and discovery</title><p>Examples use <codeph>$BPM_BASE_URL</codeph> as a deployment placeholder. Discover the current contract from <codeph>/openapi.json</codeph> and, for interactive inspection only, the FastAPI schema UIs at <codeph>/docs</codeph> and <codeph>/redoc</codeph>. The future product documentation portal is reserved for <codeph>/help/</codeph>, so do not treat <codeph>/docs</codeph> as the DITA documentation route.</p></section>
     <section id="a-content-types"><title>Content types</title><p>Most programmatic operations use JSON request and response bodies. Firefox import accepts <codeph>application/json</codeph> and <codeph>multipart/form-data</codeph>; unsupported media types can return <codeph>415</codeph>. Firefox export returns <codeph>application/json</codeph> and can add <codeph>Content-Disposition</codeph> when download output is requested.</p></section>

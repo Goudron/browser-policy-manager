@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-use-reusable-api-examples" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+<task id="admin-task-use-reusable-api-examples" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
   <title>Reuse DevOps API examples and environment templates</title>
   <shortdesc>Use language-neutral request patterns, environment templates, copyable curl commands, multipart samples, and compact Python assertions for current BPM API workflows.</shortdesc>
   <taskbody>
-    <prereq><p>Set <codeph>BPM_BASE_URL</codeph> for the BPM instance under test. Do not put credentials, tenant names, personal host names, private hosts, or production profile IDs into reusable examples; BPM 0.9.0 does not currently document API authentication.</p></prereq>
+    <prereq><p>Set <codeph>BPM_BASE_URL</codeph> for the BPM instance under test. Do not put credentials, tenant names, personal host names, private hosts, or production profile IDs into reusable examples; BPM does not currently document API authentication.</p></prereq>
     <context><p>This task covers <codeph>API-HEALTH-001</codeph>, <codeph>API-HEALTH-002</codeph>, <codeph>API-PROFILE-001</codeph>, <codeph>API-PROFILE-003</codeph>, <codeph>API-PROFILE-004</codeph>, <codeph>API-PROFILE-005</codeph>, <codeph>API-FF-001</codeph>, <codeph>API-VAL-001</codeph>, and <codeph>API-FF-002</codeph>. The examples intentionally use <codeph>$BPM_BASE_URL</codeph>, synthetic names, <codeph>release-152</codeph>, response assertions, and disposable fixture IDs instead of environment-specific hosts or secrets.</p></context>
     <steps>
       <step><cmd>Create a reusable environment template before copying curl requests.</cmd><info><p>Request example: <codeph>export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"</codeph>. Response example: the shell keeps one base URL, schema channel, synthetic profile name, and optional import path for the whole run. Error example: the shell exits the assignment when a required value is missing.</p><codeblock outputclass="language-bash"><![CDATA[

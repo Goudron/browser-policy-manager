@@ -64,9 +64,9 @@ Each backlog must include:
 
 Use this task table shape:
 
-| ID | Task | Essence | Minimal reasoning | Acceptance |
-| --- | --- | --- | --- | --- |
-| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | low | Version surfaces, changelog, package metadata, and version assertions agree; README remains current-state product documentation rather than release history. |
+| ID | Task | Essence | Model | Minimal reasoning | Acceptance |
+| --- | --- | --- | --- | --- | --- |
+| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | GPT-5.6 Luna | Light | Version surfaces, package metadata, and version assertions agree; README does not receive a target-version anchor or release-history entry. |
 
 Task IDs must use:
 
@@ -76,19 +76,53 @@ Task IDs must use:
 
 Example: `BPM086-M3-04`.
 
-## Minimal Reasoning Field
+## Model And Reasoning Fields
 
-Every task must specify the minimum sufficient ChatGPT-5.5 reasoning level:
+Every task must specify both the minimum sufficient GPT-5.6 model and the minimum sufficient
+reasoning level. Model capability and reasoning effort are independent choices; do not encode both
+decisions in one vague complexity label.
+
+The model tiers follow OpenAI's current model guidance:
+
+| Model | Use when |
+| --- | --- |
+| `GPT-5.6 Luna` | Cost-sensitive, high-volume, well-bounded work with deterministic steps and cheap verification: metadata, docs-index maintenance, repetitive edits after a mapping is approved, direct command wrappers, formatting, and simple contract updates. |
+| `GPT-5.6 Terra` | Default for everyday engineering that needs a balance of capability and cost: focused feature work, local refactors, test design, documentation, localization review, and UI/backend changes that follow established project patterns. |
+| `GPT-5.6 Sol` | Flagship model for genuinely complex professional work: ambiguous cross-system architecture, security-critical reasoning, broad migrations, difficult multi-surface debugging, and release-critical decisions where Terra is not a safe minimum. |
+
+Use this project vocabulary for reasoning effort:
 
 | Level | Use when |
 | --- | --- |
-| `low` | Mechanical metadata, docs index updates, small copy changes, direct command wrappers. |
-| `medium` | Local refactors, focused tests, one subsystem, clear existing patterns. |
-| `high` | Cross-module behavior, migrations, frontend route wiring, schema/localization/test-platform contracts. |
-| `extra high` | Release-critical architecture decisions, broad migrations, coverage recovery across many surfaces, hard-to-reproduce browser behavior. |
+| `Light` | Mechanical or directly specified work with little ambiguity, a short context path, and immediate deterministic verification. |
+| `Medium` | Standard reasoning for a focused subsystem, local trade-offs, adjacent tests, and clear existing patterns. |
+| `High` | Extended reasoning for cross-file behavior, migrations, frontend/backend wiring, or schema, localization, browser, and test-platform contracts. |
+| `Extra High` | The highest allowed effort for release-critical architecture, broad failure analysis, coverage recovery across many surfaces, or hard-to-reproduce behavior. |
 
-Use the lowest level that should still let the task be done safely. Do not inflate reasoning levels
-as a substitute for splitting a task.
+In API terminology, the runbook's `Light` and `Extra High` labels correspond to `low` and `xhigh`.
+The project intentionally uses only `Light`, `Medium`, `High`, and `Extra High`; do not add `none`
+or `max` unless this runbook is revised.
+
+Choose economically in this order:
+
+1. Start with Luna and promote to Terra only when the task needs engineering judgment that Luna is
+   not a safe minimum.
+2. Use Terra as the normal default. Prefer Terra with a higher reasoning level when the work is
+   deep but remains bounded and follows known project patterns.
+3. Promote to Sol only when capability, ambiguity, risk, or cross-domain breadth makes Terra unsafe.
+   Every Sol assignment must include a short task-specific justification in the task essence or
+   acceptance text.
+4. Split an oversized task before selecting a larger model or inflating reasoning effort.
+
+Use the lowest model and reasoning level that should still let the task be completed safely. Final
+quality commands, release metadata, and other mechanically verifiable work do not become Sol tasks
+merely because they occur late in the backlog.
+
+Selection guidance is based on OpenAI's current descriptions of
+[GPT-5.6 model tiers](https://developers.openai.com/api/docs/models) and
+[reasoning levels](https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt/). Re-check these
+official sources when creating a backlog if model names, availability, or effort controls may have
+changed.
 
 ## Mandatory Version Transition
 
@@ -102,8 +136,6 @@ product surface for that epic:
   frontend vendor packages, documentation toolchain components, and test/dev dependencies that are
   part of the product workflow;
 - changelog entry for the target version;
-- README current-state product copy when the target version changes what users can do, without
-  turning README into release notes or version history;
 - docs index, active architecture notes, and release-readiness docs when they name the current
   release;
 - UI-visible version strings if the product exposes them;
@@ -111,19 +143,29 @@ product surface for that epic:
 
 By the end of the backlog, the repository should not describe the new work as belonging to the
 previous target version except in historical notes, archive files, or explicit migration context.
+README is not a version surface for this purpose. Do not add a README task to identify the active
+target version, reserve version-specific copy, or create a release anchor. Version-specific
+planning, release status, and completed-version summaries belong in the backlog and `CHANGELOG.md`,
+not in README.
 
 ## README, Product Documentation, And Changelog
 
-Every epic backlog must include README, product-documentation, and changelog work.
+Every epic backlog must include product-documentation and changelog work. Include README work only
+when the completed epic changes the durable current product state that README describes.
 
 README must be updated after the main backlog implementation is complete, not only at backlog
 creation time. It should describe the actual current product state after the epic, including current
 surfaces, commands, supported external/runtime versions where they are product facts, test workflow,
-and user-facing behavior.
+and user-facing behavior. If the epic does not change durable README content, the backlog should
+explicitly say that no README update is needed.
 
 README must not summarize what changed in a specific BPM version or list which earlier BPM version
 introduced a feature. Release history, "what changed", and target-version completion notes belong in
 `CHANGELOG.md`.
+README must also not identify the active target version, reserve a future-version section, mention
+that something is planned for a particular version, or contain a version-specific completion
+placeholder. The only version-like facts allowed in README are durable product facts such as
+supported external/runtime versions, schema channels, command names, or compatibility constraints.
 
 When editing README:
 
@@ -132,6 +174,7 @@ When editing README:
 - keep the primary product language English;
 - remove release-note phrasing such as "what's included in <version>", "planned for <version>", or
   "introduced in <version>";
+- remove target-version anchors, active-target notes, and future-version placeholders;
 - remove or revise stale feature descriptions that no longer match the product;
 - do not delete historical or legal footer material while refreshing the main product copy.
 
@@ -153,8 +196,9 @@ Prefer milestones like these when applicable:
 - M1: version transition and release anchors;
 - M2: current-state audit and safety contracts;
 - M3..N: implementation milestones grouped by product or subsystem ownership;
-- pre-final documentation milestone: update README current-state copy and maintained product
-  documentation so they reflect the functionality after the epic;
+- pre-final documentation milestone: update maintained product documentation and, only when the
+  durable current product state changed, refresh README current-state copy without version-specific
+  release notes or target-version anchors;
 - final milestone: quality, coverage, visual smoke, changelog, commit, push handoff, and
   release-readiness checks.
 
@@ -186,11 +230,14 @@ Every backlog must end with a final quality milestone. Include tasks for:
 7. Verify the dedicated documentation-update milestone is complete and its focused documentation
    checks have passed.
 8. Update `CHANGELOG.md` for the target version while preserving older version history.
-9. Update docs index if final verification changes maintained documentation.
-10. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
+9. Verify README has no target-version anchor, release-history entry, planned-for-version copy, or
+   version-specific completion placeholder; update README only if the durable current product state
+   changed.
+10. Update docs index if final verification changes maintained documentation.
+11. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
     release procedures include documentation drift gates when the epic changed those areas.
-11. Create a git commit for the completed epic.
-12. Provide the maintainer with the exact `git push` command to run manually.
+12. Create a git commit for the completed epic.
+13. Provide the maintainer with the exact `git push` command to run manually.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -219,7 +266,7 @@ backlog flow, then prints the push command for the maintainer to run.
 
 When executing a backlog interactively with the user:
 
-1. Show exactly one next task with its ID, essence, acceptance, and minimal reasoning.
+1. Show exactly one next task with its ID, essence, acceptance, minimum model, and minimal reasoning.
 2. Wait for explicit approval.
 3. Execute only that approved task.
 4. Report what changed and which checks passed.
@@ -234,11 +281,16 @@ Before calling a new backlog ready, confirm:
 - target BPM version is present and normalized;
 - epic id and task IDs are stable;
 - milestones are grouped by meaning;
-- every task has `low`, `medium`, `high`, or `extra high` as minimal reasoning;
+- every task names exactly one minimum model: `GPT-5.6 Luna`, `GPT-5.6 Terra`, or `GPT-5.6 Sol`;
+- every task has `Light`, `Medium`, `High`, or `Extra High` as minimal reasoning;
+- Luna is preferred for deterministic high-volume work, Terra is the normal default, and every Sol
+  assignment has a task-specific justification showing why Terra is unsafe;
 - first milestone includes version transition across product surfaces;
 - first milestone includes local editable-package metadata refresh and external dependency
   currency checks for Python, frontend vendor packages, documentation toolchain components, and
   test/dev dependencies;
+- first milestone does not include README target-version anchors, active-target notes, or
+  future-version placeholders;
 - a dedicated documentation-update milestone appears before the final quality milestone when the
   epic changes product behavior or operating procedures;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
@@ -246,6 +298,8 @@ Before calling a new backlog ready, confirm:
   trial run;
 - final milestone verifies documentation-update completion and includes changelog entry, git commit,
   and maintainer-run push command;
+- final milestone verifies README has no version-specific release notes, active-target marker, or
+  planned/completion placeholder; README updates are limited to durable current-state product facts;
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
   changed schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
   release procedures;

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-complex-policy-families" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>复杂的 Firefox 策略族</title>
-  <shortdesc>请按组审查嵌套策略族，因为一个导出值可能同时组合多个相关的浏览器行为。</shortdesc>
+  <title>复杂的 Firefox 策略系列</title>
+  <shortdesc>将嵌套策略系列作为组进行审查，因为一个导出的值可以组合多个相关的浏览器行为。</shortdesc>
   <conbody>
-    <section id="a-extensions"><title>Extensions</title><p>将 <codeph>ExtensionSettings</codeph> 用于基于 dictionary 的安装规则和未知 extension IDs；只有在旧结构符合预期 Firefox 行为时，才使用 legacy <codeph>Extensions</codeph>。</p></section>
-    <section id="a-permissions"><title>Permissions</title><p><codeph>Permissions</codeph> 汇总 camera、microphone、location、notification、autoplay 等决策。请一起审查 allow/block lists，因为同一个域可能同时受到多个 permission branch 的影响。</p></section>
-    <section id="a-updates"><title>Updates</title><p><codeph>DisableAppUpdate</codeph>、<codeph>AppAutoUpdate</codeph> 和 <codeph>DisableSystemAddonUpdate</codeph> 等 update controls 应作为一个族审查，以便用户理解哪个 updater 仍然处于活动状态。</p></section>
-    <section id="a-certificates"><title>Certificates</title><p><codeph>Certificates</codeph> 可以导入 enterprise roots 并安装 certificate files。请将路径和 trust behavior 视为环境相关，并在部署前于 BPM 外部完成验证。</p></section>
-    <section id="a-proxy"><title>Proxy</title><p><codeph>Proxy</codeph> 组合 mode、server、port 和 protocol reuse。请谨慎验证手动 proxy values，因为格式错误的地址可能阻断浏览器网络访问。</p></section>
-    <section id="a-search-homepage"><title>Search 和 homepage</title><p><codeph>SearchEngines</codeph> 和 <codeph>Homepage</codeph> 决定用户最先看到的入口点。Search URL templates 必须保留 <codeph>{searchTerms}</codeph>，并且 locked homepages 应与 source tracing 一起核对。</p></section>
-    <section id="a-privacy-ai"><title>Privacy 和 AI controls</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等 privacy families 可能与 site exceptions 交互。<codeph>AIControls</codeph> 等 Firefox AI controls 是需要记录的产品策略；它们不会向 documentation portal 添加 AI functionality。</p></section>
+    <section id="a-extensions"><title>扩展</title><p>使用 <codeph>ExtensionSettings</codeph> 进行基于字典的安装规则和未知扩展 ID；仅当该形状与预期的 Firefox 行为匹配时才使用旧版 <codeph>Extensions</codeph>。</p></section>
+    <section id="a-permissions"><title>权限</title><p><codeph>Permissions</codeph> 对摄像头、麦克风、位置、通知、自动播放和类似决策进行分组。一起查看允许/阻止列表，因为一个域可能会受到多个权限分支的影响。</p></section>
+    <section id="a-updates"><title>更新</title><p>更新控件（例如 <codeph>DisableAppUpdate</codeph>、<codeph>AppAutoUpdate</codeph> 和 <codeph>DisableSystemAddonUpdate</codeph>）应作为一个系列进行审查，以便用户了解哪个更新程序保持活动状态。</p></section>
+    <section id="a-certificates"><title>证书</title><p><codeph>Certificates</codeph>可以导入企业根并安装证书文件。将路径和信任行为视为特定于环境的行为，并在部署之前在 BPM 外部验证它们。</p></section>
+    <section id="a-proxy"><title>代理</title><p><codeph>Proxy</codeph> 结合了模式、服务器、端口和协议重用。请仔细验证手动代理值，因为格式错误的地址可能会阻止浏览器网络访问。</p></section>
+    <section id="a-search-homepage"><title>搜索和主页</title><p><codeph>SearchEngines</codeph> 和 <codeph>Homepage</codeph> 塑造第一个用户入口点。搜索 URL 模板必须保留 <codeph>{searchTerms}</codeph>，并且应根据源跟踪检查锁定的主页。</p></section>
+    <section id="a-privacy-ai"><title>隐私和 AI 控制</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可以与站点例外进行交互。 Firefox AI 控件（例如 <codeph>AIControls</codeph>）是要记录的产品政策；他们没有将 AI 功能添加到文档门户。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-task-review-complex-policy-configuration"/>

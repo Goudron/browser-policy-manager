@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-04-ubuntu-source-install-20260714",
+  "backlog_item": "BPM091-M11-04",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "pass",
+  "target": {
+    "id": "ubuntu-26-04",
+    "name": "Ubuntu 26.04 LTS",
+    "identity": {
+      "ID": "ubuntu",
+      "VERSION_ID": "26.04"
+    },
+    "source_topic": "documentation/src/dita/en/admin/admin-task-install-ubuntu-26-04-source.dita",
+    "source_sha256": "20ac9548464bb2dbefd28f923dd953f6251375d2b60a7d5751366a56ed44180c"
+  },
+  "validation_started_at": "2026-07-14T07:55:09Z",
+  "validation_completed_at": "2026-07-14T08:52:24Z",
+  "contracts": {
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json"
+  },
+  "source_snapshot": {
+    "repository": "https://github.com/Goudron/browser-policy-manager.git",
+    "validation_branch": "validation/bpm-0.9.1-m11",
+    "accepted_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+    "accepted_ref_parent": "a208de6aa6035bbc4673dfc0e228edb7b2cda0dd",
+    "accepted_ref_version": "0.9.1",
+    "remote_ref_fetched_and_verified": true,
+    "normal_development_branch_changed": false
+  },
+  "golden_image": {
+    "ref": "docker.io/library/ubuntu@sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+    "id": "sha256:b7f48194d4d8b763a478a621cdc81c27be222ba2206ca3ca6bc42b49685f3d9e",
+    "platform": "linux/amd64",
+    "local_exact_digest_reused": true,
+    "registry_pull_performed": false,
+    "retained": true
+  },
+  "isolation": {
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "network": "bpm091-m11-net",
+    "published_ports": "none",
+    "host_bind_mounts": "none",
+    "docker_socket_mount": "none",
+    "privileged": false,
+    "cap_add": "none"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "bpm_ref": "df58ae05d3693758f5d3fe9a721f94367adbaccc",
+      "container_name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a01",
+      "container_id": "79ab371fc56d2b59aba255e01e7e61a2efe7bacd6534b0c3624a9a19bdf804dc",
+      "started_at": "2026-07-14T07:55:09Z",
+      "last_event_at": "2026-07-14T08:06:52Z",
+      "raw_harness_result": "pass",
+      "accepted_disposition": "rejected-diagnostic-false-pass",
+      "finding": "The readiness adapter used exit inside eval, ended the parent execution script, and let the old host runner report pass without verify, shutdown, stop-probe, or completion evidence.",
+      "command_start_events": 32,
+      "command_end_events": 31,
+      "documented_commands_completed": 30,
+      "documented_command_failures": 0,
+      "last_event": "adapter-wait-ready:command_start",
+      "completion_marker_present": false,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "d6706f0329d67e9b11c90858855e69322bc0fa8b7be769bdb3923246b5b6f233",
+        "summary.json": "66ba60bc5db7d82901d827eab5eadb04882e46a426392585d12690a166b6c8c5",
+        "events.jsonl": "6db65149aeae0301a0b33bdfd9c759b5b60ebe5eaab6ebe25592541affc04603",
+        "container-inspect.json": "b6b3e35dcddc73bd562ce45cb024f999869957a9792690b8340ecd3060047259",
+        "container-evidence/events.jsonl": "e2aae66ea28b9d0b5557328976355617ff57fbc7fc72d0207a963e461c816d0f",
+        "container-evidence/runtime.log": "e6b8909e0386b3f5a611afb7e9e52e4a7572f3125e2b94ddcd2a3e137d41f47f",
+        "container-evidence/run.sh": "eba6cc23498366742822771d0fbb71ce176bc54d7af91dbe70bb6d3cd0371185"
+      }
+    },
+    {
+      "attempt": 2,
+      "bpm_ref": "a208de6aa6035bbc4673dfc0e228edb7b2cda0dd",
+      "container_name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a02",
+      "container_id": "40136e54168c39ed5769fbd752f25adc354cd2893eedfddff55eb415237c6760",
+      "started_at": "2026-07-14T08:14:12Z",
+      "last_event_at": "2026-07-14T08:31:11Z",
+      "raw_harness_result": "blocked",
+      "accepted_disposition": "retained-diagnostic-completion-guard-catch",
+      "finding": "All documented commands and probes passed, but exit inside the stop probe ended the parent execution script before the completion marker; the host completion guard correctly rejected the run.",
+      "command_start_events": 40,
+      "command_end_events": 39,
+      "documented_commands_completed": 35,
+      "documented_command_failures": 0,
+      "last_event": "adapter-stop-probe:command_start",
+      "completion_marker_present": false,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "03ca27159bfe5a1f3c0d973533eac4f89ec5f089cd474840595d55799a407579",
+        "summary.json": "0ef1573a3a2a5162884340d3031bfdbd7979e5dcfd7a35fdf64f8a21dd160a39",
+        "events.jsonl": "45014d2fe3e226e4b33d51eec3f778bdb69d72a01e71ac2fd847e279d9c16aef",
+        "container-inspect.json": "8198731ffbe17cf4cd5f3098e53cac655d0c93091eaf48c7bd477d74b54bb72f",
+        "container-evidence/events.jsonl": "36f7ec3e6d97716dfe076e36ab6fa10b434298bec686394330e3fe147c9fd761",
+        "container-evidence/runtime.log": "134ad0647ca16e878a3b9ddce023389211a3615dec22eebe098f1ea9bd4aea0c",
+        "container-evidence/run.sh": "c7343c8ba757358ed6377b415cfa39dc52edad0a233b1abf99be0bdc1d794c3f"
+      }
+    },
+    {
+      "attempt": 3,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "container_name": "bpm091-ubuntu-26-04-m11-04-ubuntu-source-install-20260714-a03",
+      "container_id": "b2c8838542c64161e260d1db00fb14c31c90d19b3ab26c395dee601926667cb4",
+      "started_at": "2026-07-14T08:34:13Z",
+      "completed_at": "2026-07-14T08:52:12Z",
+      "raw_harness_result": "pass",
+      "accepted_disposition": "accepted-clean-source-install-pass",
+      "command_start_events": 41,
+      "command_end_events": 41,
+      "documented_commands_completed": 35,
+      "documented_command_failures": 0,
+      "documented_stage_counts": {
+        "distro-prep": 6,
+        "checkout": 9,
+        "install": 8,
+        "docs": 3,
+        "start": 4,
+        "verify": 5
+      },
+      "adapter_commands_completed": [
+        "adapter-setup",
+        "adapter-wait-ready",
+        "adapter-second-terminal",
+        "adapter-stop",
+        "adapter-stop-probe",
+        "adapter-complete"
+      ],
+      "completion_marker_present": true,
+      "host_completion_guard_passed": true,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "bf6a2ef3e0787f3dca6efd7c3e9017acdf6c6dc9da64eac445192ba91b1ddfa4",
+        "summary.json": "faec8c7ff14e2b405d23d0370805ebdd5d0bd0051d91929022cfcdb4c997299a",
+        "events.jsonl": "ddf613f98b4d90508d53a2598d0807b8a239da6bd7cedf811715b9f485450dab",
+        "container-inspect.json": "f35c3d08b519ab18d37a7c24a1b3427ede2e8521f6250fbdddb472f1c98683b9",
+        "container-evidence/events.jsonl": "bc4a32fc0dcda13f206d8cf7d41373b8fd8129af8fb0f8954b25e8dfb2c8f091",
+        "container-evidence/runtime.log": "b301d58a073c8d3937188fe08326087f43134cceb35092356046dde439acee45",
+        "container-evidence/run.sh": "d5d91f2d1fa10b1956ac496e9cc3dfbe35fdf99f5c41592324e4c0988687d9fa",
+        "container-evidence/completed": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+      }
+    }
+  ],
+  "accepted_attempt": {
+    "attempt": 3,
+    "prerequisites": "pass",
+    "clean_detached_checkout": "pass",
+    "python_version": "3.14.4",
+    "editable_bpm_install": "0.9.1",
+    "alembic_upgrade_head": "pass",
+    "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+    "docs_validate_all_six_locales": "pass",
+    "docs_build_all_six_locales": "pass",
+    "docs_install_dev_all_six_locales": "pass",
+    "runtime_start": "pass",
+    "runtime_log_sha256": "b301d58a073c8d3937188fe08326087f43134cceb35092356046dde439acee45",
+    "probes": [
+      {
+        "command_id": "verify-03",
+        "path": "/health",
+        "status": 200,
+        "body": "{\"status\":\"ok\"}",
+        "body_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      {
+        "command_id": "verify-04",
+        "path": "/health/ready",
+        "status": 200,
+        "body": "{\"status\":\"ready\",\"ready\":true}",
+        "body_sha256": "78aa039c7aaf6b957621f1adf8854b80f4ae56832053b914c5dfeefe41cad936"
+      },
+      {
+        "command_id": "verify-05",
+        "path": "/profiles",
+        "status": 200,
+        "body_recording": "discarded-by-documented-curl-command"
+      }
+    ],
+    "runtime_log_inspection": "clean-startup-probes-and-shutdown",
+    "runtime_shutdown": "pass",
+    "post_shutdown_health_probe": "connection-refused-as-required",
+    "completion_marker": "complete"
+  },
+  "retry": {
+    "fresh_container_per_attempt": true,
+    "golden_image_reused": true,
+    "installed_state_reused": false,
+    "accepted_after_harness_defects_fixed": true
+  },
+  "local_transcript": "documentation/build/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714",
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714/retained-inventory.json",
+  "verification": {
+    "focused_unit_and_contract": "pass-43",
+    "full_documentation_contract": "pass-673-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

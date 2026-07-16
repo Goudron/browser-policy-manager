@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>États de revue All Settings</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Use this reference to interpret clean, invalid, CIS manual-review, raw, unknown, deprecated, and imported review states.</shortdesc>
+  <title>Tous les paramètres états d'examen</title>
+  <shortdesc>Utilisez cette référence pour interpréter les états de révision propre, invalide, à révision manuelle CIS, brut, inconnu, obsolète et importé.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>États de revue All Settings</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Review states explain why All Settings asks for attention before the user edits routine values.</p></section>
-    <section id="a-clean-profile"><title>Clean profile</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. A clean profile has no remaining Review items. It can still contain configured settings; it simply has no attention states that BPM can detect.</p></section>
-    <section id="a-invalid-items"><title>Invalid items</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Invalid items have values that fail current validation for the selected schema channel and should be fixed or removed before handoff.</p></section>
-    <section id="a-cis-manual-review"><title>CIS manual review</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. CIS manual-review items need a human decision or external verification. BPM can surface the item without claiming certified compliance.</p></section>
-    <section id="a-raw-unknown-imported"><title>Raw, unknown, and imported items</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Raw fallback, unknown, and imported items should be preserved or removed deliberately because BPM may not be able to model their intent visually.</p></section>
-    <section id="a-deprecated-items"><title>Deprecated items</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. Deprecated settings may still exist in a profile, but the user should confirm current Release/ESR support before relying on them.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>Ce sujet décrit entièrement le scénario All Settings pour la localisation française : États de revue All Settings. If a state is unexpected, clear filters, confirm the schema channel, refresh the profile, and inspect the setting detail before editing.</p></section>
+    <section id="a-overview"><title>Présentation</title><p>Les états de révision expliquent pourquoi Tous les paramètres demande de l'attention avant que l'utilisateur ne modifie les valeurs de routine.</p></section>
+    <section id="a-clean-profile"><title>Nettoyer le profil</title><p>Un profil propre ne contient plus aucun élément de révision. Il peut toujours contenir des paramètres configurés ; il n'a tout simplement aucun état d'attention que BPM peut détecter.</p></section>
+    <section id="a-invalid-items"><title>Éléments invalides</title><p>Les éléments non valides ont des valeurs qui échouent à la validation actuelle pour le canal de schéma sélectionné et doivent être corrigés ou supprimés avant le transfert.</p></section>
+    <section id="a-cis-manual-review"><title>Révision du manuel CIS</title><p>Les éléments d'examen manuel du CIS nécessitent une décision humaine ou une vérification externe. BPM peut faire apparaître l’élément sans prétendre à une conformité certifiée.</p></section>
+    <section id="a-raw-unknown-imported"><title>Éléments bruts, inconnus et importés</title><p>Les éléments bruts de secours, inconnus et importés doivent être conservés ou supprimés délibérément, car BPM peut ne pas être en mesure de modéliser visuellement leur intention.</p></section>
+    <section id="a-deprecated-items"><title>Éléments obsolètes</title><p>Des paramètres obsolètes peuvent toujours exister dans un profil, mais l'utilisateur doit confirmer la prise en charge actuelle de la version/ESR avant de s'y fier.</p></section>
+    <section id="a-recovery"><title>Récupération</title><p>Si un état est inattendu, effacez les filtres, confirmez le canal de schéma, actualisez le profil et inspectez les détails du paramètre avant de le modifier.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-attention-items"/>

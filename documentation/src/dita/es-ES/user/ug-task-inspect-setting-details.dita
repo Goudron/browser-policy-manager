@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-setting-details" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Inspeccionar detalles de un ajuste</title>
-  <shortdesc>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. Select a setting and inspect its value, source, validation, schema support, and product location.</shortdesc>
+  <title>Inspeccionar detalles de configuración</title>
+  <shortdesc>Seleccione una configuración e inspeccione su valor, fuente, validación, soporte de esquema y ubicación del producto.</shortdesc>
   <taskbody>
-    <prereq><p>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. Open All Settings and select a setting row from Review, Configured, Catalog, search, or a deep link.</p></prereq>
-    <context><p>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. The detail panel is the safe place to understand a single setting before editing it. It shows value shape, source attribution, validation issues, and navigation context.</p></context>
+    <prereq><p>Abra Todos los ajustes y seleccione una fila de configuración entre Revisar, Configurado, Catálogo, búsqueda o un enlace profundo.</p></prereq>
+    <context><p>El panel de detalles es el lugar seguro para comprender una configuración única antes de editarla. Muestra la forma del valor, la atribución de la fuente, los problemas de validación y el contexto de navegación.</p></context>
     <steps>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. Select the setting row you need to understand.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. Read the current value, source badge, validation messages, and schema/channel support.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. Check the product location or related surface link if the setting is also covered elsewhere.</cmd><info><p>Resultado esperado: la acción se realiza en All Settings sin perder el contexto del perfil.</p></info></step>
-      <step><cmd>Este tema describe por completo el escenario de All Settings para la localización española: Inspeccionar detalles de un ajuste. Decide whether to edit, remove, reset, or leave the value unchanged.</cmd><info><note type="warning">Advertencia: antes de guardar, compruebe el esquema, la fuente del valor y las consecuencias del cambio.</note></info></step>
+      <step><cmd>Seleccione la fila de configuración que necesita comprender.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Lea el valor actual, la insignia de origen, los mensajes de validación y el soporte de esquema/canal.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Verifique la ubicación del producto o el enlace de superficie relacionado si la configuración también se cubre en otro lugar.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Decida si desea editar, eliminar, restablecer o dejar el valor sin cambios.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
-    <result><p>All Settings muestra el estado esperado del perfil y la acción se puede explicar durante la revisión. You understand what the setting does in this profile and what action is safe next.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, borre los filtros, vuelva al panel de detalle o abra el tema relacionado. Recovery: if the value shape is unclear, compare with JSON Editor or leave the setting unchanged until validation guidance is available.</p></postreq>
+    <result><p>Usted comprende qué hace la configuración en este perfil y qué acción es segura a continuación.</p></result>
+    <postreq><p>Recuperación: si la forma del valor no está clara, compárela con Editor JSON o deje la configuración sin cambios hasta que esté disponible la guía de validación.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-setting-detail"/>

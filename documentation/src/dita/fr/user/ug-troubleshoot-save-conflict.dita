@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-save-conflict" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Résoudre un conflit d’enregistrement</title>
-  <shortdesc>Récupérez après une concurrent update ou un stale tab sans perdre silencieusement les modifications du profil.</shortdesc>
+  <title>Résoudre un conflit de sauvegarde</title>
+  <shortdesc>Récupérez à partir d'une mise à jour simultanée ou d'un onglet obsolète sans perdre silencieusement les modifications de profil.</shortdesc>
   <taskbody>
-    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action échouée indique que le workflow courant ne peut pas continuer en sécurité.</p></prereq>
-    <context><p>Un conflit d’enregistrement signifie qu’un autre onglet ou une autre session a modifié le profil enregistré après le chargement de l’éditeur courant.</p></context>
+    <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
+    <context><p>Un conflit de sauvegarde signifie qu'un autre onglet ou une autre session a modifié le profil enregistré après son chargement par l'éditeur actuel.</p></context>
     <steps>
-      <step><cmd>Arrêtez-vous sur le panneau save-conflict et n’écrasez pas immédiatement.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Comparez le nom visible du profil, le canal de schéma, le mode d’édition et le dernier état enregistré avec l’onglet qui a produit le conflit.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Copiez les valeurs de brouillon non enregistrées qui doivent être conservées avant de recharger le profil.</cmd><info><p>Résultat attendu : vous préservez l’état du profil et comprenez la prochaine action de récupération sûre.</p></info></step>
-      <step><cmd>Rechargez le profil ou réessayez l’enregistrement seulement après avoir choisi entre le brouillon courant et le nouvel état enregistré.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail utilisateur sur un profil.</note></info></step>
+      <step><cmd>Arrêtez-vous sur le panneau de conflit de sauvegarde et n'écrasez pas immédiatement.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Comparez le nom du profil visible, le canal de schéma, le mode éditeur et le dernier état enregistré avec l'onglet à l'origine du conflit.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Copiez toutes les valeurs brouillon non enregistrées qui doivent être conservées avant de recharger le profil.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
+      <step><cmd>Rechargez le profil ou réessayez de sauvegarder uniquement après avoir choisi de conserver le brouillon actuel ou le nouvel état enregistré.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
     </steps>
-    <result><p>Le stale tab est résolu sans abandon silencieux du brouillon courant ni du profil enregistré plus récent.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une tentative propre, arrêtez le workflow et conservez le message visible, le nom du profil, le canal de schéma et la surface courante pour revue mainteneur.</p></postreq>
+    <result><p>L'onglet obsolète est résolu sans supprimer silencieusement le brouillon actuel ou le profil enregistré le plus récent.</p></result>
+    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

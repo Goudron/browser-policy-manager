@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-json-document" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Valider le document JSON</title>
-  <shortdesc>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. Validate raw JSON syntax and Firefox policy values before saving.</shortdesc>
+  <shortdesc>Validez la syntaxe JSON brute et les valeurs de stratégie Firefox avant d'enregistrer.</shortdesc>
   <taskbody>
-    <prereq><p>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. Open JSON Editor with the document you want to check.</p></prereq>
-    <context><p>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. Validation distinguishes malformed JSON from policy or schema errors. A document can parse as JSON and still fail policy validation.</p></context>
+    <prereq><p>Ouvrez Éditeur JSON avec le document que vous souhaitez vérifier.</p></prereq>
+    <context><p>La validation distingue le JSON mal formé des erreurs de stratégie ou de schéma. Un document peut être analysé au format JSON et échouer néanmoins à la validation de la politique.</p></context>
     <steps>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. Choose the shared Validate action.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. If validation reports malformed JSON, fix syntax such as trailing commas or missing braces.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. If validation reports policy errors, correct unsupported keys, wrong value types, or schema-channel mismatches.</cmd><info><p>Résultat attendu : JSON Editor conserve le contexte du profil et affiche un état compréhensible.</p></info></step>
-      <step><cmd>Ce sujet décrit entièrement le scénario JSON Editor pour la localisation française : Valider le document JSON. Validate again until the status explains that the document is acceptable or the remaining issue is intentional for raw review.</cmd><info><note type="warning">Avertissement : avant d’enregistrer, vérifiez la syntaxe JSON, top-level policies et les erreurs de validation des stratégies.</note></info></step>
+      <step><cmd>Choisissez l'action Valider partagée.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Si les rapports de validation contiennent un JSON mal formé, corrigez la syntaxe telle que les virgules de fin ou les accolades manquantes.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Si la validation signale des erreurs de stratégie, corrigez les clés non prises en charge, les types de valeur incorrects ou les incompatibilités de canal de schéma.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Validez à nouveau jusqu'à ce que le statut explique que le document est acceptable ou que le problème restant est intentionnel pour une révision brute.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>
     </steps>
-    <result><p>JSON Editor affiche l’état attendu, et l’action peut être expliquée lors de la revue. The document has a known validation state before save or export.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, validez le document, revenez à All Settings ou ouvrez le sujet associé. Recovery: if errors are hard to read, use All Settings to inspect the affected policy or preference visually.</p></postreq>
+    <result><p>Le document a un état de validation connu avant l'enregistrement ou l'exportation.</p></result>
+    <postreq><p>Récupération : si les erreurs sont difficiles à lire, utilisez Tous les paramètres pour inspecter visuellement la stratégie ou la préférence concernée.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

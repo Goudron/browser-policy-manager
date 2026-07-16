@@ -2,7 +2,7 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Profile model and lifecycle</title>
-  <shortdesc>A BPM profile is one saved Firefox policy workspace shared by the Library, Guided Editor, All Settings, JSON Editor, and Compare.</shortdesc>
+  <shortdesc>A BPM profile is one saved Firefox policy workspace shared by the Library, Guided editor, All settings, JSON editor, and Compare.</shortdesc>
   <conbody>
     <p>Use a profile to collect Firefox policies, managed preferences, validation state, source attribution, and lifecycle state in one place. The same profile can be opened through different BPM surfaces without changing its identity.</p>
     <section id="a-lifecycle-states">

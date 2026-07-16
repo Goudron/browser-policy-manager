@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm091-m11-05-debian-source-install-20260714",
+  "backlog_item": "BPM091-M11-05",
+  "target_bpm_version": "0.9.1",
+  "status": "accepted",
+  "result": "pass",
+  "target": {
+    "id": "debian-13-5",
+    "name": "Debian 13.5",
+    "identity": {
+      "ID": "debian",
+      "VERSION_ID": "13",
+      "debian_version": "13.5"
+    },
+    "source_topic": "documentation/src/dita/en/admin/admin-task-install-debian-13-source.dita",
+    "source_sha256": "291df352620bab300d71fb41933c59429daf3b0c643cd5654f0f4ffb9a33bffa"
+  },
+  "validation_started_at": "2026-07-14T09:09:58Z",
+  "validation_completed_at": "2026-07-14T10:04:05Z",
+  "contracts": {
+    "harness": "documentation/config/live-source-install-harness-0.9.1.json",
+    "privileged_boundary": "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+    "documented_commands": "documentation/config/linux-source-install-command-contract-0.9.1.json"
+  },
+  "source_snapshot": {
+    "repository": "https://github.com/Goudron/browser-policy-manager.git",
+    "validation_branch": "validation/bpm-0.9.1-m11",
+    "accepted_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+    "accepted_ref_parent": "a208de6aa6035bbc4673dfc0e228edb7b2cda0dd",
+    "accepted_ref_version": "0.9.1",
+    "remote_ref_fetched_and_verified": true,
+    "normal_development_branch_changed": false
+  },
+  "golden_image": {
+    "ref": "docker.io/library/debian@sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+    "id": "sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a",
+    "amd64_manifest_digest": "sha256:3a953985c225a97dfb5a8f1ddc6a3ecefefc35ef51f537075e08941305045a1e",
+    "platform": "linux/amd64",
+    "initial_registry_pull_performed": true,
+    "accepted_attempt_local_exact_digest_reused": true,
+    "accepted_attempt_registry_pull_performed": false,
+    "retained": true
+  },
+  "isolation": {
+    "concurrency": 1,
+    "resource_flags": [
+      "--cpus=2",
+      "--memory=1536m",
+      "--memory-swap=2560m",
+      "--pids-limit=512",
+      "--ulimit=nofile=4096:4096",
+      "--security-opt=no-new-privileges"
+    ],
+    "network": "bpm091-m11-net",
+    "published_ports": "none",
+    "host_bind_mounts": "none",
+    "docker_socket_mount": "none",
+    "privileged": false,
+    "cap_add": "none"
+  },
+  "inherited_harness_guards": {
+    "fresh_container_per_attempt": true,
+    "parent_shell_exit_forbidden_in_adapters": true,
+    "readiness_attempts": 300,
+    "readiness_interval_seconds": 2,
+    "runtime_exit_stops_readiness_wait": true,
+    "activated_environment_preserved_for_background_runtime": true,
+    "second_terminal_working_directory_restored": true,
+    "negative_stop_probe_required": true,
+    "completion_marker_required": true,
+    "host_completion_guard_required": true
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "container_name": "bpm091-debian-13-5-m11-05-debian-source-install-20260714-a01",
+      "container_id": "fa5e8a08bf6ae37cde0010cf0b5cc0df3d0e3526f6d8d003e2a42e6d0b030f",
+      "started_at": "2026-07-14T09:09:58Z",
+      "last_event_at": "2026-07-14T09:37:51Z",
+      "raw_harness_result": "blocked",
+      "accepted_disposition": "retained-diagnostic-login-shell-path-defect",
+      "finding": "The harness started make dev through a login shell, which reset the activated virtual-environment PATH on Debian; make dev could not find uvicorn. The documented same-shell procedure was unchanged, while the shared background runner was corrected to preserve the active environment and stop readiness polling as soon as the runtime exits.",
+      "command_start_events": 43,
+      "command_end_events": 43,
+      "documented_commands_completed": 41,
+      "documented_command_failures": 0,
+      "last_event": "adapter-wait-ready:command_end:1",
+      "completion_marker_present": false,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "ddf0514d7d4516a2b758933a9595641520f3be78b63898ee76fb907042fab623",
+        "summary.json": "994b806332c84bb32dd6c7c3eba628fea6f89cfa8317c3c46a41224bed8ea437",
+        "events.jsonl": "8fd2239e4784b2c6ca416914e50fbe5a477d2e3457cec1fbd69bcfb14acaa88e",
+        "container-inspect.json": "6bcda45fb6d1160a37e64dd9269bc089dab4ba56482a797681976bce1b052b5a",
+        "container-evidence/events.jsonl": "30e38adbfcbcf5bb61f5de484983d4851c3a1224331d978369df7d4788b3f2b8",
+        "container-evidence/runtime.log": "d4a931c9dde1ce460f431dffd76b272efaa7b1a90ec2c53df7ae91ad80b4e5d5",
+        "container-evidence/run.sh": "b1abc90fc5a81859bd36c7412094a9bbba9386d643dfe4db3282536524cae009"
+      }
+    },
+    {
+      "attempt": 2,
+      "bpm_ref": "ff8271e577169c9063291087fb5f244b9fdb9139",
+      "container_name": "bpm091-debian-13-5-m11-05-debian-source-install-20260714-a02",
+      "container_id": "0dc5721e31ba5a1d0ed63418792e43379c91d09c2af9b112c12f70f2922adc56",
+      "started_at": "2026-07-14T09:40:51Z",
+      "completed_at": "2026-07-14T10:03:50Z",
+      "raw_harness_result": "pass",
+      "accepted_disposition": "accepted-clean-source-install-pass",
+      "command_start_events": 52,
+      "command_end_events": 52,
+      "documented_commands_completed": 46,
+      "documented_command_failures": 0,
+      "documented_stage_counts": {
+        "distro-prep": 4,
+        "python": 13,
+        "checkout": 9,
+        "install": 8,
+        "docs": 3,
+        "start": 4,
+        "verify": 5
+      },
+      "adapter_commands_completed": [
+        "adapter-setup",
+        "adapter-wait-ready",
+        "adapter-second-terminal",
+        "adapter-stop",
+        "adapter-stop-probe",
+        "adapter-complete"
+      ],
+      "completion_marker_present": true,
+      "host_completion_guard_passed": true,
+      "installed_state_reused": false,
+      "container_state": "exited",
+      "container_exit_code": 0,
+      "oom_killed": false,
+      "retained": true,
+      "transcript_sha256": {
+        "plan.json": "ddf0514d7d4516a2b758933a9595641520f3be78b63898ee76fb907042fab623",
+        "summary.json": "b3122b7b90a74b1bd42f6f4eb3041a78e89eed062b6a3524080086184909b921",
+        "events.jsonl": "0caedcbea9d712be7c82c8d23fa85587a3350f3041f970f9e7ee831a1186bec7",
+        "container-inspect.json": "9a55de1cbc528bdad35b4b194650d4cd8075d1bc2c1d57c75e573ac982a88045",
+        "container-evidence/events.jsonl": "645ed243318090f12828e0917fe04ed028c425d35a47826cfa9c8dec803ba9c3",
+        "container-evidence/runtime.log": "7f942d7daeb7a9ec8a09f9705b20c850bcaf2a5d7586eb968b0c1cb596997f3e",
+        "container-evidence/run.sh": "0996d6fb99c51da3085d70551eac477e4760a344fade5512e9d1abdffc17aa9a",
+        "container-evidence/completed": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+      }
+    }
+  ],
+  "accepted_attempt": {
+    "attempt": 2,
+    "prerequisites": "pass",
+    "clean_detached_checkout": "pass",
+    "python_version": "3.14.6",
+    "python_source_sha256": "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63",
+    "editable_bpm_install": "0.9.1",
+    "alembic_upgrade_head": "pass",
+    "latest_migration": "20260620_upgrade_profiles_to_firefox152",
+    "docs_validate_all_six_locales": "pass",
+    "docs_build_all_six_locales": "pass",
+    "docs_install_dev_all_six_locales": "pass",
+    "runtime_start": "pass",
+    "runtime_log_sha256": "7f942d7daeb7a9ec8a09f9705b20c850bcaf2a5d7586eb968b0c1cb596997f3e",
+    "probes": [
+      {
+        "command_id": "verify-03",
+        "path": "/health",
+        "status": 200,
+        "body": "{\"status\":\"ok\"}",
+        "body_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      {
+        "command_id": "verify-04",
+        "path": "/health/ready",
+        "status": 200,
+        "body": "{\"status\":\"ready\",\"ready\":true}",
+        "body_sha256": "78aa039c7aaf6b957621f1adf8854b80f4ae56832053b914c5dfeefe41cad936"
+      },
+      {
+        "command_id": "verify-05",
+        "path": "/profiles",
+        "status": 200,
+        "body_recording": "discarded-by-documented-curl-command"
+      }
+    ],
+    "runtime_log_inspection": "clean-startup-probes-and-shutdown",
+    "runtime_shutdown": "pass",
+    "post_shutdown_health_probe": "connection-refused-as-required",
+    "completion_marker": "complete"
+  },
+  "reviewed_non_blocking_observation": {
+    "finding": "The CPython build reported the optional _dbm and _zstd extension modules as unavailable.",
+    "disposition": "non-blocking-for-bpm-source-install",
+    "basis": "Python 3.14.6 installation, the complete BPM dependency set, migrations, six-locale documentation publication, application startup, all required probes, and shutdown completed successfully without either optional extension."
+  },
+  "retry": {
+    "fresh_container_per_attempt": true,
+    "golden_image_reused_after_initial_pull": true,
+    "installed_state_reused": false,
+    "accepted_after_shared_harness_defect_fixed": true
+  },
+  "local_transcript": "documentation/build/live-source-install/0.9.1/m11-05-debian-source-install-20260714",
+  "retained_inventory": "documentation/evidence/live-source-install/0.9.1/m11-05-debian-source-install-20260714/retained-inventory.json",
+  "verification": {
+    "focused_unit_and_contract": "pass-31",
+    "full_documentation_contract": "pass-678-with-4-deselected",
+    "docs_snapshot": "pass",
+    "docs_install_dev": "pass",
+    "dev_server_started": false
+  }
+}

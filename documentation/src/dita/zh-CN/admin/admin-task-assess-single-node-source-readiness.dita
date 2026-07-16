@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-assess-single-node-source-readiness" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>评估当前 single-node source readiness</title>
-  <shortdesc>判断当前 source-run BPM 实例是否适合受控 single-node operation，并记录支持该判断的 evidence。</shortdesc>
+<task id="admin-task-assess-single-node-source-readiness" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>评估当前单节点源准备情况</title>
+  <shortdesc>确定当前源运行的 BPM 实例是否已准备好进行受控单节点操作，并列出支持该决策的证据。</shortdesc>
   <taskbody>
-    <prereq><p>Linux 或 Windows 10/11 through WSL source deployment 已完成，dependencies 已安装，并且已知目标 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 和 <codeph>BPM_SCHEMA_CACHE_DIR</codeph> 值。</p></prereq>
-    <context><p>BPM 0.9.0 可以为 current-state single-node source operation 做准备。此评估不是 production hardening certificate、HA design 或 packaged service acceptance。</p></context>
+    <prereq><p>Linux 或 Windows 10/11 通过 WSL 源部署已完成，依赖项已安装，并且预期的 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 和 <codeph>BPM_SCHEMA_CACHE_DIR</codeph> 值已知。</p></prereq>
+    <context><p>BPM 可以为当前状态单节点源操作做好准备。此评估不是生产强化证书、HA设计或打包服务验收。</p></context>
     <steps>
-      <step><cmd>记录准确的 source 和 runtime configuration。</cmd><info><p>保存 <codeph>git rev-parse --short HEAD</codeph>、BPM version、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph>，以及 process 是通过 <codeph>make dev</codeph> 还是由团队直接维护的 <codeph>uvicorn app.main:app</codeph> command 启动。</p></info></step>
-      <step><cmd>从用户将使用的同一 network boundary 运行 liveness 和 readiness checks。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>记录准确的源和运行时配置。</cmd><info><p>捕获 <codeph>git rev-parse --short HEAD</codeph>、BPM 版本、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph>，以及流程是使用 <codeph>make dev</codeph> 还是直接拥有的 <codeph>uvicorn app.main:app</codeph> 命令启动。</p></info></step>
+      <step><cmd>从用户将使用的同一网络边界运行活动性和就绪性检查。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
 make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
-]]></codeblock><p>将结果记录为 <codeph>GET /health</codeph> 和 <codeph>GET /health/ready</codeph> evidence。通过 probes 只证明 source process 的 liveness/readiness。</p></info></step>
-      <step><cmd>在共享实例前检查 data 和 documentation evidence。</cmd><info><p>确认 <codeph>data/bpm.db</codeph> 是预期数据库，至少一个 profile 可以导出为 <codeph>policies.json</codeph>，并且 <codeph>/help/</codeph> 会打开已构建的 documentation artifact 或已记录的 unavailable state。</p></info></step>
-      <step><cmd>将实例分类为 current-state source operation。</cmd><info><note type="warning">不要把实例称为 packaged、hardened、load balanced 或 highly available。如果 external controls 增加这些属性，请把它们记录为 external responsibilities，并将 BPM 0.9.0 evidence 限定为 single-node source operation。</note></info></step>
+]]></codeblock><p>将结果记录为 <codeph>GET /health</codeph> 和 <codeph>GET /health/ready</codeph> 证据。通过探针仅证明源进程的活跃性和就绪性。</p></info></step>
+      <step><cmd>在共享实例之前检查数据和文档证据。</cmd><info><p>确认 <codeph>data/bpm.db</codeph> 是目标数据库，至少一个配置文件可以导出为 <codeph>policies.json</codeph>，并且 <codeph>/help/</codeph> 打开构建的文档工件或记录的不可用状态。</p></info></step>
+      <step><cmd>将实例分类为当前状态源操作。</cmd><info><note type="warning">不要将实例标记为打包、强化、负载平衡或高可用。如果外部控制添加这些属性，请将它们记录为外部责任，并将 BPM 证据限制为单节点源操作。</note></info></step>
     </steps>
-    <result><p>readiness note 说明今天可以安全地从 source 做什么、哪些 checks 已通过，以及哪些决定需要等待 distribution 和 runtime support。</p></result>
-    <postreq><p>在超出本地管理员工作站或 controlled lab host 暴露实例之前，使用 network exposure 和 proxy-readiness topic。</p></postreq>
+    <result><p>准备说明说明了今天可以从源头安全地完成哪些操作、哪些检查已通过以及哪些决策必须等待分发和运行时支持。</p></result>
+    <postreq><p>在将实例暴露到本地管理员工作站或受控实验室主机之外之前，请使用网络暴露和代理就绪主题。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-review-devops-configuration-sources"/>

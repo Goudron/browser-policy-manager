@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configurar políticas de Firefox para IA y funciones inteligentes</title>
-  <shortdesc>Use el paso 5 para políticas existentes de Firefox relacionadas con AI &amp; smart features, búsqueda visual y superficies inteligentes cuando el esquema Release las admita.</shortdesc>
+  <title>Configurar Firefox AI y políticas de funciones inteligentes</title>
+  <shortdesc>Utilice el Paso 5 para los controles de políticas del navegador Firefox existentes relacionados con las funciones inteligentes AI &amp;, la búsqueda visual y las superficies inteligentes en los esquemas de versión compatibles.</shortdesc>
   <taskbody>
-    <prereq><p>Seleccione un esquema Release que admita estas políticas o tenga en cuenta que en ESR 140.12 algunos controles no existen.</p></prereq>
-    <context><p>Este tema describe políticas existentes de Firefox para IA y funciones inteligentes como funcionalidad del producto. No añade funcionalidad de IA al portal de documentación: RAG, embeddings, búsqueda generativa o respuestas generativas quedan fuera de 0.9.0.</p></context>
+    <prereq><p>Se selecciona un esquema de versión que admite los controles o comprende que ESR 140.12 puede omitirlos.</p></prereq>
+    <context><p>Este tema documenta las configuraciones de políticas existentes de Firefox como funcionalidad del producto. No agrega la funcionalidad AI al portal de documentación 0.9.1: RAG, las incrustaciones, la búsqueda generativa y las respuestas generativas permanecen fuera del alcance.</p></context>
     <steps>
-      <step><cmd>Abra el paso 5 «AI &amp; smart features».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise las superficies integradas del navegador relacionadas con IA, búsqueda visual y funciones inteligentes que aparecen para el esquema Release elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Active, desactive o deje sin cambios cada política admitida según el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Si un control no aparece en ESR 140.12, trátelo como no admitido en ESR y no lo invente manualmente como ajuste Guided.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>Abra el Paso 5, AI &amp; funciones inteligentes.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Revise las superficies del navegador integrado AI, la búsqueda visual y las funciones del navegador inteligente enumeradas para el esquema de versión seleccionado.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Habilite, deshabilite o abandone cada política admitida según el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Si falta un control en ESR 140.12, trátelo como no compatible en lugar de inventar manualmente una configuración guiada.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
-    <result><p>Las políticas admitidas de Firefox para IA y funciones inteligentes se revisan como ajustes del producto, y se mantiene el límite documental sin RAG, embeddings ni respuestas generativas.</p></result>
-    <postreq><p>Recuperación: si un control esperado no aparece en ESR, cambie a un esquema Release admitido para revisarlo o documente la ausencia de soporte en ESR.</p></postreq>
+    <result><p>Firefox AI compatible y las políticas de funciones inteligentes se revisan como configuración del producto, mientras que el portal de documentación sigue sin ser AI para 0.9.1.</p></result>
+    <postreq><p>Recuperación: si una parte interesada esperaba un control ESR ausente, cambiar a un esquema de versión compatible para revisar o documentar el estado no compatible.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>

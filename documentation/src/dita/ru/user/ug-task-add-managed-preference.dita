@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-add-managed-preference" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Добавьте управляемую preference</title>
-  <shortdesc>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Add a known managed preference that is not yet configured in the profile.</shortdesc>
+  <title>Добавить управляемое предпочтение</title>
+  <shortdesc>Добавьте известное управляемое предпочтение, которое еще не настроено в профиле.</shortdesc>
   <taskbody>
-    <prereq><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Open All Settings with the correct schema channel selected.</p></prereq>
-    <context><p>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Managed preferences complement Firefox policies when BPM exposes a known preference key and lock behavior. Add them deliberately and validate the result.</p></context>
+    <prereq><p>Откройте Все настройки, выбрав правильный канал схемы.</p></prereq>
+    <context><p>Управляемые параметры дополняет политики Firefox, когда BPM предоставляет известный ключ предпочтения и поведение блокировки. Добавьте их намеренно и проверьте результат.</p></context>
     <steps>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Open the add preference control or find the preference in Catalog mode.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Choose the known preference key and review its expected value type.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Enter the value and lock state required by the profile.</cmd><info><p>Ожидаемый результат: действие выполнено в All Settings без потери контекста профиля.</p></info></step>
-      <step><cmd>Эта тема полноценно описывает сценарий All Settings для русской локали: Добавьте управляемую preference. Apply, validate, and save the managed preference.</cmd><info><note type="warning">Предупреждение: перед сохранением проверьте схему, источник значения и последствия изменения.</note></info></step>
+      <step><cmd>Откройте элемент управления добавлением предпочтений или найдите предпочтение в Каталог.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Выберите известный ключ предпочтения и просмотрите тип его ожидаемого значения.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Введите значение и состояние блокировки, требуемые профилем.</cmd><info><p>Ожидаемый результат: профиль Все настройки остается сосредоточенным на выбранной задаче.</p></info></step>
+      <step><cmd>Примените, проверьте и сохраните управляемое предпочтение.</cmd><info><note type="warning">Изменение настроек может повлиять на экспортированную политику Firefox. Перед сохранением просмотрите исходный код, проверку и поддержку схемы.</note></info></step>
     </steps>
-    <result><p>All Settings показывает ожидаемое состояние профиля, а действие можно объяснить при проверке. The profile contains the new managed preference with the intended value and lock behavior.</p></result>
-    <postreq><p>Восстановление: если результат отличается от ожидаемого, очистите фильтры, вернитесь к detail panel или откройте связанный раздел. Recovery: if the preference key is unknown or validation fails, remove the draft value and use JSON only for deliberate raw review.</p></postreq>
+    <result><p>Профиль содержит новое управляемое предпочтение с заданным значением и поведением блокировки.</p></result>
+    <postreq><p>Восстановление: если ключ предпочтения неизвестен или проверка не удалась, удалите черновое значение и используйте JSON только для намеренной необработанной проверки.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-policies-and-managed-preferences"/>

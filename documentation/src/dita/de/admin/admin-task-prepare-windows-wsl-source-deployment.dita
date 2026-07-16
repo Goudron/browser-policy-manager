@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-0" platform="windows linux">
-  <title>Windows 10/11 für Source-Deployment über WSL vorbereiten</title>
-  <shortdesc>Aktivieren Sie WSL, wählen Sie eine unterstützte Linux-Distributionsannahme und bestätigen Sie, dass BPM innerhalb von Linux und nicht als native Windows service läuft.</shortdesc>
+<task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
+  <title>Bereiten Sie Windows 10/11 für die WSL-Quellenbereitstellung vor</title>
+  <shortdesc>Aktivieren Sie WSL, wählen Sie eine unterstützte Linux-Distributionsannahme und bestätigen Sie, dass BPM unter Linux und nicht als nativer Windows-Dienst ausgeführt wird.</shortdesc>
   <taskbody>
-    <prereq><p>Verwenden Sie Windows 10 oder Windows 11 mit der Berechtigung, WSL 2 zu aktivieren, eine Linux distribution wie Ubuntu LTS zu installieren und Befehle in PowerShell sowie in der WSL shell auszuführen.</p></prereq>
-    <context><p>Dieser Runbook-Pfad beschreibt BPM 0.9.0 source deployment über WSL. Der unterstützte application process bleibt der Linux source workflow innerhalb von WSL; native Windows installers, Windows services, MSI packages, scheduled tasks, IIS hosting und production Windows service management werden in diesem Release nicht geliefert.</p></context>
+    <prereq><p>Verwenden Sie Windows 10 oder Windows 11 mit der Berechtigung, WSL 2 zu aktivieren, installieren Sie eine Linux-Distribution wie Ubuntu LTS und führen Sie Befehle sowohl in PowerShell als auch in der WSL-Shell aus.</p></prereq>
+    <context><p>Dieses Betriebsanleitung dokumentiert die BPM-Quellbereitstellung über WSL. Der unterstützte Bewerbungsprozess ist weiterhin der Linux-Quellworkflow innerhalb der WSL; Native Windows-Installationsprogramme, Windows-Dienste, MSI-Pakete, geplante Aufgaben, IIS-Hosting und die Verwaltung von Windows-Produktionsdiensten werden in dieser Version nicht bereitgestellt.</p></context>
     <steps>
-      <step><cmd>Prüfen Sie die WSL-Verfügbarkeit aus PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+      <step><cmd>Bestätigen Sie die WSL-Verfügbarkeit von PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 wsl --status
 wsl --list --verbose
-]]></codeblock><p>Erwartetes Ergebnis: WSL ist installiert, WSL 2 ist verfügbar, und die gewählte Linux distribution ist sichtbar.</p></info></step>
-      <step><cmd>Installieren Sie WSL und eine freigegebene Linux distribution, falls sie fehlen.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
+]]></codeblock><p>Erwartetes Ergebnis: WSL ist installiert, WSL 2 ist verfügbar und die ausgewählte Linux-Distribution ist sichtbar.</p></info></step>
+      <step><cmd>Installieren Sie WSL und eine genehmigte Linux-Distribution, falls diese fehlen.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 wsl --install
 wsl --install -d Ubuntu
-]]></codeblock><p>Verwenden Sie den in Ihrer Organisation freigegebenen distribution name. Starten Sie Windows neu, falls es verlangt wird, und legen Sie beim ersten Start der distribution den Linux user an.</p></info></step>
-      <step><cmd>Dokumentieren Sie distribution und filesystem boundary.</cmd><info><p>Legen Sie BPM im WSL Linux filesystem ab, zum Beispiel <codeph>/home/&lt;linux-user&gt;/browser-policy-manager</codeph>. Führen Sie den checkout nicht aus <codeph>/mnt/c</codeph> aus, weil Windows filesystem semantics und antivirus scanning Python environments, file watching und permissions unzuverlässig machen können.</p></info></step>
-      <step><cmd>Bestätigen Sie, was dieser Windows-Pfad noch nicht unterstützt.</cmd><info><note type="warning">Dies ist keine native Windows installation. Der Runbook-Pfad liefert kein MSI/EXE packaging, keinen Windows service, kein service account model, keine Event Viewer integration, keine Windows firewall policy, keine reverse proxy/TLS recipe, keine HA topology, keine managed secrets, keine backup automation und kein production hardening.</note></info></step>
+]]></codeblock><p>Verwenden Sie Ihren von der Organisation genehmigten Vertriebsnamen. Starten Sie neu, wenn Windows dies verlangt, und erstellen Sie dann den Linux-Benutzer, wenn die Distribution zum ersten Mal startet.</p></info></step>
+      <step><cmd>Zeichnen Sie die Verteilung und die Dateisystemgrenze auf.</cmd><info><p>Platzieren Sie BPM unter dem WSL-Linux-Dateisystem, zum Beispiel <codeph>/home/&lt;linux-user&gt;/browser-policy-manager</codeph>. Vermeiden Sie es, den Checkout über <codeph>/mnt/c</codeph> auszuführen, da die Semantik des Windows-Dateisystems und die Virenprüfung dazu führen können, dass Python-Umgebungen, Dateiüberwachung und Berechtigungen unzuverlässig werden.</p></info></step>
+      <step><cmd>Bestätigen Sie, was dieser Windows-Pfad noch nicht unterstützt.</cmd><info><note type="warning">Dies ist keine native Windows-Installation. Das Betriebsanleitung bietet keine MSI/EXE-Paketierung, keinen Windows-Dienst, kein Dienstkontomodell, keine Ereignisanzeigeintegration, keine Windows-Firewallrichtlinie, kein Reverse-Proxy/TLS-Rezept, keine HA-Topologie, keine verwalteten Geheimnisse, keine Sicherungsautomatisierung oder keine Produktionshärtung.</note></info></step>
     </steps>
-    <result><p>Windows und WSL sind für ein Linux-based BPM source deployment mit klaren platform und filesystem boundaries bereit.</p></result>
-    <postreq><p>Fahren Sie fort, indem Sie die WSL distribution shell öffnen und den source checkout im Linux home directory einrichten.</p></postreq>
+    <result><p>Windows und WSL sind bereit für eine Linux-basierte BPM-Quellenbereitstellung mit klaren Plattform- und Dateisystemgrenzen.</p></result>
+    <postreq><p>Fahren Sie fort, indem Sie die WSL-Distributions-Shell öffnen und den Quell-Checkout im Linux-Home-Verzeichnis einrichten.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-set-up-windows-wsl-source-checkout"/>

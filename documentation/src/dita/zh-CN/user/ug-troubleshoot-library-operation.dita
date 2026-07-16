@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-library-operation" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>排查库操作问题</title>
-  <shortdesc>本任务完整说明“排查库操作问题”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>库操作故障排除</title>
+  <shortdesc>从库加载、生命周期、删除和操作状态故障中安全恢复。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>库加载或行操作报告错误、超时或使可见行处于意外状态。</p></prereq>
+    <context><p>故障排除首先在重试之前保留上下文并读取可见状态。</p></context>
     <steps>
-      <step><cmd>打开与“排查库操作问题”对应的 BPM 区域。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
+      <step><cmd>在当前状态明确之前不要重复破坏性操作。</cmd><info><note type="warning">在部分失败后重复存档或永久删除可以隐藏实际成功的操作。</note></info></step>
+      <step><cmd>记录配置文件名称、行状态、过滤器状态和可见状态消息。</cmd><info><p>预期结果：您可以在重试之前解释 BPM 显示的内容。</p></info></step>
+      <step><cmd>刷新库一次。</cmd><info><p>如果刷新的状态与预期结果匹配，则从刷新的行列表继续。</p></info></step>
+      <step><cmd>如果刷新后的状态仍然错误，请重置搜索和过滤器并检查所有生命周期状态下的配置文件。</cmd><info><p>这将隐藏行与失败或已完成的操作区分开来。</p></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>您知道是否重试操作、恢复配置文件、删除前停止或从刷新的库视图继续。</p></result>
+    <postreq><p>恢复：对于重复的连接或 API 失败，停止库更改并保留可见状态以供支持或维护人员审查。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-refresh-profile-library"/>

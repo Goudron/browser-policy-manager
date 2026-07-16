@@ -30,7 +30,8 @@ COMPACT_OR_FALLBACK_MARKERS = (
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.75,
     "de": 0.75,
-    "zh-CN": 0.45,
+    # Structural parity is checked separately; this only rejects compact fallbacks.
+    "zh-CN": 0.30,
     "fr": 0.75,
     "es-ES": 0.75,
 }

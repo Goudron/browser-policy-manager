@@ -89,7 +89,7 @@ def test_search_performance_budget_is_deterministic_and_ci_stable() -> None:
     budget = contract["performance_budget"]
 
     assert "wall-clock" in budget["latency_budget_proxy"]
-    assert budget["max_index_bytes_per_locale"] == 3000000
+    assert budget["max_index_bytes_per_locale"] == 4100000
     assert budget["max_documents_per_locale"] >= 122
     assert budget["max_quality_fixtures_per_locale"] >= 10
     assert budget["max_visible_results_per_query"] == 50

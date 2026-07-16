@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-validate-firefox-policies-json" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-0" platform="web">
+<task id="admin-task-validate-firefox-policies-json" xml:lang="en" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
   <title>Validate candidate Firefox policies.json through the API</title>
   <shortdesc>Use the validation endpoint as a preflight gate for candidate Firefox Enterprise <codeph>policies.json</codeph> documents and structured error handling.</shortdesc>
   <taskbody>

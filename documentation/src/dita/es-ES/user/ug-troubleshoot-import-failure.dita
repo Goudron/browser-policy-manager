@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-import-failure" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Recuperarse de failed import</title>
-  <shortdesc>Diagnostique failed import de JSON o multipart policy input sin cambiar internal storage.</shortdesc>
+  <title>Recuperarse de una importación fallida</title>
+  <shortdesc>Diagnosticar la importación fallida de JSON o entrada de política multiparte sin cambiar el almacenamiento interno.</shortdesc>
   <taskbody>
-    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
-    <context><p>La importación puede fallar si el archivo no se lee, JSON malformed, Firefox boundary shape es incorrecta o los valores normalizados no pasan validation.</p></context>
+    <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
+    <context><p>La importación puede fallar porque el archivo no es legible, el JSON tiene un formato incorrecto, la forma del límite de Firefox es incorrecta o los valores normalizados no pueden pasar la validación.</p></context>
     <steps>
-      <step><cmd>Mantenga import failure message visible e identifique si la entrada era JSON o multipart.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Confirme que el archivo contiene un Firefox boundary document con top-level policies object cuando se usa JSON import.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Si el mensaje indica syntax, recupere primero malformed JSON.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Reintente import una vez con el archivo corregido y revise normalized values antes de guardar.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+      <step><cmd>Mantenga visible el mensaje de error de importación e identifique si la entrada fue JSON o multiparte.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Confirme que el archivo contiene un documento de límites de Firefox con un objeto de políticas de nivel superior cuando se utiliza la importación JSON.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Si el mensaje informa sintaxis, recupere primero el JSON con formato incorrecto.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Vuelva a intentar importar una vez con el archivo corregido y luego revise los valores normalizados antes de guardar.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
     </steps>
-    <result><p>La importación crea un BPM profile draft revisable o permanece bloqueada con una razón visible conservada.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+    <result><p>La importación se realiza correctamente en un borrador de perfil BPM revisable o permanece bloqueada con un motivo visible conservado.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-import-policies-json"/>

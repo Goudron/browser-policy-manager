@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-select-cis-baseline" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Выбрать CIS baseline и starter preset</title>
-  <shortdesc>Выберите канал схемы Firefox, starter preset и CIS layer, соответствующие цели deployment, до детального review.</shortdesc>
+  <title>Выберите базовый вариант CIS и стартовую предустановку</title>
+  <shortdesc>Перед детальным просмотром выберите канал схемы Firefox, стартовую предустановку и уровень CIS, которые соответствуют цели развертывания.</shortdesc>
   <taskbody>
-    <prereq><p>У вас есть draft профиля, известно, ориентируется ли целевой браузер на поведение схем Firefox ESR 140.12 или Firefox Release 152, и вы можете проверить values перед export.</p></prereq>
-    <context><p>Starter preset задаёт форму среды, а CIS layer добавляет mapped hardening baseline BPM. Используйте оба как проверяемые входные данные, а не как автоматическое deployment approval.</p></context>
+    <prereq><p>У вас есть черновик профиля, вы знаете, соответствует ли целевой браузер поведению схемы Firefox ESR 140.12 или Firefox Release 152, и можете просмотреть значения перед экспортом.</p></prereq>
+    <context><p>Стартовый пресет отражает форму среды, а слой CIS добавляет сопоставленную базовую линию усиления жесткости BPM. Используйте оба варианта в качестве проверенных входных данных, а не в качестве автоматического утверждения развертывания.</p></context>
     <steps>
-      <step><cmd>Выберите канал схемы Firefox, соответствующий target deployment: ESR 140.12 или Release 152.</cmd><info><p>Ожидаемый результат: BPM проверяет доступные policies и managed preferences по нужному каналу.</p></info></step>
-      <step><cmd>Выберите starter preset: Basic corporate для управляемых office profiles, classroom или kiosk для ограниченного shared browsing, либо protected station для hardened SOC-style workstations.</cmd><info><p>Ожидаемый результат: профиль получает исходную environment baseline до применения CIS hardening.</p></info></step>
-      <step><cmd>Выберите CIS Level 1 для широкого baseline hardening или CIS Level 2, когда deployment принимает stricter controls и дополнительный review.</cmd><info><p>Ожидаемый результат: BPM применяет matching generated layer для выбранного Firefox channel.</p></info></step>
-      <step><cmd>Проверьте source attribution для values, добавленных preset, CIS layer, import, manual edits или raw fallback.</cmd><info><p>Ожидаемый результат: каждое configured value можно отследить до export.</p></info></step>
-      <step><cmd>Разберите manual-review paths и conflicts перед сохранением профиля.</cmd><info><note type="warning">Не трактуйте полученный профиль как CIS certification или замену официального benchmark и локального security approval.</note></info></step>
-      <step><cmd>Выполняйте validation и export только после документирования выбранного channel, preset, CIS level и manual decisions.</cmd><info><p>Ожидаемый результат: exported <codeph>policies.json</codeph> пригоден для review и связан с выбранной BPM baseline.</p></info></step>
+      <step><cmd>Выберите канал схемы Firefox, соответствующий целевому развертыванию: ESR 140.12 или Release 152.</cmd><info><p>Ожидаемый результат: BPM проверяет доступные политики и Управляемые параметры на соответствие предполагаемому каналу.</p></info></step>
+      <step><cmd>Выберите начальный набор настроек: базовый корпоративный для управляемых офисных профилей, класс или киоск для ограниченного совместного просмотра или защищенная станция для защищенных рабочих станций в стиле SOC.</cmd><info><p>Ожидаемый результат: профиль имеет исходные базовые параметры среды до применения усиления защиты CIS.</p></info></step>
+      <step><cmd>Выберите уровень CIS 1 для широкого базового усиления защиты или уровень CIS 2, если развертывание допускает более строгий контроль и дополнительную проверку.</cmd><info><p>Ожидаемый результат: BPM применяет соответствующий сгенерированный слой для выбранного канала Firefox.</p></info></step>
+      <step><cmd>Проверьте атрибуцию источника на предмет значений, добавленных стилем настроек, слоем CIS, импортом, редактированием вручную или необработанным резервным вариантом.</cmd><info><p>Ожидаемый результат: каждое настроенное значение можно отследить перед экспортом.</p></info></step>
+      <step><cmd>Устраните пути и конфликты ручной проверки перед сохранением профиля.</cmd><info><note type="warning">Не рассматривайте полученный профиль как сертификацию CIS или как замену официального эталонного теста и одобрения местной безопасности.</note></info></step>
+      <step><cmd>Проверяйте и экспортируйте только после того, как выбранный канал, предустановка, уровень CIS и принятые вручную решения задокументированы.</cmd><info><p>Ожидаемый результат: экспортированный <codeph>policies.json</codeph> доступен для проверки и привязан к выбранному базовому плану BPM.</p></info></step>
     </steps>
-    <result><p>Профиль имеет осознанный starter preset, поддерживаемый CIS layer, видимый source attribution и понятный список оставшихся manual verification duties.</p></result>
-    <postreq><p>Если baseline слишком строгая или слишком мягкая, удалите CIS layer или смените starter preset, заново выполните validation и повторите review до export.</p></postreq>
+    <result><p>Профиль имеет заранее заданную начальную настройку, поддерживаемый уровень CIS, видимую ссылку на источник и четкий список оставшихся обязанностей по ручной проверке.</p></result>
+    <postreq><p>Если базовая линия слишком строгая или слишком разрешительная, удалите слой CIS или измените начальный набор настроек, проведите повторную проверку и повторите проверку перед экспортом.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.cis-concept-orientation"/>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-refresh-profile-library" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Actualiser la Bibliothèque de profils</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Actualiser la Bibliothèque de profils » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Actualiser la bibliothèque</title>
+  <shortdesc>Rechargez les lignes de la bibliothèque et interprétez l'état de chargement ou d'action avant de répéter une opération.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>La bibliothèque est ouverte et vous devez confirmer l'état actuel du profil enregistré après une modification ou un échec de chargement.</p></prereq>
+    <context><p>Actualiser recharge la bibliothèque à partir de BPM. Il ne valide pas les profils et n'enregistre pas les modifications non enregistrées de l'éditeur.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Actualiser la Bibliothèque de profils ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
+      <step><cmd>Choisissez Actualiser dans la bibliothèque.</cmd><info><p>Résultat attendu : le statut annonce un chargement puis soit une liste actualisée, soit une erreur.</p></info></step>
+      <step><cmd>Attendez le message d'état avant de démarrer une autre action de la bibliothèque.</cmd><info><note type="warning">La répétition des actions de cycle de vie ou de suppression alors que l'état n'est pas résolu peut rendre plus difficile la détermination de l'opération qui a échoué.</note></info></step>
+      <step><cmd>Examinez les décomptes filtrés et totaux après l'actualisation.</cmd><info><p>Les comptes peuvent changer si un autre onglet a enregistré, archivé, restauré ou supprimé un profil.</p></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>La vue Bibliothèque reflète la dernière liste de profils disponible pour BPM.</p></result>
+    <postreq><p>Récupération : si l'actualisation échoue, laissez la page actuelle ouverte et utilisez la rubrique de dépannage pour décider s'il faut réessayer ou conserver le contexte.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-prepare-source-update-evidence" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>在从源码更新前准备 evidence</title>
-  <shortdesc>在将 BPM 移动到更新的 source revision 之前，收集 source revision、configuration、database backup、profile export evidence 和 stop conditions。</shortdesc>
+<task id="admin-task-prepare-source-update-evidence" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>在从源更新之前准备证据</title>
+  <shortdesc>在将 BPM 移动到较新的源修订版之前收集源修订版、配置、数据库备份、配置文件导出证据和停止条件。</shortdesc>
   <taskbody>
-    <prereq><p>BPM 正从 Linux 或 WSL source checkout 运行，并且管理员已完成 configuration、storage、backup 和 operational-boundary reviews。</p></prereq>
-    <context><p>update-from-source procedure 会改变 code、dependencies、database schema 和 documentation output expectations。BPM 0.9.0 不提供 automatic rollback、database downgrade guarantees、managed backup 或 packaged upgrade tooling。将 evidence collection 视为必需的 pre-update gate。</p></context>
+    <prereq><p>BPM 正在从 Linux 或 WSL 源签出运行，并且管理员已完成配置、存储、备份和操作边界审查。</p></prereq>
+    <context><p>从源更新过程会更改代码、依赖项、数据库模式和文档输出期望。 BPM 不提供自动回滚、数据库降级保证、托管备份或打包升级工具。将证据收集视为必要的更新前关卡。</p></context>
     <steps>
-      <step><cmd>停止 foreground BPM process，并记录当前 source state。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>停止前台 BPM 进程并记录当前源状态。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git status --short
 git rev-parse --short HEAD
-]]></codeblock><p>只有在 working tree state 已理解，并且 current source revision 已记录为 rollback reference 时才继续。</p></info></step>
-      <step><cmd>记录 effective configuration 和 runtime paths。</cmd><info><p>捕获活动的 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph>、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>，以及 values 来自 shell exports 还是 <codeph>.env</codeph>。不要把 secrets 复制到 update note。</p></info></step>
-      <step><cmd>在 BPM 停止时创建 manual database backup evidence。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>仅当了解工作树状态并将当前源修订记录为回滚引用时才继续。</p></info></step>
+      <step><cmd>记录有效配置和运行时路径。</cmd><info><p>捕获活动的 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph>、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>，以及值是否来自 shell 导出或 <codeph>.env</codeph>。不要将机密复制到更新说明中。</p></info></step>
+      <step><cmd>在 BPM 停止时创建手动数据库备份证据。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
-]]></codeblock><p>记录 timestamp、current revision、database URL、file size 和 checksum。如果部署不使用 <codeph>data/bpm.db</codeph>，请备份从 <codeph>BPM_DATABASE_URL</codeph> 解析出的 path。</p></info></step>
-      <step><cmd>在更改 code 前导出 critical profile evidence。</cmd><info><p>使用现有 API export examples 保存所需 Firefox <codeph>policies.json</codeph> documents，并记录 response status、profile ID、revision、schema channel 和 exported-document hash。</p><note type="warning">如果缺少 database backup 或 export evidence，请停止 update。不要用 Git rollback 或 <codeph>alembic downgrade</codeph> 会安全的假设替代缺失的 backup evidence。</note></info></step>
+]]></codeblock><p>记录时间戳、当前版本、数据库 URL、文件大小和校验和。如果部署不使用 <codeph>data/bpm.db</codeph>，请备份从 <codeph>BPM_DATABASE_URL</codeph> 解析的路径。</p></info></step>
+      <step><cmd>在更改代码之前导出关键配置文件证据。</cmd><info><p>使用现有的 API 导出示例保存所需的 Firefox <codeph>policies.json</codeph> 文档并记录响应状态、配置文件 ID、修订、架构通道和导出文档哈希。</p><note type="warning">如果数据库备份或导出证据丢失，请停止更新。不要假设 Git 回滚或 <codeph>alembic downgrade</codeph> 是安全的，从而替换丢失的备份证据。</note></info></step>
     </steps>
-    <result><p>Update 具有已验证的 pre-change evidence set 和已知 previous source reference。</p></result>
-    <postreq><p>只有在 evidence set 完整并经过审查后，才继续刷新 source revision 和 dependencies。</p></postreq>
+    <result><p>该更新具有经过验证的更改前证据集和已知的先前源参考。</p></result>
+    <postreq><p>仅在证据集完成并经过审核后才继续刷新源修订和依赖项。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="map-cis-settings-guide" xml:lang="es-ES">
-  <title>Guía de configuración CIS</title>
+  <title>Guía de configuración de CIS</title>
   <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
   <topicref keyref="topic.cis-concept-orientation"/>
   <topicref keyref="topic.cis-concept-levels-channels-layers"/>

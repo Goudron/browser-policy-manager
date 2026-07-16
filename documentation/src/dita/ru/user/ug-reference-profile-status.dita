@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-profile-status" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Справка по статусу профиля</title>
-  <shortdesc>Проверяйте profile name, ID, schema, lifecycle, dirty/saved state и validation context перед действием.</shortdesc>
+  <title>Ссылка на статус профиля</title>
+  <shortdesc>Прежде чем действовать, прочтите имя профиля, ID, схему, жизненный цикл, измененное/сохраненное состояние и контекст проверки.</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>Идентичность</title><p>Profile name и ID подтверждают, что текущий editor, Library row или Compare selection относится к нужному saved profile или draft.</p></section>
-    <section id="a-profile-lifecycle"><title>Lifecycle</title><p>Lifecycle state различает active, archived, draft, restored и deletion-sensitive работу с профилем.</p></section>
-    <section id="a-profile-validation"><title>Валидация</title><p>Validation context показывает, готовы ли текущие policy и managed-preference values к save, comparison или export.</p></section>
-    <section id="a-profile-dirty-state"><title>Dirty state</title><p>Dirty/saved state показывает, нужно ли сохранить видимые editor changes перед navigation, export или доверием другой вкладке.</p></section>
+    <section id="a-profile-identity"><title>Личность</title><p>Имя профиля и ID подтверждают, что текущий редактор, строка библиотеки или выбор сравнения относятся к предполагаемому сохраненному профилю или черновику.</p></section>
+    <section id="a-profile-lifecycle"><title>Жизненный цикл</title><p>Состояние жизненного цикла различает активную, архивированную, черновую, восстановленную и чувствительную к удалению работу профиля.</p></section>
+    <section id="a-profile-validation"><title>Проверка</title><p>Контекст проверки показывает, готовы ли текущая политика и значения управляемых предпочтений к сохранению, сравнению или экспорту.</p></section>
+    <section id="a-profile-dirty-state"><title>Грязное состояние</title><p>Состояние «грязное/сохраненное» сообщает вам, нужно ли сохранять видимые изменения редактора, прежде чем переход к навигации, экспорту или другой вкладке станет доверенным.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-review-profile-context"/>

@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-select-comparison-profiles" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>选择要比较的配置文件</title>
-  <shortdesc>本任务完整说明“选择要比较的配置文件”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>独立搜索配置文件 A 和配置文件 B，从有限结果列表中选择行，并查看每个摘要。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>比较表面从库中打开。</p></prereq>
+    <context><p>每面都有自己的搜索字段和结果列表，因此您可以选择具有相似名称的配置文件，而无需混合面。</p></context>
     <steps>
-      <step><cmd>打开与“选择要比较的配置文件”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>在左侧搜索字段中搜索配置文件 A，然后选择所需的行。</cmd><info><p>预期结果：左侧选定配置文件摘要显示配置文件名称、模式通道、生命周期和状态上下文。</p></info></step>
+      <step><cmd>在右侧搜索字段中搜索配置文件 B，然后选择所需的行。</cmd><info><p>预期结果：正确的摘要独立更新。</p></info></step>
+      <step><cmd>在阅读比较表之前确认两个摘要。</cmd><info><note type="warning">不要单独依赖搜索结果位置。确认双方的身份和架构。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>配置文件 A 和配置文件 B 已选择并准备进行比较。</p></result>
+    <postreq><p>恢复：如果一个配置文件丢失，请清除该侧的搜索，刷新原始选项卡中的库，并确认配置文件已保存。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-compare-profiles"/>

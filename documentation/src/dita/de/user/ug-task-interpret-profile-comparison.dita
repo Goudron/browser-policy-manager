@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-interpret-profile-comparison" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Vergleichstabelle interpretieren</title>
-  <shortdesc>Diese Aufgabe beschreibt den vollständigen Ablauf „Vergleichstabelle interpretieren“ mit Entscheidungen, Schritten, Ergebnis, Warnungen und Wiederherstellung.</shortdesc>
+  <title>Interpretieren Sie die Vergleichstabelle</title>
+  <shortdesc>Richtlinien- und verwaltete Einstellungszeilen in den Status „Gleich“, „Geändert“ und „Fehlend“ lesen.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM und prüfen Sie den passenden Arbeitskontext, das Firefox-Schema oder den Profilstatus für diese Aufgabe.</p></prereq>
-    <context><p>Dieses Thema beschreibt den vollständigen Benutzerablauf für die deutsche Lokalisierung ohne Kurzfassung.</p></context>
+    <prereq><p>Profil A und Profil B sind ausgewählt und die Vergleichstabelle ist sichtbar.</p></prereq>
+    <context><p>Die Tabelle vergleicht die Kombination der Einstellungen beider Profile. Richtlinienzeilen und Zeilen mit verwalteten Einstellungen können zusammen angezeigt werden, da sich beide auf das Firefox-Verhalten auswirken können.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie den BPM-Bereich für „Vergleichstabelle interpretieren“.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Prüfen Sie aktuelle Werte, Profilstatus, Hinweise und Einschränkungen des gewählten Schemas.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent und die Aktion ist bei der Prüfung erklärbar.</p></info></step>
-      <step><cmd>Ändern Sie nur Werte, die zum Profilziel gehören, und vermeiden Sie unbeabsichtigte Nachbaränderungen.</cmd><info><note type="warning">Warnung: Prüfen Sie Schema, Profilstatus und Folgen der Änderung, bevor Sie speichern.</note></info></step>
+      <step><cmd>Scannen Sie den Zeilentyp, um Richtlinienzeilen von Zeilen mit verwalteten Einstellungen zu unterscheiden.</cmd><info><p>Erwartetes Ergebnis: Sie wissen, ob die Zeile eine Firefox Enterprise-Richtlinie oder einen verwalteten Präferenzschlüssel darstellt.</p></info></step>
+      <step><cmd>Lesen Sie den Wert und den Status jeder Seite.</cmd><info><p>Gleiche Zeilen haben übereinstimmende Werte, geänderte Zeilen haben unterschiedliche Werte und fehlende Zeilen sind nur auf einer Seite vorhanden.</p></info></step>
+      <step><cmd>Verwenden Sie fehlende oder geänderte Zeilen, um zu entscheiden, welches Profil überprüft werden muss.</cmd><info><note type="warning">Profileinstellungen vergleichen übernimmt keine Änderungen. Öffnen Sie den entsprechenden Profileditor, um Werte zu aktualisieren.</note></info></step>
     </steps>
-    <result><p>Das BPM-Profil oder die Ansicht befindet sich im erwarteten Zustand für diesen Ablauf.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Ergebnis abweicht, kehren Sie zum zuständigen Bereich zurück, machen Sie die letzte Änderung rückgängig oder öffnen Sie das verknüpfte Thema.</p></postreq>
+    <result><p>Sie können erklären, ob die ausgewählten Profile gleichwertig oder unterschiedlich sind oder auf einer Seite Einstellungen fehlen.</p></result>
+    <postreq><p>Wiederherstellung: Wenn Zeilen veraltet aussehen, speichern Sie zuerst die Editoränderungen und öffnen Sie Profileinstellungen vergleichen erneut aus der Bibliothek.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

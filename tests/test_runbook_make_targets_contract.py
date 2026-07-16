@@ -34,6 +34,13 @@ def test_readme_points_routine_commands_to_make_targets():
         assert command not in readme
 
 
+def test_make_dev_refreshes_local_documentation_before_starting_runtime():
+    makefile = _read("Makefile")
+
+    assert "dev: docs-install-dev\n\tuvicorn app.main:app --reload --port 8000" in makefile
+    assert "run:\n\tuvicorn app.main:app --reload --port 8000" in makefile
+
+
 def test_locale_runbook_uses_make_targets_for_repeatable_gates():
     runbook = _read("docs/locale_update_runbook_2026-06-01.md")
 
@@ -91,18 +98,27 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "The user must provide that target version in the request",
         "compact epic id: `BPM086`",
         "<EPIC_ID>-M<milestone_number>-<two_digit_task_number>",
-        "Every task must specify the minimum sufficient ChatGPT-5.5 reasoning level",
-        "`low`",
-        "`medium`",
-        "`high`",
-        "`extra high`",
+        "Every task must specify both the minimum sufficient GPT-5.6 model and the minimum sufficient reasoning level.",
+        "`GPT-5.6 Luna`",
+        "`GPT-5.6 Terra`",
+        "`GPT-5.6 Sol`",
+        "`Light`",
+        "`Medium`",
+        "`High`",
+        "`Extra High`",
+        "Use Terra as the normal default.",
+        "Every Sol assignment must include a short task-specific justification",
         "Product source, UI copy, README, changelog, and maintained documentation use English as the primary product language.",
         "The working chat with the maintainer can be in Russian",
         "The first milestone must include the target-version transition.",
         "By the end of the backlog, the repository should not describe the new work as belonging to the previous target version",
-        "Every epic backlog must include README, product-documentation, and changelog work.",
+        "README is not a version surface for this purpose.",
+        "Do not add a README task to identify the active target version",
+        "Every epic backlog must include product-documentation and changelog work.",
+        "Include README work only when the completed epic changes the durable current product state that README describes.",
         "README must be updated after the main backlog implementation is complete",
         "README must not summarize what changed in a specific BPM version",
+        "README must also not identify the active target version",
         "Release history, \"what changed\", and target-version completion notes belong in `CHANGELOG.md`.",
         "keep the maintainer copyright at the bottom",
         "keep the existing information about email topics / message themes",
@@ -120,11 +136,13 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "Create a git commit for the completed epic.",
         "Provide the maintainer with the exact `git push` command to run manually.",
         "Do not push from the backlog execution step.",
-        "Show exactly one next task with its ID, essence, acceptance, and minimal reasoning.",
+        "Show exactly one next task with its ID, essence, acceptance, minimum model, and minimal reasoning.",
         "Do not start executing a backlog task just because the backlog exists.",
     }
     for phrase in required_phrases:
         assert phrase in normalized
+
+    assert "ChatGPT-5.5" not in runbook
 
 
 def test_firefox_live_runbook_uses_make_targets_for_sandbox_and_suites():

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-install-ubuntu-26-04-source" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux"><title>Установка BPM из исходников в Ubuntu 26.04 LTS</title><shortdesc>Полная последовательность установки BPM 0.9.1 с системным Python 3.14.</shortdesc><taskbody>
+<prereq><p>Нужны Ubuntu 26.04 LTS, права sudo, доступ HTTPS и согласованная ссылка Git BPM 0.9.1 вместо <codeph>&lt;approved-0.9.1-ref&gt;</codeph>.</p></prereq><context><p>Это односерверный запуск из исходников для контролируемой проверки, а не установка системной службы.</p></context><steps>
+<step><cmd>Установите зависимости, получите исходники, создайте окружение, выполните миграцию и соберите документацию.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+. /etc/os-release
+test "$ID" = "ubuntu" && test "$VERSION_ID" = "26.04"
+sudo apt-get update
+sudo apt-get install -y build-essential ca-certificates curl git make python3.14 python3.14-dev python3.14-venv
+export BPM_PYTHON=/usr/bin/python3.14
+"$BPM_PYTHON" --version
+export BPM_REPOSITORY_URL="https://github.com/Goudron/browser-policy-manager.git"
+export BPM_REF="<approved-0.9.1-ref>"
+test "$BPM_REF" != "<approved-0.9.1-ref>"
+cd "$HOME"
+git clone "$BPM_REPOSITORY_URL" browser-policy-manager
+cd "$HOME/browser-policy-manager"
+git checkout --detach "$BPM_REF"
+git status --short
+git rev-parse --short HEAD
+"$BPM_PYTHON" -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+python --version
+mkdir -p data
+export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
+alembic upgrade head
+make setup-docs-toolchain
+make docs-validate
+make docs-build
+]]></codeblock><p>Остановитесь при любой ошибке или если версия Python не 3.14.x.</p></info></step>
+<step><cmd>Запустите BPM в основном терминале.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+export BPM_HOST="127.0.0.1"
+export BPM_PORT="8000"
+export BPM_RELOAD="true"
+make dev
+]]></codeblock></info></step>
+<step><cmd>Во втором терминале проверьте зонды и интерфейс.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+cd browser-policy-manager
+source .venv/bin/activate
+curl -fsS http://127.0.0.1:8000/health
+curl -fsS http://127.0.0.1:8000/health/ready
+curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
+]]></codeblock></info></step>
+<step><cmd>Соблюдайте границу остановки.</cmd><info><p>При сбое нажмите <codeph>Ctrl+C</codeph>, сохраните вывод и журналы, не редактируйте <codeph>data/bpm.db</codeph> и не выполняйте <codeph>alembic downgrade</codeph>.</p></info></step>
+</steps><result><p>Миграция и сборка документации завершены, зонды отвечают, Библиотека профилей доступна, журналы можно проверить.</p></result><postreq><p>Последовательность команд успешно проверена в чистом контейнере пользовательского пространства Ubuntu 26.04. Эта проверка не подтверждает нативную загрузку, ядро, systemd, рабочий стол, оборудование, межсетевой экран узла или промышленное развёртывание.</p></postreq></taskbody><related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links></task>

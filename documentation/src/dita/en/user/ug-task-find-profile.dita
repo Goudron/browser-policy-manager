@@ -4,7 +4,7 @@
   <title>Find a profile by name</title>
   <shortdesc>Use Library search to narrow saved profiles by name before opening, duplicating, or changing lifecycle state.</shortdesc>
   <taskbody>
-    <prereq><p>The Profile Library is open and profile rows have finished loading.</p></prereq>
+    <prereq><p>The Library is open and profile rows have finished loading.</p></prereq>
     <context><p>Search narrows the current Library view. It works together with schema, lifecycle, validation, and sort controls.</p></context>
     <steps>
       <step><cmd>Place the cursor in the Library search field.</cmd><info><p>Expected result: the current row list remains visible while you type.</p></info></step>

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-refresh-source-revision-dependencies" xml:lang="fr" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>Actualiser source revision et dependencies</title>
-  <shortdesc>Déplacez le checkout vers une revision plus récente approuvée et réinstallez la Python environment sans masquer dependency ou worktree failures.</shortdesc>
+<task id="admin-task-refresh-source-revision-dependencies" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>Actualiser la révision source et les dépendances</title>
+  <shortdesc>Déplacez la récupération vers une révision plus récente approuvée et réinstallez l'environnement Python sans masquer les échecs de dépendance ou d'arborescence de travail.</shortdesc>
   <taskbody>
-    <prereq><p>Le pre-update evidence set existe, la previous revision est consignée et un target branch, tag ou commit approuvé est connu.</p></prereq>
-    <context><p>Les BPM source updates sont des Git et Python-environment operations effectuées dans le checkout existant. La procedure n’installe pas packaged distribution, native service ni production upgrade manager.</p></context>
+    <prereq><p>L'ensemble de preuves préalable à la mise à jour existe, la révision précédente est enregistrée et une branche, une balise ou une validation cible approuvée est connue. Les mises à jour des sources</p></prereq>
+    <context><p>Les mises à jour de la source BPM sont des opérations dans les environnements Git et Python effectuées dans la caisse existante. La procédure n’installe pas de distribution packagée, de service natif ou de gestionnaire de mise à niveau de production.</p></context>
     <steps>
-      <step><cmd>Récupérez la source reference approuvée.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>Récupérez la référence source approuvée.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git fetch --tags
 git status --short
-]]></codeblock><p>Arrêtez-vous si des local changes sont inattendus. Préservez les user-owned ou site-owned changes au lieu de les écraser.</p></info></step>
-      <step><cmd>Passez à la source revision plus récente approuvée.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Arrêtez-vous si les modifications locales sont inattendues. Conservez les modifications appartenant à l'utilisateur ou au site au lieu de les écraser.</p></info></step>
+      <step><cmd>Passer à la révision source la plus récente approuvée.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git checkout <approved-new-ref>
 git rev-parse --short HEAD
-]]></codeblock><p>Consignez la target revision et comparez-la à l’approved change ticket ou release note.</p></info></step>
-      <step><cmd>Actualisez la repository-local Python environment.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+]]></codeblock><p>Enregistrez la révision cible et comparez-la avec le ticket de modification approuvé ou la note de version.</p></info></step>
+      <step><cmd>Actualisez l'environnement Python local du référentiel.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
-]]></codeblock><p>Utilisez le <codeph>.venv</codeph> existant sauf si l’update note exige explicitement de le reconstruire. Consignez les dependency failures avant toute modification de database.</p></info></step>
-      <step><cmd>Arrêtez-vous en cas de unresolved source ou dependency failures.</cmd><info><note type="warning">Si checkout, dependency installation ou virtual-environment activation échoue, n’exécutez pas migrations. Revenez à la recorded previous revision uniquement si la database n’a pas changé, puis réinstallez le previous dependency set et relancez les pre-update smoke checks.</note></info></step>
+]]></codeblock><p>Utilisez le <codeph>.venv</codeph> existant à moins que la note de mise à jour n'exige explicitement sa reconstruction. Enregistrez les échecs de dépendance avant de modifier la base de données.</p></info></step>
+      <step><cmd>Arrêt en cas d'échecs de source ou de dépendance non résolus.</cmd><info><note type="warning">Si l'extraction, l'installation des dépendances ou l'activation de l'environnement virtuel échoue, n'exécutez pas de migrations. Revenez à la révision précédente enregistrée uniquement si la base de données n'a pas été modifiée, puis réinstallez l'ensemble de dépendances précédent et réexécutez les contrôles de fumée avant la mise à jour.</note></info></step>
     </steps>
-    <result><p>Le checkout et la Python environment sont sur la target revision approuvée, ou l’update s’est arrêté avant database changes.</p></result>
-    <postreq><p>Exécutez database migrations et documentation checks seulement après un dependency refresh réussi.</p></postreq>
+    <result><p>L'environnement de paiement et Python se trouve sur la révision cible approuvée, ou la mise à jour s'est arrêtée avant les modifications de la base de données.</p></result>
+    <postreq><p>Exécutez les migrations de bases de données et les vérifications de documentation uniquement une fois l'actualisation des dépendances réussie.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-prepare-source-update-evidence"/>

@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-profile-library" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utiliser la Bibliothèque de profils</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Utiliser la Bibliothèque de profils » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Utiliser la bibliothèque</title>
+  <shortdesc>Ouvrez la bibliothèque et utilisez ses décomptes, son statut et ses actions de ligne comme point de départ pour le travail de profil enregistré.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>BPM est ouvert et vous travaillez avec des enregistrements de profil enregistrés, et non avec un brouillon d'éditeur non enregistré.</p></prereq>
+    <context><p>La bibliothèque répertorie les profils enregistrés et affiche les décomptes filtrés et totaux afin que vous sachiez si les filtres ou la recherche masquent des lignes.</p>
+      <fig id="screenshot-library-overview">
+        <title>Présentation de la bibliothèque</title>
+        <image keyref="screenshot.library-overview" placement="break">
+          <alt>Bibliothèque affichant les lignes de profil enregistrées, les décomptes et les actions de profil.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Utiliser la Bibliothèque de profils ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Ouvrez la bibliothèque.</cmd><info><p>Résultat attendu : la bibliothèque charge les lignes de profil ou un message d'état vide si aucun profil enregistré n'existe.</p></info></step>
+      <step><cmd>Lisez les décomptes filtrés et totaux avant d'agir sur les lignes.</cmd><info><p>Si le nombre filtré est inférieur au nombre total, le texte de recherche ou les filtres sont actifs.</p></info></step>
+      <step><cmd>Utilisez les actions de ligne uniquement après avoir confirmé le nom de la ligne, le canal de schéma, l'état du cycle de vie et l'état de validation.</cmd><info><note type="warning">Une action de ligne s'applique à ce profil enregistré, et non à un brouillon d'éditeur temporaire.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Vous pouvez identifier la vue Bibliothèque active et choisir l'action de profil suivante sans perdre le contexte.</p></result>
+    <postreq><p>Récupération : si les lignes ne se chargent pas ou si l'état d'une action reste en échec, actualisez la bibliothèque, puis utilisez la rubrique de dépannage de la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

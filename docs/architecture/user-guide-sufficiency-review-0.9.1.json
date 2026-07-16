@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "review_id": "bpm-0.9.1-user-guide-sufficiency-review",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M6-01",
+  "guide_id": "user-guide",
+  "status": "accepted",
+  "review_date": "2026-07-10",
+  "inherits_from": [
+    "documentation/config/documentation-sufficiency-review-protocol-0.9.1.json",
+    "documentation/config/user-guide-coverage-closure-0.9.0.json",
+    "documentation/config/topic-section-taxonomy-0.9.1.json"
+  ],
+  "scope": {
+    "locale_scope": "source-locale-plus-parity",
+    "source_locale": "en",
+    "parity_locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+    "included_topic_prefixes": ["ug-task-", "ug-troubleshoot-"],
+    "excluded_topic_kinds": ["concept", "reference"],
+    "excluded_topic_rule": "Concept and reference topics remain required supporting content, but they are not represented as independently executed user actions.",
+    "execution_method": "Committed browser smoke for representative product paths plus deterministic per-topic DITA/source/test simulation for every included task and troubleshooting topic."
+  },
+  "normalization": {
+    "rule": "Each workflow_reviews entry expands to one protocol review item for every topic_id in topic_ids.",
+    "field_resolution": {
+      "review_id": "{workflow.review_id}:{topic_id}",
+      "guide_id": "workflow.guide_id",
+      "topic_id": "workflow.topic_ids[]",
+      "locale_scope": "scope.locale_scope",
+      "task_or_claim": "documentation/src/dita/en/user/{topic_id}.dita /task/title",
+      "prerequisites": "documentation/src/dita/en/user/{topic_id}.dita /task/taskbody/prereq",
+      "exact_steps": "documentation/src/dita/en/user/{topic_id}.dita /task/taskbody/steps/step/cmd in document order",
+      "expected_result": "documentation/src/dita/en/user/{topic_id}.dita /task/taskbody/result",
+      "recovery_path": "documentation/src/dita/en/user/{topic_id}.dita /task/taskbody/postreq plus workflow.recovery_path and the topic related-links section",
+      "drift_source": "workflow.drift_source",
+      "focused_verification": "workflow.focused_verification",
+      "evidence_type": "workflow.evidence_type",
+      "evidence_artifact": "workflow.evidence_artifact",
+      "review_disposition": "workflow.review_disposition"
+    }
+  },
+  "workflow_reviews": [
+    {
+      "review_id": "UG-SUFF-ORIENT",
+      "guide_id": "user-guide",
+      "section_id": "orient-and-plan",
+      "topic_ids": [
+        "ug-task-change-interface-language",
+        "ug-task-change-interface-theme",
+        "ug-task-work-across-editor-tabs"
+      ],
+      "task_or_claim": "Users can retain profile context while changing locale or theme and while moving between editor tabs.",
+      "prerequisites": "Resolved from each topic prereq and checked against the shared page header and editor-route state.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and simulated against locale, theme, and route-state controls.",
+      "expected_result": "Resolved from each topic result; locale/theme changes do not mutate profile data or lose the active surface.",
+      "recovery_path": ["ug-troubleshoot-unsaved-changes", "ug-troubleshoot-product-connection"],
+      "drift_source": ["app/templates/profiles/_page_header.html", "app/static/profiles_platform.js", "app/i18n/*.json"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q tests/test_locale_matrix.py tests/test_ui_runtime_i18n_contract.py tests/test_light_theme_surface_contract_091.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_primary_routes_render_in_ru_and_zh_cn tests/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale"
+      ],
+      "evidence_type": ["browser_smoke", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_cross_cutting_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-CREATE",
+      "guide_id": "user-guide",
+      "section_id": "create-and-start",
+      "topic_ids": [
+        "ug-task-choose-firefox-schema",
+        "ug-task-choose-profile-identity-schema",
+        "ug-task-choose-guided-scenario",
+        "ug-task-apply-starter-preset",
+        "ug-task-apply-cis-layer",
+        "ug-task-create-first-profile",
+        "ug-task-import-policies-json",
+        "ug-task-open-saved-profile"
+      ],
+      "task_or_claim": "Users can create or import a profile, choose its schema and starting configuration, save it, and reopen the intended editor.",
+      "prerequisites": "Resolved from each topic prereq and checked against the Library, import boundary, schema catalog, presets, and CIS layers.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and simulated against current Library and Guided controls.",
+      "expected_result": "Resolved from each topic result; a saved profile has a stable ID, revision, schema channel, and editor entry points.",
+      "recovery_path": ["ug-troubleshoot-profile-name", "ug-troubleshoot-import-failure", "ug-troubleshoot-schema-mismatch"],
+      "drift_source": ["app/api/profiles.py", "app/templates/profiles/_page_wizard.html", "app/presets", "app/compliance/firefox"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_schema_validation_topics.py documentation/tests/contract/test_user_guide_import_export_topics.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_imports_firefox_policies_json_in_russian_library tests/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "tests/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_import_export_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-GUIDED",
+      "guide_id": "user-guide",
+      "section_id": "guided-editor",
+      "topic_ids": [
+        "ug-task-use-guided-editor",
+        "ug-task-search-guided-settings",
+        "ug-task-configure-browser-access-defaults",
+        "ug-task-configure-home-search-navigation",
+        "ug-task-configure-security-privacy",
+        "ug-task-configure-users-addons-sites",
+        "ug-task-configure-firefox-ai-policies",
+        "ug-task-use-guided-fine-tuning",
+        "ug-task-review-guided-profile",
+        "ug-task-save-export-guided-profile"
+      ],
+      "task_or_claim": "Users can traverse all six Guided Editor steps, configure supported control families, review changes, save, and export.",
+      "prerequisites": "Resolved from each topic prereq and checked against a deterministic Release/ESR profile fixture.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against the six-step Guided runtime mapping.",
+      "expected_result": "Resolved from each topic result; saved and exported state matches the selected schema-supported guided controls.",
+      "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch", "ug-troubleshoot-unsaved-changes"],
+      "drift_source": ["app/web/firefox_wizard_steps.py", "app/web/firefox_wizard_shell", "app/templates/profiles/_page_wizard*.html", "app/static/profiles_guided.js"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_guided_topics.py tests/test_firefox_wizard_shell.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_guided_disclosure_labels_follow_active_locale",
+        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_release_guided_ai_and_vpn_browser_regression_can_save_and_export tests/test_ui_smoke_profile_workflow.py::test_library_to_editor_browser_regression_can_load_and_save_guided_homepage"
+      ],
+      "evidence_type": ["browser_smoke", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_guided_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-FINISH",
+      "guide_id": "user-guide",
+      "section_id": "finish-profile-changes",
+      "topic_ids": [
+        "ug-task-save-profile",
+        "ug-task-validate-profile",
+        "ug-task-switch-editor-mode",
+        "ug-task-review-profile-context",
+        "ug-task-export-policies-json"
+      ],
+      "task_or_claim": "Users can preserve context across editors, validate and save canonical profile state, and export Firefox policies.json.",
+      "prerequisites": "Resolved from each topic prereq and checked against a saved deterministic profile.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against save, validation, mode-link, and export handlers.",
+      "expected_result": "Resolved from each topic result; saved state has the expected revision and export returns the canonical Firefox document.",
+      "recovery_path": ["ug-troubleshoot-save-conflict", "ug-troubleshoot-policy-validation", "ug-troubleshoot-product-connection"],
+      "drift_source": ["app/api/profiles.py", "app/api/validation.py", "app/api/export.py", "app/static/profiles_workspace.js"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q tests/test_validation_api.py tests/test_export_firefox_policies_json.py tests/test_workspace_export_links_unit.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_editor_mode_links_preserve_route_context",
+        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_visual_and_json_same_profile_regression_can_save_without_conflict"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "tests/test_validation_api.py", "tests/test_export_firefox_policies_json.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-SETTINGS-REVIEW",
+      "guide_id": "user-guide",
+      "section_id": "all-settings-review-filters",
+      "topic_ids": [
+        "ug-task-use-all-settings",
+        "ug-task-review-attention-items",
+        "ug-task-inspect-configured-settings",
+        "ug-task-filter-settings-by-source",
+        "ug-task-browse-settings-catalog",
+        "ug-task-search-all-settings",
+        "ug-task-filter-all-settings"
+      ],
+      "task_or_claim": "Users can distinguish Review, Configured, and Catalog modes and narrow settings by query, category, source, and state.",
+      "prerequisites": "Resolved from each topic prereq and checked against the deterministic corporate CIS profile.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against the current All Settings modes, filters, counts, and bounded lists.",
+      "expected_result": "Resolved from each topic result; the visible inventory and count match the selected mode and filters without mutating the profile.",
+      "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch"],
+      "drift_source": ["app/static/profiles_all_settings_list.js", "app/static/profiles_settings_search.js", "app/web/firefox_all_settings_categories.py"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q tests/test_all_settings_route_state_contract.py tests/test_all_settings_search_grouping_contract.py tests/test_all_settings_inventory_counts.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-SETTINGS-EDIT",
+      "guide_id": "user-guide",
+      "section_id": "all-settings-editing",
+      "topic_ids": [
+        "ug-task-inspect-setting-details",
+        "ug-task-edit-setting-detail",
+        "ug-task-remove-reset-setting",
+        "ug-task-add-managed-preference",
+        "ug-task-navigate-settings-categories"
+      ],
+      "task_or_claim": "Users can inspect one setting, edit or reset it, add a known managed preference, validate, and save.",
+      "prerequisites": "Resolved from each topic prereq and checked against schema-backed setting and preference fixtures.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against the single detail panel and value adapters.",
+      "expected_result": "Resolved from each topic result; the canonical profile contains the intentional validated value or no longer contains the reset value.",
+      "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-save-conflict"],
+      "drift_source": ["app/static/profiles_all_settings_detail.js", "app/static/profiles_schema_shell_value_io.js", "app/services/firefox_policy_ui_registry"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q tests/test_firefox_wizard_shell_unit.py tests/test_profiles_data_document_adapters.py tests/core/test_policy_validation_with_schema.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile",
+        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_profiles_public_workflow_smoke"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-SETTINGS-ADVANCED",
+      "guide_id": "user-guide",
+      "section_id": "all-settings-advanced-sources",
+      "topic_ids": [
+        "ug-task-use-advanced-schema-controls",
+        "ug-task-handle-raw-unknown-settings",
+        "ug-task-follow-setting-deep-link",
+        "ug-task-trace-setting-source",
+        "ug-task-resolve-cis-manual-review"
+      ],
+      "task_or_claim": "Users can inspect advanced/raw settings, preserve source attribution, follow a deep link, and record a CIS manual-review decision.",
+      "prerequisites": "Resolved from each topic prereq and checked against imported, raw, manual, baseline, and CIS source-state fixtures.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against source badges, deep-link state, and review dispositions.",
+      "expected_result": "Resolved from each topic result; the user can explain origin, support state, and the safe next action for the setting.",
+      "recovery_path": ["ug-troubleshoot-policy-validation", "ug-troubleshoot-schema-mismatch"],
+      "drift_source": ["app/static/profiles_settings_inventory.js", "app/static/profiles_all_settings_state.js", "app/compliance/firefox"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q tests/test_all_settings_source_state_fixtures.py tests/test_profile_navigation.py tests/compliance/test_cis_firefox_merge.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_all_settings_counts_hydrated_corporate_cis_profile"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_all_settings_source_state_fixtures.py", "documentation/tests/contract/test_user_guide_all_settings_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-JSON",
+      "guide_id": "user-guide",
+      "section_id": "json-interchange",
+      "topic_ids": [
+        "ug-task-use-json-editor",
+        "ug-task-edit-raw-policies-json",
+        "ug-task-format-json-document",
+        "ug-task-validate-json-document",
+        "ug-task-save-json-document"
+      ],
+      "task_or_claim": "Users can inspect, edit, format, validate, and save the Firefox JSON boundary document without losing canonical profile state.",
+      "prerequisites": "Resolved from each topic prereq and checked against valid, malformed, and schema-invalid JSON fixtures.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against the Monaco-backed JSON surface and validation pipeline.",
+      "expected_result": "Resolved from each topic result; valid JSON saves to the profile while malformed or invalid JSON remains blocked with visible feedback.",
+      "recovery_path": ["ug-troubleshoot-malformed-json", "ug-troubleshoot-policy-validation", "ug-troubleshoot-save-conflict"],
+      "drift_source": ["app/static/profiles_runtime_json_editor.js", "app/static/profiles_json.js", "app/api/validation.py"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_json_editor_topics.py tests/test_validation_api.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_json_editor_loads_corporate_cis_known_preferences",
+        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_visual_and_json_same_profile_regression_can_save_without_conflict"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "tests/test_ui_smoke_profile_workflow.py", "documentation/tests/contract/test_user_guide_json_editor_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-LIBRARY",
+      "guide_id": "user-guide",
+      "section_id": "profile-library-operations",
+      "topic_ids": [
+        "ug-task-review-archived-profile",
+        "ug-task-use-profile-library",
+        "ug-task-find-profile",
+        "ug-task-filter-profile-library",
+        "ug-task-sort-profile-library",
+        "ug-task-refresh-profile-library",
+        "ug-task-duplicate-profile",
+        "ug-task-archive-profile",
+        "ug-task-restore-profile",
+        "ug-task-permanently-delete-profile"
+      ],
+      "task_or_claim": "Users can find and identify profiles, refresh and sort the Library, duplicate profiles, and safely manage archive/restore/delete lifecycle actions.",
+      "prerequisites": "Resolved from each topic prereq and checked against active and archived deterministic profile rows.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against Library filters, row identity, confirmations, and status updates.",
+      "expected_result": "Resolved from each topic result; each action changes only the intended row and exposes the resulting lifecycle state.",
+      "recovery_path": ["ug-troubleshoot-library-operation", "ug-troubleshoot-profile-name", "ug-troubleshoot-missing-profile"],
+      "drift_source": ["app/static/profiles_library.js", "app/api/profiles.py", "app/templates/profiles/_page_library_workspace.html"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_library_topics.py tests/test_profiles_list_filters_and_include_deleted.py tests/test_profiles_crud_extended.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure tests/test_ui_browser_tabs.py::test_browser_smoke_library_edit_and_named_clone_draft_open_new_tabs"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_library_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-COMPARE",
+      "guide_id": "user-guide",
+      "section_id": "profile-comparison",
+      "topic_ids": [
+        "ug-task-compare-profiles",
+        "ug-task-select-comparison-profiles",
+        "ug-task-interpret-profile-comparison"
+      ],
+      "task_or_claim": "Users can open Compare, independently select two saved profiles, and interpret policy/preference equal, changed, and missing rows.",
+      "prerequisites": "Resolved from each topic prereq and checked against two saved profiles with deterministic differences.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against independent selectors and the two-column comparison table.",
+      "expected_result": "Resolved from each topic result; the user can identify which saved profile requires follow-up without Compare mutating either profile.",
+      "recovery_path": ["ug-troubleshoot-missing-profile", "ug-troubleshoot-product-connection"],
+      "drift_source": ["app/static/profiles_compare.js", "app/static/profiles_compare_state.js", "app/templates/profiles/_page_compare_workspace.html"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_comparison_topics.py tests/test_profiles_compare_entrypoint.py tests/test_profiles_compare_state.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_two_profiles tests/test_ui_browser_tabs.py::test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_profiles"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_comparison_topics.py"],
+      "review_disposition": "pass"
+    },
+    {
+      "review_id": "UG-SUFF-RECOVERY",
+      "guide_id": "user-guide",
+      "section_id": "recover-safely",
+      "topic_ids": [
+        "ug-troubleshoot-save-conflict",
+        "ug-troubleshoot-library-operation",
+        "ug-troubleshoot-malformed-json",
+        "ug-troubleshoot-import-failure",
+        "ug-troubleshoot-policy-validation",
+        "ug-troubleshoot-schema-mismatch",
+        "ug-troubleshoot-profile-name",
+        "ug-troubleshoot-missing-profile",
+        "ug-troubleshoot-product-connection",
+        "ug-task-manage-destructive-actions",
+        "ug-troubleshoot-unsaved-changes"
+      ],
+      "task_or_claim": "Users can stop unsafe work, preserve visible context, recover from common validation/state/connection failures, and avoid internal data edits.",
+      "prerequisites": "Resolved from each topic prereq and checked against deterministic conflict, malformed input, missing-row, and failed-action states.",
+      "exact_steps": "Resolved from each topic step/cmd sequence and checked against current error/status/confirmation behavior.",
+      "expected_result": "Resolved from each topic result; the workflow either resumes safely or stops with enough visible evidence for maintainer diagnosis.",
+      "recovery_path": ["Each topic is itself the terminal User Guide recovery path; persistent infrastructure failures hand off to Administrator troubleshooting."],
+      "drift_source": ["app/static/profiles_runtime_dirty_guard.js", "app/api/profiles.py", "app/core/policy_validation.py", "app/i18n/*.json"],
+      "focused_verification": [
+        "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_troubleshooting_topics.py tests/test_profiles_update_and_pagination.py tests/test_profiles_error_branches_and_validation.py",
+        "./.venv/bin/pytest -o addopts= -q -m browser_ui tests/test_ui_browser_tabs.py::test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure",
+        "./.venv/bin/pytest -q tests/test_ui_smoke_profile_workflow.py::test_stale_save_conflict_browser_regression_does_not_overwrite_profile tests/test_ui_smoke_profile_workflow.py::test_save_as_copy_conflict_regression_preserves_local_draft_as_new_profile"
+      ],
+      "evidence_type": ["browser_smoke", "api_or_unit_test", "documented_simulation_evidence"],
+      "evidence_artifact": ["tests/test_ui_smoke_profile_workflow.py", "tests/test_ui_browser_tabs.py", "documentation/tests/contract/test_user_guide_troubleshooting_topics.py"],
+      "review_disposition": "pass"
+    }
+  ],
+  "execution_record": {
+    "browser_smoke": {
+      "date": "2026-07-10",
+      "command_scope": "Eight selected browser_ui nodes from tests/test_ui_browser_tabs.py covering locale/routes, import, Guided disclosure, Library lifecycle, All Settings, JSON, Compare, and Library edit/clone.",
+      "result": "pass",
+      "result_summary": "8 passed in 164.89s",
+      "environment": "Repository Chromium/Selenium harness with isolated test application and database state."
+    },
+    "api_and_source_simulation": {
+      "date": "2026-07-10",
+      "command_scope": "Four selected tests from tests/test_ui_smoke_profile_workflow.py covering Guided save/export, visual-to-JSON saves, stale revision conflict, and save-as-copy recovery.",
+      "result": "pass",
+      "result_summary": "4 passed",
+      "environment": "Isolated FastAPI test client plus maintained frontend-source assertions."
+    },
+    "per_topic_contract": {
+      "date": "2026-07-10",
+      "command": "./.venv/bin/pytest -q documentation/tests/contract/test_user_guide_sufficiency_review.py documentation/tests/contract/test_documentation_sufficiency_review_protocol.py documentation/tests/contract/test_user_guide_coverage_closure.py",
+      "result": "pass",
+      "result_summary": "24 passed",
+      "verified_boundary": "All 72 action/recovery topics, six-locale prereq/step/result structure, taxonomy ownership, protocol fields, evidence paths, and recovery boundaries."
+    }
+  },
+  "summary": {
+    "workflow_review_count": 11,
+    "task_topic_count": 62,
+    "troubleshooting_topic_count": 10,
+    "reviewed_topic_count": 72,
+    "pass_count": 72,
+    "blocked_count": 0,
+    "deferred_non_goal_count": 0,
+    "release_blockers": [],
+    "result": "Every User Guide task and troubleshooting topic resolves to explicit prerequisites, ordered commands, an observable result, a recovery path, drift sources, focused verification, and successful browser or deterministic simulation evidence."
+  },
+  "unverified_boundaries": [
+    "This review proves BPM UI and documentation behavior; it does not claim that an exported policy has been activated in a live Firefox deployment.",
+    "Native operating-system file picker and download-manager presentation is browser/OS-owned; BPM import/export request and response behavior is verified.",
+    "Human deployment policy choices remain administrator decisions; the review proves the documented controls and observable BPM results."
+  ]
+}

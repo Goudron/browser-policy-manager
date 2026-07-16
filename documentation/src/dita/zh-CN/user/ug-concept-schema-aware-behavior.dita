@@ -2,16 +2,16 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-schema-aware-behavior" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>Firefox 架构通道和验证</title>
-  <shortdesc>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. The Firefox schema channel controls which policies and values BPM can validate and show as supported.</shortdesc>
+  <shortdesc>Firefox 模式通道控制 BPM 可以验证和显示受支持的策略和值。</shortdesc>
   <conbody>
-    <p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. Choose Firefox ESR 140.12 for the supported Extended Support Release channel, or Firefox Release 152 for the current mainstream channel. Schema choice changes available controls, validation messages, and whether a setting is supported, unavailable, deprecated, unknown, imported, or preserved as raw data.</p>
-    <section id="a-channel-choice"><title>Channel choice</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. The supported schema channels are ESR 140.12 and Release 152. Choose the channel that matches the browser fleet before import, validation, detailed editing, or export.</p></section>
-    <section id="a-validation"><title>Validation</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. Validation checks the profile against the selected schema and BPM normalized model. Run validation before export, after JSON edits, after import, and before comparing important profiles.</p></section>
-    <section id="a-release-esr-differences"><title>Release and ESR differences</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. Common policies such as DisableTelemetry validate in both supported channels. Release 152 can also support newer controls such as AIControls and VisualSearchEnabled that are absent in ESR 140.12.</p></section>
-    <section id="a-state-meanings"><title>Supported, unavailable, deprecated, unknown, and raw states</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. Supported settings can be edited and validated for the selected schema. Unavailable or unknown settings should be reviewed before handoff; deprecated settings may still exist but require current-channel confirmation; raw fallback values should be preserved or removed deliberately.</p></section>
-    <section id="a-migration-expectations"><title>Migration expectations</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. Switching schema channels is a review decision, not a silent migration. Revalidate after switching and inspect Release-only, ESR-absent, imported, raw, or deprecated values before saving or exporting.</p></section>
-    <section id="a-example-boundary"><title>Example boundary</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. A common valid example uses DisableTelemetry. A Release-only valid example can use AIControls or VisualSearchEnabled. The same AIControls document is unsupported on ESR 140.12, and wrong value types such as a string value for DisableTelemetry are schema-invalid.</p></section>
-    <section id="a-recovery"><title>Recovery</title><p>本主题面向中文本地化完整说明架构通道工作流：Firefox 架构通道和验证. If validation fails, read the affected policy path, confirm the schema channel, inspect the setting in All Settings or JSON Editor, and only then edit, remove, or preserve the value.</p></section>
+    <p>选择 Firefox ESR 140.12 作为受支持的扩展支持版本通道，或选择 Firefox Release 152 作为当前主流通道。架构选择会更改可用的控件、验证消息以及设置是否受支持、不可用、已弃用、未知、导入或保留为原始数据。</p>
+    <section id="a-channel-choice"><title>通道选择</title><p>支持的架构通道是 ESR 140.12 和版本 152。在导入、验证、详细编辑或导出之前选择与浏览器组匹配的通道。</p></section>
+    <section id="a-validation"><title>验证</title><p>验证根据所选模式和 BPM 规范化模型检查配置文件。在导出之前、JSON 编辑之后、导入之后以及比较重要配置文件之前运行验证。</p></section>
+    <section id="a-release-esr-differences"><title>版本和 ESR 差异</title><p>DisableTelemetry 等常见策略在两个受支持的渠道中均有效。版本 152 还可以支持 ESR 140.12 中不存在的较新控件，例如 AIControls 和 VisualSearchEnabled。</p></section>
+    <section id="a-state-meanings"><title>支持、不可用、已弃用、未知和原始状态</title><p>可以针对所选模式编辑和验证支持的设置。切换前应检查不可用或未知的设置；已弃用的设置可能仍然存在，但需要当前频道确认；应故意保留或删除原始后备值。</p></section>
+    <section id="a-migration-expectations"><title>迁移期望</title><p>切换模式通道是一项审查决定，而不是静默迁移。切换后重新验证，并在保存或导出之前检查仅发布、不存在 ESR、导入、原始或已弃用的值。</p></section>
+    <section id="a-example-boundary"><title>边界示例</title><p>一个常见的有效示例使用 DisableTelemetry。仅发布的有效示例可以使用 AIControls 或 VisualSearchEnabled。 ESR 140.12 不支持相同的 AIControls 文档，并且错误的值类型（例如 DisableTelemetry 的字符串值）是架构无效的。</p></section>
+    <section id="a-recovery"><title>恢复</title><p>如果验证失败，请读取受影响的策略路径，确认架构通道，检查 所有设置 或 JSON 编辑器 中的设置，然后才编辑、删除或保留该值。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

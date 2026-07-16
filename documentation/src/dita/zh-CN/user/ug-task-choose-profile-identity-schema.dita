@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-profile-identity-schema" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>设置配置文件标识和架构通道</title>
-  <shortdesc>本任务完整说明“设置配置文件标识和架构通道”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <title>设置 配置档案身份 和模式通道</title>
+  <shortdesc>在配置引导设置之前选择已保存的配置文件名称和 Firefox 架构通道。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>在 引导式编辑器 中打开新的或保存的配置文件。</p></prereq>
+    <context><p>使用步骤 1，配置文件 &amp; 基线，设置将驱动验证和可用控件的名称和架构通道。</p></context>
     <steps>
-      <step><cmd>打开与“设置配置文件标识和架构通道”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>继续前检查警告、最终状态和恢复路径。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>确认您正在编辑预期的配置文件草稿。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>输入清晰的配置文件名称。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>选择 Firefox 架构通道，例如版本 152 或 ESR 140.12。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>在继续之前检查所选通道是否更改可见控件。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>指导草案具有稳定的身份和模式通道。</p></result>
+    <postreq><p>恢复：如果控件看起来与预期不同，请返回步骤 1 并在更改设置之前确认架构通道。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

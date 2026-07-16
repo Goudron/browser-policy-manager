@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-task-review-devops-configuration-sources" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
-  <title>检查 DevOps 配置来源</title>
-  <shortdesc>识别当前 BPM configuration sources，记录 effective runtime values，并把普通设置与不受支持的 secret-management expectations 分开。</shortdesc>
+<task id="admin-task-review-devops-configuration-sources" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
+  <title>查看 DevOps 配置源</title>
+  <shortdesc>识别当前的 BPM 配置源，记录有效的运行时值，并将普通设置与不受支持的秘密管理期望分开。</shortdesc>
   <taskbody>
-    <prereq><p>BPM 已在 Linux 或通过 WSL 从源码部署，管理员可以检查 shell environment、可选的 <codeph>.env</codeph> file 和 source checkout。</p></prereq>
-    <context><p>BPM 0.9.0 从带 <codeph>BPM_</codeph> 前缀的 environment variables 以及 repository-root 的 <codeph>.env</codeph> 文件加载 settings。configuration model 位于 <codeph>app/core/config.py</codeph>。本版本不定义 application secret store、credential vault、API token setting、encryption-key setting 或 production configuration profile。</p></context>
+    <prereq><p>BPM 从 Linux 上的源代码或通过 WSL 部署，管理员可以检查 shell 环境、可选的 <codeph>.env</codeph> 文件和源代码签出。</p></prereq>
+    <context><p>BPM 从带有 <codeph>BPM_</codeph> 前缀的环境变量和存储库根 <codeph>.env</codeph> 文件加载设置。配置模型位于 <codeph>app/core/config.py</codeph> 中。此版本未定义应用程序秘密存储、凭证库、API 令牌设置、加密密钥设置或生产配置文件。</p></context>
     <steps>
-      <step><cmd>列出本次运行使用的 configuration sources。</cmd><info><p>记录 values 来自 shell exports、本地 <codeph>.env</codeph>，还是 <codeph>app/core/config.py</codeph> 中的 defaults。将 <codeph>.env</codeph> 保留在 checkout 本地，不要提交。</p></info></step>
-      <step><cmd>记录影响 process behavior 的 runtime settings。</cmd><info><p>包括 <codeph>BPM_APP_NAME</codeph>、<codeph>BPM_APP_VERSION</codeph>、<codeph>BPM_DEBUG</codeph>、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_RELOAD</codeph>、<codeph>BPM_API_PREFIX</codeph>、<codeph>BPM_DEFAULT_LOCALE</codeph>、<codeph>BPM_SUPPORTED_LOCALES</codeph>、<codeph>BPM_I18N_DIR</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。Defaults 是 local-source defaults，不是 production policy。</p></info></step>
-      <step><cmd>单独记录 data、schema 和 network-related settings。</cmd><info><p>跟踪 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DB_ECHO</codeph>、<codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph>、<codeph>BPM_SCHEMA_BASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph>。即使不包含 password，也要把 database URLs 和 network origins 当作 operational evidence。</p></info></step>
-      <step><cmd>不要把 secrets 放入 BPM configuration examples。</cmd><info><note type="warning">BPM 0.9.0 source deployment 文档不提供 authentication setup、managed secrets、encryption-at-rest configuration、token rotation、tenant isolation 或 secret redaction guarantees。如果环境需要这些 controls，请把它们记录为 external platform controls，而不是 BPM-supported features。</note></info></step>
+      <step><cmd>列出用于此运行的配置源。</cmd><info><p>记录值是来自 shell 导出、本地 <codeph>.env</codeph> 还是 <codeph>app/core/config.py</codeph> 中的默认值。将 <codeph>.env</codeph> 保留在结账本地，并且不提交它。</p></info></step>
+      <step><cmd>记录影响流程行为的运行时设置。</cmd><info><p>包括 <codeph>BPM_APP_NAME</codeph>、<codeph>BPM_APP_VERSION</codeph>、<codeph>BPM_DEBUG</codeph>、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_RELOAD</codeph>、<codeph>BPM_API_PREFIX</codeph>、<codeph>BPM_DEFAULT_LOCALE</codeph>、<codeph>BPM_SUPPORTED_LOCALES</codeph>、<codeph>BPM_I18N_DIR</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。默认值是本地源默认值，而不是生产策略。</p></info></step>
+      <step><cmd>分别记录数据、模式和网络相关设置。</cmd><info><p>跟踪 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DB_ECHO</codeph>、<codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph>、<codeph>BPM_SCHEMA_BASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph>。将数据库 URL 和网络来源视为操作证据，即使它们不包含密码。</p></info></step>
+      <step><cmd>对 BPM 配置示例保密。</cmd><info><note type="warning">BPM 源部署文档不提供身份验证设置、托管机密、静态加密配置、令牌轮换、租户隔离或机密编辑保证。如果您的环境需要这些控件，请将它们记录为外部平台控件而不是 BPM 支持的功能。</note></info></step>
     </steps>
-    <result><p>部署具有经过审查的 configuration inventory，与当前 source settings 一致，并且不暗示不受支持的 secret-management behavior。</p></result>
-    <postreq><p>在把 BPM 暴露到 controlled local environment 之外之前，使用 storage、network 和 operational-boundary 主题审查这些 values 的影响。</p></postreq>
+    <result><p>部署具有经过审核的配置清单，该配置清单与当前源设置相匹配，并不意味着不支持秘密管理行为。</p></result>
+    <postreq><p>在将 BPM 暴露到受控本地环境之外之前，使用存储、网络和操作边界主题来检查记录值的影响。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-plan-devops-storage-logs-backups"/>

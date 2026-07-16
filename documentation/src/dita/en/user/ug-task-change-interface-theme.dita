@@ -4,19 +4,20 @@
   <title>Change the interface theme</title>
   <shortdesc>Select system, light, or dark theme without changing profile content.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All Settings, Guided, JSON, or Compare surface available.</p></prereq>
-    <context><p>Theme selection affects only the BPM interface and helps review tables, code blocks, validation states, and warnings comfortably.</p></context>
+    <prereq><p>Open BPM or the product documentation portal in the browser.</p></prereq>
+    <context><p>Theme selection affects only presentation. BPM and the documentation portal support System, Light, and Dark modes without changing profile or help content.</p></context>
     <steps>
-      <step><cmd>Open the theme selector in the page header.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Choose System, Light, or Dark.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Check that editor panels, tables, notes, focus indicators, and validation states remain readable.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Open the theme selector in the current page header.</cmd><info><p>Expected result: the selector shows System, Light, and Dark without changing the current route, locale, or selected profile.</p></info></step>
+      <step><cmd>Choose System, Light, or Dark.</cmd><info><p>Expected result: System follows the operating-system preference; Light and Dark apply the explicit mode on supported BPM and documentation surfaces.</p></info></step>
+      <step><cmd>Check editor panels, tables, notes, code blocks, focus indicators, and validation states.</cmd><info><p>Expected result: content remains readable; the documentation Light mode uses comfortable light-gray primary surfaces rather than a pure-white page.</p></info></step>
       <step><cmd>Continue editing after confirming that unsaved profile data is still present.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>
-    <result><p>BPM uses the selected visual theme across supported surfaces.</p></result>
+    <result><p>BPM and the product documentation use the selected visual theme across supported surfaces.</p></result>
     <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>
+    <link keyref="topic.ug-concept-documentation-search-boundary"/>
     <link keyref="topic.ug-task-work-across-editor-tabs"/>
   </related-links>
 </task>

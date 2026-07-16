@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-missing-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Recuperarse de missing profile route</title>
-  <shortdesc>Recupérese cuando bookmark, stale tab o editor URL informa Profile not found.</shortdesc>
+  <title>Recuperarse de una ruta de perfil faltante</title>
+  <shortdesc>Recuperarse cuando un marcador, una pestaña obsoleta o una URL del editor informan que no se encontró el perfil.</shortdesc>
   <taskbody>
-    <prereq><p>Un estado visible de BPM, mensaje de validación, advertencia del navegador o acción fallida indica que el workflow actual no puede continuar con seguridad.</p></prereq>
-    <context><p>Una missing profile route significa que la URL ya no resuelve a un active profile; el perfil puede estar archived, deleted, filtrado o ya removed.</p></context>
+    <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
+    <context><p>Una ruta de perfil faltante significa que la URL ya no se resuelve en un perfil activo; el perfil puede estar archivado, eliminado, filtrado o ya eliminado.</p></context>
     <steps>
-      <step><cmd>Vuelva a Library en lugar de editar failed route.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Limpie search and filters, luego busque por nombre, schema channel y último status conocido.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Incluya archived profiles cuando el perfil pudo archivarse deliberadamente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción segura de recuperación.</p></info></step>
-      <step><cmd>Si el perfil sigue missing, deje de usar stale URL y continúe solo desde visible Library row o known export.</cmd><info><note type="warning">No edite internal storage, datos locales del navegador, filas de base de datos ni artefactos generados para recuperar trabajo de perfil visible al usuario.</note></info></step>
+      <step><cmd>Regrese a la Biblioteca en lugar de editar la ruta fallida.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Borre la búsqueda y los filtros, luego busque el perfil por nombre, canal de esquema y último estado conocido.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Incluir perfiles archivados cuando el perfil pueda haber sido archivado deliberadamente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Si aún falta el perfil, deje de usar la URL obsoleta y continúe solo desde una fila visible de la Biblioteca o una exportación conocida.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
     </steps>
-    <result><p>Reabre el perfil desde un estado visible de Library o confirma que bookmarked route ya no es usable.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite tras un reintento limpio, detenga el workflow y conserve el mensaje visible, nombre del perfil, canal de esquema y superficie actual para revisión de mantenimiento.</p></postreq>
+    <result><p>Puede volver a abrir el perfil desde un estado de Biblioteca visible o confirmar que la ruta marcada ya no se puede utilizar.</p></result>
+    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-profile-library"/>

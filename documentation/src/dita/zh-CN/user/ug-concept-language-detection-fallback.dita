@@ -2,12 +2,12 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-language-detection-fallback" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>语言检测和回退</title>
-  <shortdesc>了解 BPM 如何选择受支持的区域设置，以及浏览器语言不受支持时会发生什么。</shortdesc>
+  <shortdesc>了解 BPM 如何选择受支持的区域设置以及当浏览器语言不受支持时会发生什么情况。</shortdesc>
   <conbody>
-    <section id="a-supported-locales"><title>Supported locales</title><p>BPM 将 en、ru、de、zh-CN、fr 和 es-ES 作为一等界面区域设置支持。</p></section>
-    <section id="a-system-language"><title>System language</title><p>当浏览器语言与 BPM 支持的区域设置匹配时，系统语言会跟随浏览器语言。</p></section>
-    <section id="a-fallback"><title>Fallback</title><p>如果浏览器语言不受支持，BPM 会回退到受支持的区域设置，而不是显示部分翻译字符串。</p></section>
-    <section id="a-content-parity"><title>Content parity</title><p>产品文档和截图在六个区域设置中必须保持内容等价，即使 UI 标签因语言而不同。</p></section>
+    <section id="a-supported-locales"><title>支持的语言环境</title><p>BPM 支持 en、ru、de、zh-CN、fr 和 es-ES 作为一级界面语言环境。</p></section>
+    <section id="a-system-language"><title>系统语言</title><p>当系统语言与受支持的 BPM 区域设置匹配时，系统语言将遵循浏览器语言。</p></section>
+    <section id="a-fallback"><title>后备</title><p>如果浏览器语言不受支持，BPM 会回退到受支持的区域设置，而不是显示部分字符串。</p></section>
+    <section id="a-content-parity"><title>内容奇偶校验</title><p>即使 UI 标签因语言而异，产品文档和屏幕截图也必须在所有六种语言环境中保持内容等效。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.ug-task-change-interface-language"/>

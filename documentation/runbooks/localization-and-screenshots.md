@@ -75,6 +75,45 @@ or upstream source provides an approved localized form:
 - Mozilla, Firefox, CIS, BPM, and license names where required for trademark, attribution, or legal
   accuracy.
 
+## Terminology and visible-English workflow
+
+Treat the runtime UI catalog as the authority for every interface name shown in documentation.
+Resolve the source key in `app/i18n_src/` and use its exact value for the topic locale; do not
+translate labels independently in titles, navigation, prose, captions, alt text, or search text.
+`documentation/config/interface-name-authority-0.9.1.json` records the covered surfaces and
+`documentation/config/locale-terminology-authority-0.9.1.json` records the terminology authority.
+
+For each changed localized surface:
+
+1. Compare it with the English source and the corresponding runtime UI catalog key. Include topic
+   titles, short descriptions, headings, prose, lists, tables, notes, warnings, navigation/search
+   strings, captions, and alt text in the review scope.
+2. Use Mozilla Pontoon first for established Firefox UI terminology and Mozilla SUMO second for
+   reviewed user-facing help vocabulary. Record the lookup URL, source term, selected localized
+   term, and decision in the terminology evidence. Use a documented maintainer fallback only for a
+   BPM-specific concept absent from Pontoon/SUMO or conflicting source evidence.
+3. Classify every remaining visible English occurrence. English is permitted only for a reviewed
+   brand, abbreviation, identifier, command/path/API value, or placeholder covered by the authority
+   allowlist. An allowlist entry must identify the exact term and occurrence, cite its authority and
+   rationale, and be removed when that occurrence disappears. Never convert known translation debt
+   into an allowlist entry.
+4. Verify placeholders and runtime catalog keys byte-for-byte, then update the visible-English
+   inventory, replacement evidence, anti-anglicism guard, and human QA evidence when their reviewed
+   scope changes.
+5. Run the focused terminology gates before broader documentation validation:
+
+```bash
+./.venv/bin/pytest -q -m docs_contract \
+  documentation/tests/contract/test_interface_name_authority.py \
+  documentation/tests/contract/test_interface_name_replacement.py \
+  documentation/tests/contract/test_locale_terminology_authority.py \
+  documentation/tests/contract/test_locale_visible_english_inventory.py \
+  documentation/tests/contract/test_locale_anglicism_replacement.py \
+  documentation/tests/contract/test_locale_anti_anglicism_guard.py \
+  documentation/tests/contract/test_visible_english_prose_review.py \
+  documentation/tests/contract/test_locale_human_qa.py
+```
+
 ## Update propagation workflow
 
 When English source changes:
@@ -105,9 +144,46 @@ When English source changes:
 - A screenshot must not be the only place where a step, value, error, warning, or policy state is
   documented. Localized alt text and captions explain what the reader should notice.
 
+## Minimal User Guide screenshot workflow
+
+`documentation/config/user-guide-screenshot-matrix-0.9.1.json` is the maintained source of truth.
+Its minimal scope is exactly the six approved User Guide scenarios in all six published locales
+(36 rows). Do not add Administrator Guide, DevOps Guide, API, or decorative captures, and do not add
+an asset outside the matrix.
+
+For every screenshot change:
+
+1. Update or select the matrix row first. Review its locale, scenario, topic ID, route, viewport,
+   theme, fixture state, filename, asset path, caption key, and alt-text key. A new scenario expands
+   release scope and therefore requires explicit backlog approval before capture.
+2. Start BPM separately with the documented synthetic fixture state, then capture the selected
+   matrix rows with the dedicated command. The command reads the matrix; it must not discover extra
+   pages or silently reuse another locale's asset.
+
+```bash
+./.venv/bin/python documentation/tools/capture_user_guide_screenshots.py
+```
+
+3. Keep clean PNG source assets under `documentation/assets/screenshots/{locale}/` and temporary
+   captures, diffs, masks, and diagnostics under `documentation/reports/screenshots/`. Preserve the
+   matrix filename pattern, viewport byte limit, allowed PNG chunks, orphan rule, and cross-locale
+   hash rule.
+4. Integrate each image only into its matrix User Guide topic. Author its caption and alt text in
+   that topic's locale, using the matrix keys and exact localized UI catalog terminology. Verify
+   that no localized topic resolves its image, caption, or alt text from another locale.
+5. Reconcile all affected rows in the visual-QA evidence against locale, scenario, viewport, theme,
+   filename, dimensions, and asset path. Run the matrix and visual checks before broad validation:
+
+```bash
+./.venv/bin/pytest -q -m docs_contract \
+  documentation/tests/contract/test_user_guide_screenshot_matrix.py \
+  documentation/tests/contract/test_user_guide_screenshot_visual_qa.py \
+  documentation/tests/contract/test_locale_human_qa.py
+```
+
 ## Focused checks
 
-Before screenshot automation exists, combine source review with the smallest available checks:
+After the workflow-specific checks, run the shared documentation gates:
 
 ```bash
 ./.venv/bin/python documentation/tools/validate_metadata.py
@@ -116,11 +192,12 @@ make docs-build
 git diff --check -- <changed_files>
 ```
 
-When screenshot automation lands, use the dedicated documentation screenshot command from the
-snapshot/runbook and run browser work with immediate sandbox escalation.
-
 ## Done
 
 - Locale-specific visible text, captions, alt text, and screenshot filenames remain aligned.
 - No English fallback is served under another locale.
+- Every visible-English exception is narrowly allowlisted with authority and occurrence evidence;
+  stale exceptions are removed.
+- Every reviewed screenshot is represented by exactly one matrix row, and all 36 approved rows keep
+  localized caption/alt-text parity.
 - Reviewed screenshots are source assets; transient captures remain ignored.

@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "review_id": "bpm-0.9.1-visible-english-prose-review",
+  "target_bpm_version": "0.9.1",
+  "backlog_item": "BPM091-M10-06",
+  "status": "accepted",
+  "purpose": "Close the release-blocking full visible-English review for every non-English DITA source while preserving reviewed technical literals.",
+  "scope": {
+    "locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
+    "source_files_reviewed": 805,
+    "source_files_per_locale": {
+      "ru": 161,
+      "de": 161,
+      "zh-CN": 161,
+      "fr": 161,
+      "es-ES": 161
+    },
+    "visible_elements": [
+      "title",
+      "navtitle",
+      "shortdesc",
+      "p",
+      "cmd",
+      "entry",
+      "note",
+      "figdesc",
+      "alt"
+    ],
+    "generated_surfaces_covered_by_existing_contracts": [
+      "navigation",
+      "breadcrumbs",
+      "search titles and snippets",
+      "locale-owned search labels"
+    ]
+  },
+  "baseline": {
+    "source": "documentation/config/documentation-navigation-locale-completion-audit-0.9.1.json",
+    "exact_english_carryover_affected_files": 208,
+    "exact_english_carryover_fragments": 2893,
+    "high_signal_visible_blocks_at_m10_06_start": 1669,
+    "release_blocker": "DOC091-M10-VISIBLE-ENGLISH"
+  },
+  "replacement_passes": [
+    {
+      "pass": "full_structural_peer_review",
+      "visible_blocks_replaced": 10410,
+      "affected_files": 764,
+      "rule": "Use every structurally paired English visible block as the semantic source, preserve XML and technical literals, and write locale-owned prose."
+    },
+    {
+      "pass": "non_aligned_and_interface_authority_follow_up",
+      "source_files_reviewed": 36,
+      "rule": "Review structurally nonparallel installation and user-guide sources separately, then restore every BPM interface name from the active locale runtime catalog."
+    }
+  ],
+  "result": {
+    "structurally_aligned_visible_blocks_replaced": 10410,
+    "structurally_aligned_files_changed": 764,
+    "non_aligned_source_files_reviewed": 36,
+    "release_blocking_exact_peer_carryover_blocks": 0,
+    "remaining_high_signal_candidates": {
+      "ru": 5,
+      "de": 8,
+      "zh-CN": 5,
+      "fr": 5,
+      "es-ES": 5
+    },
+    "remaining_high_signal_candidate_total": 28,
+    "remaining_candidate_disposition": "Reviewed allowlisted technical literals or locale-language false positives only.",
+    "temporary_translation_markers_remaining": 0
+  },
+  "reviewed_exact_peer_homographs": [
+    {
+      "locale": "de",
+      "source": "documentation/src/dita/de/firefox/fx-concept-complex-policy-families.dita",
+      "text": "Proxy",
+      "classification": "established locale technical term"
+    },
+    {
+      "locale": "fr",
+      "source": "documentation/src/dita/fr/firefox/fx-concept-complex-policy-families.dita",
+      "text": "Extensions",
+      "classification": "French noun and Firefox policy identifier context"
+    },
+    {
+      "locale": "fr",
+      "source": "documentation/src/dita/fr/user/ug-reference-profile-status.dita",
+      "text": "Validation",
+      "classification": "French noun"
+    },
+    {
+      "locale": "fr",
+      "source": "documentation/src/dita/fr/user/ug-concept-schema-aware-behavior.dita",
+      "text": "Validation",
+      "classification": "French noun"
+    }
+  ],
+  "remaining_allowlist_categories": [
+    {
+      "category": "brand_or_abbreviation",
+      "examples": ["BPM", "Firefox", "Mozilla", "API", "CIS", "JSON", "WSL"]
+    },
+    {
+      "category": "command_path_or_protocol_literal",
+      "examples": ["GET", "POST", "PATCH", "$BPM_BASE_URL", "/api/profiles", "multipart/form-data"]
+    },
+    {
+      "category": "model_policy_or_preference_identifier",
+      "examples": ["ProfileRead", "ExtensionSettings", "browser.startup.homepage"]
+    },
+    {
+      "category": "machine_readable_response_literal",
+      "examples": ["Expected object with policy mappings", "ok", "detail", "error"]
+    },
+    {
+      "category": "cis_merge_identifier",
+      "examples": ["added_from_cis", "already_satisfied", "manual_review_kept_base"]
+    },
+    {
+      "category": "locale_language_false_positive",
+      "examples": ["Validation", "Extensions", "Proxy"]
+    }
+  ],
+  "representative_review": {
+    "ru": [
+      "documentation/src/dita/ru/admin/admin-task-check-health-readiness.dita",
+      "documentation/src/dita/ru/user/ug-task-use-all-settings.dita",
+      "documentation/src/dita/ru/cis/cis-concept-presets-layers-merge.dita"
+    ],
+    "de": [
+      "documentation/src/dita/de/admin/admin-task-check-health-readiness.dita",
+      "documentation/src/dita/de/user/ug-concept-schema-aware-behavior.dita",
+      "documentation/src/dita/de/firefox/fx-concept-complex-policy-families.dita"
+    ],
+    "zh-CN": [
+      "documentation/src/dita/zh-CN/admin/admin-task-check-health-readiness.dita",
+      "documentation/src/dita/zh-CN/user/ug-task-add-managed-preference.dita",
+      "documentation/src/dita/zh-CN/cis/cis-task-trace-cis-source.dita"
+    ],
+    "fr": [
+      "documentation/src/dita/fr/admin/admin-task-check-health-readiness.dita",
+      "documentation/src/dita/fr/user/ug-reference-profile-status.dita",
+      "documentation/src/dita/fr/firefox/fx-concept-complex-policy-families.dita"
+    ],
+    "es-ES": [
+      "documentation/src/dita/es-ES/admin/admin-task-check-health-readiness.dita",
+      "documentation/src/dita/es-ES/user/ug-task-use-all-settings.dita",
+      "documentation/src/dita/es-ES/cis/cis-task-trace-cis-source.dita"
+    ]
+  },
+  "closure": {
+    "release_blocker": "DOC091-M10-VISIBLE-ENGLISH",
+    "status": "closed",
+    "next_backlog_item": "BPM091-M10-07",
+    "drift_gate_owner": "BPM091-M10-08"
+  }
+}

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="admin-troubleshoot-database-storage" xml:lang="en" audience="administrator devops" product="bpm-0-9-0" platform="linux windows web">
+<task id="admin-troubleshoot-database-storage" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
   <title>Troubleshoot database and storage issues</title>
   <shortdesc>Diagnose local SQLite, storage path, backup, and profile visibility issues without editing database rows directly.</shortdesc>
   <taskbody>
     <prereq><p>Use this procedure when profiles disappear, writes fail, migration evidence is unclear, backup checksums do not match, or <codeph>BPM_DATABASE_URL</codeph> points to an unexpected location.</p></prereq>
-    <context><p>Current source deployment uses local storage such as <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph> and repository-owned files under <codeph>data/</codeph>, schema cache paths, and documentation site paths. There is no managed backup or restore orchestration in BPM 0.9.0.</p></context>
+    <context><p>Current source deployment uses local storage such as <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph> and repository-owned files under <codeph>data/</codeph>, schema cache paths, and documentation site paths. There is no managed backup or restore orchestration in BPM.</p></context>
     <steps>
       <step><cmd>Confirm the active database URL and working directory.</cmd><info><p>Record <codeph>BPM_DATABASE_URL</codeph>, current directory, source revision, and whether the process runs from Linux filesystem or <codeph>/mnt/c</codeph>. Do not assume two shells point at the same <codeph>data/bpm.db</codeph>.</p></info></step>
   <step><cmd>Check migration and profile API evidence before opening storage files.</cmd><info><p>Focused rerun: <codeph>alembic upgrade head</codeph>, then <codeph>curl -fsS http://127.0.0.1:8000/api/profiles?limit=50</codeph>. If the API returns expected profiles, the symptom may be filter, lifecycle, or browser state.</p></info></step>

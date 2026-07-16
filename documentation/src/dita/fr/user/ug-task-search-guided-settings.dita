@@ -1,19 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-guided-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Rechercher des paramètres Guided</title>
-  <shortdesc>Cette tâche décrit le scénario complet « Rechercher des paramètres Guided » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
+  <title>Paramètres guidés de recherche</title>
+  <shortdesc>Recherchez les commandes guidées et accédez au paramètre correspondant sans analyser chaque étape.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>
-    <context><p>Ce sujet décrit le scénario utilisateur complet pour la localisation française sans résumé réduit.</p></context>
+    <prereq><p>Un profil est ouvert dans Éditeur guidé.</p></prereq>
+    <context><p>La recherche guidée est utile lorsque vous connaissez l'objectif de la stratégie mais pas l'étape qui contient la famille de contrôle.</p>
+      <fig id="screenshot-guided-settings-search">
+        <title>Résultats de la recherche guidée des paramètres Recherche</title>
+        <image keyref="screenshot.guided-settings-search" placement="break">
+          <alt>Éditeur guidé affichant les résultats des paramètres liés à la page d'accueil.</alt>
+        </image>
+      </fig>
+    </context>
     <steps>
-      <step><cmd>Ouvrez la zone BPM correspondant à « Rechercher des paramètres Guided ».</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les valeurs actuelles, l’état du profil, les indications et les limites du schéma choisi.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Modifiez uniquement les valeurs nécessaires à l’objectif du profil et évitez les changements voisins accidentels.</cmd><info><p>Résultat attendu : le profil reste cohérent et l’action peut être expliquée lors de la revue.</p></info></step>
-      <step><cmd>Vérifiez les avertissements, l’état final et la récupération avant de continuer.</cmd><info><note type="warning">Avertissement : vérifiez le schéma, l’état du profil et les conséquences avant d’enregistrer.</note></info></step>
+      <step><cmd>Placez le curseur dans le champ de recherche des paramètres guidés.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Saisissez une politique, une préférence ou un terme en langage simple tel que recherche, cookies, signets ou autorisations.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez un résultat pour passer à l'étape et au contrôle correspondants.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Confirmez le canal de schéma si le résultat attendu est manquant.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
-    <result><p>Le profil ou la vue BPM se trouve dans l’état attendu pour ce scénario.</p></result>
-    <postreq><p>Récupération : si le résultat diffère, revenez à la zone propriétaire, annulez le dernier changement ou ouvrez le sujet associé.</p></postreq>
+    <result><p>Le paramètre correspondant est visible et prêt à être révisé ou modifié.</p></result>
+    <postreq><p>Récupération : si aucun résultat n'apparaît, supprimez les filtres et confirmez que le schéma Firefox sélectionné prend en charge le contrôle.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>

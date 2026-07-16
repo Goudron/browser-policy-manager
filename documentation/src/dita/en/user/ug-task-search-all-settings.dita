@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Search All Settings</title>
-  <shortdesc>Search configured settings, available policies, known preferences, and setting actions from All Settings.</shortdesc>
+  <title>Search All settings</title>
+  <shortdesc>Search configured settings, available policies, known preferences, and setting actions from All settings.</shortdesc>
   <taskbody>
-    <prereq><p>Open All Settings in any mode.</p></prereq>
+    <prereq><p>Open All settings in any mode.</p></prereq>
     <context><p>Search is shared across Review, Configured, and Catalog work. It can lead to a setting, an action, or a filtered group.</p></context>
     <steps>
-      <step><cmd>Place focus in the All Settings search field.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Enter a policy ID, preference key, category, source, or plain-language term.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Choose a grouped result and confirm the target setting or action.</cmd><info><p>Expected result: the All Settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Place focus in the All settings search field.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Enter a policy ID, preference key, category, source, or plain-language term.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Choose a grouped result and confirm the target setting or action.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
       <step><cmd>Clear the search when you return to browsing or filtering.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>The matching setting or action is selected without losing the current profile context.</p></result>

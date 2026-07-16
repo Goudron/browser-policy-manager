@@ -12,7 +12,7 @@
       "source": "manual",
       "policy_count": 3,
       "preference_count": 2,
-      "expected_surfaces": ["Library", "Guided Editor", "All Settings", "JSON Editor", "Export"]
+      "expected_surfaces": ["Library", "Guided editor", "All settings", "JSON editor", "Export"]
     },
     {
       "id": "doc-profile-esr-archived",
@@ -22,7 +22,7 @@
       "source": "imported-policies-json",
       "policy_count": 2,
       "preference_count": 1,
-      "expected_surfaces": ["Library", "Profile Comparison", "Restore", "Permanent Delete"]
+      "expected_surfaces": ["Library", "Compare profile settings", "Restore", "Permanent Delete"]
     }
   ]
 }
