@@ -98,11 +98,16 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "The user must provide that target version in the request",
         "compact epic id: `BPM086`",
         "<EPIC_ID>-M<milestone_number>-<two_digit_task_number>",
-        "Every task must specify the minimum sufficient ChatGPT-5.5 reasoning level",
-        "`low`",
-        "`medium`",
-        "`high`",
-        "`extra high`",
+        "Every task must specify both the minimum sufficient GPT-5.6 model and the minimum sufficient reasoning level.",
+        "`GPT-5.6 Luna`",
+        "`GPT-5.6 Terra`",
+        "`GPT-5.6 Sol`",
+        "`Light`",
+        "`Medium`",
+        "`High`",
+        "`Extra High`",
+        "Use Terra as the normal default.",
+        "Every Sol assignment must include a short task-specific justification",
         "Product source, UI copy, README, changelog, and maintained documentation use English as the primary product language.",
         "The working chat with the maintainer can be in Russian",
         "The first milestone must include the target-version transition.",
@@ -131,11 +136,13 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "Create a git commit for the completed epic.",
         "Provide the maintainer with the exact `git push` command to run manually.",
         "Do not push from the backlog execution step.",
-        "Show exactly one next task with its ID, essence, acceptance, and minimal reasoning.",
+        "Show exactly one next task with its ID, essence, acceptance, minimum model, and minimal reasoning.",
         "Do not start executing a backlog task just because the backlog exists.",
     }
     for phrase in required_phrases:
         assert phrase in normalized
+
+    assert "ChatGPT-5.5" not in runbook
 
 
 def test_firefox_live_runbook_uses_make_targets_for_sandbox_and_suites():

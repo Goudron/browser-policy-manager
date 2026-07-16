@@ -133,8 +133,8 @@ def test_documentation_snapshot_is_compact_current_and_points_to_existing_contra
     snapshot = _normalized(snapshot_path)
 
     assert snapshot_path.read_text(encoding="utf-8").count("\n") < 180
-    assert "Current completed backlog item: `BPM091-M13-09`" in snapshot
-    assert "Next backlog item: `BPM091-M13-10`" in snapshot
+    assert "Current completed backlog item: `BPM091-M13-10`" in snapshot
+    assert "Next backlog item: `BPM091-M13-11`" in snapshot
     assert "five manifest-backed contextual help links" in snapshot
     assert "localized unavailable/stale/incomplete documentation states" in snapshot
     assert "focused `/help/` accessibility/responsive/CSP/theme integration contracts" in snapshot

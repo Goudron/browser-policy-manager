@@ -64,9 +64,9 @@ Each backlog must include:
 
 Use this task table shape:
 
-| ID | Task | Essence | Minimal reasoning | Acceptance |
-| --- | --- | --- | --- | --- |
-| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | low | Version surfaces, package metadata, and version assertions agree; README does not receive a target-version anchor or release-history entry. |
+| ID | Task | Essence | Model | Minimal reasoning | Acceptance |
+| --- | --- | --- | --- | --- | --- |
+| `BPM086-M1-01` | Update product version surfaces to `0.8.6`. | Move package metadata, active release surfaces, and versioned tests to the target version. | GPT-5.6 Luna | Light | Version surfaces, package metadata, and version assertions agree; README does not receive a target-version anchor or release-history entry. |
 
 Task IDs must use:
 
@@ -76,19 +76,53 @@ Task IDs must use:
 
 Example: `BPM086-M3-04`.
 
-## Minimal Reasoning Field
+## Model And Reasoning Fields
 
-Every task must specify the minimum sufficient ChatGPT-5.5 reasoning level:
+Every task must specify both the minimum sufficient GPT-5.6 model and the minimum sufficient
+reasoning level. Model capability and reasoning effort are independent choices; do not encode both
+decisions in one vague complexity label.
+
+The model tiers follow OpenAI's current model guidance:
+
+| Model | Use when |
+| --- | --- |
+| `GPT-5.6 Luna` | Cost-sensitive, high-volume, well-bounded work with deterministic steps and cheap verification: metadata, docs-index maintenance, repetitive edits after a mapping is approved, direct command wrappers, formatting, and simple contract updates. |
+| `GPT-5.6 Terra` | Default for everyday engineering that needs a balance of capability and cost: focused feature work, local refactors, test design, documentation, localization review, and UI/backend changes that follow established project patterns. |
+| `GPT-5.6 Sol` | Flagship model for genuinely complex professional work: ambiguous cross-system architecture, security-critical reasoning, broad migrations, difficult multi-surface debugging, and release-critical decisions where Terra is not a safe minimum. |
+
+Use this project vocabulary for reasoning effort:
 
 | Level | Use when |
 | --- | --- |
-| `low` | Mechanical metadata, docs index updates, small copy changes, direct command wrappers. |
-| `medium` | Local refactors, focused tests, one subsystem, clear existing patterns. |
-| `high` | Cross-module behavior, migrations, frontend route wiring, schema/localization/test-platform contracts. |
-| `extra high` | Release-critical architecture decisions, broad migrations, coverage recovery across many surfaces, hard-to-reproduce browser behavior. |
+| `Light` | Mechanical or directly specified work with little ambiguity, a short context path, and immediate deterministic verification. |
+| `Medium` | Standard reasoning for a focused subsystem, local trade-offs, adjacent tests, and clear existing patterns. |
+| `High` | Extended reasoning for cross-file behavior, migrations, frontend/backend wiring, or schema, localization, browser, and test-platform contracts. |
+| `Extra High` | The highest allowed effort for release-critical architecture, broad failure analysis, coverage recovery across many surfaces, or hard-to-reproduce behavior. |
 
-Use the lowest level that should still let the task be done safely. Do not inflate reasoning levels
-as a substitute for splitting a task.
+In API terminology, the runbook's `Light` and `Extra High` labels correspond to `low` and `xhigh`.
+The project intentionally uses only `Light`, `Medium`, `High`, and `Extra High`; do not add `none`
+or `max` unless this runbook is revised.
+
+Choose economically in this order:
+
+1. Start with Luna and promote to Terra only when the task needs engineering judgment that Luna is
+   not a safe minimum.
+2. Use Terra as the normal default. Prefer Terra with a higher reasoning level when the work is
+   deep but remains bounded and follows known project patterns.
+3. Promote to Sol only when capability, ambiguity, risk, or cross-domain breadth makes Terra unsafe.
+   Every Sol assignment must include a short task-specific justification in the task essence or
+   acceptance text.
+4. Split an oversized task before selecting a larger model or inflating reasoning effort.
+
+Use the lowest model and reasoning level that should still let the task be completed safely. Final
+quality commands, release metadata, and other mechanically verifiable work do not become Sol tasks
+merely because they occur late in the backlog.
+
+Selection guidance is based on OpenAI's current descriptions of
+[GPT-5.6 model tiers](https://developers.openai.com/api/docs/models) and
+[reasoning levels](https://help.openai.com/en/articles/20001354-gpt-56-in-chatgpt/). Re-check these
+official sources when creating a backlog if model names, availability, or effort controls may have
+changed.
 
 ## Mandatory Version Transition
 
@@ -232,7 +266,7 @@ backlog flow, then prints the push command for the maintainer to run.
 
 When executing a backlog interactively with the user:
 
-1. Show exactly one next task with its ID, essence, acceptance, and minimal reasoning.
+1. Show exactly one next task with its ID, essence, acceptance, minimum model, and minimal reasoning.
 2. Wait for explicit approval.
 3. Execute only that approved task.
 4. Report what changed and which checks passed.
@@ -247,7 +281,10 @@ Before calling a new backlog ready, confirm:
 - target BPM version is present and normalized;
 - epic id and task IDs are stable;
 - milestones are grouped by meaning;
-- every task has `low`, `medium`, `high`, or `extra high` as minimal reasoning;
+- every task names exactly one minimum model: `GPT-5.6 Luna`, `GPT-5.6 Terra`, or `GPT-5.6 Sol`;
+- every task has `Light`, `Medium`, `High`, or `Extra High` as minimal reasoning;
+- Luna is preferred for deterministic high-volume work, Terra is the normal default, and every Sol
+  assignment has a task-specific justification showing why Terra is unsafe;
 - first milestone includes version transition across product surfaces;
 - first milestone includes local editable-package metadata refresh and external dependency
   currency checks for Python, frontend vendor packages, documentation toolchain components, and
