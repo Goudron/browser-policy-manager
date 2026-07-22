@@ -54,7 +54,7 @@
     "corrected_drift": [
       "Replaced the removed All Settings state source with app/static/profiles_all_settings_state.js.",
       "Replaced a missing unknown-policy recovery target with ug-task-handle-raw-unknown-settings.",
-      "Replaced removed Firefox schema-cache paths with the current ESR 140.12 and Release 152 policy schema paths."
+      "Replaced removed Firefox schema-cache paths with the current ESR 140.13 and Release 153 policy schema paths."
     ]
   }
 }

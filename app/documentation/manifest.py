@@ -163,6 +163,9 @@ def _validate_manifest_identity(manifest: dict[str, Any]) -> tuple[str, ...]:
     bpm_version = _manifest_bpm_version(manifest)
     if bpm_version != get_settings().APP_VERSION:
         raise ValueError("documentation manifest BPM version mismatch")
+    artifact = manifest.get("artifact")
+    if not isinstance(artifact, dict) or artifact.get("documentation_version") != bpm_version:
+        raise ValueError("documentation manifest compatibility version mismatch")
 
     return tuple(locales)
 

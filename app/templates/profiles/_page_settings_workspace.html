@@ -16,10 +16,6 @@
                             data-i18n="profiles.settings_route_title">
                             {{ tr("profiles.settings_route_title", "All settings catalog") }}
                         </h2>
-                        <p class="mt-3 text-sm leading-6 text-slate-600"
-                            data-i18n="profiles.settings_route_body">
-                            {{ tr("profiles.settings_route_body", "Search mapped controls and apply policy changes without opening the JSON editor.") }}
-                        </p>
                         {% set context_help_surface = "settings" %}
                         {% include "profiles/_context_help_link.html" %}
                     </div>
@@ -30,19 +26,17 @@
                     role="group"
                     aria-label="{{ tr('profiles.settings_modes_label', 'All settings modes') }}"
                     data-settings-mode-bar>
-                    {% for mode_id, mode_key, mode_body_key in [
-                        ("review", "profiles.settings_mode_review", "profiles.settings_mode_review_body"),
-                        ("configured", "profiles.settings_mode_configured", "profiles.settings_mode_configured_body"),
-                        ("catalog", "profiles.settings_mode_catalog", "profiles.settings_mode_catalog_body"),
+                    {% for mode_id, mode_key in [
+                        ("review", "profiles.settings_mode_review"),
+                        ("configured", "profiles.settings_mode_configured"),
+                        ("catalog", "profiles.settings_mode_catalog"),
                     ] %}
                     <button
                         type="button"
                         class="button-base ghost-button all-settings-mode-button{% if mode_id == 'review' %} is-active{% endif %}"
                         data-settings-mode="{{ mode_id }}"
-                        aria-pressed="{{ 'true' if mode_id == 'review' else 'false' }}"
-                        aria-label="{{ tr(mode_key) }}. {{ tr(mode_body_key) }}">
+                        aria-pressed="{{ 'true' if mode_id == 'review' else 'false' }}">
                         <span class="all-settings-mode-title" data-i18n="{{ mode_key }}">{{ tr(mode_key) }}</span>
-                        <span class="all-settings-mode-copy" data-i18n="{{ mode_body_key }}">{{ tr(mode_body_key) }}</span>
                     </button>
                     {% endfor %}
                 </div>
@@ -72,10 +66,7 @@
                             </button>
                         </div>
                     </label>
-                    <div id="wizard-settings-search-meta" class="wizard-input-hint"
-                        data-i18n="profiles.settings_search_hint">
-                        {{ tr("profiles.settings_search_hint", "Search the All settings catalog by policy, preference, or mapped Firefox area.") }}
-                    </div>
+                    <div id="wizard-settings-search-meta" class="wizard-input-hint" aria-live="polite"></div>
                     <div
                         id="wizard-settings-search-scope"
                         class="wizard-settings-search-scope"
@@ -107,9 +98,6 @@
                     <h3 class="wizard-section-title" data-i18n="profiles.settings_review_title">
                         {{ tr("profiles.settings_review_title", "Technical review") }}
                     </h3>
-                    <p class="wizard-section-copy" data-i18n="profiles.settings_review_body">
-                        {{ tr("profiles.settings_review_body", "Review imported, deprecated, raw fallback, and validation-sensitive settings before handoff.") }}
-                    </p>
                 </div>
                 <p id="all-settings-review-summary" class="wizard-input-hint" aria-live="polite"></p>
             </div>
@@ -126,9 +114,6 @@
                     <h3 class="wizard-section-title" data-i18n="profiles.settings_list_title">
                         {{ tr("profiles.settings_list_title") }}
                     </h3>
-                    <p class="wizard-section-copy" data-i18n="profiles.settings_list_body">
-                        {{ tr("profiles.settings_list_body") }}
-                    </p>
                 </div>
                 <button
                     type="button"

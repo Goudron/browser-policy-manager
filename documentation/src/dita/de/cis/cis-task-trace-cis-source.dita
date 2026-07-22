@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-trace-cis-source" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Verfolgen Sie einen CIS-Wert zu seiner Quelle</title>
+  <title>Einen CIS-Wert bis zu seiner Quelle verfolgen</title>
   <shortdesc>Verfolgen Sie einen konfigurierten Wert auf die Startervoreinstellung, die CIS-Ebene, die Zusammenführungsentscheidung und spätere Änderungen vor dem Export zurück.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein Profil, das aus einer Starter-Voreinstellung erstellt wurde oder auf das eine CIS Level 1- oder Level 2-Ebene angewendet wurde.</p></prereq>

@@ -260,6 +260,33 @@ def test_screenshot_link_normalization_points_to_locale_assets(tmp_path: Path) -
     assert 'src="../assets/screenshots/ug-library-overview-desktop-light.png"' in html
 
 
+def test_transient_dita_screenshot_copies_are_removed_from_publishable_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    screenshot_source = tmp_path / "source/en"
+    screenshot_source.mkdir(parents=True)
+    screenshot_name = "ug-library-overview-desktop-light.png"
+    (screenshot_source / screenshot_name).write_bytes(b"source")
+    monkeypatch.setattr(build_docs, "SCREENSHOT_ROOT", tmp_path / "source")
+
+    locale_root = tmp_path / "site/en"
+    canonical = locale_root / "assets/screenshots" / screenshot_name
+    transient = (
+        locale_root
+        / "home/build/.publish-example/.site-dita-temp/en/input/assets/screenshots/en"
+        / screenshot_name
+    )
+    canonical.parent.mkdir(parents=True)
+    transient.parent.mkdir(parents=True)
+    canonical.write_bytes(b"source")
+    transient.write_bytes(b"source")
+
+    build_docs._remove_dita_transient_screenshot_copies(tmp_path / "site")
+
+    assert canonical.is_file()
+    assert not (locale_root / "home").exists()
+
+
 def test_generated_link_validation_rejects_missing_fragment(tmp_path: Path) -> None:
     _minimal_site(tmp_path)
     page = tmp_path / "en/index.html"
@@ -293,14 +320,18 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert 'role="status" aria-live="polite"' in html
         assert 'bpm-docs-search.js" defer' in html
         assert '<meta name="theme-color" content="#edf2f7">' in html
-        assert 'class="bpm-docs-theme-control"' in html
+        assert "bpm-docs-theme-control" in html
         assert 'data-docs-theme-select' in html
         assert '<option value="system">' in html
         assert '<option value="light">' in html
         assert '<option value="dark">' in html
         assert 'class="bpm-docs-breadcrumbs"' in html
         assert 'aria-label=' in html
-        assert f'hreflang="{locale}" lang="{locale}" aria-current="true"' in html
+        assert 'data-docs-locale-select' in html
+        assert '<option value="system" data-docs-locale-system>' in html
+        assert f'<option value="{locale}"' in html
+        assert 'data-docs-locale-href=' in html
+        assert 'data-docs-locale-matches=' in html
         header = html[
             html.index('<header class="bpm-docs-header">') : html.index("</header>")
         ]
@@ -334,7 +365,8 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
             assert nodes["section:user-guide:orient-and-plan"]["node"]["label"] == (
                 "Ориентируйтесь и планируйте работу с профилями"
             )
-        assert 'BPM 0.9.1' in html
+        assert f"v{build_docs._product_version()}" in html
+        assert "Documentation 0.9.1" not in html
         assert (tmp_path / locale / "assets/bpm-docs.css").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-print.css").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-search.js").is_file()
@@ -409,12 +441,14 @@ def test_portal_navigation_tree_supports_hash_guide_activation_script(
     nodes = _navigation_nodes(navigation)
 
     assert 'data-docs-tree-host' in sidebar
+    assert f'data-navigation-version="{build_docs._product_version()}"' in sidebar
     assert 'role="tree"' not in sidebar
     assert nodes["documentation-root"]["node"]["label"] == "Documents"
     assert nodes["user-guide"]["node"]["anchor"] == "a-user-guide"
     assert nodes["administrator-guide"]["node"]["anchor"] == "a-administrator-guide"
     assert "setupNavigationHost" in script
     assert "validatedNavigationNodes" in script
+    assert "expectedVersion = host.dataset.navigationVersion" in script
     assert "renderNavigationTree" in script
     assert 'guideItemForHash' in script
     assert 'window.location.hash' in script
@@ -423,6 +457,38 @@ def test_portal_navigation_tree_supports_hash_guide_activation_script(
     assert 'tree.querySelectorAll("[data-tree-branch]")' in script
     assert 'event.key === "Enter" && item.hasAttribute("data-tree-branch")' in script
     assert 'requiredExpandedTreeNodes(tree).has(item.dataset.treeNode || "")' in script
+
+
+def test_generated_compatibility_versions_follow_the_product_version(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    product_version = "9.8.7"
+    monkeypatch.setattr(build_docs, "_product_version", lambda: product_version)
+    _minimal_site(tmp_path)
+    build_docs.apply_portal_shell(tmp_path)
+    build_docs.generate_manifest_files(tmp_path)
+
+    manifest = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
+    target_map = json.loads((tmp_path / "ui-target-map.json").read_text(encoding="utf-8"))
+    assert manifest["artifact"]["bpm_version"] == product_version
+    assert manifest["artifact"]["documentation_version"] == product_version
+    assert target_map["bpm_version"] == product_version
+
+    for locale in build_docs.LOCALES:
+        navigation = json.loads((tmp_path / locale / "navigation.json").read_text(encoding="utf-8"))
+        search = json.loads(
+            (tmp_path / "search" / locale / "index.json").read_text(encoding="utf-8")
+        )
+        page = (tmp_path / locale / "index.html").read_text(encoding="utf-8")
+        assert navigation["documentation_version"] == product_version
+        assert search["target_bpm_version"] == product_version
+        assert all(
+            document["versions"]["bpm_version"] == product_version
+            and document["versions"]["documentation_version"] == product_version
+            for document in search["documents"]
+        )
+        assert f'data-navigation-version="{product_version}"' in page
+        assert f"data-tree-storage-key=\"bpm-docs-tree:{locale}:{product_version}\"" in page
 
 
 def test_portal_shell_validation_rejects_inline_styles_and_active_content(tmp_path: Path) -> None:
@@ -533,7 +599,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["integrity_contract_id"] == "bpm-doc-search-integrity-drift-0.9.0"
     assert search_payload["integrity_schema_version"] == 1
     assert search_payload["result_schema_version"] == 1
-    assert search_payload["target_bpm_version"] == "0.9.1"
+    assert search_payload["target_bpm_version"] == build_docs._product_version()
     assert search_payload["search_mode"] == "deterministic-local-static"
     assert search_payload["non_ai_boundary"] == "no-ai-no-rag-no-embeddings-no-generative-answers"
     assert search_payload["status"] == "ready"
@@ -644,7 +710,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert first_document["topic_id"] in first_document["searchable"]["identifiers"]
     assert first_document["filter_facets"]["locale"] == ["en"]
     assert first_document["filter_facets"]["guide_id"] == [first_document["guide_id"]]
-    assert first_document["filter_facets"]["bpm_version"] == ["0.9.1"]
+    assert first_document["filter_facets"]["bpm_version"] == [build_docs._product_version()]
     assert set(first_document["normalized"]["fields"]) == set(search_payload["searchable_fields"])
     assert first_document["normalized"]["tokens"]
     assert first_document["topic_id"] in first_document["normalized"]["fields"]["identifiers"]

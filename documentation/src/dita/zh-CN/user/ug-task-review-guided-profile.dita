@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-guided-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>查看引导配置文件</title>
+  <title>查看引导配置档案</title>
   <shortdesc>在切换之前使用步骤 6 以简单语言检查配置。</shortdesc>
   <taskbody>
     <prereq><p>您已完成要保留的引导式更改。</p></prereq>

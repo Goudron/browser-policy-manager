@@ -4,13 +4,13 @@
   <title>排查架构缓存和 API 验证错误</title>
   <shortdesc>诊断不可用的模式缓存、未知的模式通道和 Firefox 策略验证失败，而无需修补生成的模式工件。</shortdesc>
   <taskbody>
-    <prereq><p>当 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>、<codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph> 或面向用户的验证返回 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph> 时使用此过程；非对象文档可以返回 <codeph>200 ok=false</codeph> 和 <codeph>Expected object with policy mappings</codeph>。</p></prereq>
+    <prereq><p>当 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>、<codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph> 或面向用户的验证返回 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph> 时使用此过程；非对象文档可以返回 <codeph>200 ok=false</codeph> 和 <codeph>Expected object with policy mappings</codeph>。</p></prereq>
     <context><p>BPM 验证取决于维护的模式通道和本地模式/缓存配置。诊断记录问题是否是请求形状、未知配置文件、无效的 Firefox 策略数据或不可用的架构缓存。</p></context>
     <steps>
       <step><cmd>记录准确的验证请求和响应。</cmd><info><p>存储清理后的请求正文哈希、模式通道、HTTP 状态、<codeph>detail</codeph>、<codeph>message</codeph>、<codeph>error</codeph> 和 <codeph>issues</codeph>。如果候选 <codeph>policies.json</codeph> 包含客户值，请将其保留在日志之外。</p></info></step>
-  <step><cmd>首先对请求形状故障进行分类。</cmd><info><p>非对象 <codeph>document</codeph> 或缺失 <codeph>document.policies</codeph> 是操作员输入，而不是模式缓存缺陷；当前的 BPM 可以将其报告为 <codeph>200 ok=false</codeph>。重点重播： <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> 与 <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph>。</p></info></step>
+  <step><cmd>首先对请求形状故障进行分类。</cmd><info><p>非对象 <codeph>document</codeph> 或缺失 <codeph>document.policies</codeph> 是操作员输入，而不是模式缓存缺陷；当前的 BPM 可以将其报告为 <codeph>200 ok=false</codeph>。重点重播： <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph> 与 <codeph>{"document":{"policies":{"DisableTelemetry":true}}}</codeph>。</p></info></step>
   <step><cmd>对模式通道和缓存故障进行分类。</cmd><info><p><codeph>beta-999</codeph> 等配置文件可以返回 <codeph>404</codeph>；不可用的注册模式可以返回 <codeph>503</codeph>。在进行更广泛的重建之前，请检查 <codeph>BPM_SCHEMA_BASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph>。</p></info></step>
-  <step><cmd>使用维护的刷新和验证检查。</cmd><info><p>重点重新运行：<codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_openapi_drift.py</codeph> 用于 API 文档漂移或 API 行为更改时的产品架构测试。不要手动编辑 <codeph>app/schemas/cache</codeph> 或生成的 Firefox 框架。</p></info></step>
+  <step><cmd>使用维护的刷新和验证检查。</cmd><info><p>重点重新运行： 用于 API 文档漂移或 API 行为更改时的产品架构测试。不要手动编辑 <codeph>app/schemas/cache</codeph> 或生成的 Firefox 框架。</p></info></step>
   <step><cmd>停止不安全的恢复并保存证据。</cmd><info><p>如果相同的有效请求在运行期间更改状态，则保留响应正文、源版本、缓存路径和环境变量。</p><note type="warning">不要将生成的模式工件或数据库行作为例行恢复进行编辑；将产品缺陷与操作员有效载荷错误分开。</note></info></step>
     </steps>
     <result><p>运算符具有分类验证失败，重新运行次数最少且没有隐藏模式突变。</p></result>

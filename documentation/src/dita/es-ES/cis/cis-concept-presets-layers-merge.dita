@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-presets-layers-merge" xml:lang="es-ES" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Cómo se fusionan los ajustes preestablecidos, las capas CIS y la atribución de origen</title>
+  <title>Fusión de ajustes preestablecidos, capas CIS y atribución de origen</title>
   <shortdesc>Utilice este tema para comprender cómo BPM combina un ajuste preestablecido inicial, una capa CIS, datos importados, ediciones manuales y respaldo sin procesar antes de la exportación.</shortdesc>
   <conbody>
     <section id="a-source-order"><title>Orden de origen</title><p>BPM trata el ajuste preestablecido inicial como la línea de base inicial, aplica la capa CIS seleccionada para el canal de esquema de Firefox elegido y luego mantiene visibles los valores de respaldo importados, manuales o sin procesar posteriores como atribución de fuente separada. Revise los valores en Todos los ajustes antes de exportar porque la atribución de fuente explica por qué existe un valor configurado y si un cambio anula la fuente de referencia, CIS, manual, importada o sin procesar.</p></section>

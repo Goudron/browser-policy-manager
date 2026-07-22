@@ -29,7 +29,7 @@
     },
     "firefox_channel": {
       "label": "Firefox channel",
-      "values": ["esr-140.12", "release-152"]
+      "values": ["esr-140.13", "esr-153.0", "release-153"]
     },
     "policy_category": {
       "label": "Firefox policy category",
@@ -65,7 +65,7 @@
     },
     "bpm_version": {
       "label": "BPM version",
-      "values": ["0.9.1"]
+      "values": ["{product_version}"]
     }
   },
   "filter_contract": {
@@ -111,7 +111,7 @@
     {
       "fixture_id": "en-firefox-release-ai",
       "locale": "en",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_min_count": 1,
       "must_include_topic_ids": ["fx-concept-complex-policy-families"]
     },

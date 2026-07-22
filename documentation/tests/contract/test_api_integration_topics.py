@@ -247,10 +247,6 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
         "policy import/export",
         "compliance metadata",
         "health checks",
-        "generated OpenAPI contract",
-        "maintained API inventory",
-        "route/model source",
-        "focused API tests",
         "configuration manager",
         "compliance scanner",
         "policy review gate",
@@ -379,7 +375,7 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
         "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?download=1",
         "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?pretty=1",
         "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json?include_deleted=true",
-        "POST $BPM_BASE_URL/api/validate/release-152",
+        "POST $BPM_BASE_URL/api/validate/release-153",
         '{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}',
         "FirefoxPoliciesJsonImportRequest",
         "multipart/form-data",
@@ -394,7 +390,7 @@ def test_english_api_topics_cover_audience_patterns_and_current_api_boundaries()
         "API-VAL-001",
         "candidate policies.json",
         "preflight gate",
-        "POST $BPM_BASE_URL/api/validate/release-152",
+        "POST $BPM_BASE_URL/api/validate/release-153",
         "POST $BPM_BASE_URL/api/validate/beta-999",
         '{"document":123}',
         '{"document":{"policies":[]}}',
@@ -486,7 +482,7 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
     json_import = {
         "name": "Docs API JSON Import",
         "description": "Imported by control product",
-        "schema_version": "release-152",
+        "schema_version": "release-153",
         "compliance": {"framework": "cis", "layer": "cis_l1"},
         "document": {
             "policies": {
@@ -508,7 +504,7 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
         )
         assert json_response.status_code == 201, json_response.text
         json_profile = json_response.json()
-        assert json_profile["schema_version"] == "release-152"
+        assert json_profile["schema_version"] == "release-153"
         assert json_profile["compliance"] == {"framework": "cis", "layer": "cis_l1"}
         assert json_profile["flags"] == json_import["document"]["policies"]
 
@@ -517,7 +513,7 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
             data={
                 "name": "Docs API Multipart Import",
                 "description": "Uploaded policies.json",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "compliance": json.dumps({"framework": "cis", "layer": "cis_l2"}),
             },
             files={
@@ -545,7 +541,7 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
         assert "compliance" not in exported_document
         assert "\n  \"policies\"" in export_response.text
 
-        validation_response = client.post("/api/validate/release-152", json={"document": exported_document})
+        validation_response = client.post("/api/validate/release-153", json={"document": exported_document})
         assert validation_response.status_code == 200, validation_response.text
         assert validation_response.json()["ok"] is True
 
@@ -553,7 +549,7 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
 def test_validation_gate_documented_examples_execute_against_api_test_app() -> None:
     with make_test_client() as client:
         success_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={
                 "document": {
                     "policies": {
@@ -564,22 +560,22 @@ def test_validation_gate_documented_examples_execute_against_api_test_app() -> N
             },
         )
         assert success_response.status_code == 200, success_response.text
-        assert success_response.json() == {"ok": True, "profile": "release-152"}
+        assert success_response.json() == {"ok": True, "profile": "release-153"}
 
         ok_false_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": 123},
         )
         assert ok_false_response.status_code == 200, ok_false_response.text
         assert ok_false_response.json() == {
             "ok": False,
-            "profile": "release-152",
+            "profile": "release-153",
             "detail": "Expected object with policy mappings",
             "error": "Expected object with policy mappings",
         }
 
         malformed_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": []}},
         )
         assert malformed_response.status_code == 400, malformed_response.text
@@ -595,7 +591,7 @@ def test_validation_gate_documented_examples_execute_against_api_test_app() -> N
         assert unknown_channel_response.json()["detail"] == "Unknown profile 'beta-999'"
 
         policy_failure_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": {"Proxy": {"Mode": "bogus"}}}},
         )
         assert policy_failure_response.status_code == 422, policy_failure_response.text
@@ -622,7 +618,7 @@ def test_pull_compare_update_scenario_executes_against_api_test_app() -> None:
     profile_payload = {
         "name": f"Docs Pull Compare {suffix}",
         "description": "Scenario source",
-        "schema_version": "release-152",
+        "schema_version": "release-153",
         "flags": {"DisableTelemetry": False},
         "compliance": {"source": "bpm-library"},
     }
@@ -653,7 +649,7 @@ def test_pull_compare_update_scenario_executes_against_api_test_app() -> None:
         assert changed_keys == ["BlockAboutConfig", "DisableTelemetry"]
 
         validation_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": desired_flags}},
         )
         assert validation_response.status_code == 200, validation_response.text
@@ -711,7 +707,7 @@ def test_import_review_export_compliance_scenario_executes_against_api_test_app(
             "/api/profiles/import/firefox/policies.json",
             json={
                 "name": f"Docs Reviewed Baseline {suffix}",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "compliance": compliance,
                 "document": {"policies": policies},
             },
@@ -726,11 +722,11 @@ def test_import_review_export_compliance_scenario_executes_against_api_test_app(
         assert read_response.json()["revision"] == imported["revision"]
 
         validation_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": policies}},
         )
         assert validation_response.status_code == 200, validation_response.text
-        assert validation_response.json() == {"ok": True, "profile": "release-152"}
+        assert validation_response.json() == {"ok": True, "profile": "release-153"}
 
         export_response = client.get(
             f"/api/export/profiles/{imported['id']}/firefox/policies.json"
@@ -771,7 +767,7 @@ def test_reusable_api_examples_execute_against_api_test_app_without_environment_
         'file=@$BPM_JSON_IMPORT_PATH;type=application/json',
         '"$BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1"',
         'base_url = os.environ["BPM_BASE_URL"].rstrip("/")',
-        'schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-152")',
+        'schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-153")',
         "requests.Session()",
         "ready.raise_for_status()",
         "validation.raise_for_status()",
@@ -804,14 +800,14 @@ def test_reusable_api_examples_execute_against_api_test_app_without_environment_
             "/api/profiles",
             json={
                 "name": f"docs-api-example-{suffix}",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "flags": policies,
             },
         )
         assert create_response.status_code == 201, create_response.text
         created = create_response.json()
         assert created["flags"] == policies
-        assert created["schema_version"] == "release-152"
+        assert created["schema_version"] == "release-153"
 
         list_response = client.get(f"/api/profiles?q={suffix}&lifecycle=active&limit=50&offset=0")
         assert list_response.status_code == 200, list_response.text
@@ -833,17 +829,17 @@ def test_reusable_api_examples_execute_against_api_test_app_without_environment_
         assert update_response.json()["revision"] == read_profile["revision"] + 1
 
         validation_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": policies}},
         )
         assert validation_response.status_code == 200, validation_response.text
-        assert validation_response.json() == {"ok": True, "profile": "release-152"}
+        assert validation_response.json() == {"ok": True, "profile": "release-153"}
 
         json_import_response = client.post(
             "/api/profiles/import/firefox/policies.json",
             json={
                 "name": f"docs-json-import-example-{suffix}",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "compliance": {"source": "docs-devops-template"},
                 "document": {"policies": {"DisableTelemetry": True}},
             },
@@ -855,7 +851,7 @@ def test_reusable_api_examples_execute_against_api_test_app_without_environment_
             "/api/profiles/import/firefox/policies.json",
             data={
                 "name": f"docs-multipart-import-example-{suffix}",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "compliance": json.dumps({"source": "docs-devops-template"}),
             },
             files={

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-archived-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Überprüfen Sie ein archiviertes Profil</title>
+  <title>Ein archiviertes Profil prüfen</title>
   <shortdesc>Öffnen Sie ein archiviertes Profil bewusst mit archiviertem Kontext, bevor Sie Entscheidungen zur Wiederherstellung oder dauerhaften Löschung treffen.</shortdesc>
   <taskbody>
     <prereq><p>Das archivierte Profil ist weiterhin über einen Bibliothekslebenszyklusfilter oder eine include_deleted-Route sichtbar.</p></prereq>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utilice Controles de esquema avanzados</title>
+  <title>Usar los controles de esquema avanzados</title>
   <shortdesc>Acceda a controles avanzados de preferencias y esquemas desde Todos los ajustes sin tratar a Editor guiado como el editor completo.</shortdesc>
   <taskbody>
     <prereq><p>Abra Todos los ajustes en Catálogo.</p></prereq>

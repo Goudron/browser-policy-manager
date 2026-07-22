@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Дублировать профиль</title>
+  <title>Дублирование профиля</title>
   <shortdesc>Создайте именованный управляемый черновик из существующего сохраненного профиля, если вам нужна безопасная отправная точка для изменений.</shortdesc>
   <taskbody>
     <prereq><p>Исходный профиль виден в библиотеке, и вы подтвердили идентичность его строки.</p></prereq>

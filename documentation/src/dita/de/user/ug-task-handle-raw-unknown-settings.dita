@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-handle-raw-unknown-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Behandelt rohe und unbekannte Einstellungen</title>
+  <title>Roh- und unbekannte Einstellungen behandeln</title>
   <shortdesc>Überprüfen Sie importierte unbekannte Schlüssel und Roh-Fallback-Werte, ohne sie versehentlich zu verlieren.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie Prüfung oder eine unformatierte/unbekannte gefilterte Liste in Alle Einstellungen.</p></prereq>

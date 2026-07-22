@@ -5,7 +5,7 @@
   <shortdesc>Ouvrez la bibliothèque et utilisez ses décomptes, son statut et ses actions de ligne comme point de départ pour le travail de profil enregistré.</shortdesc>
   <taskbody>
     <prereq><p>BPM est ouvert et vous travaillez avec des enregistrements de profil enregistrés, et non avec un brouillon d'éditeur non enregistré.</p></prereq>
-    <context><p>La bibliothèque répertorie les profils enregistrés et affiche les décomptes filtrés et totaux afin que vous sachiez si les filtres ou la recherche masquent des lignes.</p>
+    <context><p>La bibliothèque répertorie les profils enregistrés et affiche les décomptes filtrés et totaux pour indiquer si la recherche ou les filtres masquent des lignes. La grille d’actions vient d’abord ; la ligne de filtres se trouve immédiatement au-dessus du tableau des profils.</p>
       <fig id="screenshot-library-overview">
         <title>Présentation de la bibliothèque</title>
         <image keyref="screenshot.library-overview" placement="break">
@@ -15,8 +15,8 @@
     </context>
     <steps>
       <step><cmd>Ouvrez la bibliothèque.</cmd><info><p>Résultat attendu : la bibliothèque charge les lignes de profil ou un message d'état vide si aucun profil enregistré n'existe.</p></info></step>
-      <step><cmd>Lisez les décomptes filtrés et totaux avant d'agir sur les lignes.</cmd><info><p>Si le nombre filtré est inférieur au nombre total, le texte de recherche ou les filtres sont actifs.</p></info></step>
-      <step><cmd>Utilisez les actions de ligne uniquement après avoir confirmé le nom de la ligne, le canal de schéma, l'état du cycle de vie et l'état de validation.</cmd><info><note type="warning">Une action de ligne s'applique à ce profil enregistré, et non à un brouillon d'éditeur temporaire.</note></info></step>
+      <step><cmd>Utilisez la grille d’actions pour actualiser la liste, commencer un brouillon, ouvrir Comparer ou importer policies.json.</cmd><info><p>Ces actions précèdent les filtres et le tableau.</p></info></step>
+      <step><cmd>Définissez les filtres de recherche, schéma, état de profil, validation et tri directement au-dessus du tableau ; lisez ensuite les décomptes filtré et total avant une action de ligne.</cmd><info><note type="warning">Une action de ligne s’applique à ce profil enregistré, et non à un brouillon d’éditeur temporaire.</note></info></step>
     </steps>
     <result><p>Vous pouvez identifier la vue Bibliothèque active et choisir l'action de profil suivante sans perdre le contexte.</p></result>
     <postreq><p>Récupération : si les lignes ne se chargent pas ou si l'état d'une action reste en échec, actualisez la bibliothèque, puis utilisez la rubrique de dépannage de la bibliothèque.</p></postreq>

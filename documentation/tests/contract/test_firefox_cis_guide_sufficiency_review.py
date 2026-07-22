@@ -80,10 +80,10 @@ def test_firefox_baseline_and_representative_policy_facts_match_generated_source
     by_id = {policy["policy_id"]: policy for policy in inventory["policies"]}
 
     assert baseline == {
-        "channels": ["esr-140.12", "release-152"],
+        "channels": ["esr-140.13", "esr-153.0", "release-153"],
         "policy_count": inventory["summary"]["policy_union_count"],
-        "both_channels_count": inventory["summary"]["policy_scope_counts"]["both"],
-        "release_only_count": inventory["summary"]["policy_scope_counts"]["release-only"],
+        "all_channels_count": inventory["summary"]["policy_scope_counts"]["both"],
+        "partial_channels_count": inventory["summary"]["policy_scope_counts"]["partial"],
         "managed_preference_count": inventory["summary"]["managed_preference_count"],
         "schema_valid_example_count": index["example_count"],
     }
@@ -91,10 +91,10 @@ def test_firefox_baseline_and_representative_policy_facts_match_generated_source
     assert {entry["value_type"] for entry in by_id["DisableTelemetry"]["channels"].values()} == {"boolean"}
     assert by_id["Homepage"]["channel_scope"] == "both"
     assert {entry["value_type"] for entry in by_id["Homepage"]["channels"].values()} == {"object"}
-    assert by_id["Preferences"]["channels"]["release-152"]["ui"]["preserve_unknown_fields"] is True
+    assert by_id["Preferences"]["channels"]["release-153"]["ui"]["preserve_unknown_fields"] is True
     for policy_id in ("AIControls", "VisualSearchEnabled"):
-        assert by_id[policy_id]["channel_scope"] == "release-only"
-        assert set(by_id[policy_id]["channels"]) == {"release-152"}
+        assert by_id[policy_id]["channel_scope"] == "partial"
+        assert set(by_id[policy_id]["channels"]) == {"esr-153.0", "release-153"}
 
 
 def test_managed_preference_sample_and_cis_l2_mapping_agree() -> None:
@@ -116,7 +116,7 @@ def test_managed_preference_sample_and_cis_l2_mapping_agree() -> None:
     assert target["target_id"] == preference["preference_id"]
     assert target["value"] == {"Status": "locked", "Type": "boolean", "Value": True}
     assert recommendation["level"] == 2
-    assert recommendation["generated_layers"] == ["cis-l2.esr-140.12", "cis-l2.release-152"]
+    assert recommendation["generated_layers"] == ["cis-l2.esr-140.13", "cis-l2.esr-153.0", "cis-l2.release-153"]
 
 
 def test_cis_counts_manual_review_and_provenance_only_states_match_sources() -> None:

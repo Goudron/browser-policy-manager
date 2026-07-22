@@ -17,7 +17,7 @@ mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
 ]]></codeblock><p>Record timestamp, current revision, database URL, file size, and checksum. If the deployment does not use <codeph>data/bpm.db</codeph>, back up the path resolved from <codeph>BPM_DATABASE_URL</codeph> instead.</p></info></step>
-      <step><cmd>Export critical profile evidence before changing code.</cmd><info><p>Use the existing API export examples to save required Firefox <codeph>policies.json</codeph> documents and record response status, profile ID, revision, schema channel, and exported-document hash.</p><note type="warning">If database backup or export evidence is missing, stop the update. Do not replace missing backup evidence with an assumption that Git rollback or <codeph>alembic downgrade</codeph> will be safe.</note></info></step>
+      <step><cmd>Export critical profile evidence before changing the source revision.</cmd><info><p>Use the existing API export examples to save required Firefox <codeph>policies.json</codeph> documents and record response status, profile ID, revision, schema channel, and exported-document hash.</p><note type="warning">If database backup or export evidence is missing, stop the update. Do not replace missing backup evidence with an assumption that Git rollback or <codeph>alembic downgrade</codeph> will be safe.</note></info></step>
     </steps>
     <result><p>The update has a verified pre-change evidence set and a known previous source reference.</p></result>
     <postreq><p>Proceed to refreshing the source revision and dependencies only after the evidence set is complete and reviewed.</p></postreq>

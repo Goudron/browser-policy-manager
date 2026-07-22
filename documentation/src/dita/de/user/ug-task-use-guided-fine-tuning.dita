@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-fine-tuning" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Verwenden Sie geführte Feinabstimmungssteuerelemente</title>
+  <title>Steuerelemente für die Feinabstimmung im Modus „Geführter Editor“ verwenden</title>
   <shortdesc>Erweitern Sie die Feinabstimmung und erweiterte Kontrollen bewusst, nachdem die grundlegenden Entscheidungen klar sind.</shortdesc>
   <taskbody>
     <prereq><p>Ein geführter Profilentwurf verfügt über ein Szenario, eine Voreinstellung oder Anfangseinstellungen.</p></prereq>

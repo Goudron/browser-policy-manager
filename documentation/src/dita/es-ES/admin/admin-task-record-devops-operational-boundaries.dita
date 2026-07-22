@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-devops-operational-boundaries" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Registro de límites de operación de origen</title>
+  <title>Registrar los límites operativos de la implementación desde código fuente</title>
   <shortdesc>Cree una nota de transferencia de operaciones que indique el usuario del tiempo de ejecución, el modelo de proceso, las comprobaciones admitidas y las capacidades de producción diferida.</shortdesc>
   <taskbody>
     <prereq><p>Se completaron las revisiones de configuración, almacenamiento, copia de seguridad, red y CORS para la instancia ejecutada en origen. La documentación</p></prereq>

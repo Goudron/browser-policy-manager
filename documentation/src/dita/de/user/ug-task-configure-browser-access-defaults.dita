@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-browser-access-defaults" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Konfigurieren Sie den Browserzugriff und die Standardeinstellungen</title>
+  <title>Browserzugriff und Standardeinstellungen konfigurieren</title>
   <shortdesc>Verwenden Sie Schritt 2, um den Browserzugriff, das Netzwerkverhalten und die Grundeinstellungen zu konfigurieren.</shortdesc>
   <taskbody>
     <prereq><p>Ein geführter Profilentwurf ist geöffnet.</p></prereq>
@@ -13,7 +13,7 @@
       <step><cmd>Validierungswarnungen, die neben schemaabhängigen Steuerelementen angezeigt werden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Das Profil verfügt über absichtlichen Browserzugriff und Standardverhaltenseinstellungen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn bei der Validierung ein Wert festgestellt wird, machen Sie die letzte Änderung rückgängig oder verwenden Sie Alle Einstellungen, um die Rohrichtlinienform zu überprüfen.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn bei der Validierung ein Wert beanstandet wird, machen Sie die letzte Änderung rückgängig oder verwenden Sie Alle Einstellungen, um die Rohform der Richtlinie zu überprüfen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-plan-devops-storage-logs-backups" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Planen Sie Speicherung, Protokolle und Sicherungsnachweise</title>
+  <title>Speicherung, Protokolle und Sicherungsnachweise planen</title>
   <shortdesc>Suchen Sie die Quell-Bereitstellungsdatenbank, den Schema-Cache, die Dokumentationsseite, Vordergrundprotokolle und manuelle Sicherungsnachweise, ohne Anspruch auf verwaltete Sicherungs- oder Wiederherstellungsunterstützung zu erheben.</shortdesc>
   <taskbody>
     <prereq><p>Das Bereitstellungskonfigurationsinventar umfasst <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_SCHEMA_CACHE_DIR</codeph> und <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>.</p></prereq>

@@ -23,14 +23,14 @@ def test_library_and_editor_timestamps_use_browser_locale_formatters():
         assert 'timeStyle: "short"' in source
 
 
-def test_editor_initial_metadata_does_not_server_render_raw_updated_timestamp():
+def test_editor_chrome_keeps_timestamp_in_lifecycle_details_only():
     template = _read("app/templates/profiles/_page_editor_chrome.html")
+    workspace_source = _read("app/static/profiles_workspace.js")
 
     assert "initial_profile.updated_at" not in template
     assert 'id="current-meta"' in template
-    assert 't("profiles.meta_updated").replace("{value}", formatTimestamp(profile.updated_at))' in _read(
-        "app/static/profiles_workspace.js"
-    )
+    assert "currentMetaEl.textContent = `#${profile.id}`;" in workspace_source
+    assert 't("profiles.meta_updated")' not in workspace_source
 
 
 def test_conflict_copy_timestamp_uses_locale_formatter_instead_of_manual_utc_slice():

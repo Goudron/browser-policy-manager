@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-guided-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Suchgeführte Einstellungen</title>
+  <title>Einstellungen im Modus „Geführter Editor“ durchsuchen</title>
   <shortdesc>Durchsuchen Sie geführte Steuerelemente und springen Sie zur passenden Einstellung, ohne jeden Schritt zu scannen.</shortdesc>
   <taskbody>
     <prereq><p>Ein Profil ist in Geführter Editor geöffnet.</p></prereq>

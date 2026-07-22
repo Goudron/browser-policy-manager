@@ -31,7 +31,7 @@
       },
       "ru": {
         "interface_name": "Все настройки",
-        "title": "Используйте Все настройки",
+        "title": "Работа с разделом «Все настройки»",
         "shortdesc": "Откройте Все настройки для сохраненного профиля, если вам нужен полный визуальный контроль помимо более короткого управляемого рабочего процесса.",
         "first_paragraph": "Существует сохраненный профиль. Прежде чем Все настройки сможет открыться, необходимо сохранить новые несохраненные черновики.",
         "forbidden_english_fragments": [
@@ -53,7 +53,7 @@
       },
       "zh-CN": {
         "interface_name": "所有设置",
-        "title": "使用 所有设置",
+        "title": "使用“所有设置”",
         "shortdesc": "当您需要在较短的引导式工作流程之外进行完整的视觉控制时，请打开 所有设置 以获取已保存的配置文件。",
         "first_paragraph": "存在已保存的配置文件。必须先保存新的未保存草稿，然后才能打开 所有设置。",
         "forbidden_english_fragments": [
@@ -64,8 +64,8 @@
       },
       "fr": {
         "interface_name": "Tous les paramètres",
-        "title": "Utilisez Tous les paramètres",
-        "shortdesc": "Ouvrez Tous les paramètres pour un profil enregistré lorsque vous avez besoin d'un contrôle visuel complet au-delà du flux de travail guidé plus court.",
+        "title": "Utiliser « Tous les paramètres »",
+        "shortdesc": "Ouvrez « Tous les paramètres » pour un profil enregistré lorsque vous avez besoin d’un contrôle visuel complet au-delà du flux de travail guidé.",
         "first_paragraph": "Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que Tous les paramètres puisse s'ouvrir.",
         "forbidden_english_fragments": [
           "Use All settings",
@@ -75,8 +75,8 @@
       },
       "es-ES": {
         "interface_name": "Todos los ajustes",
-        "title": "Utilice Todos los ajustes",
-        "shortdesc": "Abra Todos los ajustes para obtener un perfil guardado cuando necesite un control visual completo más allá del flujo de trabajo guiado más corto.",
+        "title": "Usar «Todos los ajustes»",
+        "shortdesc": "Abra «Todos los ajustes» para un perfil guardado cuando necesite un control visual completo más allá del flujo de trabajo guiado.",
         "first_paragraph": "Existe un perfil guardado. Los nuevos borradores no guardados deben guardarse antes de que se pueda abrir Todos los ajustes.",
         "forbidden_english_fragments": [
           "Use All settings",

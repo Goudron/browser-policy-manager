@@ -67,14 +67,15 @@ def test_schema_validation_fixtures_match_supported_release_and_esr_boundaries()
     esr_unsupported_ai = _policies_fixture("esr-unsupported-ai.example.json")
     invalid_value = _policies_fixture("invalid-policy-value.example.json")
 
-    assert validate_profile_policies_for_channel(common_valid, "esr-140.12") == []
-    assert validate_profile_policies_for_channel(common_valid, "release-152") == []
-    assert validate_profile_policies_for_channel(release_only_valid, "release-152") == []
+    for channel in ("esr-140.13", "esr-153.0", "release-153"):
+        assert validate_profile_policies_for_channel(common_valid, channel) == []
+    for channel in ("esr-153.0", "release-153"):
+        assert validate_profile_policies_for_channel(release_only_valid, channel) == []
 
-    esr_issues = validate_profile_policies_for_channel(esr_unsupported_ai, "esr-140.12")
+    esr_issues = validate_profile_policies_for_channel(esr_unsupported_ai, "esr-140.13")
     assert {issue.policy for issue in esr_issues} == {"AIControls"}
-    assert validate_profile_policies_for_channel(invalid_value, "release-152")
-    assert validate_profile_policies_for_channel(invalid_value, "esr-140.12")
+    for channel in ("esr-140.13", "esr-153.0", "release-153"):
+        assert validate_profile_policies_for_channel(invalid_value, channel)
 
 
 def test_schema_validation_topics_exist_in_every_locale_with_stable_metadata() -> None:
@@ -145,8 +146,9 @@ def test_schema_validation_topics_are_case_mapped_keyed_and_reachable() -> None:
 def test_english_schema_topics_cover_validation_states_and_migration_expectations() -> None:
     text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in TOPICS)
     for required in (
-        "ESR 140.12",
-        "Release 152",
+        "ESR 140.13",
+        "ESR 153.0",
+        "Release 153",
         "DisableTelemetry",
         "AIControls",
         "VisualSearchEnabled",

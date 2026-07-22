@@ -37,7 +37,7 @@ creates a profile ID.
 - Version-aware validation against bundled Firefox policy schemas.
 - Guided editor for common administrator and security-team scenarios.
 - Dedicated AI and smart browser features step for schema versions that support those policies.
-- Schema-aware ESR/Release behavior, including ESR 140.12 handling for unsupported AI settings.
+- Schema-aware Release/ESR behavior across Release 153, ESR 153.0, and ESR 140.13.
 - Triage-first All settings workflow with Review, Configured, and Catalog modes, source attribution,
   grouped search, bounded long lists, and one primary detail editor.
 - JSON editor backed by the locally bundled Monaco editor.
@@ -48,14 +48,16 @@ creates a profile ID.
 
 | Channel | Schema key | Status |
 |---|---|---|
-| Firefox ESR 140.12 | `esr-140.12` | Active |
-| Firefox Release 152 | `release-152` | Active |
+| Firefox Release 153 | `release-153` | Active |
+| Firefox ESR 153.0 | `esr-153.0` | Active |
+| Firefox ESR 140.13 | `esr-140.13` | Active |
 
 Bundled schema files live in `app/schemas/policies/`.
 
 The selected schema controls validation, imported-profile normalization, available UI controls,
-and schema-specific behavior. For example, Firefox ESR 140.12 does not expose supported AI policy
-fields in the UI, while Firefox Release 152 exposes the current AI controls.
+and schema-specific behavior. Firefox Release 153 and ESR 153.0 expose the current AI policy
+controls; ESR 140.13 does not. ESR 140.13 and ESR 153.0 are distinct supported channels, and BPM
+does not migrate a profile automatically from one ESR channel to the other.
 
 ## Web Routes
 
@@ -125,7 +127,7 @@ JSON import example:
 {
   "name": "Workstation baseline",
   "description": "Imported Firefox deployment policy",
-  "schema_version": "esr-140.12",
+  "schema_version": "esr-140.13",
   "document": {
     "policies": {
       "DisableTelemetry": true,
@@ -169,9 +171,11 @@ links cover the main product surfaces, policy/CIS/import/export/validation targe
 supported policy or known managed preference in All settings. Unsupported, unavailable, or unknown
 settings use localized non-link states instead of broken documentation URLs.
 
-The portal uses the same visual language as the BPM application. It supports light, dark, and
-system themes; the light theme uses light-gray primary surfaces instead of a pure-white page. Search
-starts as a compact one-line control and expands when filters or additional room are needed.
+The portal uses the same BPM product header and visual language as the application, including the
+single BPM version derived from product metadata. It supports light, dark, and system themes; the
+light theme uses light-gray primary surfaces instead of a pure-white page. Search starts as a
+compact one-line control. Advanced filters are hidden by default and change only through their
+explicit toggle; search, URL/history hydration, results, and clear preserve that choice.
 
 Navigation is built from one generated source per locale. The independently scrollable sidebar
 opens at the localized Documents root and presents a guide, section, and topic hierarchy where a
@@ -201,36 +205,11 @@ embeddings, vector database, hosted search service, or generated answers are use
 indexes support locale-aware lookup, aliases, bounded typo tolerance, ranking, facets, filters, and
 localized empty-result recovery.
 
-For maintainer review from source, build and install the local documentation artifact before
-opening BPM:
-
-```bash
-make docs-install-dev
-make dev
-```
-
-Then open the product UI and use the documentation link in the header, or open:
+After starting BPM, open the product UI and use the documentation link in the header, or open:
 
 ```text
 http://127.0.0.1:8000/help/
 ```
-
-Focused documentation commands:
-
-```bash
-make setup-docs-toolchain
-make test-docs
-make test-docs-contract
-make test-docs-ui-contract
-make test-docs-browser
-make docs-validate
-make docs-build
-make docs-release-check
-make docs-coverage
-```
-
-`make test-docs-browser` launches Chromium/Selenium. `make docs-install-dev` installs ignored local
-output under `app/documentation/site`; release packaging still requires the package/extraction gates.
 
 ## UI Modes
 
@@ -271,8 +250,9 @@ sections, starter presets, compliance-aware baselines, and focused controls for 
 administration tasks. It intentionally stays smaller than a full schema mirror.
 
 The AI and smart browser features step remains a dedicated guided step. It shows current Firefox
-Release AI controls where the selected schema supports them. For ESR 140.12, the step clearly
-states that the schema does not support AI settings and does not render unsupported controls.
+AI controls for Release 153 and ESR 153.0 where the selected schema supports them. For ESR 140.13,
+the step clearly states that the schema does not support AI settings and does not render unsupported
+controls.
 
 ### All Settings
 
@@ -310,8 +290,8 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 
 ## Localization
 
-The primary project and UI source language is English. Product copy starts from
-`app/i18n/en.json` and English maintainer documentation before it is localized.
+The primary UI source language is English. Product copy starts from `app/i18n/en.json` and is
+available in the active locale catalogs below.
 
 BPM keeps a six-locale UI matrix:
 
@@ -335,8 +315,8 @@ should follow Mozilla Pontoon and SUMO style where applicable. English text shou
 localized UI unless it is a brand name, policy key, product identifier, API term, JSON value, or
 another intentionally untranslated technical value.
 
-Current locale ownership is single-maintainer and manual-review based. External/community translation intake is not a separate maintained workflow yet; any proposed locale copy must follow
-the project glossary, placeholder rules, Pontoon/SUMO terminology workflow, and locale QA runbook.
+Locale terminology follows Mozilla Pontoon and SUMO style where applicable, with the same
+placeholder and glossary rules in every active catalog.
 
 Localization catalogs are served from:
 
@@ -353,26 +333,13 @@ Currently active runtime catalogs:
 - `fr`
 - `es-ES`
 
-## Architecture
-
-- FastAPI application with Jinja templates.
-- SQLAlchemy models with Alembic migrations.
-- SQLite default database at `sqlite+aiosqlite:///./data/bpm.db`.
-- Optional PostgreSQL support through the `postgres` extra.
-- Self-hosted frontend assets under `app/static/`.
-- Locally bundled Monaco editor for the JSON surface.
-- Route-aware security headers and CSP middleware.
-- Startup normalization for legacy stored schema versions.
-- Bundled Firefox policy schemas under `app/schemas/policies/`.
-- Static product documentation runtime bridge under `app/documentation/`.
-
 ## Quick Start
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -e ".[dev]"
+pip install .
 make dev
 ```
 
@@ -380,129 +347,10 @@ Open:
 
 - API root: <http://127.0.0.1:8000/>
 - Profile library: <http://127.0.0.1:8000/profiles>
-- Documentation portal, after `make docs-install-dev`: <http://127.0.0.1:8000/help/>
-
-## Development Commands
-
-Quality checks:
-
-```bash
-make quality
-```
-
-Equivalent focused gates:
-
-```bash
-make typecheck
-make lint
-make test-fast
-make test-contract
-make test-firefox-schema-contract
-make test-locale-contract
-make docs-release-check
-make coverage
-```
-
-Coverage-oriented run:
-
-```bash
-make coverage
-```
-
-Migrations:
-
-```bash
-alembic upgrade head
-alembic revision --autogenerate -m "describe change"
-```
-
-Frontend vendor rebuild:
-
-```bash
-npm ci
-make rebuild-frontend-vendor
-make verify-frontend-vendor
-```
-
-## Testing
-
-Default test runs exclude heavy browser-driven suites through project pytest settings.
-Use the marker-aware Makefile targets for routine development:
-
-```bash
-make test-fast
-make test-contract
-make test-ui
-make test-live
-make test-release
-```
-
-`make test-ui` and `make test-release` start local application/browser processes and should be run
-in an environment that permits local HTTP sockets and Chromium/Selenium execution.
-
-The excluded heavy layers are:
-
-- `browser_ui`
-- `firefox_live`
-- `firefox_live_amo`
-
-Run them explicitly when needed:
-
-```bash
-make test-ui
-make test-firefox-live
-make test-firefox-live-amo
-```
-
-`browser_ui` is a compact local Chromium/Selenium smoke layer. It checks Firefox
-policies import, the Library, Guided editor, All settings, JSON editor, route
-handoff links, the dedicated comparison workflow, compare locale handoff, large
-compare selector lists, comparison table setting labels, named clone drafts,
-clone-name action bounds, and the Russian/Simplified Chinese locale pair. Deep
-UI behavior, full locale quality, and edit/export edge cases stay in faster API
-and static contract tests. GitHub Actions runs mypy, Ruff, and pytest with
-coverage; browser UI smoke remains a local/release verification layer.
-
-`pytest-xdist` is intentionally not enabled in mandatory CI. The opt-in pure-unit
-pilot is available through `make test-unit-pilot` and `make test-unit-xdist`. See
-[`docs/architecture/pytest-xdist-readiness.md`](docs/architecture/pytest-xdist-readiness.md)
-for the xdist decision and future adoption gates.
-
-Live Firefox policy checks validate Firefox runtime behavior for exported `policies.json`
-artifacts rather than the `/profiles` browser UI.
-
-For local Chromium-based UI verification:
-
-```bash
-make local-chromium-ui-audit
-```
-
-That audit writes reports and screenshots under `artifacts/local_chromium_ui_audit/`.
-
-## Project Layout
-
-| Path | Purpose |
-|---|---|
-| `app/api/` | REST API routes. |
-| `app/web/` | HTML route handlers and UI catalogs. |
-| `app/static/` | Self-hosted frontend assets. |
-| `app/templates/` | Jinja templates. |
-| `app/schemas/` | Bundled policy schemas and schema helpers. |
-| `app/services/` | Import, export, normalization, validation, and profile services. |
-| `alembic/` | Database migrations. |
-| `docs/` | Runbooks, migration notes, and project planning notes. |
-| `documentation/` | DITA documentation source, toolchain config, focused tests, fixtures, build tools, and ignored generated output. |
-| `tools/` | Local build, audit, conversion, and maintenance scripts. |
-| `tests/` | Unit, API, web, browser UI, and live Firefox regression tests. |
+- Documentation portal: <http://127.0.0.1:8000/help/>
 
 ## License
 
 This project is licensed under the [MPL-2.0](LICENSE).
-
-## Author
-
-**Valery Ledovskoy**<br>
-📧 [valery@ledovskoy.com](mailto:valery@ledovskoy.com)<br>
-Only emails with `[BPM]` in the subject line are reviewed.
 
 © 2025-2026 • Released under [Mozilla Public License 2.0](LICENSE)

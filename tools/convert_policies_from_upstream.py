@@ -11,10 +11,11 @@ from https://mozilla.github.io/policy-templates/ and saved it to:
 
     data/upstream/policy-templates/policy-templates.html
 
-It will generate two JSON schema files:
+It will generate every target declared in `tools/firefox_schema_targets.json`, currently:
 
-    app/schemas/policies/firefox-release-152.json
-    app/schemas/policies/firefox-esr-140.12.json
+    app/schemas/policies/firefox-release-153.json
+    app/schemas/policies/firefox-esr-153.0.json
+    app/schemas/policies/firefox-esr-140.13.json
 
 These files are emitted as raw JSON Schema bundles with BPM metadata stored
 under ``x-bpm-*`` extension keys.

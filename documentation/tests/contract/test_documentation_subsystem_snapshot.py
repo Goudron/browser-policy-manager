@@ -26,6 +26,7 @@ def test_generated_documentation_subsystem_snapshot_is_compact_and_bounded() -> 
     snapshot = SNAPSHOT.read_text(encoding="utf-8")
 
     assert "BPM Documentation Subsystem Snapshot" in snapshot
+    assert f"Target BPM version: `{generate_subsystem_snapshot._product_version()}`" in snapshot
     assert "Deterministic input digest:" in snapshot
     assert "Documentation tools" in snapshot
     assert "Documentation tests" in snapshot

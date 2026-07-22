@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-manage-profile-retirement" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>存档、恢复、永久删除或重置配置文件</title>
+  <title>存档、恢复、永久删除或重置配置档案</title>
   <shortdesc>使用具有明确审查和恢复记录的破坏性配置文件生命周期端点。</shortdesc>
   <taskbody>
     <prereq><p>在调用破坏性端点之前确认目标配置文件 ID、当前生命周期状态和外部批准记录。</p></prereq>

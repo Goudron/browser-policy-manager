@@ -22,7 +22,7 @@ def _json(path: Path) -> dict[str, object]:
 
 
 def test_search_filter_locale_labels_cover_all_facets_and_values() -> None:
-    facets = _json(SEARCH_FACETS)
+    facets = build_docs._search_facets_filters()
     facet_fields = facets["facet_fields"]
 
     assert set(build_docs.SEARCH_FILTER_FIELD_LABELS) == set(build_docs.LOCALES)
@@ -41,7 +41,7 @@ def test_search_filter_locale_labels_cover_all_facets_and_values() -> None:
 
 
 def test_non_english_visible_filter_labels_do_not_fall_back_to_raw_english() -> None:
-    facets = _json(SEARCH_FACETS)
+    facets = build_docs._search_facets_filters()
     contract = _json(SEARCH_UI_CONTRACT)
     visible_fields = set(contract["localized_labels"]["visible_facets"])
     for locale in set(build_docs.LOCALES) - {"en"}:
@@ -56,7 +56,7 @@ def test_non_english_visible_filter_labels_do_not_fall_back_to_raw_english() -> 
 
 
 def test_localized_filter_payload_preserves_url_params_and_raw_values() -> None:
-    facets = _json(SEARCH_FACETS)
+    facets = build_docs._search_facets_filters()
 
     for locale in build_docs.LOCALES:
         localized = build_docs._localized_search_facet_fields(locale, facets)

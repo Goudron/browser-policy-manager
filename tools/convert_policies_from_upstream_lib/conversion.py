@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+from pathlib import Path
 from typing import Any
 
 from .common import SchemaPolicyDefinition, UpstreamPolicyEntry
@@ -211,6 +213,71 @@ def schema_to_json_schema(
     }
 
 
+def _version_at_least(version: str, minimum: str) -> bool:
+    return _version_tuple(version) >= _version_tuple(minimum)
+
+
+def apply_documented_schema_overrides(schema: dict, target_version: str) -> dict:
+    """Fill documented upstream gaps that the retired policy-template Markdown omits.
+
+    Mozilla's v8.0 release package points policy syntax to Firefox Administrator Reference. Its
+    bundled Markdown omits several ExtensionSettings fields documented for Firefox 153 at
+    https://firefox-admin-docs.mozilla.org/reference/policies/extensionsettings/ . Keep this bridge
+    deliberately narrow and version-gated until the upstream package publishes the complete
+    structure again.
+    """
+    extension_settings = schema.get("properties", {}).get("ExtensionSettings")
+    if not isinstance(extension_settings, dict):
+        return schema
+
+    additional = extension_settings.setdefault(
+        "additionalProperties",
+        {"type": "object", "properties": {}, "additionalProperties": False},
+    )
+    if not isinstance(additional, dict):
+        return schema
+    properties = additional.setdefault("properties", {})
+    if not isinstance(properties, dict):
+        return schema
+
+    base_properties = {
+        "default_area": {"type": "string", "enum": ["navbar", "menupanel"]},
+        "private_browsing": {"type": "boolean"},
+        "restricted_domains": {"type": "array", "items": {"type": "string"}},
+        "temporarily_allow_weak_signatures": {"type": "boolean"},
+    }
+    for name, definition in base_properties.items():
+        properties.setdefault(name, definition)
+
+    installation_mode = properties.setdefault("installation_mode", {"type": "string"})
+    if isinstance(installation_mode, dict):
+        installation_mode["enum"] = ["allowed", "blocked", "force_installed", "normal_installed"]
+
+    allowed_types = properties.setdefault("allowed_types", {"type": "array", "items": {"type": "string"}})
+    if isinstance(allowed_types, dict):
+        allowed_type_items = allowed_types.setdefault("items", {"type": "string"})
+        if isinstance(allowed_type_items, dict):
+            allowed_type_items["enum"] = [
+                "extension",
+                "theme",
+                "dictionary",
+                "locale",
+                "sitepermission",
+            ]
+
+    if _version_at_least(target_version, "153.0"):
+        firefox_153_properties = {
+            "allowed_permissions": {"type": "array", "items": {"type": "string"}},
+            "blocked_permissions": {"type": "array", "items": {"type": "string"}},
+            "runtime_allowed_hosts": {"type": "array", "items": {"type": "string"}},
+            "runtime_blocked_hosts": {"type": "array", "items": {"type": "string"}},
+        }
+        for name, definition in firefox_153_properties.items():
+            properties.setdefault(name, definition)
+
+    return schema
+
+
 def _version_tuple(value: str | None) -> tuple[int, ...]:
     if not value:
         return ()
@@ -258,6 +325,107 @@ def convert_upstream_html_to_policies(html_path) -> list[UpstreamPolicyEntry]:
     return _merge_variant_entries(result)
 
 
+def _markdown_plain_text(value: str) -> str:
+    normalized = value.replace("\\", "").strip()
+    normalized = re.sub(r"`([^`]*)`", r"\1", normalized)
+    normalized = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", normalized)
+    return re.sub(r"[*_]+", "", normalized).strip()
+
+
+def _markdown_policy_property_descriptions(lines: list[str]) -> dict[str, str]:
+    descriptions: dict[str, str] = {}
+    for line in lines:
+        if not line.startswith("|") or line.count("|") < 3:
+            continue
+        cells = [_markdown_plain_text(cell) for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 2 or not cells[0] or set(cells[0]) == {"-"}:
+            continue
+        if cells[0].casefold() in {"name", "key", "property", "setting"}:
+            continue
+        if cells[1] and cells[0] not in descriptions:
+            descriptions[cells[0].strip("`\"' ")] = cells[1]
+    return descriptions
+
+
+def _markdown_policies_json_snippet(lines: list[str]) -> str | None:
+    for index, line in enumerate(lines):
+        if not line.casefold().startswith("#### policies.json"):
+            continue
+        for start in range(index + 1, len(lines)):
+            if lines[start].strip().startswith("```"):
+                end = next(
+                    (
+                        candidate
+                        for candidate in range(start + 1, len(lines))
+                        if lines[candidate].strip().startswith("```")
+                    ),
+                    None,
+                )
+                if end is not None:
+                    return "\n".join(lines[start + 1 : end]).strip() or None
+                return None
+            if lines[start].startswith("### "):
+                break
+    return None
+
+
+def convert_upstream_markdown_to_policies(markdown_path: Path) -> list[UpstreamPolicyEntry]:
+    """Parse the official policy-template Markdown published with current Mozilla releases."""
+    lines = markdown_path.read_text(encoding="utf-8").splitlines()
+    section_indexes = [
+        index for index, line in enumerate(lines) if line.startswith("### ") and not line.startswith("#### ")
+    ]
+    result: list[UpstreamPolicyEntry] = []
+
+    for position, start in enumerate(section_indexes):
+        end = section_indexes[position + 1] if position + 1 < len(section_indexes) else len(lines)
+        heading = lines[start].removeprefix("### ").strip()
+        section_lines = lines[start + 1 : end]
+        compatibility = next(
+            (
+                _markdown_plain_text(line)
+                for line in section_lines
+                if line.startswith("**Compatibility:**")
+            ),
+            None,
+        )
+        snippet = _markdown_policies_json_snippet(section_lines)
+        snippet_keys = _extract_policy_keys_from_snippet(snippet)
+        base_heading = heading.split(" | ", maxsplit=1)[0]
+        policy_key = snippet_keys[0] if len(set(snippet_keys)) == 1 else _canonical_policy_name(base_heading)
+        description = next(
+            (
+                _markdown_plain_text(line)
+                for line in section_lines
+                if line.strip()
+                and not line.startswith(("**Compatibility:**", "####", "```", "|"))
+            ),
+            f"Firefox policy {policy_key}.",
+        )
+        result.append(
+            UpstreamPolicyEntry(
+                name=heading,
+                policy_key=policy_key,
+                description=description,
+                compatibility=compatibility,
+                section_text="\n".join(section_lines) or None,
+                policies_json_snippet=snippet,
+                property_descriptions=_markdown_policy_property_descriptions(section_lines),
+            )
+        )
+
+    if not result:
+        raise RuntimeError(f"Could not find Markdown policy sections in {markdown_path}")
+    return _merge_variant_entries(result)
+
+
+def convert_upstream_document_to_policies(document_path: Path) -> list[UpstreamPolicyEntry]:
+    """Parse the supported upstream documentation format selected by its source extension."""
+    if document_path.suffix.casefold() in {".md", ".markdown"}:
+        return convert_upstream_markdown_to_policies(document_path)
+    return convert_upstream_html_to_policies(document_path)
+
+
 def add_missing_linux_example_entries(
     entries: list[UpstreamPolicyEntry],
     linux_policy_examples: dict[str, Any],
@@ -291,6 +459,8 @@ def _min_version_for_policy_key(policy_key: str) -> str | None:
     }
     if policy_key in release_only_v151:
         return "151.0"
+    if policy_key == "DisableRemoteSettingsAndAcceptSecurityConsequences":
+        return "153.0"
     return None
 
 

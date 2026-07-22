@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>切换编辑器模式</title>
-  <shortdesc>对于同一保存的配置文件，有意在 引导式编辑器、所有设置 和 JSON 之间移动。</shortdesc>
+  <shortdesc>针对同一已保存的配置文件，在引导式编辑器、所有设置和 JSON 之间切换，并使用紧凑的共享配置文件上下文。</shortdesc>
   <taskbody>
     <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
-    <context><p>切换模式更改编辑表面，而不是底层保存的配置文件；在信任另一个表面之前，必须保存未保存的更改。</p></context>
+    <context><p>紧凑的共享上下文会显示当前配置文件的名称、状态、架构通道和验证信号。切换模式只会更改编辑界面，不会更改已保存的配置文件；切换前请保存未保存的更改。</p></context>
     <steps>
       <step><cmd>确认当前配置文件已保存并具有可见的 ID。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>选择目标模式：针对常见工作流程的引导模式、针对完整检查的 所有设置 或针对原始文档工作的 JSON。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
-      <step><cmd>打开目标模式并验证配置文件名称和模式通道。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>打开目标模式并验证紧凑上下文：配置文件名称、状态、架构通道和验证信号。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>仅在保存或有意放弃更改后返回到之前的模式。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
     <result><p>您正在编辑器模式下处理适合当前任务的相同配置文件。</p></result>

@@ -13,7 +13,7 @@
       <step><cmd>Wenn der aktualisierte Status immer noch falsch ist, setzen Sie die Suche und Filter zurück und überprüfen Sie das Profil unter allen Lebenszyklusstatus.</cmd><info><p>Dies unterscheidet eine ausgeblendete Zeile von einem fehlgeschlagenen oder abgeschlossenen Vorgang.</p></info></step>
     </steps>
     <result><p>Sie wissen, ob Sie den Vorgang wiederholen, das Profil wiederherstellen, vor dem Löschen anhalten oder in der aktualisierten Bibliotheksansicht fortfahren müssen.</p></result>
-    <postreq><p>Wiederherstellung: Stoppen Sie bei wiederholten Verbindungs- oder API-Fehlern die Bibliotheksänderungen und behalten Sie den sichtbaren Status für den Support oder die Überprüfung durch den Betreuer bei.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-refresh-profile-library"/>

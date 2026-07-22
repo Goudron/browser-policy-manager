@@ -5,7 +5,7 @@
 <step><cmd>Bauen Sie das geprüfte CPython 3.14.6.</cmd><info><codeblock conref="../../en/admin/admin-task-install-debian-13-source.dita#admin-task-install-debian-13-source/python"/></info></step>
 <step><cmd>Checken Sie BPM aus.</cmd><info><codeblock conref="../../en/admin/admin-task-install-debian-13-source.dita#admin-task-install-debian-13-source/checkout"/></info></step>
 <step><cmd>Installieren und migrieren Sie BPM.</cmd><info><codeblock conref="../../en/admin/admin-task-install-debian-13-source.dita#admin-task-install-debian-13-source/install"/></info></step>
-<step><cmd>Bauen Sie die Dokumentation.</cmd><info><codeblock conref="../../en/admin/admin-task-install-debian-13-source.dita#admin-task-install-debian-13-source/docs"/></info></step>
+
 <step><cmd>Starten Sie BPM.</cmd><info><codeblock conref="../../en/admin/admin-task-install-debian-13-source.dita#admin-task-install-debian-13-source/start"/></info></step>
 <step><cmd>Prüfen Sie das Ergebnis.</cmd><info><codeblock conref="../../en/admin/admin-task-install-debian-13-source.dita#admin-task-install-debian-13-source/verify"/></info></step>
 <step><cmd>Brechen Sie sicher ab.</cmd><info><p>Bewahren Sie Prüfsumme und Protokolle auf; führen Sie keine Datenbankherabstufung aus und entfernen Sie Python erst nach der Diagnose.</p></info></step>

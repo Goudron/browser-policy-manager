@@ -4,10 +4,10 @@
   <title>Select a CIS baseline and starter preset</title>
   <shortdesc>Select the Firefox schema channel, starter preset, and CIS layer that match the deployment goal before detailed review.</shortdesc>
   <taskbody>
-    <prereq><p>You have a profile draft, know whether the target browser follows Firefox ESR 140.12 or Firefox Release 152 schema behavior, and can review values before export.</p></prereq>
+    <prereq><p>You have a profile draft, know whether the target browser follows Firefox ESR 140.13 or Firefox Release 153 schema behavior, and can review values before export.</p></prereq>
     <context><p>A starter preset expresses the environment shape, while a CIS layer adds BPM's mapped hardening baseline. Use both as reviewed inputs, not as automatic deployment approval.</p></context>
     <steps>
-      <step><cmd>Select the Firefox schema channel that matches the target deployment: ESR 140.12 or Release 152.</cmd><info><p>Expected result: BPM validates available policies and managed preferences against the intended channel.</p></info></step>
+      <step><cmd>Select the Firefox schema channel that matches the target deployment: ESR 140.13 or Release 153.</cmd><info><p>Expected result: BPM validates available policies and managed preferences against the intended channel.</p></info></step>
       <step><cmd>Choose a starter preset: Basic corporate for managed office profiles, classroom or kiosk for constrained shared browsing, or protected station for hardened SOC-style workstations.</cmd><info><p>Expected result: the profile has an initial environment baseline before CIS hardening is applied.</p></info></step>
       <step><cmd>Choose CIS Level 1 for broad baseline hardening or CIS Level 2 when the deployment accepts stricter controls and additional review.</cmd><info><p>Expected result: BPM applies the matching generated layer for the selected Firefox channel.</p></info></step>
       <step><cmd>Review source attribution for values added by the preset, the CIS layer, imports, manual edits, or raw fallback.</cmd><info><p>Expected result: each configured value can be traced before export.</p></info></step>

@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-source-update-migrations-docs" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Run migrations and documentation rebuild checks</title>
-  <shortdesc>Apply database migrations, validate documentation source, and rebuild the static documentation output after the source revision changes.</shortdesc>
+  <title>Run migrations and source-update checks</title>
+  <shortdesc>Apply database migrations and verify the updated BPM source deployment after the source revision changes.</shortdesc>
   <taskbody>
     <prereq><p>The checkout and dependencies have been refreshed successfully, and the database backup evidence was collected while BPM was stopped.</p></prereq>
-    <context><p>Updates may introduce database migrations and documentation changes. BPM documents forward migration with <codeph>alembic upgrade head</codeph>; it does not promise automatic downgrade or safe schema rollback.</p></context>
+    <context><p>Updates may introduce database migrations. BPM documents forward migration with <codeph>alembic upgrade head</codeph>; it does not promise automatic downgrade or safe schema rollback.</p></context>
     <steps>
       <step><cmd>Apply database migrations to the intended database.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><p>Use the actual deployment value for <codeph>BPM_DATABASE_URL</codeph>. Stop immediately if migration output is unclear or fails.</p></info></step>
-      <step><cmd>Run a narrow source smoke check before serving users.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make test-fast
-]]></codeblock><p>This check is a source smoke, not a production certification or HA validation.</p></info></step>
-      <step><cmd>Validate and rebuild documentation output for the updated revision.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make docs-validate
-make docs-build
-]]></codeblock><p><codeph>make docs-validate</codeph> checks DITA, metadata, source links, and generated links. <codeph>make docs-build</codeph> rebuilds ignored static output; it does not by itself install a default documentation artifact into the application runtime.</p></info></step>
-      <step><cmd>Stop on migration, smoke, or documentation rebuild failures.</cmd><info><note type="warning">After a migration has run, do not assume Git checkout rollback is enough. Do not run <codeph>alembic downgrade</codeph> unless a reviewed release note explicitly says it is supported for the exact revision pair. Use the pre-update database backup as the safe recovery baseline when rollback is required.</note></info></step>
+      <step><cmd>Start the updated BPM process and verify its current interface.</cmd><info><p>Check health and readiness, then open the Library route. If documentation is required for the deployment, confirm that <codeph>/help/</codeph> reports a ready installed artifact rather than a missing or incompatible state.</p></info></step>
+      <step><cmd>Stop on migration or runtime verification failures.</cmd><info><note type="warning">After a migration has run, do not assume Git checkout rollback is enough. Do not run <codeph>alembic downgrade</codeph> unless a reviewed release note explicitly says it is supported for the exact revision pair. Use the pre-update database backup as the safe recovery baseline when rollback is required.</note></info></step>
     </steps>
-    <result><p>The updated source revision has completed migrations, source smoke, and documentation rebuild checks, or the update has stopped at a named failure point.</p></result>
+    <result><p>The updated source revision has completed migrations and runtime verification, or the update has stopped at a named failure point.</p></result>
     <postreq><p>Start BPM and run the post-update verification topic before handing the instance back to users or integrators.</p></postreq>
   </taskbody>
   <related-links>

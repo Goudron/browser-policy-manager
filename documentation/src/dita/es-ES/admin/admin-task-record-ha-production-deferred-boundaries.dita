@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Registro HA y límites de producción diferida</title>
+  <title>Registrar los límites diferidos de alta disponibilidad y producción</title>
   <shortdesc>Indique qué capacidades de producción, HA, proxy inverso, restauración y gestión de servicios están ausentes en la actualidad y qué se puede preparar para trabajos de diseño posteriores.</shortdesc>
   <taskbody>
     <prereq><p>Existen notas de preparación, exposición de la red, copia de seguridad/exportación, monitoreo y ventana de actualización para la instancia de ejecución de origen actual.</p></prereq>

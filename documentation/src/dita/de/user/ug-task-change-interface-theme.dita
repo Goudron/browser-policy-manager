@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-theme" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Ändern Sie das Oberflächendesign</title>
+  <title>Das Oberflächendesign ändern</title>
   <shortdesc>Wählen Sie System-, helles oder dunkles Design, ohne den Profilinhalt zu ändern.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie BPM oder das Produktdokumentationsportal im Browser.</p></prereq>

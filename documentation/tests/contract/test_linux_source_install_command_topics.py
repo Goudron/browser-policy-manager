@@ -13,8 +13,7 @@ CONTRACT = DOCS / "config/linux-source-install-command-contract-0.9.1.json"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 COMMON = (
     "<approved-0.9.1-ref>", "git clone", "git checkout --detach", "-m venv .venv",
-    'pip install -e ".[dev]"', "alembic upgrade head", "make setup-docs-toolchain",
-    "make docs-validate", "make docs-build", "make dev", "/health", "/health/ready", "/profiles",
+    'pip install -e ".[dev]"', "alembic upgrade head", "make dev", "/health", "/health/ready", "/profiles",
 )
 
 pytestmark = pytest.mark.docs_contract
@@ -101,7 +100,7 @@ def test_localized_peers_resolve_invariant_command_blocks(locale: str) -> None:
         assert root.find("./taskbody/result") is not None
         if locale != "ru":
             conrefs = [node.attrib["conref"] for node in root.findall(".//codeblock[@conref]")]
-            assert len(conrefs) >= 6
+            assert len(conrefs) >= 5
             for conref in conrefs:
                 rel, fragment = conref.split("#", 1)
                 owner = (path.parent / rel).resolve()
@@ -114,7 +113,7 @@ def test_localized_peers_resolve_invariant_command_blocks(locale: str) -> None:
 def test_all_six_locale_peers_preserve_exact_command_parity(target: dict) -> None:
     expected = _normalized_command_lines("en", target["topic_id"])
 
-    assert len(expected) >= 6
+    assert len(expected) >= 5
     for locale in LOCALES[1:]:
         assert _normalized_command_lines(locale, target["topic_id"]) == expected, (
             locale,

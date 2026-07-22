@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-install-ubuntu-26-04-source" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux"><title>Установка BPM из исходников в Ubuntu 26.04 LTS</title><shortdesc>Полная последовательность установки BPM 0.9.1 с системным Python 3.14.</shortdesc><taskbody>
 <prereq><p>Нужны Ubuntu 26.04 LTS, права sudo, доступ HTTPS и согласованная ссылка Git BPM 0.9.1 вместо <codeph>&lt;approved-0.9.1-ref&gt;</codeph>.</p></prereq><context><p>Это односерверный запуск из исходников для контролируемой проверки, а не установка системной службы.</p></context><steps>
-<step><cmd>Установите зависимости, получите исходники, создайте окружение, выполните миграцию и соберите документацию.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+<step><cmd>Установите зависимости, получите исходники, создайте окружение, выполните миграцию.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 . /etc/os-release
 test "$ID" = "ubuntu" && test "$VERSION_ID" = "26.04"
 sudo apt-get update
@@ -26,9 +26,6 @@ python --version
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-make setup-docs-toolchain
-make docs-validate
-make docs-build
 ]]></codeblock><p>Остановитесь при любой ошибке или если версия Python не 3.14.x.</p></info></step>
 <step><cmd>Запустите BPM в основном терминале.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"

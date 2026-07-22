@@ -15,11 +15,12 @@ def test_wizard_starter_catalog_is_schema_aware():
         catalog["presets"]
     )
     assert "DisablePocket" in catalog["managed_policy_keys"]
-    assert (
-        catalog["presets"]["basic_corporate"]["policy_values"]["esr-140.12"]["DisablePocket"]
-        is True
-    )
-    assert catalog["quick_policy_enabled_values"]["DisablePocket"]["release-152"] is True
+    for schema_version in ("esr-140.13", "esr-153.0", "release-153"):
+        assert (
+            catalog["presets"]["basic_corporate"]["policy_values"][schema_version]["DisablePocket"]
+            is True
+        )
+        assert catalog["quick_policy_enabled_values"]["DisablePocket"][schema_version] is True
     assert "ExtensionSettings" in catalog["managed_policy_keys"]
     assert "WebsiteFilter" in catalog["managed_policy_keys"]
     assert "SanitizeOnShutdown" in catalog["managed_policy_keys"]
@@ -37,34 +38,41 @@ def test_wizard_starter_catalog_handles_missing_cis_benchmark_metadata(monkeypat
 
 def test_wizard_starter_catalog_exposes_cis_merged_variants():
     catalog = get_wizard_starter_catalog()
-    merged = catalog["compliance_merged_presets"]["basic_corporate"]["cis_l2"]["release-152"]
-    policies = merged["policy_values"]
+    for schema_version in ("esr-140.13", "esr-153.0", "release-153"):
+        merged = catalog["compliance_merged_presets"]["basic_corporate"]["cis_l2"][
+            schema_version
+        ]
+        policies = merged["policy_values"]
 
-    assert policies["DisableTelemetry"] is True
-    assert policies["DisableFirefoxAccounts"] is True
-    assert policies["ExtensionSettings"]["*"]["installation_mode"] == "blocked"
-    assert policies["Preferences"]["security.mixed_content.block_active_content"]["Value"] is True
-    assert policies["Preferences"]["media.peerconnection.enabled"]["Value"] is False
-    assert merged["summary"]["added_from_cis"] > 0
-    assert any(
-        decision["review_required"] and decision["path"] == ["Proxy", "Mode"]
-        for decision in merged["decisions"]
-    )
+        assert policies["DisableTelemetry"] is True
+        assert policies["DisableFirefoxAccounts"] is True
+        assert policies["ExtensionSettings"]["*"]["installation_mode"] == "blocked"
+        assert policies["Preferences"]["security.mixed_content.block_active_content"]["Value"] is True
+        assert policies["Preferences"]["media.peerconnection.enabled"]["Value"] is False
+        assert merged["summary"]["added_from_cis"] > 0
+        assert any(
+            decision["review_required"] and decision["path"] == ["Proxy", "Mode"]
+            for decision in merged["decisions"]
+        )
 
-    kiosk = catalog["compliance_merged_presets"]["classroom_kiosk"]["cis_l2"]["release-152"]
-    assert kiosk["policy_values"]["ExtensionSettings"]["uBlock0@raymondhill.net"] == {
-        "installation_mode": "force_installed",
-        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi",
-    }
+        kiosk = catalog["compliance_merged_presets"]["classroom_kiosk"]["cis_l2"][
+            schema_version
+        ]
+        assert kiosk["policy_values"]["ExtensionSettings"]["uBlock0@raymondhill.net"] == {
+            "installation_mode": "force_installed",
+            "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi",
+        }
 
-    keep_current = catalog["compliance_merged_presets"]["keep_current"]["cis_l2"]["release-152"]
-    assert keep_current["policy_values"] == {}
+        keep_current = catalog["compliance_merged_presets"]["keep_current"]["cis_l2"][
+            schema_version
+        ]
+        assert keep_current["policy_values"] == {}
 
 
-def test_wizard_starter_presets_validate_for_esr_and_release_148():
+def test_wizard_starter_presets_validate_for_all_supported_schema_channels():
     catalog = get_wizard_starter_catalog()
 
-    for schema_version in ("esr-140.12", "release-152"):
+    for schema_version in ("esr-140.13", "esr-153.0", "release-153"):
         for starter_key in catalog["presets"]:
             document = build_wizard_starter_document(starter_key, schema_version)
             validate_profile_payload_with_schema(
@@ -75,21 +83,25 @@ def test_wizard_starter_presets_validate_for_esr_and_release_148():
                 }
             )
 
-    office_esr = build_wizard_starter_document("basic_corporate", "esr-140.12")
-    office_release = build_wizard_starter_document("basic_corporate", "release-152")
-    soc_esr = build_wizard_starter_document("soc_hard", "esr-140.12")
-    soc_release = build_wizard_starter_document("soc_hard", "release-152")
+    office_esr = build_wizard_starter_document("basic_corporate", "esr-140.13")
+    office_esr_153 = build_wizard_starter_document("basic_corporate", "esr-153.0")
+    office_release = build_wizard_starter_document("basic_corporate", "release-153")
+    soc_esr = build_wizard_starter_document("soc_hard", "esr-140.13")
+    soc_esr_153 = build_wizard_starter_document("soc_hard", "esr-153.0")
+    soc_release = build_wizard_starter_document("soc_hard", "release-153")
 
     assert office_esr["DisablePocket"] is True
+    assert office_esr_153["DisablePocket"] is True
     assert office_release["DisablePocket"] is True
     assert soc_esr["DisablePocket"] is True
+    assert soc_esr_153["DisablePocket"] is True
     assert soc_release["DisablePocket"] is True
 
 
 def test_wizard_starter_presets_include_operational_baseline_controls():
-    office = build_wizard_starter_document("basic_corporate", "release-152")
-    kiosk = build_wizard_starter_document("classroom_kiosk", "release-152")
-    soc = build_wizard_starter_document("soc_hard", "release-152")
+    office = build_wizard_starter_document("basic_corporate", "release-153")
+    kiosk = build_wizard_starter_document("classroom_kiosk", "release-153")
+    soc = build_wizard_starter_document("soc_hard", "release-153")
 
     assert office["Certificates"]["ImportEnterpriseRoots"] is True
     assert office["DNSOverHTTPS"] == {"Enabled": False, "Locked": True}
@@ -148,10 +160,10 @@ def test_resolve_schema_enabled_value_uses_definition_type(monkeypatch):
         lambda schema_version, policy_id: definitions[policy_id],
     )
 
-    assert _resolve_schema_enabled_value("Missing", "release-152") is True
-    assert _resolve_schema_enabled_value("ObjectPolicy", "release-152") == {}
-    assert _resolve_schema_enabled_value("ArrayPolicy", "release-152") == []
-    assert _resolve_schema_enabled_value("StringPolicy", "release-152") == ""
-    assert _resolve_schema_enabled_value("NumberPolicy", "release-152") == 1
-    assert _resolve_schema_enabled_value("IntegerPolicy", "release-152") == 1
-    assert _resolve_schema_enabled_value("BooleanPolicy", "release-152") is True
+    assert _resolve_schema_enabled_value("Missing", "release-153") is True
+    assert _resolve_schema_enabled_value("ObjectPolicy", "release-153") == {}
+    assert _resolve_schema_enabled_value("ArrayPolicy", "release-153") == []
+    assert _resolve_schema_enabled_value("StringPolicy", "release-153") == ""
+    assert _resolve_schema_enabled_value("NumberPolicy", "release-153") == 1
+    assert _resolve_schema_enabled_value("IntegerPolicy", "release-153") == 1
+    assert _resolve_schema_enabled_value("BooleanPolicy", "release-153") is True

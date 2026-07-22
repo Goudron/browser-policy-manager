@@ -4,14 +4,8 @@
         <div class="wizard-section-heading wizard-home-surface-head">
             <div>
                 <h3 class="wizard-section-title" data-i18n="profiles.wizard_homepage_title">{{ tr("profiles.wizard_homepage_title") }}</h3>
-                <p class="wizard-section-copy" data-i18n="profiles.wizard_homepage_body">
-                    {{ tr("profiles.wizard_homepage_body") }}
-                </p>
             </div>
             <button type="button" class="button-base ghost-button wizard-home-surface-toggle" data-home-surface-toggle="startup" aria-expanded="true" data-i18n="profiles.wizard_home_surface_active">{{ tr("profiles.wizard_home_surface_active") }}</button>
-        </div>
-        <div class="wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
         <div class="wizard-input-hint" data-i18n="profiles.wizard_homepage_focus_hint">
             {{ tr("profiles.wizard_homepage_focus_hint") }}
@@ -20,19 +14,15 @@
             <div class="wizard-search-engine-preset-grid" id="wizard-homepage-presets">
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="defaults">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_defaults_title">{{ tr("profiles.wizard_homepage_preset_defaults_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_defaults_copy">{{ tr("profiles.wizard_homepage_preset_defaults_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="portal">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_portal_title">{{ tr("profiles.wizard_homepage_preset_portal_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_portal_copy">{{ tr("profiles.wizard_homepage_preset_portal_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="session">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_session_title">{{ tr("profiles.wizard_homepage_preset_session_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_session_copy">{{ tr("profiles.wizard_homepage_preset_session_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-homepage-preset="locked">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_preset_locked_title">{{ tr("profiles.wizard_homepage_preset_locked_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_preset_locked_copy">{{ tr("profiles.wizard_homepage_preset_locked_copy") }}</span>
                 </button>
             </div>
             <div class="wizard-homepage-shared-recommendations">
@@ -42,11 +32,9 @@
                 <div class="wizard-homepage-shared-actions" id="wizard-homepage-shared-presets">
                     <button type="button" class="button-base ghost-button wizard-search-engine-preset wizard-homepage-shared-action" data-homepage-shared-preset="portal_locked">
                         <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_shared_preset_portal_title">{{ tr("profiles.wizard_homepage_shared_preset_portal_title") }}</span>
-                        <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_shared_preset_portal_copy">{{ tr("profiles.wizard_homepage_shared_preset_portal_copy") }}</span>
                     </button>
                     <button type="button" class="button-base ghost-button wizard-search-engine-preset wizard-homepage-shared-action" data-homepage-shared-preset="return_session">
                         <span class="wizard-search-engine-title" data-i18n="profiles.wizard_homepage_shared_preset_session_title">{{ tr("profiles.wizard_homepage_shared_preset_session_title") }}</span>
-                        <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_homepage_shared_preset_session_copy">{{ tr("profiles.wizard_homepage_shared_preset_session_copy") }}</span>
                     </button>
                 </div>
             </div>
@@ -77,7 +65,6 @@
                 <input id="wizard-homepage-locked" type="checkbox" />
                 <div>
                     <div class="wizard-toggle-title" data-i18n="profiles.wizard_homepage_locked_label">{{ tr("profiles.wizard_homepage_locked_label") }}</div>
-                    <div class="wizard-toggle-copy" data-i18n="profiles.wizard_homepage_locked_copy">{{ tr("profiles.wizard_homepage_locked_copy") }}</div>
                 </div>
             </label>
         </div>
@@ -87,14 +74,8 @@
         <div class="wizard-section-heading wizard-home-surface-head">
             <div>
                 <h3 class="wizard-section-title" data-i18n="profiles.wizard_newtab_title">{{ tr("profiles.wizard_newtab_title") }}</h3>
-                <p class="wizard-section-copy" data-i18n="profiles.wizard_newtab_body">
-                    {{ tr("profiles.wizard_newtab_body") }}
-                </p>
             </div>
             <button type="button" class="button-base ghost-button wizard-home-surface-toggle" data-home-surface-toggle="new_tab" aria-expanded="false" data-i18n="profiles.wizard_home_surface_open">{{ tr("profiles.wizard_home_surface_open") }}</button>
-        </div>
-        <div class="wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
         <div class="wizard-input-hint" data-i18n="profiles.wizard_home_overrides_focus_hint">
             {{ tr("profiles.wizard_home_overrides_focus_hint") }}
@@ -102,19 +83,15 @@
         <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-home-overrides-presets">
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-home-overrides-preset="defaults">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_home_overrides_preset_defaults_title">{{ tr("profiles.wizard_home_overrides_preset_defaults_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_home_overrides_preset_defaults_copy">{{ tr("profiles.wizard_home_overrides_preset_defaults_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-home-overrides-preset="new_tab">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_home_overrides_preset_new_tab_title">{{ tr("profiles.wizard_home_overrides_preset_new_tab_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_home_overrides_preset_new_tab_copy">{{ tr("profiles.wizard_home_overrides_preset_new_tab_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-home-overrides-preset="first_run">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_home_overrides_preset_first_run_title">{{ tr("profiles.wizard_home_overrides_preset_first_run_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_home_overrides_preset_first_run_copy">{{ tr("profiles.wizard_home_overrides_preset_first_run_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-home-overrides-preset="managed">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_home_overrides_preset_managed_title">{{ tr("profiles.wizard_home_overrides_preset_managed_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_home_overrides_preset_managed_copy">{{ tr("profiles.wizard_home_overrides_preset_managed_copy") }}</span>
             </button>
         </div>
         <div class="wizard-grid wizard-stage-panel">
@@ -144,14 +121,8 @@
         <div class="wizard-section-heading wizard-home-surface-head">
             <div>
                 <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_home_title">{{ tr("profiles.wizard_firefox_home_title") }}</h3>
-                <p class="wizard-section-copy" data-i18n="profiles.wizard_firefox_home_body">
-                    {{ tr("profiles.wizard_firefox_home_body") }}
-                </p>
             </div>
             <button type="button" class="button-base ghost-button wizard-home-surface-toggle" data-home-surface-toggle="firefox_home" aria-expanded="false" data-i18n="profiles.wizard_home_surface_open">{{ tr("profiles.wizard_home_surface_open") }}</button>
-        </div>
-        <div class="wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
         <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_home_focus_hint">
             {{ tr("profiles.wizard_firefox_home_focus_hint") }}
@@ -159,19 +130,15 @@
         <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-firefox-home-presets">
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-home-preset="defaults">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_firefox_home_preset_defaults_title">{{ tr("profiles.wizard_firefox_home_preset_defaults_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_home_preset_defaults_copy">{{ tr("profiles.wizard_firefox_home_preset_defaults_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-home-preset="shortcuts">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_firefox_home_preset_shortcuts_title">{{ tr("profiles.wizard_firefox_home_preset_shortcuts_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_home_preset_shortcuts_copy">{{ tr("profiles.wizard_firefox_home_preset_shortcuts_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-home-preset="focused">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_firefox_home_preset_focused_title">{{ tr("profiles.wizard_firefox_home_preset_focused_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_home_preset_focused_copy">{{ tr("profiles.wizard_firefox_home_preset_focused_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-home-preset="managed">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_firefox_home_preset_managed_title">{{ tr("profiles.wizard_firefox_home_preset_managed_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_home_preset_managed_copy">{{ tr("profiles.wizard_firefox_home_preset_managed_copy") }}</span>
             </button>
         </div>
         <div class="wizard-grid wizard-stage-panel">
@@ -202,15 +169,11 @@
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-firefox-home-section-status" data-i18n="profiles.wizard_firefox_home_section_state_empty">{{ tr("profiles.wizard_firefox_home_section_state_empty") }}</div>
         <div class="wizard-toolbar-row wizard-fine-tuning-bar">
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_home_fine_tuning_body">
-                {{ tr("profiles.wizard_firefox_home_fine_tuning_body") }}
-            </div>
             <button type="button" id="wizard-firefox-home-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-firefox-home-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
                 {{ tr("profiles.wizard_fine_tuning_show") }}
             </button>
         </div>
         <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-firefox-home-fine-tuning-panel" hidden>
-            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
             <div class="wizard-field-full">
                 {% call render_wizard_disclosure("profiles.wizard_firefox_home_recommendations_title", "profiles.wizard_firefox_home_recommendations_body", "wizard-firefox-home-recommendations-panel") %}
                     <div class="wizard-grid">

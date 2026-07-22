@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-database-storage" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Beheben Sie Datenbank- und Speicherprobleme</title>
+  <title>Datenbank- und Speicherprobleme beheben</title>
   <shortdesc>Lokale SQLite-, Speicherpfad-, Sicherungs- und Profilsichtbarkeitsprobleme diagnostizieren, ohne Datenbankzeilen direkt zu bearbeiten.</shortdesc>
   <taskbody>
     <prereq><p>Verwenden Sie dieses Verfahren, wenn Profile verschwinden, Schreibvorgänge fehlschlagen, Migrationsnachweise unklar sind, Sicherungsprüfsummen nicht übereinstimmen oder <codeph>BPM_DATABASE_URL</codeph> auf einen unerwarteten Speicherort verweist.</p></prereq>

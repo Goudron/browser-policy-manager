@@ -71,9 +71,9 @@ def test_all_settings_triage_mode_contract_is_backed_by_state_and_bootstrap():
 
     for snippet in (
         "data-settings-mode-bar",
-        '("review", "profiles.settings_mode_review", "profiles.settings_mode_review_body")',
-        '("configured", "profiles.settings_mode_configured", "profiles.settings_mode_configured_body")',
-        '("catalog", "profiles.settings_mode_catalog", "profiles.settings_mode_catalog_body")',
+        '("review", "profiles.settings_mode_review")',
+        '("configured", "profiles.settings_mode_configured")',
+        '("catalog", "profiles.settings_mode_catalog")',
     ):
         assert snippet in settings_template
 

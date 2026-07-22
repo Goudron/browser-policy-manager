@@ -43,7 +43,6 @@ def test_all_settings_screen_reader_labels_are_wired_to_modes_counts_and_badges(
     list_source = static_source("profiles_all_settings_list.js")
 
     for snippet in (
-        'aria-label="{{ tr(mode_key) }}. {{ tr(mode_body_key) }}"',
         'aria-label="{{ tr(\'profiles.settings_modes_label\', \'All settings modes\') }}"',
         'aria-live="polite"',
         'aria-label="{{ tr(\'profiles.settings_configured_domains_label\', \'Configured setting domains\') }}"',

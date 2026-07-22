@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-select-cis-baseline" xml:lang="fr" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Sélectionnez une ligne de base CIS et un préréglage de démarrage</title>
+  <title>Sélectionner une référence CIS et un préréglage de départ</title>
   <shortdesc>Sélectionnez le canal de schéma Firefox, le préréglage de démarrage et la couche CIS qui correspondent à l'objectif de déploiement avant un examen détaillé.</shortdesc>
   <taskbody>
-    <prereq><p>Vous disposez d'un brouillon de profil, savez si le navigateur cible suit le comportement du schéma Firefox ESR 140.12 ou Firefox Release 152 et pouvez vérifier les valeurs avant l'exportation.</p></prereq>
+    <prereq><p>Vous disposez d'un brouillon de profil, savez si le navigateur cible suit le comportement du schéma Firefox ESR 140.13 ou Firefox Release 153 et pouvez vérifier les valeurs avant l'exportation.</p></prereq>
     <context><p>Un préréglage de départ exprime la forme de l'environnement, tandis qu'une couche CIS ajoute la ligne de base de durcissement cartographiée de BPM. Utilisez les deux comme entrées examinées, et non comme approbation de déploiement automatique.</p></context>
     <steps>
-      <step><cmd>Sélectionnez le canal de schéma Firefox qui correspond au déploiement cible : ESR 140.12 ou Release 152.</cmd><info><p>Résultat attendu : BPM valide les stratégies disponibles et Préférences gérées par rapport au canal prévu.</p></info></step>
+      <step><cmd>Sélectionnez le canal de schéma Firefox qui correspond au déploiement cible : ESR 140.13 ou Release 153.</cmd><info><p>Résultat attendu : BPM valide les stratégies disponibles et Préférences gérées par rapport au canal prévu.</p></info></step>
       <step><cmd>Choisissez un préréglage de départ : Entreprise de base pour les profils de bureau gérés, salle de classe ou kiosque pour une navigation partagée contrainte, ou station protégée pour les postes de travail renforcés de style SOC.</cmd><info><p>Résultat attendu : le profil a une référence d'environnement initiale avant l'application du durcissement CIS.</p></info></step>
       <step><cmd>Choisissez le niveau CIS 1 pour un renforcement de base général ou le niveau CIS 2 lorsque le déploiement accepte des contrôles plus stricts et un examen supplémentaire.</cmd><info><p>Résultat attendu : BPM applique la couche générée correspondante pour le canal Firefox sélectionné.</p></info></step>
       <step><cmd>Examinez l'attribution de la source pour les valeurs ajoutées par le préréglage, la couche CIS, les importations, les modifications manuelles ou la solution de secours brute.</cmd><info><p>Résultat attendu : chaque valeur configurée peut être tracée avant l'export.</p></info></step>

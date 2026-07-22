@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-setting-details" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Проверьте детали настройки</title>
+  <title>Просмотр сведений о настройке</title>
   <shortdesc>Выберите параметр и проверьте его значение, источник, проверку, поддержку схемы и расположение продукта.</shortdesc>
   <taskbody>
     <prereq><p>Откройте Все настройки и выберите строку настройки из разделов «Просмотр», «Настроено», «Каталог», «Поиск» или «Глубокая ссылка».</p></prereq>

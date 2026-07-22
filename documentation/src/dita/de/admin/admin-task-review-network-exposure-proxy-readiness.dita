@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-network-exposure-proxy-readiness" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Überprüfen Sie die Fragen zur Netzwerkpräsenz und Proxy-Bereitschaft</title>
+  <title>Netzwerkexposition und Proxy-Bereitschaft prüfen</title>
   <shortdesc>Bereiten Sie Hinweise zur Netzwerkexposition und Reverse-Proxy-Fragen vor, ohne nicht unterstützte TLS- oder Proxy-Rezepte als BPM-Verhalten zu veröffentlichen.</shortdesc>
   <taskbody>
     <prereq><p>Die aktuelle Bewertung der Quellbereitschaft eines einzelnen Knotens ist abgeschlossen und der Betreiber weiß, ob Benutzer BPM über Loopback, eine WSL-weitergeleitete Adresse, einen Laborhost oder einen externen Proxy erreichen.</p></prereq>

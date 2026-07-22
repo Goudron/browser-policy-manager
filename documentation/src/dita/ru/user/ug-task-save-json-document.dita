@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Сохраните документ JSON.</title>
+  <title>Сохранение документа JSON</title>
   <shortdesc>Сохраните действительный необработанный документ JSON обратно в канонический профиль BPM.</shortdesc>
   <taskbody>
     <prereq><p>Документ JSON проверен или остальные предупреждения понятны.</p></prereq>

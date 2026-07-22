@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-settings-by-source" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Einstellungen filtern nach Quelle</title>
+  <title>Einstellungen nach Quelle filtern</title>
   <shortdesc>Filtern Sie konfigurierte Einstellungen nach Baseline-, CIS-, manueller, importierter oder Rohquellenzuordnung.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie Alle Einstellungen in Konfiguriert oder einer quellfähigen Liste.</p></prereq>

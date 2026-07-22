@@ -98,6 +98,13 @@ Treat CIS documentation as part of the benchmark or mapping refresh:
   documentation/tests/contract/test_all_settings_help_target_map.py
 ```
 
+9. If the refresh changes compact UI copy or documentation chrome, cite the affected UI-copy
+   classification dispositions. Preserve essential and safety/accessibility meaning at the action;
+   do not restore routine explanation. Every affected circled-info link has a localized
+   manifest-backed owner or explicit reviewed no-link disposition. Recheck audience/style review,
+   normalized BPM header parity, one derived BPM product version, and the explicit advanced-filter
+   toggle: search, URL/history hydration, results, and clear must not reopen a collapsed panel.
+
 ## 9. Release checklist
 
 - `sources.yaml` includes the new entry and keeps prior versions.
@@ -110,4 +117,6 @@ Treat CIS documentation as part of the benchmark or mapping refresh:
   recommendation and Firefox owner topics.
 - Visible terminology follows runtime UI catalogs plus reviewed Pontoon/SUMO evidence, and affected
   approved screenshot rows retain six-locale caption/alt-text parity.
+- Any changed compact-copy, contextual-help, header/version, or advanced-filter surface has current
+  classification, localized target, audience/style, and collapsed-filter regression evidence.
 - Update notes mention the benchmark version and release date.

@@ -182,5 +182,10 @@
     "profiles.schema_field_use_proxy_for_dns": "Usar proxy para DNS",
     "profiles.schema_field_value": "Valor",
     "profiles.schema_field_virtual_reality": "Virtual realidad",
-    "profiles.schema_field_web_suggestions": "Web sugerencias"
+    "profiles.schema_field_web_suggestions": "Web sugerencias",
+    "profiles.shell_policy_disable_remote_settings_and_accept_security_consequences": "Desactivar la configuración remota con confirmación de riesgos de seguridad",
+    "profiles.schema_field_allowed_permissions": "Permisos permitidos de complementos",
+    "profiles.schema_field_blocked_permissions": "Permisos bloqueados de complementos",
+    "profiles.schema_field_runtime_allowed_hosts": "Hosts permitidos de complementos",
+    "profiles.schema_field_runtime_blocked_hosts": "Hosts bloqueados de complementos"
 }

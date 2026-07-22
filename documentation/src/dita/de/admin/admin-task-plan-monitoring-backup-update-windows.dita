@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-plan-monitoring-backup-update-windows" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Planen Sie Überwachungseingänge, Sicherungsnachweise und Aktualisierungsfenster</title>
+  <title>Überwachungseingänge, Sicherungsnachweise und Aktualisierungsfenster planen</title>
   <shortdesc>Bereiten Sie den aktuellen Betriebsnachweis für eine von der Quelle ausgeführte Instanz vor und vermeiden Sie gleichzeitig Behauptungen über verwaltete Überwachung, offizielle Wiederherstellungsautomatisierung oder fortlaufende Upgrades.</shortdesc>
   <taskbody>
     <prereq><p>Die Instanz hat die Überprüfung der Quellbereitschaft und der Netzwerkgefährdung bestanden und ein einzelner Administrator oder DevOps-Eigentümer ist für das Bewertungsfenster verantwortlich.</p></prereq>
@@ -13,7 +13,7 @@ mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
 ]]></codeblock><p>Exportieren Sie außerdem repräsentative Firefox-Dokumente wie <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> und speichern Sie die resultierenden <codeph>policies.json</codeph>-Beweise mit Prüfsummen.</p></info></step>
-      <step><cmd>Planen Sie ein Stop-the-World-Update-Fenster für Quelländerungen.</cmd><info><p>Planen Sie für 0.9.1 die Ausfallzeit eines Knotens vor <codeph>git fetch --tags</codeph>, Abhängigkeitsaktualisierung, <codeph>alembic upgrade head</codeph>, <codeph>make docs-validate</codeph> und <codeph>make docs-build</codeph>. Rollierende Upgrades sind geplant, aber noch nicht implementiert.</p></info></step>
+      <step><cmd>Planen Sie ein Stop-the-World-Update-Fenster für Quelländerungen.</cmd><info><p>Planen Sie für 0.9.1 die Ausfallzeit eines Knotens vor <codeph>git fetch --tags</codeph>, Abhängigkeitsaktualisierung, <codeph>alembic upgrade head</codeph>,  und . Rollierende Upgrades sind geplant, aber noch nicht implementiert.</p></info></step>
       <step><cmd>Erfassen Sie Lücken als Blocker, nicht als versteckte Annahmen.</cmd><info><note type="warning">BPM bietet keine verwaltete Überwachung, keine automatisierte Backup-Planung, keine offizielle Wiederherstellungsautomatisierung, keine Point-in-Time-Wiederherstellung, keine verwalteten Geheimnisse, keine Token-Rotation oder keine fortlaufende Upgrade-Orchestrierung. Verwenden Sie manuelle Beweise und Stoppbedingungen aus dem Update-Betriebsanleitung.</note></info></step>
     </steps>
     <result><p>Der Betriebsplan enthält Überwachungseingaben, Sicherungs-/Exportnachweise und ein realistisches Aktualisierungsfenster für den aktuellen Quellbetrieb.</p></result>

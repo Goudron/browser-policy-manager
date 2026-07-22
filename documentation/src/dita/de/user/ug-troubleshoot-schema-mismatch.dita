@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-schema-mismatch" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Beheben Sie eine Schemainkongruenz</title>
+  <title>Einen Schema-Konflikt beheben</title>
   <shortdesc>Behandeln Sie nicht unterstützte Schemakanäle, ESR/Release-Konflikte oder schemaabhängige Einstellungen, ohne versteckte Datenänderungen zu erzwingen.</shortdesc>
   <taskbody>
     <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
     <context><p>Schemakonflikt bedeutet normalerweise, dass eine Einstellung in einem Firefox-Kanal vorhanden ist, im ausgewählten Kanal jedoch nicht verfügbar, veraltet oder anders gestaltet ist.</p></context>
     <steps>
-      <step><cmd>Bestätigen Sie, ob das Profil auf ESR 140.12 oder Release 152 abzielt.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Bestätigen Sie, ob das Profil auf ESR 140.13 oder Release 153 abzielt.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Identifizieren Sie die Einstellung, die in diesem Kanal nicht verfügbar, nicht unterstützt, veraltet oder schemaabhängig ist.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Wählen Sie, ob der Schemakanal gewechselt oder die betroffene Einstellung für das beabsichtigte Firefox-Ziel entfernt/geändert werden soll.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Erneute Validierung und Überprüfung der Exportbereitschaft nach der Kanal- oder Einstellungsentscheidung.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
+      <step><cmd>Erneute Validierung und Überprüfung der Exportbereitschaft nach der Kanal- oder Einstellungsentscheidung.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
     <result><p>Das Profil zielt auf den beabsichtigten Firefox-Kanal ab und verbirgt keine schemaabhängige Nichtübereinstimmung mehr.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

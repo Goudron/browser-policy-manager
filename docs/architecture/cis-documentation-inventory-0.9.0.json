@@ -49,40 +49,58 @@
   "generated_for_bpm": "0.9.0",
   "generated_layers": [
     {
-      "document_sha256": "259242f9e0117f98ab003122f9afa9a26298c038d4b1a3558b9c4a8136cc501f",
-      "file": "app/compliance/firefox/cis/generated/cis_l1.esr-140.12.json",
-      "layer_id": "cis-l1.esr-140.12",
+      "document_sha256": "ad0868462a626c11ecf0bda444b12229eda9a8d1146b8b1c53a5cc71474010fb",
+      "file": "app/compliance/firefox/cis/generated/cis_l1.esr-140.13.json",
+      "layer_id": "cis-l1.esr-140.13",
       "level": 1,
       "policy_top_level_count": 30,
       "recommendation_count": 49,
-      "schema_channel": "esr-140.12"
+      "schema_channel": "esr-140.13"
     },
     {
-      "document_sha256": "da68624701dc248a73630029850baa722ce4918acc8ca77258af264512f8b091",
-      "file": "app/compliance/firefox/cis/generated/cis_l1.release-152.json",
-      "layer_id": "cis-l1.release-152",
+      "document_sha256": "d04beeb222a33e5e1ac711fbc0f2f1bb630f432073f808cdd9798f9574e16838",
+      "file": "app/compliance/firefox/cis/generated/cis_l1.esr-153.0.json",
+      "layer_id": "cis-l1.esr-153.0",
       "level": 1,
       "policy_top_level_count": 30,
       "recommendation_count": 49,
-      "schema_channel": "release-152"
+      "schema_channel": "esr-153.0"
     },
     {
-      "document_sha256": "3e7768eaa60b4ebed59f2a7b201418d8cf243d5a7cc9bfeee473bb3a2cfabae2",
-      "file": "app/compliance/firefox/cis/generated/cis_l2.esr-140.12.json",
-      "layer_id": "cis-l2.esr-140.12",
+      "document_sha256": "5fd1fdc2ef844abfd9a697188a7b2cf0763d5d3df1a12be448274ab95a581ada",
+      "file": "app/compliance/firefox/cis/generated/cis_l1.release-153.json",
+      "layer_id": "cis-l1.release-153",
+      "level": 1,
+      "policy_top_level_count": 30,
+      "recommendation_count": 49,
+      "schema_channel": "release-153"
+    },
+    {
+      "document_sha256": "6e59670f37dde2e71c1a2880a784060df621ac8d19471825411edfc3a742c60b",
+      "file": "app/compliance/firefox/cis/generated/cis_l2.esr-140.13.json",
+      "layer_id": "cis-l2.esr-140.13",
       "level": 2,
       "policy_top_level_count": 33,
       "recommendation_count": 53,
-      "schema_channel": "esr-140.12"
+      "schema_channel": "esr-140.13"
     },
     {
-      "document_sha256": "8af0a6180c800884381f58b8a331edd86e6376db969a4a303a43bc2351b9d6d5",
-      "file": "app/compliance/firefox/cis/generated/cis_l2.release-152.json",
-      "layer_id": "cis-l2.release-152",
+      "document_sha256": "1f4db2f8abcc553a62c968d683de656661e6686195228d5436b7fece239bd5dc",
+      "file": "app/compliance/firefox/cis/generated/cis_l2.esr-153.0.json",
+      "layer_id": "cis-l2.esr-153.0",
       "level": 2,
       "policy_top_level_count": 33,
       "recommendation_count": 53,
-      "schema_channel": "release-152"
+      "schema_channel": "esr-153.0"
+    },
+    {
+      "document_sha256": "fd83aa208286f422482e443495e66577b62909e873529f5694f145a7ae3007b2",
+      "file": "app/compliance/firefox/cis/generated/cis_l2.release-153.json",
+      "layer_id": "cis-l2.release-153",
+      "level": 2,
+      "policy_top_level_count": 33,
+      "recommendation_count": 53,
+      "schema_channel": "release-153"
     }
   ],
   "manual_review_paths": [
@@ -182,10 +200,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-1-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -207,8 +227,9 @@
             "Default"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-InstallAddonsPermission",
           "target_id": "InstallAddonsPermission",
@@ -223,10 +244,12 @@
       "confidence": "medium",
       "doc_id": "cis-rec-1-1-2-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": true,
@@ -248,8 +271,9 @@
             "NTLM"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Authentication",
           "target_id": "Authentication",
@@ -264,10 +288,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-5-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -289,8 +315,9 @@
             "Sessions"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SanitizeOnShutdown",
           "target_id": "SanitizeOnShutdown",
@@ -305,10 +332,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-5-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -330,8 +359,9 @@
             "History"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SanitizeOnShutdown",
           "target_id": "SanitizeOnShutdown",
@@ -365,10 +395,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-5-4",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -390,8 +422,9 @@
             "FormData"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SanitizeOnShutdown",
           "target_id": "SanitizeOnShutdown",
@@ -406,10 +439,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-5-5",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -431,8 +466,9 @@
             "Locked"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SanitizeOnShutdown",
           "target_id": "SanitizeOnShutdown",
@@ -447,10 +483,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-6-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -472,8 +510,9 @@
             "Behavior"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Cookies",
           "target_id": "Cookies",
@@ -488,10 +527,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-6-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -513,8 +554,9 @@
             "BehaviorPrivateBrowsing"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Cookies",
           "target_id": "Cookies",
@@ -529,10 +571,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-7-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -554,8 +598,9 @@
             "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisabledCiphers",
           "target_id": "DisabledCiphers",
@@ -570,10 +615,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-9-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -595,8 +642,9 @@
             "Locked"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-EncryptedMediaExtensions",
           "target_id": "EncryptedMediaExtensions",
@@ -611,10 +659,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-10-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -635,8 +685,9 @@
             "ExtensionUpdate"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-ExtensionUpdate",
           "target_id": "ExtensionUpdate",
@@ -670,10 +721,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-15-3-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -696,8 +749,9 @@
             "BlockNewRequests"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Permissions",
           "target_id": "Permissions",
@@ -712,10 +766,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-15-3-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -738,8 +794,9 @@
             "Locked"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Permissions",
           "target_id": "Permissions",
@@ -754,10 +811,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-17-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -779,8 +838,9 @@
             "Default"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-PopupBlocking",
           "target_id": "PopupBlocking",
@@ -795,10 +855,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-17-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -820,8 +882,9 @@
             "Locked"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-PopupBlocking",
           "target_id": "PopupBlocking",
@@ -836,10 +899,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -860,8 +925,9 @@
             "browser.safebrowsing.malware.enabled"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-browser-safebrowsing-malware-enabled",
           "target_id": "browser.safebrowsing.malware.enabled",
@@ -880,10 +946,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -904,8 +972,9 @@
             "browser.safebrowsing.phishing.enabled"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-browser-safebrowsing-phishing-enabled",
           "target_id": "browser.safebrowsing.phishing.enabled",
@@ -924,10 +993,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-3",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -948,8 +1019,9 @@
             "browser.search.update"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-browser-search-update",
           "target_id": "browser.search.update",
@@ -968,10 +1040,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-4",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -992,8 +1066,9 @@
             "dom.allow_scripts_to_close_windows"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-dom-allow-scripts-to-close-windows",
           "target_id": "dom.allow_scripts_to_close_windows",
@@ -1012,10 +1087,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-5",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1036,8 +1113,9 @@
             "dom.disable_window_flip"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-dom-disable-window-flip",
           "target_id": "dom.disable_window_flip",
@@ -1056,10 +1134,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-6",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1080,8 +1160,9 @@
             "dom.disable_window_move_resize"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-dom-disable-window-move-resize",
           "target_id": "dom.disable_window_move_resize",
@@ -1100,10 +1181,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-7",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1124,8 +1207,9 @@
             "extensions.blocklist.enabled"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-extensions-blocklist-enabled",
           "target_id": "extensions.blocklist.enabled",
@@ -1144,10 +1228,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-8",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1168,8 +1254,9 @@
             "media.peerconnection.enabled"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-media-peerconnection-enabled",
           "target_id": "media.peerconnection.enabled",
@@ -1188,8 +1275,9 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-9",
       "generated_layers": [
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1210,8 +1298,9 @@
             "network.IDN_show_punycode"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-network-idn-show-punycode",
           "target_id": "network.IDN_show_punycode",
@@ -1230,10 +1319,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-18-10",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1254,8 +1345,9 @@
             "security.mixed_content.block_active_content"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-pref-security-mixed-content-block-active-content",
           "target_id": "security.mixed_content.block_active_content",
@@ -1274,10 +1366,12 @@
       "confidence": "medium",
       "doc_id": "cis-rec-1-1-19-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": true,
@@ -1299,8 +1393,9 @@
             "Mode"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Proxy",
           "target_id": "Proxy",
@@ -1315,10 +1410,12 @@
       "confidence": "medium",
       "doc_id": "cis-rec-1-1-19-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": true,
@@ -1340,8 +1437,9 @@
             "Locked"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-Proxy",
           "target_id": "Proxy",
@@ -1356,8 +1454,9 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-20-1",
       "generated_layers": [
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1378,8 +1477,9 @@
             "SearchSuggestEnabled"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SearchSuggestEnabled",
           "target_id": "SearchSuggestEnabled",
@@ -1394,10 +1494,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-22-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1419,8 +1521,9 @@
             "Cryptomining"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-EnableTrackingProtection",
           "target_id": "EnableTrackingProtection",
@@ -1435,10 +1538,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-22-2",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1460,8 +1565,9 @@
             "Locked"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-EnableTrackingProtection",
           "target_id": "EnableTrackingProtection",
@@ -1476,10 +1582,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-22-3",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1501,8 +1609,9 @@
             "EmailTracking"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-EnableTrackingProtection",
           "target_id": "EnableTrackingProtection",
@@ -1517,10 +1626,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-22-4",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1542,8 +1653,9 @@
             "Value"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-EnableTrackingProtection",
           "target_id": "EnableTrackingProtection",
@@ -1558,10 +1670,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-22-5",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1583,8 +1697,9 @@
             "Fingerprinting"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-EnableTrackingProtection",
           "target_id": "EnableTrackingProtection",
@@ -1599,10 +1714,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-23-1",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1624,8 +1741,9 @@
             "ExtensionRecommendations"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-UserMessaging",
           "target_id": "UserMessaging",
@@ -1640,10 +1758,12 @@
       "confidence": "medium",
       "doc_id": "cis-rec-1-1-24",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": true,
@@ -1664,8 +1784,9 @@
             "AppAutoUpdate"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-AppAutoUpdate",
           "target_id": "AppAutoUpdate",
@@ -1680,10 +1801,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-25",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1704,8 +1827,9 @@
             "BackgroundAppUpdate"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-BackgroundAppUpdate",
           "target_id": "BackgroundAppUpdate",
@@ -1720,10 +1844,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-26",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1744,8 +1870,9 @@
             "DisableDeveloperTools"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableDeveloperTools",
           "target_id": "DisableDeveloperTools",
@@ -1760,10 +1887,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-27",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1784,8 +1913,9 @@
             "DisableFeedbackCommands"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableFeedbackCommands",
           "target_id": "DisableFeedbackCommands",
@@ -1800,10 +1930,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-28",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1824,8 +1956,9 @@
             "DisableFirefoxAccounts"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableFirefoxAccounts",
           "target_id": "DisableFirefoxAccounts",
@@ -1840,10 +1973,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-29",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1864,8 +1999,9 @@
             "DisableFirefoxStudies"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableFirefoxStudies",
           "target_id": "DisableFirefoxStudies",
@@ -1880,10 +2016,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-30",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1904,8 +2042,9 @@
             "DisableForgetButton"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableForgetButton",
           "target_id": "DisableForgetButton",
@@ -1920,8 +2059,9 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-31",
       "generated_layers": [
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1942,8 +2082,9 @@
             "DisableFormHistory"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableFormHistory",
           "target_id": "DisableFormHistory",
@@ -1958,10 +2099,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-32",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -1982,8 +2125,9 @@
             "DisablePocket"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisablePocket",
           "target_id": "DisablePocket",
@@ -1998,10 +2142,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-33",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2022,8 +2168,9 @@
             "DisablePrivateBrowsing"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisablePrivateBrowsing",
           "target_id": "DisablePrivateBrowsing",
@@ -2038,10 +2185,12 @@
       "confidence": "medium",
       "doc_id": "cis-rec-1-1-34",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": true,
@@ -2062,8 +2211,9 @@
             "DisableSystemAddonUpdate"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableSystemAddonUpdate",
           "target_id": "DisableSystemAddonUpdate",
@@ -2078,10 +2228,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-35",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2102,8 +2254,9 @@
             "DisableTelemetry"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableTelemetry",
           "target_id": "DisableTelemetry",
@@ -2118,10 +2271,12 @@
       "confidence": "medium",
       "doc_id": "cis-rec-1-1-36",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": true,
@@ -2142,8 +2297,9 @@
             "DisableAppUpdate"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-DisableAppUpdate",
           "target_id": "DisableAppUpdate",
@@ -2158,10 +2314,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-37",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2182,8 +2340,9 @@
             "SSLVersionMax"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SSLVersionMax",
           "target_id": "SSLVersionMax",
@@ -2198,10 +2357,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-38",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2222,8 +2383,9 @@
             "SSLVersionMin"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-SSLVersionMin",
           "target_id": "SSLVersionMin",
@@ -2238,10 +2400,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-39",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2262,8 +2426,9 @@
             "NetworkPrediction"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-NetworkPrediction",
           "target_id": "NetworkPrediction",
@@ -2278,8 +2443,9 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-40",
       "generated_layers": [
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2300,8 +2466,9 @@
             "NewTabPage"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-NewTabPage",
           "target_id": "NewTabPage",
@@ -2316,10 +2483,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-41",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2340,8 +2509,9 @@
             "OfferToSaveLogins"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-OfferToSaveLogins",
           "target_id": "OfferToSaveLogins",
@@ -2356,10 +2526,12 @@
       "confidence": "high",
       "doc_id": "cis-rec-1-1-42",
       "generated_layers": [
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152"
+        "cis-l1.esr-140.13",
+        "cis-l1.esr-153.0",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153"
       ],
       "has_mapping_reason": true,
       "has_review_note": false,
@@ -2380,8 +2552,9 @@
             "PasswordManagerEnabled"
           ],
           "schema_channels": {
-            "esr-140.12": "valid",
-            "release-152": "valid"
+            "esr-140.13": "valid",
+            "esr-153.0": "valid",
+            "release-153": "valid"
           },
           "target_doc_id": "fx-policy-PasswordManagerEnabled",
           "target_id": "PasswordManagerEnabled",
@@ -2402,7 +2575,7 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 40,
           "review_required": 4,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 17,
             "already_satisfied": 15,
@@ -2416,7 +2589,21 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 40,
           "review_required": 4,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 17,
+            "already_satisfied": 15,
+            "kept_base_only": 20,
+            "manual_review_kept_base": 4,
+            "review_required": 4
+          }
+        },
+        {
+          "decision_count": 56,
+          "layer_id": "cis_l1",
+          "policy_top_level_count": 40,
+          "review_required": 4,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 17,
             "already_satisfied": 15,
@@ -2430,7 +2617,7 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 43,
           "review_required": 4,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 20,
             "already_satisfied": 15,
@@ -2444,7 +2631,21 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 43,
           "review_required": 4,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 20,
+            "already_satisfied": 15,
+            "kept_base_only": 20,
+            "manual_review_kept_base": 4,
+            "review_required": 4
+          }
+        },
+        {
+          "decision_count": 59,
+          "layer_id": "cis_l2",
+          "policy_top_level_count": 43,
+          "review_required": 4,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 20,
             "already_satisfied": 15,
@@ -2458,7 +2659,7 @@
           "layer_id": "none",
           "policy_top_level_count": 23,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2466,7 +2667,15 @@
           "layer_id": "none",
           "policy_top_level_count": 23,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "none",
+          "policy_top_level_count": 23,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         }
       ]
@@ -2480,7 +2689,7 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 30,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 30,
             "review_required": 0
@@ -2491,7 +2700,18 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 30,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 30,
+            "review_required": 0
+          }
+        },
+        {
+          "decision_count": 30,
+          "layer_id": "cis_l1",
+          "policy_top_level_count": 30,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 30,
             "review_required": 0
@@ -2502,7 +2722,7 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 33,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 33,
             "review_required": 0
@@ -2513,7 +2733,18 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 33,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 33,
+            "review_required": 0
+          }
+        },
+        {
+          "decision_count": 33,
+          "layer_id": "cis_l2",
+          "policy_top_level_count": 33,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 33,
             "review_required": 0
@@ -2524,7 +2755,7 @@
           "layer_id": "none",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2532,7 +2763,15 @@
           "layer_id": "none",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "none",
+          "policy_top_level_count": 0,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         }
       ]
@@ -2546,7 +2785,7 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 42,
           "review_required": 1,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 20,
             "already_satisfied": 12,
@@ -2560,7 +2799,21 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 42,
           "review_required": 1,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 20,
+            "already_satisfied": 12,
+            "kept_base_only": 24,
+            "manual_review_kept_base": 1,
+            "review_required": 1
+          }
+        },
+        {
+          "decision_count": 57,
+          "layer_id": "cis_l1",
+          "policy_top_level_count": 42,
+          "review_required": 1,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 20,
             "already_satisfied": 12,
@@ -2574,7 +2827,7 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 45,
           "review_required": 1,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 23,
             "already_satisfied": 12,
@@ -2588,7 +2841,21 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 45,
           "review_required": 1,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 23,
+            "already_satisfied": 12,
+            "kept_base_only": 24,
+            "manual_review_kept_base": 1,
+            "review_required": 1
+          }
+        },
+        {
+          "decision_count": 60,
+          "layer_id": "cis_l2",
+          "policy_top_level_count": 45,
+          "review_required": 1,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 23,
             "already_satisfied": 12,
@@ -2602,7 +2869,7 @@
           "layer_id": "none",
           "policy_top_level_count": 22,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2610,7 +2877,15 @@
           "layer_id": "none",
           "policy_top_level_count": 22,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "none",
+          "policy_top_level_count": 22,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         }
       ]
@@ -2624,7 +2899,7 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2632,7 +2907,15 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "cis_l1",
+          "policy_top_level_count": 0,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         },
         {
@@ -2640,7 +2923,7 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2648,7 +2931,15 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "cis_l2",
+          "policy_top_level_count": 0,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         },
         {
@@ -2656,7 +2947,7 @@
           "layer_id": "none",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2664,7 +2955,15 @@
           "layer_id": "none",
           "policy_top_level_count": 0,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "none",
+          "policy_top_level_count": 0,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         }
       ]
@@ -2678,7 +2977,7 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 42,
           "review_required": 7,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 14,
             "already_satisfied": 20,
@@ -2692,7 +2991,21 @@
           "layer_id": "cis_l1",
           "policy_top_level_count": 42,
           "review_required": 7,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 14,
+            "already_satisfied": 20,
+            "kept_base_only": 36,
+            "manual_review_kept_base": 7,
+            "review_required": 7
+          }
+        },
+        {
+          "decision_count": 77,
+          "layer_id": "cis_l1",
+          "policy_top_level_count": 42,
+          "review_required": 7,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 14,
             "already_satisfied": 20,
@@ -2706,7 +3019,7 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 45,
           "review_required": 7,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {
             "added_from_cis": 17,
             "already_satisfied": 20,
@@ -2720,7 +3033,21 @@
           "layer_id": "cis_l2",
           "policy_top_level_count": 45,
           "review_required": 7,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {
+            "added_from_cis": 17,
+            "already_satisfied": 20,
+            "kept_base_only": 36,
+            "manual_review_kept_base": 7,
+            "review_required": 7
+          }
+        },
+        {
+          "decision_count": 80,
+          "layer_id": "cis_l2",
+          "policy_top_level_count": 45,
+          "review_required": 7,
+          "schema_channel": "release-153",
           "summary": {
             "added_from_cis": 17,
             "already_satisfied": 20,
@@ -2734,7 +3061,7 @@
           "layer_id": "none",
           "policy_top_level_count": 28,
           "review_required": 0,
-          "schema_channel": "esr-140.12",
+          "schema_channel": "esr-140.13",
           "summary": {}
         },
         {
@@ -2742,7 +3069,15 @@
           "layer_id": "none",
           "policy_top_level_count": 28,
           "review_required": 0,
-          "schema_channel": "release-152",
+          "schema_channel": "esr-153.0",
+          "summary": {}
+        },
+        {
+          "decision_count": 0,
+          "layer_id": "none",
+          "policy_top_level_count": 28,
+          "review_required": 0,
+          "schema_channel": "release-153",
           "summary": {}
         }
       ]

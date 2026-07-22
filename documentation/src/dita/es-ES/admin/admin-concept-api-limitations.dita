@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="admin-concept-api-limitations" xml:lang="es-ES" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Limitaciones de seguridad y limitaciones de API actuales</title>
+  <title>Limitaciones actuales de la API y de seguridad</title>
   <shortdesc>BPM documenta claramente las limitaciones actuales para que las integraciones no infieran garantías que no estén expuestas.</shortdesc>
   <conbody>
     <section id="a-security"><title>Restricciones de seguridad</title><p>La API actual no tiene capa de autenticación o autorización. CORS tiene como valor predeterminado los orígenes <codeph>*</codeph> a menos que la configuración de implementación lo anule. La documentación no debe implicar autenticación de token API, OAuth, control de acceso basado en roles, aislamiento de inquilinos o comportamiento de autorización de producción.</p></section>

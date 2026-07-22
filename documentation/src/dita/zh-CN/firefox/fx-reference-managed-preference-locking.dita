@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>托管首选项锁定参考</title>
+  <title>托管首选项锁定</title>
   <shortdesc>托管首选项 通过 Firefox <codeph>Preferences</codeph> 策略导出，需要明确的值、类型和状态审核。</shortdesc>
   <refbody>
     <section id="a-container-policy"><title>容器策略</title><p>Firefox 将 托管首选项 存储在 <codeph>Preferences</codeph> 下。 BPM 单独记录已知的首选项，但将它们导出为该容器策略中的条目。</p></section>

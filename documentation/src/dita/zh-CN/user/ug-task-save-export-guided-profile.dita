@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>保存并下载引导配置文件</title>
+  <title>保存并下载引导配置档案</title>
   <shortdesc>保存已审核的引导配置文件，并在配置准备就绪后下载切换工件。</shortdesc>
   <taskbody>
     <prereq><p>第 6 步审核已完成，验证警告已理解。</p></prereq>

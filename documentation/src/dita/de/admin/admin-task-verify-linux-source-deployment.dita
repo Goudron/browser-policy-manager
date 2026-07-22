@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-linux-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Überprüfen Sie eine Linux-Quellbereitstellung</title>
+  <title>Eine Linux-Quellbereitstellung prüfen</title>
   <shortdesc>Verwenden Sie Integritätstests, das Web UI, Protokolle und einen engen Testbefehl, um zu bestätigen, dass die von der Quelle ausgeführte BPM-Instanz verwendbar ist.</shortdesc>
   <taskbody>
     <prereq><p>Der BPM-Prozess wird vom Repository-Checkout mit den beabsichtigten Einstellungen für <codeph>BPM_DATABASE_URL</codeph>, Host, Port und Dokumentationsseite ausgeführt.</p></prereq>
@@ -13,9 +13,7 @@ curl -fsS http://127.0.0.1:8000/health/ready
 ]]></codeblock><p>Die erwarteten Antworten sind <codeph>{"status":"ok"}</codeph> und <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
       <step><cmd>Öffnen Sie das Produkt UI und bestätigen Sie, dass die Bibliotheksroute antwortet.</cmd><info><p>Verwenden Sie <codeph>http://127.0.0.1:8000/profiles</codeph>. Die Route sollte die BPM-Schnittstelle laden oder einen beabsichtigten Anwendungsstatus anzeigen, keinen Server-Traceback.</p></info></step>
       <step><cmd>Überprüfen Sie die Protokolle der Vordergrundanwendung.</cmd><info><p>Überprüfen Sie das Terminal, auf dem <codeph>make dev</codeph> oder <codeph>uvicorn app.main:app --reload --port 8000</codeph> ausgeführt wird. Erfassen Sie Startfehler, Migrationsfehler, Portkonflikte und Dokumentationsseitenwarnungen, ohne Geheimnisse in Tickets zu kopieren.</p></info></step>
-      <step><cmd>Führen Sie die Narrow Source Smoke Suite aus, wenn Code- oder Umgebungsänderungen eine Bestätigung erfordern.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make test-fast
-]]></codeblock><note type="warning">Ein vorbeiziehender Quellrauch bescheinigt nicht die Produktionsbereitschaft, das Reverse-Proxy-Verhalten, verwaltete Backups oder die Durchsetzung von Firefox-Laufzeitrichtlinien.</note></info></step>
+      <step><cmd>Dokumentieren Sie die Grenze des Prüfergebnisses.</cmd><info><note type="warning">Das Bestehen von Health-Probes, UI-Route und Vordergrundprotokollen bestätigt weder Produktionsreife noch Reverse-Proxy-Verhalten, verwaltete Sicherungen oder die Durchsetzung von Firefox-Richtlinien zur Laufzeit.</note></info></step>
     </steps>
     <result><p>Der Administrator hat Beweise dafür, dass die Linux-Quellbereitstellung startet, Integritäts-/Bereitschaftsprüfungen beantwortet, die Route UI bedient und keine unmittelbaren Vordergrundprotokollblocker hat.</p></result>
     <postreq><p>Wenn die Überprüfung fehlschlägt, bewahren Sie den Befehl, die Namen der Umgebungsvariablen, die Testantworten und die relevanten Protokollzeilen zur Fehlerbehebung zusammen. Erweitern Sie dieses Betriebsanleitung nicht um Anweisungen für verzögerte Installationsprogramme oder Produktionstopologien.</p></postreq>

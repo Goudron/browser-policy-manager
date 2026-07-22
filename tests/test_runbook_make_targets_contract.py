@@ -9,28 +9,25 @@ def _read(path: str) -> str:
     return (REPO_ROOT / path).read_text(encoding="utf-8")
 
 
-def test_readme_points_routine_commands_to_make_targets():
+def test_readme_keeps_only_product_start_command():
     readme = _read("README.md")
 
-    required_targets = {
-        "make dev",
+    assert "make dev" in readme
+
+    developer_commands = {
         "make quality",
         "make coverage",
         "make test-ui",
         "make test-firefox-live",
         "make test-firefox-live-amo",
         "make local-chromium-ui-audit",
-    }
-    for target in required_targets:
-        assert target in readme
-
-    stale_commands = {
+        "make docs-install-dev",
         "uvicorn app.main:app --reload",
         "ruff check .\nmypy app\npytest",
         "pytest --cov=app --cov-branch --cov-report=term-missing",
         "./.venv/bin/python tools/run_local_chromium_ui_audit.py",
     }
-    for command in stale_commands:
+    for command in developer_commands:
         assert command not in readme
 
 

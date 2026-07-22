@@ -31,6 +31,27 @@ generation or runtime work.
 8. Update keys/maps/manifest source metadata only when the topic identity or navigation contract
    actually changes.
 
+## Compact UI and product-documentation boundary
+
+Before adding or restoring visible UI copy, classify the exact rendered node under the
+[UI copy classification contract](../../docs/architecture/ui-copy-classification-contract-0.9.2.md).
+Do not add routine workflow narration, a repeated purpose sentence, or a helper line that merely
+restates an adjacent label, value, or action. Keep essential and safety/accessibility text at the
+point of action: labels, current state, validation, consequence, unavailable reason, and recovery
+are never moved into documentation.
+
+Add a circled-info/contextual-help target only when the classification records a genuine remaining
+comprehension gap. The target must be a localized, manifest-backed stable topic or anchor and must
+not become a generic substitute for concise UI copy. If the label, value, action, and accessible
+name already make the control clear, do not add a help link.
+
+Write rendered product documentation for the user, administrator, DevOps operator, API integrator,
+or security reviewer who needs it. Do not address a maintainer or developer, narrate implementation
+progress, expose internal source/test/build instructions, or present a separately owned
+documentation version. Retain complete task explanations in DITA where they are needed; compact UI
+work does not authorize removal of prerequisites, warnings, results, support boundaries, or
+recovery.
+
 ## Focused checks
 
 Run the narrowest relevant checks first:
@@ -42,6 +63,11 @@ Run the narrowest relevant checks first:
 make docs-validate
 git diff --check -- <changed_files>
 ```
+
+When the change affects product-documentation source, documentation build tooling, generated portal
+behavior, or a served documentation-version surface, run `make docs-install-dev` before handoff.
+This refreshes the artifact for the maintainer's subsequent `make dev`; do not start the development
+server as part of this runbook.
 
 Escalate to `make docs-reproducibility-check`, `make docs-package`, and
 `make docs-package-verify` when the change affects maps, manifest output, generated files, theme,

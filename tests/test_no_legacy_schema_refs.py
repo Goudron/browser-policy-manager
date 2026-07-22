@@ -10,6 +10,7 @@ ALLOWED_PATHS = {
     "alembic/versions/20260423_upgrade_profiles_to_firefox150.py",
     "alembic/versions/20260521_upgrade_profiles_to_firefox151.py",
     "alembic/versions/20260620_upgrade_profiles_to_firefox152.py",
+    "alembic/versions/20260721_upgrade_profiles_to_firefox153_dual_esr.py",
     "app/services/profile_schema_normalization.py",
     "tests/test_migrations.py",
     "tests/test_no_legacy_schema_refs.py",

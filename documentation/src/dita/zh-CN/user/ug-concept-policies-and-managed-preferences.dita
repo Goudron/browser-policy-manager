@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-policies-and-managed-preferences" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>政策和 托管首选项</title>
+  <title>策略和托管首选项</title>
   <shortdesc>BPM 将 Firefox Enterprise 策略与托管首选项值分开，同时将两者保留在一个配置文件中。</shortdesc>
   <conbody>
     <p>策略被命名为 Firefox Enterprise 控件，例如浏览器行为、访问、权限或功能设置。 托管首选项 是具有值和可选锁定行为的首选项键。</p>

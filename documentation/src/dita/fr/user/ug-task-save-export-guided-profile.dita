@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Enregistrez et téléchargez un profil guidé</title>
+  <title>Enregistrer et télécharger un profil guidé</title>
   <shortdesc>Enregistrez le profil guidé révisé et téléchargez l'artefact de transfert lorsque la configuration est prête.</shortdesc>
   <taskbody>
     <prereq><p>L'examen de l'étape 6 est terminé et les avertissements de validation sont compris.</p></prereq>

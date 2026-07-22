@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-permanently-delete-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Удалить профиль навсегда</title>
+  <title>Безвозвратное удаление профиля</title>
   <shortdesc>Удаляйте активный или заархивированный профиль только после подтверждения того, что его не следует сохранять.</shortdesc>
   <taskbody>
     <prereq><p>Строка профиля видна, и вы подтвердили, что профиль больше не нужен.</p></prereq>

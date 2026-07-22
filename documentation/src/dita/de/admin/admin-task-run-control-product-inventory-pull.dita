@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-control-product-inventory-pull" xml:lang="de" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Ziehen und lesen Sie BPM-Profile von einem externen Steuerungsprodukt</title>
+  <title>BPM-Profile aus einem externen Steuerungsprodukt abrufen und prüfen</title>
   <shortdesc>Erstellen Sie die Pull-/Listen-/Leseseite einer Kontrollproduktintegration mit expliziten Besitzverhältnissen, Filtern und Beweisgrenzen.</shortdesc>
   <taskbody>
     <prereq><p>Legen Sie <codeph>$BPM_BASE_URL</codeph> fest. Entscheiden Sie, welches externe Kontrollprodukt die Bestandsauswahl, den Vergleichsspeicher, die Wiederholungsrichtlinie und die Prüfnachweise besitzt. BPM besitzt nur die von seiner API zurückgegebenen Profildatensätze.</p></prereq>

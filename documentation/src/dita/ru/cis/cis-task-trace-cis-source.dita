@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-trace-cis-source" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Проследить значение CIS до его источника</title>
+  <title>Отслеживание источника значения CIS</title>
   <shortdesc>Проследите одно настроенное значение до начальной предустановки, уровня CIS, решения о слиянии и последующих изменений перед экспортом.</shortdesc>
   <taskbody>
     <prereq><p>Откройте профиль, созданный на основе стартового стиля или к которому применен слой CIS уровня 1 или уровня 2.</p></prereq>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Cuándo usar Editor JSON</title>
+  <title>Uso del «Editor JSON»</title>
   <shortdesc>Utilice Editor JSON para revisiones sin procesar exactas, comprobaciones de migración, solución de problemas y valores que sean más fáciles de manejar como policies.json sin procesar.</shortdesc>
   <conbody>
     <p>Editor JSON es potente pero menos guiado que los editores visuales. Debería ser una elección deliberada cuando el usuario necesita precisión en el documento de límites.</p>

@@ -44,7 +44,6 @@
 
         const {
             nameInput,
-            wizardContextCopyEl,
             wizardNameEl,
             wizardSchemaEl,
             wizardModeEl,
@@ -301,19 +300,6 @@
                 VisualSearchEnabled: false,
             },
         };
-
-        function updateWizardContext() {
-            if (!wizardContextCopyEl) return;
-            const cloneSource = getCloneSourceProfile();
-            if (cloneSource?.name) {
-                wizardContextCopyEl.textContent = t("profiles.wizard_context_cloned")
-                    .replace("{name}", cloneSource.name);
-                return;
-            }
-            wizardContextCopyEl.textContent = getCurrentId()
-                ? t("profiles.wizard_context_existing")
-                : t("profiles.wizard_context_new");
-        }
 
         function getStepActionCopyEl() {
             return documentRef.getElementById("wizard-step-actions-copy");
@@ -1708,9 +1694,6 @@
             renderAllSettingsList();
             buildWizardSettingsSearchIndex();
             renderWizardSettingsSearchResults();
-            if (wizardContextCopyEl) {
-                updateWizardContext();
-            }
             if (wizardScenarioButtons.length > 0) {
                 updateWizardScenarioUi();
             }
@@ -2005,7 +1988,6 @@
             setPanelExpanded(panelEl, documentRef.getElementById("wizard-site-data-fine-tuning-toggle"), nextExpanded);
         });
         return {
-            updateWizardContext,
             setWizardStarter,
             setWizardComplianceLayer,
             setWizardComplianceSnapshot,

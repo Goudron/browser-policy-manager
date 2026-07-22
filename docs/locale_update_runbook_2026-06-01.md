@@ -92,6 +92,15 @@ the matrix row first, run the maintained capture command for every affected loca
 localized caption and alt text. Do not use a screenshot or generated navigation/search artifact
 from another locale as fallback.
 
+When the locale change affects compact UI copy or the documentation shell, cite the exact UI-copy
+classification disposition in `docs/architecture/ui-copy-classification-contract-0.9.2.md`. Keep
+labels, state, validation, consequence, unavailable reason, accessible name, and recovery at the
+point of action; do not restore routine explanation. A circled-info target requires a localized
+manifest-backed owner or an explicit reviewed no-link disposition in every affected locale. Complete
+audience/style review against the audience/editorial and locale style contracts, the normalized BPM
+header, and the one derived BPM product version. A search, URL/history hydration, result update, or
+clear action must not reopen filters that the reader collapsed.
+
 ## 5. Run Fast Locale Checks
 
 Run the narrow locale checks first:
@@ -148,6 +157,12 @@ add or update tests before accepting the locale change.
   captions, alt text, and contextual help labels contain no English fallback.
 - Generated navigation/search artifacts and contextual target mappings resolve only within the
   same locale; direct-topic links reveal the active tree node and root return remains valid.
+- Compact UI copy follows its disposition; all affected circled-info targets have localized
+  manifest-backed ownership or an explicit reviewed no-link disposition.
+- Documentation header slots, locale/theme controls, and the one derived BPM version match the
+  product UI; no separately owned documentation version is visible.
+- Search, URL/history hydration, results, and clear preserve the reader's collapsed or expanded
+  advanced-filter choice in every affected locale.
 - Every affected approved screenshot matrix row has current locale-owned visual, caption, and alt
   text evidence; no unapproved matrix expansion occurred.
 - README or release notes are updated when supported-locale behavior changes.

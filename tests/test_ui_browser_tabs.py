@@ -23,6 +23,7 @@ pytestmark = pytest.mark.browser_ui
 
 
 SMOKE_LOCALES = ("ru", "zh-CN")
+COMPACT_HEADER_LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 
 
 def _load_locale_catalog(locale: str) -> dict[str, str]:
@@ -185,7 +186,7 @@ def _create_profile(base_url: str, *, name: str, flags: dict | None = None) -> i
         json=build_profile_payload(
             name=name,
             description="Chromium smoke profile",
-            schema_version="release-152",
+            schema_version="release-153",
             flags=flags
             or {
                 "DisableTelemetry": True,
@@ -273,7 +274,7 @@ def test_browser_smoke_imports_firefox_policies_json_in_russian_library():
         try:
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "import-firefox-policies-file")))
-            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
             assert ru["profiles.import_firefox_policies_json"] in _body_text(driver)
 
             profile_id = _import_profile_through_picker(driver, wait, by, "smoke-import-ru")
@@ -294,7 +295,7 @@ def test_browser_smoke_primary_routes_render_in_ru_and_zh_cn():
     locale_catalogs = {locale: _load_locale_catalog(locale) for locale in SMOKE_LOCALES}
 
     route_expectations = (
-        ("library", "/profiles", "#list", ("profiles.title", "profiles.nav_library")),
+        ("library", "/profiles", "#list", ("profiles.nav_library",)),
         ("guided", "/profiles/{profile_id}/edit", "#wizard-panel", ("profiles.workspace_scope_guided",)),
         ("settings", "/profiles/{profile_id}/settings", "#settings-panel", ("profiles.editor_chrome_settings_link",)),
         (
@@ -314,7 +315,7 @@ def test_browser_smoke_primary_routes_render_in_ru_and_zh_cn():
             try:
                 driver.get(f"{base_url}/profiles")
                 wait.until(ec.presence_of_element_located((by.By.ID, "list")))
-                _set_locale(driver, wait, ui, locale=locale, expected_text=catalog["profiles.locale_hint"])
+                _set_locale(driver, wait, ui, locale=locale, expected_text=catalog["profiles.locale_label"])
 
                 for _route_name, route_template, ready_selector, keys in route_expectations:
                     driver.get(f"{base_url}{route_template.format(profile_id=profile_id)}")
@@ -330,6 +331,157 @@ def test_browser_smoke_primary_routes_render_in_ru_and_zh_cn():
                     _assert_document_fits(driver)
             finally:
                 _close_chromium_driver(driver)
+
+
+def test_browser_guided_schema_selector_offers_and_switches_three_channels():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    select_module = pytest.importorskip("selenium.webdriver.support.select")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    expected_channels = (
+        ("esr-140.13", "ESR 140.13"),
+        ("esr-153.0", "ESR 153.0"),
+        ("release-153", "Release 153"),
+    )
+
+    with run_test_app_server() as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/new")
+            schema_select = wait.until(
+                ec.presence_of_element_located((by.By.ID, "profile-type"))
+            )
+            selector = select_module.Select(schema_select)
+
+            assert [(option.get_attribute("value"), option.text) for option in selector.options] == list(
+                expected_channels
+            )
+            for channel, label in expected_channels:
+                selector.select_by_value(channel)
+                wait.until(
+                    lambda current_driver, expected_channel=channel: current_driver.find_element(
+                        by.By.ID, "profile-type"
+                    ).get_attribute("value")
+                    == expected_channel
+                )
+                assert select_module.Select(
+                    driver.find_element(by.By.ID, "profile-type")
+                ).first_selected_option.text == label
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_compact_header_is_usable_across_routes_locales_themes_and_zoom():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    keys = pytest.importorskip("selenium.webdriver.common.keys")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    locale_catalogs = {locale: _load_locale_catalog(locale) for locale in COMPACT_HEADER_LOCALES}
+    route_expectations = (
+        ("/profiles", "#list"),
+        ("/profiles/{profile_id}/edit", "#wizard-panel"),
+        ("/profiles/{profile_id}/settings", "#settings-panel"),
+        ("/profiles/{profile_id}/json", "#editor-panel"),
+        ("/profiles/compare", "#compare-page"),
+    )
+
+    def assert_header_state(driver, catalog: dict[str, str]) -> None:
+        metrics = driver.execute_script(
+            """
+            const header = document.querySelector('[data-bpm-header]');
+            const docs = header?.querySelector('[data-documentation-link]');
+            const locale = header?.querySelector('#lang');
+            const theme = header?.querySelector('#theme');
+            const labelFor = (control) => control?.closest('label')?.innerText?.trim() || '';
+            const rect = (node) => {
+              const value = node?.getBoundingClientRect();
+              return value ? { width: value.width, height: value.height } : null;
+            };
+            return {
+              headerPresent: Boolean(header),
+              brandPresent: Boolean(header?.querySelector('[data-bpm-header-brand]')),
+              preferencesPresent: Boolean(header?.querySelector('[data-bpm-header-preferences]')),
+              workspacePresent: Boolean(header?.querySelector('[data-bpm-header-workspace]')),
+              documentationText: docs?.innerText?.trim() || '',
+              localeLabel: labelFor(locale),
+              themeLabel: labelFor(theme),
+              localeRect: rect(locale),
+              themeRect: rect(theme),
+              headerScrollWidth: header?.scrollWidth || 0,
+              headerClientWidth: header?.clientWidth || 0,
+              documentWidth: document.documentElement.scrollWidth,
+              viewportWidth: window.innerWidth,
+            };
+            """
+        )
+        assert metrics["headerPresent"] is True
+        assert metrics["brandPresent"] is True
+        assert metrics["preferencesPresent"] is True
+        assert metrics["workspacePresent"] is True
+        assert metrics["documentationText"]
+        assert catalog["profiles.locale_label"].casefold() in metrics["localeLabel"].casefold()
+        assert catalog["profiles.theme_label"].casefold() in metrics["themeLabel"].casefold()
+        assert metrics["localeRect"]["height"] >= 44, metrics
+        assert metrics["themeRect"]["height"] >= 44, metrics
+        assert metrics["headerScrollWidth"] <= metrics["headerClientWidth"] + 1, metrics
+        assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1, metrics
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name="Compact Header Browser Smoke")
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+
+            for locale in COMPACT_HEADER_LOCALES:
+                catalog = locale_catalogs[locale]
+                _set_locale(
+                    driver,
+                    wait,
+                    ui,
+                    locale=locale,
+                    expected_text=catalog["profiles.locale_label"],
+                )
+                for route_template, ready_selector in route_expectations:
+                    driver.get(f"{base_url}{route_template.format(profile_id=profile_id)}")
+                    wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+                    wait.until(
+                        lambda current_driver, expected_locale=locale: current_driver.execute_script(
+                            "return document.documentElement.lang;"
+                        )
+                        == expected_locale
+                    )
+                    assert_header_state(driver, catalog)
+
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            catalog = locale_catalogs[COMPACT_HEADER_LOCALES[-1]]
+            for theme_mode in ("system", "light", "dark"):
+                ui.Select(driver.find_element(by.By.ID, "theme")).select_by_value(theme_mode)
+                wait.until(
+                    lambda current_driver, expected_mode=theme_mode: current_driver.execute_script(
+                        "return document.documentElement.dataset.themeMode;"
+                    )
+                    == expected_mode
+                )
+                assert_header_state(driver, catalog)
+
+            documentation_link = driver.find_element(by.By.CSS_SELECTOR, "[data-documentation-link]")
+            driver.execute_script("arguments[0].focus();", documentation_link)
+            assert driver.switch_to.active_element == documentation_link
+            documentation_link.send_keys(keys.Keys.TAB)
+            assert driver.switch_to.active_element.get_attribute("id") == "lang"
+            driver.switch_to.active_element.send_keys(keys.Keys.TAB)
+            assert driver.switch_to.active_element.get_attribute("id") == "theme"
+
+            driver.set_window_size(390, 900)
+            driver.execute_script("document.documentElement.style.fontSize = '200%';")
+            assert_header_state(driver, catalog)
+        finally:
+            _close_chromium_driver(driver)
 
 
 def test_browser_smoke_guided_disclosure_labels_follow_active_locale():
@@ -352,7 +504,7 @@ def test_browser_smoke_guided_disclosure_labels_follow_active_locale():
                     wait,
                     ui,
                     locale=locale,
-                    expected_text=catalog["profiles.locale_hint"],
+                    expected_text=catalog["profiles.locale_label"],
                 )
                 disclosure = wait.until(
                     ec.presence_of_element_located(
@@ -377,6 +529,162 @@ def test_browser_smoke_guided_disclosure_labels_follow_active_locale():
                 )
             finally:
                 _close_chromium_driver(driver)
+
+
+def test_browser_guided_choice_cards_stay_compact_and_keep_selected_state():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name="Compact Guided Choice Cards")
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/edit")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+
+            scenario = driver.find_element(
+                by.By.CSS_SELECTOR, '[data-scenario-key="shared_devices"]'
+            )
+            _click_element(driver, scenario)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, '[data-scenario-key="shared_devices"]'
+                ).get_attribute("aria-pressed")
+                == "true"
+            )
+            scenario_state = driver.execute_script(
+                """
+                const card = document.querySelector('[data-scenario-key="shared_devices"]');
+                return {
+                  active: card?.classList.contains('wizard-starter-card--active'),
+                  explanatoryNodes: card?.querySelectorAll(
+                    '.wizard-starter-copy, .wizard-starter-note, .wizard-toggle-copy'
+                  ).length,
+                };
+                """
+            )
+            assert scenario_state == {"active": True, "explanatoryNodes": 0}
+
+            _click_css_when_ready(driver, wait, by, '[data-step="2"]')
+            wait.until(
+                lambda current_driver: "is-active"
+                in current_driver.find_element(by.By.ID, "wizard-step-2")
+                .get_attribute("class")
+                .split()
+            )
+            updates = driver.find_element(
+                by.By.CSS_SELECTOR, '[data-general-policy-preset="updates"]'
+            )
+            _click_element(driver, updates)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, '[data-general-policy-preset="updates"]'
+                ).get_attribute("aria-pressed")
+                == "true"
+            )
+            preset_state = driver.execute_script(
+                """
+                const card = document.querySelector('[data-general-policy-preset="updates"]');
+                return {
+                  applied: card?.classList.contains('wizard-search-engine-preset--applied'),
+                  explanatoryNodes: card?.querySelectorAll(
+                    '.wizard-search-engine-preset-copy'
+                  ).length,
+                };
+                """
+            )
+            assert preset_state == {"applied": True, "explanatoryNodes": 0}
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_guided_sections_use_flat_layout_without_losing_responsive_flow():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name="Flat Guided Sections")
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/edit")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            _click_css_when_ready(driver, wait, by, '[data-step="2"]')
+            wait.until(
+                lambda current_driver: "is-active"
+                in current_driver.find_element(by.By.ID, "wizard-step-2")
+                .get_attribute("class")
+                .split()
+            )
+
+            layout = driver.execute_script(
+                """
+                const styles = (selector) => {
+                  const element = document.querySelector(selector);
+                  const computed = element ? getComputedStyle(element) : null;
+                  return computed && {
+                    borderTopWidth: computed.borderTopWidth,
+                    paddingTop: computed.paddingTop,
+                    paddingRight: computed.paddingRight,
+                    backgroundColor: computed.backgroundColor,
+                  };
+                };
+                return {
+                  panel: styles('#wizard-step-2'),
+                  presets: styles('#wizard-general-policy-presets'),
+                  status: styles('#wizard-general-policy-section-status'),
+                  duplicateKickers: document.querySelectorAll(
+                    '[data-i18n="profiles.wizard_main_choice_label"], ' +
+                    '[data-i18n="profiles.wizard_fine_tuning_label"]'
+                  ).length,
+                };
+                """
+            )
+            assert layout["panel"]["borderTopWidth"] == "0px"
+            assert layout["panel"]["paddingTop"] == "0px"
+            assert layout["presets"]["borderTopWidth"] == "0px"
+            assert layout["presets"]["paddingTop"] == "0px"
+            assert layout["status"]["borderTopWidth"] != "0px"
+            assert layout["duplicateKickers"] == 0
+
+            driver.set_window_size(390, 900)
+            _assert_document_fits(driver)
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_guided_cis_help_icon_is_keyboard_focusable():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name="Guided Context Help")
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles/{profile_id}/edit")
+            cis_help = wait.until(
+                ec.element_to_be_clickable(
+                    (
+                        by.By.CSS_SELECTOR,
+                        '[data-context-help-target="cis-baseline-selection"]',
+                    )
+                )
+            )
+            assert cis_help.get_attribute("target") == "_blank"
+            assert cis_help.get_attribute("rel") == "noopener noreferrer"
+            assert cis_help.get_attribute("aria-label")
+            assert cis_help.get_attribute("href").startswith(f"{base_url}/help/")
+
+            driver.execute_script("arguments[0].focus();", cis_help)
+            assert driver.switch_to.active_element == cis_help
+            _assert_document_fits(driver)
+        finally:
+            _close_chromium_driver(driver)
 
 
 def test_browser_smoke_library_permanent_delete_handles_active_archived_and_failure():
@@ -632,23 +940,120 @@ def test_browser_smoke_editor_mode_links_preserve_route_context():
                 f"?return=/profiles/{profile_id}/edit&focus=policy:DisableTelemetry"
             )
             wait.until(ec.presence_of_element_located((by.By.ID, "settings-panel")))
-            json_href = wait.until(
+            json_mode_link = wait.until(
                 ec.presence_of_element_located((by.By.ID, "editor-mode-json"))
-            ).get_attribute("href")
+            )
+            json_href = json_mode_link.get_attribute("href")
+            settings_mode_link = driver.find_element(by.By.ID, "editor-mode-settings")
 
             assert f"/profiles/{profile_id}/json" in json_href
             assert f"return=/profiles/{profile_id}/settings" in json_href
             assert "focus=policy%3ADisableTelemetry" in json_href
+            assert settings_mode_link.get_attribute("aria-current") == "page"
+            assert json_mode_link.get_attribute("aria-current") is None
 
             driver.get(f"{base_url}/profiles/{profile_id}/json?focus=raw")
             wait.until(ec.presence_of_element_located((by.By.ID, "editor-panel")))
-            settings_href = wait.until(
+            settings_mode_link = wait.until(
                 ec.presence_of_element_located((by.By.ID, "editor-mode-settings"))
-            ).get_attribute("href")
+            )
+            settings_href = settings_mode_link.get_attribute("href")
+            json_mode_link = driver.find_element(by.By.ID, "editor-mode-json")
 
             assert f"/profiles/{profile_id}/settings" in settings_href
             assert f"return=/profiles/{profile_id}/json" in settings_href
             assert "focus=settings-schema-shell-step-8" in settings_href
+            assert settings_mode_link.get_attribute("aria-current") is None
+            assert json_mode_link.get_attribute("aria-current") == "page"
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_browser_shared_editor_chrome_keeps_live_state_once_across_transitions():
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    en = _load_locale_catalog("en")
+
+    def chrome_state(driver) -> dict[str, str | bool]:
+        return driver.execute_script(
+            """
+            const text = (id) => document.getElementById(id)?.textContent?.trim() || '';
+            const clone = document.getElementById('profile-derived-note');
+            return {
+              state: text('profile-state-badge'),
+              workspace: text('workspace-signal'),
+              validation: text('validation-preview'),
+              meta: text('current-meta'),
+              clone: text('profile-derived-note'),
+              cloneVisible: Boolean(clone && !clone.hidden),
+            };
+            """
+        )
+
+    with run_test_app_server() as base_url:
+        profile_id = _create_profile(base_url, name="Live Chrome State Profile")
+        archived_id = _create_profile(base_url, name="Archived Chrome State Profile")
+        archive_response = requests.delete(f"{base_url}/api/profiles/{archived_id}", timeout=10)
+        assert archive_response.status_code == 204, archive_response.text
+
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            for route, ready_selector in (
+                (f"/profiles/{profile_id}/edit", "#wizard-panel"),
+                (f"/profiles/{profile_id}/settings", "#settings-panel"),
+                (f"/profiles/{profile_id}/json?focus=raw", "#editor-panel"),
+            ):
+                driver.get(f"{base_url}{route}")
+                wait.until(ec.presence_of_element_located((by.By.CSS_SELECTOR, ready_selector)))
+                wait.until(lambda current_driver: chrome_state(current_driver)["workspace"] == en["profiles.signal_saved"])
+                state = chrome_state(driver)
+                assert state["state"] == en["profiles.badge_active"], state
+                assert state["meta"] == f"#{profile_id}", state
+                assert state["validation"], state
+
+            assert driver.find_element(by.By.ID, "format").is_displayed()
+            _click_element(driver, driver.find_element(by.By.ID, "validate"))
+            wait.until(lambda current_driver: chrome_state(current_driver)["validation"] == en["profiles.validation_ok"])
+            driver.execute_script(
+                """
+                const model = window.monaco?.editor?.getModels?.()[0];
+                if (!model) return false;
+                model.setValue('{"DisableTelemetry":true}');
+                return true;
+                """
+            )
+            wait.until(lambda current_driver: chrome_state(current_driver)["workspace"] == en["profiles.signal_dirty"])
+            _click_element(driver, driver.find_element(by.By.ID, "format"))
+            _click_element(driver, driver.find_element(by.By.ID, "save"))
+            wait.until(lambda current_driver: chrome_state(current_driver)["workspace"] == en["profiles.signal_saved"])
+
+            driver.execute_script(
+                """
+                const model = window.monaco?.editor?.getModels?.()[0];
+                if (!model) return false;
+                model.setValue('{');
+                return true;
+                """
+            )
+            wait.until(lambda current_driver: chrome_state(current_driver)["workspace"] == en["profiles.signal_invalid"])
+            assert not driver.find_element(by.By.ID, "validate").is_enabled()
+
+            driver.get(f"{base_url}/profiles/new?clone_from={profile_id}")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            wait.until(lambda current_driver: chrome_state(current_driver)["cloneVisible"] is True)
+            clone_state = chrome_state(driver)
+            assert clone_state["state"] == en["profiles.badge_draft"], clone_state
+            assert "Live Chrome State Profile" in clone_state["clone"], clone_state
+            assert clone_state["meta"] == "", clone_state
+
+            driver.get(f"{base_url}/profiles/{archived_id}/edit?include_deleted=true")
+            wait.until(ec.presence_of_element_located((by.By.ID, "wizard-panel")))
+            wait.until(lambda current_driver: chrome_state(current_driver)["state"] == en["profiles.badge_deleted"])
+            archived_state = chrome_state(driver)
+            assert archived_state["meta"] == f"#{archived_id}", archived_state
+            assert "include_deleted=true" in driver.find_element(by.By.ID, "editor-mode-settings").get_attribute("href")
         finally:
             _close_chromium_driver(driver)
 
@@ -724,7 +1129,7 @@ def test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_t
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "list")))
             wait.until(lambda current_driver: left_name in _body_text(current_driver))
-            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
             assert ru["profiles.compare_action"] in _body_text(driver)
 
             compare_link = wait.until(
@@ -748,7 +1153,12 @@ def test_browser_smoke_library_compare_preserves_locale_in_new_tab_and_selects_t
             )
             compare_lang = wait.until(ec.presence_of_element_located((by.By.ID, "lang")))
             assert compare_lang.get_attribute("value") == "ru"
-            assert ru["profiles.compare_settings_title"] in _body_text(driver)
+            assert not driver.find_elements(
+                by.By.CSS_SELECTOR,
+                '[data-i18n="profiles.compare_route_eyebrow"], '
+                '[data-i18n="profiles.compare_selection_title"], '
+                '[data-i18n="profiles.compare_settings_title"]',
+            )
             assert not driver.find_elements(
                 by.By.CSS_SELECTOR,
                 '#compare-page a[href="/profiles"]',
@@ -1055,7 +1465,7 @@ def test_browser_smoke_library_clone_name_actions_stay_inside_panel_in_russian()
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "list")))
             wait.until(lambda current_driver: source_name in _body_text(current_driver))
-            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
 
             _click_css_when_ready(
                 driver,

@@ -186,6 +186,33 @@ the DITA/User/Admin/API/CIS/Firefox topics, screenshots or screenshot blockers, 
 targets, and documentation tests needed to make the documentation describe the product after the
 epic.
 
+### Maintainer `make dev` documentation handoff
+
+When a task changes product-documentation source, documentation build tooling, generated portal
+behavior, or a served documentation version surface, run `make docs-install-dev` before reporting
+the task complete. This installs the current documentation artifact consumed by the maintainer's
+subsequent `make dev`; it is not a request for the assistant to start the development server.
+
+Every affected backlog must include a documentation-milestone task that makes this handoff explicit.
+Its acceptance must require the task report to record the successful `make docs-install-dev` command
+and confirm that the served artifact derives its visible version from the current BPM product version.
+
+### Compact UI-copy and documentation guard
+
+When an epic removes, shortens, or introduces visible UI copy, include a pre-implementation task
+that classifies each affected rendered node against the active UI-copy classification contract. The
+backlog may remove routine explanation and duplicate presentation only; it must retain labels,
+state, validation, consequences, unavailable reasons, accessible names, and recovery at the point
+of action. A contextual circled-info link is a task only for a recorded genuine comprehension gap,
+not a default replacement for removed prose.
+
+When an epic changes rendered product documentation, include its audience and locale review in the
+documentation milestone: documentation serves users, administrators, DevOps operators, API
+integrators, and security reviewers, not maintainers or implementation progress. Require one BPM
+product version, no separately owned documentation version, and locale-native headings rather than
+English-calqued grammar; Russian task/reference headings use an idiomatic nominal form where
+natural. Cite the active documentation audience/editorial and locale style contracts in the task.
+
 `CHANGELOG.md` must receive an entry for the target version. Preserve older version history; append
 or insert the new version entry without overwriting previous release notes.
 
@@ -293,6 +320,8 @@ Before calling a new backlog ready, confirm:
   future-version placeholders;
 - a dedicated documentation-update milestone appears before the final quality milestone when the
   epic changes product behavior or operating procedures;
+- documentation-changing tasks require `make docs-install-dev` before handoff so the maintainer's
+  later `make dev` serves the current artifact and current BPM version;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;

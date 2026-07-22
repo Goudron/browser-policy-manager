@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Просмотрите элементы внимания Все настройки</title>
+  <title>Проверка требующих внимания элементов в разделе «Все настройки»</title>
   <shortdesc>Используйте Проверка для сортировки недействительных, проверенных вручную CIS, необработанных, неизвестных, устаревших и импортированных элементов перед обычным редактированием.</shortdesc>
   <taskbody>
     <prereq><p>Откройте сохраненный профиль в Все настройки.</p></prereq>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-starter-presets" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Elija un ajuste preestablecido inicial antes de editar la política detallada</title>
+  <title>Selección de un ajuste preestablecido inicial antes de editar una política detallada</title>
   <shortdesc>Los ajustes preestablecidos iniciales generan un perfil BPM para entornos comunes antes de revisar, validar y ajustar las políticas individuales de Firefox.</shortdesc>
   <conbody>
     <section id="a-purpose"><title>Propósito</title><p>Un ajuste preestablecido inicial es una línea base de BPM, no una recomendación de implementación finalizada. Úselo para crear un conjunto de políticas inicial y luego inspeccione cada valor modificado en Editor guiado, Todos los ajustes o Editor JSON antes de exportar.</p></section>

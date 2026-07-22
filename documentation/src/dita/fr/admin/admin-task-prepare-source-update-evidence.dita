@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-source-update-evidence" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Préparer les preuves avant de mettre à jour à partir de la source</title>
+  <title>Préparer les éléments de preuve avant une mise à jour depuis les sources</title>
   <shortdesc>Collectez la révision source, la configuration, la sauvegarde de la base de données, les preuves d'exportation de profil et les conditions d'arrêt avant de déplacer BPM vers une révision source plus récente.</shortdesc>
   <taskbody>
     <prereq><p>BPM s'exécute à partir d'une extraction de source Linux ou WSL et l'administrateur a terminé les examens de configuration, de stockage, de sauvegarde et des limites opérationnelles.</p></prereq>

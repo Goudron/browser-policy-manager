@@ -99,7 +99,7 @@ def test_focus_status_disabled_and_destructive_states_remain_explicit() -> None:
 
     for required in (
         ".soft-input:focus {",
-        "box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);",
+        "box-shadow: 0 0 0 4px color-mix(in srgb, var(--focus-ring-color), transparent 76%);",
         ".soft-input.input-invalid {",
         "border-color: var(--status-warn-border);",
         ".status-banner--warn {",

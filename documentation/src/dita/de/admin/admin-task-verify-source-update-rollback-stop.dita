@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-source-update-rollback-stop" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Überprüfen Sie das Update und wenden Sie Rollback-Stopp-Bedingungen an</title>
+  <title>Das Update prüfen und Rollback-Stopp-Bedingungen anwenden</title>
   <shortdesc>Starten Sie den aktualisierten BPM-Prozess, überprüfen Sie Probes, UI, API-Beweise und den Dokumentationsstatus und entscheiden Sie dann, ob Sie ihn akzeptieren, stoppen oder aus der Sicherung wiederherstellen möchten.</shortdesc>
   <taskbody>
     <prereq><p>Migrationen, Quellrauch und Überprüfungen zur Neuerstellung der Dokumentation wurden abgeschlossen oder es wurde ein Fehlerpunkt aufgezeichnet.</p></prereq>

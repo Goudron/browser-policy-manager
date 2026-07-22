@@ -13,9 +13,7 @@ curl -fsS http://127.0.0.1:8000/health/ready
 ]]></codeblock><p>预期响应为 <codeph>{"status":"ok"}</codeph> 和 <codeph>{"status":"ready","ready":true}</codeph>。</p></info></step>
       <step><cmd>打开产品 UI 并确认库路由有响应。</cmd><info><p>使用 <codeph>http://127.0.0.1:8000/profiles</codeph>。该路由应加载 BPM 界面或显示有意的应用程序状态，而不是服务器回溯。</p></info></step>
       <step><cmd>检查前台应用程序日志。</cmd><info><p>检查运行 <codeph>make dev</codeph> 或 <codeph>uvicorn app.main:app --reload --port 8000</codeph> 的终端。记录启动错误、迁移错误、端口冲突和文档站点警告，而无需将机密复制到票证中。</p></info></step>
-      <step><cmd>当代码或环境更改需要确认时运行窄源烟雾套件。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make test-fast
-]]></codeblock><note type="warning">传递的源烟雾并不能证明生产准备情况、反向代理行为、托管备份或 Firefox 运行时策略实施。</note></info></step>
+      <step><cmd>记录验证结果的支持边界。</cmd><info><note type="warning">Health 探测、UI 路由和前台日志通过，并不能证明生产就绪、反向代理行为、托管备份或 Firefox 策略在运行时得到实施。</note></info></step>
     </steps>
     <result><p>管理员有证据表明 Linux 源部署已启动、应答运行状况/就绪探测、为 UI 路由提供服务，并且没有立即的前台日志阻止程序。</p></result>
     <postreq><p>如果验证失败，请将命令、环境变量名称、探测响应和相关日志行放在一起以进行故障排除。请勿将此操作手册扩展为延迟安装程序或生产拓扑说明。</p></postreq>

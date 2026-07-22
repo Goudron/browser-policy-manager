@@ -2,7 +2,8 @@
 
 This runbook turns the Firefox schema bump into a repeatable release task instead of a one-off migration.
 
-Use it when BPM needs to move from one supported Firefox Release / ESR pair to the next one.
+Use it when BPM needs to refresh its supported Firefox Release/ESR schema matrix. A matrix may
+contain one Release channel and one or more concurrently supported ESR channels.
 
 Current product surfaces are the profile library, Guided editor, All settings, and JSON editor. Do
 not reintroduce a separate advanced editor route, template, redirect, or JavaScript bundle during a
@@ -11,47 +12,51 @@ policy/preference coverage, but it must stay inside Guided review / All settings
 
 ## Inputs You Need Before Editing
 
-Collect these four values first:
+Collect the Firefox source tag and one row for every target channel first:
 
 1. Mozilla `policy-templates` tag, for example `v7.10`.
-2. Firefox Release version, for example `150.0`.
-3. Firefox ESR version, for example `140.10`.
-4. BPM channel strings, for example `release-150` and `esr-140.10`.
+2. Firefox channel type and version, for example `Release 153`, `ESR 153.0`, or `ESR 140.13`.
+3. BPM channel string and output filename for that version.
+4. Explicit persisted-profile migration destination for every previously supported channel.
 
-Keep one mapping table for the whole change:
+Keep one support-and-migration table for the whole change. For example, the Firefox 153 transition
+supports a Release channel and two ESR channels:
 
 | Field | Example |
 |---|---|
-| Mozilla source tag | `mozilla-policy-templates-v7.10` |
-| Release channel | `release-150` |
-| Release version | `150.0` |
-| Release file | `app/schemas/policies/firefox-release-150.json` |
-| ESR channel | `esr-140.10` |
-| ESR version | `140.10` |
-| ESR file | `app/schemas/policies/firefox-esr-140.10.json` |
+| Firefox 153 source tag | `mozilla-policy-templates-v8.0` |
+| Release channel | `release-153` |
+| Release version/file | `153.0` / `app/schemas/policies/firefox-release-153.json` |
+| Current ESR channel | `esr-153.0` |
+| Current ESR version/file | `153.0` / `app/schemas/policies/firefox-esr-153.0.json` |
+| Previous ESR channel | `esr-140.13` |
+| Previous ESR version/file | `140.13` / `app/schemas/policies/firefox-esr-140.13.json` |
+| Migration map | `release-152 → release-153`; `esr-140.12 → esr-140.13` |
 
-If this table is not clear up front, stop and resolve it first. Most migration mistakes come from mixing versions from two different upstream snapshots.
+If this table is not clear up front, stop and resolve it first. Do not infer an ESR migration from
+the highest version: a concurrently supported ESR remains a separate target channel.
 
 ## Source Artifacts
 
-BPM currently builds bundled schemas from two Mozilla inputs:
+BPM currently builds bundled schemas from two Mozilla inputs for every source tag:
 
-1. The rendered docs page:
-   `data/upstream/policy-templates/policy-templates.html`
+1. The versioned `docs/index.md` policy-template document:
+   `data/upstream/policy-templates/<mozilla-tag>/policy-templates.md`
 2. The Linux example policy snapshot from the official release zip:
    `data/upstream/policy-templates/<mozilla-tag>/linux-policies.json`
 
 Recommended workflow:
 
-1. Download the latest docs page from `https://mozilla.github.io/policy-templates/`.
+1. Download `docs/index.md` from the exact Mozilla release tag named in the support matrix.
 2. Download the Mozilla release zip for the target tag.
-3. Extract `linux/policies.json` from the zip and save it as:
+3. Extract `docs/index.md` and `linux/policies.json` and save them as:
+   `data/upstream/policy-templates/<mozilla-tag>/policy-templates.md` and
    `data/upstream/policy-templates/<mozilla-tag>/linux-policies.json`
 
 The release zip is the authoritative source for the example policy payloads used by the converter.
 
 Before downloading, confirm the release metadata from the official Mozilla GitHub release page or
-API. The release name must explicitly match the target Firefox Release / ESR pair. Record the zip
+API. The release name must explicitly cover the target Firefox support matrix. Record the zip
 checksum in the execution notes so a later regeneration can identify the exact input. The `data/`
 tree is a local, Git-ignored converter cache; the committed/reviewed outputs are the bundled schemas
 and the code/tests that identify their upstream source.
@@ -61,6 +66,16 @@ release notes with the generated diff. If Mozilla announces a new field but it i
 the rendered docs input and `linux/policies.json`, do not silently claim coverage: verify the current
 Firefox Admin Docs or upstream implementation, then either extend the converter with a tested rule
 or record the upstream/converter gap explicitly.
+
+### Nested-policy completeness gate
+
+Before accepting generated schemas, make a per-channel checklist of every new top-level policy and
+every new nested field announced in the Firefox release notes or Firefox Administrator Reference.
+Compare that checklist with the generated JSON, including fields below dynamic dictionaries such as
+`ExtensionSettings["*"].allowed_permissions`. For each checklist item, add a regression that proves
+presence on every supported channel and absence on channels where Firefox does not support it. A
+converter bridge for incomplete source artifacts must cite the authoritative Mozilla evidence in its
+comment and test name. Do not start product-documentation updates until this gate passes.
 
 ## Files That Must Move Together
 
@@ -99,7 +114,8 @@ Treat the following as one unit of change:
 - `README.md`
 - `alembic/versions/*.py` for the schema-version migration
 
-If one of these still references the previous Release / ESR pair, the bump is not finished.
+If one of these still references a retired channel or omits a supported matrix channel, the bump is
+not finished.
 
 ## Update Sequence
 
@@ -120,8 +136,9 @@ This file is the product-level source of truth. UI, API, loaders, and validation
 
 ### 2. Update converter defaults
 
-Adjust the hardcoded defaults in:
+Adjust the declarative build targets in:
 
+- `tools/firefox_schema_targets.json`
 - `tools/convert_policies_from_upstream_lib/common.py`
 - `tools/convert_policies_from_upstream_lib/cli.py`
 - `tools/update_schemas.py`
@@ -129,9 +146,8 @@ Adjust the hardcoded defaults in:
 At minimum, update:
 
 - bundled output filenames
-- default Release / ESR channel strings
-- default Release / ESR version strings
-- default Mozilla source tag
+- every supported Release / ESR channel string and version
+- each channel's Mozilla source tag and versioned input paths
 - `--version` choices in `tools/update_schemas.py` if the raw-cache helper is still used
 
 Do not use a broad version-string replacement for historical policy metadata. Existing policies
@@ -140,40 +156,41 @@ moves forward.
 
 ## 3. Generate the new bundled schemas
 
-Run the converter explicitly with all version flags. Even if defaults are already updated, explicit arguments make the release step easier to audit.
+Run the converter through the committed target manifest. The manifest is the explicit audit record
+for every generated output and prevents a second ESR from being silently derived by file copy.
 
 Example:
 
 ```bash
 python tools/convert_policies_from_upstream.py \
-  --input data/upstream/policy-templates/policy-templates.html \
-  --linux-policies-input data/upstream/policy-templates/v7.10/linux-policies.json \
-  --release-channel release-150 \
-  --release-version 150.0 \
-  --release-output app/schemas/policies/firefox-release-150.json \
-  --esr-channel esr-140.10 \
-  --esr-version 140.10 \
-  --esr-output app/schemas/policies/firefox-esr-140.10.json \
-  --source-tag mozilla-policy-templates-v7.10
+  --targets-file tools/firefox_schema_targets.json
 ```
 
-Then remove the previous bundled schema files from `app/schemas/policies/`.
+For a matrix with more than one ESR, extend the converter contract and invoke it so each output is
+generated from its own explicit channel/version row. Do not create an additional ESR schema by
+copying or relabeling another generated JSON file.
 
-Do not keep the old Release / ESR files around unless the product explicitly supports multiple historical channels.
+Then remove only retired bundled schema files from `app/schemas/policies/`.
+
+Do not keep retired Release / ESR files around. Retain a previous ESR file only when it is named in
+the declared current support matrix.
 
 ## 4. Sanity-check the generated schemas before wiring them in
 
 Check the metadata directly in the JSON files:
 
 ```bash
-  jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' \
-  app/schemas/policies/firefox-release-150.json
-
-jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' \
-  app/schemas/policies/firefox-esr-140.10.json
+for schema in app/schemas/policies/firefox-*.json; do
+  jq '.["x-bpm-channel"], .["x-bpm-version"], .["x-bpm-source"]' "$schema"
+done
 
 jq '.properties.ExtensionSettings.additionalProperties.properties.allowed_types.items.enum' \
-  app/schemas/policies/firefox-release-150.json
+  app/schemas/policies/firefox-release-153.json
+
+jq '.properties.ExtensionSettings.additionalProperties.properties | with_entries(select(
+  .key == "allowed_permissions" or .key == "blocked_permissions" or
+  .key == "runtime_allowed_hosts" or .key == "runtime_blocked_hosts"
+))' app/schemas/policies/firefox-release-153.json
 ```
 
 Minimum expectations:
@@ -183,6 +200,7 @@ Minimum expectations:
 - versions match the intended Firefox numbers exactly
 - `x-bpm-source` matches the Mozilla release tag you actually used
 - `ExtensionSettings.allowed_types` still contains expected upstream values such as `sitepermission`
+- every item in the nested-policy completeness checklist is present only on its intended channels
 
 If these checks fail, do not continue into app changes yet.
 
@@ -192,9 +210,12 @@ After the bundled JSON is correct:
 
 1. Remove old channel references from the product code.
 2. Add an Alembic migration that rewrites persisted `profiles.schema_version` values from the old channel strings to the new ones. Its `down_revision` must be the current Alembic head, which may be newer than the previous schema migration.
-3. Update `app/services/profile_schema_normalization.py` so explicit runtime backfill also maps the previous Release / ESR channels to the new supported channels. This covers local databases that do not go through Alembic.
+3. Update `app/services/profile_schema_normalization.py` so explicit runtime backfill maps every
+   previously supported channel to its declared destination in the support-and-migration table. This
+   covers local databases that do not go through Alembic. Never collapse a supported ESR into a
+   different ESR merely because it is older.
 4. Run `make backfill-profile-schema-versions` against the target database and confirm the reported `scanned`, `normalized`, and `skipped_invalid` counts. The `/profiles` library route must remain read-only and must not run schema normalization during GET rendering.
-5. Update documentation and UI labels to the new Release / ESR pair.
+5. Update documentation and UI labels to the complete new Release/ESR support matrix.
    In `README.md`, refresh the Supported Firefox Schemas table, examples that carry a `schema_version`, and any prose that names the active Release / ESR versions.
 6. Update every active locale catalog when Release / ESR labels, schema-channel copy, policy names,
    or schema-related UI strings change. Edit `app/i18n_src/<locale>/*.json`, then rebuild generated
@@ -239,6 +260,18 @@ Treat Firefox schema documentation as part of the schema bump, not as a later cl
   documentation/tests/contract/test_documentation_polish_regression_gates.py \
   documentation/tests/contract/test_user_guide_screenshot_matrix.py
 ```
+
+9. If the schema bump changes compact UI copy or documentation chrome, record every affected string
+   in the UI-copy classification contract: routine explanation may stay removed, while labels,
+   state, validation, consequence, unavailable reason, accessible name, and recovery remain at the
+   point of action. Reconcile every circled-info target with its localized manifest-backed owner or
+   explicit reviewed no-link disposition. Review the audience/style contract, normalized BPM header,
+   and one derived BPM product version. Search, URL/history hydration, results, and clear must not
+   reopen a collapsed advanced-filter panel.
+10. After every documentation-source, documentation-tooling, generated-shell, or served
+    documentation-version change in this bump, run `make docs-install-dev` before handoff. Report
+    that successful install so the maintainer's subsequent `make dev` serves the current
+    documentation artifact; do not start `make dev` for the maintainer.
 
 Important: only the migration, runtime normalizer, and their tests should keep references to the previous channels.
 
@@ -324,7 +357,8 @@ Expected test touch points:
 - `tests/test_migrations.py`
   Verifies old DB rows are upgraded to the new schema channel values.
 - `tests/test_profile_schema_normalization.py`
-  Verifies runtime/library normalization upgrades previous channels to the current pair and leaves invalid profiles untouched.
+  Verifies runtime/library normalization upgrades retired channels according to the declared support
+  matrix, preserves every currently supported channel, and leaves invalid profiles untouched.
 - `tests/test_web_profiles_page.py`
   Verifies the Library remains read-only and visible UI/header text reflects the current supported
   versions. Startup/backfill normalization belongs in `tests/test_profile_schema_normalization.py`.
@@ -410,15 +444,16 @@ If the schema bump touched product wiring heavily, also review the profiles page
 Before calling the bump finished, confirm all of the following:
 
 - new bundled schema files exist and old ones are removed
-- `app/core/schema_channels.py` matches the new release pair
+- `app/core/schema_channels.py` matches the complete new Release/ESR support matrix
 - schema metadata points to the correct Mozilla tag
 - Alembic migration upgrades stored `schema_version` values
-- runtime profile schema normalization maps the previous Release / ESR pair to the new channels
+- runtime profile schema normalization maps each retired channel to its declared destination and
+  leaves every currently supported Release/ESR channel unchanged
 - application startup or the explicit backfill normalizes legacy rows before normal Library use,
   while GET `/profiles` remains read-only
 - UI audit completed for newly added/changed policies
 - no separate advanced editor route, redirect, template, or bundle was reintroduced
-- current Firefox Release / ESR labels are visible in the main header and schema selector
+- current Firefox Release / ESR matrix labels are visible in the main header and schema selector
 - active locale catalogs are updated for current Release / ESR labels, schema-channel copy, policy names, and schema-related UI strings
 - every new schema-backed policy is visible through All settings for supported channels
 - important new policies are either intentionally promoted into Guided, intentionally kept in All settings only, or explicitly left JSON-only/raw with a reason
@@ -435,12 +470,16 @@ Before calling the bump finished, confirm all of the following:
   active topic in the hierarchical tree
 - any affected approved User Guide screenshot rows, localized captions, and alt text have been
   regenerated and reviewed without expanding the matrix implicitly
+- compact-copy dispositions, contextual-help targets, audience/style review, header parity, and
+  collapsed-filter state have been revalidated where the schema bump changed those surfaces
 - `README.md` mentions the current supported Release / ESR versions
+- the final documentation artifact has been installed with `make docs-install-dev` after the last
+  documentation change, ready for the maintainer's `make dev`
 
 ## Common Failure Modes
 
 - Using the new Firefox version with the old Mozilla `policy-templates` tag.
-- Updating UI labels but leaving API or validation defaults on the previous channel.
+- Updating UI labels but leaving API, validation, or one concurrently supported ESR on the previous channel.
 - Updating English schema labels or README text but leaving non-English catalogs on the previous Release / ESR wording.
 - Adding schema-related locale keys only to `en.json`, which creates fallback islands in non-English UI.
 - Adding policy-label overrides without adding the key to `app/i18n_src/catalog-order.json`, so the
@@ -456,6 +495,7 @@ Before calling the bump finished, confirm all of the following:
 - Broadly replacing version numbers inside historical policy compatibility metadata.
 - Regenerating the bundled schema but forgetting the Alembic migration.
 - Keeping old filenames or source tags in tests and CI guards.
-- Leaving the previous schema JSON files in `app/schemas/policies/`, which makes it look like both are supported.
+- Removing a declared supported ESR schema, or leaving a retired schema JSON file in
+  `app/schemas/policies/`, which makes the support matrix ambiguous.
 
 When in doubt, verify the bundled JSON first, then the central channel constants, then the migration.

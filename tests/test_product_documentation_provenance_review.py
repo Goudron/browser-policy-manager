@@ -111,15 +111,22 @@ def test_mozilla_reuse_keeps_mpl_provenance_and_separate_trademark_rules():
     assert "https://github.com/mozilla/policy-templates/releases/tag/v7.12" in schema_source[
         "authoritative_sources"
     ]
+    assert "https://github.com/mozilla/policy-templates/releases/tag/v8.0" in schema_source[
+        "authoritative_sources"
+    ]
     assert prose_source["publication_policy"] == "allow-with-notice"
     assert any("Unmarked copy/paste" in rule for rule in prose_source["forbidden_reuse"])
     assert trademark_source["license_id"] == "LicenseRef-Mozilla-Trademark-Policy"
     assert any("not affiliated" in notice for notice in trademark_source["required_attribution"])
     assert any("logos" in rule for rule in trademark_source["forbidden_reuse"])
 
-    for schema_name in ("firefox-release-152.json", "firefox-esr-140.12.json"):
+    for schema_name, source in (
+        ("firefox-release-153.json", "mozilla-policy-templates-v8.0"),
+        ("firefox-esr-153.0.json", "mozilla-policy-templates-v8.0"),
+        ("firefox-esr-140.13.json", "mozilla-policy-templates-v7.12"),
+    ):
         schema = json.loads((Path("app/schemas/policies") / schema_name).read_text(encoding="utf-8"))
-        assert schema["x-bpm-source"] == "mozilla-policy-templates-v7.12"
+        assert schema["x-bpm-source"] == source
 
 
 def test_mdn_and_unclassified_web_documentation_are_link_only():

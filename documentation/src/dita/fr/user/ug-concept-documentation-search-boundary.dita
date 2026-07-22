@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-documentation-search-boundary" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Parcourir et rechercher la documentation du produit</title>
+  <title>Navigation et recherche dans la documentation du produit</title>
   <shortdesc>Utilisez la hiérarchie à défilement indépendant et la recherche déterministe compacte pour trouver l'aide publiée sans service externe ni IA.</shortdesc>
   <conbody>
     <section id="a-portal-navigation"><title>Arborescence de documentation</title><p>La barre latérale s'ouvre à la racine « Documents » et répertorie les guides, les sections lorsqu'elles sont nécessaires, puis les rubriques. L'arborescence défile indépendamment de l'article. Un lien vers la racine affiche la liste des guides ; un lien contextuel vers une rubrique développe tous ses ancêtres, la fait défiler dans la zone visible et l'active.</p></section>

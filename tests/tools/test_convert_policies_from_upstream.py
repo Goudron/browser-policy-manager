@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -557,3 +558,86 @@ def test_extract_required_property_names_ignores_only_required_to_phrasing():
     required_names = module._extract_required_property_names(section_text, node)
 
     assert required_names == set()
+
+
+def test_schema_target_manifest_declares_three_independent_outputs():
+    module = _load_module()
+
+    targets = module.load_schema_build_targets()
+
+    assert [(target.channel, target.version, target.source_tag) for target in targets] == [
+        ("release-153", "153.0", "mozilla-policy-templates-v8.0"),
+        ("esr-153.0", "153.0", "mozilla-policy-templates-v8.0"),
+        ("esr-140.13", "140.13", "mozilla-policy-templates-v7.12"),
+    ]
+    assert len({target.output for target in targets}) == 3
+
+
+def test_generate_schema_targets_parses_markdown_and_applies_firefox_153_bridge(tmp_path: Path):
+    module = _load_module()
+    documentation = tmp_path / "policies.md"
+    linux_policies = tmp_path / "linux-policies.json"
+    release_output = tmp_path / "release.json"
+    esr_output = tmp_path / "esr.json"
+    documentation.write_text(
+        """### ExtensionSettings
+Manage extensions.
+
+**Compatibility:** Firefox 69\\
+
+#### policies.json
+```
+{"policies": {"ExtensionSettings": {"*": {"installation_mode": "blocked"}}}}
+```
+
+### DisableRemoteSettingsAndAcceptSecurityConsequences
+Disable Remote Settings.
+
+**Compatibility:** Firefox 153\\
+
+#### policies.json
+```
+{"policies": {"DisableRemoteSettingsAndAcceptSecurityConsequences": true}}
+```
+""",
+        encoding="utf-8",
+    )
+    linux_policies.write_text(
+        json.dumps({"policies": {"ExtensionSettings": {"*": {"updates_disabled": False}}}}),
+        encoding="utf-8",
+    )
+    targets = (
+        module.SchemaBuildTarget(
+            channel="release-153",
+            version="153.0",
+            source_tag="test-v8.0",
+            documentation_input=documentation,
+            linux_policies_input=linux_policies,
+            output=release_output,
+        ),
+        module.SchemaBuildTarget(
+            channel="esr-140.13",
+            version="140.13",
+            source_tag="test-v7.12",
+            documentation_input=documentation,
+            linux_policies_input=linux_policies,
+            output=esr_output,
+        ),
+    )
+
+    module.generate_schema_targets(targets)
+
+    release = json.loads(release_output.read_text(encoding="utf-8"))
+    esr = json.loads(esr_output.read_text(encoding="utf-8"))
+    release_extension = release["properties"]["ExtensionSettings"]["additionalProperties"][
+        "properties"
+    ]
+    esr_extension = esr["properties"]["ExtensionSettings"]["additionalProperties"]["properties"]
+
+    assert release["x-bpm-source"] == "test-v8.0"
+    assert "DisableRemoteSettingsAndAcceptSecurityConsequences" in release["properties"]
+    assert "DisableRemoteSettingsAndAcceptSecurityConsequences" not in esr["properties"]
+    assert "runtime_allowed_hosts" in release_extension
+    assert "runtime_allowed_hosts" not in esr_extension
+    assert release_extension["allowed_permissions"]["items"]["type"] == "string"
+    assert "allowed_permissions" not in esr_extension

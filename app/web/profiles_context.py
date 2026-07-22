@@ -6,7 +6,7 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 from functools import cache
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from fastapi import Request
 
@@ -15,7 +15,7 @@ from app.core.locales import (
     resolve_active_catalog_locale_code,
     resolve_target_locale_code,
 )
-from app.core.schema_channels import build_schema_channels_catalog
+from app.core.schema_channels import SCHEMA_CHANNELS, build_schema_channels_catalog
 from app.documentation.manifest import (
     DOCUMENTATION_CONTEXTUAL_HELP_TARGET_IDS,
     DOCUMENTATION_DEEP_HELP_TARGET_IDS,
@@ -191,6 +191,20 @@ def build_profiles_page_context(
             return value
         return fallback
 
+    schema_channels_catalog = build_schema_channels_catalog(
+        label_overrides={
+            channel.value: tr(channel.i18n_key, channel.label)
+            for channel in SCHEMA_CHANNELS
+        }
+    )
+    schema_options = cast(list[dict[str, str]], schema_channels_catalog["options"])
+    header_schema_options = sorted(
+        schema_options,
+        key=lambda option: ("release-153", "esr-153.0", "esr-140.13").index(
+            option["value"]
+        ),
+    )
+
     return {
         "title": title,
         "app_name": settings_obj.APP_NAME,
@@ -225,7 +239,8 @@ def build_profiles_page_context(
             editing_profile_schema_version,
             wizard_schema_shell_catalog,
         ),
-        "schema_channels_catalog": build_schema_channels_catalog(),
+        "schema_channels_catalog": schema_channels_catalog,
+        "header_schema_options": header_schema_options,
         "locale_picker_options": LOCALE_MATRIX,
         "initial_lang": initial_lang,
         "initial_locale": initial_locale,

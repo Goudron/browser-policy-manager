@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Créer un premier profil depuis la Bibliothèque</title>
+  <title>Créer un premier profil depuis la bibliothèque</title>
   <shortdesc>Démarrez une nouvelle ébauche de profil guidé à partir de la bibliothèque lorsqu'aucun profil enregistré ne peut être réutilisé.</shortdesc>
   <taskbody>
     <prereq><p>Vous êtes dans la bibliothèque et souhaitez créer un nouveau profil plutôt que d'ouvrir ou de dupliquer un profil existant.</p></prereq>

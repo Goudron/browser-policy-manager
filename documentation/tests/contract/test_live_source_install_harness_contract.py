@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
@@ -10,6 +9,9 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 HARNESS = DOCUMENTATION_ROOT / "config/live-source-install-harness-0.9.1.json"
 COMMANDS = DOCUMENTATION_ROOT / "config/linux-source-install-command-contract-0.9.1.json"
+EDITORIAL_RECONCILIATION = (
+    DOCUMENTATION_ROOT / "config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 PRIVILEGED = (
     DOCUMENTATION_ROOT / "config/live-source-install-privileged-validation-contract-0.9.1.json"
 )
@@ -44,23 +46,27 @@ def test_harness_contract_is_scoped_to_m11_03_and_the_accepted_boundaries() -> N
     assert harness["execution"]["runtime_readiness_interval_seconds"] == 2
 
 
-def test_five_profiles_match_command_and_image_contracts_exactly() -> None:
+def test_five_historical_profiles_remain_mapped_to_current_compact_topics() -> None:
     harness = _json(HARNESS)
     command_targets = _json(COMMANDS)["targets"]
     image_targets = _json(PRIVILEGED)["target_images"]
     profiles = harness["targets"]
 
     expected_ids = [target["id"] for target in command_targets]
+    current_targets = {
+        target["id"]: target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+    }
     assert [profile["id"] for profile in profiles] == expected_ids
     assert [profile["image_target"] for profile in profiles] == expected_ids
     assert [target["target_id"] for target in image_targets] == expected_ids
     for profile, command_target in zip(profiles, command_targets, strict=True):
         assert profile["source_topic"].endswith(f"{command_target['topic_id']}.dita")
         source = REPOSITORY_ROOT / profile["source_topic"]
-        root = ET.fromstring(source.read_text(encoding="utf-8"))
-        assert [block.attrib["id"] for block in root.findall(".//codeblock")] == profile[
-            "stage_order"
-        ]
+        assert source.is_file()
+        assert current_targets[profile["id"]]["topic_id"] == command_target["topic_id"]
+        assert profile["stage_order"][-2:] == ["start", "verify"]
+        assert profile["historical_stage_order"][-3:] == ["docs", "start", "verify"]
 
 
 def test_container_adapter_is_visible_and_documented_commands_remain_source_owned() -> None:

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Öffnen Sie ein gespeichertes Profil in einem Editor</title>
+  <title>Ein gespeichertes Profil in einem Editor öffnen</title>
   <shortdesc>Öffnen Sie dasselbe gespeicherte Profil in Geführter Editor, Alle Einstellungen oder JSON-Editor, je nachdem, welche Änderung Sie benötigen.</shortdesc>
   <taskbody>
     <prereq><p>Das Profil ist in der Bibliothek sichtbar und seine Zeilenidentität stimmt mit dem Profil überein, das Sie bearbeiten oder überprüfen möchten.</p></prereq>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-refresh-source-revision-dependencies" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Aktualisieren Sie die Quellrevision und Abhängigkeiten</title>
+  <title>Quellrevision und Abhängigkeiten aktualisieren</title>
   <shortdesc>Verschieben Sie das Auschecken auf eine genehmigte neuere Revision und installieren Sie die Python-Umgebung neu, ohne Abhängigkeits- oder Arbeitsbaumfehler auszublenden.</shortdesc>
   <taskbody>
     <prereq><p>Der Beweissatz vor dem Update ist vorhanden, die vorherige Revision ist aufgezeichnet und ein genehmigter Zielzweig, Tag oder Commit ist bekannt.</p></prereq>

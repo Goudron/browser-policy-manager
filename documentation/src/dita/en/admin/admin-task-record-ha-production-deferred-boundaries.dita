@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Record HA and production deferred boundaries</title>
-  <shortdesc>State which production, HA, reverse-proxy, restore, and service-management capabilities are absent today and what can be prepared for later design work.</shortdesc>
+  <title>Record production operating assumptions</title>
+  <shortdesc>Record the production, HA, reverse-proxy, restore, and service-management responsibilities for a source-run instance.</shortdesc>
   <taskbody>
     <prereq><p>Readiness, network exposure, backup/export, monitoring, and update-window notes exist for the current source-run instance.</p></prereq>
-    <context><p>This topic records the boundary between current single-node source operation and future production architecture. It is deliberately explicit about what is planned but not implemented yet.</p></context>
+    <context><p>This topic records the operating assumptions for a source-run instance and the platform responsibilities that must be assigned before shared use.</p></context>
     <steps>
       <step><cmd>Name the supported current shape.</cmd><info><p>Write that BPM Administrator/DevOps documentation supports source deployment, manual configuration, health/readiness checks, API examples, manual backup evidence, documentation rebuild checks, and single-node update windows.</p></info></step>
-      <step><cmd>Name absent service and proxy capabilities.</cmd><info><p>List packaged services, native Linux service units, Windows services, official reverse-proxy recipes, TLS/proxy recipes, managed secrets, authentication gateway configuration, and production hardening as absent from BPM source documentation.</p></info></step>
-      <step><cmd>Name absent HA and upgrade capabilities.</cmd><info><p>List supported HA clustering, multi-node coordination, load balancer session affinity guidance, shared storage locking, zero-downtime migration, rolling upgrades, automatic failover, and official restore automation as future work, not current behavior.</p></info></step>
-      <step><cmd>Convert future needs into design inputs.</cmd><info><note type="warning">Do not place multiple source nodes behind a load balancer and call the result supported HA. Capture required RTO/RPO, backup verification, TLS ownership, secrets ownership, logging, monitoring, and upgrade-window expectations as inputs for later distribution/runtime tasks.</note></info></step>
+      <step><cmd>Record service and proxy responsibilities.</cmd><info><p>Assign owners for Linux or Windows services, reverse proxy, TLS, secrets, authentication gateway configuration, and production hardening.</p></info></step>
+      <step><cmd>Record HA and upgrade design requirements.</cmd><info><p>Capture requirements for multi-node coordination, load balancing, shared storage, migrations, failover, restore, and upgrade windows.</p></info></step>
+      <step><cmd>Capture operating inputs.</cmd><info><note type="warning">Do not treat multiple source nodes behind a load balancer as an operating design without documented coordination and recovery procedures. Capture RTO/RPO, backup verification, TLS ownership, secrets ownership, logging, monitoring, and update-window expectations.</note></info></step>
     </steps>
-    <result><p>The boundary record prevents unsupported production, HA, and reverse-proxy claims while preserving useful preparation work for future releases.</p></result>
-    <postreq><p>Use this record during manual documentation QA and when future installer, service, reverse-proxy, and HA backlog items are approved.</p></postreq>
+    <result><p>The operating record captures the responsibilities and recovery expectations for shared use.</p></result>
+    <postreq><p>Use this record during operational review and update planning.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-record-devops-operational-boundaries"/>

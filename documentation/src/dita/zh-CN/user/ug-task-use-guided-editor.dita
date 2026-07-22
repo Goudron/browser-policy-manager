@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>导航六个 引导式编辑器 步骤</title>
+  <title>浏览“引导式编辑器”的六个步骤</title>
   <shortdesc>依次浏览配置文件 &amp; 基线、浏览器访问权限 &amp; 默认设置、安全 &amp; 隐私、用户、附加组件 &amp; 网站、AI &amp; 智能功能以及查看 &amp; 导出。</shortdesc>
   <taskbody>
     <prereq><p>从库或创建流程中打开 引导式编辑器 中的配置文件。</p></prereq>
     <context><p>引导式编辑器 将配置文件配置转变为六个任务优先的步骤，并在您工作时保持架构验证可见。</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>引导式编辑器 概述</title>
+        <title>“引导式编辑器”概述</title>
         <image keyref="screenshot.guided-editor-overview" placement="break">
           <alt>引导式编辑器 显示已保存配置文件的步骤导航和验证状态。</alt>
         </image>

@@ -65,8 +65,9 @@ def test_editor_mode_links_preserve_route_aware_returns_and_settings_focus():
     assert "function encodeReturnPath(returnPath)" in source
     assert source.count("params.push(`return=${encodeReturnPath(returnPath)}`);") == 2
     assert 'return `/profiles/${currentId}/json?${params.join("&")}`;' in source
-    assert 'const detailMode = routeMode === "settings"' in source
-    assert 'active: routeMode === "settings" || (routeMode === "json" && detailMode === "settings")' in source
+    assert 'active: routeMode === "settings",' in source
+    assert 'active: routeMode === "json",' in source
+    assert "const detailMode = routeMode" not in source
     assert 'el.setAttribute("title", t("profiles.editor_chrome_save_first"));' in source
     assert 'el.removeAttribute("title");' in source
 
@@ -79,10 +80,10 @@ def test_unsaved_guided_route_explicitly_disables_settings_and_json_handoffs():
     assert 'id="editor-mode-settings"' in response.text
     assert 'id="editor-mode-json"' in response.text
     assert response.text.count('aria-disabled="true"') >= 2
-    assert response.text.count('title="Save the profile first to open All settings or JSON in a separate tab."') >= 2
-    assert 'id="editor-mode-links-hint"' in response.text
-    assert 'role="status"' in response.text
-    assert 'Save the profile first to open All settings or JSON in a separate tab.' in response.text
+    assert response.text.count('title="Save profile to unlock modes."') >= 2
+    assert response.text.count('data-editor-mode-save-required') == 2
+    assert response.text.count('Save profile to unlock modes.') >= 4
+    assert 'id="editor-mode-links-hint"' not in response.text
 
 
 def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save():
@@ -98,9 +99,9 @@ def test_saved_guided_route_enables_settings_and_json_handoffs_after_first_save(
     assert response.status_code == 200
     assert f'href="/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit"' in response.text
     assert f'href="/profiles/{profile_id}/json?focus=editor"' in response.text
-    assert 'title="Save the profile first to open All settings or JSON in a separate tab."' not in response.text
-    assert 'id="editor-mode-links-hint"' in response.text
-    assert 'support-hidden' in response.text
+    assert 'title="Save profile to unlock modes."' not in response.text
+    assert response.text.count('data-editor-mode-save-required hidden') == 2
+    assert 'id="editor-mode-links-hint"' not in response.text
 
 
 def test_profile_settings_route_preserves_step8_json_handoff():

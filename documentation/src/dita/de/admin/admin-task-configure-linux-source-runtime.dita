@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-configure-linux-source-runtime" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Konfigurieren Sie die Laufzeiteinstellungen der Linux-Quelle</title>
+  <title>Die Laufzeiteinstellungen der Linux-Quelle konfigurieren</title>
   <shortdesc>Legen Sie die Datenbank-URL, den Host, den Port, den Neulademodus, CORS und den Dokumentations-Site-Pfad fest, der vom von der Quelle ausgeführten BPM-Prozess verwendet wird.</shortdesc>
   <taskbody>
     <prereq><p>Die Checkout-Abhängigkeiten sind installiert und Migrationen wurden für die Datenbank angewendet, die Sie verwenden möchten.</p></prereq>

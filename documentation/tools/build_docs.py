@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import tomllib
 import unicodedata
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -25,6 +26,12 @@ from typing import Any
 import jsonschema
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
+
+from app.core.locales import LOCALE_MATRIX  # noqa: E402
+from app.core.schema_channels import SCHEMA_CHANNELS  # noqa: E402
+
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 LOCK_PATH = DOCUMENTATION_ROOT / "config/toolchain-lock.json"
 BUILD_ROOT = DOCUMENTATION_ROOT / "build"
@@ -75,12 +82,30 @@ NAVIGATION_SCHEMA = (
     REPOSITORY_ROOT / "docs/architecture/schemas/product-documentation-navigation-v1.schema.json"
 )
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
+PRODUCT_LOCALE_OPTIONS = tuple(locale for locale in LOCALE_MATRIX if locale.has_catalog)
+PRODUCT_HEADER_LABEL_KEYS = {
+    "locales": "profiles.locale_label",
+    "locale_system": "profiles.locale_system",
+    "theme": "profiles.theme_label",
+    "theme_system": "profiles.theme_system",
+    "theme_light": "profiles.theme_light",
+    "theme_dark": "profiles.theme_dark",
+}
+PRODUCT_LOCALE_OPTION_LABEL_KEYS = {
+    "en": "profiles.locale_option_en",
+    "ru": "profiles.locale_option_ru",
+    "de": "profiles.locale_option_de",
+    "zh-CN": "profiles.locale_option_zh_cn",
+    "fr": "profiles.locale_option_fr",
+    "es-ES": "profiles.locale_option_es_es",
+}
 SOURCE_SUFFIXES = {".dita", ".ditamap"}
 LINK_ATTRIBUTES = {"href", "src"}
 THEME_ROOT = DOCUMENTATION_ROOT / "assets/theme"
 SCREENSHOT_ROOT = DOCUMENTATION_ROOT / "assets/screenshots"
 THEME_FILES = ("bpm-docs.css", "bpm-docs-print.css")
 SEARCH_SCRIPT = "bpm-docs-search.js"
+PRODUCT_VERSION_FACET_PLACEHOLDER = "{product_version}"
 SEARCH_TOKEN_PATTERN = re.compile(
     r"/[^\s\"'<>]+|[^\W_]+(?:[-._:/][^\W_]+)+|[^\W_]+",
     flags=re.UNICODE,
@@ -107,10 +132,10 @@ SHELL_LABELS = {
     "en": {
         "skip": "Skip to content",
         "guides": "Guides",
-        "locales": "Languages",
+        "locales": "Locale",
         "breadcrumbs": "Breadcrumbs",
         "home": "Documentation home",
-        "version": "BPM 0.9.1 · Documentation 0.9.1",
+        "supported_firefox_versions": "Supported Firefox versions in this release:",
         "status": "Runtime package pending manifest, search, and UI target metadata.",
         "theme": "Theme",
         "theme_system": "System",
@@ -130,6 +155,8 @@ SHELL_LABELS = {
         "search_placeholder": "Search topics, policies, CIS IDs, or API operations",
         "search_submit": "Search",
         "search_clear": "Clear",
+        "search_clear_filters": "Clear filters",
+        "search_active_filters": "Active filters: {count}",
         "search_help": "Search uses this locale’s static offline index. No AI, telemetry, or network search is used.",
         "search_filters": "Filters",
         "search_results": "Search results",
@@ -143,10 +170,10 @@ SHELL_LABELS = {
     "ru": {
         "skip": "Перейти к содержимому",
         "guides": "Руководства",
-        "locales": "Языки",
+        "locales": "Локаль",
         "breadcrumbs": "Навигационная цепочка",
         "home": "Главная страница документации",
-        "version": "BPM 0.9.1 · Документация 0.9.1",
+        "supported_firefox_versions": "В текущем релизе поддерживаются версии Firefox:",
         "status": "Пакет для runtime ожидает манифест, поиск и метаданные UI-целей.",
         "theme": "Тема",
         "theme_system": "Системная",
@@ -166,6 +193,8 @@ SHELL_LABELS = {
         "search_placeholder": "Ищите разделы, политики, CIS ID или операции API",
         "search_submit": "Найти",
         "search_clear": "Сбросить",
+        "search_clear_filters": "Сбросить фильтры",
+        "search_active_filters": "Активные фильтры: {count}",
         "search_help": "Поиск использует статический офлайн-индекс текущей локали. ИИ, телеметрия и сетевой поиск не используются.",
         "search_filters": "Фильтры",
         "search_results": "Результаты поиска",
@@ -179,10 +208,10 @@ SHELL_LABELS = {
     "de": {
         "skip": "Zum Inhalt springen",
         "guides": "Handbücher",
-        "locales": "Sprachen",
+        "locales": "Sprache",
         "breadcrumbs": "Breadcrumbs",
         "home": "Startseite der Dokumentation",
-        "version": "BPM 0.9.1 · Dokumentation 0.9.1",
+        "supported_firefox_versions": "In dieser Version unterstützte Firefox-Versionen:",
         "status": "Das Runtime-Paket wartet auf Manifest, Suche und UI-Zielmetadaten.",
         "theme": "Design",
         "theme_system": "System",
@@ -202,6 +231,8 @@ SHELL_LABELS = {
         "search_placeholder": "Themen, Richtlinien, CIS-IDs oder API-Vorgänge suchen",
         "search_submit": "Suchen",
         "search_clear": "Zurücksetzen",
+        "search_clear_filters": "Filter zurücksetzen",
+        "search_active_filters": "Aktive Filter: {count}",
         "search_help": "Die Suche verwendet den statischen Offline-Index dieser Sprache. Keine KI, Telemetrie oder Netzwerksuche wird verwendet.",
         "search_filters": "Filter",
         "search_results": "Suchergebnisse",
@@ -218,7 +249,7 @@ SHELL_LABELS = {
         "locales": "语言",
         "breadcrumbs": "面包屑导航",
         "home": "文档主页",
-        "version": "BPM 0.9.1 · 文档 0.9.1",
+        "supported_firefox_versions": "当前版本支持的 Firefox 版本：",
         "status": "运行时包仍需清单、搜索和 UI 目标元数据。",
         "theme": "主题",
         "theme_system": "跟随系统",
@@ -238,6 +269,8 @@ SHELL_LABELS = {
         "search_placeholder": "搜索主题、策略、CIS ID 或 API 操作",
         "search_submit": "搜索",
         "search_clear": "清除",
+        "search_clear_filters": "清除筛选条件",
+        "search_active_filters": "已启用筛选条件：{count}",
         "search_help": "搜索使用当前语言的静态离线索引。不使用 AI、遥测或网络搜索。",
         "search_filters": "筛选条件",
         "search_results": "搜索结果",
@@ -251,10 +284,10 @@ SHELL_LABELS = {
     "fr": {
         "skip": "Aller au contenu",
         "guides": "Guides",
-        "locales": "Langues",
+        "locales": "Langue",
         "breadcrumbs": "Fil d’Ariane",
         "home": "Accueil de la documentation",
-        "version": "BPM 0.9.1 · Documentation 0.9.1",
+        "supported_firefox_versions": "Versions de Firefox prises en charge dans cette version :",
         "status": "Le paquet d’exécution attend le manifeste, la recherche et les métadonnées des cibles UI.",
         "theme": "Thème",
         "theme_system": "Système",
@@ -274,6 +307,8 @@ SHELL_LABELS = {
         "search_placeholder": "Rechercher des rubriques, politiques, ID CIS ou opérations API",
         "search_submit": "Rechercher",
         "search_clear": "Effacer",
+        "search_clear_filters": "Effacer les filtres",
+        "search_active_filters": "Filtres actifs : {count}",
         "search_help": "La recherche utilise l’index statique hors ligne de cette langue. Aucune IA, télémétrie ni recherche réseau n’est utilisée.",
         "search_filters": "Filtres",
         "search_results": "Résultats de recherche",
@@ -287,10 +322,10 @@ SHELL_LABELS = {
     "es-ES": {
         "skip": "Ir al contenido",
         "guides": "Guías",
-        "locales": "Idiomas",
+        "locales": "Idioma",
         "breadcrumbs": "Ruta de navegación",
         "home": "Inicio de la documentación",
-        "version": "BPM 0.9.1 · Documentación 0.9.1",
+        "supported_firefox_versions": "Versiones de Firefox compatibles con esta versión:",
         "status": "El paquete de runtime espera el manifiesto, la búsqueda y los metadatos de objetivos de UI.",
         "theme": "Tema",
         "theme_system": "Sistema",
@@ -310,6 +345,8 @@ SHELL_LABELS = {
         "search_placeholder": "Buscar temas, políticas, ID de CIS u operaciones de API",
         "search_submit": "Buscar",
         "search_clear": "Borrar",
+        "search_clear_filters": "Borrar filtros",
+        "search_active_filters": "Filtros activos: {count}",
         "search_help": "La búsqueda usa el índice estático sin conexión de este idioma. No se usa IA, telemetría ni búsqueda de red.",
         "search_filters": "Filtros",
         "search_results": "Resultados de búsqueda",
@@ -673,6 +710,47 @@ SEARCH_FILTER_VALUE_LABELS = {
 
 class BuildError(RuntimeError):
     """A documentation validation or publishing failure."""
+
+
+def _product_header_labels(locale: str) -> dict[str, str]:
+    """Load the shared BPM header labels from the runtime locale catalog."""
+
+    try:
+        catalog = json.loads(
+            (REPOSITORY_ROOT / "app" / "i18n" / f"{locale}.json").read_text(
+                encoding="utf-8"
+            )
+        )
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BuildError(f"cannot read product locale catalog {locale}: {exc}") from exc
+
+    keys = {
+        **PRODUCT_HEADER_LABEL_KEYS,
+        **{
+            f"locale_option_{code}": key
+            for code, key in PRODUCT_LOCALE_OPTION_LABEL_KEYS.items()
+        },
+    }
+    labels = {name: catalog.get(key) for name, key in keys.items()}
+    missing = [key for key, value in labels.items() if not isinstance(value, str) or not value]
+    if missing:
+        raise BuildError(
+            f"product locale catalog {locale} is missing header labels: {', '.join(missing)}"
+        )
+    return labels  # type: ignore[return-value]
+
+
+def _product_version() -> str:
+    try:
+        project = tomllib.loads(
+            (REPOSITORY_ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        )
+        version = project["project"]["version"]
+    except (OSError, tomllib.TOMLDecodeError, KeyError) as exc:
+        raise BuildError(f"cannot read product version: {exc}") from exc
+    if not isinstance(version, str) or not version.strip():
+        raise BuildError("product version is missing or invalid")
+    return version
 
 
 def _load_lock() -> dict[str, Any]:
@@ -1507,7 +1585,7 @@ def _navigation_payload(site_root: Path, locale: str) -> dict[str, Any]:
     return {
         "$schema": "../schemas/product-documentation-navigation-v1.schema.json",
         "schema_version": 1,
-        "documentation_version": "0.9.1",
+        "documentation_version": _product_version(),
         "locale": locale,
         "node_count": count_nodes(root),
         "root": root,
@@ -1591,6 +1669,17 @@ def _validate_navigation_manifest_alignment(
 ) -> None:
     if navigation_payload.get("locale") != locale:
         raise BuildError(f"navigation locale mismatch for {locale}")
+    artifact = manifest.get("artifact")
+    if not isinstance(artifact, dict):
+        raise BuildError("manifest artifact metadata is missing")
+    bpm_version = artifact.get("bpm_version")
+    documentation_version = artifact.get("documentation_version")
+    if (
+        not isinstance(bpm_version, str)
+        or documentation_version != bpm_version
+        or navigation_payload.get("documentation_version") != bpm_version
+    ):
+        raise BuildError(f"navigation version diverges from BPM artifact metadata for {locale}")
     expected_root = _manifest_navigation_root(manifest, locale)
     if navigation_payload.get("root") != expected_root:
         raise BuildError(f"navigation source diverges from manifest authority for {locale}")
@@ -1631,7 +1720,7 @@ def _navigation_host(site_root: Path, page: Path, locale: str) -> str:
     current_node_id = current[1] if current else "documentation-root"
     navigation_href = _relative_href(page, site_root / locale / "navigation.json")
     root_href = _relative_href(page, site_root / locale / "index.html")
-    return f"""            <div class="bpm-docs-tree-host" data-docs-tree-host aria-busy="true" data-navigation-href="{_escape(navigation_href)}" data-navigation-locale="{_escape(locale)}" data-current-tree-node="{_escape(current_node_id)}" data-tree-storage-key="bpm-docs-tree:{_escape(locale)}:0.9.1" data-label-tree="{_escape(labels["navigation_tree_label"])}" data-label-expand="{_escape(labels["navigation_expand"])}" data-label-collapse="{_escape(labels["navigation_collapse"])}" data-label-current="{_escape(labels["navigation_current"])}" data-label-parent="{_escape(labels["navigation_parent"])}" data-label-back-to-root="{_escape(labels["navigation_back_to_root"])}" data-label-loading="{_escape(labels["navigation_loading"])}" data-label-unavailable="{_escape(labels["navigation_unavailable"])}" data-root-href="{_escape(root_href)}">
+    return f"""            <div class="bpm-docs-tree-host" data-docs-tree-host aria-busy="true" data-navigation-href="{_escape(navigation_href)}" data-navigation-locale="{_escape(locale)}" data-navigation-version="{_escape(_product_version())}" data-current-tree-node="{_escape(current_node_id)}" data-tree-storage-key="bpm-docs-tree:{_escape(locale)}:{_escape(_product_version())}" data-label-tree="{_escape(labels["navigation_tree_label"])}" data-label-expand="{_escape(labels["navigation_expand"])}" data-label-collapse="{_escape(labels["navigation_collapse"])}" data-label-current="{_escape(labels["navigation_current"])}" data-label-parent="{_escape(labels["navigation_parent"])}" data-label-back-to-root="{_escape(labels["navigation_back_to_root"])}" data-label-loading="{_escape(labels["navigation_loading"])}" data-label-unavailable="{_escape(labels["navigation_unavailable"])}" data-root-href="{_escape(root_href)}">
                <p class="bpm-docs-tree-status" role="status" aria-live="polite" data-docs-tree-status>{_escape(labels["navigation_loading"])}</p>
                <noscript><p class="bpm-docs-tree-status"><a href="{_escape(root_href)}">{_escape(labels["navigation_back_to_root"])}</a></p></noscript>
             </div>"""
@@ -1802,20 +1891,38 @@ def _portal_root_anchor_targets(site_root: Path, page: Path, locale: str, body_i
 
 def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> str:
     labels = SHELL_LABELS[locale]
-    portal_title = _map_title(locale, "portal.ditamap")
+    product_header_labels = _product_header_labels(locale)
+    product_version = _product_version()
     guide_sidebar = _navigation_host(site_root, page, locale)
     breadcrumbs = _navigation_breadcrumbs(site_root, page, locale)
-    locale_links = "\n".join(
-        "               <li>"
-        f'<a href="{_escape(_relative_href(page, _locale_peer(site_root, page, locale, peer)))}"'
-        f' hreflang="{peer}" lang="{peer}"'
-        f"{' aria-current="true"' if peer == locale else ''}>{peer}</a>"
-        "</li>"
-        for peer in LOCALES
+    product_locale_codes = tuple(option.code for option in PRODUCT_LOCALE_OPTIONS)
+    if product_locale_codes != LOCALES:
+        raise BuildError(
+            "documentation locales must match the product locale picker: "
+            f"expected {LOCALES}, got {product_locale_codes}"
+        )
+    locale_options = "\n".join(
+        [
+            "                  "
+            f'<option value="system" data-docs-locale-system>{_escape(product_header_labels["locale_system"])}</option>'
+        ]
+        + [
+            "                  "
+            f'<option value="{_escape(option.code)}" lang="{_escape(option.bcp47)}"'
+            f' data-docs-locale-href="{_escape(_relative_href(page, _locale_peer(site_root, page, locale, option.code)))}"'
+            f" data-docs-locale-matches='{_escape(json.dumps(option.browser_language_matches))}'"
+            f"{' selected' if option.code == locale else ''}>{_escape(product_header_labels[f'locale_option_{option.code}'])}</option>"
+            for option in PRODUCT_LOCALE_OPTIONS
+        ]
+    )
+    firefox_versions = "\n".join(
+        "               "
+        f'<span data-firefox-channel="{_escape(channel.value)}">{_escape(channel.label)}</span>'
+        for channel in SCHEMA_CHANNELS
     )
     search_index_href = _relative_href(page, site_root / "search" / locale / "index.json")
     root_anchor_targets = _portal_root_anchor_targets(site_root, page, locale, body_inner)
-    search_shell = f"""            <section class="bpm-docs-search" role="search" aria-labelledby="bpm-docs-search-heading" data-search-locale="{_escape(locale)}" data-search-index-href="{_escape(search_index_href)}" data-label-loading="{_escape(labels["search_loading"])}" data-label-ready="{_escape(labels["search_ready"])}" data-label-no-results="{_escape(labels["search_no_results"])}" data-label-unavailable="{_escape(labels["search_unavailable"])}" data-label-result-singular="{_escape(labels["search_result_singular"])}" data-label-result-plural="{_escape(labels["search_result_plural"])}">
+    search_shell = f"""            <section class="bpm-docs-search" role="search" aria-labelledby="bpm-docs-search-heading" data-search-locale="{_escape(locale)}" data-search-index-href="{_escape(search_index_href)}" data-label-loading="{_escape(labels["search_loading"])}" data-label-ready="{_escape(labels["search_ready"])}" data-label-no-results="{_escape(labels["search_no_results"])}" data-label-unavailable="{_escape(labels["search_unavailable"])}" data-label-result-singular="{_escape(labels["search_result_singular"])}" data-label-result-plural="{_escape(labels["search_result_plural"])}" data-label-active-filters="{_escape(labels["search_active_filters"])}">
                <h2 id="bpm-docs-search-heading" class="bpm-docs-visually-hidden">{_escape(labels["search"])}</h2>
                <div class="bpm-docs-search-form">
                   <label class="bpm-docs-visually-hidden" for="bpm-docs-search-query">{_escape(labels["search_query"])}</label>
@@ -1824,6 +1931,10 @@ def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> 
                      <button class="bpm-docs-search-submit" type="button" data-search-submit>{_escape(labels["search_submit"])}</button>
                      <button class="bpm-docs-search-clear" type="button" data-search-clear>{_escape(labels["search_clear"])}</button>
                      <button class="bpm-docs-search-advanced-toggle" type="button" aria-expanded="false" aria-controls="bpm-docs-search-advanced-panel" data-search-advanced-toggle>{_escape(labels["search_filters"])}</button>
+                  </div>
+                  <div class="bpm-docs-search-active-filters" data-search-active-filters hidden>
+                     <span role="status" aria-live="polite" aria-atomic="true" data-search-active-filters-summary></span>
+                     <button class="bpm-docs-search-clear-filters" type="button" data-search-clear-filters>{_escape(labels["search_clear_filters"])}</button>
                   </div>
                </div>
                <div id="bpm-docs-search-advanced-panel" class="bpm-docs-search-advanced-panel" data-search-advanced-panel hidden>
@@ -1841,24 +1952,28 @@ def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> 
             </section>"""
     return f"""      <a class="bpm-docs-skip-link" href="#main-content">{_escape(labels["skip"])}</a>
       <header class="bpm-docs-header">
-         <div class="bpm-docs-brand">
-            <p class="bpm-docs-brand-kicker">Browser Policy Manager</p>
-            <p class="bpm-docs-brand-title">{_escape(portal_title)}</p>
-            <p class="bpm-docs-version">{_escape(labels["version"])}</p>
+         <div class="bpm-docs-header-main">
+            <p class="bpm-docs-header-title">Browser Policy Manager <span class="bpm-docs-header-version">v{_escape(product_version)}</span></p>
+            <p class="bpm-docs-header-firefox-versions" data-supported-firefox-versions><span class="bpm-docs-header-firefox-versions-label">{_escape(labels["supported_firefox_versions"])}</span>
+{firefox_versions}
+            </p>
          </div>
-         <div class="bpm-docs-header-nav">
-            <nav aria-label="{_escape(labels["locales"])}">
-               <ul>
-{locale_links}
-               </ul>
-            </nav>
-            <div class="bpm-docs-theme-control">
-               <label for="bpm-docs-theme">{_escape(labels["theme"])}</label>
-               <select id="bpm-docs-theme" name="theme" data-docs-theme-select>
-                  <option value="system">{_escape(labels["theme_system"])}</option>
-                  <option value="light">{_escape(labels["theme_light"])}</option>
-                  <option value="dark">{_escape(labels["theme_dark"])}</option>
+         <div class="bpm-docs-header-side">
+            <div class="bpm-docs-header-actions">
+            <nav class="bpm-docs-header-control bpm-docs-locale-control" aria-label="{_escape(product_header_labels["locales"])}">
+               <span class="bpm-docs-header-control-label">{_escape(product_header_labels["locales"])}</span>
+               <select id="bpm-docs-locale" name="locale" aria-label="{_escape(product_header_labels["locales"])}" data-docs-locale-select>
+{locale_options}
                </select>
+            </nav>
+            <label class="bpm-docs-header-control bpm-docs-theme-control" for="bpm-docs-theme">
+               <span class="bpm-docs-header-control-label">{_escape(product_header_labels["theme"])}</span>
+               <select id="bpm-docs-theme" name="theme" data-docs-theme-select>
+                  <option value="system">{_escape(product_header_labels["theme_system"])}</option>
+                  <option value="light">{_escape(product_header_labels["theme_light"])}</option>
+                  <option value="dark">{_escape(product_header_labels["theme_dark"])}</option>
+               </select>
+            </label>
             </div>
          </div>
       </header>
@@ -1909,6 +2024,50 @@ def _install_screenshot_assets(locale_root: Path) -> None:
     target_root.mkdir(parents=True, exist_ok=True)
     for source in sorted(source_root.glob("*.png")):
         shutil.copyfile(source, target_root / source.name)
+
+
+def _remove_dita_transient_screenshot_copies(site_root: Path) -> None:
+    """Remove DITA-OT copies made from absolute screenshot source paths.
+
+    Some DITA-OT transforms preserve an absolute ``file:`` screenshot path as a
+    nested ``<locale>/home/.../assets/screenshots/<locale>/`` output tree.  The
+    portal uses the separately installed, locale-relative screenshot assets;
+    the nested copies are non-publishable and make two otherwise identical
+    builds differ by their temporary-directory name.
+    """
+
+    for locale in LOCALES:
+        locale_root = site_root / locale
+        expected_names = {
+            source.name for source in (SCREENSHOT_ROOT / locale).glob("*.png")
+        }
+        transient_roots: set[Path] = set()
+        for copied in locale_root.rglob("*.png"):
+            relative = copied.relative_to(locale_root)
+            if len(relative.parts) < 5:
+                continue
+            if tuple(relative.parts[-4:-1]) != ("assets", "screenshots", locale):
+                continue
+            if copied.name not in expected_names:
+                continue
+            transient_roots.add(locale_root / relative.parts[0])
+
+        for transient_root in sorted(transient_roots):
+            files = [path for path in transient_root.rglob("*") if path.is_file()]
+            if not files:
+                continue
+            if not all(
+                len(path.relative_to(locale_root).parts) >= 5
+                and tuple(path.relative_to(locale_root).parts[-4:-1])
+                == ("assets", "screenshots", locale)
+                and path.name in expected_names
+                for path in files
+            ):
+                raise BuildError(
+                    "unexpected generated files beneath transient screenshot root: "
+                    f"{transient_root}"
+                )
+            shutil.rmtree(transient_root)
 
 
 def _apply_portal_shell_to_page(site_root: Path, page: Path, locale: str) -> None:
@@ -2102,7 +2261,12 @@ def _search_ranking_typo() -> dict[str, Any]:
 
 
 def _search_facets_filters() -> dict[str, Any]:
-    return _read_json_file(SEARCH_FACETS_FILTERS)
+    config = _read_json_file(SEARCH_FACETS_FILTERS)
+    bpm_version = config.get("facet_fields", {}).get("bpm_version", {})
+    if bpm_version.get("values") != [PRODUCT_VERSION_FACET_PLACEHOLDER]:
+        raise BuildError("search BPM-version facet must derive from the product version")
+    bpm_version["values"] = [_product_version()]
+    return config
 
 
 def _localized_search_facet_fields(
@@ -3056,6 +3220,7 @@ def _topic_search_document(
     facets_by_topic: dict[str, dict[str, list[str]]],
     source_revision: str,
     alias_config: dict[str, Any],
+    product_version: str,
 ) -> dict[str, Any]:
     root = topic.get("_roots", {}).get(locale)
     title = topic["title"][locale]
@@ -3115,7 +3280,7 @@ def _topic_search_document(
         "cis_level": target_facets.get("cis_level", []),
         "cis_control_state": target_facets.get("cis_control_state", []),
         "api_area": target_facets.get("api_area", []),
-        "bpm_version": ["0.9.1"],
+        "bpm_version": [product_version],
     }
     return {
         "document_id": f"{locale}:{topic_id}",
@@ -3152,12 +3317,12 @@ def _topic_search_document(
             "cis_level": filter_facets["cis_level"] or None,
             "cis_control_state": filter_facets["cis_control_state"] or None,
             "api_area": filter_facets["api_area"] or None,
-            "bpm_version": "0.9.1",
+            "bpm_version": product_version,
         },
         "filter_facets": filter_facets,
         "versions": {
-            "bpm_version": "0.9.1",
-            "documentation_version": "0.9.1",
+            "bpm_version": product_version,
+            "documentation_version": product_version,
             "source_revision": source_revision,
         },
     }
@@ -3178,6 +3343,7 @@ def _search_document(
     identifiers_by_topic = _target_identifiers_by_topic(target_map)
     facets_by_topic = _target_facets_by_topic(target_map, facets_config)
     source_revision = _source_revision()
+    product_version = _product_version()
     documents = [
         _topic_search_document(
             locale,
@@ -3187,6 +3353,7 @@ def _search_document(
             facets_by_topic,
             source_revision,
             alias_config,
+            product_version,
         )
         for topic_id, topic in sorted(topics.items())
     ]
@@ -3227,7 +3394,7 @@ def _search_document(
         "integrity_contract_id": integrity_config["contract_id"],
         "integrity_schema_version": integrity_config["schema_version"],
         "result_schema_version": contract["result_schema"]["schema_version"],
-        "target_bpm_version": _artifact_policy()["target_bpm_version"],
+        "target_bpm_version": product_version,
         "locale": locale,
         "format_version": 1,
         "generated_by": "documentation/tools/build_docs.py",
@@ -3499,7 +3666,7 @@ def _build_target_map(topics: dict[str, dict[str, Any]]) -> dict[str, Any]:
         "$schema": "schemas/product-documentation-ui-target-map-v1.schema.json",
         "schema_version": 1,
         "manifest_schema_version": 1,
-        "bpm_version": "0.9.1",
+        "bpm_version": _product_version(),
         "locales": list(LOCALES),
         "targets": targets,
     }
@@ -3640,8 +3807,8 @@ def generate_manifest_files(site_root: Path) -> None:
         "$schema": "schemas/product-documentation-manifest-v1.schema.json",
         "schema_version": 1,
         "artifact": {
-            "bpm_version": "0.9.1",
-            "documentation_version": "0.9.1",
+            "bpm_version": _product_version(),
+            "documentation_version": _product_version(),
             "build_id": _manifest_build_id(site_root),
             "source_revision": _source_revision(),
             "dita_ot_version": _load_lock()["components"]["dita_ot"]["version"],
@@ -4196,6 +4363,7 @@ def build_tree(destination: Path) -> None:
     if source_hashes() != source_before:
         raise BuildError("DITA transform mutated maintained documentation source or assets")
     _normalize_locale_root_links(destination)
+    _remove_dita_transient_screenshot_copies(destination)
     apply_portal_shell(destination)
     _normalize_screenshot_links(destination)
     generate_manifest_files(destination)
@@ -4249,6 +4417,7 @@ def _source_fingerprint() -> str:
         TOPIC_SECTION_TAXONOMY,
         TOPIC_SECTION_LABELS,
         LOCK_PATH,
+        REPOSITORY_ROOT / "pyproject.toml",
         Path(__file__),
     ]
     digest = hashlib.sha256()
@@ -4264,8 +4433,8 @@ def _write_integrity(root: Path, policy: dict[str, Any]) -> None:
     runtime = policy["current_runtime_contract"]
     integrity = {
         "schema_version": 1,
-        "bpm_version": policy["target_bpm_version"],
-        "documentation_version": policy["target_bpm_version"],
+        "bpm_version": _product_version(),
+        "documentation_version": _product_version(),
         "dita_ot_version": lock["components"]["dita_ot"]["version"],
         "locales": list(LOCALES),
         "source_fingerprint": _source_fingerprint(),
@@ -4437,7 +4606,7 @@ def install_dev_site() -> None:
     _promote_dev_site(source, DEV_SITE_ROOT)
     metadata = {
         "schema_version": 1,
-        "bpm_version": _artifact_policy()["target_bpm_version"],
+        "bpm_version": _product_version(),
         "source_fingerprint": source_fingerprint,
         "source_site": source.relative_to(REPOSITORY_ROOT).as_posix(),
         "installed_site": DEV_SITE_ROOT.relative_to(REPOSITORY_ROOT).as_posix(),

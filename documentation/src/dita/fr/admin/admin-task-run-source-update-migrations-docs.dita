@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-source-update-migrations-docs" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Exécuter les migrations et les vérifications de reconstruction de la documentation</title>
-  <shortdesc>Appliquez les migrations de bases de données, validez la source de la documentation et reconstruisez la sortie de la documentation statique après les modifications de la révision de la source.</shortdesc>
+  <title>Exécuter les migrations et les vérifications de mise à jour de la source</title>
+  <shortdesc>Appliquez les migrations de base de données et vérifiez le déploiement BPM depuis la source après un changement de révision.</shortdesc>
   <taskbody>
     <prereq><p>L'extraction et les dépendances ont été actualisées avec succès et les preuves de sauvegarde de la base de données ont été collectées alors que BPM était arrêté.</p></prereq>
-    <context><p>Les mises à jour peuvent introduire des migrations de bases de données et des modifications de la documentation. BPM documente la migration vers l'avant avec <codeph>alembic upgrade head</codeph> ; il ne promet pas de rétrogradation automatique ni de restauration sécurisée du schéma.</p></context>
+    <context><p>Les mises à jour peuvent introduire des migrations de base de données. BPM documente la migration vers l’avant avec <codeph>alembic upgrade head</codeph> ; aucune rétrogradation automatique ni restauration sûre du schéma n’est garantie.</p></context>
     <steps>
       <step><cmd>Appliquez les migrations de base de données à la base de données souhaitée.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><p>Utilisez la valeur de déploiement réelle pour <codeph>BPM_DATABASE_URL</codeph>. Arrêtez-vous immédiatement si le résultat de la migration n'est pas clair ou échoue.</p></info></step>
-      <step><cmd>Effectuez un contrôle de fumée à source étroite avant de servir les utilisateurs.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make test-fast
-]]></codeblock><p>Ce contrôle est une source de fumée, pas une certification de production ou une validation HA.</p></info></step>
-      <step><cmd>Validez et reconstruisez la sortie de la documentation pour la révision mise à jour.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make docs-validate
-make docs-build
-]]></codeblock><p><codeph>make docs-validate</codeph> vérifie DITA, les métadonnées, les liens sources et les liens générés. <codeph>make docs-build</codeph> reconstruit la sortie statique ignorée ; il n'installe pas par lui-même un artefact de documentation par défaut dans le runtime de l'application.</p></info></step>
-      <step><cmd>Arrêt en cas d'échec de migration, de fumée ou de reconstruction de la documentation.</cmd><info><note type="warning">Une fois la migration exécutée, ne présumez pas que la restauration de l'extraction Git est suffisante. N'exécutez pas <codeph>alembic downgrade</codeph> à moins qu'une note de version révisée indique explicitement qu'il est pris en charge pour la paire de révisions exacte. Utilisez la sauvegarde de la base de données préalable à la mise à jour comme référence de récupération sécurisée lorsqu'une restauration est requise.</note></info></step>
+      <step><cmd>Démarrez le processus BPM mis à jour et vérifiez son interface actuelle.</cmd><info><p>Vérifiez l’activité et l’état de préparation, puis ouvrez la route Bibliothèque. Si la documentation est requise pour le déploiement, confirmez que <codeph>/help/</codeph> signale un artefact installé prêt plutôt qu’un état absent ou incompatible.</p></info></step>
+      <step><cmd>Arrêtez-vous en cas d’échec de migration ou de vérification à l’exécution.</cmd><info><note type="warning">Après une migration, ne présumez pas qu’une restauration de l’extraction Git suffit. N’exécutez <codeph>alembic downgrade</codeph> que si une note de version examinée confirme explicitement la prise en charge de la paire de révisions exacte. Lorsqu’une restauration est nécessaire, utilisez la sauvegarde de la base de données antérieure à la mise à jour comme base de récupération sûre.</note></info></step>
     </steps>
-    <result><p>La révision source mise à jour a terminé les migrations, les vérifications de fumée de source et de reconstruction de la documentation, ou la mise à jour s'est arrêtée à un point de défaillance nommé.</p></result>
+    <result><p>La révision source mise à jour a terminé les migrations et les vérifications à l’exécution, ou la mise à jour s’est arrêtée à un point de défaillance nommé.</p></result>
     <postreq><p>Démarrez BPM et exécutez la rubrique de vérification post-mise à jour avant de rendre l'instance aux utilisateurs ou aux intégrateurs.</p></postreq>
   </taskbody>
   <related-links>

@@ -2,9 +2,6 @@
     <section class="surface-panel fade-up p-4 md:p-5">
         <div class="compare-route-heading">
             <div class="min-w-0">
-                <p class="section-eyebrow" data-i18n="profiles.compare_route_eyebrow">
-                    {{ tr("profiles.compare_route_eyebrow", "Dedicated comparison") }}
-                </p>
                 <h2 id="compare-page-title" class="section-title text-slate-900" data-i18n="profiles.compare_route_title">
                     {{ tr("profiles.compare_route_title", "Compare profile settings") }}
                 </h2>
@@ -14,10 +11,7 @@
         </div>
     </section>
 
-    <section class="grid gap-4 lg:grid-cols-2" aria-labelledby="compare-selection-title">
-        <h3 id="compare-selection-title" class="sr-only" data-i18n="profiles.compare_selection_title">
-            {{ tr("profiles.compare_selection_title", "Choose profiles to compare") }}
-        </h3>
+    <section class="grid gap-4 lg:grid-cols-2">
         <div class="surface-panel p-4">
             <label class="field-label" for="compare-left-search" data-i18n="profiles.compare_left_label">
                 {{ tr("profiles.compare_left_label", "Profile A") }}
@@ -54,12 +48,7 @@
         </div>
     </section>
 
-    <section class="surface-panel p-4" aria-labelledby="compare-settings-title">
-        <div class="compare-settings-heading mb-3">
-            <h3 id="compare-settings-title" class="compare-settings-heading__title section-title text-slate-900" data-i18n="profiles.compare_settings_title">
-                {{ tr("profiles.compare_settings_title", "Settings side by side") }}
-            </h3>
-        </div>
+    <section class="surface-panel p-4">
         <div class="compare-table-shell">
             <table id="compare-settings-table" class="compare-settings-table text-left text-sm">
                 <colgroup>

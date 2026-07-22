@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-validate-before-apply-update" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>使用 expected_revision 验证并应用配置文件更新</title>
+  <title>使用 expected_revision 验证并应用配置档案更新</title>
   <shortdesc>运行验证优先的更新工作流，该工作流使用当前修订版保护 BPM 状态，并在过时或无效数据时停止。</shortdesc>
   <taskbody>
     <prereq><p>外部产品已读取目标配置文件并存储其当前的 <codeph>revision</codeph>。在发送任何配置文件补丁之前准备候选 Firefox <codeph>policies.json</codeph> 文档。</p></prereq>
     <context><p>此工作流程使用 <codeph>API-VAL-001</codeph>、<codeph>API-PROFILE-003</codeph> 和 <codeph>API-PROFILE-005</codeph>。它记录了当前乐观的更新路径； BPM 不提供 ETags、前提条件标头、幂等性密钥或多操作事务。</p></context>
     <steps>
       <step><cmd>在 BPM 之外构建候选 Firefox 文档。</cmd><info><p>记录所需的策略密钥、源系统、审阅者、票证和模式通道。候选示例：<codeph>{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}</codeph>。</p></info></step>
-  <step><cmd>在修补配置文件之前验证候选者。</cmd><info><p>请求示例：<codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-152"}</codeph>。错误示例：<codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p></info></step>
+  <step><cmd>在修补配置文件之前验证候选者。</cmd><info><p>请求示例：<codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-153"}</codeph>。错误示例：<codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p></info></step>
   <step><cmd>当批准窗口很长时，在应用更新之前立即重新读取配置文件。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/api/profiles/42</codeph>。响应示例：<codeph>200 ProfileRead</codeph>。如果 <codeph>revision</codeph> 发生更改，请重新运行比较和批准，而不是修补陈旧状态。</p></info></step>
   <step><cmd>仅用观察到的修订版修补可变字段。</cmd><info><p>请求示例：带有 JSON <codeph>{"flags":{"DisableTelemetry":true,"BlockAboutConfig":true},"expected_revision":7,"compliance":{"source":"control-product","decision":"approved"}}</codeph> 的 <codeph>PATCH $BPM_BASE_URL/api/profiles/42</codeph>。响应示例：带有递增的 <codeph>revision</codeph> 的 <codeph>200 ProfileRead</codeph>。</p></info></step>
   <step><cmd>将冲突响应视为停止信号。</cmd><info><p>错误示例：<codeph>400</codeph> 无效负载、<codeph>404</codeph> 缺少配置文件、<codeph>409</codeph> 过时的 <codeph>expected_revision</codeph> 和 <codeph>422</codeph> 架构级请求错误。 <codeph>409</codeph>意味着必须重新计算外部期望状态。</p></info></step>

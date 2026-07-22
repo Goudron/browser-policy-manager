@@ -11,7 +11,7 @@
     const utils = {
         getDefaultSchemaVersion(documentRef = document) {
             const catalog = readSchemaChannelsCatalog(documentRef);
-            return typeof catalog.default_channel === "string" ? catalog.default_channel : "esr-140.12";
+            return typeof catalog.default_channel === "string" ? catalog.default_channel : "esr-140.13";
         },
 
         humanizeIdentifier(value) {
@@ -191,6 +191,10 @@
         },
 
         formatSchemaLabel(value) {
+            const localizedOption = Array.from(
+                document.querySelectorAll("option[data-schema-channel-label]"),
+            ).find((option) => option.dataset.schemaChannelLabel === value);
+            if (localizedOption?.textContent) return localizedOption.textContent.trim();
             const catalog = readSchemaChannelsCatalog();
             const labels = catalog && typeof catalog.labels === "object" ? catalog.labels : {};
             return labels[value] || value || utils.getDefaultSchemaVersion();

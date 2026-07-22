@@ -5,7 +5,7 @@
   <shortdesc>Enable WSL, choose a supported Linux distribution assumption, and confirm that BPM will run inside Linux rather than as a native Windows service.</shortdesc>
   <taskbody>
     <prereq><p>Use Windows 10 or Windows 11 with permission to enable WSL 2, install a Linux distribution such as Ubuntu LTS, and run commands in both PowerShell and the WSL shell.</p></prereq>
-    <context><p>This runbook documents BPM source deployment through WSL. The supported application process is still the Linux source workflow inside WSL; native Windows installers, Windows services, MSI packages, scheduled tasks, IIS hosting, and production Windows service management are not delivered in this release.</p></context>
+    <context><p>This runbook documents BPM source deployment through WSL. Run the application through the Linux source workflow inside WSL and record any Windows platform controls owned by your organization.</p></context>
     <steps>
       <step><cmd>Confirm WSL availability from PowerShell.</cmd><info><codeblock outputclass="language-powershell"><![CDATA[
 wsl --status
@@ -16,7 +16,7 @@ wsl --install
 wsl --install -d Ubuntu
 ]]></codeblock><p>Use your organization-approved distribution name. Reboot if Windows requests it, then create the Linux user when the distribution first starts.</p></info></step>
       <step><cmd>Record the distribution and filesystem boundary.</cmd><info><p>Place BPM under the WSL Linux filesystem, for example <codeph>/home/&lt;linux-user&gt;/browser-policy-manager</codeph>. Avoid running the checkout from <codeph>/mnt/c</codeph> because Windows filesystem semantics and antivirus scanning can make Python environments, file watching, and permissions unreliable.</p></info></step>
-      <step><cmd>Confirm what this Windows path does not support yet.</cmd><info><note type="warning">This is not a native Windows installation. The runbook does not provide MSI/EXE packaging, a Windows service, a service account model, Event Viewer integration, Windows firewall policy, reverse proxy/TLS recipe, HA topology, managed secrets, backup automation, or production hardening.</note></info></step>
+      <step><cmd>Record the WSL operating boundary.</cmd><info><note type="warning">This is a Linux source workflow inside WSL. Document the organization-owned procedures for Windows service management, Event Viewer, firewall policy, reverse proxy and TLS, backups, secrets, and production hardening.</note></info></step>
     </steps>
     <result><p>Windows and WSL are ready for a Linux-based BPM source deployment with clear platform and filesystem boundaries.</p></result>
     <postreq><p>Continue by opening the WSL distribution shell and setting up the source checkout under the Linux home directory.</p></postreq>

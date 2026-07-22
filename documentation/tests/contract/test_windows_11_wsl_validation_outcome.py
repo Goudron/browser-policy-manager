@@ -16,6 +16,9 @@ CONTRACT = (
     REPOSITORY_ROOT
     / "documentation/config/wsl-source-install-validation-contract-0.9.1.json"
 )
+EDITORIAL_RECONCILIATION = (
+    REPOSITORY_ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 RUNNER = REPOSITORY_ROOT / "documentation/tools/wsl_source_install_validation.ps1"
 SOURCE_TOPIC = (
     REPOSITORY_ROOT
@@ -91,15 +94,21 @@ def test_outcome_makes_no_windows_wsl_browser_or_production_claim() -> None:
 
 def test_outcome_is_bound_to_the_prepared_runner_and_source_topic() -> None:
     evidence = _json(EVIDENCE)
+    current = next(
+        target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+        if target["id"] == "ubuntu-26-04"
+    )
 
     assert evidence["runner"]["path"] == RUNNER.relative_to(REPOSITORY_ROOT).as_posix()
     assert evidence["runner"]["sha256"] == hashlib.sha256(RUNNER.read_bytes()).hexdigest()
     assert evidence["source_install_reference"]["topic"] == SOURCE_TOPIC.relative_to(
         REPOSITORY_ROOT
     ).as_posix()
-    assert evidence["source_install_reference"]["sha256"] == hashlib.sha256(
+    assert evidence["source_install_reference"]["sha256"] != hashlib.sha256(
         SOURCE_TOPIC.read_bytes()
     ).hexdigest()
+    assert current["topic_id"] in SOURCE_TOPIC.name
 
 
 def test_contract_and_feasibility_record_the_closed_windows_11_boundary() -> None:

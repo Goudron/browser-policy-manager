@@ -262,7 +262,7 @@ def _theme_metrics(driver) -> dict[str, object]:
           return node ? getComputedStyle(node).backgroundColor : "";
         });
         const controls = Array.from(document.querySelectorAll(
-          ".bpm-docs-header-nav, .bpm-docs-theme-control, .bpm-docs-search-row"
+          ".bpm-docs-header-actions, .bpm-docs-locale-control, .bpm-docs-theme-control, .bpm-docs-search-row"
         )).map((node) => {
           const rect = node.getBoundingClientRect();
           return {
@@ -303,11 +303,15 @@ def _compact_search_metrics(driver) -> dict[str, object]:
         const panel = document.querySelector("[data-search-advanced-panel]");
         const toggle = document.querySelector("[data-search-advanced-toggle]");
         const input = document.querySelector("#bpm-docs-search-query");
+        const activeFilters = document.querySelector("[data-search-active-filters]");
+        const activeFiltersSummary = document.querySelector("[data-search-active-filters-summary]");
         const rowRect = row.getBoundingClientRect();
         return {
           panelHidden: panel.hidden,
           expanded: toggle.getAttribute("aria-expanded"),
           query: input.value,
+          activeFiltersHidden: activeFilters.hidden,
+          activeFiltersSummary: activeFiltersSummary.textContent,
           rowScrollWidth: row.scrollWidth,
           rowClientWidth: row.clientWidth,
           rowLeft: rowRect.left,
@@ -410,6 +414,7 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
     generated_theme_smoke_site: Path,
 ) -> None:
     by = pytest.importorskip("selenium.webdriver.common.by")
+    keys = pytest.importorskip("selenium.webdriver.common.keys")
     ui = pytest.importorskip("selenium.webdriver.support.ui")
 
     with _documentation_test_server(generated_theme_smoke_site) as base_url:
@@ -444,11 +449,48 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                 assert collapsed_metrics["panelHidden"] is True
                 assert collapsed_metrics["expanded"] == "false"
                 assert collapsed_metrics["query"] == "theme"
+                search_input.send_keys(keys.Keys.ENTER)
+                entered_metrics = _compact_search_metrics(driver)
+                assert entered_metrics["panelHidden"] is True
+                assert entered_metrics["expanded"] == "false"
+                assert entered_metrics["query"] == "theme"
                 driver.find_element(by.By.CSS_SELECTOR, "[data-search-submit]").click()
                 submitted_metrics = _compact_search_metrics(driver)
-                assert submitted_metrics["panelHidden"] is False
-                assert submitted_metrics["expanded"] == "true"
+                assert submitted_metrics["panelHidden"] is True
+                assert submitted_metrics["expanded"] == "false"
                 assert submitted_metrics["query"] == "theme"
+                driver.execute_script(
+                    "document.querySelector('[data-search-filter]')?.click();"
+                )
+                filtered_metrics = _compact_search_metrics(driver)
+                assert filtered_metrics["panelHidden"] is True
+                assert filtered_metrics["expanded"] == "false"
+                assert filtered_metrics["activeFiltersHidden"] is False
+                assert filtered_metrics["activeFiltersSummary"]
+                driver.find_element(by.By.CSS_SELECTOR, "[data-search-clear-filters]").click()
+                cleared_filters_metrics = _compact_search_metrics(driver)
+                assert cleared_filters_metrics["panelHidden"] is True
+                assert cleared_filters_metrics["activeFiltersHidden"] is True
+                assert cleared_filters_metrics["query"] == "theme"
+                driver.refresh()
+                ui.WebDriverWait(driver, 10).until(
+                    lambda current_driver: _compact_search_metrics(current_driver)["query"] == "theme"
+                )
+                restored_metrics = _compact_search_metrics(driver)
+                assert restored_metrics["panelHidden"] is True
+                assert restored_metrics["expanded"] == "false"
+                assert restored_metrics["query"] == "theme"
+                driver.get(f"{base_url}/help/{locale}/index.html?guide=user-guide")
+                ui.WebDriverWait(driver, 10).until(
+                    lambda current_driver: current_driver.find_elements(
+                        by.By.CSS_SELECTOR, "[data-search-filter]:checked"
+                    )
+                )
+                hydrated_metrics = _compact_search_metrics(driver)
+                assert hydrated_metrics["panelHidden"] is True
+                assert hydrated_metrics["expanded"] == "false"
+                assert hydrated_metrics["activeFiltersHidden"] is False
+                assert hydrated_metrics["activeFiltersSummary"]
 
                 for width, height in ((1366, 1000), (390, 900)):
                     driver.set_window_size(width, height)
@@ -597,7 +639,7 @@ def test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard(
                 )
 
             ru = _load_locale_catalog("ru")
-            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
 
             switch_mode("configured")
             policy_link = row_help("VisualSearchEnabled")
@@ -661,7 +703,7 @@ def test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard(
             assert searched_preference.get_attribute("rel") == "noopener noreferrer"
 
             de = _load_locale_catalog("de")
-            _set_locale(driver, wait, ui, locale="de", expected_text=de["profiles.locale_hint"])
+            _set_locale(driver, wait, ui, locale="de", expected_text=de["profiles.locale_label"])
             long_unknown = search_help(long_unknown_preference)
             expected_de_label = de["profiles.all_settings.row_help.unknown_not_supported"].replace(
                 "{setting}", long_unknown_preference
@@ -1193,7 +1235,7 @@ def test_documentation_header_link_opens_packaged_portal_for_all_locales(tmp_pat
             for locale in DOCUMENTATION_LOCALES:
                 catalog = locale_catalogs[locale]
                 _set_locale(
-                    driver, wait, ui, locale=locale, expected_text=catalog["profiles.locale_hint"]
+                    driver, wait, ui, locale=locale, expected_text=catalog["profiles.locale_label"]
                 )
                 docs_link = wait.until(
                     ec.element_to_be_clickable((by.By.CSS_SELECTOR, ".compact-toolbar-docs-link"))
@@ -1252,6 +1294,69 @@ def test_documentation_header_link_opens_packaged_portal_for_all_locales(tmp_pat
             _close_chromium_driver(driver)
 
 
+def test_documentation_header_preferences_persist_between_bpm_and_portal(tmp_path: Path) -> None:
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ec = pytest.importorskip("selenium.webdriver.support.expected_conditions")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    ru = _load_locale_catalog("ru")
+    _write_generated_theme_smoke_site(tmp_path)
+
+    with _documentation_test_server(tmp_path) as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 20)
+        try:
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
+            ui.Select(driver.find_element(by.By.ID, "theme")).select_by_value("dark")
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    "return document.documentElement.dataset.theme;"
+                ) == "dark"
+            )
+
+            docs_link = wait.until(
+                ec.element_to_be_clickable((by.By.CSS_SELECTOR, ".compact-toolbar-docs-link"))
+            )
+            _click_and_switch_to_new_tab(driver, wait, docs_link)
+            wait.until(
+                lambda current_driver: current_driver.current_url.endswith("/help/ru/index.html")
+            )
+            assert ui.Select(
+                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-locale-select]")
+            ).first_selected_option.get_attribute("value") == "ru"
+            assert ui.Select(
+                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-theme-select]")
+            ).first_selected_option.get_attribute("value") == "dark"
+
+            ui.Select(
+                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-locale-select]")
+            ).select_by_value("de")
+            wait.until(
+                lambda current_driver: current_driver.current_url.endswith("/help/de/index.html")
+            )
+            ui.Select(
+                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-theme-select]")
+            ).select_by_value("light")
+
+            driver.get(f"{base_url}/profiles")
+            wait.until(ec.presence_of_element_located((by.By.ID, "list")))
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    "return document.documentElement.lang;"
+                ) == "de"
+            )
+            assert ui.Select(driver.find_element(by.By.ID, "lang")).first_selected_option.get_attribute(
+                "value"
+            ) == "de"
+            assert ui.Select(driver.find_element(by.By.ID, "theme")).first_selected_option.get_attribute(
+                "value"
+            ) == "light"
+            assert driver.execute_script("return document.documentElement.dataset.theme;") == "light"
+        finally:
+            _close_chromium_driver(driver)
+
+
 def test_documentation_contextual_links_deep_links_and_openapi_docs_survive_browser_flow(
     tmp_path: Path,
 ) -> None:
@@ -1271,7 +1376,6 @@ def test_documentation_contextual_links_deep_links_and_openapi_docs_survive_brow
         main_handle = ""
         try:
             contextual_routes = {
-                "/profiles": ("library", "ug-task-use-profile-library"),
                 "/profiles/compare": ("compare", "ug-task-compare-profiles"),
                 "/profiles/new": ("guided", "ug-task-use-guided-editor"),
                 f"/profiles/{profile_id}/settings": ("settings", "ug-task-use-all-settings"),
@@ -1281,7 +1385,7 @@ def test_documentation_contextual_links_deep_links_and_openapi_docs_survive_brow
             for route, (surface, topic_id) in contextual_routes.items():
                 driver.get(f"{base_url}{route}")
                 wait.until(ec.presence_of_element_located((by.By.ID, "lang")))
-                _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+                _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
                 main_handle = driver.current_window_handle
                 link = wait.until(
                     ec.element_to_be_clickable(
@@ -1304,7 +1408,7 @@ def test_documentation_contextual_links_deep_links_and_openapi_docs_survive_brow
 
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "lang")))
-            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_hint"])
+            _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
             main_handle = driver.current_window_handle
             icon_link = wait.until(
                 ec.element_to_be_clickable(

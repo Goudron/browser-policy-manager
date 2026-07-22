@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-refresh-source-revision-dependencies" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Actualizar la revisión fuente y las dependencias.</title>
+  <title>Actualizar la revisión del código fuente y las dependencias</title>
   <shortdesc>Mueva la compra a una revisión más reciente aprobada y reinstale el entorno Python sin ocultar dependencias o fallas en el árbol de trabajo.</shortdesc>
   <taskbody>
     <prereq><p>El conjunto de pruebas previo a la actualización existe, se registra la revisión anterior y se conoce una rama, etiqueta o confirmación de destino aprobada.</p></prereq>

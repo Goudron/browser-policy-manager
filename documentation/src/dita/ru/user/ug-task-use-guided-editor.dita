@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Пройдите шесть шагов Пошаговый редактор</title>
+  <title>Шесть шагов режима «Пошаговый редактор»</title>
   <shortdesc>Переход по базовым показателям профиля &amp;, настройкам доступа через браузер &amp;, безопасности &amp;, конфиденциальности, пользователей, надстроек сайтов &amp;, интеллектуальных функций AI &amp; и просмотра экспорта &amp;.</shortdesc>
   <taskbody>
     <prereq><p>Откройте профиль в Пошаговый редактор из библиотеки или процесса создания.</p></prereq>
     <context><p>Пошаговый редактор превращает настройку профиля в шесть шагов, выполняемых в первую очередь, и обеспечивает видимость проверки схемы во время работы.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Обзор Пошаговый редактор</title>
+        <title>Обзор режима «Пошаговый редактор»</title>
         <image keyref="screenshot.guided-editor-overview" placement="break">
           <alt>Пошаговый редактор, показывающий этап навигации и состояние проверки сохраненного профиля.</alt>
         </image>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-security-privacy" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Konfigurieren Sie Sicherheit und Datenschutz</title>
+  <title>Sicherheit und Datenschutz konfigurieren</title>
   <shortdesc>Verwenden Sie Schritt 3 für Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Härtungskontrollen.</shortdesc>
   <taskbody>
     <prereq><p>Ein geführter Profilentwurf ist im vorgesehenen Schemakanal geöffnet.</p></prereq>

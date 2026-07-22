@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>所有设置 审核状态</title>
+  <title>“所有设置”中的审核状态</title>
   <shortdesc>使用此参考来解释干净、无效、CIS 手动审核、原始、未知、已弃用和导入审核状态。</shortdesc>
   <refbody>
     <section id="a-overview"><title>概述</title><p>审核状态解释了为什么 所有设置 在用户编辑例程值之前要求注意。</p></section>

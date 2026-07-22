@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from pathlib import Path
@@ -16,6 +15,9 @@ MANIFEST = EVIDENCE_ROOT / "run-manifest.json"
 INVENTORY = EVIDENCE_ROOT / "retained-inventory.json"
 HARNESS = REPOSITORY_ROOT / "documentation/config/live-source-install-harness-0.9.1.json"
 RECONCILIATION = REPOSITORY_ROOT / "docs/architecture/linux-source-install-validation-0.9.1.json"
+EDITORIAL_RECONCILIATION = (
+    REPOSITORY_ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 HARNESS_EVIDENCE = (
     REPOSITORY_ROOT / "documentation/evidence/live-source-install/0.9.1/"
     "m11-03-harness-20260714/run-manifest.json"
@@ -48,7 +50,16 @@ def test_mint_live_install_is_accepted_against_an_immutable_091_ref() -> None:
         "VERSION_CODENAME": "zena",
     }
     assert evidence["target"]["source_sha256"] == reconciled["validated_source_sha256"]
-    assert hashlib.sha256(source.read_bytes()).hexdigest() == reconciled["reconciled_source_sha256"]
+    current = next(
+        target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+        if target["id"] == evidence["target"]["id"]
+    )
+    assert current["topic_id"] in source.name
+    assert all(
+        command not in source.read_text(encoding="utf-8")
+        for command in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["removed_maintainer_commands"]
+    )
     snapshot = evidence["source_snapshot"]
     attempt = evidence["attempts"][0]
     assert snapshot["validation_branch"] == "validation/bpm-0.9.1-m11"

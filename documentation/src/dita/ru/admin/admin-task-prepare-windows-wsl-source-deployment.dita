@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>Подготовьте Windows 10/11 к развертыванию исходного кода WSL</title>
+  <title>Подготовка Windows 10/11 к развертыванию исходного кода в WSL</title>
   <shortdesc>Включите WSL, выберите поддерживаемый дистрибутив Linux и подтвердите, что BPM будет работать внутри Linux, а не как собственная служба Windows.</shortdesc>
   <taskbody>
     <prereq><p>Используйте Windows 10 или Windows 11 с разрешением на включение WSL 2, установите дистрибутив Linux, например Ubuntu LTS, и запускайте команды как в PowerShell, так и в оболочке WSL.</p></prereq>

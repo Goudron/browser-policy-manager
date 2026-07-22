@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navega por los seis pasos Editor guiado</title>
-  <shortdesc>Mover a través de la línea base del perfil &amp;, acceso al navegador &amp; valores predeterminados, seguridad &amp; privacidad, usuarios, sitios de complementos &amp;, funciones inteligentes AI &amp; y revisión de exportación &amp;.</shortdesc>
+  <title>Navegar por los seis pasos del «Editor guiado»</title>
+  <shortdesc>Los seis pasos cubren la identidad del perfil, el acceso al navegador y los valores predeterminados, la seguridad y la privacidad, los usuarios, los complementos y los sitios, las funciones inteligentes, y la revisión y exportación.</shortdesc>
   <taskbody>
     <prereq><p>Abra un perfil en Editor guiado desde la Biblioteca o el flujo de creación.</p></prereq>
-    <context><p>Editor guiado convierte la configuración del perfil en seis primeros pasos y mantiene la validación del esquema visible mientras trabaja.</p>
+    <context><p>El «Editor guiado» organiza la configuración del perfil en seis pasos y mantiene visible la validación del esquema mientras trabaja.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Editor guiado descripción general</title>
+        <title>Descripción general del «Editor guiado»</title>
         <image keyref="screenshot.guided-editor-overview" placement="break">
           <alt>Editor guiado que muestra el estado de validación y navegación de pasos para un perfil guardado.</alt>
         </image>

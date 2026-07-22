@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Enregistrez le document JSON</title>
+  <title>Enregistrer le document JSON</title>
   <shortdesc>Enregistrez un document JSON brut valide dans le profil BPM canonique.</shortdesc>
   <taskbody>
     <prereq><p>Le document JSON a été validé ou les avertissements restants sont compris.</p></prereq>

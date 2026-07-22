@@ -1,14 +1,16 @@
-<header class="compact-toolbar surface-panel fade-up mb-4">
-    <div class="compact-toolbar-main">
-        <div class="compact-toolbar-brand">
-            <div class="compact-toolbar-section" data-i18n="profiles.title">{{ tr("profiles.title") }}</div>
-        </div>
+<header class="compact-toolbar surface-panel fade-up mb-4" data-bpm-header>
+    <div class="compact-toolbar-main" data-bpm-header-brand>
         <h1 class="compact-toolbar-title text-slate-900">
             {{ app_name }}
             <span class="compact-toolbar-version">v{{ app_version }}</span>
         </h1>
-        <p class="compact-toolbar-subtitle" data-i18n="profiles.subtitle">
-            {{ tr("profiles.subtitle") }}
+        <p class="compact-toolbar-firefox-versions" data-supported-firefox-versions>
+            <span class="compact-toolbar-firefox-versions-label" data-i18n="profiles.supported_firefox_versions">{{ tr("profiles.supported_firefox_versions") }}</span>
+            {% for option in header_schema_options %}
+            <span data-firefox-channel="{{ option.value }}">
+                <span data-i18n="{{ option.i18n_key }}">{{ option.label }}</span>{% if not loop.last %}, {% endif %}
+            </span>
+            {% endfor %}
         </p>
         {% if documentation_home_href %}
         <a
@@ -25,18 +27,14 @@
     </div>
 
     <div class="compact-toolbar-side">
-        <div class="compact-counter compact-counter--pending">
+        <div class="compact-counter compact-counter--pending" data-bpm-header-workspace>
             <strong id="workspace-profile-count" aria-hidden="true"></strong>
-            <div class="compact-counter-meta">
-                <span class="compact-counter-label" data-i18n="profiles.nav_library">{{ tr("profiles.nav_library") }}</span>
-                <span id="workspace-profile-label" aria-hidden="true"></span>
-            </div>
+            <span id="workspace-profile-label" aria-hidden="true"></span>
         </div>
-        <div class="compact-toolbar-actions">
-            <label class="compact-toolbar-control">
+        <div class="compact-toolbar-actions" data-bpm-header-preferences>
+            <label class="compact-toolbar-control" data-bpm-header-control="locale">
                 <span class="compact-toolbar-copy">
                     <strong data-i18n="profiles.locale_label">{{ tr("profiles.locale_label") }}</strong>
-                    <span data-i18n="profiles.locale_hint">{{ tr("profiles.locale_hint") }}</span>
                 </span>
                 <select id="lang" class="soft-input rounded-xl px-3 py-2 text-sm">
                     <option value="system" selected data-i18n="profiles.locale_system">{{ tr("profiles.locale_system") }}</option>
@@ -52,10 +50,9 @@
                     {% endfor %}
                 </select>
             </label>
-            <label class="compact-toolbar-control">
+            <label class="compact-toolbar-control" data-bpm-header-control="theme">
                 <span class="compact-toolbar-copy">
                     <strong data-i18n="profiles.theme_label">{{ tr("profiles.theme_label") }}</strong>
-                    <span data-i18n="profiles.theme_hint">{{ tr("profiles.theme_hint") }}</span>
                 </span>
                 <select id="theme" class="soft-input rounded-xl px-3 py-2 text-sm">
                     <option value="system" selected data-i18n="profiles.theme_system">{{ tr("profiles.theme_system") }}</option>

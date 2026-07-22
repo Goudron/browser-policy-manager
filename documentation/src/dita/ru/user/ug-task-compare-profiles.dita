@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-compare-profiles" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Открыть сравнение из библиотеки</title>
+  <title>Открытие сравнения из библиотеки</title>
   <shortdesc>Откройте отдельную страницу сравнения в новой вкладке, прежде чем выбирать два сохранённых профиля.</shortdesc>
   <taskbody>
     <prereq><p>Библиотека открыта и существует как минимум два сохраненных профиля.</p></prereq>
     <context><p>«Сравнить настройки профилей» — это отдельная страница для сохранённых профилей. Она сохраняет текущий язык и тему и не заменяет вкладку «Библиотека».</p>
       <fig id="screenshot-compare-profiles">
-        <title>Страница «Сравнить настройки профилей»</title>
+        <title>Страница сравнения настроек профилей</title>
         <image keyref="screenshot.compare-profiles" placement="break">
           <alt>Представление сравнения, показывающее два сохраненных профиля, выбранных для параллельного просмотра.</alt>
         </image>

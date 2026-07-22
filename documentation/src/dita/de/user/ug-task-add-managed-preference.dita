@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-add-managed-preference" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Fügen Sie eine verwaltete Einstellung hinzu</title>
+  <title>Eine verwaltete Einstellung hinzufügen</title>
   <shortdesc>Fügen Sie eine bekannte verwaltete Einstellung hinzu, die noch nicht im Profil konfiguriert ist.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie Alle Einstellungen mit dem richtigen ausgewählten Schemakanal.</p></prereq>

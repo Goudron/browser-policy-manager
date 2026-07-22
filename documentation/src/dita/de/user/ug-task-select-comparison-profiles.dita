@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-select-comparison-profiles" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Wählen Sie die zu vergleichenden Profile aus</title>
+  <title>Die zu vergleichenden Profile auswählen</title>
   <shortdesc>Suchen Sie unabhängig nach Profil A und Profil B, wählen Sie Zeilen aus begrenzten Ergebnislisten aus und überprüfen Sie jede Zusammenfassung.</shortdesc>
   <taskbody>
     <prereq><p>Die Vergleichsoberfläche ist in der Bibliothek geöffnet.</p></prereq>

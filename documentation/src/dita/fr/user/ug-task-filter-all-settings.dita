@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Filtrer la liste Tous les paramètres</title>
-  <shortdesc>Filtrer par état configuré, disponible, couvert par guidage, tous les paramètres uniquement, invalide, obsolète, brut ou inconnu.</shortdesc>
+  <title>Filtrer la liste « Tous les paramètres »</title>
+  <shortdesc>Filtrez les paramètres selon leur état : configuré, disponible, couvert par le guidage, invalide, obsolète, brut ou inconnu.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez Tous les paramètres avec une liste de paramètres visible.</p></prereq>
     <context><p>Les filtres d'état réduisent un vaste inventaire en fonction de la décision que l'utilisateur doit prendre. Ils sont différents des filtres source, qui expliquent l'origine d'une valeur.</p></context>

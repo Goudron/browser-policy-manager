@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-refresh-profile-library" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Aktualisieren Sie die Bibliothek</title>
+  <title>Die Bibliothek aktualisieren</title>
   <shortdesc>Bibliothekszeilen neu laden und Lade- oder Aktionsstatus interpretieren, bevor ein Vorgang wiederholt wird.</shortdesc>
   <taskbody>
     <prereq><p>Die Bibliothek ist geöffnet und Sie müssen den aktuellen Status des gespeicherten Profils nach einer Änderung oder einem fehlgeschlagenen Ladevorgang bestätigen.</p></prereq>

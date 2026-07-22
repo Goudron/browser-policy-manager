@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-source-update-migrations-docs" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Führen Sie Migrationen und Dokumentationsneuerstellungsprüfungen durch</title>
-  <shortdesc>Wenden Sie Datenbankmigrationen an, validieren Sie die Dokumentationsquelle und erstellen Sie die statische Dokumentationsausgabe neu, nachdem sich die Quellrevision geändert hat.</shortdesc>
+  <title>Migrationen und Prüfungen der Quellaktualisierung durchführen</title>
+  <shortdesc>Wenden Sie Datenbankmigrationen an und prüfen Sie die aktualisierte BPM-Quellbereitstellung nach einer Änderung der Quellrevision.</shortdesc>
   <taskbody>
     <prereq><p>Das Auschecken und die Abhängigkeiten wurden erfolgreich aktualisiert und die Datenbanksicherungsnachweise wurden gesammelt, während BPM gestoppt wurde.</p></prereq>
-    <context><p>Aktualisierungen können zu Datenbankmigrationen und Dokumentationsänderungen führen. BPM dokumentiert die Weiterleitungsmigration mit <codeph>alembic upgrade head</codeph>; Es verspricht kein automatisches Downgrade oder sicheres Schema-Rollback.</p></context>
+    <context><p>Aktualisierungen können Datenbankmigrationen enthalten. BPM dokumentiert die Vorwärtsmigration mit <codeph>alembic upgrade head</codeph>; ein automatisches Downgrade oder sicheres Schema-Rollback wird nicht zugesagt.</p></context>
     <steps>
       <step><cmd>Datenbankmigrationen auf die vorgesehene Datenbank anwenden.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><p>Verwenden Sie den tatsächlichen Bereitstellungswert für <codeph>BPM_DATABASE_URL</codeph>. Stoppen Sie sofort, wenn die Migrationsausgabe unklar ist oder fehlschlägt.</p></info></step>
-      <step><cmd>Führen Sie vor der Bedienung von Benutzern eine Überprüfung der Rauchquelle an einer schmalen Quelle durch.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make test-fast
-]]></codeblock><p>Bei dieser Prüfung handelt es sich um eine Rauchquelle, nicht um eine Produktionszertifizierung oder HA-Validierung.</p></info></step>
-      <step><cmd>Validieren und erstellen Sie die Dokumentationsausgabe für die aktualisierte Revision neu.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make docs-validate
-make docs-build
-]]></codeblock><p><codeph>make docs-validate</codeph> prüft DITA, Metadaten, Quelllinks und generierte Links. <codeph>make docs-build</codeph> erstellt die ignorierte statische Ausgabe neu; Es installiert selbst kein Standarddokumentationsartefakt in der Anwendungslaufzeit.</p></info></step>
-      <step><cmd>Stopp bei Migrations-, Smoke- oder Dokumentationsneuerstellungsfehlern.</cmd><info><note type="warning">Gehen Sie nach der Ausführung einer Migration nicht davon aus, dass ein Git-Checkout-Rollback ausreicht. Führen Sie <codeph>alembic downgrade</codeph> nicht aus, es sei denn, in einem überprüften Versionshinweis wird ausdrücklich angegeben, dass es für das genaue Revisionspaar unterstützt wird. Verwenden Sie die Datenbanksicherung vor dem Update als sichere Wiederherstellungsbasis, wenn ein Rollback erforderlich ist.</note></info></step>
+      <step><cmd>Starten Sie den aktualisierten BPM-Prozess und prüfen Sie seine aktuelle Oberfläche.</cmd><info><p>Prüfen Sie Aktivität und Bereitschaft und öffnen Sie anschließend die Bibliotheksroute. Falls Dokumentation für die Bereitstellung erforderlich ist, muss <codeph>/help/</codeph> ein bereites installiertes Artefakt statt eines fehlenden oder inkompatiblen Zustands melden.</p></info></step>
+      <step><cmd>Bei Migrations- oder Laufzeitprüfungsfehlern anhalten.</cmd><info><note type="warning">Gehen Sie nach einer Migration nicht davon aus, dass ein Git-Checkout-Rollback ausreicht. Führen Sie <codeph>alembic downgrade</codeph> nur aus, wenn ein geprüfter Versionshinweis die Unterstützung für das genaue Revisionspaar ausdrücklich bestätigt. Verwenden Sie bei einem erforderlichen Rollback die Datenbanksicherung vor dem Update als sichere Wiederherstellungsbasis.</note></info></step>
     </steps>
-    <result><p>Die aktualisierte Quellrevision hat Migrationen, Quellrauch und Dokumentationsneuerstellungsprüfungen abgeschlossen oder die Aktualisierung wurde an einem benannten Fehlerpunkt gestoppt.</p></result>
+    <result><p>Die aktualisierte Quellrevision hat Migrationen und Laufzeitprüfungen abgeschlossen, oder die Aktualisierung wurde an einem benannten Fehlerpunkt gestoppt.</p></result>
     <postreq><p>Starten Sie BPM und führen Sie das Post-Update-Überprüfungsthema aus, bevor Sie die Instanz an Benutzer oder Integratoren zurückgeben.</p></postreq>
   </taskbody>
   <related-links>

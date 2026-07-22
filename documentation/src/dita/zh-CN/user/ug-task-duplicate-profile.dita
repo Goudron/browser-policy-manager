@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-duplicate-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>复制配置文件</title>
+  <title>复制配置档案</title>
   <shortdesc>当您需要安全的更改起点时，可以从现有的已保存配置文件创建命名的引导草稿。</shortdesc>
   <taskbody>
     <prereq><p>源配置文件在库中可见，并且您已确认其行标识。</p></prereq>

@@ -57,9 +57,12 @@ def test_search_default_state_is_one_line_and_advanced_options_are_explicit() ->
 
     expansion = contract["expansion_behavior"]
     assert expansion["trigger"] == "explicit advanced-options disclosure control"
+    assert "preserves the current disclosure state" in expansion["submission_behavior"]
+    assert "preserves the collapsed filter panel" in expansion["url_restore_behavior"]
     assert "query text" in expansion["preserve_on_expand"]
     assert "selected filters" in expansion["preserve_on_collapse"]
     assert "change deterministic ranking" in expansion["must_not"]
+    assert "expand a collapsed filter panel when submitting a query" in expansion["must_not"]
     assert "trap keyboard focus" in expansion["must_not"]
 
 

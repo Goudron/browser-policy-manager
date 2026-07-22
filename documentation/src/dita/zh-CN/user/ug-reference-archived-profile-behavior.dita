@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-archived-profile-behavior" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>存档的配置文件行为</title><shortdesc>存档的配置文件通过生命周期过滤器保持可见，但与活动配置文件相比具有局限性。</shortdesc>
+  <title>已存档配置档案的行为</title><shortdesc>已存档的配置档案通过生命周期筛选器保持可见，但与活动配置档案相比具有局限性。</shortdesc>
   <refbody><section id="a-archived-purpose"><title>目的</title><p>存档保留配置文件以供审阅或稍后恢复，而不将其保留在正常的活动工作集中。</p></section><section id="a-archived-limits"><title>限制</title><p>存档的行不是正常的活动导出目标，并且在恢复配置文件之前，某些行操作将被禁用。</p></section><section id="a-archived-warning"><title>警告</title><p>永久删除仍然可以删除已存档的配置文件。在进行破坏性操作之前请仔细确认该行。</p></section><section id="a-archived-recovery"><title>恢复</title><p>当您再次需要正常编辑或活动生命周期行为时，恢复存档的配置文件。</p></section></refbody>
   <related-links><link keyref="topic.ug-task-restore-profile"/><link keyref="topic.ug-task-permanently-delete-profile"/></related-links>
 </reference>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>使用 所有设置</title>
+  <title>使用“所有设置”</title>
   <shortdesc>当您需要在较短的引导式工作流程之外进行完整的视觉控制时，请打开 所有设置 以获取已保存的配置文件。</shortdesc>
   <taskbody>
     <prereq><p>存在已保存的配置文件。必须先保存新的未保存草稿，然后才能打开 所有设置。</p></prereq>
     <context><p>所有设置 是 Firefox 策略和已知的 托管首选项 的完整可视化编辑器。它在 检查 中打开，因此在广泛的目录浏览之前可以看到注意事项。</p>
       <fig id="screenshot-all-settings-review">
-        <title>所有设置 检查</title>
+        <title>“所有设置”中的检查</title>
         <image keyref="screenshot.all-settings-review" placement="break">
           <alt>所有设置 在窄屏幕上显示审阅列表、配置的设置和设置详细信息面板。</alt>
         </image>

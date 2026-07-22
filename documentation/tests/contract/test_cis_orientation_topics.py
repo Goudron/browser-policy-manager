@@ -159,19 +159,18 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
         inventory["benchmark"]["upstream_name"],
         inventory["benchmark"]["upstream_version"],
         inventory["benchmark"]["exact_release_date"],
-        "Firefox ESR 140.12",
-        "Firefox Release 152",
+        "Firefox ESR 140.13",
+        "Firefox Release 153",
         "Level 1",
         "Level 2",
         "49 mapped recommendations",
         "53 mapped recommendations",
         "55 recommendation records",
-        "53 recommendation topics",
         "two unresolved records",
-        "cis-l1.esr-140.12",
-        "cis-l1.release-152",
-        "cis-l2.esr-140.12",
-        "cis-l2.release-152",
+        "cis-l1.esr-140.13",
+        "cis-l1.release-153",
+        "cis-l2.esr-140.13",
+        "cis-l2.release-153",
         "manual review",
         "Basic corporate",
         "classroom",
@@ -230,11 +229,11 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
         "cis-workflow-level-1-esr-fixture",
         "cis-workflow-level-2-release-fixture",
             "External verification",
-        "cis-l1.esr-140.12",
-        "cis-l2.release-152",
+        "cis-l1.esr-140.13",
+        "cis-l2.release-153",
         "basic_corporate",
         "soc_hard",
-        "blank-esr-140.12",
+        "blank-esr-140.13",
         "cis-workflow-level-1-release-reference",
         "generated mapping table",
         "affected Firefox policy topic",
@@ -245,9 +244,9 @@ def test_english_cis_orientation_covers_selection_scope_and_benchmark_facts() ->
     ):
         assert required.casefold() in text.casefold()
 
-    assert starter_presets["basic_corporate"]["variants"][4]["policy_top_level_count"] == 23
-    assert starter_presets["classroom_kiosk"]["variants"][4]["policy_top_level_count"] == 22
-    assert starter_presets["soc_hard"]["variants"][4]["policy_top_level_count"] == 28
+    assert starter_presets["basic_corporate"]["variants"][4]["policy_top_level_count"] == 43
+    assert starter_presets["classroom_kiosk"]["variants"][4]["policy_top_level_count"] == 45
+    assert starter_presets["soc_hard"]["variants"][4]["policy_top_level_count"] == 45
     assert inventory["merge_contract"]["decision_types"] == [
         "added_from_cis",
         "already_satisfied",
@@ -298,10 +297,10 @@ def test_cis_workflows_are_backed_by_deterministic_fixtures() -> None:
     assert workflows["cis-workflow-level-1-esr-fixture"] == {
         "workflow_id": "cis-workflow-level-1-esr-fixture",
         "level": 1,
-        "schema_channel": "esr-140.12",
-        "cis_layer_id": "cis-l1.esr-140.12",
+        "schema_channel": "esr-140.13",
+        "cis_layer_id": "cis-l1.esr-140.13",
         "starter_preset": "basic_corporate",
-        "comparison_profile": "blank-esr-140.12",
+        "comparison_profile": "blank-esr-140.13",
         "expected_mapped_recommendations": 49,
         "manual_review_decision_categories": [
             "update governance",
@@ -315,7 +314,7 @@ def test_cis_workflows_are_backed_by_deterministic_fixtures() -> None:
         "verification_boundary": "BPM validates schema/export/source attribution; runtime verification is external.",
     }
     assert workflows["cis-workflow-level-2-release-fixture"]["level"] == 2
-    assert workflows["cis-workflow-level-2-release-fixture"]["schema_channel"] == "release-152"
+    assert workflows["cis-workflow-level-2-release-fixture"]["schema_channel"] == "release-153"
     assert workflows["cis-workflow-level-2-release-fixture"]["expected_mapped_recommendations"] == 53
 
     for workflow in fixture["workflows"]:

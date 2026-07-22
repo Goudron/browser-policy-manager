@@ -168,7 +168,7 @@ def test_linux_source_install_passes_while_wsl_remains_unverified_non_goal() -> 
     assert resolved["resolved_by"] == "BPM091-M12-05"
     assert resolved["closure_evidence"].endswith("m11-14-evidence-closure-20260715/closure.json")
     assert "<approved-0.9.1-ref>" in current_source
-    assert "make docs-build" in current_source
+    assert "make dev" in current_source
     assert "Fedora Linux 44" in current_source
     assert "Manjaro stable branch" in current_source
     boundaries = " ".join(review["unverified_boundaries"])
@@ -206,17 +206,17 @@ def test_current_health_validation_import_and_export_results_execute() -> None:
         assert client.get("/health/ready").json() == {"status": "ready", "ready": True}
 
         validation = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": {"DisableTelemetry": True}}},
         )
         assert validation.status_code == 200
-        assert validation.json() == {"ok": True, "profile": "release-152"}
+        assert validation.json() == {"ok": True, "profile": "release-153"}
 
         imported = client.post(
             "/api/profiles/import/firefox/policies.json",
             json={
                 "name": "m6-03-admin-sufficiency",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "document": {"policies": {"DisableTelemetry": True}},
             },
         )

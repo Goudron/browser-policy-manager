@@ -10,10 +10,10 @@
       <step><cmd>在更改值之前阅读受影响的策略路径和消息。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>将问题分类为不支持的策略、错误的值类型、已弃用的设置、未知的条目、导入的值或原始回退。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>使用 所有设置 或 JSON 导航到受影响的位置并仅更正报告的值。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
-      <step><cmd>在保存或导出之前重新验证同一模式通道中的配置文件。</cmd><info><note type="warning">不要编辑内部存储、浏览器本地数据、数据库行或生成的构建工件来恢复面向用户的配置文件工作。</note></info></step>
+      <step><cmd>在保存或导出之前重新验证同一模式通道中的配置文件。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>
     </steps>
     <result><p>验证错误已解决或记录为故意的原始/不受支持的值，不能将其视为已发布就绪。</p></result>
-    <postreq><p>恢复：如果在一次干净的重试后重复出现相同的错误，则停止工作流程，保留可见消息、配置文件名称、模式通道和当前表面以供维护人员查看。</p></postreq>
+    <postreq><p>如果错误再次出现，请停止当前操作，并向支持人员提供可见消息、配置文件名称、模式通道和当前页面。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

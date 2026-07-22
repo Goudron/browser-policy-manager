@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-manage-profile-retirement" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Архивировать, восстанавливать, безвозвратно удалять или сбрасывать профили</title>
+  <title>Архивирование, восстановление, безвозвратное удаление и сброс профилей</title>
   <shortdesc>Используйте деструктивные конечные точки жизненного цикла профиля с явными записями проверки и восстановления.</shortdesc>
   <taskbody>
     <prereq><p>Прежде чем вызывать деструктивные конечные точки, подтвердите целевой профиль ID, текущее состояние жизненного цикла и запись внешнего утверждения.</p></prereq>

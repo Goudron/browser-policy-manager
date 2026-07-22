@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-source-update-migrations-docs" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>运行迁移和文档重建检查</title>
-  <shortdesc>应用数据库迁移，验证文档源，并在源修订更改后重建静态文档输出。</shortdesc>
+  <title>运行迁移和源更新检查</title>
+  <shortdesc>在源修订版本更改后，应用数据库迁移并验证更新后的 BPM 源部署。</shortdesc>
   <taskbody>
     <prereq><p>签出和依赖项已成功刷新，并且在 BPM 停止时收集了数据库备份证据。</p></prereq>
-    <context><p>更新可能会引入数据库迁移和文档更改。 BPM 记录了使用 <codeph>alembic upgrade head</codeph> 进行正向迁移；它不承诺自动降级或安全架构回滚。</p></context>
+    <context><p>更新可能会引入数据库迁移。BPM 记录了使用 <codeph>alembic upgrade head</codeph> 进行正向迁移；不承诺自动降级或安全的架构回滚。</p></context>
     <steps>
       <step><cmd>将数据库迁移应用到目标数据库。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><p>使用 <codeph>BPM_DATABASE_URL</codeph> 的实际部署值。如果迁移输出不清楚或失败，请立即停止。</p></info></step>
-      <step><cmd>在为用户提供服务之前运行窄源烟雾检查。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make test-fast
-]]></codeblock><p>此检查是烟雾源，而不是生产认证或 HA 验证。</p></info></step>
-      <step><cmd>验证并重建更新版本的文档输出。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
-make docs-validate
-make docs-build
-]]></codeblock><p><codeph>make docs-validate</codeph> 检查 DITA、元数据、源链接和生成的链接。 <codeph>make docs-build</codeph> 重建忽略的静态输出；它本身不会将默认文档工件安装到应用程序运行时中。</p></info></step>
-      <step><cmd>在迁移、冒烟或文档重建失败时停止。</cmd><info><note type="warning">迁移运行后，不要认为 Git 签出回滚就足够了。请勿运行 <codeph>alembic downgrade</codeph>，除非已审核的发行说明明确表示确切的修订版对支持它。当需要回滚时，使用更新前的数据库备份作为安全恢复基线。</note></info></step>
+      <step><cmd>启动更新后的 BPM 进程并验证当前界面。</cmd><info><p>检查运行状况和就绪状态，然后打开“库”路由。如果该部署需要文档，请确认 <codeph>/help/</codeph> 报告的是已就绪的安装工件，而不是缺失或不兼容状态。</p></info></step>
+      <step><cmd>在迁移或运行时验证失败时停止。</cmd><info><note type="warning">迁移运行后，不要认为 Git 签出回滚就足够了。除非已审核的发行说明明确支持该准确修订版本对，否则不要运行 <codeph>alembic downgrade</codeph>。需要回滚时，请使用更新前的数据库备份作为安全恢复基线。</note></info></step>
     </steps>
-    <result><p>更新的源版本已完成迁移、源烟雾和文档重建检查，或者更新已在指定故障点停止。</p></result>
+    <result><p>更新后的源修订版本已完成迁移和运行时验证，或者更新已在指定的故障点停止。</p></result>
     <postreq><p>在将实例交还给用户或集成商之前启动 BPM 并运行更新后验证主题。</p></postreq>
   </taskbody>
   <related-links>

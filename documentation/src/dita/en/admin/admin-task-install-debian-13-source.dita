@@ -49,11 +49,6 @@ mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock></info></step>
-      <step><cmd>Bootstrap and build the documentation.</cmd><info><codeblock id="docs" outputclass="language-bash"><![CDATA[
-make setup-docs-toolchain
-make docs-validate
-make docs-build
-]]></codeblock><p>Do not start BPM if any command fails.</p></info></step>
       <step><cmd>Start BPM in the foreground.</cmd><info><codeblock id="start" outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
@@ -69,7 +64,7 @@ curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
 ]]></codeblock></info></step>
       <step><cmd>Apply the stop and rollback boundary.</cmd><info><p>On failure, press <codeph>Ctrl+C</codeph>, preserve logs and checksum output, and do not run <codeph>alembic downgrade</codeph>. Keep the user-owned Python prefix and failed checkout until diagnosis; remove them only after confirming they contain no required data.</p></info></step>
     </steps>
-    <result><p>The Debian 13.5 host has a user-owned Python 3.14.6 runtime, migrated BPM source checkout, built documentation, passing probes, responding UI, and foreground logs.</p></result>
+    <result><p>The Debian 13.5 host has a user-owned Python 3.14.6 runtime, migrated BPM source checkout, passing probes, responding UI, and foreground logs.</p></result>
     <postreq><p>The command sequence passed in a clean Debian 13.5 userspace container. CPython reported the optional <codeph>_dbm</codeph> and <codeph>_zstd</codeph> modules as unavailable; the complete BPM workflow still passed. This evidence does not verify native boot, kernel, systemd, desktop, hardware, host firewall, or production deployment.</p></postreq>
   </taskbody>
   <related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links>

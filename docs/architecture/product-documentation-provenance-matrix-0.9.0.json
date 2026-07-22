@@ -137,8 +137,10 @@
       "license_id": "MPL-2.0",
       "authoritative_sources": [
         "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
-        "app/schemas/policies/firefox-release-152.json",
-        "app/schemas/policies/firefox-esr-140.12.json"
+        "https://github.com/mozilla/policy-templates/releases/tag/v8.0",
+        "app/schemas/policies/firefox-release-153.json",
+        "app/schemas/policies/firefox-esr-153.0.json",
+        "app/schemas/policies/firefox-esr-140.13.json"
       ],
       "guide_families": ["firefox-policy-guide", "cis-settings-guide"],
       "publication_policy": "allow-with-notice",

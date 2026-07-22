@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-restore-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Восстановить заархивированный профиль</title>
+  <title>Восстановление архивного профиля</title>
   <shortdesc>Верните заархивированный профиль в активный жизненный цикл библиотеки, когда его нужно будет редактировать или использовать снова.</shortdesc>
   <taskbody>
     <prereq><p>Фильтр жизненного цикла показывает архивированные или все профили, а также видимую строку целевого профиля.</p></prereq>

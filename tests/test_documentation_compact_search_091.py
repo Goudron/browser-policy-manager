@@ -28,6 +28,7 @@ def test_documentation_search_shell_defaults_to_one_line_compact_controls() -> N
         'class="bpm-docs-search-row"',
         'data-search-submit>{_escape(labels["search_submit"])}</button>',
         'data-search-clear>{_escape(labels["search_clear"])}</button>',
+        'data-label-active-filters="{_escape(labels["search_active_filters"])}"',
         'class="bpm-docs-search-advanced-toggle"',
         'aria-expanded="false"',
         'aria-controls="bpm-docs-search-advanced-panel"',
@@ -49,6 +50,11 @@ def test_documentation_search_help_filters_and_results_are_in_hidden_panel() -> 
     assert "bpm-docs-search-results" in panel
     assert "<details" not in panel
 
+    shell_before_panel = source[source.index('class="bpm-docs-search-row"') : panel_start]
+    assert "data-search-active-filters hidden" in shell_before_panel
+    assert "data-search-active-filters-summary" in shell_before_panel
+    assert 'data-search-clear-filters>{_escape(labels["search_clear_filters"])}</button>' in shell_before_panel
+
 
 def test_documentation_search_css_hides_panel_without_removing_compact_row() -> None:
     theme = _source(THEME_CSS)
@@ -59,6 +65,8 @@ def test_documentation_search_css_hides_panel_without_removing_compact_row() -> 
         "display: none;",
         ".bpm-docs-search .bpm-docs-search-advanced-toggle",
         '.bpm-docs-search .bpm-docs-search-advanced-toggle[aria-expanded="true"]',
+        ".bpm-docs-search-active-filters",
+        ".bpm-docs-search-clear-filters",
     ):
         assert required in theme
 
@@ -73,7 +81,7 @@ def test_documentation_search_runtime_toggles_advanced_panel_and_preserves_query
         "panel.hidden = !expanded;",
         'toggle.setAttribute("aria-expanded", expanded ? "true" : "false");',
         'root.querySelector("[data-search-advanced-toggle]")?.addEventListener("click"',
-        "setSearchExpanded(root, true);",
+        "setSearchExpanded(root, !expanded);",
         "runSearch(root, index);",
         "input.focus();",
     ):
@@ -81,3 +89,20 @@ def test_documentation_search_runtime_toggles_advanced_panel_and_preserves_query
 
     assert "input.value = \"\";" in script
     assert "setSearchExpanded(root, false)" not in script
+    assert "setSearchExpanded(root, true)" not in script
+
+
+def test_documentation_search_runtime_exposes_and_clears_hidden_active_filters() -> None:
+    script = _source(SEARCH_SCRIPT)
+
+    for required in (
+        "function updateActiveFilterSummary(root, filters = selectedFilters(root))",
+        'root.querySelector("[data-search-active-filters]")',
+        'root.querySelector("[data-search-active-filters-summary]")',
+        "state.hidden = !count || !panelIsCollapsed;",
+        'root.dataset.labelActiveFilters || "Active filters: {count}"',
+        'const clearFilters = root.querySelector("[data-search-clear-filters]");',
+        'clearFilters.addEventListener("click", () => {',
+        'root.querySelector("[data-search-advanced-toggle]")?.focus();',
+    ):
+        assert required in script

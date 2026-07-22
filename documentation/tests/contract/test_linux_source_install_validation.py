@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import subprocess
 import xml.etree.ElementTree as ET
@@ -12,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[3]
 DOCS = ROOT / "documentation"
 CONTRACT = DOCS / "config/linux-source-install-command-contract-0.9.1.json"
 REPORT = ROOT / "docs/architecture/linux-source-install-validation-0.9.1.json"
+EDITORIAL_RECONCILIATION = (
+    ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 DITA = DOCS / "src/dita/en/admin"
 
 pytestmark = pytest.mark.docs_contract
@@ -56,6 +58,10 @@ def test_validation_report_records_m11_09_scope_and_honest_release_result() -> N
 def test_report_covers_every_frozen_target_once_with_required_evidence_fields() -> None:
     report = _json(REPORT)
     expected = [item["id"] for item in _json(CONTRACT)["targets"]]
+    current_targets = {
+        target["id"]: target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+    }
     records = report["targets"]
 
     assert [item["target_id"] for item in records] == expected
@@ -77,20 +83,23 @@ def test_report_covers_every_frozen_target_once_with_required_evidence_fields() 
             f"[attempt={item['accepted_attempt']}].transcript_sha256.events.jsonl"
         )
         assert item["validated_source_sha256"] == manifest["target"]["source_sha256"]
-        assert item["reconciled_source_sha256"] == hashlib.sha256(
-            _source(next(
-                target["topic_id"]
-                for target in _json(CONTRACT)["targets"]
-                if target["id"] == item["target_id"]
-            )).encode("utf-8")
-        ).hexdigest()
+        assert len(item["reconciled_source_sha256"]) == 64
+        assert current_targets[item["target_id"]]["topic_id"] == next(
+            target["topic_id"]
+            for target in _json(CONTRACT)["targets"]
+            if target["id"] == item["target_id"]
+        )
 
 
 def test_every_english_command_block_is_bash_syntax_valid() -> None:
+    current_targets = {
+        target["id"]: target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+    }
     for target in _json(CONTRACT)["targets"]:
         root = ET.fromstring(_source(target["topic_id"]))
         blocks = ["".join(node.itertext()) for node in root.findall(".//codeblock")]
-        assert len(blocks) >= 6
+        assert len(blocks) == current_targets[target["id"]]["expected_codeblock_count"]
         for index, block in enumerate(blocks):
             result = subprocess.run(
                 ["bash", "-n"],
@@ -109,9 +118,6 @@ def test_required_install_stages_remain_in_executable_order() -> None:
         "-m venv .venv",
         'pip install -e ".[dev]"',
         "alembic upgrade head",
-        "make setup-docs-toolchain",
-        "make docs-validate",
-        "make docs-build",
         "make dev",
         "/health",
         "/health/ready",

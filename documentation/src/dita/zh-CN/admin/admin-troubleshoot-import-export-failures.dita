@@ -8,10 +8,10 @@
     <context><p>导入/导出故障排除将源文档有效性、多部分字段形状、重复的配置文件名称、存档的配置文件访问以及规范的 Firefox 导出与下游部署工具分开。</p></context>
     <steps>
       <step><cmd>标识操作和内容类型。</cmd><info><p>记录请求是 JSON <codeph>FirefoxPoliciesJsonImportRequest</codeph>、带有 <codeph>file=@policies.json</codeph> 的 <codeph>multipart/form-data</codeph>，还是带有 <codeph>download=1</codeph>、<codeph>pretty=1</codeph> 或 <codeph>include_deleted=true</codeph> 的导出。</p></info></step>
-  <step><cmd>在重试导入之前验证源 Firefox 文档。</cmd><info><p>重点重新运行：具有相同 <codeph>document.policies</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph>。如果验证失败，请在再次导入之前修复 BPM 之外的源文档。</p></info></step>
+  <step><cmd>在重试导入之前验证源 Firefox 文档。</cmd><info><p>重点重新运行：具有相同 <codeph>document.policies</codeph> 的 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>。如果验证失败，请在再次导入之前修复 BPM 之外的源文档。</p></info></step>
   <step><cmd>检查导入特定的运算符错误。</cmd><info><p>对于 <codeph>409</codeph>，选择新的合成配置文件名称或有意存档/恢复。对于 <codeph>415</codeph>，验证 <codeph>application/json</codeph> 或多部分上传字段。对于<codeph>422</codeph>，记录字段级错误，不要直接重写配置文件存储。</p></info></step>
   <step><cmd>检查特定于导出的状态。</cmd><info><p>对于 <codeph>404</codeph>，重新读取 <codeph>GET $BPM_BASE_URL/api/profiles/42?include_deleted=true</codeph>。对于存档的配置文件，确定 <codeph>include_deleted=true</codeph> 是否合适。将导出的文档哈希值与审核后的源哈希值进行比较； BPM 配置文件元数据和合规性元数据不会导出。</p></info></step>
-  <step><cmd>记录恢复和停止条件。</cmd><info><p>重点重新运行：<codeph>./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_integration_topics.py</codeph> 用于记录示例。</p><note type="warning">导入/导出证据不匹配后不要盲目重试；存储源哈希、导出哈希、配置文件 ID、修订、HTTP 状态和操作员决策。</note></info></step>
+  <step><cmd>记录恢复和停止条件。</cmd><info><p>重点重新运行： 用于记录示例。</p><note type="warning">导入/导出证据不匹配后不要盲目重试；存储源哈希、导出哈希、配置文件 ID、修订、HTTP 状态和操作员决策。</note></info></step>
     </steps>
     <result><p>操作员可以识别故障是否属于源 JSON、多部分字段、配置文件生命周期状态或导出证据。</p></result>
     <postreq><p>恢复后，将证据附加到外部控制产品审核记录中。</p></postreq>

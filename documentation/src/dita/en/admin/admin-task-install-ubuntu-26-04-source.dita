@@ -36,11 +36,6 @@ mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock></info></step>
-      <step><cmd>Bootstrap and build the documentation.</cmd><info><codeblock id="docs" outputclass="language-bash"><![CDATA[
-make setup-docs-toolchain
-make docs-validate
-make docs-build
-]]></codeblock><p>Do not start BPM if validation or the build fails.</p></info></step>
       <step><cmd>Set the local runtime and start BPM in the foreground.</cmd><info><codeblock id="start" outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
@@ -56,7 +51,7 @@ curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
 ]]></codeblock><p>Expect <codeph>{"status":"ok"}</codeph>, <codeph>{"status":"ready","ready":true}</codeph>, and a successful UI response. Review the foreground terminal for tracebacks.</p></info></step>
       <step><cmd>Apply the fresh-install stop and rollback boundary.</cmd><info><p>If any check fails, press <codeph>Ctrl+C</codeph>, preserve the command output and foreground logs, and do not edit <codeph>data/bpm.db</codeph>. Because this is a new installation, rollback means retaining or renaming the failed checkout for diagnosis; it does not mean running <codeph>alembic downgrade</codeph>.</p></info></step>
     </steps>
-    <result><p>The Ubuntu 26.04 LTS host has a migrated BPM 0.9.1 source checkout, built documentation, passing probes, a responding Library, and reviewable foreground logs.</p></result>
+    <result><p>The Ubuntu 26.04 LTS host has a migrated BPM 0.9.1 source checkout, passing probes, a responding Library, and reviewable foreground logs.</p></result>
     <postreq><p>The command sequence passed in a clean Ubuntu 26.04 userspace container. This evidence does not verify native boot, kernel, systemd, desktop, hardware, host firewall, or production deployment.</p></postreq>
   </taskbody>
   <related-links>

@@ -27,7 +27,6 @@ def test_zh_cn_script_audit_document_records_primary_surfaces():
 def test_zh_cn_primary_script_pass_replaces_visible_english_scaffolding():
     zh_catalog = _load_catalog("zh-CN")
     audited_keys = (
-        "profiles.sidebar_hint",
         "profiles.wizard_progress_one",
         "profiles.wizard_progress_two",
         "profiles.wizard_progress_three",
@@ -37,7 +36,6 @@ def test_zh_cn_primary_script_pass_replaces_visible_english_scaffolding():
         "profiles.wizard_baseline_summary_title",
         "profiles.wizard_baseline_summary_body",
         "profiles.wizard_cis_body",
-        "profiles.meta_updated",
         "profiles.wizard_firefox_home_top_sites_label",
         "profiles.wizard_preferences_known_home_topsites_rows_title",
         "profiles.wizard_preferences_known_home_topsites_rows_copy",
@@ -47,13 +45,10 @@ def test_zh_cn_primary_script_pass_replaces_visible_english_scaffolding():
         "profiles.wizard_preferences_known_privacy_notification_default_copy",
         "profiles.wizard_scenario_corporate_badge",
         "profiles.wizard_scenario_corporate_title",
-        "profiles.wizard_scenario_corporate_body",
         "profiles.wizard_scenario_shared_badge",
         "profiles.wizard_scenario_shared_title",
-        "profiles.wizard_scenario_shared_body",
         "profiles.wizard_scenario_hardened_badge",
         "profiles.wizard_scenario_hardened_title",
-        "profiles.wizard_scenario_hardened_body",
     )
     forbidden_fragments = (
         "an existing",

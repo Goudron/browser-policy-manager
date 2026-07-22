@@ -5,15 +5,15 @@
   <shortdesc>Récupérer à partir d'un échec d'opération de réseau, de navigateur ou d'API BPM visible dans les surfaces de la bibliothèque ou de l'éditeur.</shortdesc>
   <taskbody>
     <prereq><p>Un état BPM visible, un message de validation, un avertissement du navigateur ou une action ayant échoué indique que le flux de travail en cours ne peut pas continuer en toute sécurité.</p></prereq>
-    <context><p>Les échecs de connexion peuvent être dus à des mises en garde temporaires lors des tests du navigateur, à des interruptions du réseau, à des redémarrages de serveur ou à des échecs de fonctionnement de l'API ; la réponse sûre consiste à préserver le contexte avant de réessayer.</p></context>
+    <context><p>Les échecs de connexion peuvent provenir d’interruptions réseau, de redémarrages du serveur ou d’erreurs d’API ; conservez le contexte visible avant de réessayer.</p></context>
     <steps>
       <step><cmd>Lisez l'état visible et identifiez si l'opération ayant échoué était un chargement, un enregistrement, une importation, une exportation, un archivage, une restauration, une suppression, une validation ou une comparaison.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Vérifiez si les autres surfaces BPM de la même session de navigateur répondent toujours avant de réessayer la même action.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Réessayez l'action ayant échoué une fois après avoir conservé les modifications non enregistrées et le contexte du profil.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
-      <step><cmd>Si la mise en garde concernant les tests du navigateur ou l'échec de l'API persiste, arrêtez les modifications par l'utilisateur et conservez les détails de l'erreur visibles pour examen par le responsable.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
+      <step><cmd>Si l’erreur de connexion ou d’API persiste, arrêtez les modifications et contactez le support avec les détails visibles de l’erreur.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>
     </steps>
     <result><p>Le flux de travail reprend après une nouvelle tentative ou s'arrête avec suffisamment de contexte visible pour diagnostiquer le problème de connexion du produit.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
+    <postreq><p>Si l’erreur se répète, arrêtez le flux de travail et contactez le support avec le message visible, le nom du profil, le canal de schéma et la page active.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

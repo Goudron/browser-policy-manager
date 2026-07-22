@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-check-health-readiness" xml:lang="de" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Überprüfen Sie den Zustand und die Bereitschaft des BPM</title>
+  <title>BPM-Zustand und -Bereitschaft prüfen</title>
   <shortdesc>Verwenden Sie die aktuellen Funktions- und Bereitschaftsprüfungen als eine einfache Vorabprüfung des Betriebszustands vor API-Arbeitsabläufen.</shortdesc>
   <taskbody>
     <prereq><p><codeph>$BPM_BASE_URL</codeph> festlegen. Für Host-Setup, Dienststart, Protokolle, Aktualisierungen von der Quelle und Details zum Betriebssystem verwenden Sie das Administratorhandbuch zur Bereitstellung aus dem Quellcode. Dieses API-Thema dokumentiert nur die Integrationsprüfung.</p></prereq>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-policies-and-managed-preferences" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Políticas y Preferencias gestionadas</title>
+  <title>Políticas y preferencias gestionadas</title>
   <shortdesc>BPM separa las políticas de Firefox Enterprise de los valores de preferencias administrados y mantiene ambos en un solo perfil.</shortdesc>
   <conbody>
     <p>Las políticas se denominan controles de Firefox Enterprise, como el comportamiento, el acceso, los permisos o la configuración de funciones del navegador. Preferencias gestionadas son claves de preferencia con valores y comportamiento de bloqueo opcional.</p>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-assess-single-node-source-readiness" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Оценить текущую готовность одноузлового источника</title>
+  <title>Оценка готовности текущего одноузлового исходного развертывания</title>
   <shortdesc>Решите, готов ли текущий экземпляр BPM с исходным кодом к управляемой работе с одним узлом, и назовите доказательства, подтверждающие это решение.</shortdesc>
   <taskbody>
     <prereq><p>Развертывание исходного кода Linux или Windows 10/11 через WSL завершено, зависимости установлены, и предполагаемые значения <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> и <codeph>BPM_SCHEMA_CACHE_DIR</codeph> известны.</p></prereq>

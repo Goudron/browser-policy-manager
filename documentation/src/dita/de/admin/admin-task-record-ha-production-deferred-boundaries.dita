@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Datensatz HA und Produktionsverzögerungsgrenzen</title>
+  <title>HA- und Produktionsgrenzen dokumentieren</title>
   <shortdesc>Geben Sie an, welche Produktions-, HA-, Reverse-Proxy-, Wiederherstellungs- und Service-Management-Funktionen heute fehlen und was für spätere Entwurfsarbeiten vorbereitet werden kann.</shortdesc>
   <taskbody>
     <prereq><p>Für die aktuelle Quellausführungsinstanz sind Hinweise zu Bereitschaft, Netzwerkgefährdung, Sicherung/Export, Überwachung und Aktualisierungsfenster vorhanden.</p></prereq>

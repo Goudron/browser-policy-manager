@@ -63,8 +63,8 @@ def test_generated_policy_skeleton_inventory_covers_every_supported_policy_once(
     assert index["provenance_review_backlog_item"] == "BPM090-M5-09"
     assert index["target_bpm_version"] == "0.9.0"
     assert index["generated_by"] == "documentation/tools/generate_firefox_policy_skeletons.py"
-    assert index["policy_count"] == len(policies) == 120
-    assert index["example_count"] == sum(len(policy["channels"]) for policy in policies) == 232
+    assert index["policy_count"] == len(policies) == 121
+    assert index["example_count"] == sum(len(policy["channels"]) for policy in policies) == 354
     assert {entry["policy_id"] for entry in generated} == expected_ids
     assert len({entry["doc_id"] for entry in generated}) == len(expected_ids)
     assert len({entry["path"] for entry in generated}) == len(expected_ids)
@@ -73,7 +73,9 @@ def test_generated_policy_skeleton_inventory_covers_every_supported_policy_once(
         assert entry["doc_id"] == policy["doc_id"]
         assert entry["channel_scope"] == policy["channel_scope"]
         assert entry["channel_support"]["scope"] == policy["channel_scope"]
-        assert entry["channel_support"]["supported_channels"] == sorted(policy["channels"])
+        assert entry["channel_support"]["supported_channels"] == sorted(
+            policy["channels"], key=generator._channel_sort_key
+        )
         assert (REPOSITORY_ROOT / entry["path"]).is_file()
         assert len(entry["examples"]) == len(policy["channels"])
 
@@ -109,12 +111,13 @@ def test_each_generated_policy_topic_matches_the_model_sections_and_metadata() -
     for policy in inventory["policies"]:
         path = POLICIES_ROOT / f"{policy['doc_id']}.dita"
         root = ET.parse(path).getroot()
-        expected_props = (
-            f"{conditional_props['release']} {conditional_props['esr']}"
-            if policy["channel_scope"] == "both"
-            else conditional_props["release"]
-            if policy["channel_scope"] == "release-only"
-            else conditional_props["esr"]
+        expected_props = " ".join(
+            prop
+            for channel_prefix, prop in (
+                ("release-", conditional_props["release"]),
+                ("esr-", conditional_props["esr"]),
+            )
+            if any(channel.startswith(channel_prefix) for channel in policy["channels"])
         )
 
         assert root.tag == "reference"
@@ -135,15 +138,15 @@ def test_each_generated_policy_topic_matches_the_model_sections_and_metadata() -
 
 def test_channel_differences_artifact_records_release_esr_support_and_filter_fields() -> None:
     differences = json.loads(CHANNEL_DIFFERENCES_PATH.read_text(encoding="utf-8"))
-    release_only = [
-        "AIControls",
-        "BrowserDataBackup",
-        "DisableRemoteImprovements",
-        "GenerativeAI",
-        "IPProtectionAvailable",
-        "LocalNetworkAccess",
-        "VisualSearchEnabled",
-        "XSLTEnabled",
+    inventory = _inventory()
+    policies_by_scope = {
+        scope: [policy["policy_id"] for policy in inventory["policies"] if policy["channel_scope"] == scope]
+        for scope in ("both", "partial", "release-only", "esr-only")
+    }
+    changed = [
+        policy["policy_id"]
+        for policy in inventory["policies"]
+        if policy["definition_changed_across_channels"]
     ]
 
     assert differences["schema_version"] == 1
@@ -151,14 +154,19 @@ def test_channel_differences_artifact_records_release_esr_support_and_filter_fie
     assert differences["schema_refresh_runbook_backlog_item"] == "BPM090-M5-08"
     assert differences["provenance_review_backlog_item"] == "BPM090-M5-09"
     assert differences["summary"] == {
-        "both_channels": 112,
-        "changed_definitions": 0,
-        "esr_only": 0,
-        "release_only": 8,
+        "both_channels": len(policies_by_scope["both"]),
+        "changed_definitions": len(changed),
+        "esr_only": len(policies_by_scope["esr-only"]),
+        "partial": len(policies_by_scope["partial"]),
+        "release_only": len(policies_by_scope["release-only"]),
     }
-    assert differences["policy_ids"]["release_only"] == release_only
-    assert differences["policy_ids"]["esr_only"] == []
-    assert differences["policy_ids"]["changed_definitions"] == []
+    assert differences["policy_ids"] == {
+        "both_channels": policies_by_scope["both"],
+        "partial": policies_by_scope["partial"],
+        "release_only": policies_by_scope["release-only"],
+        "esr_only": policies_by_scope["esr-only"],
+        "changed_definitions": changed,
+    }
     assert {
         "channel_support.scope",
         "channel_support.release_supported",
@@ -189,15 +197,18 @@ def test_policy_provenance_review_records_approved_sources_and_forbidden_claims(
     assert provenance["license_id"] == source_family["license_id"] == "MPL-2.0"
     assert provenance["reuse_mode"] == "generated-facts"
     assert provenance["allowed_publication_policy"] == source_family["publication_policy"]
-    assert provenance["source_version_or_revision"] == "mozilla-policy-templates-v7.12"
-    assert provenance["source_retrieved_on"] == "2026-03-24"
+    assert {record["source_version_or_revision"] for record in provenance["source_records"]} == {
+        "mozilla-policy-templates-v7.12",
+        "mozilla-policy-templates-v8.0",
+    }
     assert provenance["summary"] == {
         "both_channels": 112,
-        "changed_definitions": 0,
+        "changed_definitions": 3,
         "esr_only": 0,
-        "example_count": 232,
-        "policy_count": 120,
-        "release_only": 8,
+        "example_count": 354,
+        "partial": 9,
+        "policy_count": 121,
+        "release_only": 0,
     }
     assert {entry["policy_id"] for entry in provenance["policies"]} == {
         entry["policy_id"] for entry in index["policies"]
@@ -214,13 +225,19 @@ def test_policy_provenance_review_records_approved_sources_and_forbidden_claims(
         assert entry["source_family_id"] == "mozilla-policy-schema-facts"
         assert entry["license_id"] == "MPL-2.0"
         assert entry["reuse_mode"] == "generated-facts"
-        assert entry["source_locator"].endswith("/mozilla/policy-templates/releases/tag/v7.12")
+        assert {record["source_version_or_revision"] for record in entry["source_records"]} == {
+            inventory_channel["schema_source"]
+            for inventory_channel in (
+                _inventory()["channels"][channel_id]
+                for channel_id in entry["supported_channels"]
+            )
+        }
         assert entry["copied_mozilla_prose"] is False
         assert entry["live_browser_verification_claim"] is False
         assert entry["no_affiliation_notice"] == "BPM is not affiliated with or endorsed by Mozilla."
         assert set(entry["source_content_sha256_when_snapshotted"]) == set(entry["supported_channels"])
         for channel in entry["channels"]:
-            assert channel["schema_source"] == "mozilla-policy-templates-v7.12"
+            assert channel["source_version_or_revision"] == channel["schema_source"]
             assert len(channel["schema_sha256"]) == 64
             assert channel["schema_sha256"] == entry["source_content_sha256_when_snapshotted"][
                 channel["channel"]
@@ -242,9 +259,7 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             "mozilla-policy-schema-facts",
             "generated-facts",
             "MPL-2.0",
-            "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
-            "2026-03-24",
-            "BPM is not affiliated with or endorsed by Mozilla.",
+                "BPM is not affiliated with or endorsed by Mozilla.",
             "BPM090-M2-03",
             "0.9.0",
         ):
@@ -256,6 +271,9 @@ def test_each_generated_policy_topic_carries_source_version_and_license_metadata
             assert channel_meta["mozilla_version"] in provenance_text
             assert channel_meta["schema_source"] in provenance_text
             assert channel["schema_sha256"] in provenance_text
+            source = channel_meta["schema_source"]
+            assert generator._source_metadata(source)["source_locator"] in provenance_text
+            assert generator._source_metadata(source)["source_retrieved_on"] in provenance_text
 
 
 def test_generated_policy_topics_reject_unreviewed_mozilla_prose_and_unsupported_claims() -> None:
@@ -277,18 +295,18 @@ def test_generated_policy_topics_reject_unreviewed_mozilla_prose_and_unsupported
             assert forbidden.casefold() not in topic_text.casefold()
 
 
-def test_release_only_policy_topics_do_not_claim_esr_support() -> None:
+def test_partial_policy_topics_retain_esr_140_13_absence() -> None:
     index = _index()
-    release_only = [
-        entry for entry in index["policies"] if entry["channel_support"]["scope"] == "release-only"
+    partial = [
+        entry for entry in index["policies"] if entry["channel_support"]["scope"] == "partial"
     ]
-    assert len(release_only) == 8
-    for entry in release_only:
+    assert len(partial) == 9
+    for entry in partial:
         assert entry["channel_support"]["release_supported"] is True
-        assert entry["channel_support"]["esr_supported"] is False
+        assert entry["channel_support"]["esr_supported"] is True
         topic_text = (POLICIES_ROOT / f"{entry['doc_id']}.dita").read_text(encoding="utf-8")
-        assert 'outputclass="channel-support-badge channel-scope-release-only"' in topic_text
-        assert "absent from Firefox ESR 140.12" in topic_text
+        assert 'outputclass="channel-support-badge channel-scope-partial"' in topic_text
+        assert "absent from Firefox ESR 140.13" in topic_text
 
 
 def test_each_generated_policy_example_validates_against_its_declared_channel() -> None:

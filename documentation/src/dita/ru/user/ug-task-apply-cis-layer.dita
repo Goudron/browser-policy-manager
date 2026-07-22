@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-apply-cis-layer" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Применить слой CIS</title>
+  <title>Применение слоя CIS</title>
   <shortdesc>Добавьте поддерживаемый уровень CIS, если для профиля требуется усиленная базовая линия на основе сопоставленных рекомендаций BPM.</shortdesc>
   <taskbody>
     <prereq><p>Выбраны черновик профиля и канал схемы.</p></prereq>

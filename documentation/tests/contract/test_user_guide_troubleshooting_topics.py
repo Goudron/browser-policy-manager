@@ -121,13 +121,13 @@ def test_english_recovery_topics_cover_required_error_families_without_internal_
         "validation errors",
         "Profile not found",
         "stale tab",
-        "browser testing caveats",
+        "Connection failures can result from",
         "network",
         "BPM API operation failure",
         "save-conflict",
         "duplicate",
         "permanent delete",
         "unsaved changes",
-        "Do not edit internal storage",
+        "Retry only from the BPM interface",
     ):
         assert required.casefold() in text.casefold()

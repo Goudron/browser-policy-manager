@@ -5,17 +5,17 @@
   <shortdesc>Prepare network exposure notes and reverse-proxy questions without publishing unsupported TLS or proxy recipes as BPM behavior.</shortdesc>
   <taskbody>
     <prereq><p>The current single-node source readiness assessment is complete, and the operator knows whether users will reach BPM through loopback, a WSL forwarded address, a lab host, or an externally owned proxy.</p></prereq>
-    <context><p>BPM can run on a configured host and port, but BPM documentation does not provide an official reverse proxy, TLS termination, authentication gateway, header policy, or rate-limiting recipe.</p></context>
+    <context><p>BPM runs on a configured host and port. Reverse proxy, TLS, authentication gateway, header policy, and rate-limiting decisions belong to the operating organization.</p></context>
     <steps>
       <step><cmd>Choose the smallest network exposure that satisfies the current evaluation.</cmd><info><p>Prefer <codeph>127.0.0.1</codeph>. Use <codeph>BPM_HOST="0.0.0.0"</codeph> only when WSL forwarding or a controlled lab network requires it, and record why <codeph>BPM_PORT="8000"</codeph> is reachable.</p></info></step>
-      <step><cmd>Write down proxy-readiness questions before adding any external proxy.</cmd><info><p>Answer who owns TLS certificates, hostname routing, request size limits, timeout values, CORS origins through <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, forwarded headers, access logs, and incident response. These questions can be prepared now; the official TLS/proxy recipes are planned but not implemented yet.</p></info></step>
+      <step><cmd>Write down proxy-readiness questions before adding an external proxy.</cmd><info><p>Answer who owns TLS certificates, hostname routing, request size limits, timeout values, CORS origins through <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>, forwarded headers, access logs, and incident response.</p></info></step>
       <step><cmd>Verify that probes still work through the chosen boundary.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
 ]]></codeblock><p>If an externally owned proxy is used in a lab, record both direct source probes and proxy-side probes. Do not treat a proxy 200 response as proof of BPM authentication, authorization, or HA.</p></info></step>
-      <step><cmd>Mark unsupported network claims explicitly.</cmd><info><note type="warning">BPM does not ship packaged services, official TLS/proxy recipes, supported HA clustering, WAF rules, request signing, rate limiting, SSO, OAuth/OIDC, role-based access control, or production hardening. Keep those as external controls or deferred requirements.</note></info></step>
+      <step><cmd>Record platform-managed network controls.</cmd><info><note type="warning">Document the owner and operating procedure for proxying, TLS, WAF rules, request signing, rate limiting, SSO, OAuth/OIDC, role-based access control, and production hardening.</note></info></step>
     </steps>
-    <result><p>The network note separates what can be configured now from reverse-proxy and TLS decisions that remain external or deferred.</p></result>
+    <result><p>The network note records the chosen exposure and the organization-owned controls around it.</p></result>
     <postreq><p>Use the monitoring, backup, and update-window topic before a shared evaluation window starts.</p></postreq>
   </taskbody>
   <related-links>

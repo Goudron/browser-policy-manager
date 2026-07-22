@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-profile-status" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>配置文件状态参考</title>
+  <title>配置档案状态参考</title>
   <shortdesc>在执行操作之前读取配置文件名称、ID、架构、生命周期、脏/已保存状态和验证上下文。</shortdesc>
   <refbody>
     <section id="a-profile-identity"><title>身份</title><p>配置文件名称和 ID 确认当前编辑器、库行或比较选择引用了预期保存的配置文件或草稿。</p></section>

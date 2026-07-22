@@ -63,7 +63,7 @@ def test_target_map_covers_exact_release_esr_policy_union_and_known_preferences(
     policy_ids = {item["policy_id"] for item in inventory["policies"]}
     preference_ids = {item["preference_id"] for item in inventory["managed_preferences"]}
 
-    assert inventory["summary"]["policy_scope_counts"] == {"both": 112, "release-only": 8}
+    assert inventory["summary"]["policy_scope_counts"] == {"both": 112, "partial": 9}
     assert {key.removeprefix("policy:") for key in targets if key.startswith("policy:")} == policy_ids
     assert {
         key.removeprefix("known-preference:")

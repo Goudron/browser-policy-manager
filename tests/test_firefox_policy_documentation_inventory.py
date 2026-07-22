@@ -5,16 +5,18 @@ import json
 from app.core.schema_channels import (
     CURRENT_ESR_SCHEMA_CHANNEL,
     CURRENT_RELEASE_SCHEMA_CHANNEL,
+    SUPPORTED_SCHEMA_CHANNELS,
 )
 from app.services.policy_schema_service import load_policy_schema
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 from tests.docs_index import doc_path_from_index
 from tools.build_firefox_policy_documentation_inventory import build_inventory
 
-RELEASE_ONLY_POLICIES = {
+PARTIAL_POLICIES = {
     "AIControls",
     "BrowserDataBackup",
     "DisableRemoteImprovements",
+    "DisableRemoteSettingsAndAcceptSecurityConsequences",
     "GenerativeAI",
     "IPProtectionAvailable",
     "LocalNetworkAccess",
@@ -41,9 +43,9 @@ def test_firefox_policy_documentation_inventory_is_current_and_complete():
 
     policies = inventory["policies"]
     assert isinstance(policies, list)
-    assert len(policies) == 120
-    assert len({entry["policy_id"] for entry in policies}) == 120
-    assert len({entry["doc_id"] for entry in policies}) == 120
+    assert len(policies) == 121
+    assert len({entry["policy_id"] for entry in policies}) == 121
+    assert len({entry["doc_id"] for entry in policies}) == 121
     assert all(entry["doc_id"] == f"fx-policy-{entry['policy_id']}" for entry in policies)
     assert all(entry["ui_target"] == f"policy:{entry['policy_id']}" for entry in policies)
 
@@ -52,29 +54,32 @@ def test_firefox_policy_documentation_inventory_records_channel_differences():
     inventory = _maintained_inventory()
     policies = inventory["policies"]
     by_id = {entry["policy_id"]: entry for entry in policies}
-    esr_ids = set(load_policy_schema(CURRENT_ESR_SCHEMA_CHANNEL).policies)
-    release_ids = set(load_policy_schema(CURRENT_RELEASE_SCHEMA_CHANNEL).policies)
+    schema_ids = {
+        channel: set(load_policy_schema(channel).policies)
+        for channel in SUPPORTED_SCHEMA_CHANNELS
+    }
+    esr_ids = schema_ids[CURRENT_ESR_SCHEMA_CHANNEL]
+    release_ids = schema_ids[CURRENT_RELEASE_SCHEMA_CHANNEL]
 
-    assert release_ids - esr_ids == RELEASE_ONLY_POLICIES
+    assert release_ids - esr_ids == PARTIAL_POLICIES
     assert esr_ids - release_ids == set()
     assert set(by_id) == esr_ids | release_ids
     assert {
-        policy_id for policy_id, entry in by_id.items() if entry["channel_scope"] == "release-only"
-    } == RELEASE_ONLY_POLICIES
-    assert not any(entry["definition_changed_across_channels"] for entry in policies)
+        policy_id for policy_id, entry in by_id.items() if entry["channel_scope"] == "partial"
+    } == PARTIAL_POLICIES
+    assert {
+        entry["policy_id"] for entry in policies if entry["definition_changed_across_channels"]
+    } == {"Cookies", "ExtensionSettings", "Homepage"}
     assert inventory["summary"]["policy_scope_counts"] == {
         "both": 112,
-        "release-only": 8,
+        "partial": 9,
     }
 
     for policy_id, entry in by_id.items():
         expected_channels = {
             channel
-            for channel, schema_ids in (
-                (CURRENT_ESR_SCHEMA_CHANNEL, esr_ids),
-                (CURRENT_RELEASE_SCHEMA_CHANNEL, release_ids),
-            )
-            if policy_id in schema_ids
+            for channel, policy_ids in schema_ids.items()
+            if policy_id in policy_ids
         }
         assert set(entry["channels"]) == expected_channels
         for channel_record in entry["channels"].values():
@@ -121,9 +126,9 @@ def test_firefox_policy_documentation_inventory_summary_is_active():
     ).read_text(encoding="utf-8")
 
     for required in (
-        "112 ESR policies",
-        "Eight policies are Release-only",
-        "no changed definitions among the 112 common policies",
+        "112 policies in ESR 140.13",
+        "Nine policies are unavailable in ESR 140.13",
+        "`Cookies`, `ExtensionSettings`, and `Homepage` have changed",
         "62 managed preferences",
         "`ui.support_level=fallback`",
         "BPM090-M2-07",

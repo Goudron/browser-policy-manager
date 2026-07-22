@@ -72,12 +72,9 @@
       "admin-task-record-ha-production-deferred-boundaries"
     ]
   },
-  "required_make_targets": ["dev", "test-fast", "docs-validate", "docs-build"],
+  "required_make_targets": ["dev"],
   "required_commands": [
     "make dev",
-    "make test-fast",
-    "make docs-validate",
-    "make docs-build",
     "alembic upgrade head",
     "pip install -e \".[dev]\"",
     "git status --short",
@@ -129,7 +126,7 @@
   "required_api_examples": [
     "GET $BPM_BASE_URL/api/profiles",
     "GET $BPM_BASE_URL/api/profiles/42?include_deleted=false",
-    "POST $BPM_BASE_URL/api/validate/release-152",
+    "POST $BPM_BASE_URL/api/validate/release-153",
     "POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json",
     "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json"
   ],
@@ -152,20 +149,17 @@
     "Windows service"
   ],
   "required_english_wsl_caveats": [
-    "not a native Windows installation",
+    "Linux source workflow inside WSL",
     "localhost forwarding",
     "inside WSL"
   ],
   "required_deferred_warnings": [
-    "packaged installers",
-    "packaged services",
-    "official reverse-proxy recipes",
-    "official TLS/proxy recipes",
-    "supported HA clustering",
-    "rolling upgrades",
-    "managed secrets",
+    "organization-owned procedures",
+    "organization-owned controls",
+    "operating assumptions",
+    "platform-owned controls",
     "production hardening",
-    "official restore automation"
+    "RTO/RPO"
   ],
   "forbidden_supported_claims": [
     "production-ready",

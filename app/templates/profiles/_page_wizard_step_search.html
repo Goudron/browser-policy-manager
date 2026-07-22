@@ -1,12 +1,6 @@
     <div class="wizard-section-group" id="wizard-step-2-default-search">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_search_title">{{ tr("profiles.wizard_search_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_search_body">
-                {{ tr("profiles.wizard_search_body") }}
-            </p>
-        </div>
-        <div class="wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
         <div class="wizard-input-stack wizard-stage-panel">
             <div class="wizard-input-hint" data-i18n="profiles.wizard_search_focus_hint">
@@ -15,19 +9,15 @@
             <div class="wizard-search-engine-preset-grid" id="wizard-search-defaults-presets">
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="defaults">
                     <span data-i18n="profiles.wizard_search_defaults_preset_defaults_title">{{ tr("profiles.wizard_search_defaults_preset_defaults_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_defaults_copy">{{ tr("profiles.wizard_search_defaults_preset_defaults_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="managed_default">
                     <span data-i18n="profiles.wizard_search_defaults_preset_managed_default_title">{{ tr("profiles.wizard_search_defaults_preset_managed_default_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_managed_default_copy">{{ tr("profiles.wizard_search_defaults_preset_managed_default_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="custom_engines">
                     <span data-i18n="profiles.wizard_search_defaults_preset_custom_engines_title">{{ tr("profiles.wizard_search_defaults_preset_custom_engines_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_custom_engines_copy">{{ tr("profiles.wizard_search_defaults_preset_custom_engines_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-defaults-preset="restricted">
                     <span data-i18n="profiles.wizard_search_defaults_preset_restricted_title">{{ tr("profiles.wizard_search_defaults_preset_restricted_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_defaults_preset_restricted_copy">{{ tr("profiles.wizard_search_defaults_preset_restricted_copy") }}</span>
                 </button>
             </div>
         </div>
@@ -47,15 +37,11 @@
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-search-defaults-section-status" data-i18n="profiles.wizard_search_defaults_section_state_empty">{{ tr("profiles.wizard_search_defaults_section_state_empty") }}</div>
         <div class="wizard-toolbar-row wizard-fine-tuning-bar">
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_search_defaults_fine_tuning_body">
-                {{ tr("profiles.wizard_search_defaults_fine_tuning_body") }}
-            </div>
             <button type="button" id="wizard-search-defaults-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-search-defaults-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
                 {{ tr("profiles.wizard_fine_tuning_show") }}
             </button>
         </div>
         <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-search-defaults-fine-tuning-panel" hidden>
-            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
             <label data-settings-target="field:wizard-search-bar">
                 <div class="field-label mb-1" data-i18n="profiles.wizard_search_bar_label">{{ tr("profiles.wizard_search_bar_label") }}</div>
                 <select id="wizard-search-bar" class="soft-input">
@@ -84,9 +70,6 @@
     <div class="wizard-section-group" id="wizard-step-2-managed-engines">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_step_four_index_engines">{{ tr("profiles.wizard_step_four_index_engines") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_search_add_body">
-                {{ tr("profiles.wizard_search_add_body") }}
-            </p>
         </div>
         <div class="wizard-search-engine-head">
             <div>
@@ -103,15 +86,12 @@
             <div class="wizard-search-engine-preset-grid">
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="ticket_queue" data-settings-target="search-engine-preset:ticket_queue">
                     <span data-i18n="profiles.wizard_search_preset_ticket_title">{{ tr("profiles.wizard_search_preset_ticket_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_ticket_copy">{{ tr("profiles.wizard_search_preset_ticket_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="wiki_portal" data-settings-target="search-engine-preset:wiki_portal">
                     <span data-i18n="profiles.wizard_search_preset_wiki_title">{{ tr("profiles.wizard_search_preset_wiki_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_wiki_copy">{{ tr("profiles.wizard_search_preset_wiki_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-search-engine-preset="duckduckgo" data-settings-target="search-engine-preset:duckduckgo">
                     <span data-i18n="profiles.wizard_search_preset_ddg_title">{{ tr("profiles.wizard_search_preset_ddg_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_search_preset_ddg_copy">{{ tr("profiles.wizard_search_preset_ddg_copy") }}</span>
                 </button>
             </div>
         </details>
@@ -182,12 +162,6 @@
     <div class="wizard-section-group" id="wizard-step-2-suggestions">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_firefox_suggest_title">{{ tr("profiles.wizard_firefox_suggest_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_firefox_suggest_body">
-                {{ tr("profiles.wizard_firefox_suggest_body") }}
-            </p>
-        </div>
-        <div class="wizard-stage-bar">
-            <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_main_choice_label">{{ tr("profiles.wizard_main_choice_label") }}</div>
         </div>
         <div class="wizard-input-stack wizard-stage-panel">
             <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_suggest_focus_hint">
@@ -196,19 +170,15 @@
             <div class="wizard-search-engine-preset-grid" id="wizard-firefox-suggest-presets">
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="defaults">
                     <span data-i18n="profiles.wizard_firefox_suggest_preset_defaults_title">{{ tr("profiles.wizard_firefox_suggest_preset_defaults_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_defaults_copy">{{ tr("profiles.wizard_firefox_suggest_preset_defaults_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="private">
                     <span data-i18n="profiles.wizard_firefox_suggest_preset_private_title">{{ tr("profiles.wizard_firefox_suggest_preset_private_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_private_copy">{{ tr("profiles.wizard_firefox_suggest_preset_private_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="managed">
                     <span data-i18n="profiles.wizard_firefox_suggest_preset_managed_title">{{ tr("profiles.wizard_firefox_suggest_preset_managed_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_managed_copy">{{ tr("profiles.wizard_firefox_suggest_preset_managed_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-firefox-suggest-preset="locked_down">
                     <span data-i18n="profiles.wizard_firefox_suggest_preset_locked_down_title">{{ tr("profiles.wizard_firefox_suggest_preset_locked_down_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_firefox_suggest_preset_locked_down_copy">{{ tr("profiles.wizard_firefox_suggest_preset_locked_down_copy") }}</span>
                 </button>
             </div>
         </div>
@@ -224,15 +194,11 @@
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-firefox-suggest-section-status" data-i18n="profiles.wizard_firefox_suggest_section_state_empty">{{ tr("profiles.wizard_firefox_suggest_section_state_empty") }}</div>
         <div class="wizard-toolbar-row wizard-fine-tuning-bar">
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_firefox_suggest_fine_tuning_body">
-                {{ tr("profiles.wizard_firefox_suggest_fine_tuning_body") }}
-            </div>
             <button type="button" id="wizard-search-suggest-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-search-suggest-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
                 {{ tr("profiles.wizard_fine_tuning_show") }}
             </button>
         </div>
         <div class="wizard-grid wizard-fine-tuning-panel" id="wizard-search-suggest-fine-tuning-panel" hidden>
-            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
             <label data-settings-target="field:firefox-suggest-sponsored">
                 <div class="field-label mb-1" data-i18n="profiles.wizard_firefox_suggest_sponsored_label">{{ tr("profiles.wizard_firefox_suggest_sponsored_label") }}</div>
                 <select class="soft-input" data-firefox-suggest-key="SponsoredSuggestions">

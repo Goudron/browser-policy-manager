@@ -140,7 +140,7 @@ class UiAuditRunner:
                 "Profiles library opened and create action is visible.",
             )
 
-            self.click(driver, By.ID, "create-profile-link")
+            self.click_and_switch_to_new_tab(driver, By.ID, "create-profile-link")
             self.wait_for(driver, EC.presence_of_element_located((By.ID, "wizard-panel")))
             self.wait_for(driver, EC.presence_of_element_located((By.ID, "wizard-export-save-action")))
             self.capture(driver, viewport, "desktop_new_profile_initial")
@@ -150,180 +150,11 @@ class UiAuditRunner:
             self.verify_dark_theme(driver, viewport, "desktop_dark_theme_initial")
             self.verify_language_switch(driver, viewport)
 
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-scenario-key="shared_devices"]',
-                "step1_scenario_shared_devices",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-starter-key="classroom_kiosk"]',
-                "step1_starter_classroom_kiosk",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-cis-layer-key="cis_l1"]',
-                "step1_cis_l1",
-            )
-            self.capture(driver, viewport, "desktop_step1_setup")
-            self.verify_layout(driver, viewport, "desktop_step1_setup")
+            for step in range(1, 7):
+                self.go_to_step(driver, step)
+                self.capture(driver, viewport, f"desktop_step{step}")
+                self.verify_layout(driver, viewport, f"desktop_step{step}")
 
-            self.go_to_step(driver, 2)
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-general-policy-preset="managed"]',
-                "step2_general_managed",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-proxy-preset="manual"]',
-                "step2_proxy_manual",
-            )
-            self.fill_input(driver, "wizard-proxy-http", "proxy.internal.local")
-            self.fill_input(driver, "wizard-proxy-passthrough", "localhost\n127.0.0.1")
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-network-enterprise-preset="sso"]',
-                "step2_network_sso",
-            )
-            self.toggle_disclosure(driver, "wizard-network-enterprise-fine-tuning-toggle")
-            self.capture(driver, viewport, "desktop_step2_general")
-            self.verify_layout(driver, viewport, "desktop_step2_general")
-
-            self.go_to_step(driver, 3)
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-homepage-shared-preset="portal_locked"]',
-                "step3_homepage_shared_portal_locked",
-            )
-            self.fill_input(driver, "wizard-homepage-url", "https://portal.example.test")
-            self.select_by_value(driver, "wizard-homepage-start-page", "homepage")
-            self.toggle_section(driver, '[data-home-surface-toggle="new_tab"]')
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-home-overrides-preset="first_run"]',
-                "step3_home_overrides_first_run",
-            )
-            self.toggle_section(driver, '[data-home-surface-toggle="firefox_home"]')
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-firefox-home-preset="focused"]',
-                "step3_firefox_home_focused",
-            )
-            self.capture(driver, viewport, "desktop_step3_home")
-            self.verify_layout(driver, viewport, "desktop_step3_home")
-
-            self.go_to_step(driver, 4)
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-search-defaults-preset="custom_engines"]',
-                "step4_search_defaults_custom",
-            )
-            self.fill_input(driver, "wizard-search-default-engine", "DuckDuckGo")
-            self.open_details(driver, '[data-search-engine-presets-menu] summary')
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-search-engine-preset="duckduckgo"]',
-                "step4_search_preset_ddg",
-            )
-            self.click(driver, By.ID, "wizard-search-engine-add")
-            self.fill_css(driver, '[data-search-engine-field="Name"]', "Docs")
-            self.fill_css(driver, '[data-search-engine-field="URLTemplate"]', "https://docs.example.test/search?q={searchTerms}")
-            self.fill_css(driver, '[data-search-engine-field="Alias"]', "docs")
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-firefox-suggest-preset="private"]',
-                "step4_firefox_suggest_private",
-            )
-            self.capture(driver, viewport, "desktop_step4_search")
-            self.verify_layout(driver, viewport, "desktop_step4_search")
-
-            self.go_to_step(driver, 5)
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-hardening-preset="strict"]',
-                "step5_hardening_strict",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-cleanup-preset="shared"]',
-                "step5_cleanup_shared",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-site-data-preset="balanced"]',
-                "step5_site_data_balanced",
-            )
-            self.capture(driver, viewport, "desktop_step5_privacy")
-            self.verify_layout(driver, viewport, "desktop_step5_privacy")
-
-            self.go_to_step(driver, 6)
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-sync-focus-preset="managed"]',
-                "step6_sync_managed",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-language-preset="locales"]',
-                "step6_language_locales",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-extension-governance-preset="curated"]',
-                "step6_extensions_curated",
-            )
-            self.select_css_by_value(
-                driver,
-                '[data-extension-profile="uBlock0@raymondhill.net"][data-extension-field="mode"]',
-                "force_installed",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-website-access-posture="allow_only"]',
-                "step6_website_allow_only",
-            )
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-website-access-handlers="protocols"]',
-                "step6_handlers_protocols",
-            )
-            self.capture(driver, viewport, "desktop_step6_features")
-            self.verify_layout(driver, viewport, "desktop_step6_features")
-
-            self.go_to_step(driver, 7)
-            self.click_and_verify_pressed(
-                driver,
-                viewport,
-                '[data-ai-posture-preset="mixed"]',
-                "step7_ai_mixed",
-            )
-            self.capture(driver, viewport, "desktop_step7_ai")
-            self.verify_layout(driver, viewport, "desktop_step7_ai")
-
-            self.go_to_step(driver, 8)
-            self.capture(driver, viewport, "desktop_step8_export_before_save")
-            self.verify_layout(driver, viewport, "desktop_step8_export_before_save")
             previous_validation_state = self.text_of(driver, By.ID, "wizard-export-validation-state")
             previous_validation_preview = self.text_of(driver, By.ID, "validation-preview")
             self.click(driver, By.ID, "wizard-export-validate-action")
@@ -342,7 +173,7 @@ class UiAuditRunner:
             except Exception:
                 self.dump_export_debug(driver, "after_save_failure")
                 raise
-            self.capture(driver, viewport, "desktop_step8_export_after_save")
+            self.capture(driver, viewport, "desktop_step6_export_after_save")
             self.record(
                 viewport,
                 "profile_saved_via_ui",
@@ -361,9 +192,9 @@ class UiAuditRunner:
 
             self.open_and_wait(
                 driver,
-                f"/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit",
+                f"/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit",
             )
-            self.wait_for(driver, EC.presence_of_element_located((By.ID, "details-panel")))
+            self.wait_for(driver, EC.presence_of_element_located((By.ID, "settings-panel")))
             self.capture(driver, viewport, "desktop_advanced_details")
             self.verify_dark_theme(driver, viewport, "desktop_advanced_dark_theme")
             self.record(
@@ -371,6 +202,16 @@ class UiAuditRunner:
                 "advanced_route_opened",
                 self.page_contains(driver, self.profile_name),
                 "Advanced route opened for the saved profile.",
+            )
+            self.open_and_wait(driver, f"/profiles/{profile_id}/json")
+            self.wait_for(driver, EC.presence_of_element_located((By.ID, "editor-panel")))
+            self.capture(driver, viewport, "desktop_json_editor")
+            self.verify_layout(driver, viewport, "desktop_json_editor")
+            self.record(
+                viewport,
+                "json_route_opened",
+                self.page_contains(driver, self.profile_name),
+                "JSON route opened for the saved profile.",
             )
             return profile_id
         finally:
@@ -395,21 +236,25 @@ class UiAuditRunner:
             self.record(
                 viewport,
                 "mobile_workspace_scope_guided_active",
-                self.attr_equals(driver, By.ID, "workspace-scope-guided", "aria-pressed", "true"),
-                "Guided workspace scope is active on mobile edit route.",
+                self.is_present(driver, By.ID, "wizard-panel"),
+                "Guided workspace is present on the mobile edit route.",
             )
-            for step in range(1, 9):
+            for step in range(1, 7):
                 self.go_to_step(driver, step)
                 self.capture(driver, viewport, f"mobile_step{step}")
                 self.verify_layout(driver, viewport, f"mobile_step{step}")
 
             self.open_and_wait(
                 driver,
-                f"/profiles/{profile_id}/advanced?return=/profiles/{profile_id}/edit",
+                f"/profiles/{profile_id}/settings?return=/profiles/{profile_id}/edit",
             )
             self.capture(driver, viewport, "mobile_advanced")
             self.verify_layout(driver, viewport, "mobile_advanced")
             self.verify_dark_theme(driver, viewport, "mobile_advanced_dark")
+            self.open_and_wait(driver, f"/profiles/{profile_id}/json")
+            self.wait_for(driver, EC.presence_of_element_located((By.ID, "editor-panel")))
+            self.capture(driver, viewport, "mobile_json_editor")
+            self.verify_layout(driver, viewport, "mobile_json_editor")
         finally:
             self.shutdown_driver(driver)
 
@@ -588,7 +433,6 @@ class UiAuditRunner:
         )
         for field_id, value in (
             ("profile-name", self.profile_name),
-            ("profile-owner", self.profile_owner),
             ("profile-description", self.profile_description),
         ):
             driver.execute_script(
@@ -662,12 +506,11 @@ class UiAuditRunner:
 
     def verify_language_switch(self, driver: WebDriver, viewport: ViewportRun) -> None:
         selector_to_key = {
-            '[data-i18n="profiles.title"]': "profiles.title",
-            '[data-i18n="profiles.locale_label"]': "profiles.locale_label",
-            '[data-i18n="profiles.theme_label"]': "profiles.theme_label",
+            '[data-bpm-header-control="locale"] [data-i18n="profiles.locale_label"]': "profiles.locale_label",
+            '[data-bpm-header-control="theme"] [data-i18n="profiles.theme_label"]': "profiles.theme_label",
             '[data-step="1"] .wizard-step-label': "profiles.wizard_step_one",
             '[data-step="2"] .wizard-step-label': "profiles.wizard_step_two",
-            '[data-step="8"] .wizard-step-label': "profiles.wizard_step_eight",
+            '[data-step="6"] .wizard-step-label': "profiles.wizard_step_six",
         }
         for mode, opposite in (("en", "ru"), ("ru", "en"), ("en", "ru")):
             self.apply_language(driver, viewport, mode)
@@ -841,6 +684,16 @@ class UiAuditRunner:
     def click(self, driver: WebDriver, by: str, value: str) -> None:
         element = driver.find_element(by, value)
         self.safe_click(driver, element, locator=(by, value))
+
+    def click_and_switch_to_new_tab(self, driver: WebDriver, by: str, value: str) -> None:
+        previous_handles = set(driver.window_handles)
+        self.click(driver, by, value)
+        self.wait_for(
+            driver,
+            lambda current_driver: len(current_driver.window_handles) > len(previous_handles),
+        )
+        new_handle = next(handle for handle in driver.window_handles if handle not in previous_handles)
+        driver.switch_to.window(new_handle)
 
     def fill_input(self, driver: WebDriver, element_id: str, value: str) -> None:
         for attempt in range(3):

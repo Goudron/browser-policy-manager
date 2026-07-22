@@ -7,14 +7,14 @@
     {
       "id": "policy-ai-release-only",
       "policy_id": "AIControls",
-      "schema_channel": "release-152",
+      "schema_channel": "release-153",
       "expected_state": "valid-release-only",
       "documentation_topic": "fx-concept-complex-policy-families"
     },
     {
       "id": "policy-homepage-locked",
       "policy_id": "Homepage",
-      "schema_channel": "esr-140.12",
+      "schema_channel": "esr-140.13",
       "expected_state": "valid-cross-channel",
       "documentation_topic": "ug-task-use-all-settings"
     }

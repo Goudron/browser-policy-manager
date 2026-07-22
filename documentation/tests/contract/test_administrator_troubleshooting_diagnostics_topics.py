@@ -50,7 +50,7 @@ REQUIRED_INVARIANT_TERMS = (
     "BPM_DATABASE_URL",
     "BPM_SCHEMA_CACHE_DIR",
     "BPM_SCHEMA_HTTP_TIMEOUT",
-    "POST $BPM_BASE_URL/api/validate/release-152",
+    "POST $BPM_BASE_URL/api/validate/release-153",
     "POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json",
     "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json",
     "multipart/form-data",
@@ -59,9 +59,6 @@ REQUIRED_INVARIANT_TERMS = (
     "alembic upgrade head",
     "BPM_HOST=\"0.0.0.0\"",
     "pip install -e \".[dev]\"",
-    "make docs-fast-check",
-    "make docs-validate",
-    "make docs-build",
     "/help/",
     "/openapi.json",
 )
@@ -178,8 +175,8 @@ def test_english_troubleshooting_topics_cover_m12_10_diagnostic_families_and_bou
         "database and storage issues",
         "WSL networking",
         "stale Python dependencies",
-        "documentation portal build and link failures",
-        "focused rerun",
+        "unavailable documentation portal",
+        "deployment owner",
         "preserve user data",
         "separate product defects from operator",
     ):
@@ -195,11 +192,11 @@ def test_troubleshooting_examples_execute_representative_api_diagnostics() -> No
         assert client.get("/health").json() == {"status": "ok"}
         assert client.get("/health/ready").json() == {"status": "ready", "ready": True}
 
-        invalid_shape = client.post("/api/validate/release-152", json={"document": 123})
+        invalid_shape = client.post("/api/validate/release-153", json={"document": 123})
         assert invalid_shape.status_code == 200
         assert invalid_shape.json()["ok"] is False
 
-        invalid_policies = client.post("/api/validate/release-152", json={"document": {"policies": []}})
+        invalid_policies = client.post("/api/validate/release-153", json={"document": {"policies": []}})
         assert invalid_policies.status_code == 400
 
         unknown_profile = client.post(
@@ -213,7 +210,7 @@ def test_troubleshooting_examples_execute_representative_api_diagnostics() -> No
             "/api/profiles/import/firefox/policies.json",
             json={
                 "name": duplicate_name,
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "document": {"policies": {"DisableTelemetry": True}},
             },
         )
@@ -222,7 +219,7 @@ def test_troubleshooting_examples_execute_representative_api_diagnostics() -> No
             "/api/profiles/import/firefox/policies.json",
             json={
                 "name": duplicate_name,
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "document": {"policies": {"DisableTelemetry": True}},
             },
         )
@@ -232,7 +229,7 @@ def test_troubleshooting_examples_execute_representative_api_diagnostics() -> No
             "/api/profiles/import/firefox/policies.json",
             data={
                 "name": "docs-troubleshoot-multipart",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "compliance": json.dumps({"source": "troubleshooting"}),
             },
             files={

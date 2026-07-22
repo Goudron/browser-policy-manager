@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Durchsuchen Sie den Einstellungskatalog</title>
+  <title>Den Einstellungskatalog durchsuchen</title>
   <shortdesc>Verwenden Sie Katalog, um alle unterstützten Richtlinien und bekannten verwalteten Einstellungen für das ausgewählte Schema zu durchsuchen.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein gespeichertes Profil in Alle Einstellungen.</p></prereq>

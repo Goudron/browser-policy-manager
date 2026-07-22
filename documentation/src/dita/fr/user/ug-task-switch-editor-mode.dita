@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Changer de mode éditeur</title>
-  <shortdesc>Déplacez-vous délibérément entre Éditeur guidé, Tous les paramètres et JSON pour le même profil enregistré.</shortdesc>
+  <title>Changer de mode d’édition</title>
+  <shortdesc>Passez entre l’Éditeur guidé, Tous les paramètres et JSON pour le même profil enregistré en utilisant le contexte de profil partagé et compact.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
-    <context><p>Le mode de commutation modifie la surface d'édition, pas le profil enregistré sous-jacent ; les modifications non enregistrées doivent être enregistrées avant qu'une autre surface ne soit approuvée.</p></context>
+    <context><p>Le contexte partagé et compact indique le nom, l’état, le canal de schéma et le signal de validation du profil actif. Le changement de mode modifie la surface d’édition, pas le profil enregistré ; enregistrez les modifications avant de changer de surface.</p></context>
     <steps>
       <step><cmd>Confirmez que le profil actuel est enregistré et qu'il comporte un ID visible.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Choisissez le mode cible : Guidé pour les flux de travail courants, Tous les paramètres pour une inspection complète ou JSON pour le travail sur des documents bruts.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
-      <step><cmd>Ouvrez le mode cible et vérifiez le nom du profil et le canal de schéma.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Ouvrez le mode cible et vérifiez le contexte compact : nom, état, canal de schéma et signal de validation du profil.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Revenez au mode précédent uniquement après avoir enregistré ou ignoré intentionnellement les modifications.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>
     <result><p>Vous travaillez sur le même profil en mode éditeur qui correspond à la tâche en cours.</p></result>

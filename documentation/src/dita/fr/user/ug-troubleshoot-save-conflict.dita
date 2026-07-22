@@ -10,10 +10,10 @@
       <step><cmd>Arrêtez-vous sur le panneau de conflit de sauvegarde et n'écrasez pas immédiatement.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Comparez le nom du profil visible, le canal de schéma, le mode éditeur et le dernier état enregistré avec l'onglet à l'origine du conflit.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Copiez toutes les valeurs brouillon non enregistrées qui doivent être conservées avant de recharger le profil.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
-      <step><cmd>Rechargez le profil ou réessayez de sauvegarder uniquement après avoir choisi de conserver le brouillon actuel ou le nouvel état enregistré.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
+      <step><cmd>Rechargez le profil ou réessayez de sauvegarder uniquement après avoir choisi de conserver le brouillon actuel ou le nouvel état enregistré.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>
     </steps>
     <result><p>L'onglet obsolète est résolu sans supprimer silencieusement le brouillon actuel ou le profil enregistré le plus récent.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
+    <postreq><p>Si l’erreur se répète, arrêtez le flux de travail et contactez le support avec le message visible, le nom du profil, le canal de schéma et la page active.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

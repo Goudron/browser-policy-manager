@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-import-failure" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Recuperarse de una importación fallida</title>
-  <shortdesc>Diagnosticar la importación fallida de JSON o entrada de política multiparte sin cambiar el almacenamiento interno.</shortdesc>
+  <shortdesc>Diagnosticar una importación fallida de políticas JSON o multiparte en el flujo de trabajo de BPM.</shortdesc>
   <taskbody>
     <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
     <context><p>La importación puede fallar porque el archivo no es legible, el JSON tiene un formato incorrecto, la forma del límite de Firefox es incorrecta o los valores normalizados no pueden pasar la validación.</p></context>
@@ -10,10 +10,10 @@
       <step><cmd>Mantenga visible el mensaje de error de importación e identifique si la entrada fue JSON o multiparte.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Confirme que el archivo contiene un documento de límites de Firefox con un objeto de políticas de nivel superior cuando se utiliza la importación JSON.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Si el mensaje informa sintaxis, recupere primero el JSON con formato incorrecto.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
-      <step><cmd>Vuelva a intentar importar una vez con el archivo corregido y luego revise los valores normalizados antes de guardar.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
+      <step><cmd>Vuelva a intentar importar una vez con el archivo corregido y luego revise los valores normalizados antes de guardar.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
     <result><p>La importación se realiza correctamente en un borrador de perfil BPM revisable o permanece bloqueada con un motivo visible conservado.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
+    <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-import-policies-json"/>

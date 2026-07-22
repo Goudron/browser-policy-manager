@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-documentation-search-boundary" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Produktdokumentation navigieren und durchsuchen</title>
+  <title>Navigation und Suche in der Produktdokumentation</title>
   <shortdesc>Verwenden Sie die unabhängig scrollende Hierarchie und die kompakte deterministische Suche, um veröffentlichte Hilfe ohne externen Dienst oder KI zu finden.</shortdesc>
   <conbody>
     <section id="a-portal-navigation"><title>Dokumentationsbaum</title><p>Die Seitenleiste beginnt beim Stamm „Dokumente“ und listet Handbücher, bei Bedarf Abschnitte sowie Themen auf. Der Baum scrollt unabhängig vom Artikel. Ein Stammlink zeigt die Handbuchliste; ein kontextbezogener Themenlink klappt alle übergeordneten Knoten auf, bringt das Thema in den sichtbaren Bereich und markiert es als aktiv.</p></section>

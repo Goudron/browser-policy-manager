@@ -7,6 +7,7 @@
   const TREE_SELECTOR = "[data-docs-tree]";
   const TREE_HOST_SELECTOR = "[data-docs-tree-host]";
   const STORAGE_PREFIX = "bpm-docs-search:";
+  const LOCALE_STORAGE_KEY = "bpm-lang-mode";
   const THEME_STORAGE_KEY = "bpm-theme-mode";
   const THEME_MODES = new Set(["system", "light", "dark"]);
   const THEME_COLORS = {
@@ -103,6 +104,68 @@
     } else if (typeof mediaQuery.addListener === "function") {
       mediaQuery.addListener(handleSystemThemeChange);
     }
+  };
+
+  const setupLocaleSelect = () => {
+    const localeSelect = document.querySelector("[data-docs-locale-select]");
+    if (!(localeSelect instanceof HTMLSelectElement)) {
+      return;
+    }
+
+    const languageMatchesRule = (languageTag, rule) => {
+      const language = String(languageTag || "").trim().replace(/_/g, "-").toLowerCase();
+      const normalizedRule = String(rule || "").trim().replace(/_/g, "-").toLowerCase();
+      if (!language || !normalizedRule) {
+        return false;
+      }
+      return normalizedRule.endsWith("-*")
+        ? language.startsWith(`${normalizedRule.slice(0, -2)}-`)
+        : language === normalizedRule;
+    };
+
+    const systemLocaleOption = () => {
+      const options = Array.from(localeSelect.options).filter(
+        (option) => option.value !== "system"
+      );
+      const languages = [
+        ...(Array.isArray(window.navigator.languages) ? window.navigator.languages : []),
+        window.navigator.language,
+      ].filter(Boolean);
+      for (const language of languages.length ? languages : ["en"]) {
+        const matched = options.find((option) => {
+          try {
+            return JSON.parse(option.dataset.docsLocaleMatches || "[]").some((rule) =>
+              languageMatchesRule(language, rule)
+            );
+          } catch {
+            return false;
+          }
+        });
+        if (matched) {
+          return matched;
+        }
+      }
+      return options.find((option) => option.value === "en") || options[0] || null;
+    };
+
+    const savedMode = safeStorageGet(
+      LOCALE_STORAGE_KEY,
+      safeStorageGet("bpm-lang", "system")
+    );
+    const availableModes = new Set(Array.from(localeSelect.options).map((option) => option.value));
+    localeSelect.value = availableModes.has(savedMode) ? savedMode : "system";
+
+    localeSelect.addEventListener("change", () => {
+      const mode = availableModes.has(localeSelect.value) ? localeSelect.value : "system";
+      safeStorageSet(LOCALE_STORAGE_KEY, mode);
+      const option = mode === "system"
+        ? systemLocaleOption()
+        : localeSelect.selectedOptions[0];
+      const href = option?.dataset.docsLocaleHref;
+      if (href) {
+        window.location.assign(href);
+      }
+    });
   };
 
   const normalize = (value) =>
@@ -264,6 +327,20 @@
     return filters;
   };
 
+  function updateActiveFilterSummary(root, filters = selectedFilters(root)) {
+    const state = root.querySelector("[data-search-active-filters]");
+    const summary = root.querySelector("[data-search-active-filters-summary]");
+    const panel = root.querySelector("[data-search-advanced-panel]");
+    if (!state || !summary) {
+      return;
+    }
+    const count = [...filters.values()].reduce((total, values) => total + values.size, 0);
+    const panelIsCollapsed = !panel || panel.hidden;
+    state.hidden = !count || !panelIsCollapsed;
+    summary.textContent = (root.dataset.labelActiveFilters || "Active filters: {count}")
+      .replace("{count}", String(count));
+  }
+
   const setSearchExpanded = (root, expanded) => {
     const panel = root.querySelector("[data-search-advanced-panel]");
     const toggle = root.querySelector("[data-search-advanced-toggle]");
@@ -273,6 +350,7 @@
     if (toggle) {
       toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
     }
+    updateActiveFilterSummary(root);
   };
 
   const updateUrlState = (root, query, filters, index) => {
@@ -403,6 +481,7 @@
     const query = input.value.slice(0, MAX_QUERY_LENGTH).trim();
     const tokens = queryTokens(query);
     const filters = selectedFilters(root);
+    updateActiveFilterSummary(root, filters);
     if (!tokens.length && !filters.size) {
       const results = root.querySelector("[data-search-results]");
       if (results) {
@@ -454,7 +533,8 @@
     const input = root.querySelector("#bpm-docs-search-query");
     const submit = root.querySelector("[data-search-submit]");
     const clear = root.querySelector("[data-search-clear]");
-    if (!(input instanceof HTMLInputElement) || !status || !submit || !clear) {
+    const clearFilters = root.querySelector("[data-search-clear-filters]");
+    if (!(input instanceof HTMLInputElement) || !status || !submit || !clear || !clearFilters) {
       return;
     }
     status.textContent = root.dataset.labelLoading || status.textContent;
@@ -473,21 +553,19 @@
     const state = currentUrlState(index);
     input.value = (state.query || readRecentQuery(locale)).slice(0, MAX_QUERY_LENGTH);
     buildFilters(root, index, state.filters);
+    updateActiveFilterSummary(root);
     root.querySelectorAll("[data-search-filter]").forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
-        setSearchExpanded(root, true);
         runSearch(root, index);
       });
     });
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        setSearchExpanded(root, true);
         runSearch(root, index);
       }
     });
     submit.addEventListener("click", () => {
-      setSearchExpanded(root, true);
       runSearch(root, index);
     });
     clear.addEventListener("click", () => {
@@ -500,6 +578,15 @@
       runSearch(root, index);
       input.focus();
     });
+    clearFilters.addEventListener("click", () => {
+      root.querySelectorAll("[data-search-filter]").forEach((checkbox) => {
+        if (checkbox instanceof HTMLInputElement) {
+          checkbox.checked = false;
+        }
+      });
+      runSearch(root, index);
+      root.querySelector("[data-search-advanced-toggle]")?.focus();
+    });
     root.querySelector("[data-search-advanced-toggle]")?.addEventListener("click", () => {
       const toggle = root.querySelector("[data-search-advanced-toggle]");
       const expanded = toggle?.getAttribute("aria-expanded") === "true";
@@ -507,7 +594,6 @@
     });
     status.textContent = root.dataset.labelReady || "Search ready.";
     if (state.query || state.filters.size) {
-      setSearchExpanded(root, true);
       runSearch(root, index, { skipState: true });
     }
   };
@@ -528,11 +614,11 @@
     return resolved.href;
   };
 
-  const validatedNavigationNodes = (payload, expectedLocale, baseUrl) => {
+  const validatedNavigationNodes = (payload, expectedLocale, expectedVersion, baseUrl) => {
     if (
       !payload ||
       payload.schema_version !== 1 ||
-      payload.documentation_version !== "0.9.1" ||
+      payload.documentation_version !== expectedVersion ||
       payload.locale !== expectedLocale ||
       !payload.root ||
       payload.root.node_id !== "documentation-root" ||
@@ -698,6 +784,7 @@
   const setupNavigationHost = async (host) => {
     const sourceHref = host.dataset.navigationHref || "";
     const expectedLocale = host.dataset.navigationLocale || "";
+    const expectedVersion = host.dataset.navigationVersion || "";
     try {
       const sourceUrl = new URL(sourceHref, window.location.href);
       if (sourceUrl.origin !== window.location.origin) {
@@ -708,7 +795,7 @@
         throw new Error("navigation source unavailable");
       }
       const payload = await response.json();
-      validatedNavigationNodes(payload, expectedLocale, response.url || sourceUrl.href);
+      validatedNavigationNodes(payload, expectedLocale, expectedVersion, response.url || sourceUrl.href);
       renderNavigationTree(host, payload, response.url || sourceUrl.href);
     } catch {
       renderNavigationUnavailable(host);
@@ -962,6 +1049,7 @@
   };
 
   setupThemeMode();
+  setupLocaleSelect();
 
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(TREE_HOST_SELECTOR).forEach((host) => {

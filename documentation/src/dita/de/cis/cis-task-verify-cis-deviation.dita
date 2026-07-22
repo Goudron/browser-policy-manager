@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-verify-cis-deviation" xml:lang="de" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Überprüfen und protokollieren Sie eine CIS-Abweichung</title>
+  <title>Eine CIS-Abweichung prüfen und protokollieren</title>
   <shortdesc>Verwenden Sie diese Aufgabe, wenn ein CIS-bezogener Wert beibehalten, geändert oder zur manuellen Überprüfung zurückgelassen wird, anstatt automatisch akzeptiert zu werden.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein Profil, das ein CIS-Element der manuellen Überprüfung, einen Konflikt oder eine absichtliche Abweichung vom generierten Layer anzeigt.</p></prereq>

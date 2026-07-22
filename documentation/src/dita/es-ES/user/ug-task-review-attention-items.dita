@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Revisar Todos los ajustes elementos de atención</title>
-  <shortdesc>Utilice Revisión para clasificar elementos no válidos, de revisión manual CIS, sin procesar, desconocidos, obsoletos e importados antes de la edición de rutina.</shortdesc>
+  <title>Revisar los elementos que requieren atención en «Todos los ajustes»</title>
+  <shortdesc>Use «Revisión» para clasificar los elementos no válidos, de revisión manual CIS, sin procesar, desconocidos, obsoletos e importados antes de una edición habitual.</shortdesc>
   <taskbody>
     <prereq><p>Abra un perfil guardado en Todos los ajustes.</p></prereq>
     <context><p>Revisión es la vista predeterminada de atención primero. Reúne configuraciones que pueden requerir una decisión antes de exportar, comparar o transferir.</p></context>

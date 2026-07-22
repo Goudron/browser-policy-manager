@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM092-M2-08",
+  "target_bpm_version": "0.9.2",
+  "status": "active",
+  "contracts": [
+    "architecture/ui-copy-inventory-0.9.2.md",
+    "architecture/ui-copy-classification-contract-0.9.2.md",
+    "architecture/ui-density-budget-contract-0.9.2.md",
+    "architecture/ui-copy-documentation-disposition-map-0.9.2.md",
+    "architecture/unified-bpm-header-contract-0.9.2.md",
+    "architecture/documentation-audience-editorial-contract-0.9.2.md",
+    "architecture/documentation-search-panel-state-contract-0.9.2.md"
+  ],
+  "source_census": {
+    "candidate_keys": 449,
+    "candidate_words": 5934,
+    "guided_keys": 352,
+    "guided_words": 4782
+  },
+  "known_classification_prefixes": [
+    "profiles.wizard_",
+    "profiles.settings_",
+    "profiles.editor_",
+    "profiles.compare_",
+    "profiles.library_",
+    "profiles.clone_",
+    "profiles.lifecycle_",
+    "profiles.compliance_"
+  ],
+  "known_classification_keys": [
+    "profiles.subtitle",
+    "profiles.locale_hint",
+    "profiles.theme_hint",
+    "profiles.sidebar_hint",
+    "profiles.editor_section_hint",
+    "profiles.context_help_action"
+  ],
+  "guards": [
+    {
+      "id": "reintroduced-explanatory-block",
+      "owner": "BPM092-M3-01 through BPM092-M8-04",
+      "forbidden_markers": [
+        "data-i18n=\"profiles.subtitle\"",
+        "data-i18n=\"profiles.locale_hint\"",
+        "data-i18n=\"profiles.theme_hint\"",
+        "data-i18n=\"profiles.sidebar_hint\"",
+        "data-i18n=\"profiles.editor_section_hint\""
+      ]
+    },
+    {
+      "id": "unclassified-visible-prose",
+      "owner": "BPM092-M3-04 through BPM092-M8-04",
+      "forbidden_markers": ["data-i18n=\"profiles.unclassified_explanatory_copy\""]
+    },
+    {
+      "id": "header-drift",
+      "owner": "BPM092-M3-05 and BPM092-M9-07",
+      "forbidden_markers": ["data-bpm-header-missing-slot", "data-bpm-header-unmatched-focus-order"]
+    },
+    {
+      "id": "independent-documentation-version",
+      "owner": "BPM092-M9-02 and BPM092-M9-07",
+      "forbidden_markers": ["Documentation 0.9.2", "bpm-docs-version"]
+    },
+    {
+      "id": "search-auto-expand",
+      "owner": "BPM092-M9-05 and BPM092-M9-07",
+      "forbidden_markers": ["setSearchExpanded(root, true); runSearch(root, index);"]
+    },
+    {
+      "id": "maintainer-progress-narration",
+      "owner": "BPM092-M10-01 through BPM092-M10-11",
+      "forbidden_markers": ["This task is implemented", "Contact the maintainer for review", "planned for a future release"]
+    }
+  ]
+}

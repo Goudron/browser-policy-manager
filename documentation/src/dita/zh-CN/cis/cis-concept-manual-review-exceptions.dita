@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-manual-review-exceptions" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>手动审查、偏差和异常边界 当地方治理可以更改正确的部署决策时，</title>
+  <title>手动审核、偏差和例外边界</title>
   <shortdesc>当地方治理可以更改正确的部署决策时，BPM 会显示 CIS 相关的手动审核。</shortdesc>
   <conbody>
     <section id="a-manual-review-scope"><title>手动审核范围</title><p>BPM 标记九个路径的手动审核：AppAutoUpdate、BackgroundAppUpdate、DisableAppUpdate、DisableSystemAddonUpdate、Proxy.Locked、Proxy.Mode、SanitizeOnShutdown.FormData、SanitizeOnShutdown.History 和 SanitizeOnShutdown.Sessions。这些路径是审查点，因为企业补丁管理、代理路由和证据保留规则在部署之间可能存在合理的差异。</p></section>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-settings-by-source" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>筛选设置 按来源</title>
+  <title>按来源筛选设置</title>
   <shortdesc>按基线、CIS、手动、导入或原始源属性过滤配置的设置。</shortdesc>
   <taskbody>
     <prereq><p>在 已配置 或源感知列表中打开 所有设置。</p></prereq>

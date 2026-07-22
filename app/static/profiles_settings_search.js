@@ -600,9 +600,7 @@
 
             const trimmedQuery = query.trim();
             if (!trimmedQuery) {
-                wizardSettingsSearchMetaEl.textContent = isAllSettingsRoute
-                    ? t("profiles.settings_search_hint")
-                    : t("profiles.wizard_settings_search_hint");
+                wizardSettingsSearchMetaEl.textContent = "";
                 return;
             }
 

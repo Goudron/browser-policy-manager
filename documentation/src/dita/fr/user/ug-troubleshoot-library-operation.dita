@@ -13,7 +13,7 @@
       <step><cmd>Si l'état actualisé est toujours erroné, réinitialisez la recherche et les filtres et inspectez le profil sous tous les états du cycle de vie.</cmd><info><p>Cela distingue une ligne masquée d'une opération ayant échoué ou terminée.</p></info></step>
     </steps>
     <result><p>Vous savez s'il faut réessayer l'opération, restaurer le profil, arrêter avant la suppression ou continuer à partir de la vue actualisée de la bibliothèque.</p></result>
-    <postreq><p>Récupération : en cas de connexions répétées ou d'échecs d'API, arrêtez les modifications de la bibliothèque et conservez l'état visible pour l'assistance ou l'examen du responsable.</p></postreq>
+    <postreq><p>Si l’erreur se répète, arrêtez le flux de travail et contactez le support avec le message visible, le nom du profil, le canal de schéma et la page active.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-refresh-profile-library"/>

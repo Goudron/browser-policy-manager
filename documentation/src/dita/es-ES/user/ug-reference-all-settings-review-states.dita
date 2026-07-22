@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Todos los ajustes estados de revisión</title>
+  <title>Estados de revisión en «Todos los ajustes»</title>
   <shortdesc>Utilice esta referencia para interpretar estados de revisión limpios, no válidos, de revisión manual de CIS, sin procesar, desconocidos, obsoletos e importados.</shortdesc>
   <refbody>
     <section id="a-overview"><title>Descripción general</title><p>Los estados de revisión explican por qué Todos los ajustes solicita atención antes de que el usuario edite los valores de la rutina.</p></section>

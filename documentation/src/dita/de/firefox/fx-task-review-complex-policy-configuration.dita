@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fx-task-review-complex-policy-configuration" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Überprüfen Sie eine komplexe Richtlinienkonfiguration vor dem Export</title>
+  <title>Eine komplexe Richtlinienkonfiguration vor dem Export prüfen</title>
   <shortdesc>Verwenden Sie einen wiederholbaren Überprüfungsablauf für verschachtelte Objekte, Arrays, Roh-Fallback, Konflikte und kanalspezifische Verfügbarkeit.</shortdesc>
   <taskbody>
     <prereq><p>Ein Profil ist geöffnet und enthält mindestens eine komplexe Richtlinienfamilie oder verwaltete Präferenz.</p></prereq>

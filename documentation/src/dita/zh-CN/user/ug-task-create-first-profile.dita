@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>从库中创建第一个配置文件</title>
+  <title>从库中创建第一个配置档案</title>
   <shortdesc>当没有保存的配置文件适合重复使用时，从库中启动新的引导配置文件草稿。</shortdesc>
   <taskbody>
     <prereq><p>您在图书馆中，想要一个新的配置文件，而不是打开或复制现有的配置文件。</p></prereq>

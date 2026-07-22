@@ -14,6 +14,56 @@ def test_profiles_page_uses_local_js_yaml_asset():
     assert "https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js" not in response.text
 
 
+def test_profiles_header_shows_supported_firefox_channels_on_a_separate_explanatory_line():
+    response = _profiles_page_response()
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    versions = soup.select_one("[data-supported-firefox-versions]")
+    counter = soup.select_one("[data-bpm-header-workspace]")
+
+    assert versions is not None
+    assert versions.name == "p"
+    assert not versions.find_parent("h1")
+    assert [item.get_text(strip=True) for item in versions.find_all("span", recursive=False)] == [
+        "Supported Firefox schemas:",
+        "Release 153,",
+        "ESR 153.0,",
+        "ESR 140.13",
+    ]
+    assert counter is not None
+    assert counter.find("strong", id="workspace-profile-count", recursive=False) is not None
+    assert counter.find("span", id="workspace-profile-label", recursive=False) is not None
+    assert counter.select_one(".compact-counter-meta") is None
+    assert "profiles.nav_library" not in str(counter)
+
+
+def test_profiles_header_uses_the_approved_russian_three_schema_wording():
+    client = make_test_client(app)
+    response = client.get("/profiles", headers={"accept-language": "ru"})
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    versions = soup.select_one("[data-supported-firefox-versions]")
+
+    assert versions is not None
+    assert versions.get_text(" ", strip=True).replace(" ,", ",") == (
+        "Поддерживаемые схемы Firefox: релиз 153, ESR 153.0, ESR 140.13"
+    )
+
+
+def test_profiles_theme_color_matches_the_product_light_surface():
+    response = _profiles_page_response()
+    head_bootstrap = (REPO_ROOT / "app" / "static" / "profiles_head_bootstrap.js").read_text(
+        encoding="utf-8"
+    )
+    platform = (REPO_ROOT / "app" / "static" / "profiles_platform.js").read_text(
+        encoding="utf-8"
+    )
+
+    assert '<meta name="theme-color" content="#edf2f7"' in response.text
+    assert 'resolvedTheme === "dark" ? "#07111a" : "#edf2f7"' in head_bootstrap
+    assert 'resolvedTheme === "dark" ? "#07111a" : "#edf2f7"' in platform
+
+
 def test_json_profile_route_uses_local_monaco_assets():
     client = make_test_client(app)
     create_response = client.post(
@@ -61,7 +111,7 @@ def test_existing_profile_routes_embed_initial_profile_payload():
         "/api/profiles",
         json=build_profile_payload(
             name="Initial Profile Embed Contract",
-            schema_version="release-152",
+            schema_version="release-153",
             flags={"DisableTelemetry": True},
         ),
     )
@@ -72,14 +122,14 @@ def test_existing_profile_routes_embed_initial_profile_payload():
     assert response.status_code == 200
     assert '<script id="profiles-initial-profile" type="application/json">' in response.text
     assert '"name": "Initial Profile Embed Contract"' in response.text
-    assert '"schema_version": "release-152"' in response.text
+    assert '"schema_version": "release-153"' in response.text
     assert '"DisableTelemetry": true' in response.text
 
     soup = BeautifulSoup(response.text, "html.parser")
     assert soup.find(id="current-name").get_text(strip=True) == "Initial Profile Embed Contract"
     assert soup.find(id="save").get_text(strip=True) == "Save"
     assert soup.find(id="profile-name").get("value") == "Initial Profile Embed Contract"
-    assert soup.find(id="editor-profile-id").get_text(strip=True).startswith("#")
+    assert soup.find(id="current-meta").get_text(strip=True).startswith("#")
 
 
 def test_profiles_library_page_uses_library_only_assets():
@@ -495,7 +545,7 @@ def test_profiles_page_uses_request_locale_for_initial_render():
     assert response.status_code == 200
     assert '<html lang="ru">' in response.text
     assert "Библиотека" in response.text
-    assert "Менеджер профилей браузера" in response.text
+    assert "Browser Policy Manager" in response.text
     assert "Поиск по имени профиля" in response.text
     assert "Сравнение двух профилей" not in response.text
     assert "Пошаговый мастер" not in response.text
@@ -611,14 +661,11 @@ def test_profiles_documentation_links_remain_visible_for_stale_dev_artifact(
     assert response.status_code == 200
     soup = BeautifulSoup(response.text, "html.parser")
     header_link = soup.find("a", {"class": "compact-toolbar-docs-link"})
-    context_link = soup.find("a", {"data-context-help-surface": "library"})
     import_link = soup.find("a", {"data-context-help-target": "import-firefox-policies"})
 
     assert header_link is not None
-    assert context_link is not None
     assert import_link is not None
     assert header_link["href"] == "/help/?locale=ru"
-    assert context_link["href"] == "/help/?locale=ru"
     assert import_link["href"] == "/help/?locale=ru"
     assert '"/help/?locale=en"' in header_link["data-documentation-links"]
     assert '"/help/?locale=zh-CN"' in import_link["data-documentation-links"]
@@ -638,7 +685,6 @@ def test_profiles_contextual_help_links_resolve_from_manifest_for_five_surfaces(
     )
     profile_id = profile_response.json()["id"]
     routes = {
-        "/profiles": ("library", "ug-task-use-profile-library"),
         "/profiles/compare": ("compare", "ug-task-compare-profiles"),
         "/profiles/new": ("guided", "ug-task-use-guided-editor"),
         f"/profiles/{profile_id}/settings": ("settings", "ug-task-use-all-settings"),

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-guided-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Überprüfen Sie das geführte Profil</title>
+  <title>Das geführte Profil prüfen</title>
   <shortdesc>Verwenden Sie Schritt 6, um die Konfiguration vor der Übergabe im Klartext zu überprüfen.</shortdesc>
   <taskbody>
     <prereq><p>Sie haben die geführten Änderungen, die Sie beibehalten möchten, abgeschlossen.</p></prereq>

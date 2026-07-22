@@ -43,6 +43,13 @@ schema bump rather than a follow-up cleanup.
    that changes documented screens must queue localized screenshot review before release readiness.
 8. Do not add AI/RAG/embeddings/generative search behavior as part of a schema bump. Firefox
    product policies about AI still remain valid documentation subject matter.
+9. When the schema bump changes compact UI copy or documentation shell behavior, cite the exact
+   UI-copy classification disposition. Preserve labels, state, validation, consequences,
+   unavailable reasons, accessible names, and recovery at the action; do not restore routine
+   explanation. Every affected circled-info target needs a localized manifest-backed owner or an
+   explicit reviewed no-link disposition. Recheck audience/style review, normalized BPM header
+   parity, and one derived BPM product version. Search, URL/history hydration, result updates, and
+   clear must not reopen a collapsed advanced-filter panel.
 
 ## CIS refresh
 
@@ -97,6 +104,11 @@ screenshots as follow-up work.
 8. Run the focused CIS checks first, then metadata/link/build checks. If generated artifacts,
    manifest data, search data, or package inputs changed, also run reproducibility and package
    verification before release readiness.
+9. If the refresh affects compact UI copy or documentation shell/search, apply the exact UI-copy
+   disposition and retain essential or safety/accessibility meaning at the action. Every changed
+   circled-info target has a localized manifest-backed owner or a reviewed no-link disposition;
+   review audience/style, normalized BPM header parity, and one derived BPM product version. Search,
+   URL/history hydration, results, and clear must not reopen a collapsed advanced-filter panel.
 
 ## API, Administrator/DevOps, and operations refresh
 
@@ -169,6 +181,14 @@ change, treat Administrator/DevOps documentation drift as part of the same produ
   documentation/tests/contract/test_wsl_source_install_validation_runner.py \
   documentation/tests/contract/test_documentation_polish_regression_gates.py
 ```
+
+11. When a deployment, update, integration, or API change affects compact UI copy or the
+    documentation shell, apply the UI-copy classification rather than restoring explanatory prose.
+    Keep essential and safety/accessibility meaning at the action; reconcile each circled-info
+    target with a localized manifest-backed owner or a reviewed no-link disposition. Recheck
+    audience/style review, normalized BPM header parity, and one derived BPM product version.
+    Search, URL/history hydration, results, and clear must not reopen a collapsed advanced-filter
+    panel.
 
 ## Focused checks
 

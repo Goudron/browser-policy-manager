@@ -5,9 +5,9 @@
   <shortdesc>识别当前的 BPM 配置源，记录有效的运行时值，并将普通设置与不受支持的秘密管理期望分开。</shortdesc>
   <taskbody>
     <prereq><p>BPM 从 Linux 上的源代码或通过 WSL 部署，管理员可以检查 shell 环境、可选的 <codeph>.env</codeph> 文件和源代码签出。</p></prereq>
-    <context><p>BPM 从带有 <codeph>BPM_</codeph> 前缀的环境变量和存储库根 <codeph>.env</codeph> 文件加载设置。配置模型位于 <codeph>app/core/config.py</codeph> 中。此版本未定义应用程序秘密存储、凭证库、API 令牌设置、加密密钥设置或生产配置文件。</p></context>
+    <context><p>BPM 从带有 <codeph>BPM_</codeph> 前缀的环境变量和存储库根 <codeph>.env</codeph> 文件加载设置。配置模型位于 已记录的默认值 中。此版本未定义应用程序秘密存储、凭证库、API 令牌设置、加密密钥设置或生产配置文件。</p></context>
     <steps>
-      <step><cmd>列出用于此运行的配置源。</cmd><info><p>记录值是来自 shell 导出、本地 <codeph>.env</codeph> 还是 <codeph>app/core/config.py</codeph> 中的默认值。将 <codeph>.env</codeph> 保留在结账本地，并且不提交它。</p></info></step>
+      <step><cmd>列出用于此运行的配置源。</cmd><info><p>记录值是来自 shell 导出、本地 <codeph>.env</codeph> 还是 已记录的默认值 中的默认值。将 <codeph>.env</codeph> 保留在结账本地，并且不提交它。</p></info></step>
       <step><cmd>记录影响流程行为的运行时设置。</cmd><info><p>包括 <codeph>BPM_APP_NAME</codeph>、<codeph>BPM_APP_VERSION</codeph>、<codeph>BPM_DEBUG</codeph>、<codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_RELOAD</codeph>、<codeph>BPM_API_PREFIX</codeph>、<codeph>BPM_DEFAULT_LOCALE</codeph>、<codeph>BPM_SUPPORTED_LOCALES</codeph>、<codeph>BPM_I18N_DIR</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。默认值是本地源默认值，而不是生产策略。</p></info></step>
       <step><cmd>分别记录数据、模式和网络相关设置。</cmd><info><p>跟踪 <codeph>BPM_DATABASE_URL</codeph>、<codeph>BPM_DB_ECHO</codeph>、<codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph>、<codeph>BPM_SCHEMA_BASE_URL</codeph>、<codeph>BPM_SCHEMA_CACHE_DIR</codeph> 和 <codeph>BPM_SCHEMA_HTTP_TIMEOUT</codeph>。将数据库 URL 和网络来源视为操作证据，即使它们不包含密码。</p></info></step>
       <step><cmd>对 BPM 配置示例保密。</cmd><info><note type="warning">BPM 源部署文档不提供身份验证设置、托管机密、静态加密配置、令牌轮换、租户隔离或机密编辑保证。如果您的环境需要这些控件，请将它们记录为外部平台控件而不是 BPM 支持的功能。</note></info></step>

@@ -4,7 +4,7 @@
 <step><cmd>Prüfen Sie Ubuntu und installieren Sie die Voraussetzungen.</cmd><info><codeblock conref="../../en/admin/admin-task-install-ubuntu-26-04-source.dita#admin-task-install-ubuntu-26-04-source/distro-prep"/></info></step>
 <step><cmd>Checken Sie die freigegebene Referenz aus.</cmd><info><codeblock conref="../../en/admin/admin-task-install-ubuntu-26-04-source.dita#admin-task-install-ubuntu-26-04-source/checkout"/></info></step>
 <step><cmd>Erstellen Sie die Umgebung, installieren Sie BPM und migrieren Sie die Datenbank.</cmd><info><codeblock conref="../../en/admin/admin-task-install-ubuntu-26-04-source.dita#admin-task-install-ubuntu-26-04-source/install"/></info></step>
-<step><cmd>Validieren und bauen Sie die Dokumentation.</cmd><info><codeblock conref="../../en/admin/admin-task-install-ubuntu-26-04-source.dita#admin-task-install-ubuntu-26-04-source/docs"/></info></step>
+
 <step><cmd>Starten Sie BPM im Vordergrund.</cmd><info><codeblock conref="../../en/admin/admin-task-install-ubuntu-26-04-source.dita#admin-task-install-ubuntu-26-04-source/start"/></info></step>
 <step><cmd>Prüfen Sie Endpunkte, Oberfläche und Protokolle in einem zweiten Terminal.</cmd><info><codeblock conref="../../en/admin/admin-task-install-ubuntu-26-04-source.dita#admin-task-install-ubuntu-26-04-source/verify"/></info></step>
 <step><cmd>Beachten Sie die Abbruchgrenze.</cmd><info><p>Drücken Sie bei einem Fehler <codeph>Ctrl+C</codeph>, bewahren Sie Ausgabe und Protokolle auf und führen Sie kein <codeph>alembic downgrade</codeph> aus.</p></info></step>

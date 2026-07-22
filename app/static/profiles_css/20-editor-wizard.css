@@ -1125,10 +1125,6 @@
             font-size: 0.92rem;
         }
 
-        .wizard-context-copy {
-            font-size: 0.86rem;
-        }
-
         .wizard-layout {
             display: grid;
             grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
@@ -1147,8 +1143,9 @@
 
         .wizard-content {
             display: grid;
-            gap: 16px;
+            gap: 12px;
             min-width: 0;
+            padding-inline-start: var(--compact-space-3);
         }
 
         .wizard-panels,
@@ -1213,16 +1210,14 @@
 
         .wizard-panels {
             display: grid;
-            gap: 12px;
+            gap: 10px;
         }
 
         .wizard-panel {
             display: none;
-            gap: 14px;
-            border-radius: 22px;
-            padding: 16px;
-            border: 1px solid var(--surface-soft-border);
-            background: var(--surface-soft-bg);
+            gap: 12px;
+            padding: 0;
+            padding-inline: var(--compact-space-4);
         }
 
         .wizard-panel.is-active {
@@ -1232,7 +1227,7 @@
         .wizard-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
+            gap: 12px;
         }
 
         .wizard-field-full {
@@ -1258,37 +1253,24 @@
 
         .wizard-baseline-stack {
             display: grid;
-            gap: 16px;
+            gap: 10px;
         }
 
         .wizard-baseline-group {
             display: grid;
-            gap: 12px;
+            gap: 8px;
         }
 
         .wizard-baseline-group--recommended {
-            padding: 14px;
-            border-radius: 22px;
-            border: 1px solid rgba(15, 118, 110, 0.16);
-            background:
-                radial-gradient(circle at top right, rgba(15, 118, 110, 0.09), transparent 36%),
-                rgba(248, 250, 252, 0.68);
+            padding: 0;
         }
 
         .wizard-baseline-group--scenario {
-            padding: 14px;
-            border-radius: 22px;
-            border: 1px solid rgba(198, 111, 50, 0.18);
-            background:
-                radial-gradient(circle at top left, rgba(198, 111, 50, 0.1), transparent 34%),
-                rgba(255, 251, 235, 0.74);
+            padding: 0;
         }
 
         .wizard-baseline-group--cis {
-            padding: 14px;
-            border-radius: 22px;
-            border: 1px solid rgba(37, 99, 235, 0.14);
-            background: rgba(239, 246, 255, 0.62);
+            padding: 0;
         }
 
         .wizard-baseline-group-head {
@@ -1312,12 +1294,9 @@
 
         .wizard-baseline-summary-panel {
             display: grid;
-            gap: 10px;
+            gap: 6px;
             align-content: start;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--surface-soft-border);
-            background: rgba(248, 250, 252, 0.54);
+            padding: 0;
         }
 
         .wizard-baseline-summary {
@@ -1458,10 +1437,7 @@
         }
 
         .wizard-home-surface-group {
-            border-radius: 8px;
-            border: 1px solid var(--surface-soft-border);
-            padding: 12px;
-            background: rgba(248, 250, 252, 0.44);
+            padding: 0;
         }
 
         .wizard-home-surface-group[data-home-surface-collapsed="true"] {
@@ -1492,10 +1468,10 @@
         .wizard-starter-card {
             position: relative;
             display: grid;
-            gap: 8px;
+            gap: 6px;
             align-content: start;
             min-width: 0;
-            min-height: 150px;
+            min-height: 0;
             width: 100%;
             max-width: 100%;
             text-align: left;
@@ -1504,14 +1480,10 @@
             overflow-wrap: anywhere;
             cursor: pointer;
             border-radius: 12px;
-            padding: 16px 18px;
+            padding: 12px 14px;
             border: 1px solid var(--surface-soft-border);
             background: var(--raised-surface-bg);
             transition: border-color 160ms ease, transform 160ms ease, background-color 160ms ease;
-        }
-
-        .wizard-starter-card--recommended {
-            min-height: 176px;
         }
 
         .wizard-starter-card--secondary {
@@ -1526,10 +1498,6 @@
             border-radius: 8px;
             background: var(--neutral-surface-bg);
             box-shadow: none;
-        }
-
-        .wizard-scenario-card {
-            min-height: 148px;
         }
 
         .wizard-cis-card {
@@ -1589,14 +1557,6 @@
             overflow-wrap: anywhere;
         }
 
-        .wizard-starter-copy {
-            min-width: 0;
-            font-size: 0.87rem;
-            line-height: 1.6;
-            color: var(--muted);
-            overflow-wrap: anywhere;
-        }
-
         .wizard-starter-card--secondary .wizard-starter-title {
             font-size: 0.88rem;
         }
@@ -1604,16 +1564,6 @@
         .wizard-starter-card--secondary .wizard-starter-badge {
             padding: 0.24rem 0.52rem;
             font-size: 0.68rem;
-        }
-
-        .wizard-starter-note {
-            margin-top: auto;
-            min-width: 0;
-            font-size: 0.78rem;
-            line-height: 1.5;
-            color: var(--ink-soft);
-            font-weight: 600;
-            overflow-wrap: anywhere;
         }
 
         .wizard-starter-badge {
@@ -1641,7 +1591,7 @@
 
         .wizard-section-group {
             display: grid;
-            gap: 14px;
+            gap: 10px;
         }
 
         .wizard-local-index {
@@ -1696,12 +1646,9 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
-            border-radius: 18px;
-            padding: 12px 14px;
-            border: 1px solid var(--surface-soft-border);
-            background: linear-gradient(180deg, var(--raised-surface-bg), var(--neutral-surface-muted-bg));
+            padding: 0;
         }
 
         .wizard-trust-detail-head {
@@ -1714,11 +1661,8 @@
 
         .wizard-stage-panel {
             align-content: start;
-            gap: 18px;
-            border-radius: 20px;
-            padding: 14px;
-            border: 1px solid rgba(148, 163, 184, 0.14);
-            background: var(--neutral-surface-bg);
+            gap: 12px;
+            padding: 0;
         }
 
         .wizard-stage-kicker {
@@ -1733,29 +1677,14 @@
         }
 
         .wizard-fine-tuning-bar {
-            border-radius: 18px;
-            padding: 12px 14px;
-            border: 1px dashed var(--surface-soft-border);
-            background: var(--neutral-surface-bg);
+            padding: 0;
         }
 
         .wizard-fine-tuning-panel {
             align-content: start;
-            gap: 18px;
-            border-radius: 20px;
-            padding: 14px;
-            border: 1px dashed var(--surface-soft-border);
-            background: rgba(248, 250, 252, 0.48);
-        }
-
-        .wizard-fine-tuning-panel > .wizard-stage-kicker {
-            padding-bottom: 6px;
-            border-bottom: 1px dashed rgba(148, 163, 184, 0.24);
-        }
-
-        .wizard-fine-tuning-panel--nested {
-            padding: 16px;
-            background: var(--raised-surface-bg);
+            gap: 12px;
+            padding: 10px 0 0;
+            border-top: 1px dashed var(--surface-soft-border);
         }
 
         .wizard-outcome-group {
@@ -1989,9 +1918,9 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             min-width: 0;
-            min-height: 88px;
+            min-height: 56px;
             text-align: left;
             width: 100%;
             max-width: 100%;
@@ -2160,7 +2089,7 @@
 
         .wizard-section-heading {
             display: grid;
-            gap: 6px;
+            gap: 2px;
         }
 
         .wizard-step-map {
@@ -2265,31 +2194,23 @@
 
         .wizard-subsection-card {
             display: grid;
-            gap: 14px;
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid var(--surface-soft-border);
-            background: var(--raised-surface-bg);
-        }
-
-        .wizard-subsection-card--soft {
-            background: rgba(248, 250, 252, 0.56);
+            gap: 10px;
+            padding: 0;
         }
 
         .wizard-subsection-card--compact {
-            gap: 12px;
-            padding: 14px 16px;
+            gap: 8px;
         }
 
         .wizard-disclosure {
             display: grid;
-            gap: 14px;
+            gap: 8px;
         }
 
         .wizard-disclosure-head {
             display: grid;
             grid-template-columns: minmax(0, 1fr) auto;
-            gap: 12px;
+            gap: 8px;
             align-items: start;
         }
 
@@ -2300,8 +2221,8 @@
 
         .wizard-disclosure-panel {
             display: grid;
-            gap: 14px;
-            padding-top: 12px;
+            gap: 10px;
+            padding-top: 8px;
             border-top: 1px dashed rgba(148, 163, 184, 0.28);
         }
 
@@ -2446,13 +2367,6 @@
             font-size: 0.94rem;
             font-weight: 700;
             color: var(--ink);
-        }
-
-        .wizard-toggle-copy {
-            margin-top: 4px;
-            font-size: 0.84rem;
-            line-height: 1.55;
-            color: var(--muted);
         }
 
         .wizard-review {
@@ -3234,18 +3148,6 @@
             white-space: nowrap;
         }
 
-        .profile-clone-handoff-panel {
-            display: grid;
-            gap: 10px;
-        }
-
-        .profile-clone-handoff-copy {
-            margin: 0;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--muted);
-        }
-
         .dock-summary {
             display: grid;
             gap: 8px;
@@ -3628,20 +3530,20 @@
         }
 
         .editor-chrome-panel {
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: var(--compact-radius);
+            padding: var(--compact-space-3);
             box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
         }
 
         .editor-chrome-grid {
             display: grid;
-            gap: 12px;
+            gap: var(--compact-space-3);
         }
 
         .editor-chrome-heading {
             display: grid;
             grid-template-columns: minmax(0, 1fr) auto;
-            gap: 14px;
+            gap: var(--compact-space-3);
             align-items: start;
         }
 
@@ -3657,80 +3559,31 @@
         .editor-chrome-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: var(--compact-space-2);
             justify-content: flex-end;
         }
 
         .editor-chrome-actions .button-base {
-            min-height: 38px;
-            padding: 0 14px;
-        }
-
-        .editor-chrome-workbar {
-            display: grid;
-            grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1fr);
-            gap: 10px;
-            align-items: stretch;
+            min-height: var(--compact-control-target);
+            padding-inline: var(--compact-space-3);
         }
 
         .editor-chrome-fields {
             display: grid;
             grid-template-columns: minmax(0, 1fr) minmax(180px, 0.62fr);
-            gap: 10px;
+            gap: var(--compact-space-2);
             align-items: start;
         }
 
         .editor-chrome-fields .soft-input {
-            min-height: 40px;
+            min-height: var(--compact-control-target);
             padding-top: 0.62rem;
             padding-bottom: 0.62rem;
         }
 
-        .editor-chrome-status {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 8px;
-        }
-
-        .editor-chrome-status-item {
-            display: grid;
-            gap: 4px;
-            min-width: 0;
-            border: 1px solid rgba(148, 163, 184, 0.16);
-            border-radius: 14px;
-            background: var(--raised-surface-bg);
-            padding: 9px 10px;
-        }
-
-        .editor-chrome-status-item strong {
-            min-width: 0;
-            color: var(--ink);
-            font-size: 0.84rem;
-            line-height: 1.35;
-            overflow-wrap: anywhere;
-        }
-
         .editor-chrome-mode-switch {
-            display: grid;
-            grid-template-columns: minmax(220px, 0.45fr) minmax(0, 1fr);
-            gap: 10px;
-            align-items: start;
             border-top: 1px solid rgba(148, 163, 184, 0.16);
-            padding-top: 10px;
-        }
-
-        .editor-chrome-mode-copy {
-            display: grid;
-            gap: 4px;
-            min-width: 0;
-        }
-
-        .editor-chrome-mode-copy p,
-        .editor-chrome-save-hint {
-            margin: 0;
-            color: var(--muted);
-            font-size: 0.82rem;
-            line-height: 1.45;
+            padding-top: var(--compact-space-2);
         }
 
         .editor-mode-grid {
@@ -3741,19 +3594,12 @@
 
         .editor-mode-option {
             min-width: 0;
-            min-height: 58px;
+            min-height: var(--compact-control-target);
             padding: 9px 11px;
-            justify-content: stretch;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2px;
             white-space: normal;
-        }
-
-        .editor-mode-option-copy {
-            display: grid;
-            gap: 0.18rem;
-            min-width: 0;
-            width: 100%;
-            text-align: left;
-            overflow-wrap: anywhere;
         }
 
         .editor-mode-option-title {
@@ -3764,21 +3610,16 @@
             overflow-wrap: anywhere;
         }
 
-        .editor-mode-option-body {
-            min-width: 0;
-            color: var(--muted);
-            font-size: 0.78rem;
-            font-weight: 500;
-            line-height: 1.45;
-            overflow-wrap: anywhere;
-        }
-
         .editor-mode-option[aria-current="page"] .editor-mode-option-title {
             color: #fff;
         }
 
-        .editor-mode-option[aria-current="page"] .editor-mode-option-body {
-            color: rgba(255, 255, 255, 0.86);
+        .editor-mode-option-state {
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 600;
+            line-height: 1.25;
+            text-align: center;
         }
 
         .editor-chrome-details {
@@ -3799,7 +3640,7 @@
 
         .editor-chrome-detail-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             margin-top: 10px;
         }
@@ -4577,27 +4418,15 @@
             box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.1);
         }
 
-        html[data-theme="dark"] .wizard-stage-bar,
-        html[data-theme="dark"] .wizard-stage-panel,
         html[data-theme="dark"] .wizard-stage-status,
-        html[data-theme="dark"] .wizard-fine-tuning-panel,
-        html[data-theme="dark"] .wizard-subsection-card {
+        html[data-theme="dark"] .wizard-security-status {
             background: rgba(15, 23, 42, 0.62);
             border-color: rgba(148, 163, 184, 0.16);
-        }
-
-        html[data-theme="dark"] .wizard-fine-tuning-bar {
-            background: rgba(15, 23, 42, 0.48);
-            border-color: rgba(148, 163, 184, 0.18);
         }
 
         html[data-theme="dark"] .wizard-baseline-summary-item {
             background: rgba(15, 23, 42, 0.72);
             border-color: rgba(148, 163, 184, 0.18);
-        }
-
-        html[data-theme="dark"] .wizard-fine-tuning-panel--nested {
-            background: rgba(15, 23, 42, 0.72);
         }
 
         html[data-theme="dark"] .wizard-summary-row[data-summary-tone="default"] {
@@ -4755,10 +4584,7 @@
 
         html[data-theme="dark"] .surface-soft-box,
         html[data-theme="dark"] .theme-subcard,
-        html[data-theme="dark"] .editor-chrome-status-item,
         html[data-theme="dark"] .editor-chrome-detail-grid > *,
-        html[data-theme="dark"] .profile-clone-handoff-panel,
-        html[data-theme="dark"] .profile-lifecycle-panel,
         html[data-theme="dark"] .wizard-step-memory,
         html[data-theme="dark"] .dock-state-summary,
         html[data-theme="dark"] .dock-action-group--lifecycle,
@@ -4769,7 +4595,6 @@
         }
 
         html[data-theme="dark"] .editor-chrome-title,
-        html[data-theme="dark"] .editor-chrome-status-item strong,
         html[data-theme="dark"] .editor-mode-option-title {
             color: #f8fafc;
         }
@@ -4829,8 +4654,6 @@
         html[data-theme="dark"] .compare-target-copy,
         html[data-theme="dark"] .json-context-empty-copy,
         html[data-theme="dark"] .json-download-copy,
-        html[data-theme="dark"] .profile-lifecycle-copy,
-        html[data-theme="dark"] .profile-clone-handoff-copy,
         html[data-theme="dark"] .workspace-helper-copy,
         html[data-theme="dark"] .workspace-scope-body,
         html[data-theme="dark"] .workspace-scope-summary-copy,

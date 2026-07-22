@@ -79,8 +79,7 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
 
     assert ".theme-subcard {" in css
     assert 'html[data-theme="dark"] .theme-subcard,' in css
-    assert ".editor-chrome-status-item {" in css
-    assert 'html[data-theme="dark"] .editor-chrome-status-item,' in css
+    assert ".editor-chrome-panel {" in css
     assert 'html[data-theme="dark"] [class~="bg-white/80"]' in css
     assert 'html[data-theme="dark"] [class~="border-white/70"]' in css
     assert 'html[data-theme="dark"] [class~="border-slate-200"]' in css
@@ -93,7 +92,8 @@ def test_theme_safe_surface_cards_and_dark_white_override_contract():
     assert "color-scheme: light;" in css
     assert "color-scheme: dark;" in css
     assert 'url("data:image/svg+xml,' in css
-    assert editor_template.count("editor-chrome-status-item") >= 4
+    assert "editor-chrome-status-item" not in editor_template
+    assert 'id="profile-type"' in editor_template
     assert "theme-subcard" not in settings_template
     assert "data-settings-preferences-compat" in settings_template
 
@@ -754,3 +754,9 @@ def test_profiles_page_preserves_final_guided_ux_contract():
 
     assert response.status_code == 200
     assert_contains_all(response.text, PROFILES_PAGE_GUIDED_UX_REGRESSION_TOKENS)
+    for retired_step_copy in (
+        "Task-first setup",
+        "Full visual catalog",
+        "Raw policies.json editing",
+    ):
+        assert retired_step_copy not in response.text

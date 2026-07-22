@@ -174,7 +174,7 @@ def test_search_facet_and_integrity_contracts_are_release_gate_ready() -> None:
         "cis-settings-guide",
         "administrator-guide",
     ]
-    assert facets["firefox_channel"] == ["esr-140.12", "release-152", None]
+    assert facets["firefox_channel"] == ["esr-140.13", "esr-153.0", "release-153", None]
     assert facets["policy_category"] == [
         "advanced",
         "ai_smart",

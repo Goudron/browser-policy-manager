@@ -21,36 +21,38 @@ Drift-check command:
 
 ## Scope And Sources
 
-The inventory derives only from the two bundled active schemas registered in
+The inventory derives only from the three bundled active schemas registered in
 `app/core/schema_channels.py`, their normalized `PolicyDefinition` objects and UI registry
 metadata, and the known managed-preference catalog returned by
 `app.web.firefox_preferences.get_wizard_preferences_catalog()`.
 
 It does not scan downloaded upstream corpora or claim support for policy keys absent from the
-selected bundled schema. Schema source metadata for both channels is
-`mozilla-policy-templates-v7.12`.
+selected bundled schema. Schema source metadata is `mozilla-policy-templates-v8.0` for Release 153
+and ESR 153.0, and `mozilla-policy-templates-v7.12` for ESR 140.13.
 
 ## Channel Coverage
 
 | Channel | Mozilla version | Policies | Value shapes | UI support |
 | --- | --- | ---: | --- | --- |
-| `esr-140.12` | `140.12` | 112 | 55 boolean, 33 object, 14 string, 8 array, 2 integer | 45 mapped, 67 fallback |
-| `release-152` | `152.0` | 120 | 59 boolean, 37 object, 14 string, 8 array, 2 integer | 51 mapped, 69 fallback |
+| `release-153` | `153.0` | 121 | 60 boolean, 37 object, 14 string, 8 array, 2 integer | 51 mapped, 70 fallback |
+| `esr-153.0` | `153.0` | 121 | 60 boolean, 37 object, 14 string, 8 array, 2 integer | 51 mapped, 70 fallback |
+| `esr-140.13` | `140.13` | 112 | 55 boolean, 33 object, 14 string, 8 array, 2 integer | 45 mapped, 67 fallback |
 
-The union contains 120 stable policy IDs. All 112 ESR policies also exist in Release and have
-identical raw schema definitions in the current pair. Eight policies are Release-only:
+The union contains 121 stable policy IDs. The 112 policies in ESR 140.13 also exist in Release 153
+and ESR 153.0. Nine policies are unavailable in ESR 140.13:
 
 - `AIControls`;
 - `BrowserDataBackup`;
 - `DisableRemoteImprovements`;
+- `DisableRemoteSettingsAndAcceptSecurityConsequences`;
 - `GenerativeAI`;
 - `IPProtectionAvailable`;
 - `LocalNetworkAccess`;
 - `VisualSearchEnabled`;
 - `XSLTEnabled`.
 
-There are no ESR-only policies and no changed definitions among the 112 common policies. The JSON
-inventory nevertheless stores a SHA-256 fingerprint and
+There are no ESR-only policies. `Cookies`, `ExtensionSettings`, and `Homepage` have changed
+definitions across the supported channels. The JSON inventory stores a SHA-256 fingerprint and
 `definition_changed_across_channels` for every policy so later channel updates cannot hide a
 changed common definition.
 
@@ -107,8 +109,9 @@ supported policy or known-preference topics.
 
 ## Audit Result
 
-- All 120 supported policy IDs have unique stable documentation IDs and channel records.
-- Release-only policies are explicit; ESR-only and changed-common counts are both zero.
+- All 121 supported policy IDs have unique stable documentation IDs and channel records.
+- Policies unavailable in ESR 140.13 and changed common definitions are explicit; no policy is
+  ESR-only.
 - Schema value shapes, version metadata, fingerprints, UI support level, and unknown-field behavior
   are recorded per available channel.
 - All 62 known managed preferences have unique documentation IDs and UI targets.

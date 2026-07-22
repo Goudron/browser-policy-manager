@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Elija un canal de esquema de Firefox</title>
-  <shortdesc>Elija entre Firefox ESR 140.12 y Firefox Release 152 antes de importar, validar o editar un perfil.</shortdesc>
+  <title>Elegir un canal de esquema de Firefox</title>
+  <shortdesc>Elija Firefox Release 153, Firefox ESR 153.0 o Firefox ESR 140.13 antes de importar, validar o editar un perfil.</shortdesc>
   <taskbody>
     <prereq><p>Inicie esta tarea antes de crear un perfil, importar policies.json o validar un documento JSON sin formato.</p></prereq>
-    <context><p>El canal de esquema decide qué políticas de Firefox puede validar BPM y qué controles se muestran como compatibles. ESR 140.12 es el canal de soporte prolongado predeterminado; La versión 152 es el canal principal actual e incluye controles de políticas más nuevos, como AIControls y VisualSearchEnabled.</p></context>
+    <context><p>El canal de esquema determina qué políticas de Firefox puede validar BPM y qué controles se muestran como compatibles. Release 153 y ESR 153.0 incluyen controles actuales como AIControls y VisualSearchEnabled; ESR 140.13 sigue siendo un canal de soporte prolongado independiente. BPM no migra perfiles automáticamente entre canales ESR.</p></context>
     <steps>
-      <step><cmd>Compare la flota de navegadores de destino con los canales admitidos: ESR 140.12 o versión 152.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
-      <step><cmd>Elija ESR 140.12 cuando el perfil esté destinado a la implementación de la versión de soporte extendido compatible.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
-      <step><cmd>Elija la versión 152 cuando el perfil necesite controles actuales de solo la versión, incluidas las políticas de búsqueda visual y AI compatibles.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Compare la flota de navegadores de destino con los canales admitidos: Release 153, ESR 153.0 y ESR 140.13.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Elija ESR 140.13 o ESR 153.0 para la implementación de Extended Support Release compatible correspondiente.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
+      <step><cmd>Elija Release 153 o ESR 153.0 cuando el perfil necesite controles actuales, incluidas las políticas de IA y búsqueda visual compatibles.</cmd><info><p>Resultado esperado: el canal de esquema seleccionado permanece visible e intencional.</p></info></step>
       <step><cmd>Validar después de elegir el canal y antes de guardar, exportar o transferir.</cmd><info><note type="warning">La validación puede cambiar de válida a no válida cuando cambia el canal del esquema. Confirme el canal antes de guardar o exportar.</note></info></step>
     </steps>
     <result><p>El perfil utiliza el canal de esquema que coincide con la implementación prevista de Firefox.</p></result>
-    <postreq><p>Recuperación: si la validación informa configuraciones no compatibles, no disponibles, obsoletas o desconocidas, confirme el canal del esquema antes de editar los valores de la política.</p></postreq>
+    <postreq><p>Recuperación: si la validación informa configuraciones no compatibles, no disponibles, obsoletas o desconocidas, confirme el canal del esquema antes de editar los valores de la política. El paso de ESR 140.13 a ESR 153.0 requiere una decisión explícita sobre el canal de destino y una revisión.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

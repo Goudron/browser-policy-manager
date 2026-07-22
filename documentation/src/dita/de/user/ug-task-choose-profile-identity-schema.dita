@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-profile-identity-schema" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Legen Sie den Profilidentität- und Schemakanal fest</title>
+  <title>Profilidentität und Schemakanal festlegen</title>
   <shortdesc>Wählen Sie den gespeicherten Profilnamen und den Firefox-Schemakanal aus, bevor Sie die geführten Einstellungen konfigurieren.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein neues oder gespeichertes Profil in Geführter Editor.</p></prereq>
@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Bestätigen Sie, dass Sie den beabsichtigten Profilentwurf bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Geben Sie einen eindeutigen Profilnamen ein.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Wählen Sie den Firefox-Schemakanal, z. B. Release 152 oder ESR 140.12.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Wählen Sie den Firefox-Schemakanal, z. B. Release 153 oder ESR 140.13.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie, ob der ausgewählte Kanal die sichtbaren Steuerelemente ändert, bevor Sie fortfahren.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Der geführte Entwurf verfügt über einen stabilen Identitäts- und Schemakanal.</p></result>

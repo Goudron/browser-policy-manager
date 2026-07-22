@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-compare-profiles" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Abrir Comparar desde la Biblioteca</title>
+  <title>Abrir «Comparar» desde la biblioteca</title>
   <shortdesc>Abra la página de comparación en una nueva pestaña antes de seleccionar dos perfiles guardados.</shortdesc>
   <taskbody>
     <prereq><p>La biblioteca está abierta y existen al menos dos perfiles guardados.</p></prereq>

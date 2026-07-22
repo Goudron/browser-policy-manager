@@ -79,7 +79,7 @@ def test_model_covers_supported_channels_simple_complex_and_release_only_policy_
     value_model = model["value_shape_model"]
 
     assert channel_model["supported_channels"] == list(inventory["channels"])
-    assert channel_model["channel_scope_values"] == ["both", "release-only", "esr-only"]
+    assert channel_model["channel_scope_values"] == ["both", "partial", "release-only", "esr-only"]
     assert value_model["value_types"] == ["boolean", "string", "integer", "array", "object"]
     assert value_model["simple_policy_types"] == ["boolean", "string", "integer"]
     assert value_model["complex_policy_types"] == ["array", "object"]
@@ -94,12 +94,13 @@ def test_model_covers_supported_channels_simple_complex_and_release_only_policy_
     assert {entry["value_type"] for entry in simple["channels"].values()} == {"boolean"}
     assert complex_object["channel_scope"] == "both"
     assert {entry["value_type"] for entry in complex_object["channels"].values()} == {"object"}
-    assert preserve_unknown["channels"]["esr-140.12"]["ui"]["preserve_unknown_fields"] is True
-    assert release_object["channel_scope"] == "release-only"
-    assert set(release_object["channels"]) == {"release-152"}
-    assert release_object["channels"]["release-152"]["value_type"] == "object"
-    assert release_boolean["channel_scope"] == "release-only"
-    assert release_boolean["channels"]["release-152"]["value_type"] == "boolean"
+    assert preserve_unknown["channels"]["esr-140.13"]["ui"]["preserve_unknown_fields"] is True
+    assert release_object["channel_scope"] == "partial"
+    assert set(release_object["channels"]) == {"esr-153.0", "release-153"}
+    assert release_object["channels"]["release-153"]["value_type"] == "object"
+    assert release_boolean["channel_scope"] == "partial"
+    assert set(release_boolean["channels"]) == {"esr-153.0", "release-153"}
+    assert release_boolean["channels"]["release-153"]["value_type"] == "boolean"
 
     for policy in (simple, complex_object, preserve_unknown, release_object, release_boolean):
         assert policy["doc_id"] == model["topic"]["topic_id_pattern"].format(

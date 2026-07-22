@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-missing-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>从丢失的配置文件路径中恢复</title>
+  <title>从缺失的配置档案路径中恢复</title>
   <shortdesc>当书签、过时选项卡或编辑器 URL 报告未找到配置文件时进行恢复。</shortdesc>
   <taskbody>
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
@@ -10,10 +10,10 @@
       <step><cmd>返回库而不是编辑失败的路线。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>清除搜索和过滤器，然后按名称、模式通道和最后已知状态查找配置文件。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>当配置文件可能已被故意存档时，包括存档的配置文件。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
-      <step><cmd>如果配置文件仍然丢失，请停止使用过时的 URL，并仅从可见的库行或已知的导出继续。</cmd><info><note type="warning">不要编辑内部存储、浏览器本地数据、数据库行或生成的构建工件来恢复面向用户的配置文件工作。</note></info></step>
+      <step><cmd>如果配置文件仍然丢失，请停止使用过时的 URL，并仅从可见的库行或已知的导出继续。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>
     </steps>
     <result><p>您可以从可见的库状态重新打开配置文件，或者确认添加书签的路线不再可用。</p></result>
-    <postreq><p>恢复：如果在一次干净的重试后重复出现相同的错误，则停止工作流程，保留可见消息、配置文件名称、模式通道和当前表面以供维护人员查看。</p></postreq>
+    <postreq><p>如果错误再次出现，请停止当前操作，并向支持人员提供可见消息、配置文件名称、模式通道和当前页面。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-profile-library"/>

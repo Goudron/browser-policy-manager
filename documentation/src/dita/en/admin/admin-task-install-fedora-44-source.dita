@@ -35,11 +35,6 @@ mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock></info></step>
-      <step><cmd>Bootstrap and build documentation.</cmd><info><codeblock id="docs" outputclass="language-bash"><![CDATA[
-make setup-docs-toolchain
-make docs-validate
-make docs-build
-]]></codeblock></info></step>
       <step><cmd>Start BPM in the foreground.</cmd><info><codeblock id="start" outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
 export BPM_PORT="8000"
@@ -55,7 +50,7 @@ curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
 ]]></codeblock></info></step>
       <step><cmd>Apply the stop boundary.</cmd><info><p>On failure, press <codeph>Ctrl+C</codeph>, preserve DNF, pip, migration, build, probe, and log evidence, and do not run <codeph>alembic downgrade</codeph>.</p></info></step>
     </steps>
-    <result><p>The Fedora Linux 44 host has a migrated BPM source checkout, built documentation, passing probes, responding UI, and foreground logs.</p></result>
+    <result><p>The Fedora Linux 44 host has a migrated BPM source checkout, passing probes, responding UI, and foreground logs.</p></result>
     <postreq><p>The command sequence passed in a clean Fedora 44 userspace container. This evidence does not verify native boot, kernel, systemd, desktop, hardware, host firewall, or production deployment.</p></postreq>
   </taskbody>
   <related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links>

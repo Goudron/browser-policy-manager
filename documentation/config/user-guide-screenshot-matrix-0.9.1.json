@@ -101,7 +101,7 @@
       "library-overview": {
         "state_id": "shot-state-library-overview",
         "primary_profile_id": "doc-profile-release-baseline",
-        "schema_channel": "release-152",
+        "schema_channel": "release-153",
         "route_parameters": {},
         "ui_state": {
           "surface": "profile-library",
@@ -114,7 +114,7 @@
       "guided-editor-overview": {
         "state_id": "shot-state-guided-editor-overview",
         "primary_profile_id": "doc-profile-release-baseline",
-        "schema_channel": "release-152",
+        "schema_channel": "release-153",
         "route_parameters": { "profile_id": "doc-profile-release-baseline" },
         "ui_state": {
           "surface": "guided-editor",
@@ -127,7 +127,7 @@
       "guided-settings-search": {
         "state_id": "shot-state-guided-settings-search",
         "primary_profile_id": "doc-profile-release-baseline",
-        "schema_channel": "release-152",
+        "schema_channel": "release-153",
         "route_parameters": { "profile_id": "doc-profile-release-baseline" },
         "ui_state": {
           "surface": "guided-editor",
@@ -143,7 +143,7 @@
       "all-settings-review": {
         "state_id": "shot-state-all-settings-review",
         "primary_profile_id": "doc-profile-release-baseline",
-        "schema_channel": "release-152",
+        "schema_channel": "release-153",
         "route_parameters": { "profile_id": "doc-profile-release-baseline" },
         "ui_state": {
           "surface": "all-settings",
@@ -159,7 +159,7 @@
       "json-editor": {
         "state_id": "shot-state-json-editor",
         "primary_profile_id": "doc-profile-release-baseline",
-        "schema_channel": "release-152",
+        "schema_channel": "release-153",
         "route_parameters": { "profile_id": "doc-profile-release-baseline" },
         "ui_state": {
           "surface": "json-editor",
@@ -173,8 +173,8 @@
         "state_id": "shot-state-compare-profiles",
         "primary_profile_id": "doc-profile-release-baseline",
         "secondary_profile_id": "doc-profile-esr-archived",
-        "schema_channel": "release-152",
-        "secondary_schema_channel": "esr-140.12",
+        "schema_channel": "release-153",
+        "secondary_schema_channel": "esr-140.13",
         "route_parameters": {},
         "ui_state": {
           "surface": "profile-comparison",

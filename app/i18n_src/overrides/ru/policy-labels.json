@@ -204,5 +204,10 @@
     "profiles.schema_field_use_proxy_for_dns": "Использовать прокси для DNS",
     "profiles.schema_field_value": "Значение",
     "profiles.schema_field_virtual_reality": "Виртуальная реальность",
-    "profiles.schema_field_web_suggestions": "Веб-подсказки"
+    "profiles.schema_field_web_suggestions": "Веб-подсказки",
+    "profiles.shell_policy_disable_remote_settings_and_accept_security_consequences": "Отключить удалённые настройки с подтверждением рисков безопасности",
+    "profiles.schema_field_allowed_permissions": "Разрешённые разрешения дополнения",
+    "profiles.schema_field_blocked_permissions": "Запрещённые разрешения дополнения",
+    "profiles.schema_field_runtime_allowed_hosts": "Разрешённые хосты дополнения",
+    "profiles.schema_field_runtime_blocked_hosts": "Запрещённые хосты дополнения"
 }

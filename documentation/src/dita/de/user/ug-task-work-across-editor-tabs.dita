@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-work-across-editor-tabs" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Arbeiten Sie über Editor-Registerkarten hinweg</title>
+  <title>Über Editor-Registerkarten hinweg arbeiten</title>
   <shortdesc>Verwenden Sie separate Browser-Registerkarten für gespeicherte Profilmodi, ohne Entwürfe zu verwirren oder nicht gespeicherte Änderungen zu verlieren.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>

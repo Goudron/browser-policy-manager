@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Создайте первый профиль из библиотеки.</title>
+  <title>Создание первого профиля из библиотеки</title>
   <shortdesc>Запустите новый черновик управляемого профиля из библиотеки, если ни один сохраненный профиль не подходит для повторного использования.</shortdesc>
   <taskbody>
     <prereq><p>Вы находитесь в библиотеке и хотите создать новый профиль, а не открывать или дублировать существующий.</p></prereq>

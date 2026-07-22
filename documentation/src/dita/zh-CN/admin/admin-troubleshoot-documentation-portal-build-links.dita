@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-documentation-portal-build-links" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>对文档门户构建和链接故障进行故障排除</title>
-  <shortdesc>诊断 /help/ 构建、清单、搜索、源链接和生成链接故障，无需修补构建的工件。</shortdesc>
+  <title>排查不可用的文档门户</title>
+  <shortdesc>当已安装的文档门户不可用时，收集 /help/ 的可见状态和部署证据。</shortdesc>
   <taskbody>
-    <prereq><p>当 <codeph>make docs-validate</codeph>、<codeph>make docs-build</codeph>、<codeph>make test-docs-contract</codeph>、<codeph>/help/</codeph> 或生成的文档链接在源操作或从源更新检查期间失败时，请使用此过程。</p></prereq>
-    <context><p>文档门户故障排除属于源 DITA、地图、密钥、配置、工具和重点测试。 <codeph>documentation/build/</codeph>下的构建输出、报告、清单、搜索索引和包是重新生成的证据，而不是手工编辑的源。</p></context>
+    <prereq><p>当已安装的 BPM 实例在 <codeph>/help/</codeph> 报告缺失、过期、不兼容、不完整或未找到状态时，使用此过程。</p></prereq>
+    <context><p>文档门户是 BPM 界面的一部分。其可用性取决于已安装的文档工件是否与正在运行的 BPM 版本匹配；BPM 不会在运行时修复缺失或不兼容的工件。先记录可见状态和部署信息，避免将门户问题误判为 API、浏览器缓存或产品配置问题。</p></context>
     <steps>
-      <step><cmd>从故障命名的最小文档命令开始。</cmd><info><p>对于一个已更改的主题，运行 <codeph>make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/admin/example.dita"</codeph>。对于合约，运行名为 <codeph>documentation/tests/contract/...</codeph> 文件。要进行完整链接验证，请运行 <codeph>make docs-validate</codeph>。</p></info></step>
-  <step><cmd>对源链接与生成链接故障进行分类。</cmd><info><p>源失败通常会命名 DITA 主题、键或片段。生成的链接失败出现在 DITA 发布后，可能涉及清单、目标映射、搜索或规范化输出路径。保留失败的路径和目标 URL。</p></info></step>
-  <step><cmd>仅修复源、映射、键、配置或生成器输入。</cmd><info><p>不要手动修补 <codeph>documentation/build/</codeph>、<codeph>documentation/dist/</codeph>、<codeph>documentation/reports/</codeph>、生成的搜索索引或打包的工件。更新 DITA 主题、映射、keydef、配置或构建工具，然后重建。</p></info></step>
-  <step><cmd>单独验证 /help/ 运行时边界。</cmd><info><p>如果静态构建通过，但 BPM <codeph>/help/</codeph> 报告丢失、陈旧、不兼容、不完整或未找到状态，请检查已安装的工件路径和清单摘要。分别保留FastAPI、<codeph>/docs</codeph>和<codeph>/openapi.json</codeph>。</p></info></step>
-  <step><cmd>记录重点重运行和剩余门。</cmd><info><p>使用 <codeph>make test-docs-contract</codeph>、<codeph>make docs-validate</codeph> 和 <codeph>make docs-build</codeph> 进行此故障排除切片。</p><note type="warning">浏览器支持的文档检查、屏幕截图、手册 QA、包验证和产品发布测试仍然是单独的门，除非显式运行。</note></info></step>
+      <step><cmd>记录门户 URL 和可见状态。</cmd><info><p>记录完整的 <codeph>/help/</codeph> URL、区域设置、浏览器提示、BPM 版本和故障时间。将该响应与 FastAPI 的 <codeph>/docs</codeph> 和 <codeph>/openapi.json</codeph> 区分开来，它们是不同的界面。</p></info></step>
+      <step><cmd>确认运行中的 BPM 实例及其文档设置。</cmd><info><p>记录进程主机、端口、源代码修订版本或已部署的发布标识，以及 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 的值；不要复制任何机密信息。</p></info></step>
+      <step><cmd>状态未就绪时停止依赖文档的操作。</cmd><info><note type="warning">不要将缺失或不兼容的门户视为可用帮助系统，也不要手动编辑已安装文件来绕过该状态。</note></info></step>
+      <step><cmd>将证据升级给 BPM 部署负责人。</cmd><info><p>提供门户 URL、可见状态、BPM 版本、文档站点设置名称、进程日志和观察时间。部署负责人可以通过受维护的文档过程恢复匹配的文档工件。</p></info></step>
+      <step><cmd>恢复后验证门户。</cmd><info><p>部署负责人恢复匹配的工件后，重新打开 <codeph>/help/</codeph> 和受影响的上下文帮助路由。</p></info></step>
     </steps>
-    <result><p>操作员可以从源头诊断文档门户故障并重新生成输出，而无需手动编辑一次性工件。</p></result>
-    <postreq><p>门户构建通过后，重新运行源更新验证主题和任何受影响的上下文帮助路由检查。</p></postreq>
+    <result><p>操作员拥有足够证据，可将不可用的文档工件与 BPM API 区分开来，并请求正确的恢复操作。</p></result>
+    <postreq><p>将恢复后的门户状态、验证时间和原始升级证据一并记录，以便后续审计与交接。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-run-source-update-migrations-docs"/>

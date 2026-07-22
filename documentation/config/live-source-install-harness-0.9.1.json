@@ -76,7 +76,8 @@
       "id": "ubuntu-26-04",
       "source_topic": "documentation/src/dita/en/admin/admin-task-install-ubuntu-26-04-source.dita",
       "image_target": "ubuntu-26-04",
-      "stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
+      "stage_order": ["distro-prep", "checkout", "install", "start", "verify"],
+      "historical_stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
       "container_adapter_command": "apt-get update && apt-get install -y --no-install-recommends sudo",
       "identity_probe": ". /etc/os-release && test \"$ID\" = ubuntu && test \"$VERSION_ID\" = 26.04"
     },
@@ -84,7 +85,8 @@
       "id": "debian-13-5",
       "source_topic": "documentation/src/dita/en/admin/admin-task-install-debian-13-source.dita",
       "image_target": "debian-13-5",
-      "stage_order": ["distro-prep", "python", "checkout", "install", "docs", "start", "verify"],
+      "stage_order": ["distro-prep", "python", "checkout", "install", "start", "verify"],
+      "historical_stage_order": ["distro-prep", "python", "checkout", "install", "docs", "start", "verify"],
       "container_adapter_command": "apt-get update && apt-get install -y --no-install-recommends sudo",
       "identity_probe": ". /etc/os-release && test \"$ID\" = debian && test \"$VERSION_ID\" = 13 && test \"$(cat /etc/debian_version)\" = 13.5"
     },
@@ -92,7 +94,8 @@
       "id": "fedora-44",
       "source_topic": "documentation/src/dita/en/admin/admin-task-install-fedora-44-source.dita",
       "image_target": "fedora-44",
-      "stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
+      "stage_order": ["distro-prep", "checkout", "install", "start", "verify"],
+      "historical_stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
       "container_adapter_command": "dnf install -y sudo",
       "identity_probe": ". /etc/os-release && test \"$ID\" = fedora && test \"$VERSION_ID\" = 44"
     },
@@ -100,7 +103,8 @@
       "id": "linux-mint-22-3",
       "source_topic": "documentation/src/dita/en/admin/admin-task-install-linux-mint-22-3-source.dita",
       "image_target": "linux-mint-22-3",
-      "stage_order": ["distro-prep", "python", "checkout", "install", "docs", "start", "verify"],
+      "stage_order": ["distro-prep", "python", "checkout", "install", "start", "verify"],
+      "historical_stage_order": ["distro-prep", "python", "checkout", "install", "docs", "start", "verify"],
       "container_adapter_command": "apt-get update && apt-get install -y --no-install-recommends sudo",
       "identity_probe": ". /etc/os-release && test \"$ID\" = linuxmint && test \"$VERSION_ID\" = 22.3 && test \"$VERSION_CODENAME\" = zena"
     },
@@ -108,7 +112,8 @@
       "id": "manjaro-stable-2026-06-26",
       "source_topic": "documentation/src/dita/en/admin/admin-task-install-manjaro-stable-source.dita",
       "image_target": "manjaro-stable-2026-06-26",
-      "stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
+      "stage_order": ["distro-prep", "checkout", "install", "start", "verify"],
+      "historical_stage_order": ["distro-prep", "checkout", "install", "docs", "start", "verify"],
       "container_adapter_command": "pacman -Sy --needed --noconfirm sudo",
       "identity_probe": ". /etc/os-release && test \"$ID\" = manjaro"
     }

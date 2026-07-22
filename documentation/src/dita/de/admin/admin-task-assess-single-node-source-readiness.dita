@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-assess-single-node-source-readiness" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Bewerten Sie die aktuelle Bereitschaft der Einzelknotenquelle</title>
+  <title>Die Bereitschaft einer Einzelknoten-Quellbereitstellung bewerten</title>
   <shortdesc>Entscheiden Sie, ob die aktuelle, von der Quelle ausgeführte BPM-Instanz für den kontrollierten Einzelknotenbetrieb bereit ist, und benennen Sie die Beweise, die diese Entscheidung stützen.</shortdesc>
   <taskbody>
     <prereq><p>Die Bereitstellung der Linux- oder Windows 10/11-Quelle über die WSL ist abgeschlossen, Abhängigkeiten sind installiert und die beabsichtigten Werte für <codeph>BPM_DATABASE_URL</codeph>, <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> und <codeph>BPM_SCHEMA_CACHE_DIR</codeph> sind bekannt.</p></prereq>

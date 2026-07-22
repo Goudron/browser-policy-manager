@@ -205,5 +205,10 @@
     "profiles.schema_field_use_proxy_for_dns": "使用 代理 用于 DNS",
     "profiles.schema_field_value": "值",
     "profiles.schema_field_virtual_reality": "虚拟现实",
-    "profiles.schema_field_web_suggestions": "网页 建议"
+    "profiles.schema_field_web_suggestions": "网页 建议",
+    "profiles.shell_policy_disable_remote_settings_and_accept_security_consequences": "禁用远程设置并确认安全后果",
+    "profiles.schema_field_allowed_permissions": "扩展可获权限",
+    "profiles.schema_field_blocked_permissions": "扩展已阻止权限",
+    "profiles.schema_field_runtime_allowed_hosts": "扩展允许访问的主机",
+    "profiles.schema_field_runtime_blocked_hosts": "扩展禁止访问的主机"
 }

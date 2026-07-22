@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Используйте JSON-редактор</title>
+  <title>Работа с JSON-редактором</title>
   <shortdesc>Откройте полный профиль как документ Firefox policies.json для точного просмотра или необработанного редактирования.</shortdesc>
   <taskbody>
     <prereq><p>Откройте сохраненный профиль. JSON-редактор работает с сохраненным профилем и представляет его как граничный документ Firefox.</p></prereq>

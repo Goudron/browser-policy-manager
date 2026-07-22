@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-sync-profile-lifecycle" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>同步配置文件生命周期数据</title>
+  <title>同步配置档案生命周期数据</title>
   <shortdesc>使用配置文件列表、统计数据、读取、创建和更新端点，而不假设批量或事务行为。</shortdesc>
   <taskbody>
     <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph> 并读取当前 ProfileCreate、ProfileUpdate 和 ProfileRead 形状的 <codeph>/openapi.json</codeph>。</p></prereq>

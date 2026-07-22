@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-refresh-source-revision-dependencies" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Обновить исходную версию и зависимости.</title>
+  <title>Обновление исходной версии и зависимостей</title>
   <shortdesc>Переместите извлечение в утвержденную новую версию и переустановите среду Python, не скрывая зависимости или сбои рабочего дерева.</shortdesc>
   <taskbody>
     <prereq><p>Набор свидетельств перед обновлением существует, предыдущая версия записана, и известна утвержденная целевая ветвь, тег или фиксация.</p></prereq>
