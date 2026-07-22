@@ -155,9 +155,11 @@ when the completed epic changes the durable current product state that README de
 
 README must be updated after the main backlog implementation is complete, not only at backlog
 creation time. It should describe the actual current product state after the epic, including current
-surfaces, commands, supported external/runtime versions where they are product facts, test workflow,
-and user-facing behavior. If the epic does not change durable README content, the backlog should
-explicitly say that no README update is needed.
+surfaces, installation and product-start commands, supported external/runtime versions where they
+are product facts, and user-facing behavior. README is for installers, users, and administrators:
+do not add developer, maintainer, CI, test-workflow, source-tree, release-handoff, or author-routing
+prose. If the epic does not change durable README content, the backlog should explicitly say that no
+README update is needed.
 
 README must not summarize what changed in a specific BPM version or list which earlier BPM version
 introduced a feature. Release history, "what changed", and target-version completion notes belong in
@@ -169,14 +171,19 @@ supported external/runtime versions, schema channels, command names, or compatib
 
 When editing README:
 
-- keep the maintainer copyright at the bottom;
-- keep the existing information about email topics / message themes;
+- retain the legal license/copyright footer when it is user-facing;
 - keep the primary product language English;
+- remove developer, maintainer, test/CI, source-tree, and email-routing instructions;
 - remove release-note phrasing such as "what's included in <version>", "planned for <version>", or
   "introduced in <version>";
 - remove target-version anchors, active-target notes, and future-version placeholders;
 - remove or revise stale feature descriptions that no longer match the product;
 - do not delete historical or legal footer material while refreshing the main product copy.
+
+Whenever an epic changes the README audience or boundary, inventory every repository test that reads
+`README.md`, update its expectation in the same task, and run `pytest -q` after the final README
+edit. Focused README checks alone are insufficient because a locale, API, deployment, or release
+contract can also encode stale README prose.
 
 Product documentation must be updated after the epic changes functionality. Add a dedicated
 documentation-update milestone before the final quality milestone whenever the epic changes
@@ -259,7 +266,8 @@ Every backlog must end with a final quality milestone. Include tasks for:
 8. Update `CHANGELOG.md` for the target version while preserving older version history.
 9. Verify README has no target-version anchor, release-history entry, planned-for-version copy, or
    version-specific completion placeholder; update README only if the durable current product state
-   changed.
+   changed. If README audience/boundary changed, update every README-reading contract and rerun
+   `pytest -q` after the final edit.
 10. Update docs index if final verification changes maintained documentation.
 11. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
     release procedures include documentation drift gates when the epic changed those areas.
@@ -332,8 +340,10 @@ Before calling a new backlog ready, confirm:
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
   changed schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
   release procedures;
-- README instructions preserve maintainer copyright and email-topic information and forbid release
-  history/version-change summaries in README;
+- README is limited to installer/user/administrator information, retains only its legal footer, and
+  forbids developer, maintainer, email-routing, release-history, and version-change summaries;
+- any README audience/boundary change inventories every README-reading contract and reruns
+  `pytest -q` after the final README edit;
 - changelog instructions preserve previous version history;
 - runbook notes that product language is English while maintainer chat may be Russian;
 - docs index includes the new backlog;
