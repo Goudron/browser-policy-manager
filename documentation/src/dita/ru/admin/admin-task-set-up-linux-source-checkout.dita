@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-linux-source-checkout" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Настройте получение исходного кода Linux</title>
+  <title>Настройка получения исходного кода в Linux</title>
   <shortdesc>Клонируйте репозиторий BPM, создайте виртуальную среду Python, установите зависимости разработки и подготовьте схему локальной базы данных.</shortdesc>
   <taskbody>
     <prereq><p>Хост Linux подготовлен, и администратор имеет доступ к URL-адресу репозитория BPM и целевой ветке или тегу для версии 0.9.1.</p></prereq>

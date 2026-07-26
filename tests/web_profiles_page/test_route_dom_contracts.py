@@ -627,7 +627,6 @@ def test_shared_editor_chrome_dom_contract_is_present_across_editor_modes():
         'id="validate"',
         'id="profile-name"',
         'id="profile-type"',
-        'id="editor-profile-id"',
         'id="overview-schema"',
         'id="validation-preview"',
         'id="overview-context"',
@@ -691,7 +690,7 @@ def test_deleted_profile_routes_require_include_deleted_and_preserve_archived_ch
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Route Profile", schema_version="release-152"),
+        json=build_profile_payload(name="Archived Route Profile", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
     delete_response = client.delete(f"/api/profiles/{profile_id}")
@@ -736,7 +735,7 @@ def test_guided_wizard_ai_step_stays_separate_from_users_addons_sites_step():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-152"),
+        json=build_profile_payload(name="Wizard Step Seven Structure Profile", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
 
@@ -766,7 +765,7 @@ def test_guided_wizard_all_steps_stay_as_direct_wizard_panels_and_keep_own_subse
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-152"),
+        json=build_profile_payload(name="Wizard Structure Audit Profile", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
 
@@ -938,7 +937,7 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="Template Split Profile",
-            schema_version="release-152",
+            schema_version="release-153",
             flags={"DisableTelemetry": True},
         )
 
@@ -967,11 +966,11 @@ def test_profile_editor_routes_use_editor_template(monkeypatch):
     assert captured["name"] == "profiles_editor.html"
     assert captured["context"]["profiles_route_mode"] == "edit"
     assert captured["context"]["editing_profile_id"] == 7
-    assert captured["context"]["editing_profile_schema_version"] == "release-152"
+    assert captured["context"]["editing_profile_schema_version"] == "release-153"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 7,
         "name": "Template Split Profile",
-        "schema_version": "release-152",
+        "schema_version": "release-153",
         "flags": {"DisableTelemetry": True},
     }
 
@@ -995,7 +994,7 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="Settings Split Profile",
-            schema_version="esr-140.12",
+            schema_version="esr-140.13",
             flags={"DisableTelemetry": True},
         )
 
@@ -1027,11 +1026,11 @@ def test_profile_settings_route_uses_settings_template(monkeypatch):
     )
     assert captured["context"]["profiles_route_mode"] == "settings"
     assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["editing_profile_schema_version"] == "esr-140.12"
+    assert captured["context"]["editing_profile_schema_version"] == "esr-140.13"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 8,
         "name": "Settings Split Profile",
-        "schema_version": "esr-140.12",
+        "schema_version": "esr-140.13",
         "flags": {"DisableTelemetry": True},
     }
     assert captured["context"]["return_url"] == "/profiles/8/edit"
@@ -1061,7 +1060,7 @@ def test_profile_json_route_uses_json_template(monkeypatch):
         return FakeProfile(
             id=profile_id,
             name="JSON Split Profile",
-            schema_version="release-152",
+            schema_version="release-153",
             flags={"DisableTelemetry": True},
         )
 
@@ -1093,11 +1092,11 @@ def test_profile_json_route_uses_json_template(monkeypatch):
     )
     assert captured["context"]["profiles_route_mode"] == "json"
     assert captured["context"]["editing_profile_id"] == 8
-    assert captured["context"]["editing_profile_schema_version"] == "release-152"
+    assert captured["context"]["editing_profile_schema_version"] == "release-153"
     assert captured["context"]["editing_profile_initial"] == {
         "id": 8,
         "name": "JSON Split Profile",
-        "schema_version": "release-152",
+        "schema_version": "release-153",
         "flags": {"DisableTelemetry": True},
     }
     assert captured["context"]["return_url"] == "/profiles/8/edit"
@@ -1156,7 +1155,7 @@ def test_archived_profile_handoff_routes_preserve_include_deleted_return_context
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-152"),
+        json=build_profile_payload(name="Archived Handoff Profile", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
     assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
@@ -1186,7 +1185,7 @@ def test_archived_profile_semantic_focus_routes_preserve_include_deleted_context
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-152"),
+        json=build_profile_payload(name="Archived Semantic Focus Profile", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
     assert client.delete(f"/api/profiles/{profile_id}").status_code == 204
@@ -1239,7 +1238,7 @@ def test_active_profile_semantic_focus_routes_preopen_expected_settings_shell():
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-152"),
+        json=build_profile_payload(name="Active Semantic Focus Profile", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
 
@@ -1271,7 +1270,7 @@ def test_all_settings_schema_shell_rehoming_keeps_nodes_reachable_without_defaul
     client = make_test_client(app)
     create_response = client.post(
         "/api/profiles",
-        json=build_profile_payload(name="Schema Shell Rehome Contract", schema_version="release-152"),
+        json=build_profile_payload(name="Schema Shell Rehome Contract", schema_version="release-153"),
     )
     profile_id = create_response.json()["id"]
 

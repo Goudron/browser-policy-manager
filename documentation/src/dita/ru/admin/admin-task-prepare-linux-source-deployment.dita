@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-linux-source-deployment" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Подготовьте хост Linux для развертывания исходного кода.</title>
+  <title>Подготовка хоста Linux к развертыванию из исходного кода</title>
   <shortdesc>Перед установкой BPM из извлечения из репозитория проверьте поддерживаемую границу развертывания исходного кода, предварительные требования хоста и возможности отложенного производства.</shortdesc>
   <taskbody>
     <prereq><p>Используйте хост Linux, на котором можно установить Python 3.14+, Git, инструменты сборки и curl. Этот модуль руководство предполагает получение исходного кода, а не пакетного установщика.</p></prereq>

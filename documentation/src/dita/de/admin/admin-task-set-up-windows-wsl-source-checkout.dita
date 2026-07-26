@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>Richten Sie das Auschecken der BPM-Quelle innerhalb der WSL ein</title>
+  <title>Das Auschecken der BPM-Quelle innerhalb der WSL einrichten</title>
   <shortdesc>Installieren Sie die Linux-Voraussetzungen in WSL, klonen Sie BPM in das Linux-Dateisystem, erstellen Sie die virtuelle Umgebung, installieren Sie Abhängigkeiten und wenden Sie Migrationen an.</shortdesc>
   <taskbody>
     <prereq><p>Eine WSL 2-Linux-Distribution wird installiert und geöffnet, und der Administrator verfügt über die genehmigte BPM-Repository-URL und den 0.9.1-Zweig oder das Tag.</p></prereq>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Elija la superficie BPM adecuada</title>
+  <title>Elección de la interfaz de BPM adecuada</title>
   <shortdesc>BPM tiene cinco superficies de usuario: Biblioteca, Editor guiado, Todos los ajustes, Editor JSON y Comparar.</shortdesc>
   <conbody>
-    <p>Elija la superficie por el resultado que desee, no por el módulo interno del producto.</p>
+    <p>El encabezado compacto compartido y el contexto del perfil mantienen visibles el producto, perfil, esquema, configuración regional y tema actuales en todas estas superficies. Elija una superficie por el resultado que necesita, no por un módulo interno.</p>
     <dl>
       <dlentry><dt>Biblioteca</dt><dd>Buscar, crear, importar, duplicar, archivar, restaurar, eliminar, exportar y abrir perfiles.</dd></dlentry>
       <dlentry><dt>Editor guiado</dt><dd>Crear o actualizar configuraciones de políticas comunes mediante pasos orientados a tareas y opciones iniciales.</dd></dlentry>

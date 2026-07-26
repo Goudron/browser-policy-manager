@@ -20,7 +20,11 @@ from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
+from app.core.schema_channels import (
+    CURRENT_ESR_SCHEMA_CHANNEL,
+    CURRENT_RELEASE_SCHEMA_CHANNEL,
+    DEFAULT_SCHEMA_CHANNEL,
+)
 from app.db import AsyncSessionAdapter, get_session
 from app.models.profile import Base
 from app.web.firefox_preferences import get_wizard_preferences_catalog
@@ -541,7 +545,7 @@ def build_profile_payload(
     *,
     name_prefix: str = "Profile",
     description: str = "Test profile",
-    schema_version: str = "esr-140.12",
+    schema_version: str = DEFAULT_SCHEMA_CHANNEL,
     flags: dict[str, Any] | None = None,
     compliance: dict[str, Any] | None = None,
     name: str | None = None,

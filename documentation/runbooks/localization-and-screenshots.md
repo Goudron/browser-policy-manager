@@ -19,6 +19,20 @@ assets.
 - Shared DITA metadata remains language-neutral; do not hide English prose in `src/shared/`.
 - If a BPM UI label changed, update the affected locale topic/caption and the smallest related
   parity/contract test. Do not scan all locale trees unless the failure requires it.
+- Rendered product documentation addresses its actual user, administrator, DevOps, API-integrator,
+  or security-reviewer audience. Do not address a maintainer or developer, narrate implementation
+  progress, or expose internal source/test/build work as reader instructions.
+- Documentation displays the one BPM product version derived from product metadata. Do not add a
+  separately owned documentation version in prose, portal chrome, captions, screenshots, or locale
+  metadata.
+- English source carries meaning and structure; it is not a grammar, word-order, capitalization, or
+  punctuation template for another locale. Apply the
+  [locale editorial style policy](../../docs/architecture/documentation-locale-editorial-style-0.9.2.md)
+  before approving visible localized prose.
+- When a locale change reaches compact UI copy or the documentation shell, cite the exact
+  [UI copy classification contract](../../docs/architecture/ui-copy-classification-contract-0.9.2.md)
+  disposition. Do not restore routine explanation; preserve the essential or safety/accessibility
+  meaning at the point of action.
 
 ## Translation states
 
@@ -60,6 +74,13 @@ Before a localized topic, map label, screenshot caption, alt text, or search ali
 7. Search gate: localized search aliases help readers find the topic in that locale while preserving
    stable target IDs and product identifiers. Search aliases must not introduce claims that are not
    present in the reviewed topic.
+8. Natural-language gate: titles and headings follow the locale's native convention rather than a
+   literal English construction. In Russian, use an idiomatic nominal heading where natural, such as
+   `Изменение языка интерфейса`, not the calqued `Изменить язык интерфейса`.
+9. Compact-shell gate: when a screenshot or topic covers documentation chrome/search, confirm that
+   the normalized BPM header, locale/theme state, and one derived BPM product version match the
+   product UI. An advanced filter panel remains collapsed or expanded only by its explicit toggle;
+   search, URL/history hydration, result updates, and clear do not change that choice.
 
 ## Allowed technical English
 
@@ -181,6 +202,10 @@ For every screenshot change:
   documentation/tests/contract/test_locale_human_qa.py
 ```
 
+6. When a visible control is simplified, reconcile every circled-info target against its exact
+   classification disposition. Each affected locale has either a localized manifest-backed target
+   or the recorded reviewed no-link disposition; do not add a generic help link for routine prose.
+
 ## Focused checks
 
 After the workflow-specific checks, run the shared documentation gates:
@@ -191,6 +216,11 @@ make docs-validate
 make docs-build
 git diff --check -- <changed_files>
 ```
+
+When the change affects product-documentation source, documentation build tooling, generated portal
+behavior, or a served documentation-version surface, also run `make docs-install-dev` before
+handoff. It refreshes the artifact for the maintainer's subsequent `make dev`; do not start the
+development server for that handoff.
 
 ## Done
 

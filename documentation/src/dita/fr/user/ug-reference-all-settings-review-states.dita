@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Tous les paramètres états d'examen</title>
+  <title>États de revue dans « Tous les paramètres »</title>
   <shortdesc>Utilisez cette référence pour interpréter les états de révision propre, invalide, à révision manuelle CIS, brut, inconnu, obsolète et importé.</shortdesc>
   <refbody>
     <section id="a-overview"><title>Présentation</title><p>Les états de révision expliquent pourquoi Tous les paramètres demande de l'attention avant que l'utilisateur ne modifie les valeurs de routine.</p></section>

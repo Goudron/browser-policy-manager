@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utilisez Tous les paramètres</title>
-  <shortdesc>Ouvrez Tous les paramètres pour un profil enregistré lorsque vous avez besoin d'un contrôle visuel complet au-delà du flux de travail guidé plus court.</shortdesc>
+  <title>Utiliser « Tous les paramètres »</title>
+  <shortdesc>Ouvrez « Tous les paramètres » pour un profil enregistré lorsque vous avez besoin d’un contrôle visuel complet au-delà du flux de travail guidé.</shortdesc>
   <taskbody>
     <prereq><p>Un profil enregistré existe. Les nouveaux brouillons non enregistrés doivent être enregistrés avant que Tous les paramètres puisse s'ouvrir.</p></prereq>
     <context><p>Tous les paramètres est l'éditeur visuel complet des politiques Firefox et connu Préférences gérées. Il s'ouvre dans Revue afin que les éléments d'attention soient visibles avant une navigation large dans le catalogue.</p>
       <fig id="screenshot-all-settings-review">
-        <title>Tous les paramètres Revue</title>
+        <title>Mode « Revue » dans « Tous les paramètres »</title>
         <image keyref="screenshot.all-settings-review" placement="break">
           <alt>Tous les paramètres affichant la liste de révision, les paramètres configurés et le panneau de détails des paramètres sur un écran étroit.</alt>
         </image>

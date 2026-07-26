@@ -87,7 +87,15 @@ def _navigation_manifest() -> dict:
                     for locale in LOCALES
                 },
             }
-    return {"guides": guides, "topics": topics}
+    product_version = build_docs._product_version()
+    return {
+        "artifact": {
+            "bpm_version": product_version,
+            "documentation_version": product_version,
+        },
+        "guides": guides,
+        "topics": topics,
+    }
 
 
 def _node_count(node: dict) -> int:
@@ -99,7 +107,7 @@ def _navigation_payload(manifest: dict, locale: str = "ru") -> dict:
     return {
         "$schema": "../schemas/product-documentation-navigation-v1.schema.json",
         "schema_version": 1,
-        "documentation_version": "0.9.1",
+        "documentation_version": build_docs._product_version(),
         "locale": locale,
         "node_count": _node_count(root),
         "root": root,

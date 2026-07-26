@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-manage-destructive-actions" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Zerstörerische Aktionen sicher verwalten</title>
+  <title>Unumkehrbare Aktionen sicher verwalten</title>
   <shortdesc>Aktionen zum Archivieren, Wiederherstellen, Zurücksetzen, Entfernen und dauerhaften Löschen absichtlich abbrechen oder bestätigen.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>

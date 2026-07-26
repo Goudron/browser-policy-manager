@@ -1,6 +1,6 @@
-# BPM 0.9.1 Documentation Index
+# BPM 0.9.2 Documentation Index
 
-Updated: 2026-07-15
+Updated: 2026-07-17
 
 This index classifies every maintained documentation file under `docs/` so
 release, refactoring, schema, CIS, locale, administrator, DevOps, and
@@ -36,8 +36,25 @@ Ignored local artifact groups:
 | [docs/architecture/bpm-documentation-theme-token-audit-0.9.1.md](architecture/bpm-documentation-theme-token-audit-0.9.1.md) | audit | BPM 0.9.1 source CSS token and selector audit for light-theme comfort and documentation visual alignment. |
 | [docs/architecture/current-system-map.md](architecture/current-system-map.md) | active | Current backend, frontend, data, schema, and test-system map for refactoring. |
 | [docs/architecture/dependency-currency-0.9.1.md](architecture/dependency-currency-0.9.1.md) | active | BPM 0.9.1 dependency, frontend vendor, documentation toolchain, browser-driver, and test/dev currency decision. |
+| [docs/architecture/dependency-currency-0.9.2.md](architecture/dependency-currency-0.9.2.md) | active | BPM 0.9.2 dependency, frontend vendor, documentation toolchain, browser-driver, and test/dev currency decision. |
+| [docs/architecture/compact-ui-screenshot-refresh-0.9.2.md](architecture/compact-ui-screenshot-refresh-0.9.2.md) | active | BPM 0.9.2 localized User Guide screenshot recapture evidence for compact UI changes. |
+| [docs/architecture/compact-ui-user-documentation-review-0.9.2.md](architecture/compact-ui-user-documentation-review-0.9.2.md) | active | BPM 0.9.2 review record for compact UI guidance and six-locale User Guide updates. |
+| [docs/architecture/context-help-gap-review-0.9.2.md](architecture/context-help-gap-review-0.9.2.md) | active | BPM 0.9.2 disposition confirming whether compact UI changes require new contextual-help topics or links. |
 | [docs/architecture/documentation-portal-blocker-audit-0.9.1.md](architecture/documentation-portal-blocker-audit-0.9.1.md) | audit | BPM 0.9.1 baseline audit of documentation portal blockers, affected surfaces, and closing tasks. |
 | [docs/architecture/documentation-sufficiency-closure-0.9.1.json](architecture/documentation-sufficiency-closure-0.9.1.json) | active | Final BPM 0.9.1 four-guide sufficiency closure covering screenshots, themes, search/navigation, localization, help targets, live Linux evidence, and WSL non-claims. |
+| [docs/architecture/documentation-audience-editorial-contract-0.9.2.md](architecture/documentation-audience-editorial-contract-0.9.2.md) | active | BPM 0.9.2 audience, maintainer-boundary, locale-title, and editorial review contract for product documentation. |
+| [docs/architecture/documentation-audience-status-leakage-audit-0.9.2.md](architecture/documentation-audience-status-leakage-audit-0.9.2.md) | audit | BPM 0.9.2 inventory of DITA maintainer/progress leakage, locale peers, and editorial dispositions. |
+| [docs/architecture/documentation-english-editorial-review-0.9.2.md](architecture/documentation-english-editorial-review-0.9.2.md) | audit | BPM 0.9.2 English product-documentation audience and editorial sign-off review. |
+| [docs/architecture/documentation-french-heading-review-0.9.2.md](architecture/documentation-french-heading-review-0.9.2.md) | audit | BPM 0.9.2 French heading and adjacent-prose locale review. |
+| [docs/architecture/documentation-german-heading-review-0.9.2.md](architecture/documentation-german-heading-review-0.9.2.md) | audit | BPM 0.9.2 German heading and adjacent-prose locale review. |
+| [docs/architecture/documentation-locale-editorial-style-0.9.2.md](architecture/documentation-locale-editorial-style-0.9.2.md) | active | BPM 0.9.2 per-locale title, heading, punctuation, procedure, and UI-terminology style policy. |
+| [docs/architecture/documentation-navigation-search-theme-stability-0.9.2.md](architecture/documentation-navigation-search-theme-stability-0.9.2.md) | active | BPM 0.9.2 navigation, search, theme, and contextual-target stability contract. |
+| [docs/architecture/documentation-russian-heading-review-0.9.2.md](architecture/documentation-russian-heading-review-0.9.2.md) | audit | BPM 0.9.2 Russian heading and adjacent-prose locale review. |
+| [docs/architecture/documentation-search-panel-state-contract-0.9.2.md](architecture/documentation-search-panel-state-contract-0.9.2.md) | active | BPM 0.9.2 independent documentation search-filter visibility state and compact-results contract. |
+| [docs/architecture/documentation-spanish-heading-review-0.9.2.md](architecture/documentation-spanish-heading-review-0.9.2.md) | audit | BPM 0.9.2 Spanish heading and adjacent-prose locale review. |
+| [docs/architecture/documentation-zh-cn-heading-review-0.9.2.md](architecture/documentation-zh-cn-heading-review-0.9.2.md) | audit | BPM 0.9.2 Simplified-Chinese heading and adjacent-prose locale review. |
+| [docs/architecture/documentation-update-milestone-verification-0.9.2.md](architecture/documentation-update-milestone-verification-0.9.2.md) | active | BPM 0.9.2 M11/M12 documentation evidence reconciliation before release handoff. |
+| [docs/architecture/maintained-drift-procedures-verification-0.9.2.md](architecture/maintained-drift-procedures-verification-0.9.2.md) | active | BPM 0.9.2 verification of maintained schema, CIS, locale, documentation, deployment, and release drift procedures. |
 | [docs/architecture/firefox-cis-guide-sufficiency-review-0.9.1.json](architecture/firefox-cis-guide-sufficiency-review-0.9.1.json) | active | Accepted BPM 0.9.1 Firefox Policy and CIS guide sufficiency review against current schemas, inventories, mappings, provenance, and locale parity. |
 | [docs/architecture/firefox-policy-documentation-inventory-0.9.0.json](architecture/firefox-policy-documentation-inventory-0.9.0.json) | active | Machine-readable BPM 0.9.0 Firefox policy, channel, UI support, and managed-preference documentation inventory. |
 | [docs/architecture/firefox-policy-documentation-inventory-0.9.0.md](architecture/firefox-policy-documentation-inventory-0.9.0.md) | active | Human-readable BPM 0.9.0 Firefox policy documentation coverage and drift contract. |
@@ -48,6 +65,7 @@ Ignored local artifact groups:
 | [docs/architecture/profile-comparison-entrypoint-audit.md](architecture/profile-comparison-entrypoint-audit.md) | active | Maintained profile comparison ownership boundary and guardrail map. |
 | [docs/architecture/product-documentation-release-contract-0.9.0.md](architecture/product-documentation-release-contract-0.9.0.md) | active | BPM 0.9.0 product documentation blocking deliverables, ownership, evidence, and verification commands. |
 | [docs/architecture/product-documentation-release-contract-0.9.1.md](architecture/product-documentation-release-contract-0.9.1.md) | active | BPM 0.9.1 documentation completion release blockers, ownership, evidence, and verification commands. |
+| [docs/architecture/product-documentation-release-contract-0.9.2.md](architecture/product-documentation-release-contract-0.9.2.md) | active | BPM 0.9.2 UI-compaction and documentation-coherence release blockers, ownership, evidence, density exceptions, and verification commands. |
 | [docs/architecture/product-documentation-content-coverage-audit-0.9.0.json](architecture/product-documentation-content-coverage-audit-0.9.0.json) | active | Machine-readable BPM 0.9.0 final documentation content coverage audit across product, admin, Firefox, CIS, API, locale, screenshot, manifest, search, and portal domains. |
 | [docs/architecture/product-documentation-content-coverage-audit-0.9.0.md](architecture/product-documentation-content-coverage-audit-0.9.0.md) | active | Human-readable BPM 0.9.0 final documentation content coverage audit summary and release-blocker disposition. |
 | [docs/architecture/product-documentation-ownership-boundary-0.9.0.md](architecture/product-documentation-ownership-boundary-0.9.0.md) | active | Accepted BPM 0.9.0 ownership, dependency, artifact, runtime bridge, and focused-debug boundary for product documentation. |
@@ -66,7 +84,15 @@ Ignored local artifact groups:
 | [docs/architecture/pytest-xdist-readiness.md](architecture/pytest-xdist-readiness.md) | active | Maintained decision record for pytest-xdist readiness and adoption gates. |
 | [docs/architecture/refactoring-acceptance-rules.md](architecture/refactoring-acceptance-rules.md) | active | Shared acceptance contract for behavior-preserving refactors. |
 | [docs/architecture/release-naming-audit-0.9.1.md](architecture/release-naming-audit-0.9.1.md) | audit | BPM 0.9.1 bounded release-name update list and historical/provenance exclusions. |
+| [docs/architecture/release-naming-audit-0.9.2.md](architecture/release-naming-audit-0.9.2.md) | audit | BPM 0.9.2 active-version and documentation-version field classification with bounded task-owned updates. |
+| [docs/architecture/firefox-153-dual-esr-schema-contract-0.9.2.md](architecture/firefox-153-dual-esr-schema-contract-0.9.2.md) | active | BPM 0.9.2 Firefox Release 153, ESR 153.0, ESR 140.13, provenance, and non-colliding migration contract. |
 | [docs/architecture/user-guide-sufficiency-review-0.9.1.json](architecture/user-guide-sufficiency-review-0.9.1.json) | active | Accepted BPM 0.9.1 User Guide sufficiency review covering every task and troubleshooting topic with executable outcomes and recovery evidence. |
+| [docs/architecture/ui-copy-inventory-0.9.2.md](architecture/ui-copy-inventory-0.9.2.md) | active | BPM 0.9.2 rendered UI-copy baseline covering source keys, English word counts, layout footprints, representative states, and protected feedback. |
+| [docs/architecture/ui-copy-classification-contract-0.9.2.md](architecture/ui-copy-classification-contract-0.9.2.md) | active | BPM 0.9.2 fail-safe classification for every UI-copy inventory family, including required safety, recovery, accessibility, and documentation boundaries. |
+| [docs/architecture/ui-density-budget-contract-0.9.2.md](architecture/ui-density-budget-contract-0.9.2.md) | active | BPM 0.9.2 per-surface zero-residual budget for removable explanatory copy and duplicated UI facts. |
+| [docs/architecture/ui-copy-documentation-disposition-map-0.9.2.md](architecture/ui-copy-documentation-disposition-map-0.9.2.md) | active | BPM 0.9.2 locale-aware disposition of removed UI explanation to no replacement or existing documentation targets. |
+| [docs/architecture/ui-compaction-baseline-guards-0.9.2.md](architecture/ui-compaction-baseline-guards-0.9.2.md) | active | BPM 0.9.2 staged fixture and focused guard activation plan for UI-copy, header, version, search, and editorial regressions. |
+| [docs/architecture/unified-bpm-header-contract-0.9.2.md](architecture/unified-bpm-header-contract-0.9.2.md) | active | BPM 0.9.2 normalized semantic, visual, responsive, locale, theme, title, and accessibility contract for product and documentation headers. |
 | [docs/architecture/wsl-source-install-validation-feasibility-0.9.1.md](architecture/wsl-source-install-validation-feasibility-0.9.1.md) | active | BPM 0.9.1 actual-Windows-host WSL validation feasibility, runner requirements, unsupported substitutes, and conditional no-run boundary. |
 | [docs/archive/2026-q2/all_settings_search_filter_i18n_audit_2026-05-30.md](archive/2026-q2/all_settings_search_filter_i18n_audit_2026-05-30.md) | audit | Point-in-time i18n audit for all-settings search and filter UI. |
 | [docs/archive/2026-q2/browser_datetime_i18n_audit_2026-05-30.md](archive/2026-q2/browser_datetime_i18n_audit_2026-05-30.md) | audit | Point-in-time datetime localization audit. |
@@ -76,6 +102,7 @@ Ignored local artifact groups:
 | [docs/bpm_0_8_8_all_settings_architecture_backlog_2026-06-12.md](bpm_0_8_8_all_settings_architecture_backlog_2026-06-12.md) | backlog | BPM 0.8.8 All settings architecture and enterprise-scale UX backlog. |
 | [docs/bpm_0_9_0_product_documentation_portal_backlog_2026-06-20.md](bpm_0_9_0_product_documentation_portal_backlog_2026-06-20.md) | backlog | BPM 0.9.0 DITA product documentation portal, guides, deterministic search, localization, and isolated testing backlog. |
 | [docs/bpm_0_9_1_documentation_completion_backlog_2026-07-06.md](bpm_0_9_1_documentation_completion_backlog_2026-07-06.md) | backlog | BPM 0.9.1 documentation completion, theme, localized screenshots, search/navigation, terminology, and All Settings help-link backlog. |
+| [docs/bpm_0_9_2_ui_compaction_documentation_coherence_backlog_2026-07-17.md](bpm_0_9_2_ui_compaction_documentation_coherence_backlog_2026-07-17.md) | backlog | BPM 0.9.2 UI compaction, unified documentation shell, stable search filters, and audience/locale editorial-quality backlog. |
 | [docs/archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md](archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md) | audit | BPM 0.8.7.1 compare and clone visual QA notes. |
 | [docs/archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md](archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md) | audit | Point-in-time Chromium locale smoke matrix. |
 | [docs/archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md](archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md) | audit | Point-in-time CIS Firefox benchmark feature analysis. |

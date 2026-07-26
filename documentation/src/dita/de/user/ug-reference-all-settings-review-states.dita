@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-all-settings-review-states" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Alle Einstellungen Überprüfungsstatus</title>
+  <title>Prüfstatus in „Alle Einstellungen“</title>
   <shortdesc>Verwenden Sie diese Referenz, um die Status „sauber“, „ungültig“, „CIS manuelle Überprüfung“, „Roh“, „unbekannt“, „veraltet“ und „importiert“ zu interpretieren.</shortdesc>
   <refbody>
     <section id="a-overview"><title>Übersicht</title><p>Überprüfungsstatus erklären, warum Alle Einstellungen um Aufmerksamkeit bittet, bevor der Benutzer Routinewerte bearbeitet.</p></section>

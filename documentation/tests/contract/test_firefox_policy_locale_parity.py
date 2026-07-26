@@ -129,7 +129,7 @@ def test_firefox_generated_policy_skeletons_remain_language_neutral_schema_facts
     """
 
     generated_policy_topics = sorted((GENERATED_FIREFOX_ROOT / "policies").glob("fx-policy-*.dita"))
-    assert len(generated_policy_topics) == 120
+    assert len(generated_policy_topics) == 121
     assert not any(
         list((DITA_ROOT / locale / "firefox").glob("fx-policy-*.dita"))
         for locale in LOCALES
@@ -148,10 +148,12 @@ def test_firefox_generated_policy_skeletons_remain_language_neutral_schema_facts
     for required in (
         "DisableTelemetry",
         "policies",
-        "esr-140.12",
-        "release-152",
+        "esr-140.13",
+        "esr-153.0",
+        "release-153",
         "MPL-2.0",
         "mozilla-policy-templates-v7.12",
+        "mozilla-policy-templates-v8.0",
         "BPM is not affiliated with or endorsed by Mozilla.",
     ):
         assert required in text

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utilisez Contrôles de schéma avancés</title>
+  <title>Utiliser les contrôles de schéma avancés</title>
   <shortdesc>Accédez aux contrôles avancés du shell de schéma et des préférences à partir de Tous les paramètres sans traiter Éditeur guidé comme un éditeur complet.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez Tous les paramètres dans Catalogue.</p></prereq>

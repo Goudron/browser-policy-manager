@@ -79,7 +79,7 @@ def test_search_quality_fixtures_define_expected_top_counts_filters_and_score_co
     assert all(fixture.get("expected_top_topic_id") for fixture in top_fixtures)
     assert all(fixture.get("required_score_component") for fixture in top_fixtures)
     assert all(fixture.get("expected_count") == 0 for fixture in empty_fixtures)
-    assert any(fixture["filters"].get("firefox_channel") == ["release-152"] for fixture in fixtures if "filters" in fixture)
+    assert any(fixture["filters"].get("firefox_channel") == ["release-153"] for fixture in fixtures if "filters" in fixture)
     assert any(fixture["filters"].get("api_area") == ["validation"] for fixture in fixtures if "filters" in fixture)
     assert any(fixture["filters"].get("guide_id") == ["cis-settings-guide"] for fixture in fixtures if "filters" in fixture)
 

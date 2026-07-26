@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Используйте Все настройки</title>
+  <title>Работа с разделом «Все настройки»</title>
   <shortdesc>Откройте Все настройки для сохраненного профиля, если вам нужен полный визуальный контроль помимо более короткого управляемого рабочего процесса.</shortdesc>
   <taskbody>
     <prereq><p>Существует сохраненный профиль. Прежде чем Все настройки сможет открыться, необходимо сохранить новые несохраненные черновики.</p></prereq>

@@ -10,10 +10,10 @@
       <step><cmd>Gardez le Éditeur JSON ou l'erreur d'importation ouverte afin que la ligne, la colonne ou le message d'analyse reste visible.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Vérifiez les accolades, crochets, virgules, guillemets et caractères d'échappement les plus proches autour de l'emplacement signalé.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Formatez ou validez à nouveau le document après la correction de la syntaxe.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
-      <step><cmd>Poursuivez la validation du schéma uniquement après l'analyse réussie du JSON.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
+      <step><cmd>Poursuivez la validation du schéma uniquement après l'analyse réussie du JSON.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>
     </steps>
     <result><p>Le document est analysé au format JSON et peut passer à la validation de stratégie normale.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
+    <postreq><p>Si l’erreur se répète, arrêtez le flux de travail et contactez le support avec le message visible, le nom du profil, le canal de schéma et la page active.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

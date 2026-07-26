@@ -100,7 +100,7 @@ registry, frontend behavior, and their contract/smoke tests. It does not use the
 | `CAP-GUIDED-009` | Configure privacy, permissions, cookies, cleanup, and hardening posture. | Step 3 Security & privacy | `ug-task-configure-security-privacy` | task |
 | `CAP-GUIDED-010` | Configure accounts, language, translation, add-ons, bookmarks, and site handling. | Step 4 Users, add-ons & sites | `ug-task-configure-users-addons-sites` | task |
 | `CAP-GUIDED-011` | Configure supported Firefox AI and smart-feature policies on Release. | Step 5 AI & smart features | `ug-task-configure-firefox-ai-policies` | task |
-| `CAP-GUIDED-012` | Understand why unsupported AI controls are absent on ESR 140.12. | Step 5 ESR unavailable state | `ug-reference-schema-dependent-guided-controls` | reference |
+| `CAP-GUIDED-012` | Understand why unsupported AI controls are absent on ESR 140.13. | Step 5 ESR unavailable state | `ug-reference-schema-dependent-guided-controls` | reference |
 | `CAP-GUIDED-013` | Expand fine-tuning and advanced controls deliberately. | Guided disclosures and advanced fields | `ug-task-use-guided-fine-tuning` | task |
 | `CAP-GUIDED-014` | Review the configuration in plain language before handoff. | Step 6 Review & export | `ug-task-review-guided-profile` | task |
 | `CAP-GUIDED-015` | Save and download the reviewed version. | Step 6 plus editor save/export actions | `ug-task-save-export-guided-profile` | task |
@@ -146,7 +146,7 @@ registry, frontend behavior, and their contract/smoke tests. It does not use the
 
 | Capability ID | User capability | Current evidence | Planned DITA topic | Type |
 | --- | --- | --- | --- | --- |
-| `CAP-BOUNDARY-001` | Choose between supported Firefox Release 152 and ESR 140.12 schemas. | Schema channel catalog and README supported schemas | `ug-task-choose-firefox-schema` | task |
+| `CAP-BOUNDARY-001` | Choose between supported Firefox Release 153 and ESR 140.13 schemas. | Schema channel catalog and README supported schemas | `ug-task-choose-firefox-schema` | task |
 | `CAP-BOUNDARY-002` | Understand how schema choice changes validation and available controls. | README schema behavior; conditional Guided controls | `ug-concept-schema-aware-behavior` | concept |
 | `CAP-BOUNDARY-003` | Import Firefox `policies.json` into BPM's normalized profile model. | Library import and README boundary contract | `ug-task-import-policies-json` | task |
 | `CAP-BOUNDARY-004` | Export BPM's normalized profile as canonical Firefox `policies.json`. | Library/JSON export and README boundary contract | `ug-task-export-policies-json` | task |

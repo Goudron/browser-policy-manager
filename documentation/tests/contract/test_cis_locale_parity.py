@@ -47,14 +47,14 @@ MIN_LOCALIZED_TEXT_RATIO = {
     "es-ES": 0.75,
 }
 REQUIRED_INVARIANT_TERMS = (
-    "Firefox ESR 140.12",
+    "Firefox ESR 140.13",
     "49",
     "53",
     "55",
-    "cis-l1.esr-140.12",
-    "cis-l1.release-152",
-    "cis-l2.esr-140.12",
-    "cis-l2.release-152",
+    "cis-l1.esr-140.13",
+    "cis-l1.release-153",
+    "cis-l2.esr-140.13",
+    "cis-l2.release-153",
     "keep_current",
     "basic_corporate",
     "classroom_kiosk",
@@ -81,7 +81,7 @@ REQUIRED_INVARIANT_TERMS = (
 )
 ENGLISH_SEMANTIC_TERMS = (
     "CIS Mozilla Firefox ESR GPO Benchmark",
-    "Firefox Release 152",
+    "Firefox Release 153",
     "Level 1",
     "Level 2",
     "blank",
@@ -254,8 +254,8 @@ def test_cis_generated_recommendations_remain_language_neutral_mapping_facts() -
         "source expression are not copied, translated, indexed, or packaged",
         "InstallAddonsPermission.Default",
         "fx-policy-InstallAddonsPermission",
-        "cis-l1.esr-140.12",
-        "cis-l2.release-152",
+        "cis-l1.esr-140.13",
+        "cis-l2.release-153",
         "f3736db8a1e089b5cce4901698b5d871a469bea84c2e8335e9703a4f5629a85d",
     ):
         assert required in text

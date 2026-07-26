@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Rechercher Tous les paramètres</title>
+  <title>Rechercher dans « Tous les paramètres »</title>
   <shortdesc>Recherchez les paramètres configurés, les politiques disponibles, les préférences connues et les actions de configuration à partir de Tous les paramètres.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez Tous les paramètres dans n'importe quel mode.</p></prereq>

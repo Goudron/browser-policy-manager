@@ -1,7 +1,9 @@
+import json
 from pathlib import Path
 
 from bs4 import BeautifulSoup
 
+from app.core.locales import ACTIVE_CATALOG_LOCALES
 from app.main import app
 from tests.docs_index import doc_path_from_index
 from tests.support import make_test_client
@@ -69,8 +71,37 @@ def test_locale_picker_control_has_responsive_width_contract():
         "max-width: 100%;",
         "overflow: hidden;",
         "text-overflow: ellipsis;",
+        "min-height: var(--compact-control-target);",
     ):
         assert declaration in select_rule
 
     assert "@media (max-width: 1100px)" in css_source
     assert "grid-template-columns: 1fr;" in css_source
+
+
+def test_header_preferences_controls_are_labeled_and_touch_safe_in_all_locales():
+    header_template = HEADER_TEMPLATE_PATH.read_text(encoding="utf-8")
+    css_source = CSS_PATH.read_text(encoding="utf-8")
+
+    assert '<div class="compact-toolbar-actions" data-bpm-header-preferences>' in header_template
+    assert 'data-bpm-header-workspace' in header_template
+    for control, control_id, label_key in (
+        ("locale", "lang", "profiles.locale_label"),
+        ("theme", "theme", "profiles.theme_label"),
+    ):
+        assert f'data-bpm-header-control="{control}"' in header_template
+        assert f'<select id="{control_id}"' in header_template
+        assert f'data-i18n="{label_key}"' in header_template
+
+    select_rule_start = css_source.index(".compact-toolbar-control select.soft-input")
+    select_rule_end = css_source.index("}", select_rule_start)
+    assert "min-height: var(--compact-control-target);" in css_source[
+        select_rule_start:select_rule_end
+    ]
+
+    for locale in ACTIVE_CATALOG_LOCALES:
+        catalog = json.loads(
+            (REPO_ROOT / "app" / "i18n_src" / locale / "common.json").read_text(encoding="utf-8")
+        )
+        assert catalog["profiles.locale_label"].strip()
+        assert catalog["profiles.theme_label"].strip()

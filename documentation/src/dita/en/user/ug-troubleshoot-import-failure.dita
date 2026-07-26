@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-import-failure" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Recover from a failed import</title>
-  <shortdesc>Diagnose failed import of JSON or multipart policy input without changing internal storage.</shortdesc>
+  <shortdesc>Diagnose a failed JSON or multipart policy import from the BPM workflow.</shortdesc>
   <taskbody>
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
     <context><p>Import can fail because the file is not readable, the JSON is malformed, the Firefox boundary shape is wrong, or normalized values cannot pass validation.</p></context>
@@ -10,10 +10,10 @@
       <step><cmd>Keep the import failure message visible and identify whether the input was JSON or multipart.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Confirm that the file contains a Firefox boundary document with a top-level policies object when JSON import is used.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>If the message reports syntax, recover the malformed JSON first.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Retry import once with the corrected file and then review normalized values before saving.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
+      <step><cmd>Retry import once with the corrected file and then review normalized values before saving.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The import either succeeds into a reviewable BPM profile draft or remains blocked with a preserved visible reason.</p></result>
-    <postreq><p>Recovery: if the same error repeats after one clean retry, stop the workflow, preserve the visible message, profile name, schema channel, and current surface for maintainer review.</p></postreq>
+    <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-import-policies-json"/>

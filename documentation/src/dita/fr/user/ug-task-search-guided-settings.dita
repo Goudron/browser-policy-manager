@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-guided-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Paramètres guidés de recherche</title>
+  <title>Rechercher des paramètres dans l’« Éditeur guidé »</title>
   <shortdesc>Recherchez les commandes guidées et accédez au paramètre correspondant sans analyser chaque étape.</shortdesc>
   <taskbody>
     <prereq><p>Un profil est ouvert dans Éditeur guidé.</p></prereq>
     <context><p>La recherche guidée est utile lorsque vous connaissez l'objectif de la stratégie mais pas l'étape qui contient la famille de contrôle.</p>
       <fig id="screenshot-guided-settings-search">
-        <title>Résultats de la recherche guidée des paramètres Recherche</title>
+        <title>Résultats de recherche de paramètres dans l’« Éditeur guidé »</title>
         <image keyref="screenshot.guided-settings-search" placement="break">
           <alt>Éditeur guidé affichant les résultats des paramètres liés à la page d'accueil.</alt>
         </image>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Wählen Sie die richtige BPM-Oberfläche</title>
+  <title>Die passende BPM-Oberfläche auswählen</title>
   <shortdesc>BPM verfügt über fünf Benutzeroberflächen: Bibliothek, Geführter Editor, Alle Einstellungen, JSON-Editor und Profileinstellungen vergleichen.</shortdesc>
   <conbody>
-    <p>Wählen Sie die Oberfläche nach dem gewünschten Ergebnis aus, nicht nach dem internen Produktmodul.</p>
+    <p>Der gemeinsame kompakte Kopf und Profilkontext halten Produkt, Profil, Schema, Gebietsschema und Thema auf allen diesen Oberflächen sichtbar. Wählen Sie die Oberfläche nach dem gewünschten Ergebnis aus, nicht nach einem internen Modul.</p>
     <dl>
       <dlentry><dt>Bibliothek</dt><dd>Profile finden, erstellen, importieren, duplizieren, archivieren, wiederherstellen, löschen, exportieren und öffnen.</dd></dlentry>
       <dlentry><dt>Geführter Editor</dt><dd>Häufige Richtlinienkonfigurationen über aufgabenorientierte Schritte und Startauswahlen erstellen oder aktualisieren.</dd></dlentry>

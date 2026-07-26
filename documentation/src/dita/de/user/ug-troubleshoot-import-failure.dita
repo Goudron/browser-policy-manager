@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-import-failure" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Wiederherstellung nach einem fehlgeschlagenen Import</title>
-  <shortdesc>Diagnose eines fehlgeschlagenen Imports von JSON- oder mehrteiligen Richtlinieneingaben ohne Änderung des internen Speichers.</shortdesc>
+  <shortdesc>Diagnose eines fehlgeschlagenen JSON- oder mehrteiligen Richtlinienimports im BPM-Arbeitsablauf.</shortdesc>
   <taskbody>
     <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
     <context><p>Der Import kann fehlschlagen, weil die Datei nicht lesbar ist, der JSON-Code fehlerhaft ist, die Firefox-Grenzform falsch ist oder normalisierte Werte die Validierung nicht bestehen können.</p></context>
@@ -10,10 +10,10 @@
       <step><cmd>Lassen Sie die Importfehlermeldung sichtbar und identifizieren Sie, ob die Eingabe JSON oder mehrteilig war.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Bestätigen Sie, dass die Datei ein Firefox-Grenzdokument mit einem Richtlinienobjekt der obersten Ebene enthält, wenn der JSON-Import verwendet wird.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Wenn die Nachricht Syntax meldet, stellen Sie zuerst den fehlerhaften JSON wieder her.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Wiederholen Sie den Import einmal mit der korrigierten Datei und überprüfen Sie dann die normalisierten Werte vor dem Speichern.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
+      <step><cmd>Wiederholen Sie den Import einmal mit der korrigierten Datei und überprüfen Sie dann die normalisierten Werte vor dem Speichern.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
     <result><p>Der Import gelingt entweder in einen überprüfbaren BPM-Profilentwurf oder bleibt mit einem beibehaltenen sichtbaren Grund blockiert.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-import-policies-json"/>

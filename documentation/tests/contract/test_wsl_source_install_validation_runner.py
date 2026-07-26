@@ -18,6 +18,9 @@ PRIVILEGED = (
     DOCUMENTATION_ROOT
     / "config/live-source-install-privileged-validation-contract-0.9.1.json"
 )
+EDITORIAL_RECONCILIATION = (
+    REPOSITORY_ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 
 pytestmark = pytest.mark.docs_contract
 
@@ -78,6 +81,12 @@ def test_contract_declares_prepared_runner_without_claiming_windows_evidence() -
 def test_runner_reuses_the_reconciled_ubuntu_source_install_contract() -> None:
     reuse = _contract()["source_install_reuse"]
     source = REPOSITORY_ROOT / reuse["source_topic"]
+    historical = _json(REPOSITORY_ROOT / reuse["reconciliation_report"])
+    current = next(
+        target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+        if target["id"] == reuse["target_id"]
+    )
 
     assert reuse["target_id"] == "ubuntu-26-04"
     assert reuse["command_contract"] == (
@@ -86,10 +95,16 @@ def test_runner_reuses_the_reconciled_ubuntu_source_install_contract() -> None:
     assert reuse["reconciliation_report"] == (
         "docs/architecture/linux-source-install-validation-0.9.1.json"
     )
-    assert reuse["validated_source_sha256"] == hashlib.sha256(source.read_bytes()).hexdigest()
+    assert reuse["validated_source_sha256"] == next(
+        target["reconciled_source_sha256"]
+        for target in historical["targets"]
+        if target["target_id"] == reuse["target_id"]
+    )
+    assert reuse["validated_source_sha256"] != hashlib.sha256(source.read_bytes()).hexdigest()
     command_contract = _json(REPOSITORY_ROOT / reuse["command_contract"])
     ubuntu = next(target for target in command_contract["targets"] if target["id"] == "ubuntu-26-04")
     assert ubuntu["topic_id"] in source.name
+    assert current["topic_id"] == ubuntu["topic_id"]
     assert "exact documented Linux userspace procedure" in reuse["rule"]
     assert "0.0.0.0" in reuse["wsl_runtime_adapter"]
     assert "does not change" in reuse["wsl_runtime_adapter"]

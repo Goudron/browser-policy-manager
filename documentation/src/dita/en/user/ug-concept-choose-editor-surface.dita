@@ -4,7 +4,7 @@
   <title>Choose the right BPM surface</title>
   <shortdesc>BPM has five user surfaces: Library, Guided editor, All settings, JSON editor, and Compare.</shortdesc>
   <conbody>
-    <p>Choose the surface by the outcome you want, not by the internal product module.</p>
+    <p>The shared compact header and profile context keep the current product, profile, schema, locale, and theme visible across these surfaces. Choose a surface by the outcome you want, not by an internal module.</p>
     <dl>
       <dlentry><dt>Library</dt><dd>Find, create, import, duplicate, archive, restore, delete, export, and open profiles.</dd></dlentry>
       <dlentry><dt>Guided editor</dt><dd>Create or update common policy configurations through task-first steps and starter choices.</dd></dlentry>

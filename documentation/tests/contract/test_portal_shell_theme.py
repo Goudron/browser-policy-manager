@@ -4,6 +4,7 @@ import importlib.util
 from pathlib import Path
 
 DOCUMENTATION_ROOT = Path(__file__).resolve().parents[2]
+REPOSITORY_ROOT = DOCUMENTATION_ROOT.parent
 MODULE_PATH = DOCUMENTATION_ROOT / "tools/build_docs.py"
 SPEC = importlib.util.spec_from_file_location("build_docs", MODULE_PATH)
 assert SPEC and SPEC.loader
@@ -20,7 +21,7 @@ def test_portal_shell_has_localized_chrome_for_every_published_locale() -> None:
             "locales",
             "breadcrumbs",
             "home",
-            "version",
+            "supported_firefox_versions",
             "status",
             "theme",
             "theme_system",
@@ -35,6 +36,8 @@ def test_portal_shell_has_localized_chrome_for_every_published_locale() -> None:
             "search_placeholder",
             "search_submit",
             "search_clear",
+            "search_clear_filters",
+            "search_active_filters",
             "search_help",
             "search_filters",
             "search_results",
@@ -80,8 +83,40 @@ def test_portal_theme_covers_responsive_dark_light_focus_code_tables_notes_and_p
     ):
         assert required in theme
     assert "@media print" in print_theme
-    assert ".bpm-docs-header-nav" in print_theme
+    assert ".bpm-docs-header-actions" in print_theme
     assert ".bpm-docs-search" in print_theme
+
+
+def test_portal_current_navigation_uses_primary_ui_selected_surfaces() -> None:
+    theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs.css").read_text(encoding="utf-8")
+    product_theme = (
+        REPOSITORY_ROOT / "app/static/profiles_css/00-foundation.css"
+    ).read_text(encoding="utf-8")
+    product_editor = (
+        REPOSITORY_ROOT / "app/static/profiles_css/20-editor-wizard.css"
+    ).read_text(encoding="utf-8")
+
+    for token in (
+        "--bpm-docs-selected-bg: rgba(20, 184, 166, 0.12)",
+        "--bpm-docs-selected-border: rgba(15, 118, 110, 0.32)",
+        "--bpm-docs-selected-text: rgb(15 118 110)",
+        "--bpm-docs-selected-bg: rgba(6, 78, 59, 0.42)",
+        "--bpm-docs-selected-border: rgba(34, 197, 94, 0.22)",
+        "--bpm-docs-selected-text: #e2e8f0",
+    ):
+        assert token in theme
+
+    assert "background: rgba(20, 184, 166, 0.12)" in product_editor
+    assert "border-color: rgba(15, 118, 110, 0.32)" in product_editor
+    assert "background: rgba(6, 78, 59, 0.42)" in product_editor
+    assert "border-color: rgba(34, 197, 94, 0.22)" in product_editor
+    assert "--ink: #e2e8f0" in product_theme
+
+    current_rule = theme.split('.bpm-docs-guide-list a[aria-current="page"]', 1)[1].split("}", 1)[0]
+    assert "background: var(--bpm-docs-selected-bg)" in current_rule
+    assert "border-color: var(--bpm-docs-selected-border)" in current_rule
+    assert "color: var(--bpm-docs-selected-text)" in current_rule
+    assert "#ffffff" not in current_rule
 
 
 def test_portal_sidebar_has_independent_desktop_and_narrow_scroll_contract() -> None:

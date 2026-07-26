@@ -11,6 +11,6 @@
 
     const metaThemeColor = documentRef.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
-        metaThemeColor.setAttribute("content", resolvedTheme === "dark" ? "#07111a" : "#f6efe4");
+        metaThemeColor.setAttribute("content", resolvedTheme === "dark" ? "#07111a" : "#edf2f7");
     }
 })();

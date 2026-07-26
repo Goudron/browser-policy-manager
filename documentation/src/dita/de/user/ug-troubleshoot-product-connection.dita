@@ -5,15 +5,15 @@
   <shortdesc>Wiederherstellung nach einem Netzwerk-, Browser- oder BPM-API-Vorgangsfehler, der in Bibliotheks- oder Editoroberflächen sichtbar ist.</shortdesc>
   <taskbody>
     <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
-    <context><p>Verbindungsfehler können vorübergehende Einschränkungen beim Browsertest, Netzwerkunterbrechungen, Serverneustarts oder API-Betriebsfehler sein; Die sichere Antwort besteht darin, den Kontext beizubehalten, bevor Sie es erneut versuchen.</p></context>
+    <context><p>Verbindungsfehler können durch Netzwerkunterbrechungen, Serverneustarts oder API-Fehler entstehen; bewahren Sie den sichtbaren Kontext vor einem erneuten Versuch auf.</p></context>
     <steps>
       <step><cmd>Lesen Sie den sichtbaren Status und ermitteln Sie, ob der fehlgeschlagene Vorgang Laden, Speichern, Importieren, Exportieren, Archivieren, Wiederherstellen, Löschen, Validieren oder Vergleichen war.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Überprüfen Sie, ob andere BPM-Oberflächen in derselben Browsersitzung noch reagieren, bevor Sie dieselbe Aktion erneut versuchen.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Wiederholen Sie die fehlgeschlagene Aktion einmal, nachdem nicht gespeicherte Änderungen und Profilkontext erhalten geblieben sind.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Wenn der Vorbehalt beim Browsertest oder der API-Fehler weiterhin besteht, beenden Sie die Benutzerbearbeitung und bewahren Sie die sichtbaren Fehlerdetails zur Überprüfung durch den Betreuer auf.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
+      <step><cmd>Wenn der Verbindungs- oder API-Fehler weiterhin besteht, beenden Sie die Bearbeitung und wenden Sie sich mit den sichtbaren Fehlerdetails an den Support.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
     <result><p>Der Arbeitsablauf wird entweder nach einem sauberen Wiederholungsversuch fortgesetzt oder stoppt mit genügend sichtbarem Kontext, um das Produktverbindungsproblem zu diagnostizieren.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

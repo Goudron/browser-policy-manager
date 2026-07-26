@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-sync-profile-lifecycle" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Синхронизировать данные жизненного цикла профиля</title>
+  <title>Синхронизация данных жизненного цикла профиля</title>
   <shortdesc>Используйте список профилей, статистику, читайте, создавайте и обновляйте конечные точки, не прибегая к массовому или транзакционному поведению.</shortdesc>
   <taskbody>
     <prereq><p>Установите <codeph>$BPM_BASE_URL</codeph> и прочитайте <codeph>/openapi.json</codeph> для текущих фигур ProfileCreate, ProfileUpdate и ProfileRead.</p></prereq>

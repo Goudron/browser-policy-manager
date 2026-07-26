@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-users-addons-sites" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Konfigurieren Sie Benutzer, Add-Ons und Websites</title>
+  <title>Benutzer, Add-ons und Websites konfigurieren</title>
   <shortdesc>Verwenden Sie Schritt 4 für Konten, Erweiterungen, Add-ons, Lesezeichen, Sprache, Übersetzung und Website-Verwaltung.</shortdesc>
   <taskbody>
     <prereq><p>Ein geführter Entwurf ist geöffnet.</p></prereq>

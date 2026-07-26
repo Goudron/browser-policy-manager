@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-raw-policies-json" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Editar políticas sin formato JSON</title>
+  <title>Editar políticas JSON sin formato</title>
   <shortdesc>Edite el documento policies.json sin procesar con el editor Monaco incluido localmente.</shortdesc>
   <taskbody>
     <prereq><p>Abra Editor JSON para obtener un perfil guardado.</p></prereq>

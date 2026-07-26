@@ -176,7 +176,7 @@
             if (!inputEl || !confirmEl || !statusEl) return;
 
             const cloneName = inputEl.value.trim();
-            let message = t("profiles.clone_name_ready");
+            let message = "";
             let isValid = true;
             if (!cloneName) {
                 message = t("profiles.clone_name_required");
@@ -338,11 +338,9 @@
 
             if (!items.length) {
                 const li = documentRef.createElement("li");
-                li.className = "list-empty-illustration rounded-[24px] border border-dashed border-slate-200 px-4 py-6 text-center";
+                li.className = "list-empty-state rounded-[24px] border border-dashed border-slate-200 px-4 py-4 text-center";
                 li.innerHTML = `
-                    <div class="list-empty-illustration-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/80 bg-white/80 text-2xl shadow-sm">+</div>
                     <div class="text-sm font-semibold text-slate-900">${t("profiles.empty_title")}</div>
-                    <div class="mx-auto mt-2 max-w-[240px] text-sm leading-6 text-slate-500">${t("profiles.empty_list")}</div>
                 `;
                 listEl.appendChild(li);
                 return;
@@ -351,7 +349,6 @@
             items.forEach((profile) => {
                 const li = documentRef.createElement("li");
                 li.className = "library-table-row";
-                const openLabel = t("profiles.list_open");
                 const statusLabel = profile.is_deleted
                     ? t("profiles.badge_deleted")
                     : t("profiles.badge_active");
@@ -372,7 +369,6 @@
                             <a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">
                                 ${escapeHtml(profile.name)}
                             </a>
-                            <div class="library-row-identity-meta">#${profile.id}</div>
                         </div>
 
                         <div class="library-row-context" data-label="${escapeHtml(t("profiles.library_column_context"))}">
@@ -401,9 +397,6 @@
                         </div>
 
                         <div class="library-row-actions">
-                            <a class="button-base library-row-open-button" href="${editHref}" target="_blank" rel="noopener">
-                                ${openLabel}
-                            </a>
                             <div class="library-row-action-grid">
                                 <a class="button-base ghost-button library-row-secondary-action" href="${settingsHref}" target="_blank" rel="noopener">
                                     ${t("profiles.library_action_all_settings")}
@@ -484,9 +477,7 @@
                                     class="library-clone-name-status"
                                     role="status"
                                     aria-live="polite"
-                                    data-clone-name-status>
-                                    ${t("profiles.clone_name_ready")}
-                                </div>
+                                    data-clone-name-status></div>
                             </div>
                         </div>
                     </div>

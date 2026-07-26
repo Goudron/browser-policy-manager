@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-json-document" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Validieren Sie das JSON-Dokument</title>
+  <title>Das JSON-Dokument validieren</title>
   <shortdesc>Validieren Sie die rohe JSON-Syntax und die Firefox-Richtlinienwerte vor dem Speichern.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie JSON-Editor mit dem Dokument, das Sie überprüfen möchten.</p></prereq>

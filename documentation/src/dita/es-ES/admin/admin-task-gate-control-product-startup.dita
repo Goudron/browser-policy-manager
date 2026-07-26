@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-gate-control-product-startup" xml:lang="es-ES" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Inicio del producto de control de puerta con estado y preparación de BPM</title>
+  <title>Iniciar el producto de control tras comprobar la integridad y la preparación de BPM</title>
   <shortdesc>Utilice las sondas de estado actuales como puerta de inicio antes de que un producto de control externo comience la sincronización API.</shortdesc>
   <taskbody>
     <prereq><p>La implementación del origen BPM ya está iniciada. Configure el producto externo con <codeph>$BPM_BASE_URL</codeph>, tiempo de espera, intervalo de sondeo, espera máxima y la acción a tomar cuando falla la puerta.</p></prereq>
-    <context><p>Este flujo de trabajo utiliza <codeph>API-HEALTH-001</codeph> y <codeph>API-HEALTH-002</codeph>. Las sondas son sólo pequeñas señales de verificación previa; no exponen autenticación, autorización, diagnóstico de base de datos, diagnóstico de caché de esquema, solicitud identificadores ni objetivos de nivel de servicio. Este conjunto de manuales operativos M12-08 nombra el inicio controlado por el estado, la propiedad de los datos, la recuperación de fallas y la regla para no volver a intentarlo a ciegas cuando la evidencia está obsoleta.</p></context>
+    <context><p>Este flujo de trabajo utiliza <codeph>API-HEALTH-001</codeph> y <codeph>API-HEALTH-002</codeph>. Las sondas son sólo pequeñas señales de verificación previa; no exponen autenticación, autorización, diagnóstico de base de datos, diagnóstico de caché de esquema, solicitud identificadores ni objetivos de nivel de servicio. Este conjunto de manuales operativos  nombra el inicio controlado por el estado, la propiedad de los datos, la recuperación de fallas y la regla para no volver a intentarlo a ciegas cuando la evidencia está obsoleta.</p></context>
     <steps>
       <step><cmd>Verifique la vida básica antes de abrir la cola de sincronización.</cmd><info><p>Ejemplo de solicitud: <codeph>GET $BPM_BASE_URL/health</codeph>. Ejemplo de respuesta: <codeph>200 {"status":"ok"}</codeph>. Los errores de transporte los maneja el producto externo porque no se declara ningún cuerpo de error de aplicación BPM para esta sonda.</p></info></step>
   <step><cmd>Verifique la preparación antes de las llamadas de perfil o validación.</cmd><info><p>Ejemplo de solicitud: <codeph>GET $BPM_BASE_URL/health/ready</codeph>. Ejemplo de respuesta: <codeph>200 {"status":"ready","ready":true}</codeph>. Si <codeph>ready</codeph> no es true, mantenga la cola y no inicie mutaciones.</p></info></step>

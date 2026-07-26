@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-policies-and-managed-preferences" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Richtlinien und Verwaltete Einstellungen</title>
+  <title>Richtlinien und verwaltete Einstellungen</title>
   <shortdesc>BPM trennt Firefox Enterprise-Richtlinien von verwalteten Einstellungswerten und behält beide in einem Profil.</shortdesc>
   <conbody>
     <p>Richtlinien sind sogenannte Firefox Enterprise-Steuerelemente wie Browserverhalten, Zugriff, Berechtigungen oder Funktionseinstellungen. Verwaltete Einstellungen sind Präferenzschlüssel mit Werten und optionalem Sperrverhalten.</p>

@@ -27,7 +27,6 @@ def test_chromium_locale_smoke_matrix_browser_test_covers_ru_zh_smoke_routes():
     for selector in ("#list", "#wizard-panel", "#settings-panel", "#editor-panel"):
         assert selector in browser_test_source
     for key in (
-        "profiles.title",
         "profiles.nav_library",
         "profiles.workspace_scope_guided",
         "profiles.editor_chrome_settings_link",

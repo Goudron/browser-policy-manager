@@ -7,20 +7,28 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
 from app import main as main_module
-from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
 from app.db import AsyncSessionAdapter
 from app.models.profile import Base, Profile
-from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
+from app.services.profile_schema_normalization import (
+    ESR_140_13_SCHEMA_CHANNEL,
+    LEGACY_SCHEMA_VERSION_MAP,
+    RELEASE_153_SCHEMA_CHANNEL,
+    normalize_legacy_profile_schema_versions,
+)
+from app.services.profile_service import ProfileService
 from tools import backfill_profile_schema_versions
 
 LEGACY_ESR_140_8 = f"esr-140.{8}"
 LEGACY_ESR_140_9 = f"esr-140.{9}"
 LEGACY_ESR_140_10 = f"esr-140.{10}"
 LEGACY_ESR_140_11 = f"esr-140.{11}"
+LEGACY_ESR_140_12 = f"esr-140.{12}"
 LEGACY_RELEASE_148 = f"release-{148}"
 LEGACY_RELEASE_149 = f"release-{149}"
 LEGACY_RELEASE_150 = f"release-{150}"
 LEGACY_RELEASE_151 = f"release-{151}"
+LEGACY_RELEASE_152 = f"release-{152}"
+SUPPORTED_ESR_153 = "esr-153.0"
 
 
 def _make_session():
@@ -39,15 +47,27 @@ def test_profile_schema_normalization_updates_only_selected_legacy_channels():
                 Profile(name="legacy-esr-9", schema_version=LEGACY_ESR_140_9, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-esr-10", schema_version=LEGACY_ESR_140_10, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-esr-11", schema_version=LEGACY_ESR_140_11, flags={"DisableTelemetry": True}),
+                Profile(name="legacy-esr-12", schema_version=LEGACY_ESR_140_12, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-current-minus-one", schema_version=LEGACY_RELEASE_149, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-current-minus-one-copy", schema_version=LEGACY_RELEASE_149, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-current", schema_version=LEGACY_RELEASE_150, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-151", schema_version=LEGACY_RELEASE_151, flags={"DisableTelemetry": True}),
+                Profile(name="legacy-release-152", schema_version=LEGACY_RELEASE_152, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-esr-8", schema_version=LEGACY_ESR_140_8, flags={"DisableTelemetry": True}),
                 Profile(name="legacy-release-older", schema_version=LEGACY_RELEASE_148, flags={"DisableTelemetry": True}),
                 Profile(
                     name="current-release",
-                    schema_version=CURRENT_RELEASE_SCHEMA_CHANNEL,
+                    schema_version=RELEASE_153_SCHEMA_CHANNEL,
+                    flags={"DisableTelemetry": True},
+                ),
+                Profile(
+                    name="current-esr-140",
+                    schema_version=ESR_140_13_SCHEMA_CHANNEL,
+                    flags={"DisableTelemetry": True},
+                ),
+                Profile(
+                    name="current-esr-153",
+                    schema_version=SUPPORTED_ESR_153,
                     flags={"DisableTelemetry": True},
                 ),
             ]
@@ -63,26 +83,32 @@ def test_profile_schema_normalization_updates_only_selected_legacy_channels():
             row.name: (row.schema_version, row.revision)
             for row in session.scalars(select(Profile).order_by(Profile.name)).all()
         }
-        assert result.scanned == 7
-        assert result.normalized == 7
+        assert result.scanned == 9
+        assert result.normalized == 9
         assert result.skipped_invalid == 0
-        assert rows["legacy-esr-10"][0] == CURRENT_ESR_SCHEMA_CHANNEL
-        assert rows["legacy-esr-11"][0] == CURRENT_ESR_SCHEMA_CHANNEL
-        assert rows["legacy-esr-9"][0] == CURRENT_ESR_SCHEMA_CHANNEL
-        assert rows["legacy-release-current"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
-        assert rows["legacy-release-151"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
-        assert rows["legacy-release-current-minus-one"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
-        assert rows["legacy-release-current-minus-one-copy"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
+        assert rows["legacy-esr-9"][0] == ESR_140_13_SCHEMA_CHANNEL
+        assert rows["legacy-esr-10"][0] == ESR_140_13_SCHEMA_CHANNEL
+        assert rows["legacy-esr-11"][0] == ESR_140_13_SCHEMA_CHANNEL
+        assert rows["legacy-esr-12"][0] == ESR_140_13_SCHEMA_CHANNEL
+        assert rows["legacy-release-current-minus-one"][0] == RELEASE_153_SCHEMA_CHANNEL
+        assert rows["legacy-release-current-minus-one-copy"][0] == RELEASE_153_SCHEMA_CHANNEL
+        assert rows["legacy-release-current"][0] == RELEASE_153_SCHEMA_CHANNEL
+        assert rows["legacy-release-151"][0] == RELEASE_153_SCHEMA_CHANNEL
+        assert rows["legacy-release-152"][0] == RELEASE_153_SCHEMA_CHANNEL
         assert rows["legacy-esr-8"][0] == LEGACY_ESR_140_8
         assert rows["legacy-release-older"][0] == LEGACY_RELEASE_148
-        assert rows["current-release"][0] == CURRENT_RELEASE_SCHEMA_CHANNEL
+        assert rows["current-release"][0] == RELEASE_153_SCHEMA_CHANNEL
+        assert rows["current-esr-140"] == (ESR_140_13_SCHEMA_CHANNEL, 1)
+        assert rows["current-esr-153"] == (SUPPORTED_ESR_153, 1)
         assert rows["legacy-esr-10"][1] == 2
         assert rows["legacy-esr-11"][1] == 2
+        assert rows["legacy-esr-12"][1] == 2
         assert rows["legacy-esr-9"][1] == 2
         assert rows["legacy-release-current"][1] == 2
         assert rows["legacy-release-151"][1] == 2
         assert rows["legacy-release-current-minus-one"][1] == 2
         assert rows["legacy-release-current-minus-one-copy"][1] == 2
+        assert rows["legacy-release-152"][1] == 2
     finally:
         session.close()
         engine.dispose()
@@ -91,12 +117,24 @@ def test_profile_schema_normalization_updates_only_selected_legacy_channels():
 def test_profile_schema_normalization_noops_when_no_legacy_channels_exist():
     engine, session = _make_session()
     try:
-        session.add(
-            Profile(
-                name="current-only",
-                schema_version=CURRENT_RELEASE_SCHEMA_CHANNEL,
-                flags={"DisableTelemetry": True},
-            )
+        session.add_all(
+            [
+                Profile(
+                    name="current-release",
+                    schema_version=RELEASE_153_SCHEMA_CHANNEL,
+                    flags={"DisableTelemetry": True},
+                ),
+                Profile(
+                    name="current-esr-140",
+                    schema_version=ESR_140_13_SCHEMA_CHANNEL,
+                    flags={"DisableTelemetry": True},
+                ),
+                Profile(
+                    name="current-esr-153",
+                    schema_version=SUPPORTED_ESR_153,
+                    flags={"DisableTelemetry": True},
+                ),
+            ]
         )
         session.commit()
 
@@ -107,6 +145,44 @@ def test_profile_schema_normalization_noops_when_no_legacy_channels_exist():
         assert result.scanned == 0
         assert result.normalized == 0
         assert result.skipped_invalid == 0
+    finally:
+        session.close()
+        engine.dispose()
+
+
+def test_profile_schema_normalization_uses_the_explicit_dual_esr_map():
+    assert LEGACY_SCHEMA_VERSION_MAP == {
+        LEGACY_ESR_140_9: ESR_140_13_SCHEMA_CHANNEL,
+        LEGACY_ESR_140_10: ESR_140_13_SCHEMA_CHANNEL,
+        LEGACY_ESR_140_11: ESR_140_13_SCHEMA_CHANNEL,
+        LEGACY_ESR_140_12: ESR_140_13_SCHEMA_CHANNEL,
+        LEGACY_RELEASE_149: RELEASE_153_SCHEMA_CHANNEL,
+        LEGACY_RELEASE_150: RELEASE_153_SCHEMA_CHANNEL,
+        LEGACY_RELEASE_151: RELEASE_153_SCHEMA_CHANNEL,
+        LEGACY_RELEASE_152: RELEASE_153_SCHEMA_CHANNEL,
+    }
+
+
+def test_profile_service_list_does_not_normalize_legacy_profiles():
+    engine, session = _make_session()
+    try:
+        profile = Profile(
+            name="legacy-library-read",
+            schema_version=LEGACY_RELEASE_152,
+            flags={"DisableTelemetry": True},
+        )
+        session.add(profile)
+        session.commit()
+
+        profiles = asyncio.run(ProfileService.list(AsyncSessionAdapter(session)))
+        stored = session.get(Profile, profile.id)
+
+        assert [(item.name, item.schema_version) for item in profiles] == [
+            ("legacy-library-read", LEGACY_RELEASE_152)
+        ]
+        assert stored is not None
+        assert stored.schema_version == LEGACY_RELEASE_152
+        assert stored.revision == 1
     finally:
         session.close()
         engine.dispose()
@@ -204,8 +280,8 @@ def test_app_startup_normalizes_selected_legacy_profile_channels():
             row.name: row.schema_version
             for row in session.scalars(select(Profile).order_by(Profile.name)).all()
         }
-        assert rows["startup-esr"] == CURRENT_ESR_SCHEMA_CHANNEL
-        assert rows["startup-release"] == CURRENT_RELEASE_SCHEMA_CHANNEL
+        assert rows["startup-esr"] == ESR_140_13_SCHEMA_CHANNEL
+        assert rows["startup-release"] == RELEASE_153_SCHEMA_CHANNEL
         assert rows["startup-untouched"] == LEGACY_ESR_140_8
     finally:
         app.dependency_overrides.pop(main_module.get_session, None)

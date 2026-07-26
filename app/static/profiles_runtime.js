@@ -276,7 +276,6 @@
 
             documentRef.querySelectorAll([
                 "#profile-derived-note",
-                "#profile-lifecycle-copy",
                 "#json-context-copy",
                 "#wizard-clone-handoff-copy",
                 "#wizard-shared-device-workflow-copy",
@@ -356,8 +355,8 @@
                     ?.querySelector(".wizard-step-memory-item-title")
                     ?.textContent?.trim() || "";
                 const contextText = [itemTitle, itemCopy].filter(Boolean).join(". ");
-                const copyEl = button.closest(".profile-lifecycle-panel, .wizard-workflow-card, .wizard-step-actions")
-                    ?.querySelector("#profile-lifecycle-copy, #wizard-clone-handoff-copy, #wizard-shared-device-workflow-copy, #wizard-step-memory-copy");
+                const copyEl = button.closest(".wizard-workflow-card, .wizard-step-actions")
+                    ?.querySelector("#wizard-clone-handoff-copy, #wizard-shared-device-workflow-copy, #wizard-step-memory-copy");
                 if (actionText && contextText) {
                     button.setAttribute("aria-label", `${actionText}. ${contextText}`);
                 }

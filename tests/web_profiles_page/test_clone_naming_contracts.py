@@ -61,7 +61,6 @@ def test_library_clone_name_control_copy_keys_are_in_runtime_catalogs():
             "profiles.clone_name_label",
             "profiles.clone_name_confirm",
             "profiles.clone_name_cancel",
-            "profiles.clone_name_ready",
             "profiles.clone_name_required",
             "profiles.clone_name_duplicate",
         ):
@@ -143,9 +142,9 @@ def test_library_clone_name_layout_covers_russian_and_french_long_labels_contrac
     }
 
     assert locales["ru"]["profiles.clone_name_confirm"] == "Открыть черновик"
-    assert locales["ru"]["profiles.clone_name_ready"] == "Выберите имя перед открытием черновика клона."
     assert locales["fr"]["profiles.clone_name_confirm"] == "Ouvrir le brouillon"
-    assert locales["fr"]["profiles.clone_name_ready"] == "Choisissez un nom avant d’ouvrir le brouillon cloné."
+    assert "profiles.clone_name_ready" not in locales["ru"]
+    assert "profiles.clone_name_ready" not in locales["fr"]
 
     assert_source_contains_all(
         css,
@@ -273,13 +272,8 @@ def test_clone_name_conflicts_are_actionable_and_do_not_open_revision_conflict_p
     )
 
 
-def test_clone_handoff_copy_has_no_owner_or_compare_guidance():
+def test_clone_handoff_copy_is_retired_from_runtime_catalogs():
     for locale in ("en", "ru", "de", "es-ES", "fr", "zh-CN"):
         locale_json = json.loads((REPO_ROOT / "app" / "i18n" / f"{locale}.json").read_text(encoding="utf-8"))
 
-        assert "profiles.clone_handoff_item_compare" not in locale_json
-        assert "profiles.clone_handoff_compare" not in locale_json
-        identity_copy = locale_json["profiles.clone_handoff_item_identity"].lower()
-        assert "owner" not in identity_copy
-        assert "владель" not in identity_copy
-        assert "所有者" not in identity_copy
+        assert not any(key.startswith("profiles.clone_handoff_") for key in locale_json)

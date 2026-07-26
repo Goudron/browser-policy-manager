@@ -60,17 +60,15 @@ REQUIRED_SOURCE_TOKENS = (
     "curl -fsS http://127.0.0.1:8000/health",
     "curl -fsS http://127.0.0.1:8000/health/ready",
     "http://127.0.0.1:8000/profiles",
-    "make test-fast",
 )
 REQUIRED_BOUNDARY_TERMS = (
-    "packaged installer",
-    "native service",
-    "systemd",
+    "source-based Linux deployment",
+    "organization-owned procedures",
+    "services",
     "reverse proxy",
     "TLS",
-    "HA",
-    "managed secret",
-    "backup automation",
+    "secrets",
+    "backups",
     "production hardening",
 )
 FORBIDDEN_SUPPORTED_CLAIMS = (
@@ -168,11 +166,12 @@ def test_english_linux_source_runbook_matches_current_repository_commands_and_se
         "3.14+",
         "python -m venv .venv",
         "source .venv/bin/activate",
-        "pip install -e \".[dev]\"",
-        "alembic upgrade head",
+        "pip install .",
+        "make dev",
     ):
         assert token in readme
-        assert token in combined
+    assert "make dev" in combined
+    assert "alembic upgrade head" in combined
     assert "uvicorn app.main:app --reload --port 8000" in makefile
     for token in (
         "DATABASE_URL",
@@ -213,7 +212,6 @@ def test_localized_linux_source_runbook_topics_preserve_parity_and_invariant_tok
         "/health/ready",
         "http://127.0.0.1:8000/profiles",
         "make dev",
-        "make test-fast",
     )
     assert any(token in localized for token in invariant_tokens)
     if topic_id == "admin-task-set-up-linux-source-checkout":
@@ -223,6 +221,5 @@ def test_localized_linux_source_runbook_topics_preserve_parity_and_invariant_tok
         for token in (
             "curl -fsS http://127.0.0.1:8000/health",
             "curl -fsS http://127.0.0.1:8000/health/ready",
-            "make test-fast",
         ):
             assert token in localized

@@ -12,6 +12,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .wizard-content {
+                padding-inline-start: var(--compact-space-3);
+            }
+
             .wizard-settings-search-shell {
                 max-width: none;
             }
@@ -193,10 +197,6 @@
                 line-height: 1.45;
             }
 
-            .wizard-context-copy {
-                font-size: 0.8rem;
-            }
-
             .wizard-settings-search-shell {
                 padding: 0.75rem;
                 border-radius: 18px;
@@ -296,10 +296,6 @@
                 overflow-x: hidden;
             }
 
-            .compare-settings-heading {
-                grid-template-columns: 1fr;
-            }
-
             .compare-settings-table {
                 display: block;
                 min-width: 0;
@@ -385,7 +381,7 @@
             }
 
             .wizard-section-group {
-                gap: 12px;
+                gap: 10px;
             }
 
             .wizard-step-map {
@@ -400,12 +396,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .wizard-stage-bar,
             .wizard-stage-status,
-            .wizard-fine-tuning-bar,
-            .wizard-stage-panel,
-            .wizard-fine-tuning-panel,
-            .wizard-subsection-card,
             .wizard-search-engine-card,
             .wizard-summary-row--decision,
             .wizard-summary-card,
@@ -419,10 +410,8 @@
                 grid-template-columns: 1fr;
             }
 
-            .wizard-stage-panel,
-            .wizard-fine-tuning-panel,
             .wizard-policy-grid {
-                gap: 14px;
+                gap: 12px;
             }
 
             .wizard-search-engine-preset-grid {
@@ -483,11 +472,11 @@
             }
 
             .library-panel-toolbar {
-                justify-content: flex-start;
+                grid-template-columns: 1fr;
             }
 
-            .library-panel-toolbar #refresh {
-                width: auto;
+            .library-action-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .library-filter-bar {
@@ -518,11 +507,6 @@
                 justify-content: center;
             }
 
-            .library-search-field,
-            .library-panel-toolbar #refresh {
-                width: 100%;
-            }
-
             .wizard-shareable-summary-actions {
                 align-items: stretch;
             }
@@ -548,10 +532,6 @@
                 gap: 12px;
             }
 
-            .library-panel-intro {
-                max-width: none;
-            }
-
             .library-panel-badges {
                 width: 100%;
                 justify-content: flex-start !important;
@@ -564,15 +544,16 @@
                 gap: 10px;
             }
 
-            .library-search-field,
-            .library-panel-toolbar #refresh,
-            .library-panel-toolbar #create-profile-link,
-            .library-panel-toolbar #import-firefox-policies {
+            .library-action-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .library-action-grid .button-base {
                 width: 100%;
                 min-width: 0;
             }
 
-            .library-panel-toolbar .button-base {
+            .library-action-grid .button-base {
                 justify-content: center;
                 min-height: 44px;
                 white-space: normal;
@@ -676,7 +657,7 @@
             }
 
             .library-row-actions .button-base {
-                min-height: 40px;
+                min-height: var(--compact-control-target);
                 white-space: normal;
             }
 
@@ -782,8 +763,6 @@
 
             .wizard-panel {
                 min-width: 0;
-                padding: 12px;
-                border-radius: 18px;
                 overflow-wrap: anywhere;
             }
 
@@ -806,12 +785,7 @@
                 padding-inline-start: 0;
             }
 
-            .wizard-stage-bar,
             .wizard-stage-status,
-            .wizard-fine-tuning-bar,
-            .wizard-stage-panel,
-            .wizard-fine-tuning-panel,
-            .wizard-subsection-card,
             .wizard-search-engine-card,
             .wizard-summary-row--decision,
             .wizard-summary-card,
@@ -837,10 +811,6 @@
 
             .wizard-subtitle {
                 font-size: 0.82rem;
-            }
-
-            .wizard-context-copy {
-                display: none;
             }
 
             .wizard-summary-row--decision .wizard-summary-key {

@@ -176,5 +176,10 @@
     "profiles.schema_field_use_proxy_for_dns": "Verwenden Sie Proxy für DNS",
     "profiles.schema_field_value": "Wert",
     "profiles.schema_field_virtual_reality": "Virtuell Realitaet",
-    "profiles.schema_field_web_suggestions": "Web Vorschläge"
+    "profiles.schema_field_web_suggestions": "Web Vorschläge",
+    "profiles.shell_policy_disable_remote_settings_and_accept_security_consequences": "Remote-Einstellungen mit Sicherheitsbestätigung deaktivieren",
+    "profiles.schema_field_allowed_permissions": "Zugelassene Add-on-Berechtigungen",
+    "profiles.schema_field_blocked_permissions": "Gesperrte Add-on-Berechtigungen",
+    "profiles.schema_field_runtime_allowed_hosts": "Zugelassene Add-on-Hosts",
+    "profiles.schema_field_runtime_blocked_hosts": "Gesperrte Add-on-Hosts"
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-devops-network-cors-security" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Überprüfen Sie das Netzwerk, CORS und Sicherheitsbeschränkungen</title>
+  <title>Netzwerk, CORS und Sicherheitsbeschränkungen prüfen</title>
   <shortdesc>Überprüfen Sie Host, Port, Neuladen, Integritätstests, CORS-Standardeinstellungen und Sicherheitsbeschränkungen, bevor Sie eine von der Quelle ausgeführte BPM-Instanz erreichbar machen.</shortdesc>
   <taskbody>
     <prereq><p>Der Quellprozess kann mit <codeph>make dev</codeph> gestartet werden und der Administrator kann <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_RELOAD</codeph>, <codeph>BPM_ENABLE_CORS</codeph> und <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> ändern.</p></prereq>

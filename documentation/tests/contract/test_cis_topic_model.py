@@ -153,10 +153,11 @@ def test_recommendation_contract_matches_cis_inventory_counts_and_edge_cases() -
     assert recommendation_model["planned_topics_require_targets"] is True
     assert recommendation_model["provenance_only_must_not_publish_topic"] is True
 
-    assert automation_model["supported_schema_channels"] == ["esr-140.12", "release-152"]
+    assert automation_model["supported_schema_channels"] == ["esr-140.13", "esr-153.0", "release-153"]
     assert sorted({layer["schema_channel"] for layer in inventory["generated_layers"]}) == [
-        "esr-140.12",
-        "release-152",
+        "esr-140.13",
+        "esr-153.0",
+        "release-153",
     ]
     assert sorted({layer["level"] for layer in inventory["generated_layers"]}) == [1, 2]
     assert automation_model["manual_review_path_count"] == len(inventory["manual_review_paths"])

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-bpm-firefox-boundary" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Où se termine la validation BPM et où commence l'exécution de Firefox</title>
+  <title>Limite entre la validation BPM et l’exécution de Firefox</title>
   <shortdesc>BPM valide et exporte un document de stratégie Firefox Enterprise ; Firefox applique le document lors de l'exécution en dehors de BPM.</shortdesc>
   <conbody>
     <section id="a-profile-model"><title>Modèle de profil BPM</title><p>Un profil BPM est un modèle d'édition enregistré. Il peut contenir des valeurs de stratégie, Préférences gérées, des informations sur la source, un état de validation, des valeurs prédéfinies ou dérivées de CIS et des données brutes importées avant l'exportation.</p></section>

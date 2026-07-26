@@ -2,6 +2,47 @@
 from tests.web_profiles_page_helpers import *
 
 
+def test_library_compact_header_removes_routine_narration_and_keeps_controls():
+    template = template_source("_page_library_workspace.html")
+    library_css = static_source("profiles_css/10-library.css")
+
+    assert_source_excludes_all(
+        template,
+        (
+            "library-panel-intro",
+            "profiles.sidebar_title",
+            "profiles.sidebar_hint",
+            'context_help_surface = "library"',
+        ),
+    )
+    assert_source_contains_all(
+        template,
+        (
+            'id="search"',
+            'id="library-schema-filter"',
+            'id="library-lifecycle-filter"',
+            'id="library-validation-filter"',
+            'id="sort"',
+            'id="order"',
+            'id="refresh"',
+            'id="create-profile-link"',
+            'id="compare-profiles-link"',
+            'id="import-firefox-policies"',
+            'id="list"',
+        ),
+    )
+    assert_source_contains_all(
+        library_css,
+        (
+            ".library-panel-shell {",
+            "gap: var(--compact-space-3);",
+            ".library-search-input {",
+            ".library-filter-field .soft-input {",
+            "min-height: var(--compact-control-target);",
+        ),
+    )
+
+
 def test_library_table_resets_list_spacing_contract():
     library_table_block = css_block(".library-table")
 
@@ -36,6 +77,68 @@ def test_library_title_button_uses_wrapping_width_contract():
 
     assert_source_contains_all(block, ("width: 100%;", "max-width: 100%;", "min-width: 0;"))
     assert_source_excludes_all(block, ("width: fit-content;",))
+
+
+def test_library_rows_keep_facts_and_distinct_actions_without_duplicate_open_or_id():
+    source = static_source("profiles_library_bootstrap.js")
+    library_css = static_source("profiles_css/10-library.css")
+
+    assert_source_contains_all(
+        source,
+        (
+            "const profileDescription = profile.description || t(\"profiles.library_description_empty\");",
+            "formatSchemaLabel(profile.schema_version)",
+            "const validationLabel = formatValidationStateLabel(profile);",
+            "formatTimestamp(profile.updated_at)",
+            'data-library-lifecycle-action="${profile.is_deleted ? "restore" : "archive"}"',
+            'data-library-lifecycle-action="hard-delete"',
+            'data-clone-profile-id="${profile.id}"',
+        ),
+    )
+    assert_source_excludes_all(
+        source,
+        (
+            "const openLabel = t(\"profiles.list_open\");",
+            "library-row-open-button",
+            "library-row-identity-meta",
+        ),
+    )
+    assert_source_contains_all(
+        library_css,
+        (
+            ".library-row-grid {",
+            "padding: var(--compact-space-3) var(--compact-space-4);",
+            ".library-row-actions .button-base {",
+            ".library-row-secondary-action {",
+            "min-height: var(--compact-control-target);",
+        ),
+    )
+
+
+def test_library_empty_clone_and_destructive_states_keep_only_actionable_meaning():
+    source = static_source("profiles_library_bootstrap.js")
+    workspace_source = static_source("profiles_workspace.js")
+
+    assert_source_contains_all(
+        source,
+        (
+            't("profiles.empty_title")',
+            't("profiles.confirm_soft_delete")',
+            't("profiles.confirm_hard_delete")',
+            't("profiles.library_export_unavailable_archived")',
+            't("profiles.clone_name_required")',
+            't("profiles.clone_name_duplicate")',
+        ),
+    )
+    assert_source_excludes_all(
+        source + workspace_source,
+        (
+            't("profiles.empty_list")',
+            't("profiles.clone_name_ready")',
+            "list-empty-illustration",
+            "clone_handoff",
+        ),
+    )
 
 
 def test_library_row_button_uses_border_box_contract():
@@ -204,6 +307,7 @@ def test_compare_value_states_have_visible_text_and_not_color_only_contract():
 
 def test_compare_route_entrypoint_keeps_selection_and_table_anchors_contract():
     source = static_source("profiles_compare.js")
+    template = template_source("_page_compare_workspace.html")
 
     assert_source_contains_all(
         source,
@@ -239,6 +343,16 @@ def test_compare_route_entrypoint_keeps_selection_and_table_anchors_contract():
             "profiles.library_compare_",
             "profiles.library_status_compare_",
             "profile-owner",
+        ),
+    )
+    assert_source_excludes_all(
+        template,
+        (
+            "profiles.compare_route_eyebrow",
+            "profiles.compare_selection_title",
+            "profiles.compare_settings_title",
+            "compare-selection-title",
+            "compare-settings-heading",
         ),
     )
 

@@ -7,7 +7,7 @@
     {
       "id": "updates-baseline",
       "family": "updates",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "DisableAppUpdate": true,
         "AppAutoUpdate": false,
@@ -17,7 +17,7 @@
     {
       "id": "extensions-baseline",
       "family": "extensions",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "ExtensionSettings": {
           "*": {
@@ -33,7 +33,7 @@
     {
       "id": "permissions-baseline",
       "family": "permissions",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "Permissions": {
           "Camera": {
@@ -51,7 +51,7 @@
     {
       "id": "certificates-baseline",
       "family": "certificates",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "Certificates": {
           "ImportEnterpriseRoots": true,
@@ -62,7 +62,7 @@
     {
       "id": "proxy-baseline",
       "family": "proxy",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "Proxy": {
           "Mode": "manual",
@@ -75,7 +75,7 @@
     {
       "id": "search-baseline",
       "family": "search",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "SearchEngines": {
           "Add": [
@@ -91,7 +91,7 @@
     {
       "id": "homepage-baseline",
       "family": "homepage",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "Homepage": {
           "URL": "https://intranet.example.invalid/",
@@ -103,7 +103,7 @@
     {
       "id": "privacy-baseline",
       "family": "privacy",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "EnableTrackingProtection": {
           "Value": true,
@@ -119,7 +119,7 @@
     {
       "id": "ai-controls-baseline",
       "family": "ai-controls",
-      "channels": ["release-152"],
+      "channels": ["esr-153.0", "release-153"],
       "policies": {
         "AIControls": {
           "Default": {
@@ -136,7 +136,7 @@
     {
       "id": "managed-preference-locking-baseline",
       "family": "managed-preferences",
-      "channels": ["esr-140.12", "release-152"],
+      "channels": ["esr-140.13", "esr-153.0", "release-153"],
       "policies": {
         "Preferences": {
           "browser.download.useDownloadDir": {

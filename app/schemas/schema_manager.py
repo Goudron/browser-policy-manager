@@ -12,14 +12,16 @@ The manager is designed to work in CI and offline environments:
 - Timeouts and clear error messages help diagnose network issues
 
 Important note:
-- Mozilla's official `policy_templates_v*.zip` releases for Firefox 152 / ESR 140.12
+- Mozilla's official `policy_templates_v*.zip` releases for Firefox 153 / ESR 153 and
+  Firefox 140.13
   publish docs, policies.json examples, plist, and ADMX assets, but do not
   include a raw `policies-schema.json`. The URL probing in this module is
   therefore best-effort and mainly supports historical/internal workflows.
 
-Target versions in Sprint G:
-- ESR 140.12   -> version key: "esr14012"
-- Release 152 -> version key: "release152"
+Supported version keys:
+- ESR 140.13 -> version key: "esr14013"
+- ESR 153.0 -> version key: "esr1530"
+- Release 153 -> version key: "release153"
 """
 
 from __future__ import annotations
@@ -66,32 +68,40 @@ class SchemaNotFoundError(SchemaManagerError):
 
 
 class SchemaVersion(Enum):
-    """Logical versions we support in Sprint G.
+    """Logical versions exposed by the best-effort raw-schema cache helper.
 
     Each logical version maps to one or more upstream git refs.
     We try refs top-to-bottom until we download successfully.
     """
 
-    ESR14012 = "esr14012"
-    RELEASE152 = "release152"
+    ESR14013 = "esr14013"
+    ESR1530 = "esr1530"
+    RELEASE153 = "release153"
 
     @property
     def refs(self) -> list[str]:
         # We keep several plausible refs for robustness:
         # tags (e.g., "release-152.0"), the "release" branch, and ESR branches.
-        if self is SchemaVersion.ESR14012:
+        if self is SchemaVersion.ESR14013:
             return [
-                # Try exact tags first (most stable)
-                "esr-140.12",
-                "esr14012",
+                "v7.12",
+                "esr-140.13",
                 # Fallback to esr branch if exists
                 "esr",
                 # Final fallback to main
                 "main",
             ]
-        elif self is SchemaVersion.RELEASE152:
+        if self is SchemaVersion.ESR1530:
             return [
-                "release-152.0",
+                "v8.0",
+                "esr-153.0",
+                "esr",
+                "main",
+            ]
+        if self is SchemaVersion.RELEASE153:
+            return [
+                "v8.0",
+                "release-153.0",
                 "release",  # rolling branch for releases
                 "main",  # ultimate fallback
             ]
@@ -99,15 +109,17 @@ class SchemaVersion(Enum):
 
     @property
     def cache_subdir(self) -> str:
-        return "esr14012" if self is SchemaVersion.ESR14012 else "release152"
+        return self.value
 
     @staticmethod
     def from_key(key: str) -> SchemaVersion:
         k = key.strip().lower()
-        if k in {"esr14012", "firefox-esr14012"}:
-            return SchemaVersion.ESR14012
-        if k in {"release152", "firefox-release152"}:
-            return SchemaVersion.RELEASE152
+        if k in {"esr14013", "firefox-esr14013"}:
+            return SchemaVersion.ESR14013
+        if k in {"esr1530", "firefox-esr1530"}:
+            return SchemaVersion.ESR1530
+        if k in {"release153", "firefox-release153"}:
+            return SchemaVersion.RELEASE153
         raise ValueError(f"Unsupported schema version key: {key!r}")
 
 
@@ -237,7 +249,7 @@ class SchemaManager:
         raise SchemaDownloadError(
             "Unable to download policies-schema.json for "
             f"{version.value}. Upstream may not publish a raw schema for this "
-            "Firefox release anymore; the official v7.12 release package contains "
+            "Firefox release anymore; the official policy-template release package contains "
             "platform templates, but no policies-schema.json. "
             f"Last error: {last_error}"
         )

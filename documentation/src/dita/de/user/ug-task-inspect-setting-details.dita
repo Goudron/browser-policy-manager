@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-inspect-setting-details" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Überprüfen Sie die Einstellungsdetails</title>
+  <title>Einstellungsdetails prüfen</title>
   <shortdesc>Wählen Sie eine Einstellung aus und überprüfen Sie deren Wert, Quelle, Validierung, Schemaunterstützung und Produktstandort.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie Alle Einstellungen und wählen Sie eine Einstellungszeile aus „Überprüfen“, „Konfiguriert“, „Katalog“, „Suchen“ oder einen Deep-Link aus.</p></prereq>

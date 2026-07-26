@@ -39,6 +39,8 @@
   },
   "expansion_behavior": {
     "trigger": "explicit advanced-options disclosure control",
+    "submission_behavior": "Submitting a query with Enter or the search button preserves the current disclosure state.",
+    "url_restore_behavior": "Restoring a search URL preserves the collapsed filter panel while restoring its query and selected filters.",
     "state_source": "URL query parameters and in-page state only",
     "preserve_on_expand": [
       "query text",
@@ -55,6 +57,7 @@
     ],
     "must_not": [
       "change deterministic ranking",
+      "expand a collapsed filter panel when submitting a query",
       "reload from a remote service",
       "clear query text",
       "trap keyboard focus",

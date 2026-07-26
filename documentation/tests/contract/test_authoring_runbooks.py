@@ -63,6 +63,56 @@ def test_one_topic_runbook_keeps_changes_small_and_dita_only() -> None:
         assert required in runbook
 
 
+def test_authoring_runbooks_preserve_compact_ui_and_reader_documentation_boundaries() -> None:
+    topic = _text("add-or-update-topic.md")
+    localization = _text("localization-and-screenshots.md")
+    publishing = _text("links-manifest-and-publishing.md")
+    backlog = _repository_text("docs/epic-backlog-creation-runbook.md")
+
+    for required in (
+        "UI copy classification contract",
+        "Do not add routine workflow narration",
+        "labels, current state, validation, consequence, unavailable reason, and recovery",
+        "genuine remaining comprehension gap",
+        "localized, manifest-backed stable topic or anchor",
+        "Do not address a maintainer or developer",
+        "separately owned documentation version",
+        "make docs-install-dev",
+        "maintainer's subsequent `make dev`",
+        "do not start the development server",
+    ):
+        assert required in topic
+
+    for required in (
+        "English source carries meaning and structure; it is not a grammar",
+        "locale editorial style policy",
+        "Natural-language gate",
+        "Изменение языка интерфейса",
+        "Изменить язык интерфейса",
+        "one BPM product version derived from product metadata",
+        "make docs-install-dev",
+    ):
+        assert required in localization
+
+    for required in (
+        "one BPM product version derived from product metadata",
+        "circled-info/contextual-help link only for a genuine remaining comprehension gap",
+        "localized manifest-backed stable target",
+        "Do not start the development server as part of this handoff",
+    ):
+        assert required in publishing
+
+    for required in (
+        "Compact UI-copy and documentation guard",
+        "recorded genuine comprehension gap",
+        "not maintainers or implementation progress",
+        "no separately owned documentation version",
+        "locale-native headings rather than English-calqued grammar",
+        "make docs-install-dev",
+    ):
+        assert required in backlog
+
+
 def test_localization_and_inventory_runbooks_preserve_no_ai_and_provenance_boundaries() -> None:
     localization = _text("localization-and-screenshots.md")
     inventory = _text("inventory-refresh.md")
@@ -308,3 +358,40 @@ def test_schema_cis_and_locale_update_runbooks_revalidate_documentation_polish()
         "test_documentation_polish_regression_gates.py",
     ):
         assert required in locale
+
+
+def test_drift_runbooks_keep_compact_ui_and_documentation_shell_evidence_current() -> None:
+    locale = _repository_text("docs/locale_update_runbook_2026-06-01.md")
+    firefox = _repository_text("docs/firefox-schema-update-runbook.md")
+    cis = _repository_text("docs/cis_firefox_update_runbook_2026-04-13.md")
+    inventory = _text("inventory-refresh.md")
+    screenshots = _text("localization-and-screenshots.md")
+    publishing = _text("links-manifest-and-publishing.md")
+
+    for runbook in (locale, firefox, cis, inventory):
+        for required in (
+            "UI-copy classification",
+            "localized manifest-backed owner",
+            "reviewed no-link disposition",
+            "audience/style",
+            "normalized BPM header",
+            "derived BPM product version",
+            "URL/history hydration",
+            "must not reopen",
+        ):
+            assert required in runbook
+
+    for required in (
+        "Compact-shell gate",
+        "explicit toggle",
+        "localized manifest-backed target",
+        "reviewed no-link disposition",
+    ):
+        assert required in screenshots
+
+    for required in (
+        "normalized BPM header slots",
+        "one derived product version",
+        "must not reopen an advanced-filter panel",
+    ):
+        assert required in publishing

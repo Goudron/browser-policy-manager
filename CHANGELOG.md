@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.2
+
+Status: **Release candidate; implementation complete.**
+
+### Changed
+- Уплотнены Library, Guided editor, All settings, JSON editor, Compare и общая оболочка редакторов:
+  удалены дублирующие пояснения при сохранении подписей, состояний, валидации, восстановления,
+  предупреждений об опасных действиях и доступности.
+- Документация получила ту же компактную оболочку, заголовок, стили, локаль и версию BPM, что и
+  основной интерфейс; состояние свёрнутых фильтров поиска сохраняется после поиска.
+- Из пользовательской документации удалены обращения к разработчику и служебные сведения о ходе
+  реализации; заголовки и видимый текст выровнены по локальным редакционным правилам.
+- Добавлена одновременная поддержка трёх схем Firefox: релиз 153, ESR 153.0 и ESR 140.13;
+  различия каналов и отсутствие автоматической миграции между ESR документированы. Supported
+  channels are Release 153, ESR 153.0, and ESR 140.13.
+
 ## 0.9.1
 
 ### Added
@@ -199,7 +215,7 @@
   pagination, keyboard/focus contracts, screen-reader labels, and responsive heavy-profile layouts.
 - Added a distinct permanent-delete action for active and archived Library profiles with explicit
   irreversible confirmation and failure-safe API handling.
-- Added bundled Firefox Release 152 and ESR 140.12 schemas from Mozilla policy templates v7.12,
+- Added bundled Firefox Release 153 and ESR 140.13 schemas from Mozilla policy templates v7.12,
   including migration/runtime normalization, generated CIS layers, and All settings coverage for
   new schema policies.
 
@@ -211,7 +227,7 @@
 - Unified baseline, CIS, manual, imported, raw, unknown, and catalog-only source state across list,
   summary, search, and detail views.
 - Updated supported Firefox channels, UI labels, README examples, converter defaults, legacy guards,
-  migrations, locale catalogs, CIS mappings, and generated layers to Release 152 / ESR 140.12.
+  migrations, locale catalogs, CIS mappings, and generated layers to Release 153 / ESR 140.13.
 - Updated all six active locale catalogs and the global terminology/allowlist contracts for new All
   settings copy, permanent deletion, Compare cleanup, and the Web Serial policy label.
 

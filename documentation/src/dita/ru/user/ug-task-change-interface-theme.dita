@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-theme" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Изменить тему интерфейса</title>
+  <title>Изменение темы интерфейса</title>
   <shortdesc>Выберите системную, светлую или темную тему, не меняя содержимое профиля.</shortdesc>
   <taskbody>
     <prereq><p>Откройте BPM или портал документации продукта в браузере.</p></prereq>

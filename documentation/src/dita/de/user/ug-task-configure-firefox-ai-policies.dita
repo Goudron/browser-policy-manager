@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Konfigurieren Sie Firefox AI und Richtlinien für intelligente Funktionen</title>
+  <title>Firefox AI und Richtlinien für intelligente Funktionen konfigurieren</title>
   <shortdesc>Verwenden Sie Schritt 5 für vorhandene Firefox-Browserrichtlinienkontrollen im Zusammenhang mit intelligenten AI &amp;-Funktionen, visueller Suche und intelligenten Oberflächen auf unterstützten Release-Schemata.</shortdesc>
   <taskbody>
-    <prereq><p>Es wurde ein Release-Schema ausgewählt, das die Steuerelemente unterstützt, oder Sie verstehen, dass ESR 140.12 diese möglicherweise weglässt.</p></prereq>
+    <prereq><p>Es wurde ein Release-Schema ausgewählt, das die Steuerelemente unterstützt, oder Sie verstehen, dass ESR 140.13 diese möglicherweise weglässt.</p></prereq>
     <context><p>In diesem Thema werden vorhandene Firefox-Richtlinieneinstellungen als Produktfunktionalität dokumentiert. Es fügt dem 0.9.1-Dokumentationsportal keine AI-Funktionalität hinzu: RAG, Einbettungen, generative Suche und generative Antworten bleiben außerhalb des Geltungsbereichs.</p></context>
     <steps>
       <step><cmd>Öffnen Sie Schritt 5, AI &amp; intelligente Funktionen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die integrierten Browser-AI-Oberflächen, die visuelle Suche und die intelligenten Browserfunktionen, die für das ausgewählte Release-Schema aufgeführt sind.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Aktivieren, deaktivieren oder belassen Sie jede unterstützte Richtlinie entsprechend dem Profilziel.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Wenn ein Steuerelement in ESR 140.12 fehlt, behandeln Sie es als nicht unterstützt, anstatt manuell eine geführte Einstellung zu erfinden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
+      <step><cmd>Wenn ein Steuerelement in ESR 140.13 fehlt, behandeln Sie es als nicht unterstützt, anstatt manuell eine geführte Einstellung zu erfinden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Unterstützte Firefox-AI- und Smart-Feature-Richtlinien werden als Produkteinstellungen überprüft, während das Dokumentationsportal für 0.9.1 weiterhin nicht AI ist.</p></result>
     <postreq><p>Wiederherstellung: Wenn ein Stakeholder eine fehlende ESR-Kontrolle erwartet, wechseln Sie zur Überprüfung zu einem unterstützten Release-Schema oder dokumentieren Sie den nicht unterstützten Zustand.</p></postreq>

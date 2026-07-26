@@ -354,7 +354,7 @@ EXPECTED_MODEL_FIELDS = {
         "properties": {
             "name": ("string", None, None, 255),
             "description": ("anyOf:string|null", None, None, None),
-            "schema_version": ("string", "esr-140.12", None, 50),
+            "schema_version": ("string", "esr-140.13", None, 50),
             "flags": ("object", None, None, None),
             "compliance": ("anyOf:object|null", None, None, None),
         },
@@ -374,7 +374,7 @@ EXPECTED_MODEL_FIELDS = {
         "properties": {
             "name": ("string", None, None, 255),
             "description": ("anyOf:string|null", None, None, None),
-            "schema_version": ("string", "esr-140.12", None, 50),
+            "schema_version": ("string", "esr-140.13", None, 50),
             "flags": ("object", None, None, None),
             "compliance": ("anyOf:object|null", None, None, None),
             "id": ("integer", None, None, None),
@@ -585,7 +585,7 @@ def test_openapi_examples_match_documented_copyable_examples_boundary() -> None:
     assert import_schema["example"] == {
         "name": "Workstation baseline",
         "description": "Imported from Firefox policies.json",
-        "schema_version": "esr-140.12",
+        "schema_version": "esr-140.13",
         "document": {
             "policies": {
                 "DisableTelemetry": True,

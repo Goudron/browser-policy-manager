@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-devops-network-cors-security" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Проверьте сеть, CORS и ограничения безопасности.</title>
+  <title>Проверка сети, CORS и ограничений безопасности</title>
   <shortdesc>Проверьте хост, порт, перезагрузку, проверки работоспособности, значения по умолчанию CORS и ограничения безопасности, прежде чем сделать экземпляр BPM, запускаемый исходным кодом, доступным.</shortdesc>
   <taskbody>
     <prereq><p>Исходный процесс можно запустить с помощью <codeph>make dev</codeph>, а администратор может изменить <codeph>BPM_HOST</codeph>, <codeph>BPM_PORT</codeph>, <codeph>BPM_RELOAD</codeph>, <codeph>BPM_ENABLE_CORS</codeph> и <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>.</p></prereq>

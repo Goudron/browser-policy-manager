@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-network-exposure-proxy-readiness" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Просмотрите вопросы о уязвимости сети и готовности прокси-сервера.</title>
+  <title>Проверка сетевой доступности и готовности к работе через прокси</title>
   <shortdesc>Подготовьте заметки о рисках в сети и обратные вопросы без публикации неподдерживаемых TLS или прокси-рецептов, как поведение BPM.</shortdesc>
   <taskbody>
     <prereq><p>Текущая оценка готовности источника с одним узлом завершена, и оператор знает, получат ли пользователи доступ к BPM через петлю, переадресованный адрес WSL, лабораторный хост или внешний прокси-сервер.</p></prereq>

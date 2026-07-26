@@ -75,7 +75,7 @@
       "locale": "en",
       "category": "channel",
       "query": "AIControls",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_top_topic_id": "fx-concept-complex-policy-families",
       "required_score_component": "exact_identifier"
     },
@@ -131,7 +131,7 @@
       "fixture_id": "ru-typo-profile-library",
       "locale": "ru",
       "category": "typo",
-      "query": "используйте библиотку",
+      "query": "работа с библиоткей профилей",
       "expected_top_topic_id": "ug-task-use-profile-library",
       "required_score_component": "bounded_typo"
     },
@@ -148,7 +148,7 @@
       "locale": "ru",
       "category": "channel",
       "query": "AIControls",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_top_topic_id": "fx-concept-complex-policy-families",
       "required_score_component": "exact_identifier"
     },
@@ -221,7 +221,7 @@
       "locale": "de",
       "category": "channel",
       "query": "AIControls",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_top_topic_id": "fx-concept-complex-policy-families",
       "required_score_component": "exact_identifier"
     },
@@ -294,7 +294,7 @@
       "locale": "zh-CN",
       "category": "channel",
       "query": "AIControls",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_top_topic_id": "fx-concept-complex-policy-families",
       "required_score_component": "exact_identifier"
     },
@@ -375,7 +375,7 @@
       "locale": "fr",
       "category": "channel",
       "query": "AIControls",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_top_topic_id": "fx-concept-complex-policy-families",
       "required_score_component": "exact_identifier"
     },
@@ -448,7 +448,7 @@
       "locale": "es-ES",
       "category": "channel",
       "query": "AIControls",
-      "filters": {"firefox_channel": ["release-152"], "policy_category": ["ai_smart"]},
+      "filters": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"]},
       "expected_top_topic_id": "fx-concept-complex-policy-families",
       "required_score_component": "exact_identifier"
     },

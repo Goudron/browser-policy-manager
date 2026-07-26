@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-find-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Найти профиль по имени</title>
+  <title>Поиск профиля по имени</title>
   <shortdesc>Используйте поиск в библиотеке, чтобы сузить сохраненные профили по имени перед открытием, копированием или изменением состояния жизненного цикла.</shortdesc>
   <taskbody>
     <prereq><p>Библиотека открыта, и строки профиля завершили загрузку.</p></prereq>

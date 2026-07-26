@@ -74,20 +74,17 @@ REQUIRED_WSL_TOKENS = (
     "curl -fsS http://127.0.0.1:8000/health/ready",
     "Invoke-WebRequest http://localhost:8000/health",
     "Invoke-WebRequest http://localhost:8000/health/ready",
-    "make test-fast",
 )
 REQUIRED_BOUNDARY_TERMS = (
     "native Windows",
-    "MSI",
-    "EXE",
     "Windows service",
     "Event Viewer",
     "Windows firewall",
     "reverse proxy",
     "TLS",
     "HA",
-    "managed secrets",
-    "backup automation",
+    "secrets",
+    "backups",
     "production hardening",
 )
 FORBIDDEN_SUPPORTED_CLAIMS = (
@@ -176,7 +173,7 @@ def test_english_windows_wsl_runbook_covers_wsl_commands_paths_networking_and_bo
     assert not any(claim in combined for claim in FORBIDDEN_SUPPORTED_CLAIMS)
 
     assert "inside WSL" in combined
-    assert "not a native Windows installation" in combined
+    assert "Linux source workflow inside WSL" in combined
     assert "localhost forwarding" in combined
     assert "avoid" in combined.casefold() and "/mnt/c" in combined
 
@@ -223,6 +220,5 @@ def test_localized_windows_wsl_runbook_topics_preserve_parity_and_invariant_toke
         for token in (
             "curl -fsS http://127.0.0.1:8000/health",
             "Invoke-WebRequest http://localhost:8000/health",
-            "make test-fast",
         ):
             assert token in localized

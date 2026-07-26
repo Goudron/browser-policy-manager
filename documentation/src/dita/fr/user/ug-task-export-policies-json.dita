@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-export-policies-json" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Exporter un profil en Firefox policies.json</title>
+  <title>Exporter un profil au format Firefox policies.json</title>
   <shortdesc>Cette tâche décrit le scénario complet « Exporter un profil en Firefox policies.json » avec décisions, actions, résultat attendu, avertissements et récupération.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez BPM et vérifiez le contexte de travail, le schéma Firefox ou l’état du profil nécessaires à cette tâche.</p></prereq>

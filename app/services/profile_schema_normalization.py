@@ -11,7 +11,6 @@ from app.core.policy_validation import (
     load_policy_schema_for_channel,
     validate_profile_policies_or_raise,
 )
-from app.core.schema_channels import CURRENT_ESR_SCHEMA_CHANNEL, CURRENT_RELEASE_SCHEMA_CHANNEL
 from app.models.profile import Profile
 
 logger = logging.getLogger(__name__)
@@ -19,17 +18,24 @@ logger = logging.getLogger(__name__)
 LEGACY_ESR_140_9 = f"esr-140.{9}"
 LEGACY_ESR_140_10 = f"esr-140.{10}"
 LEGACY_ESR_140_11 = f"esr-140.{11}"
+LEGACY_ESR_140_12 = f"esr-140.{12}"
 LEGACY_RELEASE_149 = f"release-{149}"
 LEGACY_RELEASE_150 = f"release-{150}"
 LEGACY_RELEASE_151 = f"release-{151}"
+LEGACY_RELEASE_152 = f"release-{152}"
+
+RELEASE_153_SCHEMA_CHANNEL = "release-153"
+ESR_140_13_SCHEMA_CHANNEL = "esr-140.13"
 
 LEGACY_SCHEMA_VERSION_MAP: dict[str, str] = {
-    LEGACY_ESR_140_9: CURRENT_ESR_SCHEMA_CHANNEL,
-    LEGACY_ESR_140_10: CURRENT_ESR_SCHEMA_CHANNEL,
-    LEGACY_ESR_140_11: CURRENT_ESR_SCHEMA_CHANNEL,
-    LEGACY_RELEASE_149: CURRENT_RELEASE_SCHEMA_CHANNEL,
-    LEGACY_RELEASE_150: CURRENT_RELEASE_SCHEMA_CHANNEL,
-    LEGACY_RELEASE_151: CURRENT_RELEASE_SCHEMA_CHANNEL,
+    LEGACY_ESR_140_9: ESR_140_13_SCHEMA_CHANNEL,
+    LEGACY_ESR_140_10: ESR_140_13_SCHEMA_CHANNEL,
+    LEGACY_ESR_140_11: ESR_140_13_SCHEMA_CHANNEL,
+    LEGACY_ESR_140_12: ESR_140_13_SCHEMA_CHANNEL,
+    LEGACY_RELEASE_149: RELEASE_153_SCHEMA_CHANNEL,
+    LEGACY_RELEASE_150: RELEASE_153_SCHEMA_CHANNEL,
+    LEGACY_RELEASE_151: RELEASE_153_SCHEMA_CHANNEL,
+    LEGACY_RELEASE_152: RELEASE_153_SCHEMA_CHANNEL,
 }
 
 
@@ -44,7 +50,7 @@ async def normalize_legacy_profile_schema_versions(
     session: AsyncSession,
 ) -> ProfileSchemaNormalizationResult:
     """
-    Normalize selected legacy schema channel strings to the current supported ones.
+    Normalize selected legacy schema channel strings to explicit supported destinations.
 
     We only update a profile when its existing flags are valid against the
     target schema. Invalid profiles are left untouched for later manual review.

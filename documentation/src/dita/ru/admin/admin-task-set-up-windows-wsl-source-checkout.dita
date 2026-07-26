@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>Настройте проверку источника BPM внутри WSL</title>
+  <title>Настройка получения исходного кода BPM в WSL</title>
   <shortdesc>Установите необходимые компоненты Linux в WSL, клонируйте BPM в файловую систему Linux, создайте виртуальную среду, установите зависимости и примените миграции.</shortdesc>
   <taskbody>
     <prereq><p>Дистрибутив Linux WSL 2 установлен и открыт, и у администратора есть утвержденный URL-адрес репозитория BPM и ветка или тег 0.9.1.</p></prereq>

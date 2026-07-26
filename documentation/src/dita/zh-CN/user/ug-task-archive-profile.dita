@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-archive-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>归档活动配置文件</title>
+  <title>归档活动配置档案</title>
   <shortdesc>将活动配置文件移出正常活动列表，而不将其永久删除。</shortdesc>
   <taskbody>
     <prereq><p>配置文件处于活动状态，在库中可见，正常编辑或导出工作流程不再需要。</p></prereq>

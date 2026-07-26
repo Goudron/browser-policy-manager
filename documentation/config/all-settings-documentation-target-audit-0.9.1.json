@@ -14,11 +14,11 @@
   },
   "coverage": {
     "firefox_policies": {
-      "inventory_count": 120,
+      "inventory_count": 121,
       "both_channel_count": 112,
-      "release_only_count": 8,
+      "partial_channel_count": 9,
       "expected_target_pattern": "policy:{exact_policy_id}",
-      "generated_target_count": 120,
+      "generated_target_count": 121,
       "current_disposition": "linked",
       "fallback_disposition": "missing_documentation",
       "rule": "Every schema-known policy keeps its exact policy identity, including raw-fallback, invalid, and deprecated row states."
@@ -110,8 +110,8 @@
     }
   ],
   "summary": {
-    "policy_inventory_count": 120,
-    "policy_linked_count": 120,
+    "policy_inventory_count": 121,
+    "policy_linked_count": 121,
     "known_preference_inventory_count": 62,
     "known_preference_linked_count": 62,
     "known_preference_missing_documentation_count": 0,

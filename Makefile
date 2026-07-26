@@ -133,6 +133,8 @@ docs-coverage:
 docs-release-check:
 	@echo "Running documentation release gate: full DITA validation"
 	$(PYTHON) documentation/tools/build_docs.py validate
+	@echo "Running documentation release gate: editorial locale sign-off"
+	$(PYTHON) documentation/tools/validate_editorial_release_gate.py
 	@echo "Running documentation release gate: six-locale parity, content, manifest, search, API examples, and non-browser portal contracts"
 	$(PYTEST) -o addopts= -q -m docs_contract $(DOCS_RELEASE_GATE_PATHS)
 

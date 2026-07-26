@@ -13,7 +13,7 @@
       <step><cmd>If the refreshed state is still wrong, reset search and filters and inspect the profile under all lifecycle states.</cmd><info><p>This distinguishes a hidden row from a failed or completed operation.</p></info></step>
     </steps>
     <result><p>You know whether to retry the operation, restore the profile, stop before deletion, or continue from the refreshed Library view.</p></result>
-    <postreq><p>Recovery: for repeated connection or API failures, stop Library changes and preserve the visible status for support or maintainer review.</p></postreq>
+    <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-refresh-profile-library"/>

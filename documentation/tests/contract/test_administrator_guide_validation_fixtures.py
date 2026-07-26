@@ -115,9 +115,10 @@ def test_fixture_commands_config_names_paths_and_health_endpoints_stay_current()
         assert command in english_text
         if command.startswith("make "):
             assert f"{command.removeprefix('make ')}:" in makefile
-    for command in ('pip install -e ".[dev]"', "alembic upgrade head", "make dev"):
+    for command in ("pip install .", "make dev"):
         assert command in readme
-        assert command in english_text
+    assert "make dev" in english_text
+    assert "alembic upgrade head" in english_text
     for config_name in fixture["required_config_names"]:
         assert re.search(rf"\b{re.escape(config_name)}\b", config), config_name
     for env_var in fixture["required_env_vars"]:
@@ -144,17 +145,17 @@ def test_fixture_api_examples_and_migrated_topics_execute_representative_paths()
 
     with make_test_client() as client:
         validation = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": {"DisableTelemetry": True}}},
         )
         assert validation.status_code == 200
-        assert validation.json() == {"ok": True, "profile": "release-152"}
+        assert validation.json() == {"ok": True, "profile": "release-153"}
 
         created = client.post(
             "/api/profiles/import/firefox/policies.json",
             json={
                 "name": "docs-admin-validation-fixture",
-                "schema_version": "release-152",
+                "schema_version": "release-153",
                 "document": {"policies": {"DisableTelemetry": True}},
             },
         )

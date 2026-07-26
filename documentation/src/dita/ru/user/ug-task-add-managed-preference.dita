@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-add-managed-preference" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Добавить управляемое предпочтение</title>
+  <title>Добавление управляемой настройки</title>
   <shortdesc>Добавьте известное управляемое предпочтение, которое еще не настроено в профиле.</shortdesc>
   <taskbody>
     <prereq><p>Откройте Все настройки, выбрав правильный канал схемы.</p></prereq>

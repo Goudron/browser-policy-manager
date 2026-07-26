@@ -1,0 +1,28 @@
+{
+  "targets": [
+    {
+      "channel": "release-153",
+      "version": "153.0",
+      "source_tag": "mozilla-policy-templates-v8.0",
+      "documentation_input": "data/upstream/policy-templates/v8.0/policy-templates.md",
+      "linux_policies_input": "data/upstream/policy-templates/v8.0/linux-policies.json",
+      "output": "app/schemas/policies/firefox-release-153.json"
+    },
+    {
+      "channel": "esr-153.0",
+      "version": "153.0",
+      "source_tag": "mozilla-policy-templates-v8.0",
+      "documentation_input": "data/upstream/policy-templates/v8.0/policy-templates.md",
+      "linux_policies_input": "data/upstream/policy-templates/v8.0/linux-policies.json",
+      "output": "app/schemas/policies/firefox-esr-153.0.json"
+    },
+    {
+      "channel": "esr-140.13",
+      "version": "140.13",
+      "source_tag": "mozilla-policy-templates-v7.12",
+      "documentation_input": "data/upstream/policy-templates/v7.12/policy-templates.md",
+      "linux_policies_input": "data/upstream/policy-templates/v7.12/linux-policies.json",
+      "output": "app/schemas/policies/firefox-esr-140.13.json"
+    }
+  ]
+}

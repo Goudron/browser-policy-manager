@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-devops-operational-boundaries" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Quelloperationsgrenzen aufzeichnen</title>
+  <title>Betriebsgrenzen einer Quellbereitstellung dokumentieren</title>
   <shortdesc>Erstellen Sie eine Betriebsübergabenotiz, die den Laufzeitbenutzer, das Prozessmodell, unterstützte Prüfungen und verzögerte Produktionsfunktionen angibt.</shortdesc>
   <taskbody>
     <prereq><p>Die Konfigurations-, Speicher-, Backup-, Netzwerk- und CORS-Überprüfungen wurden für die von der Quelle ausgeführte Instanz abgeschlossen.</p></prereq>

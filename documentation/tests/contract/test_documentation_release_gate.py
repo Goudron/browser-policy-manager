@@ -45,6 +45,7 @@ def test_documentation_release_gate_runs_full_validation_and_contracts() -> None
 
     assert "DOCS_RELEASE_GATE_PATHS := documentation/tests/contract" in source
     assert "$(PYTHON) documentation/tools/build_docs.py validate" in body
+    assert "$(PYTHON) documentation/tools/validate_editorial_release_gate.py" in body
     assert "-m docs_contract" in body
     assert "$(DOCS_RELEASE_GATE_PATHS)" in body
     assert "six-locale parity, content, manifest, search, API examples" in body

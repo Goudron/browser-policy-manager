@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-documentation-search-boundary" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navegar y buscar en la documentación del producto</title>
+  <title>Navegación y búsqueda en la documentación del producto</title>
   <shortdesc>Utilice la jerarquía con desplazamiento independiente y la búsqueda determinista compacta para encontrar la ayuda publicada sin servicios externos ni IA.</shortdesc>
   <conbody>
     <section id="a-portal-navigation"><title>Árbol de documentación</title><p>La barra lateral se abre en la raíz «Documentos» y enumera las guías, las secciones cuando son necesarias y los temas. El árbol se desplaza de forma independiente al artículo. Un enlace a la raíz muestra la lista de guías; un enlace contextual a un tema expande todos sus antecesores, desplaza el tema hasta la zona visible y lo marca como activo.</p></section>

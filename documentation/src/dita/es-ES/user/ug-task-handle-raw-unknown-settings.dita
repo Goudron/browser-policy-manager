@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-handle-raw-unknown-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Manejar configuraciones sin procesar y desconocidas</title>
+  <title>Gestionar ajustes sin procesar y desconocidos</title>
   <shortdesc>Inspeccione las claves desconocidas importadas y los valores de reserva sin procesar sin perderlos accidentalmente.</shortdesc>
   <taskbody>
     <prereq><p>Abra Revisión o una lista filtrada sin procesar/desconocida en Todos los ajustes.</p></prereq>

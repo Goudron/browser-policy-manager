@@ -20,6 +20,12 @@ EXPECTED_UPDATE_TOPICS = (
 )
 EXPECTED_UPDATE_KEYREFS = [f"topic.{topic_id}" for topic_id in EXPECTED_UPDATE_TOPICS]
 UPDATE_TOPICREF_OFFSET = 17
+EXPECTED_STEP_COUNTS = {
+    "admin-task-prepare-source-update-evidence": 4,
+    "admin-task-refresh-source-revision-dependencies": 4,
+    "admin-task-run-source-update-migrations-docs": 3,
+    "admin-task-verify-source-update-rollback-stop": 4,
+}
 COMPACT_OR_FALLBACK_MARKERS = (
     "English source",
     "английский источник",
@@ -57,9 +63,6 @@ REQUIRED_UPDATE_TOKENS = (
     "BPM_DOCUMENTATION_SITE_DIR",
     "BPM_SCHEMA_CACHE_DIR",
     "alembic upgrade head",
-    "make test-fast",
-    "make docs-validate",
-    "make docs-build",
     "make dev",
     "curl -fsS http://127.0.0.1:8000/health",
     "curl -fsS http://127.0.0.1:8000/health/ready",
@@ -103,9 +106,6 @@ INVARIANT_TOKENS_BY_TOPIC = {
     "admin-task-run-source-update-migrations-docs": (
         "BPM_DATABASE_URL",
         "alembic upgrade head",
-        "make test-fast",
-        "make docs-validate",
-        "make docs-build",
     ),
     "admin-task-verify-source-update-rollback-stop": (
         "make dev",
@@ -178,7 +178,7 @@ def test_update_from_source_topics_are_full_localized_dita_tasks(locale: str, to
         assert taskbody.find(element_name) is not None, (locale, topic_id, element_name)
     steps = taskbody.find("steps")
     assert steps is not None
-    assert len(steps.findall("step")) == 4
+    assert len(steps.findall("step")) == EXPECTED_STEP_COUNTS[topic_id]
     assert all(step.find("cmd") is not None for step in steps.findall("step"))
     assert not any(marker in source for marker in COMPACT_OR_FALLBACK_MARKERS)
 
@@ -194,10 +194,11 @@ def test_english_update_from_source_topics_match_current_commands_and_boundaries
         assert re.search(re.escape(term), combined, re.IGNORECASE), term
     assert not any(claim in combined for claim in FORBIDDEN_SUPPORTED_CLAIMS)
 
-    for token in ('pip install -e ".[dev]"', "alembic upgrade head", "make test-fast"):
+    for token in ("pip install .", "make dev"):
         assert token in readme
+    for token in ('pip install -e ".[dev]"', "alembic upgrade head", "make dev"):
         assert token in combined
-    for target in ("test-fast:", "docs-validate:", "docs-build:"):
+    for target in ("dev:",):
         assert target in makefile
 
 
@@ -213,7 +214,7 @@ def test_localized_update_from_source_topics_preserve_parity_and_invariant_token
 
     assert len(localized_text) >= int(len(english_text) * MIN_LOCALIZED_TEXT_RATIO[locale])
     assert localized != english
-    assert localized.count("<step>") == english.count("<step>") == 4
+    assert localized.count("<step>") == english.count("<step>") == EXPECTED_STEP_COUNTS[topic_id]
     assert localized.count("<related-links>") == english.count("<related-links>")
 
     for token in INVARIANT_TOKENS_BY_TOPIC[topic_id]:

@@ -914,6 +914,14 @@ def test_documentation_artifact_dispositions_match_help_status_states(tmp_path: 
     assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == "artifact_stale"
 
     _write_packaged_site(tmp_path)
+    manifest = _read_manifest(tmp_path)
+    artifact = manifest["artifact"]
+    assert isinstance(artifact, dict)
+    artifact["documentation_version"] = "0.0.0"
+    _write_manifest(tmp_path, manifest)
+    assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == "artifact_incompatible"
+
+    _write_packaged_site(tmp_path)
     (tmp_path / "fr/index.html").unlink()
     assert docs_manifest.resolve_documentation_artifact_disposition(tmp_path) == (
         "artifact_incomplete"

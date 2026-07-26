@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>使用 高级架构控件</title>
-  <shortdesc>从 所有设置 获得高级架构 shell 和首选项控件，无需将 引导式编辑器 视为完整的编辑器。</shortdesc>
+  <title>使用高级架构控件</title>
+  <shortdesc>从“所有设置”使用高级架构面板和首选项控件，无需将“引导式编辑器”视为完整编辑器。</shortdesc>
   <taskbody>
     <prereq><p>在 目录 中打开 所有设置。</p></prereq>
     <context><p>高级控制仍然经过深思熟虑。 所有设置 是架构支持的策略和首选项的超集，这些策略和首选项不是一流的引导式控件。</p></context>

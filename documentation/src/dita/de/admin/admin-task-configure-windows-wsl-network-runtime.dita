@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>Konfigurieren Sie die WSL-Laufzeit und den Browserzugriff</title>
+  <title>WSL-Laufzeit und Browserzugriff konfigurieren</title>
   <shortdesc>Legen Sie BPM-Laufzeitvariablen innerhalb der WSL fest, wählen Sie eine sichere Bindungsadresse, starten Sie den Quellprozess und identifizieren Sie die Browser-URL von Windows.</shortdesc>
   <taskbody>
     <prereq><p>Der BPM-Checkout, die virtuelle Umgebung, Abhängigkeiten und Migrationen sind im WSL-Linux-Dateisystem bereit.</p></prereq>

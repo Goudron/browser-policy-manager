@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navigieren Sie durch die sechs Geführter Editor-Schritte</title>
+  <title>Durch die sechs Schritte im Modus „Geführter Editor“ navigieren</title>
   <shortdesc>Navigieren Sie durch die Profil-&amp;-Basislinie, die Browser-Zugriffs-&amp;-Standardeinstellungen, die Sicherheit &amp;-Privatsphäre, Benutzer, Add-ons-&amp;-Sites, AI &amp;-Smart-Funktionen und den Überprüfungs-&amp;-Export.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein Profil in Geführter Editor aus der Bibliothek oder dem Erstellungsablauf.</p></prereq>
     <context><p>Geführter Editor wandelt die Profilkonfiguration in sechs aufgabenorientierte Schritte um und sorgt dafür, dass die Schemavalidierung während der Arbeit sichtbar bleibt.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Geführter Editor Übersicht</title>
+        <title>Überblick über den Modus „Geführter Editor“</title>
         <image keyref="screenshot.guided-editor-overview" placement="break">
           <alt>Geführter Editor zeigt die Schrittnavigation und den Validierungsstatus für ein gespeichertes Profil an.</alt>
         </image>

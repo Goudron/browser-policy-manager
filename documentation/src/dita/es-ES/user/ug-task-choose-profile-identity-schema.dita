@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-profile-identity-schema" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Establecer Identidad del perfil y canal de esquema</title>
+  <title>Establecer la identidad del perfil y el canal de esquema</title>
   <shortdesc>Elija el nombre del perfil guardado y el canal del esquema de Firefox antes de configurar los ajustes guiados.</shortdesc>
   <taskbody>
     <prereq><p>Abra un perfil nuevo o guardado en Editor guiado.</p></prereq>
@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Confirme que está editando el borrador del perfil deseado.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Introduzca un nombre de perfil claro.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Elija el canal de esquema de Firefox, como la versión 152 o ESR 140.12.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija el canal de esquema de Firefox, como la versión 152 o ESR 140.13.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Revise si el canal seleccionado cambia los controles visibles antes de continuar.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El borrador guiado tiene una identidad y un canal de esquema estables.</p></result>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Wann sollte JSON-Editor verwendet werden?</title>
+  <title>Einsatz des JSON-Editors</title>
   <shortdesc>Verwenden Sie JSON-Editor für eine genaue Rohüberprüfung, Migrationsprüfungen, Fehlerbehebung und Werte, die einfacher als Roh-policies.json zu verarbeiten sind.</shortdesc>
   <conbody>
     <p>JSON-Editor ist leistungsstark, aber weniger geführt als die visuellen Editoren. Dies sollte eine bewusste Entscheidung sein, wenn der Benutzer die Genauigkeit des Grenzdokuments benötigt.</p>

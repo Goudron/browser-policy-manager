@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>Bereiten Sie Windows 10/11 für die WSL-Quellenbereitstellung vor</title>
+  <title>Windows 10/11 für die WSL-Quellbereitstellung vorbereiten</title>
   <shortdesc>Aktivieren Sie WSL, wählen Sie eine unterstützte Linux-Distributionsannahme und bestätigen Sie, dass BPM unter Linux und nicht als nativer Windows-Dienst ausgeführt wird.</shortdesc>
   <taskbody>
     <prereq><p>Verwenden Sie Windows 10 oder Windows 11 mit der Berechtigung, WSL 2 zu aktivieren, installieren Sie eine Linux-Distribution wie Ubuntu LTS und führen Sie Befehle sowohl in PowerShell als auch in der WSL-Shell aus.</p></prereq>

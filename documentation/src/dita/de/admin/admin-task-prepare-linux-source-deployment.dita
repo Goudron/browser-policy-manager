@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-linux-source-deployment" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Bereiten Sie einen Linux-Host für die Quellbereitstellung vor</title>
+  <title>Einen Linux-Host für die Quellbereitstellung vorbereiten</title>
   <shortdesc>Bestätigen Sie die unterstützte Quellbereitstellungsgrenze, Hostvoraussetzungen und verzögerte Produktionsfunktionen, bevor Sie BPM aus einem Repository-Checkout installieren.</shortdesc>
   <taskbody>
     <prereq><p>Verwenden Sie einen Linux-Host, auf dem Sie Python 3.14+, Git, Build-Tools und curl installieren können. Dieses Betriebsanleitung geht von einem Quell-Checkout und nicht von einem gepackten Installationsprogramm aus.</p></prereq>

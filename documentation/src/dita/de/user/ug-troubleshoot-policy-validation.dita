@@ -10,10 +10,10 @@
       <step><cmd>Lesen Sie den betroffenen Richtlinienpfad und die Meldung, bevor Sie Werte ändern.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Klassifizieren Sie das Problem als nicht unterstützte Richtlinie, falscher Werttyp, veraltete Einstellung, unbekannter Eintrag, importierter Wert oder roher Fallback.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Verwenden Sie Alle Einstellungen oder JSON, um zum betroffenen Standort zu navigieren und nur den gemeldeten Wert zu korrigieren.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Überprüfen Sie das Profil erneut im selben Schemakanal, bevor Sie es speichern oder exportieren.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
+      <step><cmd>Überprüfen Sie das Profil erneut im selben Schemakanal, bevor Sie es speichern oder exportieren.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
     <result><p>Der Validierungsfehler wurde entweder behoben oder als bewusster Rohwert/nicht unterstützter Wert dokumentiert, der nicht als veröffentlichungsbereit behandelt werden kann.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-gate-control-product-startup" xml:lang="de" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Start des Torsteuerungsprodukts mit BPM-Gesundheit und -Bereitschaft</title>
+  <title>Start eines Steuerungsprodukts mit BPM-Health- und Readiness-Prüfungen</title>
   <shortdesc>Verwenden Sie die aktuellen Integritätstests als Starttor, bevor ein externes Steuerungsprodukt mit der API-Synchronisierung beginnt.</shortdesc>
   <taskbody>
     <prereq><p>Die BPM-Quellenbereitstellung wurde bereits gestartet. Konfigurieren Sie das externe Produkt mit <codeph>$BPM_BASE_URL</codeph>, Zeitüberschreitung, Abfrageintervall, maximaler Wartezeit und der Aktion, die ausgeführt werden soll, wenn das Gate ausfällt.</p></prereq>
-    <context><p>Dieser Arbeitsablauf verwendet <codeph>API-HEALTH-001</codeph> und <codeph>API-HEALTH-002</codeph>. Bei den Sonden handelt es sich lediglich um kleine Vorflugsignale; Sie legen keine Authentifizierung, Autorisierung, Datenbankdiagnose, Schema-Cache-Diagnose, Anforderung Kennungen oder Service-Level-Ziele offen. Dieser M12-08-Betriebsanleitung-Satz benennt den zustandsgesteuerten Start, den Dateneigentum, die Wiederherstellung nach Fehlern und die Regel, nicht blind erneut zu versuchen, wenn Beweise veraltet sind.</p></context>
+    <context><p>Dieser Arbeitsablauf verwendet <codeph>API-HEALTH-001</codeph> und <codeph>API-HEALTH-002</codeph>. Bei den Sonden handelt es sich lediglich um kleine Vorflugsignale; Sie legen keine Authentifizierung, Autorisierung, Datenbankdiagnose, Schema-Cache-Diagnose, Anforderung Kennungen oder Service-Level-Ziele offen. Dieser -Betriebsanleitung-Satz benennt den zustandsgesteuerten Start, den Dateneigentum, die Wiederherstellung nach Fehlern und die Regel, nicht blind erneut zu versuchen, wenn Beweise veraltet sind.</p></context>
     <steps>
       <step><cmd>Überprüfen Sie die grundlegende Lebendigkeit, bevor Sie die Synchronisierungswarteschlange öffnen.</cmd><info><p>Anforderungsbeispiel: <codeph>GET $BPM_BASE_URL/health</codeph>. Antwortbeispiel: <codeph>200 {"status":"ok"}</codeph>. Transportfehler werden vom externen Produkt behandelt, da für dieses Probe kein BPM-Anwendungsfehlertext deklariert ist.</p></info></step>
   <step><cmd>Überprüfen Sie die Bereitschaft vor Profil- oder Validierungsaufrufen.</cmd><info><p>Anforderungsbeispiel: <codeph>GET $BPM_BASE_URL/health/ready</codeph>. Antwortbeispiel: <codeph>200 {"status":"ready","ready":true}</codeph>. Wenn <codeph>ready</codeph> nicht true ist, halten Sie die Warteschlange und starten Sie keine Mutationen.</p></info></step>

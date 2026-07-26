@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Bearbeiten Sie ein Einstellungsdetail</title>
+  <title>Ein Einstellungsdetail bearbeiten</title>
   <shortdesc>Wenden Sie eine Firefox-Richtlinie oder einen verwalteten Einstellungswert im Detailbereich „Alle Einstellungen“ an oder bearbeiten Sie sie.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein Einstellungsdetailfenster für einen unterstützten bearbeitbaren Wert.</p></prereq>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-profile-library" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Verwenden Sie die Bibliothek</title>
+  <title>Die Bibliothek verwenden</title>
   <shortdesc>Öffnen Sie die Bibliothek und verwenden Sie deren Anzahl, Status und Zeilenaktionen als Ausgangspunkt für gespeicherte Profilarbeiten.</shortdesc>
   <taskbody>
     <prereq><p>BPM ist geöffnet und Sie arbeiten mit gespeicherten Profildatensätzen, nicht mit einem nicht gespeicherten Editor-Entwurf.</p></prereq>
-    <context><p>Die Bibliothek listet gespeicherte Profile auf und zeigt gefilterte und Gesamtzahlen an, damit Sie wissen, ob Filter oder Suche Zeilen verbergen.</p>
+    <context><p>Die Bibliothek listet gespeicherte Profile auf und zeigt gefilterte sowie Gesamtzahlen an, damit sichtbar ist, ob Suche oder Filter Zeilen ausblenden. Zuerst folgt das Aktionsraster; die Filterzeile steht unmittelbar über der Profiltabelle.</p>
       <fig id="screenshot-library-overview">
         <title>Bibliotheksübersicht</title>
         <image keyref="screenshot.library-overview" placement="break">
@@ -15,8 +15,8 @@
     </context>
     <steps>
       <step><cmd>Öffnen Sie die Bibliothek.</cmd><info><p>Erwartetes Ergebnis: Die Bibliothek lädt Profilzeilen oder eine leere Statusmeldung, wenn keine gespeicherten Profile vorhanden sind.</p></info></step>
-      <step><cmd>Lesen Sie die gefilterten und Gesamtzahlen, bevor Sie auf Zeilen reagieren.</cmd><info><p>Wenn die gefilterte Anzahl niedriger ist als die Gesamtanzahl, sind Suchtext oder Filter aktiv.</p></info></step>
-      <step><cmd>Verwenden Sie Zeilenaktionen erst nach Bestätigung des Zeilennamens, des Schemakanals, des Lebenszyklusstatus und des Validierungsstatus.</cmd><info><note type="warning">Eine Zeilenaktion gilt für dieses gespeicherte Profil, nicht für einen temporären Editorentwurf.</note></info></step>
+      <step><cmd>Verwenden Sie das Aktionsraster, um die Liste zu aktualisieren, einen neuen Entwurf zu beginnen, Vergleich zu öffnen oder policies.json zu importieren.</cmd><info><p>Diese Aktionen stehen vor Filtern und Tabelle.</p></info></step>
+      <step><cmd>Setzen Sie Suche, Schema-, Profilstatus-, Validierungs- und Sortierfilter unmittelbar über der Tabelle; lesen Sie dann die gefilterte und die Gesamtzahl, bevor Sie eine Zeilenaktion verwenden.</cmd><info><note type="warning">Eine Zeilenaktion gilt für dieses gespeicherte Profil, nicht für einen temporären Editorentwurf.</note></info></step>
     </steps>
     <result><p>Sie können die aktive Bibliotheksansicht identifizieren und die nächste Profilaktion auswählen, ohne den Kontext zu verlieren.</p></result>
     <postreq><p>Wiederherstellung: Wenn Zeilen nicht geladen werden oder ein Aktionsstatus weiterhin fehlgeschlagen bleibt, aktualisieren Sie die Bibliothek und verwenden Sie dann das Thema zur Fehlerbehebung in der Bibliothek.</p></postreq>

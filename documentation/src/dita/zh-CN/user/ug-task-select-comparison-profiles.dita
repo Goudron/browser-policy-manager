@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-select-comparison-profiles" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>选择要比较的配置文件</title>
+  <title>选择要比较的配置档案</title>
   <shortdesc>独立搜索配置文件 A 和配置文件 B，从有限结果列表中选择行，并查看每个摘要。</shortdesc>
   <taskbody>
     <prereq><p>比较表面从库中打开。</p></prereq>

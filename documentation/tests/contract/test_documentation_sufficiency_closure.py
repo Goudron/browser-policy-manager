@@ -105,7 +105,7 @@ def test_screenshot_all_settings_and_navigation_claims_match_accepted_sources() 
     assert visual["status"] == "accepted"
     assert visual["release_ready"] is True
     assert audit["status"] == target_map["status"] == "accepted"
-    assert audit["summary"]["policy_linked_count"] == 120
+    assert audit["summary"]["policy_linked_count"] == 121
     assert audit["summary"]["known_preference_linked_count"] == 62
     assert target_map["policy_targets"]["target_pattern"] == "policy:{exact_policy_id}"
     assert target_map["known_preference_targets"]["target_pattern"] == (

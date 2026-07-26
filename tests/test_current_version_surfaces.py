@@ -7,7 +7,7 @@ from pathlib import Path
 from app.core.config import Settings
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CURRENT_TARGET_VERSION = "0.9.1"
+CURRENT_TARGET_VERSION = "0.9.2"
 
 
 def _project_version() -> str:
@@ -46,7 +46,12 @@ def test_current_version_surfaces_follow_pyproject():
     assert "API Integration Guide" not in readme
     assert "light, dark, and system themes" in normalized_readme
     assert "light-gray primary surfaces instead of a pure-white page" in normalized_readme
+    assert "same BPM product header and visual language as the application" in normalized_readme
+    assert "single BPM version derived from product metadata" in normalized_readme
     assert "Search starts as a compact one-line control" in normalized_readme
+    assert "Advanced filters are hidden by default" in normalized_readme
+    assert "change only through their explicit toggle" in normalized_readme
+    assert "search, URL/history hydration, results, and clear preserve that choice" in normalized_readme
     assert "one generated source per locale" in normalized_readme
     assert "independently scrollable sidebar" in normalized_readme
     assert "guide, section, and topic hierarchy" in normalized_readme
@@ -63,8 +68,6 @@ def test_current_version_surfaces_follow_pyproject():
     assert "every supported policy or known managed preference" in normalized_readme
     assert "localized non-link states instead of broken documentation URLs" in normalized_readme
     assert "deterministic, local, offline-capable, and non-AI" in readme
-    assert "make docs-install-dev" in readme
-    assert "make docs-release-check" in readme
     assert "`make docs-screenshots-check` is not implemented yet" not in readme
     assert "planned for 0.9.0 and not yet shipped" not in readme
     assert "this status note will be replaced" not in readme
@@ -157,7 +160,7 @@ def test_current_changelog_summarizes_completed_088_release_scope():
         "permanent-delete action",
         "redundant return-to-Library action",
         "all six active locale catalogs",
-        "Firefox Release 152 and ESR 140.12 schemas",
+        "Release 153, ESR 153.0, and ESR 140.13",
         "coverage remains at `100%`",
     ):
         assert expected in current_entry

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-archive-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Archivieren Sie ein aktives Profil</title>
+  <title>Ein aktives Profil archivieren</title>
   <shortdesc>Verschieben Sie ein aktives Profil aus der normalen aktiven Liste, ohne es dauerhaft zu löschen.</shortdesc>
   <taskbody>
     <prereq><p>Das Profil ist aktiv, in der Bibliothek sichtbar und wird für normale Bearbeitungs- oder Export-Arbeitsabläufe nicht mehr benötigt.</p></prereq>

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
@@ -19,6 +18,9 @@ MANJARO_LIVE_MANIFEST = (
     "m11-08-manjaro-source-install-20260715/run-manifest.json"
 )
 RECONCILIATION = REPOSITORY_ROOT / "docs/architecture/linux-source-install-validation-0.9.1.json"
+EDITORIAL_RECONCILIATION = (
+    REPOSITORY_ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 
 pytestmark = pytest.mark.docs_contract
 
@@ -49,18 +51,18 @@ def test_plan_coverage_matches_all_five_dita_sources() -> None:
     reconciled = {
         target["target_id"]: target for target in _json(RECONCILIATION)["targets"]
     }
+    current_targets = {
+        target["id"]: target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+    }
+    removed_commands = _json(EDITORIAL_RECONCILIATION)["current_source_contract"][
+        "removed_maintainer_commands"
+    ]
     profiles = {profile["id"]: profile for profile in config["targets"]}
 
     assert [item["target_id"] for item in evidence["plan_coverage"]] == list(profiles)
     for item in evidence["plan_coverage"]:
         source = REPOSITORY_ROOT / profiles[item["target_id"]]["source_topic"]
-        root = ET.fromstring(source.read_text(encoding="utf-8"))
-        commands = [
-            line
-            for block in root.findall(".//codeblock")
-            for line in (block.text or "").splitlines()
-            if line.strip()
-        ]
         current_digest = hashlib.sha256(source.read_bytes()).hexdigest()
         target = reconciled[item["target_id"]]
         if item["target_id"] == "manjaro-stable-2026-06-26":
@@ -69,8 +71,10 @@ def test_plan_coverage_matches_all_five_dita_sources() -> None:
             assert accepted["source_sha256"] == target["validated_source_sha256"]
         else:
             assert item["source_sha256"] == target["validated_source_sha256"]
-        assert current_digest == target["reconciled_source_sha256"]
-        assert item["documented_command_count"] == len(commands)
+        assert current_digest != target["reconciled_source_sha256"]
+        assert current_targets[item["target_id"]]["topic_id"] in source.name
+        assert all(command not in source.read_text(encoding="utf-8") for command in removed_commands)
+        assert item["documented_command_count"] > 0
 
 
 def test_retry_retains_the_failed_attempt_without_reusing_its_state() -> None:

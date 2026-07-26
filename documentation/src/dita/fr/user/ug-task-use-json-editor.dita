@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utilisez Éditeur JSON</title>
+  <title>Utiliser l’« Éditeur JSON »</title>
   <shortdesc>Ouvrez le profil complet en tant que document Firefox policies.json pour une révision exacte ou une modification brute.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez un profil enregistré. Éditeur JSON fonctionne sur un profil enregistré et représente le profil comme un document limite Firefox.</p></prereq>

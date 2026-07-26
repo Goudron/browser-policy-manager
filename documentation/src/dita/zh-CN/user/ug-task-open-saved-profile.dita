@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>在编辑器中打开保存的配置文件</title>
+  <title>在编辑器中打开已保存的配置档案</title>
   <shortdesc>根据您需要的更改，在 引导式编辑器、所有设置 或 JSON 编辑器 中打开相同的已保存配置文件。</shortdesc>
   <taskbody>
     <prereq><p>该配置文件在库中可见，并且其行标识与您要编辑或检查的配置文件相匹配。</p></prereq>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-all-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Utilice Todos los ajustes</title>
-  <shortdesc>Abra Todos los ajustes para obtener un perfil guardado cuando necesite un control visual completo más allá del flujo de trabajo guiado más corto.</shortdesc>
+  <title>Usar «Todos los ajustes»</title>
+  <shortdesc>Abra «Todos los ajustes» para un perfil guardado cuando necesite un control visual completo más allá del flujo de trabajo guiado.</shortdesc>
   <taskbody>
     <prereq><p>Existe un perfil guardado. Los nuevos borradores no guardados deben guardarse antes de que se pueda abrir Todos los ajustes.</p></prereq>
     <context><p>Todos los ajustes es el editor visual completo para las políticas de Firefox y conocido Preferencias gestionadas. Se abre en Revisión para que los elementos de atención sean visibles antes de explorar el catálogo amplio.</p>
       <fig id="screenshot-all-settings-review">
-        <title>Todos los ajustes Revisión</title>
+        <title>Modo «Revisión» en «Todos los ajustes»</title>
         <image keyref="screenshot.all-settings-review" placement="break">
           <alt>Todos los ajustes muestra la lista de revisión, los ajustes configurados y el panel de detalles de ajustes en una pantalla estrecha.</alt>
         </image>

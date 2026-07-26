@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-language" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Ändern Sie die Sprache der Benutzeroberfläche</title>
+  <title>Die Sprache der Benutzeroberfläche ändern</title>
   <shortdesc>Wählen Sie Englisch, Russisch, Deutsch, vereinfachtes Chinesisch, Französisch, Spanisch oder die Systemsprache für BPM.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>

@@ -58,8 +58,6 @@ REQUIRED_CURRENT_STATE_TOKENS = (
     "policies.json",
     "GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json",
     "sha256sum backups/bpm-pre-update.db",
-    "make docs-validate",
-    "make docs-build",
     "/help/",
 )
 REQUIRED_PREPARATION_TERMS = (
@@ -68,18 +66,16 @@ REQUIRED_PREPARATION_TERMS = (
     "monitoring inputs",
     "backup/export evidence",
     "update window",
-    "planned but not implemented yet",
+    "organization-owned controls",
 )
 REQUIRED_DEFERRED_TERMS = (
-    "packaged services",
-    "official TLS/proxy recipes",
-    "official reverse-proxy recipes",
-    "supported HA clustering",
-    "rolling upgrades",
-    "managed secrets",
+    "external responsibilities",
+    "operating assumptions",
+    "service and proxy responsibilities",
+    "HA and upgrade design requirements",
+    "organization-owned controls",
     "production hardening",
-    "official restore automation",
-    "load balancer session affinity",
+    "RTO/RPO",
 )
 FORBIDDEN_SUPPORTED_CLAIMS = (
     "production-ready",
@@ -116,8 +112,6 @@ INVARIANT_TOKENS_BY_TOPIC = {
         "GET /health",
         "GET /health/ready",
         "sha256sum backups/bpm-pre-update.db",
-        "make docs-validate",
-        "make docs-build",
         "HA",
     ),
     "admin-task-record-ha-production-deferred-boundaries": (
@@ -219,7 +213,7 @@ def test_production_boundary_topics_preserve_locale_structure_and_full_peer_cont
                 assert token in localized_source
 
 
-def test_english_production_boundary_topics_cover_current_preparation_and_deferred_claims() -> None:
+def test_english_production_boundary_topics_cover_current_preparation_and_operating_responsibilities() -> None:
     text = "\n".join(_normalized_text(_root("en", topic_id)) for topic_id in PRODUCTION_BOUNDARY_TOPICS)
     casefolded = text.casefold()
 

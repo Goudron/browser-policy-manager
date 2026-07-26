@@ -8,7 +8,8 @@ from sqlalchemy import create_engine, inspect, text
 
 from alembic import command
 
-CURRENT_HEAD = "20260620_upgrade_profiles_to_firefox152"
+CURRENT_HEAD = "20260721_upgrade_profiles_to_firefox153_dual_esr"
+PRE_FIREFOX_153_HEAD = "20260620_upgrade_profiles_to_firefox152"
 OWNER_DROP_HEAD = "20260606_drop_profile_owner"
 PRE_OWNER_DROP_HEAD = "20260521_upgrade_profiles_to_firefox151"
 
@@ -128,8 +129,8 @@ def test_alembic_renames_legacy_policies_table_to_profiles(tmp_path: Path):
             ).all()
         assert version == CURRENT_HEAD
         assert schema_versions == [
-            ("legacy-esr", "esr-140.12"),
-            ("legacy-release", "release-152"),
+            ("legacy-esr", "esr-140.13"),
+            ("legacy-release", "release-153"),
         ]
     finally:
         engine.dispose()
@@ -175,5 +176,88 @@ def test_alembic_profile_owner_drop_upgrade_and_downgrade(tmp_path: Path):
         columns = {column["name"] for column in insp.get_columns("profiles")}
         assert "owner" in columns
         assert "ix_profiles_owner" in {idx["name"] for idx in insp.get_indexes("profiles")}
+    finally:
+        engine.dispose()
+
+
+def test_alembic_firefox_153_migration_preserves_dual_esr_lines(tmp_path: Path):
+    ini = Path("alembic.ini")
+    if not ini.exists():
+        pytest.skip("alembic.ini not found; skipping alembic smoke test")
+
+    db_path = tmp_path / "firefox-153-migration.db"
+    url = f"sqlite:///{db_path}"
+    cfg = Config(str(ini))
+    cfg.set_main_option("sqlalchemy.url", url)
+
+    command.upgrade(cfg, PRE_FIREFOX_153_HEAD)
+    engine = create_engine(url, future=True)
+    try:
+        with engine.begin() as conn:
+            for name, schema_version in (
+                ("release-149", "release-149"),
+                ("release-150", "release-150"),
+                ("release-151", "release-151"),
+                ("release-152", "release-152"),
+                ("esr-140-9", "esr-140.9"),
+                ("esr-140-10", "esr-140.10"),
+                ("esr-140-11", "esr-140.11"),
+                ("esr-140-12", "esr-140.12"),
+                ("supported-esr-140", "esr-140.13"),
+                ("supported-esr-153", "esr-153.0"),
+            ):
+                conn.execute(
+                    text(
+                        "INSERT INTO profiles (name, schema_version, flags) "
+                        "VALUES (:name, :schema_version, '{}')"
+                    ),
+                    {"name": name, "schema_version": schema_version},
+                )
+    finally:
+        engine.dispose()
+
+    command.upgrade(cfg, "head")
+
+    engine = create_engine(url, future=True)
+    try:
+        with engine.connect() as conn:
+            schema_versions = dict(
+                conn.execute(text("SELECT name, schema_version FROM profiles")).all()
+            )
+        assert schema_versions == {
+            "release-149": "release-153",
+            "release-150": "release-153",
+            "release-151": "release-153",
+            "release-152": "release-153",
+            "esr-140-9": "esr-140.13",
+            "esr-140-10": "esr-140.13",
+            "esr-140-11": "esr-140.13",
+            "esr-140-12": "esr-140.13",
+            "supported-esr-140": "esr-140.13",
+            "supported-esr-153": "esr-153.0",
+        }
+    finally:
+        engine.dispose()
+
+    command.downgrade(cfg, PRE_FIREFOX_153_HEAD)
+
+    engine = create_engine(url, future=True)
+    try:
+        with engine.connect() as conn:
+            schema_versions = dict(
+                conn.execute(text("SELECT name, schema_version FROM profiles")).all()
+            )
+        assert schema_versions == {
+            "release-149": "release-152",
+            "release-150": "release-152",
+            "release-151": "release-152",
+            "release-152": "release-152",
+            "esr-140-9": "esr-140.12",
+            "esr-140-10": "esr-140.12",
+            "esr-140-11": "esr-140.12",
+            "esr-140-12": "esr-140.12",
+            "supported-esr-140": "esr-140.12",
+            "supported-esr-153": "esr-153.0",
+        }
     finally:
         engine.dispose()

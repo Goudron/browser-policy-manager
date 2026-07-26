@@ -171,7 +171,7 @@ def test_readme_documents_target_and_active_locale_sets():
     assert "dedicated `/profiles/compare` interface" in readme
     assert "setting column keeps policy/preference identity readable" in readme
     assert "English source UI with six active runtime locale catalogs." in readme
-    assert "The primary project and UI source language is English." in readme
+    assert "The primary UI source language is English." in readme
     assert "`app/i18n/en.json`" in readme
     assert "BPM keeps a six-locale UI matrix:" in readme
     assert "| `de` | Deutsch | Active localized catalog |" in readme
@@ -184,8 +184,9 @@ def test_readme_documents_target_and_active_locale_sets():
     assert "keeps key and placeholder parity with English" in readme
     assert "receives terminology review" in readme
     assert "currently `en`, `ru`, `de`, `zh-CN`, `fr`, or `es-ES`" in readme_single_line
-    assert "Current locale ownership is single-maintainer and manual-review based." in readme
-    assert "External/community translation intake is not a separate maintained workflow yet" in readme
+    assert "Locale terminology follows Mozilla Pontoon and SUMO style where applicable" in readme
+    assert "single-maintainer" not in readme
+    assert "**Valery Ledovskoy**" in readme
     assert "Only emails with `[BPM]` in the subject line are reviewed." in readme
     assert "© 2025-2026 • Released under [Mozilla Public License 2.0](LICENSE)" in readme
 

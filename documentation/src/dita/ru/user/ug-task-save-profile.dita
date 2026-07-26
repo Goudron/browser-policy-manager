@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Сохранить изменения профиля</title>
+  <title>Сохранение изменений профиля</title>
   <shortdesc>Создайте первый сохраненный профиль из черновика или сохраните изменения в существующем профиле.</shortdesc>
   <taskbody>
     <prereq><p>Откройте BPM в браузере и сохраните доступными профиль, библиотеку, Все настройки, управляемую поверхность, JSON или поверхность сравнения.</p></prereq>

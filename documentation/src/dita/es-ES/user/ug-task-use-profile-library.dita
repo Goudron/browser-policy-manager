@@ -5,7 +5,7 @@
   <shortdesc>Abra la biblioteca y utilice sus recuentos, estados y acciones de fila como punto de partida para el trabajo del perfil guardado.</shortdesc>
   <taskbody>
     <prereq><p>BPM está abierto y está trabajando con registros de perfil guardados, no con un borrador del editor no guardado.</p></prereq>
-    <context><p>La biblioteca enumera los perfiles guardados y muestra los recuentos totales y filtrados para que sepa si los filtros o la búsqueda ocultan filas.</p>
+    <context><p>La Biblioteca enumera los perfiles guardados y muestra los recuentos filtrado y total para indicar si la búsqueda o los filtros ocultan filas. La cuadrícula de acciones aparece primero; la fila de filtros está inmediatamente sobre la tabla de perfiles.</p>
       <fig id="screenshot-library-overview">
         <title>Descripción general de la biblioteca</title>
         <image keyref="screenshot.library-overview" placement="break">
@@ -15,8 +15,8 @@
     </context>
     <steps>
       <step><cmd>Abra la biblioteca.</cmd><info><p>Resultado esperado: la biblioteca carga filas de perfil o un mensaje de estado vacío si no existen perfiles guardados.</p></info></step>
-      <step><cmd>Lea los recuentos totales y filtrados antes de actuar en las filas.</cmd><info><p>Si el recuento filtrado es inferior al recuento total, el texto de búsqueda o los filtros están activos.</p></info></step>
-      <step><cmd>Utilice acciones de fila solo después de confirmar el nombre de la fila, el canal del esquema, el estado del ciclo de vida y el estado de validación.</cmd><info><note type="warning">Una acción de fila se aplica a ese perfil guardado, no a un borrador del editor temporal.</note></info></step>
+      <step><cmd>Use la cuadrícula de acciones para actualizar la lista, iniciar un borrador, abrir Comparar o importar policies.json.</cmd><info><p>Estas acciones aparecen antes de los filtros y de la tabla.</p></info></step>
+      <step><cmd>Establezca los filtros de búsqueda, esquema, estado del perfil, validación y orden directamente sobre la tabla; lea después los recuentos filtrado y total antes de utilizar una acción de fila.</cmd><info><note type="warning">Una acción de fila se aplica a ese perfil guardado, no a un borrador temporal del editor.</note></info></step>
     </steps>
     <result><p>Puede identificar la vista de Biblioteca activa y elegir la siguiente acción de perfil sin perder contexto.</p></result>
     <postreq><p>Recuperación: si las filas no se cargan o el estado de una acción sigue fallando, actualice la biblioteca y luego use el tema de solución de problemas de la biblioteca.</p></postreq>

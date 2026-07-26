@@ -120,36 +120,64 @@ def _region(name: str, policy_id: str, existing: dict[str, str]) -> str:
 
 
 def _channel_props(policy: dict[str, Any]) -> str:
-    scope = policy["channel_scope"]
-    if scope == "both":
-        return "firefox-release firefox-esr"
-    if scope == "release-only":
-        return "firefox-release"
-    if scope == "esr-only":
-        return "firefox-esr"
-    raise ValueError(f"unknown channel scope for {policy['policy_id']}: {scope}")
+    channels = policy["channels"]
+    props = []
+    if any(channel_id.startswith("release-") for channel_id in channels):
+        props.append("firefox-release")
+    if any(channel_id.startswith("esr-") for channel_id in channels):
+        props.append("firefox-esr")
+    if not props:
+        raise ValueError(f"policy {policy['policy_id']} has no supported channel")
+    return " ".join(props)
+
+
+def _channel_display_name(channel_id: str) -> str:
+    if channel_id.startswith("release-"):
+        return f"Firefox Release {channel_id.removeprefix('release-')}"
+    if channel_id.startswith("esr-"):
+        return f"Firefox ESR {channel_id.removeprefix('esr-')}"
+    return channel_id
+
+
+def _channel_sort_key(channel_id: str) -> tuple[int, str]:
+    if channel_id.startswith("release-"):
+        return (0, channel_id)
+    if channel_id.startswith("esr-"):
+        return (1, channel_id)
+    return (2, channel_id)
+
+
+def _source_metadata(source: str) -> dict[str, str]:
+    version = source.removeprefix("mozilla-policy-templates-")
+    return {
+        "source_locator": f"https://github.com/mozilla/policy-templates/releases/tag/{version}",
+        "source_version_or_revision": source,
+        "source_retrieved_on": "2026-07-22" if version == "v8.0" else "2026-03-24",
+    }
 
 
 def _channel_support(policy: dict[str, Any]) -> dict[str, Any]:
-    channels = sorted(policy["channels"])
+    channels = sorted(policy["channels"], key=_channel_sort_key)
     return {
         "scope": policy["channel_scope"],
         "supported_channels": channels,
-        "release_supported": "release-152" in channels,
-        "esr_supported": "esr-140.12" in channels,
+        "release_supported": any(channel_id.startswith("release-") for channel_id in channels),
+        "esr_supported": any(channel_id.startswith("esr-") for channel_id in channels),
         "definition_changed_across_channels": policy["definition_changed_across_channels"],
     }
 
 
-def _support_badge_text(policy: dict[str, Any]) -> str:
+def _support_badge_text(policy: dict[str, Any], all_channels: dict[str, Any]) -> str:
     support = _channel_support(policy)
-    if support["release_supported"] and support["esr_supported"]:
-        return "Supported in Firefox Release 152 and Firefox ESR 140.12."
-    if support["release_supported"]:
-        return "Supported in Firefox Release 152 only; absent from Firefox ESR 140.12."
-    if support["esr_supported"]:
-        return "Supported in Firefox ESR 140.12 only; absent from Firefox Release 152."
-    return "Not supported in the current BPM Firefox schema channels."
+    supported = ", ".join(_channel_display_name(channel_id) for channel_id in support["supported_channels"])
+    absent = [
+        _channel_display_name(channel_id)
+        for channel_id in sorted(all_channels, key=_channel_sort_key)
+        if channel_id not in support["supported_channels"]
+    ]
+    if not absent:
+        return f"Supported in {supported}."
+    return f"Supported in {supported}; absent from {', '.join(absent)}."
 
 
 def _example_string(schema: dict[str, Any]) -> str:
@@ -257,32 +285,24 @@ def _channel_summary(policy: dict[str, Any], channels: dict[str, Any]) -> str:
             f"with <codeph>{_escape(channel_meta['widget'])}</codeph>."
             "</li>"
         )
-    if policy["channel_scope"] == "release-only":
+    if policy["channel_scope"] in {"partial", "release-only", "esr-only"}:
         items.append(
-            "        <li outputclass=\"esr-absence-note\">This policy is absent from the supported ESR "
-            "schema and must not be documented as ESR-supported.</li>"
+            "        <li outputclass=\"channel-absence-note\">This policy is not available on every "
+            "supported BPM Firefox schema channel and must retain its channel-specific availability.</li>"
         )
     if policy["definition_changed_across_channels"]:
         items.append("        <li>The schema definition changes across supported channels.</li>")
     return "\n".join(items)
 
 
-def _channel_conditional_notes(policy: dict[str, Any]) -> str:
-    support = _channel_support(policy)
-    if support["release_supported"] and support["esr_supported"]:
-        return (
-            '      <p props="firefox-release">Release 152 supports this policy.</p>\n'
-            '      <p props="firefox-esr">ESR 140.12 supports this policy.</p>'
-        )
-    if support["release_supported"]:
-        return (
-            '      <p props="firefox-release">Release 152 supports this policy.</p>\n'
-            '      <p props="firefox-esr">ESR 140.12 does not include this policy in the bundled schema.</p>'
-        )
-    return (
-        '      <p props="firefox-esr">ESR 140.12 supports this policy.</p>\n'
-        '      <p props="firefox-release">Release 152 does not include this policy in the bundled schema.</p>'
-    )
+def _channel_conditional_notes(policy: dict[str, Any], all_channels: dict[str, Any]) -> str:
+    notes = []
+    supported = set(policy["channels"])
+    for channel_id in sorted(all_channels, key=_channel_sort_key):
+        props = "firefox-release" if channel_id.startswith("release-") else "firefox-esr"
+        state = "supports this policy" if channel_id in supported else "does not include this policy in the bundled schema"
+        notes.append(f'      <p props="{props}">{_channel_display_name(channel_id)} {state}.</p>')
+    return "\n".join(notes)
 
 
 def _value_shape(policy: dict[str, Any], channels: dict[str, Any]) -> str:
@@ -317,12 +337,21 @@ def _provenance(policy: dict[str, Any], inventory: dict[str, Any]) -> str:
         "        <li>Source family: <codeph>mozilla-policy-schema-facts</codeph>.</li>",
         "        <li>Reuse mode: <codeph>generated-facts</codeph> with BPM-authored guidance regions.</li>",
         "        <li>License: <codeph>MPL-2.0</codeph>.</li>",
-        "        <li>Mozilla source locator: <codeph>https://github.com/mozilla/policy-templates/releases/tag/v7.12</codeph>.</li>",
-        "        <li>Source retrieved on: <codeph>2026-03-24</codeph>.</li>",
         "        <li>BPM is not affiliated with or endorsed by Mozilla.</li>",
         f"        <li>Inventory backlog item: <codeph>{_escape(inventory['backlog_item'])}</codeph>.</li>",
         f"        <li>Generated for BPM: <codeph>{_escape(inventory['generated_for_bpm'])}</codeph>.</li>",
     ]
+    source_records = {
+        inventory["channels"][channel_id]["schema_source"]
+        for channel_id in policy["channels"]
+    }
+    for source in sorted(source_records):
+        metadata = _source_metadata(source)
+        lines.append(
+            "        <li>Mozilla source locator: "
+            f"<codeph>{_escape(metadata['source_locator'])}</codeph>; source retrieved on "
+            f"<codeph>{_escape(metadata['source_retrieved_on'])}</codeph>.</li>"
+        )
     for channel_id, channel in policy["channels"].items():
         channel_meta = inventory["channels"][channel_id]
         lines.append(
@@ -376,9 +405,9 @@ def _topic_content(
     </section>
     <section id="a-channel-support">
       <title>{_escape(section_titles["a-channel-support"])}</title>
-      <p outputclass="channel-support-badge channel-scope-{_escape(policy["channel_scope"])}">{_escape(_support_badge_text(policy))}</p>
+      <p outputclass="channel-support-badge channel-scope-{_escape(policy["channel_scope"])}">{_escape(_support_badge_text(policy, inventory["channels"]))}</p>
       <p>Channel scope: <codeph>{_escape(policy["channel_scope"])}</codeph>.</p>
-{_channel_conditional_notes(policy)}
+{_channel_conditional_notes(policy, inventory["channels"])}
       <ul>
 {_channel_summary(policy, channels)}
       </ul>
@@ -483,6 +512,7 @@ def _channel_differences_content(
     release_only = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "release-only"]
     esr_only = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "esr-only"]
     both = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "both"]
+    partial = [policy["policy_id"] for policy in policies if policy["channel_scope"] == "partial"]
     changed = [policy["policy_id"] for policy in policies if policy["definition_changed_across_channels"]]
     payload = {
         "schema_version": 1,
@@ -498,12 +528,14 @@ def _channel_differences_content(
             "both_channels": len(both),
             "release_only": len(release_only),
             "esr_only": len(esr_only),
+            "partial": len(partial),
             "changed_definitions": len(changed),
         },
         "policy_ids": {
             "both_channels": both,
             "release_only": release_only,
             "esr_only": esr_only,
+            "partial": partial,
             "changed_definitions": changed,
         },
         "search_and_navigation_contract": {
@@ -543,17 +575,23 @@ def _provenance_review_content(
                     "schema_version": channel_meta["schema_version"],
                     "schema_sha256": policy["channels"][channel_id]["schema_sha256"],
                     "topic_section_id": "a-provenance",
+                    **_source_metadata(channel_meta["schema_source"]),
                 }
             )
+        source_records = {
+            channel["source_version_or_revision"]: {
+                key: channel[key]
+                for key in ("source_locator", "source_version_or_revision", "source_retrieved_on")
+            }
+            for channel in channels
+        }
         policy_records.append(
             {
                 "policy_id": policy["policy_id"],
                 "doc_id": policy["doc_id"],
                 "topic_path": _display_path(output_root / POLICIES_DIRNAME / f"{policy['doc_id']}.dita"),
                 "source_family_id": "mozilla-policy-schema-facts",
-                "source_locator": "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
-                "source_version_or_revision": "mozilla-policy-templates-v7.12",
-                "source_retrieved_on": "2026-03-24",
+                "source_records": list(source_records.values()),
                 "source_content_sha256_when_snapshotted": {
                     channel_id: policy["channels"][channel_id]["schema_sha256"]
                     for channel_id in sorted(policy["channels"])
@@ -590,9 +628,13 @@ def _provenance_review_content(
         "source_model_sha256": _sha256(model_path),
         "source_matrix": "docs/architecture/product-documentation-provenance-matrix-0.9.0.json",
         "source_family_id": "mozilla-policy-schema-facts",
-        "source_locator": "https://github.com/mozilla/policy-templates/releases/tag/v7.12",
-        "source_version_or_revision": "mozilla-policy-templates-v7.12",
-        "source_retrieved_on": "2026-03-24",
+        "source_records": sorted(
+            {
+                channel["schema_source"]: _source_metadata(channel["schema_source"])
+                for channel in inventory["channels"].values()
+            }.values(),
+            key=lambda record: record["source_version_or_revision"],
+        ),
         "license_id": "MPL-2.0",
         "reuse_mode": "generated-facts",
         "allowed_publication_policy": "allow-with-notice",
@@ -614,6 +656,7 @@ def _provenance_review_content(
             "release_only": len([policy for policy in policies if policy["channel_scope"] == "release-only"]),
             "both_channels": len([policy for policy in policies if policy["channel_scope"] == "both"]),
             "esr_only": len([policy for policy in policies if policy["channel_scope"] == "esr-only"]),
+            "partial": len([policy for policy in policies if policy["channel_scope"] == "partial"]),
             "changed_definitions": len(
                 [policy for policy in policies if policy["definition_changed_across_channels"]]
             ),

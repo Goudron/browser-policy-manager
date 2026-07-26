@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Сохранить и загрузить управляемый профиль</title>
+  <title>Сохранение и выгрузка пошагового профиля</title>
   <shortdesc>Сохраните проверенный управляемый профиль и загрузите артефакт передачи обслуживания, когда конфигурация будет готова.</shortdesc>
   <taskbody>
     <prereq><p>Проверка шага 6 завершена, предупреждения проверки понятны.</p></prereq>

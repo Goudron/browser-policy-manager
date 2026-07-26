@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>配置文件模型和生命周期</title>
+  <title>配置档案模型和生命周期</title>
   <shortdesc>BPM 配置文件是由库、引导式编辑器、所有设置、JSON 编辑器 和比较共享的一个保存的 Firefox 策略工作区。</shortdesc>
   <conbody>
     <p>使用配置文件将 Firefox 策略、托管首选项、验证状态、源归因和生命周期状态收集到一处。可以通过不同的 BPM 界面打开相同的配置文件，而无需更改其身份。</p>

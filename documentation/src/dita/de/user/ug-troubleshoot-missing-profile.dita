@@ -10,10 +10,10 @@
       <step><cmd>Kehren Sie zur Bibliothek zurück, anstatt die fehlgeschlagene Route zu bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Löschen Sie Suche und Filter und suchen Sie dann nach dem Profil nach Name, Schemakanal und letztem bekannten Status.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Schließen Sie archivierte Profile ein, wenn das Profil möglicherweise absichtlich archiviert wurde.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Wenn das Profil immer noch fehlt, verwenden Sie die veraltete URL nicht mehr und fahren Sie nur von einer sichtbaren Bibliothekszeile oder einem bekannten Export fort.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
+      <step><cmd>Wenn das Profil immer noch fehlt, verwenden Sie die veraltete URL nicht mehr und fahren Sie nur von einer sichtbaren Bibliothekszeile oder einem bekannten Export fort.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
     <result><p>Sie öffnen entweder das Profil erneut aus einem sichtbaren Bibliotheksstatus heraus oder bestätigen, dass die mit einem Lesezeichen versehene Route nicht mehr verwendbar ist.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-profile-library"/>

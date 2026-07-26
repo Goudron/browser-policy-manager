@@ -17,6 +17,9 @@ COMMAND_CONTRACT = (
     ROOT / "documentation/config/linux-source-install-command-contract-0.9.1.json"
 )
 RECONCILIATION = ROOT / "docs/architecture/linux-source-install-validation-0.9.1.json"
+EDITORIAL_RECONCILIATION = (
+    ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+)
 WSL_CONTRACT = (
     ROOT / "documentation/config/wsl-source-install-validation-contract-0.9.1.json"
 )
@@ -63,9 +66,16 @@ def test_closure_accepts_only_the_complete_m11_live_install_scope() -> None:
     assert decision["overall_bpm_0_9_1_release_ready_claimed"] is False
 
 
-def test_each_linux_target_links_current_commands_to_an_accepted_transcript() -> None:
+def test_each_linux_target_keeps_accepted_transcript_and_current_editorial_boundary() -> None:
     closure = _json(CLOSURE)
     expected_ids = [target["id"] for target in _json(COMMAND_CONTRACT)["targets"]]
+    current_targets = {
+        target["id"]: target
+        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+    }
+    removed_commands = _json(EDITORIAL_RECONCILIATION)["current_source_contract"][
+        "removed_maintainer_commands"
+    ]
     records = closure["linux_targets"]
 
     assert [record["target_id"] for record in records] == expected_ids
@@ -81,10 +91,12 @@ def test_each_linux_target_links_current_commands_to_an_accepted_transcript() ->
         command_evidence = record["command_evidence"]
 
         assert source.is_file()
-        assert _sha256(source) == record["reconciled_source_sha256"]
-        assert _documented_command_count(source) == command_evidence[
-            "documented_command_count"
-        ]
+        assert current_targets[record["target_id"]]["topic_id"] in source.name
+        assert _sha256(source) != record["reconciled_source_sha256"]
+        assert all(command not in source.read_text(encoding="utf-8") for command in removed_commands)
+        assert command_evidence["documented_command_count"] == sum(
+            command_evidence["stage_counts"].values()
+        )
         assert manifest["status"] == "accepted"
         assert manifest["result"] == "pass"
         assert attempt["accepted_disposition"] == "accepted-clean-source-install-pass"

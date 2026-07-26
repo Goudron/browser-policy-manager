@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-interpret-profile-comparison" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Interpretieren Sie die Vergleichstabelle</title>
+  <title>Die Vergleichstabelle interpretieren</title>
   <shortdesc>Richtlinien- und verwaltete Einstellungszeilen in den Status „Gleich“, „Geändert“ und „Fehlend“ lesen.</shortdesc>
   <taskbody>
     <prereq><p>Profil A und Profil B sind ausgewählt und die Vergleichstabelle ist sichtbar.</p></prereq>

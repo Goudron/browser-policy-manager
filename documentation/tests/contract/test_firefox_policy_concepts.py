@@ -150,8 +150,8 @@ def test_firefox_policy_concepts_are_keyed_and_reachable_from_policy_guide_maps(
 def test_english_firefox_policy_concepts_cover_selection_boundary_and_presets() -> None:
     text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in TOPICS)
     for required in (
-        "Firefox Release 152",
-        "ESR 140.12",
+        "Firefox Release 153",
+        "ESR 140.13",
         "support badge",
         "Release-only",
         "AIControls",
@@ -214,7 +214,7 @@ def test_complex_policy_family_fixture_is_schema_valid_for_declared_channels() -
     assert len(fixture["examples"]) == 10
 
     examples_by_id = {example["id"]: example for example in fixture["examples"]}
-    assert examples_by_id["ai-controls-baseline"]["channels"] == ["release-152"]
+    assert examples_by_id["ai-controls-baseline"]["channels"] == ["esr-153.0", "release-153"]
 
     for example in fixture["examples"]:
         assert example["channels"]

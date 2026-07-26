@@ -5,7 +5,7 @@
   <shortdesc>Öffnen Sie Alle Einstellungen für ein gespeichertes Profil, wenn Sie über den kürzeren geführten Arbeitsablauf hinaus eine vollständige visuelle Kontrolle benötigen.</shortdesc>
   <taskbody>
     <prereq><p>Ein gespeichertes Profil ist vorhanden. Neue nicht gespeicherte Entwürfe müssen gespeichert werden, bevor Alle Einstellungen geöffnet werden kann.</p></prereq>
-    <context><p>Alle Einstellungen ist der vollständige visuelle Editor für Firefox-Richtlinien und bekannt als Verwaltete Einstellungen. Es wird in Prüfung geöffnet, sodass Aufmerksamkeitselemente vor dem umfassenden Durchsuchen des Katalogs sichtbar sind.</p>
+    <context><p>Alle Einstellungen ist der vollständige visuelle Editor für Firefox-Richtlinien und enthält den Bereich Verwaltete Einstellungen. Der Editor wird im Modus Prüfung geöffnet, sodass Elemente mit Handlungsbedarf vor dem umfassenden Durchsuchen des Katalogs sichtbar sind.</p>
       <fig id="screenshot-all-settings-review">
         <title>Alle Einstellungen Prüfung</title>
         <image keyref="screenshot.all-settings-review" placement="break">

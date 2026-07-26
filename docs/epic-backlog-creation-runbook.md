@@ -155,9 +155,11 @@ when the completed epic changes the durable current product state that README de
 
 README must be updated after the main backlog implementation is complete, not only at backlog
 creation time. It should describe the actual current product state after the epic, including current
-surfaces, commands, supported external/runtime versions where they are product facts, test workflow,
-and user-facing behavior. If the epic does not change durable README content, the backlog should
-explicitly say that no README update is needed.
+surfaces, installation and product-start commands, supported external/runtime versions where they
+are product facts, and user-facing behavior. README is for installers, users, and administrators:
+do not add developer, maintainer, CI, test-workflow, source-tree, or release-handoff prose. Preserve
+the author and contact policy when present. If the epic does not change durable README content, the backlog should explicitly say that no
+README update is needed.
 
 README must not summarize what changed in a specific BPM version or list which earlier BPM version
 introduced a feature. Release history, "what changed", and target-version completion notes belong in
@@ -169,14 +171,20 @@ supported external/runtime versions, schema channels, command names, or compatib
 
 When editing README:
 
-- keep the maintainer copyright at the bottom;
-- keep the existing information about email topics / message themes;
+- retain the legal license/copyright footer when it is user-facing;
 - keep the primary product language English;
+- remove developer, maintainer, test/CI, and source-tree instructions; preserve the author and
+  contact policy when present;
 - remove release-note phrasing such as "what's included in <version>", "planned for <version>", or
   "introduced in <version>";
 - remove target-version anchors, active-target notes, and future-version placeholders;
 - remove or revise stale feature descriptions that no longer match the product;
 - do not delete historical or legal footer material while refreshing the main product copy.
+
+Whenever an epic changes the README audience or boundary, inventory every repository test that reads
+`README.md`, update its expectation in the same task, and run `pytest -q` after the final README
+edit. Focused README checks alone are insufficient because a locale, API, deployment, or release
+contract can also encode stale README prose.
 
 Product documentation must be updated after the epic changes functionality. Add a dedicated
 documentation-update milestone before the final quality milestone whenever the epic changes
@@ -185,6 +193,33 @@ behavior, security posture, deployment steps, or troubleshooting flow. That mile
 the DITA/User/Admin/API/CIS/Firefox topics, screenshots or screenshot blockers, manifests/search
 targets, and documentation tests needed to make the documentation describe the product after the
 epic.
+
+### Maintainer `make dev` documentation handoff
+
+When a task changes product-documentation source, documentation build tooling, generated portal
+behavior, or a served documentation version surface, run `make docs-install-dev` before reporting
+the task complete. This installs the current documentation artifact consumed by the maintainer's
+subsequent `make dev`; it is not a request for the assistant to start the development server.
+
+Every affected backlog must include a documentation-milestone task that makes this handoff explicit.
+Its acceptance must require the task report to record the successful `make docs-install-dev` command
+and confirm that the served artifact derives its visible version from the current BPM product version.
+
+### Compact UI-copy and documentation guard
+
+When an epic removes, shortens, or introduces visible UI copy, include a pre-implementation task
+that classifies each affected rendered node against the active UI-copy classification contract. The
+backlog may remove routine explanation and duplicate presentation only; it must retain labels,
+state, validation, consequences, unavailable reasons, accessible names, and recovery at the point
+of action. A contextual circled-info link is a task only for a recorded genuine comprehension gap,
+not a default replacement for removed prose.
+
+When an epic changes rendered product documentation, include its audience and locale review in the
+documentation milestone: documentation serves users, administrators, DevOps operators, API
+integrators, and security reviewers, not maintainers or implementation progress. Require one BPM
+product version, no separately owned documentation version, and locale-native headings rather than
+English-calqued grammar; Russian task/reference headings use an idiomatic nominal form where
+natural. Cite the active documentation audience/editorial and locale style contracts in the task.
 
 `CHANGELOG.md` must receive an entry for the target version. Preserve older version history; append
 or insert the new version entry without overwriting previous release notes.
@@ -232,7 +267,8 @@ Every backlog must end with a final quality milestone. Include tasks for:
 8. Update `CHANGELOG.md` for the target version while preserving older version history.
 9. Verify README has no target-version anchor, release-history entry, planned-for-version copy, or
    version-specific completion placeholder; update README only if the durable current product state
-   changed.
+   changed. If README audience/boundary changed, update every README-reading contract and rerun
+   `pytest -q` after the final edit.
 10. Update docs index if final verification changes maintained documentation.
 11. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
     release procedures include documentation drift gates when the epic changed those areas.
@@ -293,6 +329,8 @@ Before calling a new backlog ready, confirm:
   future-version placeholders;
 - a dedicated documentation-update milestone appears before the final quality milestone when the
   epic changes product behavior or operating procedures;
+- documentation-changing tasks require `make docs-install-dev` before handoff so the maintainer's
+  later `make dev` serves the current artifact and current BPM version;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;
@@ -303,8 +341,10 @@ Before calling a new backlog ready, confirm:
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
   changed schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
   release procedures;
-- README instructions preserve maintainer copyright and email-topic information and forbid release
-  history/version-change summaries in README;
+- README is limited to installer/user/administrator information, retains its legal footer plus any
+  author/contact policy, and forbids developer, maintainer, release-history, and version-change summaries;
+- any README audience/boundary change inventories every README-reading contract and reruns
+  `pytest -q` after the final README edit;
 - changelog instructions preserve previous version history;
 - runbook notes that product language is English while maintainer chat may be Russian;
 - docs index includes the new backlog;

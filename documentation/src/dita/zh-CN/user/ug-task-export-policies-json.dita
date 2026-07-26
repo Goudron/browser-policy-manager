@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-export-policies-json" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>将配置文件导出为 Firefox policies.json</title>
+  <title>将配置档案导出为 Firefox policies.json</title>
   <shortdesc>本任务完整说明“将配置文件导出为 Firefox policies.json”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
   <taskbody>
     <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>

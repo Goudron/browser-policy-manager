@@ -5,15 +5,15 @@
   <shortdesc>Recuperación de una falla de operación de red, navegador o API de BPM visible en la biblioteca o en las superficies del editor.</shortdesc>
   <taskbody>
     <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
-    <context><p>Las fallas de conexión pueden ser advertencias temporales de prueba del navegador, interrupciones de la red, reinicios del servidor o fallas en la operación de API; la respuesta segura es preservar el contexto antes de volver a intentarlo.</p></context>
+    <context><p>Los fallos de conexión pueden deberse a interrupciones de red, reinicios del servidor o errores de API; conserve el contexto visible antes de volver a intentarlo.</p></context>
     <steps>
       <step><cmd>Lea el estado visible e identifique si la operación fallida fue cargar, guardar, importar, exportar, archivar, restaurar, eliminar, validar o comparar.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Compruebe si otras superficies BPM en la misma sesión del navegador aún responden antes de volver a intentar la misma acción.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Vuelva a intentar la acción fallida una vez después de conservar los cambios no guardados y el contexto del perfil.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
-      <step><cmd>Si la advertencia de prueba del navegador o la falla de la API persisten, detenga las ediciones del usuario y mantenga los detalles del error visibles para que los revise el mantenedor.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
+      <step><cmd>Si persiste el error de conexión o de API, deje de editar y contacte con el soporte indicando los detalles visibles del error.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
     <result><p>El flujo de trabajo se reanuda después de un reintento limpio o se detiene con suficiente contexto visible para diagnosticar el problema de conexión del producto.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
+    <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

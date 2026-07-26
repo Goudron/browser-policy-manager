@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-profile-library" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Filtern Sie die Bibliothek</title>
+  <title>Die Bibliothek filtern</title>
   <shortdesc>Kombinieren Sie Schema-, Lebenszyklus- und Validierungsfilter, um die gespeicherte Profilliste zu fokussieren.</shortdesc>
   <taskbody>
     <prereq><p>Die Bibliothek ist geöffnet und Sie wissen, welchen Profilstatus Sie überprüfen müssen.</p></prereq>

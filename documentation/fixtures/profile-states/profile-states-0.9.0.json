@@ -7,7 +7,7 @@
     {
       "id": "doc-profile-release-baseline",
       "name": "Documentation release baseline",
-      "schema_channel": "release-152",
+      "schema_channel": "release-153",
       "state": "active",
       "source": "manual",
       "policy_count": 3,
@@ -17,7 +17,7 @@
     {
       "id": "doc-profile-esr-archived",
       "name": "Documentation ESR archived",
-      "schema_channel": "esr-140.12",
+      "schema_channel": "esr-140.13",
       "state": "archived",
       "source": "imported-policies-json",
       "policy_count": 2,

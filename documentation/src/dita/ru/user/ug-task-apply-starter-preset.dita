@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-apply-starter-preset" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Применить стартовую предустановку</title>
+  <title>Применение стартовой предустановки</title>
   <shortdesc>Используйте стартовую предустановку, чтобы засеять общие варианты политики Firefox перед детальным редактированием.</shortdesc>
   <taskbody>
     <prereq><p>Черновик профиля открывается на шаге 1.</p></prereq>

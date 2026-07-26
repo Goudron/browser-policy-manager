@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-profile-identity-schema" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Définir le Identité du profil et le canal de schéma</title>
+  <title>Définir l’identité du profil et le canal de schéma</title>
   <shortdesc>Choisissez le nom du profil enregistré et le canal du schéma Firefox avant de configurer les paramètres guidés.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez un profil nouveau ou enregistré dans Éditeur guidé.</p></prereq>
@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Confirmez que vous modifiez le brouillon de profil prévu.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Entrez un nom de profil clair.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Choisissez le canal de schéma Firefox, tel que la version 152 ou ESR 140.12.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez le canal de schéma Firefox, tel que la version 152 ou ESR 140.13.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Vérifiez si le canal sélectionné modifie les commandes visibles avant de continuer.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Le brouillon guidé possède un canal d'identité et de schéma stable.</p></result>

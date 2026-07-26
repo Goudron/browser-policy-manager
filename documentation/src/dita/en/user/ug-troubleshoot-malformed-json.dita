@@ -10,10 +10,10 @@
       <step><cmd>Keep the JSON editor or import error open so the line, column, or parse message remains visible.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Check the nearest braces, brackets, commas, quotation marks, and escaped characters around the reported location.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Format or validate the document again after the syntax correction.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Continue to schema validation only after the JSON parses successfully.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
+      <step><cmd>Continue to schema validation only after the JSON parses successfully.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The document parses as JSON and can move to normal policy validation.</p></result>
-    <postreq><p>Recovery: if the same error repeats after one clean retry, stop the workflow, preserve the visible message, profile name, schema channel, and current surface for maintainer review.</p></postreq>
+    <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

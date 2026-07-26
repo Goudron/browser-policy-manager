@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-control-product-inventory-pull" xml:lang="ru" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>Извлекайте и читайте профили BPM из продукта внешнего управления.</title>
+  <title>Получение и просмотр профилей BPM из внешнего продукта управления</title>
   <shortdesc>Создайте сторону извлечения/списка/чтения в интеграции управляющего продукта с явным владением, фильтрами и границами доказательств.</shortdesc>
   <taskbody>
     <prereq><p>Установить <codeph>$BPM_BASE_URL</codeph>. Решите, какой продукт внешнего контроля владеет выбором инвентаря, хранилищем для сравнения, политикой повторных попыток и доказательствами аудита; BPM владеет только записями профилей, возвращаемыми его API.</p></prereq>

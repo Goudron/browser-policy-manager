@@ -4,13 +4,13 @@
   <title>Configurar Firefox AI y políticas de funciones inteligentes</title>
   <shortdesc>Utilice el Paso 5 para los controles de políticas del navegador Firefox existentes relacionados con las funciones inteligentes AI &amp;, la búsqueda visual y las superficies inteligentes en los esquemas de versión compatibles.</shortdesc>
   <taskbody>
-    <prereq><p>Se selecciona un esquema de versión que admite los controles o comprende que ESR 140.12 puede omitirlos.</p></prereq>
+    <prereq><p>Se selecciona un esquema de versión que admite los controles o comprende que ESR 140.13 puede omitirlos.</p></prereq>
     <context><p>Este tema documenta las configuraciones de políticas existentes de Firefox como funcionalidad del producto. No agrega la funcionalidad AI al portal de documentación 0.9.1: RAG, las incrustaciones, la búsqueda generativa y las respuestas generativas permanecen fuera del alcance.</p></context>
     <steps>
       <step><cmd>Abra el Paso 5, AI &amp; funciones inteligentes.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Revise las superficies del navegador integrado AI, la búsqueda visual y las funciones del navegador inteligente enumeradas para el esquema de versión seleccionado.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Habilite, deshabilite o abandone cada política admitida según el objetivo del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Si falta un control en ESR 140.12, trátelo como no compatible en lugar de inventar manualmente una configuración guiada.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
+      <step><cmd>Si falta un control en ESR 140.13, trátelo como no compatible en lugar de inventar manualmente una configuración guiada.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>Firefox AI compatible y las políticas de funciones inteligentes se revisan como configuración del producto, mientras que el portal de documentación sigue sin ser AI para 0.9.1.</p></result>
     <postreq><p>Recuperación: si una parte interesada esperaba un control ESR ausente, cambiar a un esquema de versión compatible para revisar o documentar el estado no compatible.</p></postreq>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Examiner Tous les paramètres éléments d'attention</title>
-  <shortdesc>Utilisez Revue pour trier les éléments non valides, à révision manuelle CIS, bruts, inconnus, obsolètes et importés avant toute modification de routine.</shortdesc>
+  <title>Examiner les éléments à traiter dans « Tous les paramètres »</title>
+  <shortdesc>Utilisez « Revue » pour trier les éléments invalides, à examiner manuellement pour CIS, bruts, inconnus, obsolètes et importés avant toute modification courante.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez un profil enregistré dans Tous les paramètres.</p></prereq>
     <context><p>Revue est la vue par défaut axée sur l'attention d'abord. Il rassemble les paramètres qui peuvent nécessiter une décision avant l'exportation, la comparaison ou le transfert.</p></context>

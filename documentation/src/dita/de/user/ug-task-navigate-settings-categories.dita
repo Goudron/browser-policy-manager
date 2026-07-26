@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Navigieren Sie durch die Einstellungskategorien</title>
+  <title>Durch die Einstellungskategorien navigieren</title>
   <shortdesc>Navigieren Sie durch Alle Einstellungen-Kategorien und zugeordnete Kontrollcluster, um zugehörige Richtlinien- und Präferenzkontrollen zu finden.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie Alle Einstellungen in Konfiguriert oder Katalog.</p></prereq>

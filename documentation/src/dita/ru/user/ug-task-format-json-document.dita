@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-format-json-document" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Отформатируйте документ JSON.</title>
+  <title>Форматирование документа JSON</title>
   <shortdesc>Отформатируйте текущий документ JSON перед просмотром, проверкой или передачей.</shortdesc>
   <taskbody>
     <prereq><p>Откройте JSON-редактор с документом JSON в редакторе.</p></prereq>

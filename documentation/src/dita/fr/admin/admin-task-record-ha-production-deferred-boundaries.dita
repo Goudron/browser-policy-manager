@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Enregistrement HA et limites de production différées</title>
+  <title>Enregistrer les limites HA et de production différées</title>
   <shortdesc>Indiquez quelles fonctionnalités de production, HA, de proxy inverse, de restauration et de gestion des services sont absentes aujourd'hui et ce qui peut être préparé pour un travail de conception ultérieur.</shortdesc>
   <taskbody>
     <prereq><p>Des notes sur la préparation, l'exposition du réseau, la sauvegarde/exportation, la surveillance et la fenêtre de mise à jour existent pour l'instance d'exécution source actuelle.</p></prereq>

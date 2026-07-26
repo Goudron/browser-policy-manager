@@ -31,7 +31,6 @@
         <div class="wizard-toggle wizard-toggle--select" data-settings-target="{{ item.target }}">
             <div>
                 <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.policy_id) }}</div>
-                <div class="wizard-toggle-copy" data-i18n="{{ item.copy_key }}">{{ tr(item.copy_key) }}</div>
             </div>
             <select class="soft-input" data-policy-select-key="{{ item.policy_id }}">
                 <option value=""></option>
@@ -45,7 +44,6 @@
             <input type="checkbox" data-policy-key="{{ item.policy_id }}" />
             <div>
                 <div class="wizard-toggle-title" data-i18n="{{ item.label_key }}">{{ tr(item.label_key, item.policy_id) }}</div>
-                <div class="wizard-toggle-copy" data-i18n="{{ item.copy_key }}">{{ tr(item.copy_key) }}</div>
             </div>
         </label>
         {%- endif %}

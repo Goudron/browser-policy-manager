@@ -34,6 +34,7 @@ def test_search_facets_contract_is_static_localized_and_non_ai() -> None:
     assert contract["non_ai_boundary"]["mode"] == "no-ai-no-rag-no-embeddings-no-generative-answers"
 
     facets = contract["facet_fields"]
+    assert facets["bpm_version"]["values"] == [build_docs.PRODUCT_VERSION_FACET_PLACEHOLDER]
     assert facets["locale"]["values"] == list(build_docs.LOCALES)
     assert set(facets) == {
         "locale",
@@ -52,7 +53,11 @@ def test_search_facets_contract_is_static_localized_and_non_ai() -> None:
         "cis-settings-guide",
         "administrator-guide",
     ]
-    assert facets["firefox_channel"]["values"] == ["esr-140.12", "release-152"]
+    assert facets["firefox_channel"]["values"] == [
+        "esr-140.13",
+        "esr-153.0",
+        "release-153",
+    ]
     assert "ai_smart" in facets["policy_category"]["values"]
     assert facets["cis_level"]["values"] == ["level-1", "level-2"]
     assert facets["api_area"]["values"] == [

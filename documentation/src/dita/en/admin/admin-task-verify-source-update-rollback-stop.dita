@@ -17,7 +17,7 @@ curl -fsS http://127.0.0.1:8000/health/ready
       <step><cmd>Apply rollback or stop conditions without inventing automatic recovery.</cmd><info><p>If failure occurs before migrations, return to the previous source revision and reinstall dependencies. If failure occurs after migrations, stop BPM, restore the verified pre-update database backup, return to the previous source revision, reinstall dependencies, and repeat health/UI smoke checks. If backup evidence is missing, restore is unverified, or data changed after migration, stop and escalate instead of claiming rollback success.</p><note type="warning">Do not mark the update complete when probes fail, documentation is stale, exports differ unexpectedly, migrations are uncertain, or rollback evidence is incomplete.</note></info></step>
     </steps>
     <result><p>The update is either accepted with complete evidence, stopped at a known blocker, or restored from the pre-update backup with explicit proof.</p></result>
-    <postreq><p>Use the resulting evidence in the operations handoff note and in future production/HA/reverse-proxy planning.</p></postreq>
+    <postreq><p>Use the resulting evidence in the operations handoff note when recording platform-owned production, HA, and reverse-proxy controls.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.admin-task-run-source-update-migrations-docs"/>

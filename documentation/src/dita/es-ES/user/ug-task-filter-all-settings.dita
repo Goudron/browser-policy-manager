@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-all-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Filtrar la lista Todos los ajustes</title>
-  <shortdesc>Filtre por estado configurado, disponible, cubierto con guía, solo para todas las configuraciones, no válido, obsoleto, sin formato o desconocido.</shortdesc>
+  <title>Filtrar la lista «Todos los ajustes»</title>
+  <shortdesc>Filtre los ajustes por estado: configurado, disponible, cubierto por el asistente, no válido, obsoleto, sin formato o desconocido.</shortdesc>
   <taskbody>
     <prereq><p>Abra Todos los ajustes con una lista de configuraciones visible.</p></prereq>
     <context><p>Los filtros de estado limitan un inventario grande según la decisión que el usuario debe tomar. Son diferentes de los filtros de origen, que explican de dónde proviene un valor.</p></context>

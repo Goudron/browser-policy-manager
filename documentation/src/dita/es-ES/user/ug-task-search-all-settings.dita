@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Buscar Todos los ajustes</title>
+  <title>Buscar en «Todos los ajustes»</title>
   <shortdesc>Busque configuraciones configuradas, políticas disponibles, preferencias conocidas y acciones de configuración de Todos los ajustes.</shortdesc>
   <taskbody>
     <prereq><p>Abra Todos los ajustes en cualquier modo.</p></prereq>

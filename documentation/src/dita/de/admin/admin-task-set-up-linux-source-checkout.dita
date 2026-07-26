@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-linux-source-checkout" xml:lang="de" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Richten Sie das Auschecken der Linux-Quelle ein</title>
+  <title>Das Auschecken der Linux-Quelle einrichten</title>
   <shortdesc>Klonen Sie das BPM-Repository, erstellen Sie die virtuelle Python-Umgebung, installieren Sie Entwicklungsabhängigkeiten und bereiten Sie das lokale Datenbankschema vor.</shortdesc>
   <taskbody>
     <prereq><p>Der Linux-Host ist vorbereitet und der Administrator hat Zugriff auf die BPM-Repository-URL sowie den freigegebenen Zielzweig, das Ziel-Tag oder die Zielrevision.</p></prereq>

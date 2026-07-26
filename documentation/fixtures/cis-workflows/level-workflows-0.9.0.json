@@ -16,10 +16,10 @@
     {
       "workflow_id": "cis-workflow-level-1-esr-fixture",
       "level": 1,
-      "schema_channel": "esr-140.12",
-      "cis_layer_id": "cis-l1.esr-140.12",
+      "schema_channel": "esr-140.13",
+      "cis_layer_id": "cis-l1.esr-140.13",
       "starter_preset": "basic_corporate",
-      "comparison_profile": "blank-esr-140.12",
+      "comparison_profile": "blank-esr-140.13",
       "expected_mapped_recommendations": 49,
       "manual_review_decision_categories": [
         "update governance",
@@ -41,8 +41,8 @@
     {
       "workflow_id": "cis-workflow-level-2-release-fixture",
       "level": 2,
-      "schema_channel": "release-152",
-      "cis_layer_id": "cis-l2.release-152",
+      "schema_channel": "release-153",
+      "cis_layer_id": "cis-l2.release-153",
       "starter_preset": "soc_hard",
       "comparison_profile": "cis-workflow-level-1-release-reference",
       "expected_mapped_recommendations": 53,

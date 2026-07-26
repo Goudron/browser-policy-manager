@@ -9,28 +9,25 @@ def _read(path: str) -> str:
     return (REPO_ROOT / path).read_text(encoding="utf-8")
 
 
-def test_readme_points_routine_commands_to_make_targets():
+def test_readme_keeps_only_product_start_command():
     readme = _read("README.md")
 
-    required_targets = {
-        "make dev",
+    assert "make dev" in readme
+
+    developer_commands = {
         "make quality",
         "make coverage",
         "make test-ui",
         "make test-firefox-live",
         "make test-firefox-live-amo",
         "make local-chromium-ui-audit",
-    }
-    for target in required_targets:
-        assert target in readme
-
-    stale_commands = {
+        "make docs-install-dev",
         "uvicorn app.main:app --reload",
         "ruff check .\nmypy app\npytest",
         "pytest --cov=app --cov-branch --cov-report=term-missing",
         "./.venv/bin/python tools/run_local_chromium_ui_audit.py",
     }
-    for command in stale_commands:
+    for command in developer_commands:
         assert command not in readme
 
 
@@ -120,8 +117,10 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "README must not summarize what changed in a specific BPM version",
         "README must also not identify the active target version",
         "Release history, \"what changed\", and target-version completion notes belong in `CHANGELOG.md`.",
-        "keep the maintainer copyright at the bottom",
-        "keep the existing information about email topics / message themes",
+        "README is for installers, users, and administrators:",
+        "remove developer, maintainer, test/CI, and source-tree instructions; preserve the author and",
+        "inventory every repository test that reads `README.md`",
+        "Focused README checks alone are insufficient",
         "Product documentation must be updated after the epic changes functionality.",
         "Add a dedicated documentation-update milestone before the final quality milestone",
         "CHANGELOG.md` must receive an entry for the target version.",

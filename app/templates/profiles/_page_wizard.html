@@ -3,8 +3,6 @@
         <div class="wizard-copy">
             <div class="section-kicker" data-i18n="profiles.wizard_kicker">{{ tr("profiles.wizard_kicker") }}</div>
             <h2 class="wizard-title" data-i18n="profiles.wizard_title">{{ tr("profiles.wizard_title") }}</h2>
-            <p class="wizard-subtitle" data-i18n="profiles.wizard_body">{{ tr("profiles.wizard_body") }}</p>
-            <p class="wizard-subtitle wizard-context-copy" id="wizard-context-copy" data-i18n="profiles.wizard_context_new">{{ tr("profiles.wizard_context_new") }}</p>
             {% set context_help_surface = "guided" %}
             {% include "profiles/_context_help_link.html" %}
         </div>
@@ -31,7 +29,7 @@
                     </button>
                 </div>
             </label>
-            <div id="wizard-settings-search-meta" class="wizard-input-hint" data-i18n="profiles.wizard_settings_search_hint">{{ tr("profiles.wizard_settings_search_hint") }}</div>
+            <div id="wizard-settings-search-meta" class="wizard-input-hint" aria-live="polite"></div>
             <div id="wizard-settings-search-results" class="wizard-settings-search-results" hidden></div>
         </div>
         </div>
@@ -51,7 +49,6 @@
                     <span class="wizard-step-index">{{ step.step }}</span>
                     <span class="wizard-step-label" data-i18n="{{ step.label_key }}">{{ tr(step.label_key, step.label_fallback) }}</span>
                 </span>
-                <span class="wizard-step-copy" data-i18n="{{ step.copy_key }}">{{ tr(step.copy_key, step.copy_fallback) }}</span>
             </button>
             {% endfor %}
         </div>

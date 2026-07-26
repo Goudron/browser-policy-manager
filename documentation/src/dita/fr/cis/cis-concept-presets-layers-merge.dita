@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-presets-layers-merge" xml:lang="fr" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Comment les préréglages, les couches CIS et l'attribution de source fusionnent</title>
+  <title>Fusion des préréglages, des couches CIS et de l’attribution de source</title>
   <shortdesc>Utilisez cette rubrique pour comprendre comment BPM combine un préréglage de démarrage, une couche CIS, des données importées, des modifications manuelles et une solution de secours brute avant l'exportation.</shortdesc>
   <conbody>
     <section id="a-source-order"><title>Ordre source</title><p>BPM traite le préréglage de démarrage comme référence initiale, applique la couche CIS sélectionnée pour le canal de schéma Firefox choisi, puis conserve les valeurs de secours importées ultérieurement, manuelles ou brutes visibles en tant qu'attribution de source distincte. Examinez les valeurs dans Tous les paramètres avant l'exportation, car l'attribution de la source explique pourquoi une valeur configurée existe et si une modification remplace la source de référence, CIS, manuelle, importée ou brute.</p></section>

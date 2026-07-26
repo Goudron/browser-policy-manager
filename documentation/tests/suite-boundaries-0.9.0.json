@@ -164,6 +164,7 @@
         "documentation/tests/contract/test_docker_engine_installation_evidence.py",
         "documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py",
         "documentation/tests/contract/test_linux_source_install_command_topics.py",
+        "documentation/tests/contract/test_linux_source_install_editorial_reconciliation_0_9_2.py",
         "documentation/tests/contract/test_live_source_install_evidence_closure.py",
         "documentation/tests/contract/test_live_source_install_environment_handoff.py",
         "documentation/tests/contract/test_live_source_install_privileged_validation_contract.py",
@@ -178,6 +179,7 @@
         "documentation/tests/contract/test_locale_anglicism_replacement.py",
         "documentation/tests/contract/test_locale_anti_anglicism_guard.py",
         "documentation/tests/contract/test_locale_human_qa.py",
+        "documentation/tests/contract/test_localized_heading_style.py",
         "documentation/tests/contract/test_interface_name_replacement.py",
         "documentation/tests/contract/test_locale_terminology_authority.py",
         "documentation/tests/contract/test_locale_visible_english_inventory.py",
@@ -198,6 +200,7 @@
         "documentation/config/interface-name-replacement-0.9.1.json",
         "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
         "documentation/config/live-source-install-harness-0.9.1.json",
+        "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json",
         "documentation/config/wsl-source-install-validation-contract-0.9.1.json",
         "documentation/evidence/live-source-install/0.9.1/m11-02-docker-engine-20260714/host-state.json",
         "documentation/evidence/live-source-install/0.9.1/m11-02-docker-engine-20260714/run-manifest.json",
@@ -238,11 +241,20 @@
       "path_globs": [
         "documentation/tests/contract/test_user_guide_*.py",
         "documentation/tests/contract/test_firefox_policy_*.py",
-        "documentation/tests/contract/test_cis_*.py"
+        "documentation/tests/contract/test_cis_*.py",
+        "documentation/tests/contract/test_public_audience_language.py",
+        "documentation/tests/contract/test_compact_ui_user_docs_0_9_2.py",
+        "documentation/tests/contract/test_context_help_gap_review_0_9_2.py",
+        "documentation/tests/contract/test_compact_ui_screenshot_refresh_0_9_2.py",
+        "documentation/tests/contract/test_firefox_153_dual_esr_schema_contract_0_9_2.py"
       ],
       "fixtures": [
         "documentation/fixtures/firefox-policy-families/",
-        "documentation/fixtures/cis-workflows/"
+        "documentation/fixtures/cis-workflows/",
+        "docs/architecture/compact-ui-user-documentation-review-0.9.2.md",
+        "docs/architecture/context-help-gap-review-0.9.2.md",
+        "docs/architecture/compact-ui-screenshot-refresh-0.9.2.md",
+        "docs/architecture/firefox-153-dual-esr-schema-contract-0.9.2.md"
       ],
       "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_user_guide_locale_parity.py"
     },
@@ -496,9 +508,19 @@
     },
     "release_gate": {
       "primary_suite": "contract",
-      "path_globs": ["documentation/tests/contract/test_documentation_release_gate.py"],
-      "fixtures": ["docs/architecture/product-documentation-release-contract-0.9.0.md"],
-      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_release_gate.py"
+      "path_globs": [
+        "documentation/tests/contract/test_documentation_release_gate.py",
+        "documentation/tests/contract/test_editorial_release_gate_0_9_2.py",
+        "documentation/tests/contract/test_documentation_update_milestone_verification_0_9_2.py"
+      ],
+      "fixtures": [
+        "docs/architecture/product-documentation-release-contract-0.9.0.md",
+        "docs/architecture/product-documentation-release-contract-0.9.2.md",
+        "docs/architecture/documentation-update-milestone-verification-0.9.2.md",
+        "documentation/config/documentation-editorial-release-gate-0.9.2.json",
+        "documentation/tools/validate_editorial_release_gate.py"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_release_gate.py documentation/tests/contract/test_editorial_release_gate_0_9_2.py"
     },
     "content_coverage_audit": {
       "primary_suite": "contract",

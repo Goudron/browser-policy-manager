@@ -10,10 +10,10 @@
       <step><cmd>Stoppen Sie im Speicherkonfliktbereich und überschreiben Sie nicht sofort.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Vergleichen Sie den sichtbaren Profilnamen, den Schemakanal, den Editormodus und den zuletzt gespeicherten Status mit der Registerkarte, die den Konflikt verursacht hat.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Kopieren Sie alle nicht gespeicherten Entwurfswerte, die vor dem erneuten Laden des Profils beibehalten werden müssen.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Laden Sie das Profil neu oder versuchen Sie es erneut, zu speichern, nachdem Sie ausgewählt haben, ob der aktuelle Entwurf oder der neuere gespeicherte Status beibehalten werden soll.</cmd><info><note type="warning">Bearbeiten Sie nicht den internen Speicher, lokale Browserdaten, Datenbankzeilen oder generierte Build-Artefakte, um benutzerbezogene Profilarbeiten wiederherzustellen.</note></info></step>
+      <step><cmd>Laden Sie das Profil neu oder versuchen Sie es erneut, zu speichern, nachdem Sie ausgewählt haben, ob der aktuelle Entwurf oder der neuere gespeicherte Status beibehalten werden soll.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
     <result><p>Die veraltete Registerkarte wird aufgelöst, ohne dass der aktuelle Entwurf oder das neuere gespeicherte Profil stillschweigend verworfen wird.</p></result>
-    <postreq><p>Wiederherstellung: Wenn derselbe Fehler nach einem sauberen Wiederholungsversuch erneut auftritt, stoppen Sie den Arbeitsablauf und bewahren Sie die sichtbare Nachricht, den Profilnamen, den Schemakanal und die aktuelle Oberfläche zur Überprüfung durch den Betreuer auf.</p></postreq>
+    <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

@@ -29,7 +29,6 @@
             updateWizardSummary,
             setWorkspaceHelper,
             syncWizardFieldsFromForm,
-            updateWizardContext,
             setWizardStarter,
             setWizardComplianceLayer,
             setWizardComplianceSnapshot,
@@ -76,16 +75,12 @@
             nameHintEl,
             currentNameEl,
             currentMetaEl,
-            editorProfileIdEl,
             editorModeGuidedEl,
             editorModeSettingsEl,
             editorModeJsonEl,
-            editorModeLinksHintEl,
             profileDerivedNoteEl,
-            profileLifecycleCopyEl,
             profileLifecycleListEl,
             profileCompliancePanelEl,
-            profileComplianceCopyEl,
             profileComplianceListEl,
             stateBadgeEl,
             workspaceProfileCountEl,
@@ -125,9 +120,6 @@
             jsonReviewDownloadStateEl,
             wizardFinishEl,
             wizardSummaryLifecycleListEl,
-            wizardCloneHandoffPanelEl,
-            wizardCloneHandoffCopyEl,
-            wizardCloneHandoffListEl,
         } = elements;
         const overviewPanelEl = documentRef.getElementById("overview-panel");
         const commandDeckEl = documentRef.getElementById("command-deck");
@@ -228,100 +220,8 @@
             }
         }
 
-        function buildCloneHandoffItems() {
-            const cloneSource = getCloneSourceProfile();
-            if (!cloneSource?.name) return [];
-
-            const raw = getCurrentRaw();
-            const items = [];
-            const pushItem = (label, action) => items.push({ label, action });
-
-            pushItem(
-                t("profiles.clone_handoff_item_identity"),
-                { kind: "step", value: 1, label: t("profiles.clone_handoff_open_step") },
-            );
-
-            const hasHomeSurface = Boolean(
-                raw?.Homepage
-                || raw?.NewTabPage !== undefined
-                || raw?.OverrideFirstRunPage
-                || raw?.OverridePostUpdatePage
-                || raw?.FirefoxHome,
-            );
-            if (hasHomeSurface) {
-                pushItem(
-                    t("profiles.clone_handoff_item_home"),
-                    { kind: "step", value: 3, label: t("profiles.clone_handoff_open_step") },
-                );
-            }
-
-            const hasPrivacySurface = Boolean(
-                raw?.DisableTelemetry !== undefined
-                || raw?.DisableFirefoxStudies !== undefined
-                || raw?.DisablePrivateBrowsing !== undefined
-                || raw?.OfferToSaveLogins !== undefined
-                || raw?.PasswordManagerEnabled !== undefined
-                || raw?.SanitizeOnShutdown
-                || raw?.Permissions
-                || raw?.Cookies,
-            );
-            if (hasPrivacySurface) {
-                pushItem(
-                    t("profiles.clone_handoff_item_privacy"),
-                    { kind: "step", value: 5, label: t("profiles.clone_handoff_open_step") },
-                );
-            }
-
-            const hasFeatureSurface = Boolean(
-                raw?.ExtensionSettings
-                || raw?.InstallAddonsPermission
-                || raw?.WebsiteFilter
-                || raw?.Handlers
-                || raw?.RequestedLocales
-                || raw?.TranslateEnabled !== undefined
-                || raw?.DisableFirefoxAccounts !== undefined
-                || raw?.UserMessaging,
-            );
-            if (hasFeatureSurface) {
-                pushItem(
-                    t("profiles.clone_handoff_item_features"),
-                    { kind: "step", value: 6, label: t("profiles.clone_handoff_open_step") },
-                );
-            }
-
-            return items.slice(0, 4);
-        }
-
-        function renderCloneHandoffPanel() {
-            const cloneSource = getCloneSourceProfile();
-            const visible = Boolean(cloneSource?.name);
-            const items = buildCloneHandoffItems();
-            const renderItems = (listEl) => {
-                if (!listEl) return;
-                listEl.innerHTML = items.map((item) => {
-                    const attrs = `data-clone-handoff-step="${String(item.action?.value || "")}"`;
-                    const describedById = "wizard-clone-handoff-copy";
-                    const ariaLabel = [item.action?.label || "", item.label].filter(Boolean).join(". ");
-                    return `<div class="wizard-export-plan-item" data-plan-tone="default" role="listitem"><div class="wizard-export-plan-copy">${item.label}</div><button type="button" class="button-base ghost-button wizard-export-plan-action" aria-label="${escapeHtml(ariaLabel)}" aria-describedby="${describedById}" ${attrs}>${item.action?.label || ""}</button></div>`;
-                }).join("");
-            };
-
-            [wizardCloneHandoffPanelEl].forEach((panelEl) => {
-                if (panelEl) {
-                    panelEl.hidden = !visible;
-                }
-            });
-            if (wizardCloneHandoffCopyEl) {
-                wizardCloneHandoffCopyEl.textContent = visible
-                    ? t("profiles.clone_handoff_active").replace("{name}", cloneSource.name)
-                    : t("profiles.clone_handoff_body");
-            }
-            renderItems(wizardCloneHandoffListEl);
-        }
-
         function buildLifecycleReviewItems() {
             const currentProfile = getCurrentProfile();
-            const cloneSource = getCloneSourceProfile();
             const sessionNote = getLifecycleSessionNote();
             const items = [];
 
@@ -341,26 +241,6 @@
                 tone: currentProfile?.updated_at ? "ready" : "default",
             });
 
-            items.push({
-                title: t("profiles.lifecycle_item_state"),
-                copy: currentProfile?.is_deleted
-                    ? t("profiles.lifecycle_item_state_archived")
-                    : (getCurrentId()
-                        ? t("profiles.lifecycle_item_state_saved")
-                        : (cloneSource?.name
-                            ? t("profiles.lifecycle_item_state_clone_draft")
-                            : t("profiles.lifecycle_item_state_new_draft"))),
-                tone: currentProfile?.is_deleted ? "strict" : (getCurrentId() ? "ready" : "default"),
-            });
-
-            items.push({
-                title: t("profiles.lifecycle_item_origin"),
-                copy: cloneSource?.name
-                    ? t("profiles.lifecycle_item_origin_clone").replace("{name}", cloneSource.name)
-                    : t("profiles.lifecycle_item_origin_independent"),
-                tone: cloneSource?.name ? "ready" : "default",
-            });
-
             if (sessionNote?.type === "restored" && sessionNote.profileId === getCurrentId()) {
                 items.push({
                     title: t("profiles.lifecycle_item_recent"),
@@ -374,15 +254,6 @@
 
         function renderLifecycleReview() {
             const items = buildLifecycleReviewItems();
-            const hasSavedProfile = Boolean(getCurrentId() || getCurrentProfile()?.created_at);
-            const copy = hasSavedProfile
-                ? t("profiles.lifecycle_review_active")
-                : t("profiles.lifecycle_review_body");
-
-            if (profileLifecycleCopyEl) {
-                profileLifecycleCopyEl.textContent = copy;
-            }
-
             const renderItemNodes = () => items.map((item) => {
                 const rowEl = documentRef.createElement("div");
                 rowEl.className = "wizard-export-plan-item";
@@ -449,14 +320,7 @@
             } else {
                 overviewContextEl.textContent = t("profiles.overview_draft");
             }
-            if (editorProfileIdEl) {
-                editorProfileIdEl.textContent = getCurrentId()
-                    ? `#${getCurrentId()}`
-                    : t("profiles.badge_draft");
-            }
-
             renderCloneContext();
-            renderCloneHandoffPanel();
             renderLifecycleReview();
             refreshEditorModeLinks();
             updateWizardSummary();
@@ -725,6 +589,10 @@
             el.classList.toggle("ghost-button", !active);
             el.classList.toggle("text-white", active);
             el.classList.toggle("text-slate-700", !active);
+            const saveRequiredEl = el.querySelector("[data-editor-mode-save-required]");
+            if (saveRequiredEl) {
+                saveRequiredEl.hidden = available;
+            }
         }
 
         function buildEditorModeHref(modeKey) {
@@ -769,9 +637,6 @@
         function refreshEditorModeLinks() {
             const hasSavedProfile = Boolean(getCurrentId());
             const guidedActive = routeMode === "new" || routeMode === "edit";
-            const detailMode = routeMode === "settings"
-                ? "settings"
-                : (isJsonModeFocusTarget(routeFocusTarget) ? "json" : "settings");
 
             setEditorModeLinkState(editorModeGuidedEl, {
                 href: buildEditorModeHref("guided"),
@@ -781,16 +646,13 @@
             setEditorModeLinkState(editorModeSettingsEl, {
                 href: buildEditorModeHref("settings"),
                 available: hasSavedProfile,
-                active: routeMode === "settings" || (routeMode === "json" && detailMode === "settings"),
+                active: routeMode === "settings",
             });
             setEditorModeLinkState(editorModeJsonEl, {
                 href: buildEditorModeHref("json"),
                 available: hasSavedProfile,
-                active: routeMode === "json" && detailMode === "json",
+                active: routeMode === "json",
             });
-            if (editorModeLinksHintEl) {
-                editorModeLinksHintEl.classList.toggle("support-hidden", hasSavedProfile);
-            }
         }
 
         function updateActionState() {
@@ -883,7 +745,7 @@
             setLifecycleSessionNote(null);
             setWizardStarter("blank");
             currentNameEl.textContent = t("profiles.none_selected");
-            currentMetaEl.textContent = message || t("profiles.selection_empty_meta");
+            currentMetaEl.textContent = "";
             stateBadgeEl.textContent = t("profiles.badge_draft");
             stateBadgeEl.className = "state-chip state-chip--draft";
             nameInput.disabled = false;
@@ -899,7 +761,6 @@
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
             updateDownloadLinks();
-            updateWizardContext();
             syncWizardNetworkFromEditor();
             syncWizardPreferencesFromEditor();
             syncWizardExtensionsFromEditor();
@@ -913,7 +774,7 @@
         }
 
         function renderProfileComplianceSummary(profile) {
-            if (!profileCompliancePanelEl || !profileComplianceCopyEl || !profileComplianceListEl) return;
+            if (!profileCompliancePanelEl || !profileComplianceListEl) return;
             const compliance = profile?.compliance;
             if (!compliance || !compliance.layer || compliance.layer === "none") {
                 profileCompliancePanelEl.hidden = true;
@@ -942,7 +803,6 @@
             items.push(t("profiles.compliance_summary_manual").replace("{count}", String(manualCount)));
             items.push(t("profiles.compliance_summary_exceptions").replace("{count}", String(exceptionCount)));
 
-            profileComplianceCopyEl.textContent = t("profiles.compliance_summary_body");
             profileComplianceListEl.innerHTML = items
                 .map((item) => `<div class="wizard-baseline-summary-item">${item}</div>`)
                 .join("");
@@ -958,11 +818,7 @@
             }
 
             currentNameEl.textContent = profile.name;
-            currentMetaEl.textContent = [
-                `ID ${profile.id}`,
-                formatSchemaLabel(profile.schema_version),
-                t("profiles.meta_updated").replace("{value}", formatTimestamp(profile.updated_at)),
-            ].filter(Boolean).join(" • ");
+            currentMetaEl.textContent = `#${profile.id}`;
 
             if (profile.is_deleted) {
                 stateBadgeEl.textContent = t("profiles.badge_deleted");
@@ -995,7 +851,6 @@
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
             updateDownloadLinks();
-            updateWizardContext();
             syncWizardNetworkFromEditor();
             syncWizardPreferencesFromEditor();
             syncWizardExtensionsFromEditor();
@@ -1051,7 +906,7 @@
             setCurrentId(null);
             setWizardStarter("keep_current");
             currentNameEl.textContent = clonedName;
-            currentMetaEl.textContent = t("profiles.clone_meta").replace("{name}", sourceName);
+            currentMetaEl.textContent = "";
             stateBadgeEl.textContent = t("profiles.badge_draft");
             stateBadgeEl.className = "state-chip state-chip--draft";
             nameInput.disabled = false;
@@ -1068,7 +923,6 @@
             syncWizardFieldsFromForm();
             syncWorkspaceOverview();
             updateDownloadLinks();
-            updateWizardContext();
             syncWizardNetworkFromEditor();
             syncWizardPoliciesFromEditor();
             syncWizardPreferencesFromEditor();
@@ -1084,11 +938,9 @@
 
             if (!items.length) {
                 const li = documentRef.createElement("li");
-                li.className = "list-empty-illustration rounded-[24px] border border-dashed border-slate-200 px-4 py-6 text-center";
+                li.className = "list-empty-state rounded-[24px] border border-dashed border-slate-200 px-4 py-4 text-center";
                 li.innerHTML = `
-                    <div class="list-empty-illustration-icon mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/80 bg-white/80 text-2xl shadow-sm">+</div>
                     <div class="text-sm font-semibold text-slate-900">${t("profiles.empty_title")}</div>
-                    <div class="mx-auto mt-2 max-w-[240px] text-sm leading-6 text-slate-500">${t("profiles.empty_list")}</div>
                 `;
                 listEl.appendChild(li);
                 return;
@@ -1688,19 +1540,6 @@
             if (!getCurrentId()) return;
             if (!windowRef.confirm(t("profiles.conflict_overwrite_confirm"))) return;
             await saveCurrent({ overwriteRevision: true });
-        });
-
-        [wizardCloneHandoffListEl].forEach((listEl) => {
-            listEl?.addEventListener("click", async (event) => {
-                const stepButton = event.target.closest("[data-clone-handoff-step]");
-                if (stepButton) {
-                    const nextStep = Number(stepButton.dataset.cloneHandoffStep || "");
-                    if (!Number.isNaN(nextStep) && nextStep > 0) {
-                        setWizardStep(nextStep);
-                        documentRef.getElementById(`wizard-step-${nextStep}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                    }
-                }
-            });
         });
 
         return {

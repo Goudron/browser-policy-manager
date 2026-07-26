@@ -5,17 +5,17 @@
       <shortdesc>对当前 BPM API 工作流程使用语言中立的请求模式、环境模板、可复制的 curl 命令、多部分示例和紧凑的 Python 断言。</shortdesc>
       <taskbody>
         <prereq><p>为测试中的 BPM 实例设置 <codeph>BPM_BASE_URL</codeph>。请勿将凭据、租户名称、个人主机名、私有主机或生产配置文件 ID 放入可重用示例中； BPM 目前没有记录 API 身份验证。</p></prereq>
-        <context><p>此任务涵盖 <codeph>API-HEALTH-001</codeph>、<codeph>API-HEALTH-002</codeph>、<codeph>API-PROFILE-001</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-PROFILE-004</codeph>、<codeph>API-PROFILE-005</codeph>、<codeph>API-FF-001</codeph>、<codeph>API-VAL-001</codeph> 和 <codeph>API-FF-002</codeph>。这些示例有意使用 <codeph>$BPM_BASE_URL</codeph>、合成名称、<codeph>release-152</codeph>、响应断言和一次性固定装置 ID，而不是特定于环境的主机或机密。</p></context>
+        <context><p>此任务涵盖 <codeph>API-HEALTH-001</codeph>、<codeph>API-HEALTH-002</codeph>、<codeph>API-PROFILE-001</codeph>、<codeph>API-PROFILE-003</codeph>、<codeph>API-PROFILE-004</codeph>、<codeph>API-PROFILE-005</codeph>、<codeph>API-FF-001</codeph>、<codeph>API-VAL-001</codeph> 和 <codeph>API-FF-002</codeph>。这些示例有意使用 <codeph>$BPM_BASE_URL</codeph>、合成名称、<codeph>release-153</codeph>、响应断言和一次性固定装置 ID，而不是特定于环境的主机或机密。</p></context>
         <steps>
           <step><cmd>在复制curl 请求之前创建可重用的环境模板。</cmd><info><p>请求示例：<codeph>export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"</codeph>。响应示例：shell 为整个运行保留一个基本 URL、架构通道、合成配置文件名称和可选导入路径。错误示例：当缺少所需值时，shell 退出赋值。</p><codeblock outputclass="language-bash"><![CDATA[
 # .env.devops-example.template
 BPM_BASE_URL=
-BPM_SCHEMA_CHANNEL=release-152
+BPM_SCHEMA_CHANNEL=release-153
 BPM_PROFILE_NAME=docs-api-example
 BPM_JSON_IMPORT_PATH=./policies.json
 
 export BPM_BASE_URL="${BPM_BASE_URL:?set BPM_BASE_URL first}"
-export BPM_SCHEMA_CHANNEL="${BPM_SCHEMA_CHANNEL:-release-152}"
+export BPM_SCHEMA_CHANNEL="${BPM_SCHEMA_CHANNEL:-release-153}"
 export BPM_PROFILE_NAME="${BPM_PROFILE_NAME:-docs-api-example}"
 export BPM_JSON_IMPORT_PATH="${BPM_JSON_IMPORT_PATH:-./policies.json}"
 ]]></codeblock></info></step>
@@ -25,7 +25,7 @@ curl -fsS "$BPM_BASE_URL/health/ready"
 ]]></codeblock></info></step>
       <step><cmd>重用配置文件生命周期片段来创建、列出、读取和受保护的更新。</cmd><info><p>请求示例：<codeph>POST $BPM_BASE_URL/api/profiles</codeph>、<codeph>GET $BPM_BASE_URL/api/profiles</codeph>、<codeph>GET $BPM_BASE_URL/api/profiles/$PROFILE_ID</codeph> 和 <codeph>PATCH $BPM_BASE_URL/api/profiles/$PROFILE_ID</codeph>。响应示例：<codeph>201 ProfileRead</codeph>、<codeph>200 ProfileRead[]</codeph>、<codeph>200 ProfileRead</codeph> 和递增的 <codeph>revision</codeph>。错误示例：<codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph> 过时的 <codeph>expected_revision</codeph> 或 <codeph>422</codeph>。</p><codeblock outputclass="language-bash"><![CDATA[
 PROFILE_JSON="$(curl -fsS -H 'Content-Type: application/json' \
-  -d '{"name":"docs-api-example","schema_version":"release-152","flags":{"DisableTelemetry":true}}' \
+  -d '{"name":"docs-api-example","schema_version":"release-153","flags":{"DisableTelemetry":true}}' \
   "$BPM_BASE_URL/api/profiles")"
 PROFILE_ID="$(python -c 'import json,sys; print(json.load(sys.stdin)["id"])' <<<"$PROFILE_JSON")"
 PROFILE_REVISION="$(python -c 'import json,sys; print(json.load(sys.stdin)["revision"])' <<<"$PROFILE_JSON")"
@@ -36,13 +36,13 @@ curl -fsS -X PATCH -H 'Content-Type: application/json' \
   -d "{\"flags\":{\"DisableTelemetry\":true,\"BlockAboutConfig\":true},\"expected_revision\":$PROFILE_REVISION}" \
   "$BPM_BASE_URL/api/profiles/$PROFILE_ID"
 ]]></codeblock></info></step>
-      <step><cmd>重用具有显式负载形状的验证和 JSON 导入片段。</cmd><info><p>请求示例：<codeph>POST $BPM_BASE_URL/api/validate/release-152</codeph> 和 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-152"}</codeph> 和 <codeph>201 ProfileRead</codeph>。错误示例：<codeph>400</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>重用具有显式负载形状的验证和 JSON 导入片段。</cmd><info><p>请求示例：<codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph> 和 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>。响应示例：<codeph>200 {"ok":true,"profile":"release-153"}</codeph> 和 <codeph>201 ProfileRead</codeph>。错误示例：<codeph>400</codeph>、<codeph>409</codeph>、<codeph>415</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph>。</p><codeblock outputclass="language-bash"><![CDATA[
 curl -fsS -H 'Content-Type: application/json' \
   -d '{"document":{"policies":{"DisableTelemetry":true,"BlockAboutConfig":true}}}' \
   "$BPM_BASE_URL/api/validate/$BPM_SCHEMA_CHANNEL"
 
 curl -fsS -H 'Content-Type: application/json' \
-  -d '{"name":"docs-json-import-example","schema_version":"release-152","compliance":{"source":"docs-devops-template"},"document":{"policies":{"DisableTelemetry":true}}}' \
+  -d '{"name":"docs-json-import-example","schema_version":"release-153","compliance":{"source":"docs-devops-template"},"document":{"policies":{"DisableTelemetry":true}}}' \
   "$BPM_BASE_URL/api/profiles/import/firefox/policies.json"
 ]]></codeblock></info></step>
       <step><cmd>重用多部分导入和导出片段进行基于文件的切换。</cmd><info><p>请求示例：<codeph>multipart/form-data</codeph> 上传到 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph>，然后上传到 <codeph>GET $BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1</codeph>。响应示例：用于导入的 <codeph>201 ProfileRead</codeph> 和用于导出的包含规范 Firefox <codeph>policies</codeph> 的 <codeph>200 application/json</codeph>。错误示例：<codeph>404</codeph> 缺少配置文件或 <codeph>422</codeph> 无效配置文件 ID。</p><codeblock outputclass="language-bash"><![CDATA[
@@ -60,7 +60,7 @@ import os
 import requests
 
 base_url = os.environ["BPM_BASE_URL"].rstrip("/")
-schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-152")
+schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-153")
 session = requests.Session()
 
 ready = session.get(f"{base_url}/health/ready", timeout=10)

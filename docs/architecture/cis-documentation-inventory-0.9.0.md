@@ -46,7 +46,7 @@ The curated source contains 55 scored, automated recommendation records:
 | Mapping status | 43 `mapped`; 10 `preference_mapped`; 1 `needs_research`; 1 `deprecated_or_removed` |
 | Mapping confidence | 48 high; 7 medium |
 | Targets | 53 total: 43 policy targets and 10 preference targets |
-| Schema compatibility | 53 valid targets on `esr-140.12`; 53 valid targets on `release-152` |
+| Schema compatibility | 53 valid targets on `esr-140.13`; 53 valid targets on `release-153` |
 | Publication disposition | 53 planned DITA topics; 2 provenance-only non-publishable records |
 
 Every recommendation has a stable `provenance_id`, source section, level, category, assessment,
@@ -83,10 +83,10 @@ that loses its Firefox documentation target makes the CIS inventory build fail.
 
 | Layer | Channel | Applied recommendations | Top-level policy keys |
 | --- | --- | ---: | ---: |
-| `cis-l1.esr-140.12` | `esr-140.12` | 49 | 30 |
-| `cis-l1.release-152` | `release-152` | 49 | 30 |
-| `cis-l2.esr-140.12` | `esr-140.12` | 53 | 33 |
-| `cis-l2.release-152` | `release-152` | 53 | 33 |
+| `cis-l1.esr-140.13` | `esr-140.13` | 49 | 30 |
+| `cis-l1.release-153` | `release-153` | 49 | 30 |
+| `cis-l2.esr-140.13` | `esr-140.13` | 53 | 33 |
+| `cis-l2.release-153` | `release-153` | 53 | 33 |
 
 Level 2 includes all applicable Level 1 recommendations plus four Level 2 recommendations. The two
 provenance-only recommendations have no generated target and therefore appear in no generated

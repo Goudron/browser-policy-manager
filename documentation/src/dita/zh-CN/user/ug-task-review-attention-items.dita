@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>查看 所有设置 个注意事项</title>
-  <shortdesc>在常规编辑之前使用 检查 对无效、CIS 手动审核、原始、未知、已弃用和导入的项目进行分类。</shortdesc>
+  <title>查看“所有设置”中的待处理项</title>
+  <shortdesc>在常规编辑前使用“检查”对无效、需要 CIS 手动审核、原始、未知、已弃用和已导入的项目进行分类。</shortdesc>
   <taskbody>
     <prereq><p>打开 所有设置 中保存的配置文件。</p></prereq>
     <context><p>检查 是默认的注意力优先视图。它收集在导出、比较或移交之前可能需要做出决定的设置。</p></context>

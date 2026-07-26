@@ -2,11 +2,11 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-product-version" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Referencia de versión del producto</title>
-  <shortdesc>Utilice el encabezado BPM y el contexto de versión para confirmar qué versión de producto y documentación está utilizando.</shortdesc>
+  <shortdesc>Utilice el encabezado común de BPM para identificar la versión de producto en ejecución; la documentación no muestra una versión independiente.</shortdesc>
   <refbody>
-    <section id="a-version-location"><title>Ubicación de la versión</title><p>El encabezado de la página muestra la versión de BPM en ejecución y el paquete de documentación está creado para BPM.</p></section>
+    <section id="a-version-location"><title>Ubicación de la versión</title><p>El mismo encabezado de Biblioteca, Editor guiado, Todos los ajustes, Editor JSON, Comparar y documentación muestra la versión de BPM en ejecución. En Biblioteca, el recuento del espacio de trabajo y la etiqueta «Perfiles en la biblioteca» se muestran en dos líneas compactas independientes.</p></section>
     <section id="a-version-scope"><title>Alcance de la versión</title><p>La versión del producto identifica el comportamiento de BPM, no la versión del navegador Firefox instalada en un terminal.</p></section>
-    <section id="a-schema-version"><title>Versión del esquema</title><p>Los canales de esquema de Firefox, como ESR 140.12 y la versión 152, son opciones independientes que afectan la validación y los controles disponibles.</p></section>
+    <section id="a-schema-version"><title>Canal de esquema</title><p>La versión actual admite Firefox ESR 140.13 y Firefox Release 153. El canal de esquema es una elección independiente que afecta a la validación y a los controles disponibles.</p></section>
     <section id="a-version-recovery"><title>Recuperación</title><p>Si el comportamiento del producto no coincide con la guía, registre la versión de BPM, el canal del esquema, la ruta, la configuración regional y el estado visible antes de informar la discrepancia.</p></section>
   </refbody>
   <related-links>

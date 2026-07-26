@@ -1,14 +1,14 @@
 {
   "backlog_item": "BPM090-M5-05",
   "channels": {
-    "esr-140.12": {
+    "esr-140.13": {
       "family": "esr",
-      "filename": "firefox-esr-140.12.json",
+      "filename": "firefox-esr-140.13.json",
       "is_default": true,
-      "mozilla_version": "140.12",
+      "mozilla_version": "140.13",
       "policy_count": 112,
       "schema_source": "mozilla-policy-templates-v7.12",
-      "schema_version": "140.12",
+      "schema_version": "140.13",
       "type_counts": {
         "array": 8,
         "boolean": 55,
@@ -21,23 +21,43 @@
         "mapped": 45
       }
     },
-    "release-152": {
-      "family": "release",
-      "filename": "firefox-release-152.json",
+    "esr-153.0": {
+      "family": "esr",
+      "filename": "firefox-esr-153.0.json",
       "is_default": false,
-      "mozilla_version": "152.0",
-      "policy_count": 120,
-      "schema_source": "mozilla-policy-templates-v7.12",
-      "schema_version": "152.0",
+      "mozilla_version": "153.0",
+      "policy_count": 121,
+      "schema_source": "mozilla-policy-templates-v8.0",
+      "schema_version": "153.0",
       "type_counts": {
         "array": 8,
-        "boolean": 59,
+        "boolean": 60,
         "integer": 2,
         "object": 37,
         "string": 14
       },
       "ui_support_counts": {
-        "fallback": 69,
+        "fallback": 70,
+        "mapped": 51
+      }
+    },
+    "release-153": {
+      "family": "release",
+      "filename": "firefox-release-153.json",
+      "is_default": false,
+      "mozilla_version": "153.0",
+      "policy_count": 121,
+      "schema_source": "mozilla-policy-templates-v8.0",
+      "schema_version": "153.0",
+      "type_counts": {
+        "array": 8,
+        "boolean": 60,
+        "integer": 2,
+        "object": 37,
+        "string": 14
+      },
+      "ui_support_counts": {
+        "fallback": 70,
         "mapped": 51
       }
     }
@@ -159,18 +179,24 @@
       "WebsiteFilter",
       "WindowsSSO"
     ],
-    "changed_definitions": [],
+    "changed_definitions": [
+      "Cookies",
+      "ExtensionSettings",
+      "Homepage"
+    ],
     "esr_only": [],
-    "release_only": [
+    "partial": [
       "AIControls",
       "BrowserDataBackup",
       "DisableRemoteImprovements",
+      "DisableRemoteSettingsAndAcceptSecurityConsequences",
       "GenerativeAI",
       "IPProtectionAvailable",
       "LocalNetworkAccess",
       "VisualSearchEnabled",
       "XSLTEnabled"
-    ]
+    ],
+    "release_only": []
   },
   "provenance_review_backlog_item": "BPM090-M5-09",
   "schema_refresh_runbook_backlog_item": "BPM090-M5-08",
@@ -186,12 +212,13 @@
     "generated_topic_section": "a-channel-support"
   },
   "source_inventory": "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json",
-  "source_inventory_sha256": "7dc1e50e6401211f45818c4dc2161acfff4d9a40d78f6ff38a75c998fb6eb31a",
+  "source_inventory_sha256": "2c3d2bce9e8e7833b783ea68450849db30d508d93d1aecf529c16b1bf5ce183c",
   "summary": {
     "both_channels": 112,
-    "changed_definitions": 0,
+    "changed_definitions": 3,
     "esr_only": 0,
-    "release_only": 8
+    "partial": 9,
+    "release_only": 0
   },
   "target_bpm_version": "0.9.0"
 }

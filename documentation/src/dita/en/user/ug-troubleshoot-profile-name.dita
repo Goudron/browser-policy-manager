@@ -10,10 +10,10 @@
       <step><cmd>Read the name validation hint before changing other profile fields.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Enter a non-empty name that distinguishes the profile purpose, Firefox channel, or source file.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>For clone workflows, change the suggested clone name before confirming if it duplicates an existing row.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>Save or duplicate again after the name hint clears.</cmd><info><note type="warning">Do not edit internal storage, browser local data, database rows, or generated build artifacts to recover user-facing profile work.</note></info></step>
+      <step><cmd>Save or duplicate again after the name hint clears.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
     </steps>
     <result><p>The profile or clone has a unique visible name that can be found later in the Library.</p></result>
-    <postreq><p>Recovery: if the same error repeats after one clean retry, stop the workflow, preserve the visible message, profile name, schema channel, and current surface for maintainer review.</p></postreq>
+    <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-create-first-profile"/>

@@ -38,7 +38,7 @@ REQUIRED_INVARIANT_TERMS = (
     "API-HEALTH-002",
     "/api/profiles",
     "/api/profiles/stats",
-    "/api/validate/release-152",
+    "/api/validate/release-153",
     "/api/profiles/import/firefox/policies.json",
     "/api/export/profiles/42/firefox/policies.json",
     "/health/ready",
@@ -171,13 +171,13 @@ def test_english_devops_integration_runbooks_cover_m12_08_acceptance_boundaries(
         "health-gated startup",
         "audit evidence",
         "data ownership",
-        "do not retry blindly",
+        "Do not retry the same PATCH blindly",
         "stale revision",
         "failure recovery",
         "$BPM_BASE_URL",
         "/api/profiles",
         "/api/profiles/stats",
-        "/api/validate/release-152",
+        "/api/validate/release-153",
         "/api/profiles/import/firefox/policies.json",
         "/api/export/profiles/42/firefox/policies.json",
         "/health/ready",
@@ -207,7 +207,7 @@ def test_devops_pull_validate_update_export_workflow_executes_against_api_test_a
     profile_payload = {
         "name": f"Docs DevOps M12-08 {suffix}",
         "description": "M12-08 integration runbook source",
-        "schema_version": "release-152",
+        "schema_version": "release-153",
         "flags": source_flags,
         "compliance": {"source": "inventory-pull"},
     }
@@ -234,7 +234,7 @@ def test_devops_pull_validate_update_export_workflow_executes_against_api_test_a
         assert read_profile["revision"] == created["revision"]
 
         validation_response = client.post(
-            "/api/validate/release-152",
+            "/api/validate/release-153",
             json={"document": {"policies": desired_flags}},
         )
         assert validation_response.status_code == 200, validation_response.text

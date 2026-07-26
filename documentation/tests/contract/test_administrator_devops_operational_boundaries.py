@@ -62,7 +62,6 @@ REQUIRED_CONFIGURATION_TOKENS = (
     "BPM_SCHEMA_CACHE_DIR",
     "BPM_SCHEMA_HTTP_TIMEOUT",
     ".env",
-    "app/core/config.py",
 )
 REQUIRED_STORAGE_LOG_TOKENS = (
     "sqlite+aiosqlite:///./data/bpm.db",

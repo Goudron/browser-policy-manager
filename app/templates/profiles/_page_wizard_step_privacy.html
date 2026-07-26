@@ -2,9 +2,6 @@
     <nav class="wizard-step-map" aria-labelledby="wizard-security-map-title">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" id="wizard-security-map-title" data-i18n="profiles.wizard_security_map_title">{{ tr("profiles.wizard_security_map_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_security_map_body">
-                {{ tr("profiles.wizard_security_map_body") }}
-            </p>
         </div>
         <div class="wizard-step-map-grid">
             <a href="#wizard-step-3-posture" class="wizard-step-map-link" data-i18n="profiles.wizard_hardening_title">{{ tr("profiles.wizard_hardening_title") }}</a>
@@ -17,9 +14,6 @@
     <div class="wizard-section-group" id="wizard-step-3-posture">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_hardening_title">{{ tr("profiles.wizard_hardening_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_hardening_body">
-                {{ tr("profiles.wizard_hardening_body") }}
-            </p>
         </div>
         <div class="wizard-toolbar-row wizard-stage-bar">
             <div class="field-label wizard-stage-kicker" data-i18n="profiles.wizard_privacy_strictness_label">{{ tr("profiles.wizard_privacy_strictness_label") }}</div>
@@ -30,15 +24,12 @@
         <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-hardening-presets">
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-hardening-preset="defaults">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_hardening_preset_defaults_title">{{ tr("profiles.wizard_hardening_preset_defaults_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_hardening_preset_defaults_copy">{{ tr("profiles.wizard_hardening_preset_defaults_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-hardening-preset="balanced">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_hardening_preset_balanced_title">{{ tr("profiles.wizard_hardening_preset_balanced_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_hardening_preset_balanced_copy">{{ tr("profiles.wizard_hardening_preset_balanced_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-hardening-preset="strict">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_hardening_preset_strict_title">{{ tr("profiles.wizard_hardening_preset_strict_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_hardening_preset_strict_copy">{{ tr("profiles.wizard_hardening_preset_strict_copy") }}</span>
             </button>
         </div>
         <div id="wizard-hardening-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" data-i18n="profiles.wizard_hardening_section_state_empty">
@@ -70,15 +61,12 @@
             <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-cleanup-presets">
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="defaults">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_cleanup_preset_defaults_title">{{ tr("profiles.wizard_cleanup_preset_defaults_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_cleanup_preset_defaults_copy">{{ tr("profiles.wizard_cleanup_preset_defaults_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="shared">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_cleanup_preset_shared_title">{{ tr("profiles.wizard_cleanup_preset_shared_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_cleanup_preset_shared_copy">{{ tr("profiles.wizard_cleanup_preset_shared_copy") }}</span>
                 </button>
                 <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-cleanup-preset="strict">
                     <span class="wizard-search-engine-title" data-i18n="profiles.wizard_cleanup_preset_strict_title">{{ tr("profiles.wizard_cleanup_preset_strict_title") }}</span>
-                    <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_cleanup_preset_strict_copy">{{ tr("profiles.wizard_cleanup_preset_strict_copy") }}</span>
                 </button>
             </div>
         </details>
@@ -86,9 +74,6 @@
     <div class="wizard-section-group" id="wizard-step-3-site-data">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_privacy_site_controls_title">{{ tr("profiles.wizard_privacy_site_controls_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_privacy_site_controls_body">
-                {{ tr("profiles.wizard_privacy_site_controls_body") }}
-            </p>
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-privacy-site-section-status" data-i18n="profiles.wizard_privacy_site_section_state_empty">
             {{ tr("profiles.wizard_privacy_site_section_state_empty") }}
@@ -102,25 +87,20 @@
         <div class="wizard-search-engine-preset-grid wizard-stage-panel" id="wizard-site-data-presets">
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-site-data-preset="defaults">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_site_data_preset_defaults_title">{{ tr("profiles.wizard_site_data_preset_defaults_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_site_data_preset_defaults_copy">{{ tr("profiles.wizard_site_data_preset_defaults_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-site-data-preset="balanced">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_site_data_preset_balanced_title">{{ tr("profiles.wizard_site_data_preset_balanced_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_site_data_preset_balanced_copy">{{ tr("profiles.wizard_site_data_preset_balanced_copy") }}</span>
             </button>
             <button type="button" class="button-base ghost-button wizard-search-engine-preset" data-site-data-preset="strict">
                 <span class="wizard-search-engine-title" data-i18n="profiles.wizard_site_data_preset_strict_title">{{ tr("profiles.wizard_site_data_preset_strict_title") }}</span>
-                <span class="wizard-search-engine-preset-copy" data-i18n="profiles.wizard_site_data_preset_strict_copy">{{ tr("profiles.wizard_site_data_preset_strict_copy") }}</span>
             </button>
         </div>
         <div class="wizard-toolbar-row wizard-fine-tuning-bar">
-            <div class="wizard-input-hint" data-i18n="profiles.wizard_site_data_fine_tuning_body">{{ tr("profiles.wizard_site_data_fine_tuning_body") }}</div>
             <button type="button" id="wizard-site-data-fine-tuning-toggle" class="button-base ghost-button" aria-expanded="false" aria-controls="wizard-site-data-fine-tuning-panel" data-i18n="profiles.wizard_fine_tuning_show">
                 {{ tr("profiles.wizard_fine_tuning_show") }}
             </button>
         </div>
         <div class="wizard-grid wizard-fine-tuning-panel wizard-fine-tuning-panel--nested" id="wizard-site-data-fine-tuning-panel" hidden>
-            <div class="field-label wizard-field-full wizard-stage-kicker" data-i18n="profiles.wizard_fine_tuning_label">{{ tr("profiles.wizard_fine_tuning_label") }}</div>
             <section class="wizard-outcome-group wizard-field-full" data-privacy-outcome-group="cookies-permissions">
                 <div class="wizard-outcome-group__head">
                     <h4 class="wizard-outcome-group__title" data-i18n="profiles.wizard_privacy_outcome_site_data_title">{{ tr("profiles.wizard_privacy_outcome_site_data_title") }}</h4>
@@ -137,9 +117,6 @@
     <div class="wizard-section-group" id="wizard-step-3-vpn">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_privacy_vpn_title">{{ tr("profiles.wizard_privacy_vpn_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_privacy_vpn_body">
-                {{ tr("profiles.wizard_privacy_vpn_body") }}
-            </p>
         </div>
         <div class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status" id="wizard-privacy-vpn-section-status" data-i18n="profiles.wizard_privacy_vpn_section_state_empty">
             {{ tr("profiles.wizard_privacy_vpn_section_state_empty") }}
@@ -151,9 +128,6 @@
     <div class="wizard-section-group" id="wizard-step-3-review">
         <div class="wizard-section-heading">
             <h3 class="wizard-section-title" data-i18n="profiles.wizard_privacy_review_title">{{ tr("profiles.wizard_privacy_review_title") }}</h3>
-            <p class="wizard-section-copy" data-i18n="profiles.wizard_privacy_review_body">
-                {{ tr("profiles.wizard_privacy_review_body") }}
-            </p>
         </div>
         <div class="wizard-summary-list wizard-summary-list--cards">
             <div class="wizard-summary-row wizard-summary-row--decision">

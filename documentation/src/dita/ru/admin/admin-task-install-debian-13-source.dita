@@ -36,9 +36,6 @@ python --version
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-make setup-docs-toolchain
-make docs-validate
-make docs-build
 ]]></codeblock></info></step>
 <step><cmd>Запустите BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"
@@ -54,4 +51,4 @@ curl -fsS http://127.0.0.1:8000/health/ready
 curl -fsS -o /dev/null http://127.0.0.1:8000/profiles
 ]]></codeblock></info></step>
 <step><cmd>Остановитесь безопасно при сбое.</cmd><info><p>Нажмите <codeph>Ctrl+C</codeph>, сохраните контрольную сумму и журналы; не выполняйте понижение схемы БД и не удаляйте пользовательский Python до диагностики.</p></info></step>
-</steps><result><p>Python 3.14.6, BPM, миграция, документация, зонды и интерфейс подготовлены.</p></result><postreq><p>Последовательность команд успешно проверена в чистом контейнере пользовательского пространства Debian 13.5. CPython сообщил об отсутствии необязательных модулей <codeph>_dbm</codeph> и <codeph>_zstd</codeph>, но полный рабочий процесс BPM завершился успешно. Проверка не подтверждает нативную загрузку, ядро, systemd, рабочий стол, оборудование, межсетевой экран узла или промышленное развёртывание.</p></postreq></taskbody><related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links></task>
+</steps><result><p>Python 3.14.6, BPM, миграция, зонды и интерфейс подготовлены.</p></result><postreq><p>Последовательность команд успешно проверена в чистом контейнере пользовательского пространства Debian 13.5. CPython сообщил об отсутствии необязательных модулей <codeph>_dbm</codeph> и <codeph>_zstd</codeph>, но полный рабочий процесс BPM завершился успешно. Проверка не подтверждает нативную загрузку, ядро, systemd, рабочий стол, оборудование, межсетевой экран узла или промышленное развёртывание.</p></postreq></taskbody><related-links><link keyref="topic.admin-task-prepare-linux-source-deployment"/><link keyref="topic.admin-task-verify-linux-source-deployment"/><link keyref="topic.admin-troubleshoot-failed-startup-probes"/></related-links></task>

@@ -27,9 +27,6 @@ python --version
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
-make setup-docs-toolchain
-make docs-validate
-make docs-build
 ]]></codeblock><p>Остановитесь, если ветка не stable, полное обновление не удалось или Python не 3.14.x.</p></info></step>
 <step><cmd>Запустите BPM.</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 export BPM_HOST="127.0.0.1"

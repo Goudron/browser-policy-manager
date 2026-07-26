@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Release 152 Policies 152.0",
+  "title": "Esr 153.0 Policies 153.0",
   "type": "object",
   "additionalProperties": false,
-  "x-bpm-channel": "release-152",
-  "x-bpm-version": "152.0",
-  "x-bpm-source": "mozilla-policy-templates-v7.12",
+  "x-bpm-channel": "esr-153.0",
+  "x-bpm-version": "153.0",
+  "x-bpm-source": "mozilla-policy-templates-v8.0",
   "properties": {
     "3rdparty": {
       "type": "object",
@@ -426,8 +426,7 @@
       },
       "additionalProperties": false,
       "x-bpm-id": "Certificates",
-      "x-bpm-description-key": "policy.Certificates",
-      "x-bpm-min-version": "60.0"
+      "x-bpm-description-key": "policy.Certificates"
     },
     "Containers": {
       "type": "object",
@@ -595,62 +594,49 @@
       "properties": {
         "Allow": {
           "type": "array",
-          "default": [
-            "http://example.org/"
-          ],
           "items": {
             "type": "string",
-            "default": "http://example.org/",
             "pattern": "^https?://"
           }
         },
         "AllowSession": {
           "type": "array",
-          "default": [
-            "http://example.edu/"
-          ],
           "items": {
             "type": "string",
-            "default": "http://example.edu/",
             "pattern": "^https?://"
           }
         },
         "Block": {
           "type": "array",
-          "default": [
-            "http://example.edu/"
-          ],
           "items": {
             "type": "string",
-            "default": "http://example.edu/",
             "pattern": "^https?://"
           }
         },
         "Locked": {
-          "type": "boolean",
-          "default": true
+          "type": "boolean"
         },
         "Behavior": {
           "type": "string",
-          "default": "accept",
           "enum": [
             "accept",
             "reject-foreign",
             "reject",
             "limit-foreign",
             "reject-tracker",
+            "partition-foreign",
             "reject-tracker-and-partition-foreign"
           ]
         },
         "BehaviorPrivateBrowsing": {
           "type": "string",
-          "default": "accept",
           "enum": [
             "accept",
             "reject-foreign",
             "reject",
             "limit-foreign",
             "reject-tracker",
+            "partition-foreign",
             "reject-tracker-and-partition-foreign"
           ]
         }
@@ -706,19 +692,19 @@
       "x-bpm-description-key": "policy.DisableDeveloperTools",
       "x-bpm-min-version": "60.0"
     },
-    "DisableEncryptedClientHello": {
-      "type": "boolean",
-      "default": true,
-      "x-bpm-id": "DisableEncryptedClientHello",
-      "x-bpm-description-key": "policy.DisableEncryptedClientHello",
-      "x-bpm-min-version": "127.0"
-    },
     "DisableFeedbackCommands": {
       "type": "boolean",
       "default": true,
       "x-bpm-id": "DisableFeedbackCommands",
       "x-bpm-description-key": "policy.DisableFeedbackCommands",
       "x-bpm-min-version": "60.0"
+    },
+    "DisableEncryptedClientHello": {
+      "type": "boolean",
+      "default": true,
+      "x-bpm-id": "DisableEncryptedClientHello",
+      "x-bpm-description-key": "policy.DisableEncryptedClientHello",
+      "x-bpm-min-version": "127.0"
     },
     "DisableFirefoxAccounts": {
       "type": "boolean",
@@ -1121,11 +1107,8 @@
             "type": "boolean",
             "default": false
           },
-          "restricted_domains": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "update_url": {
+            "type": "string"
           },
           "default_area": {
             "type": "string",
@@ -1134,14 +1117,41 @@
               "menupanel"
             ]
           },
-          "temporarily_allow_weak_signatures": {
-            "type": "boolean"
-          },
           "private_browsing": {
             "type": "boolean"
           },
-          "update_url": {
-            "type": "string"
+          "restricted_domains": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "temporarily_allow_weak_signatures": {
+            "type": "boolean"
+          },
+          "allowed_permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocked_permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "runtime_allowed_hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "runtime_blocked_hosts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "additionalProperties": false
@@ -1391,32 +1401,29 @@
       "type": "object",
       "properties": {
         "URL": {
-          "type": "string",
-          "default": "http://example.com/"
+          "type": "string"
         },
         "Locked": {
-          "type": "boolean",
-          "default": true
+          "type": "boolean"
         },
         "Additional": {
           "type": "array",
-          "default": [
-            "http://example.org/",
-            "http://example.edu/"
-          ],
           "items": {
             "type": "string"
           }
         },
         "StartPage": {
           "type": "string",
-          "default": "none",
           "enum": [
             "none",
             "homepage",
             "previous-session",
             "homepage-locked"
           ]
+        },
+        "NewTabOnRestore": {
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false,
@@ -2081,7 +2088,8 @@
         ]
       },
       "x-bpm-id": "Preferences",
-      "x-bpm-description-key": "policy.Preferences"
+      "x-bpm-description-key": "policy.Preferences",
+      "x-bpm-min-version": "81.0"
     },
     "PrimaryPassword": {
       "type": "boolean",
@@ -2322,8 +2330,7 @@
       },
       "additionalProperties": false,
       "x-bpm-id": "SearchEngines",
-      "x-bpm-description-key": "policy.SearchEngines",
-      "x-bpm-min-version": "139.0"
+      "x-bpm-description-key": "policy.SearchEngines"
     },
     "SearchSuggestEnabled": {
       "type": "boolean",
@@ -2334,7 +2341,26 @@
     },
     "SecurityDevices": {
       "type": "object",
-      "properties": {},
+      "properties": {
+        "Add": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": {
+            "type": "string",
+            "default": "PATH_TO_LIBRARY_FOR_DEVICE"
+          }
+        },
+        "Delete": {
+          "type": "array",
+          "default": [
+            "NAME_OF_DEVICE_TO_DELETE"
+          ],
+          "items": {
+            "type": "string",
+            "default": "NAME_OF_DEVICE_TO_DELETE"
+          }
+        }
+      },
       "additionalProperties": {
         "type": "string",
         "default": "PATH_TO_LIBRARY_FOR_DEVICE"
@@ -2515,6 +2541,13 @@
       "x-bpm-id": "DefaultSerialGuardSetting",
       "x-bpm-description-key": "policy.DefaultSerialGuardSetting",
       "x-bpm-min-version": "1.0"
+    },
+    "DisableRemoteSettingsAndAcceptSecurityConsequences": {
+      "type": "boolean",
+      "default": true,
+      "x-bpm-id": "DisableRemoteSettingsAndAcceptSecurityConsequences",
+      "x-bpm-description-key": "policy.DisableRemoteSettingsAndAcceptSecurityConsequences",
+      "x-bpm-min-version": "153.0"
     },
     "LocalNetworkAccess": {
       "type": "object",

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fx-task-review-complex-policy-configuration" xml:lang="ru" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Перед экспортом проверьте сложную конфигурацию политики.</title>
+  <title>Проверка сложной конфигурации политики перед экспортом</title>
   <shortdesc>Используйте повторяющийся поток проверки для вложенных объектов, массивов, необработанного резервного варианта, конфликтов и доступности для конкретного канала.</shortdesc>
   <taskbody>
     <prereq><p>Профиль открыт и содержит как минимум одно сложное семейство политик или управляемое предпочтение.</p></prereq>

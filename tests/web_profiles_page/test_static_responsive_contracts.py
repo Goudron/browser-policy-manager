@@ -69,12 +69,16 @@ def test_wizard_step_navigation_scrolls_only_for_normal_navigation():
 
 
 def test_profile_library_narrow_viewport_contract():
+    template = template_source("_page_library_workspace.html")
+
     assert_source_contains_all(
         css_source(),
         (
             "@media (max-width: 560px)",
-            ".library-panel-toolbar #create-profile-link",
-            ".library-panel-toolbar #import-firefox-policies",
+            ".library-action-grid {",
+            ".library-action-grid .button-base",
+            "grid-template-columns: repeat(4, minmax(0, 1fr));",
+            "grid-template-columns: repeat(2, minmax(0, 1fr));",
             ".library-table-shell",
             "overflow-x: hidden;",
             ".library-row-facts",
@@ -88,7 +92,7 @@ def test_profile_library_narrow_viewport_contract():
         ),
     )
     assert_source_contains_all(
-        template_source("_page_library_workspace.html"),
+        template,
         (
             'id="search"',
             'id="create-profile-link"',
@@ -97,6 +101,10 @@ def test_profile_library_narrow_viewport_contract():
             'class="library-import-feedback"',
         ),
     )
+    assert template.index('class="library-action-grid"') < template.index(
+        'class="library-filter-bar"'
+    ) < template.index('class="library-table-shell"')
+    assert template.index('id="search"') > template.index('class="library-filter-bar"')
 
 
 def test_profile_compare_table_responsive_layout_contract():
@@ -152,27 +160,12 @@ def test_profile_compare_table_responsive_layout_contract():
     )
 
 
-def test_profile_compare_table_heading_omits_stale_value_state_legend_contract():
+def test_profile_compare_table_omits_duplicate_heading_and_stale_value_state_legend_contract():
     css = css_source()
     template = template_source("_page_compare_workspace.html")
 
-    assert_source_contains_all(
-        template,
-        (
-            'class="compare-settings-heading mb-3"',
-            'class="compare-settings-heading__title section-title text-slate-900"',
-        ),
-    )
-    assert_source_contains_all(
-        css,
-        (
-            ".compare-settings-heading {",
-            "grid-template-columns: minmax(0, 1fr);",
-            ".compare-settings-heading__title {",
-            "overflow-wrap: anywhere;",
-            "@media (max-width: 820px)",
-        ),
-    )
+    assert 'compare-settings-heading' not in template
+    assert ".compare-settings-heading" not in css
     assert 'class="compare-state-legend"' not in template
     assert 'class="status-pill compare-state-legend__item"' not in template
     assert ".compare-state-legend" not in css
@@ -239,10 +232,24 @@ def test_visual_editor_narrow_viewport_contract():
     )
 
 
+def test_guided_editor_content_uses_shared_panel_inset_after_stepper():
+    editor_styles = static_source("profiles_css/20-editor-wizard.css")
+    responsive_styles = static_source("profiles_css/30-responsive.css")
+    wizard_template = template_source("_page_wizard.html")
+
+    assert ".wizard-content {\n            display: grid;\n            gap: 12px;\n            min-width: 0;\n            padding-inline-start: var(--compact-space-3);" in editor_styles
+    assert ".wizard-panel {\n            display: none;\n            gap: 12px;\n            padding: 0;\n            padding-inline: var(--compact-space-4);" in editor_styles
+    assert "@media (max-width: 1200px)" in responsive_styles
+    assert ".wizard-content {\n                padding-inline-start: var(--compact-space-3);" in responsive_styles
+    assert wizard_template.index('class="wizard-stepper"') < wizard_template.index(
+        'class="wizard-content"'
+    )
+
+
 def test_compact_toolbar_narrow_viewport_contract():
     header_template = template_source("_page_header.html")
 
-    assert '<header class="compact-toolbar surface-panel fade-up mb-4">' in header_template
+    assert '<header class="compact-toolbar surface-panel fade-up mb-4" data-bpm-header>' in header_template
     assert_source_contains_all(
         header_template,
         (
@@ -253,6 +260,329 @@ def test_compact_toolbar_narrow_viewport_contract():
             'rel="noopener noreferrer"',
             "data-documentation-links",
             "data-documentation-link",
+            'class="compact-toolbar-firefox-versions"',
+            'data-i18n="profiles.supported_firefox_versions"',
+                "header_schema_options",
+            'data-firefox-channel="{{ option.value }}"',
+            'id="workspace-profile-count"',
+            'id="workspace-profile-label"',
+        ),
+    )
+    assert 'data-i18n="profiles.nav_library"' not in header_template
+
+
+def test_shared_editor_mode_switch_uses_compact_links_with_programmatic_current_state():
+    template = template_source("_page_editor_chrome.html")
+    workspace_source = static_source("profiles_workspace.js")
+    editor_styles = static_source("profiles_css/20-editor-wizard.css")
+
+    assert_source_contains_all(
+        template,
+        (
+            'class="editor-mode-grid" role="group"',
+            "profiles.editor_chrome_modes_title",
+            'id="editor-mode-guided"',
+            'id="editor-mode-settings"',
+            'id="editor-mode-json"',
+            'class="editor-mode-option-title"',
+            "data-editor-mode-save-required",
+        ),
+    )
+    assert_source_excludes_all(
+        template,
+        (
+            "editor-chrome-mode-copy",
+            "editor-mode-option-copy",
+            "editor-mode-option-body",
+            "profiles.editor_chrome_modes_body",
+            "profiles.editor_chrome_guided_body",
+            "profiles.editor_chrome_settings_body",
+            "profiles.editor_chrome_json_body",
+            "editor-mode-links-hint",
+        ),
+    )
+    assert_source_contains_all(
+        workspace_source,
+        (
+            "function refreshEditorModeLinks()",
+            'el.setAttribute("aria-current", "page");',
+            'el.removeAttribute("aria-current");',
+            'const saveRequiredEl = el.querySelector("[data-editor-mode-save-required]");',
+            "saveRequiredEl.hidden = available;",
+        ),
+    )
+    assert_source_contains_all(
+        editor_styles,
+        (
+            ".editor-mode-grid {",
+            ".editor-mode-option {",
+            "min-height: var(--compact-control-target);",
+            ".editor-mode-option-state {",
+        ),
+    )
+
+
+def test_shared_editor_chrome_keeps_each_lifecycle_fact_in_one_location():
+    template = template_source("_page_editor_chrome.html")
+    workspace_source = static_source("profiles_workspace.js")
+
+    assert_source_contains_all(
+        template,
+        (
+            'id="profile-state-badge"',
+            'id="workspace-signal"',
+            'id="validation-preview"',
+            'id="profile-derived-note"',
+            'id="profile-lifecycle-list"',
+            'id="profile-compliance-list"',
+        ),
+    )
+    assert_source_excludes_all(
+        template,
+        (
+            "profile-lifecycle-copy",
+            "profile-compliance-copy",
+            "profiles.lifecycle_review_body",
+            "profiles.compliance_summary_body",
+        ),
+    )
+    assert_source_excludes_all(
+        workspace_source,
+        (
+            "profileLifecycleCopyEl",
+            "profileComplianceCopyEl",
+            "profiles.lifecycle_review_active",
+            "profiles.lifecycle_review_body",
+            "profiles.compliance_summary_body",
+            "profiles.clone_meta",
+            't("profiles.meta_updated")',
+            'title: t("profiles.lifecycle_item_state")',
+            'title: t("profiles.lifecycle_item_origin")',
+        ),
+    )
+    assert_source_contains_all(
+        workspace_source,
+        (
+            "function renderCloneContext()",
+            "function renderLifecycleReview()",
+            "function renderProfileComplianceSummary(profile)",
+            "currentMetaEl.textContent = `#${profile.id}`;",
+        ),
+    )
+
+
+def test_guided_editor_removes_route_step_and_section_narration_before_choice_controls():
+    template_sources = "\n".join(
+        template_source(filename)
+        for filename in (
+            "_page_wizard.html",
+            "_page_wizard_step_setup.html",
+            "_page_wizard_step_general.html",
+            "_page_wizard_step_home.html",
+            "_page_wizard_step_privacy.html",
+            "_page_wizard_step_search.html",
+            "_page_wizard_step_sync.html",
+            "_page_wizard_step_ai.html",
+        )
+    )
+
+    assert_source_contains_all(
+        template_source("_page_wizard.html"),
+        (
+            'id="wizard-panel"',
+            'id="wizard-stepper"',
+            'id="wizard-settings-search-meta" class="wizard-input-hint" aria-live="polite"',
+            'class="wizard-step-label"',
+        ),
+    )
+    assert_source_excludes_all(
+        template_sources,
+        (
+            "profiles.wizard_body",
+            "profiles.wizard_context_new",
+            "profiles.wizard_profile_identity_body",
+            "profiles.wizard_starter_body",
+            "profiles.wizard_scenarios_body",
+            "profiles.wizard_ai_body",
+            "profiles.wizard_ai_map_body",
+            "profiles.wizard_browser_defaults_map_body",
+            "profiles.wizard_general_policy_body",
+            "profiles.wizard_proxy_body",
+            "profiles.wizard_network_enterprise_body",
+            "profiles.wizard_homepage_body",
+            "profiles.wizard_newtab_body",
+            "profiles.wizard_firefox_home_body",
+            "profiles.wizard_security_map_body",
+            "profiles.wizard_hardening_body",
+            "profiles.wizard_privacy_site_controls_body",
+            "profiles.wizard_privacy_vpn_body",
+            "profiles.wizard_privacy_review_body",
+            "profiles.wizard_search_body",
+            "profiles.wizard_search_add_body",
+            "profiles.wizard_firefox_suggest_body",
+            "profiles.wizard_user_environment_map_body",
+            "profiles.wizard_sync_body",
+            "profiles.wizard_language_translation_body",
+            "profiles.wizard_extensions_body",
+            "profiles.wizard_bookmarks_focus_body",
+            "profiles.wizard_website_behavior_body",
+            "profiles.wizard_website_access_decision_body",
+            "profiles.wizard_extensions_advanced_body",
+            "wizard-step-copy",
+            "wizard-context-copy",
+        ),
+    )
+
+
+def test_guided_choice_cards_keep_labels_and_state_without_explanatory_copy():
+    template_sources = "\n".join(
+        template_source(filename)
+        for filename in (
+            "_page_wizard_step_setup.html",
+            "_page_wizard_step_general.html",
+            "_page_wizard_step_home.html",
+            "_page_wizard_step_privacy.html",
+            "_page_wizard_step_search.html",
+            "_page_wizard_step_sync.html",
+            "_page_wizard_step_ai.html",
+            "_wizard_macros.html",
+        )
+    )
+
+    assert not re.search(r'<(?:span|div) class="wizard-(?:starter-copy|starter-note|toggle-copy)"', template_sources)
+    assert not re.search(r'<span class="wizard-search-engine-preset-copy"', template_sources)
+    assert not re.search(r'aria-label="[^"\n]*(?:_copy|_body)', template_sources)
+    assert_source_contains_all(
+        template_sources,
+        (
+            'aria-pressed="true"',
+            'aria-pressed="false"',
+            'id="wizard-general-policy-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status"',
+            'id="wizard-ai-section-status" class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status"',
+        ),
+    )
+    assert_source_contains_all(
+        static_source("profiles_wizard_flow.js"),
+        (
+            'button.classList.toggle("wizard-starter-card--active", isActive);',
+            'button.classList.toggle("wizard-search-engine-preset--applied", isActive);',
+            'button.setAttribute("aria-pressed", isActive ? "true" : "false");',
+        ),
+    )
+    assert_source_contains_all(
+        css_source(),
+        (
+            ".wizard-starter-card {",
+            "gap: 6px;",
+            "min-height: 0;",
+            "padding: 12px 14px;",
+            ".wizard-search-engine-preset {",
+            "min-height: 56px;",
+            ".wizard-starter-card--active {",
+            ".wizard-search-engine-preset--applied {",
+            "overflow-wrap: anywhere;",
+        ),
+    )
+    assert_source_excludes_all(
+        static_source("profiles_wizard_flow.js"),
+        (
+            "wizardContextCopyEl",
+            "function updateWizardContext()",
+        ),
+    )
+    settings_search_source = static_source("profiles_settings_search.js")
+    assert 't("profiles.settings_search_hint")' not in settings_search_source
+    assert 't("profiles.wizard_settings_search_match_count")' in settings_search_source
+
+
+def test_guided_sections_flatten_decorative_nesting_and_duplicate_kickers():
+    template_sources = "\n".join(
+        template_source(filename)
+        for filename in (
+            "_page_wizard_step_general.html",
+            "_page_wizard_step_home.html",
+            "_page_wizard_step_privacy.html",
+            "_page_wizard_step_search.html",
+            "_page_wizard_step_sync.html",
+        )
+    )
+    editor_styles = static_source("profiles_css/20-editor-wizard.css")
+
+    assert_source_excludes_all(
+        template_sources,
+        (
+            "profiles.wizard_main_choice_label",
+            "profiles.wizard_fine_tuning_label",
+        ),
+    )
+    assert_source_contains_all(
+        template_sources,
+        (
+            'class="wizard-search-engine-preset-copy wizard-search-engine-preset-status wizard-stage-status"',
+            'data-i18n="profiles.wizard_fine_tuning_show"',
+        ),
+    )
+    assert_source_contains_all(
+        editor_styles,
+        (
+            ".wizard-panel {\n            display: none;\n            gap: 12px;\n            padding: 0;",
+            ".wizard-stage-panel {\n            align-content: start;\n            gap: 12px;\n            padding: 0;",
+            ".wizard-fine-tuning-panel {\n            align-content: start;\n            gap: 12px;\n            padding: 10px 0 0;\n            border-top:",
+            ".wizard-subsection-card {\n            display: grid;\n            gap: 10px;\n            padding: 0;",
+            ".wizard-disclosure {\n            display: grid;\n            gap: 8px;",
+        ),
+    )
+    assert "border-radius" not in css_block(".wizard-panel")
+    assert "background" not in css_block(".wizard-panel")
+    assert "border-radius" not in css_block(".wizard-stage-panel")
+    assert "background" not in css_block(".wizard-stage-panel")
+
+
+def test_compact_density_tokens_cover_controls_focus_and_reduced_motion_contract():
+    foundation = static_source("profiles_css/00-foundation.css")
+    compact_shell = static_source("profiles_css/40-compact-shell.css")
+    editor_styles = static_source("profiles_css/20-editor-wizard.css")
+
+    assert_source_contains_all(
+        foundation,
+        (
+            "--compact-space-1: 0.35rem;",
+            "--compact-space-2: 0.5rem;",
+            "--compact-space-3: 0.75rem;",
+            "--compact-space-4: 1rem;",
+            "--compact-radius: 0.8rem;",
+            "--compact-control-target: 2.75rem;",
+            "--focus-ring-width: 3px;",
+            "--focus-ring-color:",
+            "@media (prefers-reduced-motion: reduce)",
+            "animation-duration: 0.01ms !important;",
+        ),
+    )
+    assert_source_contains_all(
+        compact_shell,
+        (
+            "min-height: var(--compact-control-target);",
+            "outline: var(--focus-ring-width) solid var(--focus-ring-color);",
+            "inline-size: var(--compact-control-target);",
+            "gap: var(--compact-space-2);",
+        ),
+    )
+    assert_source_contains_all(
+        editor_styles,
+        (
+            ".editor-chrome-actions .button-base {",
+            ".editor-chrome-fields .soft-input {",
+            "min-height: var(--compact-control-target);",
+            ".editor-chrome-panel {",
+            ".editor-chrome-heading {",
+        ),
+    )
+    assert_source_excludes_all(
+        template_source("_page_editor_chrome.html"),
+        (
+            "editor-chrome-workbar",
+            "editor-chrome-status",
+            "editor-profile-id",
         ),
     )
     assert_source_contains_all(
@@ -263,10 +593,15 @@ def test_compact_toolbar_narrow_viewport_contract():
             "overflow-x: clip;",
             ".compact-toolbar-title {",
             "overflow-wrap: anywhere;",
-            "font-size: 2.45rem;",
-            "font-size: 1.9rem;",
-            "font-size: 1.62rem;",
+            "font-size: 1.45rem;",
+            "font-size: 1.3rem;",
+            "font-size: 1.15rem;",
+            ".compact-toolbar-firefox-versions {",
+            "font-size: 0.95rem;",
+            ".compact-toolbar-firefox-versions-label {",
+            "overflow-wrap: anywhere;",
             ".compact-toolbar-docs-link {",
+            "box-sizing: border-box;",
             ".compact-toolbar-control select.soft-input",
             "max-width: 100%;",
             "@media (max-width: 820px)",
@@ -281,7 +616,6 @@ def test_compact_toolbar_narrow_viewport_contract():
 def test_contextual_help_links_are_manifest_backed_and_responsive_contract():
     partial = template_source("_context_help_link.html")
     templates = {
-        "library": template_source("_page_library_workspace.html"),
         "compare": template_source("_page_compare_workspace.html"),
         "guided": template_source("_page_wizard.html"),
         "settings": template_source("_page_settings_workspace.html"),
@@ -299,6 +633,9 @@ def test_contextual_help_links_are_manifest_backed_and_responsive_contract():
             "data-documentation-links",
             "data-context-help-surface",
         ),
+    )
+    assert 'context_help_surface = "library"' not in template_source(
+        "_page_library_workspace.html"
     )
     for surface, template in templates.items():
         assert f'{{% set context_help_surface = "{surface}" %}}' in template
@@ -356,15 +693,68 @@ def test_deep_help_icon_links_are_manifest_backed_and_responsive_contract():
     assert_source_contains_all(
         css_source(),
         (
-            ".inline-help-label {",
-            ".context-help-icon-link {",
-            "inline-size: 1.35rem;",
+                ".inline-help-label {",
+                ".context-help-icon-link {",
+                "inline-size: var(--compact-control-target);",
             "border-radius: 999px;",
             ".context-help-icon-link:hover",
             ".context-help-icon-link:focus-visible",
             'html[data-theme="dark"] .context-help-icon-link',
         ),
     )
+
+
+def test_guided_help_icons_are_limited_to_residual_choice_ambiguities():
+    setup_template = template_source("_page_wizard_step_setup.html")
+    ai_template = template_source("_page_wizard_step_ai.html")
+    other_guided_templates = "\n".join(
+        template_source(filename)
+        for filename in (
+            "_page_wizard_step_general.html",
+            "_page_wizard_step_home.html",
+            "_page_wizard_step_privacy.html",
+            "_page_wizard_step_search.html",
+            "_page_wizard_step_sync.html",
+        )
+    )
+    manifest_source = source_text("app/documentation/manifest.py")
+    client = make_test_client(app)
+
+    assert setup_template.count("context_help_icon_target") == 1
+    assert ai_template.count("context_help_icon_target") == 2
+    assert "context_help_icon_target" not in other_guided_templates
+    assert_source_contains_all(
+        setup_template,
+        (
+            'context_help_icon_target = "cis-baseline-selection"',
+            'context_help_icon_label_key = "profiles.help_cis_baseline_selection"',
+        ),
+    )
+    assert_source_contains_all(
+        ai_template,
+        (
+            'context_help_icon_target = "policy-ai-controls"',
+            'context_help_icon_label_key = "profiles.help_policy_ai_controls"',
+            'context_help_icon_target = "policy-visual-search-enabled"',
+            'context_help_icon_label_key = "profiles.help_policy_visual_search_enabled"',
+        ),
+    )
+    assert_source_contains_all(
+        manifest_source,
+        (
+            '"policy-ai-controls": "policy:AIControls"',
+            '"policy-visual-search-enabled": "policy:VisualSearchEnabled"',
+            '"cis-baseline-selection": "cis:1.1.1.1"',
+        ),
+    )
+    for locale in ("en", "ru", "de", "zh-CN", "fr", "es-ES"):
+        catalog = client.get(f"/i18n/{locale}.json").json()
+        for key in (
+            "profiles.help_policy_ai_controls",
+            "profiles.help_policy_visual_search_enabled",
+            "profiles.help_cis_baseline_selection",
+        ):
+            assert isinstance(catalog.get(key), str) and catalog[key]
 
 
 def test_profile_ui_decorative_density_contract():
@@ -559,7 +949,6 @@ def test_profile_library_actions_use_editor_route_links():
         (
             'const editHref = `/profiles/${profile.id}/edit`;',
             '<a class="library-row-title-button" href="${editHref}" target="_blank" rel="noopener">',
-            '<a class="button-base library-row-open-button" href="${editHref}" target="_blank" rel="noopener">',
             '<a class="button-base ghost-button library-row-secondary-action" href="${settingsHref}" target="_blank" rel="noopener">',
             '<a class="button-base ghost-button library-row-secondary-action" href="${jsonHref}" target="_blank" rel="noopener">',
             'data-clone-profile-id="${profile.id}"',
@@ -575,6 +964,8 @@ def test_profile_library_actions_use_editor_route_links():
         (
             "data-compare-profile-id",
             "profile-compare-button",
+            "const openLabel = t(\"profiles.list_open\");",
+            "library-row-open-button\" href=\"${editHref}\"",
             "library-row-open-button--selected",
             "loadProfile(profile.id)",
         ),
@@ -621,11 +1012,10 @@ def test_all_settings_long_label_contract_targets_live_heavy_ui_elements():
     assert_source_contains_all(
         settings_template,
         (
-            "all-settings-mode-bar",
-            "all-settings-mode-button",
-            "all-settings-mode-title",
-            "all-settings-mode-copy",
-            "all-settings-source-filter-bar",
+                "all-settings-mode-bar",
+                "all-settings-mode-button",
+                "all-settings-mode-title",
+                "all-settings-source-filter-bar",
             "all-settings-source-filter-button",
             "all-settings-list-budget",
             "all-settings-detail-panel",
@@ -898,7 +1288,6 @@ def test_profile_review_and_workspace_state_helpers_are_split_from_dom_adapters(
             "editorModeGuidedEl,",
             "editorModeSettingsEl,",
             "editorModeJsonEl,",
-            "editorModeLinksHintEl,",
             "jsonReviewStripEl,",
             "jsonReviewSaveStateEl,",
             "jsonReviewValidationStateEl,",

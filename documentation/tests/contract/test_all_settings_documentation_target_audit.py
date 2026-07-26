@@ -64,10 +64,10 @@ def test_all_policy_inventory_entries_have_exact_generated_targets() -> None:
     }
 
     assert policy_ids == indexed_policy_ids == generated_policy_ids
-    assert len(policy_ids) == audit["coverage"]["firefox_policies"]["inventory_count"] == 120
+    assert len(policy_ids) == audit["coverage"]["firefox_policies"]["inventory_count"] == 121
     assert inventory["summary"]["policy_scope_counts"] == {
         "both": audit["coverage"]["firefox_policies"]["both_channel_count"],
-        "release-only": audit["coverage"]["firefox_policies"]["release_only_count"],
+        "partial": audit["coverage"]["firefox_policies"]["partial_channel_count"],
     }
     assert all(
         targets[f"policy:{policy_id}"]["source_id"] == policy_id
@@ -135,8 +135,8 @@ def test_audit_summary_and_closed_findings_match_implemented_guards() -> None:
     audit = _json(AUDIT)
 
     assert audit["summary"] == {
-        "policy_inventory_count": 120,
-        "policy_linked_count": 120,
+        "policy_inventory_count": 121,
+        "policy_linked_count": 121,
         "known_preference_inventory_count": 62,
         "known_preference_linked_count": 62,
         "known_preference_missing_documentation_count": 0,

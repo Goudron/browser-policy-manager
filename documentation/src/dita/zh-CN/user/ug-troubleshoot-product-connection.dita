@@ -5,15 +5,15 @@
   <shortdesc>从库或编辑器界面中可见的网络、浏览器或 BPM API 操作故障中恢复。</shortdesc>
   <taskbody>
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
-    <context><p>连接失败可能是临时浏览器测试警告、网络中断、服务器重新启动或 API 操作失败；安全的响应是在重试之前保留上下文。</p></context>
+    <context><p>连接失败可能由网络中断、服务器重启或 API 错误导致；重试前请保留可见的上下文。</p></context>
     <steps>
       <step><cmd>读取可见状态并确定失败的操作是否为加载、保存、导入、导出、存档、恢复、删除、验证或比较。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>在重试相同操作之前，检查同一浏览器会话中的其他 BPM 界面是否仍然响应。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>在保留未保存的更改和配置文件上下文后重试失败的操作一次。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
-      <step><cmd>如果浏览器测试警告或 API 失败仍然存在，请停止用户编辑并保留可见的错误详细信息以供维护人员查看。</cmd><info><note type="warning">不要编辑内部存储、浏览器本地数据、数据库行或生成的构建工件来恢复面向用户的配置文件工作。</note></info></step>
+      <step><cmd>如果连接或 API 错误仍然存在，请停止编辑，并向支持人员提供可见的错误详情。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>
     </steps>
     <result><p>工作流程在干净重试后恢复或停止并有足够的可见上下文来诊断产品连接问题。</p></result>
-    <postreq><p>恢复：如果在一次干净的重试后重复出现相同的错误，则停止工作流程，保留可见消息、配置文件名称、模式通道和当前表面以供维护人员查看。</p></postreq>
+    <postreq><p>如果错误再次出现，请停止当前操作，并向支持人员提供可见消息、配置文件名称、模式通道和当前页面。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-troubleshoot-library-operation"/>

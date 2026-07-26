@@ -7,13 +7,13 @@
     <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
     <context><p>La falta de coincidencia de esquema generalmente significa que existe una configuración en un canal de Firefox pero no está disponible, está obsoleta o tiene una forma diferente en el canal seleccionado.</p></context>
     <steps>
-      <step><cmd>Confirme si el perfil tiene como destino ESR 140.12 o la versión 152.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Confirme si el perfil tiene como destino ESR 140.13 o la versión 152.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Identifique la configuración que no está disponible, no es compatible, está obsoleta o depende del esquema en ese canal.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Elija si desea cambiar el canal del esquema o eliminar/cambiar la configuración afectada para el destino de Firefox previsto.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
-      <step><cmd>Revalidar y revisar la preparación para la exportación después de la decisión de canal o configuración.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
+      <step><cmd>Revalidar y revisar la preparación para la exportación después de la decisión de canal o configuración.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
     <result><p>El perfil apunta al canal de Firefox previsto y ya no oculta una discrepancia dependiente del esquema.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
+    <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-choose-firefox-schema"/>

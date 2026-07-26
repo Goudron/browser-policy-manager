@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-source-update-rollback-stop" xml:lang="ru" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Проверьте обновление и примените условия остановки отката.</title>
+  <title>Проверка обновления и применение условий остановки отката</title>
   <shortdesc>Запустите обновленный процесс BPM, проверьте зонды, UI, доказательства API и состояние документации, затем решите, следует ли принять, остановить или восстановить из резервной копии.</shortdesc>
   <taskbody>
     <prereq><p>Проверки миграции, дыма источников и восстановления документации завершены или зафиксирована точка сбоя.</p></prereq>

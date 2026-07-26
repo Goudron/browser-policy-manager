@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-find-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>按名称查找配置文件</title>
+  <title>按名称查找配置档案</title>
   <shortdesc>在打开、复制或更改生命周期状态之前，使用库搜索按名称缩小已保存的配置文件的范围。</shortdesc>
   <taskbody>
     <prereq><p>库已打开，配置文件行已完成加载。</p></prereq>

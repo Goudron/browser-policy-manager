@@ -46,6 +46,7 @@
   <topicref keys="topic.fx-policy-DisableProfileImport" href="policies/fx-policy-DisableProfileImport.dita"/>
   <topicref keys="topic.fx-policy-DisableProfileRefresh" href="policies/fx-policy-DisableProfileRefresh.dita"/>
   <topicref keys="topic.fx-policy-DisableRemoteImprovements" href="policies/fx-policy-DisableRemoteImprovements.dita"/>
+  <topicref keys="topic.fx-policy-DisableRemoteSettingsAndAcceptSecurityConsequences" href="policies/fx-policy-DisableRemoteSettingsAndAcceptSecurityConsequences.dita"/>
   <topicref keys="topic.fx-policy-DisableSafeMode" href="policies/fx-policy-DisableSafeMode.dita"/>
   <topicref keys="topic.fx-policy-DisableSecurityBypass" href="policies/fx-policy-DisableSecurityBypass.dita"/>
   <topicref keys="topic.fx-policy-DisableSetDesktopBackground" href="policies/fx-policy-DisableSetDesktopBackground.dita"/>

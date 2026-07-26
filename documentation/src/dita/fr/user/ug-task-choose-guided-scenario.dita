@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Choisissez un scénario guidé</title>
+  <title>Choisir un scénario guidé</title>
   <shortdesc>Sélectionnez le scénario qui correspond le mieux à l'objectif du profil afin que Éditeur guidé puisse présenter un point de départ utile.</shortdesc>
   <taskbody>
     <prereq><p>Vous connaissez l'objectif du profil que vous souhaitez soutenir.</p></prereq>

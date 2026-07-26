@@ -10,10 +10,10 @@
       <step><cmd>Lisez l'indice de validation du nom avant de modifier d'autres champs de profil.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Saisissez un nom non vide qui distingue l'objectif du profil, le canal Firefox ou le fichier source.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
       <step><cmd>Pour les processus de clonage, modifiez le nom de clone suggéré avant de confirmer s'il duplique une ligne existante.</cmd><info><p>Résultat attendu : vous conservez l'état du profil et comprenez la prochaine action de récupération sécurisée.</p></info></step>
-      <step><cmd>Enregistrez ou dupliquez à nouveau une fois l'indication de nom effacée.</cmd><info><note type="warning">Ne modifiez pas le stockage interne, les données locales du navigateur, les lignes de base de données ou les artefacts de build générés pour récupérer le travail de profil destiné à l'utilisateur.</note></info></step>
+      <step><cmd>Enregistrez ou dupliquez à nouveau une fois l'indication de nom effacée.</cmd><info><note type="warning">Réessayez uniquement depuis l’interface BPM ; ne modifiez pas les données du profil en dehors de l’application.</note></info></step>
     </steps>
     <result><p>Le profil ou le clone a un nom visible unique qui peut être trouvé plus tard dans la bibliothèque.</p></result>
-    <postreq><p>Récupération : si la même erreur se répète après une nouvelle tentative propre, arrêtez le flux de travail, conservez le message visible, le nom du profil, le canal de schéma et la surface actuelle pour examen par le responsable.</p></postreq>
+    <postreq><p>Si l’erreur se répète, arrêtez le flux de travail et contactez le support avec le message visible, le nom du profil, le canal de schéma et la page active.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-create-first-profile"/>

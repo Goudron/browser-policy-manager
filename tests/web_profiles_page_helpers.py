@@ -105,7 +105,6 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'data-cis-layer-key="cis_l1"',
     'data-cis-layer-key="cis_l2"',
     'id="profile-lifecycle-panel"',
-    'id="profile-lifecycle-copy"',
     'id="profile-lifecycle-list"',
     'id="wizard-summary-starter"',
     'id="wizard-summary-cis"',
@@ -426,9 +425,6 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
 PROFILES_PAGE_GUIDED_UX_REGRESSION_TOKENS = (
     "Guided editor",
     "All settings",
-    "Task-first setup",
-    "Full visual catalog",
-    "Raw policies.json editing",
     "Save, validate, download",
     "Download policies.json",
     "Latest edits",
@@ -492,11 +488,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.editor_chrome_validation"] == "Validation"
     assert locale_json["profiles.editor_chrome_modes_title"] == "Open another mode"
     assert locale_json["profiles.editor_chrome_settings_link"] == "All settings"
-    assert locale_json["profiles.editor_chrome_guided_body"].startswith("Task-first setup")
-    assert locale_json["profiles.editor_chrome_settings_body"].startswith("Full visual catalog")
-    assert locale_json["profiles.editor_chrome_json_body"].startswith("Raw policies.json editing")
     assert locale_json["profiles.editor_chrome_json_link"] == "JSON editor"
-    assert locale_json["profiles.wizard_context_existing"].startswith("You are editing")
     assert locale_json["profiles.wizard_step_one"] == "Profile & baseline"
     assert locale_json["profiles.wizard_step_two"] == "Browser access & defaults"
     assert locale_json["profiles.wizard_step_three"] == "Security & privacy"
@@ -504,9 +496,6 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_step_five"] == "AI & smart features"
     assert locale_json["profiles.wizard_step_six"] == "Review & export"
     assert locale_json["profiles.wizard_profile_identity_title"] == "Profile identity"
-    assert locale_json["profiles.wizard_profile_identity_body"].startswith(
-        "Name the profile and choose the Firefox schema channel"
-    )
     assert locale_json["profiles.workspace_scope_guided"] == "Guided editor"
     assert locale_json["profiles.workspace_scope_settings"] == "All settings"
     assert locale_json["profiles.workspace_scope_current_label"] == "Current mode"
@@ -539,9 +528,6 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_baseline_secondary_title"] == "Start another way"
     assert locale_json["profiles.wizard_baseline_summary_title"] == "This baseline will preconfigure"
     assert locale_json["profiles.wizard_cis_title"] == "CIS benchmark overlay"
-    assert locale_json["profiles.wizard_cis_l2_copy"] == (
-        "Applies Level 1 and the stricter Level 2 controls for hardened environments."
-    )
     assert locale_json["profiles.wizard_export_review_cis_manual"] == (
         "Review CIS conflicts where the base scenario stayed in place: {count}."
     )
@@ -593,9 +579,6 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.list_selected_hint"] == "This profile is currently open."
     assert locale_json["profiles.compare_route_title"] == "Compare profile settings"
     assert locale_json["profiles.compare_action"] == "Compare here"
-    assert locale_json["profiles.clone_handoff_title"] == (
-        "Recommended checks for this derived draft"
-    )
     assert locale_json["profiles.wizard_summary_derived"] == "Based on"
     assert locale_json["profiles.lifecycle_review_title"] == "Lifecycle review"
     assert locale_json["profiles.selection_empty_status"] == "Choose a profile or start a new draft to begin."
@@ -610,7 +593,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_upkeep_governance_title"] == "Browser upkeep workflow"
     assert locale_json["profiles.wizard_home_surfaces_workflow_title"] == "Home and startup workflow"
     assert locale_json["profiles.wizard_language_governance_title"] == "Language governance workflow"
-    assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 152 AI policy controls"
+    assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 153 AI policy controls"
     assert locale_json["profiles.wizard_general_policy_section_state_download_prompt_on"] == (
         "Ask where to save downloads"
     )
@@ -1111,9 +1094,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.editor_chrome_validation"] == "Проверка"
     assert locale_json["profiles.editor_chrome_modes_title"] == "Открыть другой режим"
     assert locale_json["profiles.editor_chrome_settings_link"] == "Все настройки"
-    assert locale_json["profiles.editor_chrome_guided_body"].startswith("Сценарная настройка")
-    assert locale_json["profiles.editor_chrome_settings_body"].startswith("Полный визуальный каталог")
-    assert locale_json["profiles.editor_chrome_json_body"].startswith("Редактирование сырого policies.json")
     assert locale_json["profiles.editor_chrome_json_link"] == "JSON-редактор"
     assert locale_json["profiles.wizard_step_one"] == "Профиль и основа"
     assert locale_json["profiles.wizard_step_two"] == "Доступ к браузеру и значения по умолчанию"
@@ -1173,9 +1153,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_baseline_secondary_title"] == "Другие способы начать"
     assert locale_json["profiles.wizard_baseline_summary_title"] == "Что будет настроено сразу"
     assert locale_json["profiles.wizard_cis_title"] == "Наложение CIS Benchmark"
-    assert locale_json["profiles.wizard_cis_l2_copy"] == (
-        "Применяет Level 1 и более строгие Level 2 политики для усиленных сред."
-    )
     assert locale_json["profiles.wizard_export_review_cis_manual"] == (
         "Проверьте CIS-конфликты, где значение базового сценария осталось в силе: {count}."
     )
@@ -1227,9 +1204,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.list_selected_hint"] == "Этот профиль сейчас открыт."
     assert locale_json["profiles.compare_route_title"] == "Сравнить настройки профилей"
     assert locale_json["profiles.compare_action"] == "Сравнить здесь"
-    assert locale_json["profiles.clone_handoff_title"] == (
-        "Что обычно стоит проверить в производной копии"
-    )
     assert locale_json["profiles.wizard_summary_derived"] == "Основан на"
     assert locale_json["profiles.lifecycle_review_title"] == "Жизненный цикл профиля"
     assert locale_json["profiles.selection_empty_status"] == "Выберите профиль или начните новый черновик, чтобы начать."
@@ -1584,9 +1558,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_profile_identity_title"] == (
         "Идентификация профиля"
     )
-    assert locale_json["profiles.wizard_profile_identity_body"].startswith(
-        "Задайте имя профиля и выберите канал схемы Firefox"
-    )
     assert locale_json["profiles.wizard_extensions_review_body"].startswith(
         "Быстрая проверка"
     )
@@ -1704,7 +1675,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_language_governance_title"] == (
         "Сценарий управления языком"
     )
-    assert locale_json["profiles.wizard_ai_controls_title"] == "Политики ИИ Firefox 152"
+    assert locale_json["profiles.wizard_ai_controls_title"] == "Политики ИИ Firefox 153"
     assert locale_json["profiles.wizard_search_surfaces_workflow_title"] == (
         "Сценарий поискового опыта"
     )

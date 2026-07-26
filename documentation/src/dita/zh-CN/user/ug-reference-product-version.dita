@@ -2,11 +2,11 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-product-version" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>产品版本参考</title>
-  <shortdesc>使用 BPM 标头和版本上下文来确认您正在使用的产品和文档版本。</shortdesc>
+  <shortdesc>使用统一的 BPM 标头确认正在运行的产品版本；文档不再显示独立版本。</shortdesc>
   <refbody>
-    <section id="a-version-location"><title>版本位置</title><p>页面标题显示正在运行的 BPM 版本，文档包是针对 BPM 构建的。</p></section>
+    <section id="a-version-location"><title>版本显示位置</title><p>库、引导式编辑器、所有设置、JSON 编辑器、比较和文档中的统一标头都会显示正在运行的 BPM 版本。在库中，工作区数量与“库中的配置文件”标签显示为两行简洁文本。</p></section>
     <section id="a-version-scope"><title>版本范围</title><p>产品版本标识 BPM 行为，而不是端点上安装的 Firefox 浏览器版本。</p></section>
-    <section id="a-schema-version"><title>架构版本</title><p>Firefox 架构通道（例如 ESR 140.12 和版本 152）是影响验证和可用控件的单独选择。</p></section>
+    <section id="a-schema-version"><title>架构通道</title><p>当前版本支持 Firefox ESR 140.13 和 Firefox Release 153。架构通道需单独选择，并会影响验证和可用控件。</p></section>
     <section id="a-version-recovery"><title>恢复</title><p>如果产品行为与指南不匹配，请在报告不匹配之前记录 BPM 版本、架构通道、路线、区域设置和可见状态。</p></section>
   </refbody>
   <related-links>

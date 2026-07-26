@@ -58,6 +58,16 @@
             --hero-panel-start: rgba(230, 237, 245, 0.92);
             --hero-panel-end: rgba(217, 226, 236, 0.82);
             --surface-highlight: rgba(241, 245, 249, 0.56);
+            --compact-space-1: 0.35rem;
+            --compact-space-2: 0.5rem;
+            --compact-space-3: 0.75rem;
+            --compact-space-4: 1rem;
+            --compact-radius: 0.8rem;
+            --compact-control-target: 2.75rem;
+            --focus-ring-width: 3px;
+            --focus-ring-color: rgba(15, 118, 110, 0.48);
+            --focus-ring-offset: 3px;
+            --motion-fast: 160ms ease;
         }
 
         html {
@@ -126,6 +136,7 @@
             --hero-panel-start: rgba(15, 23, 42, 0.86);
             --hero-panel-end: rgba(17, 24, 39, 0.76);
             --surface-highlight: rgba(148, 163, 184, 0.08);
+            --focus-ring-color: rgba(74, 222, 128, 0.62);
         }
 
         [hidden] {
@@ -230,7 +241,7 @@
             border: 1px solid rgba(15, 23, 42, 0.12);
             background: var(--control-bg);
             background-color: var(--control-bg);
-            transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease, transform 160ms ease;
+            transition: border-color var(--motion-fast), box-shadow var(--motion-fast), background var(--motion-fast), transform var(--motion-fast);
         }
 
         .soft-input:hover {
@@ -240,10 +251,15 @@
 
         .soft-input:focus {
             outline: none;
-            border-color: rgba(15, 118, 110, 0.45);
-            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+            border-color: var(--focus-ring-color);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--focus-ring-color), transparent 76%);
             background: var(--control-focus-bg);
             background-color: var(--control-focus-bg);
+        }
+
+        .soft-input:focus-visible {
+            outline: var(--focus-ring-width) solid var(--focus-ring-color);
+            outline-offset: 1px;
         }
 
         .soft-input.input-invalid {
@@ -442,4 +458,19 @@
             font-weight: 600;
             letter-spacing: 0.18em;
             text-transform: uppercase;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
         }

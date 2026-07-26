@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-permanently-delete-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>永久删除配置文件</title>
+  <title>永久删除配置档案</title>
   <shortdesc>仅在确认不应保留活动或存档的配置文件后才将其删除。</shortdesc>
   <taskbody>
     <prereq><p>配置文件行可见，并且您已确认不再需要该配置文件。</p></prereq>

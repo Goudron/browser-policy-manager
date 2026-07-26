@@ -10,10 +10,10 @@
       <step><cmd>Lea la sugerencia de validación de nombre antes de cambiar otros campos del perfil.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Introduzca un nombre no vacío que distinga el propósito del perfil, el canal de Firefox o el archivo fuente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Para flujos de trabajo de clonación, cambie el nombre del clon sugerido antes de confirmar si duplica una fila existente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
-      <step><cmd>Guarde o duplique nuevamente después de que se borre la sugerencia del nombre.</cmd><info><note type="warning">No edite el almacenamiento interno, los datos locales del navegador, las filas de la base de datos ni los artefactos de compilación generados para recuperar el trabajo del perfil de cara al usuario.</note></info></step>
+      <step><cmd>Guarde o duplique nuevamente después de que se borre la sugerencia del nombre.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
     <result><p>El perfil o clon tiene un nombre visible único que se puede encontrar más adelante en la Biblioteca.</p></result>
-    <postreq><p>Recuperación: si el mismo error se repite después de un reintento limpio, detenga el flujo de trabajo, conserve el mensaje visible, el nombre del perfil, el canal del esquema y la superficie actual para la revisión del mantenedor.</p></postreq>
+    <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-create-first-profile"/>

@@ -13,7 +13,7 @@ mkdir -p backups
 cp data/bpm.db backups/bpm-pre-update.db
 sha256sum backups/bpm-pre-update.db
 ]]></codeblock><p>还导出代表性 Firefox 文档，例如 <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> 并存储生成的 <codeph>policies.json</codeph> 证据以及校验和。</p></info></step>
-      <step><cmd>为源更改安排一个停止世界更新窗口。</cmd><info><p>对于 0.9.1，请在 <codeph>git fetch --tags</codeph>、依赖项刷新、<codeph>alembic upgrade head</codeph>、<codeph>make docs-validate</codeph> 和 <codeph>make docs-build</codeph> 之前计划单节点停机时间。滚动升级已计划但尚未实施。</p></info></step>
+      <step><cmd>为源更改安排一个停止世界更新窗口。</cmd><info><p>对于 0.9.1，请在 <codeph>git fetch --tags</codeph>、依赖项刷新、<codeph>alembic upgrade head</codeph>、 和  之前计划单节点停机时间。滚动升级已计划但尚未实施。</p></info></step>
       <step><cmd>将差距记录为阻碍因素，而不是隐藏的假设。</cmd><info><note type="warning">BPM 不提供托管监控、自动备份调度、官方恢复自动化、时间点恢复、托管机密、令牌轮换或滚动升级编排。使用更新操作手册中的手动证据和停止条件。</note></info></step>
     </steps>
     <result><p>操作计划包含监控输入、备份/导出证据以及当前源操作的实际更新窗口。</p></result>

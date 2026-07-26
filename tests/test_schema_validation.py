@@ -20,6 +20,7 @@ from app.core.schema_channels import (
     CURRENT_RELEASE_SCHEMA_CHANNEL,
     SCHEMA_FILENAMES,
     SCHEMA_MOZILLA_VERSIONS,
+    SCHEMA_SOURCES,
     SUPPORTED_SCHEMA_CHANNELS,
 )
 from app.core.schemas_loader import available_profiles, load_schema
@@ -56,13 +57,13 @@ def test_validator_rejects_wrong_type(profile):
     ("profile", "expected_version"),
     [(channel, SCHEMA_MOZILLA_VERSIONS[channel]) for channel in SUPPORTED_SCHEMA_CHANNELS],
 )
-def test_bundled_schema_metadata_matches_mozilla_v712(profile, expected_version):
+def test_bundled_schema_metadata_matches_declared_mozilla_provenance(profile, expected_version):
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[profile]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert schema["x-bpm-channel"] == profile
     assert schema["x-bpm-version"] == expected_version
-    assert schema["x-bpm-source"] == "mozilla-policy-templates-v7.12"
+    assert schema["x-bpm-source"] == SCHEMA_SOURCES[profile]
     assert (
         schema["properties"]["ExtensionSettings"]["additionalProperties"]["properties"][
             "allowed_types"
@@ -71,38 +72,63 @@ def test_bundled_schema_metadata_matches_mozilla_v712(profile, expected_version)
     )
 
 
-def test_release_152_keeps_upstream_min_version_metadata():
+def test_release_153_keeps_upstream_min_version_metadata():
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     assert schema["properties"]["DisableRemoteImprovements"]["x-bpm-min-version"] == "148.0"
-
-
-def test_release_152_includes_new_policy_templates_entries():
-    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
-    schema = json.loads(schema_path.read_text(encoding="utf-8"))
-
-    assert "AIControls" in schema["properties"]
-    assert "IPProtectionAvailable" in schema["properties"]
-    assert "LocalNetworkAccess" in schema["properties"]
-    assert "XSLTEnabled" in schema["properties"]
-    assert schema["properties"]["DefaultSerialGuardSetting"]["enum"] == [2, 3]
-    assert schema["properties"]["FirefoxHome"]["properties"]["Weather"]["type"] == "boolean"
     assert (
-        schema["properties"]["ExtensionSettings"]["additionalProperties"]["properties"][
-            "update_url"
-        ]["type"]
-        == "string"
+        schema["properties"]["DisableRemoteSettingsAndAcceptSecurityConsequences"]["x-bpm-min-version"]
+        == "153.0"
     )
 
 
-def test_esr_140_12_includes_shared_new_entries_but_not_release_only_entries():
+@pytest.mark.parametrize("channel", ("release-153", "esr-153.0"))
+def test_firefox_153_channels_include_new_policy_templates_entries(channel):
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[channel]
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+    assert "DisableRemoteSettingsAndAcceptSecurityConsequences" in schema["properties"]
+    extension_settings = schema["properties"]["ExtensionSettings"]["additionalProperties"][
+        "properties"
+    ]
+    for field in (
+        "allowed_permissions",
+        "blocked_permissions",
+        "runtime_allowed_hosts",
+        "runtime_blocked_hosts",
+    ):
+        assert extension_settings[field]["items"]["type"] == "string"
+
+
+def test_esr_140_13_preserves_the_frozen_policy_surface():
     schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
-    assert "AIControls" not in schema["properties"]
-    assert "IPProtectionAvailable" not in schema["properties"]
-    assert "LocalNetworkAccess" not in schema["properties"]
-    assert "XSLTEnabled" not in schema["properties"]
+    assert "DisableRemoteSettingsAndAcceptSecurityConsequences" not in schema["properties"]
+    extension_settings = schema["properties"]["ExtensionSettings"]["additionalProperties"][
+        "properties"
+    ]
+    for field in (
+        "allowed_permissions",
+        "blocked_permissions",
+        "runtime_allowed_hosts",
+        "runtime_blocked_hosts",
+    ):
+        assert field not in extension_settings
     assert schema["properties"]["DefaultSerialGuardSetting"]["enum"] == [2, 3]
     assert schema["properties"]["FirefoxHome"]["properties"]["Weather"]["type"] == "boolean"
+
+
+@pytest.mark.parametrize("channel", ("release-153", "esr-153.0"))
+def test_firefox_153_accepts_extension_allowed_permissions(channel):
+    PolicySchemaValidator(channel).validate(
+        {"ExtensionSettings": {"*": {"allowed_permissions": ["tabs"]}}}
+    )
+
+
+def test_esr_140_13_rejects_extension_allowed_permissions():
+    with pytest.raises(ValidationError):
+        PolicySchemaValidator(CURRENT_ESR_SCHEMA_CHANNEL).validate(
+            {"ExtensionSettings": {"*": {"allowed_permissions": ["tabs"]}}}
+        )

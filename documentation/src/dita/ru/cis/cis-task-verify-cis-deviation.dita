@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-verify-cis-deviation" xml:lang="ru" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>Проверьте и запишите отклонение CIS</title>
+  <title>Проверка и фиксация отклонения от CIS</title>
   <shortdesc>Используйте эту задачу, когда значение, связанное с CIS, сохраняется, изменяется или оставляется для проверки вручную вместо автоматического принятия.</shortdesc>
   <taskbody>
     <prereq><p>Откройте профиль, в котором показан элемент ручной проверки CIS, конфликт или намеренное отклонение от созданного слоя.</p></prereq>
