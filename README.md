@@ -353,4 +353,10 @@ Open:
 
 This project is licensed under the [MPL-2.0](LICENSE).
 
+## Author
+
+**Valery Ledovskoy**<br>
+📧 [valery@ledovskoy.com](mailto:valery@ledovskoy.com)<br>
+Only emails with `[BPM]` in the subject line are reviewed.
+
 © 2025-2026 • Released under [Mozilla Public License 2.0](LICENSE)

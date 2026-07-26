@@ -186,7 +186,8 @@ def test_readme_documents_target_and_active_locale_sets():
     assert "currently `en`, `ru`, `de`, `zh-CN`, `fr`, or `es-ES`" in readme_single_line
     assert "Locale terminology follows Mozilla Pontoon and SUMO style where applicable" in readme
     assert "single-maintainer" not in readme
-    assert "Only emails with `[BPM]` in the subject line are reviewed." not in readme
+    assert "**Valery Ledovskoy**" in readme
+    assert "Only emails with `[BPM]` in the subject line are reviewed." in readme
     assert "© 2025-2026 • Released under [Mozilla Public License 2.0](LICENSE)" in readme
 
 

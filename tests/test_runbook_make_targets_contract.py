@@ -118,7 +118,7 @@ def test_epic_backlog_creation_runbook_defines_versioned_backlog_contract():
         "README must also not identify the active target version",
         "Release history, \"what changed\", and target-version completion notes belong in `CHANGELOG.md`.",
         "README is for installers, users, and administrators:",
-        "remove developer, maintainer, test/CI, source-tree, and email-routing instructions;",
+        "remove developer, maintainer, test/CI, and source-tree instructions; preserve the author and",
         "inventory every repository test that reads `README.md`",
         "Focused README checks alone are insufficient",
         "Product documentation must be updated after the epic changes functionality.",

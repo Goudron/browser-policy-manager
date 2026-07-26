@@ -157,8 +157,8 @@ README must be updated after the main backlog implementation is complete, not on
 creation time. It should describe the actual current product state after the epic, including current
 surfaces, installation and product-start commands, supported external/runtime versions where they
 are product facts, and user-facing behavior. README is for installers, users, and administrators:
-do not add developer, maintainer, CI, test-workflow, source-tree, release-handoff, or author-routing
-prose. If the epic does not change durable README content, the backlog should explicitly say that no
+do not add developer, maintainer, CI, test-workflow, source-tree, or release-handoff prose. Preserve
+the author and contact policy when present. If the epic does not change durable README content, the backlog should explicitly say that no
 README update is needed.
 
 README must not summarize what changed in a specific BPM version or list which earlier BPM version
@@ -173,7 +173,8 @@ When editing README:
 
 - retain the legal license/copyright footer when it is user-facing;
 - keep the primary product language English;
-- remove developer, maintainer, test/CI, source-tree, and email-routing instructions;
+- remove developer, maintainer, test/CI, and source-tree instructions; preserve the author and
+  contact policy when present;
 - remove release-note phrasing such as "what's included in <version>", "planned for <version>", or
   "introduced in <version>";
 - remove target-version anchors, active-target notes, and future-version placeholders;
@@ -340,8 +341,8 @@ Before calling a new backlog ready, confirm:
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
   changed schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
   release procedures;
-- README is limited to installer/user/administrator information, retains only its legal footer, and
-  forbids developer, maintainer, email-routing, release-history, and version-change summaries;
+- README is limited to installer/user/administrator information, retains its legal footer plus any
+  author/contact policy, and forbids developer, maintainer, release-history, and version-change summaries;
 - any README audience/boundary change inventories every README-reading contract and reruns
   `pytest -q` after the final README edit;
 - changelog instructions preserve previous version history;
