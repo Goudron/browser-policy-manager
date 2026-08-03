@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-web-evidence-retrieval-0.9.3",
+  "backlog_item": "BPM093-M9-03",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-fixed-provider-adapter-no-route-ui-or-live-smoke",
+  "pins": {
+    "provider_trust_policy": {"path": "documentation/config/bpm-web-evidence-provider-trust-policy-0.9.3.json", "sha256": "be7f11374c4c231186bee328da315836db23639180655b9c628bcf90f063cffb"},
+    "opt_in_consent": {"path": "documentation/config/bpm-web-evidence-opt-in-consent-contract-0.9.3.json", "sha256": "e1f36d48bdbdcf40a4ddd5833ce296d9ef55be350b9a3a708e25477318d84d5a"},
+    "content_boundary": {"path": "documentation/config/bpm-prompt-content-boundary-contract-0.9.3.json", "sha256": "007947a7b02af07e5e2ea9ad6383d884a2e34345413f1db4c4832ee305ad495e"},
+    "threat_review": {"path": "documentation/config/bpm-assistant-threat-review-0.9.3.json", "sha256": "c497644c9ddd87050641a0b54cfd888a408ee78ae5914b71273fce4ee0006d15"}
+  },
+  "admission": {
+    "required_order": ["request_web", "deterministic BPM scope allow", "M9-02 exact one-use consent", "one fixed provider POST"],
+    "scope_failure": "zero provider calls",
+    "missing_or_invalid_consent": "zero provider calls",
+    "locale": "request locale must remain exact; the provider receives only its pinned search_lang mapping"
+  },
+  "network": {
+    "method": "POST",
+    "endpoint": "https://api.search.brave.com/res/v1/llm/context",
+    "destinations": ["api.search.brave.com:443"],
+    "tls_verification": true,
+    "proxy_environment_inheritance": false,
+    "follow_redirects": false,
+    "automatic_retries": 0,
+    "timeout_seconds": 15.0,
+    "result_url_connections": 0,
+    "live_smoke_test": false,
+    "request_headers_allowlist": ["Accept", "Accept-Encoding", "Content-Type", "X-Subscription-Token"],
+    "location_headers": false
+  },
+  "request": {
+    "body_fields": {"q": "exact consented question", "search_lang": {"en": "en", "ru": "ru", "de": "de", "zh-CN": "zh-hans", "fr": "fr", "es-ES": "es"}, "count": 10, "spellcheck": false, "maximum_number_of_urls": 5, "maximum_number_of_tokens": 2048, "maximum_number_of_snippets": 10, "maximum_number_of_tokens_per_url": 1024, "maximum_number_of_snippets_per_url": 4, "context_threshold_mode": "strict", "enable_local": false, "goggles": "$discard\n$site=mozilla.github.io\n$site=support.mozilla.org\n$site=firefox-source-docs.mozilla.org\n$site=www.mozilla.org"},
+    "provider_calls_per_consent_max": 1
+  },
+  "response": {
+    "content_type": "application/json",
+    "content_encodings": ["identity", "gzip"],
+    "bytes_max": 262144,
+    "top_level_fields_exact": ["grounding", "sources"],
+    "accepted_grounding": "grounding.generic only; nonempty poi/map or unknown rich fields reject the complete response",
+    "generic_item_fields_exact": ["url", "title", "snippets"],
+    "source_metadata_fields_exact": ["title", "hostname", "age"],
+    "source_urls_max": 5,
+    "snippets_max": 10,
+    "snippets_per_url_max": 4
+  },
+  "source_post_filter": {
+    "source_filter_alone_is_sufficient": false,
+    "accepted_scheme": "https",
+    "accepted_port": [443, "default"],
+    "forbidden_url_components": ["credentials", "query", "fragment", "encoded bytes", "backslash", "dot segments", "double slash path"],
+    "allowed_hosts_and_paths": {"mozilla.github.io": ["/policy-templates/"], "support.mozilla.org": ["/"], "firefox-source-docs.mozilla.org": ["/browser/components/enterprisepolicies/", "/toolkit/components/enterprisepolicies/"], "www.mozilla.org": ["/en-US/firefox/", "/ru/firefox/", "/de/firefox/", "/zh-CN/firefox/", "/fr/firefox/", "/es-ES/firefox/"]},
+    "result_url_fetching": false
+  },
+  "sanitization_and_retention": {
+    "untrusted_fields": ["URL", "generic title", "source metadata title", "source age", "snippet"],
+    "active_or_encoded_control_content": "reject the complete provider response",
+    "returned_shape": "temporary external_untrusted evidence with provider/source URL/title/age/retrieval-time citation metadata",
+    "provider_body": "not retained after parsing",
+    "sanitized_content": "owned by one context-manager lease and its adapter references are cleared at terminal completion, cancellation or error",
+    "persistence": false,
+    "model_input": "M9-04 only; this task sends no provider content to inference"
+  },
+  "failure": "scope, consent, DNS, TLS, redirect, timeout, HTTP status, response type/size/schema, allowlist, sanitization or provider failure returns local_only without retry or ordinary-search fallback.",
+  "boundaries": {"http_route": false, "browser_ui": false, "browser_storage": false, "database": false, "disk": false, "telemetry": false, "ordinary_search_changed": false, "external_evidence_to_inference": false, "hosted_answers": false, "direct_result_fetch": false},
+  "verification": {"runtime": "tests/test_web_evidence_093.py", "contract": "documentation/tests/contract/test_bpm_web_evidence_retrieval_contract_0_9_3.py", "architecture": "docs/architecture/bpm-web-evidence-retrieval-0.9.3.md"}
+}

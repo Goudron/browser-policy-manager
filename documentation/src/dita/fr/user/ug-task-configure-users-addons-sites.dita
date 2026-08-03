@@ -7,7 +7,7 @@
     <prereq><p>Un brouillon guidé est ouvert.</p></prereq>
     <context><p>Cette étape collecte les contrôles qui affectent les surfaces d'identité des utilisateurs, la gouvernance des extensions, la localisation et le comportement spécifique au site Web.</p></context>
     <steps>
-      <step><cmd>Ouvrez l'étape 4, Utilisateurs, sites de modules complémentaires &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 4 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Examinez les comptes Mozilla et les surfaces de navigateur liées à l'identité.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Configurez les extensions, les modules complémentaires et les signets conformément aux règles de déploiement.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Définissez les options de langue, de traduction et de gestion du site Web.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

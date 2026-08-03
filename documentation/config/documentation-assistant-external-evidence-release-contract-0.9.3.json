@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-external-evidence-release-0.9.3",
+  "backlog_item": "BPM093-M12A-04",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-server-path-ui-selector-deferred-to-m12b-06",
+  "pins": {
+    "provider_policy": {"path": "documentation/config/bpm-web-evidence-provider-trust-policy-0.9.3.json", "sha256": "be7f11374c4c231186bee328da315836db23639180655b9c628bcf90f063cffb"},
+    "retrieval": {"path": "documentation/config/bpm-web-evidence-retrieval-contract-0.9.3.json", "sha256": "caf8eafdd77efce380459960b75a23361ed2e7435304f4d2d38efe66879832a9"},
+    "merge": {"path": "documentation/config/bpm-web-evidence-merge-contract-0.9.3.json", "sha256": "ddcd7a608098ebe4125cc6fe10ef34c94f25decf024dfc5f50e8d25f350f3410"},
+    "scope": {"path": "documentation/config/bpm-topic-scope-gate-contract-0.9.3.json", "sha256": "ed8401ca63cc9c28d9c1d0fd9a49541b39847afef986c56ec1c56a540b2bee67"},
+    "assistant_api": {"path": "documentation/config/documentation-assistant-api-delivery-contract-0.9.3.json", "sha256": "c2b5c489030bbbfebaf72e445cc1aca14b03f05468db39627772225139361cb0"}
+  },
+  "configuration": {
+    "enabled_by_default": false,
+    "administrator_gate": ["BPM_WEB_EVIDENCE_ENABLED", "BPM_BRAVE_SEARCH_API_SUBSCRIPTION_TOKEN"],
+    "missing_or_disabled": "normal local-only assistant",
+    "credential_browser_exposure": false
+  },
+  "reader_mode": {
+    "default": "off",
+    "authority": "bounded server-owned browser-session plus opaque tab ID plus exact-locale state",
+    "enable": "one explicit reader action",
+    "retention": "enabled for subsequent same-locale questions until one explicit disable",
+    "not_invalidated_by": ["completed answer", "provider failure", "cancellation", "conversation Clear"],
+    "per_question_consent": false,
+    "client_web_mode_is_authority": false,
+    "http": {
+      "status": "GET /api/documentation-assistant/web-mode?locale={locale}&tab_id={opaque_tab_id}",
+      "set": "POST /api/documentation-assistant/web-mode with the same opaque tab_id",
+      "mutation_security": "same-origin JSON guard and opaque HttpOnly SameSite=Strict assistant session"
+    },
+    "browser_selector_owner": "BPM093-M12B-06",
+    "tab_isolation": "The tab ID groups server state but grants no authority; a separate tab starts off and cannot change another tab's mode record."
+  },
+  "admission": {
+    "required": [
+      "server mode enabled for the owning session and exact locale",
+      "administrator configuration available",
+      "deterministic BPM scope allow before local or external retrieval",
+      "current same-locale answer-ready local BPM evidence",
+      "second deterministic scope check immediately before provider admission",
+      "bounded question and rate-limit reservation",
+      "one fixed Brave LLM Context POST"
+    ],
+    "crafted_chat_web_mode": "cannot enable external access",
+    "off_topic": "refuse before provider call",
+    "cross_locale": false,
+    "provider_calls_per_question_max": 1
+  },
+  "evidence_and_answer": {
+    "local_authority": "Current BPM documentation is required and remains first and higher priority.",
+    "external_sources": "Only the reviewed fixed Mozilla host/path allowlist; result URLs are metadata and are never fetched.",
+    "external_content": "sanitized untrusted request-local data in bounded leases",
+    "conflict": "abstain rather than let external evidence override BPM documentation",
+    "model_output": "validated local_text/local citations plus separately structured external_claims/external citations",
+    "conversation_retention": "only the locally grounded answer and local citations enter multi-turn context",
+    "stream": "local final-event schema remains unchanged when there are no external claims; web answers add a separate external_claims collection with opaque source handles",
+    "source_resolution": "external handles expose only allowlisted URL, title, locale, provider ID and external source kind"
+  },
+  "fallback": {
+    "local_answer_preserved_for": [
+      "mode off",
+      "missing administrator configuration",
+      "question too large for provider",
+      "rate limit",
+      "provider transport or response failure",
+      "redirect or rejected result URL",
+      "empty, stale or over-budget external evidence"
+    ],
+    "cancellation": "terminates the request without a late answer",
+    "unexpected_network_fallback": false,
+    "ordinary_search_changed": false
+  },
+  "no_call_events": [
+    "documentation page load",
+    "assistant status",
+    "web-mode status",
+    "web-mode toggle",
+    "ordinary deterministic search",
+    "off-topic question",
+    "crafted request while server mode is off"
+  ],
+  "verification": {
+    "mode": "tests/test_web_evidence_mode_093.py",
+    "provider": ["tests/test_web_evidence_093.py", "tests/test_web_evidence_security_093.py"],
+    "orchestration": "tests/test_grounded_conversation_orchestration_093.py",
+    "transport": ["tests/test_documentation_assistant_service_093.py", "tests/test_documentation_assistant_api_093.py", "tests/test_conversation_stream_093.py"],
+    "contract": "documentation/tests/contract/test_documentation_assistant_external_evidence_release_contract_0_9_3.py",
+    "architecture": "docs/architecture/documentation-assistant-external-evidence-release-0.9.3.md"
+  }
+}

@@ -8,7 +8,7 @@
     <context><p>“比较配置档案设置”是用于已保存配置档案的专用页面。它保留当前语言和主题，并且不会替换“库”标签页。</p>
       <fig id="screenshot-compare-profiles">
         <title>“比较配置档案设置”页面</title>
-        <image keyref="screenshot.compare-profiles" placement="break">
+        <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
           <alt>比较视图显示选择用于并排审查的两个已保存配置文件。</alt>
         </image>
       </fig>

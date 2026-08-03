@@ -5,9 +5,9 @@
   <shortdesc>Utilice el Paso 2 para configurar el acceso al navegador, el comportamiento de la red y los valores predeterminados básicos.</shortdesc>
   <taskbody>
     <prereq><p>Hay abierto un borrador de perfil guiado.</p></prereq>
-    <context><p>Los valores predeterminados de acceso al navegador &amp; recopilan controles que determinan si Firefox puede acceder a los recursos y cómo se comporta antes de las elecciones de políticas específicas de contenido.</p></context>
+    <context><p>Los ajustes de acceso al navegador y los valores predeterminados determinan si Firefox puede acceder a los recursos y cómo se comporta antes de elegir políticas específicas de contenido.</p></context>
     <steps>
-      <step><cmd>Abra el Paso 2, Acceso al navegador predeterminado &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Abra el paso 2 de la configuración guiada.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
       <step><cmd>Revisar el acceso a la red y los controles de comportamiento del navegador para la implementación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Establezca valores predeterminados de referencia antes de agregar opciones específicas de inicio, búsqueda o navegación.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Validar las advertencias que se muestran junto a los controles dependientes del esquema.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>

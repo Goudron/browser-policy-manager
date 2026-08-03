@@ -59,8 +59,8 @@ def test_documentation_context_guide_protects_dita_locales_generated_and_externa
     for rule in (
         "Product source is English.",
         "Published locales are exactly `en`, `ru`, `de`, `zh-CN`, `fr`, and `es-ES`",
-        "Do not ship AI/RAG/embeddings/generative answers",
-        "AI-assisted drafting or localization is allowed during development only after human review",
+        "separate optional chat feature, not a",
+        "AI-assisted drafting or localization is permitted only before that review",
         "Publishable product content is DITA 1.3.",
         "Do not add product-guide Markdown, hand-authored HTML",
         "Preserve immutable topic IDs, keys, anchors, target IDs",

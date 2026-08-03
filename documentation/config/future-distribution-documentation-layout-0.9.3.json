@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-future-distribution-documentation-layout-0.9.3",
+  "backlog_item": "BPM093-M14-07",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-and-delivered",
+  "delivery_root": "distributions/documentation",
+  "release_directory": "{bpm_version}",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "guides": [
+    {
+      "id": "user-guide",
+      "filename": "browser-policy-manager-user-guide-{locale}-{bpm_version}.pdf"
+    },
+    {
+      "id": "administrator-guide",
+      "filename": "browser-policy-manager-administrator-guide-{locale}-{bpm_version}.pdf"
+    }
+  ],
+  "release_contents": [
+    "manifest.json",
+    "checksums.sha256",
+    "NOTICE.txt",
+    "pdf/{locale}/browser-policy-manager-user-guide-{locale}-{bpm_version}.pdf",
+    "pdf/{locale}/browser-policy-manager-administrator-guide-{locale}-{bpm_version}.pdf"
+  ],
+  "ownership": {
+    "dita_source": "documentation/src/dita is hand-authored source and is never copied into the delivery root",
+    "generator": "BPM093-M14-08 documentation generator is the only writer of PDFs and delivery metadata",
+    "promotion": "BPM093-M14-09 verifies a complete temporary release directory and atomically promotes it to distributions/documentation/{bpm_version}",
+    "removal": "Remove a promoted release directory only through an explicit maintainer-approved release-retirement operation; never use broad cleanup against distributions or data/ai"
+  },
+  "integrity": {
+    "manifest": "records BPM version, generator identity, source revision, locale-guide inventory and each PDF SHA-256",
+    "checksums": "checksums.sha256 contains SHA-256 records for every declared PDF and delivery metadata file",
+    "notice": "NOTICE.txt records generated-artifact ownership, source provenance and rebuild command",
+    "rebuild": "A rebuild creates a sibling temporary directory, validates the exact declared set and checksums, then atomically replaces only the matching version directory"
+  },
+  "forbidden_content": [
+    "local-models",
+    "embeddings",
+    "rag-indexes",
+    "caches",
+    "logs",
+    "reports",
+    "credentials",
+    "secrets",
+    "source-dita",
+    "html-site",
+    "unrelated-archives"
+  ],
+  "current_release_boundary": "BPM093-M14-07 defines the delivery layout. BPM093-M14-08 generates the PDFs and BPM093-M14-09 atomically promotes the verified release directory."
+}

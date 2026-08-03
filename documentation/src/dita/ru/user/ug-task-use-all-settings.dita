@@ -8,7 +8,7 @@
     <context><p>Все настройки — это полноценный визуальный редактор политик Firefox и известного Управляемые параметры. Он открывается в Проверка, поэтому элементы внимания видны перед широким просмотром каталога.</p>
       <fig id="screenshot-all-settings-review">
         <title>Все настройки Проверка</title>
-        <image keyref="screenshot.all-settings-review" placement="break">
+        <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>Все настройки показывает список проверки, настроенные параметры и панель сведений о настройках на узком экране.</alt>
         </image>
       </fig>

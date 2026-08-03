@@ -1,0 +1,98 @@
+{
+  "backlog_item": "BPM093-M14-09",
+  "bpm_version": "0.9.3",
+  "candidate_manifest": {
+    "path": "documentation/build/pdf/pdf-build-manifest.json",
+    "sha256": "f12e38671e87c11a0e3d1f51a342bb9c152184f7bb1ca8884167972d84f60691"
+  },
+  "contract_id": "bpm-pdf-delivery-0.9.3",
+  "pdfs": [
+    {
+      "candidate_path": "en/browser-policy-manager-user-guide-en-0.9.3.pdf",
+      "guide_id": "user-guide",
+      "locale": "en",
+      "path": "pdf/en/browser-policy-manager-user-guide-en-0.9.3.pdf",
+      "sha256": "34aef967edb3027b1f3677cc42a746c3af9a6f482dc8434fd0efa1228d19f3f3"
+    },
+    {
+      "candidate_path": "en/browser-policy-manager-administrator-guide-en-0.9.3.pdf",
+      "guide_id": "administrator-guide",
+      "locale": "en",
+      "path": "pdf/en/browser-policy-manager-administrator-guide-en-0.9.3.pdf",
+      "sha256": "977b2cd4c0f77fdc5bfcd447e9a2acdfcb6c1a22205b91fd13a407bd4e15f1f9"
+    },
+    {
+      "candidate_path": "ru/browser-policy-manager-user-guide-ru-0.9.3.pdf",
+      "guide_id": "user-guide",
+      "locale": "ru",
+      "path": "pdf/ru/browser-policy-manager-user-guide-ru-0.9.3.pdf",
+      "sha256": "6b9f0b811dbfe7b7d581e0460ad57d8e6da4fcec5627c945f5ce3f4f6d0c1da4"
+    },
+    {
+      "candidate_path": "ru/browser-policy-manager-administrator-guide-ru-0.9.3.pdf",
+      "guide_id": "administrator-guide",
+      "locale": "ru",
+      "path": "pdf/ru/browser-policy-manager-administrator-guide-ru-0.9.3.pdf",
+      "sha256": "5ff0d1029ff65c3be4191e2978aeab4a6791799f77739299a2ae38fc4f80ba9b"
+    },
+    {
+      "candidate_path": "de/browser-policy-manager-user-guide-de-0.9.3.pdf",
+      "guide_id": "user-guide",
+      "locale": "de",
+      "path": "pdf/de/browser-policy-manager-user-guide-de-0.9.3.pdf",
+      "sha256": "dd2ccc87c43d3f294360b1a061542ed28565e6a2a163c3151a13c01803b12638"
+    },
+    {
+      "candidate_path": "de/browser-policy-manager-administrator-guide-de-0.9.3.pdf",
+      "guide_id": "administrator-guide",
+      "locale": "de",
+      "path": "pdf/de/browser-policy-manager-administrator-guide-de-0.9.3.pdf",
+      "sha256": "2f4ac28db14c9f4fbb0da5145116cceadb0e12400ef9aeae328596bad928cc68"
+    },
+    {
+      "candidate_path": "zh-CN/browser-policy-manager-user-guide-zh-CN-0.9.3.pdf",
+      "guide_id": "user-guide",
+      "locale": "zh-CN",
+      "path": "pdf/zh-CN/browser-policy-manager-user-guide-zh-CN-0.9.3.pdf",
+      "sha256": "fea86dde3b272ffaa4b25488c5bf1ecd716c1118325a0fae9054c117f64654b9"
+    },
+    {
+      "candidate_path": "zh-CN/browser-policy-manager-administrator-guide-zh-CN-0.9.3.pdf",
+      "guide_id": "administrator-guide",
+      "locale": "zh-CN",
+      "path": "pdf/zh-CN/browser-policy-manager-administrator-guide-zh-CN-0.9.3.pdf",
+      "sha256": "b875920397fbe1e1fa4cc7d5922e492b408d1990dfa17cce97afcd0499a4512d"
+    },
+    {
+      "candidate_path": "fr/browser-policy-manager-user-guide-fr-0.9.3.pdf",
+      "guide_id": "user-guide",
+      "locale": "fr",
+      "path": "pdf/fr/browser-policy-manager-user-guide-fr-0.9.3.pdf",
+      "sha256": "5a447caee34be5f75d7cb0e10a488b7fcbd8bcc606dc44d4bed1fbca7864fd57"
+    },
+    {
+      "candidate_path": "fr/browser-policy-manager-administrator-guide-fr-0.9.3.pdf",
+      "guide_id": "administrator-guide",
+      "locale": "fr",
+      "path": "pdf/fr/browser-policy-manager-administrator-guide-fr-0.9.3.pdf",
+      "sha256": "907db69c688509ed5ff79e62938e94e55518e470637dbe51910e370a2070591e"
+    },
+    {
+      "candidate_path": "es-ES/browser-policy-manager-user-guide-es-ES-0.9.3.pdf",
+      "guide_id": "user-guide",
+      "locale": "es-ES",
+      "path": "pdf/es-ES/browser-policy-manager-user-guide-es-ES-0.9.3.pdf",
+      "sha256": "c16d67a6fabff392139b57451854b6394d23a9b4de9b06e80bfc0ca320f1e57c"
+    },
+    {
+      "candidate_path": "es-ES/browser-policy-manager-administrator-guide-es-ES-0.9.3.pdf",
+      "guide_id": "administrator-guide",
+      "locale": "es-ES",
+      "path": "pdf/es-ES/browser-policy-manager-administrator-guide-es-ES-0.9.3.pdf",
+      "sha256": "be06bb927d84658ff9be065fdedf10a5a0256b66e03112f3be0cd445fdf13262"
+    }
+  ],
+  "schema_version": 1,
+  "source_fingerprint": "f9de164afc3ce24313b56ffa905a35a23ee00ed2034a08d5a726969e3b1f6e62",
+  "source_revision": "43c362c65eded97106626e7535e5250e97574a6b"
+}

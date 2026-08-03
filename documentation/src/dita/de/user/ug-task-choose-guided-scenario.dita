@@ -7,7 +7,7 @@
     <prereq><p>Sie kennen den Profilzweck, den Sie unterstützen möchten.</p></prereq>
     <context><p>Szenarien sorgen dafür, dass der erste Durchgang aufgabenorientiert bleibt und die Grundlinie während der Überprüfung leichter zu erklären ist.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 1, Profilierung der &amp;-Basislinie.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 1 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die Szenariooptionen und ihre Beschreibungen in einfacher Sprache.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Wählen Sie das Szenario aus, das dem Bereitstellungsziel am nächsten kommt.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die betroffene Basislinienzusammenfassung, bevor Sie Voreinstellungen oder CIS-Ebenen hinzufügen.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

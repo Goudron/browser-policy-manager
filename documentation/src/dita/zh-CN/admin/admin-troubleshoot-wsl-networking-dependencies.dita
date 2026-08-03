@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-wsl-networking-dependencies" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>WSL 网络和过时依赖项故障排除</title>
+  <title>子系统网络和过时依赖项故障排除</title>
   <shortdesc>通过 WSL 访问问题、Linux 文件系统放置以及源更改后陈旧的 Python 依赖项诊断 Windows 10/11。</shortdesc>
   <taskbody>
     <prereq><p>当 Windows 无法访问 WSL 托管的 BPM 进程、探针在 WSL 内部工作但不能从 Windows 工作、文件性能在 <codeph>/mnt/c</codeph> 下不稳定或依赖项在 <codeph>git checkout &lt;approved-new-ref&gt;</codeph> 后显得过时时，请使用此过程。</p></prereq>

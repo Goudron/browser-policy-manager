@@ -19,7 +19,7 @@ EXPECTED_UPDATE_TOPICS = (
     "admin-task-verify-source-update-rollback-stop",
 )
 EXPECTED_UPDATE_KEYREFS = [f"topic.{topic_id}" for topic_id in EXPECTED_UPDATE_TOPICS]
-UPDATE_TOPICREF_OFFSET = 17
+UPDATE_TOPICREF_OFFSET = 20
 EXPECTED_STEP_COUNTS = {
     "admin-task-prepare-source-update-evidence": 4,
     "admin-task-refresh-source-revision-dependencies": 4,
@@ -138,7 +138,7 @@ def _normalized_text(root: ET.Element) -> str:
 def test_administrator_guide_maps_include_update_from_source_topics(locale: str) -> None:
     maps = DITA_ROOT / locale / "maps"
     admin_map = ET.parse(maps / "administrator-guide.ditamap").getroot()
-    topicrefs = [topicref.attrib for topicref in admin_map.findall("topicref")]
+    topicrefs = [topicref.attrib for topicref in admin_map.findall(".//topicref")]
     assert topicrefs[
         UPDATE_TOPICREF_OFFSET : UPDATE_TOPICREF_OFFSET + len(EXPECTED_UPDATE_KEYREFS)
     ] == [

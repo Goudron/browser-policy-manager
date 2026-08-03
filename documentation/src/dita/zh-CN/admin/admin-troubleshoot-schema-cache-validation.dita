@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-schema-cache-validation" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>排查架构缓存和 API 验证错误</title>
+  <title>排查架构缓存和编程接口验证错误</title>
   <shortdesc>诊断不可用的模式缓存、未知的模式通道和 Firefox 策略验证失败，而无需修补生成的模式工件。</shortdesc>
   <taskbody>
     <prereq><p>当 <codeph>POST $BPM_BASE_URL/api/validate/release-153</codeph>、<codeph>POST $BPM_BASE_URL/api/validate/beta-999</codeph> 或面向用户的验证返回 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>422</codeph> 或 <codeph>503</codeph> 时使用此过程；非对象文档可以返回 <codeph>200 ok=false</codeph> 和 <codeph>Expected object with policy mappings</codeph>。</p></prereq>

@@ -39,7 +39,7 @@ def test_english_guidance_uses_single_bpm_version_and_compact_library_order() ->
     surfaces = _topic("en", "ug-concept-choose-editor-surface")
 
     assert "no separate visible version" in version
-    assert "Firefox ESR 140.13 and Firefox Release 153" in version
+    assert "Firefox Release 153, Firefox ESR 153.0, and Firefox ESR 140.13" in version
     assert "action grid comes first" in library
     assert "immediately above the profile table" in library
     assert "compact shared context" in switcher

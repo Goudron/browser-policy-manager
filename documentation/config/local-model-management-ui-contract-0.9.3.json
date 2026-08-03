@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-model-management-ui-0.9.3",
+  "backlog_item": "BPM093-M10-03A",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-explicit-release-model-management-with-reviewed-post-install-activation",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "artifact_boundary": {
+    "source_contract": "documentation/config/local-chat-model-installation-contract-0.9.3.json",
+    "only_model_id": "qwen3-0.6b-q8_0-official-gguf",
+    "disclosure": ["upstream", "source_revision", "license", "byte_count", "sha256", "CPU expectation", "no fixed response-time SLA"],
+    "never_exposed": ["managed filesystem paths", "prompts", "conversation text", "credentials", "arbitrary model URLs", "arbitrary model identifiers"]
+  },
+  "ui_boundary": {
+    "initial_page_load": "The only enabled control is an explicit localized local-model inspection button. It does not fetch copy, inspect a model, poll, verify, start a worker or download.",
+    "after_inspect": "The portal obtains its same-locale static copy and one same-origin lifecycle status snapshot. It renders text-only disclosure, status and only deliberate lifecycle controls.",
+    "explicit_actions": ["install confirmation", "verification", "install cancellation", "removal confirmation"],
+    "progress": "Only an accepted explicit lifecycle operation triggers bounded same-origin status polling; installation progress is bytes and percentage, never a model/chat claim.",
+    "conversation": "The standalone M10-02 dialogue controls remain disabled. This UI itself never renders chat, retrieval, answers, web evidence or ordinary-search changes. When an explicitly configured M12B/M12A assistant invokes the same verified installation operation, the application may attempt its reviewed post-verification local runtime preparation; a preparation failure preserves the verified model and exposes only a safe state."
+  },
+  "api_boundary": {
+    "base_path": "/api/local-model",
+    "routes": ["GET status", "POST install", "POST verify", "POST remove", "POST cancel"],
+    "admission": ["actual streamed body cap of 1024 bytes", "strict Pydantic schema with extra fields forbidden", "exact same-origin JSON POST and host rejection", "per-session HttpOnly SameSite=Strict cookie", "one-use rotating CSRF token", "bounded in-memory session store"],
+    "operation": "One daemon lifecycle operation is serialized for the selected fixed artifact. Install cancellation is cooperative, leaves only the fixed non-runnable partial artifact and can resume through the verified M6 flow.",
+    "non_goals": ["assistant chat HTTP route", "SSE", "retrieval", "inference worker", "web request", "arbitrary artifact download", "ordinary documentation search replacement"]
+  },
+  "removal": "Removal reaches only the M6 fixed manifest-owned model, staging and quarantine locations and is possible only after a separate explicit confirmation.",
+  "verification": {
+    "unit_tests": ["tests/test_local_model_installation.py", "tests/test_local_model_management_api_093.py"],
+    "ui_contract": "documentation/tests/contract/test_local_model_management_ui_contract_0_9_3.py",
+    "architecture": "docs/architecture/local-model-management-ui-0.9.3.md"
+  }
+}

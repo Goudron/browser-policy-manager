@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-chat-runtime-validation-0.9.3",
+  "backlog_item": "BPM093-M6-07",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented",
+  "pins": {
+    "worker": {
+      "path": "documentation/config/local-chat-worker-contract-0.9.3.json",
+      "sha256": "4a13460df3f6de23f3f562eefa3d2d89f55135113ccf60dd5b077e6d65467e7f"
+    },
+    "evidence_packing": {
+      "path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json",
+      "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"
+    },
+    "availability_fallback": {
+      "path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json",
+      "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"
+    }
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "runtime_cases": {
+    "accepted_template": "The exact selected GGUF runs only with its Jinja template, --reasoning off, deterministic sampling, one stdin/stdout child, and no listener.",
+    "unicode_and_locale": "Each active locale is serialized as UTF-8 with its exact locale code. The worker does not translate, merge, or fall back to another locale.",
+    "bounded_output": "Each real probe requires nonempty UTF-8 display text with no <think> tag. The explicit 512-token runtime resource cap is not an answer word or paragraph target; M7 later validates answer grounding and citations.",
+    "determinism": "The serialized packet and fixed temperature 0, top-p 1, top-k 1, and seed 0 are deterministic. This task does not assert byte-identical neural output across runtime releases.",
+    "context": "Before worker invocation M5 EvidencePacker admits only current, citable same-locale JSON Lines within its exact 2,048-token budget. A packet outside worker byte/input limits is rejected; evidence text is never silently truncated by the worker.",
+    "lifecycle": "Focused tests prove cancellation, timeout, unload, one-active-generation, invalid artifacts, and disabled/no-model states without a second real-model benchmark."
+  },
+  "fallback": {
+    "rule": "Every unavailable worker state reports assistant_ready false and lexical_search_ready true. It neither starts a model nor changes the existing lexical documentation search or core /health/ready.",
+    "states": ["disabled", "not-installed", "incompatible", "cancelled", "crashed"]
+  },
+  "real_probe": {
+    "runner": "documentation/tools/run_local_chat_worker_validation_0_9_3.py",
+    "command": ".venv/bin/python documentation/tools/run_local_chat_worker_validation_0_9_3.py run",
+    "output": "Ignored digest-only report under documentation/.cache/bpm093-m6-07/. The runner emits factual flushed stdout progress by locale and never writes prompts or model output to its report.",
+    "network": "No network request, ordinary-search call, retrieval call, browser route, or listener is made."
+  },
+  "verification": {
+    "runtime_unit": "tests/test_local_inference_worker.py",
+    "contract": "documentation/tests/contract/test_local_chat_runtime_validation_0_9_3.py",
+    "architecture": "docs/architecture/local-chat-runtime-validation-0.9.3.md"
+  }
+}

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-select-cis-baseline" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>选择 CIS 基线和起始预设</title>
+  <title>选择安全基线基线和起始预设</title>
   <shortdesc>在详细审查之前选择与部署目标匹配的 Firefox 架构通道、入门预设和 CIS 层。</shortdesc>
   <taskbody>
-    <prereq><p>您有配置文件草稿，了解目标浏览器是否遵循 Firefox ESR 140.13 或 Firefox Release 153 架构行为，并且可以在导出之前检查值。</p></prereq>
+    <prereq><p>您有配置档案草稿，了解目标浏览器是否遵循 Firefox ESR 140.13、ESR 153.0 或 Release 153 架构行为，并且可以在导出之前检查值。</p></prereq>
     <context><p>起始预设表示环境形状，而 CIS 层添加 BPM 的映射硬化基线。将两者用作已审核的输入，而不是用作自动部署批准。</p></context>
     <steps>
-      <step><cmd>选择与目标部署匹配的 Firefox 架构通道：ESR 140.13 或版本 152。</cmd><info><p>预期结果：BPM 针对预期渠道验证可用策略和 托管首选项。</p></info></step>
+      <step><cmd>选择与目标部署匹配的 Firefox 架构通道：ESR 140.13、ESR 153.0 或 Release 153。</cmd><info><p>预期结果：BPM 针对预期通道验证可用策略和托管首选项。</p></info></step>
       <step><cmd>选择一个入门预设：用于托管办公室配置文件的基本公司、用于受限共享浏览的教室或信息亭、或用于强化 SOC 式工作站的受保护工作站。</cmd><info><p>预期结果：配置文件在应用 CIS 强化之前具有初始环境基线。</p></info></step>
-      <step><cmd>选择 CIS 1 级进行广泛的基线强化，或在部署接受更严格的控制和额外审查时选择 CIS 2 级。</cmd><info><p>预期结果：BPM 为选定的 Firefox 通道应用匹配的生成图层。</p></info></step>
+      <step><cmd>选择 CIS 1 级进行广泛的基线强化，或在部署接受更严格的控制和额外审查时选择 CIS 2 级。</cmd><info><p>预期结果：当选定的 Firefox 通道存在匹配层时，BPM 会应用该生成层。</p></info></step>
       <step><cmd>检查预设、CIS 层、导入、手动编辑或原始回退添加的值的源属性。</cmd><info><p>预期结果：导出前可以跟踪每个配置的值。</p></info></step>
       <step><cmd>在保存配置文件之前解决手动审核路径和冲突。</cmd><info><note type="warning">请勿将生成的配置文件视为 CIS 认证或官方基准和本地安全批准的替代品。</note></info></step>
       <step><cmd>仅在记录所选通道、预设、CIS 级别和手动决策后进行验证和导出。</cmd><info><p>预期结果：导出的 <codeph>policies.json</codeph> 是可审查的，并且与所选的 BPM 基线相关联。</p></info></step>

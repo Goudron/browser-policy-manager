@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.9.3
+
+Status: **Release candidate; implementation complete.**
+
+### Changed
+- Retained the BPM-owned deterministic documentation search as the released search experience;
+  its ranking and six-locale behavior remain independent from the assistant surface.
+- Added the six-locale documentation assistant UI and API boundary with a localized training notice.
+  In 0.9.3 it does not start a model worker, RAG index, generated-answer flow, citation flow, or
+  external-source request.
+- Preserved the local-only privacy and product-scope boundary: external sources are not exposed in
+  the release UI, and deferred model training, RAG answer quality, citations, and external search
+  remain outside 0.9.3.
+
+### Documentation
+- Completed the User and Administrator Guides in `en`, `ru`, `de`, `zh-CN`, `fr`, and `es-ES`,
+  including the product overview, minimum system requirements, search/assistant boundary, current
+  Firefox schema header, editorial and terminology review, and localized navigation.
+- Generated and verified both guide PDFs for all six locales, the versioned documentation delivery
+  directory, checksums, package metadata, and the installed documentation artifact used by `make dev`.
+
+### Quality
+- Completed deterministic-search, locale, security/privacy, documentation, PDF, package,
+  reproducibility, and browser smoke release gates. Deferred model/RAG quality is not represented as
+  a 0.9.3 quality result.
+
+### Known boundaries
+- Local model training and RAG-generated answers are planned for a later release. The 0.9.3
+  assistant truthfully reports that training is in progress; it does not claim model readiness.
+
 ## 0.9.2
 
 Status: **Release candidate; implementation complete.**

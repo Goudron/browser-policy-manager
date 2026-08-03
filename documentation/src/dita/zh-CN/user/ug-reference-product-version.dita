@@ -6,7 +6,7 @@
   <refbody>
     <section id="a-version-location"><title>版本显示位置</title><p>库、引导式编辑器、所有设置、JSON 编辑器、比较和文档中的统一标头都会显示正在运行的 BPM 版本。在库中，工作区数量与“库中的配置文件”标签显示为两行简洁文本。</p></section>
     <section id="a-version-scope"><title>版本范围</title><p>产品版本标识 BPM 行为，而不是端点上安装的 Firefox 浏览器版本。</p></section>
-    <section id="a-schema-version"><title>架构通道</title><p>当前版本支持 Firefox ESR 140.13 和 Firefox Release 153。架构通道需单独选择，并会影响验证和可用控件。</p></section>
+    <section id="a-schema-version"><title>架构通道</title><p>当前版本支持 Firefox Release 153、Firefox ESR 153.0 和 Firefox ESR 140.13。架构通道需单独选择，并会影响验证和可用控件。</p></section>
     <section id="a-version-recovery"><title>恢复</title><p>如果产品行为与指南不匹配，请在报告不匹配之前记录 BPM 版本、架构通道、路线、区域设置和可见状态。</p></section>
   </refbody>
   <related-links>

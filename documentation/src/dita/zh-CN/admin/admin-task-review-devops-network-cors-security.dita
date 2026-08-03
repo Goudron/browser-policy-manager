@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-devops-network-cors-security" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>检查网络、CORS 和安全限制</title>
+  <title>检查网络、跨源资源共享和安全限制</title>
   <shortdesc>在使源运行的 BPM 实例可访问之前，请检查主机、端口、重新加载、运行状况探测、CORS 默认值和安全限制。</shortdesc>
   <taskbody>
     <prereq><p>源进程可以使用 <codeph>make dev</codeph> 启动，管理员可以更改 <codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_RELOAD</codeph>、<codeph>BPM_ENABLE_CORS</codeph> 和 <codeph>BPM_CORS_ALLOW_ORIGINS</codeph>。</p></prereq>

@@ -25,6 +25,7 @@ TROUBLESHOOTING_TOPICS = (
 )
 TROUBLESHOOTING_KEYREFS = tuple(f"topic.{topic_id}" for topic_id in TROUBLESHOOTING_TOPICS)
 PRODUCTION_BOUNDARY_KEYREF_COUNT = 4
+LOCAL_ASSISTANT_KEYREF_COUNT = 3
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.72,
     "de": 0.72,
@@ -139,10 +140,10 @@ def test_troubleshooting_topics_are_keyed_and_reachable_from_admin_guide() -> No
         admin_guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/administrator-guide.ditamap").read_text(encoding="utf-8")
         )
-        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall("topicref")]
-        troubleshooting_block_end = len(topicrefs) - PRODUCTION_BOUNDARY_KEYREF_COUNT
+        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall(".//topicref")]
+        troubleshooting_start = topicrefs.index(TROUBLESHOOTING_KEYREFS[0])
         assert topicrefs[
-            troubleshooting_block_end - len(TROUBLESHOOTING_KEYREFS) : troubleshooting_block_end
+            troubleshooting_start : troubleshooting_start + len(TROUBLESHOOTING_KEYREFS)
         ] == list(TROUBLESHOOTING_KEYREFS)
 
 

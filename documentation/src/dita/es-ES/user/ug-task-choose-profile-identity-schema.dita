@@ -5,11 +5,11 @@
   <shortdesc>Elija el nombre del perfil guardado y el canal del esquema de Firefox antes de configurar los ajustes guiados.</shortdesc>
   <taskbody>
     <prereq><p>Abra un perfil nuevo o guardado en Editor guiado.</p></prereq>
-    <context><p>Utilice el Paso 1, Línea base del perfil &amp;, para establecer el nombre y el canal de esquema que impulsará la validación y los controles disponibles.</p></context>
+    <context><p>Use el paso 1 para establecer el nombre y el canal de esquema. Ambos determinan la validación y los controles disponibles.</p></context>
     <steps>
       <step><cmd>Confirme que está editando el borrador del perfil deseado.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Introduzca un nombre de perfil claro.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Elija el canal de esquema de Firefox, como la versión 152 o ESR 140.13.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija el canal de esquema de Firefox: ESR 140.13, ESR 153.0 o Release 153.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Revise si el canal seleccionado cambia los controles visibles antes de continuar.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>El borrador guiado tiene una identidad y un canal de esquema estables.</p></result>

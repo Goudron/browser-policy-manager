@@ -8,7 +8,7 @@
     <context><p>La búsqueda guiada es útil cuando conoce el objetivo de la política pero no el paso que contiene la familia de controles.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Resultados de búsqueda de ajustes en el «Editor guiado»</title>
-        <image keyref="screenshot.guided-settings-search" placement="break">
+        <image keyref="screenshot.guided-settings-search" placement="break" scalefit="yes" align="center">
           <alt>Editor guiado búsqueda que muestra resultados de configuración relacionados con la página de inicio.</alt>
         </image>
       </fig>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-schema-dependent-guided-controls" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Schema-dependent Guided controls</title>
-  <shortdesc>Some Guided controls appear only when the selected Firefox schema supports them, including Release-only AI &amp; smart-feature policies.</shortdesc>
+  <title>Find schema-dependent Guided editor controls</title>
+  <shortdesc>Guided editor shows only the controls supported by the selected Firefox schema.</shortdesc>
   <refbody>
-    <section id="a-release-controls"><title>Release-supported controls</title><p>On Firefox Release 153, Step 5 can show supported AI &amp; smart features, visual search, and smart browser feature policies when they exist in the schema.</p></section>
-    <section id="a-esr-unavailable"><title>ESR unavailable controls</title><p>On ESR 140.13, unsupported browser AI-policy controls are absent or unavailable. Do not force them into Guided editor as if they were supported.</p></section>
-    <section id="a-no-documentation-ai"><title>No documentation AI functionality</title><p>This reference explains existing Firefox browser policy controls only; it does not add AI functionality to the 0.9.1 documentation portal, including RAG, embeddings, generative search, or generative answers.</p></section>
+    <section id="a-release-controls"><title>Controls in current schemas</title><p>On Release 153 and ESR 153.0, Step 5 can show supported AI and smart-feature, visual-search, and smart-browser policies.</p></section>
+    <section id="a-esr-unavailable"><title>Controls unavailable on ESR</title><p>On ESR 140.13, unsupported browser AI-policy controls are absent or unavailable. Do not add them manually as if Guided editor supported them.</p></section>
+    <section id="a-no-documentation-ai"><title>Separate from the documentation assistant</title><p>This reference explains existing Firefox browser policy controls only. Those controls do not configure, enable, or restrict the separate documentation assistant.</p></section>
     <section id="a-recovery"><title>Recovery</title><p>If a control is missing, confirm the schema channel, check All settings for the raw support boundary, and record the unsupported state during review.</p></section>
   </refbody>
   <related-links>

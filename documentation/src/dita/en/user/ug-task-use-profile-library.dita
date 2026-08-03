@@ -8,7 +8,7 @@
     <context><p>The Library lists saved profiles and shows filtered and total counts so you know whether filters or search are hiding rows. Its action grid comes first; the filter row is immediately above the profile table.</p>
       <fig id="screenshot-library-overview">
         <title>Library overview</title>
-        <image keyref="screenshot.library-overview" placement="break">
+        <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
           <alt>Library showing saved profile rows, counts, and profile actions.</alt>
         </image>
       </fig>

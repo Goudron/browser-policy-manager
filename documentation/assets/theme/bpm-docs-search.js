@@ -168,20 +168,88 @@
     });
   };
 
-  const normalize = (value) =>
+  const unique = (items) => [...new Set(items.filter(Boolean))];
+
+  const isCjk = (character) => {
+    const codepoint = character.codePointAt(0) || 0;
+    return (
+      (codepoint >= 0x3400 && codepoint <= 0x4dbf) ||
+      (codepoint >= 0x4e00 && codepoint <= 0x9fff) ||
+      (codepoint >= 0xf900 && codepoint <= 0xfaff)
+    );
+  };
+
+  const isLatin = (character) => /\p{Script=Latin}/u.test(character);
+
+  const casefold = (value) =>
     String(value || "")
       .normalize("NFKC")
-      .toLocaleLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase("und")
+      .replace(/ß/g, "ss")
+      .replace(/ς/g, "σ");
+
+  const stripLatinDiacritics = (value) => {
+    let result = "";
+    let previousBaseWasLatin = false;
+    for (const character of String(value || "").normalize("NFD")) {
+      if (/\p{Mark}/u.test(character)) {
+        if (!previousBaseWasLatin) {
+          result += character;
+        }
+        continue;
+      }
+      result += character;
+      previousBaseWasLatin = isLatin(character);
+    }
+    return result.normalize("NFC");
+  };
+
+  const normalizedText = (value, normalization = {}) => {
+    let normalized = casefold(value);
+    if (normalization.strip_diacritics) {
+      normalized = stripLatinDiacritics(normalized);
+    }
+    return normalized;
+  };
+
+  const cjkExpansions = (token) => {
+    const run = [...token].filter(isCjk).join("");
+    if (!run) {
+      return [];
+    }
+    return [
+      run,
+      ...[...run],
+      ...[...run].slice(0, -1).map((character, index) => character + [...run][index + 1]),
+    ];
+  };
+
+  const searchTokens = (value, normalization = {}) => {
+    const tokens = [];
+    const compoundParts = [];
+    const expression = /\/[^\s"'<>]+|[\p{Letter}\p{Number}]+(?:[-._:/][\p{Letter}\p{Number}]+)+|[\p{Letter}\p{Number}]+/gu;
+    const normalized = normalizedText(value, normalization);
+    for (const match of normalized.matchAll(expression)) {
+      const token = match[0].replace(/^[.,;!?()[\]{}<>"']+|[.,;!?()[\]{}<>"']+$/gu, "");
+      if (token) {
+        tokens.push(token, ...cjkExpansions(token));
+        if (/^[\p{Letter}\p{Number}]+$/u.test(token) && ![...token].some(isCjk)) {
+          compoundParts.push(token);
+        }
+      }
+    }
+    tokens.push(
+      ...compoundParts.slice(0, -1).map((part, index) => `${part}-${compoundParts[index + 1]}`),
+    );
+    return unique(tokens);
+  };
+
+  const queryTokens = (query, index) => searchTokens(query, index.normalization).slice(0, 24);
+
+  const normalizedComparableText = (value, normalization = {}) =>
+    normalizedText(value, normalization)
       .replace(/[^\p{Letter}\p{Number}._:/-]+/gu, " ")
       .trim();
-
-  const queryTokens = (query) =>
-    normalize(query)
-      .split(/\s+/u)
-      .filter(Boolean)
-      .slice(0, 24);
 
   const values = (value) => {
     if (Array.isArray(value)) {
@@ -200,9 +268,9 @@
     parent.appendChild(document.createTextNode(text));
   };
 
-  const appendMarkedText = (parent, text, tokens) => {
+  const appendMarkedText = (parent, text, tokens, normalization) => {
     const source = String(text || "");
-    const folded = normalize(source);
+    const folded = normalizedComparableText(source, normalization);
     const token = tokens.find((candidate) => candidate && folded.includes(candidate));
     if (!token) {
       appendText(parent, source);
@@ -217,46 +285,129 @@
     appendText(parent, source.slice(end));
   };
 
-  const searchableText = (documentRecord) => {
-    const searchable = documentRecord.searchable || {};
-    return [
-      searchable.title,
-      searchable.shortdesc,
-      ...(searchable.headings || []),
-      searchable.body,
-      ...(searchable.keywords || []),
-      ...(searchable.identifiers || []),
-      ...(searchable.aliases || []),
-    ]
-      .map((part) => (Array.isArray(part) ? part.join(" ") : String(part || "")))
-      .join(" ");
+  const tokenSet = (values) => new Set(Array.isArray(values) ? values : []);
+
+  const queryAliasIds = (tokens, index) => {
+    const queryTokenSet = new Set(tokens);
+    return (index.normalization?.alias_groups || [])
+      .filter((group) => {
+        return (group.terms || []).some((term) => {
+          const termTokens = searchTokens(term, index.normalization);
+          return termTokens.length && termTokens.every((token) => queryTokenSet.has(token));
+        });
+      })
+      .map((group) => group.alias_id)
+      .sort();
   };
 
-  const scoreDocument = (documentRecord, tokens) => {
+  const maxTypoDistance = (token, ranking) => {
+    const tolerance = ranking.typo_tolerance || {};
+    if (token.length < tolerance.min_token_length || token.length > tolerance.max_token_length) {
+      return 0;
+    }
+    const rule = (tolerance.max_distance_by_length || []).find(
+      (candidate) => token.length >= candidate.min_length && token.length <= candidate.max_length,
+    );
+    return rule ? rule.max_distance : 0;
+  };
+
+  const typoExcluded = (token, ranking) =>
+    (ranking.typo_tolerance?.excluded_token_patterns || []).some((pattern) =>
+      new RegExp(pattern, "iu").test(token),
+    );
+
+  const boundedLevenshtein = (left, right, limit) => {
+    if (Math.abs(left.length - right.length) > limit) {
+      return null;
+    }
+    let previous = Array.from({ length: right.length + 1 }, (_value, index) => index);
+    for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+      const current = [leftIndex];
+      let rowMinimum = leftIndex;
+      for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+        const substitution = previous[rightIndex - 1] + (left[leftIndex - 1] !== right[rightIndex - 1]);
+        const insertion = current[rightIndex - 1] + 1;
+        const deletion = previous[rightIndex] + 1;
+        const value = Math.min(substitution, insertion, deletion);
+        current.push(value);
+        rowMinimum = Math.min(rowMinimum, value);
+      }
+      if (rowMinimum > limit) {
+        return null;
+      }
+      previous = current;
+    }
+    return previous.at(-1) <= limit ? previous.at(-1) : null;
+  };
+
+  const boundedTypoMatches = (tokens, fields, ranking) => {
+    const exactPool = new Set(Object.values(fields).flat());
+    return tokens.flatMap((token) => {
+      if (exactPool.has(token) || typoExcluded(token, ranking)) {
+        return [];
+      }
+      const limit = maxTypoDistance(token, ranking);
+      if (!limit) {
+        return [];
+      }
+      const matches = [];
+      for (const field of ranking.typo_tolerance?.fields || []) {
+        for (const candidate of fields[field] || []) {
+          if (candidate === token || typoExcluded(candidate, ranking)) {
+            continue;
+          }
+          const distance = boundedLevenshtein(token, candidate, limit);
+          if (distance !== null) {
+            matches.push({ field, candidate, distance });
+          }
+        }
+      }
+      matches.sort((left, right) =>
+        left.distance - right.distance || left.field.localeCompare(right.field) || left.candidate.localeCompare(right.candidate),
+      );
+      return matches.length ? [matches[0]] : [];
+    });
+  };
+
+  const scoreDocument = (documentRecord, tokens, index) => {
     if (!tokens.length) {
-      return 1;
+      return { score: 1, breakdown: {} };
     }
-    const searchable = documentRecord.searchable || {};
-    const title = normalize(searchable.title);
-    const identifiers = normalize((searchable.identifiers || []).join(" "));
-    const aliases = normalize((searchable.aliases || []).join(" "));
-    const body = normalize(searchableText(documentRecord));
-    let score = 0;
-    for (const token of tokens) {
-      if (identifiers.split(/\s+/u).includes(token)) {
-        score += 80;
-      }
-      if (title.includes(token)) {
-        score += 40;
-      }
-      if (aliases.includes(token)) {
-        score += 30;
-      }
-      if (body.includes(token)) {
-        score += 10;
-      }
+    const ranking = index.ranking || {};
+    const weights = ranking.weights || {};
+    const fields = documentRecord.normalized?.fields || {};
+    const unmatchedTechnicalIdentifier = tokens.some(
+      (token) => typoExcluded(token, ranking) && !tokenSet(fields.identifiers).has(token),
+    );
+    if (unmatchedTechnicalIdentifier) {
+      return { score: 0, breakdown: {} };
     }
-    return score;
+    const queryTokenSet = new Set(tokens);
+    const meaningfulQueryTokens = [...queryTokenSet].filter(
+      (token) => token.length > 1 || !isCjk(token),
+    );
+    const matches = (field) => meaningfulQueryTokens.filter((token) => tokenSet(fields[field]).has(token));
+    const documentAliasIds = new Set(documentRecord.normalized?.alias_ids || []);
+    const aliasIds = queryAliasIds(tokens, index).filter((aliasId) => documentAliasIds.has(aliasId));
+    const directAliasIds = aliasIds.filter(
+      (aliasId) => documentRecord.normalized?.alias_match_sources?.[aliasId]?.includes("target_topic"),
+    );
+    const exactIdentifiers = matches("identifiers");
+    const title = matches("title");
+    const aliases = matches("aliases");
+    const headings = matches("headings");
+    const body = matches("body");
+    const typos = boundedTypoMatches(tokens, fields, ranking);
+    const breakdown = {
+      exact_identifier: exactIdentifiers.length * (weights.exact_identifier || 0),
+      title: title.length * (weights.title || 0),
+      alias: (aliases.length + aliasIds.length + directAliasIds.length) * (weights.alias || 0),
+      heading: headings.length * (weights.heading || 0),
+      body: body.length * (weights.body || 0),
+      bounded_typo: typos.length * (weights.bounded_typo || 0),
+      recency: weights.recency || 0,
+    };
+    return { score: Object.values(breakdown).reduce((total, value) => total + value, 0), breakdown };
   };
 
   const documentMatchesFilters = (documentRecord, activeFilters) => {
@@ -274,14 +425,23 @@
   };
 
   const safeResultUrl = (locale, url) => {
-    const value = String(url || "");
-    return value.startsWith(`/help/${locale}/`) ? value : "";
+    const origin = window.location?.origin || "https://bpm.invalid";
+    try {
+      const resolved = new URL(String(url || ""), origin);
+      const localeRoot = `/help/${locale}/`;
+      if (resolved.origin !== origin || !resolved.pathname.startsWith(localeRoot)) {
+        return "";
+      }
+      return `${resolved.pathname}${resolved.search}${resolved.hash}`;
+    } catch {
+      return "";
+    }
   };
 
-  const snippetText = (documentRecord, tokens) => {
+  const snippetText = (documentRecord, tokens, normalization) => {
     const searchable = documentRecord.searchable || {};
     const source = searchable.shortdesc || searchable.body || searchable.title || "";
-    const folded = normalize(source);
+    const folded = normalizedComparableText(source, normalization);
     const token = tokens.find((candidate) => folded.includes(candidate));
     if (!token) {
       return String(source).slice(0, 220);
@@ -327,6 +487,31 @@
     return filters;
   };
 
+  const filterEntries = (filters) => {
+    if (filters instanceof Map) {
+      return [...filters.entries()];
+    }
+    return Object.entries(filters || {});
+  };
+
+  const filterValues = (value) => (value instanceof Set ? [...value] : values(value));
+
+  const normalizeFilters = (index, filters) => {
+    const normalized = new Map();
+    const definitions = index.filtering?.facet_fields || {};
+    for (const [field, selected] of filterEntries(filters)) {
+      const allowed = new Set(values(definitions[field]?.values));
+      if (!allowed.size) {
+        continue;
+      }
+      const accepted = new Set(filterValues(selected).filter((value) => allowed.has(value)));
+      if (accepted.size) {
+        normalized.set(field, accepted);
+      }
+    }
+    return normalized;
+  };
+
   function updateActiveFilterSummary(root, filters = selectedFilters(root)) {
     const state = root.querySelector("[data-search-active-filters]");
     const summary = root.querySelector("[data-search-active-filters-summary]");
@@ -353,44 +538,14 @@
     updateActiveFilterSummary(root);
   };
 
-  const updateUrlState = (root, query, filters, index) => {
-    const parameters = new URLSearchParams();
-    const urlParameters = index.filtering?.url_state?.parameters || {};
-    if (query) {
-      parameters.set("q", query);
-    }
-    for (const [field, selected] of filters.entries()) {
-      const parameter = urlParameters[field] || field;
-      [...selected].sort().forEach((value) => parameters.append(parameter, value));
-    }
-    const queryString = parameters.toString();
+  const updateUrlState = (root, state, index) => {
+    const queryString = BrowserSearchAdapter.serialize(index, state);
     const nextUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ""}${window.location.hash}`;
     window.history.replaceState(null, "", nextUrl);
   };
 
-  const currentUrlState = (index) => {
-    const parameters = new URLSearchParams(window.location.search);
-    const urlParameters = index.filtering?.url_state?.parameters || {};
-    const fieldByParameter = new Map(Object.entries(urlParameters).map(([field, parameter]) => [parameter, field]));
-    const filters = new Map();
-    for (const [parameter, value] of parameters.entries()) {
-      if (parameter === "q") {
-        continue;
-      }
-      const field = fieldByParameter.get(parameter);
-      if (!field) {
-        continue;
-      }
-      if (!filters.has(field)) {
-        filters.set(field, new Set());
-      }
-      filters.get(field).add(value);
-    }
-    return {
-      query: parameters.get("q") || "",
-      filters,
-    };
-  };
+  const currentUrlState = (index, recentQuery = "") =>
+    BrowserSearchAdapter.hydrate(index, window.location.search, recentQuery);
 
   const buildFilters = (root, index, initialFilters) => {
     const container = root.querySelector("[data-search-filters]");
@@ -429,7 +584,7 @@
     }
   };
 
-  const renderResults = (root, locale, documents, tokens) => {
+  const renderResults = (root, locale, documents, tokens, index) => {
     const results = root.querySelector("[data-search-results]");
     if (!results) {
       return;
@@ -439,13 +594,18 @@
       const item = document.createElement("li");
       const article = document.createElement("article");
       const heading = document.createElement("h4");
-      const link = document.createElement("a");
       const href = safeResultUrl(locale, documentRecord.url);
+      const title = href ? document.createElement("a") : document.createElement("span");
       if (href) {
-        link.href = href;
+        title.href = href;
       }
-      appendMarkedText(link, documentRecord.searchable?.title || documentRecord.topic_id, tokens);
-      heading.appendChild(link);
+      appendMarkedText(
+        title,
+        documentRecord.searchable?.title || documentRecord.topic_id,
+        tokens,
+        index.normalization,
+      );
+      heading.appendChild(title);
 
       const metadata = document.createElement("p");
       metadata.className = "bpm-docs-search-result-meta";
@@ -461,7 +621,7 @@
 
       const snippet = document.createElement("p");
       snippet.className = "bpm-docs-search-snippet";
-      appendMarkedText(snippet, snippetText(documentRecord, tokens), tokens);
+      appendMarkedText(snippet, snippetText(documentRecord, tokens, index.normalization), tokens, index.normalization);
 
       article.appendChild(heading);
       article.appendChild(metadata);
@@ -471,6 +631,130 @@
     }
   };
 
+  const compareRankedDocuments = (left, right, locale) => {
+    if (right.score !== left.score) {
+      return right.score - left.score;
+    }
+    for (const field of ["exact_identifier", "title", "alias"]) {
+      if (right.breakdown[field] !== left.breakdown[field]) {
+        return right.breakdown[field] - left.breakdown[field];
+      }
+    }
+    return (
+      String(left.documentRecord.guide_id || "").localeCompare(String(right.documentRecord.guide_id || ""), locale)
+      || String(left.documentRecord.topic_id || "").localeCompare(String(right.documentRecord.topic_id || ""), locale)
+    );
+  };
+
+  const rankDocuments = (index, query, documents = index.documents || []) => {
+    const tokens = queryTokens(query, index);
+    return documents
+      .map((documentRecord) => ({ documentRecord, ...scoreDocument(documentRecord, tokens, index) }))
+      .filter((result) => result.score > 0)
+      .sort((left, right) => compareRankedDocuments(left, right, index.locale || "en"));
+  };
+
+  const BrowserSearchAdapter = Object.freeze({
+    contractId: "bpm-doc-search-browser-adapter-0.9.3",
+    schemaVersion: 1,
+    hydrate(index, search, recentQuery = "") {
+      const parameters = new URLSearchParams(String(search || "").replace(/^\?/u, ""));
+      const urlParameters = index.filtering?.url_state?.parameters || {};
+      const fieldByParameter = new Map(
+        Object.entries(urlParameters).map(([field, parameter]) => [parameter, field]),
+      );
+      const filters = new Map();
+      for (const [parameter, value] of parameters.entries()) {
+        if (parameter === "q") {
+          continue;
+        }
+        const field = fieldByParameter.get(parameter);
+        if (!field) {
+          continue;
+        }
+        if (!filters.has(field)) {
+          filters.set(field, new Set());
+        }
+        filters.get(field).add(value);
+      }
+      return {
+        query: (parameters.has("q") ? parameters.get("q") : recentQuery || "")
+          .slice(0, MAX_QUERY_LENGTH)
+          .trim(),
+        filters: normalizeFilters(index, filters),
+      };
+    },
+    serialize(index, state) {
+      const parameters = new URLSearchParams();
+      const query = String(state?.query || "").slice(0, MAX_QUERY_LENGTH).trim();
+      const filters = normalizeFilters(index, state?.filters);
+      const urlParameters = index.filtering?.url_state?.parameters || {};
+      if (query) {
+        parameters.set("q", query);
+      }
+      for (const [field, selected] of filters.entries()) {
+        const parameter = urlParameters[field] || field;
+        [...selected].sort().forEach((value) => parameters.append(parameter, value));
+      }
+      return parameters.toString();
+    },
+    query(index, state) {
+      const query = String(state?.query || "").slice(0, MAX_QUERY_LENGTH).trim();
+      const filters = normalizeFilters(index, state?.filters);
+      const tokens = queryTokens(query, index);
+      if (!tokens.length && !filters.size) {
+        return {
+          query,
+          filters,
+          tokens,
+          documents: [],
+          rankingEvidence: [],
+          facetCounts: index.facet_counts || {},
+          resultCount: 0,
+          statusKind: "ready",
+        };
+      }
+      const ranked = rankDocuments(
+        index,
+        query,
+        (index.documents || []).filter((documentRecord) => documentMatchesFilters(documentRecord, filters)),
+      );
+      const visible = ranked.slice(0, MAX_RESULTS);
+      const documents = visible.map((item) => item.documentRecord);
+      return {
+        query,
+        filters,
+        tokens,
+        documents,
+        rankingEvidence: visible.map((item) => ({
+          topic_id: item.documentRecord.topic_id,
+          document_id: item.documentRecord.document_id || "",
+          score: item.score,
+          score_breakdown: item.breakdown,
+          matched_fields: Object.entries(item.breakdown)
+            .filter(([field, value]) => field !== "recency" && value > 0)
+            .map(([field]) => field),
+          identifiers: values(item.documentRecord.searchable?.identifiers),
+          filter_facets: item.documentRecord.filter_facets || {},
+        })),
+        facetCounts: index.facet_counts || {},
+        resultCount: documents.length,
+        statusKind: documents.length === 0
+          ? "no-results"
+          : documents.length === 1
+            ? "result-singular"
+            : "result-plural",
+      };
+    },
+    safeResultUrl,
+  });
+
+  window.BpmDocsSearchRanking = Object.freeze({
+    queryTokens,
+    rankDocuments,
+  });
+  window.BpmDocsSearchAdapter = BrowserSearchAdapter;
+
   const runSearch = (root, index, options = {}) => {
     const locale = root.dataset.searchLocale || index.locale || "en";
     const input = root.querySelector("#bpm-docs-search-query");
@@ -478,11 +762,12 @@
     if (!(input instanceof HTMLInputElement) || !status) {
       return;
     }
-    const query = input.value.slice(0, MAX_QUERY_LENGTH).trim();
-    const tokens = queryTokens(query);
-    const filters = selectedFilters(root);
-    updateActiveFilterSummary(root, filters);
-    if (!tokens.length && !filters.size) {
+    const result = BrowserSearchAdapter.query(index, {
+      query: input.value,
+      filters: selectedFilters(root),
+    });
+    updateActiveFilterSummary(root, result.filters);
+    if (result.statusKind === "ready") {
       const results = root.querySelector("[data-search-results]");
       if (results) {
         clearNode(results);
@@ -490,41 +775,21 @@
       status.textContent = root.dataset.labelReady || "Search ready.";
       if (!options.skipState) {
         writeRecentQuery(locale, "");
-        updateUrlState(root, "", filters, index);
+        updateUrlState(root, result, index);
       }
       return;
     }
-    const ranked = [];
-    for (const documentRecord of index.documents || []) {
-      if (!documentMatchesFilters(documentRecord, filters)) {
-        continue;
-      }
-      const score = scoreDocument(documentRecord, tokens);
-      if (score > 0) {
-        ranked.push({ documentRecord, score });
-      }
-    }
-    ranked.sort((left, right) => {
-      if (right.score !== left.score) {
-        return right.score - left.score;
-      }
-      return String(left.documentRecord.searchable?.title || "").localeCompare(
-        String(right.documentRecord.searchable?.title || ""),
-        locale,
-      );
-    });
-    const visible = ranked.slice(0, MAX_RESULTS).map((item) => item.documentRecord);
-    renderResults(root, locale, visible, tokens);
-    if (!visible.length) {
+    renderResults(root, locale, result.documents, result.tokens, index);
+    if (result.statusKind === "no-results") {
       status.textContent = root.dataset.labelNoResults || "No results.";
-    } else if (visible.length === 1) {
+    } else if (result.statusKind === "result-singular") {
       status.textContent = root.dataset.labelResultSingular || "1 result";
     } else {
-      status.textContent = `${visible.length} ${root.dataset.labelResultPlural || "results"}`;
+      status.textContent = `${result.resultCount} ${root.dataset.labelResultPlural || "results"}`;
     }
     if (!options.skipState) {
-      writeRecentQuery(locale, query);
-      updateUrlState(root, query, filters, index);
+      writeRecentQuery(locale, result.query);
+      updateUrlState(root, result, index);
     }
   };
 
@@ -550,9 +815,9 @@
       return;
     }
     const locale = root.dataset.searchLocale || index.locale || "en";
-    const state = currentUrlState(index);
-    input.value = (state.query || readRecentQuery(locale)).slice(0, MAX_QUERY_LENGTH);
+    const state = currentUrlState(index, readRecentQuery(locale));
     buildFilters(root, index, state.filters);
+    input.value = state.query;
     updateActiveFilterSummary(root);
     root.querySelectorAll("[data-search-filter]").forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
@@ -591,6 +856,25 @@
       const toggle = root.querySelector("[data-search-advanced-toggle]");
       const expanded = toggle?.getAttribute("aria-expanded") === "true";
       setSearchExpanded(root, !expanded);
+    });
+    root.addEventListener("keydown", (event) => {
+      const panel = root.querySelector("[data-search-advanced-panel]");
+      if (event.key !== "Escape" || !panel || panel.hidden || !root.contains(document.activeElement)) {
+        return;
+      }
+      event.preventDefault();
+      setSearchExpanded(root, false);
+      root.querySelector("[data-search-advanced-toggle]")?.focus();
+    });
+    window.addEventListener("popstate", () => {
+      const restored = currentUrlState(index);
+      input.value = restored.query;
+      root.querySelectorAll("[data-search-filter]").forEach((checkbox) => {
+        if (checkbox instanceof HTMLInputElement) {
+          checkbox.checked = Boolean(restored.filters.get(checkbox.dataset.searchFilter || "")?.has(checkbox.value));
+        }
+      });
+      runSearch(root, index, { skipState: true });
     });
     status.textContent = root.dataset.labelReady || "Search ready.";
     if (state.query || state.filters.size) {

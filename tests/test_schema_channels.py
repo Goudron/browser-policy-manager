@@ -3,6 +3,8 @@ from app.core.schema_channels import (
     CURRENT_RELEASE_SCHEMA_CHANNEL,
     DEFAULT_RELEASE_SCHEMA_CHANNEL,
     DEFAULT_SCHEMA_CHANNEL,
+    HEADER_SCHEMA_CHANNEL_VALUES,
+    HEADER_SCHEMA_CHANNELS,
     RAW_SCHEMA_DIRS,
     SCHEMA_CHANNELS,
     SCHEMA_FILENAMES,
@@ -27,6 +29,8 @@ def test_schema_channels_constants_are_consistent():
         channel.value: channel.mozilla_version for channel in SCHEMA_CHANNELS
     }
     assert SUPPORTED_SCHEMA_CHANNELS == ("esr-140.13", "esr-153.0", "release-153")
+    assert HEADER_SCHEMA_CHANNEL_VALUES == ("release-153", "esr-153.0", "esr-140.13")
+    assert tuple(channel.value for channel in HEADER_SCHEMA_CHANNELS) == HEADER_SCHEMA_CHANNEL_VALUES
     assert SUPPORTED_SCHEMA_CHANNEL_SET == {"esr-140.13", "esr-153.0", "release-153"}
     assert SUPPORTED_ESR_SCHEMA_CHANNELS == ("esr-140.13", "esr-153.0")
     assert DEFAULT_SCHEMA_CHANNEL == "esr-140.13"

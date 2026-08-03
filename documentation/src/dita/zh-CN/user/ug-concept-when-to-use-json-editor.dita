@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>何时使用 JSON 编辑器</title>
+  <title>何时使用数据交换文档编辑器</title>
   <shortdesc>使用 JSON 编辑器 进行精确的原始审查、迁移检查、故障排除以及更容易作为原始 policies.json 处理的值。</shortdesc>
   <conbody>
     <p>JSON 编辑器 功能强大，但比可视化编辑器缺乏指导。当用户需要边界文档精度时，这应该是一个深思熟虑的选择。</p>

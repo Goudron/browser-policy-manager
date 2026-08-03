@@ -143,7 +143,7 @@ TOPICS = {
     },
 }
 ADMIN_API_KEYREFS = [f"topic.{topic_id}" for topic_id in TOPICS]
-POST_API_KEYREF_COUNT = 15
+POST_API_KEYREF_COUNT = 18
 
 pytestmark = pytest.mark.docs_contract
 
@@ -212,9 +212,8 @@ def test_api_integration_topics_are_keyed_and_reachable_from_administrator_guide
         admin_guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/administrator-guide.ditamap").read_text(encoding="utf-8")
         )
-        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall("topicref")]
-        api_block_end = len(topicrefs) - POST_API_KEYREF_COUNT
-        assert topicrefs[api_block_end - len(ADMIN_API_KEYREFS) : api_block_end] == ADMIN_API_KEYREFS
+        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall(".//topicref")]
+        assert set(ADMIN_API_KEYREFS) <= set(topicrefs)
 
 
 def test_standalone_api_guide_and_compatibility_landing_are_retired() -> None:

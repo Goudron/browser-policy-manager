@@ -8,7 +8,7 @@
     <context><p>«Сравнить настройки профилей» — это отдельная страница для сохранённых профилей. Она сохраняет текущий язык и тему и не заменяет вкладку «Библиотека».</p>
       <fig id="screenshot-compare-profiles">
         <title>Страница сравнения настроек профилей</title>
-        <image keyref="screenshot.compare-profiles" placement="break">
+        <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
           <alt>Представление сравнения, показывающее два сохраненных профиля, выбранных для параллельного просмотра.</alt>
         </image>
       </fig>

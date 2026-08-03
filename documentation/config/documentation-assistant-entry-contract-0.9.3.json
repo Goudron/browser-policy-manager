@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-entry-0.9.3",
+  "backlog_item": "BPM093-M10-01",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-static-entry-no-assistant-http-route",
+  "pins": {
+    "api": {
+      "path": "documentation/config/grounded-conversation-api-contract-0.9.3.json",
+      "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"
+    },
+    "diagnostics": {
+      "path": "documentation/config/grounded-conversation-diagnostics-contract-0.9.3.json",
+      "sha256": "de86cdd59a0a5740896181137cbb57b1381d56417b84a1b75f8bf12648f81c5a"
+    },
+    "availability": {
+      "path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json",
+      "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"
+    },
+    "threat_review": {
+      "path": "documentation/config/bpm-assistant-threat-review-0.9.3.json",
+      "sha256": "c497644c9ddd87050641a0b54cfd888a408ee78ae5914b71273fce4ee0006d15"
+    }
+  },
+  "portal_entry": {
+    "host": "every generated /help locale page",
+    "placement": "beside the deterministic documentation search in a responsive discovery-tools grid; search is serialized first and remains primary",
+    "elements": ["localized heading", "localized scope statement", "polite static unavailable status"],
+    "interactive_controls": false,
+    "initial_state": "unavailable",
+    "fallback": "Use deterministic local search and guide navigation immediately."
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "availability_truthfulness": {
+    "current_statement": "The assistant conversation is unavailable through this release surface; no model readiness is inferred from an installed artifact.",
+    "safe_diagnostics": "M7-06 remains an in-memory service. Its future publication must use the frozen same-origin status API only after the M10 request-security blocker is closed.",
+    "no_dead_control": "At M10-01 completion the entry had no button, composer, install action, retry action, status poll or chat endpoint. M10-02 may add only visibly disabled inert controls until the request-security gates are closed."
+  },
+  "security_and_resource_boundaries": {
+    "assistant_http_route": false,
+    "status_poll": false,
+    "worker_start": false,
+    "model_or_runtime_verification": false,
+    "retrieval": false,
+    "network_calls": 0,
+    "web_evidence": false,
+    "conversation_content": false,
+    "ordinary_search_changed": false,
+    "reason": "AI093-T05 remains a release blocker. M10-01 therefore adds no assistant request surface before body, schema, same-origin and CSRF controls are composed and tested."
+  },
+  "accessibility_and_layout": {
+    "semantic_region": "section with a localized heading and polite status",
+    "focus": "No new focusable control is created.",
+    "responsive": "Search and entry are adjacent on wide viewports and one column below 48rem; the entry is excluded from print output.",
+    "forced_colors": "The entry retains a system-color border."
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_documentation_assistant_entry_contract_0_9_3.py",
+    "architecture": "docs/architecture/documentation-assistant-entry-0.9.3.md",
+    "runtime": ["documentation/tests/unit/test_build_docs.py", "documentation/tests/contract/test_portal_shell_theme.py"]
+  }
+}

@@ -1,0 +1,14 @@
+Browser Policy Manager 0.9.3 documentation PDFs
+
+Generated release artifact. Do not edit files in this directory manually.
+Source: reviewed six-locale DITA documentation.
+Source revision: 43c362c65eded97106626e7535e5250e97574a6b
+Source fingerprint: f9de164afc3ce24313b56ffa905a35a23ee00ed2034a08d5a726969e3b1f6e62
+
+Rebuild candidate: make docs-pdf-build
+Verify candidate: make docs-pdf-verify
+Promote delivery: make docs-pdf-deliver
+Verify delivery: make docs-pdf-delivery-verify
+
+This delivery contains documentation PDFs and declared metadata only.
+It must not contain source DITA, HTML sites, local models, embeddings, RAG indexes, caches, logs, reports, credentials or secrets.

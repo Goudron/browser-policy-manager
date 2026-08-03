@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-ai-security-privacy-0.9.3",
+  "backlog_item": "BPM093-M2-05",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-architecture-only",
+  "implementation_boundary": {
+    "enabled_now": false,
+    "runtime_routes_added": false,
+    "network_access_added": false,
+    "model_or_index_added": false,
+    "rule": "This contract defines mandatory controls for later tasks; it does not make an AI path safe or shippable by itself."
+  },
+  "protected_assets": [
+    "reviewed DITA and published documentation artifacts",
+    "chunk, embedding, retrieval-index, model, runtime, and integrity manifests",
+    "user query, bounded conversation state, retrieved local evidence, and generated answer",
+    "BPM profiles, database, configuration, filesystem, process environment, and API state",
+    "host CPU, memory, disk, process table, network, and local availability"
+  ],
+  "trust_boundaries": [
+    {
+      "id": "browser",
+      "trust": "untrusted input and untrusted renderer boundary",
+      "access": "May send bounded same-origin query/control requests and render schema-valid plain-text answer segments plus server-resolved citations."
+    },
+    {
+      "id": "bpm-ai-controller",
+      "trust": "security control plane",
+      "access": "Validates method, origin, CSRF, schema, sizes, locale, session, state, and quotas; owns cancellation and never delegates security decisions to a model."
+    },
+    {
+      "id": "pre-inference-scope-gate",
+      "trust": "mandatory fail-closed decision boundary",
+      "access": "Runs before retrieval, inference, or web access; emits only allow, clarify, or refuse with a bounded reason code."
+    },
+    {
+      "id": "local-retrieval",
+      "trust": "read-only verified-artifact consumer",
+      "access": "Reads only the activated locale chunk/index set through manifest IDs; has no BPM database, arbitrary path, process, or network access."
+    },
+    {
+      "id": "local-inference-worker",
+      "trust": "untrusted parser and probabilistic computation",
+      "access": "Receives bounded structured context over an owner-only non-TCP IPC channel; has no tool, BPM API, arbitrary filesystem, shell, subprocess, or network capability."
+    },
+    {
+      "id": "verified-artifact-store",
+      "trust": "integrity-checked read-only installation",
+      "access": "Exposes allowlisted regular non-symlink files selected by immutable manifest ID after size, hash, compatibility, and provenance checks."
+    },
+    {
+      "id": "conversation-memory",
+      "trust": "sensitive ephemeral local state",
+      "access": "Stores only the minimum bounded per-session turns in memory and supports explicit clear, idle expiry, cancellation, and restart cleanup."
+    },
+    {
+      "id": "optional-web-adapter",
+      "trust": "disabled-by-default network boundary and untrusted evidence ingress",
+      "access": "May call only an approved provider after per-query consent and scope approval; it cannot fetch a user/model-supplied URL or reach local/private destinations."
+    }
+  ],
+  "mandatory_flow": [
+    "browser request validation",
+    "same-origin and CSRF enforcement",
+    "pre-inference scope decision",
+    "verified local retrieval",
+    "optional consented web-provider call through the isolated adapter",
+    "bounded local inference",
+    "output schema, citation, scope, and safe-render validation",
+    "plain-text response or fail-closed disposition"
+  ],
+  "global_invariants": [
+    "Rejected, malformed, cross-origin, expired, over-budget, or off-topic requests invoke neither retrieval, inference, nor web access.",
+    "The assistant cannot mutate BPM state, invoke BPM product APIs, execute tools or commands, start arbitrary processes, read arbitrary files, choose URLs, or enable network access.",
+    "Prompts, retrieved text, model output, web evidence, filenames, manifest fields, and model metadata are data and never become executable instructions.",
+    "The model never decides authorization, scope admission, artifact activation, URL eligibility, CSRF validity, retention, quota, or citation resolution.",
+    "Lexical search and /help/ remain available when AI is disabled, absent, incompatible, busy, cancelled, crashed, or quarantined."
+  ],
+  "request_security": {
+    "same_origin_only": true,
+    "inherit_application_wildcard_cors": false,
+    "unsafe_methods": ["POST", "DELETE"],
+    "requirements": [
+      "No state-changing AI operation uses GET.",
+      "Require application/json, an allowlisted request schema, bounded UTF-8 fields, exact locale, and reject unknown fields.",
+      "Validate Host and Origin, require same-origin Sec-Fetch-Site when present, and retain Origin/CSRF fallback for clients without Fetch Metadata.",
+      "Require an unpredictable session-bound CSRF token in a custom header for query, cancel, clear, consent, model lifecycle, and web-mode changes.",
+      "Do not put query, conversation, CSRF token, consent, or model-control values in URLs, cookies, referrers, or access logs."
+    ]
+  },
+  "worker_isolation": {
+    "allowed_transport": ["direct child-process pipe", "stdio", "owner-only Unix-domain socket when platform-supported"],
+    "forbidden_transport": ["TCP listener", "HTTP listener", "wildcard bind", "LAN bind", "public model API"],
+    "requirements": [
+      "BPM creates and owns the worker lifecycle; the browser never contacts it directly.",
+      "Run with a minimal environment, fixed executable and arguments, non-shell process creation, dedicated read-only artifact handles, private temporary directory, and least host privilege.",
+      "Deny outbound and inbound network access and prove no listening socket in release tests.",
+      "No plugin, tool, function-calling, code interpreter, shell, file browser, MCP, remote model, or arbitrary extension interface is loaded."
+    ]
+  },
+  "path_and_artifact_security": {
+    "requirements": [
+      "Resolve opaque manifest IDs to allowlisted paths below fixed roots; never concatenate a request/model value into a filesystem path.",
+      "Reject absolute paths, dot segments, encoded separators, backslashes, NUL/control bytes, alternate data streams, case-fold collisions, symlinks, non-regular files, and resolved paths outside the root.",
+      "Verify exact version, source, license, size, SHA-256, compatibility key, and manifest relationship before activation.",
+      "Download only after explicit user action into a private staging directory, verify before atomic promotion, preserve the last known-good set, and quarantine partial or mismatched artifacts.",
+      "Never deserialize executable model/index metadata through unsafe general-purpose object serialization."
+    ]
+  },
+  "prompt_and_output_security": {
+    "requirements": [
+      "Run a deterministic or separately evaluated multilingual scope classifier before retrieval and inference; prompt-only policy is insufficient.",
+      "Place system policy, user text, reviewed local evidence, and untrusted web evidence in structurally distinct fields with fixed precedence.",
+      "Treat instruction-like content inside DITA, examples, indexes, citations, model metadata, and web evidence as quoted data.",
+      "The output schema permits disposition, locale, plain-text answer segments, and citation IDs only; raw HTML, executable Markdown, script/style, event handlers, data URLs, and model-created href values are rejected.",
+      "Resolve citation IDs server-side against the activated manifest and render all answer text with textContent-equivalent sinks under the strict /help/ CSP."
+    ]
+  },
+  "resource_limits": {
+    "maximum_active_generations": 1,
+    "maximum_queued_generations": 1,
+    "hard_worker_rss_gib": 3.5,
+    "requirements": [
+      "Set tested limits for request characters, turns, retrieved chunks and bytes, context tokens, output tokens, generation time, retrieval time, queue wait, and per-session request rate before enabling the endpoint.",
+      "One request cannot create unbounded retries, recursive retrieval, follow-up chains, downloads, or web calls.",
+      "Cancellation stops token streaming promptly and escalates to worker termination after a bounded grace period.",
+      "An RSS, time, malformed-output, crash, or health limit trips a circuit breaker, terminates or quarantines the worker, releases resources, and leaves lexical search ready."
+    ]
+  },
+  "privacy_and_retention": {
+    "local_mode_network_requests_after_install": 0,
+    "telemetry_enabled": false,
+    "default_conversation_storage": "memory-only per browser session",
+    "requirements": [
+      "Do not persist or transmit queries, turns, retrieved chunks, embeddings, answers, refusal text, timing linked to content, or model prompts in local mode.",
+      "Keep the opaque session identifier in page memory, not localStorage; bind it to locale and CSRF state and rotate it after clear or expiry.",
+      "Implement explicit clear, bounded idle and absolute expiry, tab/session closure cleanup where observable, application-restart cleanup, and model-unload cleanup.",
+      "Logs and diagnostics contain bounded reason codes, counts, durations, versions, and resource values only; redact content, filesystem paths, environment values, tokens, and stack-frame locals.",
+      "Crash dumps, core dumps, prompt tracing, analytics, personalization, feedback learning, and training from conversations are disabled for the assistant."
+    ]
+  },
+  "optional_web_security": {
+    "enabled_by_default": false,
+    "provider_selected": false,
+    "requirements": [
+      "M9 must select and approve a provider before this path can ship; absence blocks the promised optional capability but does not weaken local-only use.",
+      "Require explicit per-query consent after showing what query data and locale will leave the computer; never send conversation history, local chunks, profile data, or identifiers unrelated to the query.",
+      "The adapter builds requests from a fixed HTTPS provider endpoint and encoded query fields; user/model URLs, arbitrary domains, alternate schemes, credentials, proxy inheritance, redirects, and link following are forbidden.",
+      "Validate DNS/IP before connection and every connection target; block loopback, link-local, private, multicast, unspecified, metadata, Unix-socket, and local hostnames for IPv4 and IPv6.",
+      "Bound response bytes, time, MIME, decoded text, and result count; allow zero redirects and discard active markup, hidden content, forms, scripts, styles, images, downloads, and provider instructions.",
+      "Label web evidence as untrusted and external, keep it separate from local citations, and give reviewed local documentation precedence.",
+      "A refused/off-topic request, absent consent, provider error, validation error, timeout, or offline state performs zero or no further provider calls and falls back to local-only behavior."
+    ]
+  },
+  "safe_recovery": {
+    "requirements": [
+      "Fail readiness closed for AI while preserving /help/ and lexical search.",
+      "On integrity or compatibility failure, quarantine the candidate, keep the last known-good verified set, and never mix generations of chunks, vectors, indexes, prompts, or models.",
+      "On worker compromise suspicion, cancel requests, terminate the process tree, remove private temporary state, clear conversation memory, revoke the session, and require explicit verified restart.",
+      "Rollback and removal use manifest-owned exact files, verify no worker/listener remains, and never delete broad or user-selected paths.",
+      "Recovery reports expose reason codes and artifact identities/checksums but no prompt, answer, secret, private path, or untrusted body."
+    ]
+  },
+  "threat_register": [
+    {
+      "id": "AI093-T01",
+      "threat": "direct and indirect prompt injection, jailbreak, prompt leakage, and instruction/data confusion",
+      "boundaries": ["pre-inference-scope-gate", "local-retrieval", "local-inference-worker", "optional-web-adapter"],
+      "controls": ["pre-inference scope gate", "structured data separation", "no tools or authority", "bounded output validation", "untrusted web quarantine"],
+      "owner": "BPM093-M8 scope and adversarial security",
+      "future_tests": ["off-topic and injection corpus invokes inference zero times", "retrieved and web instruction fixtures cannot change policy or produce actions"],
+      "fail_state": "refuse before inference or discard unsafe output; keep lexical search"
+    },
+    {
+      "id": "AI093-T02",
+      "threat": "SSRF, DNS rebinding, redirect bypass, local-service access, and metadata-service access",
+      "boundaries": ["optional-web-adapter"],
+      "controls": ["fixed provider allowlist", "HTTPS only", "zero redirects", "pre-connect DNS/IP validation", "private/special network denial", "no user/model URLs"],
+      "owner": "BPM093-M9 optional web security",
+      "future_tests": ["IPv4/IPv6/private/encoded/rebinding fixtures make zero outbound requests", "redirect and proxy-environment fixtures fail closed"],
+      "fail_state": "disable the web attempt and continue local-only"
+    },
+    {
+      "id": "AI093-T03",
+      "threat": "path traversal, symlink escape, unsafe file type, and arbitrary local-file read",
+      "boundaries": ["bpm-ai-controller", "local-retrieval", "verified-artifact-store"],
+      "controls": ["opaque manifest IDs", "fixed roots", "canonical containment", "regular non-symlink files", "hash and type verification"],
+      "owner": "BPM093-M5 corpus/index integrity and BPM093-M6 model lifecycle",
+      "future_tests": ["absolute/dot/encoded/backslash/NUL/symlink fixtures are rejected", "worker observes only allowlisted artifact handles"],
+      "fail_state": "quarantine artifact set and report AI incompatible"
+    },
+    {
+      "id": "AI093-T04",
+      "threat": "model-server exposure, unauthorized local client, LAN access, and cross-user access",
+      "boundaries": ["local-inference-worker"],
+      "controls": ["no TCP or HTTP listener", "owner-only IPC", "parent-owned lifecycle", "browser cannot address worker", "no remote model mode"],
+      "owner": "BPM093-M6 local runtime",
+      "future_tests": ["socket inventory proves no AI listener", "unrelated local process and browser cannot invoke worker"],
+      "fail_state": "terminate worker and mark AI crashed or incompatible"
+    },
+    {
+      "id": "AI093-T05",
+      "threat": "CSRF, permissive CORS inheritance, cross-site invocation, session replay, and client-side request forgery",
+      "boundaries": ["browser", "bpm-ai-controller", "conversation-memory"],
+      "controls": ["same-origin-only endpoint", "no wildcard CORS", "Origin/Host/Fetch Metadata validation", "session-bound CSRF header", "strict JSON and methods"],
+      "owner": "BPM093-M8 API and session security",
+      "future_tests": ["cross-origin/simple-content/missing-token/replayed-session requests invoke downstream zero times", "unsafe GET is absent"],
+      "fail_state": "reject request before scope or resource allocation"
+    },
+    {
+      "id": "AI093-T06",
+      "threat": "XSS, unsafe Markdown/HTML, malicious citations, and DOM injection from local/web/model text",
+      "boundaries": ["local-inference-worker", "bpm-ai-controller", "browser"],
+      "controls": ["plain-text output schema", "server-resolved citation IDs", "safe DOM sinks", "strict CSP", "no model-created URLs"],
+      "owner": "BPM093-M7 answer contract and BPM093-M10 assistant UI",
+      "future_tests": ["script/style/event/URL/Markdown payloads render inertly", "citation IDs outside activated manifest are rejected"],
+      "fail_state": "discard malformed output and show localized safe error"
+    },
+    {
+      "id": "AI093-T07",
+      "threat": "CPU, memory, disk, token, queue, retry, and conversation resource exhaustion",
+      "boundaries": ["bpm-ai-controller", "local-retrieval", "local-inference-worker", "conversation-memory"],
+      "controls": ["one active and one queued generation", "bounded inputs/context/output/time", "3.5 GiB RSS ceiling", "rate limits", "cancellation and circuit breaker"],
+      "owner": "BPM093-M6 resources and BPM093-M8 abuse controls",
+      "future_tests": ["boundary and over-limit fixtures are deterministic", "cancel/timeout/RSS breach terminates work and restores lexical readiness"],
+      "fail_state": "cancel or terminate worker, release resources, retain lexical search"
+    },
+    {
+      "id": "AI093-T08",
+      "threat": "poisoned, partial, stale, mixed-generation, or rollbacked model/index/documentation artifacts",
+      "boundaries": ["verified-artifact-store", "local-retrieval", "local-inference-worker"],
+      "controls": ["immutable manifest", "hash/provenance/license/compatibility verification", "private staging", "atomic promotion", "last known-good rollback"],
+      "owner": "BPM093-M5 retrieval artifacts and BPM093-M6 model artifacts",
+      "future_tests": ["hash/version/compatibility/mixed-generation failures cannot activate", "partial update retains last known-good set"],
+      "fail_state": "quarantine candidate and mark AI incompatible without degrading search"
+    },
+    {
+      "id": "AI093-T09",
+      "threat": "conversation over-retention, cross-session disclosure, stale session reuse, and incomplete clear",
+      "boundaries": ["browser", "conversation-memory", "bpm-ai-controller"],
+      "controls": ["memory-only bounded state", "opaque per-session ID", "idle/absolute expiry", "clear/restart/unload cleanup", "locale and CSRF binding"],
+      "owner": "BPM093-M8 privacy and conversation lifecycle",
+      "future_tests": ["clear/expiry/restart/unload erase state", "session and locale isolation prevent replay or cross-read"],
+      "fail_state": "expire session and require a new conversation"
+    },
+    {
+      "id": "AI093-T10",
+      "threat": "telemetry, sensitive logging, crash-dump leakage, feedback learning, and unintended network disclosure",
+      "boundaries": ["bpm-ai-controller", "local-inference-worker", "conversation-memory", "optional-web-adapter"],
+      "controls": ["zero local-mode network", "no content telemetry", "reason-code diagnostics", "redaction", "no training/personalization", "crash dumps disabled"],
+      "owner": "BPM093-M8 privacy",
+      "future_tests": ["network probe records zero local-mode requests after install", "log/diagnostic/crash fixtures contain no query, chunk, answer, path, environment, or token"],
+      "fail_state": "block release and disable AI path"
+    },
+    {
+      "id": "AI093-T11",
+      "threat": "dependency, runtime, model, embedding, index, and installer supply-chain compromise",
+      "boundaries": ["verified-artifact-store", "bpm-ai-controller", "local-inference-worker"],
+      "controls": ["exact source/version/license/checksum", "provenance verification", "advisory and parser review", "explicit install", "reproducible manifest expectations"],
+      "owner": "BPM093-M6 supply chain and BPM093-M13 release",
+      "future_tests": ["unapproved source/license/hash/provenance is rejected", "locked dependency/model manifest and advisory checks pass"],
+      "fail_state": "do not install or activate the candidate"
+    },
+    {
+      "id": "AI093-T12",
+      "threat": "arbitrary tool use, BPM mutation, shell/process execution, environment access, and confused-deputy behavior",
+      "boundaries": ["bpm-ai-controller", "local-inference-worker"],
+      "controls": ["no tool interface", "no BPM API credentials or database handle", "non-shell fixed spawn", "minimal environment", "least privilege"],
+      "owner": "BPM093-M6 runtime and BPM093-M8 scope security",
+      "future_tests": ["tool/file/process/network escape fixtures expose no callable capability", "assistant requests cannot mutate profile or configuration state"],
+      "fail_state": "refuse before inference or terminate worker on protocol violation"
+    },
+    {
+      "id": "AI093-T13",
+      "threat": "unsafe web-content ingestion, external-data exfiltration, provider tracking, and local/web evidence confusion",
+      "boundaries": ["optional-web-adapter", "local-inference-worker", "browser"],
+      "controls": ["per-query informed consent", "minimal query disclosure", "bounded sanitized text", "external label", "separate citations", "local precedence"],
+      "owner": "BPM093-M9 optional web evidence",
+      "future_tests": ["provider receives only approved query and locale fields", "active/hidden/instruction content cannot create actions or local citations"],
+      "fail_state": "drop web evidence and answer or abstain from local sources only"
+    },
+    {
+      "id": "AI093-T14",
+      "threat": "unsafe crash, cancellation, update, unload, rollback, removal, and recovery behavior",
+      "boundaries": ["bpm-ai-controller", "local-retrieval", "local-inference-worker", "verified-artifact-store", "conversation-memory"],
+      "controls": ["process-tree termination", "bounded cancellation", "atomic artifact sets", "session cleanup", "manifest-owned removal", "safe reason codes"],
+      "owner": "BPM093-M6 lifecycle and BPM093-M11 operations",
+      "future_tests": ["crash/cancel/update/unload/rollback/removal state matrix fails closed", "recovery leaves no listener, worker, mixed artifact, or conversation state"],
+      "fail_state": "AI unavailable until explicit verified recovery; /help/ and search remain ready"
+    }
+  ],
+  "reviewed_guidance": [
+    "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html",
+    "https://slsa.dev/spec/v1.2/verifying-artifacts"
+  ]
+}

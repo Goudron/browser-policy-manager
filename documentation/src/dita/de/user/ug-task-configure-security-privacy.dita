@@ -5,9 +5,9 @@
   <shortdesc>Verwenden Sie Schritt 3 für Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Härtungskontrollen.</shortdesc>
   <taskbody>
     <prereq><p>Ein geführter Profilentwurf ist im vorgesehenen Schemakanal geöffnet.</p></prereq>
-    <context><p>Sicherheit &amp; Datenschutzeinstellungen können sowohl die Benutzererfahrung als auch die Risikolage ändern. Überprüfen Sie daher die Warnungen vor dem Speichern.</p></context>
+    <context><p>Sicherheits- und Datenschutzeinstellungen können sowohl die Benutzererfahrung als auch die Risikolage ändern. Prüfen Sie daher die Warnungen vor dem Speichern.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 3, Sicherheit &amp; Datenschutz.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 3 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Konfigurieren Sie Datenschutzkontrollen und Berechtigungsstandards.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Legen Sie Cookies, Bereinigung, DNS und Optionen zur Sicherheitsverstärkung fest, die für das Profil erforderlich sind.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die Validierungsmeldungen und erläutern Sie etwaige Ausnahmen in der Überprüfung.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

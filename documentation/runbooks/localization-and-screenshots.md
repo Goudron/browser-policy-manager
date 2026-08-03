@@ -13,7 +13,10 @@ assets.
 - Non-English files are reviewed peers with the same content scope. They may not be compact
   summaries, placeholder translations, or silent English fallback. AI-assisted translation is
   allowed during development; shipped localized topics must still be reviewed and human-reviewed for
-  terminology, placeholders, examples, source restrictions, and product accuracy.
+  terminology, placeholders, examples, source restrictions, and product accuracy. Only that
+  reviewed, published locale peer is eligible for future same-locale assistant review only; 0.9.3
+  does not create or update an assistant corpus. A draft, translation working copy, or generated
+  answer may not be used.
 - Locale peers keep the same topic IDs, anchors, source slugs, DITA keys, asset IDs, and target IDs.
   Titles, navigation labels, captions, alt text, and search terms are localized content.
 - Shared DITA metadata remains language-neutral; do not hide English prose in `src/shared/`.

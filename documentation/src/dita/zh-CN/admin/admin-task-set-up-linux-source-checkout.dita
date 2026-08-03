@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-linux-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>设置 Linux 源签出</title>
+  <title>设置开源系统源签出</title>
   <shortdesc>克隆 BPM 存储库、创建 Python 虚拟环境、安装开发依赖项并准备本地数据库架构。</shortdesc>
   <taskbody>
     <prereq><p>Linux 主机已准备就绪，管理员可以访问版本 0.9.1 的 BPM 存储库 URL 和目标分支或标记。</p></prereq>

@@ -8,7 +8,7 @@
     <context><p>Управляемый поиск полезен, когда вы знаете цель политики, но не знаете шаг, содержащий семейство элементов управления.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Результаты поиска управляемых настроек</title>
-        <image keyref="screenshot.guided-settings-search" placement="break">
+        <image keyref="screenshot.guided-settings-search" placement="break" scalefit="yes" align="center">
           <alt>Поиск Пошаговый редактор, показывающий результаты настроек, связанных с домашней страницей.</alt>
         </image>
       </fig>

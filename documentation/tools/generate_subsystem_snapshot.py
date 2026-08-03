@@ -39,6 +39,10 @@ ARCHITECTURE_ENTRY_POINTS = (
     "firefox-policy-documentation-inventory-0.9.0.json",
     "cis-documentation-inventory-0.9.0.json",
     "api-documentation-inventory-0.9.0.md",
+    "ai-component-update-runbook-0.9.3.md",
+    "documentation-assistant-presentation-0.9.3.md",
+    "documentation-assistant-resource-state-0.9.3.md",
+    "documentation-assistant-web-mode-0.9.3.md",
 )
 DOCUMENTATION_COMMANDS = (
     "make setup-docs-toolchain",

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-surface-0.9.3",
+  "backlog_item": "BPM093-M10-02",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-inert-accessible-surface-no-assistant-http-route",
+  "pins": {
+    "entry": {
+      "path": "documentation/config/documentation-assistant-entry-contract-0.9.3.json",
+      "sha256": "6f3b20f657975e298582f8a034b9cc307b063028a6d24ae023ce08dc47bf3e1c"
+    },
+    "api": {
+      "path": "documentation/config/grounded-conversation-api-contract-0.9.3.json",
+      "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"
+    },
+    "streaming": {
+      "path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json",
+      "sha256": "c1e310a6e96d84374ea18e709253fcb960c17c2b63f452f7992e559a9d973b3f"
+    },
+    "threat_review": {
+      "path": "documentation/config/bpm-assistant-threat-review-0.9.3.json",
+      "sha256": "c497644c9ddd87050641a0b54cfd888a408ee78ae5914b71273fce4ee0006d15"
+    }
+  },
+  "surface": {
+    "host": "every generated /help locale page, inside the M10-01 assistant entry beside deterministic search",
+    "initial_state": "unavailable",
+    "transcript": {
+      "element": "ordered list with role=log",
+      "message_roles": ["user", "assistant", "system"],
+      "live_region": "polite additions/text, non-atomic",
+      "layout": "bounded to min(40dvh, 20rem), independently scrollable, with contained overscroll"
+    },
+    "status": "polite atomic status region reserved for stable availability and progress keys",
+    "answer_modes": ["answer", "clarify", "abstain", "refuse"],
+    "sources": "a named, initially hidden ordered source list; it cannot contain a source until a validated final answer exists",
+    "controls": {
+      "question_max_unicode_characters": 4000,
+      "controls": ["question", "send", "stop", "clear"],
+      "initially_disabled": true,
+      "reason": "No assistant request route is enabled yet. Disabled controls are not in the tab order and their visible explanation names the unavailable state."
+    }
+  },
+  "accessibility": {
+    "names": "Every form control, transcript, sources section, answer-state region and control group has a localized programmatic name.",
+    "focus": "The static unavailable state creates no new tab stop. A later enabled implementation must keep focus in the question field or on the user-invoked control; stream or status updates must never move focus.",
+    "keyboard": "When enabled by a later security-cleared task, the native Send, Stop and Clear buttons are the only activation path; this static state has no fake client-side action.",
+    "announcements": "Status uses a polite atomic live region and the transcript uses a polite non-atomic log. No raw model token or unsafe content is rendered by this task.",
+    "visual": "The transcript is bounded, narrow layouts stack actions, reduced-motion remains globally respected, and forced-colors preserves borders for the surface controls."
+  },
+  "security_and_resource_boundaries": {
+    "assistant_http_route": false,
+    "status_poll": false,
+    "worker_start": false,
+    "model_or_runtime_verification": false,
+    "retrieval": false,
+    "network_calls": 0,
+    "web_evidence": false,
+    "conversation_content": false,
+    "ordinary_search_changed": false,
+    "reason": "AI093-T05, AI093-T06 and AI093-T07 remain M10 release blockers. This task adds only inert semantic markup and CSS; it makes no request, no browser-side rendering sink and no worker allocation."
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "verification": {
+    "contract": "documentation/tests/contract/test_documentation_assistant_surface_contract_0_9_3.py",
+    "runtime": [
+      "documentation/tests/unit/test_build_docs.py",
+      "documentation/tests/contract/test_portal_shell_theme.py",
+      "documentation/tests/contract/test_documentation_assistant_entry_contract_0_9_3.py",
+      "documentation/tests/contract/test_bpm_assistant_threat_review_contract_0_9_3.py"
+    ],
+    "architecture": "docs/architecture/documentation-assistant-surface-0.9.3.md"
+  }
+}

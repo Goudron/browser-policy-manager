@@ -8,7 +8,7 @@
     <context><p>Compare is a dedicated saved-profile surface. It keeps the current language and theme and does not replace the Library tab.</p>
       <fig id="screenshot-compare-profiles">
         <title>Profile comparison surface</title>
-        <image keyref="screenshot.compare-profiles" placement="break">
+        <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
           <alt>Compare view showing two saved profiles selected for side-by-side review.</alt>
         </image>
       </fig>

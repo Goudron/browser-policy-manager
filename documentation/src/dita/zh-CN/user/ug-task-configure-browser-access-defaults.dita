@@ -5,9 +5,9 @@
   <shortdesc>使用步骤 2 配置浏览器访问、网络行为和基准默认值。</shortdesc>
   <taskbody>
     <prereq><p>引导轮廓草稿已打开。</p></prereq>
-    <context><p>浏览器访问 &amp; 默认收集控件，这些控件决定 Firefox 是否可以访问资源以及在选择特定内容的策略之前其行为方式。</p></context>
+    <context><p>浏览器访问和默认值决定 Firefox 是否可以访问资源，以及在选择特定内容的策略之前浏览器的行为方式。</p></context>
     <steps>
-      <step><cmd>打开第2步，浏览器访问&amp;默认。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开引导式配置的第 2 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>检查部署的网络访问和浏览器行为控制。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>在添加主页、搜索或特定于导航的选项之前设置基线默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>验证模式相关控件旁边显示的警告。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

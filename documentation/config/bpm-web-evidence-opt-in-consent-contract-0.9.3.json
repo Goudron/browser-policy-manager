@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-web-evidence-opt-in-consent-0.9.3",
+  "backlog_item": "BPM093-M9-02",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-memory-only-no-http-route-ui-or-network",
+  "pins": {
+    "provider_trust_policy": {"path": "documentation/config/bpm-web-evidence-provider-trust-policy-0.9.3.json", "sha256": "be7f11374c4c231186bee328da315836db23639180655b9c628bcf90f063cffb"},
+    "privacy": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"},
+    "retention": {"path": "documentation/config/bpm-conversation-retention-contract-0.9.3.json", "sha256": "d95c7047e7432a6dfe1fdf34b5c8c0de4da329337480fd45f20105779004d8c4"},
+    "threat_review": {"path": "documentation/config/bpm-assistant-threat-review-0.9.3.json", "sha256": "c497644c9ddd87050641a0b54cfd888a408ee78ae5914b71273fce4ee0006d15"}
+  },
+  "configuration": {
+    "enabled_environment_variable": "BPM_WEB_EVIDENCE_ENABLED",
+    "enabled_by_default": false,
+    "credential_environment_variable": "BPM_BRAVE_SEARCH_API_SUBSCRIPTION_TOKEN",
+    "credential_model": "Administrator-provided BYOK token in server configuration only; BPM ships no shared credential.",
+    "missing_credential": "normal local-only state",
+    "credential_in_browser_or_logs": false,
+    "network_calls_added": 0
+  },
+  "disclosure": {
+    "shown_before_every_provider_call": true,
+    "exact_outgoing_question": true,
+    "provider": "Brave Search API",
+    "recipient": "Brave Software, Inc. in the United States",
+    "query_log_retention_warning": "Standard Brave Search API query logs may be retained for up to 90 days for billing, troubleshooting and abuse prevention.",
+    "sent": ["exact outgoing question", "locale-derived search language", "fixed Mozilla source filter and bounded retrieval parameters"],
+    "not_sent": ["conversation history", "local BPM documentation or citations", "BPM profiles, database data, or filesystem data", "session identifiers, device location, or the subscription token"]
+  },
+  "consent": {
+    "scope": "per exact question, server-owned session and locale",
+    "storage": "process memory only",
+    "question_storage": "per-process HMAC digest only; raw question is displayed to the controller and never retained in the pending record",
+    "ttl_seconds": 300.0,
+    "pending_records_max": 32,
+    "one_time_use": true,
+    "invalidators": ["session mismatch", "locale mismatch", "question mismatch", "expiry", "session clear", "process restart", "any consume attempt"],
+    "query_limits": {"characters_max": 400, "words_max": 50},
+    "six_locale_search_language": {"en": "en", "ru": "ru", "de": "de", "zh-CN": "zh-hans", "fr": "fr", "es-ES": "es"}
+  },
+  "boundaries": {
+    "http_route": false,
+    "browser_ui": false,
+    "browser_storage": false,
+    "database": false,
+    "disk": false,
+    "telemetry": false,
+    "provider_request": false,
+    "ordinary_search_calls": 0,
+    "cross_locale_consent": false,
+    "silent_web_promotion": false
+  },
+  "next_owner": "BPM093-M9-03 may consume an approved one-time authorization before its one fixed provider POST; it must not bypass this disclosure or consent store.",
+  "verification": {
+    "runtime": "tests/test_web_evidence_consent_093.py",
+    "contract": "documentation/tests/contract/test_bpm_web_evidence_opt_in_consent_contract_0_9_3.py",
+    "architecture": "docs/architecture/bpm-web-evidence-opt-in-consent-0.9.3.md"
+  }
+}

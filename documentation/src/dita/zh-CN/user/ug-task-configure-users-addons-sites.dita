@@ -7,7 +7,7 @@
     <prereq><p>指导草案已开放。</p></prereq>
     <context><p>此步骤收集影响用户身份表面、扩展治理、本地化和网站特定行为的控件。</p></context>
     <steps>
-      <step><cmd>打开第 4 步，用户，附加组件 &amp; 站点。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开引导式配置的第 4 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>查看 Mozilla 帐户和身份相关的浏览器界面。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>根据部署规则配置扩展、附加组件和书签。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>设置语言、翻译和网站处理选项。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

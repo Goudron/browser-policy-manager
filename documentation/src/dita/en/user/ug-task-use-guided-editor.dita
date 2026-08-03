@@ -8,7 +8,7 @@
     <context><p>Guided editor turns profile configuration into six task-first steps and keeps schema validation visible while you work.</p>
       <fig id="screenshot-guided-editor-overview">
         <title>Guided editor overview</title>
-        <image keyref="screenshot.guided-editor-overview" placement="break">
+        <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
           <alt>Guided editor showing the step navigation and validation state for a saved profile.</alt>
         </image>
       </fig>

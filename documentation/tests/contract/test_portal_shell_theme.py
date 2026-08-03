@@ -21,7 +21,6 @@ def test_portal_shell_has_localized_chrome_for_every_published_locale() -> None:
             "locales",
             "breadcrumbs",
             "home",
-            "supported_firefox_versions",
             "status",
             "theme",
             "theme_system",
@@ -45,6 +44,22 @@ def test_portal_shell_has_localized_chrome_for_every_published_locale() -> None:
             "search_ready",
             "search_no_results",
             "search_unavailable",
+            "assistant",
+            "assistant_description",
+            "assistant_unavailable",
+            "assistant_transcript",
+            "assistant_question",
+            "assistant_question_placeholder",
+            "assistant_controls_unavailable",
+            "assistant_send",
+            "assistant_stop",
+            "assistant_clear",
+            "assistant_answer_mode",
+            "assistant_sources",
+            "assistant_unavailable_short",
+            "assistant_install_model",
+            "assistant_ready",
+            "assistant_clear_short",
         ):
             assert labels[key].strip(), (locale, key)
         assert labels["skip"] != build_docs.SHELL_LABELS["en"]["skip"] or locale == "en"
@@ -72,6 +87,20 @@ def test_portal_theme_covers_responsive_dark_light_focus_code_tables_notes_and_p
         ".bpm-docs-main figcaption",
         ".bpm-docs-main .note",
         ".bpm-docs-search",
+        ".bpm-docs-discovery-tools",
+        ".bpm-docs-assistant-widget",
+        ".bpm-docs-assistant-toggle",
+        ".bpm-docs-assistant-panel",
+        ".bpm-docs-assistant-clear",
+        ".bpm-docs-assistant-send",
+        ".bpm-docs-assistant-stop",
+        ".bpm-docs-assistant-message",
+        ".bpm-docs-assistant-surface",
+        ".bpm-docs-assistant-transcript",
+        ".bpm-docs-assistant-recovery",
+        ".bpm-docs-assistant-web-mode",
+        ".bpm-docs-assistant-controls textarea",
+        ".bpm-docs-assistant-actions",
         ".bpm-docs-search-input",
         ".bpm-docs-search-result-list",
         ".bpm-docs-search mark",
@@ -85,6 +114,7 @@ def test_portal_theme_covers_responsive_dark_light_focus_code_tables_notes_and_p
     assert "@media print" in print_theme
     assert ".bpm-docs-header-actions" in print_theme
     assert ".bpm-docs-search" in print_theme
+    assert ".bpm-docs-assistant-widget" in print_theme
 
 
 def test_portal_current_navigation_uses_primary_ui_selected_surfaces() -> None:

@@ -296,6 +296,136 @@ def _assert_theme_metrics_fit(metrics: dict[str, object]) -> None:
         assert control["right"] <= metrics["viewportWidth"] + 1, (metrics, control)
 
 
+def _install_assistant_ready_browser_mock(driver, locale: str) -> None:
+    driver.execute_script(
+        """
+        const locale = arguments[0];
+        const api = '/api/documentation-assistant';
+        window.__assistantQaCalls = [];
+        window.__assistantQaWebEnabled = false;
+        window.__assistantQaRejectChat = false;
+        window.__assistantQaEmitFinal = null;
+        const response = (payload, status = 200) => new Response(JSON.stringify(payload), {
+          status, headers: { 'Content-Type': 'application/json' },
+        });
+        window.fetch = async (input, init = {}) => {
+          const path = String(input);
+          window.__assistantQaCalls.push({ path, method: init.method || 'GET', body: init.body || '' });
+          if (path === `${api}/status?locale=${encodeURIComponent(locale)}`) {
+            return response({
+              api_version: 1, state: 'ready', assistant_ready: true,
+              lexical_search_ready: true, locale, message_key: 'assistant_ready',
+              action_key: 'assistant_chat_send', reason_code: 'assistant_ready', state_epoch: 1,
+            });
+          }
+          if (path.startsWith(`${api}/web-mode?locale=${encodeURIComponent(locale)}&tab_id=`)) {
+            return response({
+              api_version: 1, available: true, enabled: window.__assistantQaWebEnabled,
+              locale, reason_code: window.__assistantQaWebEnabled
+                ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
+              state_epoch: window.__assistantQaWebEnabled ? 1 : 0,
+            });
+          }
+          if (path === `${api}/web-mode`) {
+            const payload = JSON.parse(init.body);
+            if (payload.locale !== locale || typeof payload.tab_id !== 'string') {
+              return response({}, 400);
+            }
+            window.__assistantQaWebEnabled = payload.enabled;
+            return response({
+              api_version: 1, available: true, enabled: window.__assistantQaWebEnabled,
+              locale, reason_code: window.__assistantQaWebEnabled
+                ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
+              state_epoch: window.__assistantQaWebEnabled ? 2 : 3,
+            });
+          }
+          if (path === `${api}/chat`) {
+            if (window.__assistantQaRejectChat) {
+              return new Response(null, { status: 503 });
+            }
+            return response({
+              api_version: 1, request_id: 'req_qa_example', state: 'accepted', state_epoch: 2,
+              stream_path: `${api}/chat/req_qa_example/stream`,
+              time_preview: { minimum_seconds: 5, maximum_seconds: 15 },
+            }, 202);
+          }
+          if (path === `${api}/conversation`) {
+            return new Response(null, { status: 204 });
+          }
+          return new Response(null, { status: 404 });
+        };
+        window.EventSource = class {
+          constructor(url) {
+            this.url = url;
+            this.listeners = new Map();
+            window.__assistantQaEmitFinal = () => {
+              const final = this.listeners.get('final');
+              if (final) {
+                final({ data: JSON.stringify({
+                  api_version: 1, request_id: 'req_qa_example', state: 'answer', state_epoch: 3,
+                  reason_code: 'assistant_citations_validated', message_key: 'assistant_chat_answer',
+                  action_key: '', disposition: 'answer', text: `Grounded ${locale} BPM answer.`, citations: [],
+                }) });
+              }
+            };
+          }
+          addEventListener(name, listener) { this.listeners.set(name, listener); }
+          close() {}
+        };
+        """,
+        locale,
+    )
+
+
+def _install_assistant_failure_browser_mock(driver, locale: str) -> None:
+    driver.execute_script(
+        """
+        const locale = arguments[0];
+        const api = '/api/documentation-assistant';
+        const modelApi = '/api/local-model';
+        const csrf = 'c'.repeat(24);
+        window.__assistantQaFailureCalls = [];
+        window.__assistantQaInstallRequested = false;
+        const response = (payload, status = 200) => new Response(JSON.stringify(payload), {
+          status, headers: { 'Content-Type': 'application/json' },
+        });
+        const operation = (state) => state === 'idle' ? { state } : {
+          cancellable: false, downloaded_bytes: 0, kind: 'install',
+          operation_id: 'operation_qa_failure', phase: state === 'failed' ? 'failed' : 'downloading',
+          progress_percent: 0, reason_code: state === 'failed' ? 'artifact_hash_mismatch' : '',
+          state, total_bytes: 0,
+        };
+        const modelStatus = () => ({
+          api_version: 1, csrf_token: csrf, disclosure: {}, lexical_search_ready: true,
+          verification: { state: 'not-installed', verified: false, reason_code: 'artifact_missing' },
+          operation: operation(window.__assistantQaInstallRequested ? 'failed' : 'idle'),
+        });
+        window.fetch = async (input, init = {}) => {
+          const path = String(input);
+          window.__assistantQaFailureCalls.push({ path, method: init.method || 'GET', body: init.body || '' });
+          if (path === `${api}/status?locale=${encodeURIComponent(locale)}`) {
+            return response({
+              api_version: 1, state: 'not-installed', assistant_ready: false,
+              lexical_search_ready: true, locale, message_key: 'assistant_not_installed',
+              action_key: 'assistant_manage_model', reason_code: 'assistant_unavailable', state_epoch: 1,
+            });
+          }
+          if (path === `${modelApi}?locale=${encodeURIComponent(locale)}`) {
+            return response(modelStatus());
+          }
+          if (path === `${modelApi}/install`) {
+            window.__assistantQaInstallRequested = true;
+            return response({
+              api_version: 1, csrf_token: csrf, accepted: true, operation: operation('running'),
+            });
+          }
+          return new Response(null, { status: 404 });
+        };
+        """,
+        locale,
+    )
+
+
 def _compact_search_metrics(driver) -> dict[str, object]:
     return driver.execute_script(
         """
@@ -444,6 +574,14 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                 assert expanded_metrics["panelHidden"] is False
                 assert expanded_metrics["expanded"] == "true"
                 assert expanded_metrics["query"] == "theme"
+                first_filter = driver.find_element(by.By.CSS_SELECTOR, "[data-search-filter]")
+                first_filter.send_keys(keys.Keys.ESCAPE)
+                escaped_metrics = _compact_search_metrics(driver)
+                assert escaped_metrics["panelHidden"] is True
+                assert escaped_metrics["expanded"] == "false"
+                assert escaped_metrics["query"] == "theme"
+                assert driver.switch_to.active_element.get_attribute("data-search-advanced-toggle") == ""
+                driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]").click()
                 driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]").click()
                 collapsed_metrics = _compact_search_metrics(driver)
                 assert collapsed_metrics["panelHidden"] is True
@@ -491,6 +629,24 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                 assert hydrated_metrics["expanded"] == "false"
                 assert hydrated_metrics["activeFiltersHidden"] is False
                 assert hydrated_metrics["activeFiltersSummary"]
+                driver.execute_script(
+                    "window.history.pushState(null, '', '?q=theme&guide=user-guide');"
+                    "window.dispatchEvent(new PopStateEvent('popstate'));"
+                )
+                ui.WebDriverWait(driver, 10).until(
+                    lambda current_driver: (
+                        _compact_search_metrics(current_driver)["query"] == "theme"
+                        and bool(
+                            current_driver.find_elements(
+                                by.By.CSS_SELECTOR, "[data-search-filter]:checked"
+                            )
+                        )
+                    )
+                )
+                popstate_metrics = _compact_search_metrics(driver)
+                assert popstate_metrics["panelHidden"] is True
+                assert popstate_metrics["expanded"] == "false"
+                assert popstate_metrics["activeFiltersHidden"] is False
 
                 for width, height in ((1366, 1000), (390, 900)):
                     driver.set_window_size(width, height)
@@ -538,6 +694,868 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                     assert "rgb(255, 255, 255)" not in light_system["backgrounds"], light_system
                     _assert_theme_metrics_fit(light_system)
                     driver.execute_cdp_cmd("Emulation.setEmulatedMedia", {"features": []})
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable(
+    generated_theme_smoke_site: Path,
+) -> None:
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    keys = pytest.importorskip("selenium.webdriver.common.keys")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    def metrics(current_driver) -> dict[str, object]:
+        return current_driver.execute_script(
+            """
+            const widget = document.querySelector('[data-documentation-assistant-widget]');
+            const panel = document.querySelector('[data-assistant-panel]');
+            const toggle = document.querySelector('[data-assistant-toggle]');
+            const panelRect = panel.getBoundingClientRect();
+            return {
+              expanded: widget.dataset.assistantExpanded,
+              panelHidden: panel.hidden,
+              ariaExpanded: toggle.getAttribute('aria-expanded'),
+              viewportWidth: window.innerWidth,
+              viewportHeight: window.innerHeight,
+              panelWidth: panelRect.width,
+              panelHeight: panelRect.height,
+              panelRight: panelRect.right,
+              panelBottom: panelRect.bottom,
+              transcriptOverflow: getComputedStyle(document.querySelector('[data-assistant-transcript]')).overflowY,
+              panelBackground: getComputedStyle(panel).backgroundColor,
+            };
+            """
+        )
+
+    def assistant_requests(current_driver) -> list[str]:
+        return current_driver.execute_script(
+            """
+            return performance.getEntriesByType('resource')
+              .map((entry) => entry.name)
+              .filter((name) => name.includes('/api/documentation-assistant'));
+            """
+        )
+
+    with _documentation_test_server(generated_theme_smoke_site) as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 10)
+        try:
+            for width, height, locale, title in (
+                (1366, 1000, "ru", "ИИ-помощник BPM"),
+                (390, 900, "en", "BPM AI Assistant"),
+            ):
+                driver.set_window_size(width, height)
+                driver.get(f"{base_url}/help/{locale}/index.html")
+                toggle = wait.until(
+                    lambda current_driver: current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-toggle]"
+                    )
+                )
+                assert toggle.text == title
+                initial = metrics(driver)
+                assert initial["panelHidden"] is True
+                assert initial["expanded"] == "false"
+                assert initial["ariaExpanded"] == "false"
+                assert assistant_requests(driver) == []
+
+                toggle.click()
+                wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is False)
+                wait.until(
+                    lambda current_driver, expected_locale=locale: any(
+                        name.endswith(f"/api/documentation-assistant/status?locale={expected_locale}")
+                        for name in assistant_requests(current_driver)
+                    )
+                )
+                assert all(
+                    "/api/documentation-assistant/status?locale=" in name
+                    for name in assistant_requests(driver)
+                )
+                expanded = metrics(driver)
+                assert expanded["expanded"] == "true"
+                assert expanded["ariaExpanded"] == "true"
+                if width >= 768:
+                    assert expanded["panelHeight"] >= expanded["viewportHeight"] * 0.9 - 2
+                    assert expanded["panelHeight"] <= expanded["viewportHeight"] * 0.9 + 2
+                else:
+                    assert expanded["panelHeight"] <= expanded["viewportHeight"] * 0.5 + 2
+                assert expanded["panelRight"] <= expanded["viewportWidth"] + 1
+                assert expanded["panelBottom"] <= expanded["viewportHeight"] + 1
+                assert expanded["transcriptOverflow"] == "auto"
+                if width >= 768:
+                    assert expanded["panelWidth"] >= expanded["viewportWidth"] * 0.5 - 2
+                    assert expanded["panelWidth"] <= expanded["viewportWidth"] * 0.5 + 2
+                else:
+                    assert expanded["panelWidth"] >= expanded["viewportWidth"] - 34
+
+                if locale == "ru":
+                    persisted = driver.execute_script(
+                        """
+                        const widget = document.querySelector('[data-documentation-assistant-widget]');
+                        return window.BPMDocumentationAssistantConversation.recordCompletedTurn(widget, arguments[0]);
+                        """,
+                        {"user": "Покажите <img> безопасно", "assistant": "Текст без HTML <script>."},
+                    )
+                    assert persisted is True
+                    driver.refresh()
+                    wait.until(
+                        lambda current_driver: metrics(current_driver)["panelHidden"] is False
+                    )
+                    assert assistant_requests(driver) == []
+                    restored = driver.execute_script(
+                        """
+                        const transcript = document.querySelector('[data-assistant-transcript]');
+                        return {
+                          text: transcript.textContent,
+                          messages: transcript.querySelectorAll('[data-assistant-message-role]').length,
+                          unsafeNodes: transcript.querySelectorAll('img, script').length,
+                        };
+                        """
+                    )
+                    assert restored == {
+                        "text": "Покажите <img> безопасноТекст без HTML <script>.",
+                        "messages": 2,
+                        "unsafeNodes": 0,
+                    }
+                    first_user_topic = build_docs._navigation_topic_order("user-guide.ditamap")[0]
+                    driver.get(f"{base_url}/help/{locale}/user/{first_user_topic}.html")
+                    wait.until(
+                        lambda current_driver: metrics(current_driver)["panelHidden"] is False
+                    )
+                    assert driver.execute_script(
+                        "return document.querySelector('[data-assistant-transcript]').textContent;"
+                    ) == "Покажите <img> безопасноТекст без HTML <script>."
+                    assert driver.execute_script(
+                        """
+                        return window.BPMDocumentationAssistantConversation.setReady(
+                          document.querySelector('[data-documentation-assistant-widget]'), true
+                        );
+                        """
+                    ) is True
+                    clear = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-clear]")
+                    assert clear.is_displayed()
+                    clear.click()
+                    wait.until(
+                        lambda current_driver: current_driver.execute_script(
+                            "return document.querySelectorAll('[data-assistant-message-role]').length;"
+                        ) == 0
+                    )
+
+                driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").send_keys(
+                    keys.Keys.ESCAPE
+                )
+                wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is True)
+                assert driver.switch_to.active_element.get_attribute("data-assistant-toggle") == ""
+
+            driver.set_window_size(1366, 1000)
+            driver.get(f"{base_url}/help/en/index.html")
+            driver.execute_script(
+                """
+                window.__assistantTransportCalls = [];
+                window.__assistantWebEnabled = false;
+                window.fetch = async (input, init = {}) => {
+                  const path = String(input);
+                  window.__assistantTransportCalls.push({ path, method: init.method || 'GET', body: init.body || '' });
+                  if (path === '/api/documentation-assistant/status?locale=en') {
+                    return new Response(JSON.stringify({
+                      api_version: 1, state: 'ready', assistant_ready: true,
+                      lexical_search_ready: true, locale: 'en', message_key: 'assistant_ready',
+                      action_key: 'assistant_chat_send', reason_code: 'assistant_ready', state_epoch: 1,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path.startsWith('/api/documentation-assistant/web-mode?locale=en&tab_id=')) {
+                    return new Response(JSON.stringify({
+                      api_version: 1, available: true, enabled: window.__assistantWebEnabled,
+                      locale: 'en', reason_code: window.__assistantWebEnabled
+                        ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
+                      state_epoch: window.__assistantWebEnabled ? 1 : 0,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path === '/api/documentation-assistant/web-mode') {
+                    window.__assistantWebEnabled = JSON.parse(init.body).enabled;
+                    return new Response(JSON.stringify({
+                      api_version: 1, available: true, enabled: window.__assistantWebEnabled,
+                      locale: 'en', reason_code: window.__assistantWebEnabled
+                        ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
+                      state_epoch: window.__assistantWebEnabled ? 1 : 2,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path === '/api/documentation-assistant/chat') {
+                    return new Response(JSON.stringify({
+                      api_version: 1, request_id: 'req_example', state: 'accepted', state_epoch: 1,
+                      stream_path: '/api/documentation-assistant/chat/req_example/stream',
+                      time_preview: { minimum_seconds: 5, maximum_seconds: 15 },
+                    }), { status: 202, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path === '/api/documentation-assistant/chat/req_example/sources/src_example') {
+                    return new Response(JSON.stringify({
+                      api_version: 1, source_id: 'src_example', title: 'BPM overview',
+                      published_url: '/help/en/user/overview.html', locale: 'en', excerpt: 'Approved excerpt.',
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path === '/api/documentation-assistant/chat/req_example/sources/src_web') {
+                    return new Response(JSON.stringify({
+                      api_version: 1, source_id: 'src_web', title: 'Mozilla policy templates',
+                      published_url: 'https://mozilla.github.io/policy-templates/README.md', locale: 'en',
+                      excerpt: '', source_kind: 'external_untrusted', provider_id: 'brave-search-llm-context',
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path.startsWith('/api/documentation-assistant/conversation?locale=en&tab_id=')) {
+                    return new Response(null, { status: 204 });
+                  }
+                  return new Response(null, { status: 404 });
+                };
+                window.EventSource = class {
+                  constructor(url) { this.url = url; this.listeners = new Map(); }
+                  addEventListener(name, listener) {
+                    this.listeners.set(name, listener);
+                    if (name === 'final') {
+                      queueMicrotask(() => listener({ data: JSON.stringify({
+                        api_version: 1, request_id: 'req_example', state: 'answer', state_epoch: 2,
+                        reason_code: 'assistant_citations_validated', message_key: 'assistant_chat_answer',
+                        action_key: '', disposition: 'answer', text: 'Grounded BPM answer.', citations: ['src_example'],
+                        external_claims: [{ text: 'External Firefox policy note.', citations: ['src_web'] }],
+                      }) }));
+                    }
+                  }
+                  close() {}
+                };
+                """
+            )
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-send]"
+                ).is_displayed()
+            )
+            web_toggle = driver.find_element(
+                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+            )
+            assert web_toggle.is_displayed()
+            assert web_toggle.is_enabled()
+            assert not web_toggle.is_selected()
+            web_toggle.click()
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                ).is_selected()
+            )
+            question = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-question]")
+            question.send_keys("How do I configure BPM?")
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
+            wait.until(
+                lambda current_driver: "Grounded BPM answer." in current_driver.execute_script(
+                    "return document.querySelector('[data-assistant-transcript]').textContent;"
+                )
+            )
+            driver.find_element(
+                by.By.CSS_SELECTOR,
+                ".bpm-docs-assistant-message--assistant summary",
+            ).click()
+            source = driver.find_element(
+                by.By.CSS_SELECTOR,
+                ".bpm-docs-assistant-message--assistant a",
+            )
+            assert source.text == "BPM overview"
+            assert source.get_attribute("href").endswith("/help/en/user/overview.html")
+            external_region = driver.find_element(
+                by.By.CSS_SELECTOR, ".bpm-docs-assistant-external-claims"
+            )
+            assert "External sources" in external_region.text
+            assert "External Firefox policy note." in external_region.text
+            external_link = external_region.find_element(by.By.CSS_SELECTOR, "a")
+            assert external_link.get_attribute("href") == (
+                "https://mozilla.github.io/policy-templates/README.md"
+            )
+            assert external_link.get_attribute("target") == "_blank"
+            assert set(external_link.get_attribute("rel").split()) == {
+                "noopener",
+                "noreferrer",
+            }
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-clear]").click()
+            wait.until(
+                lambda current_driver: current_driver.execute_script(
+                    "return document.querySelectorAll('[data-assistant-message-role]').length;"
+                ) == 0
+            )
+            assert driver.find_element(
+                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+            ).is_selected()
+            calls = driver.execute_script("return window.__assistantTransportCalls;")
+            assert [call["method"] for call in calls] == [
+                "GET", "GET", "POST", "POST", "GET", "GET", "DELETE", "GET", "GET"
+            ]
+            assert any('"web_mode":"request_web"' in call["body"] for call in calls)
+            driver.find_element(
+                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+            ).click()
+            wait.until(
+                lambda current_driver: not current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                ).is_selected()
+            )
+            assert driver.execute_script(
+                "return window.__assistantTransportCalls.at(-1).method;"
+            ) == "POST"
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
+            wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is True)
+
+            driver.get(f"{base_url}/help/en/index.html")
+            driver.execute_script(
+                """
+                window.__assistantUnavailableWebCalls = [];
+                window.fetch = async (input, init = {}) => {
+                  const path = String(input);
+                  window.__assistantUnavailableWebCalls.push({ path, method: init.method || 'GET' });
+                  if (path === '/api/documentation-assistant/status?locale=en') {
+                    return new Response(JSON.stringify({
+                      api_version: 1, state: 'ready', assistant_ready: true,
+                      lexical_search_ready: true, locale: 'en', message_key: 'assistant_ready',
+                      action_key: 'assistant_chat_send', reason_code: 'assistant_ready', state_epoch: 1,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path.startsWith('/api/documentation-assistant/web-mode?locale=en&tab_id=')) {
+                    return new Response(JSON.stringify({
+                      api_version: 1, available: false, enabled: false, locale: 'en',
+                      reason_code: 'assistant_web_credential_unavailable', state_epoch: 0,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  return new Response(null, { status: 404 });
+                };
+                """
+            )
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+            unavailable_web_toggle = wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                )
+            )
+            wait.until(lambda _current_driver: unavailable_web_toggle.is_displayed())
+            assert not unavailable_web_toggle.is_enabled()
+            assert not unavailable_web_toggle.is_selected()
+            unavailable_calls = driver.execute_script(
+                "return window.__assistantUnavailableWebCalls;"
+            )
+            assert [call["method"] for call in unavailable_calls] == ["GET", "GET"]
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
+
+            driver.get(f"{base_url}/help/en/index.html")
+            driver.execute_script(
+                """
+                window.__assistantInstallCalls = [];
+                window.__assistantInstalled = false;
+                window.__assistantInstallState = 'idle';
+                const csrf = 'c'.repeat(24);
+                const operation = (state, phase, downloaded, total, percent, cancellable, reason) => ({
+                  operation_id: 'operation_example', kind: 'install', state, reason_code: reason,
+                  downloaded_bytes: downloaded, total_bytes: total, progress_percent: percent,
+                  cancellable, phase,
+                });
+                const modelStatus = () => ({
+                  api_version: 1, csrf_token: csrf, disclosure: {}, lexical_search_ready: true,
+                  verification: {
+                    state: window.__assistantInstallState === 'idle' ? 'not-installed' : 'installed',
+                    verified: window.__assistantInstallState !== 'idle',
+                    reason_code: window.__assistantInstallState === 'idle' ? 'artifact_missing' : 'verified',
+                  },
+                  operation: window.__assistantInstallState === 'idle'
+                    ? { state: 'idle' }
+                    : window.__assistantInstallState === 'running'
+                      ? operation('running', 'downloading', 50, 100, 50, true, '')
+                      : operation('installed', 'completed', 100, 100, 100, false, 'installed'),
+                });
+                window.fetch = async (input, init = {}) => {
+                  const path = String(input);
+                  window.__assistantInstallCalls.push({ path, method: init.method || 'GET', body: init.body || '' });
+                  if (path === '/api/documentation-assistant/status?locale=en') {
+                    const ready = window.__assistantInstalled;
+                    return new Response(JSON.stringify({
+                      api_version: 1, state: ready ? 'ready' : 'not-installed', assistant_ready: ready,
+                      lexical_search_ready: true, locale: 'en',
+                      message_key: ready ? 'assistant_ready' : 'assistant_not_installed',
+                      action_key: ready ? 'assistant_chat_send' : 'assistant_manage_model',
+                      reason_code: ready ? 'assistant_ready' : 'assistant_unavailable', state_epoch: ready ? 3 : 1,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path === '/api/local-model?locale=en') {
+                    const snapshot = modelStatus();
+                    if (window.__assistantInstallState === 'running') {
+                      window.__assistantInstallState = 'installed';
+                      window.__assistantInstalled = true;
+                    }
+                    return new Response(JSON.stringify(snapshot), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path === '/api/local-model/install') {
+                    window.__assistantInstallState = 'running';
+                    return new Response(JSON.stringify({
+                      api_version: 1, csrf_token: csrf, accepted: true,
+                      operation: operation('running', 'downloading', 0, 100, 0, true, ''),
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  if (path.startsWith('/api/documentation-assistant/web-mode?locale=en&tab_id=')) {
+                    return new Response(JSON.stringify({
+                      api_version: 1, available: true, enabled: false, locale: 'en',
+                      reason_code: 'assistant_web_disabled_by_reader', state_epoch: 0,
+                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                  }
+                  return new Response(null, { status: 404 });
+                };
+                """
+            )
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+            install = wait.until(
+                lambda current_driver: (
+                    element
+                    if (element := current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-install]"
+                    )).is_displayed() and element.is_enabled()
+                    else False
+                )
+            )
+            assert install.is_displayed()
+            assert install.is_enabled()
+            install.click()
+            wait.until(
+                lambda current_driver: "Installing model: 50% (50/100 B)" in current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-status]"
+                ).text
+            )
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-question]"
+                ).is_enabled()
+            )
+            install_calls = driver.execute_script("return window.__assistantInstallCalls;")
+            assert [call["method"] for call in install_calls] == [
+                "GET", "GET", "POST", "GET", "GET", "GET", "GET"
+            ]
+            assert all("request_web" not in call["body"] for call in install_calls)
+            assert not driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-install]").is_displayed()
+            assert driver.find_element(
+                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+            ).is_enabled()
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
+            wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is True)
+
+            driver.set_window_size(1366, 1000)
+            driver.get(f"{base_url}/help/en/index.html")
+            theme_select = ui.Select(
+                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-theme-select]")
+            )
+            backgrounds = []
+            for mode in ("light", "dark"):
+                theme_select.select_by_value(mode)
+                driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+                backgrounds.append(metrics(driver)["panelBackground"])
+                driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
+            assert backgrounds[0] != backgrounds[1]
+
+            driver.execute_cdp_cmd(
+                "Emulation.setEmulatedMedia",
+                {
+                    "features": [
+                        {"name": "prefers-reduced-motion", "value": "reduce"},
+                        {"name": "forced-colors", "value": "active"},
+                    ]
+                },
+            )
+            driver.refresh()
+            toggle = wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-toggle]"
+                )
+            )
+            accessibility_mode = driver.execute_script(
+                """
+                return {
+                  reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+                  forcedColors: matchMedia('(forced-colors: active)').matches,
+                };
+                """
+            )
+            assert accessibility_mode["reducedMotion"] is True
+            assert accessibility_mode["forcedColors"] is True
+            toggle.click()
+            assert metrics(driver)["panelHidden"] is False
+        finally:
+            driver.execute_cdp_cmd("Emulation.setEmulatedMedia", {"features": []})
+            _close_chromium_driver(driver)
+
+
+def test_documentation_floating_assistant_uses_m13_10_desktop_geometry_in_all_locales(
+    generated_theme_smoke_site: Path,
+) -> None:
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    def panel_metrics(current_driver) -> dict[str, float | bool]:
+        return current_driver.execute_script(
+            """
+            const panel = document.querySelector('[data-assistant-panel]');
+            const transcript = document.querySelector('[data-assistant-transcript]');
+            const rect = panel.getBoundingClientRect();
+            return {
+              hidden: panel.hidden,
+              width: rect.width,
+              height: rect.height,
+              top: rect.top,
+              right: rect.right,
+              bottom: rect.bottom,
+              viewportWidth: window.innerWidth,
+              viewportHeight: window.innerHeight,
+              transcriptOverflow: getComputedStyle(transcript).overflowY,
+            };
+            """
+        )
+
+    with _documentation_test_server(generated_theme_smoke_site) as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 10)
+        try:
+            for locale in DOCUMENTATION_LOCALES:
+                driver.set_window_size(1366, 1000)
+                driver.get(f"{base_url}/help/{locale}/index.html")
+                toggle = wait.until(
+                    lambda current_driver: current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-toggle]"
+                    )
+                )
+                assert toggle.text == build_docs.SHELL_LABELS[locale]["assistant"]
+                toggle.click()
+                wait.until(lambda current_driver: panel_metrics(current_driver)["hidden"] is False)
+                panel = panel_metrics(driver)
+                assert panel["width"] == pytest.approx(panel["viewportWidth"] * 0.5, abs=2)
+                assert panel["height"] == pytest.approx(panel["viewportHeight"] * 0.9, abs=2)
+                assert panel["top"] >= 0
+                assert panel["right"] <= panel["viewportWidth"] + 1
+                assert panel["bottom"] <= panel["viewportHeight"] + 1
+                assert panel["transcriptOverflow"] == "auto"
+
+            driver.set_window_size(390, 900)
+            driver.get(f"{base_url}/help/ru/index.html")
+            wait.until(lambda current_driver: panel_metrics(current_driver)["hidden"] is False)
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
+            wait.until(lambda current_driver: panel_metrics(current_driver)["hidden"] is True)
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-toggle]"
+                )
+            ).click()
+            wait.until(lambda current_driver: panel_metrics(current_driver)["hidden"] is False)
+            panel = panel_metrics(driver)
+            assert panel["width"] >= panel["viewportWidth"] - 34
+            assert panel["height"] <= panel["viewportHeight"] * 0.5 + 2
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_documentation_floating_assistant_ships_local_only_without_external_sources_control(
+    generated_theme_smoke_site: Path,
+) -> None:
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    with _documentation_test_server(generated_theme_smoke_site) as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 10)
+        try:
+            driver.get(f"{base_url}/help/en/index.html")
+            _install_assistant_ready_browser_mock(driver, "en")
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-status]"
+                ).text == build_docs.SHELL_LABELS["en"]["assistant_ready"]
+            )
+            assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-control]")
+            assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-toggle]")
+
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-question]").send_keys(
+                "How do I configure BPM?"
+            )
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
+            wait.until(
+                lambda current_driver: any(
+                    call["path"] == "/api/documentation-assistant/chat"
+                    for call in current_driver.execute_script("return window.__assistantQaCalls;")
+                )
+            )
+            calls = driver.execute_script("return window.__assistantQaCalls;")
+            assert all("/web-mode" not in call["path"] for call in calls)
+            assert any('"web_mode":"local_only"' in call["body"] for call in calls)
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
+    generated_theme_smoke_site: Path,
+) -> None:
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    keys = pytest.importorskip("selenium.webdriver.common.keys")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+
+    def panel_state(current_driver) -> dict[str, object]:
+        return current_driver.execute_script(
+            """
+            const panel = document.querySelector('[data-assistant-panel]');
+            const transcript = document.querySelector('[data-assistant-transcript]');
+            const header = document.querySelector('.bpm-docs-header');
+            const panelRect = panel.getBoundingClientRect();
+            const headerRect = header.getBoundingClientRect();
+            return {
+              panelHidden: panel.hidden,
+              panelWidth: panelRect.width,
+              panelHeight: panelRect.height,
+              panelTop: panelRect.top,
+              headerBottom: headerRect.bottom,
+              viewportWidth: window.innerWidth,
+              viewportHeight: window.innerHeight,
+              transcriptClientHeight: transcript.clientHeight,
+              transcriptScrollHeight: transcript.scrollHeight,
+              inlineScripts: document.querySelectorAll('script:not([src])').length,
+            };
+            """
+        )
+
+    with _documentation_test_server(generated_theme_smoke_site) as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 10)
+        try:
+            for index, locale in enumerate(DOCUMENTATION_LOCALES):
+                width, height = ((1366, 1000) if index % 2 == 0 else (390, 900))
+                labels = build_docs.SHELL_LABELS[locale]
+                driver.set_window_size(width, height)
+                driver.get(f"{base_url}/help/{locale}/index.html")
+                toggle = wait.until(
+                    lambda current_driver: current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-toggle]"
+                    )
+                )
+                assert toggle.text == labels["assistant"]
+                assert driver.execute_script(
+                    "return performance.getEntriesByType('resource').filter((entry) => "
+                    "entry.name.includes('/api/documentation-assistant')).length;"
+                ) == 0
+                _install_assistant_ready_browser_mock(driver, locale)
+
+                toggle.click()
+                wait.until(
+                    lambda current_driver, ready=labels["assistant_ready"]: current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-status]"
+                    ).text == ready
+                )
+                panel = panel_state(driver)
+                assert panel["panelHidden"] is False
+                if width >= 768:
+                    assert panel["panelHeight"] >= panel["viewportHeight"] * 0.9 - 2
+                    assert panel["panelHeight"] <= panel["viewportHeight"] * 0.9 + 2
+                else:
+                    assert panel["panelHeight"] <= panel["viewportHeight"] * 0.5 + 2
+                if width >= 768:
+                    assert panel["panelTop"] >= 0
+                    assert panel["panelWidth"] >= panel["viewportWidth"] * 0.5 - 2
+                    assert panel["panelWidth"] <= panel["viewportWidth"] * 0.5 + 2
+                else:
+                    assert panel["panelTop"] >= panel["headerBottom"] - 1
+                    assert panel["panelWidth"] >= panel["viewportWidth"] - 34
+                assert panel["inlineScripts"] == 0
+                _assert_theme_metrics_fit(_theme_metrics(driver))
+
+                theme_select = ui.Select(
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-docs-theme-select]")
+                )
+                theme_select.select_by_value("light")
+                light_background = driver.execute_script(
+                    "return getComputedStyle(document.querySelector('[data-assistant-panel]')).backgroundColor;"
+                )
+                theme_select.select_by_value("dark")
+                dark_background = driver.execute_script(
+                    "return getComputedStyle(document.querySelector('[data-assistant-panel]')).backgroundColor;"
+                )
+                assert light_background != dark_background
+
+                web_control = driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-web-control]"
+                )
+                web_toggle = driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                )
+                assert web_control.text == labels["assistant_external_sources"]
+                assert web_toggle.get_attribute("role") == "switch"
+                assert web_toggle.is_enabled()
+                assert not web_toggle.is_selected()
+                assert driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-question]"
+                ).is_enabled()
+                assert driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-clear]").is_displayed()
+
+                if locale == "en":
+                    question = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-question]")
+                    question.send_keys("How do I configure BPM?")
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
+                    wait.until(
+                        lambda current_driver: current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
+                        ).get_attribute("data-assistant-state") == "busy"
+                    )
+                    assert driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-status]"
+                    ).text == labels["assistant_busy_short"]
+                    driver.execute_script("window.__assistantQaEmitFinal();")
+                    wait.until(
+                        lambda current_driver: "Grounded en BPM answer." in current_driver.execute_script(
+                            "return document.querySelector('[data-assistant-transcript]').textContent;"
+                        )
+                    )
+                    assert any(
+                        '"web_mode":"local_only"' in call["body"]
+                        for call in driver.execute_script("return window.__assistantQaCalls;")
+                    )
+                    for turn in range(8):
+                        assert driver.execute_script(
+                            """
+                            return window.BPMDocumentationAssistantConversation.recordCompletedTurn(
+                              document.querySelector('[data-documentation-assistant-widget]'), arguments[0]
+                            );
+                            """,
+                            {
+                                "user": f"Long question {turn}: " + ("q" * 320),
+                                "assistant": f"Long answer {turn}: " + ("a" * 640),
+                            },
+                        ) is True
+                    transcript_state = panel_state(driver)
+                    assert transcript_state["transcriptScrollHeight"] > transcript_state[
+                        "transcriptClientHeight"
+                    ]
+                    driver.refresh()
+                    wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is False)
+                    restored = driver.execute_script(
+                        """
+                        const transcript = document.querySelector('[data-assistant-transcript]');
+                        return {
+                          messageCount: transcript.querySelectorAll('[data-assistant-message-role]').length,
+                          unsafeNodes: transcript.querySelectorAll('img, script').length,
+                          text: transcript.textContent,
+                        };
+                        """
+                    )
+                    assert restored["messageCount"] == 16
+                    assert restored["unsafeNodes"] == 0
+                    assert "Long answer 7:" in restored["text"]
+                    assert driver.execute_script(
+                        "return performance.getEntriesByType('resource').filter((entry) => "
+                        "entry.name.includes('/api/documentation-assistant')).length;"
+                    ) == 0
+                    continue
+
+                if locale == "ru":
+                    web_toggle.click()
+                    wait.until(
+                        lambda current_driver: current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                        ).is_selected()
+                    )
+                    first_topic = build_docs._navigation_topic_order("user-guide.ditamap")[0]
+                    driver.get(f"{base_url}/help/{locale}/user/{first_topic}.html")
+                    _install_assistant_ready_browser_mock(driver, locale)
+                    wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is False)
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
+                    wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is True)
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+                    wait.until(
+                        lambda current_driver: current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                        ).is_selected()
+                    )
+                    calls = driver.execute_script("return window.__assistantQaCalls;")
+                    assert any(
+                        call["method"] == "POST" and call["path"] == "/api/documentation-assistant/web-mode"
+                        for call in calls
+                    )
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-web-toggle]").click()
+                    wait.until(
+                        lambda current_driver: not current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
+                        ).is_selected()
+                    )
+
+                if locale == "es-ES":
+                    driver.execute_script("window.__assistantQaRejectChat = true;")
+                    question = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-question]")
+                    question.send_keys("¿Cómo configuro BPM?")
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
+                    wait.until(
+                        lambda current_driver: current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
+                        ).get_attribute("data-assistant-state") == "unavailable"
+                    )
+                    assert driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-status]"
+                    ).text == labels["assistant_unavailable_short"]
+
+                calls = driver.execute_script("return window.__assistantQaCalls;")
+                assert calls
+                assert all(call["path"].startswith("/api/documentation-assistant/") for call in calls)
+                assert all("search" not in call["path"] and "brave" not in call["path"] for call in calls)
+                driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").send_keys(
+                    keys.Keys.ESCAPE
+                )
+                wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is True)
+                assert driver.switch_to.active_element.get_attribute("data-assistant-toggle") == ""
+
+            csp_messages = [
+                entry["message"]
+                for entry in driver.get_log("browser")
+                if "Content Security Policy" in entry["message"]
+            ]
+            assert not csp_messages
+        finally:
+            _close_chromium_driver(driver)
+
+
+def test_documentation_floating_assistant_install_failure_stays_locale_safe(
+    generated_theme_smoke_site: Path,
+) -> None:
+    by = pytest.importorskip("selenium.webdriver.common.by")
+    ui = pytest.importorskip("selenium.webdriver.support.ui")
+    locale = "de"
+    labels = build_docs.SHELL_LABELS[locale]
+
+    with _documentation_test_server(generated_theme_smoke_site) as base_url:
+        driver = _build_chromium_driver()
+        wait = ui.WebDriverWait(driver, 10)
+        try:
+            driver.get(f"{base_url}/help/{locale}/index.html")
+            _install_assistant_failure_browser_mock(driver, locale)
+            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
+            install = wait.until(
+                lambda current_driver: (
+                    element
+                    if (element := current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-assistant-install]"
+                    )).is_displayed() and element.is_enabled()
+                    else False
+                )
+            )
+            install.click()
+            wait.until(
+                lambda current_driver: current_driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
+                ).get_attribute("data-assistant-state") == "model-failed"
+            )
+            status = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-status]").text
+            assert status == labels["assistant_install_failed"]
+            assert "artifact_hash_mismatch" not in status
+            assert not driver.find_element(
+                by.By.CSS_SELECTOR, "[data-assistant-question]"
+            ).is_enabled()
+            assert driver.find_element(
+                by.By.CSS_SELECTOR, "[data-assistant-web-control]"
+            ).get_attribute("hidden") is not None
+            calls = driver.execute_script("return window.__assistantQaFailureCalls;")
+            assert [call["method"] for call in calls] == ["GET", "GET", "POST", "GET"]
+            assert all(call["path"].startswith("/api/") for call in calls)
+            assert all("search" not in call["path"] and "brave" not in call["path"] for call in calls)
         finally:
             _close_chromium_driver(driver)
 

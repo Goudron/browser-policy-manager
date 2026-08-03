@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-floating-browser-qa-0.9.3",
+  "backlog_item": "BPM093-M12B-07",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-browser-release-qa",
+  "pins": {
+    "floating_web_mode": {
+      "path": "documentation/config/documentation-assistant-floating-web-mode-contract-0.9.3.json",
+      "sha256": "ec0cf394f815192066b1120a67223aa4620896689b4cd1aa7f9c38706937f637"
+    },
+    "floating_ui": {
+      "path": "documentation/config/documentation-assistant-floating-ui-contract-0.9.3.json",
+      "sha256": "a8293dc10da46329f7c063e0a4a0972ce615ed939cd80c5b186d30cb2f97f669"
+    }
+  },
+  "browser_evidence": {
+    "test": "documentation/tests/browser/test_documentation_portal_browser_smoke.py",
+    "runner": "pytest -m browser_ui",
+    "mock_boundary": "The scenarios replace only browser same-origin fetch/EventSource responses after page load. They do not start a model, contact the optional provider, or call ordinary search."
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "viewport_and_theme_matrix": {
+    "desktop": "1366x1000",
+    "narrow": "390x900",
+    "themes": ["light", "dark"],
+    "panel_requirements": [
+      "desktop third-width and half-height bounds",
+      "narrow viewport fit",
+      "below-header placement",
+      "no horizontal overflow of documentation controls"
+    ]
+  },
+  "state_matrix": {
+    "all_locales": ["collapsed", "ready", "external switch off"],
+    "chat": ["busy", "validated local answer", "safe unavailable failure"],
+    "model": ["installation progress in M12B-06 smoke", "safe failed installation"],
+    "persistence": [
+      "eight bounded completed text-only turns restore after reload",
+      "Russian reader-enabled external mode restores after documentation navigation",
+      "other locale records remain default-off"
+    ]
+  },
+  "safety_and_independence": {
+    "csp": "No inline portal script is introduced and the browser log has no Content Security Policy violation.",
+    "dynamic_content": "The long restored transcript contains no image or script element.",
+    "network": "Page load has no assistant request; all mocked interaction calls stay same-origin; no optional-provider or ordinary-search call occurs.",
+    "ordinary_search_changed": false,
+    "external_sources_default": "off until the reader explicitly changes it"
+  }
+}

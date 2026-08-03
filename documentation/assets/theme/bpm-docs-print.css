@@ -18,6 +18,8 @@
   .bpm-docs-skip-link,
   .bpm-docs-header-actions,
   .bpm-docs-search,
+  .bpm-docs-assistant-entry,
+  .bpm-docs-assistant-widget,
   .bpm-docs-sidebar {
     display: none !important;
   }

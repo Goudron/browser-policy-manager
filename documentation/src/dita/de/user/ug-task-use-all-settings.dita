@@ -8,7 +8,7 @@
     <context><p>Alle Einstellungen ist der vollständige visuelle Editor für Firefox-Richtlinien und enthält den Bereich Verwaltete Einstellungen. Der Editor wird im Modus Prüfung geöffnet, sodass Elemente mit Handlungsbedarf vor dem umfassenden Durchsuchen des Katalogs sichtbar sind.</p>
       <fig id="screenshot-all-settings-review">
         <title>Alle Einstellungen Prüfung</title>
-        <image keyref="screenshot.all-settings-review" placement="break">
+        <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>Alle Einstellungen zeigt die Überprüfungsliste, die konfigurierten Einstellungen und den Einstellungsdetailbereich auf einem schmalen Bildschirm an.</alt>
         </image>
       </fig>

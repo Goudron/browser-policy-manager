@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-orientation" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>了解 BPM 中的 CIS 指导</title>
+  <title>了解浏览器策略管理器中的安全基线指导</title>
   <shortdesc>BPM 记录了其自己的针对 CIS Mozilla Firefox ESR GPO 基准的 Firefox 强化映射，而无需复制受限制的基准文章或声明认证。</shortdesc>
   <conbody>
-    <section id="a-benchmark"><title>BPM 使用的基准</title><p>BPM 识别针对 CIS Mozilla Firefox ESR GPO 基准版本 1.0.0 的映射，该版本于 2024 年 7 月 19 日发布，并由 CIS 在 Windows 11 版本 23H2 上针对 Mozilla Firefox 115.10 ESR 进行测试。 BPM 还根据其捆绑的 Firefox ESR 140.13 和 Firefox Release 153 架构验证导出的策略形状，因此您选择的 BPM 渠道仍然很重要。</p></section>
-    <section id="a-what-bpm-publishes"><title>BPM 发布的内容</title><p>该指南发布了 BPM 编写的建议 ID、级别、生成层、策略或托管首选项目标、合并行为、手动审核状态和验证切换的描述。它可以显示 BPM 映射了 55 个推荐记录，计划了 53 个推荐主题，并将两个未解决的记录保留为仅来源条目。</p></section>
-    <section id="a-what-bpm-does-not-prove"><title>BPM 无法证明什么</title><p>BPM 是一个独立的实施，未经 CIS 授权、赞助、认可、认证或批准。该指南不能替代官方 CIS 基准，并且 BPM 导出不能证明每个环境中的 CIS 合规性或 Firefox 运行时行为。</p></section>
-    <section id="a-when-appropriate"><title>何时使用 CIS 指导</title><p>当配置文件需要记录的安全基线以进行企业审查、信息亭准备、受保护的工作站或入门预设与强化层之间的比较时，请使用 CIS 指南。不要将其用作唯一的部署批准：在导出之前检查本地更新、代理、证书、扩展、隐私和证据保留要求。</p></section>
+    <section id="a-benchmark"><title>浏览器策略管理器使用的基准</title><p>BPM 识别针对 CIS Mozilla Firefox ESR GPO 基准版本 1.0.0 的映射，该版本于 2024 年 7 月 19 日发布，并由 CIS 在 Windows 11 版本 23H2 上针对 Mozilla Firefox 115.10 ESR 进行测试。 BPM 还根据其捆绑的 Firefox ESR 140.13 和 Firefox Release 153 架构验证导出的策略形状，因此您选择的 BPM 渠道仍然很重要。</p></section>
+    <section id="a-what-bpm-publishes"><title>浏览器策略管理器发布的内容</title><p>该指南发布了 BPM 编写的建议 ID、级别、生成层、策略或托管首选项目标、合并行为、手动审核状态和验证切换的描述。它可以显示 BPM 映射了 55 个推荐记录，计划了 53 个推荐主题，并将两个未解决的记录保留为仅来源条目。</p></section>
+    <section id="a-what-bpm-does-not-prove"><title>浏览器策略管理器无法证明什么</title><p>BPM 是一个独立的实施，未经 CIS 授权、赞助、认可、认证或批准。该指南不能替代官方 CIS 基准，并且 BPM 导出不能证明每个环境中的 CIS 合规性或 Firefox 运行时行为。</p></section>
+    <section id="a-when-appropriate"><title>何时使用安全基线指导</title><p>当配置文件需要记录的安全基线以进行企业审查、信息亭准备、受保护的工作站或入门预设与强化层之间的比较时，请使用 CIS 指南。不要将其用作唯一的部署批准：在导出之前检查本地更新、代理、证书、扩展、隐私和证据保留要求。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.cis-concept-levels-channels-layers"/>

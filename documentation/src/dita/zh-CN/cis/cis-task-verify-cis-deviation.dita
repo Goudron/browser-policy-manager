@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-verify-cis-deviation" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>验证并记录 CIS 偏差</title>
+  <title>验证并记录安全基线偏差</title>
   <shortdesc>当 CIS 相关值被保留、更改或留作手动验证而不是自动接受时，请使用此任务。</shortdesc>
   <taskbody>
     <prereq><p>打开一个配置文件，其中显示 CIS 手动审核项目、冲突或与生成的图层的故意偏差。</p></prereq>

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-domain-ranking-facets-0.9.3",
+  "backlog_item": "BPM093-M4-03",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted",
+  "inherits_from": [
+    "documentation/config/search-corpus-and-results-0.9.0.json",
+    "documentation/config/search-ranking-typo-0.9.0.json",
+    "documentation/config/search-facets-filters-0.9.0.json",
+    "documentation/config/search-browser-adapter-contract-0.9.3.json"
+  ],
+  "ranking": {
+    "weight_contract_id": "bpm-doc-search-ranking-typo-0.9.0",
+    "preserved_sources": [
+      "identifiers",
+      "title",
+      "aliases",
+      "headings",
+      "body",
+      "bounded_typo"
+    ],
+    "evidence_fields": [
+      "topic_id",
+      "document_id",
+      "score",
+      "score_breakdown",
+      "matched_fields",
+      "identifiers",
+      "filter_facets"
+    ],
+    "exact_identifier_rule": "An exact BPM identifier remains authoritative and its score component is retained in browser evidence."
+  },
+  "facets": {
+    "preserved_fields": [
+      "locale",
+      "guide_id",
+      "topic_kind",
+      "firefox_channel",
+      "policy_category",
+      "cis_level",
+      "cis_control_state",
+      "api_area",
+      "bpm_version"
+    ],
+    "composition": "AND across facet fields; OR within values of the same facet field.",
+    "counts": "The adapter returns the generated per-locale facet counts unchanged and applies only declared facet values."
+  },
+  "adapter_projection": {
+    "maximum_evidence_rows": 50,
+    "must_not": [
+      "change score weights",
+      "hide exact identifier evidence",
+      "invent a domain facet",
+      "use a remote service or vendor UI"
+    ]
+  }
+}

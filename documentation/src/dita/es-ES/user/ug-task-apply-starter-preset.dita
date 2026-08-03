@@ -7,7 +7,7 @@
     <prereq><p>Un borrador de perfil está abierto en el Paso 1.</p></prereq>
     <context><p>Los ajustes preestablecidos iniciales proporcionan una línea de base conocida que aún puede cambiar en Editor guiado, Todos los ajustes o Editor JSON.</p></context>
     <steps>
-      <step><cmd>Abra el área preestablecida de inicio en la línea base del perfil &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Abra el área de ajuste preestablecido inicial en el paso 1.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
       <step><cmd>Compare los ajustes preestablecidos disponibles con el escenario del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Aplique el ajuste preestablecido que coincida con el comportamiento previsto del navegador.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Revise el resumen modificado antes de pasar al siguiente paso.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>

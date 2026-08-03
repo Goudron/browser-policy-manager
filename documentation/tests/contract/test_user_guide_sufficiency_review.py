@@ -15,6 +15,7 @@ TAXONOMY = DOCUMENTATION_ROOT / "config/topic-section-taxonomy-0.9.1.json"
 DITA_ROOT = DOCUMENTATION_ROOT / "src/dita"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 TEST_NODE_RE = re.compile(r"(?P<path>[A-Za-z0-9_./-]+\.py)::(?P<test>test_[A-Za-z0-9_]+)")
+POST_091_ASSISTANT_TASK = "ug-task-use-local-documentation-assistant"
 
 pytestmark = pytest.mark.docs_contract
 
@@ -46,6 +47,7 @@ def _taxonomy_action_topics() -> dict[str, list[str]]:
             topic_id
             for topic_id in section["topics"]
             if topic_id.startswith(("ug-task-", "ug-troubleshoot-"))
+            and topic_id != POST_091_ASSISTANT_TASK
         ]
         for section in user_guide["sections"]
     }

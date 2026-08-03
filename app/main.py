@@ -8,10 +8,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
-from app.api import export, health, profiles, validation
+from app.api import documentation_assistant, export, health, local_model, profiles, validation
 from app.core.config import get_settings
 from app.db import get_session, init_db
 from app.documentation import router as documentation_router
+from app.documentation.assistant_service import TrainingDocumentationAssistantService
 from app.middleware.security import SecurityHeadersMiddleware
 from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
 from app.web import profiles as web_profiles
@@ -50,13 +51,22 @@ def create_app() -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         await _run_startup_profile_normalization()
-        yield
+        try:
+            yield
+        finally:
+            runtime = getattr(app.state, "documentation_assistant_runtime", None)
+            if runtime is not None:
+                runtime.shutdown()
 
     app = FastAPI(
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
         lifespan=lifespan,
     )
+
+    # Model training and RAG promotion are intentionally beyond the 0.9.3 release boundary.
+    # Keep the visible assistant functional without loading or inspecting local AI artifacts.
+    app.state.documentation_assistant_service = TrainingDocumentationAssistantService()
 
     app.add_middleware(SecurityHeadersMiddleware)
 
@@ -81,6 +91,8 @@ def create_app() -> FastAPI:
     app.include_router(profiles.router)
     app.include_router(export.router)
     app.include_router(validation.router)
+    app.include_router(local_model.router)
+    app.include_router(documentation_assistant.router)
     app.include_router(documentation_router.router)
 
     @app.get("/i18n/{locale}.json", include_in_schema=False)

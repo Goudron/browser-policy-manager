@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Configurer Firefox AI et les politiques relatives aux fonctionnalités intelligentes</title>
-  <shortdesc>Utilisez l'étape 5 pour les contrôles de stratégie du navigateur Firefox existants liés aux fonctionnalités intelligentes AI &amp;, à la recherche visuelle et aux surfaces intelligentes sur les schémas de version pris en charge.</shortdesc>
+  <title>Configurer les stratégies Firefox pour l’IA et les fonctionnalités intelligentes</title>
+  <shortdesc>Utilisez l’étape 5 pour configurer les stratégies Firefox disponibles pour l’IA, la recherche visuelle et d’autres fonctionnalités intelligentes.</shortdesc>
   <taskbody>
-    <prereq><p>Un schéma de version qui prend en charge les contrôles est sélectionné, ou vous comprenez qu'ESR 140.13 peut les omettre.</p></prereq>
-    <context><p>Cette rubrique documente les paramètres de stratégie Firefox existants en tant que fonctionnalité du produit. Il n'ajoute pas la fonctionnalité AI au portail de documentation 0.9.1 : RAG, les intégrations, la recherche générative et les réponses génératives restent hors de portée.</p></context>
+    <prereq><p>Sélectionnez Release 153 ou ESR 153.0. Certains contrôles ne sont pas disponibles dans ESR 140.13.</p></prereq>
+    <context><p>Cette rubrique documente les paramètres de stratégie Firefox existants en tant que fonctionnalité du produit. Ces contrôles du navigateur sont distincts de l’assistant de documentation et ne modifient ni son chat ni la recherche déterministe.</p></context>
     <steps>
-      <step><cmd>Ouvrez l'étape 5, fonctionnalités intelligentes AI &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Examinez les surfaces du navigateur intégré AI, la recherche visuelle et les fonctionnalités du navigateur intelligent répertoriées pour le schéma de version sélectionné.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 5 « IA et fonctionnalités intelligentes ».</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Examinez les stratégies d’IA, de recherche visuelle et de navigateur intelligent prises en charge par le schéma sélectionné.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
       <step><cmd>Activez, désactivez ou quittez chaque stratégie prise en charge en fonction de l'objectif du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Si un contrôle est absent sur ESR 140.13, traitez-le comme non pris en charge plutôt que d'inventer manuellement un paramètre guidé.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
+      <step><cmd>Si un contrôle est absent dans ESR 140.13, traitez-le comme non pris en charge et ne créez pas le paramètre manuellement.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
-    <result><p>Les politiques Firefox prises en charge pour l'IA et les fonctions intelligentes sont examinées comme des paramètres du produit, tandis que le portail de documentation reste dépourvu de fonctions d'IA.</p></result>
-    <postreq><p>Récupération : si une partie prenante s'attend à un contrôle ESR absent, passez à un schéma de version pris en charge pour examiner ou documenter l'état non pris en charge.</p></postreq>
+    <result><p>Les stratégies Firefox pour l’IA et les fonctionnalités intelligentes sont configurées comme paramètres de profil. Elles ne contrôlent pas l’assistant de documentation.</p></result>
+    <postreq><p>Récupération : si un contrôle nécessaire est absent, passez à un schéma pris en charge approprié ou documentez l’état non pris en charge.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>

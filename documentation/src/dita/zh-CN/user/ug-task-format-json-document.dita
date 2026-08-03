@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-format-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>设置 JSON 文档格式</title>
+  <title>设置数据交换文档文档格式</title>
   <shortdesc>在审查、验证或移交之前格式化当前 JSON 文档。</shortdesc>
   <taskbody>
     <prereq><p>在编辑器中使用 JSON 文档打开 JSON 编辑器。</p></prereq>

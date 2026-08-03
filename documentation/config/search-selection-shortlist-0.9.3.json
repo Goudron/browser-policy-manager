@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-search-selection-shortlist-0.9.3",
+  "backlog_item": "BPM093-M3-01",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-shortlist-not-benchmarked",
+  "decision_boundary": "This contract freezes entry gates, weighted comparison rules, and candidates. It does not select, install, or replace a search engine.",
+  "selection_inputs": {
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "current_search_inventory": "docs/architecture/current-documentation-search-inventory-0.9.3.md",
+    "benchmark_protocol": "docs/architecture/old-laptop-benchmark-protocol-0.9.3.md",
+    "preserved_contracts": [
+      "documentation/config/search-corpus-and-results-0.9.0.json",
+      "documentation/config/search-normalization-aliases-0.9.0.json",
+      "documentation/config/search-ranking-typo-0.9.0.json",
+      "documentation/config/search-facets-filters-0.9.0.json",
+      "documentation/config/search-ui-filter-contract-0.9.1.json",
+      "documentation/config/search-quality-performance-0.9.0.json",
+      "documentation/config/search-integrity-drift-0.9.0.json"
+    ]
+  },
+  "entry_gates": [
+    {
+      "id": "SG093-E1",
+      "name": "OSI license and reproducible distribution",
+      "requirement": "The exact candidate edition, version, and distribution license are OSI-approved and an immutable source or release with checksum evidence can be recorded."
+    },
+    {
+      "id": "SG093-E2",
+      "name": "BPM-controlled self-hosting",
+      "requirement": "BPM can run the candidate without an account, paid hosted service, mandatory cloud control plane, or mandatory telemetry."
+    },
+    {
+      "id": "SG093-E3",
+      "name": "Six-locale route to parity",
+      "requirement": "Primary evidence documents a credible indexing/tokenization route for en, ru, de, zh-CN, fr, and es-ES; M3-03 must still measure every locale."
+    },
+    {
+      "id": "SG093-E4",
+      "name": "Offline, CSP, and accessibility compatibility",
+      "requirement": "The candidate has a design path that keeps documentation usable offline and permits BPM's same-origin CSP, keyboard, localized status, safe rendering, and degraded lexical behavior."
+    },
+    {
+      "id": "SG093-E5",
+      "name": "Facet and portal integration compatibility",
+      "requirement": "The candidate can preserve BPM's guide/topic/channel/policy/CIS/API facets, URL state, result URLs, exact identifiers, reviewed aliases, and deterministic fallback through an adapter if necessary."
+    },
+    {
+      "id": "SG093-E6",
+      "name": "Maintainable operational boundary",
+      "requirement": "The candidate has an active upstream or is repository-owned, has a bounded update/rollback path, and introduces no unowned public listener or network dependency."
+    }
+  ],
+  "gate_rule": {
+    "visibility": "All entry gates are explicit in this contract; there are no hidden vetoes.",
+    "admission": "A candidate may enter an isolated M3-02 prototype only when every gate has recorded evidence or an explicit prototype condition that will be tested before comparison.",
+    "rejection": "A candidate failing an entry gate is recorded with the failed gate and is not given a weighted score."
+  },
+  "weighted_matrix": {
+    "score_scale": {"minimum": 0, "maximum": 5, "meaning": "0 is no demonstrated fit; 5 is demonstrated fit on the frozen evidence."},
+    "formula": "sum(weight_percent * dimension_score / 5); total is 0 through 100",
+    "dimensions": [
+      {"id": "relevance", "weight_percent": 35, "evidence": "M3-03 six-locale corpus: Top-1, Recall@5, exact identifiers, aliases, typos, morphology, CJK, no-result behavior, and raw per-query results."},
+      {"id": "locale_parity", "weight_percent": 20, "evidence": "Per-locale evidence for en, ru, de, zh-CN, fr, and es-ES; no macro average may hide a failed locale."},
+      {"id": "resource_performance", "weight_percent": 15, "evidence": "M3-04 old-laptop raw samples: artifact bytes, startup, browser lexical-render P95, memory, and failure recovery."},
+      {"id": "offline_csp_accessibility", "weight_percent": 10, "evidence": "M3-02/M3-04 prototype evidence for no-network operation, same-origin CSP, inert rendering, keyboard behavior, localized status, and degraded state."},
+      {"id": "facet_integration", "weight_percent": 10, "evidence": "M3-02/M3-03 evidence for existing facets, URL/filter state, result URLs, exact-ID priority, reviewed aliases, and browser-visible ranking parity."},
+      {"id": "license_security_operations_maintenance", "weight_percent": 10, "evidence": "Exact edition/version/license, immutable release/checksum, advisory check, update/rollback procedure, listener/process isolation, and upstream maintenance record."}
+    ],
+    "scoring_rule": "Use the same corpus revision and host protocol for every candidate. Record the score and evidence for every dimension; a missing measurement is unscored, never zero or an assumed pass.",
+    "selection_rule": "M3-05 may select only after all admitted candidates have complete evidence. A candidate must score at least 4/5 for relevance and locale parity and meet all release floors; otherwise retain the current static control. Weighted total breaks ties only among candidates meeting those floors."
+  },
+  "candidates": [
+    {
+      "id": "current-static-control",
+      "name": "Current BPM deterministic static browser search",
+      "kind": "repository-owned browser static control",
+      "version": "BPM 0.9.3 source baseline",
+      "entry_status": "admitted-control",
+      "gate_evidence": {
+        "SG093-E1": "Repository-owned BPM source; no third-party search-engine distribution is introduced.",
+        "SG093-E2": "Current implementation is self-hosted and uses a same-origin local index.",
+        "SG093-E3": "Current per-locale index contract covers en, ru, de, zh-CN, fr, and es-ES.",
+        "SG093-E4": "Inventory records same-origin retrieval, CSP-safe DOM text rendering, and localized unavailable state.",
+        "SG093-E5": "Existing contracts define facets, URL state, result URLs, exact identifiers, and aliases.",
+        "SG093-E6": "BPM owns source, build, package, rollback, and no-listener behavior."
+      },
+      "known_constraint": "The browser scorer is simpler than the build-time scorer: it lacks bounded typo and alias-group semantics. Browser-visible results, not build-only fixtures, are the control measurement.",
+      "sources": ["docs/architecture/current-documentation-search-inventory-0.9.3.md"],
+      "scorecard": {"status": "unmeasured", "dimension_scores": {"relevance": null, "locale_parity": null, "resource_performance": null, "offline_csp_accessibility": null, "facet_integration": null, "license_security_operations_maintenance": null}, "total": null}
+    },
+    {
+      "id": "pagefind-1.5.2",
+      "name": "Pagefind",
+      "kind": "third-party static search candidate",
+      "version": "1.5.2",
+      "license": "MIT",
+      "entry_status": "admitted-to-prototype",
+      "gate_evidence": {
+        "SG093-E1": "MIT license and immutable v1.5.2 release are published by the upstream project.",
+        "SG093-E2": "Upstream describes a fully static deployment with no hosted infrastructure requirement.",
+        "SG093-E3": "Upstream multilingual documentation covers per-language indexing and explicit stemming/segmentation paths for the six BPM locales.",
+        "SG093-E4": "Static deployment is a credible path; the BPM adapter must prove offline, CSP, accessibility, and failure behavior.",
+        "SG093-E5": "Upstream filter API is a credible path; the prototype must prove every BPM facet, URL-state, ranking, alias, and result-URL invariant.",
+        "SG093-E6": "The project publishes versioned releases; BPM still must record checksum, advisory, upgrade, and rollback evidence before selection."
+      },
+      "prototype_conditions": [
+        "No Pagefind default UI is adopted without BPM's localized accessible adapter.",
+        "No candidate result is accepted until browser-visible ranking parity and every BPM facet/filter contract are measured.",
+        "No network request other than same-origin local documentation assets is permitted in local mode."
+      ],
+      "sources": [
+        "https://pagefind.app/docs/multilingual/",
+        "https://pagefind.app/docs/filtering/",
+        "https://pagefind.app/docs/api/",
+        "https://github.com/CloudCannon/pagefind/blob/main/LICENSE",
+        "https://github.com/CloudCannon/pagefind/releases/tag/v1.5.2"
+      ],
+      "scorecard": {"status": "unmeasured", "dimension_scores": {"relevance": null, "locale_parity": null, "resource_performance": null, "offline_csp_accessibility": null, "facet_integration": null, "license_security_operations_maintenance": null}, "total": null}
+    },
+    {
+      "id": "meilisearch-ce-1.45.1",
+      "name": "Meilisearch Community Edition",
+      "kind": "third-party local-service search candidate",
+      "version": "1.45.1",
+      "license": "MIT (Community Edition only)",
+      "entry_status": "admitted-to-prototype-with-isolation-condition",
+      "gate_evidence": {
+        "SG093-E1": "Only the MIT-licensed Community Edition v1.45.1 is in scope; Enterprise terms are excluded.",
+        "SG093-E2": "A self-hosted daemon is possible, but only behind a BPM-owned same-origin adapter without account, cloud, or telemetry requirement.",
+        "SG093-E3": "Upstream documents language configuration and tokenization routes for Latin languages, German compounds, Cyrillic/Russian, and Chinese segmentation; BPM must configure and measure all six locales.",
+        "SG093-E4": "The adapter must prove that the browser never contacts the daemon and that disabled/offline/degraded lexical search remains usable.",
+        "SG093-E5": "Its filtering and typo controls are candidates for an adapter; exact BPM facet/filter, URL, ranking, and alias parity remain prototype requirements.",
+        "SG093-E6": "The release is versioned, but selection requires an advisory review, checksum, lifecycle, private binding, and clean-stop/rollback evidence."
+      },
+      "prototype_conditions": [
+        "Use only the Community Edition artifact and license; do not mix Enterprise features or terms.",
+        "Bind the daemon to a BPM-owned private boundary; expose no LAN/public listener and ensure the browser never contacts the daemon directly.",
+        "A failed, stopped, or incompatible daemon must not delay or disable the independent static lexical fallback."
+      ],
+      "sources": [
+        "https://www.meilisearch.com/docs/resources/help/language",
+        "https://www.meilisearch.com/docs/capabilities/indexing/how_to/handle_multilingual_data",
+        "https://www.meilisearch.com/docs/resources/internals/typo_tolerance",
+        "https://github.com/meilisearch/meilisearch/blob/main/LICENSE",
+        "https://github.com/meilisearch/meilisearch/releases/tag/v1.45.1"
+      ],
+      "scorecard": {"status": "unmeasured", "dimension_scores": {"relevance": null, "locale_parity": null, "resource_performance": null, "offline_csp_accessibility": null, "facet_integration": null, "license_security_operations_maintenance": null}, "total": null}
+    }
+  ],
+  "additional_candidate_policy": "No additional candidate is admitted in M3-01. An added candidate must document primary evidence for all six entry gates and use the same M3-02 through M3-04 evidence path; popularity, a benchmark from another product, or a build-time-only result is insufficient.",
+  "next_evidence": ["BPM093-M3-02", "BPM093-M3-03", "BPM093-M3-04", "BPM093-M3-05"]
+}

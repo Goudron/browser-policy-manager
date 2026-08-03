@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -23,6 +24,7 @@ def test_authoring_runbooks_cover_required_maintainer_workflows() -> None:
     expected = {
         "README.md",
         "add-or-update-topic.md",
+        "documentation-update-for-future-epics.md",
         "localization-and-screenshots.md",
         "inventory-refresh.md",
         "links-manifest-and-publishing.md",
@@ -61,6 +63,39 @@ def test_one_topic_runbook_keeps_changes_small_and_dita_only() -> None:
         "git diff --check",
     ):
         assert required in runbook
+
+
+def test_epic_documentation_update_runbook_requires_editorial_and_pdf_review() -> None:
+    runbook = _text("documentation-update-for-future-epics.md")
+    backlog = _repository_text("docs/epic-backlog-creation-runbook.md")
+
+    for required in (
+        "Microsoft Writing Style Guide",
+        "Mozilla Pontoon",
+        "Mozilla SUMO",
+        "Completeness and exclusion review",
+        "Keep minimum system requirements as the first Administrator Guide topic",
+        "future capability presented as available",
+        "deterministic documentation search",
+        "make docs-pdf-build",
+        "make docs-pdf-deliver",
+        "CJK glyph",
+        "local Chromium",
+        "make docs-install-dev",
+        "progress to stdout",
+    ):
+        assert required in runbook
+
+    for required in (
+        "Required editorial documentation review",
+        "documentation-update-for-future-epics.md",
+        "Microsoft style",
+        "Mozilla Pontoon",
+        "SUMO",
+        "CJK glyph",
+        "page-fitting screenshots",
+    ):
+        assert required in backlog
 
 
 def test_authoring_runbooks_preserve_compact_ui_and_reader_documentation_boundaries() -> None:
@@ -127,6 +162,59 @@ def test_localization_and_inventory_runbooks_preserve_no_ai_and_provenance_bound
     assert "$BPM_BASE_URL" in inventory
 
 
+def test_authoring_runbooks_define_the_approved_local_assistant_boundary() -> None:
+    agents = _repository_text("documentation/AGENTS.md")
+    readme = _text("README.md")
+    localization = _text("localization-and-screenshots.md")
+    inventory = _text("inventory-refresh.md")
+    publishing = _text("links-manifest-and-publishing.md")
+    debugging = _text("debugging-protocol.md")
+    selection = json.loads(
+        (DOCUMENTATION_ROOT / "config/chat-rag-embedding-selection-contract-0.9.3.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    retrieval = json.loads(
+        (DOCUMENTATION_ROOT / "config/chat-rag-retrieval-contract-0.9.3.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    external = json.loads(
+        (
+            DOCUMENTATION_ROOT
+            / "config/documentation-assistant-external-evidence-release-contract-0.9.3.json"
+        ).read_text(encoding="utf-8")
+    )
+
+    for text in (agents, readme):
+        for required in (
+            "deterministic-search",
+            "local-only by default",
+            "same-locale",
+        ):
+            assert required in text
+    assert "unreviewed AI-authored content" in agents
+    assert "no silent model action, network, or telemetry" in agents
+    assert "never becomes local RAG knowledge" in agents
+    assert "never silently contacted" in readme
+    assert "never retained as local knowledge" in readme
+
+    assert "reviewed, published locale peer may enter" in localization
+    assert "separately reviewed chat feature" in inventory
+    assert "does not alter search ranking, files, or availability" in publishing
+    assert "Do not package model weights, embeddings, vector generations" in publishing
+    assert "Local documentation assistant wording" in debugging
+    assert "deterministic-search independence" in debugging
+
+    assert selection["scope"]["ordinary_search"].startswith("M4 deterministic documentation search")
+    assert selection["hard_boundaries"]["network_after_local_install"] == 0
+    assert retrieval["locale_and_filtering"]["locale_rule"].startswith("One request scans exactly")
+    assert retrieval["entry_boundary"]["ordinary_search"].startswith("M4 deterministic")
+    assert external["configuration"]["enabled_by_default"] is False
+    assert external["reader_mode"]["retention"].startswith("enabled for subsequent")
+    assert external["fallback"]["ordinary_search_changed"] is False
+
+
 def test_localization_runbook_defines_dita_translation_workflow() -> None:
     localization = _text("localization-and-screenshots.md")
     readme = _text("README.md")
@@ -160,7 +248,7 @@ def test_localization_runbook_defines_dita_translation_workflow() -> None:
     ):
         assert required in localization
 
-    assert "unreviewed machine output as documentation functionality" in readme
+    assert "Unreviewed AI-authored prose, generated chat output" in readme
     assert "AI-assisted drafting or localization is allowed during development" in readme
 
 

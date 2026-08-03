@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-ai-availability-fallback-0.9.3",
+  "backlog_item": "BPM093-M2-06",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-architecture-only",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "implementation_boundary": {
+    "implemented_now": false,
+    "planned_status_endpoint": "GET /api/documentation-assistant/status",
+    "planned_chat_endpoint": "POST /api/documentation-assistant/chat",
+    "rule": "Endpoint names and payloads are a contract for later tasks, not routes implemented by this task."
+  },
+  "independent_readiness": {
+    "core_bpm_health": "Existing /health/ready reports only core BPM readiness and must remain true when the local assistant is disabled, absent, incompatible, busy, cancelled, degraded, crashed, or web-offline.",
+    "assistant_ready": "True only when a verified compatible local assistant can accept an immediate generation request. It is false for disabled, not-installed, downloading, indexing without an active generation, loading, cancelled, degraded, incompatible, and crashed.",
+    "lexical_search_ready": "Always true for a valid documentation installation; it is never conditional on assistant state, model state, web state, or conversation state.",
+    "partial_artifact_rule": "A partial, stale, unverified, mixed-generation, or incompatible artifact set never makes assistant_ready true."
+  },
+  "status_api": {
+    "response_schema_version": 1,
+    "required_fields": [
+      "state",
+      "assistant_ready",
+      "lexical_search_ready",
+      "locale",
+      "message_key",
+      "action_key",
+      "reason_code",
+      "state_epoch"
+    ],
+    "optional_fields": [
+      "background_operation",
+      "queue_position",
+      "retry_after_ms",
+      "active_generation_id",
+      "web_state",
+      "safe_capabilities"
+    ],
+    "rules": [
+      "The endpoint returns stable state/reason/action keys and locale, not filesystem paths, prompt text, model output, raw exception text, secrets, private URLs, artifact hashes, or provider bodies.",
+      "A status response is localized by locale-owned title/detail/action keys. API consumers may use the stable keys; visible prose may not fall back to English in a non-English locale.",
+      "state_epoch changes after every completed transition so clients ignore stale streaming, progress, cancellation, and retry events.",
+      "A non-ready state never claims an accepted chat request, a citation, a model load, a download, an index build, or web availability that has not actually completed."
+    ]
+  },
+  "localization": {
+    "source": "future locale-owned assistant catalogs",
+    "fallback_policy": "fail closed for visible assistant text; English fallback is forbidden in ru, de, zh-CN, fr, and es-ES except allowlisted identifiers, product names, commands, paths, and API abbreviations",
+    "required_key_pattern": [
+      "assistant.state.{state}.title",
+      "assistant.state.{state}.detail",
+      "assistant.state.{state}.action",
+      "assistant.state.{state}.live",
+      "assistant.state.{state}.aria"
+    ],
+    "missing_key_behavior": "Do not render an English or generic assistant state. Keep localized lexical search available and report the assistant as unavailable through the safe existing localized recovery surface.",
+    "review_required_before_release": "Human reviewers accept state meaning, action safety, error/recovery clarity, and accessibility wording in each locale."
+  },
+  "states": [
+    {
+      "id": "disabled",
+      "kind": "stable",
+      "assistant_ready": false,
+      "chat_http_status": 409,
+      "reason_code": "assistant_disabled",
+      "allowed_actions": ["open_settings"],
+      "ui_behavior": "Assistant entry states that it is off and offers no implicit installation, network, or background start. Lexical search remains the primary available action.",
+      "api_behavior": "Reject chat before scope, retrieval, inference, web, or worker allocation.",
+      "fallback": "Use lexical search and normal /help/ navigation."
+    },
+    {
+      "id": "not-installed",
+      "kind": "stable",
+      "assistant_ready": false,
+      "chat_http_status": 409,
+      "reason_code": "assistant_not_installed",
+      "allowed_actions": ["review_installation", "start_explicit_install", "open_settings"],
+      "ui_behavior": "Show installation prerequisites, artifact size/license/provenance disclosure, and one explicit install action; do not auto-download on page load, search, or chat attempt.",
+      "api_behavior": "Reject chat without starting a download or worker.",
+      "fallback": "Use lexical search and normal /help/ navigation."
+    },
+    {
+      "id": "downloading",
+      "kind": "progress",
+      "assistant_ready": false,
+      "chat_http_status": 503,
+      "reason_code": "assistant_downloading",
+      "allowed_actions": ["cancel_install", "view_installation_status"],
+      "ui_behavior": "Show only verified bounded progress and a cancel action after explicit installation consent. Do not claim usable artifacts before hash/license/provenance verification and atomic promotion.",
+      "api_behavior": "Reject chat; status may report a bounded progress phase but no local model or index readiness.",
+      "fallback": "Use lexical search while installation continues or is cancelled."
+    },
+    {
+      "id": "indexing",
+      "kind": "progress",
+      "assistant_ready": false,
+      "chat_http_status": 503,
+      "reason_code": "assistant_indexing",
+      "allowed_actions": ["cancel_indexing", "view_index_status"],
+      "ui_behavior": "Show that local knowledge is being prepared and never present partial artifacts (chunks/vectors/indexes) as answerable. If an older verified generation exists, remain in ready with background_operation=indexing instead.",
+      "api_behavior": "Reject chat when no active verified generation exists; report only local build progress without source text or paths.",
+      "fallback": "Use lexical search; retain any last known-good assistant generation only through ready/background_operation."
+    },
+    {
+      "id": "loading",
+      "kind": "progress",
+      "assistant_ready": false,
+      "chat_http_status": 503,
+      "reason_code": "assistant_loading",
+      "allowed_actions": ["cancel_loading", "view_status"],
+      "ui_behavior": "Show that a verified compatible worker is loading; do not show a ready composer, token stream, or web control.",
+      "api_behavior": "Reject chat until worker health, isolation, resource, and artifact checks pass.",
+      "fallback": "Use lexical search and do not wait-block /help/."
+    },
+    {
+      "id": "ready",
+      "kind": "stable",
+      "assistant_ready": true,
+      "chat_http_status": 200,
+      "reason_code": "assistant_ready",
+      "allowed_actions": ["ask_question", "cancel_active_request", "clear_conversation", "request_web_consent", "open_settings"],
+      "ui_behavior": "Expose a localized accessible composer, stop/clear controls when applicable, local-source citation expectation, and optional-web disclosure. A background update may be shown as background_operation without withdrawing a verified active generation.",
+      "api_behavior": "Accept one immediate generation only when all request, scope, artifact, worker, and resource guards pass; stream only schema-valid answer events.",
+      "fallback": "On any downstream failure transition to the exact safe state and retain lexical search."
+    },
+    {
+      "id": "busy",
+      "kind": "transient",
+      "assistant_ready": false,
+      "chat_http_status": 202,
+      "reason_code": "assistant_busy",
+      "allowed_actions": ["cancel_active_request", "cancel_queued_request", "view_queue_status", "use_lexical_search"],
+      "ui_behavior": "Show a localized busy/queued state, stop control for the request owner, and queue position only when safe. Do not accept unbounded retries or conceal that a request is queued.",
+      "api_behavior": "Accept at most the configured single queued request with 202 and an opaque request ID; return 429 when the queue is full. No additional model worker is started.",
+      "fallback": "Use lexical search immediately; cancellation returns a distinct cancelled outcome."
+    },
+    {
+      "id": "cancelled",
+      "kind": "terminal_operation_outcome",
+      "assistant_ready": false,
+      "chat_http_status": 409,
+      "reason_code": "assistant_cancelled",
+      "allowed_actions": ["start_new_question_after_ready", "use_lexical_search"],
+      "ui_behavior": "Announce that the requested operation stopped without presenting partial text as complete; preserve the user's editable prompt only in the current memory-only session.",
+      "api_behavior": "Emit one terminal cancellation event, stop stream delivery, and reject a new chat until cleanup transitions to ready, degraded, or crashed.",
+      "fallback": "Use lexical search while cleanup completes."
+    },
+    {
+      "id": "degraded",
+      "kind": "stable",
+      "assistant_ready": false,
+      "chat_http_status": 503,
+      "reason_code": "assistant_degraded",
+      "allowed_actions": ["view_safe_reason", "retry_after_recovery", "open_settings", "use_lexical_search"],
+      "ui_behavior": "Explain a bounded safe capability loss without paths, prompts, secrets, stack traces, or false readiness. Do not offer a response whose grounding, security, privacy, or resource guard is degraded.",
+      "api_behavior": "Reject chat and include only stable reason/action keys. A web-only loss uses web-offline instead of degraded when local answering remains safe.",
+      "fallback": "Use lexical search and normal /help/ navigation."
+    },
+    {
+      "id": "incompatible",
+      "kind": "stable",
+      "assistant_ready": false,
+      "chat_http_status": 409,
+      "reason_code": "assistant_incompatible",
+      "allowed_actions": ["review_compatibility", "rebuild_or_reinstall", "open_settings", "use_lexical_search"],
+      "ui_behavior": "State that the selected artifact set cannot be used together; never silently select a different model/index, downgrade checks, or combine generations.",
+      "api_behavior": "Reject chat before worker start and expose a stable compatibility reason, not raw hashes or filesystem details.",
+      "fallback": "Quarantine the candidate and use lexical search; last known-good generation may be restored only after full verification."
+    },
+    {
+      "id": "crashed",
+      "kind": "stable",
+      "assistant_ready": false,
+      "chat_http_status": 503,
+      "reason_code": "assistant_crashed",
+      "allowed_actions": ["view_safe_reason", "start_verified_restart", "use_lexical_search"],
+      "ui_behavior": "State that the assistant stopped unexpectedly, provide a safe retry/restart path, and never imply that a worker or answer stream remains active.",
+      "api_behavior": "Reject chat, terminate any worker process tree, clear temporary state, and require explicit verified restart; no restart loop.",
+      "fallback": "Use lexical search and keep core BPM and /help/ routes available."
+    },
+    {
+      "id": "web-offline",
+      "kind": "capability_specific",
+      "assistant_ready": true,
+      "chat_http_status": 200,
+      "reason_code": "assistant_web_offline",
+      "allowed_actions": ["ask_local_question", "retry_web_after_explicit_consent", "use_lexical_search"],
+      "ui_behavior": "State that external evidence is unavailable and that the assistant remains local-only; do not present stale web results or retry silently.",
+      "api_behavior": "A local-only chat may proceed with 200. A web-requested chat returns a local-only result or explicit web-unavailable disposition and makes no further provider call until a new consented attempt.",
+      "fallback": "Use local citations or abstain; lexical search remains available."
+    }
+  ],
+  "background_operations": {
+    "allowed_on_ready": ["indexing", "verified_artifact_download"],
+    "rule": "Background work is visible but does not change assistant_ready while an active verified generation and healthy worker remain available. Candidate artifacts never serve requests until complete validation and atomic promotion."
+  },
+  "transitions": {
+    "disabled": ["not-installed"],
+    "not-installed": ["disabled", "downloading"],
+    "downloading": ["not-installed", "indexing", "incompatible", "crashed"],
+    "indexing": ["not-installed", "loading", "incompatible", "crashed"],
+    "loading": ["cancelled", "ready", "incompatible", "crashed"],
+    "ready": ["disabled", "busy", "loading", "degraded", "incompatible", "crashed", "web-offline"],
+    "busy": ["cancelled", "ready", "degraded", "crashed", "web-offline"],
+    "cancelled": ["ready", "degraded", "crashed"],
+    "degraded": ["disabled", "indexing", "loading", "ready", "incompatible", "crashed", "web-offline"],
+    "incompatible": ["disabled", "not-installed", "indexing"],
+    "crashed": ["disabled", "loading", "incompatible"],
+    "web-offline": ["ready", "busy", "degraded", "crashed"]
+  },
+  "transition_guards": [
+    "Only explicit user consent starts a download or web attempt; page load, lexical search, status polling, and a rejected chat never start network work.",
+    "downloading to indexing requires complete artifact verification and atomic promotion into private local storage; verification failure transitions to incompatible or not-installed, never ready.",
+    "indexing to loading requires one complete compatible chunk/vector/index/integrity generation; partial artifacts are quarantined.",
+    "loading to ready requires worker isolation, no-listener, health, resource, locale, artifact, and security checks to pass.",
+    "busy to ready occurs only after a terminal validated answer or full cleanup; cancelled is emitted before ready when the user stops work.",
+    "web-offline may not be used to conceal a core local artifact, scope, privacy, resource, or worker failure; such failure transitions to degraded, incompatible, or crashed."
+  ],
+  "non_goals": [
+    "This task does not implement the status/chat routes, model lifecycle, artifact download, indexing, worker, UI, locale catalogs, or web provider.",
+    "This task does not alter existing deterministic search, search URL/history/filter state, /help/ serving, core BPM health, or current product API readiness.",
+    "This task does not permit background installation, silent network access, English visible fallback, partial-artifact serving, hidden model restart, or lexical-search dependency on AI."
+  ],
+  "verification": {
+    "current": "documentation/tests/contract/test_local_ai_availability_fallback_contract_0_9_3.py",
+    "future": [
+      "BPM093-M6 lifecycle/state transition and resource tests",
+      "BPM093-M8 scope/privacy/CSRF/no-network state tests",
+      "BPM093-M10 six-locale UI/accessibility/state-rendering tests",
+      "BPM093-M11 update/rollback/recovery tests"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-import-firefox-policies-json" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>通过 API 导入 Firefox policies.json</title>
+  <title>通过编程接口导入火狐浏览器策略文件</title>
   <shortdesc>使用 JSON 或多部分输入从规范的 Firefox Enterprise <codeph>policies.json</codeph> 文档创建规范化的 BPM 配置文件。</shortdesc>
   <taskbody>
     <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>，选择受支持的架构通道（例如 <codeph>release-153</codeph>），并使用顶级 <codeph>policies</codeph> 对象准备完整的 Firefox 文档。</p></prereq>

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-search-relevance-benchmark-0.9.3",
+  "backlog_item": "BPM093-M3-03",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-runner-contract",
+  "inputs": {
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "candidate_prototypes": "documentation/config/search-candidate-prototypes-0.9.3.json",
+    "selection_shortlist": "documentation/config/search-selection-shortlist-0.9.3.json"
+  },
+  "artifacts": {
+    "pagefind": {
+      "version": "1.5.2",
+      "npm_package": "pagefind-1.5.2.tgz",
+      "npm_package_sha256": "539357f51b47ea98cbef10bd774b432730d5a839ade5b5a30d13df033cbe9348",
+      "linux_x64_package": "pagefind-linux-x64-1.5.2.tgz",
+      "linux_x64_package_sha256": "3c8dcfdaa69946113e0257be05bdef57297c7f1a562aa168536ff7c5d4590660",
+      "source": "https://www.npmjs.com/package/pagefind/v/1.5.2"
+    },
+    "meilisearch_ce": {
+      "version": "1.45.1",
+      "linux_amd64_binary": "meilisearch-linux-amd64",
+      "linux_amd64_binary_sha256": "35986cba02cc4c9a2f79b4f85be8c2bc0013989c208410e6cfea85b1fdc3d708",
+      "source": "https://github.com/meilisearch/meilisearch/releases/tag/v1.45.1"
+    }
+  },
+  "candidate_execution": {
+    "current-static-control": "A deterministic mirror of the current bpm-docs-search.js lexical scoring core. Browser rendering remains an M3-04 integration measurement.",
+    "pagefind-1.5.2": "Real Pagefind 1.5.2 CLI index and Search API query against a temporary same-origin localhost static site; fetch is guarded to that origin.",
+    "meilisearch-ce-1.45.1": "Real Meilisearch Community Edition 1.45.1 process bound to temporary loopback only; the benchmark client is not a browser and all HTTP calls are guarded to its private origin."
+  },
+  "fixture_rules": {
+    "base_queries_per_locale": 40,
+    "french_accent_queries_per_locale": 4,
+    "expected_topic_query_classes": ["technical_identifier", "canonical", "alias", "natural_language", "morphology", "typo", "compound", "natural_context", "accent"],
+    "no_result_dispositions": ["abstain", "refuse"],
+    "unscored_dispositions": ["clarify"],
+    "must_record_classes": ["typo", "morphology", "german_compound", "russian_inflection", "accent", "technical_identifier", "chinese_segmentation", "no_result"]
+  },
+  "metrics": {
+    "top_1": "Correct expected topic at rank one among expected-topic queries.",
+    "mrr": "Mean reciprocal rank using the first five returned topics among expected-topic queries.",
+    "recall_at_5": "Expected topic occurs in the first five returned topics among expected-topic queries.",
+    "no_result_precision": "Correct empty responses divided by all empty responses among scored expected-topic and expected-no-result queries.",
+    "no_result_recall": "Correct empty responses divided by expected-no-result queries."
+  },
+  "output": {
+    "raw_format": "newline-delimited JSON; one record per candidate and query",
+    "summary_format": "deterministic JSON with candidate and per-locale metrics",
+    "report_location": "documentation/reports/benchmark/",
+    "selection_boundary": "A relevance result alone does not select a candidate; M3-04 and M3-05 remain required."
+  }
+}

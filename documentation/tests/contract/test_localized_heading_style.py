@@ -54,6 +54,14 @@ def _titles(locale: str) -> list[tuple[Path, str]]:
             value = "".join(title.itertext()).strip()
             if value:
                 titles.append((path.relative_to(ROOT), value))
+    for path in sorted((DITA_ROOT / locale / "maps").glob("*.ditamap")):
+        root = ET.parse(path).getroot()
+        for element in (root.find("title"), *root.iter("navtitle")):
+            if element is None:
+                continue
+            value = "".join(element.itertext()).strip()
+            if value:
+                titles.append((path.relative_to(ROOT), value))
     return titles
 
 

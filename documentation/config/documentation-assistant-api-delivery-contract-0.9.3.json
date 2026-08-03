@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-api-delivery-0.9.3",
+  "backlog_item": "BPM093-M12A-01",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-release-training-notice",
+  "pins": {
+    "api": {
+      "path": "documentation/config/grounded-conversation-api-contract-0.9.3.json",
+      "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"
+    }
+  },
+  "transport": {
+    "router": "app.api.documentation_assistant",
+    "same_origin_routes": [
+      "GET /api/documentation-assistant/status",
+      "POST /api/documentation-assistant/chat",
+      "GET /api/documentation-assistant/chat/{request_id}/stream",
+      "POST /api/documentation-assistant/chat/{request_id}/cancel",
+      "DELETE /api/documentation-assistant/conversation",
+      "GET /api/documentation-assistant/chat/{request_id}/sources/{source_id}"
+    ],
+    "admission": "Only bounded JSON on the BPM origin is accepted. The server owns the cookie session and rejects client-supplied session, evidence, source, model, tool, prompt, worker and path fields.",
+    "lifecycle": "The adapter binds browser-session request ownership to the existing controller and memory-only context store. SSE exposes only reviewed safe events; clear cancels owned work and removes the associated local context and source handles."
+  },
+  "safety": {
+    "default_service": "localized_training_notice",
+    "worker_started_on_status_page_load_or_failed_admission": false,
+    "ordinary_search_changed": false,
+    "web_network_calls": 0,
+    "source_access": "The 0.9.3 training notice exposes no sources, citations, retrieval artifacts or source handles."
+  },
+  "deferred_release_assembly": {
+    "local_model_training_and_rag": "post-0.9.3",
+    "generated_answers_and_citations": "post-0.9.3",
+    "external_evidence": "outside-0.9.3"
+  },
+  "verification": {
+    "api": "tests/test_documentation_assistant_api_093.py",
+    "service": "tests/test_documentation_assistant_service_093.py",
+    "contract": "documentation/tests/contract/test_documentation_assistant_api_delivery_contract_0_9_3.py"
+  }
+}

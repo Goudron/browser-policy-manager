@@ -51,6 +51,19 @@ SCHEMA_CHANNELS: tuple[SchemaChannel, ...] = (
     ),
 )
 
+# The header presents the newest generally available schema first, followed by
+# the supported ESR schemas from newest to oldest. Keep this product-facing
+# order separate from the technical/default schema order above.
+HEADER_SCHEMA_CHANNEL_VALUES: tuple[str, ...] = (
+    "release-153",
+    "esr-153.0",
+    "esr-140.13",
+)
+HEADER_SCHEMA_CHANNELS: tuple[SchemaChannel, ...] = tuple(
+    next(channel for channel in SCHEMA_CHANNELS if channel.value == value)
+    for value in HEADER_SCHEMA_CHANNEL_VALUES
+)
+
 SUPPORTED_SCHEMA_CHANNELS: tuple[str, ...] = tuple(channel.value for channel in SCHEMA_CHANNELS)
 SUPPORTED_SCHEMA_CHANNEL_SET: frozenset[str] = frozenset(SUPPORTED_SCHEMA_CHANNELS)
 

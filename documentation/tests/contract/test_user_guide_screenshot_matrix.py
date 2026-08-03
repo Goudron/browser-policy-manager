@@ -16,6 +16,7 @@ DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 MATRIX = DOCUMENTATION_ROOT / "config/user-guide-screenshot-matrix-0.9.1.json"
 USER_GUIDE_MAP = DOCUMENTATION_ROOT / "config/user-guide-map-0.9.0.json"
 PROFILE_FIXTURES = DOCUMENTATION_ROOT / "fixtures/profile-states/profile-states-0.9.0.json"
+SCREENSHOT_CAPTURE = DOCUMENTATION_ROOT / "tools/capture_user_guide_screenshots.py"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 REQUIRED_ROW_FIELDS = {
     "id",
@@ -236,6 +237,15 @@ def test_user_guide_screenshot_capture_command_and_assets_exist() -> None:
             expected_viewport["height"],
         )
         assert asset.stat().st_size > 1024
+
+
+def test_screenshot_capture_seeds_the_current_supported_schema_channels() -> None:
+    capture_source = SCREENSHOT_CAPTURE.read_text(encoding="utf-8")
+
+    assert '"schema_version": "release-153"' in capture_source
+    assert '"schema_version": "esr-140.13"' in capture_source
+    assert '"schema_version": "release-152"' not in capture_source
+    assert '"schema_version": "esr-140.12"' not in capture_source
 
 
 def test_user_guide_screenshot_assets_are_normalized_and_not_orphaned() -> None:

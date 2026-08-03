@@ -2,7 +2,7 @@
 
 Date: 2026-06-01
 
-This map is the first orientation point for BPM 0.9.2 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
+This map is the first orientation point for BPM 0.9.3 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
 
 Refactoring acceptance rules live in `docs/architecture/refactoring-acceptance-rules.md`.
 

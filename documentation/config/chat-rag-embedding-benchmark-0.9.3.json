@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-embedding-benchmark-0.9.3",
+  "backlog_item": "BPM093-M5-03C",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-chat-only-benchmark-contract",
+  "selection_contract": {
+    "path": "documentation/config/chat-rag-embedding-selection-contract-0.9.3.json",
+    "sha256": "1bbe00915eaea73f1564a4b1324c1efee8316664f0740f402e3e964e11055db6"
+  },
+  "protocol": {
+    "id": "BPM093-M2-02",
+    "target_host": {
+      "cpu_model": "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz",
+      "physical_cores": 2,
+      "logical_threads": 4,
+      "memory_gib": 7.1,
+      "inference": "CPU-only"
+    },
+    "network": "disabled after explicit, checksum-verified artifact installation",
+    "validity": {
+      "swap_must_not_change": true,
+      "measured_attempts_per_locale": 30,
+      "warmup_attempts_per_locale": 5,
+      "rss_sample_interval_ms": 100
+    }
+  },
+  "inputs": {
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "chunk_contract": "documentation/config/rag-chunk-extraction-0.9.3.json",
+    "corpus_exclusions": "documentation/config/rag-corpus-exclusions-0.9.3.json",
+    "retrieval_mode": "same-locale only; 16 answer questions plus four answer dialogue cases per locale; no cross-language probe",
+    "no_evidence_mode": "For a boundary query containing a technical identifier absent from the active locale chunk metadata, return no_evidence without embedding or generating an answer.",
+    "top_k": 5
+  },
+  "runtime": {
+    "implementation": "ONNX Runtime CPU execution plus tokenizers; a benchmark dependency, not a product-runtime selection.",
+    "packages": ["onnxruntime", "tokenizers"],
+    "threads": {"intra_op": 2, "inter_op": 1},
+    "maximum_sequence_tokens": 512
+  },
+  "candidates": [
+    {
+      "id": "multilingual-e5-small-onnx-o4",
+      "source_contract": "documentation/config/embedding-model-benchmark-0.9.3.json",
+      "source_contract_sha256": "bd8154e51d2987ac91e3241d7d41269a1ff06810c4273b9f1d17ed6a966ad687",
+      "source_candidate_id": "multilingual-e5-small-onnx-o4"
+    },
+    {
+      "id": "multilingual-e5-base-onnx-o4",
+      "source_contract": "documentation/config/embedding-model-benchmark-m5-03a-0.9.3.json",
+      "source_contract_sha256": "432cc2f7cd82f6f929f5316ff597bdfc009095b2823cb1ac29b55e79955167f8",
+      "source_candidate_id": "multilingual-e5-base-onnx-o4"
+    }
+  ],
+  "acceptance": {
+    "same_locale_evidence_coverage_at_5_min": 0.5,
+    "citation_resolution_rate_min": 1.0,
+    "no_evidence_disposition_rate_min": 1.0,
+    "chat_retrieval_p95_ms_max": 2000,
+    "model_and_direct_runtime_disk_gib_max": 0.75,
+    "peak_process_rss_gib_max": 1.5,
+    "selection": "Select exactly one passing immutable artifact by descending macro same-locale evidence coverage@5, macro Top-1, then ascending direct disk, peak RSS, and P95 latency. A tie is a failure requiring a new reviewed criterion."
+  }
+}

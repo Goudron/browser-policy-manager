@@ -7,7 +7,7 @@
     <prereq><p>Ein Profilentwurf und ein Schemakanal werden ausgewählt.</p></prereq>
     <context><p>Die CIS-Schicht ist eine BPM-Zuordnungshilfe; Überprüfen Sie jede resultierende Einstellung für die Bereitstellung und behandeln Sie sie nicht als Zertifizierung.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 1, Profilierung der &amp;-Basislinie.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 1 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Wählen Sie die unterstützte CIS-Schicht aus, die dem Zielkanal und -szenario entspricht.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die Compliance-bezogenen Grundlinienänderungen in der Zusammenfassung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Behalten Sie Einstellungen bei oder passen Sie sie an, die im Widerspruch zum Bereitstellungsziel stehen.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

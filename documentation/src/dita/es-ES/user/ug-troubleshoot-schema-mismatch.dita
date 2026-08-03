@@ -7,7 +7,7 @@
     <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
     <context><p>La falta de coincidencia de esquema generalmente significa que existe una configuración en un canal de Firefox pero no está disponible, está obsoleta o tiene una forma diferente en el canal seleccionado.</p></context>
     <steps>
-      <step><cmd>Confirme si el perfil tiene como destino ESR 140.13 o la versión 152.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Confirme si el perfil tiene como destino ESR 140.13, ESR 153.0 o Release 153.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Identifique la configuración que no está disponible, no es compatible, está obsoleta o depende del esquema en ese canal.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Elija si desea cambiar el canal del esquema o eliminar/cambiar la configuración afectada para el destino de Firefox previsto.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Revalidar y revisar la preparación para la exportación después de la decisión de canal o configuración.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>

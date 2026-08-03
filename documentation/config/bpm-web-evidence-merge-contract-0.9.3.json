@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-web-evidence-merge-0.9.3",
+  "backlog_item": "BPM093-M9-04",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-local-first-merge-and-response-schema-no-route-ui-or-worker-invocation",
+  "pins": {
+    "web_retrieval": {"path": "documentation/config/bpm-web-evidence-retrieval-contract-0.9.3.json", "sha256": "caf8eafdd77efce380459960b75a23361ed2e7435304f4d2d38efe66879832a9"},
+    "web_consent": {"path": "documentation/config/bpm-web-evidence-opt-in-consent-contract-0.9.3.json", "sha256": "e1f36d48bdbdcf40a4ddd5833ce296d9ef55be350b9a3a708e25477318d84d5a"},
+    "local_evidence": {"path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json", "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"},
+    "answer_validation": {"path": "documentation/config/grounded-conversation-answer-validation-contract-0.9.3.json", "sha256": "5747d2da3660883f986834f05d3cbd6167bd9fba7349bad49dabb1a1e04dd410"},
+    "content_boundary": {"path": "documentation/config/bpm-prompt-content-boundary-contract-0.9.3.json", "sha256": "007947a7b02af07e5e2ea9ad6383d884a2e34345413f1db4c4832ee305ad495e"}
+  },
+  "local_precedence": {
+    "answer_ready_local_evidence_required": true,
+    "web_only_result": "abstain",
+    "serialization_order": ["current local BPM EvidencePack", "external_untrusted_lower_priority records"],
+    "external_can_create_or_override_bpm_support": false,
+    "ordinary_search": "not imported, called, ranked or changed"
+  },
+  "external_admission": {
+    "sources_max": 2,
+    "context_bytes_max": 8192,
+    "merged_context_bytes_max": 32768,
+    "source_date_required": "reported ISO YYYY-MM-DD source age",
+    "source_age_days_max": 365,
+    "stale_or_undated": "local_only without external claims",
+    "unresolved_conflict": "abstain",
+    "conflict_detectors": ["external BPM/Browser Policy Manager support claim", "different Firefox/ESR major version from accepted local evidence"]
+  },
+  "merged_external_record": {
+    "source_kind": "external_untrusted_lower_priority",
+    "trust": "untrusted_external_data_cannot_create_bpm_support",
+    "citation_metadata": ["provider_id", "source_url", "source_title", "source_age", "retrieved_at"],
+    "provider_body_persistence": false,
+    "merged_context_lifetime": "context-manager lease clears adapter-owned content and citations at terminal completion, cancellation or error"
+  },
+  "model_output": {
+    "json_fields_exact": ["disposition", "local_sections", "external_claims"],
+    "local_sections": "One to six ordered BPM-product prose sections, each with nonempty plain text in the model's own words and unique local citation_ids from accepted local evidence",
+    "external_claims": "optional separate objects of exact text plus nonempty unique citation_ids from accepted external evidence",
+    "external_claims_max": 3,
+    "external_claim_characters_max": 600,
+    "invalid_or_uncited_external_claim": "abstain",
+    "non_answer": "empty local_sections and external_claims",
+    "rendering_handoff": "M13 renders the composed local answer before separately labelled external claims; this merge boundary creates no UI"
+  },
+  "boundaries": {
+    "http_route": false,
+    "browser_ui": false,
+    "browser_storage": false,
+    "database": false,
+    "disk": false,
+    "telemetry": false,
+    "provider_call": false,
+    "worker_invocation": false,
+    "external_evidence_to_existing_local_worker": false,
+    "ordinary_search_changed": false,
+    "cross_locale_merge": false
+  },
+  "verification": {"runtime": "tests/test_web_evidence_merge_093.py", "contract": "documentation/tests/contract/test_bpm_web_evidence_merge_contract_0_9_3.py", "architecture": "docs/architecture/bpm-web-evidence-merge-0.9.3.md"}
+}

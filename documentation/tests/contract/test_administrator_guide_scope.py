@@ -61,6 +61,9 @@ ADMIN_GUIDE_KEYREFS = [
     "topic.admin-task-review-network-exposure-proxy-readiness",
     "topic.admin-task-plan-monitoring-backup-update-windows",
     "topic.admin-task-record-ha-production-deferred-boundaries",
+    "topic.admin-reference-minimum-system-requirements",
+    "topic.admin-task-operate-local-documentation-assistant",
+    "topic.admin-task-maintain-local-documentation-assistant",
 ]
 
 pytestmark = pytest.mark.docs_contract
@@ -79,9 +82,17 @@ def test_administrator_guide_has_stable_map_key_and_portal_slot_in_every_locale(
             "format": "ditamap",
             "processing-role": "resource-only",
         }
-        assert [topicref.attrib for topicref in root.findall("topicref")] == [
-            {"keyref": keyref} for keyref in ADMIN_GUIDE_KEYREFS
-        ]
+        sections = root.findall("topichead")
+        assert len(sections) == 8
+        assert all(section.attrib == {"outputclass": "case-oriented-section"} for section in sections)
+        assert sections[0].findall("topicref")[0].attrib == {
+            "keyref": "topic.admin-reference-minimum-system-requirements"
+        }
+        assert {
+            topicref.attrib["keyref"]
+            for section in sections
+            for topicref in section.findall("topicref")
+        } == set(ADMIN_GUIDE_KEYREFS)
 
         portal_refs = [
             element.attrib["href"]

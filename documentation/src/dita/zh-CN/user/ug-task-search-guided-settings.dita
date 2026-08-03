@@ -8,7 +8,7 @@
     <context><p>当您知道策略目标但不知道包含控制系列的步骤时，引导式搜索非常有用。</p>
       <fig id="screenshot-guided-settings-search">
         <title>引导设置搜索结果</title>
-        <image keyref="screenshot.guided-settings-search" placement="break">
+        <image keyref="screenshot.guided-settings-search" placement="break" scalefit="yes" align="center">
           <alt>引导式编辑器 搜索显示主页相关设置结果。</alt>
         </image>
       </fig>

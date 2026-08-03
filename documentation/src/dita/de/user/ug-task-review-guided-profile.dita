@@ -7,7 +7,7 @@
     <prereq><p>Sie haben die geführten Änderungen, die Sie beibehalten möchten, abgeschlossen.</p></prereq>
     <context><p>Der Überprüfungsschritt hilft Ihnen, fehlende Schemaauswahlen, Validierungswarnungen und Einstellungen zu erkennen, die nicht zum Szenario passen.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 6, Überprüfen Sie den &amp;-Export.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 6 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Lesen Sie die Zusammenfassung des ausgewählten Profils und die geänderten Einstellungsgruppen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Validierungswarnungen auflösen oder dokumentieren, warum eine unterstützte Ausnahme bestehen bleibt.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Bestätigen Sie, dass das Szenario, die CIS-Ebene, der Schemakanal und die bearbeiteten Steuerelemente mit dem Übergabeziel übereinstimmen.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-artifact-refresh-0.9.3",
+  "backlog_item": "BPM093-M11-01",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-refresh-orchestration-contract",
+  "source_of_truth": "validated published DITA manifests",
+  "artifacts": ["deterministic lexical search index", "rag-chunk-v1 manifest", "locale-private E5-base exact-vector generation"],
+  "incremental": {"unit": "changed published topic plus exact locale", "safe_reuse": "passage-hash and full compatibility-key verified vector cache only", "fallback": "unknown manifest membership, schema/normalization/version or compatibility drift requires the affected full-locale rebuild"},
+  "promotion": "Build every affected artifact in private staging, validate manifest/source hashes, locale coverage, citations and compatibility, then atomically replace its pointer. A partial candidate never replaces the last verified generation.",
+  "stale_failure": "A source-manifest, version, chunk, vector, compatibility or pointer mismatch fails release validation and chat abstains; deterministic search remains available.",
+  "boundaries": {"ordinary_search_depends_on_rag": false, "network_calls": 0, "training": false},
+  "verification": ["documentation/tools/build_docs.py fast-check", "documentation/tools/extract_rag_chunks_0_9_3.py", "documentation/tools/generate_chat_rag_exact_generations_0_9_3.py", "documentation/tools/run_chat_rag_retrieval_validation_0_9_3.py"]
+}

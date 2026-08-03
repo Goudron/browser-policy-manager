@@ -8,7 +8,7 @@
     <context><p>JSON editor is the raw document surface. Use it when Guided or All settings is too high-level for exact review, migration checks, troubleshooting, or raw values.</p>
       <fig id="screenshot-json-editor">
         <title>JSON editor in dark theme</title>
-        <image keyref="screenshot.json-editor" placement="break">
+        <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
           <alt>JSON editor showing editable Firefox policies JSON for a saved profile.</alt>
         </image>
       </fig>

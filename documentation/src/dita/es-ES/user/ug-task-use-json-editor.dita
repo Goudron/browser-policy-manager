@@ -8,7 +8,7 @@
     <context><p>Editor JSON es la superficie del documento sin formato. Úselo cuando Guiado o Todos los ajustes sea de nivel demasiado alto para una revisión exacta, comprobaciones de migración, resolución de problemas o valores sin procesar.</p>
       <fig id="screenshot-json-editor">
         <title>Editor JSON en tema oscuro</title>
-        <image keyref="screenshot.json-editor" placement="break">
+        <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
           <alt>Editor JSON que muestra las políticas editables de Firefox JSON para un perfil guardado.</alt>
         </image>
       </fig>

@@ -8,7 +8,7 @@
     <context><p>La bibliothèque répertorie les profils enregistrés et affiche les décomptes filtrés et totaux pour indiquer si la recherche ou les filtres masquent des lignes. La grille d’actions vient d’abord ; la ligne de filtres se trouve immédiatement au-dessus du tableau des profils.</p>
       <fig id="screenshot-library-overview">
         <title>Présentation de la bibliothèque</title>
-        <image keyref="screenshot.library-overview" placement="break">
+        <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
           <alt>Bibliothèque affichant les lignes de profil enregistrées, les décomptes et les actions de profil.</alt>
         </image>
       </fig>

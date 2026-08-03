@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-conversation-retention-0.9.3",
+  "backlog_item": "BPM093-M8-06",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-memory-only-no-http-route",
+  "pins": {
+    "least_privilege": {"path": "documentation/config/bpm-ai-least-privilege-contract-0.9.3.json", "sha256": "d2cd03a5efabcdb8b25fa3aa09d0f983e21488b69de83cfb15ad48be062fef44"},
+    "context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "3f06b876eb59be5642bee4cfb2a96c165edb0ad3764df3100946fd9aeb7df16f"},
+    "streaming": {"path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json", "sha256": "c1e310a6e96d84374ea18e709253fcb960c17c2b63f452f7992e559a9d973b3f"},
+    "diagnostics": {"path": "documentation/config/grounded-conversation-diagnostics-contract-0.9.3.json", "sha256": "de86cdd59a0a5740896181137cbb57b1381d56417b84a1b75f8bf12648f81c5a"},
+    "privacy": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"}
+  },
+  "retention": {
+    "storage": "process-memory only",
+    "persistence": false,
+    "telemetry": false,
+    "content_logging": false,
+    "idle_session_ttl_seconds": 900.0,
+    "absolute_session_ttl_seconds": 28800.0,
+    "context_pairs_max": 8,
+    "context_turns_max": 16,
+    "clear": "An exact opaque session can be deleted immediately; a controller reset or process shutdown clears every session and returns no conversation content.",
+    "restart": "A new process creates an empty store; no prompt, answer, evidence, citation identity, resolved entity or session handle survives.",
+    "optional_persistence": "not implemented; any future local persistence requires a separately reviewed, explicit user control and its own retention/deletion contract"
+  },
+  "completed_stream": {
+    "completed_record_retention_seconds": 900.0,
+    "request_content": "dropped as soon as an active request completes or a queued request is cancelled",
+    "events": "consumed by poll and bounded to eight while pending",
+    "source_handles": "opaque, in-memory only and removed with their completed request record",
+    "completed_records_max": 4
+  },
+  "diagnostics": "Only safe state classes and booleans are exposed. Prompts, answers, evidence, excerpts, paths, artifact content and untrusted worker reason text are not retained in the diagnostic shape.",
+  "boundaries": {
+    "http_route": false,
+    "browser_storage": false,
+    "database": false,
+    "disk": false,
+    "network_calls": 0,
+    "ordinary_search_calls": 0,
+    "personalization": false,
+    "cross_locale_context": false
+  },
+  "verification": {
+    "runtime": ["tests/test_conversation_context_093.py", "tests/test_conversation_stream_093.py", "tests/test_conversation_diagnostics_093.py"],
+    "contract": "documentation/tests/contract/test_bpm_conversation_retention_contract_0_9_3.py",
+    "architecture": "docs/architecture/bpm-conversation-retention-0.9.3.md"
+  }
+}

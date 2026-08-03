@@ -1,0 +1,194 @@
+# BPM print theme. It deliberately uses the same teal/ink palette as the
+# documentation portal and a Unicode-capable family for every locale.
+extends: default
+
+brand:
+  color:
+    primary: '#0f766e'
+    secondary: '#5d6b7f'
+    tertiary: '#cbd5e1'
+    inverse: '#f1f5f9'
+    links: '#0f766e'
+    note:
+      background:
+        attention: '#fff7e6'
+        caution: '#fff1f2'
+        info: '#ecfdf5'
+        tip: '#ecfdf5'
+
+pdf2:
+  font:
+    monospaced: 'DejaVu Sans Mono, Noto Sans Mono CJK SC, Droid Sans Fallback'
+    sans: 'Noto Sans CJK SC, Noto Sans, Droid Sans Fallback'
+    serif: 'Noto Sans CJK SC, Noto Sans, Droid Sans Fallback'
+
+page:
+  size: A4
+  mirror-margins: true
+
+# The web portal provides the related-topic navigation.  Repeating it after
+# every topic makes the printed guides noisy and, in the stock PDF transform,
+# routes localized generated labels through a non-Unicode fallback font.
+include-related-links: none
+
+base:
+  font-family: $pdf2-font-sans
+
+header:
+  color: $brand-color-secondary
+  end-indent: 15mm
+  even:
+    content: '{part-title}'
+    text-align: start
+  font-family: $pdf2-font-sans
+  font-size: 8pt
+  odd:
+    content: '{chapter-title}'
+    text-align: end
+  padding-after: 5pt
+  padding-before: 9pt
+  start-indent: 15mm
+
+footer:
+  color: $brand-color-secondary
+  end-indent: 15mm
+  even:
+    content: '{folio}'
+    font-weight: bold
+    text-align: start
+  font-family: $pdf2-font-sans
+  font-size: 8pt
+  odd:
+    content: '{folio}'
+    font-weight: bold
+    text-align: end
+  padding-after: 9pt
+  padding-before: 5pt
+  start-indent: 15mm
+
+style:
+  body:
+    color: '#122033'
+    font-family: $pdf2-font-sans
+    font-size: 10pt
+    line-height: 1.45
+  codeblock:
+    background-color: '#edf2f7'
+    border: solid 0.75pt $brand-color-tertiary
+    color: '#122033'
+    font-family: $pdf2-font-monospaced
+    font-size: 8.5pt
+    keep-together.within-page: always
+    line-height: 1.25
+    padding-after: 7pt
+    padding-before: 7pt
+    padding-end: 8pt
+    padding-start: 8pt
+    space-after: 9pt
+    space-before: 7pt
+  cover:
+    background-color: '#f6fbfa'
+    background-image: bpm-cover-branding.png
+    background-position-horizontal: 16mm
+    background-position-vertical: 22mm
+    background-repeat: no-repeat
+    background-size: 178mm 252mm
+    height: 274mm
+  cover-title:
+    color: $brand-color-primary
+    font-family: $pdf2-font-sans
+    font-size: 22pt
+    font-weight: bold
+    line-height: 1.25
+    space-before: 120mm
+    text-align: center
+  fig:
+    caption:
+      color: $brand-color-secondary
+      font-family: $pdf2-font-sans
+      font-size: 8.5pt
+      font-style: italic
+      font-weight: normal
+  h1:
+    color: $brand-color-primary
+    font-family: $pdf2-font-sans
+    font-size: 20pt
+    font-weight: bold
+    padding-top: 0pt
+    space-after: 10pt
+    space-before: 0pt
+    title-numbering: false
+  h2:
+    color: '#115e59'
+    font-family: $pdf2-font-sans
+    font-size: 15pt
+    font-weight: bold
+    space-after: 8pt
+    space-before: 18pt
+    title-numbering: false
+  h3:
+    color: '#115e59'
+    font-family: $pdf2-font-sans
+    font-size: 12pt
+    font-weight: bold
+    space-after: 7pt
+    space-before: 15pt
+    title-numbering: false
+  link:
+    color: $brand-color-links
+  note:
+    background-color: $brand-color-note-background-info
+    border: solid 0.75pt $brand-color-tertiary
+    color: '#122033'
+    padding-end: 7pt
+    padding-start: 7pt
+    space-after: 9pt
+    space-before: 7pt
+  section:
+    font-family: $pdf2-font-sans
+  section-title:
+    color: '#115e59'
+    font-family: $pdf2-font-sans
+    font-size: 11pt
+    font-weight: bold
+    space-after: 5pt
+    space-before: 13pt
+  shortdesc:
+    color: '#334155'
+    font-family: $pdf2-font-sans
+    font-size: 10.5pt
+    space-after: 10pt
+  table:
+    font-family: $pdf2-font-sans
+    font-size: 8.5pt
+    header:
+      background-color: $brand-color-inverse
+  toc:
+    1:
+      color: '#122033'
+      font-family: $pdf2-font-sans
+      font-size: 9pt
+      line-height: 1.2
+      space-before: 3pt
+      start-indent: 12mm
+    2:
+      color: '#122033'
+      font-family: $pdf2-font-sans
+      font-size: 8.5pt
+      line-height: 1.2
+      space-before: 2pt
+      start-indent: 19mm
+    3:
+      color: '#122033'
+      font-family: $pdf2-font-sans
+      font-size: 8.25pt
+      line-height: 1.2
+      space-before: 2pt
+      start-indent: 26mm
+    chapter:
+      color: $brand-color-primary
+      font-family: $pdf2-font-sans
+      font-size: 10.5pt
+      font-weight: bold
+      start-indent: 6mm
+    maximum-level: 3

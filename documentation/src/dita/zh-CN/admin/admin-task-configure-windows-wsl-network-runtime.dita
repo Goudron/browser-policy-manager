@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-configure-windows-wsl-network-runtime" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>配置 WSL 运行时和浏览器访问</title>
+  <title>配置子系统运行时和浏览器访问</title>
   <shortdesc>在 WSL 内设置 BPM 运行时变量，选择安全绑定地址，启动源进程，并识别来自 Windows 的浏览器 URL。</shortdesc>
   <taskbody>
     <prereq><p>BPM 签出、虚拟环境、依赖项和迁移已在 WSL Linux 文件系统内准备就绪。</p></prereq>

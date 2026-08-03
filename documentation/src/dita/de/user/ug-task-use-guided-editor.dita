@@ -2,27 +2,27 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Durch die sechs Schritte im Modus „Geführter Editor“ navigieren</title>
-  <shortdesc>Navigieren Sie durch die Profil-&amp;-Basislinie, die Browser-Zugriffs-&amp;-Standardeinstellungen, die Sicherheit &amp;-Privatsphäre, Benutzer, Add-ons-&amp;-Sites, AI &amp;-Smart-Funktionen und den Überprüfungs-&amp;-Export.</shortdesc>
+  <shortdesc>Konfigurieren Sie Profil, Browserzugriff, Sicherheit, Benutzer und Websites, intelligente Funktionen sowie Überprüfung und Export nacheinander.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein Profil in Geführter Editor aus der Bibliothek oder dem Erstellungsablauf.</p></prereq>
-    <context><p>Geführter Editor wandelt die Profilkonfiguration in sechs aufgabenorientierte Schritte um und sorgt dafür, dass die Schemavalidierung während der Arbeit sichtbar bleibt.</p>
+    <prereq><p>Öffnen Sie ein Profil im geführten Editor aus der Bibliothek oder dem Erstellungsablauf.</p></prereq>
+    <context><p>Der geführte Editor gliedert die Profilkonfiguration in sechs Schritte und zeigt die Schemavalidierung während der Arbeit an.</p>
       <fig id="screenshot-guided-editor-overview">
         <title>Überblick über den Modus „Geführter Editor“</title>
-        <image keyref="screenshot.guided-editor-overview" placement="break">
-          <alt>Geführter Editor zeigt die Schrittnavigation und den Validierungsstatus für ein gespeichertes Profil an.</alt>
+        <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
+        <alt>Der geführte Editor zeigt die Schrittnavigation und den Validierungsstatus eines gespeicherten Profils.</alt>
         </image>
       </fig>
     </context>
     <steps>
-      <step><cmd>Beginnen Sie mit Schritt 1, Profilierung der &amp;-Basislinie, um Name, Schemakanal, Szenario, Startervoreinstellung und CIS-Ebene zu bestätigen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Fahren Sie mit Schritt 2 fort, Standardeinstellungen für den Browserzugriff &amp;, für Netzwerkzugriff, Browserverhalten, Startseite, Suche und Standardeinstellungen für die Navigation.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Verwenden Sie Schritt 3 für Datenschutzkontrollen, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheitsverstärkung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Verwenden Sie Schritt 4 für Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung, Add-ons und Website-Verwaltung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Verwenden Sie Schritt 5 nur für vorhandene Firefox AI &amp; Smart-Features-Richtliniensteuerungen, die das ausgewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Beenden Sie Schritt 6, Export von &amp; überprüfen, um das überprüfte Profil zu validieren, zu speichern und herunterzuladen.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
+      <step><cmd>Bestätigen Sie in Schritt 1 Name, Schemakanal, Szenario, Startvorgabe und CIS-Ebene.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Konfigurieren Sie in Schritt 2 Netzwerkzugriff, Browserverhalten, Startseite, Suche und Navigationsvorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Konfigurieren Sie in Schritt 3 Datenschutz, Berechtigungen, Cookies, Bereinigung, DNS und Sicherheitsvorgaben.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Konfigurieren Sie in Schritt 4 Konten, Erweiterungen, Lesezeichen, Sprache, Übersetzung und Website-Regeln.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Konfigurieren Sie in Schritt 5 nur Firefox-Richtlinien für KI und intelligente Funktionen, die das gewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Validieren, speichern und exportieren Sie das Profil in Schritt 6.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Sie können erklären, wo jede geführte Einstellung hingehört, und mit dem richtigen Schritt fortfahren.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Sie im falschen Bereich landen, verwenden Sie den Stepper oder die Suche, anstatt nicht verwandte Steuerelemente zu ändern.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn Sie im falschen Bereich sind, wechseln Sie zum passenden Schritt oder verwenden Sie die Suche, statt nicht zusammenhängende Einstellungen zu ändern.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-guided-settings"/>

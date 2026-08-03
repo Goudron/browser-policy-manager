@@ -77,11 +77,6 @@
             white-space: nowrap;
         }
 
-        .compact-toolbar-firefox-versions [data-firefox-channel] + [data-firefox-channel]::before {
-            content: "·";
-            margin-right: var(--compact-space-1);
-        }
-
         .compact-toolbar-docs-link {
             display: inline-flex;
             align-items: center;

@@ -189,19 +189,20 @@ def test_audit_counts_match_current_product_admin_firefox_cis_and_api_inventorie
         admin_groups["windows_wsl_deployment"]
     )
     assert _domain("administrator_devops_operations")["summary"]["topic_count"] == len(
-        admin_groups["devops_operations"]
+        admin_groups["operate_and_update_source_deployment"][:4]
     )
     assert _domain("administrator_update_from_source")["summary"]["topic_count"] == len(
-        admin_groups["update_from_source"]
+        admin_groups["operate_and_update_source_deployment"][4:8]
     )
     assert _domain("administrator_control_product_runbooks")["summary"]["topic_count"] == len(
-        admin_groups["control_product_runbooks"]
+        admin_groups["lifecycle_workflows_and_recovery"][2:]
     )
     assert _domain("administrator_troubleshooting_diagnostics")["summary"]["topic_count"] == len(
-        admin_groups["troubleshooting"]
+        admin_groups["troubleshooting_and_production_readiness"][:6]
     )
     assert _domain("administrator_production_readiness_boundaries")["summary"]["topic_count"] == len(
-        admin_groups["production_boundaries"]
+        admin_groups["requirements_and_scope"][1:]
+        + admin_groups["troubleshooting_and_production_readiness"][6:]
     )
     assert _domain("administrator_api_integration")["summary"]["migrated_admin_topic_count"] == len(
         _json(API_REHOME_AUDIT)["api_topics_to_rehome"]
@@ -295,4 +296,3 @@ def test_audit_release_blockers_match_artifact_policy_and_no_other_domain_blocks
         "documentation/tests/contract/test_product_documentation_content_coverage_audit.py"
     )
     assert audit["full_release_rerun"] == "make docs-release-check"
-

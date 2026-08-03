@@ -34,14 +34,15 @@
       "guide_id": "user-guide",
       "map_filename": "user-guide.ditamap",
       "source_strategy": "preserve_existing_user_intent_sections_and_split_two_oversized_groups",
-      "topic_count": 90,
+      "topic_count": 92,
       "sections": [
         {
           "section_id": "orient-and-plan",
           "label_key": "navigation.section.user-guide.orient-and-plan",
-          "canonical_label": "Orient and plan profile work",
+          "canonical_label": "Plan profile work",
           "source_relation": "existing_topichead",
           "topics": [
+            "ug-concept-browser-policy-manager-overview",
             "ug-reference-product-version",
             "ug-reference-profile-status",
             "ug-task-change-interface-language",
@@ -49,6 +50,7 @@
             "ug-task-change-interface-theme",
             "ug-concept-accessible-product-operation",
             "ug-concept-documentation-search-boundary",
+            "ug-task-use-local-documentation-assistant",
             "ug-task-work-across-editor-tabs",
             "ug-concept-profile-model",
             "ug-concept-choose-editor-surface"
@@ -57,7 +59,7 @@
         {
           "section_id": "create-and-start",
           "label_key": "navigation.section.user-guide.create-and-start",
-          "canonical_label": "Create and start a profile",
+          "canonical_label": "Create and set up a profile",
           "source_relation": "existing_topichead",
           "topics": [
             "ug-task-choose-firefox-schema",
@@ -75,7 +77,7 @@
         {
           "section_id": "guided-editor",
           "label_key": "navigation.section.user-guide.guided-editor",
-          "canonical_label": "Configure with Guided editor",
+          "canonical_label": "Configure profiles in Guided editor",
           "source_relation": "existing_topichead",
           "topics": [
             "ug-task-use-guided-editor",
@@ -94,7 +96,7 @@
         {
           "section_id": "finish-profile-changes",
           "label_key": "navigation.section.user-guide.finish-profile-changes",
-          "canonical_label": "Review, validate, and finish profile changes",
+          "canonical_label": "Review and complete profile changes",
           "source_relation": "existing_topichead",
           "topics": [
             "ug-task-save-profile",
@@ -123,7 +125,7 @@
         {
           "section_id": "all-settings-editing",
           "label_key": "navigation.section.user-guide.all-settings-editing",
-          "canonical_label": "Edit setting details",
+          "canonical_label": "Edit settings",
           "source_relation": "split_from_inspect-and-edit-complete-settings",
           "topics": [
             "ug-task-inspect-setting-details",
@@ -151,7 +153,7 @@
         {
           "section_id": "json-interchange",
           "label_key": "navigation.section.user-guide.json-interchange",
-          "canonical_label": "Work with JSON and interchange",
+          "canonical_label": "Work with JSON and data exchange",
           "source_relation": "existing_topichead",
           "topics": [
             "ug-task-use-json-editor",
@@ -185,7 +187,7 @@
         {
           "section_id": "profile-comparison",
           "label_key": "navigation.section.user-guide.profile-comparison",
-          "canonical_label": "Compare profile settings",
+          "canonical_label": "Compare profiles",
           "source_relation": "split_from_find-organize-and-compare-profiles",
           "topics": [
             "ug-task-compare-profiles",
@@ -198,7 +200,7 @@
         {
           "section_id": "recover-safely",
           "label_key": "navigation.section.user-guide.recover-safely",
-          "canonical_label": "Recover safely",
+          "canonical_label": "Resolve problems safely",
           "source_relation": "existing_topichead",
           "topics": [
             "ug-troubleshoot-save-conflict",
@@ -219,14 +221,25 @@
     {
       "guide_id": "administrator-guide",
       "map_filename": "administrator-guide.ditamap",
-      "source_strategy": "derive_workflow_sections_from_flat_admin_map",
-      "topic_count": 49,
+      "source_strategy": "implemented_administrator_workflow_sections",
+      "topic_count": 52,
       "sections": [
+        {
+          "section_id": "requirements-and-scope",
+          "label_key": "navigation.section.administrator-guide.requirements-and-scope",
+          "canonical_label": "System requirements and delivery scope",
+          "source_relation": "existing_topichead",
+          "topics": [
+            "admin-reference-minimum-system-requirements",
+            "admin-task-assess-single-node-source-readiness",
+            "admin-task-record-ha-production-deferred-boundaries"
+          ]
+        },
         {
           "section_id": "linux-source-deployment",
           "label_key": "navigation.section.administrator-guide.linux-source-deployment",
-          "canonical_label": "Linux source deployment",
-          "source_relation": "derived_from_flat_map",
+          "canonical_label": "Deploy BPM from source on Linux",
+          "source_relation": "existing_topichead",
           "topics": [
             "admin-task-prepare-linux-source-deployment",
             "admin-task-set-up-linux-source-checkout",
@@ -242,8 +255,8 @@
         {
           "section_id": "windows-wsl-source-deployment",
           "label_key": "navigation.section.administrator-guide.windows-wsl-source-deployment",
-          "canonical_label": "Windows WSL source deployment",
-          "source_relation": "derived_from_flat_map",
+          "canonical_label": "Deploy BPM from source in Windows WSL",
+          "source_relation": "existing_topichead",
           "topics": [
             "admin-task-prepare-windows-wsl-source-deployment",
             "admin-task-set-up-windows-wsl-source-checkout",
@@ -252,47 +265,33 @@
           ]
         },
         {
-          "section_id": "devops-operations",
-          "label_key": "navigation.section.administrator-guide.devops-operations",
-          "canonical_label": "DevOps operations",
-          "source_relation": "derived_from_flat_map",
+          "section_id": "operate-and-update-source-deployment",
+          "label_key": "navigation.section.administrator-guide.operate-and-update-source-deployment",
+          "canonical_label": "Operate and update BPM from source",
+          "source_relation": "existing_topichead",
           "topics": [
             "admin-task-review-devops-configuration-sources",
             "admin-task-plan-devops-storage-logs-backups",
             "admin-task-review-devops-network-cors-security",
-            "admin-task-record-devops-operational-boundaries"
-          ]
-        },
-        {
-          "section_id": "source-update",
-          "label_key": "navigation.section.administrator-guide.source-update",
-          "canonical_label": "Update from source",
-          "source_relation": "derived_from_flat_map",
-          "topics": [
+            "admin-task-record-devops-operational-boundaries",
             "admin-task-prepare-source-update-evidence",
             "admin-task-refresh-source-revision-dependencies",
             "admin-task-run-source-update-migrations-docs",
-            "admin-task-verify-source-update-rollback-stop"
+            "admin-task-verify-source-update-rollback-stop",
+            "admin-task-check-health-readiness"
           ]
         },
         {
-          "section_id": "api-integration-foundations",
-          "label_key": "navigation.section.administrator-guide.api-integration-foundations",
-          "canonical_label": "API integration foundations",
-          "source_relation": "derived_from_flat_map",
+          "section_id": "api-integration",
+          "label_key": "navigation.section.administrator-guide.api-integration",
+          "canonical_label": "Integrate with the BPM API",
+          "source_relation": "existing_topichead",
           "topics": [
             "admin-concept-integration-audience",
             "admin-concept-supported-integration-patterns",
             "admin-concept-api-conventions",
-            "admin-concept-api-limitations"
-          ]
-        },
-        {
-          "section_id": "profile-api-lifecycle",
-          "label_key": "navigation.section.administrator-guide.profile-api-lifecycle",
-          "canonical_label": "Profile lifecycle and Firefox JSON",
-          "source_relation": "derived_from_flat_map",
-          "topics": [
+            "admin-concept-api-limitations",
+            "admin-task-use-reusable-api-examples",
             "admin-task-sync-profile-lifecycle",
             "admin-task-manage-profile-retirement",
             "admin-task-import-firefox-policies-json",
@@ -301,23 +300,13 @@
           ]
         },
         {
-          "section_id": "api-health-and-scenarios",
-          "label_key": "navigation.section.administrator-guide.api-health-and-scenarios",
-          "canonical_label": "API health and scenarios",
-          "source_relation": "derived_from_flat_map",
+          "section_id": "lifecycle-workflows-and-recovery",
+          "label_key": "navigation.section.administrator-guide.lifecycle-workflows-and-recovery",
+          "canonical_label": "Run lifecycle workflows and recover from failures",
+          "source_relation": "existing_topichead",
           "topics": [
-            "admin-task-check-health-readiness",
             "admin-task-run-pull-compare-update-scenario",
             "admin-task-run-import-review-export-scenario",
-            "admin-task-use-reusable-api-examples"
-          ]
-        },
-        {
-          "section_id": "control-product-workflows",
-          "label_key": "navigation.section.administrator-guide.control-product-workflows",
-          "canonical_label": "Control product workflows",
-          "source_relation": "derived_from_flat_map",
-          "topics": [
             "admin-task-run-control-product-inventory-pull",
             "admin-task-run-validate-before-apply-update",
             "admin-task-run-import-review-export-handoff",
@@ -326,29 +315,29 @@
           ]
         },
         {
-          "section_id": "troubleshooting",
-          "label_key": "navigation.section.administrator-guide.troubleshooting",
-          "canonical_label": "Troubleshooting",
-          "source_relation": "derived_from_flat_map",
+          "section_id": "troubleshooting-and-production-readiness",
+          "label_key": "navigation.section.administrator-guide.troubleshooting-and-production-readiness",
+          "canonical_label": "Troubleshoot BPM and assess production readiness",
+          "source_relation": "existing_topichead",
           "topics": [
             "admin-troubleshoot-failed-startup-probes",
             "admin-troubleshoot-schema-cache-validation",
             "admin-troubleshoot-import-export-failures",
             "admin-troubleshoot-database-storage",
             "admin-troubleshoot-wsl-networking-dependencies",
-            "admin-troubleshoot-documentation-portal-build-links"
+            "admin-troubleshoot-documentation-portal-build-links",
+            "admin-task-review-network-exposure-proxy-readiness",
+            "admin-task-plan-monitoring-backup-update-windows"
           ]
         },
         {
-          "section_id": "production-readiness",
-          "label_key": "navigation.section.administrator-guide.production-readiness",
-          "canonical_label": "Production readiness boundaries",
-          "source_relation": "derived_from_flat_map",
+          "section_id": "local-documentation-assistant",
+          "label_key": "navigation.section.administrator-guide.local-documentation-assistant",
+          "canonical_label": "BPM documentation assistant",
+          "source_relation": "existing_topichead",
           "topics": [
-            "admin-task-assess-single-node-source-readiness",
-            "admin-task-review-network-exposure-proxy-readiness",
-            "admin-task-plan-monitoring-backup-update-windows",
-            "admin-task-record-ha-production-deferred-boundaries"
+            "admin-task-operate-local-documentation-assistant",
+            "admin-task-maintain-local-documentation-assistant"
           ]
         }
       ]
@@ -358,11 +347,11 @@
     "documents_with_taxonomy": ["user-guide", "administrator-guide"],
     "section_counts": {
       "user-guide": 11,
-      "administrator-guide": 10
+      "administrator-guide": 8
     },
     "topic_counts": {
-      "user-guide": 90,
-      "administrator-guide": 49
+      "user-guide": 92,
+      "administrator-guide": 52
     },
     "largest_section_topic_count": 12,
     "next_backlog_item": "BPM091-M8-03"

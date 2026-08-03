@@ -5,9 +5,9 @@
   <shortdesc>Utilisez l'étape 3 pour la confidentialité, les autorisations, les cookies, le nettoyage, DNS et le renforcement des contrôles.</shortdesc>
   <taskbody>
     <prereq><p>Un brouillon de profil guidé est ouvert sur le canal de schéma prévu. Les paramètres de confidentialité de</p></prereq>
-    <context><p>Sécurité &amp; peuvent modifier à la fois l'expérience utilisateur et la posture en matière de risque, alors consultez les avertissements avant d'enregistrer.</p></context>
+    <context><p>Les paramètres de sécurité et de confidentialité peuvent modifier l’expérience utilisateur et le niveau de risque. Vérifiez les avertissements avant d’enregistrer.</p></context>
     <steps>
-      <step><cmd>Ouvrez l'étape 3, Sécurité de la confidentialité &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 3 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Configurez les contrôles de confidentialité et les autorisations par défaut.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Définissez les options de cookies, de nettoyage, de DNS et de renforcement de la sécurité nécessaires au profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Vérifiez les messages de validation et expliquez toute exception dans la révision.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

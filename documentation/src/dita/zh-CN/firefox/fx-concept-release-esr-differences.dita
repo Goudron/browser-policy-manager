@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-release-esr-differences" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Firefox Release 与 ESR 策略差异</title>
+  <title>火狐浏览器正式版与长期支持版策略差异</title>
   <shortdesc>使用通道标志和活动架构通道来避免配置在所选 Firefox 系列中不可用的策略。</shortdesc>
   <conbody>
     <section id="a-current-channels"><title>当前通道</title><p>BPM 支持 Firefox Release 153、Firefox ESR 153.0 和 Firefox ESR 140.13。在 ESR 过渡期间，ESR 153.0 和 ESR 140.13 仍是彼此独立的受支持通道；BPM 不会在两个 ESR 之间自动迁移配置文件。</p></section>
     <section id="a-support-badges"><title>支持徽章</title><p>每个生成的策略参考都会列出其确切支持的通道。标有 Release 153 和 ESR 153.0 并不表示支持 ESR 140.13。该信息由维护的 Firefox 策略清单生成，而非来自翻译文本。</p></section>
-    <section id="a-release-only"><title>ESR 140.13 中不可用的策略</title><p>以下九项当前策略在 Release 153 和 ESR 153.0 中可用，但在 ESR 140.13 中不可用：<codeph>AIControls</codeph>、<codeph>BrowserDataBackup</codeph>、<codeph>DisableRemoteImprovements</codeph>、<codeph>DisableRemoteSettingsAndAcceptSecurityConsequences</codeph>、<codeph>GenerativeAI</codeph>、<codeph>IPProtectionAvailable</codeph>、<codeph>LocalNetworkAccess</codeph>、<codeph>VisualSearchEnabled</codeph> 和 <codeph>XSLTEnabled</codeph>。</p></section>
+    <section id="a-release-only"><title>长期支持版本中不可用的策略</title><p>以下九项当前策略在 Release 153 和 ESR 153.0 中可用，但在 ESR 140.13 中不可用：<codeph>AIControls</codeph>、<codeph>BrowserDataBackup</codeph>、<codeph>DisableRemoteImprovements</codeph>、<codeph>DisableRemoteSettingsAndAcceptSecurityConsequences</codeph>、<codeph>GenerativeAI</codeph>、<codeph>IPProtectionAvailable</codeph>、<codeph>LocalNetworkAccess</codeph>、<codeph>VisualSearchEnabled</codeph> 和 <codeph>XSLTEnabled</codeph>。</p></section>
     <section id="a-changed-definitions"><title>更改的定义</title><p>公共策略 <codeph>Cookies</codeph>、<codeph>ExtensionSettings</codeph> 和 <codeph>Homepage</codeph> 会随通道而变化。Release 153 和 ESR 153.0 还包括当前的扩展权限和主机访问控制。</p></section>
     <section id="a-user-action"><title>用户操作</title><p>请在选择策略前选定 Firefox 架构通道，检查通道徽章，并在导出前重新验证。在 ESR 140.13 与 ESR 153.0 之间迁移时，请明确选择目标通道并处理提示的差异；不会自动进行 ESR 间迁移。</p></section>
   </conbody>

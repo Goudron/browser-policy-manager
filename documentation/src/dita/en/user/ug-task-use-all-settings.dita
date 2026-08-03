@@ -8,7 +8,7 @@
     <context><p>All settings is the complete visual editor for Firefox policies and known managed preferences. It opens in Review mode so attention items are visible before broad catalog browsing.</p>
       <fig id="screenshot-all-settings-review">
         <title>All settings review mode</title>
-        <image keyref="screenshot.all-settings-review" placement="break">
+        <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>All settings showing the review list, configured settings, and setting detail panel on a narrow screen.</alt>
         </image>
       </fig>

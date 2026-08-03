@@ -8,7 +8,7 @@
     <context><p>JSON-Editor ist die Rohdokumentoberfläche. Verwenden Sie es, wenn Geführter Editor oder Alle Einstellungen für eine genaue Überprüfung, Migrationsprüfungen, Fehlerbehebung oder Rohwerte zu hoch ist.</p>
       <fig id="screenshot-json-editor">
         <title>JSON-Editor im dunklen Design</title>
-        <image keyref="screenshot.json-editor" placement="break">
+        <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
           <alt>JSON-Editor zeigt bearbeitbare Firefox-Richtlinien im JSON-Format für ein gespeichertes Profil.</alt>
         </image>
       </fig>

@@ -52,7 +52,7 @@ def build_lock() -> dict[str, Any]:
     versions = _package_versions()
     return {
         "schema_version": 1,
-        "updated": "2026-07-06",
+        "updated": "2026-07-28",
         "packages": {
             "js-yaml": versions["js-yaml"],
             "monaco-editor": versions["monaco-editor"],

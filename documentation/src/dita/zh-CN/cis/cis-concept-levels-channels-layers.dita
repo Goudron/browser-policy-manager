@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-levels-channels-layers" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>在 CIS 级别、通道和生成层之间进行选择</title>
+  <title>在安全基线级别、通道和生成层之间进行选择</title>
   <shortdesc>BPM 中的 CIS 选择取决于预期的强化级别以及用于验证和导出的 Firefox 架构通道。</shortdesc>
   <conbody>
-    <section id="a-level-1"><title>1 级</title><p>1 级是广泛企业使用的默认起点。在 BPM 中，它由为 ESR 140.13 和版本 152 生成的 1 级层表示，每个层涵盖 49 个映射建议。当配置文件应改善安全状况，同时保留常规浏览和支持工作流程时，请使用它。</p></section>
-    <section id="a-level-2"><title>2 级</title><p>2 级更为严格，并添加了可能影响可用性、操作或故障排除的控制。 BPM 为 ESR 140.13 和版本 152 生成 2 级层，每个层涵盖 53 条映射建议。仅当部署所有者接受更严格的限制并且具有例外情况审查流程时才选择它。</p></section>
-    <section id="a-supported-channels"><title>支持的 Firefox 频道</title><p>BPM 目前根据 Firefox ESR 140.13 和 Firefox Release 153 架构验证 CIS 层。推荐主题可能链接到在两个渠道中都有效的 Firefox 策略或托管首选项，但您仍然需要在导出之前保持所选架构渠道一致。</p></section>
+    <section id="a-level-1"><title>1 级</title><p>1 级是广泛企业使用的默认起点。在 BPM 中，它由为 ESR 140.13 和 Release 153 生成的 1 级层表示，每个层涵盖 49 个映射建议。当配置档案应改善安全状况，同时保留常规浏览和支持工作流程时，请使用它。</p></section>
+    <section id="a-level-2"><title>2 级</title><p>2 级更为严格，并添加了可能影响可用性、操作或故障排除的控件。BPM 为 ESR 140.13 和 Release 153 生成 2 级层，每个层涵盖 53 条映射建议。仅当部署所有者接受更严格的限制并且具有例外情况审查流程时才选择它。</p></section>
+    <section id="a-supported-channels"><title>支持的浏览器通道</title><p>BPM 支持 Firefox ESR 140.13、ESR 153.0 和 Release 153 架构。目前仅为 ESR 140.13 和 Release 153 提供生成的 CIS 层。请在导出前保持所选架构通道一致；架构受支持并不表示存在生成的 CIS 层。</p></section>
     <section id="a-generated-layers"><title>生成的层</title><p>可用的生成层为 cis-l1.esr-140.13、cis-l1.release-153、cis-l2.esr-140.13 和 cis-l2.release-153。每一层都贡献 BPM 拥有的策略值或锁定的 托管首选项，然后配置文件合并逻辑会记录值是否已添加、已满足、替换、在基础中更严格或保留以供手动审核。</p></section>
     <section id="a-manual-review"><title>手动审核</title><p>九个明确的路径需要人工审查，因为地方治理可以改变正确的决策。更新控件、代理模式和锁定状态以及选定的关闭时清理值是 BPM 提出问题但不做出通用合规性决策的示例。</p></section>
   </conbody>

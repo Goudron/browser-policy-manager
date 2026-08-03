@@ -8,7 +8,7 @@
     <context><p>所有设置 是 Firefox 策略和已知的 托管首选项 的完整可视化编辑器。它在 检查 中打开，因此在广泛的目录浏览之前可以看到注意事项。</p>
       <fig id="screenshot-all-settings-review">
         <title>“所有设置”中的检查</title>
-        <image keyref="screenshot.all-settings-review" placement="break">
+        <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>所有设置 在窄屏幕上显示审阅列表、配置的设置和设置详细信息面板。</alt>
         </image>
       </fig>

@@ -9,7 +9,7 @@
     <steps>
       <step><cmd>Confirm that you are editing the intended profile draft.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Enter a clear profile name.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Choose the Firefox schema channel, such as Release 153 or ESR 140.13.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose the Firefox schema channel: ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Review whether the selected channel changes the visible controls before continuing.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>
     <result><p>The Guided draft has a stable identity and schema channel.</p></result>

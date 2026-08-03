@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-export-firefox-policies-json" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>通过 API 导出规范 Firefox policies.json</title>
+  <title>通过编程接口导出规范火狐浏览器策略文件</title>
   <shortdesc>将一个 BPM 配置文件呈现为 Firefox Enterprise 部署文档，并具有可选的下载和漂亮打印参数。</shortdesc>
   <taskbody>
     <prereq><p>存储创建或导入返回的 BPM 配置文件 ID。如果配置文件已存档，请明确决定是否允许集成使用 <codeph>include_deleted=true</codeph> 导出它。</p></prereq>

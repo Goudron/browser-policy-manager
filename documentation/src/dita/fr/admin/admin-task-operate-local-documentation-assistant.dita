@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-operate-local-documentation-assistant" xml:lang="fr" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Utiliser l’assistant de documentation dans BPM 0.9.3</title>
+  <shortdesc>Vérifiez la limite publiée de l’avis d’entraînement sans rendre BPM ou la recherche déterministe dépendants du chat.</shortdesc>
+  <taskbody>
+    <prereq><p>Utilisez un checkout BPM 0.9.3 pris en charge et les ressources de base décrites dans <xref keyref="topic.admin-reference-minimum-system-requirements"/>.</p></prereq>
+    <context><p>Dans cette version, le chat est uniquement une interface de lecture localisée. Il ne démarre ni n’installe de modèle, ne récupère pas la documentation, n’utilise pas d’index E5, ne génère pas de réponse, n’affiche pas de citations et ne contacte pas de sources externes. La recherche déterministe reste distincte et disponible.</p></context>
+    <steps>
+      <step><cmd>Démarrez BPM avec le flux depuis les sources normal et pris en charge.</cmd><info><p>N’ajoutez pas de configuration de modèle, d’index, d’embeddings ou de fournisseur externe au démarrage de BPM 0.9.3.</p></info></step>
+      <step><cmd>Ouvrez le portail de documentation dans la langue du lecteur.</cmd><info><p>Vérifiez que l’assistant s’ouvre en bas à droite et que les contrôles de recherche ordinaires restent inchangés.</p></info></step>
+      <step><cmd>Envoyez une question sur BPM.</cmd><info><p>La transcription doit afficher l’avis localisé indiquant que le modèle local est en cours d’entraînement et que la fonction sera disponible dans une version ultérieure.</p></info></step>
+      <step><cmd>Envoyez une question hors sujet.</cmd><info><p>Le même avis est attendu ; le chat n’est pas un assistant généraliste dans cette version.</p></info></step>
+      <step><cmd>Trouvez la réponse actuelle avec la recherche déterministe dans la documentation.</cmd><info><p>La recherche, les filtres, la navigation et l’ordre des résultats restent le chemin pris en charge pour les informations produit.</p></info></step>
+    </steps>
+    <result><p>L’assistant affiche l’avis d’entraînement localisé publié, tandis que BPM et la recherche déterministe restent utilisables indépendamment.</p></result>
+    <postreq><p>N’installez pas de modèle et ne créez pas de génération RAG pour 0.9.3. Signalez comme défaut de documentation tout écart d’avis, de langue ou de limite avec la recherche ordinaire.</p></postreq>
+  </taskbody>
+  <related-links><link keyref="topic.admin-reference-minimum-system-requirements"/><link keyref="topic.admin-task-gate-control-product-startup"/></related-links>
+</task>

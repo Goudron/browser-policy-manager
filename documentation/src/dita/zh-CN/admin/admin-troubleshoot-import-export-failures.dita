@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-troubleshoot-import-export-failures" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>Firefox 导入和导出失败故障排除</title>
+  <title>火狐浏览器导入和导出失败故障排除</title>
   <shortdesc>诊断 JSON 导入、多部分导入和 Firefox 策略导出失败，同时保留源和导出的证据。</shortdesc>
   <taskbody>
     <prereq><p>当 <codeph>POST $BPM_BASE_URL/api/profiles/import/firefox/policies.json</codeph> 或 <codeph>GET $BPM_BASE_URL/api/export/profiles/42/firefox/policies.json</codeph> 返回 <codeph>400</codeph>、<codeph>404</codeph>、<codeph>409</codeph>、<codeph>415</codeph> 或 <codeph>422</codeph> 时，使用此过程。</p></prereq>

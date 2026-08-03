@@ -177,6 +177,12 @@ light theme uses light-gray primary surfaces instead of a pure-white page. Searc
 compact one-line control. Advanced filters are hidden by default and change only through their
 explicit toggle; search, URL/history hydration, results, and clear preserve that choice.
 
+Documentation search is local, deterministic, and available in English, Russian, German,
+Simplified Chinese, French, and Spanish. The documentation assistant is a separate six-locale
+support-chat surface. In 0.9.3 it returns a localized notice that the local model is still being
+trained; it does not start a model worker, RAG index, generated-answer flow, citation flow, or
+external-source request. Search remains available independently of the assistant.
+
 Navigation is built from one generated source per locale. The independently scrollable sidebar
 opens at the localized Documents root and presents a guide, section, and topic hierarchy where a
 section level is useful. Opening a contextual topic link expands the complete path and activates the
@@ -342,6 +348,10 @@ python -m pip install --upgrade pip
 pip install .
 make dev
 ```
+
+No provider token or external-source configuration is required for BPM or `make dev` in 0.9.3.
+Local-model training, RAG-generated answers and citations, and external-source research are
+separate future work.
 
 Open:
 

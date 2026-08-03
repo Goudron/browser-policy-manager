@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.9.3",
+  "backlog_item": "BPM093-M12-07",
+  "status": "implemented",
+  "source_index": "docs/docs-index.md",
+  "snapshot_generator": "documentation/tools/generate_subsystem_snapshot.py",
+  "architecture_entry_points": [
+    "ai-component-update-runbook-0.9.3.md",
+    "documentation-assistant-presentation-0.9.3.md",
+    "documentation-assistant-resource-state-0.9.3.md",
+    "documentation-assistant-web-mode-0.9.3.md"
+  ],
+  "excluded_artifact_classes": ["generated", "model", "cache"]
+}

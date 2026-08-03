@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-embedding-decision-0.9.3",
+  "backlog_item": "BPM093-M5-03C",
+  "target_bpm_version": "0.9.3",
+  "status": "maintainer-accepted",
+  "decision_date": "2026-07-29",
+  "decision_authority": "Explicit project-maintainer acceptance.",
+  "selected_candidate": {
+    "id": "multilingual-e5-base-onnx-o4",
+    "model_id": "intfloat/multilingual-e5-base",
+    "revision": "f5bd48cd75e61ca79c4cdffff9185cab1f07f4f0",
+    "artifact": "onnx/model_O4.onnx",
+    "artifact_sha256": "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703",
+    "license": "MIT",
+    "dimension": 768,
+    "source_contract": "documentation/config/embedding-model-benchmark-m5-03a-0.9.3.json",
+    "source_contract_sha256": "432cc2f7cd82f6f929f5316ff597bdfc009095b2823cb1ac29b55e79955167f8"
+  },
+  "benchmark_evidence": {
+    "contract": "documentation/config/chat-rag-embedding-benchmark-0.9.3.json",
+    "contract_sha256": "15d0146b5bf380b0710f930c5f769c96508e4cff426d508e1060aed92f8466b3",
+    "selector_result": "fail",
+    "selector_selected": null,
+    "acceptance_basis": "E5-base passed every measured same-locale evidence, citation, no-evidence, disk, RSS, and latency gate; its selector result is invalid solely because host swap changed.",
+    "not_a_benchmark_pass": true
+  },
+  "resource_policy_amendment": {
+    "path": "documentation/config/chat-rag-resource-policy-amendment-0.9.3.json",
+    "sha256": "c250f7f7b63fa74f7a15545c307a30506ff2d8c978c8c6b15529f65b9e36e74e",
+    "effect": "Historical swap movement remains recorded but is no longer a selection or release blocker."
+  },
+  "implementation_boundary": {
+    "chat_only": true,
+    "ordinary_search": "M4 ordinary search is not called, changed, ranked against, or replaced.",
+    "cross_locale_retrieval": "forbidden",
+    "optional_external_evidence": "disabled by default; only future explicit opt-in and never persisted in local chunks, embeddings, or indexes"
+  },
+  "release_blocker": {
+    "backlog_item": "BPM093-M5-03D",
+    "status": "retired-no-swap-gate",
+    "requirement": "Retain earlier no-swap attempts as diagnostics only; swap may be used for offline indexing and is no longer a release blocker.",
+    "failure_disposition": "Do not change M4 ordinary search; apply the remaining integrity, grounding, security, interactive-resource, and release gates."
+  }
+}

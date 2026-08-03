@@ -194,6 +194,26 @@ the DITA/User/Admin/API/CIS/Firefox topics, screenshots or screenshot blockers, 
 targets, and documentation tests needed to make the documentation describe the product after the
 epic.
 
+### Required editorial documentation review
+
+Every documentation-update milestone must include one task that follows the
+[documentation-update runbook](../documentation/runbooks/documentation-update-for-future-epics.md).
+Its acceptance must require an explicit review of the affected guide maps,
+headings, topic completeness, and content that must be removed because it is
+stale, internal, unsafe, or unshipped. The task must apply Microsoft style to
+English, native heading rules to every published locale, the BPM UI catalog to
+interface labels, Mozilla Pontoon to Firefox UI terminology, and SUMO to Firefox
+support prose. It must distinguish deterministic documentation search from the
+separate documentation assistant and document only the assistant behavior
+actually delivered in the target release.
+
+When the User Guide or Administrator Guide changes, require rebuilding and
+visually checking both PDFs in all six locales. The acceptance must include
+DITA/site/PDF reproducibility and package verification, CJK glyph and
+code-block checks, page-fitting screenshots, and the successful
+`make docs-install-dev` handoff. A future epic may scope the review to affected
+guides only, but it must record why each untouched guide is unaffected.
+
 ### Maintainer `make dev` documentation handoff
 
 When a task changes product-documentation source, documentation build tooling, generated portal
@@ -204,6 +224,22 @@ subsequent `make dev`; it is not a request for the assistant to start the develo
 Every affected backlog must include a documentation-milestone task that makes this handoff explicit.
 Its acceptance must require the task report to record the successful `make docs-install-dev` command
 and confirm that the served artifact derives its visible version from the current BPM product version.
+
+### Maintainer `make dev` local-artifact handoff
+
+When an epic adds a large, verified local development artifact that BPM needs to exercise the
+implemented path, add a named `*-install-dev` make target and make `make dev` depend on it. The
+target must use the same pinned, checksum-verifying lifecycle as the product, expose real flushed
+stdout progress, and be idempotent: a verified artifact is retained and only re-verified on later
+`make dev` invocations. Invoking `make dev` is explicit maintainer consent for this development
+bootstrap; product startup, page load, search, chat, and status requests remain unable to download
+an artifact.
+
+Development artifacts installed this way are persistent local state. A normal clean/reset target,
+test cleanup, or subsequent `make dev` must not delete, downgrade, or replace them. Removal needs a
+separate, confirmable command and an explicit maintainer instruction. Backlogs must separately plan
+the release UI for installation/removal, disclosure, progress, cancellation, and recovery; a
+developer make target is never release UI implementation.
 
 ### Compact UI-copy and documentation guard
 
@@ -252,6 +288,22 @@ Each task should be small enough for one focused implementation pass. Split a ta
 Each task should name the likely verification layer, for example focused unit tests, contract tests,
 locale contract, browser UI smoke, or release suite.
 
+## Long-Running Command Progress
+
+For every command in a new backlog that can run for more than one minute, or whose duration is
+materially uncertain, require interactive progress on that command's stdout. Progress must be
+flushed and derived from real work: current phase/locale, completed and total units, cache or retry
+state where relevant, and a final success/failure boundary. Include elapsed time or ETA only when it
+is measured rather than guessed. Do not substitute a spinner, fixed timer, or fabricated percentage
+for observable work.
+
+While such a command runs, keep the maintainer chat silent: progress belongs in the command output,
+not periodic chat messages. If a third-party command cannot expose units, provide a task-owned
+read-only observer that reports independently verifiable state without modifying the running work.
+The command and observer must preserve safe interruption, partial-artifact quarantine, and atomic
+promotion requirements. Repeat this rule in each created backlog's execution protocol and make it
+an explicit acceptance condition for every applicable task.
+
 ## Final Quality Milestone
 
 Every backlog must end with a final quality milestone. Include tasks for:
@@ -273,7 +325,8 @@ Every backlog must end with a final quality milestone. Include tasks for:
 11. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
     release procedures include documentation drift gates when the epic changed those areas.
 12. Create a git commit for the completed epic.
-13. Provide the maintainer with the exact `git push` command to run manually.
+13. Push the reviewed commit to its configured remote branch and monitor every triggered required
+    CI workflow until it reaches a terminal state; report the result.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -295,8 +348,18 @@ escalation immediately. Do not first try the browser test command inside the san
 
 If Make targets change in a future epic, update this runbook and the backlog together.
 
-Do not push from the backlog execution step. The assistant creates the commit when requested by the
-backlog flow, then prints the push command for the maintainer to run.
+### Automated push and CI control
+
+After the reviewed epic commit is created, the assistant pushes it to the configured remote branch
+with a regular non-force push and monitors every required GitHub Actions workflow triggered by that
+push until its terminal state. The handoff records the commit SHA, remote branch, workflow URLs,
+and each job result. The assistant must not force-push, rewrite history, create a tag or release,
+open a pull request, or push unrelated local changes.
+
+If the remote is unavailable, credentials are missing, the remote branch has advanced, a protected
+branch rejects the push, or any required workflow fails, stop the release handoff and report the
+exact condition. Do not retry a rejected push, bypass branch protection, or continue after a failed
+workflow without explicit user direction.
 
 ## Approval Protocol
 
@@ -307,6 +370,9 @@ When executing a backlog interactively with the user:
 3. Execute only that approved task.
 4. Report what changed and which checks passed.
 5. Show the next task for approval.
+
+For a long-running command, emit its interactive, real-work progress in the command's own output
+and keep chat silent until it finishes; do not replace it with periodic status messages.
 
 Do not start executing a backlog task just because the backlog exists.
 
@@ -329,13 +395,21 @@ Before calling a new backlog ready, confirm:
   future-version placeholders;
 - a dedicated documentation-update milestone appears before the final quality milestone when the
   epic changes product behavior or operating procedures;
+- the documentation-update milestone includes the required editorial review from
+  `documentation-update-for-future-epics.md`, with Microsoft, Pontoon, SUMO,
+  native-locale heading, completeness, and out-of-scope-content checks;
+- a User Guide or Administrator Guide change requires rebuilt and visually checked PDFs for all six
+  locales, including CJK glyphs, code blocks, and page-fitting screenshots;
 - documentation-changing tasks require `make docs-install-dev` before handoff so the maintainer's
   later `make dev` serves the current artifact and current BPM version;
+- any development-only local model or similarly large artifact has an idempotent `*-install-dev`
+  handoff with real stdout progress and persistent-state/no-automatic-removal rules; its release UI
+  remains a separate planned task;
 - final milestone includes mypy, ruff, `pytest -q`, coverage-to-100%, and Selenium smoke;
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;
 - final milestone verifies documentation-update completion and includes changelog entry, git commit,
-  and maintainer-run push command;
+  automatic non-force push, and terminal required-CI results;
 - final milestone verifies README has no version-specific release notes, active-target marker, or
   planned/completion placeholder; README updates are limited to durable current-state product facts;
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
@@ -350,3 +424,5 @@ Before calling a new backlog ready, confirm:
 - docs index includes the new backlog;
 - assumptions and non-goals are explicit;
 - execution protocol says each task requires separate user approval.
+- long-running commands have explicit stdout progress requirements, and the execution protocol
+  keeps progress out of chat.

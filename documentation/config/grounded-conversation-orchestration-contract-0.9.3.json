@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-orchestration-0.9.3",
+  "backlog_item": "BPM093-M7-02",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-no-http-route",
+  "pins": {
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "retrieval": {"path": "documentation/config/chat-rag-retrieval-contract-0.9.3.json", "sha256": "8301f06e5449f86ae27cdd136720c39d523987e526a09c443b447832505c1d2d"},
+    "evidence": {"path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json", "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"},
+    "security": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"},
+    "worker": {"path": "documentation/config/local-chat-worker-contract-0.9.3.json", "sha256": "4a13460df3f6de23f3f562eefa3d2d89f55135113ccf60dd5b077e6d65467e7f"}
+  },
+  "pipeline": ["validate_request", "scope_gate", "optional_web_consent_boundary", "same_locale_e5_encode", "exact_locale_retrieval", "evidence_pack", "local_worker", "parse_and_support_check", "server_citation_binding"],
+  "scope": "M8 supplies the deterministic multilingual gate. The orchestrator requires allow/clarify/refuse and fails closed before encoding, retrieval, worker, or web action for every other result.",
+  "locale": "Only the exact active request locale reaches the E5 encoder/retriever. A returned different locale is an abstention; cross-locale merge, retry, and ordinary search are forbidden.",
+  "evidence": "Only M5 answer-ready same-locale EvidencePack context reaches the worker. Empty, stale, contradictory, low-confidence, over-budget, invalid, or unavailable evidence does not invoke generation. Several current citable local topics may be packed together; scope ambiguity is decided before retrieval.",
+  "generation": "The exact M6 worker receives bounded JSON Lines evidence. M7-04 supplies the parser/support checker; absent or invalid output fails closed and no raw model text is returned.",
+  "citation": "An answer requires nonempty text and unique citation IDs that are a subset of the accepted local evidence citations. The orchestration layer resolves no user/model URL and never returns internal chunk/vector/score fields.",
+  "web": "request_web runs only after scope admission and is an explicit non-network placeholder until M9; it returns assistant_web_not_available without encoding, retrieval, worker, or provider calls.",
+  "ordinary_search": "The deterministic documentation search is neither imported, called, ranked, nor changed by this module.",
+  "implementation_boundary": {"http_route": false, "browser_ui": false, "session_persistence": false, "scope_classifier": false, "e5_runtime_loader": false, "output_schema_parser": false, "external_provider": false},
+  "verification": {"runtime": "tests/test_grounded_conversation_orchestration_093.py", "contract": "documentation/tests/contract/test_grounded_conversation_orchestration_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-orchestration-0.9.3.md"}
+}

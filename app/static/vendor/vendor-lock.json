@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "updated": "2026-07-06",
+  "updated": "2026-07-28",
   "packages": {
-    "js-yaml": "5.2.1",
+    "js-yaml": "5.2.2",
     "monaco-editor": "0.53.0",
     "esbuild": "0.28.1"
   },

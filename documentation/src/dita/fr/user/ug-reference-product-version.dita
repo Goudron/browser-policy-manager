@@ -6,7 +6,7 @@
   <refbody>
     <section id="a-version-location"><title>Affichage de la version</title><p>Le même en-tête dans la Bibliothèque, l’Éditeur guidé, Tous les paramètres, l’Éditeur JSON, Comparer et la documentation affiche la version BPM en cours. Dans la Bibliothèque, le décompte de l’espace de travail et le libellé « Profils dans la bibliothèque » sont affichés sur deux lignes compactes.</p></section>
     <section id="a-version-scope"><title>Portée de la version</title><p>La version du produit identifie le comportement BPM, et non la version du navigateur Firefox installée sur un point de terminaison.</p></section>
-    <section id="a-schema-version"><title>Canal de schéma</title><p>La version actuelle prend en charge Firefox ESR 140.13 et Firefox Release 153. Le canal de schéma est un choix distinct qui affecte la validation et les contrôles disponibles.</p></section>
+    <section id="a-schema-version"><title>Canal de schéma</title><p>La version actuelle prend en charge Firefox Release 153, Firefox ESR 153.0 et Firefox ESR 140.13. Le canal de schéma est un choix distinct qui affecte la validation et les contrôles disponibles.</p></section>
     <section id="a-version-recovery"><title>Récupération</title><p>Si le comportement du produit ne correspond pas au guide, enregistrez la version BPM, le canal de schéma, l'itinéraire, les paramètres régionaux et l'état visible avant de signaler l'incompatibilité.</p></section>
   </refbody>
   <related-links>

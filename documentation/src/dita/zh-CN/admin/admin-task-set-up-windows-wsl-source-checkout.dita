@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-windows-wsl-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>在 WSL 内设置 BPM 源签出</title>
+  <title>在子系统内设置浏览器策略管理器源签出</title>
   <shortdesc>在 WSL 中安装 Linux 先决条件，将 BPM 克隆到 Linux 文件系统中，创建虚拟环境，安装依赖项并应用迁移。</shortdesc>
   <taskbody>
     <prereq><p>安装并打开 WSL 2 Linux 发行版，并且管理员拥有批准的 BPM 存储库 URL 和 0.9.1 分支或标签。</p></prereq>

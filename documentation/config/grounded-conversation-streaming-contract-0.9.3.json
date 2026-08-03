@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-streaming-0.9.3",
+  "backlog_item": "BPM093-M7-05",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-memory-only-no-http-route",
+  "pins": {
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "7781e7419176928d2d56ae999ee122e0db68a585184acacf52fbf850695602cb"},
+    "context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "3f06b876eb59be5642bee4cfb2a96c165edb0ad3764df3100946fd9aeb7df16f"},
+    "answer_validation": {"path": "documentation/config/grounded-conversation-answer-validation-contract-0.9.3.json", "sha256": "5747d2da3660883f986834f05d3cbd6167bd9fba7349bad49dabb1a1e04dd410"},
+    "worker": {"path": "documentation/config/local-chat-worker-contract-0.9.3.json", "sha256": "4a13460df3f6de23f3f562eefa3d2d89f55135113ccf60dd5b077e6d65467e7f"}
+  },
+  "lifecycle": {
+    "api_version": 1,
+    "event_types": ["accepted", "progress", "final", "cancelled", "error"],
+    "progress_states": ["scope_check", "evidence_check", "generating", "validating"],
+    "terminal_states": ["answer", "clarify", "abstain", "refuse", "cancelled", "error"],
+    "rule": "Events contain only stable localized message/action keys, opaque IDs, validated final text and opaque source handles. Raw model tokens, prompts, evidence excerpts, source citation IDs, paths, hashes, timings and exceptions never enter the event stream."
+  },
+  "bounds": {
+    "active_requests_max": 1,
+    "queued_requests_max": 1,
+    "event_buffer_max": 8,
+    "completed_request_records_max": 4,
+    "request_timeout_seconds": 1200.0,
+    "cancellation": "Stop and disconnect set cancellation before invoking the existing worker process-group cancellation. The controller emits exactly one incomplete terminal cancellation event; a later worker outcome cannot replace it with an answer.",
+    "timeout": "Timeout invokes the same cancellation boundary and emits exactly one incomplete assistant_timeout error. The active slot is not released until the stopped worker returns, so no concurrent replacement worker can start.",
+    "backpressure": "Events are an in-memory bounded deque. Slow or disconnected consumers cause stale nonterminal events to be discarded; they never block inference or create unbounded jobs."
+  },
+  "source_handles": "Only validated final-answer citations receive fresh opaque source handles. A handle maps to one completed in-memory request and never reveals the evidence citation ID, path, chunk, vector or score.",
+  "boundaries": {
+    "http_route": false,
+    "browser_ui": false,
+    "network_calls": 0,
+    "ordinary_search_calls": 0,
+    "raw_model_token_streaming": false,
+    "persistence": false,
+    "telemetry": false
+  },
+  "verification": {
+    "runtime": "tests/test_conversation_stream_093.py",
+    "contract": "documentation/tests/contract/test_grounded_conversation_streaming_contract_0_9_3.py",
+    "architecture": "docs/architecture/grounded-conversation-streaming-0.9.3.md"
+  }
+}

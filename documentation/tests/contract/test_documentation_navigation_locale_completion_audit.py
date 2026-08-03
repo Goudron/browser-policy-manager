@@ -158,8 +158,7 @@ def test_every_recorded_english_carryover_baseline_keeps_current_sources_and_eng
         locale_root = DOCUMENTATION_ROOT / f"src/dita/{locale}"
         source_files = sorted(locale_root.rglob("*.dita")) + sorted(locale_root.rglob("*.ditamap"))
         locale_audit = audit["locales"][locale]
-        assert locale_audit["source_file_count"] == 163
-        assert len(source_files) == 161
+        assert len(source_files) == locale_audit["source_file_count"]
         assert locale_audit["exact_english_carryover_file_count"] == len(
             locale_audit["exact_english_carryover"]
         )
@@ -187,7 +186,7 @@ def test_every_recorded_english_carryover_baseline_keeps_current_sources_and_eng
         total_fragments += fragment_count
 
     summary = audit["summary"]
-    assert summary["non_english_source_files_scanned"] == total_files == 815
+    assert summary["non_english_source_files_scanned"] == total_files == 830
     assert summary["exact_english_carryover_affected_files"] == total_affected == 208
     assert summary["exact_english_carryover_fragments"] == total_fragments == 2893
     assert summary["ui_name_mismatch_affected_files"] == 225

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="map-user-guide" xml:lang="zh-CN">
-  <title>BPM 用户指南</title>
+  <title>用户指南</title>
   <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>定向和规划配置文件工作</navtitle>
+      <navtitle>规划配置档案工作</navtitle>
       <data name="intent-id" value="orient-and-plan"/>
     </topicmeta>
+    <topicref keyref="topic.ug-concept-browser-policy-manager-overview"/>
     <topicref keyref="topic.ug-reference-product-version"/>
     <topicref keyref="topic.ug-reference-profile-status"/>
     <topicref keyref="topic.ug-task-change-interface-language"/>
@@ -15,13 +16,14 @@
     <topicref keyref="topic.ug-task-change-interface-theme"/>
     <topicref keyref="topic.ug-concept-accessible-product-operation"/>
     <topicref keyref="topic.ug-concept-documentation-search-boundary"/>
+    <topicref keyref="topic.ug-task-use-local-documentation-assistant"/>
     <topicref keyref="topic.ug-task-work-across-editor-tabs"/>
     <topicref keyref="topic.ug-concept-profile-model"/>
     <topicref keyref="topic.ug-concept-choose-editor-surface"/>
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>创建并启动配置文件</navtitle>
+      <navtitle>创建并设置配置档案</navtitle>
       <data name="intent-id" value="create-and-start"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-choose-firefox-schema"/>
@@ -37,7 +39,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>使用 引导式编辑器 配置</navtitle>
+      <navtitle>使用“引导式编辑器”配置配置档案</navtitle>
       <data name="intent-id" value="configure-with-guidance"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-guided-editor"/>
@@ -54,7 +56,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>审核、验证并完成配置文件更改</navtitle>
+      <navtitle>检查并完成配置档案更改</navtitle>
       <data name="intent-id" value="review-validate-and-finish"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-save-profile"/>
@@ -66,7 +68,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>检查和编辑完整设置</navtitle>
+      <navtitle>检查和编辑“所有设置”</navtitle>
       <data name="intent-id" value="inspect-and-edit-complete-settings"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-all-settings"/>
@@ -91,7 +93,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>使用 JSON 和交换</navtitle>
+      <navtitle>处理数据交换文档</navtitle>
       <data name="intent-id" value="work-with-json-and-interchange"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-json-editor"/>
@@ -103,7 +105,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>查找、组织和 比较配置档案设置</navtitle>
+      <navtitle>查找、管理和比较配置档案</navtitle>
       <data name="intent-id" value="find-organize-and-compare-profiles"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-review-archived-profile"/>
@@ -126,7 +128,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>安全恢复</navtitle>
+      <navtitle>安全解决问题</navtitle>
       <data name="intent-id" value="recover-safely"/>
     </topicmeta>
     <topicref keyref="topic.ug-troubleshoot-save-conflict"/>

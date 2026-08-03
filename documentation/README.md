@@ -113,6 +113,26 @@ documentation/
   documentation topics, related policies, user tasks, API operations, and validation guidance.
 - `config/search-corpus-and-results-0.9.0.json` defines the deterministic static search corpus,
   result schema, facets, exclusions, six-locale boundary, and no-AI/RAG/embeddings/generative-answer contract.
+- `config/rag-knowledge-and-update-contract-0.9.3.json` defines the future local-RAG source,
+  chunk, provenance, embedding-compatibility, rebuild, artifact, and no-weight-training boundary;
+  it does not enable a RAG runtime.
+- `config/local-ai-security-privacy-contract-0.9.3.json` defines the future local assistant's
+  trust boundaries, threat register, worker isolation, request/output controls, privacy, resource,
+  optional-web, artifact-supply-chain, and safe-recovery requirements; it enables no AI route.
+- `config/local-ai-availability-fallback-contract-0.9.3.json` defines the future local assistant's
+  localized UI/API states, truthful readiness, safe transition guards, and lexical-search fallback;
+  it implements no endpoint, worker, model lifecycle, or UI.
+- `config/local-ai-preimplementation-guards-0.9.3.json` combines the accepted corpus, knowledge,
+  security, and availability decisions into focused failure guards before assistant implementation.
+- `config/search-selection-shortlist-0.9.3.json` freezes the public search-engine entry gates,
+  six-locale weighted comparison matrix, control and open-source prototype shortlist, and the rule
+  that no unmeasured candidate is selected.
+- `config/search-candidate-prototypes-0.9.3.json` defines compact six-locale, non-production
+  candidate adapter inputs and normalized result envelopes for the current control, Pagefind, and
+  Meilisearch Community Edition; it neither installs nor benchmarks a vendor engine.
+- `config/search-relevance-benchmark-0.9.3.json` locks the candidate artifacts, six-locale query
+  matrix, raw-record schema, metrics, loopback-only execution boundary, and no-selection result
+  boundary for the M3 relevance benchmark.
 - `config/search-normalization-aliases-0.9.0.json` defines deterministic locale-aware search
   normalization, reviewed aliases, technical identifier preservation, and six-locale query fixtures.
 - `config/search-ranking-typo-0.9.0.json` defines deterministic ranking weights, bounded typo

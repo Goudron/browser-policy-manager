@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-review-devops-configuration-sources" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>查看 DevOps 配置源</title>
+  <title>查看开发与运维配置源</title>
   <shortdesc>识别当前的 BPM 配置源，记录有效的运行时值，并将普通设置与不受支持的秘密管理期望分开。</shortdesc>
   <taskbody>
     <prereq><p>BPM 从 Linux 上的源代码或通过 WSL 部署，管理员可以检查 shell 环境、可选的 <codeph>.env</codeph> 文件和源代码签出。</p></prereq>

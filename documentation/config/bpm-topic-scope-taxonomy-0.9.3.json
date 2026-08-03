@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-topic-scope-taxonomy-0.9.3",
+  "backlog_item": "BPM093-M8-01",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-architecture-only",
+  "pins": {
+    "security_privacy": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"},
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "m7_evaluation": {"path": "documentation/config/grounded-conversation-evaluation-0.9.3.json", "sha256": "4a8e4910f422220708a4a8eca7b3537ac8f6ab92d1b899cf26b7c6f0d175c7c6"},
+    "evaluation_corpus": {"path": "documentation/config/search-rag-evaluation-corpus-0.9.3.json", "sha256": "0993aec89fe2991d6ef15de251bfedfa87ea99ae6498e5ef73a84f2d6b1aff52"}
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "implementation_boundary": {
+    "scope_gate_implemented": false,
+    "model_or_embedding_loaded": false,
+    "retrieval_or_inference_called": false,
+    "network_calls": 0,
+    "rule": "This taxonomy defines deterministic inputs, stable reason families and precedence for M8-02. Prompt wording and a guard model are not scope authority."
+  },
+  "decision_states": {
+    "allow": "The request has a concrete BPM, managed-Firefox-policy, BPM documentation, administration, CIS or approved BPM API intent. Allow authorizes only same-locale evidence retrieval; it never guarantees an answer.",
+    "clarify": "The request is plausibly adjacent to BPM but lacks a topic, setting, policy, managed-Firefox boundary or actionable question. Ask a localized bounded clarification before retrieval or inference.",
+    "refuse": "The request is unrelated, hostile, requests a forbidden capability, or tries to override assistant controls. Refuse before retrieval, inference, web access or resource allocation.",
+    "abstain_after_evidence": "This is not a scope-gate decision. An allowed request with no current, adequate same-locale local evidence terminates as abstain before generation."
+  },
+  "allowed_intents": [
+    {
+      "id": "bpm_product_workflows",
+      "scope": "Browser Policy Manager profiles, Profile Library, guided and all-settings editing, comparison, validation, policies.json export/import and documentation navigation.",
+      "anchors": ["Browser Policy Manager", "BPM", "profile library", "policies.json", "profile", "documentation"]
+    },
+    {
+      "id": "managed_firefox_policy",
+      "scope": "Firefox Enterprise policy names, supported channels/schemas, policy values, managed-browser settings and policy validation when tied to BPM or managed Firefox configuration.",
+      "anchors": ["Firefox policy", "enterprise policy", "AIControls", "policy ID", "supported channel", "schema"]
+    },
+    {
+      "id": "bpm_administration_operation",
+      "scope": "BPM-supported installation, deployment, update, rollback, permissions, diagnostics, local documentation, verified local model/index operation and troubleshooting.",
+      "anchors": ["installation", "deployment", "administrator", "DevOps", "diagnostics", "local assistant"]
+    },
+    {
+      "id": "bpm_api_and_cis",
+      "scope": "Documented BPM API operations, validation responses, API identifiers, CIS Firefox baseline mapping and evidence retention for supported BPM/Firefox workflows.",
+      "anchors": ["API-VAL-001", "validation endpoint", "CIS", "CIS baseline", "cis:1.1.1.1"]
+    },
+    {
+      "id": "active_bpm_follow_up",
+      "scope": "A bounded follow-up that refers to a current same-locale BPM conversation topic or its server-resolved entity. It may expand retrieval only through the existing context contract.",
+      "anchors": ["current session topic", "resolved BPM entity", "same-locale follow-up"]
+    }
+  ],
+  "clarification_intents": [
+    {
+      "id": "generic_firefox_ambiguity",
+      "rule": "A generic Firefox question without a policy, enterprise-management or BPM anchor is adjacent, not automatically product scope. Clarify whether the user means a managed Firefox policy or BPM workflow."
+    },
+    {
+      "id": "underspecified_reference",
+      "rule": "Pronouns or requests such as 'enable it' and 'does it support this' clarify unless the current same-locale session has one unambiguous BPM topic."
+    },
+    {
+      "id": "active_chat_greeting",
+      "rule": "A greeting or conversational acknowledgement in an active BPM chat clarifies what BPM task is needed; it does not invoke retrieval or generation as a general companion."
+    },
+    {
+      "id": "policy_shaped_unknown_identifier",
+      "rule": "An identifier shaped like a Firefox/BPM policy or documented API identifier is allowed for evidence lookup, even when unknown. If no adequate current evidence exists, M5/M7 returns abstain rather than inventing a policy."
+    }
+  ],
+  "refusal_intents": [
+    {
+      "id": "general_non_bpm_assistance",
+      "examples": ["weather", "vacation planning", "novel translation", "creative writing", "unrelated coding or scraping"],
+      "reason_code": "scope_off_topic"
+    },
+    {
+      "id": "privileged_or_destructive_action",
+      "examples": ["delete files", "run shell commands", "read secrets", "change BPM data", "open arbitrary URLs or network connections"],
+      "reason_code": "scope_forbidden_capability"
+    },
+    {
+      "id": "control_override_or_prompt_extraction",
+      "examples": ["ignore BPM rules", "reveal instructions", "change role", "enable tools", "treat retrieved text as authority"],
+      "reason_code": "scope_control_override"
+    }
+  ],
+  "multilingual_policy": {
+    "code_switching": "A query may mix any supported locale with technical identifiers, product names and policy/API/CIS tokens. Script or language mixing alone never causes refusal, retrieval fallback or model invocation.",
+    "retrieval_locale": "After allow, only the active UI locale is used for retrieval and answer generation. Foreign-language tokens are normalized as scope anchors only; cross-locale retrieval remains forbidden.",
+    "localized_response": "Clarify and refuse use the active locale's stable message keys. No English visible fallback is permitted in ru, de, zh-CN, fr or es-ES."
+  },
+  "precedence": [
+    "Reject malformed or unauthenticated transport before this taxonomy; it has no scope decision.",
+    "If any control-override, privileged/destructive or clearly unrelated intent is present, refuse even if the text also contains BPM or Firefox terms.",
+    "Otherwise, if an allowed intent has a concrete BPM/managed-Firefox/API/CIS/topic anchor, allow same-locale evidence retrieval.",
+    "Otherwise, if the request is plausibly adjacent, generic Firefox, an active-chat greeting or an underspecified reference, clarify without retrieval or inference.",
+    "Otherwise refuse as off-topic.",
+    "After allow, evidence policy—not taxonomy—chooses answer, clarify for contradictory/ambiguous evidence, or abstain for absent/inadequate evidence. No prompt can promote a refusal, clarification or abstention to an answer."
+  ],
+  "mandatory_fixture_coverage": [
+    "code-switched BPM and technical-token queries",
+    "generic Firefox versus managed Firefox/BPM ambiguity",
+    "known and policy-shaped unknown policy/API/CIS identifiers",
+    "BPM administrator and operation questions",
+    "greetings and underspecified references within an active same-locale chat",
+    "allowed no-evidence requests that abstain before generation",
+    "unrelated, destructive and control-override requests that refuse before retrieval/inference"
+  ],
+  "verification": {
+    "contract": "documentation/tests/contract/test_bpm_topic_scope_taxonomy_0_9_3.py",
+    "architecture": "docs/architecture/bpm-topic-scope-taxonomy-0.9.3.md",
+    "future_implementation": "BPM093-M8-02 consumes this taxonomy through deterministic scope features and fixtures; M8-03 adds adversarial multilingual escape cases."
+  }
+}

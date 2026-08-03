@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-assistant-evidence-relevance-0.9.3",
+  "backlog_item": "BPM093-M13-03",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-deterministic-pre-generation-gate",
+  "pins": {
+    "retrieval": {"path": "documentation/config/chat-rag-retrieval-contract-0.9.3.json", "sha256": "8301f06e5449f86ae27cdd136720c39d523987e526a09c443b447832505c1d2d"},
+    "quality": {"path": "documentation/config/assistant-answer-quality-release-contract-0.9.3.json", "sha256": "de76aca983fb62994d799c840209bc41811700934e72156208b658a875e4204c"}
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "placement": {
+    "pipeline": ["exact_same_locale_retrieval", "deterministic_relevance_gate", "evidence_pack", "generation_or_terminal_abstention"],
+    "candidate_window": "The gate examines every candidate already returned by the checksum-verified exact same-locale retriever, whose maximum remains five. It neither enlarges that retrieval contract nor invokes ordinary search.",
+    "terminal": "If candidates existed but none satisfies every explicit request constraint, return assistant_relevance_no_matching_evidence before EvidencePack, worker, external evidence, source rendering or extractive fallback."
+  },
+  "dimensions": {
+    "required": ["topic", "named_entities", "operating_system_or_distribution", "release", "reader_role", "bpm_version", "locale"],
+    "candidate_inputs": ["guide_id", "topic_id", "heading_path", "stable_identifiers", "reviewed_text", "current_bpm_version", "current_locale"],
+    "rule": "Every explicit constraint present in the question must agree with the candidate. Absence of a supported constraint in a candidate rejects that candidate; matching one broad term cannot override a conflicting platform, release, role, identifier, version or locale."
+  },
+  "normalization": {
+    "method": "Unicode NFKC, case-folding and whitespace normalization; locale-aware stop words and topic markers are used only for deterministic comparison.",
+    "identifier_rule": "Stable technical identifiers are matched against retained identifier metadata and reviewed text only; user-supplied identifiers never become paths, URLs, code or executable input.",
+    "locale_rule": "A retrieval-result locale mismatch is terminal. The gate does not translate, merge or retry another locale."
+  },
+  "regressions": {
+    "ubuntu": "For `Как установить BPM на Ubuntu?` and six locale equivalents, a published same-locale Ubuntu 26.04 installation candidate remains eligible and is cited. Debian 13.5 is incompatible even with a higher vector score and cannot reach model evidence or a source list.",
+    "general": "Fixtures cover topic, stable identifier, operating system/distribution, release, reader role, BPM version and locale conflict. An unsupported request clarifies or abstains rather than silently substituting a different context."
+  },
+  "boundaries": {
+    "network_calls": 0,
+    "ordinary_search_calls": 0,
+    "cross_locale_retrieval_calls": 0,
+    "model_invocations_for_rejected_evidence": 0,
+    "external_provider_calls_for_rejected_evidence": 0,
+    "telemetry": false,
+    "generated_answer_or_source_for_rejected_evidence": false
+  },
+  "verification": {
+    "runtime": ["tests/test_evidence_relevance_093.py", "tests/test_grounded_conversation_orchestration_093.py"],
+    "contract": "documentation/tests/contract/test_assistant_evidence_relevance_contract_0_9_3.py"
+  }
+}

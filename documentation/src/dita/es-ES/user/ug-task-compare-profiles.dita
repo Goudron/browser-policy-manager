@@ -8,7 +8,7 @@
     <context><p>«Comparar ajustes de perfiles» es una página dedicada a los perfiles guardados. Mantiene el idioma y el tema actuales y no reemplaza la pestaña Biblioteca.</p>
       <fig id="screenshot-compare-profiles">
         <title>Página «Comparar ajustes de perfiles»</title>
-        <image keyref="screenshot.compare-profiles" placement="break">
+        <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
           <alt>Vista de comparación que muestra dos perfiles guardados seleccionados para revisión en paralelo.</alt>
         </image>
       </fig>

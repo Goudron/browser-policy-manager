@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-apply-cis-layer" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>应用 CIS 层</title>
+  <title>应用安全基线层</title>
   <shortdesc>当配置文件需要来自 BPM 映射建议的强化基线时，添加受支持的 CIS 层。</shortdesc>
   <taskbody>
     <prereq><p>选择概要文件草稿和模式通道。</p></prereq>
     <context><p>CIS 层是 BPM 映射辅助工具；检查部署的每个结果设置，不要将其视为认证。</p></context>
     <steps>
-      <step><cmd>打开步骤 1，配置文件 &amp; 基线。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开引导式配置的第 1 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>选择与目标通道和场景相匹配的受支持的 CIS 层。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>在摘要中查看合规性基线更改。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>保留或调整与部署目标冲突的设置。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

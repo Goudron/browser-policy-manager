@@ -8,7 +8,7 @@
     <context><p>Библиотека перечисляет сохранённые профили и показывает отфильтрованное и общее количество, чтобы было видно, скрывает ли поиск или фильтр строки. Сначала расположен блок действий, а строка фильтров находится непосредственно над таблицей профилей.</p>
       <fig id="screenshot-library-overview">
         <title>Обзор библиотеки</title>
-        <image keyref="screenshot.library-overview" placement="break">
+        <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
           <alt>Библиотека, показывающая сохраненные строки профиля, счетчики и действия профиля.</alt>
         </image>
       </fig>

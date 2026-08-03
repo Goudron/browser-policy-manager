@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-operate-local-documentation-assistant" xml:lang="es-ES" audience="administrator devops" product="bpm-0-9-1" platform="linux">
+  <title>Operar el asistente de documentación en BPM 0.9.3</title>
+  <shortdesc>Verifique el límite publicado del aviso de entrenamiento sin hacer que BPM ni la búsqueda determinista dependan del chat.</shortdesc>
+  <taskbody>
+    <prereq><p>Use un checkout de BPM 0.9.3 compatible y los recursos base de <xref keyref="topic.admin-reference-minimum-system-requirements"/>.</p></prereq>
+    <context><p>En esta versión, el chat es solo una interfaz localizada para el lector. No inicia ni instala un modelo, no recupera documentación, no usa un índice E5, no genera una respuesta, no muestra citas ni contacta fuentes externas. La búsqueda determinista de documentación sigue siendo independiente y está disponible.</p></context>
+    <steps>
+      <step><cmd>Inicie BPM con el flujo normal de código fuente compatible.</cmd><info><p>No añada configuración de modelo, índice, embeddings ni proveedor externo al inicio de BPM 0.9.3.</p></info></step>
+      <step><cmd>Abra el portal de documentación en el idioma del lector.</cmd><info><p>Compruebe que el asistente se abre desde la esquina inferior derecha y que los controles de búsqueda ordinarios no cambian.</p></info></step>
+      <step><cmd>Envíe una pregunta sobre BPM.</cmd><info><p>La transcripción debe mostrar el aviso localizado de que el modelo local se está entrenando y la función estará disponible en una versión posterior.</p></info></step>
+      <step><cmd>Envíe una pregunta ajena al producto.</cmd><info><p>Se espera el mismo aviso; el chat no es un asistente de uso general en esta versión.</p></info></step>
+      <step><cmd>Busque la respuesta actual mediante la búsqueda determinista de documentación.</cmd><info><p>La búsqueda, los filtros, la navegación y el orden de resultados siguen siendo la vía compatible para la información del producto.</p></info></step>
+    </steps>
+    <result><p>El asistente muestra el aviso de entrenamiento localizado publicado, mientras BPM y la búsqueda determinista siguen siendo utilizables de forma independiente.</p></result>
+    <postreq><p>No instale un modelo ni cree una generación RAG para 0.9.3. Registre como defecto de documentación cualquier diferencia en el aviso, la configuración regional o el límite con la búsqueda ordinaria.</p></postreq>
+  </taskbody>
+  <related-links><link keyref="topic.admin-reference-minimum-system-requirements"/><link keyref="topic.admin-task-gate-control-product-startup"/></related-links>
+</task>

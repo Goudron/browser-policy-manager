@@ -12,8 +12,8 @@
       <step><cmd>Confirm the import and wait for the Library status.</cmd><info><p>Expected result: BPM creates a saved profile and returns it to the Library or editor workflow.</p><note type="warning">Do not treat the imported file as BPM's internal model. Re-export if you need a fresh Firefox boundary document after BPM normalization.</note></info></step>
     </steps>
     <result><p>The imported Firefox document becomes a BPM profile with a profile ID, revision, schema channel, and validation state.</p></result>
-    <example id="a-json-api-import-example">
-      <title>JSON API-adjacent import shape</title>
+    <example id="a-import-api-examples">
+      <title>JSON and multipart API-adjacent import shapes</title>
       <p>API integrations send the same boundary document inside <codeph>document</codeph>:</p>
       <codeblock outputclass="language-json">{
   "name": "Example imported Firefox profile",
@@ -24,9 +24,6 @@
     }
   }
 }</codeblock>
-    </example>
-    <example id="a-multipart-import-example">
-      <title>Multipart API-adjacent import shape</title>
       <p>Multipart import sends the file plus fields such as <codeph>name</codeph>, <codeph>description</codeph>, <codeph>channel</codeph>, and JSON-string <codeph>compliance</codeph>. The current runtime also accepts a <codeph>document</codeph> field, while the published OpenAPI schema names <codeph>file</codeph> as the documented file field.</p>
     </example>
     <postreq><p>Recovery: if import fails with malformed JSON, duplicate name, unsupported content type, schema mismatch, unknown policy, or validation errors, keep the original file unchanged, read the Library status, correct the input or name, and retry once from a clean Library state.</p></postreq>

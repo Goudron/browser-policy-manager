@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-ai-least-privilege-0.9.3",
+  "backlog_item": "BPM093-M8-05",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-no-http-route",
+  "pins": {
+    "m8_prompt_boundary": {"path": "documentation/config/bpm-prompt-content-boundary-contract-0.9.3.json", "sha256": "007947a7b02af07e5e2ea9ad6383d884a2e34345413f1db4c4832ee305ad495e"},
+    "model_installation": {"path": "documentation/config/local-chat-model-installation-contract-0.9.3.json", "sha256": "08a44171b8eaa564a545b442aadd334e59b8cca3baf7b38e612f621444d250b6"},
+    "local_worker": {"path": "documentation/config/local-chat-worker-contract-0.9.3.json", "sha256": "4a13460df3f6de23f3f562eefa3d2d89f55135113ccf60dd5b077e6d65467e7f"},
+    "streaming": {"path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json", "sha256": "c1e310a6e96d84374ea18e709253fcb960c17c2b63f452f7992e559a9d973b3f"},
+    "security_privacy": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"}
+  },
+  "execution_paths": {
+    "managed_root": "BPM-owned data/ai root supplied by the default worker composition",
+    "requirements": ["absolute child", "no traversal", "no symlink component", "no shell-shaped path component", "regular runtime archive", "regular model artifact", "private work directory"],
+    "violation": "assistant_unsafe_execution_path",
+    "extension_loading": "Only the checksum-verified llama-cli bundle is extracted; server binaries, plugins, tools, function calling and arbitrary extensions remain absent."
+  },
+  "process": {
+    "creation": "direct subprocess argument vector only; shell=False by omission and no request value becomes an executable or argument",
+    "fixed_flags": ["--offline", "--device", "none", "--threads", "4", "--ctx-size", "4096", "--n-predict", "160"],
+    "environment": {"PATH": "", "LC_ALL": "C", "NO_PROXY": "*", "HTTP_PROXY": "", "HTTPS_PROXY": "", "ALL_PROXY": ""},
+    "listeners": "No TCP, HTTP, Unix, loopback, LAN or public model listener is started; the only transport is BPM-owned stdin/stdout.",
+    "limits": {"active_generations_max": 1, "queued_generations_max": 1, "worker_and_retrieval_rss_bytes_max": 3758096384, "request_bytes_max": 49152}
+  },
+  "network": {
+    "local_worker": "offline and proxy-free; it inherits no process environment or credentials",
+    "model_download": "explicit install only, one pinned HTTPS source, no redirect following and no proxy environment inheritance",
+    "web_evidence": "absent; nonlocal sources remain rejected until M9",
+    "arbitrary_model_url": false,
+    "ssrf_surface": false
+  },
+  "future_assistant_transport": {
+    "status": "guard implemented without adding a route",
+    "method": "POST",
+    "content_type": "application/json",
+    "origin": "exact configured http(s) origin and Host; wildcard, cross-origin and preflight are rejected",
+    "fetch_metadata": "Sec-Fetch-Site, when present, must be same-origin",
+    "content_length_max": 49152
+  },
+  "acceptance": {
+    "http_route": false,
+    "browser_ui": false,
+    "ordinary_search_import": false,
+    "path_traversal": "rejected",
+    "symlink_escape": "rejected",
+    "shell_metacharacters": "rejected",
+    "cross_origin": "rejected",
+    "resource_flood": "rejected before a second active or queued worker can be created"
+  },
+  "verification": {
+    "runtime": "tests/test_ai_least_privilege_093.py",
+    "contract": "documentation/tests/contract/test_bpm_ai_least_privilege_contract_0_9_3.py",
+    "architecture": "docs/architecture/bpm-ai-least-privilege-0.9.3.md"
+  }
+}

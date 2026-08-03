@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-gate-control-product-startup" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>通过 BPM 运行状况和就绪状态启动控制产品</title>
+  <title>通过浏览器策略管理器运行状况和就绪状态启动控制产品</title>
   <shortdesc>在外部控制产品开始 API 同步之前，使用当前运行状况探测作为启动门。</shortdesc>
   <taskbody>
     <prereq><p>BPM 源部署已启动。使用 <codeph>$BPM_BASE_URL</codeph>、超时、轮询间隔、最长等待时间以及门发生故障时要采取的操作来配置外部产品。</p></prereq>
-    <context><p>此工作流程使用 <codeph>API-HEALTH-001</codeph> 和 <codeph>API-HEALTH-002</codeph>。探头只是小的飞行前信号；它们不公开身份验证、授权、数据库诊断、模式缓存诊断、请求 ID 或服务级别目标。此  操作手册集命名了健康门控启动、数据所有权、故障恢复以及证据过时时不要盲目重试的规则。</p></context>
+    <context id="a-documentation-assistant-availability"><p>此工作流程使用 <codeph>API-HEALTH-001</codeph> 和 <codeph>API-HEALTH-002</codeph>。探头只是小的飞行前信号；它们不公开身份验证、授权、数据库诊断、模式缓存诊断、请求 ID 或服务级别目标。此  操作手册集命名了健康门控启动、数据所有权、故障恢复以及证据过时时不要盲目重试的规则。</p><p>文档助手的可用性独立于 BPM 核心的运行状况和就绪状态。在 0.9.3 中，每个助手问题都会显示已发布的本地模型训练提示；不会启动模型、检索、RAG 索引或外部来源请求。该边界不会阻止确定性文档搜索，也不得作为配置文件更改或 API 同步的门控条件。</p></context>
     <steps>
       <step><cmd>在打开同步队列之前检查基本活性。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health</codeph>。响应示例：<codeph>200 {"status":"ok"}</codeph>。传输错误由外部产品处理，因为没有为此探测器声明 BPM 应用程序错误主体。</p></info></step>
   <step><cmd>在配置文件或验证调用之前检查准备情况。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health/ready</codeph>。响应示例：<codeph>200 {"status":"ready","ready":true}</codeph>。如果 <codeph>ready</codeph> 不是 true，则保留队列并且不启动突变。</p></info></step>

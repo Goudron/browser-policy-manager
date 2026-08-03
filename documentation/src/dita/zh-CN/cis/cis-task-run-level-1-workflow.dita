@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-run-level-1-workflow" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>运行 1 级 CIS 工作流程</title>
+  <title>运行 1 级安全基线工作流程</title>
   <shortdesc>创建、检查、比较、导出并独立验证具有代表性的 1 级 CIS 配置文件。</shortdesc>
   <taskbody>
     <prereq><p>使用夹具 <codeph>cis-workflow-level-1-esr-fixture</codeph>：Firefox ESR 140.13、图层 <codeph>cis-l1.esr-140.13</codeph>、入门预设 <codeph>basic_corporate</codeph> 和比较配置文件 <codeph>blank-esr-140.13</codeph>。</p></prereq>

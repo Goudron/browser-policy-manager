@@ -57,6 +57,7 @@
   <keydef keys="topic.admin-troubleshoot-database-storage" href="../admin/admin-troubleshoot-database-storage.dita" />
   <keydef keys="topic.admin-troubleshoot-wsl-networking-dependencies" href="../admin/admin-troubleshoot-wsl-networking-dependencies.dita" />
   <keydef keys="topic.admin-troubleshoot-documentation-portal-build-links" href="../admin/admin-troubleshoot-documentation-portal-build-links.dita" />
+  <keydef keys="topic.ug-concept-browser-policy-manager-overview" href="../user/ug-concept-browser-policy-manager-overview.dita" />
   <keydef keys="topic.ug-concept-profile-model" href="../user/ug-concept-profile-model.dita" />
   <keydef keys="topic.ug-concept-choose-editor-surface" href="../user/ug-concept-choose-editor-surface.dita" />
   <keydef keys="topic.ug-concept-schema-aware-behavior" href="../user/ug-concept-schema-aware-behavior.dita" />
@@ -129,6 +130,7 @@
   <keydef keys="topic.ug-task-change-interface-theme" href="../user/ug-task-change-interface-theme.dita" />
   <keydef keys="topic.ug-concept-accessible-product-operation" href="../user/ug-concept-accessible-product-operation.dita" />
   <keydef keys="topic.ug-concept-documentation-search-boundary" href="../user/ug-concept-documentation-search-boundary.dita" />
+  <keydef keys="topic.ug-task-use-local-documentation-assistant" href="../user/ug-task-use-local-documentation-assistant.dita" />
   <keydef keys="topic.ug-task-work-across-editor-tabs" href="../user/ug-task-work-across-editor-tabs.dita" />
   <keydef keys="topic.ug-task-save-profile" href="../user/ug-task-save-profile.dita" />
   <keydef keys="topic.ug-task-validate-profile" href="../user/ug-task-validate-profile.dita" />
@@ -167,4 +169,7 @@
   <keydef keys="topic.admin-task-review-network-exposure-proxy-readiness" href="../admin/admin-task-review-network-exposure-proxy-readiness.dita" />
   <keydef keys="topic.admin-task-plan-monitoring-backup-update-windows" href="../admin/admin-task-plan-monitoring-backup-update-windows.dita" />
   <keydef keys="topic.admin-task-record-ha-production-deferred-boundaries" href="../admin/admin-task-record-ha-production-deferred-boundaries.dita" />
+  <keydef keys="topic.admin-reference-minimum-system-requirements" href="../admin/admin-reference-minimum-system-requirements.dita" />
+  <keydef keys="topic.admin-task-operate-local-documentation-assistant" href="../admin/admin-task-operate-local-documentation-assistant.dita" />
+  <keydef keys="topic.admin-task-maintain-local-documentation-assistant" href="../admin/admin-task-maintain-local-documentation-assistant.dita" />
 </map>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-validate-firefox-policies-json" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>通过 API 验证候选 Firefox policies.json</title>
+  <title>通过编程接口验证候选火狐浏览器策略文件</title>
   <shortdesc>使用验证端点作为候选 Firefox Enterprise <codeph>policies.json</codeph> 文档和结构化错误处理的预检门。</shortdesc>
   <taskbody>
     <prereq><p>选择目标架构通道，例如 <codeph>release-153</codeph> 或 <codeph>esr-140.13</codeph>，并在 <codeph>document.policies</codeph> 中准备包含完整 Firefox 文档的 <codeph>ValidationRequest</codeph> 正文。</p></prereq>

@@ -7,7 +7,7 @@
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
     <context><p>Schema mismatch usually means a setting exists in one Firefox channel but is unavailable, deprecated, or shaped differently in the selected channel.</p></context>
     <steps>
-      <step><cmd>Confirm whether the profile is targeting ESR 140.13 or Release 153.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Confirm whether the profile targets ESR 140.13, ESR 153.0, or Release 153.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Identify the setting that is unavailable, unsupported, deprecated, or schema-dependent in that channel.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Choose whether to switch the schema channel or remove/change the affected setting for the intended Firefox target.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Revalidate and review export readiness after the channel or setting decision.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>

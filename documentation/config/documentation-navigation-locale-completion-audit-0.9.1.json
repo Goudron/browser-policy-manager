@@ -354,7 +354,7 @@
   },
   "locales": {
     "ru": {
-      "source_file_count": 163,
+      "source_file_count": 166,
       "exact_english_carryover_file_count": 45,
       "exact_english_carryover_fragment_count": 570,
       "ui_name_mismatch_file_count": 45,
@@ -1579,7 +1579,7 @@
       ]
     },
     "de": {
-      "source_file_count": 163,
+      "source_file_count": 166,
       "exact_english_carryover_file_count": 41,
       "exact_english_carryover_fragment_count": 581,
       "ui_name_mismatch_file_count": 45,
@@ -2788,7 +2788,7 @@
       ]
     },
     "zh-CN": {
-      "source_file_count": 163,
+      "source_file_count": 166,
       "exact_english_carryover_file_count": 40,
       "exact_english_carryover_fragment_count": 580,
       "ui_name_mismatch_file_count": 45,
@@ -3982,7 +3982,7 @@
       ]
     },
     "fr": {
-      "source_file_count": 163,
+      "source_file_count": 166,
       "exact_english_carryover_file_count": 41,
       "exact_english_carryover_fragment_count": 581,
       "ui_name_mismatch_file_count": 45,
@@ -5182,7 +5182,7 @@
       ]
     },
     "es-ES": {
-      "source_file_count": 163,
+      "source_file_count": 166,
       "exact_english_carryover_file_count": 41,
       "exact_english_carryover_fragment_count": 581,
       "ui_name_mismatch_file_count": 45,
@@ -6385,7 +6385,7 @@
   "summary": {
     "locales_reviewed": 6,
     "guides_reviewed": 5,
-    "non_english_source_files_scanned": 815,
+    "non_english_source_files_scanned": 830,
     "exact_english_carryover_affected_files": 208,
     "exact_english_carryover_fragments": 2893,
     "ui_name_mismatch_affected_files": 225,

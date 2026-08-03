@@ -88,6 +88,9 @@ def test_documentation_header_uses_the_product_locale_and_theme_labels() -> None
     for locale in build_docs.LOCALES:
         catalog = json.loads((REPO_ROOT / "app" / "i18n" / f"{locale}.json").read_text())
         labels = build_docs._product_header_labels(locale)
+        assert labels["supported_firefox_versions"] == catalog[
+            "profiles.supported_firefox_versions"
+        ]
         assert labels["locales"] == catalog["profiles.locale_label"]
         assert labels["locale_system"] == catalog["profiles.locale_system"]
         assert labels["theme"] == catalog["profiles.theme_label"]
@@ -96,3 +99,5 @@ def test_documentation_header_uses_the_product_locale_and_theme_labels() -> None
         assert labels["theme_dark"] == catalog["profiles.theme_dark"]
         for code, catalog_key in build_docs.PRODUCT_LOCALE_OPTION_LABEL_KEYS.items():
             assert labels[f"locale_option_{code}"] == catalog[catalog_key]
+        for channel, catalog_key in build_docs.PRODUCT_FIREFOX_SCHEMA_LABEL_KEYS.items():
+            assert labels[f"firefox_schema_{channel}"] == catalog[catalog_key]

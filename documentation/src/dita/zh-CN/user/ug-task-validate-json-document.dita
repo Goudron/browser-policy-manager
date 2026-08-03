@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-validate-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>验证 JSON 文档</title>
+  <title>验证数据交换文档文档</title>
   <shortdesc>在保存之前验证原始 JSON 语法和 Firefox 策略值。</shortdesc>
   <taskbody>
     <prereq><p>使用您要检查的文档打开 JSON 编辑器。</p></prereq>

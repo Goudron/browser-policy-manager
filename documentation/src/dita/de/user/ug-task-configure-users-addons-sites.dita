@@ -7,7 +7,7 @@
     <prereq><p>Ein geführter Entwurf ist geöffnet.</p></prereq>
     <context><p>In diesem Schritt werden Steuerelemente erfasst, die sich auf Benutzeridentitätsoberflächen, Erweiterungs-Governance, Lokalisierung und website-spezifisches Verhalten auswirken.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 4, Benutzer, Add-ons &amp;-Sites.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 4 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie Mozilla-Konten und identitätsbezogene Browseroberflächen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Konfigurieren Sie Erweiterungen, Add-Ons und Lesezeichen gemäß den Bereitstellungsregeln.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Legen Sie Optionen für Sprache, Übersetzung und Website-Handhabung fest.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-diagnostics-0.9.3",
+  "backlog_item": "BPM093-M7-06",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-memory-only-no-http-route",
+  "pins": {
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "availability": {"path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json", "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"},
+    "streaming": {"path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json", "sha256": "c1e310a6e96d84374ea18e709253fcb960c17c2b63f452f7992e559a9d973b3f"},
+    "worker": {"path": "documentation/config/local-chat-worker-contract-0.9.3.json", "sha256": "4a13460df3f6de23f3f562eefa3d2d89f55135113ccf60dd5b077e6d65467e7f"}
+  },
+  "diagnostic_shape": {
+    "fields": ["state", "assistant_ready", "lexical_search_ready", "configuration_compatible", "model_compatible", "index_compatible", "load_state", "queue_depth_class", "last_local_error_class", "web_availability"],
+    "load_states": ["disabled", "not_started", "ready", "busy", "cancelled", "failed"],
+    "queue_depth_classes": ["idle", "active", "queued"],
+    "local_error_classes": ["none", "setup", "index", "model", "runtime"],
+    "web_availability": ["not_configured", "local_only", "available", "offline"]
+  },
+  "truthfulness": [
+    "Compatibility is supplied only by approved configuration/model/index lifecycle owners; diagnostics do not load a worker, perform retrieval, or start installation.",
+    "A failed configuration or index probe reports degraded/setup or degraded/index. A model incompatibility reports incompatible/model. A crashed or incompatible worker reports runtime unless a higher-priority setup/model/index failure explains it.",
+    "lexical_search_ready is always true. assistant_ready is true only for ready or web-offline, where web-offline explicitly preserves local-only operation.",
+    "The retained last_local_error_class is only a five-value in-memory category. It never retains exception text, stack data, query identity, conversation data, source text, artifact path, hash, credential, or provider detail."
+  ],
+  "boundaries": {
+    "http_route": false,
+    "browser_ui": false,
+    "network_calls": 0,
+    "worker_start": false,
+    "retrieval": false,
+    "persistence": false,
+    "telemetry": false,
+    "conversation_content": false
+  },
+  "verification": {
+    "runtime": "tests/test_conversation_diagnostics_093.py",
+    "contract": "documentation/tests/contract/test_grounded_conversation_diagnostics_contract_0_9_3.py",
+    "architecture": "docs/architecture/grounded-conversation-diagnostics-0.9.3.md"
+  }
+}

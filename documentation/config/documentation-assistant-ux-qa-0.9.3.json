@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-ux-qa-0.9.3",
+  "backlog_item": "BPM093-M10-07",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-focused-six-locale-static-ui-qa",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "matrix": ["desktop and narrow layouts", "light, dark and system theme", "keyboard focus order", "200 percent text zoom", "assistant state/source/recovery regions", "local-only and consent presentation", "ordinary-search coexistence", "CSP-safe text-only rendering", "no page-load model, poll, chat route or provider request"],
+  "current_truth_boundary": "The rendered assistant remains a static transport-free surface. This QA does not claim that a chat route, streaming conversation or external provider is enabled.",
+  "verification": {"contracts": ["documentation/tests/contract/test_documentation_assistant_presentation_contract_0_9_3.py", "documentation/tests/contract/test_documentation_assistant_resource_state_contract_0_9_3.py", "documentation/tests/contract/test_documentation_assistant_web_mode_contract_0_9_3.py", "documentation/tests/contract/test_portal_shell_theme.py"], "browser": "documentation/tests/browser/test_documentation_portal_browser_smoke.py"}
+}
