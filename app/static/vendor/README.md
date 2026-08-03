@@ -21,8 +21,8 @@ These keep theme selection, Monaco bundle wiring, and initial locale bootstrappi
 
 `js-yaml.js`
 - Upstream package: `js-yaml`
-- Version: `4.2.0`
-- Source URL: `https://cdn.jsdelivr.net/npm/js-yaml@4.2.0/dist/js-yaml.min.js`
+- Version: `5.2.2`
+- Source URL: `https://registry.npmjs.org/js-yaml/-/js-yaml-5.2.2.tgz`
 - License file: `js-yaml.LICENSE`
 
 `profiles_monaco.js`

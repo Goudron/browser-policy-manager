@@ -50,6 +50,35 @@ def test_profiles_header_uses_the_approved_russian_three_schema_wording():
     )
 
 
+def test_profiles_header_uses_comma_separated_schema_lists_without_css_separators():
+    css = (REPO_ROOT / "app" / "static" / "profiles.css").read_text(encoding="utf-8")
+    template = (REPO_ROOT / "app" / "templates" / "profiles" / "_page_header.html").read_text(
+        encoding="utf-8"
+    )
+
+    assert 'content: "·"' not in css
+    assert "{% if not loop.last %}, {% endif %}" in template
+    for locale in ("en", "ru", "de", "zh-CN", "fr", "es-ES"):
+        catalog = json.loads(
+            (REPO_ROOT / "app" / "i18n" / f"{locale}.json").read_text(encoding="utf-8")
+        )
+        expected = " ".join(
+            (
+                catalog["profiles.supported_firefox_versions"],
+                ", ".join(
+                    catalog[key]
+                    for key in (
+                        "profiles.firefox_schema_release_153",
+                        "profiles.firefox_schema_esr_153_0",
+                        "profiles.firefox_schema_esr_140_13",
+                    )
+                ),
+            )
+        )
+
+        assert expected.count(",") == 2
+
+
 def test_profiles_theme_color_matches_the_product_light_surface():
     response = _profiles_page_response()
     head_bootstrap = (REPO_ROOT / "app" / "static" / "profiles_head_bootstrap.js").read_text(

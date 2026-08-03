@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-linux-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>准备 Linux 主机以进行源部署</title>
+  <title>准备开源系统主机以进行源部署</title>
   <shortdesc>在从存储库签出安装 BPM 之前，确认受支持的源部署边界、主机先决条件和延迟的生产功能。</shortdesc>
   <taskbody>
     <prereq><p>使用可以安装 Python 3.14+、Git、构建工具和curl 的 Linux 主机。此 操作手册 假定源签出，而不是打包的安装程序。</p></prereq>

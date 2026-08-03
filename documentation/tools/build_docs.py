@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import tomllib
 import unicodedata
 import urllib.parse
@@ -30,7 +31,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
 from app.core.locales import LOCALE_MATRIX  # noqa: E402
-from app.core.schema_channels import SCHEMA_CHANNELS  # noqa: E402
+from app.core.schema_channels import HEADER_SCHEMA_CHANNELS  # noqa: E402
 
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 LOCK_PATH = DOCUMENTATION_ROOT / "config/toolchain-lock.json"
@@ -55,12 +56,51 @@ SEARCH_CORPUS_CONTRACT = DOCUMENTATION_ROOT / "config/search-corpus-and-results-
 SEARCH_NORMALIZATION_ALIASES = DOCUMENTATION_ROOT / "config/search-normalization-aliases-0.9.0.json"
 SEARCH_RANKING_TYPO = DOCUMENTATION_ROOT / "config/search-ranking-typo-0.9.0.json"
 SEARCH_FACETS_FILTERS = DOCUMENTATION_ROOT / "config/search-facets-filters-0.9.0.json"
+SEARCH_DOMAIN_RANKING_FACETS = (
+    DOCUMENTATION_ROOT / "config/search-domain-ranking-facets-contract-0.9.3.json"
+)
 SEARCH_QUALITY_PERFORMANCE = DOCUMENTATION_ROOT / "config/search-quality-performance-0.9.0.json"
 SEARCH_INTEGRITY_DRIFT = DOCUMENTATION_ROOT / "config/search-integrity-drift-0.9.0.json"
 TOPIC_SECTION_TAXONOMY = DOCUMENTATION_ROOT / "config/topic-section-taxonomy-0.9.1.json"
 TOPIC_SECTION_LABELS = DOCUMENTATION_ROOT / "config/topic-section-labels-0.9.1.json"
 FIXTURE_CATALOG = DOCUMENTATION_ROOT / "fixtures/fixture-catalog-0.9.0.json"
 SEARCH_STATE_FIXTURE = DOCUMENTATION_ROOT / "fixtures/search-states/search-query-states-0.9.0.json"
+DOCUMENTATION_ASSISTANT_COPY = (
+    DOCUMENTATION_ROOT / "config/documentation-assistant-copy-0.9.3.json"
+)
+PDF_LAYOUT_CONTRACT = (
+    DOCUMENTATION_ROOT / "config/future-distribution-documentation-layout-0.9.3.json"
+)
+PDF_GENERATION_CONTRACT = (
+    DOCUMENTATION_ROOT / "config/pdf-generation-contract-0.9.3.json"
+)
+PDF_THEME = DOCUMENTATION_ROOT / "assets/pdf/bpm-pdf-theme.yaml"
+PDF_PRINT_CSS = DOCUMENTATION_ROOT / "assets/pdf/bpm-guide-print.css"
+PDF_COVER_LOGO = DOCUMENTATION_ROOT / "assets/branding/bpm-logo.png"
+PDF_COVER_BRANDING = DOCUMENTATION_ROOT / "assets/pdf/bpm-cover-branding.png"
+PDF_BUILD_ROOT = BUILD_ROOT / "pdf"
+PDF_BUILD_MANIFEST = "pdf-build-manifest.json"
+PDF_GUIDE_MAPS = (
+    ("user-guide", "user-guide.ditamap"),
+    ("administrator-guide", "administrator-guide.ditamap"),
+)
+PDF_FIXED_CREATION_DATE = b"D:19700101000000+00'00'"
+PDF_FIXED_UTC_CREATION_DATE = b"D:19700101000000Z"
+PDF_FIXED_DOCUMENT_ID = b"0" * 32
+PDF_CREATION_DATE_PATTERN = re.compile(
+    rb"(/CreationDate\s*\()(D:\d{14}(?:[+-]\d{2}'\d{2}'|Z))(\))"
+)
+PDF_MODIFICATION_DATE_PATTERN = re.compile(
+    rb"(/ModDate\s*\()(D:\d{14}(?:[+-]\d{2}'\d{2}'|Z))(\))"
+)
+PDF_DOCUMENT_ID_PATTERN = re.compile(
+    rb"/ID\s*\[\s*<[0-9A-Fa-f]{32}>\s*<[0-9A-Fa-f]{32}>\s*\]"
+)
+PDF_XMP_TIMESTAMP_PATTERN = re.compile(
+    rb"(<(?:dc:date|xmp:MetadataDate|xmp:CreateDate)>)(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2}))(</(?:dc:date|xmp:MetadataDate|xmp:CreateDate)>)"
+)
+PDF_FIXED_XMP_TIMESTAMP = b"1970-01-01T00:00:00+00:00"
+PDF_FIXED_UTC_XMP_TIMESTAMP = b"1970-01-01T00:00:00Z"
 SCREENSHOT_STATE_FIXTURE = (
     DOCUMENTATION_ROOT / "fixtures/screenshot-states/screenshot-states-0.9.0.json"
 )
@@ -84,12 +124,16 @@ NAVIGATION_SCHEMA = (
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 PRODUCT_LOCALE_OPTIONS = tuple(locale for locale in LOCALE_MATRIX if locale.has_catalog)
 PRODUCT_HEADER_LABEL_KEYS = {
+    "supported_firefox_versions": "profiles.supported_firefox_versions",
     "locales": "profiles.locale_label",
     "locale_system": "profiles.locale_system",
     "theme": "profiles.theme_label",
     "theme_system": "profiles.theme_system",
     "theme_light": "profiles.theme_light",
     "theme_dark": "profiles.theme_dark",
+}
+PRODUCT_FIREFOX_SCHEMA_LABEL_KEYS = {
+    channel.value: channel.i18n_key for channel in HEADER_SCHEMA_CHANNELS
 }
 PRODUCT_LOCALE_OPTION_LABEL_KEYS = {
     "en": "profiles.locale_option_en",
@@ -105,6 +149,12 @@ THEME_ROOT = DOCUMENTATION_ROOT / "assets/theme"
 SCREENSHOT_ROOT = DOCUMENTATION_ROOT / "assets/screenshots"
 THEME_FILES = ("bpm-docs.css", "bpm-docs-print.css")
 SEARCH_SCRIPT = "bpm-docs-search.js"
+MODEL_MANAGER_SCRIPT = "bpm-docs-model-manager.js"
+ASSISTANT_RENDERER_SCRIPT = "bpm-docs-assistant-renderer.js"
+ASSISTANT_STATE_MACHINE_SCRIPT = "bpm-docs-assistant-state-machine.js"
+ASSISTANT_SHELL_SCRIPT = "bpm-docs-assistant-shell.js"
+ASSISTANT_CONVERSATION_SCRIPT = "bpm-docs-assistant-conversation.js"
+ASSISTANT_TRANSPORT_SCRIPT = "bpm-docs-assistant-transport.js"
 PRODUCT_VERSION_FACET_PLACEHOLDER = "{product_version}"
 SEARCH_TOKEN_PATTERN = re.compile(
     r"/[^\s\"'<>]+|[^\W_]+(?:[-._:/][^\W_]+)+|[^\W_]+",
@@ -135,7 +185,6 @@ SHELL_LABELS = {
         "locales": "Locale",
         "breadcrumbs": "Breadcrumbs",
         "home": "Documentation home",
-        "supported_firefox_versions": "Supported Firefox versions in this release:",
         "status": "Runtime package pending manifest, search, and UI target metadata.",
         "theme": "Theme",
         "theme_system": "System",
@@ -166,6 +215,38 @@ SHELL_LABELS = {
         "search_unavailable": "Search is unavailable because the local index could not be loaded.",
         "search_result_singular": "1 result",
         "search_result_plural": "results",
+        "assistant": "BPM AI Assistant",
+        "assistant_close": "Collapse BPM AI Assistant",
+        "assistant_unavailable_short": "Unavailable",
+        "assistant_install_model": "Install model",
+        "assistant_installing": "Installing model",
+        "assistant_verifying_model": "Verifying model",
+        "assistant_preparing_documentation": "Preparing documentation",
+        "assistant_install_failed": "Model installation could not be completed",
+        "assistant_ready": "Ready",
+        "assistant_clear_short": "Clear",
+        "assistant_busy_short": "Working",
+        "assistant_clarify": "Please clarify the BPM setting, policy, guide, or task you want to discuss.",
+        "assistant_abstain": "I could not find enough current documentation evidence to answer reliably.",
+        "assistant_refuse": "I can help only with Browser Policy Manager documentation and settings.",
+        "assistant_cancelled_short": "Request cancelled",
+        "assistant_time_preview": "Expected time: from {minimum} to {maximum}",
+        "assistant_answer_failed": "The answer could not be completed.",
+        "assistant_description": "Ask BPM documentation questions when the local assistant is available. Search and guide navigation remain available independently.",
+        "assistant_unavailable": "The local documentation assistant is unavailable. Search and navigation are available.",
+        "assistant_transcript": "Conversation",
+        "assistant_question": "Question about BPM documentation",
+        "assistant_question_placeholder": "Ask about Browser Policy Manager documentation",
+        "assistant_controls_unavailable": "Conversation controls are unavailable until the local assistant can be used.",
+        "assistant_send": "Send",
+        "assistant_stop": "Stop",
+        "assistant_clear": "Clear conversation",
+        "assistant_answer_mode": "Answer state",
+        "assistant_sources": "Sources",
+        "assistant_manage_model": "Manage local model",
+        "assistant_web_title": "Optional external evidence",
+        "assistant_web_local_only": "External evidence is off. Answers use local BPM documentation only.",
+        "assistant_external_sources": "External sources",
     },
     "ru": {
         "skip": "Перейти к содержимому",
@@ -173,7 +254,6 @@ SHELL_LABELS = {
         "locales": "Локаль",
         "breadcrumbs": "Навигационная цепочка",
         "home": "Главная страница документации",
-        "supported_firefox_versions": "В текущем релизе поддерживаются версии Firefox:",
         "status": "Пакет для runtime ожидает манифест, поиск и метаданные UI-целей.",
         "theme": "Тема",
         "theme_system": "Системная",
@@ -204,6 +284,38 @@ SHELL_LABELS = {
         "search_unavailable": "Поиск недоступен: локальный индекс не удалось загрузить.",
         "search_result_singular": "1 результат",
         "search_result_plural": "результатов",
+        "assistant": "ИИ-помощник BPM",
+        "assistant_close": "Свернуть ИИ-помощника BPM",
+        "assistant_unavailable_short": "Недоступен",
+        "assistant_install_model": "Установить модель",
+        "assistant_installing": "Устанавливается модель",
+        "assistant_verifying_model": "Проверяется модель",
+        "assistant_preparing_documentation": "Подготавливается документация",
+        "assistant_install_failed": "Не удалось завершить установку модели",
+        "assistant_ready": "Готов",
+        "assistant_clear_short": "Очистить",
+        "assistant_busy_short": "Выполняется",
+        "assistant_clarify": "Уточните, какую настройку, политику, руководство или задачу BPM вы хотите обсудить.",
+        "assistant_abstain": "Я не нашёл достаточно актуальных сведений в документации для достоверного ответа.",
+        "assistant_refuse": "Я могу помочь только с документацией и настройками Browser Policy Manager.",
+        "assistant_cancelled_short": "Запрос отменён",
+        "assistant_time_preview": "Ожидаемое время: от {minimum} до {maximum}",
+        "assistant_answer_failed": "Не удалось завершить ответ.",
+        "assistant_description": "Задавайте вопросы по документации BPM, когда локальный помощник доступен. Поиск и навигация по руководствам работают независимо.",
+        "assistant_unavailable": "Локальный помощник по документации недоступен. Поиск и навигация доступны.",
+        "assistant_transcript": "Диалог",
+        "assistant_question": "Вопрос по документации BPM",
+        "assistant_question_placeholder": "Задайте вопрос по документации Browser Policy Manager",
+        "assistant_controls_unavailable": "Элементы диалога недоступны, пока нельзя использовать локального помощника.",
+        "assistant_send": "Отправить",
+        "assistant_stop": "Остановить",
+        "assistant_clear": "Очистить диалог",
+        "assistant_answer_mode": "Состояние ответа",
+        "assistant_sources": "Источники",
+        "assistant_manage_model": "Управление локальной моделью",
+        "assistant_web_title": "Необязательные внешние сведения",
+        "assistant_web_local_only": "Внешние сведения выключены. Ответы используют только локальную документацию BPM.",
+        "assistant_external_sources": "Внешние источники",
     },
     "de": {
         "skip": "Zum Inhalt springen",
@@ -211,7 +323,6 @@ SHELL_LABELS = {
         "locales": "Sprache",
         "breadcrumbs": "Breadcrumbs",
         "home": "Startseite der Dokumentation",
-        "supported_firefox_versions": "In dieser Version unterstützte Firefox-Versionen:",
         "status": "Das Runtime-Paket wartet auf Manifest, Suche und UI-Zielmetadaten.",
         "theme": "Design",
         "theme_system": "System",
@@ -242,6 +353,38 @@ SHELL_LABELS = {
         "search_unavailable": "Die Suche ist nicht verfügbar, weil der lokale Index nicht geladen werden konnte.",
         "search_result_singular": "1 Ergebnis",
         "search_result_plural": "Ergebnisse",
+        "assistant": "BPM-KI-Assistent",
+        "assistant_close": "BPM-KI-Assistent schließen",
+        "assistant_unavailable_short": "Nicht verfügbar",
+        "assistant_install_model": "Modell installieren",
+        "assistant_installing": "Modell wird installiert",
+        "assistant_verifying_model": "Modell wird überprüft",
+        "assistant_preparing_documentation": "Dokumentation wird vorbereitet",
+        "assistant_install_failed": "Die Modellinstallation konnte nicht abgeschlossen werden",
+        "assistant_ready": "Bereit",
+        "assistant_clear_short": "Löschen",
+        "assistant_busy_short": "Wird bearbeitet",
+        "assistant_clarify": "Bitte präzisieren Sie die BPM-Einstellung, Richtlinie, Anleitung oder Aufgabe, die Sie besprechen möchten.",
+        "assistant_abstain": "Ich konnte nicht genügend aktuelle Dokumentationsbelege für eine zuverlässige Antwort finden.",
+        "assistant_refuse": "Ich kann nur bei Browser-Policy-Manager-Dokumentation und -Einstellungen helfen.",
+        "assistant_cancelled_short": "Anfrage abgebrochen",
+        "assistant_time_preview": "Voraussichtliche Dauer: von {minimum} bis {maximum}",
+        "assistant_answer_failed": "Die Antwort konnte nicht fertiggestellt werden.",
+        "assistant_description": "Stellen Sie Fragen zur BPM-Dokumentation, wenn der lokale Assistent verfügbar ist. Suche und Handbuchnavigation bleiben unabhängig verfügbar.",
+        "assistant_unavailable": "Der lokale Dokumentationsassistent ist nicht verfügbar. Suche und Navigation sind verfügbar.",
+        "assistant_transcript": "Unterhaltung",
+        "assistant_question": "Frage zur BPM-Dokumentation",
+        "assistant_question_placeholder": "Stellen Sie eine Frage zur Browser-Policy-Manager-Dokumentation",
+        "assistant_controls_unavailable": "Die Dialog-Steuerelemente sind erst verfügbar, wenn der lokale Assistent verwendet werden kann.",
+        "assistant_send": "Senden",
+        "assistant_stop": "Anhalten",
+        "assistant_clear": "Unterhaltung löschen",
+        "assistant_answer_mode": "Antwortstatus",
+        "assistant_sources": "Quellen",
+        "assistant_manage_model": "Lokales Modell verwalten",
+        "assistant_web_title": "Optionale externe Belege",
+        "assistant_web_local_only": "Externe Belege sind ausgeschaltet. Antworten verwenden nur lokale BPM-Dokumentation.",
+        "assistant_external_sources": "Externe Quellen",
     },
     "zh-CN": {
         "skip": "跳到内容",
@@ -249,7 +392,6 @@ SHELL_LABELS = {
         "locales": "语言",
         "breadcrumbs": "面包屑导航",
         "home": "文档主页",
-        "supported_firefox_versions": "当前版本支持的 Firefox 版本：",
         "status": "运行时包仍需清单、搜索和 UI 目标元数据。",
         "theme": "主题",
         "theme_system": "跟随系统",
@@ -280,6 +422,38 @@ SHELL_LABELS = {
         "search_unavailable": "搜索不可用，因为无法加载本地索引。",
         "search_result_singular": "1 个结果",
         "search_result_plural": "个结果",
+        "assistant": "BPM AI 助手",
+        "assistant_close": "收起 BPM AI 助手",
+        "assistant_unavailable_short": "不可用",
+        "assistant_install_model": "安装模型",
+        "assistant_installing": "正在安装模型",
+        "assistant_verifying_model": "正在验证模型",
+        "assistant_preparing_documentation": "正在准备文档",
+        "assistant_install_failed": "无法完成模型安装",
+        "assistant_ready": "就绪",
+        "assistant_clear_short": "清除",
+        "assistant_busy_short": "正在处理",
+        "assistant_clarify": "请说明您想讨论的 BPM 设置、策略、指南或任务。",
+        "assistant_abstain": "未找到足够的当前文档证据，因此无法可靠回答。",
+        "assistant_refuse": "我只能帮助处理 Browser Policy Manager 的文档和设置。",
+        "assistant_cancelled_short": "请求已取消",
+        "assistant_time_preview": "预计用时：{minimum} 至 {maximum}",
+        "assistant_answer_failed": "无法完成回答。",
+        "assistant_description": "本地助手可用时，您可以询问 BPM 文档问题。搜索和指南导航始终可独立使用。",
+        "assistant_unavailable": "本地文档助手不可用。搜索和导航仍可使用。",
+        "assistant_transcript": "对话",
+        "assistant_question": "关于 BPM 文档的问题",
+        "assistant_question_placeholder": "请询问有关 Browser Policy Manager 文档的问题",
+        "assistant_controls_unavailable": "在本地助手可用之前，对话控件不可用。",
+        "assistant_send": "发送",
+        "assistant_stop": "停止",
+        "assistant_clear": "清除对话",
+        "assistant_answer_mode": "回答状态",
+        "assistant_sources": "来源",
+        "assistant_manage_model": "管理本地模型",
+        "assistant_web_title": "可选的外部证据",
+        "assistant_web_local_only": "外部证据已关闭。回答仅使用本地 BPM 文档。",
+        "assistant_external_sources": "外部来源",
     },
     "fr": {
         "skip": "Aller au contenu",
@@ -287,7 +461,6 @@ SHELL_LABELS = {
         "locales": "Langue",
         "breadcrumbs": "Fil d’Ariane",
         "home": "Accueil de la documentation",
-        "supported_firefox_versions": "Versions de Firefox prises en charge dans cette version :",
         "status": "Le paquet d’exécution attend le manifeste, la recherche et les métadonnées des cibles UI.",
         "theme": "Thème",
         "theme_system": "Système",
@@ -318,6 +491,38 @@ SHELL_LABELS = {
         "search_unavailable": "La recherche est indisponible car l’index local n’a pas pu être chargé.",
         "search_result_singular": "1 résultat",
         "search_result_plural": "résultats",
+        "assistant": "Assistant IA BPM",
+        "assistant_close": "Réduire l’assistant IA BPM",
+        "assistant_unavailable_short": "Indisponible",
+        "assistant_install_model": "Installer le modèle",
+        "assistant_installing": "Installation du modèle",
+        "assistant_verifying_model": "Vérification du modèle",
+        "assistant_preparing_documentation": "Préparation de la documentation",
+        "assistant_install_failed": "L’installation du modèle n’a pas pu être terminée",
+        "assistant_ready": "Prêt",
+        "assistant_clear_short": "Effacer",
+        "assistant_busy_short": "En cours",
+        "assistant_clarify": "Précisez le paramètre, la règle, le guide ou la tâche BPM dont vous voulez parler.",
+        "assistant_abstain": "Je n’ai pas trouvé suffisamment de preuves documentaires actuelles pour répondre de manière fiable.",
+        "assistant_refuse": "Je peux aider uniquement avec la documentation et les paramètres de Browser Policy Manager.",
+        "assistant_cancelled_short": "Demande annulée",
+        "assistant_time_preview": "Durée estimée : de {minimum} à {maximum}",
+        "assistant_answer_failed": "La réponse n’a pas pu être terminée.",
+        "assistant_description": "Posez des questions sur la documentation BPM lorsque l’assistant local est disponible. La recherche et la navigation dans les guides restent disponibles indépendamment.",
+        "assistant_unavailable": "L’assistant de documentation local est indisponible. La recherche et la navigation restent disponibles.",
+        "assistant_transcript": "Conversation",
+        "assistant_question": "Question sur la documentation BPM",
+        "assistant_question_placeholder": "Posez une question sur la documentation de Browser Policy Manager",
+        "assistant_controls_unavailable": "Les commandes de conversation sont indisponibles tant que l’assistant local ne peut pas être utilisé.",
+        "assistant_send": "Envoyer",
+        "assistant_stop": "Arrêter",
+        "assistant_clear": "Effacer la conversation",
+        "assistant_answer_mode": "État de la réponse",
+        "assistant_sources": "Sources",
+        "assistant_manage_model": "Gérer le modèle local",
+        "assistant_web_title": "Preuves externes facultatives",
+        "assistant_web_local_only": "Les preuves externes sont désactivées. Les réponses utilisent uniquement la documentation BPM locale.",
+        "assistant_external_sources": "Sources externes",
     },
     "es-ES": {
         "skip": "Ir al contenido",
@@ -325,7 +530,6 @@ SHELL_LABELS = {
         "locales": "Idioma",
         "breadcrumbs": "Ruta de navegación",
         "home": "Inicio de la documentación",
-        "supported_firefox_versions": "Versiones de Firefox compatibles con esta versión:",
         "status": "El paquete de runtime espera el manifiesto, la búsqueda y los metadatos de objetivos de UI.",
         "theme": "Tema",
         "theme_system": "Sistema",
@@ -356,6 +560,38 @@ SHELL_LABELS = {
         "search_unavailable": "La búsqueda no está disponible porque no se pudo cargar el índice local.",
         "search_result_singular": "1 resultado",
         "search_result_plural": "resultados",
+        "assistant": "Asistente de IA de BPM",
+        "assistant_close": "Contraer el asistente de IA de BPM",
+        "assistant_unavailable_short": "No disponible",
+        "assistant_install_model": "Instalar modelo",
+        "assistant_installing": "Instalando el modelo",
+        "assistant_verifying_model": "Verificando el modelo",
+        "assistant_preparing_documentation": "Preparando la documentación",
+        "assistant_install_failed": "No se pudo completar la instalación del modelo",
+        "assistant_ready": "Listo",
+        "assistant_clear_short": "Limpiar",
+        "assistant_busy_short": "En curso",
+        "assistant_clarify": "Aclara el ajuste, la política, la guía o la tarea de BPM que quieres consultar.",
+        "assistant_abstain": "No encontré suficiente evidencia actual en la documentación para responder de forma fiable.",
+        "assistant_refuse": "Solo puedo ayudar con la documentación y la configuración de Browser Policy Manager.",
+        "assistant_cancelled_short": "Solicitud cancelada",
+        "assistant_time_preview": "Tiempo estimado: de {minimum} a {maximum}",
+        "assistant_answer_failed": "No se pudo completar la respuesta.",
+        "assistant_description": "Haz preguntas sobre la documentación de BPM cuando el asistente local esté disponible. La búsqueda y la navegación por las guías siguen disponibles de forma independiente.",
+        "assistant_unavailable": "El asistente local de documentación no está disponible. La búsqueda y la navegación siguen disponibles.",
+        "assistant_transcript": "Conversación",
+        "assistant_question": "Pregunta sobre la documentación de BPM",
+        "assistant_question_placeholder": "Haz una pregunta sobre la documentación de Browser Policy Manager",
+        "assistant_controls_unavailable": "Los controles de conversación no están disponibles hasta que se pueda usar el asistente local.",
+        "assistant_send": "Enviar",
+        "assistant_stop": "Detener",
+        "assistant_clear": "Borrar conversación",
+        "assistant_answer_mode": "Estado de la respuesta",
+        "assistant_sources": "Fuentes",
+        "assistant_manage_model": "Gestionar el modelo local",
+        "assistant_web_title": "Evidencia externa opcional",
+        "assistant_web_local_only": "La evidencia externa está desactivada. Las respuestas usan solo documentación BPM local.",
+        "assistant_external_sources": "Fuentes externas",
     },
 }
 
@@ -726,6 +962,10 @@ def _product_header_labels(locale: str) -> dict[str, str]:
 
     keys = {
         **PRODUCT_HEADER_LABEL_KEYS,
+        **{
+            f"firefox_schema_{channel}": key
+            for channel, key in PRODUCT_FIREFOX_SCHEMA_LABEL_KEYS.items()
+        },
         **{
             f"locale_option_{code}": key
             for code, key in PRODUCT_LOCALE_OPTION_LABEL_KEYS.items()
@@ -1917,8 +2157,10 @@ def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> 
     )
     firefox_versions = "\n".join(
         "               "
-        f'<span data-firefox-channel="{_escape(channel.value)}">{_escape(channel.label)}</span>'
-        for channel in SCHEMA_CHANNELS
+        f'<span data-firefox-channel="{_escape(channel.value)}">'
+        f'{_escape(product_header_labels[f"firefox_schema_{channel.value}"])}'
+        f'{", " if index < len(HEADER_SCHEMA_CHANNELS) - 1 else ""}</span>'
+        for index, channel in enumerate(HEADER_SCHEMA_CHANNELS)
     )
     search_index_href = _relative_href(page, site_root / "search" / locale / "index.json")
     root_anchor_targets = _portal_root_anchor_targets(site_root, page, locale, body_inner)
@@ -1950,11 +2192,32 @@ def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> 
                   </section>
                </div>
             </section>"""
+    discovery_shell = f"""            <div class="bpm-docs-discovery-tools">
+{search_shell}
+            </div>"""
+    assistant_shell = f"""      <section class="bpm-docs-assistant-widget" data-documentation-assistant-widget data-assistant-locale="{_escape(locale)}" data-assistant-expanded="false" data-assistant-state="unavailable" data-assistant-label-ready="{_escape(labels["assistant_ready"])}" data-assistant-label-busy="{_escape(labels["assistant_busy_short"])}" data-assistant-label-unavailable="{_escape(labels["assistant_unavailable_short"])}" data-assistant-label-installing="{_escape(labels["assistant_installing"])}" data-assistant-label-verifying="{_escape(labels["assistant_verifying_model"])}" data-assistant-label-preparing="{_escape(labels["assistant_preparing_documentation"])}" data-assistant-label-install-failed="{_escape(labels["assistant_install_failed"])}" data-assistant-label-clarify="{_escape(labels["assistant_clarify"])}" data-assistant-label-abstain="{_escape(labels["assistant_abstain"])}" data-assistant-label-refuse="{_escape(labels["assistant_refuse"])}" data-assistant-label-cancelled="{_escape(labels["assistant_cancelled_short"])}" data-assistant-label-time-preview="{_escape(labels["assistant_time_preview"])}" data-assistant-label-answer-failed="{_escape(labels["assistant_answer_failed"])}" data-assistant-label-sources="{_escape(labels["assistant_sources"])}" data-assistant-label-external-sources="{_escape(labels["assistant_external_sources"])}">
+         <button class="bpm-docs-assistant-toggle" type="button" aria-expanded="false" aria-controls="bpm-docs-assistant-panel" data-assistant-toggle>{_escape(labels["assistant"])}</button>
+         <section id="bpm-docs-assistant-panel" class="bpm-docs-assistant-panel" aria-label="{_escape(labels["assistant"])}" data-assistant-panel hidden>
+            <button class="bpm-docs-assistant-panel-title" type="button" aria-label="{_escape(labels["assistant_close"])}" data-assistant-collapse>{_escape(labels["assistant"])}</button>
+            <ol id="bpm-docs-assistant-transcript" class="bpm-docs-assistant-transcript" role="log" aria-label="{_escape(labels["assistant_transcript"])}" aria-live="polite" aria-relevant="additions text" aria-atomic="false" data-assistant-transcript data-assistant-message-roles="user assistant system"></ol>
+            <div class="bpm-docs-assistant-controls" data-assistant-controls>
+               <label class="bpm-docs-visually-hidden" for="bpm-docs-assistant-question">{_escape(labels["assistant_question"])}</label>
+               <textarea id="bpm-docs-assistant-question" name="question" rows="3" maxlength="4000" placeholder="{_escape(labels["assistant_question_placeholder"])}" disabled aria-disabled="true" data-assistant-question></textarea>
+               <button class="bpm-docs-assistant-send" type="button" disabled aria-disabled="true" hidden data-assistant-send>{_escape(labels["assistant_send"])}</button>
+            </div>
+            <div class="bpm-docs-assistant-status-row">
+               <p id="bpm-docs-assistant-status" class="bpm-docs-assistant-status" role="status" aria-live="polite" aria-atomic="true" data-assistant-status>{_escape(labels["assistant_unavailable_short"])}</p>
+               <button class="bpm-docs-assistant-stop" type="button" disabled aria-disabled="true" hidden data-assistant-stop>{_escape(labels["assistant_stop"])}</button>
+               <button class="bpm-docs-assistant-clear" type="button" hidden data-assistant-clear>{_escape(labels["assistant_clear_short"])}</button>
+               <button class="bpm-docs-assistant-install" type="button" disabled aria-disabled="true" data-assistant-install>{_escape(labels["assistant_install_model"])}</button>
+            </div>
+         </section>
+      </section>"""
     return f"""      <a class="bpm-docs-skip-link" href="#main-content">{_escape(labels["skip"])}</a>
       <header class="bpm-docs-header">
          <div class="bpm-docs-header-main">
             <p class="bpm-docs-header-title">Browser Policy Manager <span class="bpm-docs-header-version">v{_escape(product_version)}</span></p>
-            <p class="bpm-docs-header-firefox-versions" data-supported-firefox-versions><span class="bpm-docs-header-firefox-versions-label">{_escape(labels["supported_firefox_versions"])}</span>
+            <p class="bpm-docs-header-firefox-versions" data-supported-firefox-versions><span class="bpm-docs-header-firefox-versions-label">{_escape(product_header_labels["supported_firefox_versions"])}</span>
 {firefox_versions}
             </p>
          </div>
@@ -1990,11 +2253,12 @@ def _portal_shell(site_root: Path, page: Path, locale: str, body_inner: str) -> 
             </nav>
          </aside>
          <main id="main-content" class="bpm-docs-main" tabindex="-1">
-{search_shell}
+{discovery_shell}
 {root_anchor_targets}
 {body_inner.rstrip()}
          </main>
       </div>
+{assistant_shell}
       <footer class="bpm-docs-footer">
          <p>{_escape(labels["status"])}</p>
       </footer>
@@ -2009,10 +2273,19 @@ def _install_theme_assets(locale_root: Path) -> None:
         if not source.is_file():
             raise BuildError(f"missing portal theme asset: {source}")
         shutil.copyfile(source, assets_root / filename)
-    script = THEME_ROOT / SEARCH_SCRIPT
-    if not script.is_file():
-        raise BuildError(f"missing portal search asset: {script}")
-    shutil.copyfile(script, assets_root / SEARCH_SCRIPT)
+    for script_name in (
+        SEARCH_SCRIPT,
+        MODEL_MANAGER_SCRIPT,
+        ASSISTANT_RENDERER_SCRIPT,
+        ASSISTANT_STATE_MACHINE_SCRIPT,
+        ASSISTANT_CONVERSATION_SCRIPT,
+        ASSISTANT_TRANSPORT_SCRIPT,
+        ASSISTANT_SHELL_SCRIPT,
+    ):
+        script = THEME_ROOT / script_name
+        if not script.is_file():
+            raise BuildError(f"missing portal script asset: {script}")
+        shutil.copyfile(script, assets_root / script_name)
 
 
 def _install_screenshot_assets(locale_root: Path) -> None:
@@ -2084,6 +2357,12 @@ def _apply_portal_shell_to_page(site_root: Path, page: Path, locale: str) -> Non
         f'      <link rel="stylesheet" type="text/css" media="print" href="'
         f'{_escape(_relative_href(page, site_root / locale / "assets" / THEME_FILES[1]))}">\n'
         f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / SEARCH_SCRIPT))}" defer></script>\n'
+        f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / MODEL_MANAGER_SCRIPT))}" defer></script>\n'
+        f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / ASSISTANT_RENDERER_SCRIPT))}" defer></script>\n'
+        f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / ASSISTANT_STATE_MACHINE_SCRIPT))}" defer></script>\n'
+        f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / ASSISTANT_CONVERSATION_SCRIPT))}" defer></script>\n'
+        f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / ASSISTANT_TRANSPORT_SCRIPT))}" defer></script>\n'
+        f'      <script src="{_escape(_relative_href(page, site_root / locale / "assets" / ASSISTANT_SHELL_SCRIPT))}" defer></script>\n'
     )
     before_head_close = content[: head_end.start()]
     after_head_close = content[head_end.start() : body_start.start()]
@@ -2110,6 +2389,7 @@ def apply_portal_shell(site_root: Path) -> None:
         _install_theme_assets(locale_root)
         _install_screenshot_assets(locale_root)
     generate_navigation_files(site_root)
+    generate_assistant_copy_files(site_root)
     for locale in LOCALES:
         for page in sorted((site_root / locale).rglob("*.html")):
             _apply_portal_shell_to_page(site_root, page, locale)
@@ -2139,6 +2419,200 @@ def _write_json(path: Path, payload: dict[str, Any]) -> None:
         json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+
+
+_ASSISTANT_SHELL_LABEL_KEYS = (
+    "assistant",
+    "assistant_close",
+    "assistant_unavailable_short",
+    "assistant_install_model",
+    "assistant_installing",
+    "assistant_verifying_model",
+    "assistant_preparing_documentation",
+    "assistant_install_failed",
+    "assistant_ready",
+    "assistant_clear_short",
+    "assistant_busy_short",
+    "assistant_clarify",
+    "assistant_abstain",
+    "assistant_refuse",
+    "assistant_cancelled_short",
+    "assistant_time_preview",
+    "assistant_answer_failed",
+    "assistant_busy_short",
+    "assistant_clarify",
+    "assistant_abstain",
+    "assistant_refuse",
+    "assistant_cancelled_short",
+    "assistant_description",
+    "assistant_unavailable",
+    "assistant_transcript",
+    "assistant_question",
+    "assistant_question_placeholder",
+    "assistant_controls_unavailable",
+    "assistant_send",
+    "assistant_stop",
+    "assistant_clear",
+    "assistant_answer_mode",
+    "assistant_sources",
+    "assistant_manage_model",
+    "assistant_web_title",
+    "assistant_web_local_only",
+    "assistant_external_sources",
+)
+_ASSISTANT_COPY_GROUP_KEYS = {
+    "dialogue": {
+        "scope",
+        "out_of_scope",
+        "clarification",
+        "no_evidence",
+        "answer",
+        "incomplete",
+        "citation_local",
+        "citation_external",
+        "citation_unavailable",
+        "question_too_long",
+        "source_guide",
+        "source_topic",
+        "source_anchor",
+        "source_version",
+        "source_excerpt",
+    },
+    "actions": {
+        "send",
+        "stop",
+        "clear",
+        "retry",
+        "use_search",
+        "open_settings",
+        "install",
+        "verify",
+        "cancel",
+        "remove",
+    },
+    "model": {
+        "title",
+        "optional",
+        "cpu",
+        "no_sla",
+        "source",
+        "size",
+        "confirm_install",
+        "verifying",
+        "installed",
+        "remove_confirm",
+        "removed",
+    },
+    "resource_states": {
+        "queued",
+        "timeout",
+        "unloading",
+        "unloaded",
+        "search_only",
+        "duplicate",
+        "resource_limit",
+    },
+    "web": {
+        "title",
+        "disabled",
+        "consent_title",
+        "consent_question",
+        "recipient",
+        "privacy",
+        "accept",
+        "decline",
+        "external_label",
+        "local_only",
+        "consent_required",
+        "consent_scope",
+        "active",
+    },
+}
+
+
+def _documentation_assistant_copy_contract() -> dict[str, Any]:
+    contract = _read_json_file(DOCUMENTATION_ASSISTANT_COPY)
+    if contract.get("contract_id") != "bpm-documentation-assistant-copy-0.9.3":
+        raise BuildError("documentation assistant copy contract identifier is invalid")
+    if contract.get("locales") != list(LOCALES):
+        raise BuildError("documentation assistant copy locales diverge from the published locales")
+    catalog = contract.get("catalog")
+    templates = contract.get("state_templates")
+    rules = contract.get("catalog_rules")
+    if not isinstance(catalog, dict) or set(catalog) != set(LOCALES):
+        raise BuildError("documentation assistant copy catalog has incomplete locale coverage")
+    if not isinstance(templates, dict) or set(templates) != set(LOCALES):
+        raise BuildError("documentation assistant copy templates have incomplete locale coverage")
+    if not isinstance(rules, dict):
+        raise BuildError("documentation assistant copy rules are missing")
+    state_ids = rules.get("state_ids")
+    if not isinstance(state_ids, list) or not all(isinstance(item, str) for item in state_ids):
+        raise BuildError("documentation assistant copy state inventory is invalid")
+    state_fields = rules.get("state_fields")
+    if state_fields != ["title", "detail", "action", "live", "aria"]:
+        raise BuildError("documentation assistant copy state field inventory is invalid")
+    for locale in LOCALES:
+        locale_catalog = catalog[locale]
+        if not isinstance(locale_catalog, dict):
+            raise BuildError(f"documentation assistant copy catalog is invalid for {locale}")
+        states = locale_catalog.get("states")
+        if not isinstance(states, dict) or list(states) != state_ids:
+            raise BuildError(f"documentation assistant state catalog diverges for {locale}")
+        for state_id in state_ids:
+            state = states[state_id]
+            if not isinstance(state, dict) or set(state) != {"title", "detail", "action"}:
+                raise BuildError(f"documentation assistant state copy is invalid for {locale}/{state_id}")
+            if not all(isinstance(value, str) and value.strip() for value in state.values()):
+                raise BuildError(f"documentation assistant state copy is empty for {locale}/{state_id}")
+        for group, expected_keys in _ASSISTANT_COPY_GROUP_KEYS.items():
+            messages = locale_catalog.get(group)
+            if not isinstance(messages, dict) or set(messages) != expected_keys:
+                raise BuildError(f"documentation assistant {group} copy diverges for {locale}")
+            if not all(isinstance(value, str) and value.strip() for value in messages.values()):
+                raise BuildError(f"documentation assistant {group} copy is empty for {locale}")
+        template = templates[locale]
+        if not isinstance(template, dict) or set(template) != {"live", "aria"}:
+            raise BuildError(f"documentation assistant state templates are invalid for {locale}")
+        if "{title}" not in template["live"] or "{detail}" not in template["live"]:
+            raise BuildError(f"documentation assistant live template is invalid for {locale}")
+        if "{title}" not in template["aria"]:
+            raise BuildError(f"documentation assistant aria template is invalid for {locale}")
+    return contract
+
+
+def _assistant_copy_payload(locale: str) -> dict[str, Any]:
+    if locale not in LOCALES:
+        raise BuildError(f"unsupported assistant copy locale: {locale}")
+    contract = _documentation_assistant_copy_contract()
+    source = contract["catalog"][locale]
+    template = contract["state_templates"][locale]
+    states = {
+        state_id: {
+            **state,
+            "live": template["live"].format(**state),
+            "aria": template["aria"].format(**state),
+        }
+        for state_id, state in source["states"].items()
+    }
+    return {
+        "schema_version": contract["schema_version"],
+        "contract_id": contract["contract_id"],
+        "target_bpm_version": contract["target_bpm_version"],
+        "locale": locale,
+        "messages": {
+            "shell": {key: SHELL_LABELS[locale][key] for key in _ASSISTANT_SHELL_LABEL_KEYS},
+            "states": states,
+            **{group: source[group] for group in _ASSISTANT_COPY_GROUP_KEYS},
+        },
+    }
+
+
+def generate_assistant_copy_files(site_root: Path) -> None:
+    for locale in LOCALES:
+        locale_root = site_root / locale
+        if not locale_root.is_dir():
+            raise BuildError(f"generated locale root is missing: {locale_root}")
+        _write_json(locale_root / "assistant-copy.json", _assistant_copy_payload(locale))
 
 
 def _file_sha256(path: Path) -> str:
@@ -2269,6 +2743,13 @@ def _search_facets_filters() -> dict[str, Any]:
     return config
 
 
+def _search_domain_ranking_facets() -> dict[str, Any]:
+    config = _read_json_file(SEARCH_DOMAIN_RANKING_FACETS)
+    if config.get("contract_id") != "bpm-doc-search-domain-ranking-facets-0.9.3":
+        raise BuildError("unsupported search domain ranking/facets contract")
+    return config
+
+
 def _localized_search_facet_fields(
     locale: str,
     config: dict[str, Any],
@@ -2344,12 +2825,18 @@ def _normalize_search_text(
     if rules["strip_diacritics"]:
         normalized = _strip_latin_diacritics(normalized)
     tokens: list[str] = []
+    compound_parts: list[str] = []
     for match in SEARCH_TOKEN_PATTERN.finditer(normalized):
         token = match.group(0).strip(".,;!?()[]{}<>\"'")
         if not token:
             continue
         tokens.append(token)
         tokens.extend(_cjk_expansions(token))
+        if token.isalnum() and not any(_is_cjk(character) for character in token):
+            compound_parts.append(token)
+    tokens.extend(
+        f"{left}-{right}" for left, right in zip(compound_parts, compound_parts[1:], strict=False)
+    )
     return _unique_non_empty(tokens)
 
 
@@ -2518,18 +3005,42 @@ def _score_search_document(
     normalized_fields = document["normalized"]["fields"]
     query_alias_ids = set(_resolve_search_query_aliases(locale, query, normalizer))
     document_alias_ids = set(document["normalized"]["alias_ids"])
+    unmatched_technical_identifier = any(
+        _is_typo_excluded(token, ranking) and token not in normalized_fields["identifiers"]
+        for token in query_tokens
+    )
+    if unmatched_technical_identifier:
+        return {
+            "score": 0,
+            "score_breakdown": {
+                "exact_identifier": 0,
+                "title": 0,
+                "alias": 0,
+                "heading": 0,
+                "body": 0,
+                "bounded_typo": 0,
+                "recency": 0,
+            },
+            "matched_fields": [],
+            "matches": {},
+        }
 
-    exact_identifier_matches = sorted(query_token_set & set(normalized_fields["identifiers"]))
-    title_matches = sorted(query_token_set & set(normalized_fields["title"]))
-    alias_token_matches = sorted(query_token_set & set(normalized_fields["aliases"]))
+    meaningful_query_tokens = {
+        token
+        for token in query_token_set
+        if len(token) > 1 or not _is_cjk(token)
+    }
+    exact_identifier_matches = sorted(meaningful_query_tokens & set(normalized_fields["identifiers"]))
+    title_matches = sorted(meaningful_query_tokens & set(normalized_fields["title"]))
+    alias_token_matches = sorted(meaningful_query_tokens & set(normalized_fields["aliases"]))
     alias_id_matches = sorted(query_alias_ids & document_alias_ids)
     direct_alias_matches = sorted(
         alias_id
         for alias_id in alias_id_matches
         if "target_topic" in document["normalized"].get("alias_match_sources", {}).get(alias_id, [])
     )
-    heading_matches = sorted(query_token_set & set(normalized_fields["headings"]))
-    body_matches = sorted(query_token_set & set(normalized_fields["body"]))
+    heading_matches = sorted(meaningful_query_tokens & set(normalized_fields["headings"]))
+    body_matches = sorted(meaningful_query_tokens & set(normalized_fields["body"]))
     typo_matches = _bounded_typo_matches(query_tokens, document, ranking)
 
     components = {
@@ -3303,9 +3814,6 @@ def _topic_search_document(
                 group["alias_id"]: group["match_sources"] for group in document_alias_groups
             },
             "fields": normalized_fields,
-            "tokens": _unique_non_empty(
-                [token for field_tokens in normalized_fields.values() for token in field_tokens]
-            ),
         },
         "identifier_groups": identifier_groups,
         "facets": {
@@ -3337,6 +3845,7 @@ def _search_document(
     alias_config = _search_normalization_aliases()
     ranking_config = _search_ranking_typo()
     facets_config = _search_facets_filters()
+    domain_ranking_config = _search_domain_ranking_facets()
     quality_config = _search_quality_performance()
     integrity_config = _search_integrity_drift()
     _validate_quality_fixture_coverage(quality_config)
@@ -3389,6 +3898,8 @@ def _search_document(
         "ranking_schema_version": ranking_config["schema_version"],
         "facets_contract_id": facets_config["contract_id"],
         "facets_schema_version": facets_config["schema_version"],
+        "domain_ranking_contract_id": domain_ranking_config["contract_id"],
+        "domain_ranking_schema_version": domain_ranking_config["schema_version"],
         "quality_contract_id": quality_config["contract_id"],
         "quality_schema_version": quality_config["schema_version"],
         "integrity_contract_id": integrity_config["contract_id"],
@@ -3405,6 +3916,13 @@ def _search_document(
         "allowlisted_cross_locale_fields": ["identifiers"],
         "normalization": {
             **alias_config["normalization"],
+            "alias_groups": [
+                {
+                    "alias_id": alias_group["alias_id"],
+                    "terms": _alias_terms_for_locale(alias_group, locale),
+                }
+                for alias_group in alias_config["alias_groups"]
+            ],
             "alias_group_count": len(alias_config["alias_groups"]),
             "query_fixture_count": len(locale_fixtures),
         },
@@ -3427,6 +3945,14 @@ def _search_document(
                     if fixture["locale"] == locale
                 ]
             ),
+        },
+        "domain_ranking": {
+            "preserved_sources": domain_ranking_config["ranking"]["preserved_sources"],
+            "evidence_fields": domain_ranking_config["ranking"]["evidence_fields"],
+            "preserved_facets": domain_ranking_config["facets"]["preserved_fields"],
+            "maximum_evidence_rows": domain_ranking_config["adapter_projection"][
+                "maximum_evidence_rows"
+            ],
         },
         "quality": {
             "categories": quality_config["coverage_requirements"]["categories"],
@@ -3928,6 +4454,7 @@ def _validate_search_index_semantics(
     alias_config = _search_normalization_aliases()
     ranking_config = _search_ranking_typo()
     facets_config = _search_facets_filters()
+    domain_ranking_config = _search_domain_ranking_facets()
     quality_config = _search_quality_performance()
     integrity_config = _search_integrity_drift()
     _validate_quality_fixture_coverage(quality_config)
@@ -3945,6 +4472,10 @@ def _validate_search_index_semantics(
         raise BuildError(f"search index facets contract mismatch for {locale}")
     if search_payload.get("facets_schema_version") != facets_config["schema_version"]:
         raise BuildError(f"search index facets schema mismatch for {locale}")
+    if search_payload.get("domain_ranking_contract_id") != domain_ranking_config["contract_id"]:
+        raise BuildError(f"search index domain ranking contract mismatch for {locale}")
+    if search_payload.get("domain_ranking_schema_version") != domain_ranking_config["schema_version"]:
+        raise BuildError(f"search index domain ranking schema mismatch for {locale}")
     if search_payload.get("quality_contract_id") != quality_config["contract_id"]:
         raise BuildError(f"search index quality contract mismatch for {locale}")
     if search_payload.get("quality_schema_version") != quality_config["schema_version"]:
@@ -3969,6 +4500,15 @@ def _validate_search_index_semantics(
     if fixtures != expected_fixtures:
         raise BuildError(f"search index query fixtures mismatch for {locale}")
     normalization = search_payload.get("normalization", {})
+    expected_browser_alias_groups = [
+        {
+            "alias_id": alias_group["alias_id"],
+            "terms": _alias_terms_for_locale(alias_group, locale),
+        }
+        for alias_group in alias_config["alias_groups"]
+    ]
+    if normalization.get("alias_groups") != expected_browser_alias_groups:
+        raise BuildError(f"search index browser alias groups mismatch for {locale}")
     if normalization.get("alias_group_count") != len(alias_config["alias_groups"]):
         raise BuildError(f"search index alias group count mismatch for {locale}")
     if normalization.get("query_fixture_count") != len(expected_fixtures):
@@ -4068,14 +4608,11 @@ def _validate_search_index_semantics(
             raise BuildError(f"search document identifiers are incomplete for {locale}/{topic_id}")
         normalized = document.get("normalized", {})
         normalized_fields = normalized.get("fields", {})
-        normalized_tokens = normalized.get("tokens", [])
         alias_ids = normalized.get("alias_ids", [])
         if set(normalized_fields) != required_searchable:
             raise BuildError(f"search document normalized fields mismatch for {locale}/{topic_id}")
-        if not isinstance(normalized_tokens, list) or not normalized_tokens:
-            raise BuildError(
-                f"search document normalized tokens are missing for {locale}/{topic_id}"
-            )
+        if "tokens" in normalized:
+            raise BuildError(f"search document has obsolete normalized tokens for {locale}/{topic_id}")
         if not set(alias_ids) <= known_alias_ids:
             raise BuildError(
                 f"search document aliases reference unknown group for {locale}/{topic_id}"
@@ -4108,6 +4645,15 @@ def _validate_search_index_semantics(
 
     if search_payload.get("facet_counts") != _facet_counts(documents, facets_config):
         raise BuildError(f"search index facet counts mismatch for {locale}")
+    if search_payload.get("domain_ranking") != {
+        "preserved_sources": domain_ranking_config["ranking"]["preserved_sources"],
+        "evidence_fields": domain_ranking_config["ranking"]["evidence_fields"],
+        "preserved_facets": domain_ranking_config["facets"]["preserved_fields"],
+        "maximum_evidence_rows": domain_ranking_config["adapter_projection"][
+            "maximum_evidence_rows"
+        ],
+    }:
+        raise BuildError(f"search index domain ranking projection mismatch for {locale}")
 
     expected_integrity_report = _search_integrity_report(
         locale,
@@ -4316,12 +4862,7 @@ def _run(command: list[str], env: dict[str, str]) -> None:
         raise BuildError(f"DITA command failed ({' '.join(command)}):\n{output[-12000:]}")
 
 
-def build_tree(destination: Path) -> None:
-    dita, java_home = toolchain()
-    source_before = source_hashes()
-    destination.mkdir(parents=True, exist_ok=False)
-    temp_root = destination.parent / f".{destination.name}-dita-temp"
-    temp_root.mkdir(parents=True, exist_ok=False)
+def _dita_environment(java_home: Path) -> dict[str, str]:
     env = os.environ.copy()
     env.update(
         {
@@ -4333,6 +4874,28 @@ def build_tree(destination: Path) -> None:
             "SOURCE_DATE_EPOCH": "0",
         }
     )
+    return env
+
+
+def _run_pdf(command: list[str], env: dict[str, str]) -> None:
+    """Run DITA PDF conversion and fail on errors emitted with a zero exit code."""
+
+    completed = subprocess.run(command, env=env, text=True, capture_output=True, check=False)
+    output = (completed.stdout + "\n" + completed.stderr).strip()
+    has_transform_error = "[DOTJ088E]" in output or "BUILD FAILED" in output
+    if completed.returncode or has_transform_error:
+        raise BuildError(
+            f"DITA PDF command failed ({' '.join(command)}):\n{output[-12000:]}"
+        )
+
+
+def build_tree(destination: Path) -> None:
+    dita, java_home = toolchain()
+    source_before = source_hashes()
+    destination.mkdir(parents=True, exist_ok=False)
+    temp_root = destination.parent / f".{destination.name}-dita-temp"
+    temp_root.mkdir(parents=True, exist_ok=False)
+    env = _dita_environment(java_home)
     try:
         for locale in LOCALES:
             maintained_source = DOCUMENTATION_ROOT / f"src/dita/{locale}/maps/portal.ditamap"
@@ -4368,6 +4931,636 @@ def build_tree(destination: Path) -> None:
     _normalize_screenshot_links(destination)
     generate_manifest_files(destination)
     validate_output(destination)
+
+
+def _pdf_layout() -> dict[str, Any]:
+    layout = _read_json_file(PDF_LAYOUT_CONTRACT)
+    if layout.get("schema_version") != 1:
+        raise BuildError("unsupported future PDF delivery layout schema")
+    if layout.get("target_bpm_version") != _product_version():
+        raise BuildError("future PDF delivery layout version does not match BPM version")
+    if layout.get("locales") != list(LOCALES):
+        raise BuildError("future PDF delivery layout locales do not match the BPM locale matrix")
+    guides = layout.get("guides")
+    if not isinstance(guides, list) or [guide.get("id") for guide in guides] != [
+        guide_id for guide_id, _map_name in PDF_GUIDE_MAPS
+    ]:
+        raise BuildError("future PDF delivery layout guide order is invalid")
+    for guide in guides:
+        filename = guide.get("filename")
+        if not isinstance(filename, str) or "{locale}" not in filename or "{bpm_version}" not in filename:
+            raise BuildError("future PDF delivery layout guide filename is invalid")
+    return layout
+
+
+def _pdf_generation_policy() -> dict[str, Any]:
+    policy = _read_json_file(PDF_GENERATION_CONTRACT)
+    if policy.get("schema_version") != 1 or policy.get("backlog_item") != "BPM093-M14-08":
+        raise BuildError("unsupported PDF generation contract")
+    if policy.get("candidate_root") != "documentation/build/pdf":
+        raise BuildError("PDF generation contract candidate root is invalid")
+    if policy.get("candidate_path_layout") != "{locale}/{filename}":
+        raise BuildError("PDF generation contract candidate path layout is invalid")
+    if policy.get("dita_format") != "html5":
+        raise BuildError("PDF generation contract DITA format is invalid")
+    if policy.get("pdf_renderer") != "chromium":
+        raise BuildError("PDF generation contract renderer is invalid")
+    expected_maps = [map_name for _guide_id, map_name in PDF_GUIDE_MAPS]
+    if policy.get("source_maps") != expected_maps:
+        raise BuildError("PDF generation contract source maps are invalid")
+    return policy
+
+
+def _pdf_guide_filename(layout: dict[str, Any], guide_id: str, locale: str) -> str:
+    guides = {guide["id"]: guide for guide in layout["guides"]}
+    try:
+        filename = guides[guide_id]["filename"].format(
+            locale=locale, bpm_version=_product_version()
+        )
+    except (KeyError, AttributeError) as exc:
+        raise BuildError(f"cannot format PDF filename for {guide_id}/{locale}") from exc
+    if Path(filename).name != filename or not filename.endswith(".pdf"):
+        raise BuildError(f"unsafe PDF filename for {guide_id}/{locale}: {filename!r}")
+    return filename
+
+
+def _expected_pdf_paths(layout: dict[str, Any]) -> set[str]:
+    return {
+        (Path(locale) / _pdf_guide_filename(layout, guide_id, locale)).as_posix()
+        for locale in LOCALES
+        for guide_id, _map_name in PDF_GUIDE_MAPS
+    }
+
+
+def _normalize_pdf_metadata(path: Path) -> None:
+    """Remove renderer wall-clock metadata and canonically rewrite the PDF."""
+
+    payload = path.read_bytes()
+
+    def normalize_creation_date(match: re.Match[bytes]) -> bytes:
+        fixed_date = (
+            PDF_FIXED_UTC_CREATION_DATE
+            if match.group(2).endswith(b"Z")
+            else PDF_FIXED_CREATION_DATE
+        )
+        if len(match.group(2)) != len(fixed_date):
+            raise BuildError(f"unsupported PDF creation-date format in {path}")
+        return match.group(1) + fixed_date + match.group(3)
+
+    payload, creation_dates = PDF_CREATION_DATE_PATTERN.subn(normalize_creation_date, payload)
+    payload, modification_dates = PDF_MODIFICATION_DATE_PATTERN.subn(
+        normalize_creation_date, payload
+    )
+    payload, document_ids = PDF_DOCUMENT_ID_PATTERN.subn(
+        b"/ID [<" + PDF_FIXED_DOCUMENT_ID + b"> <" + PDF_FIXED_DOCUMENT_ID + b">]",
+        payload,
+    )
+    if creation_dates != 1 or modification_dates not in {0, 1} or document_ids not in {0, 1}:
+        raise BuildError(
+            f"cannot deterministically normalize PDF metadata for {path}: "
+            f"creation_dates={creation_dates}, modification_dates={modification_dates}, "
+            f"document_ids={document_ids}"
+        )
+    path.write_bytes(payload)
+    _canonicalize_pdf(path)
+
+
+def _canonicalize_pdf(path: Path) -> None:
+    qpdf = shutil.which("qpdf")
+    if qpdf is None:
+        raise BuildError("qpdf is required for deterministic PDF generation; install qpdf")
+    qdf_path = path.with_name(f".{path.stem}.qdf.pdf")
+    canonical_path = path.with_name(f".{path.stem}.canonical.pdf")
+    try:
+        _run_pdf_tool(
+            [qpdf, "--qdf", "--object-streams=disable", str(path), str(qdf_path)],
+            "expand PDF metadata",
+        )
+        qdf_payload = qdf_path.read_bytes()
+        def normalize_xmp_timestamp(match: re.Match[bytes]) -> bytes:
+            fixed_timestamp = (
+                PDF_FIXED_UTC_XMP_TIMESTAMP
+                if match.group(2).endswith(b"Z")
+                else PDF_FIXED_XMP_TIMESTAMP
+            )
+            if len(match.group(2)) != len(fixed_timestamp):
+                raise BuildError(f"unsupported PDF XMP timestamp format in {path}")
+            return match.group(1) + fixed_timestamp + match.group(3)
+
+        qdf_payload, xmp_timestamps = PDF_XMP_TIMESTAMP_PATTERN.subn(
+            normalize_xmp_timestamp, qdf_payload
+        )
+        if xmp_timestamps not in {0, 3}:
+            raise BuildError(
+                f"cannot deterministically normalize PDF XMP metadata for {path}: "
+                f"timestamps={xmp_timestamps}"
+            )
+        qdf_path.write_bytes(qdf_payload)
+        _run_pdf_tool(
+            [
+                qpdf,
+                "--static-id",
+                "--object-streams=generate",
+                "--recompress-flate",
+                "--compression-level=9",
+                str(qdf_path),
+                str(canonical_path),
+            ],
+            "canonicalize PDF",
+        )
+        canonical_path.replace(path)
+        # qpdf writes a new trailer ID while canonicalizing.  Replacing it after
+        # that rewrite keeps the byte-level reproducibility promise without
+        # changing any cross-reference offsets: the replacement is the same
+        # fixed-width value.
+        canonical_payload = path.read_bytes()
+        canonical_payload, canonical_document_ids = PDF_DOCUMENT_ID_PATTERN.subn(
+            b"/ID [<" + PDF_FIXED_DOCUMENT_ID + b"> <" + PDF_FIXED_DOCUMENT_ID + b">]",
+            canonical_payload,
+        )
+        if canonical_document_ids != 1:
+            raise BuildError(
+                f"cannot deterministically normalize canonical PDF ID for {path}: "
+                f"document_ids={canonical_document_ids}"
+            )
+        path.write_bytes(canonical_payload)
+    finally:
+        qdf_path.unlink(missing_ok=True)
+        canonical_path.unlink(missing_ok=True)
+
+
+def _run_pdf_tool(command: list[str], operation: str) -> None:
+    completed = subprocess.run(command, text=True, capture_output=True, check=False)
+    if completed.returncode:
+        output = (completed.stdout + "\n" + completed.stderr).strip()
+        raise BuildError(f"cannot {operation} ({' '.join(command)}):\n{output[-12000:]}")
+
+
+def _pdf_keydefs(keys_path: Path) -> dict[str, str]:
+    """Return local DITA map keys needed to assemble a print-only guide HTML file."""
+
+    try:
+        root = ET.parse(keys_path).getroot()
+    except ET.ParseError as exc:
+        raise BuildError(f"cannot parse PDF keys map {keys_path}: {exc}") from exc
+    keydefs: dict[str, str] = {}
+    for keydef in root.findall(".//keydef"):
+        href = keydef.get("href")
+        for key in keydef.get("keys", "").split():
+            if href:
+                keydefs[key] = href
+    return keydefs
+
+
+def _pdf_html_path_for_topic(map_path: Path, href: str) -> Path:
+    """Resolve a local DITA topic href to its DITA-OT HTML5 output path."""
+
+    topic_href = urllib.parse.unquote(href.split("#", 1)[0])
+    if not topic_href:
+        raise BuildError(f"PDF topic reference has no local target: {map_path}")
+    locale_root = map_path.parents[1]
+    target = (map_path.parent / topic_href).resolve()
+    try:
+        return target.relative_to(locale_root).with_suffix(".html")
+    except ValueError as exc:
+        raise BuildError(f"PDF topic target leaves locale source root: {href!r}") from exc
+
+
+def _pdf_print_navigation(map_path: Path) -> tuple[str, list[tuple[str, list[Path]]]]:
+    """Read the reviewed map order so the PDF has the same logical hierarchy as the web guide."""
+
+    try:
+        root = ET.parse(map_path).getroot()
+    except ET.ParseError as exc:
+        raise BuildError(f"cannot parse PDF source map {map_path}: {exc}") from exc
+    title = " ".join(root.findtext("title", default="").split())
+    if not title:
+        raise BuildError(f"PDF source map has no title: {map_path}")
+    keydefs = _pdf_keydefs(map_path.parent / "keys.ditamap")
+
+    def topic_path(topicref: ET.Element) -> Path:
+        href = topicref.get("href") or keydefs.get(topicref.get("keyref", ""))
+        if href is None:
+            raise BuildError(
+                f"PDF topic reference cannot resolve keyref {topicref.get('keyref')!r} in {map_path}"
+            )
+        return _pdf_html_path_for_topic(map_path, href)
+
+    sections: list[tuple[str, list[Path]]] = []
+    direct_topics: list[Path] = []
+    for child in root:
+        if child.tag == "topichead":
+            heading = " ".join(child.findtext("./topicmeta/navtitle", default="").split())
+            if not heading:
+                raise BuildError(f"PDF topic section has no navigation title: {map_path}")
+            topics = [topic_path(topicref) for topicref in child.findall("./topicref")]
+            if not topics:
+                raise BuildError(f"PDF topic section has no topics: {heading!r} in {map_path}")
+            sections.append((heading, topics))
+        elif child.tag == "topicref":
+            direct_topics.append(topic_path(child))
+    if direct_topics:
+        sections.insert(0, ("", direct_topics))
+    if not sections:
+        raise BuildError(f"PDF source map has no printable topics: {map_path}")
+    return title, sections
+
+
+def _pdf_article_from_html(path: Path) -> str:
+    """Keep DITA-OT semantic HTML while dropping portal-only related-topic navigation."""
+
+    try:
+        rendered = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise BuildError(f"cannot read generated PDF topic HTML {path}: {exc}") from exc
+    match = re.search(r"(<article\b.*?</article>)", rendered, flags=re.DOTALL)
+    if match is None:
+        raise BuildError(f"generated PDF topic has no article element: {path}")
+    article = re.sub(
+        r"<nav\b(?=[^>]*\brelated-links\b)[^>]*>.*?</nav>",
+        "",
+        match.group(1),
+        flags=re.DOTALL,
+    )
+    # DITA-OT can resolve an intra-guide xref to the temporary output directory
+    # when Chromium prints this combined HTML file. It has no stable PDF target;
+    # omit local topic links while preserving external reader links.
+    return re.sub(
+        r"\s+href=(['\"])(?:file:.*?)?[^/'\"]+\.html(?:#[^'\"]*)?\1",
+        "",
+        article,
+        flags=re.IGNORECASE,
+    )
+
+
+def _generated_pdf_topic_html(output_root: Path, topic_html: Path) -> Path | None:
+    """Find one map topic in DITA-OT output, accepting its locale prefix.
+
+    DITA-OT normally preserves the locale-relative path, but it can prepend the
+    locale directory for a key-resolved map topic.  The basename and trailing
+    locale-relative path remain stable, which is sufficient to select the
+    generated article without deriving an invalid web-link path.
+    """
+
+    expected = output_root / topic_html
+    if expected.is_file():
+        return expected
+    trailing_parts = topic_html.parts
+    matches = [
+        candidate
+        for candidate in output_root.rglob(topic_html.name)
+        if candidate.is_file() and candidate.parts[-len(trailing_parts) :] == trailing_parts
+    ]
+    if len(matches) == 1:
+        return matches[0]
+    return None
+
+
+def _wait_for_pdf_topic_html(
+    *,
+    locale: str,
+    guide_id: str,
+    map_path: Path,
+    output_root: Path,
+    timeout_seconds: float = 120.0,
+) -> None:
+    """Wait until DITA-OT has materialized every map topic HTML file.
+
+    Some DITA-OT runs return control slightly before every topic file is visible
+    on disk.  The PDF printer must consume one complete map transformation, not
+    launch independent topic transformations that could diverge from map output.
+    """
+
+    _title, sections = _pdf_print_navigation(map_path)
+    expected = [
+        topic_html
+        for _section_title, topics in sections
+        for topic_html in topics
+    ]
+    deadline = time.monotonic() + timeout_seconds
+    reported_pending = False
+    while True:
+        pending = [
+            topic_html
+            for topic_html in expected
+            if _generated_pdf_topic_html(output_root, topic_html) is None
+        ]
+        if not pending:
+            return
+        if not reported_pending:
+            print(
+                f"PDF source wait: {locale}/{guide_id} "
+                f"({len(pending)} topic HTML pending)",
+                flush=True,
+            )
+            reported_pending = True
+        if time.monotonic() >= deadline:
+            samples = ", ".join(
+                topic_html.as_posix() for topic_html in pending[:5]
+            )
+            raise BuildError(
+                "DITA HTML5 output did not become ready for "
+                f"{locale}/{guide_id}: {samples}"
+            )
+        time.sleep(0.25)
+
+
+def _write_pdf_print_guide(
+    *,
+    locale: str,
+    guide_id: str,
+    map_path: Path,
+    output_root: Path,
+) -> Path:
+    """Compose one A4-ready guide from DITA HTML5 topic output in reviewed map order."""
+
+    title, sections = _pdf_print_navigation(map_path)
+    guide_directory = output_root / ("user" if guide_id == "user-guide" else "admin")
+    guide_directory.mkdir(parents=True, exist_ok=True)
+    print_path = guide_directory / f".{guide_id}-print.html"
+    toc: list[str] = []
+    content: list[str] = []
+    for section_title, topics in sections:
+        if section_title:
+            toc.append(f"<h2>{html.escape(section_title)}</h2>")
+            content.append(
+                '<section class="bpm-pdf-section">'
+                f"<h2>{html.escape(section_title)}</h2>"
+            )
+        toc.append("<ul>")
+        for topic in topics:
+            topic_path = _generated_pdf_topic_html(output_root, topic)
+            if topic_path is None:
+                raise BuildError(f"generated PDF topic is missing: {output_root / topic}")
+            article = _pdf_article_from_html(topic_path)
+            topic_title_match = re.search(r"<h1\b[^>]*>(.*?)</h1>", article, flags=re.DOTALL)
+            if topic_title_match is None:
+                raise BuildError(f"generated PDF topic has no title: {topic_path}")
+            topic_title = re.sub(r"<[^>]+>", "", topic_title_match.group(1)).strip()
+            toc.append(f"<li>{html.escape(topic_title)}</li>")
+            content.append(article)
+        toc.append("</ul>")
+        if section_title:
+            content.append("</section>")
+    version = _product_version()
+    print_path.write_text(
+        "<!doctype html>\n"
+        f'<html lang="{html.escape(locale)}"><head><meta charset="utf-8">'
+        f"<title>{html.escape(title)}</title>"
+        '<link rel="stylesheet" href="../bpm-guide-print.css"></head><body>'
+        '<section class="bpm-pdf-cover">'
+        '<img class="bpm-pdf-cover__logo" src="../assets/branding/bpm-logo.png" alt="">'
+        f"<h1>{html.escape(title)}</h1>"
+        f'<p class="bpm-pdf-cover__product">Browser Policy Manager {html.escape(version)}</p>'
+        "</section>"
+        f'<nav class="bpm-pdf-toc"><h1>{html.escape(_pdf_contents_title(locale))}</h1>'
+        + "".join(toc)
+        + "</nav>"
+        + "".join(content)
+        + "</body></html>\n",
+        encoding="utf-8",
+    )
+    return print_path
+
+
+def _pdf_contents_title(locale: str) -> str:
+    return {
+        "en": "Contents",
+        "ru": "Содержание",
+        "de": "Inhalt",
+        "zh-CN": "目录",
+        "fr": "Sommaire",
+        "es-ES": "Contenido",
+    }[locale]
+
+
+def _chromium_pdf_renderer() -> str:
+    for executable in ("chromium", "chromium-browser", "google-chrome"):
+        resolved = shutil.which(executable)
+        if resolved:
+            return resolved
+    raise BuildError(
+        "Chromium is required for Unicode-safe PDF generation; install the chromium executable"
+    )
+
+
+def _render_pdf_with_chromium(source: Path, target: Path, env: dict[str, str]) -> None:
+    renderer = _chromium_pdf_renderer()
+    completed = subprocess.run(
+        [
+            renderer,
+            "--headless",
+            "--no-sandbox",
+            "--disable-gpu",
+            "--disable-background-networking",
+            "--disable-component-update",
+            "--disable-sync",
+            "--no-first-run",
+            "--no-pdf-header-footer",
+            f"--print-to-pdf={target}",
+            source.resolve().as_uri(),
+        ],
+        env=env,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if completed.returncode:
+        output = (completed.stdout + "\n" + completed.stderr).strip()
+        raise BuildError(f"Chromium PDF rendering failed for {source}:\n{output[-12000:]}")
+    _validate_pdf_file(target)
+
+
+def _validate_pdf_file(path: Path) -> None:
+    if not path.is_file() or path.is_symlink():
+        raise BuildError(f"generated PDF is missing or unsafe: {path}")
+    payload = path.read_bytes()
+    if len(payload) < 1024 or not payload.startswith(b"%PDF-") or b"%%EOF" not in payload[-2048:]:
+        raise BuildError(f"generated file is not a complete PDF: {path}")
+
+
+def _pdf_build_manifest(layout: dict[str, Any], policy: dict[str, Any], root: Path) -> dict[str, Any]:
+    files = {
+        path: _file_sha256(root / path)
+        for path in sorted(_expected_pdf_paths(layout))
+    }
+    lock = _load_lock()
+    return {
+        "schema_version": 1,
+        "contract_id": policy["contract_id"],
+        "backlog_item": policy["backlog_item"],
+        "bpm_version": _product_version(),
+        "source_revision": _source_revision(),
+        "source_fingerprint": _source_fingerprint(),
+        "dita_ot_version": lock["components"]["dita_ot"]["version"],
+        "files": files,
+    }
+
+
+def validate_pdf_tree(root: Path) -> None:
+    layout = _pdf_layout()
+    policy = _pdf_generation_policy()
+    if not root.is_dir() or root.is_symlink():
+        raise BuildError(f"PDF candidate root is missing or unsafe: {root}")
+    expected_pdf_paths = _expected_pdf_paths(layout)
+    expected_files = expected_pdf_paths | {PDF_BUILD_MANIFEST}
+    actual_files = {
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file() and not path.is_symlink()
+    }
+    unsafe_paths = [path for path in root.rglob("*") if path.is_symlink()]
+    if unsafe_paths:
+        raise BuildError(f"PDF candidate contains a symbolic link: {unsafe_paths[0]}")
+    if actual_files != expected_files:
+        missing = sorted(expected_files - actual_files)
+        unexpected = sorted(actual_files - expected_files)
+        raise BuildError(
+            "PDF candidate file set does not match the contract: "
+            f"missing={missing}, unexpected={unexpected}"
+        )
+    for path in sorted(expected_pdf_paths):
+        _validate_pdf_file(root / path)
+    manifest = _read_json_file(root / PDF_BUILD_MANIFEST)
+    if (
+        manifest.get("schema_version") != 1
+        or manifest.get("contract_id") != policy["contract_id"]
+        or manifest.get("backlog_item") != policy["backlog_item"]
+        or manifest.get("bpm_version") != _product_version()
+        or manifest.get("source_fingerprint") != _source_fingerprint()
+    ):
+        raise BuildError("PDF candidate manifest does not match the current generation contract")
+    expected_hashes = {path: _file_sha256(root / path) for path in sorted(expected_pdf_paths)}
+    if manifest.get("files") != expected_hashes:
+        raise BuildError("PDF candidate manifest SHA-256 values do not match generated PDFs")
+
+
+def build_pdf_tree(destination: Path) -> None:
+    """Generate the two source guides for every supported locale into a candidate tree."""
+
+    layout = _pdf_layout()
+    policy = _pdf_generation_policy()
+    for required_asset in (PDF_PRINT_CSS, PDF_COVER_LOGO):
+        if not required_asset.is_file():
+            raise BuildError(f"PDF asset is missing: {required_asset}")
+    validate_sources()
+    dita, java_home = toolchain()
+    source_before = source_hashes()
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.mkdir(parents=True, exist_ok=False)
+    temp_root = destination.parent / f".{destination.name}-dita-temp"
+    temp_root.mkdir(parents=True, exist_ok=False)
+    env = _dita_environment(java_home)
+    total = len(LOCALES) * len(PDF_GUIDE_MAPS)
+    completed = 0
+    try:
+        for locale in LOCALES:
+            locale_workspace = temp_root / locale
+            input_root = locale_workspace / "input"
+            shutil.copytree(DOCUMENTATION_ROOT / "src", input_root / "src")
+            shutil.copytree(DOCUMENTATION_ROOT / "assets", input_root / "assets")
+            for guide_id, map_name in PDF_GUIDE_MAPS:
+                completed += 1
+                source = input_root / f"src/dita/{locale}/maps/{map_name}"
+                if not source.is_file():
+                    raise BuildError(f"missing PDF source map: {source}")
+                output = locale_workspace / "output" / guide_id
+                print(
+                    f"PDF source: {locale}/{guide_id} ({completed}/{total}) DITA HTML5",
+                    flush=True,
+                )
+                _run_pdf(
+                    [
+                        str(dita),
+                        "--input",
+                        str(source),
+                        "--format",
+                        policy["dita_format"],
+                        "--output",
+                        str(output),
+                        "--temp",
+                        str(locale_workspace / "work" / guide_id),
+                    ],
+                    env,
+                )
+                _wait_for_pdf_topic_html(
+                    locale=locale,
+                    guide_id=guide_id,
+                    map_path=source,
+                    output_root=output,
+                )
+                css = input_root / "assets/pdf/bpm-guide-print.css"
+                logo = input_root / "assets/branding/bpm-logo.png"
+                if not css.is_file() or not logo.is_file():
+                    raise BuildError("isolated PDF print assets are missing")
+                shutil.copyfile(css, output / "bpm-guide-print.css")
+                logo_destination = output / "assets/branding/bpm-logo.png"
+                logo_destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(logo, logo_destination)
+                print_source = _write_pdf_print_guide(
+                    locale=locale,
+                    guide_id=guide_id,
+                    map_path=source,
+                    output_root=output,
+                )
+                target = destination / locale / _pdf_guide_filename(layout, guide_id, locale)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                print(
+                    f"PDF render: {locale}/{guide_id} ({completed}/{total}) Chromium",
+                    flush=True,
+                )
+                _render_pdf_with_chromium(print_source, target, env)
+                _normalize_pdf_metadata(target)
+                _validate_pdf_file(target)
+    finally:
+        shutil.rmtree(temp_root, ignore_errors=True)
+    if source_hashes() != source_before:
+        raise BuildError("DITA PDF transform mutated maintained documentation source or assets")
+    _write_json(destination / PDF_BUILD_MANIFEST, _pdf_build_manifest(layout, policy, destination))
+    validate_pdf_tree(destination)
+
+
+def publish_pdfs() -> None:
+    BUILD_ROOT.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".pdf-build-", dir=BUILD_ROOT) as temporary:
+        candidate = Path(temporary) / "pdf"
+        build_pdf_tree(candidate)
+        previous = BUILD_ROOT / ".pdf-previous"
+        _remove_path(previous)
+        if PDF_BUILD_ROOT.exists():
+            PDF_BUILD_ROOT.replace(previous)
+        try:
+            candidate.replace(PDF_BUILD_ROOT)
+        except OSError:
+            if previous.exists():
+                previous.replace(PDF_BUILD_ROOT)
+            raise
+        finally:
+            _remove_path(previous)
+    print(f"Published PDF candidate to {PDF_BUILD_ROOT.relative_to(REPOSITORY_ROOT)}", flush=True)
+
+
+def verify_pdfs() -> None:
+    validate_pdf_tree(PDF_BUILD_ROOT)
+    print(f"Verified PDF candidate: {PDF_BUILD_ROOT.relative_to(REPOSITORY_ROOT)}", flush=True)
+
+
+def pdf_reproducibility_check() -> None:
+    validate_pdf_tree(PDF_BUILD_ROOT)
+    published_hashes = tree_hashes(PDF_BUILD_ROOT)
+    BUILD_ROOT.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".pdf-reproducibility-", dir=BUILD_ROOT) as temporary:
+        candidate = Path(temporary) / "candidate"
+        build_pdf_tree(candidate)
+        candidate_hashes = tree_hashes(candidate)
+        if published_hashes != candidate_hashes:
+            differing = sorted(
+                path
+                for path in set(published_hashes) | set(candidate_hashes)
+                if published_hashes.get(path) != candidate_hashes.get(path)
+            )
+            raise BuildError("non-deterministic PDF files:\n" + "\n".join(differing))
+    print(f"PDF reproducibility check passed for {len(published_hashes)} files.", flush=True)
 
 
 def tree_hashes(root: Path) -> dict[str, str]:
@@ -4409,11 +5602,31 @@ def _source_fingerprint() -> str:
         *sorted((DOCUMENTATION_ROOT / "src/shared/filters").glob("*.ditaval")),
         *sorted(THEME_ROOT.glob("*.css")),
         THEME_ROOT / SEARCH_SCRIPT,
+        THEME_ROOT / MODEL_MANAGER_SCRIPT,
+        THEME_ROOT / ASSISTANT_RENDERER_SCRIPT,
+        THEME_ROOT / ASSISTANT_STATE_MACHINE_SCRIPT,
+        THEME_ROOT / ASSISTANT_CONVERSATION_SCRIPT,
+        THEME_ROOT / ASSISTANT_TRANSPORT_SCRIPT,
+        THEME_ROOT / ASSISTANT_SHELL_SCRIPT,
+        DOCUMENTATION_ASSISTANT_COPY,
+        PDF_THEME,
+        PDF_PRINT_CSS,
+        PDF_COVER_LOGO,
+        PDF_COVER_BRANDING,
+        PDF_LAYOUT_CONTRACT,
+        PDF_GENERATION_CONTRACT,
         MANIFEST_SCHEMA,
         UI_TARGET_SCHEMA,
         NAVIGATION_SCHEMA,
         DOCUMENTATION_ROOT / "config/metadata-vocabulary.json",
         DOCUMENTATION_ROOT / "config/user-guide-map-0.9.0.json",
+        SEARCH_CORPUS_CONTRACT,
+        SEARCH_NORMALIZATION_ALIASES,
+        SEARCH_RANKING_TYPO,
+        SEARCH_FACETS_FILTERS,
+        SEARCH_DOMAIN_RANKING_FACETS,
+        SEARCH_QUALITY_PERFORMANCE,
+        SEARCH_INTEGRITY_DRIFT,
         TOPIC_SECTION_TAXONOMY,
         TOPIC_SECTION_LABELS,
         LOCK_PATH,
@@ -4708,6 +5921,9 @@ def main() -> int:
             "reproducibility",
             "package",
             "package-verify",
+            "pdf-build",
+            "pdf-verify",
+            "pdf-reproducibility",
         ),
     )
     parser.add_argument("paths", nargs="*", help="changed documentation paths for fast-check")
@@ -4721,6 +5937,9 @@ def main() -> int:
             "reproducibility": reproducibility_check,
             "package": package,
             "package-verify": verify_package,
+            "pdf-build": publish_pdfs,
+            "pdf-verify": verify_pdfs,
+            "pdf-reproducibility": pdf_reproducibility_check,
         }[args.command]()
     except (BuildError, OSError) as exc:
         print(f"documentation build failed: {exc}", file=sys.stderr)

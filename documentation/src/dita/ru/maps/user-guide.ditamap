@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="map-user-guide" xml:lang="ru">
-  <title>Руководство пользователя BPM</title>
+  <title>Руководство пользователя</title>
   <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Ориентироваться и планировать профильную работу</navtitle>
+      <navtitle>Планирование работы с профилями</navtitle>
       <data name="intent-id" value="orient-and-plan"/>
     </topicmeta>
+    <topicref keyref="topic.ug-concept-browser-policy-manager-overview"/>
     <topicref keyref="topic.ug-reference-product-version"/>
     <topicref keyref="topic.ug-reference-profile-status"/>
     <topicref keyref="topic.ug-task-change-interface-language"/>
@@ -15,13 +16,14 @@
     <topicref keyref="topic.ug-task-change-interface-theme"/>
     <topicref keyref="topic.ug-concept-accessible-product-operation"/>
     <topicref keyref="topic.ug-concept-documentation-search-boundary"/>
+    <topicref keyref="topic.ug-task-use-local-documentation-assistant"/>
     <topicref keyref="topic.ug-task-work-across-editor-tabs"/>
     <topicref keyref="topic.ug-concept-profile-model"/>
     <topicref keyref="topic.ug-concept-choose-editor-surface"/>
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Создать и запустить профиль</navtitle>
+      <navtitle>Создание и настройка профиля</navtitle>
       <data name="intent-id" value="create-and-start"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-choose-firefox-schema"/>
@@ -37,7 +39,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Настройка с помощью Пошаговый редактор</navtitle>
+      <navtitle>Настройка профиля в режиме «Пошаговый редактор»</navtitle>
       <data name="intent-id" value="configure-with-guidance"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-guided-editor"/>
@@ -54,7 +56,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Просмотр, проверка и завершение изменений профиля.</navtitle>
+      <navtitle>Проверка и завершение изменений профиля</navtitle>
       <data name="intent-id" value="review-validate-and-finish"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-save-profile"/>
@@ -66,7 +68,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Проверка и редактирование полных настроек</navtitle>
+      <navtitle>Проверка и редактирование раздела «Все настройки»</navtitle>
       <data name="intent-id" value="inspect-and-edit-complete-settings"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-all-settings"/>
@@ -103,7 +105,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Найдите, систематизируйте и Сравнить настройки профилей</navtitle>
+      <navtitle>Поиск, управление и сравнение профилей</navtitle>
       <data name="intent-id" value="find-organize-and-compare-profiles"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-review-archived-profile"/>
@@ -126,7 +128,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Безопасное восстановление</navtitle>
+      <navtitle>Безопасное устранение проблем</navtitle>
       <data name="intent-id" value="recover-safely"/>
     </topicmeta>
     <topicref keyref="topic.ug-troubleshoot-save-conflict"/>

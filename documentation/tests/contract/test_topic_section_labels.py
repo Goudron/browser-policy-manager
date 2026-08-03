@@ -44,7 +44,7 @@ def test_every_taxonomy_section_owns_every_locale_label() -> None:
     sections = _taxonomy_sections()
 
     assert set(catalog["labels"]) == set(sections)
-    assert len(sections) == 21
+    assert len(sections) == 19
     for label_key, localized in catalog["labels"].items():
         assert list(localized) == LOCALES
         assert all(value.strip() for value in localized.values())
@@ -56,20 +56,20 @@ def test_section_labels_use_product_locale_terminology() -> None:
     labels = _json(LABELS)["labels"]
 
     assert labels["navigation.section.user-guide.guided-editor"] == {
-        "en": "Configure with Guided editor",
-        "ru": "Настройте профиль в пошаговом редакторе",
-        "de": "Mit dem geführten Editor konfigurieren",
+        "en": "Configure profiles in Guided editor",
+        "ru": "Настройка профиля в режиме «Пошаговый редактор»",
+        "de": "Profile im Modus „Geführter Editor“ konfigurieren",
         "zh-CN": "使用引导式编辑器进行配置",
-        "fr": "Configurer avec l’éditeur guidé",
-        "es-ES": "Configurar con el editor guiado",
+        "fr": "Configurer des profils dans l’« Éditeur guidé »",
+        "es-ES": "Configurar perfiles en «Editor guiado»",
     }
-    assert labels["navigation.section.administrator-guide.troubleshooting"] == {
-        "en": "Troubleshooting",
-        "ru": "Устранение неполадок",
-        "de": "Fehlerbehebung",
-        "zh-CN": "故障排除",
-        "fr": "Dépannage",
-        "es-ES": "Solución de problemas",
+    assert labels["navigation.section.administrator-guide.requirements-and-scope"] == {
+        "en": "System requirements and delivery scope",
+        "ru": "Системные требования и границы поставки",
+        "de": "Systemanforderungen und Lieferumfang",
+        "zh-CN": "系统要求和交付范围",
+        "fr": "Configuration requise et périmètre de livraison",
+        "es-ES": "Requisitos del sistema y alcance de la entrega",
     }
 
 

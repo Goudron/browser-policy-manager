@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="map-user-guide" xml:lang="de">
-  <title>BPM-Benutzerhandbuch</title>
+  <title>Benutzerhandbuch</title>
   <mapref href="keys.ditamap" format="ditamap" processing-role="resource-only"/>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Profilarbeit orientieren und planen</navtitle>
+      <navtitle>Profilarbeit planen</navtitle>
       <data name="intent-id" value="orient-and-plan"/>
     </topicmeta>
+    <topicref keyref="topic.ug-concept-browser-policy-manager-overview"/>
     <topicref keyref="topic.ug-reference-product-version"/>
     <topicref keyref="topic.ug-reference-profile-status"/>
     <topicref keyref="topic.ug-task-change-interface-language"/>
@@ -15,13 +16,14 @@
     <topicref keyref="topic.ug-task-change-interface-theme"/>
     <topicref keyref="topic.ug-concept-accessible-product-operation"/>
     <topicref keyref="topic.ug-concept-documentation-search-boundary"/>
+    <topicref keyref="topic.ug-task-use-local-documentation-assistant"/>
     <topicref keyref="topic.ug-task-work-across-editor-tabs"/>
     <topicref keyref="topic.ug-concept-profile-model"/>
     <topicref keyref="topic.ug-concept-choose-editor-surface"/>
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Erstellen und starten Sie ein Profil</navtitle>
+      <navtitle>Ein Profil erstellen und einrichten</navtitle>
       <data name="intent-id" value="create-and-start"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-choose-firefox-schema"/>
@@ -37,7 +39,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Konfigurieren mit Geführter Editor</navtitle>
+      <navtitle>Profile im Modus „Geführter Editor“ konfigurieren</navtitle>
       <data name="intent-id" value="configure-with-guidance"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-guided-editor"/>
@@ -66,7 +68,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Überprüfen und bearbeiten Sie die vollständigen Einstellungen</navtitle>
+      <navtitle>„Alle Einstellungen“ prüfen und bearbeiten</navtitle>
       <data name="intent-id" value="inspect-and-edit-complete-settings"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-all-settings"/>
@@ -91,7 +93,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Mit JSON arbeiten und austauschen</navtitle>
+      <navtitle>Mit JSON und Datenaustausch arbeiten</navtitle>
       <data name="intent-id" value="work-with-json-and-interchange"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-use-json-editor"/>
@@ -103,7 +105,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Suchen, organisieren und Profileinstellungen vergleichen</navtitle>
+      <navtitle>Profile finden, verwalten und vergleichen</navtitle>
       <data name="intent-id" value="find-organize-and-compare-profiles"/>
     </topicmeta>
     <topicref keyref="topic.ug-task-review-archived-profile"/>
@@ -126,7 +128,7 @@
   </topichead>
   <topichead outputclass="case-oriented-section">
     <topicmeta>
-      <navtitle>Sicher wiederherstellen</navtitle>
+      <navtitle>Probleme sicher beheben</navtitle>
       <data name="intent-id" value="recover-safely"/>
     </topicmeta>
     <topicref keyref="topic.ug-troubleshoot-save-conflict"/>

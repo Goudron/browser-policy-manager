@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-pdf-delivery-0.9.3",
+  "backlog_item": "BPM093-M14-09",
+  "target_bpm_version": "0.9.3",
+  "candidate_root": "documentation/build/pdf",
+  "delivery_root": "distributions/documentation",
+  "delivery_directory": "{bpm_version}",
+  "delivery_paths": [
+    "manifest.json",
+    "checksums.sha256",
+    "NOTICE.txt",
+    "pdf/{locale}/browser-policy-manager-user-guide-{locale}-{bpm_version}.pdf",
+    "pdf/{locale}/browser-policy-manager-administrator-guide-{locale}-{bpm_version}.pdf"
+  ],
+  "promotion": {
+    "staging": "Build and validate a sibling temporary directory before replacing only distributions/documentation/{bpm_version}.",
+    "rollback": "If replacement fails, restore the immediately previous directory for the same BPM version.",
+    "scope": "No command may remove or modify another version, local AI data, source DITA, a cache, report, credential or secret."
+  },
+  "integrity": {
+    "candidate_provenance": "Every delivery PDF SHA-256 must match the verified PDF candidate manifest.",
+    "manifest": "manifest.json records contract identity, BPM version, source revision/fingerprint, candidate-manifest SHA-256 and locale-guide PDF inventory.",
+    "checksums": "checksums.sha256 records manifest.json, NOTICE.txt and every PDF; it never contains a self-checksum.",
+    "notice": "NOTICE.txt records generated-artifact ownership, provenance and the three deterministic operator commands."
+  },
+  "operator_commands": {
+    "build_candidate": "make docs-pdf-build",
+    "verify_candidate": "make docs-pdf-verify",
+    "promote": "make docs-pdf-deliver",
+    "verify_delivery": "make docs-pdf-delivery-verify"
+  }
+}

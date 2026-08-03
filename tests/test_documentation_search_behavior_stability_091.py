@@ -30,7 +30,7 @@ def _source(path: Path) -> str:
 
 def _js_block(source: str, start_marker: str) -> str:
     start = source.index(start_marker)
-    end = source.index("\n  };", start)
+    end = source.index("\n  };", start) + len("\n  };")
     return source[start:end]
 
 
@@ -82,10 +82,8 @@ def test_build_time_ranking_filter_url_and_empty_state_fixtures_remain_authorita
 
 def test_compact_search_toggle_does_not_mutate_query_filters_ranking_or_url_state() -> None:
     script = _source(SEARCH_SCRIPT)
-    toggle_block = _js_block(
-        script,
-        'root.querySelector("[data-search-advanced-toggle]")?.addEventListener("click"',
-    )
+    toggle_start = script.index('root.querySelector("[data-search-advanced-toggle]")?.addEventListener("click"')
+    toggle_block = script[toggle_start : script.index("\n    });", toggle_start) + len("\n    });")]
     set_expanded_block = _js_block(script, "const setSearchExpanded = (root, expanded) => {")
 
     for forbidden in (
@@ -112,14 +110,15 @@ def test_compact_search_preserves_existing_result_url_highlight_and_empty_state_
 
     for required in (
         "const safeResultUrl = (locale, url) => {",
-        "return value.startsWith(`/help/${locale}/`) ? value : \"\";",
-        "const appendMarkedText = (parent, text, tokens) => {",
+        "const localeRoot = `/help/${locale}/`;",
+        "!resolved.pathname.startsWith(localeRoot)",
+        "const appendMarkedText = (parent, text, tokens, normalization) => {",
         'const mark = document.createElement("mark");',
         "status.textContent = root.dataset.labelReady || \"Search ready.\";",
         "status.textContent = root.dataset.labelNoResults || \"No results.\";",
         "status.textContent = root.dataset.labelResultSingular || \"1 result\";",
-        "status.textContent = `${visible.length} ${root.dataset.labelResultPlural || \"results\"}`;",
-        "renderResults(root, locale, visible, tokens);",
-        "updateUrlState(root, query, filters, index);",
+        "status.textContent = `${result.resultCount} ${root.dataset.labelResultPlural || \"results\"}`;",
+        "renderResults(root, locale, result.documents, result.tokens, index);",
+        "updateUrlState(root, result, index);",
     ):
         assert required in script

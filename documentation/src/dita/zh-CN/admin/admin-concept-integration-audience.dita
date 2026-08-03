@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="admin-concept-integration-audience" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>集成受众和 API 边界</title>
+  <title>集成受众和编程接口边界</title>
   <shortdesc>管理员/DevOps 指南中的 API 集成部分适用于使用 BPM 当前编程 API 的外部工具，但不对未支持的产品能力作出保证。</shortdesc>
   <conbody>
     <section id="a-audience"><title>观众</title><p>当您构建或审查与 BPM 交换配置文件和 Firefox 策略数据的配置、合规性、编排、库存或控制产品时，请使用本指南。主要读者是 API 集成商、安全审查员、发布工程师和维护人员，他们需要可重复的合同来进行配置文件同步、验证门、策略导入/导出、合规性元数据、库存和运行状况检查。</p></section>

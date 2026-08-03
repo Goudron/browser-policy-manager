@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-windows-wsl-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>通过 WSL 验证 BPM 源部署</title>
+  <title>通过子系统验证浏览器策略管理器源部署</title>
   <shortdesc>检查来自 WSL 和 Windows 的探测，确认 UI 路由，检查日志，并对常见的 WSL 网络和文件系统问题进行故障排除。</shortdesc>
   <taskbody>
     <prereq><p>BPM 正在从 WSL 签出运行，具有预期的 <codeph>BPM_DATABASE_URL</codeph>、主机、端口和文档站点设置。</p></prereq>

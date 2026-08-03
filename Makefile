@@ -1,4 +1,4 @@
-.PHONY: run dev test test-fast test-unit-pilot test-unit-xdist test-contract test-ui test-live test-release test-firefox-live test-firefox-live-amo test-locale-contract test-firefox-schema-contract setup-firefox-live-browsers setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser docs-snapshot docs-fast-check docs-coverage docs-release-check docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify coverage fmt lint typecheck quality repo-health locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css verify-frontend-vendor rebuild-frontend-vendor backfill-profile-schema-versions local-chromium-ui-audit clean-local-artifacts
+.PHONY: run dev ai-model-install-dev ai-runtime-install-dev ai-rag-install-dev ai-web-sources-check-dev test test-fast test-unit-pilot test-unit-xdist test-contract test-ui test-live test-release test-firefox-live test-firefox-live-amo test-locale-contract test-firefox-schema-contract setup-firefox-live-browsers setup-docs-toolchain test-docs test-docs-contract test-docs-ui test-docs-ui-contract test-docs-browser docs-snapshot docs-fast-check docs-coverage docs-release-check docs-validate docs-build docs-install-dev docs-reproducibility-check docs-package docs-package-verify docs-pdf-build docs-pdf-verify docs-pdf-reproducibility docs-pdf-deliver docs-pdf-delivery-verify coverage fmt lint typecheck quality repo-health locale-inventory locale-quality build-locale-catalogs check-locale-catalogs build-profiles-css verify-frontend-vendor rebuild-frontend-vendor backfill-profile-schema-versions local-chromium-ui-audit clean-local-artifacts
 
 PYTEST ?= $(if $(wildcard .venv/bin/pytest),.venv/bin/pytest,pytest)
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python)
@@ -6,6 +6,8 @@ MYPY ?= $(if $(wildcard .venv/bin/mypy),.venv/bin/mypy,mypy)
 RUFF ?= $(if $(wildcard .venv/bin/ruff),.venv/bin/ruff,ruff)
 FIREFOX_CHANNEL ?= release
 DOCS_TOOLCHAIN_OFFLINE ?= 0
+AI_MODEL_LOCALE ?= en
+AI_RUNTIME_DEV_ARCHIVE ?= documentation/.cache/bpm093-m6-03/runtime/llama-b9637-bin-ubuntu-x64.tar.gz
 XDIST_WORKERS ?= auto
 TEST_FAST_MARKERS := not slow and not browser_ui and not firefox_live and not firefox_live_amo
 TEST_UNIT_PILOT_MARKERS := unit and not api and not contract and not docs_contract and not ui_contract and not slow and not browser_ui and not firefox_live and not firefox_live_amo
@@ -32,7 +34,6 @@ LOCAL_ARTIFACT_DIRS := \
 	app/documentation/site \
 	artifacts \
 	browser_policy_manager.egg-info \
-	data \
 	docs/screenshots \
 	htmlcov \
 	tmp_screens
@@ -43,10 +44,26 @@ LOCAL_ARTIFACT_FILES := \
 	tmp-bootstrap.db
 
 run:
-	uvicorn app.main:app --reload --port 8000
+	$(PYTHON) -m uvicorn app.main:app --reload --port 8000
 
-dev: docs-install-dev
-	uvicorn app.main:app --reload --port 8000
+dev: docs-install-dev ai-model-install-dev ai-runtime-install-dev ai-rag-install-dev ai-web-sources-check-dev
+	BPM_AI_LOCAL_CHAT_ENABLED=true $(PYTHON) -m uvicorn app.main:app --reload --port 8000
+
+ai-model-install-dev:
+	@echo "Ensuring the explicitly approved local chat model for development:"
+	$(PYTHON) -m app.ai.model_installation install --locale $(AI_MODEL_LOCALE) --confirm
+
+ai-runtime-install-dev:
+	@echo "Ensuring the checksum-pinned local llama.cpp runtime archive for development:"
+	$(PYTHON) -m app.ai.runtime_installation install-local --archive $(AI_RUNTIME_DEV_ARCHIVE) --confirm
+
+ai-rag-install-dev:
+	@echo "Ensuring persistent E5-base and the active six-locale RAG generation for development:"
+	$(PYTHON) -m app.ai.rag_bootstrap provision
+
+ai-web-sources-check-dev:
+	@echo "Checking optional external-sources configuration for development:"
+	$(PYTHON) -m app.documentation.web_evidence_dev_config
 
 test:
 	$(PYTEST)
@@ -156,6 +173,21 @@ docs-package:
 docs-package-verify:
 	$(PYTHON) documentation/tools/build_docs.py package-verify
 
+docs-pdf-build:
+	$(PYTHON) documentation/tools/build_docs.py pdf-build
+
+docs-pdf-verify:
+	$(PYTHON) documentation/tools/build_docs.py pdf-verify
+
+docs-pdf-reproducibility:
+	$(PYTHON) documentation/tools/build_docs.py pdf-reproducibility
+
+docs-pdf-deliver:
+	$(PYTHON) documentation/tools/deliver_pdfs.py promote
+
+docs-pdf-delivery-verify:
+	$(PYTHON) documentation/tools/deliver_pdfs.py verify
+
 coverage:
 	$(PYTEST) --cov=app --cov-branch --cov-report=term-missing --cov-report=xml --cov-report=html
 	@echo "HTML coverage report: file://$$(pwd)/htmlcov/index.html"
@@ -204,5 +236,7 @@ local-chromium-ui-audit:
 
 clean-local-artifacts:
 	@echo "Removing ignored local artifacts:"
-	@printf '  %s\n' $(LOCAL_ARTIFACT_DIRS) $(LOCAL_ARTIFACT_FILES)
+	@printf '  %s\n' $(LOCAL_ARTIFACT_DIRS) $(LOCAL_ARTIFACT_FILES) "data/* (except data/ai)"
 	rm -rf $(LOCAL_ARTIFACT_DIRS) $(LOCAL_ARTIFACT_FILES) *.db *.sqlite *.sqlite3 *.db-shm *.db-wal *.sqlite-shm *.sqlite-wal *.zip *.tar.gz
+	@if [ -d data ]; then find data -mindepth 1 -maxdepth 1 ! -name ai -exec rm -rf -- {} +; fi
+	@echo "Preserved installed local AI artifacts under data/ai; remove them only by explicit maintainer instruction."

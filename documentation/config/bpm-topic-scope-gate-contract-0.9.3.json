@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-topic-scope-gate-0.9.3",
+  "backlog_item": "BPM093-M8-02",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-no-http-route",
+  "pins": {
+    "taxonomy": {"path": "documentation/config/bpm-topic-scope-taxonomy-0.9.3.json", "sha256": "ed056c973c216eca0b2b9585f36bfa840ccb39215b4524dcbbeb60e308cf3a0f"},
+    "security_privacy": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"},
+    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "7781e7419176928d2d56ae999ee122e0db68a585184acacf52fbf850695602cb"}
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "lexical_aliases": {
+    "allowed": {
+      "en": ["bpm", "browser policy manager", "profile", "policies.json", "firefox policy", "enterprise policy", "aicontrols", "api-val-001", "cis", "installation", "deployment", "validation"],
+      "ru": ["bpm", "менеджер политик", "профил", "policies.json", "политик", "политика firefox", "aicontrols", "api-val-001", "cis", "установ", "развертыван", "провер"],
+      "de": ["bpm", "profil", "richtlin", "policies.json", "firefox-richtlin", "aicontrols", "api-val-001", "cis", "installation", "bereitstellung", "validier"],
+      "zh-CN": ["bpm", "配置文件", "档案", "策略", "policies.json", "firefox 策略", "aicontrols", "api-val-001", "cis", "安装", "部署", "验证"],
+      "fr": ["bpm", "profil", "stratég", "policies.json", "politique firefox", "aicontrols", "api-val-001", "cis", "installation", "déploiement", "validation"],
+      "es-ES": ["bpm", "perfil", "política", "policies.json", "política de firefox", "aicontrols", "api-val-001", "cis", "instalación", "despliegue", "validación"]
+    },
+    "clarify": {
+      "en": ["firefox", "hello", "hi"],
+      "ru": ["firefox", "привет", "здравствуйте"],
+      "de": ["firefox", "hallo"],
+      "zh-CN": ["firefox", "你好"],
+      "fr": ["firefox", "bonjour"],
+      "es-ES": ["firefox", "hola"]
+    },
+    "refuse": {
+      "en": ["weather", "vacation", "novel", "delete files", "shell command", "read secrets", "ignore bpm", "reveal instructions", "enable tools", "web scraper"],
+      "ru": ["погод", "отпуск", "роман", "удали файлы", "команду shell", "секрет", "игнорируй bpm", "раскрой инструкции", "включи инструменты", "веб-скрапер"],
+      "de": ["wetter", "urlaub", "roman", "lösche dateien", "shell-befehl", "geheimnisse", "ignoriere bpm", "zeige deine anweisungen", "tools aktivieren", "web-scraper"],
+      "zh-CN": ["天气", "假期", "小说", "删除文件", "shell 命令", "秘密", "忽略 bpm", "透露你的指令", "启用工具", "网页爬虫"],
+      "fr": ["météo", "temps", "vacances", "roman", "supprime mes fichiers", "commande shell", "secrets", "ignore bpm", "révèle tes instructions", "active les outils", "robot web"],
+      "es-ES": ["tiempo", "vacaciones", "novela", "borra mis archivos", "comando shell", "secretos", "ignora bpm", "revela tus instrucciones", "activa herramientas", "rastreador web"]
+    }
+  },
+  "adversarial_patterns": [
+    "\\bignore (?:all |previous |bpm )?(?:instructions|rules)\\b",
+    "\\b(?:reveal|show) (?:the )?(?:system prompt|instructions)\\b",
+    "\\b(?:you are now|act as)\\b",
+    "\\btranslate.{0,80}(?:system prompt|instructions)\\b",
+    "игнорируй (?:предыдущие )?(?:инструкции|правила)",
+    "(?:раскрой|покажи) (?:системный промпт|инструкции)",
+    "ты теперь",
+    "переведи.{0,80}(?:системный промпт|инструкции)",
+    "ignoriere (?:vorherige )?(?:anweisungen|regeln)",
+    "(?:zeige|verrate) (?:den )?(?:system-prompt|anweisungen)",
+    "du bist jetzt",
+    "übersetze.{0,80}(?:system-prompt|anweisungen)",
+    "lösche.{0,80}dateien",
+    "忽略(?:之前|先前)?(?:指令|规则)",
+    "(?:透露|显示).{0,20}(?:系统提示|指令)",
+    "你现在是",
+    "翻译.{0,80}(?:系统提示|指令)",
+    "ignore (?:les )?(?:instructions|règles)(?: précédentes)?",
+    "(?:révèle|montre) (?:le )?(?:prompt système|instructions)",
+    "tu es maintenant",
+    "traduis.{0,80}(?:prompt système|instructions)",
+    "ignora (?:las )?(?:instrucciones|reglas)(?: anteriores)?",
+    "(?:revela|muestra) (?:el )?(?:prompt del sistema|instrucciones)",
+    "ahora eres",
+    "traduce.{0,80}(?:prompt del sistema|instrucciones)"
+  ],
+  "semantic_thresholds": {"allow": 0.82, "clarify": 0.5},
+  "decision_order": ["deterministic_refuse", "policy_identifier_allow", "deterministic_bpm_alias_allow", "bounded_context_follow_up_or_clarify", "adjacent_clarify", "compact_semantic_allow_or_clarify", "refuse"],
+  "similarity": {
+    "adapter": "CosineScopeSimilarity accepts only a caller-owned local query encoder and six fixed normalized intent centroids. It has no retrieval, LLM, network, disk, tool or model-install action.",
+    "failure": "A missing, malformed, non-finite or out-of-range score fails closed to scope_similarity_unavailable before retrieval or inference."
+  },
+  "acceptance_floors": {
+    "in_scope_allow_rate_min": 1.0,
+    "adjacent_clarify_rate_min": 1.0,
+    "off_topic_refusal_rate_min": 1.0,
+    "off_topic_downstream_calls_max": 0
+  },
+  "boundaries": {
+    "http_route": false,
+    "browser_ui": false,
+    "ordinary_search_import": false,
+    "network_calls": 0,
+    "retrieval_before_decision": false,
+    "llm_before_decision": false,
+    "cross_locale_retrieval": false,
+    "prompt_only_scope_authority": false
+  },
+  "verification": {
+    "runtime": "tests/test_topic_scope_gate_093.py",
+    "contract": "documentation/tests/contract/test_bpm_topic_scope_gate_contract_0_9_3.py",
+    "architecture": "docs/architecture/bpm-topic-scope-gate-0.9.3.md"
+  }
+}

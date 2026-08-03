@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-same-locale-retrieval-0.9.3",
+  "backlog_item": "BPM093-M5-06",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-runtime-retrieval-contract",
+  "generation_contract": {
+    "path": "documentation/config/chat-rag-exact-generation-contract-0.9.3.json",
+    "sha256": "6214bb1183ebcdff1cffd06e2efb289ac0478cfbb164e9293377fa90c8c13973",
+    "active_pointer": "active-generation.json",
+    "storage_backend": "normalized-exact-f32-matrix-v1"
+  },
+  "selected_embedding": {
+    "model_id": "intfloat/multilingual-e5-base",
+    "artifact_sha256": "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703",
+    "dimension": 768,
+    "query_requirement": "The caller supplies one finite L2-normalized E5 query vector. Encoding, model loading, and answer generation are outside this task."
+  },
+  "entry_boundary": {
+    "entrypoint": "An explicitly enabled user chat only; this task exposes no HTTP route and starts no worker.",
+    "ordinary_search": "M4 deterministic documentation search is neither imported nor called, changed, ranked against, or made dependent on this retriever.",
+    "network_calls_after_install": 0,
+    "external_evidence": "disabled and absent from this retriever"
+  },
+  "locale_and_filtering": {
+    "supported_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "locale_rule": "One request scans exactly the requested active locale. Cross-locale merge, fallback, and retry are forbidden.",
+    "version_rule": "Every candidate must match the caller's current BPM and documentation version; a stale or mixed generation is unavailable rather than partially queried.",
+    "guide_rule": "An optional exact guide-id allowlist filters only candidates in the active locale.",
+    "maximum_candidates": 5,
+    "ranking": "Descending dot product over verified L2-normalized float32 vectors; equal scores break by stable chunk_id ascending."
+  },
+  "evidence_and_citation": {
+    "required_chunk_fields": [
+      "chunk_id", "topic_id", "anchor_id_or_root", "ordinal", "guide_id", "published_url",
+      "source_sha256", "identifiers", "documentation_version", "bpm_version", "provenance_class",
+      "heading_path", "text"
+    ],
+    "citation": "Every retained candidate includes source_kind=local, a verified fragment-free /help/{locale}/ topic URL, a separately verified anchor identity when present, and a stable topic citation identity.",
+    "no_evidence": "An empty candidate set is an explicit retrieval outcome for later abstention or clarification; it never falls back to ordinary search, another locale, generated text, or web evidence."
+  },
+  "integrity_and_recovery": {
+    "validate_before_scan": [
+      "safe active pointer and generation identifier", "root and locale manifest hashes", "selected model compatibility key",
+      "matrix byte count/hash/shape/finiteness/L2 normalization", "metadata byte hash/shape/field set/canonical chunk order",
+      "current version and citation-target structure"
+    ],
+    "failure": "Any missing, symlinked, partial, corrupt, stale, mixed, incompatible, or malformed artifact makes retrieval unavailable; callers must abstain and keep M4 ready.",
+    "diagnostics": "Expose only stable retrieval reason codes, never local paths, artifact hashes, chunk text, or raw exceptions."
+  },
+  "verification": {
+    "runtime": "tests/test_documentation_chat_retrieval_093.py",
+    "contract": "documentation/tests/contract/test_chat_rag_retrieval_0_9_3.py"
+  }
+}

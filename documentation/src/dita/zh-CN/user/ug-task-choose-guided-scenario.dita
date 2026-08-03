@@ -7,7 +7,7 @@
     <prereq><p>您知道您想要支持的配置文件目的。</p></prereq>
     <context><p>场景使第一遍以任务为导向，并使基线在审查期间更容易解释。</p></context>
     <steps>
-      <step><cmd>打开步骤 1，配置文件 &amp; 基线。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开引导式配置的第 1 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>查看场景选择及其简单语言描述。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>选择最接近部署目标的场景。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>在添加预设或 CIS 图层之前检查受影响的基线摘要。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

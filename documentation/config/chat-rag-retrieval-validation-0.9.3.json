@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-retrieval-validation-0.9.3",
+  "backlog_item": "BPM093-M5-08",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-active-generation-validation-contract",
+  "contracts": {
+    "embedding_decision": {
+      "path": "documentation/config/chat-rag-embedding-decision-0.9.3.json",
+      "sha256": "a230b3836b78d301f83f16b9f931fd357948bacf31df114bf8c2137e796f24c0",
+      "candidate_id": "multilingual-e5-base-onnx-o4"
+    },
+    "exact_generation": {
+      "path": "documentation/config/chat-rag-exact-generation-contract-0.9.3.json",
+      "sha256": "6214bb1183ebcdff1cffd06e2efb289ac0478cfbb164e9293377fa90c8c13973"
+    },
+    "retrieval": {
+      "path": "documentation/config/chat-rag-retrieval-contract-0.9.3.json",
+      "sha256": "8301f06e5449f86ae27cdd136720c39d523987e526a09c443b447832505c1d2d"
+    },
+    "evidence_packing": {
+      "path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json",
+      "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"
+    },
+    "resource_policy": {
+      "path": "documentation/config/chat-rag-resource-policy-amendment-0.9.3.json",
+      "sha256": "c250f7f7b63fa74f7a15545c307a30506ff2d8c978c8c6b15529f65b9e36e74e"
+    }
+  },
+  "inputs": {
+    "evaluation_corpus": {
+      "path": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+      "sha256": "0993aec89fe2991d6ef15de251bfedfa87ea99ae6498e5ef73a84f2d6b1aff52"
+    },
+    "chunk_schema": "rag-chunk-v1",
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "retrieval_mode": "Same active locale only. The caller prefixes each question with the accepted E5 query prefix and passes the normalized vector only to ExactLocaleRetriever.",
+    "top_k": 5,
+    "answer_and_dialogue_cases_per_locale": 20,
+    "no_evidence_rule": "A reviewed boundary question with a technical identifier absent from the active locale metadata abstains before embedding, retrieval, or generation."
+  },
+  "runtime": {
+    "implementation": "Checksum-verified E5-base ONNX CPU encoder plus app.documentation.retrieval.ExactLocaleRetriever.",
+    "threads": {"intra_op": 2, "inter_op": 1},
+    "maximum_sequence_tokens": 512,
+    "warmup_attempts_per_locale": 5,
+    "measured_attempts_per_locale": 30,
+    "rss_sample_interval_ms": 100
+  },
+  "acceptance": {
+    "same_locale_evidence_coverage_at_5_min": 0.5,
+    "citation_resolution_rate_min": 1.0,
+    "no_evidence_disposition_rate_min": 1.0,
+    "published_chunk_coverage_rate_min": 1.0,
+    "published_topic_coverage_rate_min": 1.0,
+    "reproducible_ranking_rate_min": 1.0,
+    "chat_retrieval_p95_ms_max": 2000,
+    "model_and_direct_runtime_disk_gib_max": 0.75,
+    "active_generation_disk_gib_max": 0.25,
+    "peak_process_rss_gib_max": 1.5
+  },
+  "integrity_and_recovery": {
+    "active_generation": "Validate the active pointer, exact-generation manifests, source-manifest identity, per-locale chunk metadata and current reviewed provenance before measuring relevance.",
+    "negative_runtime_tests": [
+      "tests/test_documentation_chat_retrieval_093.py",
+      "tests/test_documentation_evidence_packing_093.py"
+    ],
+    "failure_isolation": "Corrupt, stale, malformed, or unavailable chat artifacts fail closed in the chat path. They never import, call, modify, or make unavailable the independent M4 deterministic documentation search."
+  },
+  "boundaries": {
+    "network_calls_after_install": 0,
+    "ordinary_search_calls": 0,
+    "cross_locale_retrieval_calls": 0,
+    "answer_generation_invocations": 0,
+    "external_evidence": "disabled and absent",
+    "swap": "Observed as an operational diagnostic only; it is not a validity or release condition.",
+    "output": "Write reports only under ignored documentation/.cache/bpm093-m5-08/."
+  },
+  "progress": {
+    "stream": "stdout",
+    "flush": true,
+    "locale_case_update": 5,
+    "latency_sample_update": 5,
+    "content": "real runtime preparation, source/generation verification, locale-local evaluated-case completion, and measured latency samples; no synthetic progress or ETA"
+  }
+}

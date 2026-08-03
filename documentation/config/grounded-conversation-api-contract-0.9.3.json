@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-api-0.9.3",
+  "backlog_item": "BPM093-M7-01",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-architecture-only",
+  "pins": {
+    "availability_fallback": {"path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json", "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"},
+    "worker": {"path": "documentation/config/local-chat-worker-contract-0.9.3.json", "sha256": "4a13460df3f6de23f3f562eefa3d2d89f55135113ccf60dd5b077e6d65467e7f"},
+    "evidence_packing": {"path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json", "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"},
+    "worker_validation": {"path": "documentation/config/local-chat-runtime-validation-0.9.3.json", "sha256": "a3fdfc962178159ddd9e7dc88508d733c25b2270049795258ab3a0afd70b32d0"}
+  },
+  "implementation_boundary": {
+    "routes_implemented_now": false,
+    "worker_started_now": false,
+    "network_calls_now": 0,
+    "rule": "This is the frozen v1 API and request-state contract for later implementation. M7-01 adds neither a FastAPI router nor browser UI nor a model/controller invocation."
+  },
+  "versioning": {
+    "api_version": 1,
+    "request_field": "api_version",
+    "response_field": "api_version",
+    "unsupported_version_error": "assistant_api_version_unsupported",
+    "compatibility_rule": "A client sends exactly api_version=1. Every JSON response and every SSE event repeats api_version=1; no endpoint silently accepts a newer schema."
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "transport": {
+    "origin": "same-origin BPM application routes only; no raw llama.cpp, model, provider, or loopback service is exposed",
+    "content_types": {"request": "application/json", "stream": "text/event-stream"},
+    "session": "The server owns an opaque same-origin memory-only session. Client-supplied session, model, evidence, source URL, tool, prompt, generation, filesystem, and worker fields are rejected.",
+    "ids": "request_id and source_id are opaque server-generated identifiers. They have no path, chunk, hash, model, or sequential meaning."
+  },
+  "operations": {
+    "status": {"method": "GET", "path": "/api/documentation-assistant/status", "status": 200, "purpose": "Return safe availability only and never load a worker, retrieve evidence, open a network connection, or alter conversation state.", "required_response": ["api_version", "state", "assistant_ready", "lexical_search_ready", "locale", "message_key", "action_key", "reason_code", "state_epoch"]},
+    "ask": {"method": "POST", "path": "/api/documentation-assistant/chat", "success_status": 202, "request": ["api_version", "locale", "question", "web_mode"], "response": ["api_version", "request_id", "state", "state_epoch", "stream_path", "time_preview"], "rule": "Admission checks run before retrieval or worker allocation. The response carries only a local conservative range in whole seconds, which the locale-owned client renders as minutes and seconds. An unavailable assistant returns a stable error and leaves lexical search independent."},
+    "stream": {"method": "GET", "path": "/api/documentation-assistant/chat/{request_id}/stream", "success_status": 200, "purpose": "Same-origin SSE for one opaque request. It emits only schema-valid display-safe events and no raw model output, prompt, evidence packet, path, hash, exception, or provider body."},
+    "cancel": {"method": "POST", "path": "/api/documentation-assistant/chat/{request_id}/cancel", "success_status": 202, "response": ["api_version", "request_id", "state", "state_epoch", "reason_code"], "rule": "Cancellation is idempotent for the request owner and never starts a replacement worker."},
+    "clear": {"method": "DELETE", "path": "/api/documentation-assistant/conversation", "success_status": 204, "rule": "A tab-aware Clear supplies the exact locale and opaque tab ID, and invalidates only that memory-only dialogue context, its pending request IDs, retained display text and source handles. Legacy callers without either parameter clear their browser-session contexts."},
+    "source": {"method": "GET", "path": "/api/documentation-assistant/chat/{request_id}/sources/{source_id}", "success_status": 200, "response": ["api_version", "source_id", "title", "published_url", "locale", "excerpt"], "rule": "Only a citation already approved for that completed request is resolvable. Excerpt is display-safe and at most 1,200 Unicode characters; raw internal chunk fields, score, vector, path, hash, prompt, and unapproved evidence are never returned."}
+  },
+  "request_contract": {
+    "web_modes": ["local_only", "request_web"],
+    "web_rule": "request_web is a consent request, not authority to contact a provider. Until M9 implements and verifies it, it terminates local-only with assistant_web_not_available and makes zero network calls.",
+    "answer_dispositions": ["answer", "clarify", "abstain", "refuse"],
+    "limits": {"request_json_bytes_max": 49152, "question_unicode_characters_max": 4000, "active_requests_max": 1, "queued_requests_max": 1, "dialogue_turns_max": 16, "output_tokens_max": 512, "source_excerpt_unicode_characters_max": 1200}
+  },
+  "request_state_machine": {
+    "nonterminal": ["accepted", "scope_check", "evidence_check", "generating", "validating"],
+    "terminal": ["answer", "clarify", "abstain", "refuse", "cancelled", "error"],
+    "transitions": {
+      "accepted": ["scope_check", "cancelled", "error"],
+      "scope_check": ["evidence_check", "clarify", "abstain", "refuse", "cancelled", "error"],
+      "evidence_check": ["generating", "clarify", "abstain", "cancelled", "error"],
+      "generating": ["validating", "cancelled", "error"],
+      "validating": ["answer", "clarify", "abstain", "refuse", "error"],
+      "answer": [], "clarify": [], "abstain": [], "refuse": [], "cancelled": [], "error": []
+    },
+    "rules": ["Scope denial, absent/stale/contradictory/over-budget evidence, invalid citations, cancellation, and unavailable artifacts never enter generation or expose a confident answer.", "Only validated terminal answer, clarify, abstain, or refuse content is displayable. Partial generation is always marked incomplete and cannot be represented as answer.", "Every completed transition increments state_epoch; client events for an older epoch are ignored."]
+  },
+  "sse": {
+    "event_types": ["accepted", "progress", "final", "cancelled", "error"],
+    "required_fields": ["api_version", "request_id", "state", "state_epoch"],
+    "final_fields": ["disposition", "text", "citations"],
+    "progress_rule": "Progress carries localized stable message/action keys only. It contains no model tokens, prompts, retrieved excerpts, paths, timing internals, or secrets.",
+    "final_rule": "final has exactly one terminal disposition. answer citations are approved opaque source IDs; clarify, abstain, and refuse have no invented citation."
+  },
+  "errors": {
+    "public_codes": ["assistant_api_version_unsupported", "assistant_invalid_request", "assistant_unsupported_locale", "assistant_request_too_large", "assistant_busy", "assistant_not_found", "assistant_not_owner", "assistant_unavailable", "assistant_web_not_available", "assistant_cancelled", "assistant_internal_error"],
+    "response_fields": ["api_version", "state", "state_epoch", "reason_code", "message_key", "action_key"],
+    "rule": "Public errors are stable localized-key contracts. They never expose raw exceptions, system prompt, model output, model/runtime identity beyond approved safe status, paths, source chunks, hashes, credentials, provider responses, or internal control flow."
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_grounded_conversation_api_contract_0_9_3.py",
+    "architecture": "docs/architecture/grounded-conversation-api-contract-0.9.3.md",
+    "future_implementation": ["BPM093-M7-02", "BPM093-M7-03", "BPM093-M7-04", "BPM093-M7-05", "BPM093-M7-06"]
+  }
+}

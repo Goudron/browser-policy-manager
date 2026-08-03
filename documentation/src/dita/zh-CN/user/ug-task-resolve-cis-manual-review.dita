@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-resolve-cis-manual-review" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>解决 CIS 手动审核项目</title>
+  <title>解决安全基线手动审核项目</title>
   <shortdesc>查找需要手动审核的 CIS 建议，并决定是否配置、记录或将其留作外部验证。</shortdesc>
   <taskbody>
     <prereq><p>打开包含 CIS 层或 CIS 派生源元数据的配置文件的 所有设置 检查。</p></prereq>

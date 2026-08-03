@@ -7,7 +7,7 @@
     <prereq><p>In Schritt 1 ist ein Profilentwurf geöffnet.</p></prereq>
     <context><p>Starter-Voreinstellungen bieten eine bekannte Basislinie, die Sie noch in Geführter Editor, Alle Einstellungen oder JSON-Editor ändern können.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie den Starter-Voreinstellungsbereich in der Profil-&amp;-Basislinie.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie in Schritt 1 den Bereich für die Startervoreinstellung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Vergleichen Sie die verfügbaren Voreinstellungen mit dem Profilszenario.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Wenden Sie die Voreinstellung an, die dem beabsichtigten Browserverhalten entspricht.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die geänderte Zusammenfassung, bevor Sie mit dem nächsten Schritt fortfahren.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

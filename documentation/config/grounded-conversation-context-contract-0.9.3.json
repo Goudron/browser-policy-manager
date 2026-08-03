@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-context-0.9.3",
+  "backlog_item": "BPM093-M7-03",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-memory-only-no-http-route",
+  "pins": {
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "7781e7419176928d2d56ae999ee122e0db68a585184acacf52fbf850695602cb"},
+    "security": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"},
+    "evidence": {"path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json", "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"}
+  },
+  "identity": "Every opaque memory-only session is created by the controller for exactly one active locale and BPM version. Locale mismatch rejects context; version mismatch deletes the session before retrieval or inference.",
+  "retention": {"storage": "process-memory only", "max_context_pairs": 8, "max_context_turns": 16, "max_resolved_entities": 8, "max_entity_characters": 120, "eviction": "Keep the newest eight completed user-question/assistant-answer pairs as sixteen chronological entries. No model-generated summary is created or persisted."},
+  "follow_up": "The existing resolved entities from accepted local evidence are appended to the next retrieval query only within the exact session locale/version. The fresh request still performs same-locale retrieval and M5 evidence/citation validation; prior citations never become citations for the new answer.",
+  "topic_and_citation_reset": "If the accepted current evidence has no topic identity in common with the session, retain bounded dialogue but discard stale resolved entities before worker generation. A version change deletes the session. Every answer binds only citations from its fresh current EvidencePack.",
+  "clear": "Clear removes the exact session, turns, entities, topic identities and all handles. A missing or cleared session cannot provide context.",
+  "boundaries": {"http_route": false, "browser_storage": false, "database": false, "disk": false, "telemetry": false, "cross_locale_context": false, "ordinary_search_calls": 0, "summary_model": false},
+  "verification": {"runtime": "tests/test_conversation_context_093.py", "contract": "documentation/tests/contract/test_grounded_conversation_context_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-context-0.9.3.md"}
+}

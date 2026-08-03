@@ -5,9 +5,9 @@
   <shortdesc>Verwenden Sie Schritt 2, um den Browserzugriff, das Netzwerkverhalten und die Grundeinstellungen zu konfigurieren.</shortdesc>
   <taskbody>
     <prereq><p>Ein geführter Profilentwurf ist geöffnet.</p></prereq>
-    <context><p>Die Standardeinstellungen für den Browserzugriff &amp; erfassen Kontrollen, die bestimmen, ob Firefox Ressourcen erreichen kann und wie es sich verhält, bevor inhaltsspezifische Richtlinien ausgewählt werden.</p></context>
+    <context><p>Die Einstellungen für Browserzugriff und Standardwerte bestimmen, ob Firefox Ressourcen erreichen kann und wie sich der Browser verhält, bevor inhaltsspezifische Richtlinien ausgewählt werden.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 2, Standardeinstellungen für den Browserzugriff &amp;.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 2 der geführten Konfiguration.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Überprüfen Sie die Netzwerkzugriffs- und Browserverhaltenskontrollen für die Bereitstellung.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Legen Sie grundlegende Standardeinstellungen fest, bevor Sie Start-, Such- oder navigationsspezifische Optionen hinzufügen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Validierungswarnungen, die neben schemaabhängigen Steuerelementen angezeigt werden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>

@@ -8,7 +8,7 @@
     <context><p>Die Bibliothek listet gespeicherte Profile auf und zeigt gefilterte sowie Gesamtzahlen an, damit sichtbar ist, ob Suche oder Filter Zeilen ausblenden. Zuerst folgt das Aktionsraster; die Filterzeile steht unmittelbar über der Profiltabelle.</p>
       <fig id="screenshot-library-overview">
         <title>Bibliotheksübersicht</title>
-        <image keyref="screenshot.library-overview" placement="break">
+        <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
           <alt>Bibliothek mit gespeicherten Profilzeilen, Zählungen und Profilaktionen.</alt>
         </image>
       </fig>

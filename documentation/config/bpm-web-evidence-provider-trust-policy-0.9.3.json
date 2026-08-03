@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-web-evidence-provider-trust-policy-0.9.3",
+  "backlog_item": "BPM093-M9-01",
+  "target_bpm_version": "0.9.3",
+  "decision_date": "2026-07-30",
+  "status": "brave-llm-context-selected-contract-only-no-network",
+  "pins": {
+    "m2_security": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"},
+    "m8_threat_review": {"path": "documentation/config/bpm-assistant-threat-review-0.9.3.json", "sha256": "c497644c9ddd87050641a0b54cfd888a408ee78ae5914b71273fce4ee0006d15"},
+    "conversation_api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "scope_gate": {"path": "documentation/config/bpm-topic-scope-gate-contract-0.9.3.json", "sha256": "ed8401ca63cc9c28d9c1d0fd9a49541b39847afef986c56ec1c56a540b2bee67"},
+    "content_boundary": {"path": "documentation/config/bpm-prompt-content-boundary-contract-0.9.3.json", "sha256": "007947a7b02af07e5e2ea9ad6383d884a2e34345413f1db4c4832ee305ad495e"},
+    "retention": {"path": "documentation/config/bpm-conversation-retention-contract-0.9.3.json", "sha256": "d95c7047e7432a6dfe1fdf34b5c8c0de4da329337480fd45f20105779004d8c4"}
+  },
+  "provider_decision": {
+    "provider": "Brave Software, Inc.",
+    "product": "Brave Search API",
+    "service": "LLM Context",
+    "service_api_version": "v1",
+    "endpoint": "https://api.search.brave.com/res/v1/llm/context",
+    "method": "POST",
+    "authentication_header": "X-Subscription-Token",
+    "credential_model": "user-supplied Brave Search API subscription token stored server-side only; BPM ships no shared key",
+    "why_selected": "The service documents raw pre-extracted content for local RAG, supports POST, token/URL/snippet bounds, language preference, strict relevance and inline Goggles, and avoids BPM fetching result URLs.",
+    "hosted_answers_allowed": false,
+    "direct_result_url_fetching_allowed": false
+  },
+  "provider_facts_reviewed": {
+    "api_documentation": "https://api-dashboard.search.brave.com/documentation/services/llm-context",
+    "authentication": "https://api-dashboard.search.brave.com/documentation/guides/authentication",
+    "pricing": "https://api-dashboard.search.brave.com/documentation/pricing",
+    "rate_limits": "https://api-dashboard.search.brave.com/documentation/guides/rate-limiting",
+    "goggles": "https://api-dashboard.search.brave.com/documentation/resources/goggles",
+    "terms": "https://api-dashboard.search.brave.com/documentation/resources/terms-of-service",
+    "privacy": "https://api-dashboard.search.brave.com/privacy-policy",
+    "observed_search_price_usd_per_1000_requests": 5.0,
+    "observed_monthly_credit_usd": 5.0,
+    "payment_information_required": true,
+    "provider_capacity_requests_per_second": 50,
+    "standard_query_log_retention_days_max": 90,
+    "enterprise_zero_data_retention_available": true,
+    "terms_last_updated": "2026-02-11",
+    "privacy_notice_last_updated": "2025-12-04"
+  },
+  "terms_and_rights_policy": {
+    "permitted_basis": "Brave documents LLM Context for RAG and licenses Search Results for use inside Customer Applications.",
+    "required_restrictions": [
+      "Use results only as transient per-query grounding in BPM; never cache them, persist them, build an index/database, or add them to local documentation or embeddings.",
+      "Do not train, fine-tune, evaluate, benchmark or otherwise improve any model or service with provider results; deterministic tests use project-owned fixtures.",
+      "Do not redistribute or expose raw provider result sets or snippets; display only the validated BPM answer, provider label and approved source citations.",
+      "Delete provider response content when the request terminates and cease use immediately if the account or provider terms end.",
+      "The Brave account holder accepts current provider terms and remains responsible for required privacy notices and lawful query submission."
+    ],
+    "drift_trigger": "Any endpoint/schema, pricing, rate-limit, terms, privacy, retention, ownership or RAG-use change requires a new review before the provider remains enabled."
+  },
+  "privacy_disclosure": {
+    "recipient": "Brave Software, Inc. in the United States",
+    "sent": ["the exact consented web query", "locale-derived search language", "fixed source Goggle", "bounded retrieval parameters", "subscription token in a request header"],
+    "never_sent": ["conversation history", "prior questions", "local DITA chunks", "local citations", "BPM profiles", "database data", "session ID", "CSRF token", "filesystem paths", "device location", "IP-derived location headers"],
+    "retention_warning": "Standard Brave Search API query logs may be retained for up to 90 days for billing, troubleshooting and abuse prevention; Zero Data Retention is an enterprise option only.",
+    "consent_requirement": "M9-02 must show the exact outgoing query, provider identity, United States recipient and retention warning before each provider call; no consent means local-only."
+  },
+  "locale_mapping": {
+    "en": "en",
+    "ru": "ru",
+    "de": "de",
+    "zh-CN": "zh-hans",
+    "fr": "fr",
+    "es-ES": "es"
+  },
+  "request_policy": {
+    "body_fields_allowlist": ["q", "search_lang", "count", "spellcheck", "maximum_number_of_urls", "maximum_number_of_tokens", "maximum_number_of_snippets", "maximum_number_of_tokens_per_url", "maximum_number_of_snippets_per_url", "context_threshold_mode", "enable_local", "goggles"],
+    "query_characters_max": 400,
+    "query_words_max": 50,
+    "count": 10,
+    "spellcheck": false,
+    "maximum_number_of_urls": 5,
+    "maximum_number_of_tokens": 2048,
+    "maximum_number_of_snippets": 10,
+    "maximum_number_of_tokens_per_url": 1024,
+    "maximum_number_of_snippets_per_url": 4,
+    "context_threshold_mode": "strict",
+    "enable_local": false,
+    "provider_calls_per_consented_query_max": 1,
+    "automatic_retries": 0,
+    "redirects": 0,
+    "proxy_environment_inheritance": false,
+    "location_headers": false,
+    "provider_answer_generation": false
+  },
+  "source_policy": {
+    "inline_goggle": "$discard\n$site=mozilla.github.io\n$site=support.mozilla.org\n$site=firefox-source-docs.mozilla.org\n$site=www.mozilla.org",
+    "provider_filter_is_sufficient_alone": false,
+    "local_post_filter_required": true,
+    "allowed_sources": [
+      {"id": "mozilla-enterprise-policy-templates", "authority": "primary", "scheme": "https", "host": "mozilla.github.io", "path_prefixes": ["/policy-templates/"]},
+      {"id": "mozilla-support", "authority": "approved-secondary", "scheme": "https", "host": "support.mozilla.org", "path_prefixes": ["/"]},
+      {"id": "firefox-source-docs-enterprise-policies", "authority": "primary", "scheme": "https", "host": "firefox-source-docs.mozilla.org", "path_prefixes": ["/browser/components/enterprisepolicies/", "/toolkit/components/enterprisepolicies/"]},
+      {"id": "mozilla-firefox-product-pages", "authority": "primary", "scheme": "https", "host": "www.mozilla.org", "path_prefixes": ["/en-US/firefox/", "/ru/firefox/", "/de/firefox/", "/zh-CN/firefox/", "/fr/firefox/", "/es-ES/firefox/"]}
+    ],
+    "forbidden_sources": ["arbitrary domains", "user or model supplied URLs", "public SearXNG instances", "forums and social networks", "Bugzilla comments", "GitHub issues/discussions", "CIS benchmark text", "mirrors", "cached/translated copies", "provider Answers output"],
+    "precedence": ["reviewed current local BPM documentation", "Mozilla enterprise policy templates", "Firefox source documentation", "Mozilla product pages", "Mozilla Support"],
+    "conflict_rule": "External evidence cannot create or override BPM product support. A conflict with current local BPM documentation is labelled and abstains until M9-04 defines a reviewed resolution."
+  },
+  "response_and_network_policy": {
+    "connection_destinations": ["api.search.brave.com:443"],
+    "result_url_connections": 0,
+    "accepted_response_section": "grounding.generic only",
+    "response_bytes_max": 262144,
+    "content_type": "application/json",
+    "content_encoding": ["identity", "gzip"],
+    "poi_map_or_rich_data": "reject",
+    "sanitization": "Every URL, title and snippet is untrusted external data; enforce the local URL post-filter, active-content stripping, encoded-control rejection and external source labelling before evidence packing.",
+    "retention": "provider body and derived snippets exist in memory for one request only and are cleared at terminal completion/cancellation/error",
+    "failure": "missing credential, no consent, overlong query, DNS/TLS/provider/schema/rate/timeout/filter/sanitization failure returns local-only without a retry"
+  },
+  "data_flow": [
+    "deterministic BPM scope gate allows the exact-locale question",
+    "M9-02 obtains explicit consent for the displayed outgoing query and provider disclosure",
+    "server builds one fixed bounded POST and reads the user token from server-side configuration",
+    "Brave returns bounded pre-extracted grounding content from its index",
+    "BPM independently post-filters exact HTTPS host/path and sanitizes all external fields",
+    "accepted snippets enter a separate lower-priority external EvidencePack for one request",
+    "the local model generates under existing no-tools/output/citation controls",
+    "BPM displays a validated answer with explicit external citations and clears provider content"
+  ],
+  "reproducibility": {
+    "live_results_stable": false,
+    "rule": "Provider ranking and indexed content are time-dependent. BPM pins its request/source policy and tests only deterministic captured fixtures; live smoke tests are explicit, isolated and non-release-gating unless separately approved.",
+    "citation_metadata": ["provider id", "source URL", "source title", "reported source age/date when present", "retrieval time"]
+  },
+  "alternatives": [
+    {"candidate": "Google Custom Search JSON API", "status": "rejected", "reason": "Closed to new customers and scheduled for discontinuation on 2027-01-01."},
+    {"candidate": "Microsoft Bing Search APIs", "status": "rejected", "reason": "Retired and decommissioned on 2025-08-11; the suggested Azure AI Agents replacement adds a hosted-agent boundary."},
+    {"candidate": "self-hosted or public SearXNG", "status": "rejected-as-default-provider", "reason": "SearXNG is a metasearch proxy rather than a stable index/provider; queries are forwarded to configured engines and site syntax is not enforced uniformly, while public instances add an unowned trust boundary."},
+    {"candidate": "Brave Search API Answers", "status": "rejected", "reason": "Hosted answer generation duplicates and weakens the selected local-model, output-validation and privacy boundaries."}
+  ],
+  "acceptance": {
+    "provider_selected": true,
+    "contract_only": true,
+    "network_calls_added": 0,
+    "credentials_created_or_changed": false,
+    "http_route_added": false,
+    "browser_ui_added": false,
+    "local_mode_default": true,
+    "ordinary_search_changed": false,
+    "m9_02_required_before_any_call": true,
+    "m9_03_required_before_any_provider_content_reaches_inference": true,
+    "m9_05_required_before_release": true
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_bpm_web_evidence_provider_trust_policy_0_9_3.py",
+    "architecture": "docs/architecture/bpm-web-evidence-provider-decision-0.9.3.md"
+  }
+}

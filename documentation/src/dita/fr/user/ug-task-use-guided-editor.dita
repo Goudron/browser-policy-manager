@@ -4,25 +4,25 @@
   <title>Parcourir les six étapes de l’« Éditeur guidé »</title>
   <shortdesc>Les six étapes couvrent l’identité du profil, l’accès au navigateur et les valeurs par défaut, la sécurité et la confidentialité, les utilisateurs, les extensions et les sites, les fonctionnalités intelligentes, puis la vérification et l’exportation.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez un profil dans Éditeur guidé à partir de la bibliothèque ou du flux de création.</p></prereq>
+    <prereq><p>Ouvrez un profil dans l’éditeur guidé à partir de la bibliothèque ou du flux de création.</p></prereq>
     <context><p>L’« Éditeur guidé » organise la configuration du profil en six étapes et maintient la validation du schéma visible pendant votre travail.</p>
       <fig id="screenshot-guided-editor-overview">
         <title>Éditeur guidé</title>
-        <image keyref="screenshot.guided-editor-overview" placement="break">
+        <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
           <alt>Éditeur guidé affichant l'état de navigation et de validation des étapes pour un profil enregistré.</alt>
         </image>
       </fig>
     </context>
     <steps>
-      <step><cmd>Commencez par l'étape 1, ligne de base du profil &amp;, pour confirmer le nom, le canal de schéma, le scénario, le préréglage de démarrage et la couche CIS.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Passez à l'étape 2, Paramètres par défaut d'accès au navigateur &amp;, pour l'accès au réseau, le comportement du navigateur, l'accueil, la recherche et les paramètres par défaut de navigation.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Utilisez l'étape 3 pour les contrôles de confidentialité, les autorisations, les cookies, le nettoyage, DNS et la posture de renforcement de la sécurité.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Utilisez l'étape 4 pour les comptes, les extensions, les favoris, la langue, la traduction, les modules complémentaires et la gestion du site Web.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Utilisez l'étape 5 uniquement pour les contrôles de stratégie de fonctionnalités intelligentes Firefox AI &amp; existants pris en charge par le schéma sélectionné.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Terminez à l'étape 6, Vérifier l'exportation &amp;, pour valider, enregistrer et télécharger le profil révisé.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
+      <step><cmd>Dans l’étape 1, confirmez le nom, le canal de schéma, le scénario, le préréglage de démarrage et la couche CIS.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Dans l’étape 2, configurez l’accès réseau, le comportement du navigateur, l’accueil, la recherche et les valeurs de navigation par défaut.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Dans l’étape 3, configurez la confidentialité, les autorisations, les cookies, le nettoyage, le DNS et le niveau de sécurité.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Dans l’étape 4, configurez les comptes, les extensions, les favoris, la langue, la traduction et les règles relatives aux sites.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Dans l’étape 5, configurez uniquement les stratégies Firefox pour l’IA et les fonctionnalités intelligentes prises en charge par le schéma sélectionné.</cmd><info><p>Résultat attendu : le profil reste cohérent.</p></info></step>
+      <step><cmd>Dans l’étape 6, validez, enregistrez et exportez le profil.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Vous pouvez expliquer à quoi appartient chaque paramètre guidé et continuer à partir de la bonne étape.</p></result>
-    <postreq><p>Récupération : si vous atterrissez dans la mauvaise zone, utilisez le stepper ou la recherche au lieu de modifier les commandes sans rapport.</p></postreq>
+    <postreq><p>Récupération : si vous êtes dans la mauvaise zone, accédez à l’étape appropriée ou utilisez la recherche plutôt que de modifier des paramètres sans rapport.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-guided-settings"/>

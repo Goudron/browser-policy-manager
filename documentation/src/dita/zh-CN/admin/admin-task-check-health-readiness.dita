@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-check-health-readiness" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>检查 BPM 运行状况和准备情况</title>
+  <title>检查浏览器策略管理器运行状况和准备情况</title>
   <shortdesc>使用当前的存活探测和就绪探测作为 API 工作流程之前的轻量级运行状态预检。</shortdesc>
   <taskbody>
     <prereq><p>设置 <codeph>$BPM_BASE_URL</codeph>。有关主机设置、服务启动、日志、源更新和操作系统详细信息，请使用源部署管理员指南；此 API 主题仅记录集成状态预检。</p></prereq>

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-exact-generation-0.9.3",
+  "backlog_item": "BPM093-M5-05",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-generation-contract",
+  "embedding_decision": {
+    "path": "documentation/config/chat-rag-embedding-decision-0.9.3.json",
+    "sha256": "a230b3836b78d301f83f16b9f931fd357948bacf31df114bf8c2137e796f24c0",
+    "candidate_id": "multilingual-e5-base-onnx-o4"
+  },
+  "storage_decision": {
+    "path": "documentation/config/chat-rag-vector-storage-decision-0.9.3.json",
+    "sha256": "29a79ae4fe808c5126ed9e56b57bd7695a972b5f3f5e8b73edb3969bc7a2c027",
+    "backend_id": "normalized-exact-f32-matrix-v1"
+  },
+  "input": {
+    "chunk_schema_version": "rag-chunk-v1",
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "required_chunk_fields": [
+      "chunk_id", "locale", "topic_id", "anchor_id_or_root", "ordinal", "guide_id",
+      "published_url", "source_sha256", "manifest_sha256", "documentation_version",
+      "bpm_version", "provenance_class", "publication_state", "heading_path", "identifiers", "text"
+    ],
+    "passage_input": "passage: {heading_path}\\n{text}",
+    "sort_order": ["chunk_id"]
+  },
+  "matrix": {
+    "dtype": "little-endian float32",
+    "dimension": 768,
+    "normalization": "L2",
+    "distance_metric": "cosine via descending dot product",
+    "file_name": "vectors.f32",
+    "metadata_file_name": "chunks.json",
+    "metadata_fields": [
+      "chunk_id",
+      "topic_id",
+      "anchor_id_or_root",
+      "ordinal",
+      "guide_id",
+      "published_url",
+      "source_sha256",
+      "identifiers",
+      "documentation_version",
+      "bpm_version",
+      "provenance_class",
+      "heading_path",
+      "text"
+    ],
+    "locale_manifest_file_name": "manifest.json",
+    "root_manifest_file_name": "generation-manifest.json",
+    "active_pointer_file_name": "active-generation.json"
+  },
+  "index_build_runtime": {
+    "intra_op_threads": "all_available_logical_threads",
+    "inter_op_threads": 1,
+    "maximum_sequence_tokens": 512,
+    "swap": "permitted"
+  },
+  "progress": {
+    "stream": "stdout",
+    "update_percent": 5,
+    "flush": true,
+    "content": "real runtime preparation, locale-local chunk completion, cache hits, and newly embedded vectors; no synthetic progress or ETA"
+  },
+  "compatibility_key": [
+    "chunk_schema_version", "text_normalization_revision", "embedding_model_id",
+    "embedding_model_revision_or_checksum", "embedding_dimension", "embedding_dtype_or_quantization",
+    "vector_normalization", "distance_metric", "locale", "source_manifest_sha256", "storage_backend_id"
+  ],
+  "lifecycle": {
+    "generated_root": "documentation/.cache/bpm093-m5-05/generations",
+    "cache_root": "documentation/.cache/bpm093-m5-05/embedding-cache",
+    "private_staging": "A generation is written under a private sibling staging directory and validated completely before immutable generation-directory promotion and atomic active-pointer replacement.",
+    "activation": "Only the active pointer selects a complete verified generation. No symlink, partial directory, or best-effort recovery is accepted.",
+    "corruption": "Any hash, size, dtype, shape, locale, compatibility-key, chunk-order, or pointer mismatch quarantines the candidate and causes chat retrieval to abstain.",
+    "incremental_cache": "A cache entry is keyed by the full compatibility key and SHA-256 of the exact passage input; its sidecar and vector bytes are verified before reuse. Invalid entries are ignored and re-embedded."
+  },
+  "boundaries": {
+    "network_calls_after_model_install": 0,
+    "ordinary_search_calls": 0,
+    "cross_locale_vectors": "forbidden",
+    "generated_artifacts": "ignored local artifacts; never committed as source",
+    "resource_policy": "Offline embedding may use available CPU, RAM, and swap; this does not fine-tune model weights or alter interactive retrieval limits."
+  }
+}

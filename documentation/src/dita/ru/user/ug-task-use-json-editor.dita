@@ -8,7 +8,7 @@
     <context><p>JSON-редактор — это необработанная поверхность документа. Используйте его, когда Пошаговый редактор или Все настройки слишком высокого уровня для точного просмотра, проверки миграции, устранения неполадок или необработанных значений.</p>
       <fig id="screenshot-json-editor">
         <title>JSON-редактор в темной теме</title>
-        <image keyref="screenshot.json-editor" placement="break">
+        <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
           <alt>JSON-редактор показывает редактируемые политики Firefox в формате JSON для сохраненного профиля.</alt>
         </image>
       </fig>

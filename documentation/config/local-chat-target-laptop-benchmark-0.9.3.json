@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-chat-target-laptop-benchmark-0.9.3",
+  "backlog_item": "BPM093-M6-03",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-comparative-selection-contract",
+  "pins": {
+    "runtime_shortlist": {
+      "path": "documentation/config/local-chat-model-runtime-shortlist-0.9.3.json",
+      "sha256": "ff01277c2fb9068395c53a8a9692312c50c14f9913253f5d41627d85825d5ccf"
+    },
+    "grounded_answer_harness": {
+      "path": "documentation/config/grounded-answer-benchmark-harness-0.9.3.json",
+      "sha256": "58c93c5b8497aeba257d3b650658c27fddb002430531a4d801783bb4ce5bbd1f"
+    },
+    "resource_policy": {
+      "path": "documentation/config/chat-rag-resource-policy-amendment-0.9.3.json",
+      "sha256": "c250f7f7b63fa74f7a15545c307a30506ff2d8c978c8c6b15529f65b9e36e74e"
+    },
+    "retrieval_validation": {
+      "path": "documentation/config/chat-rag-retrieval-validation-0.9.3.json",
+      "sha256": "c045418cb31e2c9de949e03f4534c4472a94dd75b344a8cedae27b35a0f41ac7"
+    },
+    "old_laptop_protocol": {
+      "path": "docs/architecture/old-laptop-benchmark-protocol-0.9.3.md",
+      "sha256": "6151fb21f310b0ae3eb3109b5e3519ff0bfa2beb438ab64268ddcb0e5bfbe7b7"
+    }
+  },
+  "target_host": {
+    "cpu_model": "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz",
+    "architecture": "x86_64",
+    "physical_cores": 2,
+    "logical_threads": 4,
+    "accelerators": "CPU-only; no GPU, NPU, or hosted inference"
+  },
+  "runtime": {
+    "executable_name": "llama-cli",
+    "required_flags": ["--offline", "--device", "none", "--jinja", "--reasoning", "off", "--simple-io"],
+    "generation": {
+      "threads": 4,
+      "threads_batch": 4,
+      "context_tokens": 4096,
+      "batch_size": 512,
+      "ubatch_size": 128,
+      "output_tokens_max": 96,
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "top_k": 1,
+      "seed": 0,
+      "reasoning": "off"
+    }
+  },
+  "protocol": {
+    "selection_rule": "This is a comparative selection gate, not the superseded 30-by-6 release-performance matrix. Each observed sample must meet every timing and throughput ceiling.",
+    "warmup_attempts_per_locale_state_scenario": 0,
+    "selection_sample_counts": {
+      "process-cold": {"first_answer": 1},
+      "warm": {"first_answer": 2, "follow_up": 1}
+    },
+    "lifecycle_locale": "en",
+    "rss_sample_interval_ms": 100,
+    "states": ["process-cold", "warm"],
+    "measured_scenarios": ["first_answer", "follow_up"],
+    "lifecycle_scenarios": ["abstain_refuse", "cancellation", "unload_restart"],
+    "warm_session_reset": {
+      "clear_timeout_seconds": 10,
+      "retries": 2,
+      "rule": "A stalled /clear is terminated and replaced sequentially. The replacement is primed and successfully cleared before the next warm sample; every replacement is recorded in the raw sample."
+    },
+    "locale_order": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "one_active_conversation": true,
+    "network": "disabled after verified local artifact staging; llama-cli receives --offline and no listener, server, tool, or provider flag"
+  },
+  "acceptance": {
+    "artifact_disk_gib_max": 2.5,
+    "worker_and_retrieval_rss_gib_max": 3.5,
+    "cold_ttft_p95_ms_max": 30000,
+    "warm_ttft_p95_ms_max": 10000,
+    "completion_p95_ms_max": 60000,
+    "throughput_median_tokens_per_second_min": 3.0,
+    "swap": "Record before/after and per-sample movement as an operational diagnostic only. It neither invalidates a run nor changes an acceptance result.",
+    "hard_rejection": "A candidate that exceeds an artifact, RSS, TTFT, completion, or throughput ceiling in any observed selection sample is rejected regardless of answer style or later quality evidence."
+  },
+  "evidence": {
+    "workload_contract": "A benchmark run requires a complete M6-02 candidate-neutral workload. It never calls ordinary search, cross-locale retrieval, external sources, or a web provider.",
+    "answer_prompt": "The runner serializes only the prepared same-locale context_jsonl, dialogue turns, and question as one canonical stdin JSON line. It uses the GGUF's Jinja template, non-thinking mode, and a 96-token maximum.",
+    "retrieval_artifacts": "A run records the checksum-verified E5-base model directory and complete active exact-generation root used to prepare its workload. Their disk footprint is included with the direct chat runtime/model footprint."
+  },
+  "progress": {
+    "stream": "stdout",
+    "flush": true,
+    "measured_sample_update": 1,
+    "content": "real candidate/locale/state/scenario, completed comparative samples, lifecycle phase, verified artifact state, and terminal result; no synthetic progress or ETA"
+  },
+  "boundaries": {
+    "production_runtime_route": "absent",
+    "listener": "forbidden",
+    "ordinary_search_calls": 0,
+    "cross_locale_retrieval_calls": 0,
+    "external_web_calls": 0,
+    "output": "Raw records, prompts, model output, and reports remain ignored under documentation/.cache/bpm093-m6-03/."
+  }
+}

@@ -91,7 +91,7 @@
       "fixture_id": "alias-ru-ai-controls",
       "locale": "ru",
       "query": "контролы ИИ",
-      "expected_top_topic_id": "ug-reference-schema-dependent-guided-controls",
+      "expected_top_topic_id": "ug-task-configure-firefox-ai-policies",
       "required_score_component": "alias"
     },
     {

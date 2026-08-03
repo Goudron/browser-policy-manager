@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>保存 JSON 文档</title>
+  <title>保存数据交换文档文档</title>
   <shortdesc>将有效的原始 JSON 文档保存回规范的 BPM 配置文件。</shortdesc>
   <taskbody>
     <prereq><p>JSON 文档已被验证或其余警告已被理解。</p></prereq>

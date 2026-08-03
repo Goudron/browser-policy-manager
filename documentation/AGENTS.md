@@ -62,10 +62,17 @@ change.
 
 - Product source is English. Published locales are exactly `en`, `ru`, `de`, `zh-CN`, `fr`, and
   `es-ES`; non-English content is human-authored/reviewed and may not silently fall back to English.
-- Do not ship AI/RAG/embeddings/generative answers, AI-generated screenshot descriptions, or
-  unreviewed machine output as documentation functionality. AI-assisted drafting or localization is
-  allowed during development only after human review, provenance, terminology, placeholder, and
-  parity gates.
+- The approved BPM local documentation assistant is a separate optional chat feature, not a
+  documentation authoring authority and not a replacement for deterministic search. Describe or
+  integrate it only through reviewed contracts: local-only by default, same-locale grounded
+  citations or safe clarification/refusal, deterministic-search independence, and no silent model
+  action, network, or telemetry. External evidence is disabled by default and may use only the
+  reviewed server path after administrator configuration and the reader's persistent explicit
+  switch; it is separately labelled and never becomes local RAG knowledge.
+- Publishable product content, screenshots, captions, and source facts must remain human-reviewed.
+  AI-assisted drafting or localization is permitted only before that review and after provenance,
+  terminology, placeholder, and parity gates; unreviewed AI-authored content or generated chat
+  output is never publishable DITA, a search input, or a source for a later documentation update.
 - Publishable product content is DITA 1.3. Do not add product-guide Markdown, hand-authored HTML,
   inline script/style, raw HTML passthrough, or DITA 2.0 preview syntax.
 - Preserve immutable topic IDs, keys, anchors, target IDs, source slugs, asset IDs, and canonical URL

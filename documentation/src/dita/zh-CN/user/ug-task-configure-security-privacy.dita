@@ -5,9 +5,9 @@
   <shortdesc>使用步骤 3 进行隐私状态、权限、cookie、清理、DNS 和强化控制。</shortdesc>
   <taskbody>
     <prereq><p>指导概要草案已在预期模式通道上打开。</p></prereq>
-    <context><p>安全 &amp; 隐私设置可以改变用户体验和风险状况，因此在保存之前请查看警告。</p></context>
+    <context><p>安全性和隐私设置可以改变用户体验和风险状况，因此在保存之前请查看警告。</p></context>
     <steps>
-      <step><cmd>打开步骤 3，安全 &amp; 隐私。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开引导式配置的第 3 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>配置隐私控制和权限默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>设置配置文件所需的 cookie、清理、DNS 和安全强化选项。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>检查验证消息并解释审核中的任何异常情况。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-browser-tuning-benchmark-0.9.3",
+  "backlog_item": "BPM093-M4-04",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted",
+  "corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+  "frozen_control": {
+    "id": "bpm093-m3-current-static-control",
+    "implementation": "run_search_relevance_benchmark_0_9_3._current_control_topics",
+    "documents": "search_candidate_prototypes.build_compact_documents"
+  },
+  "selected_browser_engine": {
+    "id": "bpm-owned-browser-ranker",
+    "script": "documentation/assets/theme/bpm-docs-search.js",
+    "implementation": "window.BpmDocsSearchRanking.rankDocuments",
+    "document_projection": "compact corpus plus reviewed locale alias groups from search-normalization-aliases-0.9.0"
+  },
+  "metrics": [
+    "top_1",
+    "mrr",
+    "recall_at_5",
+    "no_result_recall"
+  ],
+  "acceptance": {
+    "no_regression_metrics": [
+      "top_1",
+      "mrr",
+      "recall_at_5",
+      "no_result_recall"
+    ],
+    "strict_improvement_metrics": [
+      "top_1",
+      "mrr",
+      "recall_at_5"
+    ],
+    "scope": "Every maintained locale independently; macro averages cannot hide a regression.",
+    "false_positive_guard": "Expected no-result cases must remain empty at least as often as the frozen control."
+  },
+  "tokenization_coverage": [
+    "compounds",
+    "Latin accents",
+    "bounded typo tolerance",
+    "technical identifiers",
+    "reviewed aliases",
+    "CJK full runs, unigrams, and bigrams"
+  ],
+  "network_boundary": "The runner makes no network request, download, browser launch, or generated-site read. Node loads only the maintained BPM browser script."
+}

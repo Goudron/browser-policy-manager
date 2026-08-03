@@ -13,7 +13,7 @@ def test_frontend_vendor_lock_tracks_expected_packages_and_assets():
     lock = json.loads(verify_frontend_vendor.LOCK_PATH.read_text(encoding="utf-8"))
 
     assert lock["packages"] == {
-        "js-yaml": "5.2.1",
+        "js-yaml": "5.2.2",
         "monaco-editor": "0.53.0",
         "esbuild": "0.28.1",
     }

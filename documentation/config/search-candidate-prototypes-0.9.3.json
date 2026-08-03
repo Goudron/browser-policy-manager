@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-search-candidate-prototypes-0.9.3",
+  "backlog_item": "BPM093-M3-02",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-adapter-contracts-not-benchmarked",
+  "purpose": "Build deterministic adapter inputs and normalized result envelopes for isolated search-candidate prototypes. This is not vendor execution, a performance result, or a production search replacement.",
+  "inputs": {
+    "shortlist": "documentation/config/search-selection-shortlist-0.9.3.json",
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "document_result_schema": "documentation/config/search-corpus-and-results-0.9.0.json",
+    "ranking_weights": "documentation/config/search-ranking-typo-0.9.0.json",
+    "facet_contract": "documentation/config/search-facets-filters-0.9.0.json"
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "prototype_boundary": {
+    "production_portal": "not modified",
+    "vendor_execution": "not installed, downloaded, started, or benchmarked by this task",
+    "network": "no request is issued; Meilisearch request shapes are private-adapter envelopes only",
+    "result_meaning": "Normalized results prove BPM input/output mapping only. They are not Pagefind or Meilisearch relevance results."
+  },
+  "compact_documents": {
+    "source": "The four accepted synthetic evaluation-corpus domains, expanded once per locale. Only the canonical term and the reviewed alias are indexed; inflection, typo, compound, and accent variants remain query-only benchmark stimuli.",
+    "per_locale_count": 4,
+    "domain_metadata": {
+      "profile-library": {"guide_id": "user-guide", "topic_kind": "task", "output_slug": "profile-library", "facets": {"firefox_channel": [], "policy_category": [], "cis_level": [], "cis_control_state": [], "api_area": []}},
+      "firefox-ai-controls": {"guide_id": "user-guide", "topic_kind": "task", "output_slug": "firefox-ai-controls", "facets": {"firefox_channel": ["release-153"], "policy_category": ["ai_smart"], "cis_level": [], "cis_control_state": [], "api_area": []}},
+      "api-validation": {"guide_id": "administrator-guide", "topic_kind": "task", "output_slug": "api-validation", "facets": {"firefox_channel": [], "policy_category": [], "cis_level": [], "cis_control_state": [], "api_area": ["validation"]}},
+      "cis-baseline": {"guide_id": "cis-settings-guide", "topic_kind": "task", "output_slug": "cis-baseline", "facets": {"firefox_channel": [], "policy_category": [], "cis_level": ["level-1"], "cis_control_state": ["mapped"], "api_area": []}}
+    }
+  },
+  "candidate_adapters": {
+    "current-static-control": {"kind": "reference-normalized-static", "index_input": "canonical BPM documents", "query_envelope": "in-process deterministic adapter"},
+    "pagefind-1.5.2": {"kind": "static-html-input-contract", "index_input": "minimal static HTML with data-pagefind-body and data-pagefind-filter attributes", "query_envelope": "BPM-owned adapter query; Pagefind binary is not invoked"},
+    "meilisearch-ce-1.45.1": {"kind": "private-service-request-contract", "index_input": "Meilisearch document batch and filterable-attribute settings", "query_envelope": "not-started BPM private-adapter POST envelope; browser-to-daemon transport is forbidden"}
+  },
+  "required_preservation": ["stable topic URLs", "locale separation", "guide/topic/channel/policy/CIS/API facets", "ranking source weights", "technical identifiers", "reviewed aliases", "plain-text snippets", "deterministic input", "normalized result schema"],
+  "next_evidence": ["BPM093-M3-03", "BPM093-M3-04", "BPM093-M3-05"]
+}

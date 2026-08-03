@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-record-ha-production-deferred-boundaries" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux windows web">
-  <title>记录 HA 和生产延期边界</title>
+  <title>记录高可用和生产延期边界</title>
   <shortdesc>说明目前缺少哪些生产、HA、反向代理、恢复和服务管理功能，以及可以为以后的设计工作做好哪些准备。</shortdesc>
   <taskbody>
     <prereq><p>当前源运行实例存在准备情况、网络暴露、备份/导出、监控和更新窗口注释。</p></prereq>

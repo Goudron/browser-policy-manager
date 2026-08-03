@@ -1,0 +1,38 @@
+{
+  "schema_version": 2,
+  "contract_id": "bpm-documentation-assistant-web-mode-0.9.3",
+  "backlog_item": "BPM093-M10-06",
+  "target_bpm_version": "0.9.3",
+  "status": "historical-consent-renderer-superseded-by-m12b-06-reader-switch",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "release_amendment": {
+    "owner": "BPM093-M12B-06",
+    "reason": "The product policy now uses one persistent explicit reader switch instead of per-question consent.",
+    "default": "off",
+    "retention": "one browser tab and exact locale until explicit disable, locale change or tab close",
+    "server_authority": "The renderer presents only the server-validated enabled/available state; the M12A-04 service remains the network authority."
+  },
+  "input_boundary": {
+    "api_version": 1,
+    "exact_snapshot_fields": ["api_version", "available", "enabled", "locale", "reason_code", "state_epoch"],
+    "enabled_requires_available": true,
+    "visible_text": "The switch label is locale-owned portal copy; provider/model prose never supplies it."
+  },
+  "rendering": {
+    "surface": "A native checkbox with role=switch is visible only while the assistant is Ready.",
+    "unavailable": "The switch remains visible, unchecked and disabled when administrator configuration does not permit external evidence.",
+    "helper": "The presentation helper validates and renders state only; the same-origin transport owns GET/POST and chat submission.",
+    "safe_dom": "State is applied through checked, disabled, aria-disabled and data attributes only."
+  },
+  "boundaries": {
+    "page_load": "The helper only registers validation/render functions and performs no fetch, status poll, provider request or DOM mutation on its own.",
+    "provider_request": false,
+    "ordinary_search_changed": false,
+    "local_or_session_storage_access": false
+  },
+  "verification": {
+    "historical_amendment": "documentation/tests/contract/test_documentation_assistant_web_mode_contract_0_9_3.py",
+    "release_contract": "documentation/config/documentation-assistant-floating-web-mode-contract-0.9.3.json",
+    "architecture": "docs/architecture/documentation-assistant-web-mode-0.9.3.md"
+  }
+}

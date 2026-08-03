@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-floating-web-mode-0.9.3",
+  "backlog_item": "BPM093-M12B-06",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-reader-switch-and-external-claims-ui",
+  "pins": {
+    "external_release": {"path": "documentation/config/documentation-assistant-external-evidence-release-contract-0.9.3.json", "sha256": "f39f510ebaa7a60682569ea69904d78f2e2e5ed1e280a5ca60bc68ad4173a81d"},
+    "floating_ui": {"path": "documentation/config/documentation-assistant-floating-ui-contract-0.9.3.json", "sha256": "a8293dc10da46329f7c063e0a4a0972ce615ed939cd80c5b186d30cb2f97f669"},
+    "historical_web_mode_amendment": {"path": "documentation/config/documentation-assistant-web-mode-contract-0.9.3.json", "sha256": "61bb1328324cd100a8f6297390d7f2c5c0568ec29167d4cef1b5fddfa409d589"}
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "switch": {
+    "surface": "native checkbox with role=switch in the Ready bottom status row",
+    "label": "short locale-owned External sources equivalent",
+    "default": "off",
+    "ready_only": true,
+    "unavailable_configuration": "visible, unchecked and disabled",
+    "busy_or_not_ready": "hidden and disabled",
+    "explicit_change": "same-origin POST updates server state; toggle alone never contacts an external provider"
+  },
+  "tab_and_locale_state": {
+    "browser_storage": "sessionStorage under the existing versioned exact-locale floating-assistant key",
+    "stored": ["boolean reader preference", "cryptographically random opaque tab ID"],
+    "server_key": "HttpOnly assistant session plus opaque tab ID plus exact locale",
+    "retained_until": ["explicit switch off", "locale change", "tab close"],
+    "not_reset_by": ["answer", "conversation Clear", "cancellation", "provider failure", "reload", "documentation navigation"],
+    "new_tab_default": "off",
+    "page_load_requests": 0
+  },
+  "transport": {
+    "status": "GET /api/documentation-assistant/web-mode with locale and opaque tab_id after explicit assistant opening",
+    "set": "same-origin JSON POST /api/documentation-assistant/web-mode",
+    "chat": "chat includes opaque tab_id and presentation web_mode, while the server derives effective authority from its stored mode",
+    "crafted_web_mode_authority": false,
+    "provider_call_on_status_or_toggle": false
+  },
+  "external_answer": {
+    "schema": "optional bounded external_claims beside unchanged local text and local citations",
+    "region": "separately labelled locale-owned External sources region below the local answer and local sources",
+    "safe_rendering": "textContent and createElement only",
+    "source": "server-resolved opaque handle with exact external_untrusted kind and Brave provider ID",
+    "url": "HTTPS URL must pass the same Mozilla host/path allowlist in the browser before becoming a link",
+    "link": "new browsing context with noopener noreferrer",
+    "persistence": "external claims and URLs are not placed in browser storage"
+  },
+  "boundaries": {
+    "ordinary_search_changed": false,
+    "model_lifecycle_changed": false,
+    "direct_brave_browser_call": false,
+    "cross_locale_preference": false,
+    "cross_tab_preference": false,
+    "per_question_consent": false
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_documentation_assistant_floating_web_mode_contract_0_9_3.py",
+    "backend": ["tests/test_documentation_assistant_api_093.py", "tests/test_documentation_assistant_service_093.py"],
+    "builder": "documentation/tests/unit/test_build_docs.py",
+    "browser": "documentation/tests/browser/test_documentation_portal_browser_smoke.py",
+    "architecture": "docs/architecture/documentation-assistant-floating-web-mode-0.9.3.md"
+  }
+}

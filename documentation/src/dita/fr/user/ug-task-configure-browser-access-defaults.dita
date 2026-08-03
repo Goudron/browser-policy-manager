@@ -5,9 +5,9 @@
   <shortdesc>Utilisez l'étape 2 pour configurer l'accès au navigateur, le comportement du réseau et les valeurs par défaut de base.</shortdesc>
   <taskbody>
     <prereq><p>Un brouillon de profil guidé est ouvert.</p></prereq>
-    <context><p>L'accès au navigateur &amp; par défaut collecte des contrôles qui déterminent si Firefox peut atteindre les ressources et comment il se comporte avant les choix de politique spécifiques au contenu.</p></context>
+    <context><p>Les paramètres d’accès au navigateur et les valeurs par défaut déterminent si Firefox peut atteindre les ressources et comment il se comporte avant les choix de stratégie propres au contenu.</p></context>
     <steps>
-      <step><cmd>Ouvrez l'étape 2, accès au navigateur &amp; valeurs par défaut.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 2 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Examinez les contrôles d'accès au réseau et de comportement du navigateur pour le déploiement.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Définissez les valeurs de base par défaut avant d'ajouter des choix spécifiques à l'accueil, à la recherche ou à la navigation.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Validez les avertissements affichés à côté des contrôles dépendants du schéma.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

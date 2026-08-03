@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-firefox-schema" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>选择 Firefox 架构通道</title>
+  <title>选择火狐浏览器架构通道</title>
   <shortdesc>在导入、验证或编辑配置文件之前，选择 Firefox Release 153、Firefox ESR 153.0 或 Firefox ESR 140.13。</shortdesc>
   <taskbody>
     <prereq><p>在创建配置文件、导入 policies.json 或验证原始 JSON 文档之前启动此任务。</p></prereq>

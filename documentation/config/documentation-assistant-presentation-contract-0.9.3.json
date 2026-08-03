@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-presentation-0.9.3",
+  "backlog_item": "BPM093-M10-04",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-validated-final-renderer-without-chat-enable",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "input_boundary": {
+    "only_input": "A later same-origin transport may call the renderer only with one already server-validated final payload and source views.",
+    "exact_payload_fields": ["api_version", "locale", "bpm_version", "disposition", "text", "sources"],
+    "answer": "An answer has at most eight sources, nonempty bounded plain text, and at least one current local source.",
+    "nonanswer": "clarify, abstain and refuse have empty text and no sources.",
+    "source_fields": ["source_id", "title", "guide", "anchor", "published_url", "locale", "bpm_version", "provenance", "excerpt"],
+    "rejected": ["raw model events", "partial tokens", "scores", "confidence percentages", "paths", "chunks", "vectors", "hashes", "prompts", "arbitrary HTML", "unvalidated URLs"]
+  },
+  "rendering": {
+    "answer_modes": ["answer", "clarify", "abstain", "refuse"],
+    "mode_copy": "Each mode uses the locale-owned M10-03 answer/clarification/no-evidence/out-of-scope copy; no probability or numeric confidence is shown.",
+    "source_presentation": ["keyboard reachable title link", "local versus external provenance label", "guide", "topic title", "section anchor", "BPM version", "expandable display-safe excerpt only when supplied"],
+    "local_link": "Only a same-origin /help/{locale}/ path without query or supplied fragment is accepted. A validated non-root anchor is appended by the renderer.",
+    "external_link": "Only an HTTPS URL without credentials is accepted, labelled external and opened with noopener noreferrer.",
+    "sink": "All rendered labels, answer text and source metadata use createElement/textContent. Markup parsing and HTML insertion are forbidden."
+  },
+  "boundaries": {
+    "page_load": "The renderer only registers a future-callable function. It makes no fetch, model check, retrieval, worker start, request, poll or DOM update on page load.",
+    "assistant_http_route": false,
+    "chat_controls_enabled": false,
+    "ordinary_search_changed": false,
+    "web_request": false
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_documentation_assistant_presentation_contract_0_9_3.py",
+    "copy_contract": "documentation/tests/contract/test_documentation_assistant_copy_contract_0_9_3.py",
+    "architecture": "docs/architecture/documentation-assistant-presentation-0.9.3.md"
+  }
+}

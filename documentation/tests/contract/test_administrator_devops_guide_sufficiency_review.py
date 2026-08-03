@@ -17,6 +17,11 @@ PROTOCOL = DOCUMENTATION_ROOT / "config/documentation-sufficiency-review-protoco
 TAXONOMY = DOCUMENTATION_ROOT / "config/topic-section-taxonomy-0.9.1.json"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 TEST_NODE_RE = re.compile(r"(?P<path>[A-Za-z0-9_./-]+\.py)::(?P<test>test_[A-Za-z0-9_]+)")
+POST_091_ASSISTANT_TOPICS = {
+    "admin-reference-minimum-system-requirements",
+    "admin-task-operate-local-documentation-assistant",
+    "admin-task-maintain-local-documentation-assistant",
+}
 
 pytestmark = pytest.mark.docs_contract
 
@@ -106,15 +111,20 @@ def test_review_normalization_resolves_protocol_fields_and_evidence() -> None:
                 assert f"def {node['test']}(" in path.read_text(encoding="utf-8")
 
 
-def test_review_covers_every_administrator_topic_once_in_taxonomy_order() -> None:
+def test_historical_review_covers_its_0_9_1_administrator_topic_inventory() -> None:
     taxonomy = _admin_taxonomy()
     reviews = _sections()
     reviewed = [topic for section in reviews.values() for topic in section["topic_ids"]]
 
-    assert list(reviews) == [section["section_id"] for section in taxonomy["sections"]]
-    for section in taxonomy["sections"]:
-        assert reviews[section["section_id"]]["topic_ids"] == section["topics"]
-    assert len(reviewed) == len(set(reviewed)) == taxonomy["topic_count"] == 49
+    current_topics = [
+        topic_id
+        for section in taxonomy["sections"]
+        for topic_id in section["topics"]
+        if topic_id not in POST_091_ASSISTANT_TOPICS
+    ]
+    assert set(reviewed) == set(current_topics)
+    assert not (POST_091_ASSISTANT_TOPICS & set(reviewed))
+    assert len(reviewed) == len(set(reviewed)) == len(current_topics) == 49
     assert sum("-concept-" in topic_id for topic_id in reviewed) == 4
 
 

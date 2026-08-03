@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="ug-task-use-local-documentation-assistant" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
+  <title>Usar el asistente local de documentación de BPM</title>
+  <shortdesc>Use el chat del asistente de documentación mientras el entrenamiento del modelo local está previsto para una versión posterior de BPM.</shortdesc>
+  <taskbody>
+    <prereq><p>Abra una página de documentación de BPM en el idioma en el que desea formular la pregunta. La entrada del asistente está en la esquina inferior derecha; la búsqueda habitual de documentación sigue disponible aunque el asistente no esté listo.</p></prereq>
+    <context><p>En BPM 0.9.3 no se entrega el entrenamiento del modelo local. Para cada pregunta enviada, el chat muestra: <q>El modelo local se está entrenando actualmente. Esta funcionalidad estará disponible en una de las próximas versiones.</q> No genera una respuesta, no busca un índice, no usa fuentes externas ni sustituye la búsqueda documental habitual.</p></context>
+    <steps>
+      <step><cmd>Seleccione <ph>Asistente de IA de BPM</ph> para abrir el chat flotante.</cmd><info><p>En un equipo de escritorio, el panel abierto ocupa aproximadamente la mitad de la anchura de la ventana y el 90 por ciento de su altura visible. La transcripción se desplaza, mientras el campo de pregunta y la fila de estado siguen visibles.</p></info></step>
+      <step><cmd>Introduzca cualquier pregunta en el idioma actual de la documentación y envíela.</cmd><info><p>El chat acepta el turno y devuelve el aviso localizado de entrenamiento. No inicia modelo, worker de recuperación, consulta de índice ni solicitud externa.</p></info></step>
+      <step><cmd>Lea el aviso de entrenamiento en la transcripción.</cmd><info><p>Es un mensaje de estado del producto, no una respuesta de BPM, y no tiene fuentes documentales. No lo use para configurar ni validar una política.</p></info></step>
+      <step><cmd>Use la búsqueda documental determinista para la información actual del producto.</cmd><info><p>La búsqueda, filtros, navegación y orden de resultados permanecen independientes del asistente y son la vía compatible para encontrar temas BPM publicados en 0.9.3.</p></info></step>
+      <step><cmd>Use <ph>Borrar</ph> si desea quitar la conversación visible.</cmd><info><p>El estado del panel y los mensajes terminados se mantienen en la pestaña y el idioma de documentación actuales tras navegar o recargar. Borrar una conversación no elimina artefactos locales.</p></info></step>
+    </steps>
+    <result><p>El chat muestra el aviso localizado de entrenamiento para la pregunta enviada. La búsqueda determinista permanece disponible para cualquier necesidad de información actual de BPM.</p></result>
+    <postreq><p>El entrenamiento del modelo local, las respuestas generadas, las fuentes y las fuentes externas están fuera del alcance de BPM 0.9.3. No sustituya una prueba de políticas ni la aprobación de un administrador por el aviso.</p></postreq>
+  </taskbody>
+</task>

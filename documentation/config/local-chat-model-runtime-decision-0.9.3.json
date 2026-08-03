@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-chat-model-runtime-decision-0.9.3",
+  "backlog_item": "BPM093-M6-04",
+  "target_bpm_version": "0.9.3",
+  "status": "maintainer-selected-under-best-effort-latency-policy",
+  "decision_date": "2026-07-30",
+  "decision_authority": "Explicit project-maintainer M6-04A decision: accept Qwen3 0.6B's measured target-laptop profile without a repeated benchmark and replace only the failed latency gates with the policy below.",
+  "pins": {
+    "runtime_shortlist": {
+      "path": "documentation/config/local-chat-model-runtime-shortlist-0.9.3.json",
+      "sha256": "ff01277c2fb9068395c53a8a9692312c50c14f9913253f5d41627d85825d5ccf"
+    },
+    "target_laptop_benchmark": {
+      "path": "documentation/config/local-chat-target-laptop-benchmark-0.9.3.json",
+      "sha256": "cda29f77005d41210c3b3df28991d70b6158b7229721fb206955793e28de1e40"
+    },
+    "e5_retrieval_decision": {
+      "path": "documentation/config/chat-rag-embedding-decision-0.9.3.json",
+      "sha256": "a230b3836b78d301f83f16b9f931fd357948bacf31df114bf8c2137e796f24c0"
+    },
+    "security_privacy": {
+      "path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json",
+      "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"
+    },
+    "availability_fallback": {
+      "path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json",
+      "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"
+    }
+  },
+  "runtime": {
+    "id": "llama.cpp-b9637-linux-x64-cpu",
+    "revision": "aedb2a5e9ca3d4064148bbb919e0ddc0c1b70ab3",
+    "release_tag": "b9637",
+    "license": "MIT",
+    "transport": "owner-managed direct child process over stdio only",
+    "required_flags": ["--offline", "--device", "none", "--grammar", "--no-show-timings", "--jinja", "--reasoning", "off", "--simple-io"],
+    "forbidden": ["llama-server", "TCP listener", "HTTP listener", "LAN binding", "public model API", "tools", "plugins", "function calling"]
+  },
+  "inference_profile": {
+    "threads": 4,
+    "threads_batch": 4,
+    "context_tokens": 4096,
+    "batch_size": 512,
+    "ubatch_size": 128,
+    "output_tokens_max": 96,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "top_k": 1,
+    "seed": 0,
+    "chat_template": "immutable GGUF Jinja template",
+    "reasoning_mode": "non-thinking (/no_think); hidden reasoning, thought tags, and raw template text are not displayable"
+  },
+  "model_decision": {
+    "production_selected_candidate": "qwen3-0.6b-q8_0-official-gguf",
+    "comparative_fallback": {
+      "id": "qwen3-0.6b-q8_0-official-gguf",
+      "artifact": "Qwen3-0.6B-Q8_0.gguf",
+      "artifact_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+      "quantization": "Q8_0",
+      "license": "Apache-2.0",
+      "disposition": "Selected for later explicit opt-in installation under the M6-04A best-effort latency policy. It remains disabled until M6-05 verifies an artifact and M6-06 implements the bounded worker.",
+      "complete_compact_matrix": {
+        "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+        "durable_records": 27,
+        "cold_worst_ttft_ms": 21287.793,
+        "warm_worst_ttft_ms": 33636.36,
+        "worst_completion_ms": 82780.755,
+        "cold_median_tokens_per_second": 4.95,
+        "warm_median_tokens_per_second": 4.75,
+        "peak_rss_bytes": 1186066432,
+        "artifact_disk_gib": 1.1805838374421,
+        "benchmark_status": "fail",
+        "failures": ["en:process-cold:completion", "en:warm:ttft", "ru:warm:ttft", "de:warm:ttft", "zh-CN:warm:ttft", "zh-CN:warm:completion", "fr:warm:ttft", "es-ES:warm:ttft", "es-ES:warm:completion"],
+        "raw_records_sha256": "f6fb50fb153740b7c0f4bb53b8a84443d1024ecc1904a67f23ce46c28a56b6cf",
+        "report_sha256": "b0b252853586e685c77e76da68109fc03b3e885da19f96c396084cb2dafcf71f"
+      }
+    },
+    "rejected_candidates": [
+      {
+        "id": "qwen3-1.7b-q8_0-official-gguf",
+        "artifact": "Qwen3-1.7B-Q8_0.gguf",
+        "artifact_sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a",
+        "quantization": "Q8_0",
+        "license": "Apache-2.0",
+        "measured_early_rejection": {
+          "locale": "en",
+          "state": "process-cold",
+          "scenario": "first_answer",
+          "ttft_ms": 52071.163,
+          "completion_ms": 146727.827,
+          "tokens_per_second": 1.7,
+          "peak_rss_bytes": 2383695872,
+          "partial_records_sha256": "a20afb326cedaee1b6fb3c2b0c63cf1422d07256e18185bec8fdbdcffd244b27",
+          "reason": "The first comparable sample exceeded cold TTFT, completion, and throughput hard gates. Remaining locales and quality review could not change a hard rejection."
+        }
+      }
+    ]
+  },
+  "retrieval_boundary": {
+    "embedding_model": "multilingual-e5-base-onnx-o4",
+    "embedding_model_license": "MIT",
+    "retrieval": "chat-only, same active locale, normalized exact float32 matrix",
+    "ordinary_search": "BPM deterministic documentation search is not called, changed, reranked, or replaced.",
+    "cross_locale_retrieval": "forbidden",
+    "optional_external_evidence": "disabled by default and never becomes local chunks, embeddings, an index, or chat knowledge"
+  },
+  "performance_policy": {
+    "backlog_item": "BPM093-M6-04A",
+    "status": "maintainer-accepted-no-rerun",
+    "scope": "Only the selected Qwen3 0.6B Q8_0 local chat path on the measured CPU-only target laptop profile.",
+    "user_visible_promise": "Local chat is best effort: BPM makes no fixed target-laptop promise for time to first token or complete-answer latency. It must disclose local CPU processing, remain non-blocking, and provide cancellation when the later worker is available.",
+    "accepted_evidence": "The complete M6-03 six-locale matrix is accepted as the baseline without a repeat benchmark. Its failed latency values remain visible historical evidence and are not rewritten as a pass.",
+    "superseded_acceptance": ["cold_ttft_p95_ms_max", "warm_ttft_p95_ms_max", "completion_p95_ms_max", "throughput_median_tokens_per_second_min"],
+    "retained_acceptance": ["artifact_disk_gib_max", "worker_and_retrieval_rss_gib_max", "one_active_conversation", "offline_runtime", "verified_artifact", "same_locale_citable_retrieval", "ordinary_search_independence", "security_privacy_and_fallback_contracts"],
+    "no_rerun": true,
+    "excluded_candidate_rule": "The amendment does not select Qwen3 1.7B or erase its observed early rejection."
+  },
+  "release_blocker": {
+    "id": "BPM093-M6-03-LATENCY",
+    "status": "superseded-by-m6-04a-performance-policy",
+    "resolution_backlog_item": "BPM093-M6-04A",
+    "reason": "The maintainer accepted the measured Qwen3 0.6B best-effort profile and explicitly superseded the latency-only hard gates without a re-benchmark.",
+    "effect": ["M6-05 may implement explicit verified installation for Qwen3 0.6B only.", "M6-06 owns the bounded worker only; later M7/M8 controller work owns any chat route. This decision starts neither.", "The deterministic documentation search and /help/ remain independent and ready."],
+    "resolution_rule": "The selected best-effort policy applies only to the named 0.6B artifact/profile. Any model, runtime, quantization, host scope, or user-visible latency promise change requires an explicit new decision and affected evidence."
+  },
+  "no_model_fallback": {
+    "current_product_behavior": "Until the user explicitly installs and enables the verified 0.6B artifact, use deterministic documentation search and normal /help/ navigation; do not start, download, or retry a model.",
+    "future_extractive_behavior": "Any later extractive chat answer remains optional, must be grounded in same-locale published citations, and must fail closed to deterministic search when unavailable."
+  },
+  "verification": {
+    "architecture": "docs/architecture/local-chat-model-runtime-decision-adr-0.9.3.md",
+    "contract": "documentation/tests/contract/test_local_chat_model_runtime_decision_0_9_3.py",
+    "product_runtime_change": false
+  }
+}

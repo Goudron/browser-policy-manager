@@ -7,13 +7,13 @@
   "purpose": "Close the release-blocking full visible-English review for every non-English DITA source while preserving reviewed technical literals.",
   "scope": {
     "locales": ["ru", "de", "zh-CN", "fr", "es-ES"],
-    "source_files_reviewed": 805,
+    "source_files_reviewed": 830,
     "source_files_per_locale": {
-      "ru": 161,
-      "de": 161,
-      "zh-CN": 161,
-      "fr": 161,
-      "es-ES": 161
+      "ru": 166,
+      "de": 166,
+      "zh-CN": 166,
+      "fr": 166,
+      "es-ES": 166
     },
     "visible_elements": [
       "title",

@@ -35,58 +35,109 @@ CIS_GUIDE_KEYREFS = [
     "topic.cis-task-run-level-1-workflow",
     "topic.cis-task-run-level-2-hardened-workflow",
 ]
+ADMIN_GUIDE_SECTIONS = (
+    (
+        "requirements-and-scope",
+        (
+            "topic.admin-reference-minimum-system-requirements",
+            "topic.admin-task-assess-single-node-source-readiness",
+            "topic.admin-task-record-ha-production-deferred-boundaries",
+        ),
+    ),
+    (
+        "linux-source-deployment",
+        (
+            "topic.admin-task-prepare-linux-source-deployment",
+            "topic.admin-task-set-up-linux-source-checkout",
+            "topic.admin-task-configure-linux-source-runtime",
+            "topic.admin-task-verify-linux-source-deployment",
+            "topic.admin-task-install-ubuntu-26-04-source",
+            "topic.admin-task-install-debian-13-source",
+            "topic.admin-task-install-fedora-44-source",
+            "topic.admin-task-install-linux-mint-22-3-source",
+            "topic.admin-task-install-manjaro-stable-source",
+        ),
+    ),
+    (
+        "windows-wsl-source-deployment",
+        (
+            "topic.admin-task-prepare-windows-wsl-source-deployment",
+            "topic.admin-task-set-up-windows-wsl-source-checkout",
+            "topic.admin-task-configure-windows-wsl-network-runtime",
+            "topic.admin-task-verify-windows-wsl-source-deployment",
+        ),
+    ),
+    (
+        "operate-and-update-source-deployment",
+        (
+            "topic.admin-task-review-devops-configuration-sources",
+            "topic.admin-task-plan-devops-storage-logs-backups",
+            "topic.admin-task-review-devops-network-cors-security",
+            "topic.admin-task-record-devops-operational-boundaries",
+            "topic.admin-task-prepare-source-update-evidence",
+            "topic.admin-task-refresh-source-revision-dependencies",
+            "topic.admin-task-run-source-update-migrations-docs",
+            "topic.admin-task-verify-source-update-rollback-stop",
+            "topic.admin-task-check-health-readiness",
+        ),
+    ),
+    (
+        "api-integration",
+        (
+            "topic.admin-concept-integration-audience",
+            "topic.admin-concept-supported-integration-patterns",
+            "topic.admin-concept-api-conventions",
+            "topic.admin-concept-api-limitations",
+            "topic.admin-task-use-reusable-api-examples",
+            "topic.admin-task-sync-profile-lifecycle",
+            "topic.admin-task-manage-profile-retirement",
+            "topic.admin-task-import-firefox-policies-json",
+            "topic.admin-task-export-firefox-policies-json",
+            "topic.admin-task-validate-firefox-policies-json",
+        ),
+    ),
+    (
+        "lifecycle-workflows-and-recovery",
+        (
+            "topic.admin-task-run-pull-compare-update-scenario",
+            "topic.admin-task-run-import-review-export-scenario",
+            "topic.admin-task-run-control-product-inventory-pull",
+            "topic.admin-task-run-validate-before-apply-update",
+            "topic.admin-task-run-import-review-export-handoff",
+            "topic.admin-task-gate-control-product-startup",
+            "topic.admin-task-record-integration-failure-audit",
+        ),
+    ),
+    (
+        "troubleshooting-and-production-readiness",
+        (
+            "topic.admin-troubleshoot-failed-startup-probes",
+            "topic.admin-troubleshoot-schema-cache-validation",
+            "topic.admin-troubleshoot-import-export-failures",
+            "topic.admin-troubleshoot-database-storage",
+            "topic.admin-troubleshoot-wsl-networking-dependencies",
+            "topic.admin-troubleshoot-documentation-portal-build-links",
+            "topic.admin-task-review-network-exposure-proxy-readiness",
+            "topic.admin-task-plan-monitoring-backup-update-windows",
+        ),
+    ),
+    (
+        "documentation-assistant-operations",
+        (
+            "topic.admin-task-operate-local-documentation-assistant",
+            "topic.admin-task-maintain-local-documentation-assistant",
+        ),
+    ),
+)
 ADMIN_GUIDE_KEYREFS = [
-    "topic.admin-task-prepare-linux-source-deployment",
-    "topic.admin-task-set-up-linux-source-checkout",
-    "topic.admin-task-configure-linux-source-runtime",
-    "topic.admin-task-verify-linux-source-deployment",
-    "topic.admin-task-install-ubuntu-26-04-source",
-    "topic.admin-task-install-debian-13-source",
-    "topic.admin-task-install-fedora-44-source",
-    "topic.admin-task-install-linux-mint-22-3-source",
-    "topic.admin-task-install-manjaro-stable-source",
-    "topic.admin-task-prepare-windows-wsl-source-deployment",
-    "topic.admin-task-set-up-windows-wsl-source-checkout",
-    "topic.admin-task-configure-windows-wsl-network-runtime",
-    "topic.admin-task-verify-windows-wsl-source-deployment",
-    "topic.admin-task-review-devops-configuration-sources",
-    "topic.admin-task-plan-devops-storage-logs-backups",
-    "topic.admin-task-review-devops-network-cors-security",
-    "topic.admin-task-record-devops-operational-boundaries",
-    "topic.admin-task-prepare-source-update-evidence",
-    "topic.admin-task-refresh-source-revision-dependencies",
-    "topic.admin-task-run-source-update-migrations-docs",
-    "topic.admin-task-verify-source-update-rollback-stop",
-    "topic.admin-concept-integration-audience",
-    "topic.admin-concept-supported-integration-patterns",
-    "topic.admin-concept-api-conventions",
-    "topic.admin-concept-api-limitations",
-    "topic.admin-task-sync-profile-lifecycle",
-    "topic.admin-task-manage-profile-retirement",
-    "topic.admin-task-import-firefox-policies-json",
-    "topic.admin-task-export-firefox-policies-json",
-    "topic.admin-task-validate-firefox-policies-json",
-    "topic.admin-task-check-health-readiness",
-    "topic.admin-task-run-pull-compare-update-scenario",
-    "topic.admin-task-run-import-review-export-scenario",
-    "topic.admin-task-use-reusable-api-examples",
-    "topic.admin-task-run-control-product-inventory-pull",
-    "topic.admin-task-run-validate-before-apply-update",
-    "topic.admin-task-run-import-review-export-handoff",
-    "topic.admin-task-gate-control-product-startup",
-    "topic.admin-task-record-integration-failure-audit",
-    "topic.admin-troubleshoot-failed-startup-probes",
-    "topic.admin-troubleshoot-schema-cache-validation",
-    "topic.admin-troubleshoot-import-export-failures",
-    "topic.admin-troubleshoot-database-storage",
-    "topic.admin-troubleshoot-wsl-networking-dependencies",
-    "topic.admin-troubleshoot-documentation-portal-build-links",
-    "topic.admin-task-assess-single-node-source-readiness",
-    "topic.admin-task-review-network-exposure-proxy-readiness",
-    "topic.admin-task-plan-monitoring-backup-update-windows",
-    "topic.admin-task-record-ha-production-deferred-boundaries",
+    keyref for _, section_keyrefs in ADMIN_GUIDE_SECTIONS for keyref in section_keyrefs
 ]
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
+PRODUCT_VERSION_CHANNELS = (
+    "Firefox Release 153",
+    "Firefox ESR 153.0",
+    "Firefox ESR 140.13",
+)
 
 pytestmark = pytest.mark.docs_contract
 
@@ -139,11 +190,28 @@ def test_guide_maps_are_independent_localized_dita_inputs(locale: str) -> None:
             ]
             assert list(root) == [title, key_map, *topicrefs]
         elif filename == "administrator-guide.ditamap":
-            topicrefs = root.findall("topicref")
-            assert [topicref.attrib for topicref in topicrefs] == [
-                {"keyref": keyref} for keyref in ADMIN_GUIDE_KEYREFS
+            topicheads = root.findall("topichead")
+            assert len(topicheads) == len(ADMIN_GUIDE_SECTIONS)
+            assert all(topichead.attrib == {"outputclass": "case-oriented-section"} for topichead in topicheads)
+            assert list(root) == [title, key_map, *topicheads]
+            assert [
+                (
+                    topichead.find("topicmeta/data").attrib,
+                    [topicref.attrib for topicref in topichead.findall("topicref")],
+                )
+                for topichead in topicheads
+            ] == [
+                (
+                    {"name": "admin-section-id", "value": section_id},
+                    [{"keyref": keyref} for keyref in keyrefs],
+                )
+                for section_id, keyrefs in ADMIN_GUIDE_SECTIONS
             ]
-            assert list(root) == [title, key_map, *topicrefs]
+            assert all(
+                (navtitle := topichead.find("topicmeta/navtitle")) is not None
+                and "".join(navtitle.itertext()).strip()
+                for topichead in topicheads
+            )
         else:
             assert list(root) == [title, key_map]
 
@@ -177,3 +245,11 @@ def test_publishable_source_boundary_contains_only_dita_xml() -> None:
     }
     assert ".ditamap" in source_files
     assert source_files <= {".ditamap", ".dita"}
+
+
+@pytest.mark.parametrize("locale", LOCALES)
+def test_product_version_topic_lists_every_current_firefox_schema_channel(locale: str) -> None:
+    topic = DITA_ROOT / locale / "user" / "ug-reference-product-version.dita"
+
+    text = topic.read_text(encoding="utf-8")
+    assert all(channel in text for channel in PRODUCT_VERSION_CHANNELS)

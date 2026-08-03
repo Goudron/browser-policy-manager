@@ -13,48 +13,48 @@
   "source_policy": "Reuse localized User Guide map terminology and BPM locale catalog mode names where available; use reviewed locale-native administrator workflow terms for derived sections.",
   "labels": {
     "navigation.section.user-guide.orient-and-plan": {
-      "en": "Orient and plan profile work",
-      "ru": "Ориентируйтесь и планируйте работу с профилями",
-      "de": "Profilarbeit verstehen und planen",
-      "zh-CN": "了解并规划配置文件工作",
+      "en": "Plan profile work",
+      "ru": "Планирование работы с профилями",
+      "de": "Profilarbeit planen",
+      "zh-CN": "规划配置档案工作",
       "fr": "Comprendre et planifier le travail sur les profils",
-      "es-ES": "Orientarse y planificar el trabajo con perfiles"
+      "es-ES": "Planificar el trabajo con perfiles"
     },
     "navigation.section.user-guide.create-and-start": {
-      "en": "Create and start a profile",
-      "ru": "Создайте и настройте профиль",
+      "en": "Create and set up a profile",
+      "ru": "Создание и настройка профиля",
       "de": "Ein Profil erstellen und einrichten",
-      "zh-CN": "创建并设置配置文件",
+      "zh-CN": "创建并设置配置档案",
       "fr": "Créer et configurer un profil",
       "es-ES": "Crear y configurar un perfil"
     },
     "navigation.section.user-guide.guided-editor": {
-      "en": "Configure with Guided editor",
-      "ru": "Настройте профиль в пошаговом редакторе",
-      "de": "Mit dem geführten Editor konfigurieren",
+      "en": "Configure profiles in Guided editor",
+      "ru": "Настройка профиля в режиме «Пошаговый редактор»",
+      "de": "Profile im Modus „Geführter Editor“ konfigurieren",
       "zh-CN": "使用引导式编辑器进行配置",
-      "fr": "Configurer avec l’éditeur guidé",
-      "es-ES": "Configurar con el editor guiado"
+      "fr": "Configurer des profils dans l’« Éditeur guidé »",
+      "es-ES": "Configurar perfiles en «Editor guiado»"
     },
     "navigation.section.user-guide.finish-profile-changes": {
-      "en": "Review, validate, and finish profile changes",
-      "ru": "Проверьте правильность и завершите изменения профиля",
+      "en": "Review and complete profile changes",
+      "ru": "Проверка и завершение изменений профиля",
       "de": "Profiländerungen prüfen, validieren und abschließen",
-      "zh-CN": "审查、验证并完成配置文件更改",
+      "zh-CN": "检查并完成配置档案更改",
       "fr": "Vérifier, valider et terminer les modifications du profil",
       "es-ES": "Revisar, validar y finalizar los cambios del perfil"
     },
     "navigation.section.user-guide.all-settings-review-filters": {
       "en": "Review and filter All settings",
-      "ru": "Просматривайте и фильтруйте все настройки",
+      "ru": "Проверка и фильтрация раздела «Все настройки»",
       "de": "Alle Einstellungen prüfen und filtern",
-      "zh-CN": "审查并筛选所有设置",
-      "fr": "Vérifier et filtrer tous les paramètres",
-      "es-ES": "Revisar y filtrar todos los ajustes"
+      "zh-CN": "检查和筛选“所有设置”",
+      "fr": "Vérifier et filtrer « Tous les paramètres »",
+      "es-ES": "Revisar y filtrar «Todos los ajustes»"
     },
     "navigation.section.user-guide.all-settings-editing": {
-      "en": "Edit setting details",
-      "ru": "Редактируйте параметры настройки",
+      "en": "Edit settings",
+      "ru": "Редактирование параметров настройки",
       "de": "Einstellungsdetails bearbeiten",
       "zh-CN": "编辑设置详情",
       "fr": "Modifier les détails d’un paramètre",
@@ -62,123 +62,107 @@
     },
     "navigation.section.user-guide.all-settings-advanced-sources": {
       "en": "Handle advanced settings and sources",
-      "ru": "Работайте с расширенными настройками и источниками",
+      "ru": "Работа с расширенными настройками и источниками",
       "de": "Erweiterte Einstellungen und Quellen verwalten",
       "zh-CN": "处理高级设置和来源",
       "fr": "Gérer les paramètres avancés et leurs sources",
       "es-ES": "Gestionar ajustes avanzados y sus fuentes"
     },
     "navigation.section.user-guide.json-interchange": {
-      "en": "Work with JSON and interchange",
-      "ru": "Работайте с JSON и обменом данными",
+      "en": "Work with JSON and data exchange",
+      "ru": "Работа с JSON и обменом данными",
       "de": "Mit JSON und Datenaustausch arbeiten",
-      "zh-CN": "使用 JSON 和数据交换",
-      "fr": "Utiliser JSON et l’échange de données",
-      "es-ES": "Trabajar con JSON e intercambio de datos"
+      "zh-CN": "处理数据交换文档",
+      "fr": "Utiliser JSON et échanger des données",
+      "es-ES": "Trabajar con JSON e intercambiar datos"
     },
     "navigation.section.user-guide.profile-library-operations": {
       "en": "Find and manage profiles",
-      "ru": "Находите профили и управляйте ими",
+      "ru": "Поиск и управление профилями",
       "de": "Profile finden und verwalten",
-      "zh-CN": "查找并管理配置文件",
+      "zh-CN": "查找并管理配置档案",
       "fr": "Trouver et gérer les profils",
       "es-ES": "Buscar y gestionar perfiles"
     },
     "navigation.section.user-guide.profile-comparison": {
-      "en": "Compare profile settings",
-      "ru": "Сравнивайте профили",
+      "en": "Compare profiles",
+      "ru": "Сравнение профилей",
       "de": "Profile vergleichen",
-      "zh-CN": "比较配置文件",
+      "zh-CN": "比较配置档案",
       "fr": "Comparer les profils",
       "es-ES": "Comparar perfiles"
     },
     "navigation.section.user-guide.recover-safely": {
-      "en": "Recover safely",
-      "ru": "Безопасно восстанавливайтесь после проблем",
+      "en": "Resolve problems safely",
+      "ru": "Безопасное устранение проблем",
       "de": "Probleme sicher beheben",
       "zh-CN": "安全恢复",
-      "fr": "Récupérer en toute sécurité",
-      "es-ES": "Recuperarse de forma segura"
+      "fr": "Résoudre les problèmes en toute sécurité",
+      "es-ES": "Resolver problemas de forma segura"
+    },
+    "navigation.section.administrator-guide.requirements-and-scope": {
+      "en": "System requirements and delivery scope",
+      "ru": "Системные требования и границы поставки",
+      "de": "Systemanforderungen und Lieferumfang",
+      "zh-CN": "系统要求和交付范围",
+      "fr": "Configuration requise et périmètre de livraison",
+      "es-ES": "Requisitos del sistema y alcance de la entrega"
     },
     "navigation.section.administrator-guide.linux-source-deployment": {
-      "en": "Linux source deployment",
-      "ru": "Развёртывание из исходного кода в Linux",
-      "de": "Bereitstellung aus dem Quellcode unter Linux",
-      "zh-CN": "Linux 源码部署",
-      "fr": "Déploiement depuis les sources sous Linux",
-      "es-ES": "Despliegue desde código fuente en Linux"
+      "en": "Deploy BPM from source on Linux",
+      "ru": "Развёртывание BPM из исходного кода в Linux",
+      "de": "BPM aus dem Quellcode unter Linux bereitstellen",
+      "zh-CN": "在开源操作系统上从源代码部署浏览器策略管理器",
+      "fr": "Déployer BPM depuis les sources sous Linux",
+      "es-ES": "Implementar BPM desde código fuente en Linux"
     },
     "navigation.section.administrator-guide.windows-wsl-source-deployment": {
-      "en": "Windows WSL source deployment",
-      "ru": "Развёртывание из исходного кода в Windows WSL",
-      "de": "Bereitstellung aus dem Quellcode unter Windows WSL",
-      "zh-CN": "Windows WSL 源码部署",
-      "fr": "Déploiement depuis les sources sous Windows WSL",
-      "es-ES": "Despliegue desde código fuente en Windows WSL"
+      "en": "Deploy BPM from source in Windows WSL",
+      "ru": "Развёртывание BPM из исходного кода через Windows WSL",
+      "de": "BPM aus dem Quellcode mit Windows WSL bereitstellen",
+      "zh-CN": "通过视窗子系统从源代码部署浏览器策略管理器",
+      "fr": "Déployer BPM depuis les sources avec Windows WSL",
+      "es-ES": "Implementar BPM desde código fuente con Windows WSL"
     },
-    "navigation.section.administrator-guide.devops-operations": {
-      "en": "DevOps operations",
-      "ru": "Операции DevOps",
-      "de": "DevOps-Betrieb",
-      "zh-CN": "DevOps 运维",
-      "fr": "Opérations DevOps",
-      "es-ES": "Operaciones de DevOps"
+    "navigation.section.administrator-guide.operate-and-update-source-deployment": {
+      "en": "Operate and update BPM from source",
+      "ru": "Эксплуатация и обновление развёртывания из исходного кода",
+      "de": "Eine BPM-Quellbereitstellung betreiben und aktualisieren",
+      "zh-CN": "运行和更新源代码部署",
+      "fr": "Exploiter et mettre à jour BPM depuis les sources",
+      "es-ES": "Operar y actualizar BPM desde código fuente"
     },
-    "navigation.section.administrator-guide.source-update": {
-      "en": "Update from source",
-      "ru": "Обновление из исходного кода",
-      "de": "Aktualisierung aus dem Quellcode",
-      "zh-CN": "从源码更新",
-      "fr": "Mise à jour depuis les sources",
-      "es-ES": "Actualización desde código fuente"
+    "navigation.section.administrator-guide.api-integration": {
+      "en": "Integrate with the BPM API",
+      "ru": "Интеграция через API BPM",
+      "de": "BPM über die API integrieren",
+      "zh-CN": "通过编程接口集成浏览器策略管理器",
+      "fr": "Intégrer BPM par l’API",
+      "es-ES": "Integrar BPM mediante la API"
     },
-    "navigation.section.administrator-guide.api-integration-foundations": {
-      "en": "API integration foundations",
-      "ru": "Основы интеграции с API",
-      "de": "Grundlagen der API-Integration",
-      "zh-CN": "API 集成基础",
-      "fr": "Principes de l’intégration API",
-      "es-ES": "Fundamentos de la integración con API"
+    "navigation.section.administrator-guide.lifecycle-workflows-and-recovery": {
+      "en": "Run lifecycle workflows and recover from failures",
+      "ru": "Сценарии жизненного цикла и восстановление после сбоев",
+      "de": "Lebenszyklusabläufe ausführen und Fehler beheben",
+      "zh-CN": "运行生命周期工作流和从故障中恢复",
+      "fr": "Exécuter les flux de cycle de vie et rétablir le service",
+      "es-ES": "Ejecutar flujos de ciclo de vida y recuperarse de fallos"
     },
-    "navigation.section.administrator-guide.profile-api-lifecycle": {
-      "en": "Profile lifecycle and Firefox JSON",
-      "ru": "Жизненный цикл профиля и JSON Firefox",
-      "de": "Profillebenszyklus und Firefox-JSON",
-      "zh-CN": "配置文件生命周期和 Firefox JSON",
-      "fr": "Cycle de vie des profils et JSON Firefox",
-      "es-ES": "Ciclo de vida de perfiles y JSON de Firefox"
+    "navigation.section.administrator-guide.troubleshooting-and-production-readiness": {
+      "en": "Troubleshoot BPM and assess production readiness",
+      "ru": "Устранение неполадок и оценка готовности к эксплуатации",
+      "de": "Fehler beheben und Betriebsbereitschaft bewerten",
+      "zh-CN": "排除故障并评估生产就绪情况",
+      "fr": "Résoudre les problèmes de BPM et évaluer la préparation à la production",
+      "es-ES": "Resolver problemas y evaluar la preparación para producción"
     },
-    "navigation.section.administrator-guide.api-health-and-scenarios": {
-      "en": "API health and scenarios",
-      "ru": "Работоспособность API и сценарии",
-      "de": "API-Zustand und Szenarien",
-      "zh-CN": "API 运行状况和场景",
-      "fr": "État de l’API et scénarios",
-      "es-ES": "Estado de la API y escenarios"
-    },
-    "navigation.section.administrator-guide.control-product-workflows": {
-      "en": "Control product workflows",
-      "ru": "Рабочие процессы внешних систем управления",
-      "de": "Arbeitsabläufe externer Steuerungsprodukte",
-      "zh-CN": "外部控制产品工作流",
-      "fr": "Flux de travail des produits de contrôle externes",
-      "es-ES": "Flujos de trabajo de productos de control externos"
-    },
-    "navigation.section.administrator-guide.troubleshooting": {
-      "en": "Troubleshooting",
-      "ru": "Устранение неполадок",
-      "de": "Fehlerbehebung",
-      "zh-CN": "故障排除",
-      "fr": "Dépannage",
-      "es-ES": "Solución de problemas"
-    },
-    "navigation.section.administrator-guide.production-readiness": {
-      "en": "Production readiness boundaries",
-      "ru": "Границы готовности к промышленной эксплуатации",
-      "de": "Grenzen der Produktionsbereitschaft",
-      "zh-CN": "生产就绪边界",
-      "fr": "Limites de préparation à la production",
-      "es-ES": "Límites de preparación para producción"
+    "navigation.section.administrator-guide.local-documentation-assistant": {
+      "en": "BPM documentation assistant",
+      "ru": "Помощник BPM по документации",
+      "de": "BPM-Dokumentationsassistent",
+      "zh-CN": "浏览器策略管理器文档助手",
+      "fr": "Assistant de documentation BPM",
+      "es-ES": "Asistente de documentación de BPM"
     }
   }
 }

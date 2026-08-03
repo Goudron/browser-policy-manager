@@ -20,6 +20,10 @@ PRODUCTION_BOUNDARY_TOPICS = (
     "admin-task-record-ha-production-deferred-boundaries",
 )
 PRODUCTION_BOUNDARY_KEYREFS = tuple(f"topic.{topic_id}" for topic_id in PRODUCTION_BOUNDARY_TOPICS)
+DOCUMENTATION_ASSISTANT_KEYREFS = (
+    "topic.admin-task-operate-local-documentation-assistant",
+    "topic.admin-task-maintain-local-documentation-assistant",
+)
 MIN_LOCALIZED_TEXT_RATIO = {
     "ru": 0.72,
     "de": 0.72,
@@ -175,7 +179,7 @@ def test_production_boundary_topics_exist_in_every_locale_with_stable_metadata()
             assert len(signature["related"]) == 4
 
 
-def test_production_boundary_topics_are_keyed_and_reachable_from_admin_guide_tail() -> None:
+def test_production_boundary_topics_are_keyed_and_precede_the_local_assistant_section() -> None:
     for locale in LOCALES:
         keys = ET.fromstring((DITA_ROOT / locale / "maps/keys.ditamap").read_text(encoding="utf-8"))
         keydefs = {
@@ -191,8 +195,12 @@ def test_production_boundary_topics_are_keyed_and_reachable_from_admin_guide_tai
         admin_guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/administrator-guide.ditamap").read_text(encoding="utf-8")
         )
-        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall("topicref")]
-        assert topicrefs[-len(PRODUCTION_BOUNDARY_KEYREFS) :] == list(PRODUCTION_BOUNDARY_KEYREFS)
+        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall(".//topicref")]
+        assert topicrefs[-len(DOCUMENTATION_ASSISTANT_KEYREFS) :] == list(
+            DOCUMENTATION_ASSISTANT_KEYREFS
+        )
+        assistant_start = topicrefs.index(DOCUMENTATION_ASSISTANT_KEYREFS[0])
+        assert all(topicrefs.index(keyref) < assistant_start for keyref in PRODUCTION_BOUNDARY_KEYREFS)
 
 
 def test_production_boundary_topics_preserve_locale_structure_and_full_peer_content() -> None:

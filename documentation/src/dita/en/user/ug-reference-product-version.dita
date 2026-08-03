@@ -6,7 +6,7 @@
   <refbody>
     <section id="a-version-location"><title>Version location</title><p>The same header on Library, Guided editor, All settings, JSON editor, Compare, and documentation displays the running BPM version. In Library, the workspace count and its “Profiles in library” label are separate concise lines.</p></section>
     <section id="a-version-scope"><title>Version scope</title><p>The product version identifies BPM behavior, not the Firefox browser version installed on an endpoint.</p></section>
-    <section id="a-schema-version"><title>Schema version</title><p>The current release supports Firefox ESR 140.13 and Firefox Release 153. The schema channel is a separate choice that affects validation and available controls.</p></section>
+    <section id="a-schema-version"><title>Schema version</title><p>The current release supports Firefox Release 153, Firefox ESR 153.0, and Firefox ESR 140.13. The schema channel is a separate choice that affects validation and available controls.</p></section>
     <section id="a-version-recovery"><title>Recovery</title><p>If product behavior does not match the guide, record the BPM version, schema channel, route, locale, and visible status before reporting the mismatch.</p></section>
   </refbody>
   <related-links>

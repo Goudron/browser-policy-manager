@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-evidence-packing-0.9.3",
+  "backlog_item": "BPM093-M5-07",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-pre-generation-evidence-contract",
+  "retrieval_contract": {
+    "path": "documentation/config/chat-rag-retrieval-contract-0.9.3.json",
+    "sha256": "8301f06e5449f86ae27cdd136720c39d523987e526a09c443b447832505c1d2d",
+    "accepted_disposition": "answer-ready local evidence only"
+  },
+  "entry_boundary": {
+    "before_generation": true,
+    "model_or_worker_calls": 0,
+    "ordinary_search_calls": 0,
+    "network_calls": 0,
+    "external_evidence": "forbidden",
+    "scope": "Caller must pass the deterministic scope-gate admission result; a non-admitted request abstains without packing or generation."
+  },
+  "budget": {
+    "maximum_context_tokens": 2048,
+    "maximum_evidence_chunks": 4,
+    "counter": "A caller supplies the selected chat model's immutable exact tokenizer counter. Character, word, byte, and estimated-token counters are forbidden for a production request.",
+    "serialization": "Canonical JSON Lines with sorted keys and source text as data, not executable instructions."
+  },
+  "selection": {
+    "ranking_input": "The verified same-locale retrieval order is relevance order.",
+    "source_order": "After relevance selection, packed records sort by topic_id, anchor_id_or_root, ordinal, then chunk_id while retaining all source metadata.",
+    "deduplication": "Retain at most one highest-ranked record per exact citation identity.",
+    "minimum_top_score": 0.45,
+    "score_margin_policy": "Keep top score, runner-up score, margin, and candidate count as internal deterministic evidence diagnostics. No fixed score margin produces a terminal disposition: multiple current local citations can jointly answer one admitted BPM question. Request ambiguity is decided by the scope gate before retrieval.",
+    "confidence": "Keep top score, runner-up score, margin, and candidate count as internal deterministic evidence diagnostics; never render them as fake user probability."
+  },
+  "terminal_dispositions": {
+    "answer": "Only nonempty, current, locale-private, citable, deduplicated evidence within the exact token budget is answer-ready.",
+    "abstain": {
+      "no_evidence": "No retained candidate.",
+      "scope_not_admitted": "The caller did not admit the request to BPM scope.",
+      "stale_evidence": "Any evidence BPM or documentation version differs from the current caller version.",
+      "contradictory_evidence": "One citation identity maps to different source hashes.",
+      "low_confidence": "Top retrieval score is below the fixed minimum.",
+      "context_budget_exceeded": "No retained citable record fits the exact context budget.",
+      "duplicate_chunk_identity": "A retrieval result repeats a chunk identity."
+    }
+  },
+  "citation": {
+    "required": ["citation_id", "published_url", "topic_id", "anchor_id_or_root", "source_kind"],
+    "source_kind": "local",
+    "rule": "Every packed record preserves its server-resolvable active-generation citation; no model-proposed or ordinary-search URL can enter the context."
+  },
+  "verification": {
+    "runtime": "tests/test_documentation_evidence_packing_093.py",
+    "contract": "documentation/tests/contract/test_chat_rag_evidence_packing_0_9_3.py"
+  }
+}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-verify-linux-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>验证 Linux 源部署</title>
+  <title>验证开源系统源部署</title>
   <shortdesc>使用运行状况探测、Web UI、日志和狭义测试命令来确认源运行的 BPM 实例可用。</shortdesc>
   <taskbody>
     <prereq><p>BPM 流程从存储库签出运行，具有预期的 <codeph>BPM_DATABASE_URL</codeph>、主机、端口和文档站点设置。</p></prereq>

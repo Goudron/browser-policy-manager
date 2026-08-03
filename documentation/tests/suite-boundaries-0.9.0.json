@@ -246,7 +246,8 @@
         "documentation/tests/contract/test_compact_ui_user_docs_0_9_2.py",
         "documentation/tests/contract/test_context_help_gap_review_0_9_2.py",
         "documentation/tests/contract/test_compact_ui_screenshot_refresh_0_9_2.py",
-        "documentation/tests/contract/test_firefox_153_dual_esr_schema_contract_0_9_2.py"
+        "documentation/tests/contract/test_firefox_153_dual_esr_schema_contract_0_9_2.py",
+        "documentation/tests/contract/test_current_schema_documentation.py"
       ],
       "fixtures": [
         "documentation/fixtures/firefox-policy-families/",
@@ -292,6 +293,27 @@
       "primary_suite": "contract",
       "path_globs": [
         "documentation/tests/contract/test_search_*.py",
+        "documentation/tests/contract/test_browser_search_*.py",
+        "documentation/tests/contract/test_rag_chunk_extraction_0_9_3.py",
+        "documentation/tests/contract/test_rag_corpus_exclusions_0_9_3.py",
+        "documentation/tests/contract/test_embedding_model_benchmark_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_embedding_selection_contract_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_embedding_benchmark_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_embedding_decision_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_clean_host_validation_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_resource_policy_amendment_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_vector_storage_decision_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_exact_generation_0_9_3.py",
+        "documentation/tests/contract/test_chat_rag_retrieval_0_9_3.py",
+        "tests/test_documentation_chat_retrieval_093.py",
+        "documentation/tests/contract/test_chat_rag_evidence_packing_0_9_3.py",
+        "tests/test_documentation_evidence_packing_093.py",
+        "documentation/tests/contract/test_chat_rag_retrieval_validation_0_9_3.py",
+        "documentation/tests/contract/test_local_chat_model_runtime_shortlist_0_9_3.py",
+        "documentation/tests/contract/test_grounded_answer_benchmark_harness_0_9_3.py",
+        "documentation/tests/contract/test_local_chat_target_laptop_benchmark_0_9_3.py",
+        "documentation/tests/contract/test_rag_knowledge_update_contract_0_9_3.py",
+        "documentation/tests/contract/test_local_ai_*_0_9_3.py",
         "documentation/tests/unit/test_build_docs.py"
       ],
       "fixtures": [
@@ -300,7 +322,29 @@
         "documentation/config/search-ranking-typo-0.9.0.json",
         "documentation/config/search-facets-filters-0.9.0.json",
         "documentation/config/search-quality-performance-0.9.0.json",
-        "documentation/config/search-integrity-drift-0.9.0.json"
+        "documentation/config/search-integrity-drift-0.9.0.json",
+        "documentation/config/rag-chunk-extraction-0.9.3.json",
+        "documentation/config/rag-corpus-exclusions-0.9.3.json",
+        "documentation/config/embedding-model-benchmark-0.9.3.json",
+        "documentation/config/embedding-model-benchmark-m5-03a-0.9.3.json",
+        "documentation/config/chat-rag-embedding-selection-contract-0.9.3.json",
+        "documentation/config/chat-rag-embedding-benchmark-0.9.3.json",
+        "documentation/config/chat-rag-embedding-decision-0.9.3.json",
+        "documentation/config/chat-rag-clean-host-validation-0.9.3.json",
+        "documentation/config/chat-rag-resource-policy-amendment-0.9.3.json",
+        "documentation/config/chat-rag-vector-storage-decision-0.9.3.json",
+        "documentation/config/chat-rag-exact-generation-contract-0.9.3.json",
+        "documentation/config/chat-rag-retrieval-contract-0.9.3.json",
+        "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json",
+        "documentation/config/chat-rag-retrieval-validation-0.9.3.json",
+        "documentation/config/local-chat-model-runtime-shortlist-0.9.3.json",
+        "documentation/config/grounded-answer-benchmark-harness-0.9.3.json",
+        "documentation/config/local-chat-target-laptop-benchmark-0.9.3.json",
+        "app/documentation/retrieval.py",
+        "app/documentation/evidence.py",
+        "documentation/tools/run_chat_rag_retrieval_validation_0_9_3.py",
+        "documentation/tools/run_grounded_answer_benchmark_0_9_3.py",
+        "documentation/tools/run_local_chat_target_laptop_benchmark_0_9_3.py"
       ],
       "focused_rerun": "./.venv/bin/pytest -q documentation/tests/contract/test_search_corpus_contract.py documentation/tests/contract/test_search_integrity_drift.py"
     },
@@ -501,10 +545,20 @@
       "primary_suite": "contract",
       "path_globs": [
         "documentation/tests/contract/test_documentation_subsystem_snapshot.py",
+        "documentation/tests/contract/test_maintained_index_snapshot_contract_0_9_3.py",
         "documentation/tests/unit/test_generate_subsystem_snapshot.py"
       ],
       "fixtures": ["documentation/PROJECT_SNAPSHOT.generated.md"],
       "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_subsystem_snapshot.py"
+    },
+    "bpm_0_9_3_documentation_assistant": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_*_0_9_3.py"],
+      "fixtures": [
+        "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+        "docs/architecture/product-documentation-release-contract-0.9.3.md"
+      ],
+      "focused_rerun": "make test-docs-contract"
     },
     "release_gate": {
       "primary_suite": "contract",
@@ -543,6 +597,15 @@
       "path_globs": ["documentation/tests/browser/test_documentation_portal_browser_smoke.py"],
       "fixtures": [],
       "focused_rerun": "make test-docs-browser"
+    },
+    "pdf_delivery": {
+      "primary_suite": "unit",
+      "path_globs": ["documentation/tests/unit/test_deliver_pdfs.py"],
+      "fixtures": [
+        "documentation/config/future-distribution-documentation-layout-0.9.3.json",
+        "documentation/config/pdf-delivery-contract-0.9.3.json"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q documentation/tests/unit/test_deliver_pdfs.py"
     },
     "toolchain": {
       "primary_suite": "unit",

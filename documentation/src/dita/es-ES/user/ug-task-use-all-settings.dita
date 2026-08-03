@@ -8,7 +8,7 @@
     <context><p>Todos los ajustes es el editor visual completo para las políticas de Firefox y conocido Preferencias gestionadas. Se abre en Revisión para que los elementos de atención sean visibles antes de explorar el catálogo amplio.</p>
       <fig id="screenshot-all-settings-review">
         <title>Modo «Revisión» en «Todos los ajustes»</title>
-        <image keyref="screenshot.all-settings-review" placement="break">
+        <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>Todos los ajustes muestra la lista de revisión, los ajustes configurados y el panel de detalles de ajustes en una pantalla estrecha.</alt>
         </image>
       </fig>

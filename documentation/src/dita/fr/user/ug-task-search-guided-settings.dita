@@ -8,7 +8,7 @@
     <context><p>La recherche guidée est utile lorsque vous connaissez l'objectif de la stratégie mais pas l'étape qui contient la famille de contrôle.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Résultats de recherche de paramètres dans l’« Éditeur guidé »</title>
-        <image keyref="screenshot.guided-settings-search" placement="break">
+        <image keyref="screenshot.guided-settings-search" placement="break" scalefit="yes" align="center">
           <alt>Éditeur guidé affichant les résultats des paramètres liés à la page d'accueil.</alt>
         </image>
       </fig>

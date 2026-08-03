@@ -29,70 +29,70 @@
       "guide_id": "user-guide",
       "map_filename": "user-guide.ditamap",
       "status": "needs_section_grouping",
-      "topic_count": 90,
+      "topic_count": 92,
       "current_shape": "source_has_topicheads_but_portal_tree_needs_section_nodes",
       "current_source_section_count": 8,
       "largest_current_source_section_count": 19,
       "source_sections": [
         {
           "section_id": "orient-and-plan",
-          "canonical_navtitle": "Orient and plan profile work",
-          "topic_count": 10,
+          "canonical_navtitle": "Plan profile work",
+          "topic_count": 12,
           "disposition": "keep_as_section_candidate"
         },
         {
           "section_id": "create-and-start",
-          "canonical_navtitle": "Create and start a profile",
+          "canonical_navtitle": "Create and set up a profile",
           "topic_count": 10,
           "disposition": "keep_as_section_candidate"
         },
         {
           "section_id": "configure-with-guidance",
-          "canonical_navtitle": "Configure with Guided editor",
+          "canonical_navtitle": "Configure profiles in Guided editor",
           "topic_count": 11,
           "disposition": "keep_as_section_candidate"
         },
         {
           "section_id": "review-validate-and-finish",
-          "canonical_navtitle": "Review, validate, and finish profile changes",
+          "canonical_navtitle": "Review and complete profile changes",
           "topic_count": 6,
           "disposition": "keep_as_section_candidate"
         },
         {
           "section_id": "inspect-and-edit-complete-settings",
-          "canonical_navtitle": "Inspect and edit complete settings",
+          "canonical_navtitle": "Review and edit All settings",
           "topic_count": 19,
           "disposition": "split_or_subgroup_in_m8_02"
         },
         {
           "section_id": "work-with-json-and-interchange",
-          "canonical_navtitle": "Work with JSON and interchange",
+          "canonical_navtitle": "Work with JSON and data exchange",
           "topic_count": 6,
           "disposition": "keep_as_section_candidate"
         },
         {
           "section_id": "find-organize-and-compare-profiles",
-          "canonical_navtitle": "Find, organize, and compare profiles",
+          "canonical_navtitle": "Find, manage, and compare profiles",
           "topic_count": 17,
           "disposition": "split_or_subgroup_in_m8_02"
         },
         {
           "section_id": "recover-safely",
-          "canonical_navtitle": "Recover safely",
+          "canonical_navtitle": "Resolve problems safely",
           "topic_count": 11,
           "disposition": "keep_as_section_candidate"
         }
       ],
-      "reasoning": "The User Guide has 90 unique topicrefs and already expresses user-intent groups in DITA. The portal tree should expose a section level instead of presenting a long topic list, and M8-02 must split or subgroup the two existing source sections that exceed the target."
+      "reasoning": "The User Guide has 92 unique topicrefs and already expresses user-intent groups in DITA. The portal tree should expose a section level instead of presenting a long topic list, and M8-02 must split or subgroup the two existing source sections that exceed the target."
     },
     {
       "guide_id": "administrator-guide",
       "map_filename": "administrator-guide.ditamap",
       "status": "needs_section_grouping",
-      "topic_count": 49,
-      "current_shape": "flat_topicrefs",
-      "current_source_section_count": 0,
-      "largest_current_source_section_count": 49,
+      "topic_count": 52,
+      "current_shape": "source_has_topicheads",
+      "current_source_section_count": 8,
+      "largest_current_source_section_count": 10,
       "proposed_grouping_axes_for_m8_02": [
         "Linux source deployment",
         "Windows WSL source deployment",
@@ -102,7 +102,7 @@
         "Troubleshooting",
         "Production readiness boundaries"
       ],
-      "reasoning": "The Administrator and DevOps Guide now exposes 49 direct topicrefs, including five distribution-specific Linux source-install procedures. It needs and uses a section taxonomy so operators can scan deployment, operations, integration, troubleshooting, and readiness workflows separately."
+      "reasoning": "The Administrator and DevOps Guide groups its 52 topics into eight source sections, beginning with minimum system requirements. Operators can scan deployment, operations, integration, lifecycle, troubleshooting, readiness and assistant-state workflows without a flat list."
     },
     {
       "guide_id": "cis-settings-guide",

@@ -266,7 +266,7 @@ def _profile_payload(locale: str, fixture_id: str) -> dict[str, Any]:
         return {
             "name": text["primary_name"],
             "description": text["primary_description"],
-            "schema_version": "release-152",
+            "schema_version": "release-153",
             "flags": {
                 "DisableTelemetry": True,
                 "Homepage": {
@@ -321,7 +321,7 @@ def _profile_payload(locale: str, fixture_id: str) -> dict[str, Any]:
         return {
             "name": text["secondary_name"],
             "description": text["secondary_description"],
-            "schema_version": "esr-140.12",
+            "schema_version": "esr-140.13",
             "flags": {
                 "DisableTelemetry": True,
                 "DisableFirefoxStudies": True,

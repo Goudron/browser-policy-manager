@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-vector-storage-decision-0.9.3",
+  "backlog_item": "BPM093-M5-04",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-for-implementation",
+  "decision_date": "2026-07-29",
+  "embedding_decision": {
+    "path": "documentation/config/chat-rag-embedding-decision-0.9.3.json",
+    "sha256": "a230b3836b78d301f83f16b9f931fd357948bacf31df114bf8c2137e796f24c0",
+    "selected_candidate_id": "multilingual-e5-base-onnx-o4",
+    "dimension": 768,
+    "vector_normalization": "L2",
+    "distance_metric": "cosine via descending dot product of L2-normalized float32 vectors"
+  },
+  "corpus_scope": {
+    "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "retrieval": "An enabled chat reads exactly one active-locale generation; cross-locale scan, fallback, merge, and ordinary-search calls are forbidden.",
+    "current_chunk_count": 2401,
+    "growth_multiplier": 10,
+    "growth_chunk_count": 24010,
+    "top_k": 5
+  },
+  "selected_backend": {
+    "id": "normalized-exact-f32-matrix-v1",
+    "format": "One locale-private contiguous little-endian float32 matrix plus canonical chunk-order metadata and a checksummed compatibility/integrity manifest.",
+    "algorithm": "Exact descending dot-product scan over the active locale only; no approximate-nearest-neighbour graph, cross-locale fallback, hybrid retrieval, daemon, listener, or database server.",
+    "runtime_dependency": "No vector-database extension. The concrete bounded numeric kernel is selected with M5-06 and must preserve this exact ordering contract.",
+    "promotion_and_recovery": "Build a complete candidate generation in private staging, verify every file hash, shape, locale, compatibility key, and chunk order, then atomically promote. A missing, partial, corrupt, mixed, or stale generation is quarantined and retrieval abstains while M4 ordinary search remains ready.",
+    "migration_boundary": "There is no in-place schema migration. A future backend or format change creates a new compatibility key and full replacement generation; the old verified generation remains active until atomic promotion.",
+    "rationale": [
+      "The current and 10x locale-private corpus fits exact scan within the frozen retrieval budget without a new native vector-database component.",
+      "The byte format, ordering, reproducibility, per-locale isolation, checksum verification, and recovery path are directly controlled by BPM.",
+      "It avoids sqlite-vec's pre-v1 breaking-change and extension ABI/package risk on the supported local installation paths."
+    ]
+  },
+  "rejected_candidates": [
+    {
+      "id": "sqlite-vec-0.1.10-alpha.4",
+      "kind": "SQLite vec0 extension",
+      "observed_package": {
+        "distribution": "sqlite-vec==0.1.10a4",
+        "wheel_sha256": "f1897fa54780aaee4ce216091a51193f6383060099325360163550836f803eff",
+        "linux_x86_64_extension_sha256": "c6cc9fa91c6b69487798bdfb22ca46238d5e83eb227c679040c15edb335a21b5",
+        "license": "MIT OR Apache-2.0"
+      },
+      "benchmark_role": "Compared with the same deterministic vectors, query set, locale partitioning, top-k, and current/10x corpus scale.",
+      "rejection_reason": "The upstream project declares the API pre-v1 with expected breaking changes. It adds a native loadable extension, binding/package and ABI verification, and a database recovery/migration surface without a required performance or scale benefit for this corpus."
+    }
+  ],
+  "acceptance": {
+    "correctness": "Both comparison candidates must return the same ordered top-k IDs for every deterministic query in each locale and scale; a candidate may never scan another locale.",
+    "latency_p95_ms_max": 250,
+    "disk_gib_max_at_growth": 0.25,
+    "ordinary_search_dependency": "forbidden",
+    "network_calls": 0,
+    "resource_policy": "Offline generation may use swap under the accepted resource-policy amendment. Interactive retrieval limits and all non-swap release gates remain mandatory."
+  }
+}

@@ -8,7 +8,7 @@
     <context><p>Éditeur JSON est la surface brute du document. Utilisez-le lorsque Éditeur guidé ou Tous les paramètres est de niveau trop élevé pour un examen exact, des contrôles de migration, un dépannage ou des valeurs brutes.</p>
       <fig id="screenshot-json-editor">
         <title>Éditeur JSON dans le thème sombre</title>
-        <image keyref="screenshot.json-editor" placement="break">
+        <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
           <alt>Éditeur JSON affichant les politiques Firefox modifiables JSON pour un profil enregistré.</alt>
         </image>
       </fig>

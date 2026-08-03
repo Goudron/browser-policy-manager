@@ -7,7 +7,7 @@
     <prereq><p>Un brouillon de profil et un canal de schéma sont sélectionnés.</p></prereq>
     <context><p>La couche CIS est une aide à la cartographie BPM ; examinez chaque paramètre résultant pour le déploiement et ne le traitez pas comme une certification.</p></context>
     <steps>
-      <step><cmd>Ouvrez l'étape 1, ligne de base du profil &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 1 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Choisissez la couche CIS prise en charge qui correspond au canal cible et au scénario.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Examinez les modifications de base tenant compte de la conformité dans le résumé.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Conservez ou ajustez les paramètres qui entrent en conflit avec l'objectif de déploiement.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

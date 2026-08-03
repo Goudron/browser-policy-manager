@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-resource-state-0.9.3",
+  "backlog_item": "BPM093-M10-05",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-transport-free-resource-state-renderer",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "input_boundary": {
+    "future_only": "A later same-origin transport may call the renderer with one already server-validated state snapshot and the locale-owned assistant-copy messages. This task creates neither transport nor polling.",
+    "exact_snapshot_fields": ["api_version", "locale", "state", "state_epoch"],
+    "api_version": 1,
+    "states": ["loading", "indexing", "busy", "cancelled", "timeout", "degraded", "unloading", "unloaded", "search-only", "duplicate"],
+    "stale_event_rule": "A state snapshot whose epoch is not greater than the last accepted epoch for this assistant surface is ignored.",
+    "forbidden_input": ["prompt", "answer", "partial tokens", "queue identifiers", "filesystem paths", "exception text", "resource counters", "model output", "HTML"]
+  },
+  "rendering": {
+    "message_source": "The renderer selects only reviewed locale-owned states/resource_states/actions.retry text from assistant-copy.json; it does not accept visible text from the snapshot.",
+    "recovery": "Every accepted resource state exposes a keyboard-reachable same-page link to the deterministic documentation search. Retry wording is informational until a later guarded transport provides a real action.",
+    "controls": "The question, send, stop and clear controls remain disabled. The renderer never changes disabled or aria-disabled attributes.",
+    "duplicate": "A busy or duplicate state does not start another worker or request; the rendering layer only reports the state supplied by a later bounded controller."
+  },
+  "boundaries": {
+    "page_load": "The script only registers a future-callable function. It performs no fetch, model inspection, status poll, retrieval, worker start, timeout, retry, unload, request or DOM update on page load.",
+    "assistant_http_route": false,
+    "chat_controls_enabled": false,
+    "ordinary_search_changed": false,
+    "web_request": false
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_documentation_assistant_resource_state_contract_0_9_3.py",
+    "copy_contract": "documentation/tests/contract/test_documentation_assistant_copy_contract_0_9_3.py",
+    "architecture": "docs/architecture/documentation-assistant-resource-state-0.9.3.md"
+  }
+}

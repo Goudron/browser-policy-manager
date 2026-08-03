@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-ai-preimplementation-guards-0.9.3",
+  "backlog_item": "BPM093-M2-07",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-preimplementation-guards",
+  "sources": {
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "knowledge_contract": "documentation/config/rag-knowledge-and-update-contract-0.9.3.json",
+    "security_contract": "documentation/config/local-ai-security-privacy-contract-0.9.3.json",
+    "availability_contract": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json"
+  },
+  "locale_evidence": {
+    "required_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "corpus_status": "accepted",
+    "english_review": "source-reviewed",
+    "non_english_review": "localized-reviewed",
+    "review_status": "accepted",
+    "rule": "Every locale must have accepted review evidence before its corpus cases can be evaluated. Missing, extra, draft, or cross-locale fallback evidence is rejected."
+  },
+  "chunk_manifest": {
+    "required_schema_version": "rag-chunk-v1",
+    "required_fields": [
+      "chunk_id",
+      "chunk_schema_version",
+      "locale",
+      "topic_id",
+      "anchor_id_or_root",
+      "ordinal",
+      "published_url",
+      "source_revision",
+      "source_sha256",
+      "manifest_sha256",
+      "documentation_version",
+      "bpm_version",
+      "provenance_class",
+      "text_normalization_revision"
+    ],
+    "id_format": "ragc-v1:{locale}:{topic_id}:{anchor_id_or_root}:{ordinal}",
+    "rule": "A chunk without the required schema version, deterministic ID, locale, version, provenance, source hash, or manifest hash is unversioned or unverifiable and is rejected before embedding or retrieval."
+  },
+  "artifact_ownership": {
+    "committed_source": [
+      "reviewed eligible DITA and provenance records",
+      "selected configuration, tools, compact synthetic fixtures, and tests"
+    ],
+    "generated_ignored": [
+      "chunks and chunk manifests",
+      "embeddings and embedding manifests",
+      "retrieval indexes and integrity manifests",
+      "model downloads, caches, benchmark reports, and conversation state"
+    ],
+    "rule": "No generated artifact is hand-edited or treated as source; a model/index/chunk candidate activates only as a complete checksummed compatible manifest set."
+  },
+  "resource_ceilings": {
+    "artifact_disk_gib_max": 2.5,
+    "worker_and_retrieval_rss_gib_max": 3.5,
+    "maximum_active_generations": 1,
+    "maximum_queued_generations": 1,
+    "rule": "An implementation must reject or cancel work before exceeding these ceilings; a limit breach cannot start another worker or block lexical search."
+  },
+  "startup_and_network": {
+    "local_mode_network_requests_after_install": 0,
+    "model_start_requires": ["explicit user installation", "verified compatible artifacts", "explicit user enablement"],
+    "forbidden_implicit_triggers": ["page load", "lexical search", "status polling", "rejected chat", "background retry"],
+    "forbidden_listener_transports": ["TCP listener", "HTTP listener", "wildcard bind", "LAN bind", "public model API"],
+    "rule": "A plan that starts a model, opens network access, or exposes a listener without all required explicit conditions is rejected."
+  },
+  "capability_boundary": {
+    "allowed_model_tools": [],
+    "forbidden_capabilities": [
+      "BPM state mutation",
+      "BPM product API invocation",
+      "shell or command execution",
+      "arbitrary subprocess creation",
+      "arbitrary file access",
+      "arbitrary URL selection or network access",
+      "function calling, plugins, MCP, or code interpreter"
+    ],
+    "rule": "The local assistant has no callable tool capability. A missing or non-empty tool allowlist is rejected."
+  },
+  "citation_modes": {
+    "answer": {
+      "required": ["citation_id", "published_url", "source_kind"],
+      "allowed_source_kind": ["local", "external-web-labelled"],
+      "rule": "An answer needs at least one current resolved citation. Local citations must resolve to the activated published manifest; external citations must be explicitly labelled and cannot replace local evidence."
+    },
+    "clarify": {
+      "required": [],
+      "rule": "A clarification asks only for the missing BPM documentation context and does not invent evidence."
+    },
+    "abstain": {
+      "required": [],
+      "rule": "No-evidence cases abstain without a fabricated citation or web call."
+    },
+    "refuse": {
+      "required": [],
+      "rule": "Off-topic or unsafe requests refuse before retrieval, inference, or web access."
+    }
+  },
+  "state_and_fallback": {
+    "state_contract": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json",
+    "ready_state": "ready",
+    "assistant_independent_core_health": true,
+    "lexical_search_ready_all_states": true,
+    "partial_artifacts_ready": false,
+    "allowed_transitions_owner": "availability_contract.transitions",
+    "rule": "Unknown state, unsupported transition, false readiness, or an AI dependency in lexical search is rejected."
+  },
+  "verification": {
+    "current": "documentation/tests/contract/test_local_ai_preimplementation_guards_0_9_3.py",
+    "negative_cases": [
+      "unversioned chunk",
+      "missing locale evidence",
+      "silent model or network startup",
+      "answer without citation",
+      "exposed model port",
+      "unsupported state transition",
+      "lexical search dependency on AI"
+    ]
+  }
+}

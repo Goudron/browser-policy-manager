@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-embedding-selection-0.9.3",
+  "backlog_item": "BPM093-M5-03B",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-chat-retrieval-selection-contract",
+  "supported_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "scope": {
+    "entrypoint": "An explicitly enabled user chat only.",
+    "ordinary_search": "M4 deterministic documentation search is not called, changed, ranked against, or made dependent on chat RAG.",
+    "retrieval_mode": "Retrieve only published local evidence from the active chat locale; cross-locale prose retrieval and fallback are forbidden.",
+    "not_a_quality_substitute": "Chat retrieval need not be more relevant than ordinary search. A lower-coverage result is useful only as an explicit no-evidence abstention, never as an unsupported factual answer."
+  },
+  "local_evidence": {
+    "chunk_contract": "documentation/config/rag-chunk-extraction-0.9.3.json",
+    "exclusions": "documentation/config/rag-corpus-exclusions-0.9.3.json",
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "allowed": "Only current published, reviewed chunks with the exact active locale and a resolvable local topic/anchor URL.",
+    "forbidden": ["ordinary search results", "cross-locale prose", "drafts", "chat history", "generated answers", "external pages", "provider responses"],
+    "citation": "Each retained evidence item carries its published local URL and stable topic/anchor identity. Chunks, scores, and model output are never citations."
+  },
+  "candidate_artifact": {
+    "minimum_count": 2,
+    "must_pin": ["model_id", "revision", "artifact_sha256", "tokenizer_sha256", "license", "dimension", "normalization", "prefix_rule", "CPU/runtime requirements"],
+    "resource_measurement": "BPM093-M2-02 clean-host CPU-only protocol; a changed swap counter invalidates selection.",
+    "selection_order": "Among candidates that pass every hard boundary, rank by same-locale evidence coverage and citation readiness; tie is no selection. This is not a comparison to ordinary-search relevance."
+  },
+  "hard_boundaries": {
+    "same_locale_only": true,
+    "citation_target_must_resolve": true,
+    "missing_evidence_disposition": "abstain_or_clarify",
+    "unsupported_factual_answer": "forbidden",
+    "ordinary_search_dependency": "forbidden",
+    "cross_locale_fallback": "forbidden",
+    "network_after_local_install": 0
+  },
+  "optional_external_evidence": {
+    "default": "disabled",
+    "activation": "Later M7/M8 work requires explicit user opt-in, a reviewed provider/scope policy, and visible external-source state.",
+    "ordering": "Retrieve and label local BPM evidence independently before any permitted external request; do not silently merge conflicts.",
+    "persistence": "External content never enters local chunks, embeddings, indexes, model training, or persistent chat knowledge.",
+    "citation": "External claims require their own labelled external citation."
+  },
+  "verification": {
+    "current": "documentation/tests/contract/test_chat_rag_embedding_selection_contract_0_9_3.py",
+    "next": "BPM093-M5-03C produces ignored candidate reports; BPM093-M7 proves generated-answer grounding and abstention."
+  }
+}

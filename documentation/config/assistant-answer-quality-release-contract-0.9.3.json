@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-assistant-answer-quality-release-0.9.3",
+  "backlog_item": "BPM093-M13-01",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-m13-quality-migration-contract",
+  "pins": {
+    "answer_validation": {"path": "documentation/config/grounded-conversation-answer-validation-contract-0.9.3.json", "sha256": "5747d2da3660883f986834f05d3cbd6167bd9fba7349bad49dabb1a1e04dd410"},
+    "conversation_context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "3f06b876eb59be5642bee4cfb2a96c165edb0ad3764df3100946fd9aeb7df16f"},
+    "conversation_retention": {"path": "documentation/config/bpm-conversation-retention-contract-0.9.3.json", "sha256": "d95c7047e7432a6dfe1fdf34b5c8c0de4da329337480fd45f20105779004d8c4"},
+    "floating_ui": {"path": "documentation/config/documentation-assistant-floating-ui-contract-0.9.3.json", "sha256": "a8293dc10da46329f7c063e0a4a0972ce615ed939cd80c5b186d30cb2f97f669"},
+    "presentation": {"path": "documentation/config/documentation-assistant-presentation-contract-0.9.3.json", "sha256": "7e0c15bc83385b87d025f2a57eaf440ea43adbd5e5d070c390867ffce61bb273"},
+    "rag_knowledge": {"path": "documentation/config/rag-knowledge-and-update-contract-0.9.3.json", "sha256": "89da0cba318239335f46925de97973e52c6e343ebd5f64b135bb80a7630d4b6f"},
+    "external_evidence": {"path": "documentation/config/documentation-assistant-external-evidence-release-contract-0.9.3.json", "sha256": "f39f510ebaa7a60682569ea69904d78f2e2e5ed1e280a5ca60bc68ad4173a81d"},
+    "security_privacy": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"}
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "release_invariants": {
+    "ordinary_search": "The deterministic documentation search remains separate and is neither queried nor ranked by assistant answer quality, relevance, timing or conversation code.",
+    "knowledge": "Only reviewed, publishable, versioned and provenance-tracked local material may become RAG evidence. Model-weight training is not a default knowledge-update path; M13-07A permits a reversible adapter experiment only after the approved benchmark proves evidence, retrieval and composition remediation insufficient.",
+    "privacy": "No prompt, answer, evidence, hardware identifier, timing sample, credential or conversation content becomes telemetry. External evidence remains retained implementation only and never becomes local RAG knowledge in 0.9.3.",
+    "locale": "Every visible string, evidence item, retained turn and retrieval result is exact-active-locale only; cross-locale fallback, merge and retained-context reuse are forbidden."
+  },
+  "answer_contract": {
+    "order": ["complete_grounded_generated_answer", "zero_or_more_deduplicated_relevant_local_sources"],
+    "completeness": "The answer must contain the complete grounded response needed for the accepted question. A word count, paragraph count or latency target must not silently shorten it; hard parser, context, cancellation and resource safety bounds remain explicit.",
+    "validation": "A factual claim requires current accepted evidence. Unsupported, malformed, contradictory or irrelevant output clarifies, abstains or refuses; raw evidence excerpts and raw model output are never substituted as a plausible answer. A schema/citation-valid but excessively extractive local draft may make exactly one isolated local rewrite from its private draft and accepted citation IDs, then must pass the original evidence checks again.",
+    "citation": "Only current accepted source identities may support an answer. A source list is optional, deduplicated and cannot make an unsupported answer valid."
+  },
+  "benchmark": {
+    "local": "M13-06A executes ten approved support intents as native reviewed EN/RU prompts (20 cases). The bilingual result is the selected-model control reported for all six product locales, but it never permits cross-locale retrieval or a claim that another locale was independently executed. Citation resolution, explicit-context relevance and safe behavior are 100%; each supported answer must receive at least 4/5 reviewer relevance and completeness; long raw evidence extraction is zero.",
+    "external": "Deferred beyond 0.9.3 by product-owner decision: no external-source benchmark, configured provider request, reader switch or external claim is a release requirement. The retained implementation may be reconsidered only in a separately approved investigation.",
+    "remediation": "Correct evidence/relevance first, then approved RAG corpus, then composition/prompt/runtime. A local adapter is conditional, reproducible, rights-cleared, trained off the target laptop and must improve failures without regressing a passing benchmark case."
+  },
+  "universal_relevance": {
+    "dimensions": ["topic", "named_entities", "operating_system_or_distribution", "release", "reader_role", "bpm_version", "locale"],
+    "rule": "Before generation, source rendering or fallback, every explicit request constraint must agree with the candidate evidence. A missing supporting context clarifies or abstains; an incompatible context is rejected and is never silently substituted.",
+    "regression_fixture": "The Russian question `Как установить BPM на Ubuntu?` selects the published same-locale Ubuntu 26.04 source-install procedure. Debian 13.5 evidence is incompatible and cannot reach answer text or sources."
+  },
+  "conversation": {
+    "scope": "One browser tab, one exact locale and one BPM version.",
+    "retention": "Retain the newest eight completed user-question/assistant-answer pairs across documentation navigation and reload. The ninth completed pair deterministically evicts the oldest. Clear, tab close, locale/version change, expiry and process restart remove context as applicable.",
+    "follow_up": "Every accepted follow-up receives a fresh answer and fresh same-locale retrieval informed only by its bounded retained context. Cancelled or failed turns stay visibly terminal, do not count as completed pairs and never block a later request.",
+    "external_boundary": "Retained context is never sent to an external provider. In 0.9.3 every browser chat request is local_only; no reader switch or provider request is emitted."
+  },
+  "time_preview": {
+    "display": "Immediately after an accepted request, the transcript renders locale-owned preliminary copy equivalent to `Expected time: from N minutes S seconds to M minutes T seconds`. The completed answer or explicit terminal failure atomically replaces that preliminary message.",
+    "inputs": ["safe_local_hardware_and_runtime_profile", "installed_model_identity_and_quantization", "cold_or_warm_start", "prompt_and_retained_context_size", "selected_evidence_size", "predicted_answer_token_range", "rolling_local_generation_throughput"],
+    "calibration": "Compute a conservative local lower and upper range in whole seconds from bounded installation/runtime measurements; recalibrate after model installation or a material runtime change. The calculation uses no network, telemetry or stable hardware identifier and does not delay request admission.",
+    "honesty": "The range is an estimate, not a deadline. It must widen for unknown or cold conditions and must not be used to truncate, cancel or deprioritize a valid answer."
+  },
+  "sources_and_viewport": {
+    "local_links": "Relevant local documentation sources are active same-window links to validated same-locale BPM documentation.",
+    "external_links": "External-source navigation is deferred beyond 0.9.3 and is not present in the released assistant UI.",
+    "desktop_panel": "The expanded lower-right assistant overlay is 50vw wide and 90dvh high; title, composer and status remain visible while only the transcript scrolls.",
+    "responsive_accessibility": "Narrow-view fallback, light/dark/forced-colors rendering, keyboard operation and safe text-only rendering remain mandatory."
+  },
+  "implementation_sequence": {
+    "BPM093-M13-02": "Remove unsafe fallback and add deterministic capability answers.",
+    "BPM093-M13-03": "Implement universal relevance gates and fixtures.",
+    "BPM093-M13-04": "Repair eight-pair conversation admission, retention and continuation.",
+    "BPM093-M13-05": "Implement complete-answer limits and local time-range calculation/rendering.",
+    "BPM093-M13-06": "Implement grounded complete-answer composition.",
+    "BPM093-M13-06A": "Run the ten-intent same-locale local-answer benchmark after structured-generation correction.",
+    "BPM093-M13-06B": "Enforce selected-model structured JSON generation without weakening grounding.",
+    "BPM093-M13-06C": "Rewrite an otherwise valid excessive-quotation draft once in isolated local context.",
+    "BPM093-M13-07": "Review any additional RAG knowledge sources without training weights.",
+    "BPM093-M13-07A": "Decide and, only if benchmark-gated, evaluate a reversible local adapter.",
+    "BPM093-M13-08": "Retain content-free BYOK diagnostics without shipping a reader-accessible external-source path.",
+    "BPM093-M13-09": "Retain the reviewed external-link implementation for separately approved future research; do not ship it in the assistant UI.",
+    "BPM093-M13-10": "Implement the 50vw by 90dvh responsive panel.",
+    "BPM093-M13-11": "Defer configured external-source end-to-end validation to the separate post-0.9.3 investigation."
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_assistant_answer_quality_release_contract_0_9_3.py",
+    "implementation": "Each referenced M13 task supplies its focused runtime, UI or browser proof; this planning contract adds no route, model invocation, generated answer, provider call or browser mutation."
+  }
+}

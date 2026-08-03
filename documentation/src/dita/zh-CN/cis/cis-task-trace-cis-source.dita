@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="cis-task-trace-cis-source" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>追踪 CIS 值的来源</title>
+  <title>追踪安全基线值的来源</title>
   <shortdesc>将一个配置值跟踪回起始预设、CIS 层、合并决策以及导出前的后续编辑。</shortdesc>
   <taskbody>
     <prereq><p>打开从入门预设创建的配置文件或应用了 CIS 1 级或 2 级图层的配置文件。</p></prereq>

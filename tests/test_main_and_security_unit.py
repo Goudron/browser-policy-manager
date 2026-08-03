@@ -139,3 +139,22 @@ def test_create_app_uses_stricter_default_csp_outside_profiles():
     assert "style-src 'self'" in csp
     assert "worker-src 'self'" in csp
     assert "child-src 'self'" in csp
+
+
+def test_lifespan_shuts_down_an_attached_documentation_assistant_runtime():
+    calls: list[str] = []
+
+    class _Runtime:
+        def shutdown(self) -> None:
+            calls.append("shutdown")
+
+    app = main_module.create_app()
+    app.state.documentation_assistant_runtime = _Runtime()
+
+    async def _run_lifespan() -> None:
+        async with app.router.lifespan_context(app):
+            return None
+
+    asyncio.run(_run_lifespan())
+
+    assert calls == ["shutdown"]

@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-embedding-model-benchmark-m5-03a-0.9.3",
+  "backlog_item": "BPM093-M5-03A",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-remediation-benchmark-contract",
+  "supersedes_selection_attempt": "documentation/config/embedding-model-benchmark-0.9.3.json",
+  "protocol": {
+    "id": "BPM093-M2-02",
+    "target_host": {
+      "cpu_model": "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz",
+      "physical_cores": 2,
+      "logical_threads": 4,
+      "memory_gib": 7.1,
+      "inference": "CPU-only"
+    },
+    "network": "disabled after explicit, checksum-verified artifact installation",
+    "validity": {
+      "swap_must_not_change": true,
+      "measured_attempts_per_locale": 30,
+      "warmup_attempts_per_locale": 5,
+      "rss_sample_interval_ms": 100
+    }
+  },
+  "inputs": {
+    "evaluation_corpus": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+    "chunk_contract": "documentation/config/rag-chunk-extraction-0.9.3.json",
+    "corpus_exclusions": "documentation/config/rag-corpus-exclusions-0.9.3.json",
+    "passage_projection": "heading_path followed by a newline and chunk text; no cross-locale passage is admitted",
+    "top_k": 5,
+    "topic_deduplication": "Keep the highest-scoring chunk per topic before taking the first five topic IDs.",
+    "retrieval_query_plan": "Expand the reviewed answer templates for every domain and locale. Search typos, no-result cases, and exact identifiers are lexical/hybrid evidence owned by M4 and M5-06, not a dense-encoder quality gate.",
+    "cross_language_probe": {
+      "query_locale": "en",
+      "query_class": "answer_question",
+      "target_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
+    }
+  },
+  "runtime": {
+    "implementation": "ONNX Runtime CPU execution plus tokenizers; a benchmark dependency, not a product-runtime selection.",
+    "packages": [
+      {
+        "distribution": "onnxruntime",
+        "version": "1.28.0",
+        "wheel": "onnxruntime-1.28.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+        "sha256": "6afdc83f1317c136e92fc29f5ee9f058de59d87c0b22cee3fdbfbaa0ccc2098a"
+      },
+      {
+        "distribution": "tokenizers",
+        "version": "0.23.1",
+        "wheel": "tokenizers-0.23.1-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "5075b405006415ea148a992d093699c66eb01952bf59f4d5727089a98bda45a4"
+      },
+      {
+        "distribution": "safetensors",
+        "version": "0.8.0",
+        "wheel": "safetensors-0.8.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "sha256": "fd6f3f93c9a0a7cc2788ee63fb763353d4bd2e89b0751bc78fcf7dda00bea774"
+      }
+    ],
+    "threads": {"intra_op": 2, "inter_op": 1},
+    "maximum_sequence_tokens": 512
+  },
+  "candidates": [
+    {
+      "id": "multilingual-e5-base-onnx-o4",
+      "model_id": "intfloat/multilingual-e5-base",
+      "revision": "f5bd48cd75e61ca79c4cdffff9185cab1f07f4f0",
+      "source": "https://huggingface.co/intfloat/multilingual-e5-base/tree/f5bd48cd75e61ca79c4cdffff9185cab1f07f4f0",
+      "license": "MIT",
+      "languages_claimed_by_upstream": 94,
+      "dimension": 768,
+      "artifact": "onnx/model_O4.onnx",
+      "quantization": "ONNX O4 graph optimization; floating-point weights; no ISA-specific model requirement",
+      "required_cpu_features": [],
+      "prefixes": {"query": "query: ", "passage": "passage: "},
+      "normalization": "attention-mask mean pooling, then L2 normalization; cosine score is the dot product of normalized vectors",
+      "files": {
+        "config.json": "9dab198f24c8c0879e481cf7822005d5ecbceedbacb390ffafa594e28d31bac4",
+        "tokenizer.json": "62c24cdc13d4c9952d63718d6c9fa4c287974249e16b7ade6d5a85e7bbb75626",
+        "tokenizer_config.json": "efb5c0d09722e5fe59a462cd2a9976ee216d55b037597d997cd3fe833216da15",
+        "special_tokens_map.json": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f",
+        "onnx/model_O4.onnx": "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703"
+      }
+    },
+    {
+      "id": "distiluse-base-multilingual-cased-v2-onnx-quint8-avx2",
+      "model_id": "sentence-transformers/distiluse-base-multilingual-cased-v2",
+      "revision": "76a1ba57cb3d655b5196538484e0cfa9370317e4",
+      "source": "https://huggingface.co/sentence-transformers/distiluse-base-multilingual-cased-v2/tree/76a1ba57cb3d655b5196538484e0cfa9370317e4",
+      "license": "Apache-2.0",
+      "languages_claimed_by_upstream": 50,
+      "dimension": 512,
+      "artifact": "onnx/model_quint8_avx2.onnx",
+      "quantization": "ONNX unsigned 8-bit quantization for AVX2",
+      "required_cpu_features": ["avx2"],
+      "prefixes": {"query": "", "passage": ""},
+      "post_pooling": {
+        "kind": "dense_tanh_safetensors",
+        "artifact": "2_Dense/model.safetensors",
+        "weight_key": "linear.weight",
+        "bias_key": "linear.bias",
+        "in_features": 768,
+        "out_features": 512
+      },
+      "normalization": "attention-mask mean pooling, Dense+Tanh projection, then L2 normalization; cosine score is the dot product of normalized vectors",
+      "files": {
+        "config.json": "1d17c6ca084881da80813dfe2670ea25d0ef9f56cc8c780dec64c8c8c281fabf",
+        "tokenizer.json": "5b4e1a8171c81dfd666ae40265b9530c6e0b3d53923fe8ac493dcc84229adf81",
+        "tokenizer_config.json": "ccdb1ee6fba1d0f4bbc413ca28c3d71deb3ba399191eec498c2328164e50127b",
+        "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+        "2_Dense/model.safetensors": "0a21b1ce908e772ebf09f93c20ca09524c32706e9918d9c0169a3f0663b191ed",
+        "onnx/model_quint8_avx2.onnx": "6a5852e0da9ca0e4532274b6c5eed71f9938fa8ff15e8345c6873a1969093f80"
+      }
+    }
+  ],
+  "acceptance": {
+    "per_locale": {"top_1_min": 0.7, "recall_at_5_min": 0.9},
+    "cross_language_recall_at_5_min": 0.75,
+    "embedding_p95_ms_max": 2000,
+    "model_and_direct_runtime_disk_gib_max": 0.75,
+    "peak_process_rss_gib_max": 1.5,
+    "selection": "Select exactly one passing immutable artifact by descending macro Recall@5, macro Top-1, cross-language Recall@5, then ascending direct disk, peak RSS, and P95 latency. A tie is a failure requiring a new reviewed criterion."
+  }
+}

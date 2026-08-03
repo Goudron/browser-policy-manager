@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-run-validate-before-apply-update" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-  <title>使用 expected_revision 验证并应用配置档案更新</title>
+  <title>使用预期修订字段验证并应用配置档案更新</title>
   <shortdesc>运行验证优先的更新工作流，该工作流使用当前修订版保护 BPM 状态，并在过时或无效数据时停止。</shortdesc>
   <taskbody>
     <prereq><p>外部产品已读取目标配置文件并存储其当前的 <codeph>revision</codeph>。在发送任何配置文件补丁之前准备候选 Firefox <codeph>policies.json</codeph> 文档。</p></prereq>

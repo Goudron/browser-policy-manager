@@ -10,7 +10,7 @@ generation or runtime work.
 - English source topic, the same topic in exactly the affected locale if this is a localized change,
   direct key map, direct subject/condition metadata, and one focused test.
 - Synthetic examples only. Do not include secrets, private hosts, production data, licensed CIS
-  source expression, copied vendor prose, or AI-generated content.
+  source expression, copied vendor prose, or unreviewed AI-authored content.
 
 ## Steps
 

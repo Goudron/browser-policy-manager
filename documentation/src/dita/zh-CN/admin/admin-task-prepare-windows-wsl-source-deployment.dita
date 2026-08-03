@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-prepare-windows-wsl-source-deployment" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="windows linux">
-  <title>准备 Windows 10/11 以进行 WSL 源部署</title>
+  <title>准备视窗系统以进行子系统源部署</title>
   <shortdesc>启用 WSL，选择受支持的 Linux 发行版假设，并确认 BPM 将在 Linux 内部运行，而不是作为本机 Windows 服务运行。</shortdesc>
   <taskbody>
     <prereq><p>使用具有启用 WSL 2 权限的 Windows 10 或 Windows 11，安装 Linux 发行版（例如 Ubuntu LTS），并在 PowerShell 和 WSL shell 中运行命令。</p></prereq>

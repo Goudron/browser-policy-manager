@@ -37,7 +37,7 @@ def _source(locale: str, topic_id: str) -> str:
 
 def _map_keyrefs(locale: str, map_name: str) -> list[str]:
     root = ET.parse(DITA_ROOT / locale / "maps" / map_name).getroot()
-    return [topicref.attrib["keyref"] for topicref in root.findall("topicref")]
+    return [topicref.attrib["keyref"] for topicref in root.findall(".//topicref")]
 
 
 def _keydefs(locale: str) -> dict[str, str | None]:

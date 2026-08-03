@@ -29,7 +29,10 @@ def _openapi_operations() -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
         for method, operation in path_item.items():
             if not isinstance(operation, dict):
                 continue
-            target = web if "web" in operation.get("tags", []) else integration
+            tags = operation.get("tags", [])
+            if "documentation-assistant" in tags:
+                continue
+            target = web if "web" in tags else integration
             target.add((method.upper(), path))
     return integration, web
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="admin-task-maintain-local-documentation-assistant" xml:lang="de" audience="administrator devops security-reviewer" product="bpm-0-9-1" platform="linux">
+  <title>Die Grenze des Dokumentationsassistenten in BPM 0.9.3 pflegen</title>
+  <shortdesc>Halten Sie den lokalisierten Schulungshinweis und die Grenze zur deterministischen Suche bei der Dokumentationspflege korrekt.</shortdesc>
+  <taskbody>
+    <prereq><p>Halten Sie die freigegebene BPM-Quellcode-Revision und den Dokumentations-Publikationsworkflow bereit.</p></prereq>
+    <context><p>In 0.9.3 gibt es kein lokales Modell, kein Modellartefakt, keine RAG-Generation, keinen Embedding- oder Zitatspeicher und keinen Anbieter externer Quellen zu pflegen. Erzeugen Sie keinen Wartungszustand für nicht gelieferte Funktionen.</p></context>
+    <steps>
+      <step><cmd>Übernehmen Sie die freigegebene BPM-Revision und bauen Sie die Dokumentation neu.</cmd><info><p>Verwenden Sie den normalen Dokumentationsworkflow, einschließlich <codeph>make docs-install-dev</codeph> für eine Entwicklungsumgebung.</p></info></step>
+      <step><cmd>Öffnen Sie die veröffentlichte Dokumentation in allen unterstützten Sprachen.</cmd><info><p>Prüfen Sie den Einstieg des Assistenten und die unabhängige deterministische Suche.</p></info></step>
+      <step><cmd>Senden Sie in jedem Gebietsschema eine Frage.</cmd><info><p>Prüfen Sie den lokalen Schulungshinweis sowie das Fehlen von Antwort, Quelle, Zitat, externer Behauptung und Modellinstallation.</p></info></step>
+      <step><cmd>Führen Sie in 0.9.3 keine Befehle zur Modellinstallation oder RAG-Generierung aus.</cmd><info><p>Sie gehören zu einem späteren Release und beheben keinen Schulungshinweis.</p></info></step>
+      <step><cmd>Dokumentieren Sie die Dokumentationsrevision und das Prüfergebnis.</cmd><info><p>Behandeln Sie eine Abweichung zwischen Hinweis und Suchgrenze als Dokumentationsfehler.</p></info></step>
+    </steps>
+    <result><p>Das veröffentlichte Portal behält einen lokalisierten Hinweis im Chat und einen getrennten Pfad zu aktuellen Informationen über die deterministische Suche.</p></result>
+    <postreq><p>Bewahren Sie keine Leserfragen als Wartungsartefakt auf. Prüfen Sie Modell- und Retrieval-Betrieb erst, wenn ein späteres Release ihn ausdrücklich liefert.</p></postreq>
+  </taskbody>
+  <related-links><link keyref="topic.admin-reference-minimum-system-requirements"/><link keyref="topic.admin-task-run-source-update-migrations-docs"/><link keyref="topic.admin-task-verify-source-update-rollback-stop"/></related-links>
+</task>

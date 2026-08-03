@@ -7,7 +7,7 @@
     <prereq><p>Un brouillon de profil est ouvert à l'étape 1.</p></prereq>
     <context><p>Les préréglages de démarrage fournissent une référence connue que vous pouvez toujours modifier dans Éditeur guidé, Tous les paramètres ou Éditeur JSON.</p></context>
     <steps>
-      <step><cmd>Ouvrez la zone de préréglage de démarrage dans la ligne de base du profil &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez la zone de préréglage de démarrage dans l’étape 1.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Comparez les préréglages disponibles avec le scénario de profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Appliquez le préréglage qui correspond au comportement prévu du navigateur.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Vérifiez le résumé modifié avant de passer à l'étape suivante.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

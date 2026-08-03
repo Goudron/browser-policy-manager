@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-cis-layer-merge" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>入门预设和 CIS 层</title>
+  <title>入门预设和安全基线层</title>
   <shortdesc>入门预设和 CIS 图层有助于在手动检查和编辑之前创建初始配置文件。</shortdesc>
   <conbody>
     <p>入门预设为配置文件提供初始用途，例如公司、课堂或面向安全的用途。 CIS 层在 BPM 支持的情况下添加 BPM 映射的安全基线选择。</p>

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-rag-chunk-extraction-0.9.3",
+  "backlog_item": "BPM093-M5-01",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented",
+  "chunk_schema_version": "rag-chunk-v1",
+  "text_normalization_revision": "dita-plain-text-v1",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "source_boundary": {
+    "published_manifest_required": true,
+    "allowed_provenance_classes": ["published_reviewed_dita", "published_approved_generated_dita"],
+    "excluded_inputs": ["runbooks", "reports", "caches", "runtime state", "models", "embeddings", "external web content"]
+  },
+  "units": {
+    "anchor_pattern": "a-[a-z0-9]+(?:-[a-z0-9]+)*",
+    "root_locator": "root",
+    "block_tags": ["shortdesc", "p", "li", "steps", "table", "codeblock", "screen", "example", "note", "dlentry"],
+    "preserve_kinds": ["shortdesc", "paragraph", "steps", "table", "code", "example", "note", "definition"]
+  },
+  "bounds": {
+    "target_characters": 1400,
+    "maximum_characters": 2400,
+    "overlap_characters": 0,
+    "split_rule": "Append complete deterministic DITA blocks where possible; otherwise split plain text at sentence then whitespace boundaries. A code or table block larger than the maximum fails closed."
+  },
+  "manifest": {
+    "sort_order": ["locale", "topic_id", "anchor_id_or_root", "ordinal"],
+    "required_chunk_fields": ["chunk_id", "chunk_schema_version", "locale", "topic_id", "anchor_id_or_root", "ordinal", "guide_id", "published_url", "source_dita_path", "source_revision", "source_sha256", "manifest_sha256", "documentation_version", "bpm_version", "provenance_class", "publication_state", "heading_path", "identifiers", "text_normalization_revision", "content_kinds", "text", "character_count"],
+    "serialization": "UTF-8 JSON with sorted keys, two-space indentation, and a final newline"
+  }
+}

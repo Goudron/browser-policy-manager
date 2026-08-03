@@ -8,7 +8,7 @@
     <context><p>La Biblioteca enumera los perfiles guardados y muestra los recuentos filtrado y total para indicar si la búsqueda o los filtros ocultan filas. La cuadrícula de acciones aparece primero; la fila de filtros está inmediatamente sobre la tabla de perfiles.</p>
       <fig id="screenshot-library-overview">
         <title>Descripción general de la biblioteca</title>
-        <image keyref="screenshot.library-overview" placement="break">
+        <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
           <alt>Biblioteca que muestra filas de perfil guardadas, recuentos y acciones de perfil.</alt>
         </image>
       </fig>

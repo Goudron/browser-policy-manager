@@ -348,6 +348,22 @@ WEB_OPERATIONS: tuple[OperationContract, ...] = (
     ),
 )
 
+# The assistant transport has a separate versioned API delivery contract.  It is not
+# part of the public profile/API integration inventory or its Administrator Guide
+# coverage matrix.
+DOCUMENTATION_ASSISTANT_ROUTE_KEYS = frozenset(
+    {
+        ("GET", "/api/documentation-assistant/status"),
+        ("GET", "/api/documentation-assistant/web-mode"),
+        ("POST", "/api/documentation-assistant/web-mode"),
+        ("POST", "/api/documentation-assistant/chat"),
+        ("GET", "/api/documentation-assistant/chat/{request_id}/stream"),
+        ("POST", "/api/documentation-assistant/chat/{request_id}/cancel"),
+        ("DELETE", "/api/documentation-assistant/conversation"),
+        ("GET", "/api/documentation-assistant/chat/{request_id}/sources/{source_id}"),
+    }
+)
+
 EXPECTED_MODEL_FIELDS = {
     "ProfileCreate": {
         "required": ("name",),
@@ -490,7 +506,7 @@ def test_openapi_operation_inventory_matches_generated_schema_with_topic_ids() -
     }
     expected_route_keys = {(operation.method, operation.path) for operation in expected_operations}
 
-    assert actual_route_keys == expected_route_keys, (
+    assert actual_route_keys == expected_route_keys | DOCUMENTATION_ASSISTANT_ROUTE_KEYS, (
         "OpenAPI route set drifted. Update API documentation inventory and DITA coverage. "
         f"missing={sorted(expected_route_keys - actual_route_keys)} "
         f"unexpected={sorted(actual_route_keys - expected_route_keys)}"

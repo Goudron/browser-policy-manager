@@ -80,7 +80,7 @@ def test_visible_english_review_records_complete_source_scope() -> None:
 
     actual_counts = {locale: len(_source_paths(locale)) for locale in LOCALES}
     assert actual_counts == review["scope"]["source_files_per_locale"]
-    assert sum(actual_counts.values()) == review["scope"]["source_files_reviewed"] == 805
+    assert sum(actual_counts.values()) == review["scope"]["source_files_reviewed"] == 830
 
 
 def test_visible_english_review_has_no_release_blocking_exact_peer_carryover() -> None:

@@ -7,7 +7,7 @@
     <prereq><p>Vous connaissez l'objectif du profil que vous souhaitez soutenir.</p></prereq>
     <context><p>Les scénarios gardent la première passe orientée vers la tâche et rendent la ligne de base plus facile à expliquer lors de la révision.</p></context>
     <steps>
-      <step><cmd>Ouvrez l'étape 1, ligne de base du profil &amp;.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Ouvrez l’étape 1 de la configuration guidée.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Passez en revue les choix de scénarios et leurs descriptions en langage simple.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Choisissez le scénario le plus proche de l'objectif de déploiement.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Vérifiez le résumé de la ligne de base concerné avant d'ajouter des préréglages ou des couches CIS.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

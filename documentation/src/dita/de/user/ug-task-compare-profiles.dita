@@ -8,7 +8,7 @@
     <context><p>„Profileinstellungen vergleichen“ ist eine eigene Seite für gespeicherte Profile. Sie behält die aktuelle Sprache und das aktuelle Thema bei und ersetzt nicht die Registerkarte „Bibliothek“.</p>
       <fig id="screenshot-compare-profiles">
         <title>Seite „Profileinstellungen vergleichen“</title>
-        <image keyref="screenshot.compare-profiles" placement="break">
+        <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
           <alt>Vergleichsansicht mit zwei gespeicherten Profilen, die für die Gegenüberstellung ausgewählt wurden.</alt>
         </image>
       </fig>

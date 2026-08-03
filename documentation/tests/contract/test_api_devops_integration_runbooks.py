@@ -25,6 +25,7 @@ DEVOPS_RUNBOOK_TOPICS = (
 DEVOPS_RUNBOOK_KEYREFS = tuple(f"topic.{topic_id}" for topic_id in DEVOPS_RUNBOOK_TOPICS)
 TROUBLESHOOTING_KEYREF_COUNT = 6
 PRODUCTION_BOUNDARY_KEYREF_COUNT = 4
+LOCAL_ASSISTANT_KEYREF_COUNT = 3
 REQUIRED_INVARIANT_TERMS = (
     "$BPM_BASE_URL",
     "API-PROFILE-001",
@@ -122,9 +123,11 @@ def test_devops_integration_runbooks_are_keyed_and_reachable_from_admin_guide() 
         admin_guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/administrator-guide.ditamap").read_text(encoding="utf-8")
         )
-        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall("topicref")]
-        devops_block_end = len(topicrefs) - TROUBLESHOOTING_KEYREF_COUNT - PRODUCTION_BOUNDARY_KEYREF_COUNT
-        assert topicrefs[devops_block_end - len(DEVOPS_RUNBOOK_KEYREFS) : devops_block_end] == list(DEVOPS_RUNBOOK_KEYREFS)
+        topicrefs = [topicref.attrib["keyref"] for topicref in admin_guide.findall(".//topicref")]
+        workflows_start = topicrefs.index(DEVOPS_RUNBOOK_KEYREFS[0])
+        assert topicrefs[workflows_start : workflows_start + len(DEVOPS_RUNBOOK_KEYREFS)] == list(
+            DEVOPS_RUNBOOK_KEYREFS
+        )
 
 
 def test_devops_integration_runbooks_preserve_locale_structure_and_full_peer_content() -> None:

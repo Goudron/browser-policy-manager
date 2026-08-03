@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-pdf-generation-0.9.3",
+  "backlog_item": "BPM093-M14-08",
+  "target_bpm_version": "0.9.3",
+  "candidate_root": "documentation/build/pdf",
+  "candidate_path_layout": "{locale}/{filename}",
+  "dita_format": "html5",
+  "pdf_renderer": "chromium",
+  "source_maps": [
+    "user-guide.ditamap",
+    "administrator-guide.ditamap"
+  ],
+  "locales": [
+    "en",
+    "ru",
+    "de",
+    "zh-CN",
+    "fr",
+    "es-ES"
+  ],
+  "candidate_manifest": "pdf-build-manifest.json",
+  "determinism": {
+    "environment": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "TZ": "UTC",
+      "SOURCE_DATE_EPOCH": "0"
+    },
+    "pdf_metadata": {
+      "creation_date": ["D:19700101000000Z", "D:19700101000000+00'00'"],
+      "canonicalizer": "qpdf --static-id --object-streams=generate --recompress-flate --compression-level=9",
+      "xmp_timestamp": ["1970-01-01T00:00:00Z", "1970-01-01T00:00:00+00:00"]
+    },
+    "verification": "pdf-reproducibility compares the verified published candidate with one isolated candidate tree using every file SHA-256"
+  },
+  "safety": {
+    "source_copy": "Each DITA conversion receives an isolated copy of documentation/src and documentation/assets.",
+    "source_immutability": "The generator compares source and asset SHA-256 values before and after all conversions.",
+    "delivery_boundary": "This generator writes only documentation/build/pdf. BPM093-M14-09 alone promotes a validated candidate into distributions/documentation/{bpm_version}."
+  },
+  "operator_commands": {
+    "build": "make docs-pdf-build",
+    "verify": "make docs-pdf-verify",
+    "reproducibility": "make docs-pdf-reproducibility"
+  }
+}

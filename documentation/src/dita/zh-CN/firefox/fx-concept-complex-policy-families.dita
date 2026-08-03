@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-complex-policy-families" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>复杂的 Firefox 策略系列</title>
+  <title>复杂的火狐浏览器策略系列</title>
   <shortdesc>将嵌套策略系列作为组进行审查，因为一个导出的值可以组合多个相关的浏览器行为。</shortdesc>
   <conbody>
     <section id="a-extensions"><title>扩展</title><p>使用 <codeph>ExtensionSettings</codeph> 进行基于字典的安装规则和未知扩展 ID；仅当该形状与预期的 Firefox 行为匹配时才使用旧版 <codeph>Extensions</codeph>。</p></section>
@@ -10,7 +10,7 @@
     <section id="a-certificates"><title>证书</title><p><codeph>Certificates</codeph>可以导入企业根并安装证书文件。将路径和信任行为视为特定于环境的行为，并在部署之前在 BPM 外部验证它们。</p></section>
     <section id="a-proxy"><title>代理</title><p><codeph>Proxy</codeph> 结合了模式、服务器、端口和协议重用。请仔细验证手动代理值，因为格式错误的地址可能会阻止浏览器网络访问。</p></section>
     <section id="a-search-homepage"><title>搜索和主页</title><p><codeph>SearchEngines</codeph> 和 <codeph>Homepage</codeph> 塑造第一个用户入口点。搜索 URL 模板必须保留 <codeph>{searchTerms}</codeph>，并且应根据源跟踪检查锁定的主页。</p></section>
-    <section id="a-privacy-ai"><title>隐私和 AI 控制</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可以与站点例外进行交互。 Firefox AI 控件（例如 <codeph>AIControls</codeph>）是要记录的产品政策；他们没有将 AI 功能添加到文档门户。</p></section>
+    <section id="a-privacy-ai"><title>隐私和人工智能控制</title><p><codeph>EnableTrackingProtection</codeph> 和 <codeph>Cookies</codeph> 等隐私系列可以与站点例外进行交互。 Firefox AI 控件（例如 <codeph>AIControls</codeph>）是要记录的产品政策；他们没有将 AI 功能添加到文档门户。</p></section>
   </conbody>
   <related-links>
     <link keyref="topic.fx-task-review-complex-policy-configuration"/>

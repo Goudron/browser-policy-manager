@@ -12,8 +12,8 @@
       <step><cmd>Use download and pretty-print options only to control delivery and formatting.</cmd><info><p>API-adjacent export supports <codeph>download=1</codeph>, <codeph>pretty=1</codeph>, and <codeph>indent</codeph>; these options do not change the policy meaning.</p><note type="warning">Archived profiles are not normal direct Library export targets. The API has an explicit <codeph>include_deleted</codeph> option for archived export scenarios.</note></info></step>
     </steps>
     <result><p>You have a canonical Firefox <filepath>policies.json</filepath> file containing only the exported <codeph>policies</codeph> document.</p></result>
-    <example id="a-export-output-example">
-      <title>Canonical export shape</title>
+    <example id="a-export-examples">
+      <title>Canonical export shape and API-adjacent options</title>
       <codeblock outputclass="language-json">{
   "policies": {
     "DisableTelemetry": true,
@@ -22,9 +22,6 @@
     }
   }
 }</codeblock>
-    </example>
-    <example id="a-export-query-example">
-      <title>API-adjacent export options</title>
       <p>Use <codeph>/api/export/profiles/{profile_id}/firefox/policies.json?download=1&amp;pretty=1</codeph> for an attachment-style, two-space formatted response, or use <codeph>indent</codeph> when a specific JSON indentation is required.</p>
     </example>
     <postreq><p>Recovery: if export reports a missing profile, archived profile, invalid query option, or stale row context, refresh the Library, confirm lifecycle and profile ID, and retry from the active saved row or the JSON editor for that profile.</p></postreq>

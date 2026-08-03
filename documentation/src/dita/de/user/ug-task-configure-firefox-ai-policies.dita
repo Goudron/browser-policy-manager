@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-configure-firefox-ai-policies" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
-  <title>Firefox AI und Richtlinien für intelligente Funktionen konfigurieren</title>
-  <shortdesc>Verwenden Sie Schritt 5 für vorhandene Firefox-Browserrichtlinienkontrollen im Zusammenhang mit intelligenten AI &amp;-Funktionen, visueller Suche und intelligenten Oberflächen auf unterstützten Release-Schemata.</shortdesc>
+  <title>Firefox-Richtlinien für KI und intelligente Funktionen konfigurieren</title>
+  <shortdesc>Konfigurieren Sie in Schritt 5 verfügbare Firefox-Richtlinien für KI, die visuelle Suche und andere intelligente Funktionen.</shortdesc>
   <taskbody>
-    <prereq><p>Es wurde ein Release-Schema ausgewählt, das die Steuerelemente unterstützt, oder Sie verstehen, dass ESR 140.13 diese möglicherweise weglässt.</p></prereq>
-    <context><p>In diesem Thema werden vorhandene Firefox-Richtlinieneinstellungen als Produktfunktionalität dokumentiert. Es fügt dem 0.9.1-Dokumentationsportal keine AI-Funktionalität hinzu: RAG, Einbettungen, generative Suche und generative Antworten bleiben außerhalb des Geltungsbereichs.</p></context>
+    <prereq><p>Wählen Sie Release 153 oder ESR 153.0. Unter ESR 140.13 sind einige Steuerelemente nicht verfügbar.</p></prereq>
+    <context><p>In diesem Thema werden vorhandene Firefox-Richtlinieneinstellungen als Produktfunktionalität dokumentiert. Diese Browser-Steuerelemente sind vom Dokumentationsassistenten getrennt und ändern weder dessen Chat noch die deterministische Suche.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Schritt 5, AI &amp; intelligente Funktionen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Überprüfen Sie die integrierten Browser-AI-Oberflächen, die visuelle Suche und die intelligenten Browserfunktionen, die für das ausgewählte Release-Schema aufgeführt sind.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Öffnen Sie Schritt 5 „KI und intelligente Funktionen“.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Prüfen Sie die KI-, visuelle Such- und intelligenten Browserrichtlinien, die das ausgewählte Schema unterstützt.</cmd><info><p>Erwartetes Ergebnis: Das Profil bleibt konsistent.</p></info></step>
       <step><cmd>Aktivieren, deaktivieren oder belassen Sie jede unterstützte Richtlinie entsprechend dem Profilziel.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Wenn ein Steuerelement in ESR 140.13 fehlt, behandeln Sie es als nicht unterstützt, anstatt manuell eine geführte Einstellung zu erfinden.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
+      <step><cmd>Wenn ein Steuerelement in ESR 140.13 fehlt, behandeln Sie es als nicht unterstützt und fügen Sie die Einstellung nicht manuell hinzu.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
-    <result><p>Unterstützte Firefox-AI- und Smart-Feature-Richtlinien werden als Produkteinstellungen überprüft, während das Dokumentationsportal für 0.9.1 weiterhin nicht AI ist.</p></result>
-    <postreq><p>Wiederherstellung: Wenn ein Stakeholder eine fehlende ESR-Kontrolle erwartet, wechseln Sie zur Überprüfung zu einem unterstützten Release-Schema oder dokumentieren Sie den nicht unterstützten Zustand.</p></postreq>
+    <result><p>Firefox-Richtlinien für KI und intelligente Funktionen sind als Profileinstellungen konfiguriert. Sie steuern den Dokumentationsassistenten nicht.</p></result>
+    <postreq><p>Wiederherstellung: Wenn ein benötigtes Steuerelement fehlt, wechseln Sie zum passenden unterstützten Schema oder dokumentieren Sie den nicht unterstützten Status.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-schema-dependent-guided-controls"/>

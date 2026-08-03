@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-answer-benchmark-harness-0.9.3",
+  "backlog_item": "BPM093-M6-02",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-candidate-neutral-harness-contract",
+  "pins": {
+    "model_runtime_shortlist": {
+      "path": "documentation/config/local-chat-model-runtime-shortlist-0.9.3.json",
+      "sha256": "ff01277c2fb9068395c53a8a9692312c50c14f9913253f5d41627d85825d5ccf"
+    },
+    "evaluation_corpus": {
+      "path": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+      "sha256": "0993aec89fe2991d6ef15de251bfedfa87ea99ae6498e5ef73a84f2d6b1aff52"
+    },
+    "evidence_packing": {
+      "path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json",
+      "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"
+    },
+    "resource_policy": {
+      "path": "documentation/config/local-ai-preimplementation-guards-0.9.3.json",
+      "sha256": "7f24b3739dca42f76c46c9e39306094f64007a6718f6cfde31c95d1afa42fac9"
+    }
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "workload": {
+    "answer_questions_per_locale": 16,
+    "dialogue_answer_cases_per_locale": 4,
+    "terminal_cases_per_locale": {
+      "abstain": 4,
+      "clarify": 2,
+      "refuse": 6
+    },
+    "total_cases_per_locale": 32,
+    "answer_output_tokens_max": 96,
+    "evidence_rule": "Every candidate receives byte-identical candidate-neutral request packets built from the same prepared same-locale EvidencePack data and the same locale-native dialogue turns. Expected citations/dispositions are stored only in the scorer oracle, never in model input.",
+    "cross_locale_fallback": "forbidden"
+  },
+  "prepared_evidence_packet": {
+    "required_fields": ["request_id", "locale", "evidence_disposition", "context_jsonl", "citation_ids", "dialogue_turns", "model_invocation_count"],
+    "answer_rule": "answer cases require answer-ready local evidence, a nonempty canonical context_jsonl, the expected local citation, and zero pre-harness model invocations.",
+    "terminal_rule": "abstain, clarify, and refuse cases must remain terminal before model invocation; their prepared packet has zero model invocations and no model response is admitted."
+  },
+  "candidate_response": {
+    "required_fields": ["request_id", "candidate_id", "answer_text", "citation_ids", "output_tokens", "ttft_ns", "completion_ns", "worker_peak_rss_bytes", "network_calls"],
+    "rules": [
+      "Only expected answer cases may have a candidate response.",
+      "citation_ids must be nonempty, unique, and a subset of the scorer's expected local citations.",
+      "answer_text may not contain thought tags; raw model output remains ignored local benchmark evidence.",
+      "output_tokens is in [1, 96], timing/resource values are nonnegative, and network_calls is zero."
+    ]
+  },
+  "human_review": {
+    "required_fields": ["request_id", "candidate_id", "language", "instruction_following", "continuity", "claims"],
+    "accepted_value": "accepted",
+    "normal_continuity_value": "not_applicable",
+    "dialogue_continuity_value": "accepted",
+    "claim_rule": "Every answer has at least one reviewed claim. Every claim must be marked supported and cite one or more citation_ids already emitted by that response. Unsupported factual claims are a hard failure regardless of style, latency, or resource result.",
+    "locale_rule": "A passing report contains one complete human-review record for every answer case in every supported locale."
+  },
+  "measurement": {
+    "fixed_generation_settings": {
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "top_k": 1,
+      "seed": 0,
+      "mode": "non-thinking",
+      "output_tokens_max": 96
+    },
+    "reported_metrics": ["grounded_answer_rate", "citation_selection_rate", "terminal_disposition_rate", "language_rate", "instruction_following_rate", "dialogue_continuity_rate", "ttft_p95_ms", "completion_p95_ms", "output_tokens_median", "worker_peak_rss_bytes", "network_calls"],
+    "selection_boundary": "M6-02 records comparable measurements only. M6-03 applies the target-host resource protocol; M6-04 decides a winner."
+  },
+  "boundaries": {
+    "network_calls_after_install": 0,
+    "ordinary_search_calls": 0,
+    "cross_locale_retrieval_calls": 0,
+    "tools_or_function_calls": 0,
+    "production_runtime_route": "absent",
+    "model_download_or_start": "absent",
+    "output": "Workloads, raw candidate responses, reviews, and reports are ignored artifacts under documentation/.cache/bpm093-m6-02/."
+  },
+  "progress": {
+    "stream": "stdout",
+    "flush": true,
+    "locale_case_update": 8,
+    "content": "real contract/evidence validation and locale-local workload or score completion; no synthetic progress or ETA"
+  }
+}

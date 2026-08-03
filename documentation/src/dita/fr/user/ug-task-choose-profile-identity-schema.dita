@@ -5,11 +5,11 @@
   <shortdesc>Choisissez le nom du profil enregistré et le canal du schéma Firefox avant de configurer les paramètres guidés.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez un profil nouveau ou enregistré dans Éditeur guidé.</p></prereq>
-    <context><p>Utilisez l'étape 1, ligne de base du profil &amp;, pour définir le nom et le canal de schéma qui piloteront la validation et les contrôles disponibles.</p></context>
+    <context><p>Utilisez l’étape 1 pour définir le nom et le canal de schéma. Ils déterminent la validation et les contrôles disponibles.</p></context>
     <steps>
       <step><cmd>Confirmez que vous modifiez le brouillon de profil prévu.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Entrez un nom de profil clair.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
-      <step><cmd>Choisissez le canal de schéma Firefox, tel que la version 152 ou ESR 140.13.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez le canal de schéma Firefox : ESR 140.13, ESR 153.0 ou Release 153.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Vérifiez si le canal sélectionné modifie les commandes visibles avant de continuer.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Le brouillon guidé possède un canal d'identité et de schéma stable.</p></result>

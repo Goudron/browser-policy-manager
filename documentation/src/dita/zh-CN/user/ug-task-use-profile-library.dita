@@ -8,7 +8,7 @@
     <context><p>库会列出已保存的配置文件，并显示筛选数量和总数，以便了解搜索或筛选器是否隐藏行。操作按钮组位于前方，筛选行紧挨在配置文件表格上方。</p>
       <fig id="screenshot-library-overview">
         <title>库概述</title>
-        <image keyref="screenshot.library-overview" placement="break">
+        <image keyref="screenshot.library-overview" placement="break" scalefit="yes" align="center">
           <alt>显示保存的配置文件行、计数和配置文件操作的库。</alt>
         </image>
       </fig>

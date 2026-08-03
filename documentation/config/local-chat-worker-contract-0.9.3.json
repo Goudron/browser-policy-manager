@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-chat-worker-0.9.3",
+  "backlog_item": "BPM093-M6-06",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-no-browser-route",
+  "pins": {
+    "runtime_decision": {
+      "path": "documentation/config/local-chat-model-runtime-decision-0.9.3.json",
+      "sha256": "a81586f071d1e21c846cd45b8437d885be206996da5480aef0a52d7c8f4e1145"
+    },
+    "security_privacy": {
+      "path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json",
+      "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"
+    },
+    "availability_fallback": {
+      "path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json",
+      "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"
+    }
+  },
+  "runtime": {
+    "id": "llama.cpp-b9637-linux-x64-cpu",
+    "archive_filename": "llama-b9637-bin-ubuntu-x64.tar.gz",
+    "archive_sha256": "a50ee14f021a9d8e92e30f622f7e3be1318ee1125bb9a9ba8d2025388df48743",
+    "archive_byte_count": 15512345,
+    "revision": "aedb2a5e9ca3d4064148bbb919e0ddc0c1b70ab3",
+    "worker_extraction": "Every start re-verifies the retained archive and privately extracts only llama-cli and lib* shared libraries. llama-server, rpc-server and every other runtime executable are excluded.",
+    "transport": "one BPM-owned direct child process over stdin/stdout only",
+    "forbidden": ["llama-server", "TCP listener", "HTTP listener", "Unix listener", "loopback listener", "LAN binding", "public model API", "tools", "plugins", "function calling"]
+  },
+  "model": {
+    "id": "qwen3-0.6b-q8_0-official-gguf",
+    "filename": "Qwen3-0.6B-Q8_0.gguf",
+    "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "required_state": "M6-05 exact verified artifact only"
+  },
+  "inference_profile": {
+    "threads": 4,
+    "threads_batch": 4,
+    "context_tokens": 4096,
+    "batch_size": 512,
+    "ubatch_size": 128,
+    "output_tokens_max": 512,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "top_k": 1,
+    "seed": 0,
+    "required_flags": ["--offline", "--device", "none", "--grammar", "--no-show-timings", "--jinja", "--reasoning", "off", "--simple-io", "--conversation"],
+    "reasoning_output": "Thought tags are removed before worker output; raw template and hidden reasoning are not exposed.",
+    "structured_output": "M13-06B supplies a fixed local GBNF grammar that permits only the answer/terminal section JSON shapes. The required --no-show-timings flag prevents llama-cli from appending its human timing footer to that machine JSON stream. Every generation receives a fresh llama-cli child, then releases it: the controller alone supplies the bounded retained dialogue and native KV history cannot cross BPM requests. The grammar constrains syntax, not facts: current-evidence citation resolution, plain-text checks, quotation rejection and safe terminal handling remain server-owned."
+  },
+  "resource_and_lifecycle": {
+    "disabled_by_default": true,
+    "start_trigger": "only an explicit later controller generation call after verified model and runtime checks; no startup, page load, lexical search, status poll, rejected chat, background retry or make dev invocation starts a worker",
+    "concurrency": "one active generation; a second request is rejected busy without another worker",
+    "input_limits": {"max_input_bytes": 49152, "max_question_characters": 4000, "max_evidence_characters": 32000, "max_dialogue_turns": 16},
+    "timeouts": {"startup_seconds": 120, "response_seconds": 900},
+    "rss_ceiling_bytes": 3758096384,
+    "cancel": "terminates the dedicated process group; unload clears the private runtime directory and in-process conversation state",
+    "failure": "timeout, crash, invalid runtime/model or protocol failure is fail-closed. Assistant health is not ready while lexical search and existing /health/ready remain ready.",
+    "diagnostics": "health returns only state, stable reason code, readiness booleans and runtime identity; it never returns prompts, output, evidence, paths, secrets or raw exceptions.",
+    "local_timing": "Before an accepted request only, the worker may expose process-local CPU-thread count, fixed model identity/quantization/runtime, cold-or-warm state and a four-sample rolling generated-token throughput to the response-time estimator. It starts no worker, creates no hardware identifier, and never logs, persists, telemeters or returns a measurement to the browser."
+  },
+  "development_handoff": {
+    "make_target": "make ai-runtime-install-dev",
+    "source": "the checksum-pinned M6-03 archive cache copied by explicit make target",
+    "persistence": "The verified archive is stored under data/ai/runtime and is preserved by clean-local-artifacts. A later make dev only verifies it; it does not start or remove the worker/runtime.",
+    "release_boundary": "This developer bootstrap is not a release UI. BPM093-M10-03A owns the product installation/removal UI."
+  },
+  "implementation_boundary": {
+    "implemented": ["verified archive retention", "minimal private worker extraction", "lazy stdio child lifecycle", "one-generation limit", "timeout", "cancellation", "unload", "safe health"],
+    "not_implemented": ["FastAPI assistant routes", "browser controls", "scope gate", "retrieval invocation", "citation validation", "conversation persistence", "web search"]
+  },
+  "verification": {
+    "runtime_unit": "tests/test_local_runtime_installation.py",
+    "worker_unit": "tests/test_local_inference_worker.py",
+    "contract": "documentation/tests/contract/test_local_chat_worker_contract_0_9_3.py",
+    "architecture": "docs/architecture/local-chat-worker-0.9.3.md"
+  }
+}

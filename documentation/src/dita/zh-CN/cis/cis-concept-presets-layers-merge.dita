@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="cis-concept-presets-layers-merge" xml:lang="zh-CN" audience="user security-reviewer" product="bpm-0-9-0" platform="web">
-  <title>预设、CIS 图层和源属性如何合并</title>
+  <title>预设、安全基线图层和源属性如何合并</title>
   <shortdesc>使用本主题可了解 BPM 如何在导出前组合入门预设、CIS 层、导入的数据、手动编辑和原始回退。</shortdesc>
   <conbody>
     <section id="a-source-order"><title>源顺序</title><p>BPM 将启动器预设视为初始基线，为选定的 Firefox 架构通道应用选定的 CIS 层，然后将以后导入的、手动的或原始后备值保留为可见的单独源属性。导出前请检查 所有设置 中的值，因为源属性解释了配置值存在的原因以及更改是否覆盖基线、CIS、手动、导入或原始源。</p></section>

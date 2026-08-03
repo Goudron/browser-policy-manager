@@ -7,7 +7,7 @@
     <prereq><p>您已完成要保留的引导式更改。</p></prereq>
     <context><p>检查步骤可帮助您发现缺少的架构选择、验证警告以及与场景不匹配的设置。</p></context>
     <steps>
-      <step><cmd>打开第 6 步，查看 &amp; 导出。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开引导式配置的第 6 步。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>读取选定的配置文件摘要和更改的设置组。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>解决验证警告或记录支持的异常仍然存在的原因。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>确认场景、CIS 层、模式通道和编辑的控件与切换目标匹配。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

@@ -6,6 +6,11 @@
   "synthetic": true,
   "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
   "admin_topic_groups": {
+    "requirements_and_scope": [
+      "admin-reference-minimum-system-requirements",
+      "admin-task-assess-single-node-source-readiness",
+      "admin-task-record-ha-production-deferred-boundaries"
+    ],
     "linux_source_deployment": [
       "admin-task-prepare-linux-source-deployment",
       "admin-task-set-up-linux-source-checkout",
@@ -23,53 +28,51 @@
       "admin-task-configure-windows-wsl-network-runtime",
       "admin-task-verify-windows-wsl-source-deployment"
     ],
-    "devops_operations": [
+    "operate_and_update_source_deployment": [
       "admin-task-review-devops-configuration-sources",
       "admin-task-plan-devops-storage-logs-backups",
       "admin-task-review-devops-network-cors-security",
-      "admin-task-record-devops-operational-boundaries"
-    ],
-    "update_from_source": [
+      "admin-task-record-devops-operational-boundaries",
       "admin-task-prepare-source-update-evidence",
       "admin-task-refresh-source-revision-dependencies",
       "admin-task-run-source-update-migrations-docs",
-      "admin-task-verify-source-update-rollback-stop"
+      "admin-task-verify-source-update-rollback-stop",
+      "admin-task-check-health-readiness"
     ],
-    "migrated_api": [
+    "api_integration": [
       "admin-concept-integration-audience",
       "admin-concept-supported-integration-patterns",
       "admin-concept-api-conventions",
       "admin-concept-api-limitations",
+      "admin-task-use-reusable-api-examples",
       "admin-task-sync-profile-lifecycle",
       "admin-task-manage-profile-retirement",
       "admin-task-import-firefox-policies-json",
       "admin-task-export-firefox-policies-json",
-      "admin-task-validate-firefox-policies-json",
-      "admin-task-check-health-readiness",
+      "admin-task-validate-firefox-policies-json"
+    ],
+    "lifecycle_workflows_and_recovery": [
       "admin-task-run-pull-compare-update-scenario",
       "admin-task-run-import-review-export-scenario",
-      "admin-task-use-reusable-api-examples"
-    ],
-    "control_product_runbooks": [
       "admin-task-run-control-product-inventory-pull",
       "admin-task-run-validate-before-apply-update",
       "admin-task-run-import-review-export-handoff",
       "admin-task-gate-control-product-startup",
       "admin-task-record-integration-failure-audit"
     ],
-    "troubleshooting": [
+    "troubleshooting_and_production_readiness": [
       "admin-troubleshoot-failed-startup-probes",
       "admin-troubleshoot-schema-cache-validation",
       "admin-troubleshoot-import-export-failures",
       "admin-troubleshoot-database-storage",
       "admin-troubleshoot-wsl-networking-dependencies",
-      "admin-troubleshoot-documentation-portal-build-links"
-    ],
-    "production_boundaries": [
-      "admin-task-assess-single-node-source-readiness",
+      "admin-troubleshoot-documentation-portal-build-links",
       "admin-task-review-network-exposure-proxy-readiness",
-      "admin-task-plan-monitoring-backup-update-windows",
-      "admin-task-record-ha-production-deferred-boundaries"
+      "admin-task-plan-monitoring-backup-update-windows"
+    ],
+    "local_documentation_assistant": [
+      "admin-task-operate-local-documentation-assistant",
+      "admin-task-maintain-local-documentation-assistant"
     ]
   },
   "required_make_targets": ["dev"],

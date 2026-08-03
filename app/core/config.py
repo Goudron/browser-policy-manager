@@ -27,7 +27,9 @@ def _read_project_version() -> str:
     try:
         data = tomllib.loads(pyproject_path.read_text(encoding="utf-8"))
         version = data.get("project", {}).get("version")
-    except (OSError, tomllib.TOMLDecodeError):
+    except OSError:
+        version = None
+    except tomllib.TOMLDecodeError:
         version = None
     return version if isinstance(version, str) and version else "0.0.0-dev"
 
@@ -91,6 +93,14 @@ class Settings(BaseSettings):
     # Project root is one level above /app
     ROOT_DIR: Path = APP_DIR.parent
     DATA_DIR: Path = ROOT_DIR / "data"
+    # Used only after the user explicitly confirms a local-chat model download.
+    AI_MODEL_DOWNLOAD_TIMEOUT_SECONDS: float = 30.0
+    # M6-06 remains disabled until a later controller exposes explicit user enablement.
+    AI_LOCAL_CHAT_ENABLED: bool = False
+    # Optional external evidence is deliberately disabled unless an administrator enables it.
+    # The BYOK token is server configuration only and must never enter a browser payload or log.
+    WEB_EVIDENCE_ENABLED: bool = False
+    BRAVE_SEARCH_API_SUBSCRIPTION_TOKEN: str | None = None
     TEMPLATES_DIR: Path = APP_DIR / "templates"
     STATIC_DIR: Path = APP_DIR / "static"
     DOCUMENTATION_SITE_DIR: str = "app/documentation/site"

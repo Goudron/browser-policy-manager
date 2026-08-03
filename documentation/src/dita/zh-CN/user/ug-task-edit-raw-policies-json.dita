@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-raw-policies-json" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>编辑原始策略 JSON</title>
+  <title>编辑原始策略数据交换文档</title>
   <shortdesc>使用本地捆绑的 Monaco 编辑器编辑原始 policies.json 文档。</shortdesc>
   <taskbody>
     <prereq><p>打开 JSON 编辑器 以获取已保存的配置文件。</p></prereq>

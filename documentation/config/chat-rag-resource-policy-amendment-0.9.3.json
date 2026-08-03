@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-resource-policy-amendment-0.9.3",
+  "target_bpm_version": "0.9.3",
+  "decision_date": "2026-07-29",
+  "decision_authority": "Explicit project-maintainer decision.",
+  "status": "accepted",
+  "scope": {
+    "model_training": "forbidden; E5-base weights are already pretrained and are never fine-tuned by BPM 0.9.3",
+    "offline_index_build": "Embedding published documentation into an exact local generation may use available CPU, RAM, and operating-system swap.",
+    "interactive_chat": "Embedding a user request still loads E5-base; it remains subject to the accepted P95 and RSS ceilings, but swap movement is observed diagnostic data rather than a release-blocking validity condition."
+  },
+  "supersedes": {
+    "historical_contract": "documentation/config/chat-rag-embedding-benchmark-0.9.3.json",
+    "rule": "A changed swap counter invalidates selection and blocks release.",
+    "new_rule": "Do not use swap-counter movement as a model-selection or release blocker. Preserve the historical benchmark evidence and record swap as an operational diagnostic."
+  },
+  "resource_policy": {
+    "index_build_threads": "all available logical CPU threads",
+    "index_build_swap": "permitted",
+    "interactive_chat_retrieval_p95_ms_max": 2000,
+    "interactive_peak_rss_gib_max": 1.5,
+    "ordinary_search_dependency": "forbidden",
+    "network_calls_after_install": 0
+  },
+  "release_effect": {
+    "M5_03D": "Retired as a no-swap release blocker; its failed attempts remain historical diagnostics.",
+    "E5_base": "Accepted for implementation and packaging subject to normal integrity, grounding, security, interactive-resource, and release gates.",
+    "M4": "Unchanged and independent."
+  }
+}

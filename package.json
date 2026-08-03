@@ -7,7 +7,7 @@
     "rebuild:vendor": "bash tools/rebuild_frontend_vendor.sh"
   },
   "dependencies": {
-    "js-yaml": "5.2.1",
+    "js-yaml": "5.2.2",
     "monaco-editor": "0.53.0"
   },
   "devDependencies": {

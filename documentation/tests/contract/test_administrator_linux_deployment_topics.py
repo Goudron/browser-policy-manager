@@ -102,8 +102,9 @@ def _normalized_text(root: ET.Element) -> str:
 def test_administrator_guide_maps_include_linux_source_runbook_topics(locale: str) -> None:
     maps = DITA_ROOT / locale / "maps"
     admin_map = ET.parse(maps / "administrator-guide.ditamap").getroot()
-    topicrefs = [topicref.attrib for topicref in admin_map.findall("topicref")]
-    assert topicrefs[: len(EXPECTED_ADMIN_KEYREFS)] == [
+    topicrefs = [topicref.attrib for topicref in admin_map.findall(".//topicref")]
+    linux_topics_start = 3
+    assert topicrefs[linux_topics_start : linux_topics_start + len(EXPECTED_ADMIN_KEYREFS)] == [
         {"keyref": keyref} for keyref in EXPECTED_ADMIN_KEYREFS
     ]
 

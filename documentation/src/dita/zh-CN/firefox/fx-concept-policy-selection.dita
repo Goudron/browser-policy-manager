@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="fx-concept-policy-selection" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>选择要配置的 Firefox 策略</title>
+  <title>选择要配置的火狐浏览器策略</title>
   <shortdesc>根据所需结果、架构通道、值类型以及最适合的 BPM 编辑器选择策略。</shortdesc>
   <conbody>
     <section id="a-start-with-outcome"><title>确定预期结果</title><p>先确定所需的浏览器行为，例如更新、主页、扩展、隐私、权限、搜索、证书、代理或 Firefox AI 功能。然后根据 Firefox 策略参考和用户指南中的操作流程查找稳定的策略 ID。</p></section>
-    <section id="a-check-channel"><title>检查发行版通道和 ESR 支持</title><p>有些策略同时适用于 Firefox Release 153 和 ESR 140.13，另一些则仅适用于 Release 通道。使用策略前请选择 BPM 架构通道；策略不可用会阻止验证，并不表示文档存在缺失。</p></section>
+    <section id="a-check-channel"><title>检查发行版通道和长期支持版支持</title><p>有些策略同时适用于 Firefox Release 153 和 ESR 140.13，另一些则仅适用于 Release 通道。使用策略前请选择 BPM 架构通道；策略不可用会阻止验证，并不表示文档存在缺失。</p></section>
     <section id="a-pick-edit-surface"><title>选择编辑器</title><p>常见任务使用引导式编辑器，完整目录和来源跟踪使用所有设置，需要精确控制 Firefox 文档内容时使用 JSON 编辑器。仅在所选通道通过验证后再导出配置档案。</p></section>
     <section id="a-review-value-shape"><title>检查值类型</title><p>简单的布尔值、字符串和整数策略通常可以安全地直接编辑。包含对象、数组、扩展、权限、搜索、证书、代理和首选项锁定的策略需要额外检查：嵌套字段、未知字段和未处理的备用值可能会影响导出的 <codeph>policies.json</codeph>。</p></section>
   </conbody>

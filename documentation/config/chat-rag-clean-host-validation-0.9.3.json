@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-chat-rag-clean-host-validation-0.9.3",
+  "backlog_item": "BPM093-M5-03D",
+  "target_bpm_version": "0.9.3",
+  "attempt_date": "2026-07-29",
+  "status": "failed-before-quality-measurement",
+  "input_contract": {
+    "path": "documentation/config/chat-rag-embedding-benchmark-0.9.3.json",
+    "sha256": "15d0146b5bf380b0710f930c5f769c96508e4cff426d508e1060aed92f8466b3"
+  },
+  "candidate": {
+    "id": "multilingual-e5-base-onnx-o4",
+    "artifact_sha256": "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703"
+  },
+  "inputs": {
+    "chunk_manifest_sha256": "5d2ce6bedcc2b78dc650e4f48731cbdd641053f46a6d6a5da4f84320744178d0",
+    "source_manifest_sha256": "d03d0c680ad27f557ad38d6f07d710f19602811b7536b345ce3025e0a152e852",
+    "network_calls": 0,
+    "ordinary_search_calls": 0,
+    "cross_locale_retrieval_calls": 0,
+    "answer_generation_invocations": 0
+  },
+  "swap_validation": {
+    "required": "swap_used_bytes must be identical before and after the complete measurement",
+    "before_bytes": 4941529088,
+    "observed_after_bytes": 5942845440,
+    "changed": true,
+    "observation_elapsed_seconds_approx": 45
+  },
+  "disposition": {
+    "measurement_completed": false,
+    "reason": "The no-swap hard gate had already failed, so the CPU-only run was terminated before collecting invalid quality/resource metrics.",
+    "release_effect": "Historical diagnostic only under the later resource-policy amendment; M4 ordinary search remains unchanged.",
+    "next_attempt": "Record swap as an operational diagnostic if needed, but do not use it to reject E5-base or block packaging."
+  }
+}

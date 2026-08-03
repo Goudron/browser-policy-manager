@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-evaluation-0.9.3",
+  "backlog_item": "BPM093-M7-07",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-deterministic-conformance-evaluation",
+  "pins": {
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "7781e7419176928d2d56ae999ee122e0db68a585184acacf52fbf850695602cb"},
+    "context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "3f06b876eb59be5642bee4cfb2a96c165edb0ad3764df3100946fd9aeb7df16f"},
+    "answer_validation": {"path": "documentation/config/grounded-conversation-answer-validation-contract-0.9.3.json", "sha256": "5747d2da3660883f986834f05d3cbd6167bd9fba7349bad49dabb1a1e04dd410"},
+    "streaming": {"path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json", "sha256": "c1e310a6e96d84374ea18e709253fcb960c17c2b63f452f7992e559a9d973b3f"},
+    "diagnostics": {"path": "documentation/config/grounded-conversation-diagnostics-contract-0.9.3.json", "sha256": "de86cdd59a0a5740896181137cbb57b1381d56417b84a1b75f8bf12648f81c5a"}
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "fixture_matrix": {
+    "per_locale": ["grounded_answer", "same-topic_follow_up", "no-evidence_abstention", "off-topic_refusal"],
+    "answer_cases_per_locale": 2,
+    "terminal_cases_per_locale": 2,
+    "source": "Reviewed locale-native test fixtures owned by this deterministic M7 conformance evaluator. They are test evidence, not maintained product documentation or model-quality claims."
+  },
+  "quality_floors": {
+    "grounded_answer_rate": 1.0,
+    "citation_resolution_rate": 1.0,
+    "dialogue_continuity_rate": 1.0,
+    "abstention_rate": 1.0,
+    "refusal_rate": 1.0
+  },
+  "scope": {
+    "proves": "The implemented M7 orchestration accepts only same-locale local evidence, binds citations through the strict answer validator, retains bounded same-topic context for a follow-up, and stops terminal no-evidence/off-topic cases before model invocation.",
+    "does_not_prove": "It does not start, benchmark, select or make a language-quality claim about Qwen3. The selected model's runtime measurements remain M6 evidence; a future production composition with M8 scope policy, real E5/index adapters and M10 routes requires its own integration evaluation."
+  },
+  "boundaries": {
+    "network_calls": 0,
+    "ordinary_search_calls": 0,
+    "cross_locale_retrieval_calls": 0,
+    "chat_model_started": false,
+    "fixture_conversation_content_retained": false,
+    "report_location": "documentation/.cache/bpm093-m7-07/"
+  },
+  "progress": {
+    "stream": "stdout",
+    "flush": true,
+    "content": "contract verification plus each completed locale's four real deterministic conformance checks; no synthetic ETA or chat-side progress."
+  },
+  "verification": {
+    "runtime": "tests/test_grounded_conversation_evaluation_093.py",
+    "contract": "documentation/tests/contract/test_grounded_conversation_evaluation_contract_0_9_3.py",
+    "architecture": "docs/architecture/grounded-conversation-evaluation-0.9.3.md",
+    "command": ".venv/bin/python documentation/tools/run_grounded_conversation_evaluation_0_9_3.py --output documentation/.cache/bpm093-m7-07/evaluation.json"
+  }
+}

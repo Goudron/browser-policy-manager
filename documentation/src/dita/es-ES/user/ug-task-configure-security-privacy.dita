@@ -5,9 +5,9 @@
   <shortdesc>Utilice el Paso 3 para conocer la postura de privacidad, los permisos, las cookies, la limpieza, DNS y los controles de refuerzo.</shortdesc>
   <taskbody>
     <prereq><p>Hay un borrador de perfil guiado abierto en el canal de esquema previsto.</p></prereq>
-    <context><p>Seguridad La configuración de privacidad de &amp; puede cambiar tanto la experiencia del usuario como la postura de riesgo, así que revise las advertencias antes de guardar.</p></context>
+    <context><p>Los ajustes de seguridad y privacidad pueden cambiar tanto la experiencia del usuario como el nivel de riesgo. Revise las advertencias antes de guardar.</p></context>
     <steps>
-      <step><cmd>Abra el Paso 3, Seguridad &amp; privacidad.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Abra el paso 3 de la configuración guiada.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
       <step><cmd>Configurar controles de privacidad y permisos predeterminados.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Configure las opciones de cookies, limpieza, DNS y refuerzo de seguridad que necesita el perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Verifique los mensajes de validación y explique cualquier excepción en la revisión.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>

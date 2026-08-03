@@ -34,7 +34,9 @@ search files, build output, or release packaging.
   topic output paths, target-map SHA, search SHA, and referenced file existence.
 - Search files are deterministic locale-owned release artifacts. Their source hashes, topic IDs,
   localized titles/aliases/facets, and manifest records must agree; do not add hosted search,
-  telemetry, AI/RAG, or cross-locale fallback.
+  telemetry, AI/RAG, or cross-locale fallback to the deterministic-search pipeline. In 0.9.3 the
+  assistant returns only its localized training notice and does not alter search ranking, files, or
+  availability.
 - `navigation.json` is the single generated hierarchy source for each locale. Validate every
   Documents/guide/section/topic node, localized label, safe same-locale URL, manifest hash, and node
   count. Do not embed per-page tree copies or patch generated navigation output.
@@ -74,7 +76,12 @@ changes:
 5. Run `make docs-package` and `make docs-package-verify` for release-candidate evidence.
 6. Inspect the package only through generated artifact checks or a targeted archive listing; do not
    patch extracted output.
-7. Before final release handoff, update `docs/docs-index.md` for any new maintained architecture,
+7. For an assistant-related documentation change, verify that the 0.9.3 localized training notice
+   remains accurate and that deterministic search remains independent. Do not package model weights,
+   embeddings, vector generations, prompts, transcripts, provider responses, credentials,
+   telemetry, or generated chat answers as documentation artifacts. Future RAG or external-evidence
+   work requires its own reviewed release scope.
+8. Before final release handoff, update `docs/docs-index.md` for any new maintained architecture,
    runbook, audit, or backlog file under `docs/`, and verify `tests/test_docs_index.py` so generated
    product docs, local artifacts, screenshots, Codex snapshots, package output, and debug reports do
    not become maintained docs by accident.

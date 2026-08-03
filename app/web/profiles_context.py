@@ -15,7 +15,11 @@ from app.core.locales import (
     resolve_active_catalog_locale_code,
     resolve_target_locale_code,
 )
-from app.core.schema_channels import SCHEMA_CHANNELS, build_schema_channels_catalog
+from app.core.schema_channels import (
+    HEADER_SCHEMA_CHANNEL_VALUES,
+    SCHEMA_CHANNELS,
+    build_schema_channels_catalog,
+)
 from app.documentation.manifest import (
     DOCUMENTATION_CONTEXTUAL_HELP_TARGET_IDS,
     DOCUMENTATION_DEEP_HELP_TARGET_IDS,
@@ -200,9 +204,7 @@ def build_profiles_page_context(
     schema_options = cast(list[dict[str, str]], schema_channels_catalog["options"])
     header_schema_options = sorted(
         schema_options,
-        key=lambda option: ("release-153", "esr-153.0", "esr-140.13").index(
-            option["value"]
-        ),
+        key=lambda option: HEADER_SCHEMA_CHANNEL_VALUES.index(option["value"]),
     )
 
     return {

@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-local-chat-model-runtime-shortlist-0.9.3",
+  "backlog_item": "BPM093-M6-01",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-benchmark-shortlist-not-selection",
+  "reviewed_on": "2026-07-29",
+  "purpose": "Admit only immutable, locally runnable chat-runtime candidates to M6 measurement. This selects neither a shipped model nor a default inference runtime and downloads no artifact.",
+  "pins": {
+    "preimplementation_guards": {
+      "path": "documentation/config/local-ai-preimplementation-guards-0.9.3.json",
+      "sha256": "7f24b3739dca42f76c46c9e39306094f64007a6718f6cfde31c95d1afa42fac9"
+    },
+    "security_privacy": {
+      "path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json",
+      "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"
+    },
+    "availability": {
+      "path": "documentation/config/local-ai-availability-fallback-contract-0.9.3.json",
+      "sha256": "84c5090620c42cd71ebb227ef3eeec3309eccd8998dddd4097ae09736c1bea9c"
+    },
+    "evaluation_corpus": {
+      "path": "documentation/config/search-rag-evaluation-corpus-0.9.3.json",
+      "sha256": "0993aec89fe2991d6ef15de251bfedfa87ea99ae6498e5ef73a84f2d6b1aff52"
+    }
+  },
+  "target_host": {
+    "cpu_model": "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz",
+    "architecture": "x86_64",
+    "physical_cores": 2,
+    "logical_threads": 4,
+    "memory_gib": 7.1,
+    "accelerators": "CPU-only; no GPU, NPU, or hosted inference",
+    "forbidden_cpu_requirement": "AVX-512"
+  },
+  "runtime": {
+    "id": "llama.cpp-b9637-linux-x64-cpu",
+    "admitted_for_benchmark": true,
+    "upstream_owner": "ggml-org",
+    "upstream_repository": "https://github.com/ggml-org/llama.cpp",
+    "revision": "aedb2a5e9ca3d4064148bbb919e0ddc0c1b70ab3",
+    "release_tag": "b9637",
+    "release_source": "https://github.com/ggml-org/llama.cpp/releases/tag/b9637",
+    "artifact": {
+      "filename": "llama-b9637-bin-ubuntu-x64.tar.gz",
+      "source": "https://github.com/ggml-org/llama.cpp/releases/download/b9637/llama-b9637-bin-ubuntu-x64.tar.gz",
+      "sha256": "a50ee14f021a9d8e92e30f622f7e3be1318ee1125bb9a9ba8d2025388df48743",
+      "byte_count": 15512345,
+      "checksum_source": "The official GitHub release asset digest for tag b9637."
+    },
+    "license": {
+      "spdx": "MIT",
+      "source": "https://github.com/ggml-org/llama.cpp/blob/b9637/LICENSE"
+    },
+    "supported_target": {
+      "os": "Ubuntu Linux x64 CPU release artifact",
+      "architecture": "x86_64",
+      "cpu_feature_claim": "No feature claim beyond the official x64 CPU artifact is accepted here; M6-03 must run the actual i5-7200U preflight and benchmark."
+    },
+    "chat_template": "The selected model's immutable GGUF metadata/template must be applied by the admitted runtime. Raw prompt concatenation is forbidden.",
+    "security_boundary": {
+      "allowed_worker_transport": ["direct child-process pipe", "stdio"],
+      "forbidden": ["llama-server", "TCP listener", "HTTP listener", "wildcard bind", "LAN bind", "public model API", "tools", "plugins", "function calling"],
+      "rule": "M6-06 may invoke a fixed executable only as an owner-managed child process. The browser never contacts llama.cpp directly."
+    }
+  },
+  "admitted_models": [
+    {
+      "id": "qwen3-0.6b-q8_0-official-gguf",
+      "role": "smallest multilingual instruction-control candidate",
+      "upstream_owner": "Qwen",
+      "source_repository": "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF",
+      "source_revision": "23749fefcc72300e3a2ad315e1317431b06b590a",
+      "base_model": "Qwen/Qwen3-0.6B",
+      "weight_format": "GGUF",
+      "quantization": "Q8_0",
+      "artifact": {
+        "filename": "Qwen3-0.6B-Q8_0.gguf",
+        "source": "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF/resolve/23749fefcc72300e3a2ad315e1317431b06b590a/Qwen3-0.6B-Q8_0.gguf",
+        "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+        "byte_count": 639446688,
+        "checksum_source": "Official Qwen Hugging Face LFS object metadata at the pinned revision."
+      },
+      "license": {
+        "spdx": "Apache-2.0",
+        "source": "https://huggingface.co/Qwen/Qwen3-0.6B-GGUF/blob/23749fefcc72300e3a2ad315e1317431b06b590a/LICENSE"
+      },
+      "context": {
+        "upstream_max_tokens": 32768,
+        "benchmark_requirement": "Must accept the fixed M6 structured evidence/prompt plus the 96-token answer cap without truncating protected citation fields."
+      },
+      "template_and_reasoning": {
+        "template_source": "Pinned upstream README requires the Jinja chat template for correct multi-turn history.",
+        "required_mode": "non-thinking (/no_think) for BPM answer benchmarking",
+        "release_rule": "Hidden thinking text, thought tags, raw template output, or model reasoning must never be displayed; M6-07 must prove the output boundary."
+      },
+      "locale_admission": {
+        "upstream_claim": "Qwen3 declares 100+ languages and dialects with multilingual instruction following.",
+        "required_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+        "quality_status": "unmeasured; M6-02/M6-03 require separately reviewed evidence in every locale and no cross-locale fallback"
+      }
+    },
+    {
+      "id": "qwen3-1.7b-q8_0-official-gguf",
+      "role": "larger multilingual instruction-quality candidate",
+      "upstream_owner": "Qwen",
+      "source_repository": "https://huggingface.co/Qwen/Qwen3-1.7B-GGUF",
+      "source_revision": "90862c4b9d2787eaed51d12237eafdfe7c5f6077",
+      "base_model": "Qwen/Qwen3-1.7B",
+      "weight_format": "GGUF",
+      "quantization": "Q8_0",
+      "artifact": {
+        "filename": "Qwen3-1.7B-Q8_0.gguf",
+        "source": "https://huggingface.co/Qwen/Qwen3-1.7B-GGUF/resolve/90862c4b9d2787eaed51d12237eafdfe7c5f6077/Qwen3-1.7B-Q8_0.gguf",
+        "sha256": "061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a",
+        "byte_count": 1834426016,
+        "checksum_source": "Official Qwen Hugging Face LFS object metadata at the pinned revision."
+      },
+      "license": {
+        "spdx": "Apache-2.0",
+        "source": "https://huggingface.co/Qwen/Qwen3-1.7B-GGUF/blob/90862c4b9d2787eaed51d12237eafdfe7c5f6077/LICENSE"
+      },
+      "context": {
+        "upstream_max_tokens": 32768,
+        "benchmark_requirement": "Must accept the fixed M6 structured evidence/prompt plus the 96-token answer cap without truncating protected citation fields."
+      },
+      "template_and_reasoning": {
+        "template_source": "Pinned upstream README requires the Jinja chat template for correct multi-turn history.",
+        "required_mode": "non-thinking (/no_think) for BPM answer benchmarking",
+        "release_rule": "Hidden thinking text, thought tags, raw template output, or model reasoning must never be displayed; M6-07 must prove the output boundary."
+      },
+      "locale_admission": {
+        "upstream_claim": "Qwen3 declares 100+ languages and dialects with multilingual instruction following.",
+        "required_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+        "quality_status": "unmeasured; M6-02/M6-03 require separately reviewed evidence in every locale and no cross-locale fallback"
+      }
+    }
+  ],
+  "excluded_models": [
+    {
+      "id": "google-gemma-3-1b-it",
+      "upstream_owner": "Google DeepMind",
+      "source_repository": "https://huggingface.co/google/gemma-3-1b-it",
+      "source_revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+      "weight_format": "Safetensors upstream; no upstream GGUF artifact is admitted",
+      "license": "Gemma Terms of Use",
+      "terms_source": "https://ai.google.dev/gemma/terms",
+      "context_tokens": 32768,
+      "locale_claim": "Gemma 3 model card declares multilingual support in over 140 languages.",
+      "disposition": "excluded from M6 benchmark shortlist",
+      "reason": "The upstream repository is manually gated under Gemma Terms of Use and the task has no accepted upstream GGUF artifact/checksum or redistribution-compliance record. An unofficial conversion is forbidden until a later task supplies separate conversion provenance, artifact hash, terms/redistribution review, and maintainer acceptance."
+    }
+  ],
+  "artifact_and_resource_rules": {
+    "only_one_chat_model_installed_or_mapped": true,
+    "model_artifacts_are_generated_ignored_state": true,
+    "no_download_or_terms_acceptance_in_benchmark": true,
+    "no_silent_download": true,
+    "total_artifact_disk_gib_max": 2.5,
+    "worker_and_retrieval_rss_gib_max": 3.5,
+    "runtime_plus_one_model_rule": "M6-03 measures each candidate separately with E5-base, the active retrieval generation, its direct runtime, and exactly one chat model; candidate artifact size alone is not acceptance evidence."
+  },
+  "benchmark_admission": {
+    "fixed_protocol": "docs/architecture/old-laptop-benchmark-protocol-0.9.3.md",
+    "required_scenarios": ["first_answer", "follow_up", "abstain_refuse", "cancellation", "unload_restart"],
+    "required_locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+    "not_selection_evidence": ["No quality, latency, memory, installation, worker-isolation, or six-locale result is asserted by this shortlist.", "M6-02 through M6-07 own benchmark execution, selection, installation, worker, and runtime acceptance."],
+    "rejection": "Any source, revision, license/terms, artifact checksum, chat template, format/quantization, target-architecture compatibility, security boundary, or six-locale result that is absent or fails rejects that candidate without fallback to an unpinned model."
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_local_chat_model_runtime_shortlist_0_9_3.py",
+    "architecture": "docs/architecture/local-chat-model-runtime-shortlist-0.9.3.md"
+  }
+}

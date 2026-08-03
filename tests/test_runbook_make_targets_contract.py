@@ -34,8 +34,20 @@ def test_readme_keeps_only_product_start_command():
 def test_make_dev_refreshes_local_documentation_before_starting_runtime():
     makefile = _read("Makefile")
 
-    assert "dev: docs-install-dev\n\tuvicorn app.main:app --reload --port 8000" in makefile
-    assert "run:\n\tuvicorn app.main:app --reload --port 8000" in makefile
+    assert (
+        "dev: docs-install-dev ai-model-install-dev ai-runtime-install-dev "
+        "ai-rag-install-dev ai-web-sources-check-dev"
+    ) in makefile
+    assert (
+        "BPM_AI_LOCAL_CHAT_ENABLED=true $(PYTHON) -m uvicorn "
+        "app.main:app --reload --port 8000"
+    ) in makefile
+    assert "run:\n\t$(PYTHON) -m uvicorn app.main:app --reload --port 8000" in makefile
+    assert (
+        "ai-web-sources-check-dev:\n"
+        "\t@echo \"Checking optional external-sources configuration for development:\"\n"
+        "\t$(PYTHON) -m app.documentation.web_evidence_dev_config"
+    ) in makefile
 
 
 def test_locale_runbook_uses_make_targets_for_repeatable_gates():

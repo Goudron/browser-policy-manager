@@ -88,7 +88,7 @@ def test_documentation_search_runtime_toggles_advanced_panel_and_preserves_query
         assert required in script
 
     assert "input.value = \"\";" in script
-    assert "setSearchExpanded(root, false)" not in script
+    assert "setSearchExpanded(root, false)" in script
     assert "setSearchExpanded(root, true)" not in script
 
 

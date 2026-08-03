@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-rag-knowledge-update-0.9.3",
+  "backlog_item": "BPM093-M2-04",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted-architecture-only",
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "implementation_boundary": {
+    "implemented_now": false,
+    "current_lexical_contract": "documentation/config/search-corpus-and-results-0.9.0.json remains the active runtime contract until BPM093-M4 replaces its non-AI boundary through reviewed implementation.",
+    "selection_owners": {
+      "chunker_and_embedding": "BPM093-M5",
+      "runtime_and_chat_model": "BPM093-M6",
+      "answer_and_citation_policy": "BPM093-M7"
+    }
+  },
+  "chat_retrieval_boundary": {
+    "entrypoint": "Only an explicitly enabled user chat may request RAG retrieval.",
+    "ordinary_search": "The BPM M4 deterministic documentation search is independent, is not invoked by chat retrieval, and has no dependency on AI/RAG state.",
+    "locale_rule": "Resolve the user's active chat locale and retrieve only chunks with that exact locale; cross-locale prose retrieval and fallback are rejected.",
+    "quality_rule": "Chat retrieval need not outrank ordinary search, but a generated factual answer requires accepted evidence and resolvable citations; otherwise the chat abstains or clarifies."
+  },
+  "optional_external_evidence": {
+    "default": "disabled",
+    "activation": "A later M8/M7 implementation requires explicit user opt-in, reviewed provider and scope policy, and a visible external-source state before making an external request.",
+    "local_priority": "Current local BPM evidence is retrieved and labelled separately before any permitted external evidence; conflicts are not silently merged.",
+    "local_corpus_boundary": "External pages, provider responses, and downloaded content never enter local chunks, embeddings, indexes, model training, or persistent chat knowledge.",
+    "citation_rule": "An external claim is displayed only with its own labelled external citation and never as a local BPM documentation citation."
+  },
+  "source_eligibility": {
+    "eligible": [
+      {
+        "kind": "published_reviewed_dita",
+        "rule": "Use only a reviewed DITA topic or anchor that is present in the locale's published manifest and permitted by the documentation provenance policy."
+      },
+      {
+        "kind": "published_approved_generated_dita",
+        "rule": "Use generated DITA only when its approved generator input, provenance, locale, and published manifest record make the rendered text publishable."
+      },
+      {
+        "kind": "language_neutral_technical_identifier",
+        "rule": "Retain a stable topic, policy, preference, CIS, API, capability, or version identifier only with its eligible locale-bound source text."
+      }
+    ],
+    "excluded": [
+      "unpublished, hidden, draft, or manifest-absent DITA and generated output",
+      "restricted source expression or provenance-only CIS material",
+      "cross-locale prose, except allowlisted language-neutral technical identifiers attached to the selected locale",
+      "evaluation fixtures, generated answers, chat transcripts, prompts, model output, embeddings, vector indexes, and benchmark reports",
+      "BPM runtime state, profiles, databases, logs, screenshots awaiting review, caches, telemetry, secrets, and private hosts",
+      "web content, provider responses, and any external corpus"
+    ],
+    "citation_rule": "A local answer may cite only the current published locale URL and stable topic/anchor identifier carried by an eligible chunk. A chunk, embedding, retrieval score, or generated answer is never a citation source."
+  },
+  "chunking": {
+    "chunk_schema_version": "rag-chunk-v1",
+    "projection": "Extract published plain text after DITA transformation; preserve title, shortdesc, heading path, locale, stable identifiers, and the source topic/anchor URL. Markup, navigation chrome, scripts, unreviewed asset text, and generated answer text are excluded.",
+    "boundaries": [
+      "A chunk belongs to exactly one locale and one published topic.",
+      "Prefer one stable DITA anchor or topic root per chunk unit; do not mix text from different topics or anchors.",
+      "Split a long unit only at deterministic sentence or block boundaries using the selected chunker revision and ordinal.",
+      "Do not split, translate, normalize away, or fabricate stable technical identifiers; retain them as metadata and exact-retrieval fields.",
+      "The selected tokenizer, target length, overlap, heading treatment, and plain-text normalization revision are immutable inputs to an index build and are selected in BPM093-M5."
+    ],
+    "stable_id": {
+      "format": "ragc-v1:{locale}:{topic_id}:{anchor_id_or_root}:{ordinal}",
+      "rule": "The ID is derived only from immutable schema/version, locale, topic ID, anchor-or-root locator, and zero-based deterministic ordinal; it contains neither content hashes nor model identifiers. A changed or removed source unit invalidates its prior ID rather than reusing it for unrelated text."
+    },
+    "required_metadata": [
+      "chunk_id", "chunk_schema_version", "locale", "topic_id", "anchor_id_or_root", "ordinal",
+      "guide_id", "published_url", "source_dita_path", "source_revision", "source_sha256",
+      "manifest_sha256", "documentation_version", "bpm_version", "provenance_class",
+      "publication_state", "heading_path", "identifiers", "text_normalization_revision"
+    ]
+  },
+  "embedding_compatibility": {
+    "selection_status": "No embedding model is selected by this task.",
+    "required_compatibility_key": [
+      "chunk_schema_version", "text_normalization_revision", "embedding_model_id",
+      "embedding_model_revision_or_checksum", "embedding_dimension", "embedding_dtype_or_quantization",
+      "vector_normalization", "distance_metric", "locale", "source_manifest_sha256"
+    ],
+    "rules": [
+      "An index contains vectors from exactly one compatibility key; mixed keys are rejected.",
+      "A retrieval request must reject a missing, stale, or incompatible chunk/vector/index manifest and retain lexical search without attempting a best-effort answer.",
+      "Changing an embedding model, revision/checksum, dimension, dtype/quantization, normalization, metric, chunk schema, text normalization, locale, or source manifest requires rebuild of every affected embedding and index artifact.",
+      "Chat-only retrieval is independent of ordinary lexical search. It may return less relevant evidence, but it must not produce a factual answer without accepted same-locale evidence and a resolvable citation."
+    ]
+  },
+  "rebuild_contract": {
+    "promotion": "Generate chunks, embedding manifest, vectors, retrieval index, and integrity manifest as one candidate set. Validate source hashes, locale coverage, chunk IDs, compatibility key, and citation targets before atomically promoting the complete set. A partial or failed set is discarded or quarantined and cannot replace the last known-good set.",
+    "triggers": [
+      {
+        "change": "published source text, topic/anchor identity, manifest membership, locale, version, or allowed identifier changes",
+        "invalidate": ["affected chunks", "affected embeddings", "affected locale retrieval index", "integrity manifest"],
+        "action": "re-index affected locale/source units; rebuild broader scopes when the manifest cannot safely map the change"
+      },
+      {
+        "change": "source provenance, publication review, restriction, or deletion changes",
+        "invalidate": ["affected chunks", "affected embeddings", "affected locale retrieval index", "integrity manifest"],
+        "action": "remove or rebuild affected units before they can be retrieved"
+      },
+      {
+        "change": "chunk schema, chunker revision, text normalization, tokenizer, target length, overlap, or heading treatment",
+        "invalidate": ["all chunks in the affected scope", "all dependent embeddings", "all dependent retrieval indexes", "integrity manifest"],
+        "action": "full rebuild for the affected locale/version scope"
+      },
+      {
+        "change": "embedding compatibility-key component",
+        "invalidate": ["all dependent embeddings", "all dependent retrieval indexes", "embedding and integrity manifests"],
+        "action": "full re-embedding and re-index for the affected scope"
+      },
+      {
+        "change": "chat model, prompt, answer policy, scope policy, UI copy, or optional-web provider configuration only",
+        "invalidate": ["no chunk or embedding artifact by itself"],
+        "action": "do not re-index solely for this change; rerun the owning answer, security, privacy, web, or UX gates"
+      }
+    ]
+  },
+  "reindexing_and_training": {
+    "ordinary_product_update": "A reviewed documentation change is ingested by chunk regeneration, re-embedding, and retrieval-index promotion. It does not change base-model weights.",
+    "training_boundary": "Base-model fine-tuning, LoRA/adapter training, and training from raw DITA, chats, queries, retrieved chunks, web content, or telemetry are out of scope for BPM 0.9.3 and cannot be introduced through an index rebuild.",
+    "separate_approval_required_for_future_training": [
+      "new backlog task and model-risk review",
+      "explicit licensed training-data provenance and retention policy",
+      "reproducible training recipe, evaluation, rollback, and supply-chain manifest",
+      "six-locale quality, privacy, security, resource, and release-gate approval"
+    ]
+  },
+  "artifact_boundary": {
+    "committed_source": [
+      "reviewed eligible DITA and provenance records",
+      "this contract, selected build configuration, tools, compact synthetic fixtures, and tests"
+    ],
+    "generated_ignored_artifacts": [
+      "chunk projections and chunk manifests", "embedding vectors and embedding manifests",
+      "retrieval/vector indexes and integrity manifests", "benchmark reports, model downloads, caches, and local conversation state"
+    ],
+    "rules": [
+      "Generated artifacts must be checksummed, reproducible from committed inputs plus selected checksummed model artifacts, and never hand-edited or committed as source.",
+      "No model, embedding, index, or conversation artifact is introduced by this task; BPM093-M5 and later tasks choose exact generated paths and installation lifecycle."
+    ]
+  },
+  "verification": {
+    "current": "documentation/tests/contract/test_rag_knowledge_update_contract_0_9_3.py",
+    "future": [
+      "BPM093-M5 chunk, embedding, index-compatibility, citation, and atomic-rebuild tests",
+      "BPM093-M7 grounded-answer and abstention tests",
+      "BPM093-M8 source-scope, privacy, and no-arbitrary-data-access tests"
+    ]
+  }
+}

@@ -7,7 +7,7 @@ from pathlib import Path
 from app.core.config import Settings
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CURRENT_TARGET_VERSION = "0.9.2"
+CURRENT_TARGET_VERSION = "0.9.3"
 
 
 def _project_version() -> str:
@@ -120,7 +120,7 @@ def test_current_release_naming_audit_bounds_091_updates():
 
 def test_current_changelog_finalizes_091_documentation_release_scope():
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    current_entry = changelog.split("## 0.9.0", 1)[0]
+    current_entry = changelog.split("## 0.9.1", 1)[1].split("## 0.9.0", 1)[0]
     normalized_entry = " ".join(current_entry.split())
 
     assert "Status: **In progress.**" not in current_entry

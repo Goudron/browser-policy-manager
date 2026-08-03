@@ -131,8 +131,9 @@ def test_documentation_header_matches_the_product_chrome_and_uses_one_version() 
     )
     assert 'class="bpm-docs-header-context"' not in source
     assert 'class="bpm-docs-header-firefox-versions" data-supported-firefox-versions' in source
-    assert 'class="bpm-docs-header-firefox-versions-label">{_escape(labels["supported_firefox_versions"])}' in source
-    assert "for channel in SCHEMA_CHANNELS" in source
+    assert 'class="bpm-docs-header-firefox-versions-label">{_escape(product_header_labels["supported_firefox_versions"])}' in source
+    assert "for channel in HEADER_SCHEMA_CHANNELS" in source
+    assert "PRODUCT_FIREFOX_SCHEMA_LABEL_KEYS" in source
     assert 'class="bpm-docs-header-control bpm-docs-locale-control"' in source
     assert 'class="bpm-docs-header-control bpm-docs-theme-control"' in source
     assert 'data-docs-locale-select' in source

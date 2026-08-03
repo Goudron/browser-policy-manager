@@ -7,7 +7,7 @@
     <prereq><p>Se seleccionan un borrador de perfil y un canal de esquema.</p></prereq>
     <context><p>La capa CIS es una ayuda para el mapeo BPM; revise cada configuración resultante para la implementación y no la trate como una certificación.</p></context>
     <steps>
-      <step><cmd>Abra el paso 1, Línea base del perfil &amp;.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Abra el paso 1 de la configuración guiada.</cmd><info><p>Resultado esperado: el perfil guiado permanece coherente.</p></info></step>
       <step><cmd>Elija la capa CIS compatible que coincida con el canal y el escenario de destino.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Revise los cambios de referencia relacionados con el cumplimiento en el resumen.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Mantener o ajustar la configuración que entre en conflicto con el objetivo de implementación.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>

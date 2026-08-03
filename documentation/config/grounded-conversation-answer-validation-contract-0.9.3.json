@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-grounded-conversation-answer-validation-0.9.3",
+  "backlog_item": "BPM093-M13-06",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-grounded-section-composition",
+  "pins": {
+    "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
+    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "7781e7419176928d2d56ae999ee122e0db68a585184acacf52fbf850695602cb"},
+    "context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "3f06b876eb59be5642bee4cfb2a96c165edb0ad3764df3100946fd9aeb7df16f"},
+    "evidence": {"path": "documentation/config/chat-rag-evidence-packing-contract-0.9.3.json", "sha256": "ba81ca7f3860cb40acc4e9c85a91faa1b69f344bc337342a3da39c016cd231ad"},
+    "security": {"path": "documentation/config/local-ai-security-privacy-contract-0.9.3.json", "sha256": "fd2d21ac779ce09f0523e4165febc2a92a7b6306731a1a064f95a926096ef737"}
+  },
+  "generation_payload": {
+    "fields": ["instruction", "user_question"],
+    "instruction_rule": "The controller sends fixed output-schema policy separately from the untrusted question. The model must return exactly one JSON object with disposition and sections only; an answer has one to six ordered plain-text sections in the model's own words, and every section has one or more unique accepted citation IDs. The composed answer includes all grounded information needed without a word or paragraph target. Explicit parser, context, cancellation and resource limits remain in force.",
+    "answer_rule": "answer requires nonempty sections with nonempty plain text and unique accepted citation IDs per section. clarify, abstain and refuse require an empty sections list."
+  },
+  "excessive_quote_rewrite": "Only when a first local response has already passed the exact schema, plain-text and current-citation checks but contains an excessive contiguous quotation, BPM may perform one private local rewrite. It unloads the first worker before the second worker receives only the untrusted draft and the already accepted citation IDs, never the EvidencePack or dialogue. The rewrite may add no fact or citation, is validated again against the original EvidencePack, and neither draft is logged, persisted or exposed. Any other invalid response, rewrite failure or repeated quotation remains a terminal abstention.",
+  "response_schema": {"exact_fields": ["disposition", "sections"], "section_exact_fields": ["text", "citation_ids"], "dispositions": ["answer", "clarify", "abstain", "refuse"], "model_response_bytes_max": 16384, "answer_unicode_characters_max": 4000, "sections_max": 6, "section_unicode_characters_max": 1200, "extractive_span_characters_max": 95, "plain_text": "Control characters and markup-like tags are rejected; model-created links never become source links."},
+  "citation_resolution": {
+    "source": "Only the current accepted EvidencePack local citations are an allowlist.",
+    "rules": ["Every answer ID is unique and exactly resolves to one allowlisted citation identity.", "The server validates topic/anchor identity and a relative /help/{locale}/ URL without query, fragment, traversal, percent encoding, scheme or host.", "No user/model URL, anchor, chunk field, vector, score, path, hash or external source is interpreted as a citation."],
+    "resolution_rate": 1.0
+  },
+  "fallback": {"invalid_output": "Malformed JSON, extra/missing fields, unsupported disposition, plain-text violation, empty/overlong section or answer, unknown/duplicate citation, excessive contiguous evidence quotation or locale mismatch abstains without showing evidence text or citations.", "terminal": "No invalid generated text or raw evidence excerpt is returned as a confident BPM answer."},
+  "boundaries": {"http_route": false, "browser_renderer": false, "ordinary_search_calls": 0, "network_calls": 0, "model_url_trust": false, "raw_model_output_exposed": false},
+  "verification": {"runtime": "tests/test_generation_answer_validation_093.py", "contract": "documentation/tests/contract/test_grounded_conversation_answer_validation_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-answer-validation-0.9.3.md"}
+}

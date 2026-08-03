@@ -159,21 +159,19 @@ def test_topic_section_taxonomy_splits_only_the_oversized_user_guide_groups() ->
     }
 
 
-def test_topic_section_taxonomy_derives_admin_workflow_sections_from_flat_map() -> None:
+def test_topic_section_taxonomy_matches_implemented_admin_workflow_sections() -> None:
     admin = _taxonomy_documents()["administrator-guide"]
 
-    assert admin["source_strategy"] == "derive_workflow_sections_from_flat_admin_map"
+    assert admin["source_strategy"] == "implemented_administrator_workflow_sections"
     assert [section["section_id"] for section in admin["sections"]] == [
+        "requirements-and-scope",
         "linux-source-deployment",
         "windows-wsl-source-deployment",
-        "devops-operations",
-        "source-update",
-        "api-integration-foundations",
-        "profile-api-lifecycle",
-        "api-health-and-scenarios",
-        "control-product-workflows",
-        "troubleshooting",
-        "production-readiness",
+        "operate-and-update-source-deployment",
+        "api-integration",
+        "lifecycle-workflows-and-recovery",
+        "troubleshooting-and-production-readiness",
+        "local-documentation-assistant",
     ]
 
 

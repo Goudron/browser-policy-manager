@@ -119,8 +119,9 @@ def _normalized_text(root: ET.Element) -> str:
 def test_administrator_guide_maps_include_windows_wsl_runbook_topics(locale: str) -> None:
     maps = DITA_ROOT / locale / "maps"
     admin_map = ET.parse(maps / "administrator-guide.ditamap").getroot()
-    topicrefs = [topicref.attrib for topicref in admin_map.findall("topicref")]
-    assert topicrefs[9 : 9 + len(EXPECTED_WSL_KEYREFS)] == [
+    topicrefs = [topicref.attrib for topicref in admin_map.findall(".//topicref")]
+    wsl_topics_start = 12
+    assert topicrefs[wsl_topics_start : wsl_topics_start + len(EXPECTED_WSL_KEYREFS)] == [
         {"keyref": keyref} for keyref in EXPECTED_WSL_KEYREFS
     ]
 

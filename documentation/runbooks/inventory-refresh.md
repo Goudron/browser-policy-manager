@@ -41,8 +41,9 @@ schema bump rather than a follow-up cleanup.
 7. Review locales and screenshots where relevant. Authored Firefox Policy Guide topics must remain
    content-equivalent in `en`, `ru`, `de`, `zh-CN`, `fr`, and `es-ES`; any UI-visible schema change
    that changes documented screens must queue localized screenshot review before release readiness.
-8. Do not add AI/RAG/embeddings/generative search behavior as part of a schema bump. Firefox
-   product policies about AI still remain valid documentation subject matter.
+8. Do not add, reconfigure, or claim AI/RAG/embeddings/generative search behavior as part of a
+   schema bump. The 0.9.3 assistant remains a localized training notice, and
+   Firefox product policies about AI remain valid documentation subject matter.
 9. When the schema bump changes compact UI copy or documentation shell behavior, cite the exact
    UI-copy classification disposition. Preserve labels, state, validation, consequences,
    unavailable reasons, accessible names, and recovery at the action; do not restore routine
@@ -96,7 +97,8 @@ screenshots as follow-up work.
    `ui-target-map.json`, and every locale search index must include changed publishable CIS topics,
    anchors, capability targets, recommendation targets, hashes, output paths, and generated
    recommendation routes. Keep search deterministic and static; do not add AI/RAG/embeddings or
-   generative answers.
+   generative answers to this CIS refresh. Any future assistant may consume only the
+   resulting reviewed, published locale content through its own contracts.
 7. Review screenshots when a refresh changes documented UI state, source labels, review states,
    CIS layer labels, Guided Editor summaries, All Settings rows, comparison output, validation
    screens, or export screens. Queue locale-specific screenshots under

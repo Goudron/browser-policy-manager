@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
     <task id="admin-task-use-reusable-api-examples" xml:lang="zh-CN" audience="administrator devops integrator security-reviewer" product="bpm-0-9-1" platform="web">
-      <title>重用 DevOps API 示例和环境模板</title>
+      <title>重用开发与运维编程接口示例和环境模板</title>
       <shortdesc>对当前 BPM API 工作流程使用语言中立的请求模式、环境模板、可复制的 curl 命令、多部分示例和紧凑的 Python 断言。</shortdesc>
       <taskbody>
         <prereq><p>为测试中的 BPM 实例设置 <codeph>BPM_BASE_URL</codeph>。请勿将凭据、租户名称、个人主机名、私有主机或生产配置文件 ID 放入可重用示例中； BPM 目前没有记录 API 身份验证。</p></prereq>

@@ -23,7 +23,7 @@ def test_settings_version_matches_pyproject():
     pyproject = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8"))
     settings = config_module.Settings()
 
-    assert pyproject["project"]["version"] == "0.9.2"
+    assert pyproject["project"]["version"] == "0.9.3"
     assert settings.APP_VERSION == pyproject["project"]["version"]
 
 
@@ -34,6 +34,17 @@ def test_project_version_falls_back_when_pyproject_cannot_be_read(monkeypatch):
         raise OSError("no pyproject")
 
     monkeypatch.setattr(config_module.Path, "read_text", _raise_os_error)
+
+    assert config_module._read_project_version() == "0.0.0-dev"
+
+
+def test_project_version_falls_back_when_pyproject_is_malformed(monkeypatch):
+    from app.core import config as config_module
+
+    def _malformed(*args, **kwargs):
+        return "[project"
+
+    monkeypatch.setattr(config_module.Path, "read_text", _malformed)
 
     assert config_module._read_project_version() == "0.0.0-dev"
 

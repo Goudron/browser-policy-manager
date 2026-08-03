@@ -8,7 +8,7 @@
     <context><p>Die geführte Suche ist nützlich, wenn Sie das Richtlinienziel kennen, aber nicht den Schritt, der die Kontrollfamilie enthält.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Suchergebnisse für geführte Einstellungen</title>
-        <image keyref="screenshot.guided-settings-search" placement="break">
+        <image keyref="screenshot.guided-settings-search" placement="break" scalefit="yes" align="center">
           <alt>Geführter Editor-Suche mit Homepage-bezogenen Einstellungsergebnissen.</alt>
         </image>
       </fig>

@@ -19,7 +19,7 @@ EXPECTED_DEVOPS_TOPICS = (
     "admin-task-record-devops-operational-boundaries",
 )
 EXPECTED_DEVOPS_KEYREFS = [f"topic.{topic_id}" for topic_id in EXPECTED_DEVOPS_TOPICS]
-DEVOPS_TOPICREF_OFFSET = 13
+DEVOPS_TOPICREF_OFFSET = 16
 COMPACT_OR_FALLBACK_MARKERS = (
     "English source",
     "английский источник",
@@ -148,7 +148,7 @@ def _normalized_text(root: ET.Element) -> str:
 def test_administrator_guide_maps_include_devops_operational_topics(locale: str) -> None:
     maps = DITA_ROOT / locale / "maps"
     admin_map = ET.parse(maps / "administrator-guide.ditamap").getroot()
-    topicrefs = [topicref.attrib for topicref in admin_map.findall("topicref")]
+    topicrefs = [topicref.attrib for topicref in admin_map.findall(".//topicref")]
     assert topicrefs[
         DEVOPS_TOPICREF_OFFSET : DEVOPS_TOPICREF_OFFSET + len(EXPECTED_DEVOPS_KEYREFS)
     ] == [

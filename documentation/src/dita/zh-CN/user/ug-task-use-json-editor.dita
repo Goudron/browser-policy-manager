@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-json-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
-  <title>使用 JSON 编辑器</title>
+  <title>使用数据交换文档编辑器</title>
   <shortdesc>将完整的配置文件作为 Firefox policies.json 文档打开，以进行精确审阅或原始编辑。</shortdesc>
   <taskbody>
     <prereq><p>打开保存的配置文件。 JSON 编辑器 适用于已保存的配置文件，并将该配置文件表示为 Firefox 边界文档。</p></prereq>
     <context><p>JSON 编辑器 是原始文档表面。当 引导式编辑器 或 所有设置 级别太高而无法进行精确审查、迁移检查、故障排除或原始值时，请使用它。</p>
       <fig id="screenshot-json-editor">
-        <title>JSON 编辑器</title>
-        <image keyref="screenshot.json-editor" placement="break">
+        <title>数据交换文档编辑器</title>
+        <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
           <alt>JSON 编辑器 显示已保存配置文件的可编辑 Firefox 策略 JSON。</alt>
         </image>
       </fig>

@@ -316,9 +316,47 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert 'class="bpm-docs-search"' in html
         assert 'role="search"' in html
         assert 'id="bpm-docs-search-query"' in html
+        assert 'class="bpm-docs-discovery-tools"' in html
+        assert 'class="bpm-docs-assistant-widget"' in html
+        assert 'data-documentation-assistant-widget' in html
+        assert f'data-assistant-locale="{locale}"' in html
+        assert 'data-assistant-expanded="false"' in html
+        assert 'data-assistant-toggle' in html
+        assert 'data-assistant-panel hidden' in html
+        assert 'class="bpm-docs-assistant-entry"' not in html
+        assert 'data-assistant-state="unavailable"' in html
+        assert 'role="log"' in html
+        assert 'data-assistant-message-roles="user assistant system"' in html
+        assert 'data-assistant-question' in html
+        assert 'data-assistant-install' in html
+        assert 'data-assistant-clear' in html
+        assert 'data-assistant-send' in html
+        assert 'data-assistant-stop' in html
+        assert 'data-local-model-manager' not in html
+        assert 'data-assistant-web-control hidden' in html
+        assert 'role="switch"' in html
+        assert 'data-assistant-web-toggle' in html
+        assistant_copy = json.loads(
+            (tmp_path / locale / "assistant-copy.json").read_text(encoding="utf-8")
+        )
+        assert assistant_copy["locale"] == locale
+        assert assistant_copy["messages"]["states"]["ready"]["title"]
+        assert assistant_copy["messages"]["states"]["ready"]["live"]
+        assert assistant_copy["messages"]["states"]["ready"]["aria"]
+        assert assistant_copy["messages"]["shell"]["assistant_ready"]
+        assert assistant_copy["messages"]["shell"]["assistant_clear_short"]
+        assert assistant_copy["messages"]["shell"]["assistant_external_sources"]
+        assert "assistant-copy.json" not in html
         assert 'data-search-index-href="../search/' in html or 'data-search-index-href="search/' in html
         assert 'role="status" aria-live="polite"' in html
         assert 'bpm-docs-search.js" defer' in html
+        assert 'bpm-docs-model-manager.js" defer' in html
+        assert 'bpm-docs-assistant-renderer.js" defer' in html
+        assert 'bpm-docs-assistant-state-machine.js" defer' in html
+        assert 'bpm-docs-assistant-web-mode.js" defer' in html
+        assert 'bpm-docs-assistant-conversation.js" defer' in html
+        assert 'bpm-docs-assistant-transport.js" defer' in html
+        assert 'bpm-docs-assistant-shell.js" defer' in html
         assert '<meta name="theme-color" content="#edf2f7">' in html
         assert "bpm-docs-theme-control" in html
         assert 'data-docs-theme-select' in html
@@ -370,6 +408,13 @@ def test_portal_shell_adds_accessibility_landmarks_theme_assets_and_locale_peers
         assert (tmp_path / locale / "assets/bpm-docs.css").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-print.css").is_file()
         assert (tmp_path / locale / "assets/bpm-docs-search.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-model-manager.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-assistant-renderer.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-assistant-state-machine.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-assistant-web-mode.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-assistant-conversation.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-assistant-transport.js").is_file()
+        assert (tmp_path / locale / "assets/bpm-docs-assistant-shell.js").is_file()
         assert (
             tmp_path / locale / "assets/screenshots/ug-library-overview-desktop-light.png"
         ).is_file()
@@ -574,7 +619,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         "cis-settings-guide",
         "administrator-guide",
     }
-    assert len(manifest["topics"]) == 159
+    assert len(manifest["topics"]) == 160
     assert set(manifest["navigation"]) == set(build_docs.LOCALES)
     for locale, record in manifest["navigation"].items():
         navigation_path = tmp_path / record["path"]
@@ -594,6 +639,8 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["ranking_schema_version"] == 1
     assert search_payload["facets_contract_id"] == "bpm-doc-search-facets-filters-0.9.0"
     assert search_payload["facets_schema_version"] == 1
+    assert search_payload["domain_ranking_contract_id"] == "bpm-doc-search-domain-ranking-facets-0.9.3"
+    assert search_payload["domain_ranking_schema_version"] == 1
     assert search_payload["quality_contract_id"] == "bpm-doc-search-quality-performance-0.9.0"
     assert search_payload["quality_schema_version"] == 1
     assert search_payload["integrity_contract_id"] == "bpm-doc-search-integrity-drift-0.9.0"
@@ -608,6 +655,18 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["normalization"]["unicode_form"] == "NFKC"
     assert search_payload["normalization"]["alias_group_count"] == 5
     assert search_payload["normalization"]["query_fixture_count"] == 3
+    assert search_payload["domain_ranking"] == {
+        "preserved_sources": ["identifiers", "title", "aliases", "headings", "body", "bounded_typo"],
+        "evidence_fields": [
+            "topic_id", "document_id", "score", "score_breakdown", "matched_fields",
+            "identifiers", "filter_facets",
+        ],
+        "preserved_facets": [
+            "locale", "guide_id", "topic_kind", "firefox_channel", "policy_category",
+            "cis_level", "cis_control_state", "api_area", "bpm_version",
+        ],
+        "maximum_evidence_rows": 50,
+    }
     assert search_payload["ranking"]["ranking_order"] == [
         "exact_identifier",
         "title",
@@ -624,7 +683,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert search_payload["filtering"]["url_state"]["parameters"]["guide_id"] == "guide"
     assert search_payload["filtering"]["filter_fixture_count"] == 5
     assert search_payload["facet_counts"]["guide_id"]["user-guide"] > 0
-    assert search_payload["facet_counts"]["firefox_channel"]["release-152"] > 0
+    assert search_payload["facet_counts"]["firefox_channel"]["release-153"] > 0
     assert search_payload["facet_counts"]["policy_category"]["ai_smart"] > 0
     assert search_payload["facet_counts"]["cis_level"]["level-1"] > 0
     assert search_payload["facet_counts"]["cis_control_state"]["mapped"] > 0
@@ -712,7 +771,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert first_document["filter_facets"]["guide_id"] == [first_document["guide_id"]]
     assert first_document["filter_facets"]["bpm_version"] == [build_docs._product_version()]
     assert set(first_document["normalized"]["fields"]) == set(search_payload["searchable_fields"])
-    assert first_document["normalized"]["tokens"]
+    assert "tokens" not in first_document["normalized"]
     assert first_document["topic_id"] in first_document["normalized"]["fields"]["identifiers"]
 
     ai_documents = [
@@ -721,7 +780,10 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
         if "firefox-ai-controls" in document["normalized"]["alias_ids"]
     ]
     assert ai_documents
-    assert any("aicontrols" in document["normalized"]["tokens"] for document in ai_documents)
+    assert any(
+        "aicontrols" in document["normalized"]["fields"]["identifiers"]
+        for document in ai_documents
+    )
     assert any("ai_smart" in document["filter_facets"]["policy_category"] for document in ai_documents)
 
     api_documents = [
@@ -754,7 +816,7 @@ def test_manifest_generation_lists_guides_locales_search_and_target_map(tmp_path
     assert manifest["ui_target_map"]["sha256"] == build_docs._file_sha256(
         tmp_path / "ui-target-map.json"
     )
-    assert len(target_map["targets"]) == 517
+    assert len(target_map["targets"]) == 519
     assert "policy:AIControls" in target_map["targets"]
     assert "known-preference:network.IDN_show_punycode" in target_map["targets"]
     assert "capability:CAP-SET-001" in target_map["targets"]
@@ -809,12 +871,236 @@ def test_package_removes_stale_outputs_before_validation(
     assert not checksum.exists()
 
 
-def test_source_fingerprint_tracks_portal_script(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_source_fingerprint_tracks_portal_scripts_and_local_model_copy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     fingerprint = build_docs._source_fingerprint()
 
-    monkeypatch.setattr(build_docs, "SEARCH_SCRIPT", "bpm-docs-print.css")
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "SEARCH_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
 
-    assert build_docs._source_fingerprint() != fingerprint
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "MODEL_MANAGER_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "ASSISTANT_RENDERER_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "ASSISTANT_STATE_MACHINE_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "ASSISTANT_WEB_MODE_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "ASSISTANT_CONVERSATION_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "ASSISTANT_TRANSPORT_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "ASSISTANT_SHELL_SCRIPT", "bpm-docs-print.css")
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "DOCUMENTATION_ASSISTANT_COPY", build_docs.MANIFEST_SCHEMA)
+        assert build_docs._source_fingerprint() != fingerprint
+
+    with monkeypatch.context() as patch:
+        patch.setattr(build_docs, "PDF_PRINT_CSS", build_docs.MANIFEST_SCHEMA)
+        assert build_docs._source_fingerprint() != fingerprint
+
+
+def _fake_pdf_payload() -> bytes:
+    payload = (
+        b"%PDF-1.4\n"
+        b"1 0 obj\n<< /CreationDate (D:20260801184921+03'00') >>\nendobj\n"
+        b"trailer\n<< /ID [<37B735189F1AA8E704DCCD50F8032B58> "
+        b"<37B735189F1AA8E704DCCD50F8032B58>] >>\n%%EOF\n"
+    )
+    return payload + (b"% deterministic test padding\n" * 40)
+
+
+def test_pdf_candidate_build_writes_every_locale_guide_and_normalizes_metadata(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    documentation = tmp_path / "documentation"
+    for locale in build_docs.LOCALES:
+        maps = documentation / "src" / "dita" / locale / "maps"
+        maps.mkdir(parents=True)
+        for _guide_id, map_name in build_docs.PDF_GUIDE_MAPS:
+            (maps / map_name).write_text("<map/>", encoding="utf-8")
+    (documentation / "assets/pdf").mkdir(parents=True)
+    (documentation / "assets/branding").mkdir(parents=True)
+    (documentation / "assets/pdf/bpm-guide-print.css").write_text("@page {}", encoding="utf-8")
+    (documentation / "assets/branding/bpm-logo.png").write_bytes(b"png")
+    layout_path = documentation / "layout.json"
+    policy_path = documentation / "pdf-policy.json"
+    layout_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "target_bpm_version": "0.9.3",
+                "locales": list(build_docs.LOCALES),
+                "guides": [
+                    {
+                        "id": "user-guide",
+                        "filename": "browser-policy-manager-user-guide-{locale}-{bpm_version}.pdf",
+                    },
+                    {
+                        "id": "administrator-guide",
+                        "filename": "browser-policy-manager-administrator-guide-{locale}-{bpm_version}.pdf",
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    policy_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "contract_id": "bpm-pdf-generation-0.9.3",
+                "backlog_item": "BPM093-M14-08",
+                "candidate_root": "documentation/build/pdf",
+                "candidate_path_layout": "{locale}/{filename}",
+                "dita_format": "html5",
+                "pdf_renderer": "chromium",
+                "source_maps": ["user-guide.ditamap", "administrator-guide.ditamap"],
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(build_docs, "DOCUMENTATION_ROOT", documentation)
+    monkeypatch.setattr(build_docs, "PDF_LAYOUT_CONTRACT", layout_path)
+    monkeypatch.setattr(build_docs, "PDF_GENERATION_CONTRACT", policy_path)
+    monkeypatch.setattr(build_docs, "validate_sources", lambda: None)
+    monkeypatch.setattr(build_docs, "toolchain", lambda: (tmp_path / "dita", tmp_path / "java"))
+    monkeypatch.setattr(build_docs, "source_hashes", lambda: {"source": "unchanged"})
+    monkeypatch.setattr(build_docs, "_source_fingerprint", lambda: "source-fingerprint")
+    monkeypatch.setattr(build_docs, "_source_revision", lambda: "a" * 40)
+    monkeypatch.setattr(
+        build_docs,
+        "_load_lock",
+        lambda: {"components": {"dita_ot": {"version": "4.4"}}},
+    )
+
+    def fake_run_pdf(command: list[str], _env: dict[str, str]) -> None:
+        output = Path(command[command.index("--output") + 1])
+        output.mkdir(parents=True)
+
+    def fake_write_pdf_print_guide(**kwargs: object) -> Path:
+        print_path = Path(str(kwargs["output_root"])) / "print.html"
+        print_path.write_text("<html><body>print</body></html>", encoding="utf-8")
+        return print_path
+
+    def fake_render_pdf(_source: Path, target: Path, _env: dict[str, str]) -> None:
+        target.write_bytes(_fake_pdf_payload())
+
+    monkeypatch.setattr(build_docs, "_run_pdf", fake_run_pdf)
+    monkeypatch.setattr(build_docs, "_wait_for_pdf_topic_html", lambda **_kwargs: None)
+    monkeypatch.setattr(build_docs, "_write_pdf_print_guide", fake_write_pdf_print_guide)
+    monkeypatch.setattr(build_docs, "_render_pdf_with_chromium", fake_render_pdf)
+    monkeypatch.setattr(build_docs, "_canonicalize_pdf", lambda _path: None)
+    candidate = tmp_path / "candidate"
+
+    build_docs.build_pdf_tree(candidate)
+
+    files = sorted(path for path in candidate.rglob("*.pdf"))
+    assert len(files) == 12
+    for path in files:
+        payload = path.read_bytes()
+        assert build_docs.PDF_FIXED_CREATION_DATE in payload
+        assert payload.count(build_docs.PDF_FIXED_DOCUMENT_ID) == 2
+    build_docs.validate_pdf_tree(candidate)
+
+
+def test_canonicalize_pdf_replaces_qpdf_trailer_id_after_the_rewrite(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    path = tmp_path / "guide.pdf"
+    path.write_bytes(_fake_pdf_payload())
+
+    monkeypatch.setattr(build_docs.shutil, "which", lambda executable: "/usr/bin/qpdf")
+
+    def fake_run_pdf_tool(command: list[str], _operation: str) -> None:
+        source = Path(command[-2])
+        target = Path(command[-1])
+        payload = source.read_bytes()
+        if "--static-id" in command:
+            payload = build_docs.PDF_DOCUMENT_ID_PATTERN.sub(
+                b"/ID [<11111111111111111111111111111111> <22222222222222222222222222222222>]",
+                payload,
+            )
+        target.write_bytes(payload)
+
+    monkeypatch.setattr(build_docs, "_run_pdf_tool", fake_run_pdf_tool)
+
+    build_docs._canonicalize_pdf(path)
+
+    assert path.read_bytes().count(build_docs.PDF_FIXED_DOCUMENT_ID) == 2
+
+
+def test_pdf_article_drops_temporary_local_file_links_but_keeps_external_links(tmp_path: Path) -> None:
+    topic = tmp_path / "topic.html"
+    topic.write_text(
+        "<html><body><article><p><a href=\"file:///tmp/build/topic.html\">Local</a>"
+        "<a href=\"admin-reference-minimum-system-requirements.html\">Topic</a>"
+        "<a href=\"https://example.invalid/article\">External</a></p></article></body></html>",
+        encoding="utf-8",
+    )
+
+    article = build_docs._pdf_article_from_html(topic)
+
+    assert "file:///" not in article
+    assert "admin-reference-minimum-system-requirements.html" not in article
+    assert 'href="https://example.invalid/article"' in article
+
+
+def test_pdf_topic_html_waits_for_delayed_map_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    maps = tmp_path / "src/dita/de/maps"
+    topic = tmp_path / "src/dita/de/admin/admin-reference.dita"
+    maps.mkdir(parents=True)
+    topic.parent.mkdir(parents=True)
+    (maps / "keys.ditamap").write_text(
+        '<map><keydef keys="topic.admin-reference" href="../admin/admin-reference.dita"/></map>',
+        encoding="utf-8",
+    )
+    map_path = maps / "administrator-guide.ditamap"
+    map_path.write_text(
+        '<map><title>Administrator guide</title><topicref keyref="topic.admin-reference"/></map>',
+        encoding="utf-8",
+    )
+    topic.write_text('<reference id="admin-reference"><title>Reference</title></reference>', encoding="utf-8")
+    output_root = tmp_path / "output"
+    ticks = iter((0.0, 0.0, 0.1, 0.2))
+
+    def fake_sleep(_seconds: float) -> None:
+        destination = output_root / "de/admin/admin-reference.html"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(
+            "<article><h1>Reference</h1></article>", encoding="utf-8"
+        )
+
+    monkeypatch.setattr(build_docs.time, "monotonic", lambda: next(ticks))
+    monkeypatch.setattr(build_docs.time, "sleep", fake_sleep)
+
+    build_docs._wait_for_pdf_topic_html(
+        locale="de",
+        guide_id="administrator-guide",
+        map_path=map_path,
+        output_root=output_root,
+    )
+
+    assert (output_root / "de/admin/admin-reference.html").is_file()
 
 
 def test_makefile_exposes_only_the_implemented_documentation_build_targets() -> None:

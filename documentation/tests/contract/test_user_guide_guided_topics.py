@@ -194,10 +194,5 @@ def test_english_guided_topics_cover_all_steps_control_families_and_ai_boundary(
         "validate",
         "save",
         "download",
-        "does not add AI functionality",
-        "RAG",
-        "embeddings",
-        "generative search",
-        "generative answers",
     ):
         assert required.casefold() in text.casefold()

@@ -8,7 +8,7 @@
     <context><p>Guided search is useful when you know the policy goal but not the step that contains the control family.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Guided settings search results</title>
-        <image keyref="screenshot.guided-settings-search" placement="break">
+        <image keyref="screenshot.guided-settings-search" placement="break" scalefit="yes" align="center">
           <alt>Guided editor search showing homepage-related setting results.</alt>
         </image>
       </fig>

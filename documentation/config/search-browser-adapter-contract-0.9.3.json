@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-doc-search-browser-adapter-0.9.3",
+  "backlog_item": "BPM093-M4-02",
+  "target_bpm_version": "0.9.3",
+  "status": "accepted",
+  "inherits_from": [
+    "documentation/config/search-corpus-and-results-0.9.0.json",
+    "documentation/config/search-normalization-aliases-0.9.0.json",
+    "documentation/config/search-ranking-typo-0.9.0.json",
+    "documentation/config/search-facets-filters-0.9.0.json",
+    "documentation/config/search-ui-filter-contract-0.9.1.json"
+  ],
+  "adapter": {
+    "global": "BpmDocsSearchAdapter",
+    "contract_id": "bpm-doc-search-browser-adapter-0.9.3",
+    "schema_version": 1,
+    "operations": [
+      "hydrate",
+      "serialize",
+      "query",
+      "safeResultUrl"
+    ],
+    "implementation_boundary": "The adapter accepts only the BPM generated static index and does not call, name, or render a vendor search UI. The DOM shell supplies localized labels and rendering."
+  },
+  "state": {
+    "query_parameter": "q",
+    "query_maximum_characters": 256,
+    "filter_encoding": "repeat-parameter",
+    "recent_query_storage": "locale-scoped browser localStorage; URL query takes precedence when present",
+    "unknown_url_filters": "ignore values not declared by the generated locale index",
+    "history": "hydrate initial and popstate URL state without writing a new history entry"
+  },
+  "result": {
+    "maximum_visible_results": 50,
+    "status_kinds": [
+      "ready",
+      "no-results",
+      "result-singular",
+      "result-plural"
+    ],
+    "link_policy": "Only same-origin normalized paths under /help/{active locale}/ may be rendered as result links; invalid URLs render as plain titles."
+  },
+  "accessibility": {
+    "preserve": [
+      "polite live status",
+      "DOM-order keyboard navigation",
+      "Enter submission",
+      "Escape collapses only the open advanced panel and preserves query/filter state",
+      "focus returns to the advanced toggle after Escape collapse",
+      "clear focuses query input",
+      "clear-filters focuses advanced toggle"
+    ]
+  },
+  "error": {
+    "index_load_failure": "show the locale-owned unavailable state; keep the rest of the documentation portal usable",
+    "network_boundary": "fetch only the generated same-origin index with credentials: same-origin; no remote or vendor request is allowed"
+  },
+  "non_goals": [
+    "change deterministic ranking",
+    "add a dependency or vendor-specific browser UI",
+    "add AI, telemetry, or network search",
+    "replace the existing documented facet or URL contracts"
+  ]
+}

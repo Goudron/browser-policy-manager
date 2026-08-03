@@ -2,27 +2,27 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-guided-editor" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>浏览“引导式编辑器”的六个步骤</title>
-  <shortdesc>依次浏览配置文件 &amp; 基线、浏览器访问权限 &amp; 默认设置、安全 &amp; 隐私、用户、附加组件 &amp; 网站、AI &amp; 智能功能以及查看 &amp; 导出。</shortdesc>
+  <shortdesc>依次配置配置档案、浏览器访问、安全性、用户和网站、智能功能，以及检查和导出。</shortdesc>
   <taskbody>
-    <prereq><p>从库或创建流程中打开 引导式编辑器 中的配置文件。</p></prereq>
-    <context><p>引导式编辑器 将配置文件配置转变为六个任务优先的步骤，并在您工作时保持架构验证可见。</p>
+    <prereq><p>从资料库或创建流程中打开“引导式编辑器”中的配置档案。</p></prereq>
+    <context><p>“引导式编辑器”将配置档案配置分为六个步骤，并在您工作时显示架构验证状态。</p>
       <fig id="screenshot-guided-editor-overview">
         <title>“引导式编辑器”概述</title>
-        <image keyref="screenshot.guided-editor-overview" placement="break">
-          <alt>引导式编辑器 显示已保存配置文件的步骤导航和验证状态。</alt>
+        <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
+        <alt>“引导式编辑器”显示已保存配置档案的步骤导航和验证状态。</alt>
         </image>
       </fig>
     </context>
     <steps>
-      <step><cmd>从步骤 1 开始，配置文件 &amp; 基线，以确认名称、架构通道、场景、启动器预设和 CIS 层。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>继续执行步骤 2，浏览器访问 &amp; 默认值，用于网络访问、浏览器行为、主页、搜索和导航默认值。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>使用步骤 3 进行隐私控制、权限、cookie、清理、DNS 和安全强化态势。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>使用步骤 4 进行帐户、扩展、书签、语言、翻译、附加组件和网站处理。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>仅对所选架构支持的现有 Firefox AI &amp; 智能功能策略控件使用步骤 5。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
-      <step><cmd>完成步骤 6，检查 &amp; 导出，以验证、保存和下载检查后的配置文件。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
+      <step><cmd>在第 1 步确认名称、架构通道、场景、初始预设和 CIS 层。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
+      <step><cmd>在第 2 步配置网络访问、浏览器行为、主页、搜索和导航默认值。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
+      <step><cmd>在第 3 步配置隐私、权限、Cookie、清理、DNS 和安全性。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
+      <step><cmd>在第 4 步配置帐户、扩展、书签、语言、翻译和网站规则。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
+      <step><cmd>在第 5 步仅配置所选架构支持的 Firefox AI 和智能功能策略。</cmd><info><p>预期结果：配置档案保持一致。</p></info></step>
+      <step><cmd>在第 6 步验证、保存并导出配置档案。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
-    <result><p>您可以解释每个引导设置所属的位置并从正确的步骤继续。</p></result>
-    <postreq><p>恢复：如果您降落在错误的区域，请使用步进器或搜索，而不是更改不相关的控件。</p></postreq>
+    <result><p>您可以确定每项引导设置的位置，并从正确的步骤继续操作。</p></result>
+    <postreq><p>恢复：如果进入了错误的区域，请转到相应步骤或使用搜索，不要更改无关设置。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-guided-settings"/>

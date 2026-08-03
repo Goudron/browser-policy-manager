@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-rag-corpus-exclusions-0.9.3",
+  "backlog_item": "BPM093-M5-02",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented",
+  "allow": {
+    "source_path_prefixes": ["documentation/src/dita/", "documentation/src/generated/"],
+    "provenance_classes": ["published_reviewed_dita", "published_approved_generated_dita"],
+    "publication_state": "published",
+    "published_url_prefix": "/help/"
+  },
+  "deny": {
+    "path_fragments": ["/runbooks/", "/reports/", "/.cache/", "/dist/", "/build/", "/fixtures/", "/evidence/", "/logs/", "/secrets/", "/prompts/", "/chats/", "/models/", "/embeddings/", "/indexes/"],
+    "categories": ["maintainer runbooks", "drafts", "blocked provenance", "generated reports", "secrets", "local paths", "test diagnostics", "model prompts", "chat logs", "unpublishable source material", "runtime state", "external web content"]
+  },
+  "diagnostics": {
+    "allowed_fields": ["chunk_id", "topic_id", "locale", "source_dita_path", "source_sha256", "manifest_sha256", "provenance_class", "rejection_category"],
+    "forbidden_fields": ["text", "heading_path", "identifiers", "prompt", "chat", "excerpt", "secret", "local_path"]
+  }
+}

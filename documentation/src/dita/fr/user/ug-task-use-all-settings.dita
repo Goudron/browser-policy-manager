@@ -8,7 +8,7 @@
     <context><p>Tous les paramètres est l'éditeur visuel complet des politiques Firefox et connu Préférences gérées. Il s'ouvre dans Revue afin que les éléments d'attention soient visibles avant une navigation large dans le catalogue.</p>
       <fig id="screenshot-all-settings-review">
         <title>Mode « Revue » dans « Tous les paramètres »</title>
-        <image keyref="screenshot.all-settings-review" placement="break">
+        <image keyref="screenshot.all-settings-review" placement="break" height="150mm" align="center">
           <alt>Tous les paramètres affichant la liste de révision, les paramètres configurés et le panneau de détails des paramètres sur un écran étroit.</alt>
         </image>
       </fig>

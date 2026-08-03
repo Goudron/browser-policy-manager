@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-documentation-assistant-floating-ui-0.9.3",
+  "backlog_item": "BPM093-M12B-01",
+  "target_bpm_version": "0.9.3",
+  "status": "implemented-architecture-contract-no-widget-or-transport-change",
+  "pins": {
+    "assistant_api_delivery": {
+      "path": "documentation/config/documentation-assistant-api-delivery-contract-0.9.3.json",
+      "sha256": "c2b5c489030bbbfebaf72e445cc1aca14b03f05468db39627772225139361cb0"
+    },
+    "assistant_copy": {
+      "path": "documentation/config/documentation-assistant-copy-0.9.3.json",
+      "sha256": "7b0bdc08962e7b7f5d597c2cbec6844cfb7b1b9c7419149f6f07b22ff2433670"
+    },
+    "model_management": {
+      "path": "documentation/config/local-model-management-ui-contract-0.9.3.json",
+      "sha256": "0f055afe84485e8287d53d378aba7a9506b383ee292a4e59968cd29a3238c704"
+    },
+    "conversation_retention": {
+      "path": "documentation/config/bpm-conversation-retention-contract-0.9.3.json",
+      "sha256": "d95c7047e7432a6dfe1fdf34b5c8c0de4da329337480fd45f20105779004d8c4"
+    }
+  },
+  "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
+  "component_boundary": {
+    "owner": "documentation portal",
+    "scope": "every generated /help/{locale}/ page",
+    "relationship_to_search": "The floating assistant is an independent overlay. It neither moves, hides, queries nor ranks the deterministic documentation search.",
+    "implementation_deferred_to": ["BPM093-M12B-02", "BPM093-M12B-03", "BPM093-M12B-04", "BPM093-M12B-05", "BPM093-M12B-06", "BPM093-M12B-07"],
+    "no_change_now": ["portal markup", "CSS", "JavaScript", "assistant API", "model lifecycle API", "chat transport", "model or RAG artifacts"]
+  },
+  "collapsed": {
+    "default": true,
+    "placement": "fixed in the lower-right corner of the visible documentation viewport",
+    "visible_content": "Only the locale-owned assistant title is visible; icons, badges, status, explanatory prose, transcripts and controls are absent.",
+    "activation": "The title is the localized accessible button name and toggles the expanded panel."
+  },
+  "expanded": {
+    "desktop_viewport": {
+      "minimum_inline_size": "33.333vw",
+      "block_size": "50dvh",
+      "placement": "fixed lower-right overlay with a safe viewport inset",
+      "article_interference": "The panel does not reflow the article or reserve a sidebar column."
+    },
+    "narrow_viewport": {
+      "breakpoint": "48rem",
+      "inline_size": "calc(100vw - 2rem)",
+      "block_size": "50dvh",
+      "placement": "fixed lower-right overlay with a 1rem viewport inset"
+    },
+    "order": ["localized title", "scrollable chat transcript", "question composer", "bottom status row"],
+    "long_content": "Only the transcript scrolls; the title, composer and status row remain visible. The transcript never expands the panel beyond its viewport-bound height.",
+    "visual_system": "Use existing portal tokens and both light and dark themes; support reduced motion and forced colors."
+  },
+  "state_to_controls": {
+    "ready": {
+      "status": "ready",
+      "composer": "enabled",
+      "bottom_controls": ["external_sources_switch", "clear"],
+      "installation_control": "absent"
+    },
+    "busy": {
+      "status": "busy",
+      "composer": "disabled",
+      "bottom_controls": ["stop", "clear"],
+      "installation_control": "absent"
+    },
+    "not_ready": {
+      "states": ["disabled", "not-installed", "downloading", "indexing", "loading", "cancelled", "degraded", "incompatible", "crashed"],
+      "composer": "disabled",
+      "bottom_controls": ["install_or_recover"],
+      "failure": "Show only a locale-owned safe reason code when the server reports an installation/preparation failure; never show paths, hashes, prompts, stack traces, credentials or raw exceptions."
+    },
+    "installation_progress": {
+      "visible_when": "an explicitly started server-owned installation or preparation operation is active; after reload or documentation navigation, an explicit reader opening reattaches to that operation",
+      "allowed_fields": ["phase", "downloaded_bytes", "total_bytes", "progress_percent", "safe_reason_code"],
+      "phases": ["downloading", "verifying", "preparing_documentation", "completed", "failed"],
+      "forbidden": ["simulated percentages", "filesystem paths", "artifact hashes", "model output", "chat text"]
+    },
+    "clear": "Clear is visible only when the assistant can accept a conversation. It removes the portal's retained display state and invokes the server-owned clear operation; it never deletes an installed model."
+  },
+  "persistent_state": {
+    "scope": "one browser tab and one documentation locale",
+    "storage": "sessionStorage only, under a versioned locale-private key owned by the portal",
+    "retain": ["collapsed_or_expanded", "at_most_eight_completed_text_only_turns", "server-bound_safe_citation_views", "external_sources_preference_and_opaque_tab_id"],
+    "discard": ["active_request_or_stream", "partial_tokens", "prompts_or_system_instructions", "model_installation_credentials", "paths", "raw_errors", "cross_locale_content"],
+    "dialogue_clear_conditions": ["explicit Clear", "browser-tab close", "locale change", "server-declared conversation expiry"],
+    "external_sources_clear_conditions": ["explicit switch off", "browser-tab close", "locale change"],
+    "forbidden_storage": ["localStorage", "IndexedDB", "cookies", "server database", "telemetry", "cross-origin storage"],
+    "reload_rule": "A reload or documentation-page navigation restores only the retained display state. An interrupted request is not resumed and no partial answer is presented as completed."
+  },
+  "copy_authority": {
+    "rule": "Visible UI text is locale-owned. M12B-03 adds the required short labels to the maintained assistant catalog; English fallback is forbidden.",
+    "collapsed_titles": {
+      "en": "BPM AI Assistant",
+      "ru": "ИИ-помощник BPM",
+      "de": "BPM-KI-Assistent",
+      "zh-CN": "BPM AI 助手",
+      "fr": "Assistant IA BPM",
+      "es-ES": "Asistente de IA de BPM"
+    },
+    "required_short_labels": ["ready", "clear", "install_model", "installing", "verifying_model", "preparing_documentation", "installation_failed", "stop", "external_sources"],
+    "no_explanatory_copy": "The widget shows no scope, privacy, resource, search-fallback or model-description paragraphs. Product documentation remains the place for those explanations."
+  },
+  "accessibility": {
+    "focus": "Opening moves focus to the title or composer only after a user action. Streaming, status and installation progress never move focus. Escape collapses the panel and returns focus to its title button.",
+    "keyboard": "The title, composer, external-sources switch, clear, stop and install/recover controls use native keyboard-accessible elements. Focus order follows visual order.",
+    "announcements": "The transcript is a polite non-atomic log; the short bottom status is a polite atomic status region. Progress announcements are rate-limited to meaningful state or percentage changes.",
+    "safe_rendering": "All user, assistant, source and reason text is rendered through text-only DOM APIs. The title and sources have localized programmatic names."
+  },
+  "security_and_network": {
+    "page_load": "Restoring a collapsed/expanded panel or retained transcript makes no assistant, model, RAG, ordinary-search or external-web request.",
+    "installation": "Only an explicit user activation may start installation. M12B-05 binds the unavailable assistant control to the bounded same-origin local-model lifecycle, server-owned factual progress and post-verification preparation; it never offers model deletion.",
+    "transport": "M12B-04 binds same-origin status/chat/SSE/source/cancel/clear routes. M12B-05 binds the local-model lifecycle. M12B-06 binds the M12A-04 tab/locale-scoped external-mode API, switch and separately labelled external claims after explicit reader activation.",
+    "ordinary_search_changed": false
+  },
+  "verification": {
+    "contract": "documentation/tests/contract/test_documentation_assistant_floating_ui_contract_0_9_3.py",
+    "architecture": "docs/architecture/documentation-assistant-floating-ui-0.9.3.md",
+    "future_browser_proof": "BPM093-M12B-07"
+  }
+}

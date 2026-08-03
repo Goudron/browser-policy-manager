@@ -7,7 +7,7 @@
     <section id="a-overview"><title>概述</title><p>审核状态解释了为什么 所有设置 在用户编辑例程值之前要求注意。</p></section>
     <section id="a-clean-profile"><title>清洁轮廓</title><p>干净的配置文件没有剩余的审阅项目。它仍然可以包含配置的设置；它根本没有 BPM 可以检测到的注意力状态。</p></section>
     <section id="a-invalid-items"><title>无效项目</title><p>无效项目的值未通过所选模式通道的当前验证，应在切换前修复或删除。</p></section>
-    <section id="a-cis-manual-review"><title>CIS 手动审核</title><p>CIS 手动审核项目需要人工决策或外部验证。 BPM 可以在不声明经过认证的合规性的情况下显示该项目。</p></section>
+    <section id="a-cis-manual-review"><title>安全基线手动审核</title><p>CIS 手动审核项目需要人工决策或外部验证。 BPM 可以在不声明经过认证的合规性的情况下显示该项目。</p></section>
     <section id="a-raw-unknown-imported"><title>原始、未知和进口物品</title><p>应故意保留或删除原始后备、未知和导入的项目，因为 BPM 可能无法直观地对其意图进行建模。</p></section>
     <section id="a-deprecated-items"><title>已弃用的项目</title><p>已弃用的设置可能仍存在于配置文件中，但用户应在依赖它们之前确认当前版本/ESR 支持。</p></section>
     <section id="a-recovery"><title>恢复</title><p>如果出现意外状态，请清除过滤器、确认架构通道、刷新配置文件并在编辑前检查设置详细信息。</p></section>
