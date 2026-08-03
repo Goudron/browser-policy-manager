@@ -325,7 +325,8 @@ Every backlog must end with a final quality milestone. Include tasks for:
 11. Verify schema, CIS, locale, Administrator/DevOps deployment, DevOps integration, update, and
     release procedures include documentation drift gates when the epic changed those areas.
 12. Create a git commit for the completed epic.
-13. Provide the maintainer with the exact `git push` command to run manually.
+13. Push the reviewed commit to its configured remote branch and monitor every triggered required
+    CI workflow until it reaches a terminal state; report the result.
 
 The coverage task must explicitly say that falling below 100% is not accepted as "known debt" for
 the epic. Either add focused tests, shrink untested dead code, or document and remove unreachable
@@ -347,8 +348,18 @@ escalation immediately. Do not first try the browser test command inside the san
 
 If Make targets change in a future epic, update this runbook and the backlog together.
 
-Do not push from the backlog execution step. The assistant creates the commit when requested by the
-backlog flow, then prints the push command for the maintainer to run.
+### Automated push and CI control
+
+After the reviewed epic commit is created, the assistant pushes it to the configured remote branch
+with a regular non-force push and monitors every required GitHub Actions workflow triggered by that
+push until its terminal state. The handoff records the commit SHA, remote branch, workflow URLs,
+and each job result. The assistant must not force-push, rewrite history, create a tag or release,
+open a pull request, or push unrelated local changes.
+
+If the remote is unavailable, credentials are missing, the remote branch has advanced, a protected
+branch rejects the push, or any required workflow fails, stop the release handoff and report the
+exact condition. Do not retry a rejected push, bypass branch protection, or continue after a failed
+workflow without explicit user direction.
 
 ## Approval Protocol
 
@@ -398,7 +409,7 @@ Before calling a new backlog ready, confirm:
 - Selenium/browser UI verification notes require immediate sandbox escalation, without a sandboxed
   trial run;
 - final milestone verifies documentation-update completion and includes changelog entry, git commit,
-  and maintainer-run push command;
+  automatic non-force push, and terminal required-CI results;
 - final milestone verifies README has no version-specific release notes, active-target marker, or
   planned/completion placeholder; README updates are limited to durable current-state product facts;
 - final milestone verifies maintained runbooks and docs index include documentation drift gates for
