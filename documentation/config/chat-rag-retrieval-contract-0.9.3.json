@@ -49,7 +49,7 @@
     "diagnostics": "Expose only stable retrieval reason codes, never local paths, artifact hashes, chunk text, or raw exceptions."
   },
   "verification": {
-    "runtime": "tests/test_documentation_chat_retrieval_093.py",
+    "runtime": "tests/integration/ai/incubation/test_documentation_chat_retrieval.py",
     "contract": "documentation/tests/contract/test_chat_rag_retrieval_0_9_3.py"
   }
 }

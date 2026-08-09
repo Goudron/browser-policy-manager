@@ -13,7 +13,7 @@
       <step><cmd>Validez les avertissements affichés à côté des contrôles dépendants du schéma.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>
     </steps>
     <result><p>Le profil dispose d'un accès intentionnel au navigateur et de paramètres de comportement par défaut.</p></result>
-    <postreq><p>Récupération : si la validation signale une valeur, annulez la dernière modification ou utilisez Tous les paramètres pour inspecter la forme brute de la stratégie.</p></postreq>
+    <postreq><p>Récupération : si la validation signale une valeur, annulez la dernière modification ou utilisez <uicontrol>Tous les paramètres</uicontrol> pour inspecter la forme brute de la stratégie.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-configure-home-search-navigation"/>

@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-refresh-profile-library" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>刷新库</title>
-  <shortdesc>在重复操作之前重新加载库行并解释加载或操作状态。</shortdesc>
+  <shortdesc>在重复操作之前重新加载<uicontrol>库</uicontrol>行并解释加载或操作状态。</shortdesc>
   <taskbody>
-    <prereq><p>库已打开，您需要在更改或加载失败后确认当前保存的配置文件状态。</p></prereq>
-    <context><p>刷新从 BPM 重新加载库。它不会验证配置文件或保存未保存的编辑器更改。</p></context>
+    <prereq><p><uicontrol>库</uicontrol>已打开，您需要在更改或加载失败后确认当前保存的配置文件状态。</p></prereq>
+    <context><p>刷新从 BPM 重新加载<uicontrol>库</uicontrol>。它不会验证配置文件或保存未保存的编辑器更改。</p></context>
     <steps>
-      <step><cmd>在库中选择“刷新”。</cmd><info><p>预期结果：状态先提示正在加载，然后显示刷新后的列表或错误。</p></info></step>
-      <step><cmd>等待状态消息出现，再开始其他库操作。</cmd><info><note type="warning">状态尚未确定时重复执行生命周期操作或删除操作，会增加判断具体失败操作的难度。</note></info></step>
+      <step><cmd>在<uicontrol>库</uicontrol>中选择“刷新”。</cmd><info><p>预期结果：状态先提示正在加载，然后显示刷新后的列表或错误。</p></info></step>
+      <step><cmd>等待状态消息出现，再开始其他<uicontrol>库</uicontrol>操作。</cmd><info><note type="warning">状态尚未确定时重复执行生命周期操作或删除操作，会增加判断具体失败操作的难度。</note></info></step>
       <step><cmd>刷新后查看过滤计数和总计数。</cmd><info><p>如果另一个标签页保存、归档、恢复或删除了配置档案，计数可能会发生变化。</p></info></step>
     </steps>
-    <result><p>库视图反映了 BPM 可用的最新配置文件列表。</p></result>
+    <result><p><uicontrol>库</uicontrol>视图反映了 BPM 可用的最新配置文件列表。</p></result>
     <postreq><p>恢复：如果刷新失败，请保持当前页面打开并使用故障排除主题来决定是重试还是保留上下文。</p></postreq>
   </taskbody>
   <related-links>

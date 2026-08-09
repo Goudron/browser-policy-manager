@@ -4,11 +4,11 @@
   <title>Enregistrer les modifications du profil</title>
   <shortdesc>Créez le premier profil enregistré à partir d'un brouillon ou conservez les modifications apportées à un profil existant.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
     <context><p>L'enregistrement établit le profil ID pour un nouveau brouillon et met les dernières valeurs de stratégie et de préférences gérées à la disposition des autres surfaces BPM.</p></context>
     <steps>
       <step><cmd>Vérifiez le nom du profil, le canal de schéma et l'état de validation avant d'enregistrer.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
-      <step><cmd>Sélectionnez Enregistrer sur la surface active de l'éditeur.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Sélectionnez <uicontrol>Enregistrer</uicontrol> sur la surface active de l'éditeur.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Attendez le message d'état visible qui confirme la sauvegarde terminée.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Si un retour de validation ou de connexion apparaît, lisez-le avant de quitter ou de réessayer.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>

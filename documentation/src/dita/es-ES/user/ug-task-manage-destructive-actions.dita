@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-manage-destructive-actions" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Gestionar acciones destructivas de forma segura</title>
-  <shortdesc>Cancelar o confirmar acciones de archivado, restauración, restablecimiento, eliminación y eliminación permanente de forma deliberada.</shortdesc>
+  <shortdesc><uicontrol>Cancelar</uicontrol> o confirmar acciones de archivado, restauración, restablecimiento, eliminación y eliminación permanente de forma deliberada.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, Biblioteca, Todos los ajustes, Guiado, JSON o Superficie de comparación.</p></prereq>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, <uicontrol>Biblioteca</uicontrol>, <uicontrol>Todos los ajustes</uicontrol>, Guiado, JSON o Superficie de comparación.</p></prereq>
     <context><p>Las acciones destructivas pueden ocultar un perfil, eliminar configuraciones, restablecer valores o eliminar permanentemente una fila después de la confirmación.</p></context>
     <steps>
       <step><cmd>Lea la etiqueta de acción y el perfil o configuración afectados antes de confirmar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Cancelar si el perfil visible, el estado del ciclo de vida, el canal del esquema o la atribución de origen no coinciden con el objetivo previsto.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd><uicontrol>Cancelar</uicontrol> si el perfil visible, el estado del ciclo de vida, el canal del esquema o la atribución de origen no coinciden con el objetivo previsto.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Para la eliminación permanente, confirme que ya no se necesitan exportar, comparar ni revisar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Después de la confirmación, espere el mensaje de estado y actualice la biblioteca o el editor una vez antes de repetir la acción.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
     <result><p>La acción se cancela de forma segura o se completa con un estado visible y un impacto comprendido.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-archive-profile"/>

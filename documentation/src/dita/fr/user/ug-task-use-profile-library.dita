@@ -18,7 +18,7 @@
       <step><cmd>Utilisez la grille d’actions pour actualiser la liste, commencer un brouillon, ouvrir Comparer ou importer policies.json.</cmd><info><p>Ces actions précèdent les filtres et le tableau.</p></info></step>
       <step><cmd>Définissez les filtres de recherche, schéma, état de profil, validation et tri directement au-dessus du tableau ; lisez ensuite les décomptes filtré et total avant une action de ligne.</cmd><info><note type="warning">Une action de ligne s’applique à ce profil enregistré, et non à un brouillon d’éditeur temporaire.</note></info></step>
     </steps>
-    <result><p>Vous pouvez identifier la vue Bibliothèque active et choisir l'action de profil suivante sans perdre le contexte.</p></result>
+    <result><p>Vous pouvez identifier la vue <uicontrol>Bibliothèque</uicontrol> active et choisir l'action de profil suivante sans perdre le contexte.</p></result>
     <postreq><p>Récupération : si les lignes ne se chargent pas ou si l'état d'une action reste en échec, actualisez la bibliothèque, puis utilisez la rubrique de dépannage de la bibliothèque.</p></postreq>
   </taskbody>
   <related-links>

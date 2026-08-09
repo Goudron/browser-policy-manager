@@ -7,7 +7,7 @@
     <section id="a-release-controls"><title>Contrôles des schémas actuels</title><p>Dans Release 153 et ESR 153.0, l’étape 5 peut afficher les stratégies prises en charge pour l’IA et les fonctionnalités intelligentes, la recherche visuelle et les fonctionnalités intelligentes du navigateur.</p></section>
     <section id="a-esr-unavailable"><title>Contrôles indisponibles dans ESR</title><p>Dans ESR 140.13, les contrôles de stratégie d’IA non pris en charge sont absents ou signalés comme indisponibles. Ne les ajoutez pas manuellement comme si l’éditeur guidé les prenait en charge.</p></section>
     <section id="a-no-documentation-ai"><title>Distinct de l’assistant de documentation</title><p>Cette référence explique uniquement les contrôles de stratégie du navigateur Firefox existants. Ces contrôles ne configurent, n’activent ni ne limitent l’assistant de documentation distinct.</p></section>
-    <section id="a-recovery"><title>Récupération</title><p>Si un contrôle est manquant, confirmez le canal de schéma, consultez « Tous les paramètres » et notez l’état non pris en charge lors de la révision.</p></section>
+    <section id="a-recovery"><title>Récupération</title><p>Si un contrôle est manquant, confirmez le canal de schéma, consultez « <uicontrol>Tous les paramètres</uicontrol> » et notez l’état non pris en charge lors de la révision.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-interpret-profile-comparison" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>解释比较表</title>
-  <shortdesc>读取相等、已更改和缺失状态中的策略和托管首选项行。</shortdesc>
+  <shortdesc>读取相等、已更改和缺失状态中的策略和<uicontrol>托管首选项</uicontrol>行。</shortdesc>
   <taskbody>
     <prereq><p>配置文件 A 和配置文件 B 已选择，并且比较表可见。</p></prereq>
-    <context><p>该表比较两个配置文件的设置并集。策略行和托管首选项行可能会一起出现，因为两者都会影响 Firefox 的行为。</p></context>
+    <context><p>该表比较两个配置文件的设置并集。策略行和<uicontrol>托管首选项</uicontrol>行可能会一起出现，因为两者都会影响 Firefox 的行为。</p></context>
     <steps>
-      <step><cmd>扫描行类型以区分策略行和托管首选项行。</cmd><info><p>预期结果：您知道该行是否代表 Firefox Enterprise 策略或托管首选项键。</p></info></step>
+      <step><cmd>扫描行类型以区分策略行和<uicontrol>托管首选项</uicontrol>行。</cmd><info><p>预期结果：您知道该行是否代表 Firefox Enterprise 策略或<uicontrol>托管首选项</uicontrol>键。</p></info></step>
       <step><cmd>读取每一侧的值和状态。</cmd><info><p>相等的行具有匹配的值，更改的行具有不同的值，并且缺失的行仅存在于一侧。</p></info></step>
       <step><cmd>使用缺失或更改的行来决定哪个配置文件需要检查。</cmd><info><note type="warning">比较不应用更改。打开相关的配置文件编辑器以更新值。</note></info></step>
     </steps>
     <result><p>您可以解释所选配置文件在一侧是否相同、不同或缺少设置。</p></result>
-    <postreq><p>恢复：如果行看起来过时，请先保存编辑器更改，然后从库中重新打开比较。</p></postreq>
+    <postreq><p>恢复：如果行看起来过时，请先保存编辑器更改，然后从<uicontrol>库</uicontrol>中重新打开比较。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

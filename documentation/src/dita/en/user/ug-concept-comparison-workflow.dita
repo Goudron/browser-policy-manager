@@ -4,7 +4,7 @@
   <title>Profile comparison workflow</title>
   <shortdesc>Compare helps review the saved setting differences between two profiles without changing either profile.</shortdesc>
   <conbody>
-    <p>The workflow is: open Compare from the Library, search independently for Profile A and Profile B, review each selected profile summary, then read the comparison table.</p>
+    <p>The workflow is: open Compare from the <uicontrol>Library</uicontrol>, search independently for <uicontrol>Profile A</uicontrol> and <uicontrol>Profile B</uicontrol>, review each selected profile summary, then read the comparison table.</p>
     <p>The table uses the union of policy and managed-preference settings from both profiles. A row can be equal, changed, or missing on one side. Compare is read-only and does not merge values.</p>
     <p>Use Compare when deciding whether two saved profiles are equivalent, whether one profile missed a setting, or whether a policy or preference changed between versions.</p>
   </conbody>

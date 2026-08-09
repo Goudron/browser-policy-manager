@@ -1,4 +1,3 @@
-(() => {
     function readSchemaChannelsCatalog(documentRef = document) {
         const element = documentRef.getElementById("schema-channels-catalog");
         try {
@@ -201,5 +200,4 @@
         },
     };
 
-    window.BPMProfilesUtils = utils;
-})();
+    export { utils };

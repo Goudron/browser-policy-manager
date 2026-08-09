@@ -16,7 +16,9 @@ def _contract() -> dict:
     return json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
 
-def test_rag_knowledge_contract_is_architecture_only_and_preserves_current_runtime_boundary() -> None:
+def test_rag_knowledge_contract_is_architecture_only_and_preserves_current_runtime_boundary() -> (
+    None
+):
     contract = _contract()
 
     assert contract["schema_version"] == 1
@@ -26,7 +28,10 @@ def test_rag_knowledge_contract_is_architecture_only_and_preserves_current_runti
     assert contract["status"] == "accepted-architecture-only"
     assert contract["locales"] == LOCALES
     assert contract["implementation_boundary"]["implemented_now"] is False
-    assert "remains the active runtime contract" in contract["implementation_boundary"]["current_lexical_contract"]
+    assert (
+        "remains the active runtime contract"
+        in contract["implementation_boundary"]["current_lexical_contract"]
+    )
     chat_boundary = contract["chat_retrieval_boundary"]
     assert "explicitly enabled user chat" in chat_boundary["entrypoint"]
     assert "independent" in chat_boundary["ordinary_search"]
@@ -36,7 +41,10 @@ def test_rag_knowledge_contract_is_architecture_only_and_preserves_current_runti
     external = contract["optional_external_evidence"]
     assert external["default"] == "disabled"
     assert "explicit user opt-in" in external["activation"]
-    assert "never enter local chunks, embeddings, indexes, model training" in external["local_corpus_boundary"]
+    assert (
+        "never enter local chunks, embeddings, indexes, model training"
+        in external["local_corpus_boundary"]
+    )
     assert "labelled external citation" in external["citation_rule"]
 
 
@@ -68,12 +76,24 @@ def test_rag_chunk_schema_has_stable_ids_and_complete_provenance_metadata() -> N
     chunking = _contract()["chunking"]
 
     assert chunking["chunk_schema_version"] == "rag-chunk-v1"
-    assert chunking["stable_id"]["format"] == "ragc-v1:{locale}:{topic_id}:{anchor_id_or_root}:{ordinal}"
+    assert (
+        chunking["stable_id"]["format"]
+        == "ragc-v1:{locale}:{topic_id}:{anchor_id_or_root}:{ordinal}"
+    )
     assert "neither content hashes nor model identifiers" in chunking["stable_id"]["rule"]
     assert set(chunking["required_metadata"]) >= {
-        "chunk_id", "locale", "topic_id", "anchor_id_or_root", "published_url",
-        "source_revision", "source_sha256", "manifest_sha256", "documentation_version",
-        "bpm_version", "provenance_class", "text_normalization_revision",
+        "chunk_id",
+        "locale",
+        "topic_id",
+        "anchor_id_or_root",
+        "published_url",
+        "source_revision",
+        "source_sha256",
+        "manifest_sha256",
+        "documentation_version",
+        "bpm_version",
+        "provenance_class",
+        "text_normalization_revision",
     }
     boundaries = " ".join(chunking["boundaries"])
     assert "exactly one locale" in boundaries
@@ -87,9 +107,15 @@ def test_rag_embedding_compatibility_and_rebuilds_fail_closed_and_are_complete()
 
     assert compatibility["selection_status"] == "No embedding model is selected by this task."
     assert set(compatibility["required_compatibility_key"]) >= {
-        "chunk_schema_version", "text_normalization_revision", "embedding_model_id",
-        "embedding_model_revision_or_checksum", "embedding_dimension", "vector_normalization",
-        "distance_metric", "locale", "source_manifest_sha256",
+        "chunk_schema_version",
+        "text_normalization_revision",
+        "embedding_model_id",
+        "embedding_model_revision_or_checksum",
+        "embedding_dimension",
+        "vector_normalization",
+        "distance_metric",
+        "locale",
+        "source_manifest_sha256",
     }
     rules = " ".join(compatibility["rules"])
     assert "mixed keys are rejected" in rules

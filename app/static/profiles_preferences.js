@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         wizardPreferenceSections = [],
@@ -7,6 +6,7 @@
         wizardPreferenceEntryManagedKeys = [],
         dependencies = {},
         state = {},
+        components = {},
     }) {
         const {
             t,
@@ -21,6 +21,11 @@
             toEditorValue,
             setStatus,
         } = dependencies;
+        const {
+            createPreferenceRows,
+            createPreferenceState,
+            createPreferenceViews,
+        } = components;
 
         const wizardPreferenceRowTemplateEl = documentRef.getElementById("wizard-preference-row-template");
         const wizardPreferencesKnownListEl = documentRef.getElementById("wizard-preferences-known-list");
@@ -40,7 +45,7 @@
             ]),
         );
 
-        const rowHelpers = window.BPMProfilesPreferenceRows.create({
+        const rowHelpers = createPreferenceRows({
             dependencies: {
                 t,
                 escapeHtml,
@@ -50,7 +55,7 @@
             },
         });
 
-        const preferenceState = window.BPMProfilesPreferenceState.create({
+        const preferenceState = createPreferenceState({
             documentRef,
             wizardPreferenceSections,
             wizardKnownPreferenceIndex,
@@ -70,7 +75,7 @@
             rowHelpers,
         });
 
-        const preferenceViews = window.BPMProfilesPreferenceViews.create({
+        const preferenceViews = createPreferenceViews({
             documentRef,
             wizardPreferenceSections,
             wizardKnownPreferences,
@@ -144,5 +149,4 @@
         };
     }
 
-    window.BPMProfilesPreferences = { create };
-})();
+    export { create };

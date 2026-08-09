@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-maintain-local-documentation-assistant" xml:lang="fr" audience="administrator devops security-reviewer" product="bpm-0-9-1" platform="linux">
-  <title>Maintenir la limite de l’assistant de documentation dans BPM 0.9.3</title>
+  <title>Maintenir la limite de l’assistant de documentation dans BPM 0.9.4</title>
   <shortdesc>Conservez l’exactitude de l’avis d’entraînement localisé et de la limite avec la recherche déterministe lors de la maintenance de la documentation BPM.</shortdesc>
   <taskbody>
     <prereq><p>Préparez la révision des sources BPM approuvée et le flux de publication de la documentation.</p></prereq>
-    <context><p>La version 0.9.3 ne contient aucun modèle local, artefact de modèle, génération RAG, magasin d’embeddings, magasin de citations ou fournisseur de sources externes à maintenir. Ne créez pas d’état de maintenance pour des fonctions non livrées dans cette version.</p></context>
+    <context><p>La version 0.9.4 ne contient aucun modèle local, artefact de modèle, génération RAG, magasin d’embeddings, magasin de citations ou fournisseur de sources externes à maintenir. Ne créez pas d’état de maintenance pour des fonctions non livrées dans cette version.</p></context>
     <steps>
       <step><cmd>Appliquez la révision BPM approuvée et régénérez la documentation.</cmd><info><p>Utilisez le flux documentaire normal, y compris <codeph>make docs-install-dev</codeph> pour préparer un environnement de développement.</p></info></step>
       <step><cmd>Ouvrez la documentation publiée dans chaque langue prise en charge.</cmd><info><p>Vérifiez l’entrée de l’assistant et le fonctionnement indépendant de la recherche déterministe.</p></info></step>
       <step><cmd>Envoyez une question dans chaque langue.</cmd><info><p>Vérifiez l’avis propre à la langue et l’absence de réponse, source, citation, affirmation externe ou installation de modèle.</p></info></step>
-      <step><cmd>N’exécutez aucune commande d’installation de modèle ou de génération RAG pour 0.9.3.</cmd><info><p>Elles appartiennent à une version ultérieure et ne constituent pas une récupération de l’avis d’entraînement.</p></info></step>
+      <step><cmd>N’exécutez aucune commande d’installation de modèle ou de génération RAG pour 0.9.4.</cmd><info><p>Elles appartiennent à une version ultérieure et ne constituent pas une récupération de l’avis d’entraînement.</p></info></step>
       <step><cmd>Consignez la révision de la documentation et le résultat de la vérification.</cmd><info><p>Traitez tout écart entre l’avis publié et la limite de recherche déterministe comme un défaut de documentation.</p></info></step>
     </steps>
     <result><p>Le portail publié conserve un avis localisé dans le chat et un chemin distinct vers les informations actuelles grâce à la recherche déterministe.</p></result>

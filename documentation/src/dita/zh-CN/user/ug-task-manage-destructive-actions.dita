@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-manage-destructive-actions" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>安全管理破坏性行为</title>
-  <shortdesc>故意取消或确认存档、恢复、重置、删除和永久删除操作。</shortdesc>
+  <shortdesc>故意<uicontrol>取消</uicontrol>或确认存档、恢复、重置、删除和永久删除操作。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、<uicontrol>库</uicontrol>、<uicontrol>所有设置</uicontrol>、引导、JSON 或比较表面可用。</p></prereq>
     <context><p>破坏性操作可以隐藏配置文件、删除设置、重置值或在确认后永久删除行。</p></context>
     <steps>
       <step><cmd>在确认之前阅读操作标签和受影响的配置文件或设置。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
-      <step><cmd>如果可见配置文件、生命周期状态、架构通道或源属性与预期目标不匹配，则取消。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>如果可见配置文件、生命周期状态、架构通道或源属性与预期目标不匹配，则<uicontrol>取消</uicontrol>。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>对于永久删除，确认不再需要导出、比较和审查。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
-      <step><cmd>确认后，等待状态消息并刷新库或编辑器一次，然后再重复操作。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
+      <step><cmd>确认后，等待状态消息并刷新<uicontrol>库</uicontrol>或编辑器一次，然后再重复操作。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
-    <result><p>该操作要么被安全取消，要么以可见的状态和可理解的影响完成。</p></result>
-    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <result><p>该操作要么被安全<uicontrol>取消</uicontrol>，要么以可见的状态和可理解的影响完成。</p></result>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从<uicontrol>库</uicontrol>中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-archive-profile"/>

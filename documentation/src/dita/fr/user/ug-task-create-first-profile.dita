@@ -5,9 +5,9 @@
   <shortdesc>Démarrez une nouvelle ébauche de profil guidé à partir de la bibliothèque lorsqu'aucun profil enregistré ne peut être réutilisé.</shortdesc>
   <taskbody>
     <prereq><p>Vous êtes dans la bibliothèque et souhaitez créer un nouveau profil plutôt que d'ouvrir ou de dupliquer un profil existant.</p></prereq>
-    <context><p>L'action de création ouvre un brouillon Éditeur guidé. Le brouillon devient un profil enregistré uniquement après l'avoir enregistré.</p></context>
+    <context><p>L'action de création ouvre un brouillon <uicontrol>Éditeur guidé</uicontrol>. Le brouillon devient un profil enregistré uniquement après l'avoir enregistré.</p></context>
     <steps>
-      <step><cmd>Choisissez l'action Bibliothèque pour créer un nouveau profil.</cmd><info><p>Résultat attendu : BPM ouvre le Éditeur guidé pour un nouveau brouillon.</p></info></step>
+      <step><cmd>Choisissez l'action <uicontrol>Bibliothèque</uicontrol> pour créer un nouveau profil.</cmd><info><p>Résultat attendu : BPM ouvre le <uicontrol>Éditeur guidé</uicontrol> pour un nouveau brouillon.</p></info></step>
       <step><cmd>Choisissez l'objectif du profil, le canal de schéma et les options de démarrage affichés par l'éditeur.</cmd><info><p>Le canal de schéma affecte les contrôles disponibles et le comportement de validation.</p></info></step>
       <step><cmd>Enregistrez le brouillon lorsqu'il porte le nom et les paramètres initiaux souhaités.</cmd><info><note type="warning">La fermeture d'un brouillon non enregistré peut entraîner la perte des modifications apportées uniquement au brouillon.</note></info></step>
     </steps>

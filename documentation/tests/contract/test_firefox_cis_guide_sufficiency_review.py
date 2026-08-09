@@ -11,7 +11,9 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 REVIEW = REPOSITORY_ROOT / "docs/architecture/firefox-cis-guide-sufficiency-review-0.9.1.json"
 PROTOCOL = DOCUMENTATION_ROOT / "config/documentation-sufficiency-review-protocol-0.9.1.json"
-FIREFOX_INVENTORY = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+FIREFOX_INVENTORY = (
+    REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+)
 CIS_INVENTORY = REPOSITORY_ROOT / "docs/architecture/cis-documentation-inventory-0.9.0.json"
 FIREFOX_INDEX = DOCUMENTATION_ROOT / "src/generated/firefox/firefox-policy-skeletons-0.9.0.json"
 CIS_INDEX = DOCUMENTATION_ROOT / "src/generated/cis/cis-recommendation-skeletons-0.9.0.json"
@@ -61,7 +63,13 @@ def test_each_review_item_resolves_every_protocol_field_and_evidence_path() -> N
         assert item["review_disposition"] == "pass"
         assert set(item["evidence_type"]) <= allowed_evidence
         assert "static_source_simulation" in item["evidence_type"]
-        for field in required - {"review_id", "guide_id", "topic_id", "locale_scope", "review_disposition"}:
+        for field in required - {
+            "review_id",
+            "guide_id",
+            "topic_id",
+            "locale_scope",
+            "review_disposition",
+        }:
             assert item[field], (item["review_id"], field)
         for artifact in item["evidence_artifact"]:
             assert (REPOSITORY_ROOT / artifact).is_file(), artifact
@@ -88,7 +96,9 @@ def test_firefox_baseline_and_representative_policy_facts_match_generated_source
         "schema_valid_example_count": index["example_count"],
     }
     assert by_id["DisableTelemetry"]["channel_scope"] == "both"
-    assert {entry["value_type"] for entry in by_id["DisableTelemetry"]["channels"].values()} == {"boolean"}
+    assert {entry["value_type"] for entry in by_id["DisableTelemetry"]["channels"].values()} == {
+        "boolean"
+    }
     assert by_id["Homepage"]["channel_scope"] == "both"
     assert {entry["value_type"] for entry in by_id["Homepage"]["channels"].values()} == {"object"}
     assert by_id["Preferences"]["channels"]["release-153"]["ui"]["preserve_unknown_fields"] is True
@@ -101,12 +111,12 @@ def test_managed_preference_sample_and_cis_l2_mapping_agree() -> None:
     firefox_inventory = _json(FIREFOX_INVENTORY)
     cis_inventory = _json(CIS_INVENTORY)
     preference = next(
-        item for item in firefox_inventory["managed_preferences"]
+        item
+        for item in firefox_inventory["managed_preferences"]
         if item["preference_id"] == "network.IDN_show_punycode"
     )
     recommendation = next(
-        item for item in cis_inventory["recommendations"]
-        if item["recommendation_id"] == "1.1.18.9"
+        item for item in cis_inventory["recommendations"] if item["recommendation_id"] == "1.1.18.9"
     )
     target = recommendation["targets"][0]
 
@@ -116,7 +126,11 @@ def test_managed_preference_sample_and_cis_l2_mapping_agree() -> None:
     assert target["target_id"] == preference["preference_id"]
     assert target["value"] == {"Status": "locked", "Type": "boolean", "Value": True}
     assert recommendation["level"] == 2
-    assert recommendation["generated_layers"] == ["cis-l2.esr-140.13", "cis-l2.esr-153.0", "cis-l2.release-153"]
+    assert recommendation["generated_layers"] == [
+        "cis-l2.esr-140.13",
+        "cis-l2.esr-153.0",
+        "cis-l2.release-153",
+    ]
 
 
 def test_cis_counts_manual_review_and_provenance_only_states_match_sources() -> None:

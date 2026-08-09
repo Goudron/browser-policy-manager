@@ -2,10 +2,11 @@
   "schema_version": 1,
   "contract_id": "bpm-future-distribution-documentation-layout-0.9.3",
   "backlog_item": "BPM093-M14-07",
-  "target_bpm_version": "0.9.3",
+  "target_bpm_version": "0.9.4",
   "status": "implemented-and-delivered",
   "delivery_root": "distributions/documentation",
   "release_directory": "{bpm_version}",
+  "known_promoted_versions": ["0.9.3", "0.9.4"],
   "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
   "guides": [
     {

@@ -2,11 +2,11 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-language-detection-fallback" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>语言检测和回退</title>
-  <shortdesc>了解 BPM 如何选择受支持的区域设置以及当浏览器语言不受支持时会发生什么情况。</shortdesc>
+  <shortdesc>选择“<uicontrol>浏览器</uicontrol>”后，BPM 会将浏览器首选项中的第一个语言匹配到六种受支持的语言环境之一；如果第一个语言不受支持，界面将显示为英语。</shortdesc>
   <conbody>
     <section id="a-supported-locales"><title>支持的语言环境</title><p>BPM 支持 en、ru、de、zh-CN、fr 和 es-ES 作为一级界面语言环境。</p></section>
-    <section id="a-system-language"><title>系统语言</title><p>当系统语言与受支持的 BPM 区域设置匹配时，系统语言将遵循浏览器语言。</p></section>
-    <section id="a-fallback"><title>后备</title><p>如果浏览器语言不受支持，BPM 会回退到受支持的区域设置，而不是显示部分字符串。</p></section>
+    <section id="a-system-language"><title>浏览器语言的来源和匹配</title><p>选择“<uicontrol>浏览器</uicontrol>”时，BPM 会按浏览器首选项顺序采用 <codeph>navigator.languages</codeph> 中第一个非空的语言标记。只有当该列表没有提供语言标记时，BPM 才会使用 <codeph>navigator.language</codeph>。它会将下划线改为连字符，并且不区分大小写。匹配规则接受 en 和 en-*、ru 和 ru-*、de 和 de-*、zh-CN、zh-Hans、zh-Hans-* 和 zh、fr 和 fr-*，以及 es-ES、es 和 es-*。不符合这些规则的语言标记会解析为 en。</p></section>
+    <section id="a-fallback"><title>回退和保存的选择</title><p>BPM 当前为每种受支持的语言环境提供目录。如果已解析的目标语言环境目录不可用，BPM 会依次使用该语言环境声明的回退、英语以及第一个启用的目录。每种非英语语言环境都会回退到英语。因此，在当前提供的六个目录中，第一个浏览器语言不受支持时会显示英语界面。显式选择的语言会保存为 <codeph>bpm-lang-mode</codeph>；“<uicontrol>浏览器</uicontrol>”保存的是跟随浏览器的模式，而不是固定的已解析语言环境，因此 BPM 加载时会重新确定。</p></section>
     <section id="a-content-parity"><title>内容奇偶校验</title><p>即使 UI 标签因语言而异，产品文档和屏幕截图也必须在所有六种语言环境中保持内容等效。</p></section>
   </conbody>
   <related-links>

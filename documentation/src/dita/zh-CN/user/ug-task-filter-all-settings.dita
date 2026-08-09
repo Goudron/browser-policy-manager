@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-filter-all-settings" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>筛选“所有设置”列表</title>
-  <shortdesc>按已配置、可用、引导覆盖、仅限所有设置、无效、已弃用、原始或未知状态进行过滤。</shortdesc>
+  <shortdesc>按已配置、可用、引导覆盖、仅限<uicontrol>所有设置</uicontrol>、无效、已弃用、原始或未知状态进行过滤。</shortdesc>
   <taskbody>
-    <prereq><p>打开带有可见设置列表的 所有设置。</p></prereq>
-    <context><p>状态过滤器根据用户需要做出的决策缩小大量库存的范围。它们与源过滤器不同，源过滤器解释值的来源。</p></context>
+    <prereq><p>打开带有可见设置列表的 <uicontrol>所有设置</uicontrol>。</p></prereq>
+    <context><p>状态过滤器根据用户需要做出的决策缩小大量<uicontrol>库</uicontrol>存的范围。它们与源过滤器不同，源过滤器解释值的来源。</p></context>
     <steps>
-      <step><cmd>打开列表过滤器工具栏。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>选择与任务匹配的状态过滤器：已配置、可用、引导覆盖、仅限所有设置、无效、已弃用、原始或未知。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>检查过滤后的计数和代表行。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开列表过滤器工具栏。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择与任务匹配的状态过滤器：已配置、可用、引导覆盖、仅限<uicontrol>所有设置</uicontrol>、无效、已弃用、原始或未知。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>检查过滤后的计数和代表行。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>在应用不相关的编辑之前清除状态过滤器。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>该列表仅显示所选状态的设置。</p></result>

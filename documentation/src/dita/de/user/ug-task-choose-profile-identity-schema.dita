@@ -4,7 +4,7 @@
   <title>Profilidentität und Schemakanal festlegen</title>
   <shortdesc>Wählen Sie den gespeicherten Profilnamen und den Firefox-Schemakanal aus, bevor Sie die geführten Einstellungen konfigurieren.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein neues oder gespeichertes Profil in Geführter Editor.</p></prereq>
+    <prereq><p>Öffnen Sie ein neues oder gespeichertes Profil in <uicontrol>Geführter Editor</uicontrol>.</p></prereq>
     <context><p>Verwenden Sie Schritt 1, um den Namen und den Schemakanal festzulegen. Beides bestimmt die Validierung und die verfügbaren Steuerelemente.</p></context>
     <steps>
       <step><cmd>Bestätigen Sie, dass Sie den beabsichtigten Profilentwurf bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>

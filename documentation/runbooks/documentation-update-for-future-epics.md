@@ -6,6 +6,14 @@ deployment boundary, locale-visible UI term, or documentation presentation.
 Apply it before the final quality milestone. It supplements, rather than
 replaces, the focused topic, localization, inventory, and publishing runbooks.
 
+`documentation/tools/build_docs.py` is the stable command façade. Its owned
+implementation is split across `documentation/buildlib/`: `sources` validates
+DITA/source ownership, `catalog` and `portal` build navigation/search and site
+data, `artifacts` and `publishing` stage and promote artifacts, `pdf` owns print
+generation/verification, and `lifecycle`/`shared` provide the common progress
+and atomic handoff rules. Do not add a second coordinator or hand-edit generated
+site, search, manifest, package, or PDF output.
+
 ## Scope and source of truth
 
 1. Identify the affected reader and guide: User Guide, Firefox Policy Guide,
@@ -79,19 +87,25 @@ Do not expose model weights, prompts, embeddings, vector generations, chat
 transcripts, provider configuration, or external responses as product-guide
 content.
 
-## Required checks
+## Required checks and release evidence
 
-Run the narrowest affected contract first, then the complete documentation
-release checks when a guide map, localization, presentation, search source, or
-PDF changes:
+Run the narrowest affected contract first. Use `make docs-fast-check` with the
+changed documentation paths for a bounded source/tooling check; it is not a
+release substitute. When a guide map, localization, presentation, search source,
+package, or PDF changes, run the complete documentation release checks:
 
 ```bash
-./.venv/bin/python documentation/tools/validate_metadata.py
-./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_localized_heading_style.py
+make docs-fast-check DOCS_CHANGED='documentation/src/dita/en/user/example.dita'
+make test-docs-contract
 make docs-validate
 make docs-release-check
 make docs-reproducibility-check
 ```
+
+Record the exact completed commands and their generated evidence, including
+locale, guide, manifest/search target, PDF verification, package verification,
+and the installed-artifact result. An incomplete audit is a release blocker;
+do not substitute a narrative status statement for a failing or unrun gate.
 
 For any changed user or administrator guide, rebuild both guide PDFs in every
 published locale and verify them. Inspect at least the title page, contents,
@@ -108,6 +122,27 @@ Keep commands, payloads, and other multi-line examples in `codeblock`
 elements; do not remove their technical values or replace them with
 screenshots. The renderer must run headless with background networking
 disabled and must not start a BPM development server.
+
+For every PDF change, keep the M11 print contract fail-closed. The title page
+must state the actual final page count and place the visible copyright at the
+bottom. Build that copyright from the same UI-footer template and locale
+catalog values: Russian uses `Валерий Ледовской` and `Лицензия`; every other
+published locale uses `Valery Ledovskoy` and `Licensed under`. The
+release-scoped `ui_footer_year` in the PDF generation contract freezes the
+same year range that the rendered UI shows for that release. Every page after
+the title page must carry its actual PDF sequence number, centered at the
+bottom for printed copies.
+
+The contents is a binary navigation contract, not a visual list. Use the
+two-pass Chromium render to measure the real page of every stable section and
+topic destination, then render that number and an internal link into the
+contents entry. The final verifier must use `qpdf` structure data to prove that
+each displayed destination page equals the actual named-destination page and
+that every destination has a link annotation. It must use positioned
+`pdftotext` output to prove the localized page-count text, bottom title-page
+copyright, absence of a page number on page 1, and one centered, correct page
+number on every later page. Preserve zero-gap CJK text such as `页数：103`
+when reconstructing positioned lines. Never edit generated PDFs manually.
 
 ```bash
 make docs-pdf-build
@@ -135,5 +170,8 @@ as part of the `make docs-install-dev` handoff.
   unsafe, and unshipped reader claims.
 - DITA, generated site, both guide PDFs in all six locales, delivery directory,
   and documentation package have been rebuilt only from source and verified.
+- PDF title-page totals, localized UI-footer copyright, linked/page-numbered
+  contents, named destinations, and printed page numbers pass binary
+  verification and an independent 13-file SHA-256 reproducibility comparison.
 - The epic backlog records this runbook in its documentation milestone and the
   successful `make docs-install-dev` handoff.

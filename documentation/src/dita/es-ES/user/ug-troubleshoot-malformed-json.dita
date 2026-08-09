@@ -7,7 +7,7 @@
     <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
     <context><p>JSON con formato incorrecto es un problema de sintaxis: BPM no puede analizar el documento lo suficiente como para validar nombres o valores de políticas.</p></context>
     <steps>
-      <step><cmd>Mantenga abierto el error Editor JSON o de importación para que la línea, columna o mensaje de análisis permanezca visible.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Mantenga abierto el error <uicontrol>Editor JSON</uicontrol> o de importación para que la línea, columna o mensaje de análisis permanezca visible.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Verifique las llaves, corchetes, comas, comillas y caracteres de escape más cercanos a la ubicación informada.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Formatee o valide el documento nuevamente después de la corrección de sintaxis.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Continúe con la validación del esquema solo después de que JSON se analice correctamente.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>

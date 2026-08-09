@@ -4,8 +4,8 @@
   <title>Policies and managed preferences</title>
   <shortdesc>BPM separates Firefox Enterprise policies from managed preference values while keeping both in one profile.</shortdesc>
   <conbody>
-    <p>Policies are named Firefox Enterprise controls such as browser behavior, access, permissions, or feature settings. Managed preferences are preference keys with values and optional lock behavior.</p>
-    <p>Guided editor covers common policy goals. All settings exposes the broader supported catalog. JSON editor shows the exact document boundary used for import and export.</p>
+    <p>Policies are named Firefox Enterprise controls such as browser behavior, access, permissions, or feature settings. <uicontrol>Managed preferences</uicontrol> are preference keys with values and optional lock behavior.</p>
+    <p><uicontrol>Guided editor</uicontrol> covers common policy goals. <uicontrol>All settings</uicontrol> exposes the broader supported catalog. <uicontrol>JSON editor</uicontrol> shows the exact document boundary used for import and export.</p>
     <p>Policy-by-policy reference details belong to the Firefox Policy Guide; this User Guide explains how a user reaches and safely edits those controls in BPM.</p>
   </conbody>
 </concept>

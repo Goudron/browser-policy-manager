@@ -7,7 +7,7 @@
     <prereq><p>L'examen de l'étape 6 est terminé et les avertissements de validation sont compris.</p></prereq>
     <context><p>Sauvegarde des enregistrements du profil BPM ; le téléchargement fournit la version révisée pour le transfert de la stratégie.</p></context>
     <steps>
-      <step><cmd>Choisissez Enregistrer pour stocker l'état actuel du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
+      <step><cmd>Choisissez <uicontrol>Enregistrer</uicontrol> pour stocker l'état actuel du profil.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Vérifiez que l'état enregistré apparaît dans la bibliothèque avant de fermer l'éditeur.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Choisissez l'action de téléchargement ou d'exportation nécessaire au transfert.</cmd><info><p>Résultat attendu : le profil guidé reste cohérent.</p></info></step>
       <step><cmd>Partagez le fichier exporté avec le contexte nécessaire pour identifier le canal de schéma et l'objectif du profil.</cmd><info><note type="warning">La modification des contrôles dépendants du schéma peut rendre les valeurs invalides pour le canal Firefox sélectionné.</note></info></step>

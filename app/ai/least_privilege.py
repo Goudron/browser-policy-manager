@@ -20,9 +20,7 @@ class LeastPrivilegeViolation(ValueError):
         self.code = code
 
 
-def require_managed_path(
-    path: Path, root: Path, *, require_regular: bool = False
-) -> Path:
+def require_managed_path(path: Path, root: Path, *, require_regular: bool = False) -> Path:
     """Accept only a non-symlink child path with no traversal or shell-shaped component."""
 
     candidate = Path(path)
@@ -83,7 +81,9 @@ class AssistantRequestMetadata:
 class AssistantRequestGuard:
     """Fail closed for the future same-origin JSON assistant surface; no route is added here."""
 
-    def __init__(self, expected_origin: str, *, maximum_bytes: int = ASSISTANT_MAX_REQUEST_BYTES) -> None:
+    def __init__(
+        self, expected_origin: str, *, maximum_bytes: int = ASSISTANT_MAX_REQUEST_BYTES
+    ) -> None:
         parsed = urlsplit(expected_origin)
         if (
             parsed.scheme not in {"http", "https"}
@@ -112,7 +112,9 @@ class AssistantRequestGuard:
             raise LeastPrivilegeViolation("assistant_host_mismatch")
         if request.sec_fetch_site is not None and request.sec_fetch_site != "same-origin":
             raise LeastPrivilegeViolation("assistant_cross_origin")
-        media_type = request.content_type.split(";", 1)[0].strip().casefold() if request.content_type else ""
+        media_type = (
+            request.content_type.split(";", 1)[0].strip().casefold() if request.content_type else ""
+        )
         if media_type != "application/json":
             raise LeastPrivilegeViolation("assistant_invalid_content_type")
         if request.content_length is not None and (

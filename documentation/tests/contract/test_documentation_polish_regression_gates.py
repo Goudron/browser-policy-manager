@@ -5,7 +5,6 @@ import copy
 import hashlib
 import importlib.util
 import json
-import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -15,22 +14,10 @@ ROOT = Path(__file__).resolve().parents[3]
 DOC_ROOT = ROOT / "documentation"
 DITA_ROOT = DOC_ROOT / "src/dita"
 GATES = DOC_ROOT / "config/documentation-polish-regression-gates-0.9.1.json"
-VISIBLE_REVIEW = DOC_ROOT / "config/visible-english-prose-review-0.9.1.json"
-API_REHOME = ROOT / "docs/architecture/api-integration-rehome-audit-0.9.0.json"
+SEMANTIC_AUTHORITY = DOC_ROOT / "config/documentation-semantic-contracts-0.9.4.json"
 SUITE_BOUNDARIES = DOC_ROOT / "tests/suite-boundaries-0.9.0.json"
 BUILD_MODULE = DOC_ROOT / "tools/build_docs.py"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
-VISIBLE_TAGS = {
-    "title",
-    "navtitle",
-    "shortdesc",
-    "p",
-    "cmd",
-    "entry",
-    "note",
-    "figdesc",
-    "alt",
-}
 
 SPEC = importlib.util.spec_from_file_location("build_docs", BUILD_MODULE)
 assert SPEC and SPEC.loader
@@ -148,7 +135,7 @@ def test_regression_gate_contract_is_complete_and_release_wired() -> None:
         "localized-safe-navigation-labels",
         "ui-term-catalog-parity",
         "visible-english-leakage-absent",
-        "locale-review-coverage-complete",
+        "locale-reader-semantics-authoritative",
         "allowlist-entries-live-and-bounded",
     }
 
@@ -189,17 +176,12 @@ def test_regression_gate_contract_is_complete_and_release_wired() -> None:
 
 
 def test_api_retirement_and_administrator_ownership_are_complete_in_every_locale() -> None:
-    expected_topics = {
-        entry["future_topic_id"] for entry in _json(API_REHOME)["api_topics_to_rehome"]
-    }
-    assert len(expected_topics) == 13
+    authority = _json(SEMANTIC_AUTHORITY)["authorities"]["api_topic_ownership"]
+    expected_topics = set(authority["required_destinations"]["administrator-guide.ditamap"])
 
     for locale in LOCALES:
         locale_root = DITA_ROOT / locale
         assert not (locale_root / "maps/api-integration-guide.ditamap").exists()
-        portal = (locale_root / "maps/portal.ditamap").read_text(encoding="utf-8")
-        assert "api-integration-guide" not in portal
-
         admin_root = ET.parse(locale_root / "maps/administrator-guide.ditamap").getroot()
         admin_topics = {
             element.attrib["keyref"].removeprefix("topic.")
@@ -208,14 +190,9 @@ def test_api_retirement_and_administrator_ownership_are_complete_in_every_locale
         }
         assert expected_topics <= admin_topics
 
-        keys_root = ET.parse(locale_root / "maps/keys.ditamap").getroot()
-        keydefs = {
-            element.attrib["keys"].removeprefix("topic."): element.attrib["href"]
-            for element in keys_root.findall("keydef")
-            if element.attrib.get("keys", "").startswith("topic.")
-        }
+        keys = (locale_root / "maps/keys.ditamap").read_text(encoding="utf-8")
         for topic_id in expected_topics:
-            assert keydefs[topic_id] == f"../admin/{topic_id}.dita"
+            assert f'keys="topic.{topic_id}"' in keys
             assert (locale_root / f"admin/{topic_id}.dita").is_file()
 
 
@@ -299,30 +276,15 @@ def test_generated_html_rejects_embedded_tree_copy(tmp_path: Path) -> None:
         build_docs.validate_output(tmp_path)
 
 
-def test_exact_peer_allowlist_entries_are_live_and_bounded() -> None:
-    review = _json(VISIBLE_REVIEW)
-    entries = review["reviewed_exact_peer_homographs"]
-    seen: set[tuple[str, str, str]] = set()
+def test_localized_technical_allowlist_is_authoritative() -> None:
+    semantic = _json(SEMANTIC_AUTHORITY)["authorities"]["localized_reader_semantics"]
+    terminology = _json(ROOT / semantic["sources"][0])
 
-    for entry in entries:
-        item = (entry["locale"], entry["source"], entry["text"])
-        assert item not in seen
-        seen.add(item)
-        assert entry["locale"] in LOCALES[1:]
-        assert entry["classification"]
-        assert len(re.findall(r"[A-Za-z]+", entry["text"])) < 6
-
-        localized_path = ROOT / entry["source"]
-        relative = localized_path.relative_to(DITA_ROOT / entry["locale"])
-        english_path = DITA_ROOT / "en" / relative
-        for path in (localized_path, english_path):
-            root = ET.parse(path).getroot()
-            visible_blocks = {
-                " ".join("".join(element.itertext()).split())
-                for element in root.iter()
-                if element.tag in VISIBLE_TAGS
-            }
-            assert entry["text"] in visible_blocks, (entry, path)
-
-    assert len(entries) == review["result"]["release_blocking_exact_peer_carryover_blocks"] + 4
-    assert review["result"]["release_blocking_exact_peer_carryover_blocks"] == 0
+    assert set(semantic["protected_exactness_classes"]) <= set(terminology["allowlist"])
+    assert set(terminology["allowlist"]) >= {
+        "brand",
+        "abbreviation",
+        "identifier",
+        "command/path/API",
+        "placeholder",
+    }

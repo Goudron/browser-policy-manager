@@ -1,4 +1,3 @@
-(() => {
     function create({ dependencies = {} }) {
         const { t, textToList, parseBooleanSelectValue } = dependencies;
 
@@ -287,5 +286,4 @@
         };
     }
 
-    window.BPMProfilesSchemaShellValueIO = { create };
-})();
+    export { create };

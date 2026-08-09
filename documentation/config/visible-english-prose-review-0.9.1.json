@@ -63,9 +63,9 @@
       "de": 8,
       "zh-CN": 5,
       "fr": 5,
-      "es-ES": 5
+      "es-ES": 6
     },
-    "remaining_high_signal_candidate_total": 28,
+    "remaining_high_signal_candidate_total": 29,
     "remaining_candidate_disposition": "Reviewed allowlisted technical literals or locale-language false positives only.",
     "temporary_translation_markers_remaining": 0
   },

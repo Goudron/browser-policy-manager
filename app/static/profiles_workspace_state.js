@@ -1,4 +1,3 @@
-(() => {
     function isPlainObject(value) {
         return Boolean(value) && typeof value === "object" && !Array.isArray(value);
     }
@@ -99,11 +98,10 @@
         };
     }
 
-    window.BPMProfilesWorkspaceState = {
+    export {
         buildCreatePayload,
         buildUpdatePayload,
         getWorkflowLifecycleState,
         normalizeValue,
         snapshotToString,
     };
-})();

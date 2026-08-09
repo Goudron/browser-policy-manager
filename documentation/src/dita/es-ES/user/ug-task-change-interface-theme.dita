@@ -5,15 +5,15 @@
   <shortdesc>Seleccione el tema del sistema, claro u oscuro sin cambiar el contenido del perfil.</shortdesc>
   <taskbody>
     <prereq><p>Abra BPM o el portal de documentación del producto en el navegador.</p></prereq>
-    <context><p>La selección del tema solo afecta a la presentación. BPM y el portal de documentación admiten Sistema, Claro y Oscuro sin cambiar el perfil ni el contenido de la ayuda.</p></context>
+    <context><p>La selección del tema solo afecta a la presentación. BPM y el portal de documentación admiten <uicontrol>Sistema</uicontrol>, <uicontrol>Claro</uicontrol> y <uicontrol>Oscuro</uicontrol> sin cambiar el perfil ni el contenido de la ayuda.</p></context>
     <steps>
-      <step><cmd>Abra el selector de tema en el encabezado de la página actual.</cmd><info><p>Resultado esperado: Sistema, Claro y Oscuro están disponibles sin cambiar la dirección, el idioma ni el perfil seleccionado.</p></info></step>
-      <step><cmd>Elija Sistema, Claro u Oscuro.</cmd><info><p>Resultado esperado: Sistema sigue la preferencia del sistema operativo; Claro y Oscuro aplican explícitamente el modo a las interfaces compatibles de BPM y de la documentación.</p></info></step>
+      <step><cmd>Abra el selector de tema en el encabezado de la página actual.</cmd><info><p>Resultado esperado: <uicontrol>Sistema</uicontrol>, <uicontrol>Claro</uicontrol> y <uicontrol>Oscuro</uicontrol> están disponibles sin cambiar la dirección, el idioma ni el perfil seleccionado.</p></info></step>
+      <step><cmd>Elija <uicontrol>Sistema</uicontrol>, <uicontrol>Claro</uicontrol> u <uicontrol>Oscuro</uicontrol>.</cmd><info><p>Resultado esperado: <uicontrol>Sistema</uicontrol> sigue la preferencia del sistema operativo; <uicontrol>Claro</uicontrol> y <uicontrol>Oscuro</uicontrol> aplican explícitamente el modo a las interfaces compatibles de BPM y de la documentación.</p></info></step>
       <step><cmd>Compruebe los paneles del editor, tablas, notas, bloques de código, indicadores de enfoque y estados de validación.</cmd><info><p>Resultado esperado: el contenido sigue siendo legible; el tema claro de la documentación utiliza superficies principales de color gris claro en lugar de una página blanca pura.</p></info></step>
       <step><cmd>Continúe editando después de confirmar que los datos del perfil no guardados todavía están presentes.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
     <result><p>BPM y la documentación del producto utilizan el tema seleccionado en todas las interfaces compatibles.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>

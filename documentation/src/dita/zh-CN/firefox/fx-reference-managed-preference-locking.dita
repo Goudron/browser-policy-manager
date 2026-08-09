@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="fx-reference-managed-preference-locking" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>托管首选项锁定</title>
-  <shortdesc>托管首选项 通过 Firefox <codeph>Preferences</codeph> 策略导出，需要明确的值、类型和状态审核。</shortdesc>
+  <shortdesc><uicontrol>托管首选项</uicontrol> 通过 Firefox <codeph>Preferences</codeph> 策略导出，需要明确的值、类型和状态审核。</shortdesc>
   <refbody>
-    <section id="a-container-policy"><title>容器策略</title><p>Firefox 将 托管首选项 存储在 <codeph>Preferences</codeph> 下。 BPM 单独记录已知的首选项，但将它们导出为该容器策略中的条目。</p></section>
+    <section id="a-container-policy"><title>容器策略</title><p>Firefox 将 <uicontrol>托管首选项</uicontrol> 存储在 <codeph>Preferences</codeph> 下。 BPM 单独记录已知的首选项，但将它们导出为该容器策略中的条目。</p></section>
     <section id="a-status-values"><title>状态值</title><p><codeph>locked</codeph> 防止用户在 Firefox 支持首选项的情况下进行更改。 <codeph>default</codeph>、<codeph>user</codeph> 和 <codeph>clear</codeph> 具有不同的运行时含义，不应用作同义词。</p></section>
     <section id="a-type-values"><title>类型值</title><p>当 BPM 需要精确的值形状时，将 <codeph>Type</codeph> 设置为 <codeph>boolean</codeph>、<codeph>number</codeph> 或 <codeph>string</codeph>。 <codeph>Value</codeph> 类型必须与声明的类型匹配。</p></section>
     <section id="a-source-conflicts"><title>源冲突</title><p>首选项可以来自预设、CIS 层、导入、手动编辑或原始后备。在锁定之前查看源代码，因为锁定的首选项比未锁定的策略默认值更能推翻用户的期望。</p></section>

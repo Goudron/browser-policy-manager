@@ -48,7 +48,11 @@ def _task_signature(root: ET.Element) -> dict[str, object]:
 def _section_signature(root: ET.Element) -> dict[str, object]:
     body = root.find("refbody") if root.tag == "reference" else root.find("conbody")
     return {
-        "sections": [section.attrib.get("id") for section in body.findall("section")] if body is not None else [],
+        "sections": (
+            [section.attrib.get("id") for section in body.findall("section")]
+            if body is not None
+            else []
+        ),
         "related": [link.attrib["keyref"] for link in root.findall("./related-links/link")],
     }
 
@@ -63,7 +67,9 @@ def test_user_guide_localized_topics_preserve_dita_structure_and_links() -> None
     for english_topic in sorted((DITA_ROOT / "en/user").glob("*.dita")):
         english_root = _root("en", english_topic.name)
         english_signature = (
-            _task_signature(english_root) if english_root.tag == "task" else _section_signature(english_root)
+            _task_signature(english_root)
+            if english_root.tag == "task"
+            else _section_signature(english_root)
         )
 
         for locale in LOCALIZED_LOCALES:
@@ -92,4 +98,6 @@ def test_user_guide_localized_topics_are_not_compact_or_english_fallbacks() -> N
             localized_text = _normalized_text(localized_root)
             assert localized_text != english_text
             assert all(marker not in localized_text for marker in COMPACT_STUB_MARKERS)
-            assert localized_root.findtext("title") != _root("en", english_topic.name).findtext("title")
+            assert localized_root.findtext("title") != _root("en", english_topic.name).findtext(
+                "title"
+            )

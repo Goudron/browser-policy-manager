@@ -52,8 +52,6 @@ creates a profile ID.
 | Firefox ESR 153.0 | `esr-153.0` | Active |
 | Firefox ESR 140.13 | `esr-140.13` | Active |
 
-Bundled schema files live in `app/schemas/policies/`.
-
 The selected schema controls validation, imported-profile normalization, available UI controls,
 and schema-specific behavior. Firefox Release 153 and ESR 153.0 expose the current AI policy
 controls; ESR 140.13 does not. ESR 140.13 and ESR 153.0 are distinct supported channels, and BPM
@@ -123,6 +121,20 @@ GET /api/export/profiles/{id}/firefox/policies.json
 
 JSON import example:
 
+The Firefox file supplied for import is a complete `policies.json` document, not an internal BPM
+`flags` fragment:
+
+```json
+{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}
+```
+
+The API request carries that complete document in its `document` field:
+
 ```json
 {
   "name": "Workstation baseline",
@@ -156,20 +168,11 @@ Export example:
 }
 ```
 
-For migration and breaking-change notes around this contract, see
-[`docs/firefox_policies_json_migration_notes_2026-04-14.md`](docs/firefox_policies_json_migration_notes_2026-04-14.md).
-
 ## Product Documentation Portal
 
-BPM product documentation is authored as DITA topics under `documentation/src/dita/` and published
-as a static, manifest-validated site. The BPM runtime does not import DITA tooling, Java, build
-dependencies, or source topics.
-
-BPM serves an installed static documentation artifact under `/help/`, keeps FastAPI `/docs` for
-OpenAPI, and exposes a locale-aware documentation link from the product header. Contextual help
-links cover the main product surfaces, policy/CIS/import/export/validation targets, and every
-supported policy or known managed preference in All settings. Unsupported, unavailable, or unknown
-settings use localized non-link states instead of broken documentation URLs.
+BPM provides localized product documentation at `/help/` and keeps FastAPI OpenAPI documentation
+at `/docs`. The product header and contextual help links open the relevant documentation topic;
+unavailable settings show a localized non-link state.
 
 The portal uses the same BPM product header and visual language as the application, including the
 single BPM version derived from product metadata. It supports light, dark, and system themes; the
@@ -178,15 +181,9 @@ compact one-line control. Advanced filters are hidden by default and change only
 explicit toggle; search, URL/history hydration, results, and clear preserve that choice.
 
 Documentation search is local, deterministic, and available in English, Russian, German,
-Simplified Chinese, French, and Spanish. The documentation assistant is a separate six-locale
-support-chat surface. In 0.9.3 it returns a localized notice that the local model is still being
-trained; it does not start a model worker, RAG index, generated-answer flow, citation flow, or
-external-source request. Search remains available independently of the assistant.
-
-Navigation is built from one generated source per locale. The independently scrollable sidebar
-opens at the localized Documents root and presents a guide, section, and topic hierarchy where a
-section level is useful. Opening a contextual topic link expands the complete path and activates the
-target topic, while root links expose the top-level guide list.
+Simplified Chinese, French, and Spanish. The separate documentation assistant shows a localized
+training notice; it does not provide generated answers, citations, or external-search results.
+Search remains available independently of the assistant. No provider token or external-source configuration is required.
 
 The portal contains four guide families in all six active locales:
 
@@ -202,14 +199,8 @@ Documentation locales match the runtime UI locale matrix: `en`, `ru`, `de`, `zh-
 BPM UI terminology. The User Guide includes a reviewed minimal set of locale-specific screenshots
 for the Library, Guided editor, All settings, JSON editor, profile comparison, and settings search.
 
-The Administrator/DevOps Guide provides exact source-install command sequences for Ubuntu 26.04
-LTS, Debian 13.5, Fedora Linux 44, Linux Mint 22.3, and the Manjaro stable branch. Windows 10 and
-Windows 11 WSL deployment guidance is available, but actual Windows-host validation is not claimed.
-
-Published search is deterministic, local, offline-capable, and non-AI: no RAG,
-embeddings, vector database, hosted search service, or generated answers are used. The static
-indexes support locale-aware lookup, aliases, bounded typo tolerance, ranking, facets, filters, and
-localized empty-result recovery.
+The Administrator/DevOps Guide covers supported source deployment, operations, API integration,
+troubleshooting, and the current production, high-availability, and reverse-proxy boundaries.
 
 After starting BPM, open the product UI and use the documentation link in the header, or open:
 
@@ -296,68 +287,25 @@ review, troubleshooting, migration checks, and values that are easier to handle 
 
 ## Localization
 
-The primary UI source language is English. Product copy starts from `app/i18n/en.json` and is
-available in the active locale catalogs below.
-
-BPM keeps a six-locale UI matrix:
+The primary UI source language is English. BPM is available in these locales:
 
 | Locale | Native label | Status |
 |---|---|---|
-| `en` | English | Active source catalog |
-| `ru` | Русский | Active localized catalog |
-| `de` | Deutsch | Active localized catalog |
-| `zh-CN` | 简体中文 | Active localized catalog |
-| `fr` | Français | Active localized catalog |
-| `es-ES` | Español | Active localized catalog |
+| `en` | English | Available |
+| `ru` | Русский | Available |
+| `de` | Deutsch | Available |
+| `zh-CN` | 简体中文 | Available |
+| `fr` | Français | Available |
+| `es-ES` | Español | Available |
 
-Every listed locale is an active runtime catalog. A locale remains shippable only while its
-`app/i18n/{locale}.json` file exists, keeps key and placeholder parity with English, passes
-locale-quality checks, and receives terminology review. Unsupported or regional browser-language
-matches fall back to the nearest active catalog, currently `en`, `ru`, `de`, `zh-CN`, `fr`, or
-`es-ES`.
+Unsupported or regional browser-language matches use the closest available locale.
 
 Mozilla, Firefox, browser UI, privacy, permission, add-on, translation, and policy terminology
 should follow Mozilla Pontoon and SUMO style where applicable. English text should not appear in a
 localized UI unless it is a brand name, policy key, product identifier, API term, JSON value, or
 another intentionally untranslated technical value.
 
-Locale terminology follows Mozilla Pontoon and SUMO style where applicable, with the same
-placeholder and glossary rules in every active catalog.
-
-Localization catalogs are served from:
-
-```text
-GET /i18n/{locale}.json
-```
-
-Currently active runtime catalogs:
-
-- `en`
-- `ru`
-- `de`
-- `zh-CN`
-- `fr`
-- `es-ES`
-
-## Quick Start
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install .
-make dev
-```
-
-No provider token or external-source configuration is required for BPM or `make dev` in 0.9.3.
-Local-model training, RAG-generated answers and citations, and external-source research are
-separate future work.
-
-Open:
-
-- API root: <http://127.0.0.1:8000/>
-- Profile library: <http://127.0.0.1:8000/profiles>
-- Documentation portal: <http://127.0.0.1:8000/help/>
+Locale terminology follows Mozilla Pontoon and SUMO style where applicable.
 
 ## License
 

@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-language" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>更改界面语言</title>
-  <shortdesc>选择英语、俄语、德语、简体中文、法语、西班牙语或 BPM 的系统语言。</shortdesc>
+  <shortdesc>选择<uicontrol>英语</uicontrol>、<uicontrol>俄语</uicontrol>、<uicontrol>德语</uicontrol>、<uicontrol>简体中文</uicontrol>、<uicontrol>法语</uicontrol>、<uicontrol>西班牙语</uicontrol>或 BPM 的系统语言。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <prereq><p>在<uicontrol>浏览器</uicontrol>中打开 BPM 并保持配置文件、<uicontrol>库</uicontrol>、<uicontrol>所有设置</uicontrol>、引导、JSON 或比较表面可用。</p></prereq>
     <context><p>当屏幕截图、标签、验证消息和文档示例必须与操作员区域设置匹配时，请使用语言选择器。</p></context>
     <steps>
       <step><cmd>打开页眉中的语言选择器。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
-      <step><cmd>选择英语、俄语、德语、简体中文、法语、西班牙语或系统。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
+      <step><cmd>选择<uicontrol>英语</uicontrol>、<uicontrol>俄语</uicontrol>、<uicontrol>德语</uicontrol>、<uicontrol>简体中文</uicontrol>、<uicontrol>法语</uicontrol>、<uicontrol>西班牙语</uicontrol>或<uicontrol>浏览器</uicontrol>。</cmd><info><p>显式选择的语言会保存到后续 BPM 页面和重新加载中。<uicontrol>浏览器</uicontrol>会保存为模式：BPM 在每次加载时按已说明的匹配和回退顺序，根据当前<uicontrol>浏览器</uicontrol>首选项解析它。</p></info></step>
       <step><cmd>确认导航标签、验证消息、状态文本和编辑器控件切换到选定的区域设置。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>仅在确认配置文件和架构通道仍然相同后才继续编辑。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
     <result><p>BPM 在选定的区域设置中显示界面，而不更改配置文件数据。</p></result>
-    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从<uicontrol>库</uicontrol>中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-language-detection-fallback"/>

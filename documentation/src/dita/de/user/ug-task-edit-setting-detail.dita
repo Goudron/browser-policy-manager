@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein Einstellungsdetail bearbeiten</title>
-  <shortdesc>Wenden Sie eine Firefox-Richtlinie oder einen verwalteten Einstellungswert im Detailbereich „Alle Einstellungen“ an oder bearbeiten Sie sie.</shortdesc>
+  <shortdesc>Wenden Sie eine Firefox-Richtlinie oder einen verwalteten Einstellungswert im Detailbereich „<uicontrol>Alle Einstellungen</uicontrol>“ an oder bearbeiten Sie sie.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie ein Einstellungsdetailfenster für einen unterstützten bearbeitbaren Wert.</p></prereq>
     <context><p>Durch die Detailbearbeitung bleibt die Änderung auf eine Einstellung konzentriert, während die gemeinsame Validierung und das Speicherverhalten wiederverwendet werden.</p></context>
     <steps>
-      <step><cmd>Überprüfen Sie den aktuellen Wert und den Validierungsstatus.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Geben Sie den neuen Richtlinien- oder verwalteten Präferenzwert ein oder wählen Sie ihn aus.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wenden Sie die Detailbearbeitung an und achten Sie auf Validierungsfeedback.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie den aktuellen Wert und den Validierungsstatus.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Geben Sie den neuen Richtlinien- oder verwalteten Präferenzwert ein oder wählen Sie ihn aus.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wenden Sie die Detailbearbeitung an und achten Sie auf Validierungsfeedback.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Speichern Sie das Profil, wenn der bearbeitete Wert gültig und beabsichtigt ist.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Die ausgewählte Richtlinie oder verwaltete Einstellung hat den neuen Wert im Profil.</p></result>

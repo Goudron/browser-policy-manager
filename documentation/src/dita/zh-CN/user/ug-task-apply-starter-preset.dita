@@ -5,7 +5,7 @@
   <shortdesc>在详细编辑之前使用入门预设来播种常见的 Firefox 策略选择。</shortdesc>
   <taskbody>
     <prereq><p>在步骤 1 中打开配置文件草稿。</p></prereq>
-    <context><p>入门预设提供了一个已知基线，您仍然可以在 引导式编辑器、所有设置 或 JSON 编辑器 中更改该基线。</p></context>
+    <context><p>入门预设提供了一个已知基线，您仍然可以在 <uicontrol>引导式编辑器</uicontrol>、<uicontrol>所有设置</uicontrol> 或 <uicontrol>JSON 编辑器</uicontrol> 中更改该基线。</p></context>
     <steps>
       <step><cmd>在第 1 步打开初始预设区域。</cmd><info><p>预期结果：引导配置档案保持一致。</p></info></step>
       <step><cmd>将可用预设与配置文件场景进行比较。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>

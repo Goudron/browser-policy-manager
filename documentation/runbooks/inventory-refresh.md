@@ -19,7 +19,7 @@ When the Release or ESR Firefox policy schema changes, treat documentation drift
 schema bump rather than a follow-up cleanup.
 
 1. Rebuild the maintained inventory with the existing inventory builder and verify
-   `tests/test_firefox_policy_documentation_inventory.py`.
+   `tests/contract/docs/general/test_firefox_policy_documentation_inventory.py`.
 2. Regenerate schema-grounded policy skeletons with
    `./.venv/bin/python documentation/tools/generate_firefox_policy_skeletons.py`.
 3. Review added policies, removed policies, and changed common definitions:
@@ -67,7 +67,7 @@ manual-review paths, or exception boundary changes, treat documentation drift as
 change. Do not leave recommendation topics, mappings, provenance, locales, examples, search, or
 screenshots as follow-up work.
 
-1. Rebuild or check the maintained CIS inventory first with `tests/test_cis_documentation_inventory.py`.
+1. Rebuild or check the maintained CIS inventory first with `tests/contract/docs/general/test_cis_documentation_inventory.py`.
    The inventory must still close recommendation count, planned-topic count, provenance-only records,
    generated layers, starter presets, merge decisions, manual-review paths, and exception-contract
    facts before DITA source is edited.
@@ -173,13 +173,13 @@ change, treat Administrator/DevOps documentation drift as part of the same produ
    contextual targets together with the DITA peers. The independently scrolling hierarchy must
    reveal direct topics and return to Documents, API procedures must remain owned by the
    Administrator Guide, and theme/search/help labels must stay localized from runtime UI catalogs.
-10. Run the live-evidence and documentation-polish contracts that match the change; do not infer
-    current evidence from a successful older transcript:
+10. Run the current-source installation and documentation-polish contracts that match the change;
+    do not infer current behavior from a successful older transcript:
 
 ```bash
 ./.venv/bin/pytest -q -m docs_contract \
   documentation/tests/contract/test_linux_source_install_command_topics.py \
-  documentation/tests/contract/test_live_source_install_evidence_closure.py \
+  documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py \
   documentation/tests/contract/test_wsl_source_install_validation_runner.py \
   documentation/tests/contract/test_documentation_polish_regression_gates.py
 ```
@@ -197,12 +197,12 @@ change, treat Administrator/DevOps documentation drift as part of the same produ
 Use the exact inventory builder/test first, then metadata and DITA checks:
 
 ```bash
-./.venv/bin/pytest -q -m docs_contract tests/test_firefox_policy_documentation_inventory.py
+./.venv/bin/pytest -q -m docs_contract tests/contract/docs/general/test_firefox_policy_documentation_inventory.py
 ./.venv/bin/python documentation/tools/generate_firefox_policy_skeletons.py
 ./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_firefox_policy_skeleton_generation.py
 ./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_manifest_generation.py
-./.venv/bin/pytest -q -m docs_contract tests/test_cis_documentation_inventory.py
-./.venv/bin/pytest -q -m docs_contract tests/test_api_documentation_inventory.py
+./.venv/bin/pytest -q -m docs_contract tests/contract/docs/general/test_cis_documentation_inventory.py
+./.venv/bin/pytest -q -m docs_contract tests/contract/docs/general/test_api_documentation_inventory.py
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/contract/test_api_openapi_drift.py
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/contract/test_administrator_update_from_source_topics.py
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/contract/test_api_devops_integration_runbooks.py

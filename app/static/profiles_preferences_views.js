@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         wizardPreferenceSections = [],
@@ -226,5 +225,4 @@
         };
     }
 
-    window.BPMProfilesPreferenceViews = { create };
-})();
+    export { create };

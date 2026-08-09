@@ -20,5 +20,5 @@
   "web": "request_web runs only after scope admission and is an explicit non-network placeholder until M9; it returns assistant_web_not_available without encoding, retrieval, worker, or provider calls.",
   "ordinary_search": "The deterministic documentation search is neither imported, called, ranked, nor changed by this module.",
   "implementation_boundary": {"http_route": false, "browser_ui": false, "session_persistence": false, "scope_classifier": false, "e5_runtime_loader": false, "output_schema_parser": false, "external_provider": false},
-  "verification": {"runtime": "tests/test_grounded_conversation_orchestration_093.py", "contract": "documentation/tests/contract/test_grounded_conversation_orchestration_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-orchestration-0.9.3.md"}
+  "verification": {"runtime": "tests/integration/ai/incubation/test_grounded_conversation_orchestration.py", "contract": "documentation/tests/contract/test_grounded_conversation_orchestration_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-orchestration-0.9.3.md"}
 }

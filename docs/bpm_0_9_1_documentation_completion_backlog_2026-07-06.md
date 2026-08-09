@@ -371,7 +371,7 @@ named-release command/transcript evidence required by `BPM091-M6-05` and `BPM091
 
 Evidence: `BPM091-M6-04` confirms the M2 selection rule in
 `docs/architecture/linux-distribution-selection-0.9.1.md` and its focused contract
-`tests/test_linux_distribution_selection_091.py`; maintainer approval is dated 2026-07-11, the
+`tests/integration/app/test_linux_distribution_selection_091.py`; maintainer approval is dated 2026-07-11, the
 incorrect `M6-02` authoring gate is replaced by `M6-04 -> M6-05 -> M6-06`, and exact validation
 targets are frozen as Ubuntu 26.04 LTS, Debian 13.5, Fedora Linux 44, Linux Mint 22.3, and the
 Manjaro stable branch after its 2026-06-26 stable update.

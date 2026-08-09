@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Navegar por categorías de configuración</title>
-  <shortdesc>Navegue por categorías Todos los ajustes y grupos de controles asignados para encontrar políticas y controles de preferencias relacionados.</shortdesc>
+  <shortdesc>Navegue por categorías <uicontrol>Todos los ajustes</uicontrol> y grupos de controles asignados para encontrar políticas y controles de preferencias relacionados.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes en Configurado o Catálogo.</p></prereq>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> en Configurado o <uicontrol>Catálogo</uicontrol>.</p></prereq>
     <context><p>Las categorías agrupan la configuración por dominio de producto en lugar de por ubicación de archivo. Ayudan a los usuarios a moverse entre el acceso al navegador, la privacidad, la búsqueda, las extensiones, sin procesar/no asignado y otros grupos.</p></context>
     <steps>
-      <step><cmd>Abre la navegación de categorías o el resumen del catálogo.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Elija el dominio o clúster que coincida con el objetivo de configuración.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Revisar recuentos de categorías para configuraciones configuradas, de atención, sin formato o obsoletas.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abre la navegación de categorías o el resumen del catálogo.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija el dominio o clúster que coincida con el objetivo de configuración.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Revisar recuentos de categorías para configuraciones configuradas, de atención, sin formato o obsoletas.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Abra un detalle de configuración o cambie filtros sin perder el contexto de la categoría.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
-    <result><p>Puede desplazarse por Inventario de ajustes por dominio de producto y llegar al panel de detalles correspondiente.</p></result>
+    <result><p>Puede desplazarse por <uicontrol>Inventario de ajustes</uicontrol> por dominio de producto y llegar al panel de detalles correspondiente.</p></result>
     <postreq><p>Recuperación: si una categoría no contiene el control esperado, busque por política ID o inspeccione elementos sin procesar/no asignados.</p></postreq>
   </taskbody>
   <related-links>

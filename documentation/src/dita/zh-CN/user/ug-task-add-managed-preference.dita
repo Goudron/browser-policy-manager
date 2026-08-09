@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-add-managed-preference" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>添加托管首选项</title>
-  <shortdesc>添加尚未在配置文件中配置的已知托管首选项。</shortdesc>
+  <shortdesc>添加尚未在配置文件中配置的已知<uicontrol>托管首选项</uicontrol>。</shortdesc>
   <taskbody>
-    <prereq><p>打开 所有设置，并选择正确的模式通道。</p></prereq>
-    <context><p>托管首选项 补充 Firefox 策略。故意添加它们并验证结果。</p></context>
+    <prereq><p>打开 <uicontrol>所有设置</uicontrol>，并选择正确的模式通道。</p></prereq>
+    <context><p><uicontrol>托管首选项</uicontrol> 补充 Firefox 策略。故意添加它们并验证结果。</p></context>
     <steps>
-      <step><cmd>打开添加首选项控件或在 目录 中找到首选项。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>选择已知的首选项键并检查其预期值类型。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>输入配置文件所需的值和锁定状态。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>应用、验证并保存托管首选项。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
+      <step><cmd>打开添加首选项控件或在 <uicontrol>目录</uicontrol> 中找到首选项。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择已知的首选项键并检查其预期值类型。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>输入配置文件所需的值和锁定状态。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>应用、验证并保存<uicontrol>托管首选项</uicontrol>。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>配置文件包含具有预期值和锁定行为的新托管首选项。</p></result>
+    <result><p>配置文件包含具有预期值和锁定行为的新<uicontrol>托管首选项</uicontrol>。</p></result>
     <postreq><p>恢复：如果首选项键未知或验证失败，请删除草稿值并仅使用 JSON 进行有意的原始审核。</p></postreq>
   </taskbody>
   <related-links>

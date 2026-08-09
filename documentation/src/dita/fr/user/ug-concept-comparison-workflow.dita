@@ -2,6 +2,6 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-comparison-workflow" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Processus de comparaison des profils</title><shortdesc>La comparaison permet d’examiner les différences de paramètres enregistrés entre deux profils sans les modifier.</shortdesc>
-  <conbody><p>Ouvrez « Comparer les paramètres des profils » depuis la Bibliothèque, recherchez séparément « Profil A » et « Profil B », vérifiez chaque résumé, puis lisez le tableau de comparaison.</p><p>Le tableau réunit les politiques et les préférences gérées des deux profils. Une ligne affiche « Même valeur », « Valeur différente » ou « Manquant » d’un côté. La comparaison est en lecture seule et ne fusionne pas les valeurs.</p></conbody>
+  <conbody><p>Ouvrez « <uicontrol>Comparer les paramètres des profils</uicontrol> » depuis la <uicontrol>Bibliothèque</uicontrol>, recherchez séparément « <uicontrol>Profil A</uicontrol> » et « <uicontrol>Profil B</uicontrol> », vérifiez chaque résumé, puis lisez le tableau de comparaison.</p><p>Le tableau réunit les politiques et les préférences gérées des deux profils. Une ligne affiche « Même valeur », « Valeur différente » ou « Manquant » d’un côté. La comparaison est en lecture seule et ne fusionne pas les valeurs.</p></conbody>
   <related-links><link keyref="topic.ug-reference-comparison-states"/><link keyref="topic.ug-task-interpret-profile-comparison"/></related-links>
 </concept>

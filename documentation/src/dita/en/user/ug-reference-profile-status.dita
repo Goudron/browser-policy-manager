@@ -4,7 +4,7 @@
   <title>Profile status reference</title>
   <shortdesc>Read profile name, ID, schema, lifecycle, dirty/saved state, and validation context before acting.</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>Identity</title><p>Profile name and ID confirm that the current editor, Library row, or Compare selection refers to the intended saved profile or draft.</p></section>
+    <section id="a-profile-identity"><title>Identity</title><p>Profile name and ID confirm that the current editor, <uicontrol>Library</uicontrol> row, or Compare selection refers to the intended saved profile or draft.</p></section>
     <section id="a-profile-lifecycle"><title>Lifecycle</title><p>Lifecycle state distinguishes active, archived, draft, restored, and deletion-sensitive profile work.</p></section>
     <section id="a-profile-validation"><title>Validation</title><p>Validation context shows whether the current policy and managed-preference values are ready for save, comparison, or export.</p></section>
     <section id="a-profile-dirty-state"><title>Dirty state</title><p>Dirty/saved state tells you whether visible editor changes still need to be saved before navigation, export, or another tab is trusted.</p></section>

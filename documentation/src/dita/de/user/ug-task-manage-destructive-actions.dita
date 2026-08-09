@@ -4,16 +4,16 @@
   <title>Unumkehrbare Aktionen sicher verwalten</title>
   <shortdesc>Aktionen zum Archivieren, Wiederherstellen, Zurücksetzen, Entfernen und dauerhaften Löschen absichtlich abbrechen oder bestätigen.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
     <context><p>Zerstörerische Aktionen können ein Profil ausblenden, Einstellungen entfernen, Werte zurücksetzen oder eine Zeile nach Bestätigung dauerhaft löschen.</p></context>
     <steps>
       <step><cmd>Lesen Sie vor der Bestätigung die Aktionsbezeichnung und das betroffene Profil oder die betroffene Einstellung.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
-      <step><cmd>Abbrechen, wenn das sichtbare Profil, der Lebenszyklusstatus, der Schemakanal oder die Quellenzuordnung nicht mit dem beabsichtigten Ziel übereinstimmen.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd><uicontrol>Abbrechen</uicontrol>, wenn das sichtbare Profil, der Lebenszyklusstatus, der Schemakanal oder die Quellenzuordnung nicht mit dem beabsichtigten Ziel übereinstimmen.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Bestätigen Sie zum dauerhaften Löschen, dass Export, Vergleich und Überprüfung nicht mehr erforderlich sind.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
-      <step><cmd>Warten Sie nach der Bestätigung auf die Statusmeldung und aktualisieren Sie die Bibliothek oder den Editor einmal, bevor Sie die Aktion wiederholen.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
+      <step><cmd>Warten Sie nach der Bestätigung auf die Statusmeldung und aktualisieren Sie die <uicontrol>Bibliothek</uicontrol> oder den Editor einmal, bevor Sie die Aktion wiederholen.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>Die Aktion wird entweder sicher abgebrochen oder mit einem sichtbaren Status und verstandenen Auswirkungen abgeschlossen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-archive-profile"/>

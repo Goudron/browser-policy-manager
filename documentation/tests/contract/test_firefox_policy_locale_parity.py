@@ -131,8 +131,7 @@ def test_firefox_generated_policy_skeletons_remain_language_neutral_schema_facts
     generated_policy_topics = sorted((GENERATED_FIREFOX_ROOT / "policies").glob("fx-policy-*.dita"))
     assert len(generated_policy_topics) == 121
     assert not any(
-        list((DITA_ROOT / locale / "firefox").glob("fx-policy-*.dita"))
-        for locale in LOCALES
+        list((DITA_ROOT / locale / "firefox").glob("fx-policy-*.dita")) for locale in LOCALES
     )
 
     sample = ET.parse(GENERATED_FIREFOX_ROOT / "policies/fx-policy-DisableTelemetry.dita").getroot()

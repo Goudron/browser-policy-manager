@@ -4,7 +4,7 @@
   <title>搜索引导设置</title>
   <shortdesc>搜索引导控件并跳转到匹配的设置，无需扫描每个步骤。</shortdesc>
   <taskbody>
-    <prereq><p>个人资料已在 引导式编辑器 中打开。</p></prereq>
+    <prereq><p>个人资料已在 <uicontrol>引导式编辑器</uicontrol> 中打开。</p></prereq>
     <context><p>当您知道策略目标但不知道包含控制系列的步骤时，引导式搜索非常有用。</p>
       <fig id="screenshot-guided-settings-search">
         <title>引导设置搜索结果</title>

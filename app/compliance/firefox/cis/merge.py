@@ -266,9 +266,13 @@ def _select_by_rule(rule: str | None, base_value: Any, cis_value: Any) -> str | 
         }
         return _select_rank(base_value, cis_value, order)
     if rule == "tls_version_min_rank":
-        return _select_rank(base_value, cis_value, {"tls1": 0, "tls1.1": 1, "tls1.2": 2, "tls1.3": 3})
+        return _select_rank(
+            base_value, cis_value, {"tls1": 0, "tls1.1": 1, "tls1.2": 2, "tls1.3": 3}
+        )
     if rule == "tls_version_max_rank":
-        return _select_rank(base_value, cis_value, {"tls1": 0, "tls1.1": 1, "tls1.2": 2, "tls1.3": 3})
+        return _select_rank(
+            base_value, cis_value, {"tls1": 0, "tls1.1": 1, "tls1.2": 2, "tls1.3": 3}
+        )
     if rule == "preference_locked_value":
         return _select_preference(base_value, cis_value)
     return None

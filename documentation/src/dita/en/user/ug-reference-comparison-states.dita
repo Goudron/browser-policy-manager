@@ -6,9 +6,9 @@
   <refbody>
     <section id="a-comparison-row-types"><title>Row types</title><p>A policy row represents a Firefox Enterprise policy. A preference row represents a managed preference key and value.</p></section>
     <section id="a-comparison-equal"><title>Equal</title><p>Both profiles contain the setting and the compared values match.</p></section>
-    <section id="a-comparison-changed"><title>Changed</title><p>Both profiles contain the setting, but Profile A and Profile B have different values or value details.</p></section>
+    <section id="a-comparison-changed"><title>Changed</title><p>Both profiles contain the setting, but <uicontrol>Profile A</uicontrol> and <uicontrol>Profile B</uicontrol> have different values or value details.</p></section>
     <section id="a-comparison-missing"><title>Missing</title><p>The setting exists on only one side. Review the profile where the value is missing before assuming the absence is intentional.</p></section>
-    <section id="a-comparison-recovery"><title>Recovery</title><p>If a state is unexpected, confirm both selected profiles, save any editor changes, and reopen Compare from the Library.</p></section>
+    <section id="a-comparison-recovery"><title>Recovery</title><p>If a state is unexpected, confirm both selected profiles, save any editor changes, and reopen Compare from the <uicontrol>Library</uicontrol>.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-select-comparison-profiles"/>

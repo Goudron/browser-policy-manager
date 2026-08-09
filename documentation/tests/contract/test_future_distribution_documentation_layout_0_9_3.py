@@ -18,6 +18,7 @@ def test_m14_07_layout_keeps_the_pdf_delivery_scope_safe_after_promotion() -> No
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
     assert contract["backlog_item"] == "BPM093-M14-07"
+    assert contract["target_bpm_version"] == "0.9.4"
     assert contract["status"] == "implemented-and-delivered"
     assert contract["delivery_root"] == "distributions/documentation"
     assert contract["release_directory"] == "{bpm_version}"
@@ -48,4 +49,5 @@ def test_m14_07_layout_keeps_the_pdf_delivery_scope_safe_after_promotion() -> No
     version_directories = [
         path for path in DELIVERY_ROOT.iterdir() if path.is_dir() and not path.name.startswith(".")
     ]
-    assert {path.name for path in version_directories} <= {"0.9.3"}
+    assert {path.name for path in version_directories} == set(contract["known_promoted_versions"])
+    assert contract["target_bpm_version"] in contract["known_promoted_versions"]

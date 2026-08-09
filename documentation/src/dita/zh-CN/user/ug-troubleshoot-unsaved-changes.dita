@@ -4,16 +4,16 @@
   <title>从未保存的更改中恢复</title>
   <shortdesc>避免在导航、选项卡关闭、刷新或模式切换期间丢失未保存的编辑器更改。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、<uicontrol>库</uicontrol>、<uicontrol>所有设置</uicontrol>、引导、JSON 或比较表面可用。</p></prereq>
     <context><p>BPM 警告脏编辑器状态，但用户仍然需要决定是保存、丢弃还是留在页面上。</p></context>
     <steps>
       <step><cmd>当浏览器或 BPM 报告未保存的更改时停止。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>标识包含草稿的活动选项卡、配置文件名称、架构通道和编辑器模式。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>如果更改应成为新的配置文件状态，请保存配置文件，或者取消导航以首先查看它们。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
-      <step><cmd>如果您有意放弃更改，请从库中重新打开配置文件并确认保存的状态，然后再继续。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
+      <step><cmd>如果您有意放弃更改，请从<uicontrol>库</uicontrol>中重新打开配置文件并确认保存的状态，然后再继续。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
     <result><p>您可以通过保存草稿来保留草稿，或者故意返回到上次保存的配置文件状态。</p></result>
-    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从<uicontrol>库</uicontrol>中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

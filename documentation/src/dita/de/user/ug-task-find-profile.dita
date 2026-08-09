@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-find-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein Profil anhand des Namens suchen</title>
-  <shortdesc>Verwenden Sie die Bibliothekssuche, um gespeicherte Profile nach Namen einzugrenzen, bevor Sie sie öffnen, duplizieren oder den Lebenszyklusstatus ändern.</shortdesc>
+  <shortdesc>Verwenden Sie die <uicontrol>Bibliothek</uicontrol>ssuche, um gespeicherte Profile nach Namen einzugrenzen, bevor Sie sie öffnen, duplizieren oder den Lebenszyklusstatus ändern.</shortdesc>
   <taskbody>
-    <prereq><p>Die Bibliothek ist geöffnet und die Profilzeilen wurden vollständig geladen.</p></prereq>
-    <context><p>Durch die Suche wird die aktuelle Bibliotheksansicht eingeschränkt. Es arbeitet mit Schema-, Lebenszyklus-, Validierungs- und Sortierkontrollen zusammen.</p></context>
+    <prereq><p>Die <uicontrol>Bibliothek</uicontrol> ist geöffnet und die Profilzeilen wurden vollständig geladen.</p></prereq>
+    <context><p>Durch die Suche wird die aktuelle <uicontrol>Bibliothek</uicontrol>sansicht eingeschränkt. Es arbeitet mit Schema-, Lebenszyklus-, Validierungs- und Sortierkontrollen zusammen.</p></context>
     <steps>
-      <step><cmd>Platzieren Sie den Cursor im Suchfeld der Bibliothek.</cmd><info><p>Erwartetes Ergebnis: Die aktuelle Zeilenliste bleibt während der Eingabe sichtbar.</p></info></step>
+      <step><cmd>Platzieren Sie den Cursor im Suchfeld der <uicontrol>Bibliothek</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Die aktuelle Zeilenliste bleibt während der Eingabe sichtbar.</p></info></step>
       <step><cmd>Geben Sie einen eindeutigen Teil des Profilnamens ein.</cmd><info><p>Die gefilterte Anzahl wird aktualisiert, um mit den noch sichtbaren Zeilen übereinzustimmen.</p></info></step>
-      <step><cmd>Bestätigen Sie die Zeilenidentität, bevor Sie eine Aktion auswählen.</cmd><info><note type="warning">Die Suche speichert oder ändert keine Profile. Es ändert nur, was die Bibliothek anzeigt.</note></info></step>
+      <step><cmd>Bestätigen Sie die Zeilenidentität, bevor Sie eine Aktion auswählen.</cmd><info><note type="warning">Die Suche speichert oder ändert keine Profile. Es ändert nur, was die <uicontrol>Bibliothek</uicontrol> anzeigt.</note></info></step>
     </steps>
-    <result><p>Die Bibliothek zeigt nur Zeilen an, die mit dem Suchtext und allen aktiven Filtern übereinstimmen.</p></result>
+    <result><p>Die <uicontrol>Bibliothek</uicontrol> zeigt nur Zeilen an, die mit dem Suchtext und allen aktiven Filtern übereinstimmen.</p></result>
     <postreq><p>Wiederherstellung: Löschen Sie den Suchtext, wenn das erwartete Profil fehlt, und aktualisieren Sie ihn, wenn die Zeile immer noch nicht angezeigt wird.</p></postreq>
   </taskbody>
   <related-links>

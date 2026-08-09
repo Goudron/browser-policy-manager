@@ -18,11 +18,14 @@ from urllib.parse import urlsplit
 
 import numpy as np
 
-SUPPORTED_LOCALES: Final[tuple[str, ...]] = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
+from app.documentation.assistant_contracts import SUPPORTED_LOCALES
+
 GENERATION_ID: Final[re.Pattern[str]] = re.compile(r"raggen-v1-[0-9a-f]{20}")
 STORAGE_BACKEND: Final[str] = "normalized-exact-f32-matrix-v1"
 EMBEDDING_MODEL_ID: Final[str] = "intfloat/multilingual-e5-base"
-EMBEDDING_ARTIFACT_SHA256: Final[str] = "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703"
+EMBEDDING_ARTIFACT_SHA256: Final[str] = (
+    "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703"
+)
 VECTOR_DIMENSION: Final[int] = 768
 REQUIRED_CHUNK_FIELDS: Final[frozenset[str]] = frozenset(
     {
@@ -122,7 +125,9 @@ def _safe_generation_root(index_root: Path) -> tuple[str, Path]:
     generation_root = index_root / "generations" / generation_id
     if not generation_root.is_dir() or generation_root.is_symlink():
         raise RetrievalUnavailable("invalid_active_generation")
-    manifest_path = _regular_file(generation_root / "generation-manifest.json", "invalid_active_generation")
+    manifest_path = _regular_file(
+        generation_root / "generation-manifest.json", "invalid_active_generation"
+    )
     if _sha256(manifest_path) != manifest_sha256:
         raise RetrievalUnavailable("invalid_active_generation")
     return generation_id, generation_root
@@ -168,7 +173,14 @@ def _citation(chunk: dict[str, Any], locale: str) -> LocalCitation:
 def _validate_chunk(chunk: Any, locale: str, expected_bpm_version: str) -> dict[str, Any]:
     if not isinstance(chunk, dict) or set(chunk) != REQUIRED_CHUNK_FIELDS:
         raise RetrievalUnavailable("invalid_chunk_metadata")
-    required_text = ("chunk_id", "guide_id", "documentation_version", "bpm_version", "provenance_class", "text")
+    required_text = (
+        "chunk_id",
+        "guide_id",
+        "documentation_version",
+        "bpm_version",
+        "provenance_class",
+        "text",
+    )
     if any(not isinstance(chunk[field], str) or not chunk[field] for field in required_text):
         raise RetrievalUnavailable("invalid_chunk_metadata")
     if chunk["provenance_class"] != "published_reviewed_dita":
@@ -177,11 +189,18 @@ def _validate_chunk(chunk: Any, locale: str, expected_bpm_version: str) -> dict[
         raise RetrievalUnavailable("invalid_chunk_metadata")
     if not isinstance(chunk["source_sha256"], str) or len(chunk["source_sha256"]) != 64:
         raise RetrievalUnavailable("invalid_chunk_metadata")
-    if chunk["bpm_version"] != expected_bpm_version or chunk["documentation_version"] != expected_bpm_version:
+    if (
+        chunk["bpm_version"] != expected_bpm_version
+        or chunk["documentation_version"] != expected_bpm_version
+    ):
         raise RetrievalUnavailable("incompatible_generation")
-    if not isinstance(chunk["heading_path"], list) or not all(isinstance(value, str) and value for value in chunk["heading_path"]):
+    if not isinstance(chunk["heading_path"], list) or not all(
+        isinstance(value, str) and value for value in chunk["heading_path"]
+    ):
         raise RetrievalUnavailable("invalid_chunk_metadata")
-    if not isinstance(chunk["identifiers"], list) or not all(isinstance(value, str) for value in chunk["identifiers"]):
+    if not isinstance(chunk["identifiers"], list) or not all(
+        isinstance(value, str) for value in chunk["identifiers"]
+    ):
         raise RetrievalUnavailable("invalid_chunk_metadata")
     _citation(chunk, locale)
     return chunk
@@ -207,16 +226,24 @@ class ExactLocaleRetriever:
         if not isinstance(limit, int) or not 1 <= limit <= 5:
             raise RetrievalUnavailable("invalid_retrieval_limit")
         if isinstance(guide_ids, (bytes, str)) or (
-            guide_ids is not None and any(not isinstance(guide_id, str) or not guide_id for guide_id in guide_ids)
+            guide_ids is not None
+            and any(not isinstance(guide_id, str) or not guide_id for guide_id in guide_ids)
         ):
             raise RetrievalUnavailable("invalid_guide_filter")
         query = _normalize_query(query_vector)
         generation_id, root = _safe_generation_root(self._index_root)
-        root_manifest = _load_json(_regular_file(root / "generation-manifest.json", "invalid_active_generation"))
-        if root_manifest.get("generation_id") != generation_id or root_manifest.get("storage_backend_id") != STORAGE_BACKEND:
+        root_manifest = _load_json(
+            _regular_file(root / "generation-manifest.json", "invalid_active_generation")
+        )
+        if (
+            root_manifest.get("generation_id") != generation_id
+            or root_manifest.get("storage_backend_id") != STORAGE_BACKEND
+        ):
             raise RetrievalUnavailable("incompatible_generation")
         entries = root_manifest.get("locales")
-        if not isinstance(entries, list) or [entry.get("locale") for entry in entries if isinstance(entry, dict)] != list(SUPPORTED_LOCALES):
+        if not isinstance(entries, list) or [
+            entry.get("locale") for entry in entries if isinstance(entry, dict)
+        ] != list(SUPPORTED_LOCALES):
             raise RetrievalUnavailable("invalid_generation_metadata")
         entry = next((item for item in entries if item["locale"] == locale), None)
         if not isinstance(entry, dict) or not isinstance(entry.get("manifest_sha256"), str):
@@ -224,7 +251,9 @@ class ExactLocaleRetriever:
         locale_root = root / locale
         if not locale_root.is_dir() or locale_root.is_symlink():
             raise RetrievalUnavailable("invalid_generation_metadata")
-        locale_manifest_path = _regular_file(locale_root / "manifest.json", "invalid_generation_metadata")
+        locale_manifest_path = _regular_file(
+            locale_root / "manifest.json", "invalid_generation_metadata"
+        )
         if _sha256(locale_manifest_path) != entry["manifest_sha256"]:
             raise RetrievalUnavailable("invalid_generation_metadata")
         locale_manifest = _load_json(locale_manifest_path)
@@ -235,7 +264,8 @@ class ExactLocaleRetriever:
             or not isinstance(compatibility, dict)
             or compatibility.get("locale") != locale
             or compatibility.get("embedding_model_id") != EMBEDDING_MODEL_ID
-            or compatibility.get("embedding_model_revision_or_checksum") != EMBEDDING_ARTIFACT_SHA256
+            or compatibility.get("embedding_model_revision_or_checksum")
+            != EMBEDDING_ARTIFACT_SHA256
             or compatibility.get("embedding_dimension") != VECTOR_DIMENSION
             or compatibility.get("vector_normalization") != "L2"
             or compatibility.get("distance_metric") != "cosine via descending dot product"
@@ -265,7 +295,9 @@ class ExactLocaleRetriever:
         if len(raw) != rows * VECTOR_DIMENSION * 4:
             raise RetrievalUnavailable("invalid_generation_metadata")
         vectors = np.frombuffer(raw, dtype="<f4").reshape(rows, VECTOR_DIMENSION)
-        if not np.isfinite(vectors).all() or not np.allclose(np.linalg.norm(vectors, axis=1), 1.0, atol=1e-4):
+        if not np.isfinite(vectors).all() or not np.allclose(
+            np.linalg.norm(vectors, axis=1), 1.0, atol=1e-4
+        ):
             raise RetrievalUnavailable("invalid_generation_metadata")
         metadata = _load_json(chunks_path)
         chunks = metadata.get("chunks")
@@ -277,10 +309,14 @@ class ExactLocaleRetriever:
             raise RetrievalUnavailable("invalid_chunk_metadata")
         allowed_guides = frozenset(guide_ids) if guide_ids is not None else None
         eligible = [
-            index for index, chunk in enumerate(checked_chunks) if allowed_guides is None or chunk["guide_id"] in allowed_guides
+            index
+            for index, chunk in enumerate(checked_chunks)
+            if allowed_guides is None or chunk["guide_id"] in allowed_guides
         ]
         scores = vectors @ query
-        ordered = sorted(eligible, key=lambda index: (-float(scores[index]), checked_chunks[index]["chunk_id"]))[:limit]
+        ordered = sorted(
+            eligible, key=lambda index: (-float(scores[index]), checked_chunks[index]["chunk_id"])
+        )[:limit]
         candidates = tuple(
             RetrievedEvidence(
                 chunk_id=checked_chunks[index]["chunk_id"],

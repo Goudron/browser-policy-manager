@@ -13,9 +13,7 @@ from app.services.policy_schema_service import load_policy_schema
 from app.web.firefox_preferences import get_wizard_preferences_catalog
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT_PATH = (
-    ROOT / "docs" / "architecture" / "firefox-policy-documentation-inventory-0.9.0.json"
-)
+OUTPUT_PATH = ROOT / "docs" / "architecture" / "firefox-policy-documentation-inventory-0.9.0.json"
 
 
 def _schema_path(filename: str) -> Path:

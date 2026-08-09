@@ -275,7 +275,7 @@ class TopicScopeGate:
         for token in _BASE64_TOKEN.findall(query):
             try:
                 decoded = b64decode(token, validate=True)
-            except (BinasciiError, ValueError):
+            except BinasciiError, ValueError:
                 continue
             if 0 < len(decoded) <= MAX_DECODED_CONTROL_BYTES:
                 try:

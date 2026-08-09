@@ -181,7 +181,7 @@ def _direct_runtime_bytes(distributions: list[str]) -> int:
     files = {
         Path(importlib.metadata.distribution(distribution).locate_file(file)).resolve()
         for distribution in distributions
-        for file in (importlib.metadata.files(distribution) or [])
+        for file in importlib.metadata.files(distribution) or []
         if Path(importlib.metadata.distribution(distribution).locate_file(file)).is_file()
     }
     return sum(file.stat().st_size for file in files)
@@ -201,7 +201,9 @@ def _import_runtime() -> tuple[Any, Any]:
         import onnxruntime
         from tokenizers import Tokenizer
     except ImportError as error:
-        raise BenchmarkError("install the pinned offline benchmark runtime before measuring") from error
+        raise BenchmarkError(
+            "install the pinned offline benchmark runtime before measuring"
+        ) from error
     return onnxruntime, Tokenizer
 
 
@@ -230,9 +232,10 @@ def _post_pooling(candidate: dict[str, Any], model_dir: Path) -> tuple[Any, list
     tensors = load_file(str(model_dir / post_pooling["artifact"]))
     weight = tensors[post_pooling["weight_key"]]
     bias = tensors[post_pooling["bias_key"]]
-    if weight.shape != (post_pooling["out_features"], post_pooling["in_features"]) or bias.shape != (
+    if weight.shape != (
         post_pooling["out_features"],
-    ):
+        post_pooling["in_features"],
+    ) or bias.shape != (post_pooling["out_features"],):
         raise BenchmarkError("post-pooling tensor shape does not match the benchmark contract")
     return lambda values: np.tanh(values @ weight.T + bias), ["safetensors"]
 
@@ -264,7 +267,9 @@ def _encoder(candidate: dict[str, Any], model_dir: Path, config: dict[str, Any])
             mask = feeds["attention_mask"][..., None]
             pooled = (hidden * mask).sum(axis=1) / np.maximum(mask.sum(axis=1), 1)
             transformed = post_pooling(pooled)
-            normalized = transformed / np.maximum(np.linalg.norm(transformed, axis=1, keepdims=True), 1e-12)
+            normalized = transformed / np.maximum(
+                np.linalg.norm(transformed, axis=1, keepdims=True), 1e-12
+            )
             vectors.append(normalized.astype(np.float32))
         return np.vstack(vectors)
 
@@ -329,14 +334,18 @@ def run_candidate(
     _validate_model_dir(candidate, model_dir)
     missing_features = sorted(set(candidate["required_cpu_features"]) - _cpu_flags())
     if missing_features:
-        raise BenchmarkError(f"required CPU features are unavailable: {', '.join(missing_features)}")
+        raise BenchmarkError(
+            f"required CPU features are unavailable: {', '.join(missing_features)}"
+        )
     manifest = _read_json(chunks_path)
     chunks = manifest.get("chunks", [])
     if manifest.get("chunk_schema_version") != "rag-chunk-v1" or not chunks:
         raise BenchmarkError("the input must be a non-empty rag-chunk-v1 manifest")
     for chunk in chunks:
         _validate_retrieval_chunk(chunk)
-    grouped_chunks = {locale: [chunk for chunk in chunks if chunk["locale"] == locale] for locale in LOCALES}
+    grouped_chunks = {
+        locale: [chunk for chunk in chunks if chunk["locale"] == locale] for locale in LOCALES
+    }
     if any(not grouped_chunks[locale] for locale in LOCALES):
         raise BenchmarkError("chunk manifest does not cover the exact six locales")
     cases = _retrieval_cases()
@@ -359,7 +368,9 @@ def run_candidate(
         ranks: dict[str, list[int | None]] = defaultdict(list)
         for locale in LOCALES:
             locale_cases = [case for case in cases if case.locale == locale]
-            query_vectors = encode([candidate["prefixes"]["query"] + case.query for case in locale_cases])
+            query_vectors = encode(
+                [candidate["prefixes"]["query"] + case.query for case in locale_cases]
+            )
             for case, vector in zip(locale_cases, query_vectors, strict=True):
                 topic_ids = _ranked_topic_ids(
                     vector @ vectors[locale].T, grouped_chunks[locale], config["inputs"]["top_k"]
@@ -373,7 +384,9 @@ def run_candidate(
             if case.locale == probe["query_locale"] and case.query_class == probe["query_class"]
         ]
         cross_language_ranks: list[int | None] = []
-        cross_queries = encode([candidate["prefixes"]["query"] + case.query for case in source_cases])
+        cross_queries = encode(
+            [candidate["prefixes"]["query"] + case.query for case in source_cases]
+        )
         for locale in probe["target_locales"]:
             for case, vector in zip(source_cases, cross_queries, strict=True):
                 topic_ids = _ranked_topic_ids(
@@ -437,14 +450,14 @@ def run_candidate(
             "memory_after": memory_after,
         },
         "validity": {"valid": True, "reasons": []},
-        "per_locale": {
-            locale: _metrics(ranks[locale]) for locale in LOCALES
-        },
+        "per_locale": {locale: _metrics(ranks[locale]) for locale in LOCALES},
         "cross_language": {
             "query_locale": probe["query_locale"],
             "target_locales": probe["target_locales"],
             "case_count": len(cross_language_ranks),
-            "recall_at_5": sum(bool(rank) for rank in cross_language_ranks) / len(cross_language_ranks),
+            "recall_at_5": (
+                sum(bool(rank) for rank in cross_language_ranks) / len(cross_language_ranks)
+            ),
         },
         "latency": {"p95_ms_by_locale": latency, "p95_ms_max": max(latency.values())},
         "resources": {
@@ -471,7 +484,14 @@ def select_reports(paths: list[Path], config_path: Path = CONFIG_PATH) -> dict[s
         raise BenchmarkError("selection requires one report for every configured candidate")
     passing = [report for report in reports if report["status"] == "pass"]
     if not passing:
-        return {"schema_version": 1, "backlog_item": config["backlog_item"], "status": "fail", "selected": None, "reports": reports}
+        return {
+            "schema_version": 1,
+            "backlog_item": config["backlog_item"],
+            "status": "fail",
+            "selected": None,
+            "reports": reports,
+        }
+
     def selection_key(report: dict[str, Any]) -> tuple[float, float, float, float, float, float]:
         per_locale = list(report["per_locale"].values())
         return (
@@ -482,6 +502,7 @@ def select_reports(paths: list[Path], config_path: Path = CONFIG_PATH) -> dict[s
             report["resources"]["peak_rss_gib"],
             report["latency"]["p95_ms_max"],
         )
+
     ordered = sorted(passing, key=selection_key)
     if len(ordered) > 1 and selection_key(ordered[0]) == selection_key(ordered[1]):
         raise BenchmarkError("selection tie requires a new reviewed criterion")
@@ -496,7 +517,9 @@ def select_reports(paths: list[Path], config_path: Path = CONFIG_PATH) -> dict[s
 
 def _write_json(value: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
 
 def main() -> int:

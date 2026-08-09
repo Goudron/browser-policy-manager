@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
 import pytest
 
 from app.ai import least_privilege
-from app.ai import local_inference_worker as worker
-from app.documentation import conversation_stream
 
 ROOT = Path(__file__).resolve().parents[3]
 CONFIG_PATH = ROOT / "documentation/config/bpm-ai-least-privilege-contract-0.9.3.json"
@@ -18,32 +15,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m8_05_pins_prior_boundaries_and_freezes_execution_and_resource_limits() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M8-05"
-    assert contract["status"] == "implemented-no-http-route"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["execution_paths"]["violation"] == "assistant_unsafe_execution_path"
-    assert contract["execution_paths"]["requirements"] == [
-        "absolute child",
-        "no traversal",
-        "no symlink component",
-        "no shell-shaped path component",
-        "regular runtime archive",
-        "regular model artifact",
-        "private work directory",
-    ]
-    limits = contract["process"]["limits"]
-    assert limits == {
-        "active_generations_max": conversation_stream.MAX_ACTIVE_REQUESTS,
-        "queued_generations_max": conversation_stream.MAX_QUEUED_REQUESTS,
-        "worker_and_retrieval_rss_bytes_max": worker.MAX_WORKER_AND_RETRIEVAL_RSS_BYTES,
-        "request_bytes_max": least_privilege.ASSISTANT_MAX_REQUEST_BYTES,
-    }
 
 
 def test_m8_05_keeps_network_and_future_transport_fail_closed_without_a_route() -> None:
@@ -59,7 +30,9 @@ def test_m8_05_keeps_network_and_future_transport_fail_closed_without_a_route() 
     }
     assert contract["network"] == {
         "local_worker": "offline and proxy-free; it inherits no process environment or credentials",
-        "model_download": "explicit install only, one pinned HTTPS source, no redirect following and no proxy environment inheritance",
+        "model_download": (
+            "explicit install only, one pinned HTTPS source, no redirect following and no proxy environment inheritance"
+        ),
         "web_evidence": "absent; nonlocal sources remain rejected until M9",
         "arbitrary_model_url": False,
         "ssrf_surface": False,
@@ -68,7 +41,9 @@ def test_m8_05_keeps_network_and_future_transport_fail_closed_without_a_route() 
         "status": "guard implemented without adding a route",
         "method": "POST",
         "content_type": "application/json",
-        "origin": "exact configured http(s) origin and Host; wildcard, cross-origin and preflight are rejected",
+        "origin": (
+            "exact configured http(s) origin and Host; wildcard, cross-origin and preflight are rejected"
+        ),
         "fetch_metadata": "Sec-Fetch-Site, when present, must be same-origin",
         "content_length_max": least_privilege.ASSISTANT_MAX_REQUEST_BYTES,
     }

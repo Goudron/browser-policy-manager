@@ -2,11 +2,11 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Cas d’utilisation de l’« Éditeur JSON »</title>
-  <shortdesc>Utilisez Éditeur JSON pour une révision brute exacte, des contrôles de migration, un dépannage et des valeurs plus faciles à gérer en tant que policies.json brutes.</shortdesc>
+  <shortdesc>Utilisez <uicontrol>Éditeur JSON</uicontrol> pour une révision brute exacte, des contrôles de migration, un dépannage et des valeurs plus faciles à gérer en tant que policies.json brutes.</shortdesc>
   <conbody>
-    <p>Éditeur JSON est puissant mais moins guidé que les éditeurs visuels. Il doit s'agir d'un choix délibéré lorsque l'utilisateur a besoin d'une précision dans les documents de délimitation.</p>
-    <section id="a-good-fit"><title>Bon ajustement</title><p>Utilisez Éditeur JSON pour un examen exact de policies.json, des contrôles de migration, des valeurs de secours brutes ou le dépannage de documents d'importation/exportation mal formés.</p></section>
-    <section id="a-not-first-choice"><title>Pas le premier choix</title><p>Utilisez Éditeur guidé pour les flux de travail courants et Tous les paramètres pour une inspection visuelle complète avant de choisir JSON brut pour les modifications de routine.</p></section>
+    <p><uicontrol>Éditeur JSON</uicontrol> est puissant mais moins guidé que les éditeurs visuels. Il doit s'agir d'un choix délibéré lorsque l'utilisateur a besoin d'une précision dans les documents de délimitation.</p>
+    <section id="a-good-fit"><title>Bon ajustement</title><p>Utilisez <uicontrol>Éditeur JSON</uicontrol> pour un examen exact de policies.json, des contrôles de migration, des valeurs de secours brutes ou le dépannage de documents d'importation/exportation mal formés.</p></section>
+    <section id="a-not-first-choice"><title>Pas le premier choix</title><p>Utilisez <uicontrol>Éditeur guidé</uicontrol> pour les flux de travail courants et <uicontrol>Tous les paramètres</uicontrol> pour une inspection visuelle complète avant de choisir JSON brut pour les modifications de routine.</p></section>
     <section id="a-validation-boundary"><title>Limite de validation</title><p>Une syntaxe JSON valide ne suffit pas. BPM valide également les valeurs de la stratégie Firefox, la prise en charge des canaux de schéma et le modèle canonique normalisé avant l'enregistrement.</p></section>
     <section id="a-examples"><title>Exemples</title><p>Un exemple valide conserve un objet de stratégie de niveau supérieur avec des entrées telles que DisableTelemetry et Préférences, y compris une valeur browser.startup.homepage verrouillée. Les exemples non valides incluent une syntaxe JSON mal formée et des valeurs de stratégie non valides au niveau du schéma, telles qu'une chaîne où un booléen est requis.</p></section>
   </conbody>

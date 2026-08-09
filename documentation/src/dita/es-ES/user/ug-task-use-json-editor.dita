@@ -4,8 +4,8 @@
   <title>Usar el «Editor JSON»</title>
   <shortdesc>Abra el perfil completo como un documento policies.json de Firefox para una revisión exacta o edición sin formato.</shortdesc>
   <taskbody>
-    <prereq><p>Abrir un perfil guardado. Editor JSON funciona en un perfil guardado y representa el perfil como un documento de límites de Firefox.</p></prereq>
-    <context><p>Editor JSON es la superficie del documento sin formato. Úselo cuando Guiado o Todos los ajustes sea de nivel demasiado alto para una revisión exacta, comprobaciones de migración, resolución de problemas o valores sin procesar.</p>
+    <prereq><p>Abrir un perfil guardado. <uicontrol>Editor JSON</uicontrol> funciona en un perfil guardado y representa el perfil como un documento de límites de Firefox.</p></prereq>
+    <context><p><uicontrol>Editor JSON</uicontrol> es la superficie del documento sin formato. Úselo cuando Guiado o <uicontrol>Todos los ajustes</uicontrol> sea de nivel demasiado alto para una revisión exacta, comprobaciones de migración, resolución de problemas o valores sin procesar.</p>
       <fig id="screenshot-json-editor">
         <title>Editor JSON en tema oscuro</title>
         <image keyref="screenshot.json-editor" placement="break" scalefit="yes" align="center">
@@ -14,13 +14,13 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Abra el perfil guardado desde la Biblioteca u otro editor.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Cambiar a Editor JSON.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abra el perfil guardado desde la <uicontrol>Biblioteca</uicontrol> u otro editor.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Cambiar a <uicontrol>Editor JSON</uicontrol>.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
       <step><cmd>Confirme que el editor muestra un objeto de políticas de nivel superior y que la acción de descarga está disponible.</cmd><info><p>Resultado esperado: el documento JSON permanece centrado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Utilice Editor JSON solo cuando sea necesario un control exacto del documento sin procesar.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
+      <step><cmd>Utilice <uicontrol>Editor JSON</uicontrol> solo cuando sea necesario un control exacto del documento sin procesar.</cmd><info><note type="warning">Guardar JSON sin formato puede cambiar el perfil BPM canónico. Valide la sintaxis y los valores de política antes de guardar.</note></info></step>
     </steps>
     <result><p>El perfil actual es visible como contenido editable de Firefox policies.json.</p></result>
-    <postreq><p>Recuperación: si la ruta no se puede abrir, primero guarde el perfil o regrese a Todos los ajustes para editarlo visualmente.</p></postreq>
+    <postreq><p>Recuperación: si la ruta no se puede abrir, primero guarde el perfil o regrese a <uicontrol>Todos los ajustes</uicontrol> para editarlo visualmente.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-when-to-use-json-editor"/>

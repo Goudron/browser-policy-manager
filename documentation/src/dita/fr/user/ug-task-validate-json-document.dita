@@ -4,16 +4,16 @@
   <title>Valider le document JSON</title>
   <shortdesc>Validez la syntaxe JSON brute et les valeurs de stratégie Firefox avant d'enregistrer.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Éditeur JSON avec le document que vous souhaitez vérifier.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Éditeur JSON</uicontrol> avec le document que vous souhaitez vérifier.</p></prereq>
     <context><p>La validation distingue le JSON mal formé des erreurs de stratégie ou de schéma. Un document peut être analysé au format JSON et échouer néanmoins à la validation de la politique.</p></context>
     <steps>
-      <step><cmd>Choisissez l'action Valider partagée.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez l'action <uicontrol>Valider</uicontrol> partagée.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Si les rapports de validation contiennent un JSON mal formé, corrigez la syntaxe telle que les virgules de fin ou les accolades manquantes.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Si la validation signale des erreurs de stratégie, corrigez les clés non prises en charge, les types de valeur incorrects ou les incompatibilités de canal de schéma.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Validez à nouveau jusqu'à ce que le statut explique que le document est acceptable ou que le problème restant est intentionnel pour une révision brute.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>
     </steps>
     <result><p>Le document a un état de validation connu avant l'enregistrement ou l'exportation.</p></result>
-    <postreq><p>Récupération : si les erreurs sont difficiles à lire, utilisez Tous les paramètres pour inspecter visuellement la stratégie ou la préférence concernée.</p></postreq>
+    <postreq><p>Récupération : si les erreurs sont difficiles à lire, utilisez <uicontrol>Tous les paramètres</uicontrol> pour inspecter visuellement la stratégie ou la préférence concernée.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-raw-policies-json"/>

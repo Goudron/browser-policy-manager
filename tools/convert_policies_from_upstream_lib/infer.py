@@ -93,13 +93,19 @@ def _merge_inferred_schemas(nodes: list[dict[str, Any]]) -> dict[str, Any] | Non
         if merged_props:
             merged["properties"] = merged_props
 
-        dynamic_nodes = [node["additional_properties_schema"] for node in nodes if node.get("additional_properties_schema")]
+        dynamic_nodes = [
+            node["additional_properties_schema"]
+            for node in nodes
+            if node.get("additional_properties_schema")
+        ]
         merged_dynamic = _merge_inferred_schemas(dynamic_nodes) if dynamic_nodes else None
         if merged_dynamic is not None:
             merged["additional_properties_schema"] = merged_dynamic
             merged["additional_properties"] = True
         else:
-            merged["additional_properties"] = any(node.get("additional_properties", False) for node in nodes)
+            merged["additional_properties"] = any(
+                node.get("additional_properties", False) for node in nodes
+            )
 
         return merged
 
@@ -206,8 +212,7 @@ def infer_schema_from_example_value(value: Any) -> dict[str, Any]:
         return {
             "type": "object",
             "properties": {
-                key: infer_schema_from_example_value(item)
-                for key, item in value.items()
+                key: infer_schema_from_example_value(item) for key, item in value.items()
             },
             "additional_properties": False,
         }

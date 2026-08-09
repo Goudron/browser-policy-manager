@@ -114,7 +114,7 @@ def _pagefind_static_document(document: dict[str, Any]) -> str:
     return (
         f'<main data-pagefind-body data-bpm-document-id="{html.escape(document["document_id"])}">'
         f'<h1 data-pagefind-meta="title">{html.escape(searchable["title"])}</h1>'
-        f'<p>{html.escape(searchable["shortdesc"])}</p>{filter_spans}</main>'
+        f"<p>{html.escape(searchable['shortdesc'])}</p>{filter_spans}</main>"
     )
 
 
@@ -145,8 +145,14 @@ def candidate_index_input(candidate_id: str, locale: str) -> dict[str, Any]:
         "execution": "not-started-private-adapter-only",
         "index_settings": {
             "filterableAttributes": [
-                "guide_id", "topic_kind", "firefox_channel", "policy_category",
-                "cis_level", "cis_control_state", "api_area", "bpm_version",
+                "guide_id",
+                "topic_kind",
+                "firefox_channel",
+                "policy_category",
+                "cis_level",
+                "cis_control_state",
+                "api_area",
+                "bpm_version",
             ],
             "searchableAttributes": ["identifiers", "title", "aliases", "headings", "body"],
         },
@@ -169,19 +175,37 @@ def candidate_index_input(candidate_id: str, locale: str) -> dict[str, Any]:
     }
 
 
-def candidate_query_envelope(candidate_id: str, locale: str, query: str, filters: dict[str, list[str]]) -> dict[str, Any]:
+def candidate_query_envelope(
+    candidate_id: str, locale: str, query: str, filters: dict[str, list[str]]
+) -> dict[str, Any]:
     """Describe the adapter input that M3-03 will connect to a real candidate."""
     if candidate_id == "current-static-control":
-        return {"candidate_id": candidate_id, "locale": locale, "query": query, "filters": filters, "transport": "in-process"}
+        return {
+            "candidate_id": candidate_id,
+            "locale": locale,
+            "query": query,
+            "filters": filters,
+            "transport": "in-process",
+        }
     if candidate_id == "pagefind-1.5.2":
-        return {"candidate_id": candidate_id, "locale": locale, "query": query, "filters": filters, "transport": "BPM-owned-static-adapter"}
+        return {
+            "candidate_id": candidate_id,
+            "locale": locale,
+            "query": query,
+            "filters": filters,
+            "transport": "BPM-owned-static-adapter",
+        }
     if candidate_id == "meilisearch-ce-1.45.1":
         return {
             "candidate_id": candidate_id,
             "locale": locale,
             "transport": "not-started-private-adapter-only",
             "browser_to_daemon": "forbidden",
-            "request": {"method": "POST", "path": "/private/search", "body": {"q": query, "filters": filters}},
+            "request": {
+                "method": "POST",
+                "path": "/private/search",
+                "body": {"q": query, "filters": filters},
+            },
         }
     raise ValueError(f"unknown search candidate: {candidate_id}")
 
@@ -196,7 +220,9 @@ def _facet_match(document: dict[str, Any], filters: dict[str, list[str]]) -> boo
 def _normalized_result(document: dict[str, Any], query: str) -> dict[str, Any] | None:
     searchable = document["searchable"]
     weights = document["source_weights"]
-    exact = int(any(_normalized(query) == _normalized(value) for value in searchable["identifiers"]))
+    exact = int(
+        any(_normalized(query) == _normalized(value) for value in searchable["identifiers"])
+    )
     title = int(_text_matches(query, searchable["title"]))
     alias = sum(int(_text_matches(query, value)) for value in searchable["aliases"])
     heading = sum(int(_text_matches(query, value)) for value in searchable["headings"])
@@ -225,13 +251,17 @@ def _normalized_result(document: dict[str, Any], query: str) -> dict[str, Any] |
         "snippet": searchable["shortdesc"][:260],
         "score": score,
         "score_breakdown": breakdown,
-        "matched_fields": [field for field, value in breakdown.items() if field != "recency" and value],
+        "matched_fields": [
+            field for field, value in breakdown.items() if field != "recency" and value
+        ],
         "identifiers": searchable["identifiers"],
         "facets": document["facets"],
     }
 
 
-def query_candidate(candidate_id: str, locale: str, query: str, filters: dict[str, list[str]] | None = None) -> dict[str, Any]:
+def query_candidate(
+    candidate_id: str, locale: str, query: str, filters: dict[str, list[str]] | None = None
+) -> dict[str, Any]:
     """Run the shared reference mapping and return its candidate envelope plus normalized results.
 
     This is deliberately not a substitute for vendor execution or a relevance measurement.
@@ -248,5 +278,7 @@ def query_candidate(candidate_id: str, locale: str, query: str, filters: dict[st
         "candidate_id": candidate_id,
         "execution": "adapter-contract-reference-only",
         "query_envelope": envelope,
-        "results": sorted(results, key=lambda result: (-result["score"], result["guide_id"], result["topic_id"])),
+        "results": sorted(
+            results, key=lambda result: (-result["score"], result["guide_id"], result["topic_id"])
+        ),
     }

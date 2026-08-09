@@ -36,8 +36,8 @@ The following contracts must remain green whenever their corresponding procedure
 
 ```bash
 ./.venv/bin/pytest -q \
-  tests/test_runbook_make_targets_contract.py \
-  tests/test_ui_locale_glossary.py \
+  tests/contract/testing/test_runbook_make_targets_contract.py \
+  tests/contract/ui/localization/test_ui_locale_glossary.py \
   documentation/tests/contract/test_authoring_runbooks.py \
   documentation/tests/contract/test_documentation_update_milestone_verification_0_9_2.py \
   documentation/tests/contract/test_firefox_153_dual_esr_schema_contract_0_9_2.py

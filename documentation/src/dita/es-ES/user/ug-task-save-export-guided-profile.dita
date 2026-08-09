@@ -7,8 +7,8 @@
     <prereq><p>La revisión del paso 6 está completa y se comprenden las advertencias de validación.</p></prereq>
     <context><p>Al guardar se registra el perfil BPM; La descarga proporciona la versión revisada para la transferencia de políticas.</p></context>
     <steps>
-      <step><cmd>Elija Guardar para almacenar el estado actual del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
-      <step><cmd>Confirme que el estado guardado aparezca en la Biblioteca antes de cerrar el editor.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Elija <uicontrol>Guardar</uicontrol> para almacenar el estado actual del perfil.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
+      <step><cmd>Confirme que el estado guardado aparezca en la <uicontrol>Biblioteca</uicontrol> antes de cerrar el editor.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Elija la acción de descarga o exportación necesaria para la transferencia.</cmd><info><p>Resultado esperado: el perfil guiado permanece consistente.</p></info></step>
       <step><cmd>Comparta el archivo exportado con el contexto necesario para identificar el canal del esquema y el propósito del perfil.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>

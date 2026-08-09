@@ -117,6 +117,7 @@ make docs-snapshot
 make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/user/example.dita"
 make docs-coverage
 make docs-release-check
+make docs-release-handoff
 make docs-validate
 make docs-build
 make docs-install-dev
@@ -125,7 +126,7 @@ make docs-package
 make docs-package-verify
 ./.venv/bin/python documentation/tools/validate_metadata.py
 ./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/unit/test_bootstrap_toolchain.py
-./.venv/bin/pytest -q tests/test_product_documentation_scaffold.py
+./.venv/bin/pytest -q tests/contract/docs/general/test_product_documentation_scaffold.py
 ./.venv/bin/pytest -q -m docs_contract tests/<one_relevant_contract>.py
 ./.venv/bin/pytest -q -m docs_contract
 ./.venv/bin/ruff check <changed_python_files>
@@ -144,12 +145,20 @@ locked archives, exact versions, and a DITA 1.3 HTML5 smoke build. The focused `
 commands run only `documentation/tests/` selections. `make test-docs-ui-contract` runs the
 non-browser portal/UI contracts. `make test-docs-browser` runs the Chromium/Selenium documentation
 portal smoke and requires immediate sandbox escalation; `make test-docs-ui` runs both layers.
-`make docs-snapshot` refreshes the bounded documentation subsystem map. `make docs-fast-check` validates changed documentation source
-inputs, reports affected locale/guide/search outputs, and does not run DITA-OT or unrelated BPM
-code. `make docs-coverage` writes isolated documentation coverage reports
+`make docs-snapshot` refreshes the bounded documentation subsystem map. It and
+`make codex-snapshot` are scheduled-audit generators: each digests only its declared source owners.
+Generated artifacts, installed sites, reports, browser evidence, Git state, and local-machine state
+are not snapshot input. Regenerate only the snapshot whose declared source changed; never edit a
+snapshot digest by hand. `make docs-fast-check` is a
+30-second bounded authoring check for changed README/DITA/locale/figure/fixture inputs: it reports
+selected scope, guards run, intentional release-only skips, and `make docs-release-handoff` as the
+exact escalation. It does not run DITA-OT or unrelated BPM code and is never a release claim.
+`make docs-coverage` writes isolated documentation coverage reports
 under `documentation/reports/coverage/` and must keep the included coverage-policy scope at 100%.
 `make docs-release-check` runs full six-locale DITA validation plus the maintained documentation
-contract suite and is a prerequisite of `make test-release`.
+contract suite and is a prerequisite of `make test-release`. `make docs-release-handoff` is the
+authoritative documentation command: it retains that gate and adds binary PDF verification/delivery,
+reproducibility, package verification, snapshot refresh, and local install proof.
 The validation, build, dev-install, reproducibility, and packaging commands are offline and use only
 that cache. `make docs-install-dev` promotes a validated local build into ignored
 `app/documentation/site` so `make dev` can serve `/help/` for maintainer review; it is not release

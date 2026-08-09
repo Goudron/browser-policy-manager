@@ -2,11 +2,11 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-language-detection-fallback" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Language detection and fallback</title>
-  <shortdesc>Understand how BPM chooses a supported locale and what happens when the browser language is not supported.</shortdesc>
+  <shortdesc>Choose <uicontrol>Browser</uicontrol> to have BPM resolve the first browser-preference language to one of six supported locales; an unsupported first language displays the interface in English.</shortdesc>
   <conbody>
     <section id="a-supported-locales"><title>Supported locales</title><p>BPM supports en, ru, de, zh-CN, fr, and es-ES as first-class interface locales.</p></section>
-    <section id="a-system-language"><title>System language</title><p>System language follows the browser language when it matches a supported BPM locale.</p></section>
-    <section id="a-fallback"><title>Fallback</title><p>If the browser language is unsupported, BPM falls back to a supported locale rather than showing partial strings.</p></section>
+    <section id="a-system-language"><title>Browser-language sources and matching</title><p>When you select <uicontrol>Browser</uicontrol>, BPM takes the first non-empty tag from <codeph>navigator.languages</codeph>, in the browser's preference order. Only when that list provides no tag does BPM use <codeph>navigator.language</codeph>. It changes underscores to hyphens and compares tags without case sensitivity. The matching rules accept en and en-*, ru and ru-*, de and de-*, zh-CN, zh-Hans, zh-Hans-*, and zh, fr and fr-*, and es-ES, es, and es-*. A tag that matches none of those rules resolves to en.</p></section>
+    <section id="a-fallback"><title>Fallback and stored choice</title><p>BPM currently ships a catalog for every supported locale. If a resolved target catalog is unavailable, BPM follows that locale's declared fallback, then English, and finally the first enabled catalog. Every non-English locale falls back to English. Therefore, with the shipped six-catalog set, an unsupported first browser language displays English. An explicit language selection is stored as <codeph>bpm-lang-mode</codeph>; <uicontrol>Browser</uicontrol> stores the browser-following mode rather than a frozen resolved locale, so BPM evaluates it again when it loads.</p></section>
     <section id="a-content-parity"><title>Content parity</title><p>Product documentation and screenshots must remain content-equivalent across all six locales, even when UI labels differ by language.</p></section>
   </conbody>
   <related-links>

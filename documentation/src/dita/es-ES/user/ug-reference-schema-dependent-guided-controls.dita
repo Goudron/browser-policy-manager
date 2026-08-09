@@ -4,10 +4,10 @@
   <title>Identificar controles dependientes del esquema en el editor guiado</title>
   <shortdesc>El editor guiado muestra solo los controles compatibles con el esquema de Firefox seleccionado.</shortdesc>
   <refbody>
-    <section id="a-release-controls"><title>Controles en esquemas actuales</title><p>En Release 153 y ESR 153.0, el paso 5 puede mostrar políticas compatibles para IA y funciones inteligentes, búsqueda visual y funciones inteligentes del navegador.</p></section>
+    <section id="a-release-controls"><title>Controles en esquemas actuales</title><p>En Release 153 y ESR 153.0, el paso 5 puede mostrar políticas compatibles para <uicontrol>IA y funciones inteligentes</uicontrol>, búsqueda visual y funciones inteligentes del navegador.</p></section>
     <section id="a-esr-unavailable"><title>Controles no disponibles en ESR</title><p>En ESR 140.13, los controles de políticas de IA no compatibles están ausentes o se marcan como no disponibles. No los agregue manualmente como si el editor guiado los admitiera.</p></section>
     <section id="a-no-documentation-ai"><title>Independiente del asistente de documentación</title><p>Esta referencia explica únicamente los controles de políticas del navegador Firefox existentes. Estos controles no configuran, activan ni limitan el asistente de documentación independiente.</p></section>
-    <section id="a-recovery"><title>Recuperación</title><p>Si falta un control, confirme el canal del esquema, consulte «Todos los ajustes» y registre el estado no compatible durante la revisión.</p></section>
+    <section id="a-recovery"><title>Recuperación</title><p>Si falta un control, confirme el canal del esquema, consulte «<uicontrol>Todos los ajustes</uicontrol>» y registre el estado no compatible durante la revisión.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

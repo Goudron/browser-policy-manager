@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Buscar en «Todos los ajustes»</title>
-  <shortdesc>Busque configuraciones configuradas, políticas disponibles, preferencias conocidas y acciones de configuración de Todos los ajustes.</shortdesc>
+  <shortdesc>Busque configuraciones configuradas, políticas disponibles, preferencias conocidas y acciones de configuración de <uicontrol>Todos los ajustes</uicontrol>.</shortdesc>
   <taskbody>
-    <prereq><p>Abra Todos los ajustes en cualquier modo.</p></prereq>
-    <context><p>La búsqueda se comparte entre el trabajo de Revisión, Configurado y Catálogo. Puede conducir a una configuración, una acción o un grupo filtrado.</p></context>
+    <prereq><p>Abra <uicontrol>Todos los ajustes</uicontrol> en cualquier modo.</p></prereq>
+    <context><p>La búsqueda se comparte entre el trabajo de <uicontrol>Revisión</uicontrol>, Configurado y <uicontrol>Catálogo</uicontrol>. Puede conducir a una configuración, una acción o un grupo filtrado.</p></context>
     <steps>
-      <step><cmd>Coloque el foco en el campo de búsqueda Todos los ajustes.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Ingrese una política ID, clave de preferencia, categoría, fuente o término en lenguaje sencillo.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Elija un resultado agrupado y confirme la configuración o acción objetivo.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Coloque el foco en el campo de búsqueda <uicontrol>Todos los ajustes</uicontrol>.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Ingrese una política ID, clave de preferencia, categoría, fuente o término en lenguaje sencillo.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Elija un resultado agrupado y confirme la configuración o acción objetivo.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Borra la búsqueda cuando vuelvas a navegar o filtrar.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>La configuración o acción coincidente se selecciona sin perder el contexto del perfil actual.</p></result>

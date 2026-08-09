@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-language" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Die Sprache der Benutzeroberfläche ändern</title>
-  <shortdesc>Wählen Sie Englisch, Russisch, Deutsch, vereinfachtes Chinesisch, Französisch, Spanisch oder die Systemsprache für BPM.</shortdesc>
+  <shortdesc>Wählen Sie <uicontrol>Englisch</uicontrol>, <uicontrol>Russisch</uicontrol>, <uicontrol>Deutsch</uicontrol>, vereinfachtes Chinesisch, <uicontrol>Französisch</uicontrol>, <uicontrol>Spanisch</uicontrol> oder die Systemsprache für BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <prereq><p>Öffnen Sie BPM im <uicontrol>Browser</uicontrol> und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
     <context><p>Verwenden Sie die Sprachauswahl, wenn Screenshots, Beschriftungen, Validierungsmeldungen und Dokumentationsbeispiele mit dem Gebietsschema des Operators übereinstimmen müssen.</p></context>
     <steps>
       <step><cmd>Öffnen Sie die Sprachauswahl im Seitenkopf.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
-      <step><cmd>Wählen Sie Englisch, Russisch, Deutsch, vereinfachtes Chinesisch, Französisch, Spanisch oder System.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Wählen Sie <uicontrol>Englisch</uicontrol>, <uicontrol>Russisch</uicontrol>, <uicontrol>Deutsch</uicontrol>, <uicontrol>Chinesisch (vereinfacht)</uicontrol>, <uicontrol>Französisch</uicontrol>, <uicontrol>Spanisch</uicontrol> oder <uicontrol>Browser</uicontrol>.</cmd><info><p>Eine ausdrücklich gewählte Sprache wird für weitere BPM-Seiten und Neuladungen gespeichert. <uicontrol>Browser</uicontrol> wird als Modus gespeichert: BPM löst ihn bei jedem Laden anhand der aktuellen <uicontrol>Browser</uicontrol>präferenzen in der beschriebenen Reihenfolge für Zuordnung und Fallback auf.</p></info></step>
       <step><cmd>Bestätigen Sie, dass Navigationsbeschriftungen, Validierungsmeldungen, Statustext und Editor-Steuerelemente zum ausgewählten Gebietsschema wechseln.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Fahren Sie mit der Bearbeitung erst fort, nachdem Sie bestätigt haben, dass das Profil und der Schemakanal noch identisch sind.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>BPM zeigt die Schnittstelle im ausgewählten Gebietsschema an, ohne die Profildaten zu ändern.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-language-detection-fallback"/>

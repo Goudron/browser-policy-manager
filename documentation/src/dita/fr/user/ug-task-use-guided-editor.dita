@@ -5,9 +5,9 @@
   <shortdesc>Les six étapes couvrent l’identité du profil, l’accès au navigateur et les valeurs par défaut, la sécurité et la confidentialité, les utilisateurs, les extensions et les sites, les fonctionnalités intelligentes, puis la vérification et l’exportation.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez un profil dans l’éditeur guidé à partir de la bibliothèque ou du flux de création.</p></prereq>
-    <context><p>L’« Éditeur guidé » organise la configuration du profil en six étapes et maintient la validation du schéma visible pendant votre travail.</p>
+    <context><p>L’« <uicontrol>Éditeur guidé</uicontrol> » organise la configuration du profil en six étapes et maintient la validation du schéma visible pendant votre travail.</p>
       <fig id="screenshot-guided-editor-overview">
-        <title>Éditeur guidé</title>
+        <title>Vue d’ensemble de l’« Éditeur guidé »</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
           <alt>Éditeur guidé affichant l'état de navigation et de validation des étapes pour un profil enregistré.</alt>
         </image>

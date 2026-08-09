@@ -4,8 +4,8 @@
   <title>Políticas y preferencias gestionadas</title>
   <shortdesc>BPM separa las políticas de Firefox Enterprise de los valores de preferencias administrados y mantiene ambos en un solo perfil.</shortdesc>
   <conbody>
-    <p>Las políticas se denominan controles de Firefox Enterprise, como el comportamiento, el acceso, los permisos o la configuración de funciones del navegador. Preferencias gestionadas son claves de preferencia con valores y comportamiento de bloqueo opcional.</p>
-    <p>Editor guiado cubre objetivos políticos comunes. Todos los ajustes expone el catálogo compatible más amplio. Editor JSON muestra el límite exacto del documento utilizado para la importación y exportación.</p>
+    <p>Las políticas se denominan controles de Firefox Enterprise, como el comportamiento, el acceso, los permisos o la configuración de funciones del navegador. <uicontrol>Preferencias gestionadas</uicontrol> son claves de preferencia con valores y comportamiento de bloqueo opcional.</p>
+    <p><uicontrol>Editor guiado</uicontrol> cubre objetivos políticos comunes. <uicontrol>Todos los ajustes</uicontrol> expone el catálogo compatible más amplio. <uicontrol>Editor JSON</uicontrol> muestra el límite exacto del documento utilizado para la importación y exportación.</p>
     <p>Los detalles de referencia política por política pertenecen a la Guía de políticas de Firefox; Esta Guía del usuario explica cómo un usuario alcanza y edita de forma segura esos controles en BPM.</p>
   </conbody>
 </concept>

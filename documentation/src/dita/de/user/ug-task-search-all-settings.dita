@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>„Alle Einstellungen“ durchsuchen</title>
-  <shortdesc>Durchsuchen Sie konfigurierte Einstellungen, verfügbare Richtlinien, bekannte Einstellungen und Einstellungsaktionen von Alle Einstellungen.</shortdesc>
+  <shortdesc>Durchsuchen Sie konfigurierte Einstellungen, verfügbare Richtlinien, bekannte Einstellungen und Einstellungsaktionen von <uicontrol>Alle Einstellungen</uicontrol>.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie Alle Einstellungen in einem beliebigen Modus.</p></prereq>
-    <context><p>Die Suche wird für alle Überprüfungs-, Konfigurations- und Katalogarbeiten verwendet. Es kann zu einer Einstellung, einer Aktion oder einer gefilterten Gruppe führen.</p></context>
+    <prereq><p>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> in einem beliebigen Modus.</p></prereq>
+    <context><p>Die Suche wird für alle Überprüfungs-, Konfigurations- und <uicontrol>Katalog</uicontrol>arbeiten verwendet. Es kann zu einer Einstellung, einer Aktion oder einer gefilterten Gruppe führen.</p></context>
     <steps>
-      <step><cmd>Platzieren Sie den Fokus im Suchfeld Alle Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Geben Sie eine Richtlinie ID, einen Präferenzschlüssel, eine Kategorie, eine Quelle oder einen Begriff im Klartext ein.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wählen Sie ein gruppiertes Ergebnis und bestätigen Sie die Zieleinstellung oder Aktion.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Platzieren Sie den Fokus im Suchfeld <uicontrol>Alle Einstellungen</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Geben Sie eine Richtlinie ID, einen Präferenzschlüssel, eine Kategorie, eine Quelle oder einen Begriff im Klartext ein.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie ein gruppiertes Ergebnis und bestätigen Sie die Zieleinstellung oder Aktion.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Löschen Sie die Suche, wenn Sie zum Durchsuchen oder Filtern zurückkehren.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Die passende Einstellung oder Aktion wird ausgewählt, ohne dass der aktuelle Profilkontext verloren geht.</p></result>

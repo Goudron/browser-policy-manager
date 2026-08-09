@@ -69,9 +69,7 @@ def test_m10_candidate_names_and_historical_documentation_aliases_are_owned() ->
     aliases = authority["documentation_aliases"]
     alias_terms = {term for alias in aliases for term in alias["source_terms"]}
     alias_keys = {alias["catalog_key"] for alias in aliases}
-    family_keys = {
-        key for family in authority["interface_families"].values() for key in family
-    }
+    family_keys = {key for family in authority["interface_families"].values() for key in family}
 
     assert len(aliases) == authority["summary"]["documentation_alias_count"]
     assert alias_keys <= family_keys
@@ -131,6 +129,7 @@ def test_catalog_quality_findings_are_resolved_by_replacement_task() -> None:
     assert len(corrections) == authority["summary"]["additional_catalog_correction_count"]
     for correction in corrections:
         assert correction["baseline"] != correction["resolved"]
-        assert _json(ROOT / f"app/i18n/{correction['locale']}.json")[
-            correction["catalog_key"]
-        ] == correction["resolved"]
+        assert (
+            _json(ROOT / f"app/i18n/{correction['locale']}.json")[correction["catalog_key"]]
+            == correction["resolved"]
+        )

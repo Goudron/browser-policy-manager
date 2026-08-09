@@ -3,7 +3,6 @@ from __future__ import annotations
 import html
 import importlib.util
 import json
-import os
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
@@ -13,20 +12,38 @@ import pytest
 
 from app.core.config import get_settings
 from app.models.profile import Profile
-from tests.support import run_test_app_server, run_test_app_server_handle
-from tests.test_documentation_runtime_route import _write_packaged_site
-from tests.test_ui_browser_tabs import (
-    _assert_document_fits,
-    _body_text,
-    _build_chromium_driver,
-    _click_and_switch_to_new_tab,
-    _close_chromium_driver,
-    _create_profile,
-    _load_locale_catalog,
-    _set_locale,
+from tests.browser.harness import (
+    assert_document_fits as _assert_document_fits,
 )
+from tests.browser.harness import (
+    body_text as _body_text,
+)
+from tests.browser.harness import (
+    build_chromium_driver as _build_chromium_driver,
+)
+from tests.browser.harness import (
+    click_and_switch_to_new_tab as _click_and_switch_to_new_tab,
+)
+from tests.browser.harness import (
+    click_element as _click_element,
+)
+from tests.browser.harness import (
+    close_chromium_driver as _close_chromium_driver,
+)
+from tests.browser.harness import (
+    configured_environment,
+)
+from tests.browser.profiles.pages import create_profile as _create_profile
+from tests.browser.profiles.pages import load_locale_catalog as _load_locale_catalog
+from tests.browser.profiles.pages import set_locale as _set_locale
+from tests.contract.docs.general.test_documentation_runtime_route import _write_packaged_site
+from tests.support import run_test_app_server, run_test_app_server_handle
 
-pytestmark = [pytest.mark.browser_ui, pytest.mark.slow]
+pytestmark = [
+    pytest.mark.browser_ui,
+    pytest.mark.slow,
+    pytest.mark.usefixtures("browser_test_context"),
+]
 
 DOCUMENTATION_ROOT = Path(__file__).resolve().parents[2]
 BUILD_DOCS_PATH = DOCUMENTATION_ROOT / "tools/build_docs.py"
@@ -96,34 +113,24 @@ def _augment_packaged_site_for_browser_smoke(root: Path) -> None:
 
 @contextmanager
 def _documentation_test_server(site_root: Path) -> Iterator[str]:
-    previous_site_dir = os.environ.get("BPM_DOCUMENTATION_SITE_DIR")
-    os.environ["BPM_DOCUMENTATION_SITE_DIR"] = str(site_root)
-    get_settings.cache_clear()
-    try:
-        with run_test_app_server() as base_url:
-            yield base_url
-    finally:
-        if previous_site_dir is None:
-            os.environ.pop("BPM_DOCUMENTATION_SITE_DIR", None)
-        else:
-            os.environ["BPM_DOCUMENTATION_SITE_DIR"] = previous_site_dir
+    with configured_environment({"BPM_DOCUMENTATION_SITE_DIR": site_root}):
         get_settings.cache_clear()
+        try:
+            with run_test_app_server() as base_url:
+                yield base_url
+        finally:
+            get_settings.cache_clear()
 
 
 @contextmanager
 def _documentation_test_server_handle(site_root: Path) -> Iterator[Any]:
-    previous_site_dir = os.environ.get("BPM_DOCUMENTATION_SITE_DIR")
-    os.environ["BPM_DOCUMENTATION_SITE_DIR"] = str(site_root)
-    get_settings.cache_clear()
-    try:
-        with run_test_app_server_handle() as handle:
-            yield handle
-    finally:
-        if previous_site_dir is None:
-            os.environ.pop("BPM_DOCUMENTATION_SITE_DIR", None)
-        else:
-            os.environ["BPM_DOCUMENTATION_SITE_DIR"] = previous_site_dir
+    with configured_environment({"BPM_DOCUMENTATION_SITE_DIR": site_root}):
         get_settings.cache_clear()
+        try:
+            with run_test_app_server_handle() as handle:
+                yield handle
+        finally:
+            get_settings.cache_clear()
 
 
 def _write_generated_theme_smoke_site(root: Path) -> None:
@@ -247,8 +254,7 @@ def _close_current_tab_and_return(driver, handle: str) -> None:
 
 
 def _theme_metrics(driver) -> dict[str, object]:
-    return driver.execute_script(
-        """
+    return driver.execute_script("""
         const selectors = [
           ".bpm-docs-header",
           ".bpm-docs-sidebar",
@@ -284,8 +290,7 @@ def _theme_metrics(driver) -> dict[str, object]:
           backgrounds,
           controls,
         };
-        """
-    )
+        """)
 
 
 def _assert_theme_metrics_fit(metrics: dict[str, object]) -> None:
@@ -302,7 +307,6 @@ def _install_assistant_ready_browser_mock(driver, locale: str) -> None:
         const locale = arguments[0];
         const api = '/api/documentation-assistant';
         window.__assistantQaCalls = [];
-        window.__assistantQaWebEnabled = false;
         window.__assistantQaRejectChat = false;
         window.__assistantQaEmitFinal = null;
         const response = (payload, status = 200) => new Response(JSON.stringify(payload), {
@@ -316,27 +320,6 @@ def _install_assistant_ready_browser_mock(driver, locale: str) -> None:
               api_version: 1, state: 'ready', assistant_ready: true,
               lexical_search_ready: true, locale, message_key: 'assistant_ready',
               action_key: 'assistant_chat_send', reason_code: 'assistant_ready', state_epoch: 1,
-            });
-          }
-          if (path.startsWith(`${api}/web-mode?locale=${encodeURIComponent(locale)}&tab_id=`)) {
-            return response({
-              api_version: 1, available: true, enabled: window.__assistantQaWebEnabled,
-              locale, reason_code: window.__assistantQaWebEnabled
-                ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
-              state_epoch: window.__assistantQaWebEnabled ? 1 : 0,
-            });
-          }
-          if (path === `${api}/web-mode`) {
-            const payload = JSON.parse(init.body);
-            if (payload.locale !== locale || typeof payload.tab_id !== 'string') {
-              return response({}, 400);
-            }
-            window.__assistantQaWebEnabled = payload.enabled;
-            return response({
-              api_version: 1, available: true, enabled: window.__assistantQaWebEnabled,
-              locale, reason_code: window.__assistantQaWebEnabled
-                ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
-              state_epoch: window.__assistantQaWebEnabled ? 2 : 3,
             });
           }
           if (path === `${api}/chat`) {
@@ -385,7 +368,6 @@ def _install_assistant_failure_browser_mock(driver, locale: str) -> None:
         const modelApi = '/api/local-model';
         const csrf = 'c'.repeat(24);
         window.__assistantQaFailureCalls = [];
-        window.__assistantQaInstallRequested = false;
         const response = (payload, status = 200) => new Response(JSON.stringify(payload), {
           status, headers: { 'Content-Type': 'application/json' },
         });
@@ -398,7 +380,7 @@ def _install_assistant_failure_browser_mock(driver, locale: str) -> None:
         const modelStatus = () => ({
           api_version: 1, csrf_token: csrf, disclosure: {}, lexical_search_ready: true,
           verification: { state: 'not-installed', verified: false, reason_code: 'artifact_missing' },
-          operation: operation(window.__assistantQaInstallRequested ? 'failed' : 'idle'),
+          operation: operation('failed'),
         });
         window.fetch = async (input, init = {}) => {
           const path = String(input);
@@ -414,7 +396,6 @@ def _install_assistant_failure_browser_mock(driver, locale: str) -> None:
             return response(modelStatus());
           }
           if (path === `${modelApi}/install`) {
-            window.__assistantQaInstallRequested = true;
             return response({
               api_version: 1, csrf_token: csrf, accepted: true, operation: operation('running'),
             });
@@ -427,8 +408,7 @@ def _install_assistant_failure_browser_mock(driver, locale: str) -> None:
 
 
 def _compact_search_metrics(driver) -> dict[str, object]:
-    return driver.execute_script(
-        """
+    return driver.execute_script("""
         const row = document.querySelector(".bpm-docs-search-row");
         const panel = document.querySelector("[data-search-advanced-panel]");
         const toggle = document.querySelector("[data-search-advanced-toggle]");
@@ -448,8 +428,7 @@ def _compact_search_metrics(driver) -> dict[str, object]:
           rowRight: rowRect.right,
           viewportWidth: window.innerWidth,
         };
-        """
-    )
+        """)
 
 
 def _assert_compact_search_row_fits(metrics: dict[str, object]) -> None:
@@ -459,8 +438,7 @@ def _assert_compact_search_row_fits(metrics: dict[str, object]) -> None:
 
 
 def _tree_state(driver) -> dict[str, object]:
-    return driver.execute_script(
-        """
+    return driver.execute_script("""
         const current = document.querySelector("[data-docs-tree] [aria-current='page']");
         const active = document.activeElement;
         const guides = Array.from(document.querySelectorAll(
@@ -497,13 +475,11 @@ def _tree_state(driver) -> dict[str, object]:
             ".bpm-docs-breadcrumbs li"
           )).map((node) => node.textContent.trim()),
         };
-        """
-    )
+        """)
 
 
 def _sidebar_scroll_state(driver) -> dict[str, object]:
-    return driver.execute_script(
-        """
+    return driver.execute_script("""
         const sidebar = document.querySelector('.bpm-docs-sidebar');
         const active = document.activeElement;
         const sidebarRect = sidebar.getBoundingClientRect();
@@ -525,8 +501,7 @@ def _sidebar_scroll_state(driver) -> dict[str, object]:
           sidebarTop: sidebarRect.top,
           sidebarBottom: sidebarRect.bottom,
         };
-        """
-    )
+        """)
 
 
 def _tree_collection_node(state: dict[str, Any], collection: str, node_id: str) -> dict[str, Any]:
@@ -569,7 +544,10 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                 search_input = driver.find_element(by.By.CSS_SELECTOR, "#bpm-docs-search-query")
                 search_input.clear()
                 search_input.send_keys("theme")
-                driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]").click()
+                _click_element(
+                    driver,
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]"),
+                )
                 expanded_metrics = _compact_search_metrics(driver)
                 assert expanded_metrics["panelHidden"] is False
                 assert expanded_metrics["expanded"] == "true"
@@ -580,9 +558,18 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                 assert escaped_metrics["panelHidden"] is True
                 assert escaped_metrics["expanded"] == "false"
                 assert escaped_metrics["query"] == "theme"
-                assert driver.switch_to.active_element.get_attribute("data-search-advanced-toggle") == ""
-                driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]").click()
-                driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]").click()
+                assert (
+                    driver.switch_to.active_element.get_attribute("data-search-advanced-toggle")
+                    == ""
+                )
+                _click_element(
+                    driver,
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]"),
+                )
+                _click_element(
+                    driver,
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]"),
+                )
                 collapsed_metrics = _compact_search_metrics(driver)
                 assert collapsed_metrics["panelHidden"] is True
                 assert collapsed_metrics["expanded"] == "false"
@@ -592,27 +579,33 @@ def test_documentation_generated_theme_modes_render_for_all_locales_and_viewport
                 assert entered_metrics["panelHidden"] is True
                 assert entered_metrics["expanded"] == "false"
                 assert entered_metrics["query"] == "theme"
-                driver.find_element(by.By.CSS_SELECTOR, "[data-search-submit]").click()
+                _click_element(
+                    driver,
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-search-submit]"),
+                )
                 submitted_metrics = _compact_search_metrics(driver)
                 assert submitted_metrics["panelHidden"] is True
                 assert submitted_metrics["expanded"] == "false"
                 assert submitted_metrics["query"] == "theme"
-                driver.execute_script(
-                    "document.querySelector('[data-search-filter]')?.click();"
-                )
+                driver.execute_script("document.querySelector('[data-search-filter]')?.click();")
                 filtered_metrics = _compact_search_metrics(driver)
                 assert filtered_metrics["panelHidden"] is True
                 assert filtered_metrics["expanded"] == "false"
                 assert filtered_metrics["activeFiltersHidden"] is False
                 assert filtered_metrics["activeFiltersSummary"]
-                driver.find_element(by.By.CSS_SELECTOR, "[data-search-clear-filters]").click()
+                _click_element(
+                    driver,
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-search-clear-filters]"),
+                )
                 cleared_filters_metrics = _compact_search_metrics(driver)
                 assert cleared_filters_metrics["panelHidden"] is True
                 assert cleared_filters_metrics["activeFiltersHidden"] is True
                 assert cleared_filters_metrics["query"] == "theme"
                 driver.refresh()
                 ui.WebDriverWait(driver, 10).until(
-                    lambda current_driver: _compact_search_metrics(current_driver)["query"] == "theme"
+                    lambda current_driver: (
+                        _compact_search_metrics(current_driver)["query"] == "theme"
+                    )
                 )
                 restored_metrics = _compact_search_metrics(driver)
                 assert restored_metrics["panelHidden"] is True
@@ -706,8 +699,7 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
     ui = pytest.importorskip("selenium.webdriver.support.ui")
 
     def metrics(current_driver) -> dict[str, object]:
-        return current_driver.execute_script(
-            """
+        return current_driver.execute_script("""
             const widget = document.querySelector('[data-documentation-assistant-widget]');
             const panel = document.querySelector('[data-assistant-panel]');
             const toggle = document.querySelector('[data-assistant-toggle]');
@@ -725,17 +717,14 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
               transcriptOverflow: getComputedStyle(document.querySelector('[data-assistant-transcript]')).overflowY,
               panelBackground: getComputedStyle(panel).backgroundColor,
             };
-            """
-        )
+            """)
 
     def assistant_requests(current_driver) -> list[str]:
-        return current_driver.execute_script(
-            """
+        return current_driver.execute_script("""
             return performance.getEntriesByType('resource')
               .map((entry) => entry.name)
               .filter((name) => name.includes('/api/documentation-assistant'));
-            """
-        )
+            """)
 
     with _documentation_test_server(generated_theme_smoke_site) as base_url:
         driver = _build_chromium_driver()
@@ -763,7 +752,9 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                 wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is False)
                 wait.until(
                     lambda current_driver, expected_locale=locale: any(
-                        name.endswith(f"/api/documentation-assistant/status?locale={expected_locale}")
+                        name.endswith(
+                            f"/api/documentation-assistant/status?locale={expected_locale}"
+                        )
                         for name in assistant_requests(current_driver)
                     )
                 )
@@ -794,7 +785,10 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                         const widget = document.querySelector('[data-documentation-assistant-widget]');
                         return window.BPMDocumentationAssistantConversation.recordCompletedTurn(widget, arguments[0]);
                         """,
-                        {"user": "Покажите <img> безопасно", "assistant": "Текст без HTML <script>."},
+                        {
+                            "user": "Покажите <img> безопасно",
+                            "assistant": "Текст без HTML <script>.",
+                        },
                     )
                     assert persisted is True
                     driver.refresh()
@@ -802,16 +796,14 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                         lambda current_driver: metrics(current_driver)["panelHidden"] is False
                     )
                     assert assistant_requests(driver) == []
-                    restored = driver.execute_script(
-                        """
+                    restored = driver.execute_script("""
                         const transcript = document.querySelector('[data-assistant-transcript]');
                         return {
                           text: transcript.textContent,
                           messages: transcript.querySelectorAll('[data-assistant-message-role]').length,
                           unsafeNodes: transcript.querySelectorAll('img, script').length,
                         };
-                        """
-                    )
+                        """)
                     assert restored == {
                         "text": "Покажите <img> безопасноТекст без HTML <script>.",
                         "messages": 2,
@@ -822,23 +814,30 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                     wait.until(
                         lambda current_driver: metrics(current_driver)["panelHidden"] is False
                     )
-                    assert driver.execute_script(
-                        "return document.querySelector('[data-assistant-transcript]').textContent;"
-                    ) == "Покажите <img> безопасноТекст без HTML <script>."
-                    assert driver.execute_script(
-                        """
+                    assert (
+                        driver.execute_script(
+                            "return document.querySelector('[data-assistant-transcript]').textContent;"
+                        )
+                        == "Покажите <img> безопасноТекст без HTML <script>."
+                    )
+                    assert (
+                        driver.execute_script("""
                         return window.BPMDocumentationAssistantConversation.setReady(
                           document.querySelector('[data-documentation-assistant-widget]'), true
                         );
-                        """
-                    ) is True
+                        """)
+                        is True
+                    )
                     clear = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-clear]")
                     assert clear.is_displayed()
                     clear.click()
                     wait.until(
-                        lambda current_driver: current_driver.execute_script(
-                            "return document.querySelectorAll('[data-assistant-message-role]').length;"
-                        ) == 0
+                        lambda current_driver: (
+                            current_driver.execute_script(
+                                "return document.querySelectorAll('[data-assistant-message-role]').length;"
+                            )
+                            == 0
+                        )
                     )
 
                 driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").send_keys(
@@ -849,10 +848,8 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
 
             driver.set_window_size(1366, 1000)
             driver.get(f"{base_url}/help/en/index.html")
-            driver.execute_script(
-                """
+            driver.execute_script("""
                 window.__assistantTransportCalls = [];
-                window.__assistantWebEnabled = false;
                 window.fetch = async (input, init = {}) => {
                   const path = String(input);
                   window.__assistantTransportCalls.push({ path, method: init.method || 'GET', body: init.body || '' });
@@ -861,23 +858,6 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                       api_version: 1, state: 'ready', assistant_ready: true,
                       lexical_search_ready: true, locale: 'en', message_key: 'assistant_ready',
                       action_key: 'assistant_chat_send', reason_code: 'assistant_ready', state_epoch: 1,
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  if (path.startsWith('/api/documentation-assistant/web-mode?locale=en&tab_id=')) {
-                    return new Response(JSON.stringify({
-                      api_version: 1, available: true, enabled: window.__assistantWebEnabled,
-                      locale: 'en', reason_code: window.__assistantWebEnabled
-                        ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
-                      state_epoch: window.__assistantWebEnabled ? 1 : 0,
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  if (path === '/api/documentation-assistant/web-mode') {
-                    window.__assistantWebEnabled = JSON.parse(init.body).enabled;
-                    return new Response(JSON.stringify({
-                      api_version: 1, available: true, enabled: window.__assistantWebEnabled,
-                      locale: 'en', reason_code: window.__assistantWebEnabled
-                        ? 'assistant_web_enabled' : 'assistant_web_disabled_by_reader',
-                      state_epoch: window.__assistantWebEnabled ? 1 : 2,
                     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
                   }
                   if (path === '/api/documentation-assistant/chat') {
@@ -893,13 +873,6 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                       published_url: '/help/en/user/overview.html', locale: 'en', excerpt: 'Approved excerpt.',
                     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
                   }
-                  if (path === '/api/documentation-assistant/chat/req_example/sources/src_web') {
-                    return new Response(JSON.stringify({
-                      api_version: 1, source_id: 'src_web', title: 'Mozilla policy templates',
-                      published_url: 'https://mozilla.github.io/policy-templates/README.md', locale: 'en',
-                      excerpt: '', source_kind: 'external_untrusted', provider_id: 'brave-search-llm-context',
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
                   if (path.startsWith('/api/documentation-assistant/conversation?locale=en&tab_id=')) {
                     return new Response(null, { status: 204 });
                   }
@@ -912,40 +885,30 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                     if (name === 'final') {
                       queueMicrotask(() => listener({ data: JSON.stringify({
                         api_version: 1, request_id: 'req_example', state: 'answer', state_epoch: 2,
-                        reason_code: 'assistant_citations_validated', message_key: 'assistant_chat_answer',
-                        action_key: '', disposition: 'answer', text: 'Grounded BPM answer.', citations: ['src_example'],
-                        external_claims: [{ text: 'External Firefox policy note.', citations: ['src_web'] }],
-                      }) }));
+                            reason_code: 'assistant_citations_validated', message_key: 'assistant_chat_answer',
+                            action_key: '', disposition: 'answer', text: 'Grounded BPM answer.', citations: ['src_example'],
+                          }) }));
                     }
                   }
                   close() {}
                 };
-                """
-            )
+                """)
             driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
             wait.until(
                 lambda current_driver: current_driver.find_element(
                     by.By.CSS_SELECTOR, "[data-assistant-send]"
                 ).is_displayed()
             )
-            web_toggle = driver.find_element(
-                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-            )
-            assert web_toggle.is_displayed()
-            assert web_toggle.is_enabled()
-            assert not web_toggle.is_selected()
-            web_toggle.click()
-            wait.until(
-                lambda current_driver: current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                ).is_selected()
-            )
+            assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-toggle]")
             question = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-question]")
             question.send_keys("How do I configure BPM?")
             driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
             wait.until(
-                lambda current_driver: "Grounded BPM answer." in current_driver.execute_script(
-                    "return document.querySelector('[data-assistant-transcript]').textContent;"
+                lambda current_driver: (
+                    "Grounded BPM answer."
+                    in current_driver.execute_script(
+                        "return document.querySelector('[data-assistant-transcript]').textContent;"
+                    )
                 )
             )
             driver.find_element(
@@ -958,182 +921,26 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
             )
             assert source.text == "BPM overview"
             assert source.get_attribute("href").endswith("/help/en/user/overview.html")
-            external_region = driver.find_element(
+            assert not driver.find_elements(
                 by.By.CSS_SELECTOR, ".bpm-docs-assistant-external-claims"
             )
-            assert "External sources" in external_region.text
-            assert "External Firefox policy note." in external_region.text
-            external_link = external_region.find_element(by.By.CSS_SELECTOR, "a")
-            assert external_link.get_attribute("href") == (
-                "https://mozilla.github.io/policy-templates/README.md"
-            )
-            assert external_link.get_attribute("target") == "_blank"
-            assert set(external_link.get_attribute("rel").split()) == {
-                "noopener",
-                "noreferrer",
-            }
             driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-clear]").click()
             wait.until(
-                lambda current_driver: current_driver.execute_script(
-                    "return document.querySelectorAll('[data-assistant-message-role]').length;"
-                ) == 0
-            )
-            assert driver.find_element(
-                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-            ).is_selected()
-            calls = driver.execute_script("return window.__assistantTransportCalls;")
-            assert [call["method"] for call in calls] == [
-                "GET", "GET", "POST", "POST", "GET", "GET", "DELETE", "GET", "GET"
-            ]
-            assert any('"web_mode":"request_web"' in call["body"] for call in calls)
-            driver.find_element(
-                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-            ).click()
-            wait.until(
-                lambda current_driver: not current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                ).is_selected()
-            )
-            assert driver.execute_script(
-                "return window.__assistantTransportCalls.at(-1).method;"
-            ) == "POST"
-            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
-            wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is True)
-
-            driver.get(f"{base_url}/help/en/index.html")
-            driver.execute_script(
-                """
-                window.__assistantUnavailableWebCalls = [];
-                window.fetch = async (input, init = {}) => {
-                  const path = String(input);
-                  window.__assistantUnavailableWebCalls.push({ path, method: init.method || 'GET' });
-                  if (path === '/api/documentation-assistant/status?locale=en') {
-                    return new Response(JSON.stringify({
-                      api_version: 1, state: 'ready', assistant_ready: true,
-                      lexical_search_ready: true, locale: 'en', message_key: 'assistant_ready',
-                      action_key: 'assistant_chat_send', reason_code: 'assistant_ready', state_epoch: 1,
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  if (path.startsWith('/api/documentation-assistant/web-mode?locale=en&tab_id=')) {
-                    return new Response(JSON.stringify({
-                      api_version: 1, available: false, enabled: false, locale: 'en',
-                      reason_code: 'assistant_web_credential_unavailable', state_epoch: 0,
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  return new Response(null, { status: 404 });
-                };
-                """
-            )
-            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
-            unavailable_web_toggle = wait.until(
-                lambda current_driver: current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                )
-            )
-            wait.until(lambda _current_driver: unavailable_web_toggle.is_displayed())
-            assert not unavailable_web_toggle.is_enabled()
-            assert not unavailable_web_toggle.is_selected()
-            unavailable_calls = driver.execute_script(
-                "return window.__assistantUnavailableWebCalls;"
-            )
-            assert [call["method"] for call in unavailable_calls] == ["GET", "GET"]
-            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
-
-            driver.get(f"{base_url}/help/en/index.html")
-            driver.execute_script(
-                """
-                window.__assistantInstallCalls = [];
-                window.__assistantInstalled = false;
-                window.__assistantInstallState = 'idle';
-                const csrf = 'c'.repeat(24);
-                const operation = (state, phase, downloaded, total, percent, cancellable, reason) => ({
-                  operation_id: 'operation_example', kind: 'install', state, reason_code: reason,
-                  downloaded_bytes: downloaded, total_bytes: total, progress_percent: percent,
-                  cancellable, phase,
-                });
-                const modelStatus = () => ({
-                  api_version: 1, csrf_token: csrf, disclosure: {}, lexical_search_ready: true,
-                  verification: {
-                    state: window.__assistantInstallState === 'idle' ? 'not-installed' : 'installed',
-                    verified: window.__assistantInstallState !== 'idle',
-                    reason_code: window.__assistantInstallState === 'idle' ? 'artifact_missing' : 'verified',
-                  },
-                  operation: window.__assistantInstallState === 'idle'
-                    ? { state: 'idle' }
-                    : window.__assistantInstallState === 'running'
-                      ? operation('running', 'downloading', 50, 100, 50, true, '')
-                      : operation('installed', 'completed', 100, 100, 100, false, 'installed'),
-                });
-                window.fetch = async (input, init = {}) => {
-                  const path = String(input);
-                  window.__assistantInstallCalls.push({ path, method: init.method || 'GET', body: init.body || '' });
-                  if (path === '/api/documentation-assistant/status?locale=en') {
-                    const ready = window.__assistantInstalled;
-                    return new Response(JSON.stringify({
-                      api_version: 1, state: ready ? 'ready' : 'not-installed', assistant_ready: ready,
-                      lexical_search_ready: true, locale: 'en',
-                      message_key: ready ? 'assistant_ready' : 'assistant_not_installed',
-                      action_key: ready ? 'assistant_chat_send' : 'assistant_manage_model',
-                      reason_code: ready ? 'assistant_ready' : 'assistant_unavailable', state_epoch: ready ? 3 : 1,
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  if (path === '/api/local-model?locale=en') {
-                    const snapshot = modelStatus();
-                    if (window.__assistantInstallState === 'running') {
-                      window.__assistantInstallState = 'installed';
-                      window.__assistantInstalled = true;
-                    }
-                    return new Response(JSON.stringify(snapshot), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  if (path === '/api/local-model/install') {
-                    window.__assistantInstallState = 'running';
-                    return new Response(JSON.stringify({
-                      api_version: 1, csrf_token: csrf, accepted: true,
-                      operation: operation('running', 'downloading', 0, 100, 0, true, ''),
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  if (path.startsWith('/api/documentation-assistant/web-mode?locale=en&tab_id=')) {
-                    return new Response(JSON.stringify({
-                      api_version: 1, available: true, enabled: false, locale: 'en',
-                      reason_code: 'assistant_web_disabled_by_reader', state_epoch: 0,
-                    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-                  }
-                  return new Response(null, { status: 404 });
-                };
-                """
-            )
-            driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
-            install = wait.until(
                 lambda current_driver: (
-                    element
-                    if (element := current_driver.find_element(
-                        by.By.CSS_SELECTOR, "[data-assistant-install]"
-                    )).is_displayed() and element.is_enabled()
-                    else False
+                    current_driver.execute_script(
+                        "return document.querySelectorAll('[data-assistant-message-role]').length;"
+                    )
+                    == 0
                 )
             )
-            assert install.is_displayed()
-            assert install.is_enabled()
-            install.click()
-            wait.until(
-                lambda current_driver: "Installing model: 50% (50/100 B)" in current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-status]"
-                ).text
+            calls = driver.execute_script("return window.__assistantTransportCalls;")
+            assert any(
+                call["path"] == "/api/documentation-assistant/chat" and call["method"] == "POST"
+                for call in calls
             )
-            wait.until(
-                lambda current_driver: current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-question]"
-                ).is_enabled()
-            )
-            install_calls = driver.execute_script("return window.__assistantInstallCalls;")
-            assert [call["method"] for call in install_calls] == [
-                "GET", "GET", "POST", "GET", "GET", "GET", "GET"
-            ]
-            assert all("request_web" not in call["body"] for call in install_calls)
-            assert not driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-install]").is_displayed()
-            assert driver.find_element(
-                by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-            ).is_enabled()
+            assert any(call["path"].endswith("/sources/src_example") for call in calls)
+            assert all("/web-mode" not in call["path"] for call in calls)
+            assert all("request_web" not in call["body"] for call in calls)
             driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
             wait.until(lambda current_driver: metrics(current_driver)["panelHidden"] is True)
 
@@ -1165,14 +972,12 @@ def test_documentation_floating_assistant_shell_is_bounded_and_keyboard_operable
                     by.By.CSS_SELECTOR, "[data-assistant-toggle]"
                 )
             )
-            accessibility_mode = driver.execute_script(
-                """
+            accessibility_mode = driver.execute_script("""
                 return {
                   reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
                   forcedColors: matchMedia('(forced-colors: active)').matches,
                 };
-                """
-            )
+                """)
             assert accessibility_mode["reducedMotion"] is True
             assert accessibility_mode["forcedColors"] is True
             toggle.click()
@@ -1189,8 +994,7 @@ def test_documentation_floating_assistant_uses_m13_10_desktop_geometry_in_all_lo
     ui = pytest.importorskip("selenium.webdriver.support.ui")
 
     def panel_metrics(current_driver) -> dict[str, float | bool]:
-        return current_driver.execute_script(
-            """
+        return current_driver.execute_script("""
             const panel = document.querySelector('[data-assistant-panel]');
             const transcript = document.querySelector('[data-assistant-transcript]');
             const rect = panel.getBoundingClientRect();
@@ -1205,8 +1009,7 @@ def test_documentation_floating_assistant_uses_m13_10_desktop_geometry_in_all_lo
               viewportHeight: window.innerHeight,
               transcriptOverflow: getComputedStyle(transcript).overflowY,
             };
-            """
-        )
+            """)
 
     with _documentation_test_server(generated_theme_smoke_site) as base_url:
         driver = _build_chromium_driver()
@@ -1263,9 +1066,10 @@ def test_documentation_floating_assistant_ships_local_only_without_external_sour
             _install_assistant_ready_browser_mock(driver, "en")
             driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
             wait.until(
-                lambda current_driver: current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-status]"
-                ).text == build_docs.SHELL_LABELS["en"]["assistant_ready"]
+                lambda current_driver: (
+                    current_driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-status]").text
+                    == build_docs.SHELL_LABELS["en"]["assistant_ready"]
+                )
             )
             assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-control]")
             assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-toggle]")
@@ -1295,8 +1099,7 @@ def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
     ui = pytest.importorskip("selenium.webdriver.support.ui")
 
     def panel_state(current_driver) -> dict[str, object]:
-        return current_driver.execute_script(
-            """
+        return current_driver.execute_script("""
             const panel = document.querySelector('[data-assistant-panel]');
             const transcript = document.querySelector('[data-assistant-transcript]');
             const header = document.querySelector('.bpm-docs-header');
@@ -1314,15 +1117,14 @@ def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
               transcriptScrollHeight: transcript.scrollHeight,
               inlineScripts: document.querySelectorAll('script:not([src])').length,
             };
-            """
-        )
+            """)
 
     with _documentation_test_server(generated_theme_smoke_site) as base_url:
         driver = _build_chromium_driver()
         wait = ui.WebDriverWait(driver, 10)
         try:
             for index, locale in enumerate(DOCUMENTATION_LOCALES):
-                width, height = ((1366, 1000) if index % 2 == 0 else (390, 900))
+                width, height = (1366, 1000) if index % 2 == 0 else (390, 900)
                 labels = build_docs.SHELL_LABELS[locale]
                 driver.set_window_size(width, height)
                 driver.get(f"{base_url}/help/{locale}/index.html")
@@ -1332,17 +1134,23 @@ def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
                     )
                 )
                 assert toggle.text == labels["assistant"]
-                assert driver.execute_script(
-                    "return performance.getEntriesByType('resource').filter((entry) => "
-                    "entry.name.includes('/api/documentation-assistant')).length;"
-                ) == 0
+                assert (
+                    driver.execute_script(
+                        "return performance.getEntriesByType('resource').filter((entry) => "
+                        "entry.name.includes('/api/documentation-assistant')).length;"
+                    )
+                    == 0
+                )
                 _install_assistant_ready_browser_mock(driver, locale)
 
                 toggle.click()
                 wait.until(
-                    lambda current_driver, ready=labels["assistant_ready"]: current_driver.find_element(
-                        by.By.CSS_SELECTOR, "[data-assistant-status]"
-                    ).text == ready
+                    lambda current_driver, ready=labels["assistant_ready"]: (
+                        current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-assistant-status]"
+                        ).text
+                        == ready
+                    )
                 )
                 panel = panel_state(driver)
                 assert panel["panelHidden"] is False
@@ -1374,37 +1182,38 @@ def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
                 )
                 assert light_background != dark_background
 
-                web_control = driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-web-control]"
-                )
-                web_toggle = driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                )
-                assert web_control.text == labels["assistant_external_sources"]
-                assert web_toggle.get_attribute("role") == "switch"
-                assert web_toggle.is_enabled()
-                assert not web_toggle.is_selected()
+                assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-control]")
+                assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-toggle]")
                 assert driver.find_element(
                     by.By.CSS_SELECTOR, "[data-assistant-question]"
                 ).is_enabled()
-                assert driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-clear]").is_displayed()
+                assert driver.find_element(
+                    by.By.CSS_SELECTOR, "[data-assistant-clear]"
+                ).is_displayed()
 
                 if locale == "en":
                     question = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-question]")
                     question.send_keys("How do I configure BPM?")
                     driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
                     wait.until(
-                        lambda current_driver: current_driver.find_element(
-                            by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
-                        ).get_attribute("data-assistant-state") == "busy"
+                        lambda current_driver: (
+                            current_driver.find_element(
+                                by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
+                            ).get_attribute("data-assistant-state")
+                            == "busy"
+                        )
                     )
-                    assert driver.find_element(
-                        by.By.CSS_SELECTOR, "[data-assistant-status]"
-                    ).text == labels["assistant_busy_short"]
+                    assert (
+                        driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-status]").text
+                        == labels["assistant_busy_short"]
+                    )
                     driver.execute_script("window.__assistantQaEmitFinal();")
                     wait.until(
-                        lambda current_driver: "Grounded en BPM answer." in current_driver.execute_script(
-                            "return document.querySelector('[data-assistant-transcript]').textContent;"
+                        lambda current_driver: (
+                            "Grounded en BPM answer."
+                            in current_driver.execute_script(
+                                "return document.querySelector('[data-assistant-transcript]').textContent;"
+                            )
                         )
                     )
                     assert any(
@@ -1412,72 +1221,66 @@ def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
                         for call in driver.execute_script("return window.__assistantQaCalls;")
                     )
                     for turn in range(8):
-                        assert driver.execute_script(
-                            """
+                        assert (
+                            driver.execute_script(
+                                """
                             return window.BPMDocumentationAssistantConversation.recordCompletedTurn(
                               document.querySelector('[data-documentation-assistant-widget]'), arguments[0]
                             );
                             """,
-                            {
-                                "user": f"Long question {turn}: " + ("q" * 320),
-                                "assistant": f"Long answer {turn}: " + ("a" * 640),
-                            },
-                        ) is True
+                                {
+                                    "user": f"Long question {turn}: " + ("q" * 320),
+                                    "assistant": f"Long answer {turn}: " + ("a" * 640),
+                                },
+                            )
+                            is True
+                        )
                     transcript_state = panel_state(driver)
-                    assert transcript_state["transcriptScrollHeight"] > transcript_state[
-                        "transcriptClientHeight"
-                    ]
+                    assert (
+                        transcript_state["transcriptScrollHeight"]
+                        > transcript_state["transcriptClientHeight"]
+                    )
                     driver.refresh()
-                    wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is False)
-                    restored = driver.execute_script(
-                        """
+                    wait.until(
+                        lambda current_driver: panel_state(current_driver)["panelHidden"] is False
+                    )
+                    restored = driver.execute_script("""
                         const transcript = document.querySelector('[data-assistant-transcript]');
                         return {
                           messageCount: transcript.querySelectorAll('[data-assistant-message-role]').length,
                           unsafeNodes: transcript.querySelectorAll('img, script').length,
                           text: transcript.textContent,
                         };
-                        """
-                    )
+                        """)
                     assert restored["messageCount"] == 16
                     assert restored["unsafeNodes"] == 0
                     assert "Long answer 7:" in restored["text"]
-                    assert driver.execute_script(
-                        "return performance.getEntriesByType('resource').filter((entry) => "
-                        "entry.name.includes('/api/documentation-assistant')).length;"
-                    ) == 0
+                    assert (
+                        driver.execute_script(
+                            "return performance.getEntriesByType('resource').filter((entry) => "
+                            "entry.name.includes('/api/documentation-assistant')).length;"
+                        )
+                        == 0
+                    )
                     continue
 
                 if locale == "ru":
-                    web_toggle.click()
-                    wait.until(
-                        lambda current_driver: current_driver.find_element(
-                            by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                        ).is_selected()
-                    )
                     first_topic = build_docs._navigation_topic_order("user-guide.ditamap")[0]
                     driver.get(f"{base_url}/help/{locale}/user/{first_topic}.html")
                     _install_assistant_ready_browser_mock(driver, locale)
-                    wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is False)
+                    wait.until(
+                        lambda current_driver: panel_state(current_driver)["panelHidden"] is False
+                    )
                     driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").click()
-                    wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is True)
+                    wait.until(
+                        lambda current_driver: panel_state(current_driver)["panelHidden"] is True
+                    )
                     driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-toggle]").click()
                     wait.until(
-                        lambda current_driver: current_driver.find_element(
-                            by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                        ).is_selected()
+                        lambda current_driver: panel_state(current_driver)["panelHidden"] is False
                     )
                     calls = driver.execute_script("return window.__assistantQaCalls;")
-                    assert any(
-                        call["method"] == "POST" and call["path"] == "/api/documentation-assistant/web-mode"
-                        for call in calls
-                    )
-                    driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-web-toggle]").click()
-                    wait.until(
-                        lambda current_driver: not current_driver.find_element(
-                            by.By.CSS_SELECTOR, "[data-assistant-web-toggle]"
-                        ).is_selected()
-                    )
+                    assert all("/web-mode" not in call["path"] for call in calls)
 
                 if locale == "es-ES":
                     driver.execute_script("window.__assistantQaRejectChat = true;")
@@ -1485,22 +1288,32 @@ def test_documentation_floating_assistant_release_qa_matrix_for_all_locales(
                     question.send_keys("¿Cómo configuro BPM?")
                     driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-send]").click()
                     wait.until(
-                        lambda current_driver: current_driver.find_element(
-                            by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
-                        ).get_attribute("data-assistant-state") == "unavailable"
+                        lambda current_driver, expected=labels["assistant_unavailable_short"]: (
+                            current_driver.find_element(
+                                by.By.CSS_SELECTOR, "[data-assistant-status]"
+                            ).text
+                            == expected
+                        )
                     )
-                    assert driver.find_element(
-                        by.By.CSS_SELECTOR, "[data-assistant-status]"
-                    ).text == labels["assistant_unavailable_short"]
+                    assert (
+                        driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-status]").text
+                        == labels["assistant_unavailable_short"]
+                    )
 
                 calls = driver.execute_script("return window.__assistantQaCalls;")
                 assert calls
-                assert all(call["path"].startswith("/api/documentation-assistant/") for call in calls)
-                assert all("search" not in call["path"] and "brave" not in call["path"] for call in calls)
+                assert all(
+                    call["path"].startswith("/api/documentation-assistant/") for call in calls
+                )
+                assert all(
+                    "search" not in call["path"] and "brave" not in call["path"] for call in calls
+                )
                 driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-collapse]").send_keys(
                     keys.Keys.ESCAPE
                 )
-                wait.until(lambda current_driver: panel_state(current_driver)["panelHidden"] is True)
+                wait.until(
+                    lambda current_driver: panel_state(current_driver)["panelHidden"] is True
+                )
                 assert driver.switch_to.active_element.get_attribute("data-assistant-toggle") == ""
 
             csp_messages = [
@@ -1531,17 +1344,23 @@ def test_documentation_floating_assistant_install_failure_stays_locale_safe(
             install = wait.until(
                 lambda current_driver: (
                     element
-                    if (element := current_driver.find_element(
-                        by.By.CSS_SELECTOR, "[data-assistant-install]"
-                    )).is_displayed() and element.is_enabled()
+                    if (
+                        element := current_driver.find_element(
+                            by.By.CSS_SELECTOR, "[data-assistant-install]"
+                        )
+                    ).is_displayed()
+                    and element.is_enabled()
                     else False
                 )
             )
             install.click()
             wait.until(
-                lambda current_driver: current_driver.find_element(
-                    by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
-                ).get_attribute("data-assistant-state") == "model-failed"
+                lambda current_driver: (
+                    current_driver.find_element(
+                        by.By.CSS_SELECTOR, "[data-documentation-assistant-widget]"
+                    ).get_attribute("data-assistant-state")
+                    == "model-failed"
+                )
             )
             status = driver.find_element(by.By.CSS_SELECTOR, "[data-assistant-status]").text
             assert status == labels["assistant_install_failed"]
@@ -1549,13 +1368,13 @@ def test_documentation_floating_assistant_install_failure_stays_locale_safe(
             assert not driver.find_element(
                 by.By.CSS_SELECTOR, "[data-assistant-question]"
             ).is_enabled()
-            assert driver.find_element(
-                by.By.CSS_SELECTOR, "[data-assistant-web-control]"
-            ).get_attribute("hidden") is not None
+            assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-control]")
             calls = driver.execute_script("return window.__assistantQaFailureCalls;")
             assert [call["method"] for call in calls] == ["GET", "GET", "POST", "GET"]
             assert all(call["path"].startswith("/api/") for call in calls)
-            assert all("search" not in call["path"] and "brave" not in call["path"] for call in calls)
+            assert all(
+                "search" not in call["path"] and "brave" not in call["path"] for call in calls
+            )
         finally:
             _close_chromium_driver(driver)
 
@@ -1816,13 +1635,11 @@ def test_documentation_navigation_tree_browser_smoke_for_all_locales(
                 )
                 host = driver.find_element(by.By.CSS_SELECTOR, "[data-docs-tree-host]")
                 assert host.get_attribute("aria-busy") == "false"
-                navigation_resources = driver.execute_script(
-                    """
+                navigation_resources = driver.execute_script("""
                     return performance.getEntriesByType('resource')
                       .filter((entry) => entry.name.endsWith('/navigation.json'))
                       .map((entry) => entry.name);
-                    """
-                )
+                    """)
                 assert navigation_resources == [f"{base_url}/help/{locale}/navigation.json"]
                 root_state = _tree_state(driver)
                 assert root_state["rootText"] == expected_root
@@ -1843,12 +1660,10 @@ def test_documentation_navigation_tree_browser_smoke_for_all_locales(
                 )
                 assert root_state["breadcrumbs"] == [expected_root]
                 _assert_document_fits(driver)
-                loaded_main_metrics[locale] = driver.execute_script(
-                    """
+                loaded_main_metrics[locale] = driver.execute_script("""
                     const rect = document.querySelector('.bpm-docs-main').getBoundingClientRect();
                     return { left: rect.left, width: rect.width };
-                    """
-                )
+                    """)
 
                 driver.get(f"{base_url}/help/{locale}/index.html#a-user-guide")
                 wait.until(
@@ -2080,7 +1895,10 @@ def test_documentation_navigation_tree_browser_smoke_for_all_locales(
                 search_input = driver.find_element(by.By.CSS_SELECTOR, "#bpm-docs-search-query")
                 search_input.clear()
                 search_input.send_keys("theme")
-                driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]").click()
+                _click_element(
+                    driver,
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-search-advanced-toggle]"),
+                )
                 wait.until(
                     lambda current_driver: current_driver.find_elements(
                         by.By.CSS_SELECTOR, ".bpm-docs-search-filter-grid legend"
@@ -2129,12 +1947,10 @@ def test_documentation_navigation_tree_browser_smoke_for_all_locales(
                             f"{base_url}/help/{locale}/index.html"
                         )
                         assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-docs-tree]")
-                        unavailable_main_metrics = driver.execute_script(
-                            """
+                        unavailable_main_metrics = driver.execute_script("""
                             const rect = document.querySelector('.bpm-docs-main').getBoundingClientRect();
                             return { left: rect.left, width: rect.width };
-                            """
-                        )
+                            """)
                         assert unavailable_main_metrics == loaded_main_metrics[locale]
                         _assert_document_fits(driver)
                     finally:
@@ -2200,8 +2016,7 @@ def test_documentation_sidebar_scroll_is_independent_and_reveals_deep_topic(
                 assert wheel_state["scrollTop"] > 0
                 assert wheel_state["windowScrollY"] == 0
 
-                independent = driver.execute_script(
-                    """
+                independent = driver.execute_script("""
                     const sidebar = document.querySelector('.bpm-docs-sidebar');
                     const beforeWindow = window.scrollY;
                     sidebar.scrollTop = 0;
@@ -2213,8 +2028,7 @@ def test_documentation_sidebar_scroll_is_independent_and_reveals_deep_topic(
                       atStart,
                       atEnd: sidebar.scrollTop,
                     };
-                    """
-                )
+                    """)
                 assert independent["beforeWindow"] == independent["afterWindow"] == 0
                 assert independent["atStart"] == 0
                 assert independent["atEnd"] > 0
@@ -2328,9 +2142,10 @@ def test_documentation_header_preferences_persist_between_bpm_and_portal(tmp_pat
             _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
             ui.Select(driver.find_element(by.By.ID, "theme")).select_by_value("dark")
             wait.until(
-                lambda current_driver: current_driver.execute_script(
-                    "return document.documentElement.dataset.theme;"
-                ) == "dark"
+                lambda current_driver: (
+                    current_driver.execute_script("return document.documentElement.dataset.theme;")
+                    == "dark"
+                )
             )
 
             docs_link = wait.until(
@@ -2340,12 +2155,18 @@ def test_documentation_header_preferences_persist_between_bpm_and_portal(tmp_pat
             wait.until(
                 lambda current_driver: current_driver.current_url.endswith("/help/ru/index.html")
             )
-            assert ui.Select(
-                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-locale-select]")
-            ).first_selected_option.get_attribute("value") == "ru"
-            assert ui.Select(
-                driver.find_element(by.By.CSS_SELECTOR, "[data-docs-theme-select]")
-            ).first_selected_option.get_attribute("value") == "dark"
+            assert (
+                ui.Select(
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-docs-locale-select]")
+                ).first_selected_option.get_attribute("value")
+                == "ru"
+            )
+            assert (
+                ui.Select(
+                    driver.find_element(by.By.CSS_SELECTOR, "[data-docs-theme-select]")
+                ).first_selected_option.get_attribute("value")
+                == "dark"
+            )
 
             ui.Select(
                 driver.find_element(by.By.CSS_SELECTOR, "[data-docs-locale-select]")
@@ -2360,17 +2181,25 @@ def test_documentation_header_preferences_persist_between_bpm_and_portal(tmp_pat
             driver.get(f"{base_url}/profiles")
             wait.until(ec.presence_of_element_located((by.By.ID, "list")))
             wait.until(
-                lambda current_driver: current_driver.execute_script(
-                    "return document.documentElement.lang;"
-                ) == "de"
+                lambda current_driver: (
+                    current_driver.execute_script("return document.documentElement.lang;") == "de"
+                )
             )
-            assert ui.Select(driver.find_element(by.By.ID, "lang")).first_selected_option.get_attribute(
-                "value"
-            ) == "de"
-            assert ui.Select(driver.find_element(by.By.ID, "theme")).first_selected_option.get_attribute(
-                "value"
-            ) == "light"
-            assert driver.execute_script("return document.documentElement.dataset.theme;") == "light"
+            assert (
+                ui.Select(
+                    driver.find_element(by.By.ID, "lang")
+                ).first_selected_option.get_attribute("value")
+                == "de"
+            )
+            assert (
+                ui.Select(
+                    driver.find_element(by.By.ID, "theme")
+                ).first_selected_option.get_attribute("value")
+                == "light"
+            )
+            assert (
+                driver.execute_script("return document.documentElement.dataset.theme;") == "light"
+            )
         finally:
             _close_chromium_driver(driver)
 
@@ -2403,7 +2232,9 @@ def test_documentation_contextual_links_deep_links_and_openapi_docs_survive_brow
             for route, (surface, topic_id) in contextual_routes.items():
                 driver.get(f"{base_url}{route}")
                 wait.until(ec.presence_of_element_located((by.By.ID, "lang")))
-                _set_locale(driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"])
+                _set_locale(
+                    driver, wait, ui, locale="ru", expected_text=ru["profiles.locale_label"]
+                )
                 main_handle = driver.current_window_handle
                 link = wait.until(
                     ec.element_to_be_clickable(

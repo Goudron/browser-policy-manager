@@ -53,9 +53,7 @@ def _taxonomy_action_topics() -> dict[str, list[str]]:
     }
 
 
-def _topic_contract(
-    locale: str, topic_id: str
-) -> tuple[str, list[str], str, str, list[str]]:
+def _topic_contract(locale: str, topic_id: str) -> tuple[str, list[str], str, str, list[str]]:
     root = ET.fromstring(
         (DITA_ROOT / locale / "user" / f"{topic_id}.dita").read_text(encoding="utf-8")
     )
@@ -110,9 +108,7 @@ def test_review_normalization_resolves_every_protocol_field() -> None:
     assert set(field_resolution) == set(protocol["review_item_template"]["required_fields"])
     assert "one protocol review item for every topic_id" in review["normalization"]["rule"]
     allowed_scopes = set(protocol["review_item_template"]["locale_scope_values"])
-    allowed_dispositions = set(
-        protocol["review_item_template"]["review_disposition_values"]
-    )
+    allowed_dispositions = set(protocol["review_item_template"]["review_disposition_values"])
     allowed_evidence = set(protocol["evidence_types"])
     for workflow in review["workflow_reviews"]:
         assert workflow["guide_id"] == "user-guide"

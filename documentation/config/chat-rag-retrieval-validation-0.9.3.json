@@ -62,8 +62,8 @@
   "integrity_and_recovery": {
     "active_generation": "Validate the active pointer, exact-generation manifests, source-manifest identity, per-locale chunk metadata and current reviewed provenance before measuring relevance.",
     "negative_runtime_tests": [
-      "tests/test_documentation_chat_retrieval_093.py",
-      "tests/test_documentation_evidence_packing_093.py"
+      "tests/integration/ai/incubation/test_documentation_chat_retrieval.py",
+      "tests/integration/ai/incubation/test_documentation_evidence_packing.py"
     ],
     "failure_isolation": "Corrupt, stale, malformed, or unavailable chat artifacts fail closed in the chat path. They never import, call, modify, or make unavailable the independent M4 deterministic documentation search."
   },

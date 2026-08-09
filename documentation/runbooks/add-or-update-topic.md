@@ -57,21 +57,28 @@ recovery.
 Run the narrowest relevant checks first:
 
 ```bash
-./.venv/bin/python documentation/tools/validate_metadata.py
+make docs-fast-check DOCS_CHANGED="README.md documentation/src/dita/en/user/<topic>.dita"
 ./.venv/bin/pytest -q -m docs_contract tests/<one_relevant_contract>.py
-./documentation/.cache/toolchain/python-venv/bin/pytest -q documentation/tests/<focused_test>.py
 make docs-validate
 git diff --check -- <changed_files>
 ```
+
+The bounded authoring command has a 30-second budget. It prints the selected scope, guards run,
+intentional release-only skips, and the exact escalation command. It checks changed README/DITA
+schema and direct links, locale structural shape when a locale peer changed, full Firefox
+`policies.json` examples, semantic UI/admonition markup, and affected figures/registered fixtures.
+It is not a release gate.
 
 When the change affects product-documentation source, documentation build tooling, generated portal
 behavior, or a served documentation-version surface, run `make docs-install-dev` before handoff.
 This refreshes the artifact for the maintainer's subsequent `make dev`; do not start the development
 server as part of this runbook.
 
-Escalate to `make docs-reproducibility-check`, `make docs-package`, and
-`make docs-package-verify` when the change affects maps, manifest output, generated files, theme,
-assets, package policy, or release evidence.
+For a documentation release or any change affecting maps, manifest output, generated files, theme,
+assets, package policy, or release evidence, run the authoritative
+`make docs-release-handoff`. It retains six-locale validation/editorial sign-off, binary PDF
+verification and delivery, reproducibility, package verification, snapshot refresh, and the local
+install handoff; it is deliberately separate from the fast authoring command.
 
 ## Done
 

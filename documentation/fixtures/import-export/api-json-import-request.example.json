@@ -1,7 +1,7 @@
 {
   "name": "Example imported Firefox profile",
   "description": "Synthetic import example for BPM 0.9.0 documentation.",
-  "channel": "firefox-release",
+  "schema_version": "release-153",
   "document": {
     "policies": {
       "DisableTelemetry": true,

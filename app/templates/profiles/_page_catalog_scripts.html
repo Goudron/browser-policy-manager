@@ -1,9 +1,25 @@
+{% if "wizard_starter_catalog" in profiles_catalog_keys %}
 <script id="wizard-starter-catalog" type="application/json">{{ wizard_starter_catalog | tojson }}</script>
+{% endif %}
+{% if "wizard_settings_catalog" in profiles_catalog_keys %}
 <script id="wizard-settings-catalog" type="application/json">{{ wizard_settings_catalog | tojson }}</script>
+{% endif %}
+{% if "wizard_preferences_catalog" in profiles_catalog_keys %}
 <script id="wizard-preferences-catalog" type="application/json">{{ wizard_preferences_catalog | tojson }}</script>
+{% endif %}
+{% if "wizard_manual_policy_controls" in profiles_catalog_keys %}
 <script id="wizard-manual-policy-controls" type="application/json">{{ wizard_manual_policy_controls | tojson }}</script>
+{% endif %}
+{% if "wizard_schema_shell_catalog" in profiles_catalog_keys %}
 <script id="wizard-schema-shell-catalog" type="application/json">{{ wizard_schema_shell_catalog | tojson }}</script>
+{% endif %}
+{% if "all_settings_category_catalog" in profiles_catalog_keys %}
 <script id="all-settings-category-catalog" type="application/json">{{ all_settings_category_catalog | tojson }}</script>
+{% endif %}
+{% if "schema_channels_catalog" in profiles_catalog_keys %}
 <script id="schema-channels-catalog" type="application/json">{{ schema_channels_catalog | tojson }}</script>
+{% endif %}
+{% if "documentation_all_settings_row_help_links" in profiles_catalog_keys %}
 <script id="all-settings-row-help-links" type="application/json">{{ documentation_all_settings_row_help_links | tojson }}</script>
 <script id="all-settings-row-help-status" type="application/json">{{ documentation_all_settings_row_help_status | tojson }}</script>
+{% endif %}

@@ -20,7 +20,9 @@ SPEC = importlib.util.spec_from_file_location("build_docs", BUILD_DOCS_PATH)
 assert SPEC and SPEC.loader
 build_docs = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(build_docs)
-PROTOTYPES_SPEC = importlib.util.spec_from_file_location("search_candidate_prototypes", PROTOTYPES_PATH)
+PROTOTYPES_SPEC = importlib.util.spec_from_file_location(
+    "search_candidate_prototypes", PROTOTYPES_PATH
+)
 assert PROTOTYPES_SPEC and PROTOTYPES_SPEC.loader
 search_candidate_prototypes = importlib.util.module_from_spec(PROTOTYPES_SPEC)
 if str(TOOLS_ROOT) not in sys.path:
@@ -192,8 +194,12 @@ def test_browser_ranker_matches_build_ranker_for_typo_alias_and_cjk_cases() -> N
             "index": _index(
                 "en",
                 [
-                    _document("en", "ug-task-use-profile-library", "Profile Library", "Save profiles."),
-                    _document("en", "ug-task-configure-firefox-ai-policies", "Firefox AI", "Policies."),
+                    _document(
+                        "en", "ug-task-use-profile-library", "Profile Library", "Save profiles."
+                    ),
+                    _document(
+                        "en", "ug-task-configure-firefox-ai-policies", "Firefox AI", "Policies."
+                    ),
                 ],
             ),
         },
@@ -202,8 +208,15 @@ def test_browser_ranker_matches_build_ranker_for_typo_alias_and_cjk_cases() -> N
             "index": _index(
                 "zh-CN",
                 [
-                    _document("zh-CN", "ug-task-use-profile-library", "配置档案库", "保存配置档案。"),
-                    _document("zh-CN", "ug-task-configure-firefox-ai-policies", "Firefox AI 策略", "策略。"),
+                    _document(
+                        "zh-CN", "ug-task-use-profile-library", "配置档案库", "保存配置档案。"
+                    ),
+                    _document(
+                        "zh-CN",
+                        "ug-task-configure-firefox-ai-policies",
+                        "Firefox AI 策略",
+                        "策略。",
+                    ),
                 ],
             ),
         },

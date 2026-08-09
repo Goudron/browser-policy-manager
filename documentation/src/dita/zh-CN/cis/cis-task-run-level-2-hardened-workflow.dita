@@ -5,11 +5,11 @@
   <shortdesc>在部署之前使用 2 级夹具检查更严格的 CIS 配置文件。</shortdesc>
   <taskbody>
     <prereq><p>使用固定装置 <codeph>cis-workflow-level-2-release-fixture</codeph>：Firefox Release 153、图层 <codeph>cis-l2.release-153</codeph>、初始预设 <codeph>soc_hard</codeph> 和比较配置档案 <codeph>cis-workflow-level-1-release-reference</codeph>。</p></prereq>
-    <context><p>2 级是硬化路径。它可能不如 1 级兼容，因此审核者必须检查 引导式编辑器 和 所有设置、解决注意事项、与 1 级参考进行比较、导出并独立验证结果。</p></context>
+    <context><p>2 级是硬化路径。它可能不如 1 级兼容，因此审核者必须检查 <uicontrol>引导式编辑器</uicontrol> 和 <uicontrol>所有设置</uicontrol>、解决注意事项、与 1 级参考进行比较、导出并独立验证结果。</p></context>
     <steps>
       <step><cmd>创建或复制 Release 153 配置档案，应用 SOC 风格的强化初始预设和 2 级 CIS 层。</cmd><info><p>预期结果：配置档案在源跟踪中记录 <codeph>soc_hard</codeph> 和 <codeph>cis-l2.release-153</codeph>。</p></info></step>
-      <step><cmd>查看 引导式编辑器 中的配置文件，重点关注更严格的安全/隐私默认设置以及可能影响可用性、附加组件、浏览数据、网络行为或企业运营的任何控制。</cmd><info><p>预期结果：在导出配置文件之前识别高影响设置。</p></info></step>
-      <step><cmd>使用 所有设置 过滤配置的 CIS 行、打开注意项，并跟踪每行到其生成的推荐主题、映射表、UI 目标和受影响的 Firefox 策略主题。</cmd><info><p>预期结果：每个更严格的值都有可见的源路径和用于审查的策略主题路径。</p></info></step>
+      <step><cmd>查看 <uicontrol>引导式编辑器</uicontrol> 中的配置文件，重点关注更严格的安全/隐私默认设置以及可能影响可用性、附加组件、浏览数据、网络行为或企业运营的任何控制。</cmd><info><p>预期结果：在导出配置文件之前识别高影响设置。</p></info></step>
+      <step><cmd>使用 <uicontrol>所有设置</uicontrol> 过滤配置的 CIS 行、打开注意项，并跟踪每行到其生成的推荐主题、映射表、UI 目标和受影响的 Firefox 策略主题。</cmd><info><p>预期结果：每个更严格的值都有可见的源路径和用于审查的策略主题路径。</p></info></step>
       <step><cmd>使用偏差任务解决手动审核行和故意偏差，包括所有者、原因、审核日期、外部记录以及值是否保持基线、CIS、手动、导入或原始。</cmd><info><note type="warning">BPM 不保留专用的异常或豁免对象；在处理所审查的偏差之前保存外部记录。</note></info></step>
       <step><cmd>将 2 级配置文件与 1 级参考夹具进行比较，并检查所有更改或新配置的行。</cmd><info><p>预期结果：审核者可以在批准之前解释为什么级别 2 与级别 1 不同。</p></info></step>
       <step><cmd>使用所有者批准的运行时、操作系统、网络或审核方法验证、导出 <codeph>policies.json</codeph> 并运行独立的部署验证。</cmd><info><p>预期结果：强化的配置文件具有导出工件、验证结果、比较证据和外部验证证据。</p></info></step>

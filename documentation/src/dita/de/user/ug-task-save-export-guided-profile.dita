@@ -2,13 +2,13 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein geführtes Profil speichern und herunterladen</title>
-  <shortdesc>Speichern Sie das überprüfte geführte Profil und laden Sie das Übergabeartefakt herunter, wenn die Konfiguration fertig ist.</shortdesc>
+  <shortdesc><uicontrol>Speichern</uicontrol> Sie das überprüfte geführte Profil und laden Sie das Übergabeartefakt herunter, wenn die Konfiguration fertig ist.</shortdesc>
   <taskbody>
     <prereq><p>Die Überprüfung in Schritt 6 ist abgeschlossen und die Validierungswarnungen wurden verstanden.</p></prereq>
-    <context><p>Speichern zeichnet das BPM-Profil auf; Beim Herunterladen wird die überprüfte Version zur Richtlinienübergabe bereitgestellt.</p></context>
+    <context><p><uicontrol>Speichern</uicontrol> zeichnet das BPM-Profil auf; Beim Herunterladen wird die überprüfte Version zur Richtlinienübergabe bereitgestellt.</p></context>
     <steps>
-      <step><cmd>Wählen Sie „Speichern“, um den aktuellen Profilstatus zu speichern.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
-      <step><cmd>Vergewissern Sie sich, dass der gespeicherte Status in der Bibliothek angezeigt wird, bevor Sie den Editor schließen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Wählen Sie „<uicontrol>Speichern</uicontrol>“, um den aktuellen Profilstatus zu speichern.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
+      <step><cmd>Vergewissern Sie sich, dass der gespeicherte Status in der <uicontrol>Bibliothek</uicontrol> angezeigt wird, bevor Sie den Editor schließen.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Wählen Sie die für die Übergabe erforderliche Download- oder Exportaktion aus.</cmd><info><p>Erwartetes Ergebnis: Das geführte Profil bleibt konsistent.</p></info></step>
       <step><cmd>Geben Sie die exportierte Datei mit dem Kontext frei, der zur Identifizierung des Schemakanals und des Profilzwecks erforderlich ist.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>

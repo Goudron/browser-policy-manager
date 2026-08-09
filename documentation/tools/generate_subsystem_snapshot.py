@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the compact BPM documentation subsystem snapshot."""
+"""Generate the declared, source-only documentation subsystem snapshot."""
 
 from __future__ import annotations
 
@@ -10,23 +10,64 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 OUTPUT_PATH = DOCUMENTATION_ROOT / "PROJECT_SNAPSHOT.generated.md"
-EXCLUDED_PARTS = {
-    ".cache",
-    ".mypy_cache",
-    ".pytest_cache",
-    ".ruff_cache",
-    ".toolchain",
-    ".venv",
-    "__pycache__",
-    "build",
-    "dist",
-    "html",
-    "node_modules",
-    "reports",
-    "vendor",
-}
-EXCLUDED_SUFFIXES = {".gif", ".ico", ".jpg", ".jpeg", ".png", ".pyc", ".tar", ".tgz", ".xz", ".zip"}
-APP_DOCUMENTATION_ROOT = REPOSITORY_ROOT / "app/documentation"
+
+# Each source belongs to one reviewed snapshot owner.  Keep this list to
+# entrypoints and compact authority records: a topic, generated artifact, test
+# report, or local installation must not make an orientation snapshot stale.
+SOURCE_OWNERS = (
+    (
+        "Snapshot governance",
+        "documentation architecture and snapshot maintainers",
+        (
+            "documentation/tools/generate_subsystem_snapshot.py",
+            "documentation/AGENTS.md",
+            "documentation/config/documentation-test-estate-inventory-0.9.4.json",
+        ),
+    ),
+    (
+        "Documentation build",
+        "documentation build tooling maintainers",
+        (
+            "documentation/tools/build_docs.py",
+            "documentation/buildlib/lifecycle.py",
+            "documentation/buildlib/sources.py",
+            "documentation/buildlib/portal.py",
+            "documentation/buildlib/artifacts.py",
+            "documentation/buildlib/pdf.py",
+        ),
+    ),
+    (
+        "Source and publication authority",
+        "documentation source-contract maintainers",
+        (
+            "documentation/src/dita/en/maps/user-guide.ditamap",
+            "documentation/src/dita/en/maps/administrator-guide.ditamap",
+            "documentation/src/dita/en/maps/keys.ditamap",
+            "documentation/config/artifact-policy.json",
+            "documentation/config/documentation-semantic-contracts-0.9.4.json",
+        ),
+    ),
+    (
+        "Runtime `/help/` bridge",
+        "documentation runtime maintainers",
+        (
+            "app/documentation/router.py",
+            "app/documentation/assistant_contracts.py",
+            "app/documentation/assistant_service.py",
+        ),
+    ),
+    (
+        "Focused validation",
+        "documentation architecture and snapshot maintainers",
+        (
+            "documentation/tests/unit/test_generate_subsystem_snapshot.py",
+            "documentation/tests/contract/test_documentation_subsystem_snapshot.py",
+            "documentation/tests/contract/test_maintained_index_snapshot_contract_0_9_3.py",
+            "documentation/tests/contract/test_documentation_test_estate_inventory_0_9_4.py",
+            "tests/contract/docs/general/test_codex_project_snapshot.py",
+        ),
+    ),
+)
 ARCHITECTURE_ENTRY_POINTS = (
     "product-documentation-ownership-boundary-0.9.0.md",
     "dita-publishing-toolchain-decision-0.9.0.md",
@@ -45,40 +86,38 @@ ARCHITECTURE_ENTRY_POINTS = (
     "documentation-assistant-web-mode-0.9.3.md",
 )
 DOCUMENTATION_COMMANDS = (
-    "make setup-docs-toolchain",
-    "make setup-docs-toolchain DOCS_TOOLCHAIN_OFFLINE=1",
     "make docs-snapshot",
-    "make docs-fast-check DOCS_CHANGED=\"documentation/src/dita/en/user/example.dita\"",
-    "make docs-coverage",
-    "make docs-release-check",
+    "make codex-snapshot",
+    'make docs-fast-check DOCS_CHANGED="documentation/src/dita/en/user/example.dita"',
     "make test-docs",
     "make test-docs-contract",
-    "make test-docs-ui-contract",
-    "make test-docs-browser",
-    "make test-docs-ui",
-    "make docs-validate",
-    "make docs-build",
-    "make docs-reproducibility-check",
-    "make docs-package",
-    "make docs-package-verify",
+    "make docs-release-handoff",
 )
-
-
-def _included(path: Path) -> bool:
-    relative = path.relative_to(REPOSITORY_ROOT)
-    if any(part in EXCLUDED_PARTS for part in relative.parts):
-        return False
-    return path.suffix.lower() not in EXCLUDED_SUFFIXES
-
-
-def _files_under(root: Path) -> list[Path]:
-    if not root.exists():
-        return []
-    return sorted(path for path in root.rglob("*") if path.is_file() and _included(path))
+ENVIRONMENT_REPORT_BOUNDARIES = (
+    "build, distribution, installed-site, PDF, package, and generated search output",
+    "browser captures, test reports, coverage, diagnostics, caches, toolchains, dependencies, and vendor trees",
+    "Git state, local-machine paths, credentials, databases, and live-install transcripts",
+)
 
 
 def _repo_path(path: Path) -> str:
     return path.relative_to(REPOSITORY_ROOT).as_posix()
+
+
+def _declared_paths() -> list[Path]:
+    paths: list[Path] = []
+    for _label, _owner, relative_paths in SOURCE_OWNERS:
+        for relative_path in relative_paths:
+            path = REPOSITORY_ROOT / relative_path
+            if not path.is_file():
+                raise RuntimeError(f"snapshot source input is missing: {relative_path}")
+            paths.append(path)
+    for name in ARCHITECTURE_ENTRY_POINTS:
+        path = REPOSITORY_ROOT / "docs/architecture" / name
+        if not path.is_file():
+            raise RuntimeError(f"snapshot architecture input is missing: {name}")
+        paths.append(path)
+    return paths
 
 
 def _digest(paths: list[Path]) -> str:
@@ -90,23 +129,9 @@ def _digest(paths: list[Path]) -> str:
     return hasher.hexdigest()
 
 
-def _topic_counts() -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for locale_root in sorted((DOCUMENTATION_ROOT / "src/dita").glob("*")):
-        if locale_root.is_dir():
-            counts[locale_root.name] = len(sorted(locale_root.rglob("*.dita")))
-    return counts
-
-
-def _line(label: str, paths: list[Path]) -> str:
-    return f"- {label}: {len(paths)} files, sha256 `{_digest(paths)[:16]}`"
-
-
 def _product_version() -> str:
     try:
-        project = tomllib.loads(
-            (REPOSITORY_ROOT / "pyproject.toml").read_text(encoding="utf-8")
-        )
+        project = tomllib.loads((REPOSITORY_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
         version = project["project"]["version"]
     except (OSError, tomllib.TOMLDecodeError, KeyError) as exc:
         raise RuntimeError(f"cannot read product version: {exc}") from exc
@@ -116,73 +141,33 @@ def _product_version() -> str:
 
 
 def generate_snapshot() -> str:
-    source_paths = [
-        *_files_under(DOCUMENTATION_ROOT / "src/dita"),
-        *_files_under(DOCUMENTATION_ROOT / "src/shared"),
-        *_files_under(DOCUMENTATION_ROOT / "src/generated"),
-        *_files_under(DOCUMENTATION_ROOT / "assets/theme"),
-    ]
-    config_paths = _files_under(DOCUMENTATION_ROOT / "config")
-    fixture_paths = _files_under(DOCUMENTATION_ROOT / "fixtures")
-    runbook_paths = _files_under(DOCUMENTATION_ROOT / "runbooks")
-    tool_paths = _files_under(DOCUMENTATION_ROOT / "tools")
-    test_paths = _files_under(DOCUMENTATION_ROOT / "tests")
-    runtime_paths = _files_under(APP_DOCUMENTATION_ROOT)
-    architecture_paths = [
-        REPOSITORY_ROOT / "docs/architecture" / name
-        for name in ARCHITECTURE_ENTRY_POINTS
-        if (REPOSITORY_ROOT / "docs/architecture" / name).is_file()
-    ]
-    all_paths = [
-        *source_paths,
-        *config_paths,
-        *fixture_paths,
-        *runbook_paths,
-        *tool_paths,
-        *test_paths,
-        *runtime_paths,
-        *architecture_paths,
-    ]
-    topic_counts = _topic_counts()
+    paths = _declared_paths()
     lines = [
         "# BPM Documentation Subsystem Snapshot",
         "",
-        "Generated by `documentation/tools/generate_subsystem_snapshot.py`.",
+        "Generated only by `make docs-snapshot` (`documentation/tools/generate_subsystem_snapshot.py`); do not edit manually.",
+        "It has no Git, local-machine, generated-artifact, or report input.",
         f"Target BPM version: `{_product_version()}`",
-        f"Deterministic input digest: `{_digest(all_paths)}`",
+        f"Declared source digest: `{_digest(paths)}`",
         "",
-        "## Bounded Surface",
+        "## Declared Source Owners",
         "",
-        _line("DITA/shared/generated sources and theme assets", source_paths),
-        _line("Configuration and policy contracts", config_paths),
-        _line("Compact fixtures", fixture_paths),
-        _line("Maintainer runbooks", runbook_paths),
-        _line("Documentation tools", tool_paths),
-        _line("Documentation tests", test_paths),
-        _line("Runtime `/help/` bridge", runtime_paths),
-        _line("Architecture entry points", architecture_paths),
-        "",
-        "## Locale Topic Counts",
-        "",
-        *[f"- `{locale}`: {count} DITA topics" for locale, count in sorted(topic_counts.items())],
+        *[
+            f"- {label} — {owner}: " + ", ".join(f"`{path}`" for path in relative_paths)
+            for label, owner, relative_paths in SOURCE_OWNERS
+        ],
+        "- Architecture entry points — documentation architecture maintainers:",
+        *[f"  - `docs/architecture/{name}`" for name in ARCHITECTURE_ENTRY_POINTS],
         "",
         "## Commands",
         "",
         *[f"- `{command}`" for command in DOCUMENTATION_COMMANDS],
         "",
-        "## Excluded By Design",
+        "## Environment And Report Evidence Excluded From This Snapshot",
         "",
-        "- disposable build, distribution, reports, cache, and toolchain directories",
-        "- generated pages, generated search indexes, coverage reports, diagnostics, caches, pyc files, dependency folders, and screenshot binaries",
-        "- unrelated application modules outside the documentation runtime bridge",
+        *[f"- {boundary}" for boundary in ENVIRONMENT_REPORT_BOUNDARIES],
         "",
-        "## Entry Points",
-        "",
-        "- `documentation/PROJECT_SNAPSHOT.md`",
-        "- `documentation/AGENTS.md`",
-        "- `documentation/tests/suite-boundaries-0.9.0.json`",
-        "- `documentation/fixtures/fixture-catalog-0.9.0.json`",
-        "- `documentation/config/diagnostics-policy-0.9.0.json`",
+        "A declared source change invalidates this documentation snapshot only. Regenerate it through its owning command; do not copy digests from evidence or edit this file by hand.",
         "",
     ]
     return "\n".join(lines)

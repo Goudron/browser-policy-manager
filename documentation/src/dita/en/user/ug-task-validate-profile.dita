@@ -4,16 +4,16 @@
   <title>Validate a profile</title>
   <shortdesc>Run schema-aware validation before saving, exporting, or comparing policy changes.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, <uicontrol>Library</uicontrol>, <uicontrol>All settings</uicontrol>, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Validation checks policy names, value shapes, supported schema channel, unsupported ESR-only differences, and raw or unknown entries visible in BPM.</p></context>
     <steps>
-      <step><cmd>Open the profile in Guided, All settings, or JSON.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Open the profile in Guided, <uicontrol>All settings</uicontrol>, or JSON.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Confirm the selected Firefox schema channel before validating.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Run validation or review the visible validation panel on the active surface.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd><uicontrol>Run validation</uicontrol> or review the visible validation panel on the active surface.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Resolve unsupported policies, wrong value types, unknown raw entries, or stale imported values before treating the profile as ready.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>
     <result><p>You know whether the profile is ready to save and export for the selected Firefox channel.</p></result>
-    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the <uicontrol>Library</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

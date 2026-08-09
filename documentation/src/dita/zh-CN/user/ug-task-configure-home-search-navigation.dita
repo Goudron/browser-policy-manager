@@ -7,7 +7,7 @@
     <prereq><p>步骤 2 已打开并且模式通道正确。</p></prereq>
     <context><p>这些控件会影响用户首先看到的内容以及 Firefox 如何解析导航和搜索活动。</p></context>
     <steps>
-      <step><cmd>打开主页、搜索和导航部分。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
+      <step><cmd>打开主页、<uicontrol>搜索和导航</uicontrol>部分。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>设置配置文件所需的主页或新选项卡行为。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>根据策略配置托管搜索引擎和搜索建议。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>
       <step><cmd>在转到安全设置之前检查导航默认值。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>

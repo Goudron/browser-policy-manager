@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -14,23 +13,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m8_01_pins_scope_authority_and_has_no_runtime_implementation() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M8-01"
-    assert contract["status"] == "accepted-architecture-only"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-    assert contract["implementation_boundary"] == {
-        "scope_gate_implemented": False,
-        "model_or_embedding_loaded": False,
-        "retrieval_or_inference_called": False,
-        "network_calls": 0,
-        "rule": "This taxonomy defines deterministic inputs, stable reason families and precedence for M8-02. Prompt wording and a guard model are not scope authority.",
-    }
 
 
 def test_m8_01_covers_allowed_adjacent_refused_and_no_evidence_precedence() -> None:

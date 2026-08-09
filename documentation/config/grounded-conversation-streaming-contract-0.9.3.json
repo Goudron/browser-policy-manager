@@ -39,7 +39,7 @@
     "telemetry": false
   },
   "verification": {
-    "runtime": "tests/test_conversation_stream_093.py",
+    "runtime": "tests/integration/ai/incubation/test_conversation_stream.py",
     "contract": "documentation/tests/contract/test_grounded_conversation_streaming_contract_0_9_3.py",
     "architecture": "docs/architecture/grounded-conversation-streaming-0.9.3.md"
   }

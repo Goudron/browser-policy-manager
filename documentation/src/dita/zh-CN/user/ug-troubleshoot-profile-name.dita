@@ -5,14 +5,14 @@
   <shortdesc>修复创建或克隆期间空的、重复的或不清楚的配置文件名称。</shortdesc>
   <taskbody>
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
-    <context><p>配置文件名称标识库行、编辑器选项卡、比较选择、导入和恢复消息，因此名称验证会阻止不明确的保存。</p></context>
+    <context><p>配置文件名称标识<uicontrol>库</uicontrol>行、编辑器选项卡、比较选择、导入和恢复消息，因此名称验证会阻止不明确的保存。</p></context>
     <steps>
       <step><cmd>在更改其他配置文件字段之前阅读名称验证提示。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>输入一个非空名称，用于区分配置文件用途、Firefox 通道或源文件。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>对于克隆工作流程，请在确认它是否与现有行重复之前更改建议的克隆名称。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>名称提示清除后再次保存或复制。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>
     </steps>
-    <result><p>配置文件或克隆具有唯一的可见名称，稍后可以在库中找到该名称。</p></result>
+    <result><p>配置文件或克隆具有唯一的可见名称，稍后可以在<uicontrol>库</uicontrol>中找到该名称。</p></result>
     <postreq><p>如果错误再次出现，请停止当前操作，并向支持人员提供可见消息、配置文件名称、模式通道和当前页面。</p></postreq>
   </taskbody>
   <related-links>

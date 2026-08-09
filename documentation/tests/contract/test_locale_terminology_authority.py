@@ -58,9 +58,10 @@ def test_locale_terminology_authority_declares_source_policy() -> None:
     assert authority["backlog_item"] == "BPM091-M7-02"
     assert authority["target_bpm_version"] == "0.9.1"
     assert authority["status"] == "accepted"
-    assert "documentation/config/locale-visible-english-inventory-0.9.1.json" in authority[
-        "inherits_from"
-    ]
+    assert (
+        "documentation/config/locale-visible-english-inventory-0.9.1.json"
+        in authority["inherits_from"]
+    )
     assert authority["locales"] == list(LOCALES)
 
     policy = authority["authority_policy"]

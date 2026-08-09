@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Editar un detalle de configuración</title>
-  <shortdesc>Aplique o edite una política de Firefox o un valor de preferencia administrado desde el panel de detalles Todos los ajustes.</shortdesc>
+  <shortdesc>Aplique o edite una política de Firefox o un valor de preferencia administrado desde el panel de detalles <uicontrol>Todos los ajustes</uicontrol>.</shortdesc>
   <taskbody>
     <prereq><p>Abra un panel de detalles de configuración para un valor editable admitido.</p></prereq>
     <context><p>La edición de detalles mantiene el cambio centrado en una configuración mientras reutiliza la validación compartida y el comportamiento de guardado.</p></context>
     <steps>
-      <step><cmd>Inspeccionar el valor actual y el estado de validación.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Ingrese o elija la nueva política o valor de preferencia administrada.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Aplique la edición de detalles y esté atento a los comentarios de validación.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Inspeccionar el valor actual y el estado de validación.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Ingrese o elija la nueva política o valor de preferencia administrada.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Aplique la edición de detalles y esté atento a los comentarios de validación.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Guarde el perfil cuando el valor editado sea válido e intencional.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>La política seleccionada o la preferencia administrada tiene el nuevo valor en el perfil.</p></result>

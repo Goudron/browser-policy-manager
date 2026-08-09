@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=68", "wheel>=0.47.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "browser-policy-manager"
-version = "0.9.3"
+version = "0.9.4"
 description = "Firefox enterprise policy profile manager with guided, visual settings, and JSON editing workflows."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -22,8 +22,8 @@ classifiers = [
 
 dependencies = [
   # Web & app
-  "fastapi>=0.139.0",
-  "uvicorn[standard]>=0.50.0",
+  "fastapi>=0.141.1",
+  "uvicorn[standard]>=0.52.1",
   "jinja2>=3.1.6",
   "python-multipart>=0.0.32",
 
@@ -31,7 +31,7 @@ dependencies = [
   "pydantic>=2.13.4",
   "pydantic-settings>=2.14.2",
   "jsonschema>=4.26.0",
-  "fastjsonschema>=2.21.2",
+  "fastjsonschema>=2.22.1",
 
   # DB & migrations
   "sqlalchemy>=2.0.51",
@@ -42,9 +42,6 @@ dependencies = [
   "pyyaml>=6.0.3",
   "httpx>=0.28.1",
   "requests>=2.34.2",
-  "numpy>=2.5.1",
-  "onnxruntime>=1.28.0",
-  "tokenizers>=0.23.1",
 ]
 
 [project.urls]
@@ -57,25 +54,36 @@ dev = [
   "pytest-cov>=7.1.0",
   "pytest-asyncio>=1.4.0",
   "pytest-xdist>=3.8.0",
-  "anyio>=4.14.1",
+  "anyio>=4.14.2",
   "beautifulsoup4>=4.15.0",
-  "selenium>=4.45.0",
+  # PEP 517 frontend used by the clean sdist/wheel delivery gate.
+  "build==1.3.0",
+  "selenium>=4.46.0",
 
-  # lint & format & types
-  "ruff>=0.15.20",
-  "black>=26.5.1",
-  "isort>=8.0.1",
-  "mypy>=2.1.0",
-  "types-PyYAML>=6.0.12.20260518",
-  "types-requests>=2.33.0.20260518",
+  # lint, format & types
+  "ruff>=0.16.1",
+  "mypy>=2.3.0",
+  "import-linter>=2.13,<3",
+  "pre-commit==4.6.1",
+  # Exact supply-chain tooling keeps audit and SBOM evidence reproducible.
+  "pip-audit==2.10.1",
+  "cyclonedx-bom==7.3.1",
+  "types-PyYAML>=6.0.12.20260724",
+  "types-requests>=2.33.0.20260712",
 
   # local dev
-  "ipython>=9.15.0",
+  "ipython>=9.16.1",
 ]
 
 postgres = [
   "asyncpg>=0.31.0",
   "psycopg[binary]>=3.3.4",
+]
+
+ai = [
+  "numpy>=2.5.1",
+  "onnxruntime>=1.28.0",
+  "tokenizers>=0.23.1",
 ]
 
 [tool.setuptools]
@@ -86,22 +94,41 @@ where = ["."]
 include = ["app*"]
 exclude = ["tests*", "alembic*", "tools*", "scripts*"]
 
+[tool.setuptools.package-data]
+app = [
+  "i18n/*.json",
+  "presets/*.yaml",
+  "static/*.css",
+  "static/*.ico",
+  "static/*.js",
+  "static/profiles_bundles/*",
+  "static/vendor/*",
+  "static/vendor/vendor/monaco-assets/*.ttf",
+  "templates/*.html",
+  "templates/profiles/*.html",
+]
+"app.schemas" = [
+  "policies/*.json",
+]
+"app.compliance.firefox.cis" = [
+  "*.yaml",
+  "generated/*.json",
+]
+
 [tool.ruff]
+# Ruff is the single formatter and import-sorter authority.  Keeping a second
+# formatter causes alternating output as their preview styles evolve.
 line-length = 100
 target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 ignore = [
-  "E501",  # длина строки — контролирует black
+  "E501",  # line length is controlled by Ruff's formatter
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "app/api/*.py" = ["B008"]
-
-[tool.black]
-line-length = 100
-target-version = ["py314"]
 
 [tool.mypy]
 python_version = "3.14"
@@ -118,25 +145,106 @@ exclude = [
   "build/.*",
 ]
 
+[tool.importlinter]
+root_packages = ["app", "documentation", "tools"]
+include_external_packages = false
+exclude_type_checking_imports = true
+
+[[tool.importlinter.contracts]]
+name = "delivery depends only downward on the profile backend"
+type = "layers"
+layers = [
+  "app.main",
+  "app.api | app.web",
+  "app.services | app.compliance",
+  "app.models | app.schemas | app.db | app.middleware",
+  "app.core",
+]
+
+[[tool.importlinter.contracts]]
+name = "owned profile layers have no sibling cycles"
+type = "acyclic_siblings"
+ancestors = [
+  "app.api",
+  "app.web",
+  "app.services",
+  "app.compliance",
+  "app.core",
+  "app.models",
+  "app.schemas",
+]
+
+[[tool.importlinter.contracts]]
+name = "schema loader remains a core implementation detail"
+type = "protected"
+protected_modules = ["app.core.schemas_loader"]
+allowed_importers = ["app.core"]
+
+[[tool.importlinter.contracts]]
+name = "policy UI registry remains behind the service facade"
+type = "protected"
+protected_modules = ["app.services.firefox_policy_ui_registry"]
+allowed_importers = ["app.services"]
+
+[[tool.importlinter.contracts]]
+name = "incubation runtime is only reached through its assembly"
+type = "protected"
+protected_modules = [
+  "app.ai.e5_runtime",
+  "app.documentation.local_assistant_runtime",
+]
+allowed_importers = [
+  "app.ai.rag_bootstrap",
+  "app.documentation.local_assistant_runtime",
+  "documentation.tools.run_assistant_answer_benchmark_0_9_3",
+]
+
+[[tool.importlinter.contracts]]
+name = "release assembly cannot reach incubation runtimes"
+type = "forbidden"
+source_modules = ["app.main"]
+forbidden_modules = [
+  "app.ai.e5_runtime",
+  "app.ai.local_inference_worker",
+  "app.ai.rag_bootstrap",
+  "app.documentation.local_assistant_runtime",
+]
+
+[[tool.importlinter.contracts]]
+name = "release assembly cannot import documentation build tooling"
+type = "forbidden"
+source_modules = ["app.main", "app.api", "app.web", "app.services"]
+forbidden_modules = ["documentation.tools.*"]
+
 [[tool.mypy.overrides]]
 module = ["requests.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-addopts = "-q -m 'not firefox_live and not firefox_live_amo and not browser_ui'"
+addopts = "-q -m 'not ai_incubation and not live and not browser'"
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
-  "order: test order marker",
-  "unit: fast isolated tests for helpers, services, schemas, and pure functions",
-  "api: FastAPI/API surface tests that exercise HTTP handlers or API contracts",
-  "contract: repository or product contract tests that guard expected behavior or documentation",
-  "docs_contract: documentation architecture, source, tooling, runbook, backlog, and isolated subsystem contract tests",
-  "ui_contract: UI/template/static/localization contract tests that do not require a real browser",
-  "slow: tests that are intentionally excluded from the fastest local feedback loop",
-  "browser_ui: runs Chromium-based browser UI regression tests",
-  "firefox_live: runs live Firefox enterprise-policy tests",
-  "firefox_live_amo: runs live Firefox AMO canary tests",
+  "unit: primary layer — isolated helper or pure-module behavior",
+  "integration: primary layer — interaction between application components or adapters",
+  "contract: primary layer — stable repository, product, or published-interface contract",
+  "browser: primary layer — deterministic real-browser behavior",
+  "live: primary layer — external/runtime behavior requiring a provisioned live environment",
+  "api: domain — FastAPI/API surface",
+  "db: domain — persistence, migrations, or database runtime",
+  "schema: domain — policy/schema definitions and validation",
+  "ui: domain — templates, static assets, localization, or UI behavior",
+  "docs: domain — documentation subsystem",
+  "compliance: domain — compliance sources, generation, or validation",
+  "ai: domain — optional local-model, inference, retrieval, or RAG behavior",
+  "tooling: domain — repository build, developer, or maintenance tooling",
+  "slow: duration — intentionally outside the fastest feedback loop",
+  "ai_incubation: environment — opt-in AI implementation contour",
+  "browser_ui: environment — Chromium/Selenium browser harness",
+  "firefox_live: environment — provisioned Firefox enterprise-policy runtime",
+  "firefox_live_amo: environment — external Firefox AMO canary",
+  "docs_contract: compatibility selector for the docs domain's contract layer; not a primary layer",
+  "ui_contract: compatibility selector for the UI domain's contract layer; not a primary layer",
 ]
 filterwarnings = [
   "ignore:websockets\\.legacy is deprecated:DeprecationWarning:websockets\\.legacy",

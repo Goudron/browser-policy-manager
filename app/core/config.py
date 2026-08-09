@@ -6,14 +6,14 @@ It defines strongly-typed settings using Pydantic v2 BaseSettings.
 Defaults target local/dev usage; values can be overridden via environment
 variables or a .env file at the project root.
 
-Sprint G additions:
-- Schema management settings (SCHEMA_*) for Mozilla policy schemas
 """
 
 from __future__ import annotations
 
 import tomllib
 from functools import lru_cache
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as distribution_version
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -31,7 +31,13 @@ def _read_project_version() -> str:
         version = None
     except tomllib.TOMLDecodeError:
         version = None
-    return version if isinstance(version, str) and version else "0.0.0-dev"
+    if isinstance(version, str) and version:
+        return version
+
+    try:
+        return distribution_version("browser-policy-manager")
+    except PackageNotFoundError:
+        return "0.0.0-dev"
 
 
 class Settings(BaseSettings):
@@ -74,16 +80,6 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api"
     ENABLE_CORS: bool = True
     CORS_ALLOW_ORIGINS: list[str] = ["*"]
-
-    # -------------------------------------------------------------------------
-    # Schema management (Sprint G)
-    # -------------------------------------------------------------------------
-    # Base URL of upstream Mozilla policy-templates repository (raw content)
-    SCHEMA_BASE_URL: str = "https://raw.githubusercontent.com/mozilla/policy-templates"
-    # Where we cache actual upstream policies-schema.json files in repo
-    SCHEMA_CACHE_DIR: str = "app/schemas/mozilla"
-    # HTTP timeout (seconds) for schema downloads
-    SCHEMA_HTTP_TIMEOUT: int = 15
 
     # -------------------------------------------------------------------------
     # Paths

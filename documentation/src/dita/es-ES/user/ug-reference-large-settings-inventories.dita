@@ -2,13 +2,13 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-large-settings-inventories" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Grandes inventarios de configuración</title>
-  <shortdesc>Utilice comportamientos, búsquedas, filtros y categorías de lista limitada cuando Todos los ajustes contenga un gran inventario de políticas y preferencias.</shortdesc>
+  <shortdesc>Utilice comportamientos, búsquedas, filtros y categorías de lista limitada cuando <uicontrol>Todos los ajustes</uicontrol> contenga un gran inventario de políticas y preferencias.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Descripción general</title><p>Todos los ajustes puede exponer muchas políticas respaldadas por esquemas y preferencias conocidas. Las listas acotadas mantienen la interfaz utilizable y hacen explícita la siguiente acción de limitación.</p></section>
-    <section id="a-list-budget"><title>Listar presupuesto</title><p>Todos los ajustes puede mostrar un subconjunto limitado, un recuento o una acción de continuación en lugar de representar cada fila a la vez.</p></section>
+    <section id="a-overview"><title>Descripción general</title><p><uicontrol>Todos los ajustes</uicontrol> puede exponer muchas políticas respaldadas por esquemas y preferencias conocidas. Las listas acotadas mantienen la interfaz utilizable y hacen explícita la siguiente acción de limitación.</p></section>
+    <section id="a-list-budget"><title>Listar presupuesto</title><p><uicontrol>Todos los ajustes</uicontrol> puede mostrar un subconjunto limitado, un recuento o una acción de continuación en lugar de representar cada fila a la vez.</p></section>
     <section id="a-narrowing-tools"><title>Herramientas de limitación</title><p>La búsqueda, la navegación por categorías, los filtros de origen y los filtros de estado son las formas admitidas de reducir un inventario grande.</p></section>
     <section id="a-performance-boundary"><title>Límite de rendimiento</title><p>El manejo de inventarios grandes es un límite UI, no una señal de que faltan configuraciones en el perfil o catálogo.</p></section>
-    <section id="a-recovery"><title>Recuperación</title><p>Si la fila esperada no está visible, busque por ID exacto, borre filtros o cambie entre Configurado y Catálogo.</p></section>
+    <section id="a-recovery"><title>Recuperación</title><p>Si la fila esperada no está visible, busque por ID exacto, borre filtros o cambie entre Configurado y <uicontrol>Catálogo</uicontrol>.</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

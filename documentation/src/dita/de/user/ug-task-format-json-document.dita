@@ -4,7 +4,7 @@
   <title>Das JSON-Dokument formatieren</title>
   <shortdesc>Formatieren Sie das aktuelle JSON-Dokument vor der Überprüfung, Validierung oder Übergabe.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie JSON-Editor mit einem JSON-Dokument im Editor.</p></prereq>
+    <prereq><p>Öffnen Sie <uicontrol>JSON-Editor</uicontrol> mit einem JSON-Dokument im Editor.</p></prereq>
     <context><p>Durch die Formatierung werden nur Leerzeichen und Einrückungen geändert. Es sollte die Überprüfung erleichtern, ohne die Bedeutung der Richtlinie zu ändern.</p></context>
     <steps>
       <step><cmd>Wählen Sie die JSON-Formataktion.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>

@@ -1,4 +1,38 @@
-(() => {
+import { utils } from "./profiles_utils.js";
+import * as platform from "./profiles_platform.js";
+import * as data from "./profiles_data.js";
+import { read as readDom } from "./profiles_dom.js";
+import { create as createBootstrapSections } from "./profiles_bootstrap_sections.js";
+import { initCoreModules } from "./profiles_bootstrap_core.js";
+import { initFeatureModules } from "./profiles_bootstrap_features.js";
+import { startRuntimeModule } from "./profiles_bootstrap_runtime.js";
+import { create as createShared } from "./profiles_shared.js";
+import { create as createExtensions } from "./profiles_extensions.js";
+import { create as createSchemaShell } from "./profiles_schema_shell.js";
+import { create as createSchemaShellSections } from "./profiles_schema_shell_sections.js";
+import { create as createSchemaShellValueIO } from "./profiles_schema_shell_value_io.js";
+import { create as createSchemaShellReview } from "./profiles_schema_shell_review.js";
+import { create as createSchemaShellActions } from "./profiles_schema_shell_actions.js";
+import { create as createAllSettingsRouteState } from "./profiles_all_settings_state.js";
+import { create as createSettingsInventory } from "./profiles_settings_inventory.js";
+import { create as createAllSettingsDetail } from "./profiles_all_settings_detail.js";
+import { create as createAllSettingsList } from "./profiles_all_settings_list.js";
+import { create as createSettingsSearch } from "./profiles_settings_search.js";
+import { create as createWizardFlow } from "./profiles_wizard_flow.js";
+import { create as createWorkspace } from "./profiles_workspace.js";
+import * as workspaceState from "./profiles_workspace_state.js";
+import { create as createReview } from "./profiles_review.js";
+import * as reviewState from "./profiles_review_state.js";
+import { create as createPreferences } from "./profiles_preferences.js";
+import { create as createSearchEngines } from "./profiles_search_engines.js";
+import { create as createNetwork } from "./profiles_network.js";
+import { create as createPreferenceRows } from "./profiles_preferences_rows.js";
+import { create as createPreferenceState } from "./profiles_preferences_state.js";
+import { create as createPreferenceViews } from "./profiles_preferences_views.js";
+import { create as createRuntime } from "./profiles_runtime.js";
+import * as jsonEditorRuntime from "./profiles_runtime_json_editor.js";
+import { create as createDirtyRouteGuard } from "./profiles_runtime_dirty_guard.js";
+
     const WIZARD_REVIEW_FILTERS = [
         { value: "changed", key: "profiles.wizard_review_filter_changed", fallback: "Changed" },
         { value: "attention", key: "profiles.wizard_review_filter_attention", fallback: "Needs attention" },
@@ -295,11 +329,13 @@
     }
 
     function start() {
-        const utils = window.BPMProfilesUtils;
-        const platform = window.BPMProfilesPlatform;
-        const data = window.BPMProfilesData;
-        const dom = window.BPMProfilesDom.read(document);
-        const shared = window.BPMProfilesShared.create({
+        const dom = readDom(document);
+        const bootstrapSections = createBootstrapSections({
+            initCoreModules,
+            initFeatureModules,
+            startRuntimeModule,
+        });
+        const shared = createShared({
             documentRef: document,
             elements: {
                 statusEl: dom.elements.statusEl,
@@ -320,7 +356,7 @@
         initWizardLongLists(document, shared.t);
         initWizardHomeSurfaceGroups(document, shared.t);
 
-        const core = window.BPMProfilesBootstrapSections.initCoreModules({
+        const core = bootstrapSections.initCoreModules({
             documentRef: document,
             windowRef: window,
             elements: dom.elements,
@@ -332,9 +368,27 @@
             managedExtensionFields: dom.managedExtensionFields,
             managedExtensionStatusEls: dom.managedExtensionStatusEls,
             wizardSchemaShellViews: dom.wizardSchemaShellViews,
+            components: {
+                createExtensions,
+                createSchemaShell,
+                createSchemaShellSections,
+                createSchemaShellValueIO,
+                createSchemaShellReview,
+                createSchemaShellActions,
+                createAllSettingsRouteState,
+                createSettingsInventory,
+                createAllSettingsDetail,
+                createAllSettingsList,
+                createSettingsSearch,
+                createWizardFlow,
+                createWorkspace,
+                createWorkspaceState: () => workspaceState,
+                createReview,
+                reviewState,
+            },
         });
 
-        const features = window.BPMProfilesBootstrapSections.initFeatureModules({
+        const features = bootstrapSections.initFeatureModules({
             documentRef: document,
             elements: dom.elements,
             catalogs: dom.catalogs,
@@ -342,12 +396,20 @@
             utils,
             data,
             core,
+            components: {
+                createPreferences,
+                createSearchEngines,
+                createNetwork,
+                createPreferenceRows,
+                createPreferenceState,
+                createPreferenceViews,
+            },
         });
 
         core.setSyncWizardNetworkFromEditor(features.syncWizardNetworkFromEditor);
         core.setSyncWizardPreferencesFromEditor(features.syncWizardPreferencesFromEditor);
 
-        window.BPMProfilesBootstrapSections.startRuntimeModule({
+        bootstrapSections.startRuntimeModule({
             documentRef: document,
             windowRef: window,
             shared,
@@ -356,8 +418,12 @@
             data,
             core,
             features,
+            components: {
+                createRuntime,
+                jsonEditorRuntime,
+                createDirtyRouteGuard,
+            },
         });
     }
 
-    window.BPMProfilesBootstrap = { start };
-})();
+    export { start };

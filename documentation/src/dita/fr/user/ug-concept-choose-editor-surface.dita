@@ -2,14 +2,14 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-choose-editor-surface" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Choix de l’interface BPM adaptée</title>
-  <shortdesc>BPM comporte cinq surfaces utilisateur : Bibliothèque, Éditeur guidé, Tous les paramètres, Éditeur JSON et Comparer.</shortdesc>
+  <shortdesc>BPM comporte cinq surfaces utilisateur : <uicontrol>Bibliothèque</uicontrol>, <uicontrol>Éditeur guidé</uicontrol>, <uicontrol>Tous les paramètres</uicontrol>, <uicontrol>Éditeur JSON</uicontrol> et Comparer.</shortdesc>
   <conbody>
     <p>L’en-tête compact partagé et le contexte de profil maintiennent visibles le produit, le profil, le schéma, les paramètres régionaux et le thème sur toutes ces surfaces. Choisissez une surface selon le résultat souhaité, et non selon un module interne.</p>
     <dl>
-      <dlentry><dt>Bibliothèque</dt><dd>Rechercher, créer, importer, dupliquer, archiver, restaurer, supprimer, exporter et ouvrir des profils.</dd></dlentry>
-      <dlentry><dt>Éditeur guidé</dt><dd>Créer ou mettre à jour des configurations de politiques courantes avec des étapes orientées tâche et des choix de départ.</dd></dlentry>
-      <dlentry><dt>Tous les paramètres</dt><dd>Examiner les points à traiter, parcourir le catalogue complet des politiques et préférences prises en charge, puis modifier des valeurs détaillées.</dd></dlentry>
-      <dlentry><dt>Éditeur JSON</dt><dd>Inspecter ou modifier le document exact des politiques Firefox lorsqu’un contrôle brut précis est nécessaire.</dd></dlentry>
+      <dlentry><dt><uicontrol>Bibliothèque</uicontrol></dt><dd>Rechercher, créer, importer, dupliquer, archiver, restaurer, supprimer, exporter et ouvrir des profils.</dd></dlentry>
+      <dlentry><dt><uicontrol>Éditeur guidé</uicontrol></dt><dd>Créer ou mettre à jour des configurations de politiques courantes avec des étapes orientées tâche et des choix de départ.</dd></dlentry>
+      <dlentry><dt><uicontrol>Tous les paramètres</uicontrol></dt><dd>Examiner les points à traiter, parcourir le catalogue complet des politiques et préférences prises en charge, puis modifier des valeurs détaillées.</dd></dlentry>
+      <dlentry><dt><uicontrol>Éditeur JSON</uicontrol></dt><dd>Inspecter ou modifier le document exact des politiques Firefox lorsqu’un contrôle brut précis est nécessaire.</dd></dlentry>
       <dlentry><dt>Comparer</dt><dd>Comparer deux profils enregistrés et comprendre les paramètres identiques, différents ou manquants.</dd></dlentry>
     </dl>
   </conbody>

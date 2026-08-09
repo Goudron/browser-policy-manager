@@ -2,9 +2,9 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Modelo de perfil y ciclo de vida</title>
-  <shortdesc>Un perfil BPM es un espacio de trabajo de políticas de Firefox guardado y compartido por la Biblioteca, Editor guiado, Todos los ajustes, Editor JSON y Comparar.</shortdesc>
+  <shortdesc>Un perfil BPM es un espacio de trabajo de políticas de Firefox guardado y compartido por la <uicontrol>Biblioteca</uicontrol>, <uicontrol>Editor guiado</uicontrol>, <uicontrol>Todos los ajustes</uicontrol>, <uicontrol>Editor JSON</uicontrol> y Comparar.</shortdesc>
   <conbody>
-    <p>Utilice un perfil para recopilar políticas de Firefox, Preferencias gestionadas, estado de validación, atribución de fuente y estado del ciclo de vida en un solo lugar. Un mismo perfil se puede abrir a través de diferentes superficies BPM sin cambiar su identidad.</p>
+    <p>Utilice un perfil para recopilar políticas de Firefox, <uicontrol>Preferencias gestionadas</uicontrol>, estado de validación, atribución de fuente y estado del ciclo de vida en un solo lugar. Un mismo perfil se puede abrir a través de diferentes superficies BPM sin cambiar su identidad.</p>
     <section id="a-lifecycle-states">
       <title>Estados del ciclo de vida</title>
       <p>Un borrador no guardado existe solo hasta que se guarda por primera vez. Un perfil activo guardado se puede editar, validar, exportar, archivar, duplicar o comparar. Un perfil archivado se conserva para revisar y restaurar flujos de trabajo, pero no es el destino de exportación normal.</p>

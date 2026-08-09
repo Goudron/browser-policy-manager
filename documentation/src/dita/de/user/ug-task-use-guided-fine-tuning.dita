@@ -13,7 +13,7 @@
       <step><cmd>Überprüfen Sie die Zusammenfassung und die Validierungsmeldung im Klartext noch einmal, bevor Sie fortfahren.</cmd><info><note type="warning">Das Ändern schemaabhängiger Steuerelemente kann dazu führen, dass Werte für den ausgewählten Firefox-Kanal ungültig werden.</note></info></step>
     </steps>
     <result><p>Das Profil enthält absichtliche erweiterte Änderungen und keine versehentlichen umfassenden Änderungen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn die Änderung schwer zu erklären ist, setzen Sie die Steuerung zurück und verwenden Sie Alle Einstellungen oder JSON-Editor für eine tiefergehende Untersuchung.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn die Änderung schwer zu erklären ist, setzen Sie die Steuerung zurück und verwenden Sie <uicontrol>Alle Einstellungen</uicontrol> oder <uicontrol>JSON-Editor</uicontrol> für eine tiefergehende Untersuchung.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-guided-editor"/>

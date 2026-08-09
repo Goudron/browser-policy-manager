@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -1635,5 +1634,4 @@
         };
     }
 
-    window.BPMProfilesNetwork = { create };
-})();
+    export { create };

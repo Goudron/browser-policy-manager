@@ -12,7 +12,7 @@
       <step><cmd>Actualiza la biblioteca una vez.</cmd><info><p>Si el estado actualizado coincide con el resultado deseado, continúe desde la lista de filas actualizada.</p></info></step>
       <step><cmd>Si el estado actualizado aún es incorrecto, restablezca la búsqueda y los filtros e inspeccione el perfil en todos los estados del ciclo de vida.</cmd><info><p>Esto distingue una fila oculta de una operación fallida o completada.</p></info></step>
     </steps>
-    <result><p>Usted sabe si debe volver a intentar la operación, restaurar el perfil, detenerse antes de eliminarlo o continuar desde la vista actualizada de la Biblioteca.</p></result>
+    <result><p>Usted sabe si debe volver a intentar la operación, restaurar el perfil, detenerse antes de eliminarlo o continuar desde la vista actualizada de la <uicontrol>Biblioteca</uicontrol>.</p></result>
     <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>

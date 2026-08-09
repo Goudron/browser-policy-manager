@@ -62,14 +62,14 @@ def _topic_root(locale: str, topic_id: str) -> ET.Element:
 def _case_topics() -> dict[str, dict[str, object]]:
     case_map = json.loads(USER_GUIDE_MAP.read_text(encoding="utf-8"))
     return {
-        topic["topic_id"]: topic
-        for section in case_map["sections"]
-        for topic in section["topics"]
+        topic["topic_id"]: topic for section in case_map["sections"] for topic in section["topics"]
     }
 
 
 def _section_keyrefs(locale: str) -> list[str]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     for topichead in root.findall("topichead"):
         intent = topichead.find("./topicmeta/data[@name='intent-id']")
         if intent is not None and intent.attrib["value"] == SECTION_ID:
@@ -134,7 +134,9 @@ def test_all_settings_reference_states_are_complete() -> None:
     for locale in LOCALES:
         for topic_id, sections in expected_sections.items():
             root = _topic_root(locale, topic_id)
-            assert {section.attrib["id"] for section in root.findall("./refbody/section")} == sections
+            assert {
+                section.attrib["id"] for section in root.findall("./refbody/section")
+            } == sections
             assert len(root.findall("./related-links/link")) >= 2
 
 

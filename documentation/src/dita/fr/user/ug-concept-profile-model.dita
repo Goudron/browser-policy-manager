@@ -2,9 +2,9 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-profile-model" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Modèle de profil et cycle de vie</title>
-  <shortdesc>Un profil BPM est un espace de travail de stratégie Firefox enregistré partagé par la bibliothèque, Éditeur guidé, Tous les paramètres, Éditeur JSON et Comparer les paramètres des profils.</shortdesc>
+  <shortdesc>Un profil BPM est un espace de travail de stratégie Firefox enregistré partagé par la bibliothèque, <uicontrol>Éditeur guidé</uicontrol>, <uicontrol>Tous les paramètres</uicontrol>, <uicontrol>Éditeur JSON</uicontrol> et <uicontrol>Comparer les paramètres des profils</uicontrol>.</shortdesc>
   <conbody>
-    <p>Utilisez un profil pour collecter les politiques Firefox, Préférences gérées, l'état de validation, l'attribution de la source et l'état du cycle de vie en un seul endroit. Le même profil peut être ouvert via différentes surfaces BPM sans changer son identité.</p>
+    <p>Utilisez un profil pour collecter les politiques Firefox, <uicontrol>Préférences gérées</uicontrol>, l'état de validation, l'attribution de la source et l'état du cycle de vie en un seul endroit. Le même profil peut être ouvert via différentes surfaces BPM sans changer son identité.</p>
     <section id="a-lifecycle-states">
       <title>États du cycle de vie</title>
       <p>Un brouillon non enregistré n'existe que jusqu'à son premier enregistrement. Un profil actif enregistré peut être modifié, validé, exporté, archivé, dupliqué ou comparé. Un profil archivé est conservé pour les flux de travail de révision et de restauration, mais ne constitue pas la cible d'exportation normale.</p>

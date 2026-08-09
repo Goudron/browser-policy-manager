@@ -7,7 +7,7 @@
     <prereq><p>打开从入门预设创建的配置文件或应用了 CIS 1 级或 2 级图层的配置文件。</p></prereq>
     <context><p>当审阅者询问设置是否来自原始基线、CIS 层、导入、手动编辑或原始回退时，跟踪值非常有用。</p></context>
     <steps>
-      <step><cmd>打开 所有设置 并按配置值或 CIS 源徽章进行过滤。</cmd><info><p>预期结果：相关政策或管理偏好及其来源属性仍然可见。</p></info></step>
+      <step><cmd>打开 <uicontrol>所有设置</uicontrol> 并按配置值或 CIS 源徽章进行过滤。</cmd><info><p>预期结果：相关政策或管理偏好及其来源属性仍然可见。</p></info></step>
       <step><cmd>读取源属性并确定当前值是基线、CIS、手动、导入还是原始。</cmd><info><p>预期结果：您可以命名该值的直接来源。</p></info></step>
       <step><cmd>当生成的图层贡献了值时，打开相关的 CIS 建议或 Firefox 策略主题。</cmd><info><p>预期结果：可以看到推荐ID、路径、值、渠道支持和合并规则。</p></info></step>
       <step><cmd>检查合并决策：added_from_cis、already_satisfied、cis_replaced_base、kept_base_only、kept_base_stricter 或 manual_review_kept_base。</cmd><info><p>预期结果：您知道 CIS 是否添加了该值、确认了该值、替换了该值，还是留下了基值以供审核。</p></info></step>

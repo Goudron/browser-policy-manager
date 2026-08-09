@@ -9,60 +9,62 @@ from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
 from app.api import documentation_assistant, export, health, local_model, profiles, validation
-from app.core.config import get_settings
-from app.db import get_session, init_db
+from app.core.config import Settings, get_settings
+from app.core.response_assets import load_favicon_response_asset, load_locale_response_asset
+from app.db import DatabaseRuntime
 from app.documentation import router as documentation_router
 from app.documentation.assistant_service import TrainingDocumentationAssistantService
 from app.middleware.security import SecurityHeadersMiddleware
-from app.services.profile_schema_normalization import normalize_legacy_profile_schema_versions
 from app.web import profiles as web_profiles
 
 # Local settings instance for this module.
 settings = get_settings()
 
 
-def _resolve_path(path_value: str | Path) -> Path:
+def _resolve_path(path_value: str | Path, *, root_dir: Path | None = None) -> Path:
     path = Path(path_value)
     if path.is_absolute():
         return path
-    return settings.ROOT_DIR / path
+    return (root_dir or settings.ROOT_DIR) / path
 
 
-def create_app() -> FastAPI:
+def create_app(
+    *,
+    app_settings: Settings | None = None,
+    database_runtime: DatabaseRuntime | None = None,
+) -> FastAPI:
     """
     Application factory used by production runners and tests.
 
     It wires core middleware and includes all API routers.
     """
-    async def _run_startup_profile_normalization() -> None:
-        await init_db()
-        session_dependency = app.dependency_overrides.get(get_session, get_session)
-        session_generator = session_dependency()
-        session = await session_generator.__anext__()
-        try:
-            await normalize_legacy_profile_schema_versions(session)
-            await session.commit()
-        finally:
-            try:
-                await session_generator.__anext__()
-            except StopAsyncIteration:
-                pass
+    configured_settings = app_settings or settings
+    owned_database_runtime = database_runtime or DatabaseRuntime(configured_settings)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        await _run_startup_profile_normalization()
         try:
+            await owned_database_runtime.init()
+            await owned_database_runtime.verify_release_schema()
             yield
         finally:
-            runtime = getattr(app.state, "documentation_assistant_runtime", None)
-            if runtime is not None:
-                runtime.shutdown()
+            try:
+                service = getattr(app.state, "documentation_assistant_service", None)
+                shutdown_service = getattr(service, "shutdown", None)
+                if callable(shutdown_service):
+                    shutdown_service()
+                runtime = getattr(app.state, "documentation_assistant_runtime", None)
+                if runtime is not None:
+                    runtime.shutdown()
+            finally:
+                await owned_database_runtime.dispose()
 
     app = FastAPI(
-        title=settings.APP_NAME,
-        version=settings.APP_VERSION,
+        title=configured_settings.APP_NAME,
+        version=configured_settings.APP_VERSION,
         lifespan=lifespan,
     )
+    app.state.database_runtime = owned_database_runtime
 
     # Model training and RAG promotion are intentionally beyond the 0.9.3 release boundary.
     # Keep the visible assistant functional without loading or inspecting local AI artifacts.
@@ -71,9 +73,9 @@ def create_app() -> FastAPI:
     app.add_middleware(SecurityHeadersMiddleware)
 
     # Basic CORS configuration. Tests do not depend on strict values here.
-    allow_origins = settings.CORS_ALLOW_ORIGINS
+    allow_origins = configured_settings.CORS_ALLOW_ORIGINS
 
-    if settings.ENABLE_CORS:
+    if configured_settings.ENABLE_CORS:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=allow_origins,
@@ -82,7 +84,11 @@ def create_app() -> FastAPI:
             allow_headers=["*"],
         )
 
-    app.mount("/static", StaticFiles(directory=str(settings.STATIC_DIR)), name="static")
+    app.mount(
+        "/static",
+        StaticFiles(directory=str(configured_settings.STATIC_DIR)),
+        name="static",
+    )
 
     # Routers
     app.include_router(web_profiles.router)
@@ -97,31 +103,49 @@ def create_app() -> FastAPI:
 
     @app.get("/i18n/{locale}.json", include_in_schema=False)
     async def locale_catalog(locale: str) -> Response:
-        if locale not in settings.SUPPORTED_LOCALES:
+        if locale not in configured_settings.SUPPORTED_LOCALES:
             raise HTTPException(status_code=404, detail="Locale not supported")
 
-        locale_path = _resolve_path(settings.I18N_DIR) / f"{locale}.json"
-        if not locale_path.is_file():
+        locale_path = (
+            _resolve_path(
+                configured_settings.I18N_DIR,
+                root_dir=configured_settings.ROOT_DIR,
+            )
+            / f"{locale}.json"
+        )
+        asset = load_locale_response_asset(locale_path)
+        if asset is None:
             raise HTTPException(status_code=404, detail="Locale file not found")
 
-        return Response(content=locale_path.read_text(encoding="utf-8"), media_type="application/json")
+        return Response(
+            content=asset.content,
+            media_type=asset.media_type,
+            status_code=asset.status_code,
+        )
 
     @app.get("/favicon.ico", include_in_schema=False)
     async def favicon() -> Response:
-        favicon_path = settings.STATIC_DIR / "favicon.ico"
-        return Response(content=favicon_path.read_bytes(), media_type="image/x-icon")
+        favicon_path = configured_settings.STATIC_DIR / "favicon.ico"
+        asset = load_favicon_response_asset(favicon_path)
+        if asset is None:
+            raise HTTPException(status_code=404, detail="Favicon file not found")
+        return Response(
+            content=asset.content,
+            media_type=asset.media_type,
+            status_code=asset.status_code,
+        )
 
     @app.get("/")
     async def root() -> dict[str, str]:
         """
         Simple JSON landing endpoint used by smoke tests.
         """
-        app_name = settings.APP_NAME
+        app_name = configured_settings.APP_NAME
         return {
             "status": "ok",
             "app": app_name,  # explicitly required by tests
             "name": app_name,
-            "version": settings.APP_VERSION,
+            "version": configured_settings.APP_VERSION,
             "message": "Browser Policy Manager API is running",
         }
 

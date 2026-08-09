@@ -129,7 +129,10 @@ class WebEvidenceRateLimiter:
             session_requests = self._session_requests.get(session_id)
             if len(self._global_requests) >= self._max_requests_global:
                 return False
-            if session_requests is not None and len(session_requests) >= self._max_requests_per_session:
+            if (
+                session_requests is not None
+                and len(session_requests) >= self._max_requests_per_session
+            ):
                 return False
             if session_requests is None:
                 if len(self._session_requests) >= self._max_tracked_sessions:
@@ -222,7 +225,9 @@ class HttpxBraveContextTransport:
                     raise WebEvidenceTransportError("provider redirect rejected")
                 content_type = response.headers.get("content-type")
                 content_encoding = response.headers.get("content-encoding")
-                if not _json_content_type(content_type) or not _accepted_content_encoding(content_encoding):
+                if not _json_content_type(content_type) or not _accepted_content_encoding(
+                    content_encoding
+                ):
                     raise WebEvidenceTransportError("provider response type rejected")
                 body = _bounded_response_body(response)
                 return ProviderHttpResponse(
@@ -346,7 +351,9 @@ class ScopedWebEvidenceRetriever:
         except Exception:
             return WebEvidenceResult("local_only", "assistant_web_scope_unavailable")
         if scope.disposition != "allow" or not scope.reason_code:
-            return WebEvidenceResult("local_only", scope.reason_code or "assistant_web_scope_unavailable")
+            return WebEvidenceResult(
+                "local_only", scope.reason_code or "assistant_web_scope_unavailable"
+            )
         authorization_session_id = request.web_session_id or request.session_id
         if authorization_session_id is None:
             return WebEvidenceResult("local_only", "assistant_web_mode_unavailable")
@@ -405,6 +412,13 @@ class ScopedWebEvidenceRetriever:
             "assistant_web_evidence_ready",
             ExternalWebEvidenceLease(evidence),
         )
+
+    def shutdown(self) -> None:
+        """Clear bounded authorization counters owned by this process-local retriever."""
+
+        self._rate_limiter.clear_all()
+        if self._consent_store is not None:
+            self._consent_store.clear_all()
 
     @staticmethod
     def _cancelled(cancellation_check: CancellationCheck) -> bool:
@@ -519,7 +533,10 @@ class ScopedWebEvidenceRetriever:
                 source_url=source_url,
                 source_title=title,
                 source_age=source_age,
-                retrieved_at=self._retrieved_at().astimezone(UTC).replace(microsecond=0).isoformat(),
+                retrieved_at=self._retrieved_at()
+                .astimezone(UTC)
+                .replace(microsecond=0)
+                .isoformat(),
                 locale=locale,
             ),
             tuple(snippet for snippet in clean_snippets if snippet is not None),
@@ -551,7 +568,10 @@ def _approved_source_url(value: object) -> str | None:
         not isinstance(value, str)
         or not value
         or len(value) > MAX_EXTERNAL_URL_CHARACTERS
-        or any(character.isspace() or ord(character) < 32 or character in {"\\", "%"} for character in value)
+        or any(
+            character.isspace() or ord(character) < 32 or character in {"\\", "%"}
+            for character in value
+        )
     ):
         return None
     try:

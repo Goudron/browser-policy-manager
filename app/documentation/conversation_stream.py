@@ -15,13 +15,20 @@ from dataclasses import dataclass, field
 from time import monotonic
 from typing import Literal, Protocol
 
+from app.documentation.assistant_contracts import (
+    ConversationAdmission,
+    ConversationRequest,
+    ConversationStreamEvent,
+    ConversationStreamExternalClaim,
+    ConversationTimePreview,
+    EventType,
+    RequestState,
+)
 from app.documentation.conversation import (
     AnswerDisposition,
     ConversationOutcome,
-    ConversationRequest,
 )
 from app.documentation.response_timing import (
-    ConversationTimePreview,
     conservative_default_preview,
 )
 
@@ -32,21 +39,6 @@ MAX_EVENT_BUFFER = 8
 MAX_COMPLETED_REQUESTS = 4
 COMPLETED_RECORD_RETENTION_SECONDS = 15 * 60.0
 REQUEST_TIMEOUT_SECONDS = 1_200.0
-
-EventType = Literal["accepted", "progress", "final", "cancelled", "error"]
-RequestState = Literal[
-    "accepted",
-    "scope_check",
-    "evidence_check",
-    "generating",
-    "validating",
-    "answer",
-    "clarify",
-    "abstain",
-    "refuse",
-    "cancelled",
-    "error",
-]
 
 
 class ConversationRunner(Protocol):
@@ -59,47 +51,6 @@ class ConversationRunner(Protocol):
         lifecycle_callback: Callable[[str], None] | None = None,
         cancellation_check: Callable[[], bool] | None = None,
     ) -> ConversationOutcome: ...
-
-
-@dataclass(frozen=True)
-class ConversationStreamEvent:
-    """A display-safe, transport-ready event; source IDs are opaque server handles."""
-
-    event_type: EventType
-    request_id: str
-    state: RequestState
-    state_epoch: int
-    reason_code: str
-    message_key: str
-    action_key: str
-    disposition: str | None = None
-    text: str = ""
-    source_ids: tuple[str, ...] = ()
-    incomplete: bool = False
-    api_version: int = API_VERSION
-    external_claims: tuple[ConversationStreamExternalClaim, ...] = ()
-
-
-@dataclass(frozen=True)
-class ConversationStreamExternalClaim:
-    """One external claim with request-opaque citation handles."""
-
-    text: str
-    source_ids: tuple[str, ...]
-
-
-@dataclass(frozen=True)
-class ConversationAdmission:
-    """The safe result of accepting, queueing, or refusing a new chat request."""
-
-    request_id: str | None
-    state: RequestState
-    reason_code: str
-    state_epoch: int
-    api_version: int = API_VERSION
-    time_preview: ConversationTimePreview = field(
-        default_factory=lambda: ConversationTimePreview(60, 900)
-    )
 
 
 @dataclass
@@ -128,7 +79,9 @@ class ConversationStreamController:
         max_event_buffer: int = MAX_EVENT_BUFFER,
         completed_retention_seconds: float = COMPLETED_RECORD_RETENTION_SECONDS,
         clock: Callable[[], float] = monotonic,
-        time_preview_estimator: Callable[..., ConversationTimePreview] = conservative_default_preview,
+        time_preview_estimator: Callable[
+            ..., ConversationTimePreview
+        ] = conservative_default_preview,
     ) -> None:
         if request_timeout_seconds <= 0 or completed_retention_seconds <= 0:
             raise ValueError("conversation retention timeout must be positive")
@@ -188,7 +141,9 @@ class ConversationStreamController:
 
         try:
             return self._time_preview_estimator(request, queued=queued)
-        except (TypeError, ValueError):
+        except TypeError:
+            return conservative_default_preview(request, queued=queued)
+        except ValueError:
             return conservative_default_preview(request, queued=queued)
 
     def poll(self, request_id: str) -> tuple[ConversationStreamEvent, ...]:
@@ -240,6 +195,32 @@ class ConversationStreamController:
             if record is None or not record.terminal:
                 return None
             return record.sources.get(source_id)
+
+    def retains(self, request_id: str) -> bool:
+        """Report whether an opaque request handle remains valid without returning its contents."""
+
+        with self._lock:
+            self._expire_completed_locked()
+            return request_id in self._records
+
+    def shutdown(self) -> None:
+        """Cancel active work and release every controller-owned record during app shutdown."""
+
+        with self._lock:
+            active = self._active_request_id is not None
+            records = tuple(self._records.values())
+            self._records.clear()
+            self._queued_request_ids.clear()
+            self._active_request_id = None
+        for record in records:
+            record.cancellation_requested.set()
+            if record.timeout_timer is not None:
+                record.timeout_timer.cancel()
+            record.request = None
+            record.events.clear()
+            record.sources.clear()
+        if active:
+            self._cancel_generation()
 
     def queue_depth_class(self) -> Literal["idle", "active", "queued"]:
         """Return a coarse safe queue class without exposing request identities or counts."""
@@ -344,10 +325,7 @@ class ConversationStreamController:
             external_claims = tuple(
                 ConversationStreamExternalClaim(
                     claim.text,
-                    tuple(
-                        self._source_id_for(record, citation)
-                        for citation in claim.citations
-                    ),
+                    tuple(self._source_id_for(record, citation) for citation in claim.citations),
                 )
                 for claim in outcome.external_claims
             )

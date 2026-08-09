@@ -27,7 +27,7 @@
   },
   "removal": "Removal reaches only the M6 fixed manifest-owned model, staging and quarantine locations and is possible only after a separate explicit confirmation.",
   "verification": {
-    "unit_tests": ["tests/test_local_model_installation.py", "tests/test_local_model_management_api_093.py"],
+    "unit_tests": ["tests/integration/ai/core/test_local_model_installation.py", "tests/integration/ai/core/test_local_model_management_api.py"],
     "ui_contract": "documentation/tests/contract/test_local_model_management_ui_contract_0_9_3.py",
     "architecture": "docs/architecture/local-model-management-ui-0.9.3.md"
   }

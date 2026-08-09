@@ -2,12 +2,12 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-configure-linux-source-runtime" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
   <title>配置开源系统源运行时设置</title>
-  <shortdesc>设置源运行 BPM 流程使用的数据库 URL、主机、端口、重新加载模式、CORS 和文档站点路径。</shortdesc>
+  <shortdesc>设置源运行 BPM 流程使用的数据<uicontrol>库</uicontrol> URL、主机、端口、重新加载模式、CORS 和文档站点路径。</shortdesc>
   <taskbody>
-    <prereq><p>已安装签出依赖项，并已为您计划使用的数据库应用迁移。</p></prereq>
-    <context><p>BPM 读取带有 <codeph>BPM_</codeph> 前缀的环境变量，并且还支持存储库本地 <codeph>.env</codeph> 文件。默认数据库 URL 为 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，其将数据存储在 <codeph>data/bpm.db</codeph> 中。</p></context>
+    <prereq><p>已安装签出依赖项，并已为您计划使用的数据<uicontrol>库</uicontrol>应用迁移。</p></prereq>
+    <context><p>BPM 读取带有 <codeph>BPM_</codeph> 前缀的环境变量，并且还支持存储<uicontrol>库</uicontrol>本地 <codeph>.env</codeph> 文件。默认数据<uicontrol>库</uicontrol> URL 为 <codeph>sqlite+aiosqlite:///./data/bpm.db</codeph>，其将数据存储在 <codeph>data/bpm.db</codeph> 中。</p></context>
     <steps>
-      <step><cmd>创建本地数据目录并定义数据库 URL。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>创建本地数据目录并定义数据<uicontrol>库</uicontrol> URL。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 mkdir -p data
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 ]]></codeblock><p>对于可重复的源运行，相同的值可能存储在未提交的本地 <codeph>.env</codeph> 文件中。</p></info></step>
@@ -17,7 +17,7 @@ export BPM_PORT="8000"
 export BPM_RELOAD="true"
 ]]></codeblock><p>使用环回进行本地验证。绑定到共享接口是此源运行手册边界之外的操作决策。</p></info></step>
       <step><cmd>查看 CORS 和文档站点设置。</cmd><info><p>源默认值包括 <codeph>BPM_ENABLE_CORS</codeph>、<codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。保留允许的 CORS 仅用于受控本地评估，并在已安装的静态文档站点可用时将 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph> 指向该站点。</p></info></step>
-      <step><cmd>从存储库脚本启动 BPM。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>从存储<uicontrol>库</uicontrol>脚本启动 BPM。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 make dev
 ]]></codeblock><p>Makefile 运行 <codeph>uvicorn app.main:app --reload --port 8000</codeph>。保持前台终端打开，以便启动消息和回溯可见。</p></info></step>
     </steps>

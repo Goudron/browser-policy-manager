@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         managedExtensionProfiles = [],
@@ -1659,5 +1658,4 @@
         };
     }
 
-    window.BPMProfilesExtensions = { create };
-})();
+    export { create };

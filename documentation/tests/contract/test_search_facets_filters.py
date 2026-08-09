@@ -70,7 +70,9 @@ def test_search_facets_contract_is_static_localized_and_non_ai() -> None:
     ]
 
 
-def test_search_filter_contract_defines_composition_url_state_and_localized_empty_recovery() -> None:
+def test_search_filter_contract_defines_composition_url_state_and_localized_empty_recovery() -> (
+    None
+):
     contract = _contract()
 
     assert contract["filter_contract"]["composition"] == (
@@ -89,9 +91,7 @@ def test_search_filter_fixture_matrix_covers_all_locales_and_empty_recovery() ->
 
     fixture_locales = {fixture["locale"] for fixture in fixtures}
     empty_fixture_locales = {
-        fixture["locale"]
-        for fixture in fixtures
-        if fixture.get("expected_empty")
+        fixture["locale"] for fixture in fixtures if fixture.get("expected_empty")
     }
     assert fixture_locales == set(build_docs.LOCALES)
     assert empty_fixture_locales == set(build_docs.LOCALES)
@@ -133,11 +133,19 @@ def test_filter_helpers_apply_and_across_fields_or_within_a_field_and_preserve_u
     )
     assert [document["topic_id"] for document in filtered] == ["api"]
 
-    assert build_docs._filter_search_documents(docs, {"api_area": ["validation"], "cis_level": ["level-2"]}) == []
-    assert build_docs._filter_url_query(
-        {"api_area": ["validation"], "guide_id": ["administrator-guide"]},
-        contract,
-    ) == "api_area=validation&guide=administrator-guide"
+    assert (
+        build_docs._filter_search_documents(
+            docs, {"api_area": ["validation"], "cis_level": ["level-2"]}
+        )
+        == []
+    )
+    assert (
+        build_docs._filter_url_query(
+            {"api_area": ["validation"], "guide_id": ["administrator-guide"]},
+            contract,
+        )
+        == "api_area=validation&guide=administrator-guide"
+    )
 
 
 @pytest.mark.parametrize(

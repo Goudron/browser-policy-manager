@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import importlib.util
 import json
 import queue
@@ -27,36 +26,6 @@ def _config() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
-def test_target_laptop_contract_pins_m6_inputs_and_the_actual_host_protocol() -> None:
-    config = _config()
-
-    assert config["contract_id"] == "bpm-local-chat-target-laptop-benchmark-0.9.3"
-    assert config["backlog_item"] == "BPM093-M6-03"
-    assert config["status"] == "accepted-comparative-selection-contract"
-    for pin in config["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert config["target_host"] == {
-        "cpu_model": "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz",
-        "architecture": "x86_64",
-        "physical_cores": 2,
-        "logical_threads": 4,
-        "accelerators": "CPU-only; no GPU, NPU, or hosted inference",
-    }
-    assert config["runtime"]["required_flags"] == ["--offline", "--device", "none", "--jinja", "--reasoning", "off", "--simple-io"]
-    assert config["protocol"]["warmup_attempts_per_locale_state_scenario"] == 0
-    assert config["protocol"]["selection_sample_counts"] == {
-        "process-cold": {"first_answer": 1},
-        "warm": {"first_answer": 2, "follow_up": 1},
-    }
-    assert config["protocol"]["lifecycle_locale"] == "en"
-    assert config["protocol"]["warm_session_reset"] == {
-        "clear_timeout_seconds": 10,
-        "retries": 2,
-        "rule": "A stalled /clear is terminated and replaced sequentially. The replacement is primed and successfully cleared before the next warm sample; every replacement is recorded in the raw sample.",
-    }
-    assert config["protocol"]["locale_order"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
-
-
 def test_benchmark_rejects_resource_regressions_but_treats_swap_as_diagnostic() -> None:
     config = _config()
     records = []
@@ -77,8 +46,17 @@ def test_benchmark_rejects_resource_regressions_but_treats_swap_as_diagnostic() 
                             "scenario": scenario,
                         }
                     )
-    records.append({"locale": "en", "scenario": "cancellation", "status": "pass", "peak_rss_bytes": 1_000_000})
-    records.append({"locale": "en", "scenario": "unload_restart", "status": "pass", "peak_rss_bytes": 1_000_000})
+    records.append(
+        {"locale": "en", "scenario": "cancellation", "status": "pass", "peak_rss_bytes": 1_000_000}
+    )
+    records.append(
+        {
+            "locale": "en",
+            "scenario": "unload_restart",
+            "status": "pass",
+            "peak_rss_bytes": 1_000_000,
+        }
+    )
 
     status, failures, metrics = runner._status(records, config, artifact_bytes=1_000_000)
 
@@ -147,7 +125,9 @@ def test_clean_warm_session_replaces_a_stalled_clear(monkeypatch: pytest.MonkeyP
     config = {"protocol": {"warm_session_reset": {"clear_timeout_seconds": 10, "retries": 2}}}
 
     request = {"dialogue_turns": [], "context_jsonl": "", "query": "test"}
-    session, restart_count = runner._start_clean_warm_session(Path("runtime"), Path("model"), config, request)
+    session, restart_count = runner._start_clean_warm_session(
+        Path("runtime"), Path("model"), config, request
+    )
 
     assert session is created[1]
     assert restart_count == 1

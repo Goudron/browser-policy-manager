@@ -4,10 +4,10 @@
   <title>编辑原始策略数据交换文档</title>
   <shortdesc>使用本地捆绑的 Monaco 编辑器编辑原始 policies.json 文档。</shortdesc>
   <taskbody>
-    <prereq><p>打开 JSON 编辑器 以获取已保存的配置文件。</p></prereq>
+    <prereq><p>打开 <uicontrol>JSON 编辑器</uicontrol> 以获取已保存的配置文件。</p></prereq>
     <context><p>Monaco 编辑器在本地捆绑并编辑原始 JSON 文本。 BPM 在保存到规范化配置文件模型之前仍会进行验证。</p></context>
     <steps>
-      <step><cmd>将焦点置于 JSON 编辑器 中。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
+      <step><cmd>将焦点置于 <uicontrol>JSON 编辑器</uicontrol> 中。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
       <step><cmd>仅编辑任务所需的策略、首选项或原始值。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
       <step><cmd>保留顶级策略对象和有效的 JSON 语法。</cmd><info><p>预期结果：JSON 文档仍然专注于所选任务。</p></info></step>
       <step><cmd>在保存原始编辑之前使用验证。</cmd><info><note type="warning">保存原始 JSON 可以更改规范的 BPM 配置文件。保存之前验证语法和策略值。</note></info></step>

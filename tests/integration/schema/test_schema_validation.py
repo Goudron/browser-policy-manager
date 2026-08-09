@@ -1,0 +1,109 @@
+# tests/integration/schema/test_schema_validation.py
+"""
+Basic tests for schema loading and policy validation.
+
+The tests assert:
+- Schemas for supported channels are loadable.
+- Validator is constructible for each supported profile.
+- Passing a clearly wrong type (e.g., integer) fails validation.
+- Bundled schema snapshots expose the expected Mozilla metadata for v7.12.
+"""
+
+import json
+from pathlib import Path
+
+import pytest
+
+from app.core.schema_channels import (
+    CURRENT_ESR_SCHEMA_CHANNEL,
+    CURRENT_RELEASE_SCHEMA_CHANNEL,
+    SCHEMA_FILENAMES,
+    SCHEMA_MOZILLA_VERSIONS,
+    SCHEMA_SOURCES,
+    SUPPORTED_SCHEMA_CHANNELS,
+)
+from app.core.schemas_loader import available_profiles, load_schema
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+SCHEMAS_DIR = REPO_ROOT / "app" / "schemas" / "policies"
+
+
+def test_available_profiles_scope():
+    profiles = available_profiles()
+    assert set(profiles.keys()) == set(SUPPORTED_SCHEMA_CHANNELS)
+    for channel, filename in SCHEMA_FILENAMES.items():
+        assert profiles[channel].endswith(filename)
+
+
+@pytest.mark.parametrize("profile", SUPPORTED_SCHEMA_CHANNELS)
+def test_load_schema_ok(profile):
+    schema = load_schema(profile)
+    assert isinstance(schema, dict)
+    # Minimal sanity: schema should declare an object at top-level or have properties/anyOf/etc.
+    assert isinstance(schema, dict) and len(schema) > 0
+
+
+@pytest.mark.parametrize(
+    ("profile", "expected_version"),
+    [(channel, SCHEMA_MOZILLA_VERSIONS[channel]) for channel in SUPPORTED_SCHEMA_CHANNELS],
+)
+def test_bundled_schema_metadata_matches_declared_mozilla_provenance(profile, expected_version):
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[profile]
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+    assert schema["x-bpm-channel"] == profile
+    assert schema["x-bpm-version"] == expected_version
+    assert schema["x-bpm-source"] == SCHEMA_SOURCES[profile]
+    assert schema["properties"]["ExtensionSettings"]["additionalProperties"]["properties"][
+        "allowed_types"
+    ]["items"]["enum"] == ["extension", "theme", "dictionary", "locale", "sitepermission"]
+
+
+def test_release_153_keeps_upstream_min_version_metadata():
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_RELEASE_SCHEMA_CHANNEL]
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+    assert schema["properties"]["DisableRemoteImprovements"]["x-bpm-min-version"] == "148.0"
+    assert (
+        schema["properties"]["DisableRemoteSettingsAndAcceptSecurityConsequences"][
+            "x-bpm-min-version"
+        ]
+        == "153.0"
+    )
+
+
+@pytest.mark.parametrize("channel", ("release-153", "esr-153.0"))
+def test_firefox_153_channels_include_new_policy_templates_entries(channel):
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[channel]
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+    assert "DisableRemoteSettingsAndAcceptSecurityConsequences" in schema["properties"]
+    extension_settings = schema["properties"]["ExtensionSettings"]["additionalProperties"][
+        "properties"
+    ]
+    for field in (
+        "allowed_permissions",
+        "blocked_permissions",
+        "runtime_allowed_hosts",
+        "runtime_blocked_hosts",
+    ):
+        assert extension_settings[field]["items"]["type"] == "string"
+
+
+def test_esr_140_13_preserves_the_frozen_policy_surface():
+    schema_path = SCHEMAS_DIR / SCHEMA_FILENAMES[CURRENT_ESR_SCHEMA_CHANNEL]
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+    assert "DisableRemoteSettingsAndAcceptSecurityConsequences" not in schema["properties"]
+    extension_settings = schema["properties"]["ExtensionSettings"]["additionalProperties"][
+        "properties"
+    ]
+    for field in (
+        "allowed_permissions",
+        "blocked_permissions",
+        "runtime_allowed_hosts",
+        "runtime_blocked_hosts",
+    ):
+        assert field not in extension_settings
+    assert schema["properties"]["DefaultSerialGuardSetting"]["enum"] == [2, 3]
+    assert schema["properties"]["FirefoxHome"]["properties"]["Weather"]["type"] == "boolean"

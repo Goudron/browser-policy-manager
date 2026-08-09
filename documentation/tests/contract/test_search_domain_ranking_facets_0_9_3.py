@@ -19,15 +19,32 @@ def test_domain_ranking_and_facets_contract_preserves_bpm_search_evidence() -> N
     assert contract["backlog_item"] == "BPM093-M4-03"
     assert contract["ranking"]["weight_contract_id"] == "bpm-doc-search-ranking-typo-0.9.0"
     assert contract["ranking"]["preserved_sources"] == [
-        "identifiers", "title", "aliases", "headings", "body", "bounded_typo"
+        "identifiers",
+        "title",
+        "aliases",
+        "headings",
+        "body",
+        "bounded_typo",
     ]
     assert contract["ranking"]["evidence_fields"] == [
-        "topic_id", "document_id", "score", "score_breakdown", "matched_fields",
-        "identifiers", "filter_facets",
+        "topic_id",
+        "document_id",
+        "score",
+        "score_breakdown",
+        "matched_fields",
+        "identifiers",
+        "filter_facets",
     ]
     assert contract["facets"]["preserved_fields"] == [
-        "locale", "guide_id", "topic_kind", "firefox_channel", "policy_category",
-        "cis_level", "cis_control_state", "api_area", "bpm_version",
+        "locale",
+        "guide_id",
+        "topic_kind",
+        "firefox_channel",
+        "policy_category",
+        "cis_level",
+        "cis_control_state",
+        "api_area",
+        "bpm_version",
     ]
     assert contract["facets"]["composition"] == (
         "AND across facet fields; OR within values of the same facet field."

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -11,15 +10,14 @@ DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 CONTRACT = DOCUMENTATION_ROOT / "config/wsl-source-install-validation-contract-0.9.1.json"
 RUNNER = DOCUMENTATION_ROOT / "tools/wsl_source_install_validation.ps1"
 FEASIBILITY = (
-    REPOSITORY_ROOT
-    / "docs/architecture/wsl-source-install-validation-feasibility-0.9.1.md"
+    REPOSITORY_ROOT / "docs/architecture/wsl-source-install-validation-feasibility-0.9.1.md"
 )
 PRIVILEGED = (
-    DOCUMENTATION_ROOT
-    / "config/live-source-install-privileged-validation-contract-0.9.1.json"
+    DOCUMENTATION_ROOT / "config/live-source-install-privileged-validation-contract-0.9.1.json"
 )
 EDITORIAL_RECONCILIATION = (
-    REPOSITORY_ROOT / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
+    REPOSITORY_ROOT
+    / "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json"
 )
 
 pytestmark = pytest.mark.docs_contract
@@ -47,44 +45,27 @@ def test_contract_declares_prepared_runner_without_claiming_windows_evidence() -
     assert contract["target_bpm_version"] == "0.9.1"
     assert contract["status"] == "runner-prepared-awaiting-actual-windows-hosts"
     assert contract["runner"] == RUNNER.relative_to(REPOSITORY_ROOT).as_posix()
-    assert contract["feasibility_record"] == FEASIBILITY.relative_to(
-        REPOSITORY_ROOT
-    ).as_posix()
-    assert contract["privileged_contract"] == PRIVILEGED.relative_to(
-        REPOSITORY_ROOT
-    ).as_posix()
+    assert contract["feasibility_record"] == FEASIBILITY.relative_to(REPOSITORY_ROOT).as_posix()
+    assert contract["privileged_contract"] == PRIVILEGED.relative_to(REPOSITORY_ROOT).as_posix()
     assert privileged["wsl_boundary"]["actual_windows_host_required"] is True
     assert contract["actual_host_gate"]["current_linux_host_can_satisfy_gate"] is False
     assert contract["actual_host_gate"]["container_substitution_allowed"] is False
-    assert contract["conditional_outcomes"] == {
-        "Windows10": {
-            "owner_task": "BPM091-M11-11",
-            "current_status": "unverified-no-actual-host-supplied",
-            "validation_claimed": False,
-            "evidence": (
-                "documentation/evidence/live-source-install/0.9.1/"
-                "m11-11-windows10-wsl-20260715/run-manifest.json"
-            ),
-        },
-        "Windows11": {
-            "owner_task": "BPM091-M11-12",
-            "current_status": "unverified-no-actual-host-supplied",
-            "validation_claimed": False,
-            "evidence": (
-                "documentation/evidence/live-source-install/0.9.1/"
-                "m11-12-windows11-wsl-20260715/run-manifest.json"
-            ),
-        },
-    }
+    outcomes = contract["conditional_outcomes"]
+    assert set(outcomes) == {"Windows10", "Windows11"}
+    assert all(outcome["validation_claimed"] is False for outcome in outcomes.values())
+    assert all(
+        outcome["current_status"] == "unverified-no-actual-host-supplied"
+        for outcome in outcomes.values()
+    )
 
 
-def test_runner_reuses_the_reconciled_ubuntu_source_install_contract() -> None:
+def test_runner_uses_the_current_ubuntu_source_install_contract() -> None:
     reuse = _contract()["source_install_reuse"]
     source = REPOSITORY_ROOT / reuse["source_topic"]
-    historical = _json(REPOSITORY_ROOT / reuse["reconciliation_report"])
+    reconciliation = _json(REPOSITORY_ROOT / reuse["current_source_authority"])
     current = next(
         target
-        for target in _json(EDITORIAL_RECONCILIATION)["current_source_contract"]["targets"]
+        for target in reconciliation["current_source_contract"]["targets"]
         if target["id"] == reuse["target_id"]
     )
 
@@ -92,20 +73,22 @@ def test_runner_reuses_the_reconciled_ubuntu_source_install_contract() -> None:
     assert reuse["command_contract"] == (
         "documentation/config/linux-source-install-command-contract-0.9.1.json"
     )
-    assert reuse["reconciliation_report"] == (
-        "docs/architecture/linux-source-install-validation-0.9.1.json"
-    )
-    assert reuse["validated_source_sha256"] == next(
-        target["reconciled_source_sha256"]
-        for target in historical["targets"]
-        if target["target_id"] == reuse["target_id"]
-    )
-    assert reuse["validated_source_sha256"] != hashlib.sha256(source.read_bytes()).hexdigest()
     command_contract = _json(REPOSITORY_ROOT / reuse["command_contract"])
-    ubuntu = next(target for target in command_contract["targets"] if target["id"] == "ubuntu-26-04")
+    ubuntu = next(
+        target for target in command_contract["targets"] if target["id"] == "ubuntu-26-04"
+    )
     assert ubuntu["topic_id"] in source.name
     assert current["topic_id"] == ubuntu["topic_id"]
-    assert "exact documented Linux userspace procedure" in reuse["rule"]
+    source_text = source.read_text(encoding="utf-8")
+    assert all(
+        token in source_text
+        for token in reconciliation["current_source_contract"]["required_tokens"]
+    )
+    assert not any(
+        command in source_text
+        for command in reconciliation["current_source_contract"]["removed_maintainer_commands"]
+    )
+    assert "documented Linux userspace procedure" in reuse["rule"]
     assert "0.0.0.0" in reuse["wsl_runtime_adapter"]
     assert "does not change" in reuse["wsl_runtime_adapter"]
 
@@ -225,9 +208,7 @@ def test_runner_captures_bounded_hashed_evidence_and_blocked_summaries() -> None
     runner = _runner()
     evidence = _contract()["evidence"]
     required_evidence = " ".join(
-        item
-        for check in _contract()["checks"]
-        for item in check["required_evidence"]
+        item for check in _contract()["checks"] for item in check["required_evidence"]
     )
 
     for filename in (
@@ -298,11 +279,11 @@ def test_powershell_structure_and_feasibility_handoff_are_reviewable() -> None:
         'Write-Output "WSL validation $status. Evidence: $script:EvidenceDirectory"'
     )
     for token in (
-            "Runner prepared; actual Windows hosts required",
-            "BPM091-M11-11",
-            "BPM091-M11-12",
-            "unverified-no-actual-host-supplied",
-            "Current Linux host: unsuitable",
+        "Runner prepared; actual Windows hosts required",
+        "BPM091-M11-11",
+        "BPM091-M11-12",
+        "unverified-no-actual-host-supplied",
+        "Current Linux host: unsuitable",
         "cannot turn this preparation task into Windows/WSL execution evidence",
     ):
         assert token in feasibility

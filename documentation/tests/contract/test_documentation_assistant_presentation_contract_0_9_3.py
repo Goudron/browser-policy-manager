@@ -7,7 +7,9 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = ROOT / "documentation"
-CONTRACT_PATH = DOCUMENTATION_ROOT / "config/documentation-assistant-presentation-contract-0.9.3.json"
+CONTRACT_PATH = (
+    DOCUMENTATION_ROOT / "config/documentation-assistant-presentation-contract-0.9.3.json"
+)
 
 pytestmark = pytest.mark.docs_contract
 
@@ -22,16 +24,23 @@ def test_m10_04_uses_only_validated_final_payloads_without_enabling_chat() -> No
         encoding="utf-8"
     )
     theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs.css").read_text(encoding="utf-8")
-    builder = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    builder = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
 
     assert contract["backlog_item"] == "BPM093-M10-04"
     assert contract["status"] == "implemented-validated-final-renderer-without-chat-enable"
     assert contract["locales"] == ["en", "ru", "de", "zh-CN", "fr", "es-ES"]
     assert contract["input_boundary"]["exact_payload_fields"] == [
-        "api_version", "locale", "bpm_version", "disposition", "text", "sources"
+        "api_version",
+        "locale",
+        "bpm_version",
+        "disposition",
+        "text",
+        "sources",
     ]
     assert contract["boundaries"] == {
-        "page_load": "The renderer only registers a future-callable function. It makes no fetch, model check, retrieval, worker start, request, poll or DOM update on page load.",
+        "page_load": (
+            "The renderer only registers a future-callable function. It makes no fetch, model check, retrieval, worker start, request, poll or DOM update on page load."
+        ),
         "assistant_http_route": False,
         "chat_controls_enabled": False,
         "ordinary_search_changed": False,
@@ -39,8 +48,8 @@ def test_m10_04_uses_only_validated_final_payloads_without_enabling_chat() -> No
     }
     for required in (
         "validPayload(payload)",
-        "payload.disposition === \"answer\"",
-        "payload.sources.some((source) => source.provenance === \"local\")",
+        'payload.disposition === "answer"',
+        'payload.sources.some((source) => source.provenance === "local")',
         "Object.keys(source).length !== 9",
         'document.createElement("details")',
         "createElement",

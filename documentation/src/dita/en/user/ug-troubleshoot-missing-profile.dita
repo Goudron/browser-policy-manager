@@ -7,12 +7,12 @@
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
     <context><p>A missing profile route means the URL no longer resolves to an active profile; the profile may be archived, deleted, filtered out, or already removed.</p></context>
     <steps>
-      <step><cmd>Return to the Library instead of editing the failed route.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Return to the <uicontrol>Library</uicontrol> instead of editing the failed route.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Clear search and filters, then look for the profile by name, schema channel, and last known status.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Include archived profiles when the profile may have been archived deliberately.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
-      <step><cmd>If the profile is still missing, stop using the stale URL and continue only from a visible Library row or known export.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
+      <step><cmd>If the profile is still missing, stop using the stale URL and continue only from a visible <uicontrol>Library</uicontrol> row or known export.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>
     </steps>
-    <result><p>You either reopen the profile from a visible Library state or confirm that the bookmarked route is no longer usable.</p></result>
+    <result><p>You either reopen the profile from a visible <uicontrol>Library</uicontrol> state or confirm that the bookmarked route is no longer usable.</p></result>
     <postreq><p>If the error repeats, stop the workflow and contact support with the visible message, profile name, schema channel, and current page.</p></postreq>
   </taskbody>
   <related-links>

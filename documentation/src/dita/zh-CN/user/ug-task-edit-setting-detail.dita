@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>编辑设置详细信息</title>
-  <shortdesc>从 所有设置 详细信息面板应用或编辑 Firefox 策略或托管首选项值。</shortdesc>
+  <shortdesc>从 <uicontrol>所有设置</uicontrol> 详细信息面板应用或编辑 Firefox 策略或<uicontrol>托管首选项</uicontrol>值。</shortdesc>
   <taskbody>
     <prereq><p>打开支持的可编辑值的设置详细信息面板。</p></prereq>
     <context><p>详细信息编辑使更改集中在一项设置上，同时重用共享验证和保存行为。</p></context>
     <steps>
-      <step><cmd>检查当前值和验证状态。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>输入或选择新策略或托管首选项值。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>应用详细编辑并观察验证反馈。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>检查当前值和验证状态。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>输入或选择新策略或<uicontrol>托管首选项</uicontrol>值。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>应用详细编辑并观察验证反馈。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>当编辑的值有效且有意时保存配置文件。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>所选策略或托管首选项在配置文件中具有新值。</p></result>
+    <result><p>所选策略或<uicontrol>托管首选项</uicontrol>在配置文件中具有新值。</p></result>
     <postreq><p>恢复：如果验证失败，请在保存之前更正值形状或重置详细信息。</p></postreq>
   </taskbody>
   <related-links>

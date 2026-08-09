@@ -11,7 +11,7 @@
 export BPM_DATABASE_URL="sqlite+aiosqlite:///./data/bpm.db"
 alembic upgrade head
 ]]></codeblock><p>Utilice el valor de implementación real para <codeph>BPM_DATABASE_URL</codeph>. Deténgase inmediatamente si el resultado de la migración no es claro o falla.</p></info></step>
-      <step><cmd>Inicie el proceso BPM actualizado y verifique su interfaz actual.</cmd><info><p>Compruebe el estado y la preparación, y después abra la ruta Biblioteca. Si la documentación es necesaria para el despliegue, confirme que <codeph>/help/</codeph> informa de un artefacto instalado listo y no de un estado ausente o incompatible.</p></info></step>
+      <step><cmd>Inicie el proceso BPM actualizado y verifique su interfaz actual.</cmd><info><p>Compruebe el estado y la preparación, y después abra la ruta <uicontrol>Biblioteca</uicontrol>. Si la documentación es necesaria para el despliegue, confirme que <codeph>/help/</codeph> informa de un artefacto instalado listo y no de un estado ausente o incompatible.</p></info></step>
       <step><cmd>Deténgase ante errores de migración o de verificación en tiempo de ejecución.</cmd><info><note type="warning">Después de ejecutar una migración, no suponga que basta con revertir el checkout de Git. No ejecute <codeph>alembic downgrade</codeph> salvo que una nota de versión revisada confirme expresamente su compatibilidad con el par exacto de revisiones. Si se requiere una reversión, use la copia de seguridad de la base de datos anterior a la actualización como base segura de recuperación.</note></info></step>
     </steps>
     <result><p>La revisión de origen actualizada completó las migraciones y las verificaciones en tiempo de ejecución, o la actualización se detuvo en un punto de error designado.</p></result>

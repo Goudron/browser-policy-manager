@@ -37,9 +37,7 @@ def test_vocabulary_uses_fixed_dita_attributes_and_maintained_dynamic_registries
         "deliveryTarget",
         "props",
     }
-    assert vocabulary["attributes"]["deliveryTarget"] == [
-        f"locale-{locale}" for locale in LOCALES
-    ]
+    assert vocabulary["attributes"]["deliveryTarget"] == [f"locale-{locale}" for locale in LOCALES]
     assert vocabulary["attributes"]["props"] == [
         "firefox-release",
         "firefox-esr",
@@ -47,7 +45,7 @@ def test_vocabulary_uses_fixed_dita_attributes_and_maintained_dynamic_registries
         "cis-level-2",
     ]
     assert {group: len(values) for group, values in vocabulary["registry_values"].items()} == {
-            "policy": 121,
+        "policy": 121,
         "cis": 55,
         "api-operation": 15,
     }
@@ -57,14 +55,12 @@ def test_subject_scheme_enumerates_every_fixed_vocabulary_value_once() -> None:
     vocabulary = json.loads(
         (DOCUMENTATION_ROOT / "config/metadata-vocabulary.json").read_text(encoding="utf-8")
     )
-    root = ET.parse(
-        DOCUMENTATION_ROOT / "src/shared/metadata-subject-scheme.ditamap"
-    ).getroot()
+    root = ET.parse(DOCUMENTATION_ROOT / "src/shared/metadata-subject-scheme.ditamap").getroot()
     subject_roots = {element.attrib["keys"]: element for element in root.findall("subjectdef")}
     enumeration_roots = {
-        definition.find("attributedef").attrib["name"]: definition.find("subjectdef").attrib[
-            "keyref"
-        ]
+        definition.find("attributedef").attrib["name"]: (
+            definition.find("subjectdef").attrib["keyref"]
+        )
         for definition in root.findall("enumerationdef")
     }
     expected_roots = {
@@ -94,8 +90,12 @@ def test_locale_key_maps_resolve_guides_and_shared_subject_scheme(locale: str) -
         "processing-role": "resource-only",
     }
     keydefs = [element.attrib for element in root.findall("keydef")]
-    guide_keydefs = [definition for definition in keydefs if definition["keys"].startswith("guide.")]
-    topic_keydefs = [definition for definition in keydefs if definition["keys"].startswith("topic.")]
+    guide_keydefs = [
+        definition for definition in keydefs if definition["keys"].startswith("guide.")
+    ]
+    topic_keydefs = [
+        definition for definition in keydefs if definition["keys"].startswith("topic.")
+    ]
     assert {definition["keys"] for definition in guide_keydefs} == GUIDE_KEYS
     assert all(set(definition) == {"keys"} for definition in guide_keydefs)
     assert topic_keydefs
@@ -103,7 +103,11 @@ def test_locale_key_maps_resolve_guides_and_shared_subject_scheme(locale: str) -
     for definition in topic_keydefs:
         assert definition["href"].startswith(("../user/", "../firefox/", "../cis/", "../admin/"))
         assert definition["href"].endswith(".dita")
-        assert (DOCUMENTATION_ROOT / f"src/dita/{locale}/maps" / definition["href"]).resolve().is_file()
+        assert (
+            (DOCUMENTATION_ROOT / f"src/dita/{locale}/maps" / definition["href"])
+            .resolve()
+            .is_file()
+        )
 
 
 def test_filters_select_one_firefox_channel_and_one_locale_without_source_copies() -> None:
@@ -122,8 +126,7 @@ def test_filters_select_one_firefox_channel_and_one_locale_without_source_copies
             f"locale-{other}" for other in LOCALES if other != locale
         }
         assert all(
-            element.attrib["action"] == "exclude"
-            and element.attrib["att"] == "deliveryTarget"
+            element.attrib["action"] == "exclude" and element.attrib["att"] == "deliveryTarget"
             for element in exclusions
         )
 
@@ -163,4 +166,6 @@ def test_current_dita_sources_use_only_registered_conditional_metadata() -> None
     )
 
     assert files
-    assert [error for path in files for error in validate_metadata.validate_xml(path, vocabulary)] == []
+    assert [
+        error for path in files for error in validate_metadata.validate_xml(path, vocabulary)
+    ] == []

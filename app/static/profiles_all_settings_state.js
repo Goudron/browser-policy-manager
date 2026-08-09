@@ -1,4 +1,3 @@
-(() => {
     const DEFAULT_FILTER = "all";
     const DEFAULT_CATEGORY = "all";
     const DEFAULT_MODE = "review";
@@ -238,5 +237,4 @@
         };
     }
 
-    window.BPMProfilesAllSettingsState = { create };
-})();
+    export { create };

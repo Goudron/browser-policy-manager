@@ -4,11 +4,11 @@
   <title>Changer la langue de l'interface</title>
   <shortdesc>Sélectionnez l'anglais, le russe, l'allemand, le chinois simplifié, le français, l'espagnol ou la langue du système pour BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
     <context><p>Utilisez le sélecteur de langue lorsque les captures d'écran, les étiquettes, les messages de validation et les exemples de documentation doivent correspondre aux paramètres régionaux de l'opérateur.</p></context>
     <steps>
       <step><cmd>Ouvrez le sélecteur de langue dans l'en-tête de la page.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
-      <step><cmd>Choisissez anglais, russe, allemand, chinois simplifié, français, espagnol ou système.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Choisissez <uicontrol>Anglais</uicontrol>, <uicontrol>Russe</uicontrol>, <uicontrol>Allemand</uicontrol>, <uicontrol>Chinois simplifié</uicontrol>, <uicontrol>Français</uicontrol>, <uicontrol>Espagnol</uicontrol> ou <uicontrol>Navigateur</uicontrol>.</cmd><info><p>Une langue choisie explicitement est enregistrée pour les pages BPM suivantes et les rechargements. <uicontrol>Navigateur</uicontrol> est enregistré comme mode : BPM le résout à chaque chargement à partir des préférences actuelles du navigateur, selon l'ordre de correspondance et de repli décrit.</p></info></step>
       <step><cmd>Confirmez que les étiquettes de navigation, les messages de validation, le texte d'état et les commandes de l'éditeur basculent vers les paramètres régionaux sélectionnés.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Poursuivez la modification uniquement après avoir confirmé que le profil et le canal de schéma sont toujours les mêmes.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>
     </steps>

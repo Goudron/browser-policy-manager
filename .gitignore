@@ -84,6 +84,8 @@ pytestdebug.log
 *.orig
 *.rej
 /artifacts/
+# Generated from the resolved CI environments; never retain stale evidence in source.
+/artifacts/dependency-audit/
 /tmp_screens/
 /docs/screenshots/
 

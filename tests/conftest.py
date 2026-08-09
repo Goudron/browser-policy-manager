@@ -1,9 +1,10 @@
 # ruff: noqa: E402
 import asyncio
-import gc
 import os
 import sys
 from pathlib import Path
+
+pytest_plugins = ("tests.browser.harness",)
 
 # Ensure project root on sys.path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -16,10 +17,9 @@ TEST_DATABASE_CONTEXT = configure_worker_database()
 
 import httpx
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.db import AsyncSessionAdapter, get_session
+from app.db import get_session
 from app.main import app as default_app
 from app.models.profile import Base
 from tests.app_harness import (
@@ -28,16 +28,39 @@ from tests.app_harness import (
     snapshot_dependency_overrides,
 )
 from tests.cache_harness import reset_app_caches as reset_registered_app_caches
-from tests.marker_policy import markers_for_path
+from tests.marker_policy import (
+    AI_INCUBATION_TEST_FILES,
+    OwnershipPolicyError,
+    markers_for_path,
+    primary_markers,
+)
 
 
-def _dispose_global_database_engine() -> None:
+def pytest_addoption(parser):
+    parser.addoption(
+        "--run-ai-incubation",
+        action="store_true",
+        default=False,
+        help="collect the optional local model/inference/RAG test contour",
+    )
+
+
+def pytest_ignore_collect(collection_path, config):
     try:
-        from app import db as db_module
-
-        db_module.engine.dispose()
-    except Exception:
-        pass
+        relative = Path(str(collection_path)).resolve().relative_to(Path(str(config.rootpath)))
+    except ValueError:
+        return None
+    normalized = relative.as_posix()
+    if normalized in AI_INCUBATION_TEST_FILES:
+        return None if config.getoption("--run-ai-incubation") else True
+    if (
+        config.getoption("--run-ai-incubation")
+        and relative.suffix == ".py"
+        and relative.name.startswith("test_")
+        and relative.parts[:1] == ("tests",)
+    ):
+        return True
+    return None
 
 
 def pytest_collection_modifyitems(config, items):
@@ -47,12 +70,20 @@ def pytest_collection_modifyitems(config, items):
             path = Path(str(item.fspath)).resolve().relative_to(root)
         except ValueError:
             path = Path(str(item.fspath))
-        for marker in sorted(markers_for_path(path)):
+        try:
+            markers = markers_for_path(path)
+        except OwnershipPolicyError as error:
+            raise pytest.UsageError(str(error)) from error
+        for marker in sorted(markers):
             item.add_marker(marker)
+        layers = primary_markers(marker.name for marker in item.iter_markers())
+        if len(layers) != 1:
+            raise pytest.UsageError(
+                f"{item.nodeid} must have exactly one primary test layer; found {sorted(layers)}"
+            )
 
 
 def pytest_unconfigure(config):
-    _dispose_global_database_engine()
     TEST_DATABASE_CONTEXT.cleanup()
 
 
@@ -80,15 +111,7 @@ def guard_worker_database(worker_database_context: WorkerDatabaseContext):
     assert worker_database_context.database_path.resolve() != project_database_path
     assert os.environ["BPM_DATABASE_URL"] == worker_database_context.database_url
     yield
-    _dispose_global_database_engine()
     worker_database_context.cleanup()
-
-
-@pytest.fixture(autouse=True)
-def cleanup_global_sqlite_engine():
-    yield
-    _dispose_global_database_engine()
-    gc.collect()
 
 
 @pytest.fixture(autouse=True)
@@ -117,15 +140,19 @@ def reset_app_caches():
 
 @pytest.fixture
 async def test_session():
-    engine = create_engine("sqlite:///:memory:", echo=False, future=True)
-    testing_session_factory = sessionmaker(bind=engine, expire_on_commit=False)
-    Base.metadata.create_all(bind=engine)
-    session = testing_session_factory()
+    engine = create_async_engine("sqlite+aiosqlite:///:memory:", echo=False)
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
+    testing_session_factory = async_sessionmaker(
+        bind=engine,
+        expire_on_commit=False,
+        class_=AsyncSession,
+    )
     try:
-        yield AsyncSessionAdapter(session)
+        async with testing_session_factory() as session:
+            yield session
     finally:
-        session.close()
-        engine.dispose()
+        await engine.dispose()
 
 
 @pytest.fixture

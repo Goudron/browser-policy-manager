@@ -34,9 +34,7 @@ def test_topic_section_label_catalog_declares_m8_04_scope() -> None:
     assert catalog["backlog_item"] == "BPM091-M8-04"
     assert catalog["status"] == "accepted"
     assert catalog["locales"] == LOCALES
-    assert "must never use the English value as a runtime fallback" in catalog[
-        "fallback_policy"
-    ]
+    assert "must never use the English value as a runtime fallback" in catalog["fallback_policy"]
 
 
 def test_every_taxonomy_section_owns_every_locale_label() -> None:

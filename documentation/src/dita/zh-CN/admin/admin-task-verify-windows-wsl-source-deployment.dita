@@ -15,7 +15,7 @@ curl -fsS http://127.0.0.1:8000/health/ready
 Invoke-WebRequest http://localhost:8000/health
 Invoke-WebRequest http://localhost:8000/health/ready
 ]]></codeblock><p>如果 localhost 不起作用，请使用 <codeph>hostname -I</codeph> 中的 WSL IP 重试。记录成功的地址。</p></info></step>
-      <step><cmd>从 Windows 浏览器打开 UI 路由。</cmd><info><p>使用 <codeph>http://localhost:8000/profiles</codeph> 或 <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>。库路由应该加载 BPM 接口或有意的空/错误状态，而不是回溯。</p></info></step>
+      <step><cmd>从 Windows 浏览器打开 UI 路由。</cmd><info><p>使用 <codeph>http://localhost:8000/profiles</codeph> 或 <codeph>http://&lt;wsl-ip&gt;:8000/profiles</codeph>。<uicontrol>库</uicontrol>路由应该加载 BPM 接口或有意的空/错误状态，而不是回溯。</p></info></step>
       <step><cmd>在更改 BPM 代码之前对 WSL 特定的故障进行故障排除。</cmd><info><p>对于连接失败，请确认 <codeph>make dev</codeph> 仍在运行，检查 <codeph>BPM_HOST</codeph>，运行 <codeph>wsl --list --verbose</codeph>，并在重新启动分发后刷新 WSL IP。对于文件监视速度慢或权限错误，请将结帐从 <codeph>/mnt/c</codeph> 移至 <codeph>/home/&lt;linux-user&gt;</codeph>。请在环境路径和网络路由稳定后运行。</p><note type="warning">通过 WSL 通过运行状况检查并不能证明生产准备情况、Windows 服务行为、托管备份或 HA 支持。</note></info></step>
     </steps>
     <result><p>管理员有证据表明 BPM 在 WSL 内部启动、响应探测、可从 Windows 访问，并且没有直接的 WSL 网络或文件系统阻止程序。</p></result>

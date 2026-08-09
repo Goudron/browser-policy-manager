@@ -1,173 +1,178 @@
 # Browser Policy Manager Current System Map
 
-Date: 2026-06-01
+Date: 2026-08-04
 
-This map is the first orientation point for BPM 0.9.3 work. It names the main runtime surfaces, ownership boundaries, generated/vendor zones, and test layers so future changes can start from a smaller shared context.
+This is the first orientation point for BPM 0.9.4 work. Read this map before
+opening a subsystem. It names owned entrypoints and narrow verification routes;
+it is not an inventory of dependencies, generated files, caches, secrets, or
+the implementation of every feature. Import direction rules are executable in
+`docs/architecture/python-architecture-boundaries-0.9.4.md`.
 
-Refactoring acceptance rules live in `docs/architecture/refactoring-acceptance-rules.md`.
+## Release Application
 
-## Application Shell
+`app/main.py:create_app` is the ASGI factory and release assembly. Each app owns
+an injectable `app/db.py:DatabaseRuntime` with a native async engine and session
+factory. Its lifespan initializes that runtime, verifies the exact Alembic head
+without writing, and disposes the database and documentation-assistant runtimes.
+Alembic, not application startup or a request path, owns every retained schema
+and stored-channel upgrade.
 
-- ASGI app factory: `app/main.py:create_app`.
-- Settings: `app/core/config.py`, with app metadata loaded from `pyproject.toml`.
-- Middleware: `app/middleware/security.py`, FastAPI CORS middleware.
-- Static assets: mounted at `/static` from `app/static`.
-- Runtime locale catalogs: served by `GET /i18n/{locale}.json`.
-- Favicon: served by `GET /favicon.ico`.
-- Root JSON endpoint: `GET /`.
-- Startup side effect: database initialization plus legacy profile schema normalization currently runs in app lifespan.
+| Concern | Owner and minimum reading route | Focused verification |
+| --- | --- | --- |
+| Configuration and HTTP shell | `app/core/config.py`, `app/main.py`, `app/middleware/security.py` | `tests/unit/app/test_bootstrap_config.py`, `tests/integration/app/test_current_version_surfaces.py` |
+| Database lifecycle | `app/db.py`, `app/models/profile.py`, `alembic/env.py`, `alembic/versions/` | `tests/unit/db/test_db_helpers.py`, `tests/integration/db/test_migrations.py`, `tests/integration/db/test_database_integration.py`, `tests/integration/db/test_database_recovery.py` |
+| Profile data/API lifecycle | `app/api/profiles.py` -> `app/services/profile_service.py` -> `app/schemas/profile.py`/`app/models/profile.py` | `tests/integration/api/test_profiles_api.py`, `tests/unit/profiles/test_profiles_core_unit.py`, `tests/integration/profiles/test_profiles_update_and_pagination.py` |
+| Firefox boundary | `app/services/firefox_policy_import.py`, `app/services/firefox_policy_export.py`, `app/api/export.py`, `app/api/validation.py` | `tests/integration/api/test_firefox_policies_import_api.py`, `tests/integration/api/test_openapi_surface.py` |
+| Rendered profile routes | `app/web/profiles.py`, `app/web/profiles_context.py`, `app/web/profile_navigation.py`, `app/templates/profiles/` | `tests/contract/ui/profiles/`, `tests/contract/ui/localization/test_web_profiles_page.py` |
 
-## Web Routes
+The public policy exchange format is a complete Firefox `policies.json` object;
+database storage is normalized around `Profile.flags`. Schema channels start at
+`app/core/schema_channels.py`; `app/core/schemas_loader.py` reads only the
+three pinned bundled policy schemas. CIS YAML source and generated compliance
+layers are owned by `app/compliance/firefox/cis/`, with tests in
+`tests/contract/compliance/`.
 
-Web routes live in `app/web/profiles.py` and render Jinja templates from `app/templates`.
-Shared `/profiles` locale, asset-version, footer, wizard catalog, schema shell, all-settings, and manual-control context assembly lives in `app/web/profiles_context.py`.
+## Browser Runtime And Generated Boundaries
 
-| Route | Template | Purpose |
-|---|---|---|
-| `GET /profiles` | `profiles_library.html` | Profile library and lifecycle workspace. |
-| `GET /profiles/compare` | `profiles_compare.html` | Dedicated saved-profile comparison workspace. |
-| `GET /profiles/new` | `profiles_editor.html` | Guided editor for a new unsaved draft. |
-| `GET /profiles/{profile_id}/edit` | `profiles_editor.html` | Guided editor for an existing profile. |
-| `GET /profiles/{profile_id}/settings` | `profiles_settings.html` | All settings visual policy catalog. |
-| `GET /profiles/{profile_id}/json` | `profiles_json.html` | Direct Firefox `policies.json` editor. |
+The browser application is Jinja-rendered and self-hosted. The wrapper
+`app/templates/profiles/_page_document.html` selects the five profile surfaces:
+library, comparison, guided editor, all settings, and JSON editor.
+`app/templates/profiles/_page_route_assets.html` reads the generated manifest
+and loads each route-specific native ESM entry. Route source uses direct imports;
+there is no profile-global compatibility bridge or load-order contract.
 
-The shared page wrapper is `app/templates/profiles/_page_document.html`. It selects route-specific shells through `profiles_template_kind` and includes the current static script chain.
+- CSS source is `app/static/profiles_css/`; rebuild its checked-in output
+  `app/static/profiles.css` with `make build-profiles-css`.
+- `tools/frontend_profile_graph_0_9_4.json` freezes the owned profile
+  frontend: direct-import module sources, route entries, vendor boundary,
+  public DOM test owner, and conversion stage. Run
+  `make frontend-profile-graph` before moving an owned profile asset.
+- `app/static/profiles_modules/` contains side-effect-free ES-module sources.
+  Use `make test-profile-pure-modules` for native Node import/parity contracts.
+- `app/static/profiles_bundles/` is generated M6-04 output: five route entries,
+  shared chunks, external source maps, a canonical metafile, and a checksum
+  manifest. Rebuild only with `make build-profile-frontend-bundles`; run
+  `make check-profile-frontend-bundles` before review. The template reads that
+  manifest, while Monaco remains the separately verified JSON-only vendor
+  boundary. The manifest holds generated/JavaScript/per-route byte ceilings,
+  so generated output is sized even before it enters Git. Do not hand-edit
+  bundle output or use it as general source context.
+- Monaco source input is `app/static_src/profiles_monaco_entry.js`; rebuild
+  vendor output with `tools/build_monaco_bundle.sh` or
+  `make rebuild-frontend-vendor`.
+- `app/static/vendor/`, `app/static/profiles.css`,
+  `app/compliance/firefox/cis/generated/`, runtime locale catalogs in
+  `app/i18n/`, and bundled schemas in `app/schemas/policies/` are generated or
+  vendored boundaries. Do not use them for broad context; change their owned
+  source and run the relevant rebuild/check command instead.
+- Locale ownership starts at `app/core/locales.py` and `app/i18n_src/`.
+  Use `make check-locale-catalogs` and locale-contract tests after changes.
 
-## API Surface
+## Documentation And Optional AI Are Separate Contours
 
-API routers are included from `app/main.py`.
+The installed documentation HTTP surface is assembled by `app/main.py` from
+`app/documentation/router.py`. Its release-safe assistant transport is
+`app/documentation/assistant_contracts.py` and
+`app/documentation/assistant_service.py`; the visible default is a training
+notice, not local model/RAG execution.
 
-| Router | Prefix | Main endpoints |
-|---|---|---|
-| `app/api/health.py` | none | `GET /health`, `GET /health/ready`. |
-| `app/api/profiles.py` | `/api/profiles` | List, stats, create, import, get, update, archive, restore, hard-delete, reset. |
-| `app/api/export.py` | `/api/export` | `GET /api/export/profiles/{profile_id}/firefox/policies.json`. |
-| `app/api/validation.py` | `/api/validate` | `POST /api/validate/{profile}`. |
+`app/ai/` and `app/documentation/local_assistant_runtime.py` are optional
+incubation/development assembly. They are reached only through explicit
+development commands (`make dev`, `make ai-*-dev`) or named offline tooling.
+Install `[dev,ai]`, run `make ai-extra-check`, and use
+`make test-ai-incubation` for this separate contour;
+they must not become a transitive dependency of `app.main`. Documentation
+build sources and tools live in `documentation/` and are likewise not release
+runtime. Their maintained entrypoint is `documentation/tools/build_docs.py`;
+its owned library responsibilities live in `documentation/buildlib/` (source
+validation, portal/catalog generation, PDF, and publication). Use
+`make docs-validate` or `make test-docs` rather than loading its corpus.
 
-The product import/export boundary is Firefox Enterprise `policies.json`; internal profile storage stays normalized around `Profile.flags`.
+## Test Contours And Fast Commands
 
-## Data And Services
+| Change area | Start here | Escalate when needed |
+| --- | --- | --- |
+| Python ownership/imports | `make architecture` | `tests/integration/app/test_python_architecture_contracts.py` |
+| Optional AI incubation | `make ai-extra-check` | `make test-ai-incubation` |
+| Product unit/API/route contracts | `make test-unit`, `make test-integration`, or a named test file | `make test-contract`, `make test-browser` |
+| Firefox schema bundles | `make test-firefox-schema-workflow` | `make test-firefox-schema-contract` |
+| Firefox policy behavior | `make setup-firefox-live-browsers FIREFOX_CHANNEL=<release|esr153|esr140>` | `make firefox-live-workflow FIREFOX_CHANNEL=<channel>` |
+| Documentation tooling/portal | `make test-docs` | `make docs-validate` |
+| Performance/repository health | `make profile-performance-gate` | `make repo-health` |
+| Profile frontend graph | `make frontend-profile-graph` | named DOM/browser contracts in `tests/contract/ui/profiles/` |
+| Profile route bundles | `make check-profile-frontend-bundles` | `tests/unit/profiles/test_profile_frontend_bundles.py`, route/browser asset contracts |
 
-- Database/session setup: `app/db.py`.
-- ORM model: `app/models/profile.py`.
-- Pydantic profile schema: `app/schemas/profile.py`.
-- Profile CRUD and lifecycle logic: `app/services/profile_service.py`; `ProfileQuery` centralizes list/count filters before command methods mutate rows.
-- Firefox `policies.json` import/export adapters: `app/services/firefox_policy_import.py`, `app/services/firefox_policy_export.py`.
-- Policy schema service and validation: `app/services/policy_schema_service.py`, `app/core/policy_validation.py`.
-- Legacy schema channel normalization: `app/services/profile_schema_normalization.py`; explicit backfill command: `make backfill-profile-schema-versions`.
+`browser_ui`, `firefox_live`, and `firefox_live_amo` are deliberately outside
+the default pytest selection. Generated artifacts, dependency trees, local
+artifacts, and credentials are excluded from this map and from routine context
+loading.
 
-## Firefox Schemas
+## Machine-Checked Drift Contract
 
-Supported schema channels are centralized in `app/core/schema_channels.py`. Update the
-single `SCHEMA_CHANNELS` inventory first; labels, filenames, raw schema directories,
-Mozilla versions, defaults, and the UI catalog are derived from it.
+The following bounded manifest is verified by
+`tests/contract/docs/general/test_current_system_map.py`. When moving an owner, entrypoint, test
+contour, or command listed here, update the map in the same change. It only
+checks named paths and commands; it does not recursively scan the repository.
 
-| Channel | File |
-|---|---|
-| `esr-140.11` | `app/schemas/policies/firefox-esr-140.11.json` |
-| `release-151` | `app/schemas/policies/firefox-release-151.json` |
-
-Schema loading helpers live in `app/core/schemas_loader.py` and `app/schemas/schema_manager.py`. Schema updates are supported by `tools/update_schemas.py` and the Firefox schema update runbook.
-
-## Frontend Runtime
-
-The frontend is currently self-hosted, route-rendered Jinja plus static browser scripts.
-
-| Area | Main files |
-|---|---|
-| Shared wrapper and route shells | `app/templates/profiles/_page_document.html`, `_library_shell.html`, `_guided_shell.html`, `_settings_shell.html`, `_json_shell.html`. |
-| Server-side profile navigation | `app/web/profile_navigation.py` builds profile route URLs and resolves `return`, `focus`, and `include_deleted` semantics. |
-| Bootstrap and shared helpers | `profiles_head_bootstrap.js`, `profiles_page_bootstrap.js`, `profiles_bootstrap*.js`, `profiles_shared.js`, `profiles_utils.js`, `profiles_platform.js`, `profiles_data.js`. |
-| Profile library | `profiles_library_bootstrap.js`, `profiles_library.js`, `_page_library_workspace.html`. |
-| Profile comparison | `profiles_compare_state.js`, `profiles_compare.js`, `_page_compare_workspace.html`. |
-| Guided editor | `profiles_guided.js`, `profiles_wizard_flow.js`, `_page_wizard*.html`, `app/web/firefox_wizard_steps.py`. |
-| All settings | `profiles_settings.js`, `profiles_schema_shell*.js`, `profiles_all_settings_*.js`, `profiles_settings_search.js`. |
-| JSON editor | `profiles_json.js`, `profiles_runtime.js`, vendored Monaco assets. |
-| Policy-specific controls | `profiles_preferences*.js`, `profiles_search_engines.js`, `profiles_network.js`, `profiles_extensions.js`, `profiles_review.js`, `profiles_workspace.js`. |
-| Styling | Generated bundle `app/static/profiles.css`, source layers in `app/static/profiles_css/`, `app/static/vendor/profiles_tailwind.css`, `app/static/vendor/profiles_monaco.css`. |
-
-Current refactoring risk: scripts are split across files, but most modules communicate through `window.BPMProfiles*` globals and depend on load order in `_page_document.html`.
-
-The profile workspace has five product surfaces only: Library, Profile comparison, Guided editor,
-All settings, and JSON editor. There is no compatibility route for retired editor modes.
-
-## Vendor And Generated Assets
-
-- Vendored frontend assets live under `app/static/vendor`.
-- `/profiles` CSS source layers live under `app/static/profiles_css`; rebuild the checked-in bundle with `make build-profiles-css`.
-- Monaco build input: `app/static_src/profiles_monaco_entry.js`.
-- Monaco build script: `tools/build_monaco_bundle.sh`.
-- Pinned frontend packages: `package.json`.
-- Generated CIS layers live under `app/compliance/firefox/cis/generated`.
-- Bundled Firefox policy schemas live under `app/schemas/policies`.
-
-Treat vendor/generated outputs as reproducible artifacts: update them through scripts and verify license/checksum/size drift where possible.
-
-## Localization
-
-- Locale matrix and browser-language fallback rules: `app/core/locales.py`.
-- Locale source segments: `app/i18n_src/{locale}/{common,library,wizard,settings,json}.json`.
-- Generated locale segments: `app/i18n_src/generated/{locale}/policy-labels.json`, with overrides in `app/i18n_src/overrides/{locale}/policy-labels.json`.
-- Runtime catalogs: generated `app/i18n/en.json`, `ru.json`, `de.json`, `zh-CN.json`, `fr.json`, `es-ES.json`.
-- Source language: English.
-- Catalog contract: all active catalogs keep key and placeholder parity with `en`.
-- Locale inventory report: `make locale-inventory`.
-- Runtime catalog rebuild: `make build-locale-catalogs`; drift check: `make check-locale-catalogs`.
-- Current pressure point: every runtime catalog has 2,620 keys, so copy and generated policy labels are expensive to review as one file.
-
-## CIS And Compliance
-
-CIS Firefox hardening assets live under `app/compliance/firefox/cis`.
-
-| File or module | Purpose |
-|---|---|
-| `schema.yaml` | Source-data shape contract. |
-| `sources.yaml` | Source references. |
-| `firefox_esr_gpo_1_0_0.yaml` | Curated benchmark input. |
-| `mappings.yaml` | Recommendation-to-policy/preference mapping targets. |
-| `merge_rules.yaml` | Layer merge behavior. |
-| `validation.py` | Source validation. |
-| `generation.py` | Generated layer creation. |
-| `merge.py` | Compliance layer merge logic. |
-| `generated/*.json` | Generated L1/L2 ESR/Release layers. |
-
-Related tools live under `tools/cis_firefox`.
-
-## Test Layers
-
-The current default pytest config excludes `firefox_live`, `firefox_live_amo`, and `browser_ui`.
-Routine development should use the marker-aware Makefile targets documented for the current project shape.
-
-| Layer | Main files or markers |
-|---|---|
-| Unit/API/service | `tests/test_*unit*.py`, `tests/api`, `tests/core`, profile service/API tests. |
-| Route/static contract | `tests/web_profiles_page/`, `tests/test_web_profiles_page.py`, `tests/test_ui_smoke_profile_workflow.py`. |
-| Locale/docs contract | `tests/test_locale_*.py`, `tests/test_ui_locale_glossary.py`, docs-specific contract tests. |
-| Compliance | `tests/compliance`. |
-| Browser UI | marker `browser_ui`, smoke file `tests/test_ui_browser_tabs.py`; covers import, primary routes, route handoff, and RU/ZH-CN rendering. |
-| Live Firefox | markers `firefox_live`, `firefox_live_amo`, files under `tests/live_firefox`. |
-| Tooling | `tests/tools`. |
-
-Current baseline from `tools/repo_health_report.py`: the historical full default timing was 803.15s test time. BPM now favors layered targets over one default catch-all run.
-
-## CI And Local Commands
-
-- Main CI: `.github/workflows/ci.yml` splits lint/type checks, mandatory fast tests, coverage/contract checks, and manual browser UI checks.
-- Manual guarded live Firefox policy tests: `.github/workflows/firefox-live.yml`.
-- Manual guarded AMO canary: `.github/workflows/firefox-live-amo.yml`.
-- Gist snapshot publishing: `.github/workflows/gist-snapshot.yml`.
-- Layered local tests: `make test-fast`, `make test-contract`, `make test-ui`, `make test-live`, `make test-release`.
-- Local health report: `make repo-health`.
-- Locale inventory report: `make locale-inventory`.
-- Locale rebuild/check: `make build-locale-catalogs`, `make check-locale-catalogs`.
-- Default local tests: `make test`.
-- Live Firefox setup: `make setup-firefox-live-browsers`.
-- `pytest-xdist` status: final BPM 0.8.5 decision is opt-in pure-unit pilot only, not enabled for mandatory CI; see `docs/architecture/pytest-xdist-readiness.md`.
-
-## High-Risk Couplings To Keep In Mind
-
-- `app/web/profiles.py` currently combines web route handling, route URL/focus semantics, catalog context building, locale bootstrapping, and legacy normalization entry points.
-- `_page_document.html` centralizes script order for most profile routes.
-- Python URL/focus helpers and JavaScript route/focus helpers must stay behaviorally aligned.
-- Locale files, docs contracts, and UI static-source tests are tightly coupled; docs or copy cleanup can break tests even when runtime behavior is unchanged.
-- CIS generated layers depend on curated YAML inputs plus merge/generation rules; optimize tests with schema/validator caching before changing data shape.
+```json system-map-contract
+{
+  "version": "0.9.4",
+  "paths": [
+    "app/main.py",
+    "app/core/config.py",
+    "app/db.py",
+    "app/models/profile.py",
+    "app/schemas/profile.py",
+    "app/api/profiles.py",
+    "app/api/export.py",
+    "app/api/validation.py",
+    "app/services/profile_service.py",
+    "app/services/firefox_policy_import.py",
+    "app/services/firefox_policy_export.py",
+    "app/web/profiles.py",
+    "app/web/profiles_context.py",
+    "app/templates/profiles/_page_document.html",
+    "app/static_src/profiles_monaco_entry.js",
+    "app/static/profiles_modules/",
+    "app/static/profiles_bundles/",
+    "app/core/schema_channels.py",
+    "app/core/schemas_loader.py",
+    "app/documentation/router.py",
+    "app/documentation/assistant_contracts.py",
+    "app/documentation/assistant_service.py",
+    "app/documentation/local_assistant_runtime.py",
+    "app/ai/",
+    "documentation/tools/build_docs.py",
+    "documentation/buildlib/",
+    "tests/contract/ui/profiles/",
+    "tests/live/firefox/",
+    "tests/contract/compliance/"
+  ],
+  "commands": [
+    "make architecture",
+    "make ai-extra-check",
+    "make test-ai-incubation",
+    "make test-fast",
+    "make test-unit",
+    "make test-integration",
+    "make test-contract",
+    "make test-browser",
+    "make test-firefox-schema-workflow",
+    "make test-firefox-schema-contract",
+    "make test-live",
+    "make test-docs",
+    "make docs-validate",
+    "make profile-performance-gate",
+    "make repo-health",
+    "make test-profile-pure-modules",
+    "make check-profile-frontend-bundles"
+  ],
+  "excluded_boundaries": [
+    "app/static/vendor/",
+    "app/static/profiles.css",
+    "app/compliance/firefox/cis/generated/",
+    "app/i18n/",
+    "app/schemas/policies/"
+  ]
+}
+```

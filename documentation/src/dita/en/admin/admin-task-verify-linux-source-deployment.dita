@@ -11,7 +11,7 @@
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
 ]]></codeblock><p>Expected responses are <codeph>{"status":"ok"}</codeph> and <codeph>{"status":"ready","ready":true}</codeph>.</p></info></step>
-      <step><cmd>Open the product UI and confirm that the Library route responds.</cmd><info><p>Use <codeph>http://127.0.0.1:8000/profiles</codeph>. The route should load the BPM interface or show an intentional application state, not a server traceback.</p></info></step>
+      <step><cmd>Open the product UI and confirm that the <uicontrol>Library</uicontrol> route responds.</cmd><info><p>Use <codeph>http://127.0.0.1:8000/profiles</codeph>. The route should load the BPM interface or show an intentional application state, not a server traceback.</p></info></step>
       <step><cmd>Inspect the foreground application logs.</cmd><info><p>Review the terminal running <codeph>make dev</codeph> or <codeph>uvicorn app.main:app --reload --port 8000</codeph>. Record startup errors, migration errors, port conflicts, and documentation-site warnings without copying secrets into tickets.</p></info></step>
       <step><cmd>Record the support boundary for the verification result.</cmd><info><note type="warning">Passing health probes, the UI route, and foreground-log checks does not certify production readiness, reverse proxy behavior, managed backups, or Firefox runtime policy enforcement.</note></info></step>
     </steps>

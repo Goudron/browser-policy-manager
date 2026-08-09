@@ -4,10 +4,10 @@
   <title>Rohes Richtlinien-JSON bearbeiten</title>
   <shortdesc>Bearbeiten Sie das Rohdokument policies.json mit dem lokal gebündelten Monaco-Editor.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie JSON-Editor für ein gespeichertes Profil.</p></prereq>
+    <prereq><p>Öffnen Sie <uicontrol>JSON-Editor</uicontrol> für ein gespeichertes Profil.</p></prereq>
     <context><p>Der Monaco-Editor ist lokal gebündelt und bearbeitet den rohen JSON-Text. BPM führt weiterhin eine Validierung durch, bevor es im normalisierten Profilmodell gespeichert wird.</p></context>
     <steps>
-      <step><cmd>Platzieren Sie den Fokus auf JSON-Editor.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Platzieren Sie den Fokus auf <uicontrol>JSON-Editor</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Bearbeiten Sie nur die Richtlinien, Präferenzen oder Rohwerte, die für die Aufgabe erforderlich sind.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Behalten Sie das Richtlinienobjekt der obersten Ebene und die gültige JSON-Syntax bei.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Verwenden Sie die Validierung, bevor Sie die Rohbearbeitung speichern.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>

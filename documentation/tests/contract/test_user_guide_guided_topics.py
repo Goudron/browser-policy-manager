@@ -70,7 +70,9 @@ def _topic_root(locale: str, topic_id: str) -> ET.Element:
 
 
 def _section_keyrefs(locale: str) -> dict[str, list[str]]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     sections: dict[str, list[str]] = {}
     for topichead in root.findall("topichead"):
         intent = topichead.find("./topicmeta/data[@name='intent-id']")
@@ -85,9 +87,7 @@ def _section_keyrefs(locale: str) -> dict[str, list[str]]:
 def _case_topics() -> dict[str, dict[str, object]]:
     case_map = json.loads(USER_GUIDE_MAP.read_text(encoding="utf-8"))
     return {
-        topic["topic_id"]: topic
-        for section in case_map["sections"]
-        for topic in section["topics"]
+        topic["topic_id"]: topic for section in case_map["sections"] for topic in section["topics"]
     }
 
 
@@ -151,7 +151,9 @@ def test_guided_topics_are_inventory_case_mapped_keyed_and_reachable() -> None:
         assert case_topics[topic_id]["capability_ids"] == capability_ids
 
         for locale in LOCALES:
-            keys = ET.fromstring((DITA_ROOT / locale / "maps/keys.ditamap").read_text(encoding="utf-8"))
+            keys = ET.fromstring(
+                (DITA_ROOT / locale / "maps/keys.ditamap").read_text(encoding="utf-8")
+            )
             keydefs = {
                 keydef.attrib["keys"]: keydef.attrib["href"]
                 for keydef in keys.findall("keydef")

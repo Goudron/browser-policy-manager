@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>查看“所有设置”中的待处理项</title>
-  <shortdesc>在常规编辑前使用“检查”对无效、需要 CIS 手动审核、原始、未知、已弃用和已导入的项目进行分类。</shortdesc>
+  <shortdesc>在常规编辑前使用“<uicontrol>检查</uicontrol>”对无效、需要 CIS 手动审核、原始、未知、已弃用和已导入的项目进行分类。</shortdesc>
   <taskbody>
-    <prereq><p>打开 所有设置 中保存的配置文件。</p></prereq>
-    <context><p>检查 是默认的注意力优先视图。它收集在导出、比较或移交之前可能需要做出决定的设置。</p></context>
+    <prereq><p>打开 <uicontrol>所有设置</uicontrol> 中保存的配置文件。</p></prereq>
+    <context><p><uicontrol>检查</uicontrol> 是默认的注意力优先视图。它收集在导出、比较或移交之前可能需要做出决定的设置。</p></context>
     <steps>
-      <step><cmd>打开 所有设置 并停留在 检查。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>阅读审核摘要和分组行动卡。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>打开适用于配置文件的每个无效、CIS 手动审核、原始、未知、已弃用或导入的项目。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开 <uicontrol>所有设置</uicontrol> 并停留在 <uicontrol>检查</uicontrol>。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>阅读审核摘要和分组行动卡。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开适用于配置文件的每个无效、CIS 手动审核、原始、未知、已弃用或导入的项目。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>解决该项目，记录其保留的原因，或移至链接的详细信息视图以进行有意的编辑。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>注意事项要么得到解决，要么有意保留，要么准备好进行重点细节编辑。</p></result>

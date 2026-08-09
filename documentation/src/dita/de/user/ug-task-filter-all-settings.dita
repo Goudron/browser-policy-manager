@@ -4,12 +4,12 @@
   <title>Die Liste „Alle Einstellungen“ filtern</title>
   <shortdesc>Filtern Sie nach dem Status „Konfiguriert“, „Verfügbar“, „Geführt abgedeckt“, „Nur alle Einstellungen“, „Ungültig“, „Veraltet“, „Roh“ oder „Unbekannt“.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie Alle Einstellungen mit einer sichtbaren Einstellungsliste.</p></prereq>
+    <prereq><p>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> mit einer sichtbaren Einstellungsliste.</p></prereq>
     <context><p>Statusfilter grenzen einen großen Bestand anhand der Entscheidung ein, die der Benutzer treffen muss. Sie unterscheiden sich von Quellfiltern, die erklären, woher ein Wert stammt.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie die Listenfilter-Symbolleiste.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wählen Sie den Statusfilter aus, der der Aufgabe entspricht: konfiguriert, verfügbar, geführt abgedeckt, nur alle Einstellungen, ungültig, veraltet, unformatiert oder unbekannt.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Überprüfen Sie die gefilterte Anzahl und repräsentative Zeilen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie die Listenfilter-Symbolleiste.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie den Statusfilter aus, der der Aufgabe entspricht: konfiguriert, verfügbar, geführt abgedeckt, nur alle Einstellungen, ungültig, veraltet, unformatiert oder unbekannt.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie die gefilterte Anzahl und repräsentative Zeilen.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Löschen Sie den Statusfilter, bevor Sie nicht verwandte Änderungen anwenden.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Die Liste zeigt nur Einstellungen mit dem ausgewählten Status.</p></result>

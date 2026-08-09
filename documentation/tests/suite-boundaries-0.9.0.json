@@ -57,7 +57,7 @@
       "browser_backed": false
     },
     "docs-fast-check": {
-      "purpose": "Validate changed documentation source inputs and report affected locale, guide, search, and output areas before the full corpus.",
+      "purpose": "Run the bounded authoring check for changed README, DITA, locale, figure, or fixture inputs; it reports selected scope, semantic guards, intentional release-only skips, and the authoritative escalation command.",
       "command": "make docs-fast-check",
       "paths": ["documentation/tools/build_docs.py"],
       "browser_backed": false
@@ -65,7 +65,15 @@
     "docs-coverage": {
       "purpose": "Run isolated documentation-code coverage for the accepted coverage policy.",
       "command": "make docs-coverage",
-      "paths": ["documentation/tests/unit/test_validate_metadata.py"],
+      "paths": [
+        "documentation/tests/unit/test_build_docs.py",
+        "documentation/tests/unit/test_build_docs_structure.py",
+        "documentation/tests/unit/test_buildlib_artifacts.py",
+        "documentation/tests/unit/test_build_lifecycle.py",
+        "documentation/tests/unit/test_validate_metadata.py",
+        "documentation/buildlib/",
+        "documentation/tools/validate_metadata.py"
+      ],
       "browser_backed": false
     },
     "docs-release-check": {
@@ -73,6 +81,16 @@
       "command": "make docs-release-check",
       "paths": [
         "documentation/tools/build_docs.py",
+        "documentation/tests/contract/"
+      ],
+      "browser_backed": false
+    },
+    "docs-release-handoff": {
+      "purpose": "Run the authoritative six-locale documentation release handoff, including release validation, binary PDF proof, reproducibility, package verification, snapshot, and local install proof.",
+      "command": "make docs-release-handoff",
+      "paths": [
+        "documentation/tools/build_docs.py",
+        "documentation/tools/generate_subsystem_snapshot.py",
         "documentation/tests/contract/"
       ],
       "browser_backed": false
@@ -161,20 +179,11 @@
         "documentation/tests/contract/test_documentation_sufficiency_drift.py",
         "documentation/tests/contract/test_documentation_sufficiency_closure.py",
         "documentation/tests/contract/test_documentation_sufficiency_review_protocol.py",
-        "documentation/tests/contract/test_docker_engine_installation_evidence.py",
         "documentation/tests/contract/test_firefox_cis_guide_sufficiency_review.py",
         "documentation/tests/contract/test_linux_source_install_command_topics.py",
         "documentation/tests/contract/test_linux_source_install_editorial_reconciliation_0_9_2.py",
-        "documentation/tests/contract/test_live_source_install_evidence_closure.py",
-        "documentation/tests/contract/test_live_source_install_environment_handoff.py",
         "documentation/tests/contract/test_live_source_install_privileged_validation_contract.py",
         "documentation/tests/contract/test_live_source_install_harness_contract.py",
-        "documentation/tests/contract/test_live_source_install_harness_evidence.py",
-        "documentation/tests/contract/test_ubuntu_26_04_live_source_install_evidence.py",
-        "documentation/tests/contract/test_debian_13_5_live_source_install_evidence.py",
-        "documentation/tests/contract/test_fedora_44_live_source_install_evidence.py",
-        "documentation/tests/contract/test_linux_mint_22_3_live_source_install_evidence.py",
-        "documentation/tests/contract/test_manjaro_stable_live_source_install_evidence.py",
         "documentation/tests/contract/test_linux_source_install_validation.py",
         "documentation/tests/contract/test_locale_anglicism_replacement.py",
         "documentation/tests/contract/test_locale_anti_anglicism_guard.py",
@@ -183,13 +192,10 @@
         "documentation/tests/contract/test_interface_name_replacement.py",
         "documentation/tests/contract/test_locale_terminology_authority.py",
         "documentation/tests/contract/test_locale_visible_english_inventory.py",
-        "documentation/tests/contract/test_visible_english_prose_review.py",
         "documentation/tests/contract/test_navigation_tree_contract.py",
         "documentation/tests/contract/test_topic_section_hierarchy_audit.py",
         "documentation/tests/contract/test_topic_section_labels.py",
         "documentation/tests/contract/test_topic_section_taxonomy.py",
-        "documentation/tests/contract/test_windows_10_wsl_validation_outcome.py",
-        "documentation/tests/contract/test_windows_11_wsl_validation_outcome.py",
         "documentation/tests/contract/test_wsl_source_install_validation_runner.py"
       ],
       "fixtures": [
@@ -202,26 +208,7 @@
         "documentation/config/live-source-install-harness-0.9.1.json",
         "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json",
         "documentation/config/wsl-source-install-validation-contract-0.9.1.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-02-docker-engine-20260714/host-state.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-02-docker-engine-20260714/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-03-harness-20260714/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-03-harness-20260714/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-04-ubuntu-source-install-20260714/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-05-debian-source-install-20260714/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-05-debian-source-install-20260714/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-06-fedora-source-install-20260714/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-06-fedora-source-install-20260714/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-07-mint-source-install-20260715/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-07-mint-source-install-20260715/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-08-manjaro-source-install-20260715/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-11-windows10-wsl-20260715/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-12-windows11-wsl-20260715/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/run-manifest.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-13-validation-environment-handoff-20260715/retained-inventory.json",
-        "documentation/evidence/live-source-install/0.9.1/m11-14-evidence-closure-20260715/closure.json",
-        "documentation/config/visible-english-prose-review-0.9.1.json",
+        "documentation/config/documentation-semantic-contracts-0.9.4.json",
         "docs/architecture/documentation-sufficiency-closure-0.9.1.json"
       ],
       "focused_rerun": "make test-docs-contract"
@@ -264,7 +251,8 @@
       "path_globs": [
         "documentation/tests/contract/test_manifest_generation.py",
         "documentation/tests/contract/test_artifact_policy.py",
-        "documentation/tests/unit/test_build_docs.py"
+        "documentation/tests/unit/test_build_docs.py",
+        "documentation/tests/unit/test_buildlib_*.py"
       ],
       "fixtures": ["documentation/fixtures/metadata-filter/"],
       "focused_rerun": "./.venv/bin/pytest -q documentation/tests/unit/test_build_docs.py::test_manifest_generation_lists_guides_locales_search_and_target_map"
@@ -305,9 +293,9 @@
         "documentation/tests/contract/test_chat_rag_vector_storage_decision_0_9_3.py",
         "documentation/tests/contract/test_chat_rag_exact_generation_0_9_3.py",
         "documentation/tests/contract/test_chat_rag_retrieval_0_9_3.py",
-        "tests/test_documentation_chat_retrieval_093.py",
+        "tests/integration/ai/incubation/test_documentation_chat_retrieval.py",
         "documentation/tests/contract/test_chat_rag_evidence_packing_0_9_3.py",
-        "tests/test_documentation_evidence_packing_093.py",
+        "tests/integration/ai/incubation/test_documentation_evidence_packing.py",
         "documentation/tests/contract/test_chat_rag_retrieval_validation_0_9_3.py",
         "documentation/tests/contract/test_local_chat_model_runtime_shortlist_0_9_3.py",
         "documentation/tests/contract/test_grounded_answer_benchmark_harness_0_9_3.py",
@@ -371,14 +359,14 @@
     },
     "api_rehome_audit": {
       "primary_suite": "contract",
-      "path_globs": ["documentation/tests/contract/test_api_rehome_audit.py"],
+      "path_globs": ["documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py"],
       "fixtures": [
-        "docs/architecture/api-integration-rehome-audit-0.9.0.json",
-        "docs/architecture/api-integration-rehome-audit-0.9.0.md",
+        "documentation/config/documentation-semantic-contracts-0.9.4.json",
         "documentation/src/dita/en/maps/administrator-guide.ditamap",
-        "documentation/src/dita/en/maps/user-guide.ditamap"
+        "documentation/src/dita/en/maps/user-guide.ditamap",
+        "documentation/src/dita/en/maps/keys.ditamap"
       ],
-      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_api_rehome_audit.py"
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_semantic_contracts_0_9_4.py"
     },
     "administrator_guide_scope": {
       "primary_suite": "contract",
@@ -506,10 +494,14 @@
     "coverage": {
       "primary_suite": "unit",
       "path_globs": [
+        "documentation/tests/unit/test_build_docs.py",
+        "documentation/tests/unit/test_build_docs_structure.py",
+        "documentation/tests/unit/test_buildlib_artifacts.py",
+        "documentation/tests/unit/test_build_lifecycle.py",
         "documentation/tests/unit/test_validate_metadata.py",
         "documentation/tests/contract/test_documentation_coverage_policy.py"
       ],
-      "fixtures": ["documentation/config/coverage-policy-0.9.0.json"],
+      "fixtures": ["documentation/config/coverage-policy-0.9.4.json"],
       "focused_rerun": "make docs-coverage"
     },
     "fixtures": {
@@ -559,6 +551,26 @@
         "docs/architecture/product-documentation-release-contract-0.9.3.md"
       ],
       "focused_rerun": "make test-docs-contract"
+    },
+    "bpm_0_9_4_editorial_pdf_release": {
+      "primary_suite": "contract",
+      "path_globs": ["documentation/tests/contract/test_*_0_9_4.py"],
+      "fixtures": [
+        "documentation/config/documentation-editorial-pdf-release-review-0.9.4.json",
+        "documentation/config/documentation-gap-inventory-0.9.4.json",
+        "documentation/config/pdf-generation-contract-0.9.3.json"
+      ],
+      "focused_rerun": "make test-docs-contract"
+    },
+    "test_estate_inventory": {
+      "primary_suite": "contract",
+      "path_globs": [
+        "documentation/tests/contract/test_documentation_test_estate_inventory_0_9_4.py"
+      ],
+      "fixtures": [
+        "documentation/config/documentation-test-estate-inventory-0.9.4.json"
+      ],
+      "focused_rerun": "./.venv/bin/pytest -q -m docs_contract documentation/tests/contract/test_documentation_test_estate_inventory_0_9_4.py"
     },
     "release_gate": {
       "primary_suite": "contract",

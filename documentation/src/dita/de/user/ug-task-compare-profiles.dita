@@ -4,8 +4,8 @@
   <title>„Profileinstellungen vergleichen“ aus der Bibliothek öffnen</title>
   <shortdesc>Öffnen Sie die spezielle Vergleichsoberfläche in einer neuen Registerkarte, bevor Sie zwei gespeicherte Profile auswählen.</shortdesc>
   <taskbody>
-    <prereq><p>Die Bibliothek ist geöffnet und es sind mindestens zwei gespeicherte Profile vorhanden.</p></prereq>
-    <context><p>„Profileinstellungen vergleichen“ ist eine eigene Seite für gespeicherte Profile. Sie behält die aktuelle Sprache und das aktuelle Thema bei und ersetzt nicht die Registerkarte „Bibliothek“.</p>
+    <prereq><p>Die <uicontrol>Bibliothek</uicontrol> ist geöffnet und es sind mindestens zwei gespeicherte Profile vorhanden.</p></prereq>
+    <context><p>„<uicontrol>Profileinstellungen vergleichen</uicontrol>“ ist eine eigene Seite für gespeicherte Profile. Sie behält die aktuelle Sprache und das aktuelle Thema bei und ersetzt nicht die Registerkarte „<uicontrol>Bibliothek</uicontrol>“.</p>
       <fig id="screenshot-compare-profiles">
         <title>Seite „Profileinstellungen vergleichen“</title>
         <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
@@ -14,11 +14,11 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Wählen Sie in der Bibliothek die Aktion „Profileinstellungen vergleichen“.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet die Vergleichsoberfläche in einer neuen Browser-Registerkarte.</p></info></step>
-      <step><cmd>Verwenden Sie die linken und rechten Suchfelder, um Profil A und Profil B auszuwählen.</cmd><info><note type="warning">Der Vergleich liest den gespeicherten Profilstatus. Speichern Sie Editoränderungen, bevor Sie sich darauf verlassen.</note></info></step>
+      <step><cmd>Wählen Sie in der <uicontrol>Bibliothek</uicontrol> die Aktion „<uicontrol>Profileinstellungen vergleichen</uicontrol>“.</cmd><info><p>Erwartetes Ergebnis: BPM öffnet die Vergleichsoberfläche in einer neuen Browser-Registerkarte.</p></info></step>
+      <step><cmd>Verwenden Sie die linken und rechten Suchfelder, um <uicontrol>Profil A</uicontrol> und <uicontrol>Profil B</uicontrol> auszuwählen.</cmd><info><note type="warning">Der Vergleich liest den gespeicherten Profilstatus. Speichern Sie Editoränderungen, bevor Sie sich darauf verlassen.</note></info></step>
     </steps>
-    <result><p>Die Vergleichsoberfläche ist für die unabhängige Auswahl von Profil A und Profil B bereit.</p></result>
-    <postreq><p>Wiederherstellung: Wenn die Registerkarte „Vergleichen“ ohne erwartete Profile geöffnet wird, kehren Sie zur Bibliothek zurück, aktualisieren Sie sie und bestätigen Sie, dass beide Profile gespeichert und sichtbar sind.</p></postreq>
+    <result><p>Die Vergleichsoberfläche ist für die unabhängige Auswahl von <uicontrol>Profil A</uicontrol> und <uicontrol>Profil B</uicontrol> bereit.</p></result>
+    <postreq><p>Wiederherstellung: Wenn die Registerkarte „Vergleichen“ ohne erwartete Profile geöffnet wird, kehren Sie zur <uicontrol>Bibliothek</uicontrol> zurück, aktualisieren Sie sie und bestätigen Sie, dass beide Profile gespeichert und sichtbar sind.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-comparison-workflow"/>

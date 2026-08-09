@@ -49,14 +49,14 @@ def test_locale_anglicism_replacement_closes_all_inventory_replace_findings() ->
     assert "make build-locale-catalogs" in replacement["scope"]["generated_by"]
 
     replace_finding_ids = {
-        finding["id"]
-        for finding in inventory["findings"]
-        if finding["classification"] == "replace"
+        finding["id"] for finding in inventory["findings"] if finding["classification"] == "replace"
     }
     assert set(replacement["closed_findings"]) == replace_finding_ids
 
 
-def test_locale_anglicism_replacement_removes_forbidden_fragments_from_sources_and_runtime() -> None:
+def test_locale_anglicism_replacement_removes_forbidden_fragments_from_sources_and_runtime() -> (
+    None
+):
     replacement = _json(REPLACEMENT)
 
     for locale in LOCALES:

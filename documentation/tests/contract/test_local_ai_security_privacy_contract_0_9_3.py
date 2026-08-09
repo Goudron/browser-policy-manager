@@ -110,7 +110,12 @@ def test_privacy_web_resources_and_recovery_are_explicit() -> None:
     assert web["enabled_by_default"] is False
     assert web["provider_selected"] is False
     web_rules = " ".join(web["requirements"])
-    for requirement in ("per-query consent", "zero redirects", "loopback", "local documentation precedence"):
+    for requirement in (
+        "per-query consent",
+        "zero redirects",
+        "loopback",
+        "local documentation precedence",
+    ):
         assert requirement in web_rules
 
     recovery_rules = " ".join(contract["safe_recovery"]["requirements"])
@@ -122,7 +127,9 @@ def test_privacy_web_resources_and_recovery_are_explicit() -> None:
 def test_threat_register_covers_acceptance_with_owner_tests_and_fail_state() -> None:
     threats = _contract()["threat_register"]
 
-    assert [threat["id"] for threat in threats] == [f"AI093-T{number:02d}" for number in range(1, 15)]
+    assert [threat["id"] for threat in threats] == [
+        f"AI093-T{number:02d}" for number in range(1, 15)
+    ]
     threat_text = " ".join(threat["threat"] for threat in threats).lower()
     for required in (
         "ssrf",

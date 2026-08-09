@@ -18,7 +18,11 @@ def _primary_type_from_schema_node(node: dict[str, Any]) -> str:
                 if branch_type:
                     return branch_type
 
-    if isinstance(node.get("properties"), dict) or "additional_properties" in node or "additional_properties_schema" in node:
+    if (
+        isinstance(node.get("properties"), dict)
+        or "additional_properties" in node
+        or "additional_properties_schema" in node
+    ):
         return "object"
     if isinstance(node.get("items"), dict):
         return "array"
@@ -35,7 +39,11 @@ def _schema_node_to_property_dict(
         "type": node["type"],
         "description_key": description_key,
         "enum": node.get("enum"),
-        "items_type": node.get("items", {}).get("type") if node.get("type") == "array" and node.get("items", {}).get("type") in SCALAR_TYPES else None,
+        "items_type": (
+            node.get("items", {}).get("type")
+            if node.get("type") == "array" and node.get("items", {}).get("type") in SCALAR_TYPES
+            else None
+        ),
         "minimum": node.get("minimum"),
         "maximum": node.get("maximum"),
         "default": node.get("default"),
@@ -52,13 +60,25 @@ def _schema_node_to_property_dict(
         if isinstance(items_schema, dict):
             item_type = items_schema.get("type")
             item_has_extra_constraints = any(
-                key in items_schema for key in ("pattern", "format", "minimum", "maximum", "const", "oneOf", "anyOf", "allOf")
+                key in items_schema
+                for key in (
+                    "pattern",
+                    "format",
+                    "minimum",
+                    "maximum",
+                    "const",
+                    "oneOf",
+                    "anyOf",
+                    "allOf",
+                )
             )
         else:
             item_type = None
             item_has_extra_constraints = False
 
-        if isinstance(items_schema, dict) and (item_type not in SCALAR_TYPES or item_has_extra_constraints):
+        if isinstance(items_schema, dict) and (
+            item_type not in SCALAR_TYPES or item_has_extra_constraints
+        ):
             property_dict["items"] = items_schema
         elif isinstance(items_schema, dict) and items_schema.get("enum") is not None:
             property_dict["enum"] = items_schema["enum"]
@@ -94,14 +114,28 @@ def _policy_definition_from_inferred_node(
     }
 
     items_schema = node.get("items")
-    items_type = items_schema.get("type") if isinstance(items_schema, dict) and items_schema.get("type") in SCALAR_TYPES else None
+    items_type = (
+        items_schema.get("type")
+        if isinstance(items_schema, dict) and items_schema.get("type") in SCALAR_TYPES
+        else None
+    )
     enum = None
     items = None
     if node_type == "array" and isinstance(items_schema, dict):
         if items_schema.get("enum") is not None:
             enum = items_schema["enum"]
         if items_schema.get("type") not in SCALAR_TYPES or any(
-            key in items_schema for key in ("pattern", "format", "minimum", "maximum", "const", "oneOf", "anyOf", "allOf")
+            key in items_schema
+            for key in (
+                "pattern",
+                "format",
+                "minimum",
+                "maximum",
+                "const",
+                "oneOf",
+                "anyOf",
+                "allOf",
+            )
         ):
             items = items_schema
 
@@ -145,7 +179,11 @@ def _legacy_property_to_json_schema(node: dict[str, Any]) -> dict[str, Any]:
     if node.get("format") is not None:
         schema["format"] = node["format"]
 
-    if node_type == "array" or node.get("items_type") is not None or isinstance(node.get("items"), dict):
+    if (
+        node_type == "array"
+        or node.get("items_type") is not None
+        or isinstance(node.get("items"), dict)
+    ):
         items_schema = (
             _legacy_property_to_json_schema(node["items"])
             if isinstance(node.get("items"), dict)
@@ -179,7 +217,9 @@ def _legacy_property_to_json_schema(node: dict[str, Any]) -> dict[str, Any]:
 
         additional_properties_schema = node.get("additional_properties_schema")
         if isinstance(additional_properties_schema, dict):
-            schema["additionalProperties"] = _legacy_property_to_json_schema(additional_properties_schema)
+            schema["additionalProperties"] = _legacy_property_to_json_schema(
+                additional_properties_schema
+            )
         else:
             schema["additionalProperties"] = node.get("additional_properties", True)
 

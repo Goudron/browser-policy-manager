@@ -58,8 +58,8 @@ REQUIRED_INVARIANT_TERMS = (
     "sqlite+aiosqlite:///./data/bpm.db",
     "data/bpm.db",
     "alembic upgrade head",
-    "BPM_HOST=\"0.0.0.0\"",
-    "pip install -e \".[dev]\"",
+    'BPM_HOST="0.0.0.0"',
+    'pip install -e ".[dev]"',
     "/help/",
     "/openapi.json",
 )
@@ -133,8 +133,7 @@ def test_troubleshooting_topics_are_keyed_and_reachable_from_admin_guide() -> No
             if keydef.attrib["keys"] in TROUBLESHOOTING_KEYREFS
         }
         assert keydefs == {
-            f"topic.{topic_id}": f"../admin/{topic_id}.dita"
-            for topic_id in TROUBLESHOOTING_TOPICS
+            f"topic.{topic_id}": f"../admin/{topic_id}.dita" for topic_id in TROUBLESHOOTING_TOPICS
         }
 
         admin_guide = ET.fromstring(
@@ -197,7 +196,9 @@ def test_troubleshooting_examples_execute_representative_api_diagnostics() -> No
         assert invalid_shape.status_code == 200
         assert invalid_shape.json()["ok"] is False
 
-        invalid_policies = client.post("/api/validate/release-153", json={"document": {"policies": []}})
+        invalid_policies = client.post(
+            "/api/validate/release-153", json={"document": {"policies": []}}
+        )
         assert invalid_policies.status_code == 400
 
         unknown_profile = client.post(

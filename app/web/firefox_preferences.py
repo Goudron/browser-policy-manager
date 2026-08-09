@@ -115,7 +115,9 @@ def _build_known_preferences(
     return sorted(known_preferences, key=lambda item: item["pref"])
 
 
-def get_wizard_preferences_catalog(settings_catalog: dict[str, Any] | None = None) -> dict[str, Any]:
+def get_wizard_preferences_catalog(
+    settings_catalog: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Return the preference-focused subset of the shared Firefox Settings catalog."""
 
     resolved_catalog = settings_catalog or get_wizard_settings_catalog()

@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM094-M8-03",
+  "purpose": "Explicit, fail-closed primary-layer ownership by test layer and subsystem. Shared support and generated/artifact fixtures remain outside collection and retain explicit owners.",
+  "owners": [
+    {
+      "id": "documentation-unit",
+      "prefix": "documentation/tests/unit/",
+      "layer": "unit",
+      "markers": [
+        "docs"
+      ]
+    },
+    {
+      "id": "documentation-contract",
+      "prefix": "documentation/tests/contract/",
+      "layer": "contract",
+      "markers": [
+        "docs",
+        "docs_contract"
+      ]
+    },
+    {
+      "id": "documentation-browser",
+      "prefix": "documentation/tests/browser/",
+      "layer": "browser",
+      "markers": [
+        "docs",
+        "browser_ui",
+        "slow"
+      ]
+    },
+    {
+      "id": "browser-profiles",
+      "prefix": "tests/browser/profiles/",
+      "layer": "browser",
+      "markers": [
+        "browser_ui",
+        "slow"
+      ]
+    },
+    {
+      "id": "firefox-live",
+      "prefix": "tests/live/firefox/",
+      "layer": "live",
+      "markers": [
+        "firefox_live",
+        "slow"
+      ]
+    },
+    {
+      "id": "contract-compliance",
+      "prefix": "tests/contract/compliance/",
+      "layer": "contract",
+      "markers": [
+        "compliance"
+      ]
+    },
+    {
+      "id": "contract-settings",
+      "prefix": "tests/contract/settings/",
+      "layer": "contract",
+      "markers": []
+    },
+    {
+      "id": "contract-ui-general",
+      "prefix": "tests/contract/ui/general/",
+      "layer": "contract",
+      "markers": []
+    },
+    {
+      "id": "contract-profiles",
+      "prefix": "tests/contract/profiles/",
+      "layer": "contract",
+      "markers": []
+    },
+    {
+      "id": "contract-testing",
+      "prefix": "tests/contract/testing/",
+      "layer": "contract",
+      "markers": []
+    },
+    {
+      "id": "contract-db",
+      "prefix": "tests/contract/db/",
+      "layer": "contract",
+      "markers": [
+        "db"
+      ]
+    },
+    {
+      "id": "contract-docs-general",
+      "prefix": "tests/contract/docs/general/",
+      "layer": "contract",
+      "markers": [
+        "docs",
+        "docs_contract"
+      ]
+    },
+    {
+      "id": "contract-docs-schema",
+      "prefix": "tests/contract/docs/schema/",
+      "layer": "contract",
+      "markers": [
+        "docs",
+        "docs_contract",
+        "schema"
+      ]
+    },
+    {
+      "id": "contract-ui-smoke",
+      "prefix": "tests/contract/ui/smoke/",
+      "layer": "contract",
+      "markers": [
+        "ui",
+        "ui_contract",
+        "slow"
+      ]
+    },
+    {
+      "id": "contract-ui-localization",
+      "prefix": "tests/contract/ui/localization/",
+      "layer": "contract",
+      "markers": [
+        "ui",
+        "ui_contract"
+      ]
+    },
+    {
+      "id": "contract-ui-profiles",
+      "prefix": "tests/contract/ui/profiles/",
+      "layer": "contract",
+      "markers": [
+        "ui",
+        "ui_contract"
+      ]
+    },
+    {
+      "id": "integration-ai-core",
+      "prefix": "tests/integration/ai/core/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-settings",
+      "prefix": "tests/integration/settings/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-app",
+      "prefix": "tests/integration/app/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-docs",
+      "prefix": "tests/integration/docs/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-profiles",
+      "prefix": "tests/integration/profiles/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-firefox",
+      "prefix": "tests/integration/firefox/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-ui",
+      "prefix": "tests/integration/ui/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-locale",
+      "prefix": "tests/integration/locale/",
+      "layer": "integration",
+      "markers": []
+    },
+    {
+      "id": "integration-ai-incubation",
+      "prefix": "tests/integration/ai/incubation/",
+      "layer": "integration",
+      "markers": [
+        "ai",
+        "ai_incubation"
+      ]
+    },
+    {
+      "id": "integration-api",
+      "prefix": "tests/integration/api/",
+      "layer": "integration",
+      "markers": [
+        "api"
+      ]
+    },
+    {
+      "id": "integration-db",
+      "prefix": "tests/integration/db/",
+      "layer": "integration",
+      "markers": [
+        "db"
+      ]
+    },
+    {
+      "id": "integration-schema",
+      "prefix": "tests/integration/schema/",
+      "layer": "integration",
+      "markers": [
+        "schema"
+      ]
+    },
+    {
+      "id": "unit-testing",
+      "prefix": "tests/unit/testing/",
+      "layer": "unit",
+      "markers": []
+    },
+    {
+      "id": "unit-app",
+      "prefix": "tests/unit/app/",
+      "layer": "unit",
+      "markers": []
+    },
+    {
+      "id": "unit-tooling",
+      "prefix": "tests/unit/tooling/",
+      "layer": "unit",
+      "markers": [
+        "tooling"
+      ]
+    },
+    {
+      "id": "unit-firefox",
+      "prefix": "tests/unit/firefox/",
+      "layer": "unit",
+      "markers": []
+    },
+    {
+      "id": "unit-schema-general",
+      "prefix": "tests/unit/schema/general/",
+      "layer": "unit",
+      "markers": [
+        "schema"
+      ]
+    },
+    {
+      "id": "unit-profiles",
+      "prefix": "tests/unit/profiles/",
+      "layer": "unit",
+      "markers": []
+    },
+    {
+      "id": "unit-db",
+      "prefix": "tests/unit/db/",
+      "layer": "unit",
+      "markers": [
+        "db"
+      ]
+    },
+    {
+      "id": "unit-schema-contracts",
+      "prefix": "tests/unit/schema/contracts/",
+      "layer": "unit",
+      "markers": [
+        "schema"
+      ]
+    }
+  ],
+  "marker_overrides": [
+    {
+      "id": "compliance-schema-matrix-slow",
+      "paths": [
+        "tests/contract/compliance/test_cis_firefox_mapping_targets.py"
+      ],
+      "markers": [
+        "slow"
+      ]
+    },
+    {
+      "id": "profile-route-dom-slow",
+      "paths": [
+        "tests/contract/ui/profiles/test_route_dom_contracts.py"
+      ],
+      "markers": [
+        "slow"
+      ]
+    },
+    {
+      "id": "profile-lifecycle-slow",
+      "paths": [
+        "tests/integration/profiles/test_e2e_profile_lifecycle.py"
+      ],
+      "markers": [
+        "slow"
+      ]
+    },
+    {
+      "id": "firefox-live-amo",
+      "paths": [
+        "tests/live/firefox/test_extension_settings_amo.py"
+      ],
+      "markers": [
+        "firefox_live_amo"
+      ]
+    }
+  ],
+  "support_owners": [
+    {
+      "id": "shared-test-runtime",
+      "paths": [
+        "tests/app_harness.py",
+        "tests/cache_harness.py",
+        "tests/conftest.py",
+        "tests/db_harness.py",
+        "tests/docs_index.py",
+        "tests/marker_policy.py",
+        "tests/profile_route_contracts.py",
+        "tests/support.py",
+        "tests/sync_session_adapter.py",
+        "tests/web_profiles_page_helpers.py"
+      ]
+    },
+    {
+      "id": "firefox-live-harness",
+      "paths": [
+        "tests/live/firefox/conftest.py",
+        "tests/live/firefox/helpers.py"
+      ]
+    },
+    {
+      "id": "firefox-live-fixtures",
+      "prefix": "tests/live/firefox/fixtures/"
+    },
+    {
+      "id": "product-test-fixtures",
+      "prefix": "tests/fixtures/"
+    },
+    {
+      "id": "documentation-test-fixtures",
+      "prefix": "documentation/fixtures/"
+    },
+    {
+      "id": "documentation-test-support",
+      "paths": [
+        "documentation/tests/conftest.py",
+        "documentation/tests/suite-boundaries-0.9.0.json"
+      ]
+    }
+  ]
+}

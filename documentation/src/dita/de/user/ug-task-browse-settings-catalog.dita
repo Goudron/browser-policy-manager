@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Den Einstellungskatalog durchsuchen</title>
-  <shortdesc>Verwenden Sie Katalog, um alle unterstützten Richtlinien und bekannten verwalteten Einstellungen für das ausgewählte Schema zu durchsuchen.</shortdesc>
+  <shortdesc>Verwenden Sie <uicontrol>Katalog</uicontrol>, um alle unterstützten Richtlinien und bekannten verwalteten Einstellungen für das ausgewählte Schema zu durchsuchen.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein gespeichertes Profil in Alle Einstellungen.</p></prereq>
-    <context><p>Katalog ist das vollständige visuelle Inventar. Es umfasst konfigurierte und verfügbare Einstellungen und behält gleichzeitig erweiterte Kontrollen hinter absichtlichen Offenlegungen bei.</p></context>
+    <prereq><p>Öffnen Sie ein gespeichertes Profil in <uicontrol>Alle Einstellungen</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Katalog</uicontrol> ist das vollständige visuelle Inventar. Es umfasst konfigurierte und verfügbare Einstellungen und behält gleichzeitig erweiterte Kontrollen hinter absichtlichen Offenlegungen bei.</p></context>
     <steps>
-      <step><cmd>Wechseln Sie zu Katalog.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Durchsuchen Sie Kategorien nach unterstützten Richtlinien und bekannten Verwaltete Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Verwenden Sie Kategoriekarten oder eine Suche, um den Bestand einzugrenzen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wechseln Sie zu <uicontrol>Katalog</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Durchsuchen Sie Kategorien nach unterstützten Richtlinien und bekannten <uicontrol>Verwaltete Einstellungen</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Verwenden Sie Kategoriekarten oder eine Suche, um den Bestand einzugrenzen.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Wählen Sie eine Einstellung aus, bevor Sie einen Wert anwenden, bearbeiten oder zurücksetzen.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Sie können unterstützte Richtlinien und bekannte Einstellungen finden, ohne zuerst rohes JSON zu verwenden.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der Katalog groß ist, verwenden Sie Suche, Filter oder Steuerelemente für begrenzte Listen, anstatt blind zu scrollen.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der <uicontrol>Katalog</uicontrol> groß ist, verwenden Sie Suche, Filter oder Steuerelemente für begrenzte Listen, anstatt blind zu scrollen.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-search-all-settings"/>

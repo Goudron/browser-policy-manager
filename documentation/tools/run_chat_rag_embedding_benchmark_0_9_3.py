@@ -70,7 +70,9 @@ def _answer_cases() -> list[embedding.RetrievalCase]:
     citation_topics = {domain["citation_id"]: domain["topic_id"] for domain in corpus["domains"]}
     cases = embedding._retrieval_cases()
     for locale in LOCALES:
-        for case_id, query, disposition, citation_id in corpus["boundary_cases"][locale]["dialogue"]:
+        for case_id, query, disposition, citation_id in corpus["boundary_cases"][locale][
+            "dialogue"
+        ]:
             if disposition == "answer":
                 cases.append(
                     embedding.RetrievalCase(
@@ -149,25 +151,33 @@ def _candidate_status(report: dict[str, Any], config: dict[str, Any]) -> tuple[s
     return ("pass" if not failures else "fail"), failures
 
 
-def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_path: Path = CONFIG_PATH) -> dict[str, Any]:
+def run_candidate(
+    candidate_id: str, model_dir: Path, chunks_path: Path, config_path: Path = CONFIG_PATH
+) -> dict[str, Any]:
     config = _read_json(config_path)
     candidate = _candidate(config, candidate_id)
     embedding._validate_model_dir(candidate, model_dir)
     missing_features = sorted(set(candidate["required_cpu_features"]) - embedding._cpu_flags())
     if missing_features:
-        raise BenchmarkError(f"required CPU features are unavailable: {', '.join(missing_features)}")
+        raise BenchmarkError(
+            f"required CPU features are unavailable: {', '.join(missing_features)}"
+        )
     manifest = _read_json(chunks_path)
     chunks = manifest.get("chunks", [])
     if manifest.get("chunk_schema_version") != "rag-chunk-v1" or not chunks:
         raise BenchmarkError("the input must be a non-empty rag-chunk-v1 manifest")
     for chunk in chunks:
         embedding._validate_retrieval_chunk(chunk)
-    grouped = {locale: [chunk for chunk in chunks if chunk["locale"] == locale] for locale in LOCALES}
+    grouped = {
+        locale: [chunk for chunk in chunks if chunk["locale"] == locale] for locale in LOCALES
+    }
     if any(not grouped[locale] for locale in LOCALES):
         raise BenchmarkError("chunk manifest does not cover the exact six locales")
     cases = _answer_cases()
     no_evidence = _no_evidence_cases()
-    if {case.locale for case in cases} != set(LOCALES) or any(not no_evidence[locale] for locale in LOCALES):
+    if {case.locale for case in cases} != set(LOCALES) or any(
+        not no_evidence[locale] for locale in LOCALES
+    ):
         raise BenchmarkError("chat evaluation corpus does not cover the exact six locales")
 
     memory_before = embedding._memory_snapshot()
@@ -176,7 +186,10 @@ def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_
         vectors: dict[str, np.ndarray] = {}
         for locale in LOCALES:
             passages = [
-                candidate["prefixes"]["passage"] + " ".join(chunk["heading_path"]) + "\n" + chunk["text"]
+                candidate["prefixes"]["passage"]
+                + " ".join(chunk["heading_path"])
+                + "\n"
+                + chunk["text"]
                 for chunk in grouped[locale]
             ]
             vectors[locale] = encode(passages)
@@ -185,10 +198,14 @@ def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_
         citation_results: dict[str, list[bool]] = defaultdict(list)
         for locale in LOCALES:
             locale_cases = [case for case in cases if case.locale == locale]
-            query_vectors = encode([candidate["prefixes"]["query"] + case.query for case in locale_cases])
+            query_vectors = encode(
+                [candidate["prefixes"]["query"] + case.query for case in locale_cases]
+            )
             for case, vector in zip(locale_cases, query_vectors, strict=True):
                 scores = vector @ vectors[locale].T
-                topic_ids = embedding._ranked_topic_ids(scores, grouped[locale], config["inputs"]["top_k"])
+                topic_ids = embedding._ranked_topic_ids(
+                    scores, grouped[locale], config["inputs"]["top_k"]
+                )
                 rank = embedding._rank(topic_ids, case.expected_topic_id)
                 ranks[locale].append(rank)
                 citation_results[locale].extend(
@@ -211,7 +228,9 @@ def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_
             for _ in range(config["protocol"]["validity"]["measured_attempts_per_locale"]):
                 started = time.monotonic_ns()
                 vector = encode(query)[0]
-                _ = embedding._ranked_topic_ids(vector @ vectors[locale].T, grouped[locale], config["inputs"]["top_k"])
+                _ = embedding._ranked_topic_ids(
+                    vector @ vectors[locale].T, grouped[locale], config["inputs"]["top_k"]
+                )
                 samples.append(time.monotonic_ns() - started)
             latency[locale] = _nearest_rank_p95_ms(samples)
         runtime_bytes = embedding._direct_runtime_bytes(runtime_distributions)
@@ -223,9 +242,13 @@ def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_
         per_locale[locale] = {
             **_metrics(ranks[locale]),
             "expected_case_count": len(ranks[locale]),
-            "citation_resolution_rate": sum(citation_results[locale]) / len(citation_results[locale]),
+            "citation_resolution_rate": (
+                sum(citation_results[locale]) / len(citation_results[locale])
+            ),
             "no_evidence_case_count": len(no_evidence_results[locale]),
-            "no_evidence_disposition_rate": sum(no_evidence_results[locale]) / len(no_evidence_results[locale]),
+            "no_evidence_disposition_rate": (
+                sum(no_evidence_results[locale]) / len(no_evidence_results[locale])
+            ),
         }
     result = {
         "schema_version": 1,
@@ -241,14 +264,14 @@ def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_
             "cross_locale_retrieval_calls": 0,
             "network_calls": 0,
             "network_disabled": True,
-            "answer_generation_invocations": 0
+            "answer_generation_invocations": 0,
         },
         "host": {
             "platform": platform.platform(),
             "machine": platform.machine(),
             "cpu_flags": sorted(embedding._cpu_flags()),
             "memory_before": memory_before,
-            "memory_after": memory_after
+            "memory_after": memory_after,
         },
         "validity": {"valid": True, "reasons": []},
         "per_locale": per_locale,
@@ -259,8 +282,8 @@ def run_candidate(candidate_id: str, model_dir: Path, chunks_path: Path, config_
             "direct_disk_gib": (embedding._directory_bytes(model_dir) + runtime_bytes) / 1024**3,
             "peak_rss_bytes": max(sampler.samples),
             "peak_rss_gib": max(sampler.samples) / 1024**3,
-            "rss_sample_count": len(sampler.samples)
-        }
+            "rss_sample_count": len(sampler.samples),
+        },
     }
     if memory_before["swap_used_bytes"] != memory_after["swap_used_bytes"]:
         result["validity"] = {"valid": False, "reasons": ["swap-changed-during-measurement"]}
@@ -276,7 +299,13 @@ def select_reports(paths: list[Path], config_path: Path = CONFIG_PATH) -> dict[s
         raise BenchmarkError("selection requires one report for every configured candidate")
     passing = [report for report in reports if report["status"] == "pass"]
     if not passing:
-        return {"schema_version": 1, "backlog_item": config["backlog_item"], "status": "fail", "selected": None, "reports": reports}
+        return {
+            "schema_version": 1,
+            "backlog_item": config["backlog_item"],
+            "status": "fail",
+            "selected": None,
+            "reports": reports,
+        }
 
     def selection_key(report: dict[str, Any]) -> tuple[float, float, float, float, float]:
         metrics = list(report["per_locale"].values())
@@ -285,7 +314,7 @@ def select_reports(paths: list[Path], config_path: Path = CONFIG_PATH) -> dict[s
             -sum(item["top_1"] for item in metrics) / len(metrics),
             report["resources"]["direct_disk_gib"],
             report["resources"]["peak_rss_gib"],
-            report["latency"]["p95_ms_max"]
+            report["latency"]["p95_ms_max"],
         )
 
     ordered = sorted(passing, key=selection_key)
@@ -296,13 +325,15 @@ def select_reports(paths: list[Path], config_path: Path = CONFIG_PATH) -> dict[s
         "backlog_item": config["backlog_item"],
         "status": "pass",
         "selected": ordered[0]["candidate"],
-        "reports": reports
+        "reports": reports,
     }
 
 
 def _write_json(value: dict[str, Any], output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
 
 def main() -> int:

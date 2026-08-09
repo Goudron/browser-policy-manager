@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-restore-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Restore an archived profile</title>
-  <shortdesc>Return an archived profile to the active Library lifecycle when it should be edited or used again.</shortdesc>
+  <shortdesc>Return an archived profile to the active <uicontrol>Library</uicontrol> lifecycle when it should be edited or used again.</shortdesc>
   <taskbody>
     <prereq><p>The lifecycle filter shows archived or all profiles, and the target profile row is visible.</p></prereq>
     <context><p>Restore reverses archive. It does not revalidate the profile or change policy values.</p></context>

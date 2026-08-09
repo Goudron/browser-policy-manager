@@ -120,9 +120,10 @@ def test_disclaimer_and_source_boundary_match_registered_cis_source_families() -
     assert "benchmark rationale prose" in source_boundary["blocked_without_rights_approval"]
 
     benchmark_family = families["cis-benchmark-pdf"]
-    assert benchmark_family["publication_policy"] == source_boundary[
-        "benchmark_source_publication_policy"
-    ]
+    assert (
+        benchmark_family["publication_policy"]
+        == source_boundary["benchmark_source_publication_policy"]
+    )
     assert benchmark_family["may_publish_without_rights_approval"] is False
     assert "restricted-external-benchmark-content" == benchmark_family["classification"]
 
@@ -139,13 +140,17 @@ def test_recommendation_contract_matches_cis_inventory_counts_and_edge_cases() -
     automation_model = model["automation_model"]
     fixtures = model["fixture_recommendation_ids"]
 
-    assert recommendation_model["recommendation_count"] == inventory["summary"]["recommendation_count"]
-    assert recommendation_model["planned_topic_count"] == inventory["summary"][
-        "publication_disposition_counts"
-    ]["planned-dita-topic"]
-    assert recommendation_model["provenance_only_count"] == inventory["summary"][
-        "publication_disposition_counts"
-    ]["provenance-only-non-publishable"]
+    assert (
+        recommendation_model["recommendation_count"] == inventory["summary"]["recommendation_count"]
+    )
+    assert (
+        recommendation_model["planned_topic_count"]
+        == inventory["summary"]["publication_disposition_counts"]["planned-dita-topic"]
+    )
+    assert (
+        recommendation_model["provenance_only_count"]
+        == inventory["summary"]["publication_disposition_counts"]["provenance-only-non-publishable"]
+    )
     assert recommendation_model["allowed_publication_dispositions"] == [
         "planned-dita-topic",
         "provenance-only-non-publishable",
@@ -153,7 +158,11 @@ def test_recommendation_contract_matches_cis_inventory_counts_and_edge_cases() -
     assert recommendation_model["planned_topics_require_targets"] is True
     assert recommendation_model["provenance_only_must_not_publish_topic"] is True
 
-    assert automation_model["supported_schema_channels"] == ["esr-140.13", "esr-153.0", "release-153"]
+    assert automation_model["supported_schema_channels"] == [
+        "esr-140.13",
+        "esr-153.0",
+        "release-153",
+    ]
     assert sorted({layer["schema_channel"] for layer in inventory["generated_layers"]}) == [
         "esr-140.13",
         "esr-153.0",

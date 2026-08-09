@@ -4,7 +4,7 @@
   <title>États de revue dans « Tous les paramètres »</title>
   <shortdesc>Utilisez cette référence pour interpréter les états de révision propre, invalide, à révision manuelle CIS, brut, inconnu, obsolète et importé.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Présentation</title><p>Les états de révision expliquent pourquoi Tous les paramètres demande de l'attention avant que l'utilisateur ne modifie les valeurs de routine.</p></section>
+    <section id="a-overview"><title>Présentation</title><p>Les états de révision expliquent pourquoi <uicontrol>Tous les paramètres</uicontrol> demande de l'attention avant que l'utilisateur ne modifie les valeurs de routine.</p></section>
     <section id="a-clean-profile"><title>Nettoyer le profil</title><p>Un profil propre ne contient plus aucun élément de révision. Il peut toujours contenir des paramètres configurés ; il n'a tout simplement aucun état d'attention que BPM peut détecter.</p></section>
     <section id="a-invalid-items"><title>Éléments invalides</title><p>Les éléments non valides ont des valeurs qui échouent à la validation actuelle pour le canal de schéma sélectionné et doivent être corrigés ou supprimés avant le transfert.</p></section>
     <section id="a-cis-manual-review"><title>Révision du manuel CIS</title><p>Les éléments d'examen manuel du CIS nécessitent une décision humaine ou une vérification externe. BPM peut faire apparaître l’élément sans prétendre à une conformité certifiée.</p></section>

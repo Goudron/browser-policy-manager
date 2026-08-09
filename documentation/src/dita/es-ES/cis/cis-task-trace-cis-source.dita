@@ -7,7 +7,7 @@
     <prereq><p>Abra un perfil que se creó a partir de un ajuste preestablecido inicial o que tenga aplicada una capa CIS Nivel 1 o Nivel 2.</p></prereq>
     <context><p>El seguimiento de un valor es útil cuando un revisor pregunta si una configuración proviene de la línea base original, la capa CIS, una importación, una edición manual o un respaldo sin formato.</p></context>
     <steps>
-      <step><cmd>Abra Todos los ajustes y filtre por valores configurados o por la insignia de origen CIS.</cmd><info><p>Resultado esperado: la política relevante o la preferencia administrada permanece visible con su atribución de origen.</p></info></step>
+      <step><cmd>Abra <uicontrol>Todos los ajustes</uicontrol> y filtre por valores configurados o por la insignia de origen CIS.</cmd><info><p>Resultado esperado: la política relevante o la preferencia administrada permanece visible con su atribución de origen.</p></info></step>
       <step><cmd>Lea la atribución de origen e identifique si el valor actual es de referencia, CIS, manual, importado o sin procesar.</cmd><info><p>Resultado esperado: puede nombrar la fuente inmediata del valor.</p></info></step>
       <step><cmd>Abra la recomendación CIS relacionada o el tema de política de Firefox cuando una capa generada contribuyó con el valor.</cmd><info><p>Resultado esperado: puede ver la recomendación ID, la ruta, el valor, el soporte del canal y la regla de combinación.</p></info></step>
       <step><cmd>Verifique la decisión de fusión: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter o manual_review_kept_base.</cmd><info><p>Resultado esperado: sabes si CIS agregó el valor, lo confirmó, lo reemplazó o dejó un valor base para revisión.</p></info></step>

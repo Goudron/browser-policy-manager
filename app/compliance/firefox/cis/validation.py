@@ -115,8 +115,12 @@ def validate_sources(base_dir: Path = BASE_DIR) -> ValidationResult:
         _validate_urlish(benchmark, "public_versions_page_url", errors, location)
         _validate_urlish(benchmark, "official_update_article_url", errors, location, required=False)
 
-        source_data = _load_mapping(base_dir / source_file, errors, source_file) if source_file else {}
-        mapping_data = _load_mapping(base_dir / mapping_file, errors, mapping_file) if mapping_file else {}
+        source_data = (
+            _load_mapping(base_dir / source_file, errors, source_file) if source_file else {}
+        )
+        mapping_data = (
+            _load_mapping(base_dir / mapping_file, errors, mapping_file) if mapping_file else {}
+        )
 
         source_summary = _validate_recommendations(
             source_file,
@@ -435,10 +439,16 @@ def _validate_target(
         if "value" not in target:
             errors.append(f"{location}: {kind} target requires value")
         path = target.get("path")
-        if not isinstance(path, list) or not path or not all(isinstance(part, str) for part in path):
+        if (
+            not isinstance(path, list)
+            or not path
+            or not all(isinstance(part, str) for part in path)
+        ):
             errors.append(f"{location}: {kind} target path must be a non-empty string list")
         if kind == "preference" and path and len(path) != 1:
-            errors.append(f"{location}: preference target path must contain exactly one preference key")
+            errors.append(
+                f"{location}: preference target path must contain exactly one preference key"
+            )
 
         schema_channels = target.get("schema_channels") or {}
         if not isinstance(schema_channels, dict):

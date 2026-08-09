@@ -8,8 +8,7 @@ import pytest
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 MAKEFILE = REPOSITORY_ROOT / "Makefile"
 RELEASE_CONTRACT = (
-    REPOSITORY_ROOT
-    / "docs/architecture/product-documentation-release-contract-0.9.0.md"
+    REPOSITORY_ROOT / "docs/architecture/product-documentation-release-contract-0.9.0.md"
 )
 
 pytestmark = pytest.mark.docs_contract
@@ -36,7 +35,7 @@ def test_release_tests_depend_on_documentation_release_gate() -> None:
     assert "test-release: docs-release-check" in source
 
     release_body = _target_body(source, "test-release")
-    assert "$(PYTEST) -o addopts= -q -m \"$(TEST_RELEASE_MARKERS)\"" in release_body
+    assert '$(PYTEST) -o addopts= -q -m "$(TEST_RELEASE_MARKERS)"' in release_body
 
 
 def test_documentation_release_gate_runs_full_validation_and_contracts() -> None:
@@ -57,3 +56,26 @@ def test_release_contract_names_documentation_release_gate() -> None:
 
     assert "`make docs-release-check`" in contract
     assert "make test-release" in contract
+
+
+def test_authoritative_release_handoff_keeps_binary_delivery_and_install_proof() -> None:
+    source = _makefile_source()
+    body = _target_body(source, "docs-release-handoff")
+
+    assert "en, ru, de, zh-CN, fr, es-ES" in body
+    assert "No release-only checks are skipped" in body
+    assert "not the fast authoring check" in body
+    for command in (
+        "docs-snapshot",
+        "docs-release-check",
+        "docs-pdf-build",
+        "docs-pdf-verify",
+        "docs-pdf-deliver",
+        "docs-pdf-delivery-verify",
+        "docs-reproducibility-check",
+        "docs-package",
+        "docs-package-verify",
+        "docs-install-dev",
+    ):
+        assert f"$(MAKE) {command}" in body
+    assert "make test-release" in body

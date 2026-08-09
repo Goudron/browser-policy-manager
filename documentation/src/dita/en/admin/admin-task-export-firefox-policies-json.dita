@@ -15,6 +15,12 @@
       <step><cmd>Record the exact exported artifact externally.</cmd><info><note type="warning">Export has no ETag, precondition header, bulk endpoint, or transaction wrapper. Record the profile ID, revision observed before export, schema channel, query parameters, exported document hash, and downstream handoff decision outside BPM.</note></info></step>
     </steps>
     <result><p>The integration has a canonical Firefox <codeph>policies.json</codeph> artifact that excludes BPM-only metadata and can be supplied to deployment tooling.</p></result>
+    <example id="a-export-policies-document"><title>Full Firefox policies.json document</title><p>The response body is the complete Firefox deployment document, not BPM profile metadata or <codeph>flags</codeph>:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>If validation fails or the profile revision changed between read and export, stop the handoff and refresh the profile state.</p></postreq>
   </taskbody>
   <related-links>

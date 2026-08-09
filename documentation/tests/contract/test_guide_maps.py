@@ -175,7 +175,10 @@ def test_guide_maps_are_independent_localized_dita_inputs(locale: str) -> None:
         if filename == "user-guide.ditamap":
             topicheads = root.findall("topichead")
             assert len(topicheads) == 8
-            assert all(topichead.attrib == {"outputclass": "case-oriented-section"} for topichead in topicheads)
+            assert all(
+                topichead.attrib == {"outputclass": "case-oriented-section"}
+                for topichead in topicheads
+            )
             assert list(root) == [title, key_map, *topicheads]
         elif filename == "firefox-policy-guide.ditamap":
             topicrefs = root.findall("topicref")
@@ -192,7 +195,10 @@ def test_guide_maps_are_independent_localized_dita_inputs(locale: str) -> None:
         elif filename == "administrator-guide.ditamap":
             topicheads = root.findall("topichead")
             assert len(topicheads) == len(ADMIN_GUIDE_SECTIONS)
-            assert all(topichead.attrib == {"outputclass": "case-oriented-section"} for topichead in topicheads)
+            assert all(
+                topichead.attrib == {"outputclass": "case-oriented-section"}
+                for topichead in topicheads
+            )
             assert list(root) == [title, key_map, *topicheads]
             assert [
                 (

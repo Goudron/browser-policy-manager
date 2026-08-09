@@ -30,9 +30,9 @@
     "historical_record": "The M8 threat review remains an immutable pre-M9 snapshot; this contract supplies the M9 closure evidence rather than rewriting that review.",
     "closed_findings": ["AI093-T02", "AI093-T13"],
     "evidence": [
-      "tests/test_web_evidence_093.py",
-      "tests/test_web_evidence_security_093.py",
-      "tests/test_web_evidence_merge_093.py",
+      "tests/integration/ai/incubation/test_web_evidence.py",
+      "tests/integration/ai/incubation/test_web_evidence_security.py",
+      "tests/integration/ai/incubation/test_web_evidence_merge.py",
       "documentation/tests/contract/test_bpm_web_evidence_security_contract_0_9_3.py"
     ]
   },
@@ -93,10 +93,10 @@
   },
   "verification": {
     "runtime": [
-      "tests/test_web_evidence_093.py",
-      "tests/test_web_evidence_security_093.py",
-      "tests/test_web_evidence_merge_093.py",
-      "tests/test_conversation_diagnostics_093.py"
+      "tests/integration/ai/incubation/test_web_evidence.py",
+      "tests/integration/ai/incubation/test_web_evidence_security.py",
+      "tests/integration/ai/incubation/test_web_evidence_merge.py",
+      "tests/integration/ai/incubation/test_conversation_diagnostics.py"
     ],
     "contract": "documentation/tests/contract/test_bpm_web_evidence_security_contract_0_9_3.py",
     "architecture": "docs/architecture/bpm-web-evidence-security-review-0.9.3.md"

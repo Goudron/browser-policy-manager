@@ -22,10 +22,15 @@ def test_clean_host_attempt_truthfully_records_the_failed_no_swap_gate() -> None
     assert validation["backlog_item"] == "BPM093-M5-03D"
     assert validation["status"] == "failed-before-quality-measurement"
     contract = ROOT / validation["input_contract"]["path"]
-    assert validation["input_contract"]["sha256"] == hashlib.sha256(contract.read_bytes()).hexdigest()
+    assert (
+        validation["input_contract"]["sha256"] == hashlib.sha256(contract.read_bytes()).hexdigest()
+    )
     assert validation["candidate"]["id"] == "multilingual-e5-base-onnx-o4"
     assert validation["swap_validation"]["changed"] is True
-    assert validation["swap_validation"]["before_bytes"] != validation["swap_validation"]["observed_after_bytes"]
+    assert (
+        validation["swap_validation"]["before_bytes"]
+        != validation["swap_validation"]["observed_after_bytes"]
+    )
     assert validation["disposition"]["measurement_completed"] is False
 
 

@@ -5,7 +5,7 @@
   <shortdesc>Los seis pasos cubren la identidad del perfil, el acceso al navegador y los valores predeterminados, la seguridad y la privacidad, los usuarios, los complementos y los sitios, las funciones inteligentes, y la revisión y exportación.</shortdesc>
   <taskbody>
     <prereq><p>Abra un perfil en el editor guiado desde la biblioteca o el flujo de creación.</p></prereq>
-    <context><p>El «Editor guiado» organiza la configuración del perfil en seis pasos y mantiene visible la validación del esquema mientras trabaja.</p>
+    <context><p>El «<uicontrol>Editor guiado</uicontrol>» organiza la configuración del perfil en seis pasos y mantiene visible la validación del esquema mientras trabaja.</p>
       <fig id="screenshot-guided-editor-overview">
         <title>Descripción general del «Editor guiado»</title>
         <image keyref="screenshot.guided-editor-overview" placement="break" scalefit="yes" align="center">
@@ -18,7 +18,7 @@
       <step><cmd>En el paso 2, configure el acceso a la red, el comportamiento del navegador, el inicio, la búsqueda y los valores de navegación predeterminados.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
       <step><cmd>En el paso 3, configure la privacidad, los permisos, las cookies, la limpieza, DNS y la postura de seguridad.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
       <step><cmd>En el paso 4, configure las cuentas, las extensiones, los marcadores, el idioma, la traducción y las reglas de sitios.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
-      <step><cmd>En el paso 5, configure solo las políticas de Firefox para IA y funciones inteligentes compatibles con el esquema seleccionado.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
+      <step><cmd>En el paso 5, configure solo las políticas de Firefox para <uicontrol>IA y funciones inteligentes</uicontrol> compatibles con el esquema seleccionado.</cmd><info><p>Resultado esperado: el perfil permanece coherente.</p></info></step>
       <step><cmd>En el paso 6, valide, guarde y exporte el perfil.</cmd><info><note type="warning">Cambiar los controles dependientes del esquema puede hacer que los valores no sean válidos para el canal de Firefox seleccionado.</note></info></step>
     </steps>
     <result><p>Puede explicar a dónde pertenece cada configuración guiada y continuar desde el paso correcto.</p></result>

@@ -6,11 +6,11 @@
   "status": "implemented-deterministic-conformance-evaluation",
   "pins": {
     "api": {"path": "documentation/config/grounded-conversation-api-contract-0.9.3.json", "sha256": "c96cd5d3301bbe8a713bde85add0ae725872e4725cd2a7b9d6fbec149c1bf59e"},
-    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "7781e7419176928d2d56ae999ee122e0db68a585184acacf52fbf850695602cb"},
-    "context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "3f06b876eb59be5642bee4cfb2a96c165edb0ad3764df3100946fd9aeb7df16f"},
-    "answer_validation": {"path": "documentation/config/grounded-conversation-answer-validation-contract-0.9.3.json", "sha256": "5747d2da3660883f986834f05d3cbd6167bd9fba7349bad49dabb1a1e04dd410"},
-    "streaming": {"path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json", "sha256": "c1e310a6e96d84374ea18e709253fcb960c17c2b63f452f7992e559a9d973b3f"},
-    "diagnostics": {"path": "documentation/config/grounded-conversation-diagnostics-contract-0.9.3.json", "sha256": "de86cdd59a0a5740896181137cbb57b1381d56417b84a1b75f8bf12648f81c5a"}
+    "orchestration": {"path": "documentation/config/grounded-conversation-orchestration-contract-0.9.3.json", "sha256": "145771ab828983372e960f61cdc4c7212a69511da09ab35f8b924f08613491e5"},
+    "context": {"path": "documentation/config/grounded-conversation-context-contract-0.9.3.json", "sha256": "d369ef84c001b7d09b7e720f1ed9da2e22f021224515f38304f5240cd2bf4d4e"},
+    "answer_validation": {"path": "documentation/config/grounded-conversation-answer-validation-contract-0.9.3.json", "sha256": "7e08cf1bdff549152e5bd925f7fc58b1c341c9ac4b065d8aa5a18d6ece3bd5db"},
+    "streaming": {"path": "documentation/config/grounded-conversation-streaming-contract-0.9.3.json", "sha256": "f66f64a16b0b4ec84f8d8dd6ea0175eb3986d1e51b009c90730eeda4f9b94684"},
+    "diagnostics": {"path": "documentation/config/grounded-conversation-diagnostics-contract-0.9.3.json", "sha256": "5bbf239f3b3503bdf6a32905341d7851d5ab30579cea9e0f4dd6f8c9f8a6e72d"}
   },
   "locales": ["en", "ru", "de", "zh-CN", "fr", "es-ES"],
   "fixture_matrix": {
@@ -44,7 +44,7 @@
     "content": "contract verification plus each completed locale's four real deterministic conformance checks; no synthetic ETA or chat-side progress."
   },
   "verification": {
-    "runtime": "tests/test_grounded_conversation_evaluation_093.py",
+    "runtime": "tests/integration/ai/incubation/test_grounded_conversation_evaluation.py",
     "contract": "documentation/tests/contract/test_grounded_conversation_evaluation_contract_0_9_3.py",
     "architecture": "docs/architecture/grounded-conversation-evaluation-0.9.3.md",
     "command": ".venv/bin/python documentation/tools/run_grounded_conversation_evaluation_0_9_3.py --output documentation/.cache/bpm093-m7-07/evaluation.json"

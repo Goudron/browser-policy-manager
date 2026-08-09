@@ -4,12 +4,12 @@
   <title>Filtrer les paramètres par source</title>
   <shortdesc>Filtrez les paramètres configurés par attribution de référence, CIS, manuelle, importée ou source brute.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres dans Configurés ou une liste prenant en charge la source.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> dans <uicontrol>Configurés</uicontrol> ou une liste prenant en charge la source.</p></prereq>
     <context><p>Les filtres source expliquent pourquoi une valeur existe. Ils permettent de distinguer les lignes de base générées, les couches CIS, les modifications manuelles, les stratégies importées et les valeurs de secours brutes.</p></context>
     <steps>
-      <step><cmd>Ouvrez les commandes du filtre source.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez baseline, CIS, manuel, importé ou brut en fonction de la question à laquelle vous répondez.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Vérifiez le nombre de listes et les badges visibles après chaque changement de filtre.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez les commandes du filtre source.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez baseline, CIS, manuel, importé ou brut en fonction de la question à laquelle vous répondez.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Vérifiez le nombre de listes et les badges visibles après chaque changement de filtre.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Effacez le filtre avant de passer à un autre chemin d'investigation.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>La liste visible contient uniquement les paramètres de la catégorie source sélectionnée.</p></result>

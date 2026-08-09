@@ -2,13 +2,13 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-export-guided-profile" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Save and download a Guided profile</title>
-  <shortdesc>Save the reviewed Guided profile and download the handoff artifact when the configuration is ready.</shortdesc>
+  <shortdesc><uicontrol>Save</uicontrol> the reviewed Guided profile and download the handoff artifact when the configuration is ready.</shortdesc>
   <taskbody>
     <prereq><p>Step 6 review is complete and validation warnings are understood.</p></prereq>
     <context><p>Saving records the BPM profile; downloading provides the reviewed version for policy handoff.</p></context>
     <steps>
-      <step><cmd>Choose Save to store the current profile state.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
-      <step><cmd>Confirm the saved state appears in the Library before closing the editor.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Choose <uicontrol>Save</uicontrol> to store the current profile state.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Confirm the saved state appears in the <uicontrol>Library</uicontrol> before closing the editor.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Choose the download or export action needed for the handoff.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Share the exported file with the context needed to identify schema channel and profile purpose.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>
     </steps>

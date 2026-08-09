@@ -1,135 +1,309 @@
+"""Fail-closed pytest taxonomy driven by explicit ownership metadata.
+
+``tests/test-layer-ownership-0.9.4.json`` owns every primary execution layer.
+Directory prefixes deliberately accept new tests below an established owner.
+There is no root inventory or catch-all primary-layer default.
+"""
+
 from __future__ import annotations
 
+import json
+from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
+from functools import cache
 from pathlib import Path
+from typing import Any
 
-LAYER_MARKERS = {
-    "api",
-    "browser_ui",
-    "contract",
-    "docs_contract",
-    "firefox_live",
-    "firefox_live_amo",
-    "slow",
-    "ui_contract",
-    "unit",
-}
+PRIMARY_LAYERS = frozenset({"unit", "integration", "contract", "browser", "live"})
+DOMAIN_MARKERS = frozenset({"api", "db", "schema", "ui", "docs", "compliance", "ai", "tooling"})
+DURATION_MARKERS = frozenset({"slow"})
+ENVIRONMENT_MARKERS = frozenset({"ai_incubation", "browser_ui", "firefox_live", "firefox_live_amo"})
+COMPATIBILITY_MARKERS = frozenset({"docs_contract", "ui_contract"})
+LAYER_MARKERS = (
+    PRIMARY_LAYERS | DOMAIN_MARKERS | DURATION_MARKERS | ENVIRONMENT_MARKERS | COMPATIBILITY_MARKERS
+)
 
-SLOW_TEST_FILES = {
-    "tests/compliance/test_cis_firefox_mapping_targets.py",
-    "tests/test_e2e_profile_lifecycle.py",
-    "tests/test_ui_browser_tabs.py",
-    "tests/test_ui_smoke_profile_workflow.py",
-    "tests/web_profiles_page/test_route_dom_contracts.py",
-}
+OWNERSHIP_PATH = Path(__file__).with_name("test-layer-ownership-0.9.4.json")
 
-DOCS_CONTRACT_FILES = {
-    "tests/test_api_documentation_inventory.py",
-    "tests/test_cis_documentation_inventory.py",
-    "tests/test_dita_publishing_toolchain_decision.py",
-    "tests/test_documentation_identifiers_and_url_conventions.py",
-    "tests/test_documentation_runtime_route.py",
-    "tests/test_docs_index.py",
-    "tests/test_firefox_policy_documentation_inventory.py",
-    "tests/test_product_documentation_release_contract.py",
-    "tests/test_product_documentation_ownership_boundary.py",
-    "tests/test_product_documentation_manifest_schema.py",
-    "tests/test_product_documentation_accessibility_security_contract.py",
-    "tests/test_product_documentation_context_guide.py",
-    "tests/test_product_documentation_provenance_review.py",
-    "tests/test_product_documentation_scaffold.py",
-    "tests/test_product_user_capability_inventory.py",
-    "tests/test_pytest_xdist_isolation_audit_contract.py",
-    "tests/test_readme_firefox_policies_contract.py",
-}
 
-UI_CONTRACT_FILES = {
-    "tests/test_all_settings_search_filter_i18n.py",
-    "tests/test_browser_datetime_i18n.py",
-    "tests/test_chromium_locale_smoke_matrix_contract.py",
-    "tests/test_cjk_font_fallback_contract.py",
-    "tests/test_de_overflow_layout_contract.py",
-    "tests/test_es_es_overflow_layout_contract.py",
-    "tests/test_fr_overflow_layout_contract.py",
-    "tests/test_locale_picker_layout_contract.py",
-    "tests/test_locale_screenshot_pack_contract.py",
-    "tests/test_locale_switching_regression_contract.py",
-    "tests/test_locale_viewport_overflow_contract.py",
-    "tests/test_localized_import_edit_export_workflow_contract.py",
-    "tests/test_responsive_long_label_css_contract.py",
-    "tests/test_runtime_count_i18n.py",
-    "tests/test_ui_locale_glossary.py",
-    "tests/test_ui_runtime_i18n_contract.py",
-    "tests/test_ui_smoke_profile_workflow.py",
-    "tests/test_validation_error_i18n.py",
-    "tests/test_web_profiles_page.py",
-    "tests/test_zh_cn_script_layout_contract.py",
-}
+class OwnershipPolicyError(ValueError):
+    """Raised when a test path has no unique, valid ownership rule."""
+
+
+@dataclass(frozen=True)
+class OwnershipRule:
+    identifier: str
+    layer: str
+    markers: frozenset[str]
+    paths: frozenset[str]
+    prefix: str | None
+
+    def matches(self, path: str) -> bool:
+        return path in self.paths or (self.prefix is not None and path.startswith(self.prefix))
+
+
+@dataclass(frozen=True)
+class MarkerOverride:
+    """Orthogonal markers for exceptional tests below a directory owner."""
+
+    identifier: str
+    markers: frozenset[str]
+    paths: frozenset[str]
+
+    def matches(self, path: str) -> bool:
+        return path in self.paths
 
 
 def normalize_test_path(path: str | Path) -> str:
+    """Normalise a repository-relative test path for metadata matching."""
+
     return Path(path).as_posix()
 
 
-def markers_for_path(path: str | Path) -> set[str]:
+def _as_string_list(value: Any, *, owner: str, field: str) -> tuple[str, ...]:
+    if not isinstance(value, list) or not value or not all(isinstance(item, str) for item in value):
+        raise OwnershipPolicyError(
+            f"owner {owner!r} must define a non-empty string list for {field}"
+        )
+    return tuple(value)
+
+
+def parse_ownership_rules(payload: Mapping[str, Any]) -> tuple[OwnershipRule, ...]:
+    """Validate and parse the repository-owned layer metadata.
+
+    The parser is public so tests can prove malformed and overlapping metadata
+    stops collection instead of silently reverting to a heuristic.
+    """
+
+    if payload.get("schema_version") != 1:
+        raise OwnershipPolicyError("test-layer ownership metadata requires schema_version 1")
+    entries = payload.get("owners")
+    if not isinstance(entries, list) or not entries:
+        raise OwnershipPolicyError("test-layer ownership metadata requires non-empty owners")
+
+    rules: list[OwnershipRule] = []
+    identifiers: set[str] = set()
+    configured_paths: set[str] = set()
+    for raw_entry in entries:
+        if not isinstance(raw_entry, Mapping):
+            raise OwnershipPolicyError("each test-layer owner must be an object")
+        identifier = raw_entry.get("id")
+        layer = raw_entry.get("layer")
+        markers = raw_entry.get("markers")
+        if not isinstance(identifier, str) or not identifier:
+            raise OwnershipPolicyError("each test-layer owner requires a non-empty id")
+        if identifier in identifiers:
+            raise OwnershipPolicyError(f"duplicate test-layer owner id {identifier!r}")
+        identifiers.add(identifier)
+        if layer not in PRIMARY_LAYERS:
+            raise OwnershipPolicyError(f"owner {identifier!r} has invalid primary layer {layer!r}")
+        if not isinstance(markers, list) or not all(isinstance(marker, str) for marker in markers):
+            raise OwnershipPolicyError(f"owner {identifier!r} must define a string list of markers")
+        marker_set = frozenset(markers)
+        unknown_markers = marker_set - LAYER_MARKERS
+        invalid_primary_markers = marker_set & PRIMARY_LAYERS
+        if unknown_markers or invalid_primary_markers:
+            raise OwnershipPolicyError(
+                f"owner {identifier!r} has invalid markers "
+                f"{sorted(unknown_markers | invalid_primary_markers)}"
+            )
+
+        raw_paths = raw_entry.get("paths")
+        prefix = raw_entry.get("prefix")
+        if (raw_paths is None) == (prefix is None):
+            raise OwnershipPolicyError(
+                f"owner {identifier!r} must define exactly one of paths or prefix"
+            )
+        paths: frozenset[str]
+        if raw_paths is not None:
+            paths = frozenset(
+                normalize_test_path(item)
+                for item in _as_string_list(raw_paths, owner=identifier, field="paths")
+            )
+            if len(paths) != len(raw_paths):
+                raise OwnershipPolicyError(f"owner {identifier!r} repeats an explicit test path")
+            repeated_paths = configured_paths & paths
+            if repeated_paths:
+                raise OwnershipPolicyError(
+                    f"test-layer ownership duplicates explicit path(s) {sorted(repeated_paths)}"
+                )
+            configured_paths.update(paths)
+            rule_prefix = None
+        else:
+            if not isinstance(prefix, str) or not prefix.endswith("/"):
+                raise OwnershipPolicyError(f"owner {identifier!r} prefix must end in '/'")
+            paths = frozenset()
+            rule_prefix = normalize_test_path(prefix)
+            if not rule_prefix.endswith("/"):
+                rule_prefix += "/"
+        rules.append(OwnershipRule(identifier, layer, marker_set, paths, rule_prefix))
+
+    for index, rule in enumerate(rules):
+        for other in rules[index + 1 :]:
+            prefixes = tuple(prefix for prefix in (rule.prefix, other.prefix) if prefix is not None)
+            if len(prefixes) == 2 and (
+                prefixes[0].startswith(prefixes[1]) or prefixes[1].startswith(prefixes[0])
+            ):
+                raise OwnershipPolicyError(
+                    f"test-layer ownership prefixes overlap: {rule.identifier!r} and {other.identifier!r}"
+                )
+            for prefix, paths, owner in (
+                (rule.prefix, other.paths, other.identifier),
+                (other.prefix, rule.paths, rule.identifier),
+            ):
+                if prefix is not None and any(path.startswith(prefix) for path in paths):
+                    raise OwnershipPolicyError(
+                        f"test-layer ownership prefix {prefix!r} overlaps explicit paths of {owner!r}"
+                    )
+    return tuple(rules)
+
+
+def parse_marker_overrides(
+    payload: Mapping[str, Any], rules: tuple[OwnershipRule, ...]
+) -> tuple[MarkerOverride, ...]:
+    """Parse exceptional orthogonal markers without creating a second owner."""
+
+    entries = payload.get("marker_overrides", [])
+    if not isinstance(entries, list):
+        raise OwnershipPolicyError("test-layer marker_overrides must be a list")
+
+    overrides: list[MarkerOverride] = []
+    identifiers: set[str] = set()
+    configured_paths: set[str] = set()
+    for raw_entry in entries:
+        if not isinstance(raw_entry, Mapping):
+            raise OwnershipPolicyError("each marker override must be an object")
+        identifier = raw_entry.get("id")
+        if not isinstance(identifier, str) or not identifier:
+            raise OwnershipPolicyError("each marker override requires a non-empty id")
+        if identifier in identifiers:
+            raise OwnershipPolicyError(f"duplicate marker override id {identifier!r}")
+        identifiers.add(identifier)
+
+        paths = frozenset(
+            normalize_test_path(item)
+            for item in _as_string_list(raw_entry.get("paths"), owner=identifier, field="paths")
+        )
+        if len(paths) != len(raw_entry["paths"]):
+            raise OwnershipPolicyError(f"marker override {identifier!r} repeats a test path")
+        repeated_paths = configured_paths & paths
+        if repeated_paths:
+            raise OwnershipPolicyError(
+                f"marker overrides duplicate test path(s) {sorted(repeated_paths)}"
+            )
+        configured_paths.update(paths)
+
+        raw_markers = raw_entry.get("markers")
+        if (
+            not isinstance(raw_markers, list)
+            or not raw_markers
+            or not all(isinstance(marker, str) for marker in raw_markers)
+        ):
+            raise OwnershipPolicyError(
+                f"marker override {identifier!r} must define a non-empty string list of markers"
+            )
+        markers = frozenset(raw_markers)
+        invalid_markers = (markers - LAYER_MARKERS) | (markers & PRIMARY_LAYERS)
+        if invalid_markers:
+            raise OwnershipPolicyError(
+                f"marker override {identifier!r} has invalid markers {sorted(invalid_markers)}"
+            )
+
+        for path in paths:
+            owners = tuple(rule for rule in rules if rule.matches(path))
+            if len(owners) != 1:
+                raise OwnershipPolicyError(
+                    f"marker override {identifier!r} requires exactly one owner for {path!r}"
+                )
+        overrides.append(MarkerOverride(identifier, markers, paths))
+    return tuple(overrides)
+
+
+@cache
+def ownership_metadata() -> Mapping[str, Any]:
+    """Load the versioned ownership document once per pytest process."""
+
+    try:
+        payload = json.loads(OWNERSHIP_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise OwnershipPolicyError(f"cannot load test-layer ownership metadata: {error}") from error
+    if not isinstance(payload, Mapping):
+        raise OwnershipPolicyError("test-layer ownership metadata root must be an object")
+    return payload
+
+
+@cache
+def ownership_rules() -> tuple[OwnershipRule, ...]:
+    """Load the versioned ownership configuration once per pytest process."""
+
+    return parse_ownership_rules(ownership_metadata())
+
+
+@cache
+def marker_overrides() -> tuple[MarkerOverride, ...]:
+    """Load exceptional non-primary markers once per pytest process."""
+
+    return parse_marker_overrides(ownership_metadata(), ownership_rules())
+
+
+def ownership_for_path(path: str | Path) -> OwnershipRule:
+    """Return exactly one owner for ``path`` or raise a collection-stopping error."""
+
     normalized = normalize_test_path(path)
-    filename = Path(normalized).name
-    parts = set(Path(normalized).parts)
-    markers: set[str] = set()
+    matches = tuple(rule for rule in ownership_rules() if rule.matches(normalized))
+    if not matches:
+        raise OwnershipPolicyError(
+            f"unowned test path {normalized!r}; add it below an owned directory or to "
+            f"{OWNERSHIP_PATH.as_posix()}"
+        )
+    if len(matches) != 1:
+        raise OwnershipPolicyError(
+            f"test path {normalized!r} has duplicate owners {[rule.identifier for rule in matches]}"
+        )
+    return matches[0]
 
-    if "live_firefox" in parts:
-        markers.add("firefox_live")
-        if filename == "test_extension_settings_amo.py":
-            markers.add("firefox_live_amo")
 
-    if normalized == "tests/test_ui_browser_tabs.py":
-        markers.add("browser_ui")
+def primary_layer_for_path(path: str | Path) -> str:
+    """Return the sole execution layer owned by a test path."""
 
-    if normalized in SLOW_TEST_FILES or markers & {"browser_ui", "firefox_live"}:
-        markers.add("slow")
+    return ownership_for_path(path).layer
 
-    if normalized.startswith("tests/api/") or filename in {
-        "test_api.py",
-        "test_api_validation_unit.py",
-        "test_health_endpoints.py",
-        "test_openapi_surface.py",
-        "test_profiles_conflict_name_api.py",
-        "test_validation_api.py",
-    }:
-        markers.add("api")
 
-    if normalized in DOCS_CONTRACT_FILES:
-        markers.update({"contract", "docs_contract"})
+def markers_for_path(path: str | Path) -> set[str]:
+    """Return declared primary and orthogonal markers without inference."""
 
-    if normalized in UI_CONTRACT_FILES or normalized.startswith("tests/web_profiles_page/"):
-        markers.update({"contract", "ui_contract"})
+    normalized = normalize_test_path(path)
+    owner = ownership_for_path(path)
+    override_markers = {
+        marker
+        for override in marker_overrides()
+        if override.matches(normalized)
+        for marker in override.markers
+    }
+    return {owner.layer, *owner.markers, *override_markers}
 
-    if filename.endswith("_contract.py") or normalized.startswith("tests/compliance/"):
-        markers.add("contract")
 
-    if (
-        filename.endswith("_unit.py")
-        or normalized.startswith("tests/core/")
-        or normalized.startswith("tests/tools/")
-        or filename
-        in {
-            "test_bootstrap_config.py",
-            "test_ci_workflow_layers.py",
-            "test_db_helpers.py",
-            "test_firefox_settings_catalog_builders.py",
-            "test_firefox_starter_presets.py",
-            "test_frontend_vendor_rebuild_contract.py",
-            "test_live_firefox_harness_unit.py",
-            "test_makefile_test_targets.py",
-            "test_policy_schema_models.py",
-            "test_policy_schema_service.py",
-            "test_profile_navigation.py",
-            "test_profile_schema_normalization.py",
-            "test_pytest_marker_policy.py",
-            "test_schema_channels.py",
-            "test_workspace_export_links_unit.py",
-            "test_yaml_io.py",
-        }
-    ):
-        markers.add("unit")
+def primary_markers(markers: Iterable[str]) -> set[str]:
+    """Extract primary execution layers from marker names."""
 
-    return markers
+    return set(markers) & PRIMARY_LAYERS
+
+
+def _test_files_for_rule(rule: OwnershipRule) -> tuple[str, ...]:
+    """Return materialized test modules for one explicit or directory owner."""
+
+    if rule.prefix is None:
+        return tuple(sorted(rule.paths))
+    project_root = OWNERSHIP_PATH.parent.parent
+    directory = project_root / rule.prefix
+    return tuple(
+        path.relative_to(project_root).as_posix() for path in sorted(directory.rglob("test_*.py"))
+    )
+
+
+AI_INCUBATION_TEST_FILES = frozenset(
+    path
+    for rule in ownership_rules()
+    if "ai_incubation" in rule.markers
+    for path in _test_files_for_rule(rule)
+)

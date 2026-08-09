@@ -13,7 +13,7 @@
       <step><cmd>在继续之前重新检查简单语言摘要和验证消息。</cmd><info><note type="warning">更改与架构相关的控件可能会使值对于选定的 Firefox 通道无效。</note></info></step>
     </steps>
     <result><p>该配置文件包含有意的高级更改，而不是意外的广泛编辑。</p></result>
-    <postreq><p>恢复：如果更改难以解释，请重置控件并使用 所有设置 或 JSON 编辑器 进行更深入的检查。 深色主题中的</p></postreq>
+    <postreq><p>恢复：如果更改难以解释，请重置控件并使用 <uicontrol>所有设置</uicontrol> 或 <uicontrol>JSON 编辑器</uicontrol> 进行更深入的检查。 深色主题中的</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-use-guided-editor"/>

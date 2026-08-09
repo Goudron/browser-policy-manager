@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-product-connection" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>从产品连接故障中恢复</title>
-  <shortdesc>从库或编辑器界面中可见的网络、浏览器或 BPM API 操作故障中恢复。</shortdesc>
+  <shortdesc>从<uicontrol>库</uicontrol>或编辑器界面中可见的网络、浏览器或 BPM API 操作故障中恢复。</shortdesc>
   <taskbody>
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
     <context><p>连接失败可能由网络中断、服务器重启或 API 错误导致；重试前请保留可见的上下文。</p></context>

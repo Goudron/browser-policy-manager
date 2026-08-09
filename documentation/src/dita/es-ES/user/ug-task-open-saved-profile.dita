@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-open-saved-profile" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Abrir un perfil guardado en un editor</title>
-  <shortdesc>Abra el mismo perfil guardado en Editor guiado, Todos los ajustes o Editor JSON según el cambio que necesite.</shortdesc>
+  <shortdesc>Abra el mismo perfil guardado en <uicontrol>Editor guiado</uicontrol>, <uicontrol>Todos los ajustes</uicontrol> o <uicontrol>Editor JSON</uicontrol> según el cambio que necesite.</shortdesc>
   <taskbody>
-    <prereq><p>El perfil es visible en la Biblioteca y su identidad de fila coincide con el perfil que desea editar o inspeccionar.</p></prereq>
-    <context><p>Abrir un perfil guardado no lo duplica. Cada superficie del editor funciona con el mismo Identidad del perfil guardado.</p></context>
+    <prereq><p>El perfil es visible en la <uicontrol>Biblioteca</uicontrol> y su identidad de fila coincide con el perfil que desea editar o inspeccionar.</p></prereq>
+    <context><p>Abrir un perfil guardado no lo duplica. Cada superficie del editor funciona con el mismo <uicontrol>Identidad del perfil</uicontrol> guardado.</p></context>
     <steps>
-      <step><cmd>Utilice el título de la fila o la acción guiada para ediciones orientadas a tareas.</cmd><info><p>Resultado esperado: BPM abre el perfil en Editor guiado.</p></info></step>
-      <step><cmd>Utilice Todos los ajustes cuando necesite el catálogo completo compatible y los detalles de fuente/atención.</cmd><info><p>Esta es la opción más segura para una inspección detallada de políticas y preferencias.</p></info></step>
-      <step><cmd>Utilice Editor JSON cuando necesite inspeccionar o editar el documento de límites sin formato.</cmd><info><note type="warning">Los cambios JSON sin formato deben validarse antes de exportarlos o compararlos.</note></info></step>
+      <step><cmd>Utilice el título de la fila o la acción guiada para ediciones orientadas a tareas.</cmd><info><p>Resultado esperado: BPM abre el perfil en <uicontrol>Editor guiado</uicontrol>.</p></info></step>
+      <step><cmd>Utilice <uicontrol>Todos los ajustes</uicontrol> cuando necesite el catálogo completo compatible y los detalles de fuente/atención.</cmd><info><p>Esta es la opción más segura para una inspección detallada de políticas y preferencias.</p></info></step>
+      <step><cmd>Utilice <uicontrol>Editor JSON</uicontrol> cuando necesite inspeccionar o editar el documento de límites sin formato.</cmd><info><note type="warning">Los cambios JSON sin formato deben validarse antes de exportarlos o compararlos.</note></info></step>
     </steps>
     <result><p>El editor seleccionado se abre en su propio contexto de perfil y mantiene el mismo perfil ID.</p></result>
-    <postreq><p>Recuperación: si abrió el editor incorrecto, regrese a la fila Biblioteca o use otro enlace de editor para el mismo perfil.</p></postreq>
+    <postreq><p>Recuperación: si abrió el editor incorrecto, regrese a la fila <uicontrol>Biblioteca</uicontrol> o use otro enlace de editor para el mismo perfil.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

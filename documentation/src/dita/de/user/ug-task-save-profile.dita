@@ -4,16 +4,16 @@
   <title>Profiländerungen speichern</title>
   <shortdesc>Erstellen Sie das erste gespeicherte Profil aus einem Entwurf oder behalten Sie Änderungen an einem vorhandenen Profil bei.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
-    <context><p>Durch das Speichern wird das Profil ID für einen neuen Entwurf erstellt und die neuesten Richtlinien- und verwalteten Präferenzwerte für andere BPM-Oberflächen verfügbar gemacht.</p></context>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <context><p>Durch das <uicontrol>Speichern</uicontrol> wird das Profil ID für einen neuen Entwurf erstellt und die neuesten Richtlinien- und verwalteten Präferenzwerte für andere BPM-Oberflächen verfügbar gemacht.</p></context>
     <steps>
-      <step><cmd>Überprüfen Sie vor dem Speichern den Profilnamen, den Schemakanal und den Validierungsstatus.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
-      <step><cmd>Wählen Sie „Speichern“ auf der aktiven Editoroberfläche.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Überprüfen Sie vor dem <uicontrol>Speichern</uicontrol> den Profilnamen, den Schemakanal und den Validierungsstatus.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
+      <step><cmd>Wählen Sie „<uicontrol>Speichern</uicontrol>“ auf der aktiven Editoroberfläche.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Warten Sie auf die sichtbare Statusmeldung, die bestätigt, dass die Speicherung abgeschlossen ist.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Wenn eine Validierungs- oder Verbindungsrückmeldung angezeigt wird, lesen Sie diese, bevor Sie fortfahren oder es erneut versuchen.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>Das Profil hat einen gespeicherten Status, der erneut geöffnet, validiert, exportiert oder verglichen werden kann.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-profile"/>

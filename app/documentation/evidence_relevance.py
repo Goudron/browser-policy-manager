@@ -51,13 +51,93 @@ _GUIDE_MARKERS: Final[dict[str, tuple[str, ...]]] = {
 }
 _STOP_WORDS: Final[dict[str, frozenset[str]]] = {
     "en": frozenset(
-        {"about", "and", "are", "can", "for", "from", "how", "i", "in", "is", "my", "of", "on", "question", "the", "to", "what", "with", "you"}
+        {
+            "about",
+            "and",
+            "are",
+            "can",
+            "for",
+            "from",
+            "how",
+            "i",
+            "in",
+            "is",
+            "my",
+            "of",
+            "on",
+            "question",
+            "the",
+            "to",
+            "what",
+            "with",
+            "you",
+        }
     ),
-    "ru": frozenset({"в", "вы", "и", "как", "ли", "на", "о", "по", "про", "с", "ты", "у", "что", "это"}),
-    "de": frozenset({"auf", "das", "der", "die", "du", "ein", "eine", "für", "ich", "im", "ist", "kann", "mit", "und", "was", "wie", "zu"}),
+    "ru": frozenset(
+        {"в", "вы", "и", "как", "ли", "на", "о", "по", "про", "с", "ты", "у", "что", "это"}
+    ),
+    "de": frozenset(
+        {
+            "auf",
+            "das",
+            "der",
+            "die",
+            "du",
+            "ein",
+            "eine",
+            "für",
+            "ich",
+            "im",
+            "ist",
+            "kann",
+            "mit",
+            "und",
+            "was",
+            "wie",
+            "zu",
+        }
+    ),
     "zh-CN": frozenset(),
-    "fr": frozenset({"avec", "comment", "des", "en", "et", "je", "la", "le", "les", "peux", "pour", "quel", "que", "sur", "un", "une", "vous"}),
-    "es-ES": frozenset({"con", "cómo", "de", "el", "en", "la", "las", "los", "me", "para", "puedo", "qué", "una", "un", "y"}),
+    "fr": frozenset(
+        {
+            "avec",
+            "comment",
+            "des",
+            "en",
+            "et",
+            "je",
+            "la",
+            "le",
+            "les",
+            "peux",
+            "pour",
+            "quel",
+            "que",
+            "sur",
+            "un",
+            "une",
+            "vous",
+        }
+    ),
+    "es-ES": frozenset(
+        {
+            "con",
+            "cómo",
+            "de",
+            "el",
+            "en",
+            "la",
+            "las",
+            "los",
+            "me",
+            "para",
+            "puedo",
+            "qué",
+            "una",
+            "un",
+            "y",
+        }
+    ),
 }
 _ZH_TOPIC_TERMS: Final[tuple[str, ...]] = (
     "安装",
@@ -124,9 +204,7 @@ def _constraints(locale: str, question: str) -> _Constraints:
         (platform, match.group(1))
         for platform in platforms
         for match in (
-            re.search(
-                rf"\b{re.escape(alias)}\s+(\d+(?:\.\d+){{1,3}})\b", normalized
-            )
+            re.search(rf"\b{re.escape(alias)}\s+(\d+(?:\.\d+){{1,3}})\b", normalized)
             for alias in _PLATFORM_ALIASES[platform]
         )
         if match is not None
@@ -161,10 +239,7 @@ def _matches(candidate: RetrievedEvidence, constraints: _Constraints) -> bool:
     ):
         return False
     if any(
-        not any(
-            f"{alias} {release}" in haystack
-            for alias in _PLATFORM_ALIASES[platform]
-        )
+        not any(f"{alias} {release}" in haystack for alias in _PLATFORM_ALIASES[platform])
         for platform, release in constraints.platform_releases
     ):
         return False
@@ -215,9 +290,7 @@ def _topic_term_matches(term: str, words: frozenset[str], haystack: str) -> bool
     if term in words or term in haystack:
         return True
     return len(term) >= 5 and any(
-        word.startswith(term[:5]) or term.startswith(word[:5])
-        for word in words
-        if len(word) >= 5
+        word.startswith(term[:5]) or term.startswith(word[:5]) for word in words if len(word) >= 5
     )
 
 

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "target_version": "0.9.4",
+  "categories": {
+    "default_release": {
+      "modules": ["app.main", "app.api", "app.web", "app.services", "app.compliance", "app.core", "app.models", "app.schemas", "app.db", "app.middleware", "app.documentation.router", "app.documentation.assistant_contracts", "app.documentation.assistant_service", "app.documentation.training_notice", "app.ai.least_privilege", "app.ai.model_installation", "app.ai.model_management", "app.ai.runtime_installation"],
+      "dependencies": ["alembic", "aiosqlite", "fastapi", "fastjsonschema", "httpx", "jinja2", "jsonschema", "pydantic", "pydantic-settings", "python-multipart", "pyyaml", "requests", "sqlalchemy", "uvicorn"],
+      "commands": ["run", "test", "test-fast", "test-contract", "test-release", "architecture"],
+      "fixtures": ["tests/conftest.py", "tests/app_harness.py", "tests/cache_harness.py", "tests/db_harness.py", "tests/fixtures/"],
+      "tests": ["tests/integration/ai/core/test_ai_optional_extra.py", "tests/integration/docs/test_documentation_assistant_api.py", "tests/integration/docs/test_documentation_assistant_service.py", "tests/integration/ai/core/test_local_model_installation.py", "tests/integration/ai/core/test_local_model_management_api.py", "tests/integration/ai/core/test_model_installation_edges.py", "tests/integration/ai/core/test_model_management.py", "tests/integration/app/test_runtime_installation_edges.py", "tests/integration/ai/core/test_training_notice.py"]
+    },
+    "optional_incubation": {
+      "modules": ["app.ai.e5_runtime", "app.ai.local_inference_worker", "app.ai.rag_bootstrap", "app.documentation.answer_validation", "app.documentation.assistant_capabilities", "app.documentation.conversation", "app.documentation.conversation_context", "app.documentation.conversation_diagnostics", "app.documentation.conversation_stream", "app.documentation.evidence", "app.documentation.evidence_relevance", "app.documentation.local_assistant_runtime", "app.documentation.response_timing", "app.documentation.retrieval", "app.documentation.topic_scope", "app.documentation.web_evidence", "app.documentation.web_evidence_consent", "app.documentation.web_evidence_merge"],
+      "dependencies": ["numpy", "onnxruntime", "tokenizers"],
+      "commands": ["ai-extra-check", "ai-model-install-dev", "ai-runtime-install-dev", "ai-rag-install-dev", "ai-web-sources-check-dev", "dev", "test-ai-incubation"],
+      "fixtures": [],
+      "tests": ["tests/integration/ai/incubation/test_assistant_answer_benchmark.py", "tests/integration/ai/incubation/test_assistant_capabilities.py", "tests/integration/ai/incubation/test_assistant_threat_review.py", "tests/integration/ai/incubation/test_conversation_context.py", "tests/integration/ai/incubation/test_conversation_diagnostics.py", "tests/integration/ai/incubation/test_conversation_stream.py", "tests/integration/ai/incubation/test_conversation_stream_edges.py", "tests/integration/ai/incubation/test_documentation_chat_retrieval.py", "tests/integration/ai/incubation/test_documentation_evidence_packing.py", "tests/integration/ai/incubation/test_e5_runtime.py", "tests/integration/ai/incubation/test_evidence_relevance.py", "tests/integration/ai/incubation/test_generation_answer_validation.py", "tests/integration/ai/incubation/test_grounded_conversation_evaluation.py", "tests/integration/ai/incubation/test_grounded_conversation_orchestration.py", "tests/integration/ai/incubation/test_local_assistant_runtime.py", "tests/integration/ai/incubation/test_local_inference_worker.py", "tests/integration/ai/incubation/test_local_inference_worker_edges.py", "tests/integration/ai/incubation/test_prompt_content_boundary.py", "tests/integration/ai/incubation/test_rag_bootstrap.py", "tests/integration/ai/incubation/test_response_timing.py", "tests/integration/ai/incubation/test_scope_adversarial_fixtures.py", "tests/integration/ai/incubation/test_topic_scope_edges.py", "tests/integration/ai/incubation/test_topic_scope_gate.py", "tests/integration/ai/incubation/test_web_evidence.py", "tests/integration/ai/incubation/test_web_evidence_consent.py", "tests/integration/ai/incubation/test_web_evidence_dev_config.py", "tests/integration/ai/incubation/test_web_evidence_edges.py", "tests/integration/ai/incubation/test_web_evidence_merge.py", "tests/integration/ai/incubation/test_web_evidence_mode.py", "tests/integration/ai/incubation/test_web_evidence_security.py"]
+    },
+    "development_tooling": {
+      "modules": ["documentation/tools/", "tools/"],
+      "dependencies": ["anyio", "beautifulsoup4", "black", "build", "cyclonedx-bom", "import-linter", "ipython", "isort", "mypy", "pip-audit", "pre-commit", "pytest", "pytest-asyncio", "pytest-cov", "pytest-xdist", "ruff", "selenium", "types-pyyaml", "types-requests"],
+      "commands": ["lint", "typecheck", "quality", "docs-validate", "repo-health", "release-boundary", "package-smoke"],
+      "fixtures": ["documentation/tests/"],
+      "tests": ["tests/unit/tooling/test_ci_workflow_layers.py", "tests/unit/tooling/test_makefile_test_targets.py", "tests/unit/testing/test_pytest_marker_policy.py", "tests/integration/app/test_python_architecture_contracts.py", "tests/integration/app/test_release_incubation_boundary.py"]
+    },
+    "release_optional_integration": {
+      "modules": [],
+      "dependencies": ["asyncpg", "psycopg"],
+      "commands": [],
+      "fixtures": [],
+      "tests": []
+    }
+  },
+  "rules": {
+    "optional_incubation_fixture_policy": "No shared optional-incubation fixture is tracked; the optional test contour creates only test-local tmp_path resources.",
+    "base_wheel_smoke": "Install the built wheel into a fresh virtual environment without extras, then import app.main and exercise the training-notice assistant and no-artifact local-model HTTP surfaces.",
+    "release_safe_disabled_surfaces": ["/api/documentation-assistant/status?locale=en", "/api/local-model"]
+  }
+}

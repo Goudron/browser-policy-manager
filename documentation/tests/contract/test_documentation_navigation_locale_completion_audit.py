@@ -148,7 +148,9 @@ def test_ui_name_authority_values_match_runtime_catalogs_and_sources() -> None:
             assert finding["term_occurrences"]
 
 
-def test_every_recorded_english_carryover_baseline_keeps_current_sources_and_english_peers() -> None:
+def test_every_recorded_english_carryover_baseline_keeps_current_sources_and_english_peers() -> (
+    None
+):
     audit = _json(AUDIT)
     total_files = 0
     total_affected = 0

@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-edit-setting-detail" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Modifier les détails d'un paramètre</title>
-  <shortdesc>Appliquez ou modifiez une stratégie Firefox ou une valeur de préférence gérée à partir du panneau de détails Tous les paramètres.</shortdesc>
+  <shortdesc>Appliquez ou modifiez une stratégie Firefox ou une valeur de préférence gérée à partir du panneau de détails <uicontrol>Tous les paramètres</uicontrol>.</shortdesc>
   <taskbody>
     <prereq><p>Ouvrez un panneau de détails de paramètre pour une valeur modifiable prise en charge.</p></prereq>
     <context><p>La modification détaillée permet de concentrer les modifications sur un paramètre tout en réutilisant le comportement de validation et d'enregistrement partagé.</p></context>
     <steps>
-      <step><cmd>Inspectez la valeur actuelle et l'état de validation.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Saisissez ou choisissez la nouvelle valeur de stratégie ou de préférence gérée.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Appliquez la modification détaillée et surveillez les commentaires de validation.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Inspectez la valeur actuelle et l'état de validation.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Saisissez ou choisissez la nouvelle valeur de stratégie ou de préférence gérée.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Appliquez la modification détaillée et surveillez les commentaires de validation.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Enregistrez le profil lorsque la valeur modifiée est valide et intentionnelle.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>La stratégie sélectionnée ou la préférence gérée a la nouvelle valeur dans le profil.</p></result>

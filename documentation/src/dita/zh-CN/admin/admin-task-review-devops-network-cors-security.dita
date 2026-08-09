@@ -8,7 +8,7 @@
     <context><p>当前默认值针对本地源操作进行了优化：<codeph>BPM_HOST="0.0.0.0"</codeph>、<codeph>BPM_PORT="8000"</codeph>、<codeph>BPM_RELOAD="true"</codeph>、<codeph>BPM_ENABLE_CORS="true"</codeph> 以及相当于 <codeph>["*"]</codeph> 的许可源。这些默认值不是强化的网络暴露策略。</p></context>
     <steps>
       <step><cmd>选择当前环境的最窄绑定地址。</cmd><info><p>使用 <codeph>127.0.0.1</codeph> 进行本地 Linux 检查。仅当 WSL 浏览器转发或受控实验室网络需要时才使用 <codeph>0.0.0.0</codeph>。记录任何非环回绑定的原因。</p></info></step>
-      <step><cmd>通过运行状况和就绪探测控制操作访问。</cmd><info><p>在 API 示例或 UI 烟雾检查之前使用 <codeph>GET /health</codeph> 和 <codeph>GET /health/ready</codeph>。成功的探测仅显示进程的活跃性/就绪性；它们不证明数据库备份状态、Firefox 强制执行、身份验证、授权或生产拓扑。</p></info></step>
+      <step><cmd>通过运行状况和就绪探测控制操作访问。</cmd><info><p>在 API 示例或 UI 烟雾检查之前使用 <codeph>GET /health</codeph> 和 <codeph>GET /health/ready</codeph>。成功的探测仅显示进程的活跃性/就绪性；它们不证明数据<uicontrol>库</uicontrol>备份状态、Firefox 强制执行、身份验证、授权或生产拓扑。</p></info></step>
       <step><cmd>限制任何共享评估的 CORS。</cmd><info><p>对于本地实验，宽松的 <codeph>BPM_CORS_ALLOW_ORIGINS</codeph> 可能是可以接受的。对于共享主机，设置显式来源并记录谁拥有浏览器来源。 BPM 文档未定义凭据 CORS、CSRF 保护、API 身份验证或租户隔离。</p></info></step>
       <step><cmd>将不受支持的安全控制排除在 BPM 声明之外。</cmd><info><note type="warning">此版本不提供 TLS 终止、反向代理配方、防火墙策略、速率限制、请求签名、审核日志记录、SSO、OAuth/OIDC 设置、基于角色的访问控制、漏洞扫描或 HA 故障转移。如果您的环境添加了它们，请将它们记录为外部控制。</note></info></step>
     </steps>

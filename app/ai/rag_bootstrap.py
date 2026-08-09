@@ -53,7 +53,9 @@ class E5ModelInstaller:
             try:
                 verify_model_directory(self.model_dir)
             except Exception as error:
-                raise RagBootstrapError("existing E5 installation is invalid; it was not removed") from error
+                raise RagBootstrapError(
+                    "existing E5 installation is invalid; it was not removed"
+                ) from error
             print("M12A-02: E5-base: verified persistent installation", flush=True)
             return self.model_dir
         if self._root.is_symlink() or (self._root.exists() and not self._root.is_dir()):
@@ -90,7 +92,9 @@ class E5ModelInstaller:
                 output_file.write(block)
                 copied += len(block)
                 if copied == total or copied % (64 * 1024 * 1024) < len(block):
-                    print(f"M12A-02: E5-base: {relative}: copied {copied}/{total} bytes", flush=True)
+                    print(
+                        f"M12A-02: E5-base: {relative}: copied {copied}/{total} bytes", flush=True
+                    )
         destination.chmod(0o600)
 
     @staticmethod
@@ -141,7 +145,9 @@ def _sha256(path: Path) -> str:
 
 
 def _canonical_json(value: object) -> bytes:
-    return (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+    return (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+    ).encode("utf-8")
 
 
 def _write_json_atomic(path: Path, value: dict[str, object]) -> None:
@@ -169,9 +175,15 @@ def _published_source_fingerprint() -> str:
 
     inputs = {
         "published_documentation": build_docs._source_fingerprint(),
-        "chunk_extractor": _sha256(REPOSITORY_ROOT / "documentation/tools/extract_rag_chunks_0_9_3.py"),
-        "chunk_contract": _sha256(REPOSITORY_ROOT / "documentation/config/rag-chunk-extraction-0.9.3.json"),
-        "corpus_exclusions": _sha256(REPOSITORY_ROOT / "documentation/config/rag-corpus-exclusions-0.9.3.json"),
+        "chunk_extractor": _sha256(
+            REPOSITORY_ROOT / "documentation/tools/extract_rag_chunks_0_9_3.py"
+        ),
+        "chunk_contract": _sha256(
+            REPOSITORY_ROOT / "documentation/config/rag-chunk-extraction-0.9.3.json"
+        ),
+        "corpus_exclusions": _sha256(
+            REPOSITORY_ROOT / "documentation/config/rag-corpus-exclusions-0.9.3.json"
+        ),
         "generation_tool": _sha256(
             REPOSITORY_ROOT / "documentation/tools/generate_chat_rag_exact_generations_0_9_3.py"
         ),
@@ -187,7 +199,7 @@ def _read_regular_json(path: Path) -> dict[str, object] | None:
         return None
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+    except OSError, json.JSONDecodeError:
         return None
     return value if isinstance(value, dict) else None
 
@@ -248,7 +260,7 @@ def _active_generation_result(
         config = generation._read_json(generation.CONFIG_PATH)
         generation._validate_storage_decision(config)
         generation._decision_candidate(config)
-    except (OSError, ValueError, generation.GenerationError):
+    except OSError, ValueError, generation.GenerationError:
         return None
 
     pointer = _read_regular_json(rag_root / "index" / config["matrix"]["active_pointer_file_name"])
@@ -262,17 +274,19 @@ def _active_generation_result(
         not _regular(root_manifest_path)
         or pointer_data.get("manifest_sha256") != _sha256(root_manifest_path)
         or (not legacy_adoption and state_data.get("generation_id") != generation_id)
-        or (not legacy_adoption and state_data.get("generation_manifest_sha256") != _sha256(root_manifest_path))
+        or (
+            not legacy_adoption
+            and state_data.get("generation_manifest_sha256") != _sha256(root_manifest_path)
+        )
     ):
         return None
     try:
         manifest = generation.validate_generation(generation_root, config)
-    except (OSError, ValueError, generation.GenerationError):
+    except OSError, ValueError, generation.GenerationError:
         return None
-    if (
-        manifest.get("generation_id") != generation_id
-        or manifest.get("source_manifest_sha256") != chunks.get("source_manifest_sha256")
-    ):
+    if manifest.get("generation_id") != generation_id or manifest.get(
+        "source_manifest_sha256"
+    ) != chunks.get("source_manifest_sha256"):
         return None
     return {
         "generation_id": generation_id,
@@ -293,7 +307,10 @@ def _write_bootstrap_state(
     generation: Any,
 ) -> None:
     generation_root = Path(str(result["generation_root"]))
-    root_manifest = generation_root / generation._read_json(generation.CONFIG_PATH)["matrix"]["root_manifest_file_name"]
+    root_manifest = (
+        generation_root
+        / generation._read_json(generation.CONFIG_PATH)["matrix"]["root_manifest_file_name"]
+    )
     _write_json_atomic(
         rag_root / BOOTSTRAP_STATE_FILE_NAME,
         {
@@ -315,7 +332,9 @@ def provision() -> dict[str, object]:
     generation = _generation_module()
     fingerprint = _published_source_fingerprint()
     chunks_path = rag_root / "chunks.json"
-    active = _active_generation_result(rag_root, chunks_path, fingerprint, settings.APP_VERSION, generation)
+    active = _active_generation_result(
+        rag_root, chunks_path, fingerprint, settings.APP_VERSION, generation
+    )
     if active is not None:
         if active.pop("legacy_adoption"):
             _write_bootstrap_state(rag_root, chunks_path, fingerprint, active, generation)

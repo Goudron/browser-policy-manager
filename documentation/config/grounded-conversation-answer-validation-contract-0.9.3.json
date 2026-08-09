@@ -25,5 +25,5 @@
   },
   "fallback": {"invalid_output": "Malformed JSON, extra/missing fields, unsupported disposition, plain-text violation, empty/overlong section or answer, unknown/duplicate citation, excessive contiguous evidence quotation or locale mismatch abstains without showing evidence text or citations.", "terminal": "No invalid generated text or raw evidence excerpt is returned as a confident BPM answer."},
   "boundaries": {"http_route": false, "browser_renderer": false, "ordinary_search_calls": 0, "network_calls": 0, "model_url_trust": false, "raw_model_output_exposed": false},
-  "verification": {"runtime": "tests/test_generation_answer_validation_093.py", "contract": "documentation/tests/contract/test_grounded_conversation_answer_validation_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-answer-validation-0.9.3.md"}
+  "verification": {"runtime": "tests/integration/ai/incubation/test_generation_answer_validation.py", "contract": "documentation/tests/contract/test_grounded_conversation_answer_validation_contract_0_9_3.py", "architecture": "docs/architecture/grounded-conversation-answer-validation-0.9.3.md"}
 }

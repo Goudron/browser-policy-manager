@@ -65,5 +65,5 @@
   },
   "failure": "scope, consent, DNS, TLS, redirect, timeout, HTTP status, response type/size/schema, allowlist, sanitization or provider failure returns local_only without retry or ordinary-search fallback.",
   "boundaries": {"http_route": false, "browser_ui": false, "browser_storage": false, "database": false, "disk": false, "telemetry": false, "ordinary_search_changed": false, "external_evidence_to_inference": false, "hosted_answers": false, "direct_result_fetch": false},
-  "verification": {"runtime": "tests/test_web_evidence_093.py", "contract": "documentation/tests/contract/test_bpm_web_evidence_retrieval_contract_0_9_3.py", "architecture": "docs/architecture/bpm-web-evidence-retrieval-0.9.3.md"}
+  "verification": {"runtime": "tests/integration/ai/incubation/test_web_evidence.py", "contract": "documentation/tests/contract/test_bpm_web_evidence_retrieval_contract_0_9_3.py", "architecture": "docs/architecture/bpm-web-evidence-retrieval-0.9.3.md"}
 }

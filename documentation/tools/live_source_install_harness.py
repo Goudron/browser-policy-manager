@@ -94,9 +94,7 @@ def validate_run_identity(run_id: str, attempt: int) -> None:
 
 def parse_backlog_item(value: str) -> str:
     if not BACKLOG_ITEM_PATTERN.fullmatch(value):
-        raise argparse.ArgumentTypeError(
-            "backlog item must match BPM091-M11-<two digits>"
-        )
+        raise argparse.ArgumentTypeError("backlog item must match BPM091-M11-<two digits>")
     return value
 
 
@@ -157,7 +155,9 @@ def build_plan(
                 }
             )
     if placeholder_count != 1:
-        raise HarnessError(f"Expected one BPM_REF placeholder for {target_id}, found {placeholder_count}")
+        raise HarnessError(
+            f"Expected one BPM_REF placeholder for {target_id}, found {placeholder_count}"
+        )
 
     readiness_attempts = int(config["execution"]["runtime_readiness_attempts"])
     readiness_interval = int(config["execution"]["runtime_readiness_interval_seconds"])
@@ -237,17 +237,17 @@ def render_execution_script(plan: dict[str, Any], run_id: str) -> str:
         'runtime_log="$evidence_dir/runtime.log"',
         'runtime_pid=""',
         "emit_start() {",
-        "  printf '{\"event\":\"command_start\",\"command_id\":\"%s\","
-        "\"stage\":\"%s\",\"classification\":\"%s\",\"started_at\":\"%s\"}\\n' "
+        '  printf \'{"event":"command_start","command_id":"%s",'
+        '"stage":"%s","classification":"%s","started_at":"%s"}\\n\' '
         '"$1" "$2" "$3" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$events"',
         "}",
         "emit_end() {",
         '  output="$evidence_dir/command-output/$1.txt"',
         '  bytes="$(stat -c %s "$output" 2>/dev/null || printf 0)"',
         '  sha="$(sha256sum "$output" 2>/dev/null | awk \'{print $1}\' || true)"',
-        "  printf '{\"event\":\"command_end\",\"command_id\":\"%s\","
-        "\"stage\":\"%s\",\"classification\":\"%s\",\"finished_at\":\"%s\","
-        "\"exit_code\":%s,\"output_bytes\":%s,\"output_sha256\":\"%s\"}\\n' "
+        '  printf \'{"event":"command_end","command_id":"%s",'
+        '"stage":"%s","classification":"%s","finished_at":"%s",'
+        '"exit_code":%s,"output_bytes":%s,"output_sha256":"%s"}\\n\' '
         '"$1" "$2" "$3" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$4" "$bytes" "$sha" '
         '>> "$events"',
         "}",
@@ -329,9 +329,7 @@ def render_execution_script(plan: dict[str, Any], run_id: str) -> str:
             )
             + " || exit $?",
             "run_foreground adapter-stop-probe runtime container_adapter "
-            + shlex.quote(
-                "! curl -fsS http://127.0.0.1:8000/health >/dev/null 2>&1"
-            )
+            + shlex.quote("! curl -fsS http://127.0.0.1:8000/health >/dev/null 2>&1")
             + " || exit $?",
             'cat "$runtime_log"',
             "run_foreground adapter-complete runtime container_adapter "
@@ -508,10 +506,7 @@ def _resolve_image(
             observed_digests = {
                 image.get("Id"),
                 image.get("Descriptor", {}).get("digest"),
-                *(
-                    digest.rsplit("@", 1)[-1]
-                    for digest in image.get("RepoDigests") or []
-                ),
+                *(digest.rsplit("@", 1)[-1] for digest in image.get("RepoDigests") or []),
             }
             if image.get("Os") != "linux" or image.get("Architecture") != "amd64":
                 raise HarnessError(f"Cached golden image platform drift for {target_id}")
@@ -552,7 +547,9 @@ def _resolve_image(
             raise HarnessError(
                 f"Local image {image_ref} is unavailable; run prepare-mint before this target"
             )
-    inspected = client.run(f"inspect-image-{target_id}", ["image", "inspect", image_ref], quiet=True)
+    inspected = client.run(
+        f"inspect-image-{target_id}", ["image", "inspect", image_ref], quiet=True
+    )
     image = json.loads(inspected.output)[0]
     if image.get("Os") != "linux" or image.get("Architecture") != "amd64":
         raise HarnessError(f"Image platform drift for {target_id}")
@@ -811,7 +808,7 @@ def _run_documented_install(
                 name,
                 "/bin/sh",
                 "-lc",
-                f"test \"$(cat {shlex.quote(remote_root + '/completed')})\" = complete",
+                f'test "$(cat {shlex.quote(remote_root + "/completed")})" = complete',
             ],
         )
         result = "pass"
@@ -1016,8 +1013,8 @@ def _prepare_mint(
                 [
                     cd,
                     "unsquashfs -processors 2 -d rootfs filesystem.squashfs",
-                    ". rootfs/etc/os-release && test \"$ID\" = linuxmint "
-                    "&& test \"$VERSION_ID\" = 22.3 && test \"$VERSION_CODENAME\" = zena",
+                    '. rootfs/etc/os-release && test "$ID" = linuxmint '
+                    '&& test "$VERSION_ID" = 22.3 && test "$VERSION_CODENAME" = zena',
                 ]
             ),
         ),
@@ -1097,7 +1094,11 @@ def _prepare_mint(
 
 
 def _output_root(config: dict[str, Any], args: argparse.Namespace) -> Path:
-    base = Path(args.output_root) if args.output_root else REPOSITORY_ROOT / config["evidence"]["local_root"]
+    base = (
+        Path(args.output_root)
+        if args.output_root
+        else REPOSITORY_ROOT / config["evidence"]["local_root"]
+    )
     return base / args.run_id / args.target / f"attempt-{args.attempt:02d}"
 
 

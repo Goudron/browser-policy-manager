@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Examiner les éléments à traiter dans « Tous les paramètres »</title>
-  <shortdesc>Utilisez « Revue » pour trier les éléments invalides, à examiner manuellement pour CIS, bruts, inconnus, obsolètes et importés avant toute modification courante.</shortdesc>
+  <shortdesc>Utilisez « <uicontrol>Revue</uicontrol> » pour trier les éléments invalides, à examiner manuellement pour CIS, bruts, inconnus, obsolètes et importés avant toute modification courante.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez un profil enregistré dans Tous les paramètres.</p></prereq>
-    <context><p>Revue est la vue par défaut axée sur l'attention d'abord. Il rassemble les paramètres qui peuvent nécessiter une décision avant l'exportation, la comparaison ou le transfert.</p></context>
+    <prereq><p>Ouvrez un profil enregistré dans <uicontrol>Tous les paramètres</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Revue</uicontrol> est la vue par défaut axée sur l'attention d'abord. Il rassemble les paramètres qui peuvent nécessiter une décision avant l'exportation, la comparaison ou le transfert.</p></context>
     <steps>
-      <step><cmd>Ouvrez Tous les paramètres et restez dans Revue.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Lisez le résumé de l'examen et les fiches d'action groupées.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Ouvrez chaque élément non valide, à révision manuelle CIS, brut, inconnu, obsolète ou importé qui s'applique au profil.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez <uicontrol>Tous les paramètres</uicontrol> et restez dans <uicontrol>Revue</uicontrol>.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Lisez le résumé de l'examen et les fiches d'action groupées.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez chaque élément non valide, à révision manuelle CIS, brut, inconnu, obsolète ou importé qui s'applique au profil.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Résolvez l'élément, documentez pourquoi il reste ou passez à la vue détaillée liée pour une modification délibérée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Les éléments d'attention sont soit résolus, intentionnellement conservés, soit prêts pour une modification détaillée ciblée.</p></result>
-    <postreq><p>Récupération : si Revue semble vide mais que vous attendiez des problèmes, effacez les filtres, actualisez le profil et confirmez le canal de schéma sélectionné.</p></postreq>
+    <postreq><p>Récupération : si <uicontrol>Revue</uicontrol> semble vide mais que vous attendiez des problèmes, effacez les filtres, actualisez le profil et confirmez le canal de schéma sélectionné.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-all-settings-review-states"/>

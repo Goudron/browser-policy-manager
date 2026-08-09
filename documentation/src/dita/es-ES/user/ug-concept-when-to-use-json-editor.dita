@@ -2,11 +2,11 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Uso del «Editor JSON»</title>
-  <shortdesc>Utilice Editor JSON para revisiones sin procesar exactas, comprobaciones de migración, solución de problemas y valores que sean más fáciles de manejar como policies.json sin procesar.</shortdesc>
+  <shortdesc>Utilice <uicontrol>Editor JSON</uicontrol> para revisiones sin procesar exactas, comprobaciones de migración, solución de problemas y valores que sean más fáciles de manejar como policies.json sin procesar.</shortdesc>
   <conbody>
-    <p>Editor JSON es potente pero menos guiado que los editores visuales. Debería ser una elección deliberada cuando el usuario necesita precisión en el documento de límites.</p>
-    <section id="a-good-fit"><title>Buen ajuste</title><p>Utilice Editor JSON para una revisión exacta de policies.json, comprobaciones de migración, valores de respaldo sin procesar o para solucionar problemas de documentos de importación/exportación con formato incorrecto.</p></section>
-    <section id="a-not-first-choice"><title>No es la primera opción</title><p>Utilice Editor guiado para flujos de trabajo comunes y Todos los ajustes para una inspección visual completa antes de elegir JSON sin formato para ediciones de rutina.</p></section>
+    <p><uicontrol>Editor JSON</uicontrol> es potente pero menos guiado que los editores visuales. Debería ser una elección deliberada cuando el usuario necesita precisión en el documento de límites.</p>
+    <section id="a-good-fit"><title>Buen ajuste</title><p>Utilice <uicontrol>Editor JSON</uicontrol> para una revisión exacta de policies.json, comprobaciones de migración, valores de respaldo sin procesar o para solucionar problemas de documentos de importación/exportación con formato incorrecto.</p></section>
+    <section id="a-not-first-choice"><title>No es la primera opción</title><p>Utilice <uicontrol>Editor guiado</uicontrol> para flujos de trabajo comunes y <uicontrol>Todos los ajustes</uicontrol> para una inspección visual completa antes de elegir JSON sin formato para ediciones de rutina.</p></section>
     <section id="a-validation-boundary"><title>Límite de validación</title><p>La sintaxis JSON válida no es suficiente. BPM también valida los valores de la política de Firefox, la compatibilidad con el canal de esquema y el modelo canónico normalizado antes de guardar.</p></section>
     <section id="a-examples"><title>Ejemplos</title><p>Un ejemplo válido mantiene un objeto de políticas de nivel superior con entradas como DisableTelemetry y Preferencias, incluido un valor browser.startup.homepage bloqueado. Los ejemplos no válidos incluyen sintaxis JSON con formato incorrecto y valores de política de esquema no válidos, como una cadena donde se requiere un valor booleano.</p></section>
   </conbody>

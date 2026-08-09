@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>选择引导场景</title>
-  <shortdesc>选择最符合配置文件目标的场景，以便 引导式编辑器 可以提供一个有用的起点。</shortdesc>
+  <shortdesc>选择最符合配置文件目标的场景，以便 <uicontrol>引导式编辑器</uicontrol> 可以提供一个有用的起点。</shortdesc>
   <taskbody>
     <prereq><p>您知道您想要支持的配置文件目的。</p></prereq>
     <context><p>场景使第一遍以任务为导向，并使基线在审查期间更容易解释。</p></context>

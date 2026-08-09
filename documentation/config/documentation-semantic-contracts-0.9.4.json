@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "contract_id": "bpm-0.9.4-documentation-semantic-contracts",
+  "backlog_item": "BPM094-M11A-03",
+  "target_bpm_version": "0.9.4",
+  "status": "accepted-current-source-authority",
+  "purpose": "Replace historical prose, transcript, and generated-state witnesses with small current-source contracts. Exact matching is reserved for published identifiers, commands, safety literals, localized labels, hashes, and binary artifacts.",
+  "exactness_policy": {
+    "allowed_product_requirements": [
+      "API and target identifiers",
+      "maintainer and release commands",
+      "safety and no-claim literals",
+      "approved localized labels",
+      "content-addressed hashes",
+      "binary delivery artifact invariants"
+    ],
+    "forbidden_incidental_coupling": [
+      "editorial prose phrases",
+      "whole-tree file counts or digests",
+      "retired maintainer commands",
+      "host-specific transcript state",
+      "historical fixture inventory counts"
+    ]
+  },
+  "authorities": {
+    "api_topic_ownership": {
+      "owner": "documentation source-contract maintainers",
+      "sources": [
+        "documentation/src/dita/en/maps/administrator-guide.ditamap",
+        "documentation/src/dita/en/maps/user-guide.ditamap",
+        "documentation/src/dita/en/maps/keys.ditamap"
+      ],
+      "required_destinations": {
+        "administrator-guide.ditamap": [
+          "admin-task-import-firefox-policies-json",
+          "admin-task-export-firefox-policies-json",
+          "admin-task-run-pull-compare-update-scenario"
+        ],
+        "user-guide.ditamap": [
+          "ug-task-import-policies-json",
+          "ug-task-export-policies-json",
+          "ug-task-validate-profile"
+        ]
+      },
+      "negative_rule": "A required API workflow cannot disappear from its current reader-owned guide or point at a missing topic key."
+    },
+    "documentation_command_boundary": {
+      "owner": "documentation release-contract maintainers",
+      "source": "Makefile",
+      "fast_runtime_source": "documentation/buildlib/sources.py",
+      "fast_target": "docs-fast-check",
+      "release_target": "docs-release-handoff",
+      "fast_semantics": [
+        "Selected scope",
+        "Fast guards run",
+        "Skipped release-only checks",
+        "make docs-release-handoff"
+      ],
+      "release_chain": [
+        "docs-snapshot",
+        "docs-release-check",
+        "docs-pdf-build",
+        "docs-pdf-verify",
+        "docs-pdf-deliver",
+        "docs-pdf-delivery-verify",
+        "docs-reproducibility-check",
+        "docs-package",
+        "docs-package-verify",
+        "docs-install-dev"
+      ],
+      "negative_rule": "The fast command cannot claim release coverage, and the authoritative release command cannot omit a delivery or install proof."
+    },
+    "localized_reader_semantics": {
+      "owner": "documentation editorial and localization review maintainers",
+      "sources": [
+        "documentation/config/locale-terminology-authority-0.9.1.json",
+        "documentation/config/locale-anti-anglicism-guard-0.9.1.json"
+      ],
+      "protected_exactness_classes": [
+        "brand",
+        "abbreviation",
+        "identifier",
+        "command/path/API",
+        "placeholder"
+      ],
+      "negative_rule": "Removing a protected technical-label class or accepting ordinary English prose is a localization regression; editorial rephrasing within an approved locale is not."
+    },
+    "runtime_artifact_policy": {
+      "owner": "documentation portal release maintainer",
+      "source": "documentation/config/artifact-policy.json",
+      "generated_non_prerequisites": [
+        "manifest.json",
+        "ui-target-map.json",
+        "runtime-ready six locale search indexes"
+      ],
+      "required_runtime_state": false,
+      "negative_rule": "A generated manifest or search index cannot be treated as a standalone runtime shipping prerequisite; package extraction, localized review, and final QA remain required."
+    },
+    "current_source_installation": {
+      "owner": "documentation release-contract maintainers",
+      "sources": [
+        "documentation/config/linux-source-install-editorial-reconciliation-0.9.2.json",
+        "documentation/config/live-source-install-privileged-validation-contract-0.9.1.json",
+        "documentation/config/wsl-source-install-validation-contract-0.9.1.json",
+        "documentation/tools/wsl_source_install_validation.ps1"
+      ],
+      "required_target_ids": [
+        "ubuntu-26-04",
+        "debian-13-5",
+        "fedora-44",
+        "linux-mint-22-3",
+        "manjaro-stable-2026-06-26"
+      ],
+      "negative_rule": "Each current deployment topic must retain deploy, migration, start, readiness, Library, stop, and rollback semantics; Linux-container history cannot become Windows/WSL evidence, and the runner must retain its explicit safety boundary."
+    },
+    "reader_explanations": {
+      "owner": "documentation editorial and localization review maintainers",
+      "backlog_item": "BPM094-M11A-03A",
+      "sources": [
+        "app/static/profiles_platform.js",
+        "app/core/locales.py",
+        "tests/integration/locale/test_locale_matrix.py"
+      ],
+      "topic": {
+        "guide": "user",
+        "topic_id": "ug-concept-language-detection-fallback",
+        "locales": [
+          "en",
+          "ru",
+          "de",
+          "zh-CN",
+          "fr",
+          "es-ES"
+        ]
+      },
+      "lead_contract": {
+        "required_reader_input_markup": "uicontrol",
+        "minimum_meaningful_length": 24,
+        "forbid_title_restatement": true
+      },
+      "required_sections": {
+        "supported_locales": "a-supported-locales",
+        "source_precedence_and_matching": "a-system-language",
+        "fallback_and_persistence": "a-fallback"
+      },
+      "required_exact_identifiers": [
+        "navigator.languages",
+        "navigator.language",
+        "bpm-lang-mode"
+      ],
+      "required_related_action_keyref": "topic.ug-task-change-interface-language",
+      "negative_rule": "A locale-language lead cannot be empty or merely repeat the title: it must name a user-visible input in semantic markup, while localized prose may otherwise differ. The topic must retain its supported-locale boundary, source precedence, matching, fallback, unsupported-browser-language outcome, stored-mode behavior, and related language-change action."
+    }
+  },
+  "replacements": [
+    {
+      "false_blocker": "M11-FB-001",
+      "authority": "api_topic_ownership",
+      "positive_test": "test_current_api_topic_ownership_accepts_current_maps",
+      "negative_test": "test_current_api_topic_ownership_rejects_missing_destination"
+    },
+    {
+      "false_blocker": "M11-FB-002",
+      "authority": "documentation_command_boundary",
+      "positive_test": "test_documentation_command_boundary_accepts_fast_and_release_paths",
+      "negative_test": "test_documentation_command_boundary_rejects_missing_release_proof"
+    },
+    {
+      "false_blocker": "M11-FB-003",
+      "authority": "localized_reader_semantics",
+      "positive_test": "test_localized_reader_semantics_accepts_protected_technical_classes",
+      "negative_test": "test_localized_reader_semantics_rejects_missing_protected_class"
+    },
+    {
+      "false_blocker": "M11-FB-004",
+      "authority": "runtime_artifact_policy",
+      "positive_test": "test_runtime_artifact_policy_accepts_current_shipping_boundary",
+      "negative_test": "test_runtime_artifact_policy_rejects_generated_runtime_prerequisite"
+    },
+    {
+      "false_blocker": "M11-FB-006",
+      "authority": "current_source_installation",
+      "retired_witnesses": [
+        "documentation/tests/contract/test_docker_engine_installation_evidence.py",
+        "documentation/tests/contract/test_live_source_install_evidence_closure.py",
+        "documentation/tests/contract/test_live_source_install_environment_handoff.py",
+        "documentation/tests/contract/test_live_source_install_harness_evidence.py",
+        "documentation/tests/contract/test_ubuntu_26_04_live_source_install_evidence.py",
+        "documentation/tests/contract/test_debian_13_5_live_source_install_evidence.py",
+        "documentation/tests/contract/test_fedora_44_live_source_install_evidence.py",
+        "documentation/tests/contract/test_linux_mint_22_3_live_source_install_evidence.py",
+        "documentation/tests/contract/test_manjaro_stable_live_source_install_evidence.py",
+        "documentation/tests/contract/test_windows_10_wsl_validation_outcome.py",
+        "documentation/tests/contract/test_windows_11_wsl_validation_outcome.py"
+      ],
+      "positive_test": "test_current_source_installation_accepts_current_topics_and_safety_boundary",
+      "negative_test": "test_current_source_installation_rejects_removed_topic_or_safety_boundary"
+    }
+  ]
+}

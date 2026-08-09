@@ -7,12 +7,12 @@
     <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
     <context><p>Eine fehlende Profilroute bedeutet, dass die URL nicht mehr in ein aktives Profil aufgelöst wird; Das Profil kann archiviert, gelöscht, herausgefiltert oder bereits entfernt sein.</p></context>
     <steps>
-      <step><cmd>Kehren Sie zur Bibliothek zurück, anstatt die fehlgeschlagene Route zu bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
+      <step><cmd>Kehren Sie zur <uicontrol>Bibliothek</uicontrol> zurück, anstatt die fehlgeschlagene Route zu bearbeiten.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Löschen Sie Suche und Filter und suchen Sie dann nach dem Profil nach Name, Schemakanal und letztem bekannten Status.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
       <step><cmd>Schließen Sie archivierte Profile ein, wenn das Profil möglicherweise absichtlich archiviert wurde.</cmd><info><p>Erwartetes Ergebnis: Sie behalten den Profilstatus bei und verstehen die nächste sichere Wiederherstellungsaktion.</p></info></step>
-      <step><cmd>Wenn das Profil immer noch fehlt, verwenden Sie die veraltete URL nicht mehr und fahren Sie nur von einer sichtbaren Bibliothekszeile oder einem bekannten Export fort.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
+      <step><cmd>Wenn das Profil immer noch fehlt, verwenden Sie die veraltete URL nicht mehr und fahren Sie nur von einer sichtbaren <uicontrol>Bibliothek</uicontrol>szeile oder einem bekannten Export fort.</cmd><info><note type="warning">Wiederholen Sie die Aktion nur über die BPM-Oberfläche; ändern Sie Profildaten nicht außerhalb der Anwendung.</note></info></step>
     </steps>
-    <result><p>Sie öffnen entweder das Profil erneut aus einem sichtbaren Bibliotheksstatus heraus oder bestätigen, dass die mit einem Lesezeichen versehene Route nicht mehr verwendbar ist.</p></result>
+    <result><p>Sie öffnen entweder das Profil erneut aus einem sichtbaren <uicontrol>Bibliothek</uicontrol>sstatus heraus oder bestätigen, dass die mit einem Lesezeichen versehene Route nicht mehr verwendbar ist.</p></result>
     <postreq><p>Wenn der Fehler erneut auftritt, beenden Sie den Arbeitsablauf und wenden Sie sich mit der sichtbaren Meldung, dem Profilnamen, dem Schemakanal und der aktuellen Seite an den Support.</p></postreq>
   </taskbody>
   <related-links>

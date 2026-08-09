@@ -1,4 +1,3 @@
-(() => {
     function initCoreModules({
         documentRef = document,
         windowRef = window,
@@ -11,6 +10,7 @@
         managedExtensionFields = [],
         managedExtensionStatusEls = [],
         wizardSchemaShellViews = {},
+        components = {},
     }) {
         const {
             humanizeIdentifier,
@@ -30,6 +30,24 @@
             getDefaultSchemaVersion,
             formatSchemaLabel,
         } = utils;
+        const {
+            createExtensions,
+            createSchemaShell,
+            createSchemaShellSections,
+            createSchemaShellValueIO,
+            createSchemaShellReview,
+            createSchemaShellActions,
+            createAllSettingsRouteState,
+            createSettingsInventory,
+            createAllSettingsDetail,
+            createAllSettingsList,
+            createSettingsSearch,
+            createWizardFlow,
+            createWorkspace,
+            createWorkspaceState,
+            createReview,
+            reviewState,
+        } = components;
         const { libraryCountLabel } = platform;
         const {
             toEditorValue,
@@ -377,7 +395,7 @@
             return managedExtensionProfiles.find((profile) => profile.id === profileId) || null;
         }
 
-        const extensions = window.BPMProfilesExtensions.create({
+        const extensions = createExtensions({
             managedExtensionProfiles,
             managedExtensionFields,
             managedExtensionStatusEls,
@@ -436,7 +454,7 @@
         });
 
         let handleAllSettingsDocumentChange = () => {};
-        const schemaShell = window.BPMProfilesSchemaShell.create({
+        const schemaShell = createSchemaShell({
             documentRef,
             elements: {
                 wizardDnsOverHttpsCardEl,
@@ -485,6 +503,16 @@
             },
             wizardSchemaShellCatalog,
             wizardSchemaShellViews,
+            components: {
+                createSections: (config) => createSchemaShellSections({
+                    ...config,
+                    components: {
+                        createValueIO: createSchemaShellValueIO,
+                        createReview: createSchemaShellReview,
+                        createActions: createSchemaShellActions,
+                    },
+                }),
+            },
         });
 
         function readAllSettingsModeFromUrl() {
@@ -507,7 +535,7 @@
             windowRef.history.replaceState(windowRef.history.state, "", nextUrl);
         }
 
-        const allSettingsRouteState = window.BPMProfilesAllSettingsState.create({
+        const allSettingsRouteState = createAllSettingsRouteState({
             activeMode: readAllSettingsModeFromUrl(),
         });
         let getWizardComplianceMergeInfoRef = () => null;
@@ -526,7 +554,7 @@
                 || [];
         }
 
-        const settingsInventory = window.BPMProfilesSettingsInventory.create({
+        const settingsInventory = createSettingsInventory({
             dependencies: {
                 t,
                 getActiveWizardSchemaVersion: () => getActiveWizardSchemaVersion(),
@@ -538,7 +566,7 @@
             wizardPreferencesCatalog,
             wizardSchemaShellCatalog,
         });
-        const allSettingsDetail = window.BPMProfilesAllSettingsDetail.create({
+        const allSettingsDetail = createAllSettingsDetail({
             documentRef,
             elements: {
                 allSettingsDetailPanelEl,
@@ -597,7 +625,7 @@
         });
         syncAllSettingsModeButtons();
 
-        allSettingsList = window.BPMProfilesAllSettingsList.create({
+        allSettingsList = createAllSettingsList({
             documentRef,
             elements: {
                 allSettingsConfiguredSummaryEl,
@@ -635,9 +663,13 @@
             allSettingsCategoryCatalog,
             wizardPreferencesCatalog,
             wizardSchemaShellCatalog,
+            components: {
+                createAllSettingsRouteState,
+                createSettingsInventory,
+            },
         });
 
-        const settingsSearch = window.BPMProfilesSettingsSearch.create({
+        const settingsSearch = createSettingsSearch({
             documentRef,
             elements: {
                 wizardSettingsSearchInputEl,
@@ -672,7 +704,7 @@
         setBuildWizardSettingsSearchIndex(settingsSearch.buildIndex);
         setRenderWizardSettingsSearchResults(settingsSearch.renderResults);
 
-        const wizardFlow = window.BPMProfilesWizardFlow.create({
+        const wizardFlow = createWizardFlow({
             documentRef,
             elements: {
                 nameInput,
@@ -754,7 +786,7 @@
         let renderFinalExportStepSummaryRef = () => {};
         let syncWizardNetworkFromEditorRef = () => {};
         let syncWizardPreferencesFromEditorRef = () => {};
-        const workspace = window.BPMProfilesWorkspace.create({
+        const workspace = createWorkspace({
             documentRef,
             windowRef,
             elements: {
@@ -877,6 +909,7 @@
                 setValidationPreviewTone,
                 setValidationIssues,
             },
+            workspaceState: createWorkspaceState(),
         });
         setCurrentSnapshotState(workspace.currentSnapshotState);
         setSaveCurrent(workspace.saveCurrent);
@@ -889,7 +922,7 @@
             workspace.updateActionState();
         };
 
-        review = window.BPMProfilesReview.create({
+        review = createReview({
             documentRef,
             elements: {
                 validationPreviewEl,
@@ -1034,6 +1067,7 @@
                 setWizardComplianceDecisionNote: (...args) => wizardFlow.setWizardComplianceDecisionNote(...args),
                 getBaselineSummary: () => wizardFlow.getBaselineSummary(),
             },
+            reviewState,
         });
         setRenderExtensionReviewSummary(review.renderExtensionReviewSummary);
         setRenderNetworkReviewSummary(review.renderNetworkReviewSummary);
@@ -1072,7 +1106,6 @@
         return coreApi;
     }
 
-    window.BPMProfilesBootstrapCore = {
+    export {
         initCoreModules,
     };
-})();

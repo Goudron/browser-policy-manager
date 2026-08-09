@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "evidence_id": "bpm-0.9.4-documentation-test-model-proof",
+  "backlog_item": "BPM094-M11A-06",
+  "target_bpm_version": "0.9.4",
+  "recorded_on": "2026-08-09",
+  "status": "proven-clean",
+  "purpose": "Prove that scoped benign documentation changes receive bounded feedback without weakening the authoritative release chain, while meaningful source, semantic, PDF, and package regressions fail in their earliest responsible layer.",
+  "authority_records": [
+    "documentation/config/documentation-test-estate-inventory-0.9.4.json",
+    "documentation/config/documentation-semantic-contracts-0.9.4.json",
+    "documentation/config/documentation-ci-handoff-ownership-0.9.4.json"
+  ],
+  "mutation_isolation": {
+    "method": "pytest tmp_path disposable source trees and in-memory copies of release authority text",
+    "maintained_documentation_mutated": false,
+    "generated_release_outputs": "Only maintained commands may replace ignored build, PDF, package, report, and dev-install outputs.",
+    "retention": "No mutation fixture or temporary tree is retained after pytest cleanup."
+  },
+  "m11_baseline": {
+    "historical_release_record": {
+      "source": "docs/bpm_0_9_0_product_documentation_portal_backlog_2026-06-20.md#BPM090-M14-05",
+      "command": "make docs-release-check",
+      "passed": 452,
+      "deselected": 3,
+      "duration_seconds": null,
+      "duration_note": "The M11 completion record did not retain a wall-clock duration; no duration is invented."
+    },
+    "executable_broad_authoring_comparator": {
+      "command": "make test-docs",
+      "result": "passed",
+      "passed": 1032,
+      "deselected": 11,
+      "pytest_duration_seconds": 375.45,
+      "wall_duration_seconds": 386.88,
+      "scope_note": "This is the current executable counterpart of the broad M11 documentation unit/contract authoring route, not a reconstruction of an unrecorded historical duration."
+    },
+    "false_blocker_population": {
+      "source": "documentation/config/documentation-test-estate-inventory-0.9.4.json#m11_false_blockers",
+      "cases": ["M11-FB-001", "M11-FB-002", "M11-FB-003", "M11-FB-004", "M11-FB-005", "M11-FB-006"],
+      "false_blocks": 6,
+      "population_size": 6,
+      "rate": 1.0,
+      "rate_definition": "known false-blocking M11 cases divided by the same six-case replay population"
+    }
+  },
+  "executions": [
+    {
+      "id": "m11a-prerequisite-contracts",
+      "layer": "deterministic-ci",
+      "command": ".venv/bin/pytest -o addopts= -q <M11A-01,M11A-03,M11A-04,M11A-05 focused contracts>",
+      "result": "passed",
+      "passed": 22,
+      "deselected": 0,
+      "pytest_duration_seconds": 0.55,
+      "wall_duration_seconds": 7.68
+    },
+    {
+      "id": "english-editorial-fast",
+      "layer": "fast-authoring",
+      "command": "make docs-fast-check DOCS_CHANGED='documentation/src/dita/en/user/ug-concept-browser-policy-manager-overview.dita'",
+      "result": "passed-not-release",
+      "checked_inputs": 1,
+      "checked_guards": 2,
+      "passed": 0,
+      "deselected": 0,
+      "wall_duration_seconds": 4.83
+    },
+    {
+      "id": "russian-localization-fast",
+      "layer": "fast-authoring",
+      "command": "make docs-fast-check DOCS_CHANGED='documentation/src/dita/ru/user/ug-concept-browser-policy-manager-overview.dita'",
+      "result": "passed-not-release",
+      "checked_inputs": 1,
+      "checked_guards": 3,
+      "passed": 0,
+      "deselected": 0,
+      "wall_duration_seconds": 4.92
+    },
+    {
+      "id": "false-blocker-replay",
+      "layer": "deterministic-ci",
+      "command": ".venv/bin/pytest -o addopts= -q <six M11 false-blocker replacement positive tests>",
+      "result": "passed",
+      "passed": 6,
+      "deselected": 0,
+      "pytest_duration_seconds": 0.24,
+      "wall_duration_seconds": 10.29
+    },
+    {
+      "id": "meaningful-negative-regressions",
+      "layer": "owning-fast-and-release-contracts",
+      "command": ".venv/bin/pytest -o addopts= -q <source, release-chain, PDF-cache, PDF-figure, and package negative tests>",
+      "result": "passed-by-rejecting-all-injected-regressions",
+      "passed": 5,
+      "deselected": 0,
+      "pytest_duration_seconds": 0.37,
+      "wall_duration_seconds": 8.96
+    },
+    {
+      "id": "isolated-benign-mutation-and-snapshot-scope",
+      "layer": "fast-authoring-and-scheduled-audit",
+      "command": ".venv/bin/pytest -o addopts= -q <six isolated mutation, snapshot-scope, and evidence-comparison proof tests>",
+      "result": "passed",
+      "passed": 6,
+      "deselected": 0,
+      "pytest_duration_seconds": 0.30,
+      "wall_duration_seconds": 10.89
+    },
+    {
+      "id": "authoritative-release-handoff",
+      "layer": "manual-release-handoff",
+      "command": "make docs-release-handoff",
+      "result": "passed",
+      "passed": 986,
+      "deselected": 0,
+      "pytest_duration_seconds": 105.78,
+      "wall_duration_seconds": 2613.79,
+      "completed_chain": [
+        "docs-snapshot",
+        "docs-release-check",
+        "docs-pdf-build",
+        "docs-pdf-verify",
+        "docs-pdf-deliver",
+        "docs-pdf-delivery-verify",
+        "docs-reproducibility-check",
+        "docs-package",
+        "docs-package-verify",
+        "docs-install-dev"
+      ],
+      "phase_counts": {
+        "validated_locales": 6,
+        "release_contracts_passed": 986,
+        "pdf_candidate_units": 24,
+        "reproducible_files": 1088
+      },
+      "package_sha256": "3ca94392ac4f467dee208cb5a8a824c842ae819f5ad33f49e63a80be17be683a"
+    },
+    {
+      "id": "post-handoff-evidence-seal",
+      "layer": "deterministic-ci",
+      "command": ".venv/bin/pytest -o addopts= -q documentation/tests/contract/test_documentation_test_model_proof_0_9_4.py",
+      "result": "passed",
+      "passed": 7,
+      "deselected": 0,
+      "pytest_duration_seconds": 0.37,
+      "wall_duration_seconds": 10.65
+    }
+  ],
+  "evidence_seal_bootstrap_attempt": {
+    "command": "make docs-release-handoff",
+    "result": "expected-preseal-contract-stop",
+    "passed_before_stop": 985,
+    "failed": 1,
+    "wall_duration_seconds": 658.09,
+    "failure": "The new proof contract refused to label a handoff still in progress as proven-clean; no product documentation guard failed and PDF/package phases did not run in this attempt.",
+    "disposition": "The evidence lifecycle now accepts only an internally consistent pending pre-seal or a fully populated proven-clean record; the complete handoff was restarted from its first phase."
+  },
+  "scenarios": [
+    {
+      "id": "benign-editorial-rephrase",
+      "class": "benign",
+      "expected_layer": "fast-authoring",
+      "proof_test": "test_benign_editorial_rephrase_passes_fast_layer",
+      "outcome": "passed-fast-with-release-escalation",
+      "false_block": false
+    },
+    {
+      "id": "benign-localized-rephrase",
+      "class": "benign",
+      "expected_layer": "fast-authoring",
+      "proof_test": "test_benign_localized_rephrase_passes_shape_aware_fast_layer",
+      "outcome": "passed-fast-with-localized-shape-guard",
+      "false_block": false
+    },
+    {
+      "id": "undeclared-topic-snapshot-change",
+      "class": "benign",
+      "expected_layer": "scheduled-audit",
+      "proof_test": "test_snapshot_scope_ignores_undeclared_input_but_tracks_declared_owner",
+      "outcome": "unrelated-snapshot-stayed-stable",
+      "false_block": false
+    },
+    {
+      "id": "malformed-changed-source",
+      "class": "meaningful-regression",
+      "expected_layer": "fast-authoring",
+      "proof_test": "test_malformed_source_fails_in_fast_layer",
+      "outcome": "rejected-before-release",
+      "false_block": false
+    },
+    {
+      "id": "release-chain-package-proof-removed",
+      "class": "meaningful-regression",
+      "expected_layer": "release-gate-semantic-contract",
+      "proof_test": "test_documentation_command_boundary_rejects_missing_release_proof",
+      "outcome": "rejected-by-current-command-authority",
+      "false_block": false
+    },
+    {
+      "id": "corrupt-pdf-cache",
+      "class": "meaningful-regression",
+      "expected_layer": "pdf-build-owner",
+      "proof_test": "test_pdf_cache_reuses_verified_payload_and_quarantines_corruption",
+      "outcome": "rejected-and-quarantined",
+      "false_block": false
+    },
+    {
+      "id": "incomplete-pdf-figure-inventory",
+      "class": "meaningful-regression",
+      "expected_layer": "pdf-build-owner",
+      "proof_test": "test_pdf_print_guide_rejects_an_incomplete_user_guide_figure_inventory",
+      "outcome": "rejected-before-pdf-publication",
+      "false_block": false
+    },
+    {
+      "id": "package-missing-locale-root",
+      "class": "meaningful-regression",
+      "expected_layer": "package-verification-owner",
+      "proof_test": "test_archive_verification_rejects_missing_locale_root",
+      "outcome": "rejected-by-package-verification",
+      "false_block": false
+    }
+  ],
+  "false_blocker_comparison": {
+    "population_size": 6,
+    "m11_false_blocks": 6,
+    "m11_rate": 1.0,
+    "m11a_false_blocks": 0,
+    "m11a_rate": 0.0,
+    "absolute_rate_reduction": 1.0,
+    "replay_result": "All six current positive authorities passed; their negative counterparts continue to fail closed."
+  },
+  "runtime_comparison": {
+    "broad_comparator_wall_seconds": 386.88,
+    "english_fast_wall_seconds": 4.83,
+    "russian_fast_wall_seconds": 4.92,
+    "slowest_fast_wall_seconds": 4.92,
+    "slowest_fast_within_budget_seconds": 30,
+    "broad_to_slowest_fast_ratio": 78.63,
+    "interpretation": "The scoped fast command is at least 78.63 times faster on this runner than the measured broad unit/contract authoring comparator; it explicitly does not claim release coverage."
+  },
+  "skipped_by_design": {
+    "fast_authoring": [
+      "six-locale DITA validation and editorial sign-off",
+      "full locale parity, manifest, search, API-example, and portal contract suites",
+      "binary PDF build, verification, and delivery",
+      "reproducibility, package verification, documentation snapshot, and install handoff"
+    ],
+    "authoritative_release_handoff": [],
+    "outside_documentation_release_owner": [
+      "general BPM make test-release suite",
+      "live Firefox"
+    ]
+  },
+  "approved_separate_audits": [
+    {
+      "owner": "documentation-audits scheduled workflow",
+      "command": "make docs-snapshot plus the declared snapshot/index/editorial/localization audit selection",
+      "status": "approved-separate-owner",
+      "reason": "Scheduled review evidence is not an ordinary prose-edit prerequisite and cannot be presented as release evidence."
+    },
+    {
+      "owner": "CI chromium-tests job",
+      "command": "make test-browser && make test-docs-browser",
+      "status": "approved-separate-owner",
+      "reason": "Installed portal browser behavior has its own required-PR owner and artifacts."
+    },
+    {
+      "owner": "general BPM release manager",
+      "command": "make test-release",
+      "status": "approved-separate-owner",
+      "reason": "The authoritative documentation handoff is complete documentation evidence, not the general BPM release suite."
+    }
+  ],
+  "conclusion": "Benign scoped edits pass the fast layer with explicit release-only skips and escalation; all six M11 false-blocker authorities replay without a false block; meaningful regressions fail in the earliest responsible owner; and the complete documentation release handoff passes without skipped release-only work."
+}

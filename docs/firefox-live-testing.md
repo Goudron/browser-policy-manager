@@ -9,16 +9,17 @@ not drive the BPM `/profiles` UI, wizard flow, or Chromium product audit path.
 
 - Firefox runs in `headless` mode by default.
 - Every test creates its own temporary Firefox profile.
-- The harness reuses a project-local Firefox install under `.bpm-test-browsers/`.
-- Enterprise policies are written into that isolated project-local Firefox as `distribution/policies.json`.
+- The harness reuses a checksum-verified, immutable Firefox installation under `.bpm-test-browsers/`.
+- Each run clones that installation before writing `distribution/policies.json`; it never writes
+  into the verified installation.
 - Your normal Firefox profile and settings are not reused.
 
 ## Project-local sandbox
 
-The live harness looks for browser binaries in this hidden project folder first:
-
-- `.bpm-test-browsers/firefox/firefox/firefox`
-- `.bpm-test-browsers/geckodriver/geckodriver`
+The provisioner stores verified archives under `.bpm-test-browsers/cache/` and
+channel-specific immutable installs under `.bpm-test-browsers/installs/`. The manifest
+`tools/firefox_live_browsers_manifest_0_9_4.json` owns URLs, SHA-256 values, platforms,
+Firefox channels, and the matching geckodriver.
 
 If you prefer explicit paths, you can still use:
 
@@ -53,15 +54,27 @@ Linux helper:
 make setup-firefox-live-browsers
 ```
 
-The helper downloads the latest Linux Firefox Release build into `.bpm-test-browsers/` and prints
-the installed Firefox and geckodriver versions at the end. For the current BPM release channel, the
-expected target is Firefox `150.x`.
+The helper downloads exact Linux x86-64 archives, verifies their SHA-256 values in a temporary
+staging directory, checks the extracted executable versions, and only then atomically promotes a
+channel-specific immutable install. The pinned Release pair is Firefox `153.0.1` with geckodriver
+`0.37.1`.
 
 To install the ESR sandbox instead, pass the channel through Make:
 
 ```bash
-make setup-firefox-live-browsers FIREFOX_CHANNEL=esr
+make setup-firefox-live-browsers FIREFOX_CHANNEL=esr153
 ```
+
+The supported channels are `release` (Firefox `153.0.1`), `esr153` (Firefox `153.0esr`), and
+`esr140` (Firefox `140.13.0esr`), all with geckodriver `0.37.1`. Verify a provisioned channel
+before a rerun:
+
+```bash
+make verify-firefox-live-browsers FIREFOX_CHANNEL=esr153
+```
+
+The exact URLs, SHA-256 values, and installed versions are owned by the manifest and provisioning
+tool. Floating downloads are not accepted.
 
 Then run:
 
@@ -71,6 +84,13 @@ make test-firefox-live
 
 The default `pytest` run excludes `firefox_live` and `firefox_live_amo`, so use
 the explicit Make target above when you want the deterministic real-browser suite.
+
+For the reviewed end-to-end workflow with timeout, per-channel artifacts, and a terminal summary,
+use:
+
+```bash
+make firefox-live-workflow FIREFOX_CHANNEL=release
+```
 
 ## AMO canary
 
@@ -116,8 +136,8 @@ These scenarios intentionally focus on the Firefox policy engine itself:
 - `.github/workflows/ci.yml`
   Does not run live Firefox suites.
 - `.github/workflows/firefox-live.yml`
-  Runs the deterministic live suite only by manual dispatch when `run_live_tests`
-  is set to `RUN`.
+  Runs the deterministic local suite weekly and by manual dispatch when `run_live_tests`
+  is set to `RUN`, separately for `release`, `esr153`, and `esr140`.
 - `.github/workflows/firefox-live-amo.yml`
   Runs the separate AMO canary suite only by manual dispatch when
-  `run_live_tests` is set to `RUN`.
+  `run_live_tests` is set to `RUN`, separately for the same three channels.

@@ -44,7 +44,7 @@ later model answer can use it.
 
 ## Fixed adversarial evidence
 
-`tests/test_web_evidence_security_093.py` uses only fakes. It proves off-topic refusal before
+`tests/integration/ai/incubation/test_web_evidence_security.py` uses only fakes. It proves off-topic refusal before
 network; private, link-local, IPv6, userinfo, non-default-port and path-bypass URLs cannot widen
 the sole provider destination; six locale-specific prompt overrides are rejected while preserving
 the request locale's search language; per-session and global limits preserve consent; pre/post

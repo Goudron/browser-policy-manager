@@ -175,9 +175,14 @@ def test_api_integration_topics_exist_in_every_locale_with_stable_metadata() -> 
             assert root.find("shortdesc") is not None
             assert len(root.findall("./related-links/link")) >= 4
             if topic_contract["kind"] == "concept":
-                section_ids = {section.attrib["id"] for section in root.findall("./conbody/section")}
+                section_ids = {
+                    section.attrib["id"] for section in root.findall("./conbody/section")
+                }
                 assert section_ids == topic_contract["sections"]
-                assert all("".join(section.itertext()).strip() for section in root.findall("./conbody/section"))
+                assert all(
+                    "".join(section.itertext()).strip()
+                    for section in root.findall("./conbody/section")
+                )
             else:
                 taskbody = root.find("taskbody")
                 assert taskbody is not None
@@ -193,7 +198,9 @@ def test_api_integration_topics_exist_in_every_locale_with_stable_metadata() -> 
                 assert sum(bool(step.findall(".//codeph")) for step in steps) >= 3
                 text = "".join(root.itertext())
                 assert all(api_id in text for api_id in topic_contract["api_ids"])
-                assert any(note.attrib.get("type") == "warning" for note in taskbody.findall(".//note"))
+                assert any(
+                    note.attrib.get("type") == "warning" for note in taskbody.findall(".//note")
+                )
 
 
 def test_api_integration_topics_are_keyed_and_reachable_from_administrator_guide_maps() -> None:
@@ -204,10 +211,7 @@ def test_api_integration_topics_are_keyed_and_reachable_from_administrator_guide
             for keydef in keys.findall("keydef")
             if keydef.attrib["keys"] in ADMIN_API_KEYREFS
         }
-        assert keydefs == {
-            f"topic.{topic_id}": f"../admin/{topic_id}.dita"
-            for topic_id in TOPICS
-        }
+        assert keydefs == {f"topic.{topic_id}": f"../admin/{topic_id}.dita" for topic_id in TOPICS}
 
         admin_guide = ET.fromstring(
             (DITA_ROOT / locale / "maps/administrator-guide.ditamap").read_text(encoding="utf-8")
@@ -527,8 +531,7 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
         assert multipart_response.json()["flags"] == multipart_document["policies"]
 
         export_response = client.get(
-            f"/api/export/profiles/{json_profile['id']}/firefox/policies.json"
-            "?download=1&pretty=1"
+            f"/api/export/profiles/{json_profile['id']}/firefox/policies.json?download=1&pretty=1"
         )
         assert export_response.status_code == 200, export_response.text
         assert export_response.headers["content-type"].startswith("application/json")
@@ -538,9 +541,11 @@ def test_firefox_import_export_documented_examples_execute_against_api_test_app(
         exported_document = export_response.json()
         assert exported_document == {"policies": json_import["document"]["policies"]}
         assert "compliance" not in exported_document
-        assert "\n  \"policies\"" in export_response.text
+        assert '\n  "policies"' in export_response.text
 
-        validation_response = client.post("/api/validate/release-153", json={"document": exported_document})
+        validation_response = client.post(
+            "/api/validate/release-153", json={"document": exported_document}
+        )
         assert validation_response.status_code == 200, validation_response.text
         assert validation_response.json()["ok"] is True
 
@@ -641,9 +646,7 @@ def test_pull_compare_update_scenario_executes_against_api_test_app() -> None:
         assert read_profile["revision"] == created["revision"]
 
         changed_keys = sorted(
-            key
-            for key, value in desired_flags.items()
-            if read_profile["flags"].get(key) != value
+            key for key, value in desired_flags.items() if read_profile["flags"].get(key) != value
         )
         assert changed_keys == ["BlockAboutConfig", "DisableTelemetry"]
 
@@ -728,8 +731,7 @@ def test_import_review_export_compliance_scenario_executes_against_api_test_app(
         assert validation_response.json() == {"ok": True, "profile": "release-153"}
 
         export_response = client.get(
-            f"/api/export/profiles/{imported['id']}/firefox/policies.json"
-            "?download=1&pretty=1"
+            f"/api/export/profiles/{imported['id']}/firefox/policies.json?download=1&pretty=1"
         )
         assert export_response.status_code == 200, export_response.text
         assert export_response.headers["content-disposition"] == (
@@ -758,12 +760,12 @@ def test_reusable_api_examples_execute_against_api_test_app_without_environment_
         '"$BPM_BASE_URL/api/profiles"',
         '"$BPM_BASE_URL/api/profiles?q=docs-api-example&lifecycle=active&limit=50&offset=0"',
         '"$BPM_BASE_URL/api/profiles/$PROFILE_ID"',
-        'PATCH',
+        "PATCH",
         "expected_revision",
         '"$BPM_BASE_URL/api/validate/$BPM_SCHEMA_CHANNEL"',
         '"$BPM_BASE_URL/api/profiles/import/firefox/policies.json"',
-        'multipart/form-data',
-        'file=@$BPM_JSON_IMPORT_PATH;type=application/json',
+        "multipart/form-data",
+        "file=@$BPM_JSON_IMPORT_PATH;type=application/json",
         '"$BPM_BASE_URL/api/export/profiles/$PROFILE_ID/firefox/policies.json?pretty=1"',
         'base_url = os.environ["BPM_BASE_URL"].rstrip("/")',
         'schema_channel = os.environ.get("BPM_SCHEMA_CHANNEL", "release-153")',
@@ -870,4 +872,4 @@ def test_reusable_api_examples_execute_against_api_test_app_without_environment_
         assert export_response.status_code == 200, export_response.text
         assert export_response.headers["content-type"].startswith("application/json")
         assert export_response.json() == {"policies": policies}
-        assert "\n  \"policies\"" in export_response.text
+        assert '\n  "policies"' in export_response.text

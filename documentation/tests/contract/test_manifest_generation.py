@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import importlib.util
 import json
 from pathlib import Path
@@ -10,6 +11,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 MODULE_PATH = DOCUMENTATION_ROOT / "tools/build_docs.py"
 POLICY_CONTEXT_TARGETS = DOCUMENTATION_ROOT / "config/firefox-policy-context-targets-0.9.0.json"
+SEMANTIC_AUTHORITY = DOCUMENTATION_ROOT / "config/documentation-semantic-contracts-0.9.4.json"
 SPEC = importlib.util.spec_from_file_location("build_docs", MODULE_PATH)
 assert SPEC and SPEC.loader
 build_docs = importlib.util.module_from_spec(SPEC)
@@ -41,15 +43,33 @@ def test_guide_landing_topics_are_manifest_ready_without_product_topics() -> Non
     assert len(set(anchors)) == len(anchors)
 
 
-def test_manifest_artifacts_are_no_longer_runtime_blockers() -> None:
+def _runtime_artifact_policy_errors(policy: dict, authority: dict) -> list[str]:
+    runtime = policy["current_runtime_contract"]
+    errors: list[str] = []
+    if runtime["runtime_ready"] is not authority["required_runtime_state"]:
+        errors.append("runtime readiness no longer reflects the current delivery boundary")
+    if set(authority["generated_non_prerequisites"]) & set(runtime["required_before_shipping"]):
+        errors.append("generated state became a runtime shipping prerequisite")
+    if len(runtime["required_before_shipping"]) < 3:
+        errors.append("shipping boundary lost a delivery or review prerequisite")
+    return errors
+
+
+def test_manifest_artifact_policy_uses_current_shipping_semantics() -> None:
     policy = json.loads(
         (DOCUMENTATION_ROOT / "config/artifact-policy.json").read_text(encoding="utf-8")
     )
+    authority = json.loads(SEMANTIC_AUTHORITY.read_text(encoding="utf-8"))["authorities"][
+        "runtime_artifact_policy"
+    ]
 
-    blockers = policy["current_runtime_contract"]["required_before_shipping"]
-    assert "manifest.json" not in blockers
-    assert "ui-target-map.json" not in blockers
-    assert "runtime-ready six locale search indexes" not in blockers
+    assert _runtime_artifact_policy_errors(policy, authority) == []
+
+    stale_policy = copy.deepcopy(policy)
+    stale_policy["current_runtime_contract"]["required_before_shipping"].append("manifest.json")
+    assert _runtime_artifact_policy_errors(stale_policy, authority) == [
+        "generated state became a runtime shipping prerequisite"
+    ]
 
 
 def test_policy_context_targets_are_inventory_backed_and_unambiguous() -> None:
@@ -66,7 +86,10 @@ def test_policy_context_targets_are_inventory_backed_and_unambiguous() -> None:
     assert assignments["ExtensionSettings"]["family_id"] == "extensions"
     assert assignments["Preferences"]["family_id"] == "managed-preferences"
     assert context["default_policy_target"]["topic_id"] == "fx-concept-policy-selection"
-    assert context["default_policy_target"]["validation_topic_id"] == "ug-troubleshoot-policy-validation"
+    assert (
+        context["default_policy_target"]["validation_topic_id"]
+        == "ug-troubleshoot-policy-validation"
+    )
 
 
 def test_policy_context_targets_reject_orphaned_and_ambiguous_policy_links() -> None:
@@ -99,7 +122,10 @@ def test_target_map_semantics_reject_unknown_policy_sources() -> None:
                         "aliases": [],
                     }
                 },
-                "output": {locale: f"{locale}/firefox/fx-concept-policy-selection.html" for locale in build_docs.LOCALES},
+                "output": {
+                    locale: f"{locale}/firefox/fx-concept-policy-selection.html"
+                    for locale in build_docs.LOCALES
+                },
             }
         }
     }
@@ -108,7 +134,9 @@ def test_target_map_semantics_reject_unknown_policy_sources() -> None:
             "policy:NotARealFirefoxPolicy": {
                 "kind": "policy",
                 "source_id": "NotARealFirefoxPolicy",
-                "source_inventory": "documentation/config/firefox-policy-context-targets-0.9.0.json",
+                "source_inventory": (
+                    "documentation/config/firefox-policy-context-targets-0.9.0.json"
+                ),
                 "topic_id": "fx-concept-policy-selection",
                 "anchor_id": "a-review-value-shape",
             }

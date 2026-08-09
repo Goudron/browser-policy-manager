@@ -4,9 +4,9 @@
   <title>集成受众和编程接口边界</title>
   <shortdesc>管理员/DevOps 指南中的 API 集成部分适用于使用 BPM 当前编程 API 的外部工具，但不对未支持的产品能力作出保证。</shortdesc>
   <conbody>
-    <section id="a-audience"><title>观众</title><p>当您构建或审查与 BPM 交换配置文件和 Firefox 策略数据的配置、合规性、编排、库存或控制产品时，请使用本指南。主要读者是 API 集成商、安全审查员、发布工程师和维护人员，他们需要可重复的合同来进行配置文件同步、验证门、策略导入/导出、合规性元数据、库存和运行状况检查。</p></section>
-    <section id="a-evidence-boundary"><title>证据边界</title><p>该指南基于生成的 OpenAPI 合约、维护的 API 库存、路线/模型源和重点 API 测试。它记录了 0.9.1 版本中已经公开的 API BPM。它不授权新的端点、安全模型、数据模式、重试语义或兼容性承诺。</p></section>
-    <section id="a-supported-consumers"><title>支持的消费者角色</title><p>支持的使用者是通用角色：配置管理器、合规性扫描器、策略审查门、配置文件库存收集器、部署协调器和操作监视器。他们可以调用 API 清单中列出的服务、配置文件、Firefox 导入/导出、验证和运行状况操作。</p></section>
+    <section id="a-audience"><title>观众</title><p>当您构建或审查与 BPM 交换配置文件和 Firefox 策略数据的配置、合规性、编排、<uicontrol>库</uicontrol>存或控制产品时，请使用本指南。主要读者是 API 集成商、安全审查员、发布工程师和维护人员，他们需要可重复的合同来进行配置文件同步、验证门、策略导入/导出、合规性元数据、<uicontrol>库</uicontrol>存和运行状况检查。</p></section>
+    <section id="a-evidence-boundary"><title>证据边界</title><p>该指南基于生成的 OpenAPI 合约、维护的 API <uicontrol>库</uicontrol>存、路线/模型源和重点 API 测试。它记录了 0.9.1 版本中已经公开的 API BPM。它不授权新的端点、安全模型、数据模式、重试语义或兼容性承诺。</p></section>
+    <section id="a-supported-consumers"><title>支持的消费者角色</title><p>支持的使用者是通用角色：配置管理器、合规性扫描器、策略审查门、配置文件<uicontrol>库</uicontrol>存收集器、部署协调器和操作监视器。他们可以调用 API 清单中列出的服务、配置文件、Firefox 导入/导出、验证和运行状况操作。</p></section>
     <section id="a-unsupported-claims"><title>不支持的声明</title><p>请勿描述特定于产品的连接器、市场集成、认证集成、合作伙伴关系、托管代理或供应商工作流程，除非该连接器实际发货。 HTML 路由、静态资产、生成的架构 界面 和下划线前缀的 Python 帮助程序不是稳定的机器集成 API。</p></section>
     <section id="a-data-ownership"><title>数据所有权</title><p>BPM 拥有规范化配置文件模型、验证状态、修订、生命周期状态、不透明合规性对象和规范的 Firefox 导出呈现。集成产品拥有自己的调度、授权、审计跟踪、重试策略、异常记录、部署决策以及 BPM 之外的任何运行时验证。</p></section>
   </conbody>

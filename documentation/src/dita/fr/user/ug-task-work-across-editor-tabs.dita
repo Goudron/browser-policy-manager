@@ -4,8 +4,8 @@
   <title>Travailler sur les onglets de l'éditeur</title>
   <shortdesc>Utilisez des onglets de navigateur distincts pour les modes de profil enregistré sans confondre les brouillons ni perdre les modifications non enregistrées.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
-    <context><p>BPM ouvre les modes de profil enregistrés et les surfaces de comparaison dans des onglets séparés afin que les utilisateurs puissent inspecter côte à côte Éditeur guidé, Tous les paramètres, JSON et Comparer les paramètres des profils.</p></context>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <context><p>BPM ouvre les modes de profil enregistrés et les surfaces de comparaison dans des onglets séparés afin que les utilisateurs puissent inspecter côte à côte <uicontrol>Éditeur guidé</uicontrol>, <uicontrol>Tous les paramètres</uicontrol>, JSON et <uicontrol>Comparer les paramètres des profils</uicontrol>.</p></context>
     <steps>
       <step><cmd>Ouvrez un profil enregistré à partir de la bibliothèque dans le mode éditeur requis.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Gardez le nom du profil, le canal de schéma et le badge de cycle de vie visibles dans chaque onglet.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>

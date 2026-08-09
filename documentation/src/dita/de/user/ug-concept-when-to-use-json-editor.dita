@@ -2,11 +2,11 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-when-to-use-json-editor" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Einsatz des JSON-Editors</title>
-  <shortdesc>Verwenden Sie JSON-Editor für eine genaue Rohüberprüfung, Migrationsprüfungen, Fehlerbehebung und Werte, die einfacher als Roh-policies.json zu verarbeiten sind.</shortdesc>
+  <shortdesc>Verwenden Sie <uicontrol>JSON-Editor</uicontrol> für eine genaue Rohüberprüfung, Migrationsprüfungen, Fehlerbehebung und Werte, die einfacher als Roh-policies.json zu verarbeiten sind.</shortdesc>
   <conbody>
-    <p>JSON-Editor ist leistungsstark, aber weniger geführt als die visuellen Editoren. Dies sollte eine bewusste Entscheidung sein, wenn der Benutzer die Genauigkeit des Grenzdokuments benötigt.</p>
-    <section id="a-good-fit"><title>Gute Passform</title><p>Verwenden Sie JSON-Editor für eine genaue policies.json-Überprüfung, Migrationsprüfungen, rohe Fallback-Werte oder die Fehlerbehebung bei fehlerhaften Import-/Exportdokumenten.</p></section>
-    <section id="a-not-first-choice"><title>Nicht die erste Wahl</title><p>Verwenden Sie Geführter Editor für allgemeine Arbeitsabläufe und Alle Einstellungen für eine vollständige visuelle Inspektion, bevor Sie rohes JSON für routinemäßige Bearbeitungen wählen.</p></section>
+    <p><uicontrol>JSON-Editor</uicontrol> ist leistungsstark, aber weniger geführt als die visuellen Editoren. Dies sollte eine bewusste Entscheidung sein, wenn der Benutzer die Genauigkeit des Grenzdokuments benötigt.</p>
+    <section id="a-good-fit"><title>Gute Passform</title><p>Verwenden Sie <uicontrol>JSON-Editor</uicontrol> für eine genaue policies.json-Überprüfung, Migrationsprüfungen, rohe Fallback-Werte oder die Fehlerbehebung bei fehlerhaften Import-/Exportdokumenten.</p></section>
+    <section id="a-not-first-choice"><title>Nicht die erste Wahl</title><p>Verwenden Sie <uicontrol>Geführter Editor</uicontrol> für allgemeine Arbeitsabläufe und <uicontrol>Alle Einstellungen</uicontrol> für eine vollständige visuelle Inspektion, bevor Sie rohes JSON für routinemäßige Bearbeitungen wählen.</p></section>
     <section id="a-validation-boundary"><title>Validierungsgrenze</title><p>Gültige JSON-Syntax reicht nicht aus. BPM validiert außerdem Firefox-Richtlinienwerte, die Schemakanalunterstützung und das kanonische normalisierte Modell vor dem Speichern.</p></section>
     <section id="a-examples"><title>Beispiele</title><p>Ein gültiges Beispiel behält ein Richtlinienobjekt der obersten Ebene mit Einträgen wie DisableTelemetry und Preferences bei, einschließlich eines gesperrten browser.startup.homepage-Werts. Zu den ungültigen Beispielen gehören eine fehlerhafte JSON-Syntax und ungültige Schema-Richtlinienwerte, beispielsweise eine Zeichenfolge, bei der ein boolescher Wert erforderlich ist.</p></section>
   </conbody>

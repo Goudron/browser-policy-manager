@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-operate-local-documentation-assistant" xml:lang="en" audience="administrator devops" product="bpm-0-9-1" platform="linux">
-  <title>Operate the documentation assistant in BPM 0.9.3</title>
+  <title>Operate the documentation assistant in BPM 0.9.4</title>
   <shortdesc>Verify the released training-notice boundary without making BPM or deterministic documentation search dependent on the chat.</shortdesc>
   <taskbody>
-    <prereq><p>Use a supported BPM 0.9.3 source checkout and the base system capacity in <xref keyref="topic.admin-reference-minimum-system-requirements"/>.</p></prereq>
+    <prereq><p>Use a supported BPM 0.9.4 source checkout and the base system capacity in <xref keyref="topic.admin-reference-minimum-system-requirements"/>.</p></prereq>
     <context><p>In this release the chat is a localized reader interface only. It does not start or install a model, retrieve documentation, use an E5 index, generate an answer, expose citations, or contact external sources. Deterministic documentation search remains separate and available.</p></context>
     <steps>
-      <step><cmd>Start BPM by using the normal supported source workflow.</cmd><info><p>Do not add model, index, embedding, or external-provider setup to BPM startup for release 0.9.3.</p></info></step>
+      <step><cmd>Start BPM by using the normal supported source workflow.</cmd><info><p>Do not add model, index, embedding, or external-provider setup to BPM startup for release 0.9.4.</p></info></step>
       <step><cmd>Open the documentation portal in the reader’s locale.</cmd><info><p>Confirm that the assistant can be opened from the lower-right corner without changing the ordinary search controls.</p></info></step>
       <step><cmd>Submit a BPM-related question.</cmd><info><p>The transcript must show the localized notice that local-model training is in progress and will be available in a later version.</p></info></step>
       <step><cmd>Submit an unrelated question.</cmd><info><p>The same notice is expected; the chat is not a general-purpose assistant in this release.</p></info></step>
       <step><cmd>Use deterministic documentation search to find the current answer.</cmd><info><p>Search, filters, navigation, and result ordering remain the supported product-information path.</p></info></step>
     </steps>
     <result><p>The assistant presents the released localized training notice, while BPM and deterministic documentation search remain independently usable.</p></result>
-    <postreq><p>Do not install a model or build a RAG generation for 0.9.3. Record a documentation defect if the notice, locale, or ordinary search boundary differs from this behavior.</p></postreq>
+    <postreq><p>Do not install a model or build a RAG generation for 0.9.4. Record a documentation defect if the notice, locale, or ordinary search boundary differs from this behavior.</p></postreq>
   </taskbody>
   <related-links><link keyref="topic.admin-reference-minimum-system-requirements"/><link keyref="topic.admin-task-gate-control-product-startup"/></related-links>
 </task>

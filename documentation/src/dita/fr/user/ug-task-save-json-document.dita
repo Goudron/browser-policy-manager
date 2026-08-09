@@ -5,10 +5,10 @@
   <shortdesc>Enregistrez un document JSON brut valide dans le profil BPM canonique.</shortdesc>
   <taskbody>
     <prereq><p>Le document JSON a été validé ou les avertissements restants sont compris.</p></prereq>
-    <context><p>L'enregistrement réécrit le document brut via la normalisation BPM. Le profil enregistré peut ensuite être ouvert dans les processus guidés, Tous les paramètres, de comparaison ou d'exportation.</p></context>
+    <context><p>L'enregistrement réécrit le document brut via la normalisation BPM. Le profil enregistré peut ensuite être ouvert dans les processus guidés, <uicontrol>Tous les paramètres</uicontrol>, de comparaison ou d'exportation.</p></context>
     <steps>
       <step><cmd>Validez le document JSON.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez Enregistrer uniquement lorsque l'objet de stratégie de niveau supérieur et les valeurs de stratégie sont correctes.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez <uicontrol>Enregistrer</uicontrol> uniquement lorsque l'objet de stratégie de niveau supérieur et les valeurs de stratégie sont correctes.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Attendez l'état enregistré avant de quitter l'itinéraire.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Rouvrez le profil ou exportez policies.json lorsque vous avez besoin d'une preuve de transfert.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>
     </steps>

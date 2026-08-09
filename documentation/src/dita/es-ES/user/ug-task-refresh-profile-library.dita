@@ -7,11 +7,11 @@
     <prereq><p>La biblioteca está abierta y debe confirmar el estado actual del perfil guardado después de un cambio o una carga fallida.</p></prereq>
     <context><p>Actualizar recarga la biblioteca desde BPM. No valida perfiles ni guarda cambios del editor no guardados.</p></context>
     <steps>
-      <step><cmd>Elija Actualizar en la Biblioteca.</cmd><info><p>Resultado esperado: el estado anuncia la carga y luego una lista actualizada o un error.</p></info></step>
-      <step><cmd>Espere el mensaje de estado antes de iniciar otra acción de la Biblioteca.</cmd><info><note type="warning">Repetir el ciclo de vida o eliminar acciones mientras el estado no está resuelto puede hacer que sea más difícil saber qué operación falló.</note></info></step>
+      <step><cmd>Elija Actualizar en la <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Resultado esperado: el estado anuncia la carga y luego una lista actualizada o un error.</p></info></step>
+      <step><cmd>Espere el mensaje de estado antes de iniciar otra acción de la <uicontrol>Biblioteca</uicontrol>.</cmd><info><note type="warning">Repetir el ciclo de vida o eliminar acciones mientras el estado no está resuelto puede hacer que sea más difícil saber qué operación falló.</note></info></step>
       <step><cmd>Revisar los recuentos filtrados y totales después de la actualización.</cmd><info><p>Los recuentos pueden cambiar si otra pestaña guardó, archivó, restauró o eliminó un perfil.</p></info></step>
     </steps>
-    <result><p>La vista Biblioteca refleja la lista de perfiles más reciente disponible para BPM.</p></result>
+    <result><p>La vista <uicontrol>Biblioteca</uicontrol> refleja la lista de perfiles más reciente disponible para BPM.</p></result>
     <postreq><p>Recuperación: si la actualización falla, mantenga abierta la página actual y utilice el tema de solución de problemas para decidir si desea volver a intentarlo o conservar el contexto.</p></postreq>
   </taskbody>
   <related-links>

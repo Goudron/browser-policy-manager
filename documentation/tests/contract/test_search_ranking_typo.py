@@ -79,7 +79,9 @@ def test_search_ranking_fixtures_cover_exact_alias_title_typo_and_all_locales() 
         "typo-en-profile-library",
         "typo-de-validation-endpoint",
     } <= fixture_ids
-    assert {
-        fixture["required_score_component"]
-        for fixture in config["ranking_fixtures"]
-    } >= {"exact_identifier", "title", "alias", "bounded_typo"}
+    assert {fixture["required_score_component"] for fixture in config["ranking_fixtures"]} >= {
+        "exact_identifier",
+        "title",
+        "alias",
+        "bounded_typo",
+    }

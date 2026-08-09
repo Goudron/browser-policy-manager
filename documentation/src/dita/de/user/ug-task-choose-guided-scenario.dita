@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-choose-guided-scenario" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Ein geführtes Szenario auswählen</title>
-  <shortdesc>Wählen Sie das Szenario aus, das am besten zum Profilziel passt, damit Geführter Editor einen nützlichen Ausgangspunkt bieten kann.</shortdesc>
+  <shortdesc>Wählen Sie das Szenario aus, das am besten zum Profilziel passt, damit <uicontrol>Geführter Editor</uicontrol> einen nützlichen Ausgangspunkt bieten kann.</shortdesc>
   <taskbody>
     <prereq><p>Sie kennen den Profilzweck, den Sie unterstützen möchten.</p></prereq>
     <context><p>Szenarien sorgen dafür, dass der erste Durchgang aufgabenorientiert bleibt und die Grundlinie während der Überprüfung leichter zu erklären ist.</p></context>

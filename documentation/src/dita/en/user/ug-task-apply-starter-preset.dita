@@ -5,9 +5,9 @@
   <shortdesc>Use a starter preset to seed common Firefox policy choices before detailed editing.</shortdesc>
   <taskbody>
     <prereq><p>A profile draft is open in Step 1.</p></prereq>
-    <context><p>Starter presets provide a known baseline that you can still change in Guided editor, All settings, or JSON editor.</p></context>
+    <context><p>Starter presets provide a known baseline that you can still change in <uicontrol>Guided editor</uicontrol>, <uicontrol>All settings</uicontrol>, or <uicontrol>JSON editor</uicontrol>.</p></context>
     <steps>
-      <step><cmd>Open the starter preset area in Profile &amp; baseline.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open the starter preset area in <uicontrol>Profile &amp; baseline</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Compare the available presets against the profile scenario.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Apply the preset that matches the intended browser behavior.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Review the changed summary before moving to the next step.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>

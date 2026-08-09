@@ -5,7 +5,7 @@ Status: active guard plan
 Backlog item: `BPM092-M2-08`
 
 Fixture: `tests/fixtures/ui_compaction_baseline_guards_0.9.2.json`
-Focused test: `tests/test_ui_compaction_baseline_guards_092.py`
+Focused test: `tests/integration/ui/test_ui_compaction_baseline_guards_092.py`
 
 ## Active M2 Guards
 

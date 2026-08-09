@@ -4,7 +4,7 @@
   <title>Rechercher des paramètres dans l’« Éditeur guidé »</title>
   <shortdesc>Recherchez les commandes guidées et accédez au paramètre correspondant sans analyser chaque étape.</shortdesc>
   <taskbody>
-    <prereq><p>Un profil est ouvert dans Éditeur guidé.</p></prereq>
+    <prereq><p>Un profil est ouvert dans <uicontrol>Éditeur guidé</uicontrol>.</p></prereq>
     <context><p>La recherche guidée est utile lorsque vous connaissez l'objectif de la stratégie mais pas l'étape qui contient la famille de contrôle.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Résultats de recherche de paramètres dans l’« Éditeur guidé »</title>

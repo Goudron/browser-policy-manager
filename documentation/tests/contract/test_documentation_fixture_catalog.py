@@ -86,9 +86,7 @@ def test_fixture_catalog_maps_failure_domains_to_existing_suite_boundaries() -> 
     boundaries = _json(SUITE_BOUNDARIES)
     known_domains = set(boundaries["domains"])
     mapped_domains = {
-        domain
-        for fixture in catalog["fixtures"]
-        for domain in fixture["failure_domains"]
+        domain for fixture in catalog["fixtures"] for domain in fixture["failure_domains"]
     }
 
     assert mapped_domains <= known_domains
@@ -109,9 +107,10 @@ def test_fixture_catalog_is_registered_in_suite_boundary_contract() -> None:
     fixtures_domain = boundaries["domains"]["fixtures"]
 
     assert fixtures_domain["primary_suite"] == "contract"
-    assert "documentation/tests/contract/test_documentation_fixture_catalog.py" in fixtures_domain[
-        "path_globs"
-    ]
+    assert (
+        "documentation/tests/contract/test_documentation_fixture_catalog.py"
+        in fixtures_domain["path_globs"]
+    )
     assert "documentation/fixtures/fixture-catalog-0.9.0.json" in fixtures_domain["fixtures"]
     assert fixtures_domain["focused_rerun"] == (
         "./.venv/bin/pytest -q -m docs_contract "

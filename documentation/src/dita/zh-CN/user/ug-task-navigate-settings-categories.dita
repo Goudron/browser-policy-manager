@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-navigate-settings-categories" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>导航设置类别</title>
-  <shortdesc>导航 所有设置 类别和映射的控制集群以查找相关的策略和首选项控制。</shortdesc>
+  <shortdesc>导航 <uicontrol>所有设置</uicontrol> 类别和映射的控制集群以查找相关的策略和首选项控制。</shortdesc>
   <taskbody>
-    <prereq><p>在配置中打开 所有设置 或 目录。</p></prereq>
+    <prereq><p>在配置中打开 <uicontrol>所有设置</uicontrol> 或 <uicontrol>目录</uicontrol>。</p></prereq>
     <context><p>按产品域而不是按文件位置对设置进行分类。它们帮助用户在浏览器访问、隐私、搜索、扩展、原始/未映射和其他集群之间移动。</p></context>
     <steps>
-      <step><cmd>打开类别导航或目录摘要。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>选择与配置目标匹配的域或集群。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>查看已配置、关注、原始或已弃用设置的类别计数。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开类别导航或<uicontrol>目录</uicontrol>摘要。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>选择与配置目标匹配的域或集群。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>查看<uicontrol>已配置</uicontrol>、关注、原始或已弃用设置的类别计数。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>打开设置详细信息或切换过滤器，而不会丢失类别上下文。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
-    <result><p>您可以按产品域浏览 设置清单 并到达相关的详细信息面板。</p></result>
+    <result><p>您可以按产品域浏览 <uicontrol>设置清单</uicontrol> 并到达相关的详细信息面板。</p></result>
     <postreq><p>恢复：如果类别不包含预期的控制，则按策略 ID 搜索或检查原始/未映射的项目。</p></postreq>
   </taskbody>
   <related-links>

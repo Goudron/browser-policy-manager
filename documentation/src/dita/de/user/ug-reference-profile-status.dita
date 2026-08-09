@@ -4,7 +4,7 @@
   <title>Profilstatusreferenz</title>
   <shortdesc>Lesen Sie Profilnamen, ID, Schema, Lebenszyklus, geänderten/gespeicherten Status und Validierungskontext, bevor Sie handeln.</shortdesc>
   <refbody>
-    <section id="a-profile-identity"><title>Identität</title><p>Profilname und ID bestätigen, dass sich der aktuelle Editor, die aktuelle Bibliothekszeile oder die Vergleichsauswahl auf das beabsichtigte gespeicherte Profil oder den Entwurf bezieht.</p></section>
+    <section id="a-profile-identity"><title>Identität</title><p>Profilname und ID bestätigen, dass sich der aktuelle Editor, die aktuelle <uicontrol>Bibliothek</uicontrol>szeile oder die Vergleichsauswahl auf das beabsichtigte gespeicherte Profil oder den Entwurf bezieht.</p></section>
     <section id="a-profile-lifecycle"><title>Lebenszyklus</title><p>Der Lebenszyklusstatus unterscheidet aktive, archivierte, Entwurfs-, wiederhergestellte und löschempfindliche Profilarbeiten.</p></section>
     <section id="a-profile-validation"><title>Validierung</title><p>Der Validierungskontext zeigt an, ob die aktuellen Richtlinien- und verwalteten Einstellungswerte zum Speichern, Vergleichen oder Exportieren bereit sind.</p></section>
     <section id="a-profile-dirty-state"><title>Fehlerhafter Zustand</title><p>Der Status „Dirty/Saved“ gibt an, ob sichtbare Editoränderungen noch gespeichert werden müssen, bevor Navigation, Export oder eine andere Registerkarte vertrauenswürdig ist.</p></section>

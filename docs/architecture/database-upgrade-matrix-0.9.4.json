@@ -1,0 +1,472 @@
+{
+  "contract_version": 2,
+  "product_version": "0.9.4",
+  "observed_head_revision": "20260804_add_profile_name_casefold",
+  "planned_upgrade_owner": "BPM094-M4-04",
+  "supported_engines": [
+    "sqlite",
+    "postgresql"
+  ],
+  "retained_window": {
+    "first_canonical_revision": "20251022_init_profiles",
+    "last_source_revision": "20260804_add_profile_name_casefold",
+    "policy": "Retain every released Alembic state and every alias already recognized by alembic/env.py; reject unstamped non-empty and unknown-stamp databases."
+  },
+  "legacy_revision_aliases": {
+    "5cb73fdb68ed": "20251022_init_profiles",
+    "20251026_add_deleted_at": "20251026_add_deleted_at_profiles",
+    "20260323_rename_profiles": "20260323_normalize_profiles"
+  },
+  "schema_shapes": {
+    "empty": {
+      "table": null,
+      "required_columns": [],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "profiles",
+        "policies"
+      ]
+    },
+    "legacy-policies-owner": {
+      "table": "policies",
+      "required_columns": [
+        "id",
+        "name",
+        "description",
+        "schema_version",
+        "flags",
+        "owner",
+        "created_at",
+        "updated_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "profiles"
+      ]
+    },
+    "legacy-policies-owner-soft-delete": {
+      "table": "policies",
+      "required_columns": [
+        "id",
+        "name",
+        "description",
+        "schema_version",
+        "flags",
+        "owner",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "profiles"
+      ]
+    },
+    "profiles-owner": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "description",
+        "schema_version",
+        "flags",
+        "owner",
+        "created_at",
+        "updated_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "policies"
+      ]
+    },
+    "profiles-owner-soft-delete": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "description",
+        "schema_version",
+        "flags",
+        "owner",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "policies"
+      ]
+    },
+    "profiles-owner-revision": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "description",
+        "schema_version",
+        "flags",
+        "owner",
+        "revision",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [
+        "compliance"
+      ],
+      "forbidden_tables": [
+        "policies"
+      ]
+    },
+    "profiles-ownerless-revision": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "description",
+        "schema_version",
+        "flags",
+        "compliance",
+        "revision",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "known_source_variants": [
+        "A database produced only by the current Alembic chain can be missing compliance; this is a supported source defect that M4-04 must repair."
+      ],
+      "forbidden_tables": [
+        "policies"
+      ],
+      "forbidden_columns": [
+        "owner"
+      ]
+    },
+    "profiles-ownerless-revision-name-casefold": {
+      "table": "profiles",
+      "required_columns": [
+        "id",
+        "name",
+        "name_casefold",
+        "description",
+        "schema_version",
+        "flags",
+        "compliance",
+        "revision",
+        "created_at",
+        "updated_at",
+        "deleted_at"
+      ],
+      "optional_columns": [],
+      "forbidden_tables": [
+        "policies"
+      ],
+      "forbidden_columns": [
+        "owner"
+      ]
+    }
+  },
+  "supported_sources": [
+    {
+      "id": "fresh-empty",
+      "kind": "fresh_install",
+      "stamp": null,
+      "canonical_revision": null,
+      "shape": "empty",
+      "fixture_scenario": "fresh-empty",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "legacy-5cb73fdb68ed",
+      "kind": "legacy_alias",
+      "stamp": "5cb73fdb68ed",
+      "canonical_revision": "20251022_init_profiles",
+      "shape": "legacy-policies-owner",
+      "fixture_scenario": "from-initial",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20251022",
+      "kind": "canonical_revision",
+      "stamp": "20251022_init_profiles",
+      "canonical_revision": "20251022_init_profiles",
+      "shape": "profiles-owner",
+      "fixture_scenario": "from-initial",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "legacy-20251026",
+      "kind": "legacy_alias",
+      "stamp": "20251026_add_deleted_at",
+      "canonical_revision": "20251026_add_deleted_at_profiles",
+      "shape": "legacy-policies-owner-soft-delete",
+      "fixture_scenario": "from-deleted-at",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20251026",
+      "kind": "canonical_revision",
+      "stamp": "20251026_add_deleted_at_profiles",
+      "canonical_revision": "20251026_add_deleted_at_profiles",
+      "shape": "profiles-owner-soft-delete",
+      "fixture_scenario": "from-deleted-at",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "legacy-20260323",
+      "kind": "legacy_alias",
+      "stamp": "20260323_rename_profiles",
+      "canonical_revision": "20260323_normalize_profiles",
+      "shape": "profiles-owner-revision",
+      "fixture_scenario": "from-normalized",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260323",
+      "kind": "canonical_revision",
+      "stamp": "20260323_normalize_profiles",
+      "canonical_revision": "20260323_normalize_profiles",
+      "shape": "profiles-owner-revision",
+      "fixture_scenario": "from-normalized",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260330",
+      "kind": "canonical_revision",
+      "stamp": "20260330_upgrade_profiles_to_firefox149",
+      "canonical_revision": "20260330_upgrade_profiles_to_firefox149",
+      "shape": "profiles-owner-revision",
+      "fixture_scenario": "from-firefox-149",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260423",
+      "kind": "canonical_revision",
+      "stamp": "20260423_upgrade_profiles_to_firefox150",
+      "canonical_revision": "20260423_upgrade_profiles_to_firefox150",
+      "shape": "profiles-owner-revision",
+      "fixture_scenario": "from-firefox-150",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260521",
+      "kind": "canonical_revision",
+      "stamp": "20260521_upgrade_profiles_to_firefox151",
+      "canonical_revision": "20260521_upgrade_profiles_to_firefox151",
+      "shape": "profiles-owner-revision",
+      "fixture_scenario": "from-firefox-151",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260606",
+      "kind": "canonical_revision",
+      "stamp": "20260606_drop_profile_owner",
+      "canonical_revision": "20260606_drop_profile_owner",
+      "shape": "profiles-ownerless-revision",
+      "fixture_scenario": "from-owner-drop",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260620",
+      "kind": "canonical_revision",
+      "stamp": "20260620_upgrade_profiles_to_firefox152",
+      "canonical_revision": "20260620_upgrade_profiles_to_firefox152",
+      "shape": "profiles-ownerless-revision",
+      "fixture_scenario": "from-firefox-152",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260721",
+      "kind": "canonical_revision",
+      "stamp": "20260721_upgrade_profiles_to_firefox153_dual_esr",
+      "canonical_revision": "20260721_upgrade_profiles_to_firefox153_dual_esr",
+      "shape": "profiles-ownerless-revision",
+      "fixture_scenario": "head-idempotent",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260804",
+      "kind": "canonical_revision",
+      "stamp": "20260804_alembic_owns_profile_schema_and_data",
+      "canonical_revision": "20260804_alembic_owns_profile_schema_and_data",
+      "shape": "profiles-ownerless-revision",
+      "fixture_scenario": "head-idempotent",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    },
+    {
+      "id": "canonical-20260804-name-casefold",
+      "kind": "canonical_revision",
+      "stamp": "20260804_add_profile_name_casefold",
+      "canonical_revision": "20260804_add_profile_name_casefold",
+      "shape": "profiles-ownerless-revision-name-casefold",
+      "fixture_scenario": "head-idempotent",
+      "applicability": {
+        "sqlite": "required",
+        "postgresql": "required"
+      }
+    }
+  ],
+  "target_head_invariants": {
+    "tables": [
+      "alembic_version",
+      "profiles"
+    ],
+    "forbidden_tables": [
+      "policies"
+    ],
+    "profile_columns": [
+      "id",
+      "name",
+      "name_casefold",
+      "description",
+      "schema_version",
+      "flags",
+      "compliance",
+      "revision",
+      "created_at",
+      "updated_at",
+      "deleted_at"
+    ],
+    "forbidden_profile_columns": [
+      "owner"
+    ],
+    "indexes": {
+      "ix_profiles_name": {
+        "columns": [
+          "name"
+        ],
+        "unique": true
+      },
+      "ix_profiles_name_casefold": {
+        "columns": [
+          "name_casefold"
+        ],
+        "unique": false
+      },
+      "ix_profiles_schema_version": {
+        "columns": [
+          "schema_version"
+        ],
+        "unique": false
+      },
+      "ix_profiles_created_at": {
+        "columns": [
+          "created_at"
+        ],
+        "unique": false
+      },
+      "ix_profiles_updated_at": {
+        "columns": [
+          "updated_at"
+        ],
+        "unique": false
+      },
+      "ix_profiles_deleted_at": {
+        "columns": [
+          "deleted_at"
+        ],
+        "unique": false
+      }
+    },
+    "row_rules": [
+      "Preserve id, name, description, flags JSON structure, compliance JSON structure when present, timestamps, deleted_at, and revision when present.",
+      "Default missing revision to 1 and missing compliance/deleted_at to null.",
+      "Remove owner storage without copying owner data elsewhere.",
+      "Apply only the explicit same-family Firefox channel transitions encoded by retained migrations.",
+      "Preserve invalid policy JSON and unsupported channel strings for explicit quarantine; a database migration must not silently repair policy semantics."
+    ]
+  },
+  "preflight_stop_condition_ids": [
+    "unstamped-nonempty",
+    "unknown-or-multiple-stamp",
+    "mixed-profile-tables",
+    "shape-does-not-match-stamp",
+    "duplicate-or-null-required-data",
+    "unreadable-json-storage",
+    "backup-not-restorable",
+    "database-has-active-writers",
+    "insufficient-disk-or-privileges",
+    "partial-or-failed-prior-upgrade"
+  ],
+  "unsupported_sources": [
+    {
+      "id": "unstamped-nonempty",
+      "reason": "A non-empty database without alembic_version has no unambiguous source shape; automatic stamping is forbidden."
+    },
+    {
+      "id": "unknown-or-multiple-stamp",
+      "reason": "An unknown revision or more than one version row is not a linear retained source."
+    },
+    {
+      "id": "mixed-profile-tables",
+      "reason": "A database containing both policies and profiles requires explicit recovery; choosing one would risk data loss."
+    },
+    {
+      "id": "shape-does-not-match-stamp",
+      "reason": "Required tables or columns disagree with the declared source revision."
+    }
+  ],
+  "recovery_evidence": {
+    "owner": "BPM094-M4-06",
+    "engines": [
+      "sqlite",
+      "postgresql"
+    ],
+    "failure_boundary": "The real M4 head migration is interrupted on a disposable candidate; application lifespan must reject that candidate.",
+    "backup_boundary": "The retained native backup is integrity-checked and SHA-256 verified before and after failure.",
+    "retry_boundary": "Retry always restores the same verified backup into a new absent candidate and upgrades that candidate to head.",
+    "promotion_boundary": "No recovery tool replaces the configured database; switching BPM to the verified candidate is an explicit maintainer action.",
+    "downgrade_policy": "Downgrade from the 0.9.4 head is unsupported; retained backup restore is the only recovery path.",
+    "sqlite_commands": [
+      "python tools/database_upgrade_recovery.py verify-sqlite-backup --backup <absolute-backup> --manifest <absolute-new-manifest>",
+      "python tools/database_upgrade_recovery.py retry-sqlite-upgrade --backup <absolute-backup> --manifest <absolute-manifest> --candidate <absolute-new-candidate>"
+    ],
+    "tests": "tests/integration/db/test_database_recovery.py",
+    "ci_gate": "make test-postgres-integration"
+  },
+  "known_evidence_gaps": [],
+  "golden_fixture": "tests/fixtures/database_upgrade/golden_profiles_0_9_4.json"
+}

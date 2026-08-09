@@ -1,16 +1,25 @@
 {
   "name": "browser-policy-manager-frontend-vendor",
   "private": true,
+  "type": "module",
   "description": "Pinned frontend vendor dependencies for Browser Policy Manager static assets.",
   "scripts": {
     "build:monaco": "bash tools/build_monaco_bundle.sh",
-    "rebuild:vendor": "bash tools/rebuild_frontend_vendor.sh"
+    "rebuild:vendor": "bash tools/rebuild_frontend_vendor.sh",
+    "test:frontend": "node --test --test-timeout=10000 --experimental-test-isolation=process tests/javascript/*/*/*.test.js",
+    "test:frontend:coverage": "node --test --test-timeout=10000 --experimental-test-isolation=process --experimental-test-coverage '--test-coverage-include=app/static/profiles_modules/**' --test-coverage-lines=100 --test-coverage-branches=100 --test-coverage-functions=100 tests/javascript/*/*/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.14"
   },
   "dependencies": {
-    "js-yaml": "5.2.2",
-    "monaco-editor": "0.53.0"
+    "monaco-editor": "0.56.0"
   },
   "devDependencies": {
+    "@cyclonedx/cyclonedx-npm": "6.0.0",
     "esbuild": "0.28.1"
+  },
+  "overrides": {
+    "dompurify": "3.4.13"
   }
 }

@@ -5,7 +5,7 @@
   <shortdesc>Starter-Voreinstellungen und CIS-Ebenen helfen bei der Erstellung eines ersten Profils vor der manuellen Überprüfung und Bearbeitung.</shortdesc>
   <conbody>
     <p>Eine Startervoreinstellung gibt einem Profil einen anfänglichen Zweck, z. B. die Verwendung im Unternehmen, im Klassenzimmer oder für sicherheitsorientierte Zwecke. Eine CIS-Schicht fügt die zugeordneten Sicherheitsgrundlinienoptionen von BPM hinzu, wenn BPM sie unterstützt.</p>
-    <p>Layered-Quellen bleiben in Alle Einstellungen sichtbar, sodass Sie Basiswerte, CIS-, importierte, manuelle und Rohwerte unterscheiden können. Einige CIS-bezogene Artikel erfordern eine manuelle Prüfung statt einer automatischen Annahme.</p>
+    <p>Layered-Quellen bleiben in <uicontrol>Alle Einstellungen</uicontrol> sichtbar, sodass Sie Basiswerte, CIS-, importierte, manuelle und Rohwerte unterscheiden können. Einige CIS-bezogene Artikel erfordern eine manuelle Prüfung statt einer automatischen Annahme.</p>
     <p>Die BPM-Dokumentation beschreibt BPM-Zuordnungen und Arbeitsablauf-Verhalten. Es wird kein Anspruch auf eine CIS-Zertifizierung oder -Bestätigung erhoben.</p>
   </conbody>
 </concept>

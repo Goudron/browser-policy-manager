@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Elemente mit Handlungsbedarf in „Alle Einstellungen“ prüfen</title>
-  <shortdesc>Verwenden Sie Prüfung, um ungültige, CIS-manuell überprüfte, unformatierte, unbekannte, veraltete und importierte Elemente vor der routinemäßigen Bearbeitung zu selektieren.</shortdesc>
+  <shortdesc>Verwenden Sie <uicontrol>Prüfung</uicontrol>, um ungültige, CIS-manuell überprüfte, unformatierte, unbekannte, veraltete und importierte Elemente vor der routinemäßigen Bearbeitung zu selektieren.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie ein gespeichertes Profil in Alle Einstellungen.</p></prereq>
-    <context><p>Prüfung ist die Standardansicht, bei der die Aufmerksamkeit an erster Stelle steht. Es sammelt Einstellungen, die vor dem Export, Vergleich oder der Übergabe möglicherweise eine Entscheidung erfordern.</p></context>
+    <prereq><p>Öffnen Sie ein gespeichertes Profil in <uicontrol>Alle Einstellungen</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Prüfung</uicontrol> ist die Standardansicht, bei der die Aufmerksamkeit an erster Stelle steht. Es sammelt Einstellungen, die vor dem Export, Vergleich oder der Übergabe möglicherweise eine Entscheidung erfordern.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Alle Einstellungen und bleiben Sie in Prüfung.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Lesen Sie die Zusammenfassung der Rezension und die gruppierten Aktionskarten.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Öffnen Sie alle ungültigen, CIS-manuell überprüften, unformatierten, unbekannten, veralteten oder importierten Elemente, die für das Profil gelten.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> und bleiben Sie in <uicontrol>Prüfung</uicontrol>.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Lesen Sie die Zusammenfassung der Rezension und die gruppierten Aktionskarten.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie alle ungültigen, CIS-manuell überprüften, unformatierten, unbekannten, veralteten oder importierten Elemente, die für das Profil gelten.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Lösen Sie das Element auf, dokumentieren Sie, warum es bestehen bleibt, oder wechseln Sie zur verknüpften Detailansicht, um es gezielt zu bearbeiten.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Elemente mit Handlungsbedarf werden entweder gelöst, bewusst beibehalten oder für eine gezielte Detailbearbeitung vorbereitet.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Prüfung leer aussieht, Sie aber Probleme erwartet haben, löschen Sie die Filter, aktualisieren Sie das Profil und bestätigen Sie den ausgewählten Schemakanal.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn <uicontrol>Prüfung</uicontrol> leer aussieht, Sie aber Probleme erwartet haben, löschen Sie die Filter, aktualisieren Sie das Profil und bestätigen Sie den ausgewählten Schemakanal.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-all-settings-review-states"/>

@@ -15,6 +15,7 @@ from typing import Any, Literal, Protocol
 import numpy as np
 
 from app.ai.local_inference_worker import InferenceRequest, InferenceResult, LocalInferenceWorker
+from app.documentation.assistant_contracts import ConversationRequest, DialogueTurn
 from app.documentation.conversation_context import (
     ContextTurn,
     ConversationContextStore,
@@ -40,31 +41,6 @@ TIME_PREVIEW_EVIDENCE_TOKENS = 2_048
 
 ScopeDisposition = Literal["allow", "clarify", "refuse"]
 AnswerDisposition = Literal["answer", "clarify", "abstain", "refuse"]
-WebMode = Literal["local_only", "request_web"]
-
-
-@dataclass(frozen=True)
-class DialogueTurn:
-    """One controller-owned prior turn; M7-03 will own session retention and eviction."""
-
-    role: Literal["user", "assistant"]
-    text: str
-
-
-@dataclass(frozen=True)
-class ConversationRequest:
-    """Bounded same-origin request data; it never carries client-provided evidence or source URLs."""
-
-    locale: str
-    question: str
-    web_mode: WebMode = "local_only"
-    dialogue: tuple[DialogueTurn, ...] = ()
-    session_id: str | None = None
-    web_session_id: str | None = None
-    web_tab_id: str | None = None
-    # These values are server-derived and used only for a local response-time preview.
-    timing_context_characters: int = 0
-    timing_evidence_tokens: int = TIME_PREVIEW_EVIDENCE_TOKENS
 
 
 @dataclass(frozen=True)
@@ -390,9 +366,7 @@ class GroundedConversationOrchestrator:
                 parsed = self._generation_parser(rewritten, evidence)
         except Exception:
             return (
-                ConversationOutcome(
-                    "abstain", "assistant_generation_unavailable", request.locale
-                ),
+                ConversationOutcome("abstain", "assistant_generation_unavailable", request.locale),
                 (),
             )
         return self._validated_outcome(parsed, evidence, request.locale), parsed.resolved_entities
@@ -422,7 +396,11 @@ class GroundedConversationOrchestrator:
             )
         except Exception:
             web = None
-        if web is None or getattr(web, "state", None) != "ready" or getattr(web, "lease", None) is None:
+        if (
+            web is None
+            or getattr(web, "state", None) != "ready"
+            or getattr(web, "lease", None) is None
+        ):
             if getattr(web, "reason_code", None) == "assistant_cancelled":
                 return (
                     ConversationOutcome("abstain", "assistant_cancelled", request.locale),
@@ -491,9 +469,7 @@ class GroundedConversationOrchestrator:
                 answer = self._merged_generation_validator.validate(generated, merged_evidence)
         except Exception:
             return (
-                ConversationOutcome(
-                    "abstain", "assistant_generation_unavailable", request.locale
-                ),
+                ConversationOutcome("abstain", "assistant_generation_unavailable", request.locale),
                 (),
             )
         return self._merged_outcome(answer, request.locale), ()

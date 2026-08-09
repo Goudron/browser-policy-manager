@@ -2,17 +2,17 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-select-comparison-profiles" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Die zu vergleichenden Profile auswählen</title>
-  <shortdesc>Suchen Sie unabhängig nach Profil A und Profil B, wählen Sie Zeilen aus begrenzten Ergebnislisten aus und überprüfen Sie jede Zusammenfassung.</shortdesc>
+  <shortdesc>Suchen Sie unabhängig nach <uicontrol>Profil A</uicontrol> und <uicontrol>Profil B</uicontrol>, wählen Sie Zeilen aus begrenzten Ergebnislisten aus und überprüfen Sie jede Zusammenfassung.</shortdesc>
   <taskbody>
-    <prereq><p>Die Vergleichsoberfläche ist in der Bibliothek geöffnet.</p></prereq>
+    <prereq><p>Die Vergleichsoberfläche ist in der <uicontrol>Bibliothek</uicontrol> geöffnet.</p></prereq>
     <context><p>Jede Seite verfügt über ein eigenes Suchfeld und eine eigene Ergebnisliste, sodass Sie Profile mit ähnlichen Namen auswählen können, ohne Seiten zu mischen.</p></context>
     <steps>
-      <step><cmd>Suchen Sie im linken Suchfeld nach Profil A und wählen Sie die gewünschte Zeile aus.</cmd><info><p>Erwartetes Ergebnis: Die linke Zusammenfassung des ausgewählten Profils zeigt den Profilnamen, den Schemakanal, den Lebenszyklus und den Statuskontext.</p></info></step>
-      <step><cmd>Suchen Sie im rechten Suchfeld nach Profil B und wählen Sie die gewünschte Zeile aus.</cmd><info><p>Erwartetes Ergebnis: Die richtige Zusammenfassung wird unabhängig aktualisiert.</p></info></step>
+      <step><cmd>Suchen Sie im linken Suchfeld nach <uicontrol>Profil A</uicontrol> und wählen Sie die gewünschte Zeile aus.</cmd><info><p>Erwartetes Ergebnis: Die linke Zusammenfassung des ausgewählten Profils zeigt den Profilnamen, den Schemakanal, den Lebenszyklus und den Statuskontext.</p></info></step>
+      <step><cmd>Suchen Sie im rechten Suchfeld nach <uicontrol>Profil B</uicontrol> und wählen Sie die gewünschte Zeile aus.</cmd><info><p>Erwartetes Ergebnis: Die richtige Zusammenfassung wird unabhängig aktualisiert.</p></info></step>
       <step><cmd>Bestätigen Sie beide Zusammenfassungen, bevor Sie die Vergleichstabelle lesen.</cmd><info><note type="warning">Verlassen Sie sich nicht allein auf die Position der Suchergebnisse. Bestätigen Sie Identität und Schema auf beiden Seiten.</note></info></step>
     </steps>
-    <result><p>Profil A und Profil B sind ausgewählt und zum Vergleich bereit.</p></result>
-    <postreq><p>Wiederherstellung: Wenn ein Profil fehlt, löschen Sie die Suche dieser Seite, aktualisieren Sie die Bibliothek auf der ursprünglichen Registerkarte und bestätigen Sie, dass das Profil gespeichert ist.</p></postreq>
+    <result><p><uicontrol>Profil A</uicontrol> und <uicontrol>Profil B</uicontrol> sind ausgewählt und zum Vergleich bereit.</p></result>
+    <postreq><p>Wiederherstellung: Wenn ein Profil fehlt, löschen Sie die Suche dieser Seite, aktualisieren Sie die <uicontrol>Bibliothek</uicontrol> auf der ursprünglichen Registerkarte und bestätigen Sie, dass das Profil gespeichert ist.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-compare-profiles"/>

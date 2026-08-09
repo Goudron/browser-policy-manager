@@ -4,8 +4,8 @@
   <title>Follow setting and documentation links</title>
   <shortdesc>Open focused editor locations or the exact documentation topic for a supported policy or known managed preference.</shortdesc>
   <taskbody>
-    <prereq><p>Open All settings or another BPM surface that links to a setting.</p></prereq>
-    <context><p>Editor deep links focus a setting or raw location. In All settings, the separate circled-information control opens manifest-resolved documentation for every supported policy and known managed preference.</p></context>
+    <prereq><p>Open <uicontrol>All settings</uicontrol> or another BPM surface that links to a setting.</p></prereq>
+    <context><p>Editor deep links focus a setting or raw location. In <uicontrol>All settings</uicontrol>, the separate circled-information control opens manifest-resolved documentation for every supported policy and known managed preference.</p></context>
     <steps>
       <step><cmd>For a supported policy or known managed preference, activate the circled-information control beside its row.</cmd><info><p>Expected result: the localized documentation opens in a new tab without selecting the row or changing profile data.</p></info></step>
       <step><cmd>Confirm the documentation destination and active tree item.</cmd><info><p>Expected result: the tree expands from Documents through the owning guide and section to the exact topic, which is visible and active.</p></info></step>

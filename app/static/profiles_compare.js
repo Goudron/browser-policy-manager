@@ -1,4 +1,8 @@
-(() => {
+import * as compareState from "./profiles_compare_state.js";
+import * as data from "./profiles_data.js";
+import * as platform from "./profiles_platform.js";
+import { utils } from "./profiles_utils.js";
+
     const sideKeys = ["left", "right"];
     const compareProfileResultsLimit = 40;
 
@@ -45,10 +49,10 @@
         }, {});
     }
 
-    function resolvePreselectedProfileIds(locationRef = window.location) {
+    function resolvePreselectedProfileIds(locationRef = globalThis.location) {
         const href = String(locationRef?.href || "");
         const query = href.includes("?") ? href.slice(href.indexOf("?") + 1).split("#")[0] : "";
-        const URLConstructor = window.URL || (typeof URL !== "undefined" ? URL : null);
+        const URLConstructor = globalThis.URL || (typeof URL !== "undefined" ? URL : null);
         const params = URLConstructor
             ? new URLConstructor(href || "http://bpm.local/profiles/compare").searchParams
             : {
@@ -132,18 +136,18 @@
         return labels[state] || fallbackLabels[state] || state;
     }
 
-    function buildCompareRows(leftProfile, rightProfile, compareState = window.BPMProfilesCompareState, options = {}) {
-        if (!leftProfile || !rightProfile || !compareState) return [];
+    function buildCompareRows(leftProfile, rightProfile, compareStateAdapter = compareState, options = {}) {
+        if (!leftProfile || !rightProfile || !compareStateAdapter) return [];
         const leftFlags = leftProfile.flags && typeof leftProfile.flags === "object" ? leftProfile.flags : {};
         const rightFlags = rightProfile.flags && typeof rightProfile.flags === "object" ? rightProfile.flags : {};
-        const rowKeys = compareState.collectProfileSettingKeys(leftFlags, rightFlags);
+        const rowKeys = compareStateAdapter.collectProfileSettingKeys(leftFlags, rightFlags);
         const missingLabel = options.missingLabel || "Missing";
 
         return rowKeys.map((rowKey) => {
-            const leftEntry = compareState.readSettingValue(leftFlags, rowKey);
-            const rightEntry = compareState.readSettingValue(rightFlags, rowKey);
-            const leftState = resolveCompareValueState(leftEntry, rightEntry, compareState);
-            const rightState = resolveCompareValueState(rightEntry, leftEntry, compareState);
+            const leftEntry = compareStateAdapter.readSettingValue(leftFlags, rowKey);
+            const rightEntry = compareStateAdapter.readSettingValue(rightFlags, rowKey);
+            const leftState = resolveCompareValueState(leftEntry, rightEntry, compareStateAdapter);
+            const rightState = resolveCompareValueState(rightEntry, leftEntry, compareStateAdapter);
             const presentation = resolveSettingPresentation(rowKey, options);
             return {
                 ...rowKey,
@@ -154,13 +158,13 @@
                     state: leftState,
                     stateLabel: resolveValueStateLabel(leftState, options),
                     value: leftEntry.present ? leftEntry.value : null,
-                    displayValue: compareState.formatCompareValue(leftEntry, { missingLabel }),
+                    displayValue: compareStateAdapter.formatCompareValue(leftEntry, { missingLabel }),
                 },
                 right: {
                     state: rightState,
                     stateLabel: resolveValueStateLabel(rightState, options),
                     value: rightEntry.present ? rightEntry.value : null,
-                    displayValue: compareState.formatCompareValue(rightEntry, { missingLabel }),
+                    displayValue: compareStateAdapter.formatCompareValue(rightEntry, { missingLabel }),
                 },
                 changed: leftState !== "equal" || rightState !== "equal",
             };
@@ -199,14 +203,10 @@
         const rootEl = documentRef.getElementById("compare-page");
         if (!rootEl) return null;
 
-        const data = windowRef.BPMProfilesData;
-        const compareState = windowRef.BPMProfilesCompareState;
-        const platform = windowRef.BPMProfilesPlatform;
         if (!data || !compareState || !platform) return null;
         const { resolveBrowserLanguage } = platform;
         const { resolveTheme, updateThemeColorMeta, syncThemeSensitiveControls } = platform;
         const { updateDocumentationLinks } = platform;
-        const utils = windowRef.BPMProfilesUtils || {};
         let locale = windowRef.__BPM_INITIAL_LOCALE__ || {};
         const preferencesCatalog = readEmbeddedJson(documentRef, "compare-preferences-catalog");
         let preferenceLabels = buildPreferenceLabelLookup(preferencesCatalog, locale);
@@ -619,7 +619,9 @@
         };
     }
 
-    window.BPMProfilesCompare = {
+    export const ready = true;
+
+    export {
         buildProfileSearchFilters,
         buildCompareRows,
         buildPreferenceLabelLookup,
@@ -628,7 +630,6 @@
         formatProfileSummary,
         formatProfileSchema,
         formatProfileUpdatedAt,
-        ready: true,
         readEmbeddedJson,
         resolvePreselectedProfileIds,
         resolveSettingPresentation,
@@ -636,8 +637,3 @@
         resolveValueStateLabel,
         start,
     };
-
-    if (window.document) {
-        start({ documentRef: window.document, windowRef: window });
-    }
-})();

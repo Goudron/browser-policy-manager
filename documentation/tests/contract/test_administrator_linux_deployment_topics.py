@@ -44,7 +44,7 @@ MIN_LOCALIZED_TEXT_RATIO = {
 REQUIRED_SOURCE_TOKENS = (
     "Python 3.14+",
     "source .venv/bin/activate",
-    "pip install -e \".[dev]\"",
+    'pip install -e ".[dev]"',
     "alembic upgrade head",
     "make dev",
     "uvicorn app.main:app --reload --port 8000",
@@ -78,6 +78,8 @@ FORBIDDEN_SUPPORTED_CLAIMS = (
     "HA topology is supported",
     "managed backup service is included",
 )
+README_READER_ENTRYPOINTS = ("/profiles", "/help/", "/docs")
+README_MAINTAINER_COMMANDS = ("python -m venv .venv", "pip install .", "make dev")
 
 pytestmark = pytest.mark.docs_contract
 
@@ -113,14 +115,15 @@ def test_administrator_guide_maps_include_linux_source_runbook_topics(locale: st
         for keydef in ET.parse(maps / "keys.ditamap").getroot().findall("keydef")
     }
     assert {
-        key: f"../admin/{key.removeprefix('topic.')}.dita"
-        for key in EXPECTED_ADMIN_KEYREFS
+        key: f"../admin/{key.removeprefix('topic.')}.dita" for key in EXPECTED_ADMIN_KEYREFS
     }.items() <= keydefs.items()
 
 
 @pytest.mark.parametrize("locale", LOCALES)
 @pytest.mark.parametrize("topic_id", EXPECTED_ADMIN_TOPICS)
-def test_linux_source_runbook_topics_are_full_localized_dita_tasks(locale: str, topic_id: str) -> None:
+def test_linux_source_runbook_topics_are_full_localized_dita_tasks(
+    locale: str, topic_id: str
+) -> None:
     source = _source(locale, topic_id)
     assert '<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">' in source
 
@@ -163,14 +166,10 @@ def test_english_linux_source_runbook_matches_current_repository_commands_and_se
     config = (REPOSITORY_ROOT / "app/core/config.py").read_text(encoding="utf-8")
     health = (REPOSITORY_ROOT / "app/api/health.py").read_text(encoding="utf-8")
 
-    for token in (
-        "3.14+",
-        "python -m venv .venv",
-        "source .venv/bin/activate",
-        "pip install .",
-        "make dev",
-    ):
-        assert token in readme
+    for entrypoint in README_READER_ENTRYPOINTS:
+        assert entrypoint in readme
+    for command in README_MAINTAINER_COMMANDS:
+        assert command not in readme
     assert "make dev" in combined
     assert "alembic upgrade head" in combined
     assert "uvicorn app.main:app --reload --port 8000" in makefile
@@ -216,7 +215,7 @@ def test_localized_linux_source_runbook_topics_preserve_parity_and_invariant_tok
     )
     assert any(token in localized for token in invariant_tokens)
     if topic_id == "admin-task-set-up-linux-source-checkout":
-        for token in ("python -m venv .venv", "pip install -e \".[dev]\"", "alembic upgrade head"):
+        for token in ("python -m venv .venv", 'pip install -e ".[dev]"', "alembic upgrade head"):
             assert token in localized
     if topic_id == "admin-task-verify-linux-source-deployment":
         for token in (

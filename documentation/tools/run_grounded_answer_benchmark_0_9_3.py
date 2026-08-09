@@ -36,7 +36,9 @@ def _read_json(path: Path) -> dict[str, Any]:
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     try:
-        records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+        records = [
+            json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line
+        ]
     except (OSError, json.JSONDecodeError) as error:
         raise HarnessError(f"invalid JSON Lines input: {path}") from error
     if any(not isinstance(record, dict) for record in records):
@@ -45,7 +47,9 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def _canonical_json(value: Any) -> bytes:
-    return (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+    return (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n"
+    ).encode("utf-8")
 
 
 def _sha256(path: Path) -> str:
@@ -84,7 +88,9 @@ def _oracle_cases(corpus: dict[str, Any], config: dict[str, Any]) -> list[dict[s
     locales = config["locales"]
     if corpus.get("locales") != locales:
         raise HarnessError("evaluation corpus locale set drifted")
-    topic_by_corpus_citation = {domain["citation_id"]: domain["topic_id"] for domain in corpus["domains"]}
+    topic_by_corpus_citation = {
+        domain["citation_id"]: domain["topic_id"] for domain in corpus["domains"]
+    }
     cases: list[dict[str, Any]] = []
     for locale in locales:
         answer_count = 0
@@ -118,7 +124,9 @@ def _oracle_cases(corpus: dict[str, Any], config: dict[str, Any]) -> list[dict[s
             )
             if disposition != "answer":
                 terminal_counts[disposition] += 1
-        for case_id, query, disposition, citation_id in corpus["boundary_cases"][locale]["dialogue"]:
+        for case_id, query, disposition, citation_id in corpus["boundary_cases"][locale][
+            "dialogue"
+        ]:
             cases.append(
                 {
                     "request_id": _case_id(locale, "dialogue", case_id),
@@ -126,7 +134,11 @@ def _oracle_cases(corpus: dict[str, Any], config: dict[str, Any]) -> list[dict[s
                     "case_kind": "dialogue",
                     "query": query,
                     "expected_disposition": disposition,
-                    "expected_citation_ids": [f"topic:{topic_by_corpus_citation[citation_id]}"] if disposition == "answer" else [],
+                    "expected_citation_ids": (
+                        [f"topic:{topic_by_corpus_citation[citation_id]}"]
+                        if disposition == "answer"
+                        else []
+                    ),
                     "requires_dialogue": True,
                 }
             )
@@ -134,7 +146,10 @@ def _oracle_cases(corpus: dict[str, Any], config: dict[str, Any]) -> list[dict[s
                 answer_count += 1
             else:
                 terminal_counts[disposition] += 1
-        required_answers = config["workload"]["answer_questions_per_locale"] + config["workload"]["dialogue_answer_cases_per_locale"]
+        required_answers = (
+            config["workload"]["answer_questions_per_locale"]
+            + config["workload"]["dialogue_answer_cases_per_locale"]
+        )
         if answer_count != required_answers:
             raise HarnessError(f"{locale}: answer case count drifted")
         if dict(terminal_counts) != config["workload"]["terminal_cases_per_locale"]:
@@ -160,7 +175,10 @@ def _evidence_by_request(
         if request_id not in expected or request_id in result:
             raise HarnessError("prepared evidence request identity is unknown or duplicated")
         case = expected[request_id]
-        if record["locale"] != case["locale"] or record["evidence_disposition"] != case["expected_disposition"]:
+        if (
+            record["locale"] != case["locale"]
+            or record["evidence_disposition"] != case["expected_disposition"]
+        ):
             raise HarnessError("prepared evidence disposition or locale drifted")
         if (
             not isinstance(record["context_jsonl"], str)
@@ -168,12 +186,16 @@ def _evidence_by_request(
             or not all(isinstance(citation, str) for citation in record["citation_ids"])
         ):
             raise HarnessError("prepared evidence content is malformed")
-        if not isinstance(record["dialogue_turns"], list) or not isinstance(record["model_invocation_count"], int):
+        if not isinstance(record["dialogue_turns"], list) or not isinstance(
+            record["model_invocation_count"], int
+        ):
             raise HarnessError("prepared dialogue or invocation count is malformed")
         if record["model_invocation_count"] != 0:
             raise HarnessError("prepared evidence must precede every model invocation")
         if case["expected_disposition"] == "answer":
-            if not record["context_jsonl"] or set(case["expected_citation_ids"]) - set(record["citation_ids"]):
+            if not record["context_jsonl"] or set(case["expected_citation_ids"]) - set(
+                record["citation_ids"]
+            ):
                 raise HarnessError("answer evidence is not citable and ready")
         elif record["context_jsonl"] or record["citation_ids"]:
             raise HarnessError("terminal evidence must not expose answer context or citations")
@@ -187,7 +209,9 @@ def _evidence_by_request(
     return result
 
 
-def build_workload(evidence_path: Path, output_root: Path, config_path: Path = CONFIG_PATH) -> dict[str, Any]:
+def build_workload(
+    evidence_path: Path, output_root: Path, config_path: Path = CONFIG_PATH
+) -> dict[str, Any]:
     """Build candidate-neutral request and oracle artifacts from prepared evidence packets."""
 
     print("Grounded-answer benchmark: verifying contracts and prepared evidence", flush=True)
@@ -262,7 +286,9 @@ def _load_workload(
     manifest = _read_json(manifest_path)
     if manifest.get("harness_contract_sha256") != _sha256(config_path):
         raise HarnessError("workload harness contract drifted")
-    if manifest.get("requests_sha256") != _sha256(requests_path) or manifest.get("oracle_sha256") != _sha256(oracle_path):
+    if manifest.get("requests_sha256") != _sha256(requests_path) or manifest.get(
+        "oracle_sha256"
+    ) != _sha256(oracle_path):
         raise HarnessError("workload request or oracle hash drifted")
     requests = _read_jsonl(requests_path)
     oracle = _read_jsonl(oracle_path)
@@ -280,16 +306,27 @@ def _load_workload(
 
 
 def _response_by_request(
-    records: list[dict[str, Any]], candidate_id: str, oracle: dict[str, dict[str, Any]], config: dict[str, Any]
+    records: list[dict[str, Any]],
+    candidate_id: str,
+    oracle: dict[str, dict[str, Any]],
+    config: dict[str, Any],
 ) -> dict[str, dict[str, Any]]:
     fields = set(config["candidate_response"]["required_fields"])
-    answers = {request_id: entry for request_id, entry in oracle.items() if entry["expected_disposition"] == "answer"}
+    answers = {
+        request_id: entry
+        for request_id, entry in oracle.items()
+        if entry["expected_disposition"] == "answer"
+    }
     result: dict[str, dict[str, Any]] = {}
     for record in records:
         if set(record) != fields:
             raise HarnessError("candidate response fields drifted")
         request_id = record["request_id"]
-        if record["candidate_id"] != candidate_id or request_id not in answers or request_id in result:
+        if (
+            record["candidate_id"] != candidate_id
+            or request_id not in answers
+            or request_id in result
+        ):
             raise HarnessError("candidate response identity is invalid")
         citations = record["citation_ids"]
         if (
@@ -302,7 +339,10 @@ def _response_by_request(
             or not set(citations) <= set(answers[request_id]["expected_citation_ids"])
         ):
             raise HarnessError("candidate response is uncited or exposes thought content")
-        if not isinstance(record["output_tokens"], int) or not 1 <= record["output_tokens"] <= config["workload"]["answer_output_tokens_max"]:
+        if (
+            not isinstance(record["output_tokens"], int)
+            or not 1 <= record["output_tokens"] <= config["workload"]["answer_output_tokens_max"]
+        ):
             raise HarnessError("candidate response output token count is invalid")
         measurements = ("ttft_ns", "completion_ns", "worker_peak_rss_bytes", "network_calls")
         if any(not isinstance(record[field], int) or record[field] < 0 for field in measurements):
@@ -329,14 +369,22 @@ def _review_by_request(
         if set(record) != fields:
             raise HarnessError("human review fields drifted")
         request_id = record["request_id"]
-        if record["candidate_id"] != candidate_id or request_id not in responses or request_id in result:
+        if (
+            record["candidate_id"] != candidate_id
+            or request_id not in responses
+            or request_id in result
+        ):
             raise HarnessError("human review identity is invalid")
         expected_continuity = (
             config["human_review"]["dialogue_continuity_value"]
             if oracle[request_id]["requires_dialogue"]
             else config["human_review"]["normal_continuity_value"]
         )
-        if record["language"] != accepted or record["instruction_following"] != accepted or record["continuity"] != expected_continuity:
+        if (
+            record["language"] != accepted
+            or record["instruction_following"] != accepted
+            or record["continuity"] != expected_continuity
+        ):
             raise HarnessError("human review did not accept language, instructions, or continuity")
         claims = record["claims"]
         if not isinstance(claims, list) or not claims:
@@ -377,7 +425,10 @@ def score_candidate(
 ) -> dict[str, Any]:
     """Score one candidate's response and review files against a candidate-neutral workload."""
 
-    print("Grounded-answer benchmark: verifying workload, candidate responses, and human review", flush=True)
+    print(
+        "Grounded-answer benchmark: verifying workload, candidate responses, and human review",
+        flush=True,
+    )
     config = _read_json(config_path)
     _shortlist, _corpus = _verify_pins(config)
     manifest, oracle = _load_workload(workload_root, config, config_path)
@@ -388,20 +439,54 @@ def score_candidate(
     per_locale: dict[str, dict[str, float | int]] = {}
     for locale in config["locales"]:
         locale_oracle = [entry for entry in oracle.values() if entry["locale"] == locale]
-        locale_answers = [entry for entry in locale_oracle if entry["expected_disposition"] == "answer"]
-        locale_terminals = [entry for entry in locale_oracle if entry["expected_disposition"] != "answer"]
+        locale_answers = [
+            entry for entry in locale_oracle if entry["expected_disposition"] == "answer"
+        ]
+        locale_terminals = [
+            entry for entry in locale_oracle if entry["expected_disposition"] != "answer"
+        ]
         answer_ids = [entry["request_id"] for entry in locale_answers]
-        dialogue_ids = [entry["request_id"] for entry in locale_answers if entry["requires_dialogue"]]
+        dialogue_ids = [
+            entry["request_id"] for entry in locale_answers if entry["requires_dialogue"]
+        ]
         per_locale[locale] = {
             "answer_case_count": len(answer_ids),
-            "grounded_answer_rate": sum(request_id in reviews for request_id in answer_ids) / len(answer_ids),
-            "citation_selection_rate": sum(bool(responses[request_id]["citation_ids"]) for request_id in answer_ids) / len(answer_ids),
+            "grounded_answer_rate": (
+                sum(request_id in reviews for request_id in answer_ids) / len(answer_ids)
+            ),
+            "citation_selection_rate": (
+                sum(bool(responses[request_id]["citation_ids"]) for request_id in answer_ids)
+                / len(answer_ids)
+            ),
             "terminal_case_count": len(locale_terminals),
-            "terminal_disposition_rate": sum(entry["request_id"] not in responses for entry in locale_terminals) / len(locale_terminals),
-            "language_rate": sum(reviews[request_id]["language"] == config["human_review"]["accepted_value"] for request_id in answer_ids) / len(answer_ids),
-            "instruction_following_rate": sum(reviews[request_id]["instruction_following"] == config["human_review"]["accepted_value"] for request_id in answer_ids) / len(answer_ids),
+            "terminal_disposition_rate": (
+                sum(entry["request_id"] not in responses for entry in locale_terminals)
+                / len(locale_terminals)
+            ),
+            "language_rate": (
+                sum(
+                    reviews[request_id]["language"] == config["human_review"]["accepted_value"]
+                    for request_id in answer_ids
+                )
+                / len(answer_ids)
+            ),
+            "instruction_following_rate": (
+                sum(
+                    reviews[request_id]["instruction_following"]
+                    == config["human_review"]["accepted_value"]
+                    for request_id in answer_ids
+                )
+                / len(answer_ids)
+            ),
             "dialogue_case_count": len(dialogue_ids),
-            "dialogue_continuity_rate": sum(reviews[request_id]["continuity"] == config["human_review"]["dialogue_continuity_value"] for request_id in dialogue_ids) / len(dialogue_ids),
+            "dialogue_continuity_rate": (
+                sum(
+                    reviews[request_id]["continuity"]
+                    == config["human_review"]["dialogue_continuity_value"]
+                    for request_id in dialogue_ids
+                )
+                / len(dialogue_ids)
+            ),
         }
         print(
             f"Grounded-answer benchmark: {locale}: {len(answer_ids)}/{len(answer_ids)} reviewed answers; "
@@ -466,7 +551,9 @@ def main() -> int:
             build_workload(args.evidence, args.output_root, args.config)
         else:
             _cache_path(args.output)
-            report = score_candidate(args.workload_root, args.candidate_id, args.responses, args.reviews, args.config)
+            report = score_candidate(
+                args.workload_root, args.candidate_id, args.responses, args.reviews, args.config
+            )
             _write_json(args.output, report)
     except HarnessError as error:
         parser.error(str(error))

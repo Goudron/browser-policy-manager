@@ -25,8 +25,7 @@ def _json(path: Path) -> dict:
 def _map_topic_ids(filename: str) -> list[str]:
     root = ET.fromstring((DITA_ROOT / filename).read_text(encoding="utf-8"))
     return [
-        topicref.attrib["keyref"].removeprefix("topic.")
-        for topicref in root.findall(".//topicref")
+        topicref.attrib["keyref"].removeprefix("topic.") for topicref in root.findall(".//topicref")
     ]
 
 
@@ -70,12 +69,8 @@ def test_topic_section_taxonomy_uses_a_stable_localizable_label_key_shape() -> N
     assert taxonomy["section_rules"]["label_key_pattern"] == (
         "navigation.section.{guide_id}.{section_id}"
     )
-    assert "M8-04 provides locale-owned labels" in taxonomy["section_rules"][
-        "localization_policy"
-    ]
-    assert "topic-section-labels-0.9.1.json" in taxonomy["section_rules"][
-        "localization_policy"
-    ]
+    assert "M8-04 provides locale-owned labels" in taxonomy["section_rules"]["localization_policy"]
+    assert "topic-section-labels-0.9.1.json" in taxonomy["section_rules"]["localization_policy"]
 
     label_keys: list[str] = []
     for document in taxonomy["documents"]:
@@ -94,15 +89,18 @@ def test_topic_section_taxonomy_matches_audit_required_documents() -> None:
     taxonomy = _json(TAXONOMY)
     audit = _json(AUDIT)
 
-    assert taxonomy["scope"]["affected_documents"] == audit["summary"][
-        "documents_requiring_section_grouping"
-    ]
-    assert taxonomy["scope"]["excluded_documents"] == audit["summary"][
-        "documents_excluded_as_short_enough"
-    ]
-    assert taxonomy["section_rules"]["max_topics_per_section"] == audit["thresholds"][
-        "max_topics_per_section_target"
-    ]
+    assert (
+        taxonomy["scope"]["affected_documents"]
+        == audit["summary"]["documents_requiring_section_grouping"]
+    )
+    assert (
+        taxonomy["scope"]["excluded_documents"]
+        == audit["summary"]["documents_excluded_as_short_enough"]
+    )
+    assert (
+        taxonomy["section_rules"]["max_topics_per_section"]
+        == audit["thresholds"]["max_topics_per_section_target"]
+    )
 
 
 @pytest.mark.parametrize("guide_id", ["user-guide", "administrator-guide"])
@@ -138,7 +136,9 @@ def test_topic_section_taxonomy_keeps_sections_within_target_size(guide_id: str)
 
 def test_topic_section_taxonomy_splits_only_the_oversized_user_guide_groups() -> None:
     user_guide = _taxonomy_documents()["user-guide"]
-    by_relation = {section["section_id"]: section["source_relation"] for section in user_guide["sections"]}
+    by_relation = {
+        section["section_id"]: section["source_relation"] for section in user_guide["sections"]
+    }
 
     assert {
         section_id

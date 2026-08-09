@@ -244,8 +244,12 @@ def format_diff_markdown(diff: dict[str, Any], *, max_items: int = 20) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Diff CIS Firefox benchmark versions.")
-    parser.add_argument("--from", dest="from_selector", required=True, help="From benchmark id or id@version.")
-    parser.add_argument("--to", dest="to_selector", required=True, help="To benchmark id or id@version.")
+    parser.add_argument(
+        "--from", dest="from_selector", required=True, help="From benchmark id or id@version."
+    )
+    parser.add_argument(
+        "--to", dest="to_selector", required=True, help="To benchmark id or id@version."
+    )
     parser.add_argument("--json", action="store_true", help="Emit JSON diff.")
     parser.add_argument(
         "--validate-targets",

@@ -102,7 +102,9 @@ def build_cis_layer(
 
     layer = GeneratedCisLayer(
         benchmark_id=str(benchmark.get("id", mappings_doc.get("benchmark_id", ""))),
-        upstream_version=str(benchmark.get("upstream_version", mappings_doc.get("upstream_version", ""))),
+        upstream_version=str(
+            benchmark.get("upstream_version", mappings_doc.get("upstream_version", ""))
+        ),
         level=level,
         schema_channel=schema_channel,
         recommendation_ids=tuple(applied_ids),

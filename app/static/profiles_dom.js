@@ -1,8 +1,9 @@
-(() => {
+import { read as readCatalogs } from "./profiles_catalogs.js";
+
     function read(documentRef = document) {
         const byId = (id) => documentRef.getElementById(id);
         const all = (selector) => Array.from(documentRef.querySelectorAll(selector));
-        const catalogs = window.BPMProfilesCatalogs.read(documentRef);
+        const catalogs = readCatalogs(documentRef);
         const templateKind = documentRef.body?.dataset.profilesTemplateKind || "";
         const schemaShellPrefix = templateKind === "settings"
             ? "settings-schema-shell-step-"
@@ -361,5 +362,4 @@
         };
     }
 
-    window.BPMProfilesDom = { read };
-})();
+    export { read };

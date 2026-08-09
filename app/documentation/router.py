@@ -38,10 +38,7 @@ DOCUMENTATION_HTML_CSP: Final[str] = (
     "frame-ancestors 'none'"
 )
 DOCUMENTATION_ASSET_CSP: Final[str] = (
-    "default-src 'none'; "
-    "base-uri 'none'; "
-    "form-action 'none'; "
-    "frame-ancestors 'none'"
+    "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
 )
 DOCUMENTATION_CACHE_CONTROL: Final[str] = "no-cache, max-age=0, must-revalidate"
 DOCUMENTATION_PERMISSIONS_POLICY: Final[str] = "geolocation=(), microphone=(), camera=()"
@@ -276,23 +273,23 @@ def _status_page_response(
     }.get(active_locale, "Open BPM Profile Library")
     content = (
         "<!doctype html>"
-        f"<html lang=\"{html.escape(active_locale)}\">"
+        f'<html lang="{html.escape(active_locale)}">'
         "<head>"
-        "<meta charset=\"utf-8\">"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+        '<meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
         f"<title>{html.escape(title)}</title>"
         "</head>"
         "<body>"
-        "<a href=\"#bpm-docs-status-main\">Skip to documentation status</a>"
+        '<a href="#bpm-docs-status-main">Skip to documentation status</a>'
         "<header>"
-        "<nav aria-label=\"Documentation status\">"
-        f"<a href=\"/profiles\">{html.escape(home_label)}</a>"
+        '<nav aria-label="Documentation status">'
+        f'<a href="/profiles">{html.escape(home_label)}</a>'
         "</nav>"
         "</header>"
-        "<main id=\"bpm-docs-status-main\" tabindex=\"-1\" aria-labelledby=\"bpm-docs-status-title\">"
+        '<main id="bpm-docs-status-main" tabindex="-1" aria-labelledby="bpm-docs-status-title">'
         f"<p>Browser Policy Manager · /help/ · HTTP {status_code}</p>"
-        f"<h1 id=\"bpm-docs-status-title\">{html.escape(title)}</h1>"
-        "<section role=\"status\" aria-live=\"polite\">"
+        f'<h1 id="bpm-docs-status-title">{html.escape(title)}</h1>'
+        '<section role="status" aria-live="polite">'
         f"<p>{html.escape(body)}</p>"
         "</section>"
         "</main>"
@@ -386,7 +383,9 @@ def _active_locale_from_request(
 def _site_is_available(site_root: Path) -> bool:
     catalog = _catalog(site_root)
     locales = _available_locales(catalog)
-    return bool(locales and all((site_root / locale / "index.html").is_file() for locale in locales))
+    return bool(
+        locales and all((site_root / locale / "index.html").is_file() for locale in locales)
+    )
 
 
 def _artifact_problem(site_root: Path) -> str | None:
@@ -534,7 +533,9 @@ async def documentation_locale_without_slash(locale: str) -> Response:
 
 
 @router.get("/help/{locale}/{asset_path:path}")
-async def documentation_locale_asset(request: Request, locale: str, asset_path: str = "") -> Response:
+async def documentation_locale_asset(
+    request: Request, locale: str, asset_path: str = ""
+) -> Response:
     site_root = _settings_site_root()
     catalog = _catalog(site_root)
     locales = _available_locales(catalog)

@@ -4,7 +4,7 @@
   <title>Récupérer des modifications non enregistrées</title>
   <shortdesc>Évitez de perdre les modifications non enregistrées de l'éditeur lors de la navigation, de la fermeture d'un onglet, de l'actualisation ou du changement de mode.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
     <context><p>BPM avertit de l'état de l'éditeur sale, mais les utilisateurs doivent toujours décider s'ils doivent enregistrer, supprimer ou rester sur la page.</p></context>
     <steps>
       <step><cmd>Arrêtez-vous lorsque le navigateur ou BPM signale des modifications non enregistrées.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>

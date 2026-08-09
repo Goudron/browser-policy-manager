@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-language" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Change the interface language</title>
-  <shortdesc>Select English, Russian, German, Simplified Chinese, French, Spanish, or the system language for BPM.</shortdesc>
+  <shortdesc>Select <uicontrol>English</uicontrol>, <uicontrol>Russian</uicontrol>, <uicontrol>German</uicontrol>, <uicontrol>Simplified Chinese</uicontrol>, <uicontrol>French</uicontrol>, <uicontrol>Spanish</uicontrol>, or the system language for BPM.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, <uicontrol>Library</uicontrol>, <uicontrol>All settings</uicontrol>, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Use the language selector when screenshots, labels, validation messages, and documentation examples must match the operator locale.</p></context>
     <steps>
       <step><cmd>Open the language selector in the page header.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>Choose English, Russian, German, Simplified Chinese, French, Spanish, or System.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
+      <step><cmd>Choose <uicontrol>English</uicontrol>, <uicontrol>Russian</uicontrol>, <uicontrol>German</uicontrol>, <uicontrol>Simplified Chinese</uicontrol>, <uicontrol>French</uicontrol>, <uicontrol>Spanish</uicontrol>, or <uicontrol>Browser</uicontrol>.</cmd><info><p>An explicit language is saved for later BPM pages and reloads. <uicontrol>Browser</uicontrol> is saved as the mode: BPM resolves it from the current browser preferences each time it loads, following the documented matching and fallback order.</p></info></step>
       <step><cmd>Confirm that navigation labels, validation messages, status text, and editor controls switch to the selected locale.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Continue editing only after confirming that the profile and schema channel are still the same.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>
     <result><p>BPM displays the interface in the selected locale without changing profile data.</p></result>
-    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the <uicontrol>Library</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-language-detection-fallback"/>

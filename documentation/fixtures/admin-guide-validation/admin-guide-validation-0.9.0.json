@@ -102,9 +102,6 @@
     "API_PREFIX",
     "ENABLE_CORS",
     "CORS_ALLOW_ORIGINS",
-    "SCHEMA_BASE_URL",
-    "SCHEMA_CACHE_DIR",
-    "SCHEMA_HTTP_TIMEOUT",
     "DOCUMENTATION_SITE_DIR"
   ],
   "required_env_vars": [
@@ -113,9 +110,7 @@
     "BPM_RELOAD",
     "BPM_DATABASE_URL",
     "BPM_DOCUMENTATION_SITE_DIR",
-    "BPM_SCHEMA_CACHE_DIR",
-    "BPM_CORS_ALLOW_ORIGINS",
-    "BPM_SCHEMA_HTTP_TIMEOUT"
+    "BPM_CORS_ALLOW_ORIGINS"
   ],
   "required_paths": [
     "data/bpm.db",

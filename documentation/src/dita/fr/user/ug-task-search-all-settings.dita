@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-search-all-settings" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Rechercher dans « Tous les paramètres »</title>
-  <shortdesc>Recherchez les paramètres configurés, les politiques disponibles, les préférences connues et les actions de configuration à partir de Tous les paramètres.</shortdesc>
+  <shortdesc>Recherchez les paramètres configurés, les politiques disponibles, les préférences connues et les actions de configuration à partir de <uicontrol>Tous les paramètres</uicontrol>.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres dans n'importe quel mode.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> dans n'importe quel mode.</p></prereq>
     <context><p>La recherche est partagée entre les travaux de révision, de configuration et de catalogue. Cela peut conduire à un paramètre, une action ou un groupe filtré.</p></context>
     <steps>
-      <step><cmd>Placez le focus dans le champ de recherche Tous les paramètres.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Saisissez une stratégie ID, une clé de préférence, une catégorie, une source ou un terme en langage simple.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez un résultat groupé et confirmez le paramètre ou l'action cible.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Placez le focus dans le champ de recherche <uicontrol>Tous les paramètres</uicontrol>.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Saisissez une stratégie ID, une clé de préférence, une catégorie, une source ou un terme en langage simple.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez un résultat groupé et confirmez le paramètre ou l'action cible.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Effacez la recherche lorsque vous revenez à la navigation ou au filtrage.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Le paramètre ou l'action correspondant est sélectionné sans perdre le contexte de profil actuel.</p></result>

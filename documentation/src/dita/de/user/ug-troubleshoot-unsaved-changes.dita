@@ -4,16 +4,16 @@
   <title>Wiederherstellung von nicht gespeicherten Änderungen</title>
   <shortdesc>Vermeiden Sie den Verlust nicht gespeicherter Editoränderungen beim Navigieren, Schließen von Tabs, Aktualisieren oder Moduswechsel.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine Bibliothek, eine Alle Einstellungen, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
+    <prereq><p>Öffnen Sie BPM im Browser und halten Sie ein Profil, eine <uicontrol>Bibliothek</uicontrol>, eine <uicontrol>Alle Einstellungen</uicontrol>, eine geführte, eine JSON- oder eine Vergleichsoberfläche verfügbar.</p></prereq>
     <context><p>BPM warnt vor einem fehlerhaften Editorstatus, aber Benutzer müssen noch entscheiden, ob sie die Seite speichern, verwerfen oder auf der Seite bleiben möchten.</p></context>
     <steps>
       <step><cmd>Stoppen, wenn der Browser oder BPM nicht gespeicherte Änderungen meldet.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Identifizieren Sie die aktive Registerkarte, den Profilnamen, den Schemakanal und den Editormodus, der den Entwurf enthält.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
       <step><cmd>Speichern Sie das Profil, wenn die Änderungen zum neuen Profilstatus werden sollen, oder brechen Sie die Navigation ab, um sie zuerst zu überprüfen.</cmd><info><p>Erwartetes Ergebnis: BPM hält das ausgewählte Profil, die Editoroberfläche, das Gebietsschema und das Thema während der Arbeit klar.</p></info></step>
-      <step><cmd>Wenn Sie Änderungen absichtlich verwerfen, öffnen Sie das Profil erneut aus der Bibliothek und bestätigen Sie den gespeicherten Status, bevor Sie fortfahren.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
+      <step><cmd>Wenn Sie Änderungen absichtlich verwerfen, öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol> und bestätigen Sie den gespeicherten Status, bevor Sie fortfahren.</cmd><info><note type="warning">Speichern Sie Änderungen oder verwerfen Sie sie absichtlich, bevor Sie einen Editor verlassen, einen Tab schließen oder eine irreversible Aktion bestätigen.</note></info></step>
     </steps>
     <result><p>Sie bewahren den Entwurf entweder durch Speichern auf oder kehren bewusst zum zuletzt gespeicherten Profilstatus zurück.</p></result>
-    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn der sichtbare Status unklar ist, beenden Sie die Bearbeitung, lesen Sie die aktuelle Statusmeldung, aktualisieren Sie sie einmal und öffnen Sie das Profil erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-save-profile"/>

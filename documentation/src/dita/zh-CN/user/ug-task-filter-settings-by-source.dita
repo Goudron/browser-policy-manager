@@ -4,12 +4,12 @@
   <title>按来源筛选设置</title>
   <shortdesc>按基线、CIS、手动、导入或原始源属性过滤配置的设置。</shortdesc>
   <taskbody>
-    <prereq><p>在 已配置 或源感知列表中打开 所有设置。</p></prereq>
+    <prereq><p>在 <uicontrol>已配置</uicontrol> 或源感知列表中打开 <uicontrol>所有设置</uicontrol>。</p></prereq>
     <context><p>源过滤器解释值存在的原因。它们有助于区分生成的基线、CIS 层、手动编辑、导入的策略和原始后备值。</p></context>
     <steps>
-      <step><cmd>打开源过滤器控件。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>根据您要回答的问题选择基线、CIS、手动、导入或原始。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>在每次过滤器更改后查看列表计数和可见徽章。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>打开源过滤器控件。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>根据您要回答的问题选择基线、CIS、手动、导入或原始。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>在每次过滤器更改后查看列表计数和可见徽章。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
       <step><cmd>在切换到不同的调查路径之前清除过滤器。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>可见列表仅包含所选源类别中的设置。</p></result>

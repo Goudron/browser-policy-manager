@@ -7,12 +7,12 @@
     <prereq><p>Un estado de BPM visible, un mensaje de validación, una advertencia del navegador o una acción fallida indican que el flujo de trabajo actual no puede continuar de forma segura.</p></prereq>
     <context><p>Una ruta de perfil faltante significa que la URL ya no se resuelve en un perfil activo; el perfil puede estar archivado, eliminado, filtrado o ya eliminado.</p></context>
     <steps>
-      <step><cmd>Regrese a la Biblioteca en lugar de editar la ruta fallida.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
+      <step><cmd>Regrese a la <uicontrol>Biblioteca</uicontrol> en lugar de editar la ruta fallida.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Borre la búsqueda y los filtros, luego busque el perfil por nombre, canal de esquema y último estado conocido.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
       <step><cmd>Incluir perfiles archivados cuando el perfil pueda haber sido archivado deliberadamente.</cmd><info><p>Resultado esperado: conserva el estado del perfil y comprende la siguiente acción de recuperación segura.</p></info></step>
-      <step><cmd>Si aún falta el perfil, deje de usar la URL obsoleta y continúe solo desde una fila visible de la Biblioteca o una exportación conocida.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
+      <step><cmd>Si aún falta el perfil, deje de usar la URL obsoleta y continúe solo desde una fila visible de la <uicontrol>Biblioteca</uicontrol> o una exportación conocida.</cmd><info><note type="warning">Vuelva a intentarlo solo desde la interfaz de BPM; no modifique los datos del perfil fuera de la aplicación.</note></info></step>
     </steps>
-    <result><p>Puede volver a abrir el perfil desde un estado de Biblioteca visible o confirmar que la ruta marcada ya no se puede utilizar.</p></result>
+    <result><p>Puede volver a abrir el perfil desde un estado de <uicontrol>Biblioteca</uicontrol> visible o confirmar que la ruta marcada ya no se puede utilizar.</p></result>
     <postreq><p>Si el error se repite, detenga el flujo de trabajo y contacte con el soporte indicando el mensaje visible, el nombre del perfil, el canal de esquema y la página actual.</p></postreq>
   </taskbody>
   <related-links>

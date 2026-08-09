@@ -1,4 +1,3 @@
-(() => {
     const missingValueLabel = "Not set";
 
     function isPlainObject(value) {
@@ -113,7 +112,7 @@
         return snapshotToString(value);
     }
 
-    window.BPMProfilesCompareState = {
+    export {
         collectDiffPaths,
         collectProfileSettingKeys,
         formatCompareValue,
@@ -122,4 +121,3 @@
         readSettingValue,
         snapshotToString,
     };
-})();

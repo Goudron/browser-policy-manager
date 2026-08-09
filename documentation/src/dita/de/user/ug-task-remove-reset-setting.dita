@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-remove-reset-setting" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Eine Einstellung entfernen oder zurücksetzen</title>
-  <shortdesc>Entfernen Sie einen konfigurierten Wert oder setzen Sie ihn auf die geerbte Grundlinie, Voreinstellung oder den unkonfigurierten Zustand zurück.</shortdesc>
+  <shortdesc><uicontrol>Entfernen</uicontrol> Sie einen konfigurierten Wert oder setzen Sie ihn auf die geerbte Grundlinie, Voreinstellung oder den unkonfigurierten Zustand zurück.</shortdesc>
   <taskbody>
     <prereq><p>Öffnen Sie den Einstellungsdetailbereich für einen konfigurierten Wert.</p></prereq>
-    <context><p>Die Aktionen „Entfernen“ und „Zurücksetzen“ wirken sich destruktiv auf den ausgewählten Wert aus, daher sollte der Benutzer zunächst die Quell- und Downstream-Effekte verstehen.</p></context>
+    <context><p>Die Aktionen „<uicontrol>Entfernen</uicontrol>“ und „Zurücksetzen“ wirken sich destruktiv auf den ausgewählten Wert aus, daher sollte der Benutzer zunächst die Quell- und Downstream-Effekte verstehen.</p></context>
     <steps>
-      <step><cmd>Überprüfen Sie den aktuellen Wert und das Quell-Badge.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wählen Sie „Entfernen“ oder „Zurücksetzen“ nur für die Einstellung, die Sie ändern möchten.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Lesen Sie alle im Detailbereich angezeigten Warn- oder Validierungsmeldungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie den aktuellen Wert und das Quell-Badge.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie „<uicontrol>Entfernen</uicontrol>“ oder „Zurücksetzen“ nur für die Einstellung, die Sie ändern möchten.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Lesen Sie alle im Detailbereich angezeigten Warn- oder Validierungsmeldungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Speichern Sie das Profil, nachdem Sie bestätigt haben, dass der Wert fehlt, zurückgesetzt oder wie erwartet übernommen wurde.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Die Einstellung gilt nicht mehr ab dem zuvor konfigurierten Wert.</p></result>

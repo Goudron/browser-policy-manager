@@ -4,12 +4,12 @@
   <title>Roh- und unbekannte Einstellungen behandeln</title>
   <shortdesc>Überprüfen Sie importierte unbekannte Schlüssel und Roh-Fallback-Werte, ohne sie versehentlich zu verlieren.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie Prüfung oder eine unformatierte/unbekannte gefilterte Liste in Alle Einstellungen.</p></prereq>
+    <prereq><p>Öffnen Sie <uicontrol>Prüfung</uicontrol> oder eine unformatierte/unbekannte gefilterte Liste in <uicontrol>Alle Einstellungen</uicontrol>.</p></prereq>
     <context><p>Rohe und unbekannte Einstellungen können vom Import, Schemaunterschieden oder Werten stammen, die BPM nicht visuell modellieren kann. Behandeln Sie sie als Aufbewahrungs- und Überprüfungselemente, nicht als routinemäßige Bearbeitungen.</p></context>
     <steps>
-      <step><cmd>Filtern oder öffnen Sie Überprüfungselemente für unformatierte, unbekannte oder importierte Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Überprüfen Sie den Rohwert, die Quelle, den Validierungsstatus und den Schemakanal.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Entscheiden Sie, ob der Wert in JSON-Editor beibehalten, entfernt, zurückgesetzt oder überprüft werden soll.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Filtern oder öffnen Sie Überprüfungselemente für unformatierte, unbekannte oder importierte Einstellungen.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Überprüfen Sie den Rohwert, die Quelle, den Validierungsstatus und den Schemakanal.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Entscheiden Sie, ob der Wert in <uicontrol>JSON-Editor</uicontrol> beibehalten, entfernt, zurückgesetzt oder überprüft werden soll.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Speichern Sie erst, nachdem Sie bestätigt haben, dass der Wert erhalten bleiben oder entfernt werden soll.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Rohe und unbekannte Werte werden beibehalten oder absichtlich entfernt.</p></result>

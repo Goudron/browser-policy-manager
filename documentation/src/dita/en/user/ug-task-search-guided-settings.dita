@@ -4,7 +4,7 @@
   <title>Search Guided settings</title>
   <shortdesc>Search Guided controls and jump to the matching setting without scanning every step.</shortdesc>
   <taskbody>
-    <prereq><p>A profile is open in Guided editor.</p></prereq>
+    <prereq><p>A profile is open in <uicontrol>Guided editor</uicontrol>.</p></prereq>
     <context><p>Guided search is useful when you know the policy goal but not the step that contains the control family.</p>
       <fig id="screenshot-guided-settings-search">
         <title>Guided settings search results</title>

@@ -2,15 +2,15 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Erweiterte Schema-Steuerungen verwenden</title>
-  <shortdesc>Erreichen Sie erweiterte Schema-Shell- und Einstellungssteuerelemente von Alle Einstellungen, ohne Geführter Editor als vollständigen Editor zu behandeln.</shortdesc>
+  <shortdesc>Erreichen Sie erweiterte Schema-Shell- und Einstellungssteuerelemente von <uicontrol>Alle Einstellungen</uicontrol>, ohne <uicontrol>Geführter Editor</uicontrol> als vollständigen Editor zu behandeln.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie Alle Einstellungen in Katalog.</p></prereq>
-    <context><p>Erweiterte Kontrollen bleiben geplant. Alle Einstellungen ist die Obermenge für schemagestützte Richtlinien und Einstellungen, die keine erstklassigen geführten Steuerelemente sind.</p></context>
+    <prereq><p>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> in <uicontrol>Katalog</uicontrol>.</p></prereq>
+    <context><p>Erweiterte Kontrollen bleiben geplant. <uicontrol>Alle Einstellungen</uicontrol> ist die Obermenge für schemagestützte Richtlinien und Einstellungen, die keine erstklassigen geführten Steuerelemente sind.</p></context>
     <steps>
-      <step><cmd>Wechseln Sie zu Katalog und öffnen Sie die erweiterte Schema- oder Präferenzoffenlegung.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Prüfen Sie, ob für das Steuerelement „Im geführten Editor abgedeckt“, „Alle Einstellungen nur“, „Rohwert-Fallback“, „Veraltet“ oder „Schemaabhängig“ gilt.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Bearbeiten Sie nur die erweiterte Steuerung, die für das Profilziel erforderlich ist.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Validieren und speichern Sie, bevor Sie zu Geführter Editor, JSON oder der Bibliothek zurückkehren.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
+      <step><cmd>Wechseln Sie zu <uicontrol>Katalog</uicontrol> und öffnen Sie die erweiterte Schema- oder Präferenzoffenlegung.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Prüfen Sie, ob für das Steuerelement „Im geführten Editor abgedeckt“, „<uicontrol>Alle Einstellungen</uicontrol> nur“, „Rohwert-Fallback“, „Veraltet“ oder „Schemaabhängig“ gilt.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Bearbeiten Sie nur die erweiterte Steuerung, die für das Profilziel erforderlich ist.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Validieren und speichern Sie, bevor Sie zu <uicontrol>Geführter Editor</uicontrol>, JSON oder der <uicontrol>Bibliothek</uicontrol> zurückkehren.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Die erweiterte Einstellung wird gezielt ohne doppelte Standardeditoren erreicht und geändert.</p></result>
     <postreq><p>Wiederherstellung: Wenn das Steuerelement im ausgewählten Schema nicht unterstützt wird, lassen Sie es unverändert und dokumentieren Sie die Schemagrenze.</p></postreq>

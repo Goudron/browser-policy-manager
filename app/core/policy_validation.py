@@ -8,9 +8,10 @@ the API and web layers.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import re
 from dataclasses import dataclass
-from functools import lru_cache
 from typing import Any
 
 from jsonschema import FormatChecker, ValidationError
@@ -83,14 +84,42 @@ def _build_validator(schema: JsonSchema):
     return validator_class(prepared_schema, format_checker=FormatChecker())
 
 
-@lru_cache(maxsize=16)
-def _build_validator_for_channel(channel: str):
-    return _build_validator(load_policy_schema_for_channel(channel))
+_VALIDATOR_CACHE_LIMIT = 16
+_compiled_validators: dict[tuple[str, str], Any] = {}
+
+
+def _schema_artifact_identity(schema: JsonSchema) -> str:
+    """Return a content identity for the exact schema artifact in use.
+
+    The identity is deliberately derived from canonical JSON rather than a
+    clock or a channel label.  A channel can be repinned to a different schema
+    artifact during a controlled update; the next validation then compiles a
+    validator for that new artifact instead of reusing an obsolete one.
+    """
+
+    canonical = json.dumps(schema, ensure_ascii=True, separators=(",", ":"), sort_keys=True)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _validator_for_channel(channel: str) -> Any:
+    schema = load_policy_schema_for_channel(channel)
+    key = (channel, _schema_artifact_identity(schema))
+    validator = _compiled_validators.get(key)
+    if validator is not None:
+        return validator
+
+    validator = _build_validator(schema)
+    if len(_compiled_validators) >= _VALIDATOR_CACHE_LIMIT:
+        # Schema artifacts are pinned and few.  This bounded eviction only
+        # handles maintainer/test artifact replacement; it is never time based.
+        _compiled_validators.pop(next(iter(_compiled_validators)))
+    _compiled_validators[key] = validator
+    return validator
 
 
 def clear_policy_validator_cache() -> None:
     """Clear cached compiled validators used by channel-based validation helpers."""
-    _build_validator_for_channel.cache_clear()
+    _compiled_validators.clear()
 
 
 def _extend_error_path(error: ValidationError) -> list[str | int]:
@@ -166,7 +195,7 @@ def validate_profile_policies_for_channel(
     policy documents against the same small set of schema channels.
     """
 
-    return _validate_with_validator(profile_policies, _build_validator_for_channel(channel))
+    return _validate_with_validator(profile_policies, _validator_for_channel(channel))
 
 
 def validate_profile_policies_or_raise(

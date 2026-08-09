@@ -1,12 +1,13 @@
-(() => {
+import { utils } from "./profiles_utils.js";
+import * as platform from "./profiles_platform.js";
+import * as data from "./profiles_data.js";
+import { create as createShared } from "./profiles_shared.js";
+
     function start({
         documentRef = document,
         windowRef = window,
     } = {}) {
-        const utils = windowRef.BPMProfilesUtils;
-        const platform = windowRef.BPMProfilesPlatform;
-        const data = windowRef.BPMProfilesData;
-        const shared = windowRef.BPMProfilesShared.create({
+        const shared = createShared({
             documentRef,
             elements: {
                 statusEl: documentRef.getElementById("status"),
@@ -36,8 +37,7 @@
             escapeHtml,
         } = utils;
         const {
-            listProfiles,
-            getProfileLibraryStats,
+            getProfileLibraryPage,
             importFirefoxPoliciesJson,
             softDeleteProfile,
             hardDeleteProfile,
@@ -563,12 +563,14 @@
         async function reloadList() {
             try {
                 const filters = readFilters();
-                const [items, stats] = await Promise.all([
-                    listProfiles(filters, windowRef.fetch, windowRef.location, documentRef),
-                    getProfileLibraryStats(filters, windowRef.fetch, windowRef.location, documentRef),
-                ]);
-                renderList(items);
-                updateLibrarySummary(stats);
+                const page = await getProfileLibraryPage(
+                    filters,
+                    windowRef.fetch,
+                    windowRef.location,
+                    documentRef,
+                );
+                renderList(page.items);
+                updateLibrarySummary(page.stats);
             } catch (error) {
                 console.warn("library list load failed:", error);
             }
@@ -695,7 +697,4 @@
         });
     }
 
-    window.BPMProfilesLibraryBootstrap = {
-        start,
-    };
-})();
+    export { start };

@@ -7,7 +7,7 @@
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
     <context><p>Malformed JSON is a syntax problem: BPM cannot parse the document far enough to validate policy names or values.</p></context>
     <steps>
-      <step><cmd>Keep the JSON editor or import error open so the line, column, or parse message remains visible.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
+      <step><cmd>Keep the <uicontrol>JSON editor</uicontrol> or import error open so the line, column, or parse message remains visible.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Check the nearest braces, brackets, commas, quotation marks, and escaped characters around the reported location.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Format or validate the document again after the syntax correction.</cmd><info><p>Expected result: you preserve the profile state and understand the next safe recovery action.</p></info></step>
       <step><cmd>Continue to schema validation only after the JSON parses successfully.</cmd><info><note type="warning">Retry only from the BPM interface; do not change profile data outside the application.</note></info></step>

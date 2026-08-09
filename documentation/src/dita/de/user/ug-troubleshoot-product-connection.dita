@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-product-connection" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Wiederherstellung nach Produktverbindungsfehler</title>
-  <shortdesc>Wiederherstellung nach einem Netzwerk-, Browser- oder BPM-API-Vorgangsfehler, der in Bibliotheks- oder Editoroberflächen sichtbar ist.</shortdesc>
+  <shortdesc>Wiederherstellung nach einem Netzwerk-, Browser- oder BPM-API-Vorgangsfehler, der in <uicontrol>Bibliothek</uicontrol>s- oder Editoroberflächen sichtbar ist.</shortdesc>
   <taskbody>
     <prereq><p>Ein sichtbarer BPM-Status, eine Validierungsmeldung, eine Browserwarnung oder eine fehlgeschlagene Aktion weist darauf hin, dass der aktuelle Arbeitsablauf nicht sicher fortgesetzt werden kann.</p></prereq>
     <context><p>Verbindungsfehler können durch Netzwerkunterbrechungen, Serverneustarts oder API-Fehler entstehen; bewahren Sie den sichtbaren Kontext vor einem erneuten Versuch auf.</p></context>

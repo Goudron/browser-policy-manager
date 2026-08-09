@@ -4,16 +4,16 @@
   <title>审核已归档的配置档案</title>
   <shortdesc>在恢复或永久删除决策之前，故意使用存档上下文打开存档配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>通过库生命周期过滤器或 include_deleted 路由仍然可以看到已存档的配置文件。</p></prereq>
-    <context><p>可以通过包含删除的路由和库生命周期过滤器来查看存档的配置文件，但它们不是正常的活动编辑/导出目标。</p></context>
+    <prereq><p>通过<uicontrol>库</uicontrol>生命周期过滤器或 include_deleted 路由仍然可以看到已存档的配置文件。</p></prereq>
+    <context><p>可以通过包含删除的路由和<uicontrol>库</uicontrol>生命周期过滤器来查看存档的配置文件，但它们不是正常的活动编辑/导出目标。</p></context>
     <steps>
-      <step><cmd>将库生命周期过滤器设置为已存档或所有状态。</cmd><info><p>预期结果：存档的生命周期上下文在任何恢复或破坏性操作之前保持可见。</p></info></step>
+      <step><cmd>将<uicontrol>库</uicontrol>生命周期过滤器设置为已存档或所有状态。</cmd><info><p>预期结果：存档的生命周期上下文在任何恢复或破坏性操作之前保持可见。</p></info></step>
       <step><cmd>在打开行之前确认存档的徽章、配置文件名称、架构通道、验证状态和更新时间。</cmd><info><p>预期结果：存档的生命周期上下文在任何恢复或破坏性操作之前保持可见。</p></info></step>
       <step><cmd>仅在需要审核上下文、规划恢复、进行比较或决定是否删除时打开已归档的配置档案。</cmd><info><p>预期结果：存档的生命周期上下文在任何恢复或破坏性操作之前保持可见。</p></info></step>
-      <step><cmd>在正常编辑/导出之前恢复配置文件，或者如果存档上下文不是预期目标则取消。</cmd><info><note type="warning">存档的配置文件操作可能会影响在正常活动库视图中故意隐藏的配置文件。</note></info></step>
+      <step><cmd>在正常编辑/导出之前恢复配置文件，或者如果存档上下文不是预期目标则取消。</cmd><info><note type="warning">存档的配置文件操作可能会影响在正常活动<uicontrol>库</uicontrol>视图中故意隐藏的配置文件。</note></info></step>
     </steps>
     <result><p>您可以在其生命周期上下文可见的情况下查看已存档的配置文件，并避免错误地将其视为活动配置文件。</p></result>
-    <postreq><p>恢复：如果添加书签的存档路线报告未找到配置文件，则返回到包含存档配置文件的库，然后从可见行重新打开。</p></postreq>
+    <postreq><p>恢复：如果添加书签的存档路线报告未找到配置文件，则返回到包含存档配置文件的<uicontrol>库</uicontrol>，然后从可见行重新打开。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-archived-profile-behavior"/>

@@ -10,10 +10,10 @@
       <step><cmd>Establezca el filtro del ciclo de vida de la biblioteca en Archivado o Todos los estados.</cmd><info><p>Resultado esperado: el contexto del ciclo de vida archivado permanece visible antes de cualquier restauración o acción destructiva.</p></info></step>
       <step><cmd>Confirme la insignia archivada, el nombre del perfil, el canal del esquema, el estado de validación y la hora de actualización antes de abrir la fila.</cmd><info><p>Resultado esperado: el contexto del ciclo de vida archivado permanece visible antes de cualquier restauración o acción destructiva.</p></info></step>
       <step><cmd>Abra el perfil archivado solo cuando necesite revisar el contexto, restaurar la planificación, comparar o tomar una decisión de eliminación.</cmd><info><p>Resultado esperado: el contexto del ciclo de vida archivado permanece visible antes de cualquier restauración o acción destructiva.</p></info></step>
-      <step><cmd>Restaure el perfil antes de la edición/exportación normal, o cancele si el contexto archivado no es el objetivo previsto.</cmd><info><note type="warning">Las acciones de perfiles archivados pueden afectar perfiles que están ocultos intencionalmente de la vista normal de la Biblioteca activa.</note></info></step>
+      <step><cmd>Restaure el perfil antes de la edición/exportación normal, o cancele si el contexto archivado no es el objetivo previsto.</cmd><info><note type="warning">Las acciones de perfiles archivados pueden afectar perfiles que están ocultos intencionalmente de la vista normal de la <uicontrol>Biblioteca</uicontrol> activa.</note></info></step>
     </steps>
     <result><p>Revisa el perfil archivado con su contexto de ciclo de vida visible y evita tratarlo como un perfil activo por error.</p></result>
-    <postreq><p>Recuperación: si una ruta archivada marcada informa Perfil no encontrado, regrese a la Biblioteca con los perfiles archivados incluidos y vuelva a abrir desde la fila visible.</p></postreq>
+    <postreq><p>Recuperación: si una ruta archivada marcada informa Perfil no encontrado, regrese a la <uicontrol>Biblioteca</uicontrol> con los perfiles archivados incluidos y vuelva a abrir desde la fila visible.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-archived-profile-behavior"/>

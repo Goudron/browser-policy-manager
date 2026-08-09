@@ -1,4 +1,3 @@
-(() => {
     function create({
         dependencies = {},
         allSettingsCategoryCatalog = {},
@@ -595,5 +594,4 @@
         };
     }
 
-    window.BPMProfilesSettingsInventory = { create };
-})();
+    export { create };

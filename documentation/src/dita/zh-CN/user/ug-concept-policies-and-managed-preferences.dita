@@ -2,10 +2,10 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="ug-concept-policies-and-managed-preferences" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>策略和托管首选项</title>
-  <shortdesc>BPM 将 Firefox Enterprise 策略与托管首选项值分开，同时将两者保留在一个配置文件中。</shortdesc>
+  <shortdesc>BPM 将 Firefox Enterprise 策略与<uicontrol>托管首选项</uicontrol>值分开，同时将两者保留在一个配置文件中。</shortdesc>
   <conbody>
-    <p>策略被命名为 Firefox Enterprise 控件，例如浏览器行为、访问、权限或功能设置。 托管首选项 是具有值和可选锁定行为的首选项键。</p>
-    <p>引导式编辑器 涵盖共同政策目标。 所有设置 公开了更广泛的支持目录。 JSON 编辑器 显示用于导入和导出的确切文档边界。</p>
+    <p>策略被命名为 Firefox Enterprise 控件，例如浏览器行为、访问、权限或功能设置。 <uicontrol>托管首选项</uicontrol> 是具有值和可选锁定行为的首选项键。</p>
+    <p><uicontrol>引导式编辑器</uicontrol> 涵盖共同政策目标。 <uicontrol>所有设置</uicontrol> 公开了更广泛的支持目录。 <uicontrol>JSON 编辑器</uicontrol> 显示用于导入和导出的确切文档边界。</p>
     <p>逐个策略的参考详细信息属于 Firefox 策略指南；本用户指南解释了用户如何在 BPM 中访问并安全地编辑这些控件。</p>
   </conbody>
 </concept>

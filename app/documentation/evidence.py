@@ -59,8 +59,12 @@ def _confidence(candidates: tuple[RetrievedEvidence, ...]) -> EvidenceConfidence
     return EvidenceConfidence(top_score, runner_up_score, margin, len(candidates))
 
 
-def _empty(result: RetrievalResult, reason_code: str, confidence: EvidenceConfidence) -> EvidencePack:
-    return EvidencePack("abstain", reason_code, result.locale, result.generation_id, confidence, "", 0, (), ())
+def _empty(
+    result: RetrievalResult, reason_code: str, confidence: EvidenceConfidence
+) -> EvidencePack:
+    return EvidencePack(
+        "abstain", reason_code, result.locale, result.generation_id, confidence, "", 0, (), ()
+    )
 
 
 def _record(candidate: RetrievedEvidence) -> str:
@@ -139,7 +143,9 @@ class EvidencePacker:
     def pack(self, result: RetrievalResult, *, scope_admitted: bool) -> EvidencePack:
         """Return an answer-ready pack or a terminal pre-generation disposition."""
         ranked = tuple(
-            candidate for item in result.candidates if (candidate := _safe_candidate(item)) is not None
+            candidate
+            for item in result.candidates
+            if (candidate := _safe_candidate(item)) is not None
         )
         confidence = _confidence(ranked)
         if not scope_admitted:
@@ -149,7 +155,8 @@ class EvidencePacker:
         if not ranked:
             return _empty(result, "unsafe_evidence", confidence)
         if any(
-            candidate.bpm_version != self._bpm_version or candidate.documentation_version != self._bpm_version
+            candidate.bpm_version != self._bpm_version
+            or candidate.documentation_version != self._bpm_version
             for candidate in ranked
         ):
             return _empty(result, "stale_evidence", confidence)
@@ -157,7 +164,9 @@ class EvidencePacker:
             return _empty(result, "duplicate_chunk_identity", confidence)
         citation_sources: dict[str, str] = {}
         for candidate in ranked:
-            existing = citation_sources.setdefault(candidate.citation.citation_id, candidate.source_sha256)
+            existing = citation_sources.setdefault(
+                candidate.citation.citation_id, candidate.source_sha256
+            )
             if existing != candidate.source_sha256:
                 return _empty(result, "contradictory_evidence", confidence)
         if confidence.top_score is None or confidence.top_score < self._minimum_top_score:

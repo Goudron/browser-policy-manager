@@ -86,7 +86,9 @@ _CLASSROOM_KIOSK_EXTENSIONS: dict[str, Any] = {
     **_BLOCK_ALL_EXTENSIONS,
     "uBlock0@raymondhill.net": {
         "installation_mode": "force_installed",
-        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi",
+        "install_url": (
+            "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
+        ),
     },
 }
 
@@ -372,7 +374,7 @@ def _resolve_policy_values_for_channel(
     return resolved
 
 
-def get_wizard_starter_catalog() -> dict[str, Any]:
+def get_wizard_starter_catalog(*, include_compliance: bool = True) -> dict[str, Any]:
     resolved_presets: dict[str, dict[str, Any]] = {}
     for preset_key, preset in _STARTER_PRESETS.items():
         resolved_preset = {
@@ -398,7 +400,6 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
             )
         resolved_presets[preset_key] = resolved_preset
 
-    compliance_presets = _build_compliance_presets()
     quick_policy_enabled_values = {
         "DisablePocket": {
             schema_version: _resolve_schema_enabled_value("DisablePocket", schema_version)
@@ -406,14 +407,16 @@ def get_wizard_starter_catalog() -> dict[str, Any]:
         }
     }
 
-    return {
+    catalog = {
         "managed_policy_keys": _collect_managed_policy_keys(),
         "presets": resolved_presets,
         "compliance_layers": deepcopy(CIS_LAYER_OPTIONS),
-        "compliance_merged_presets": compliance_presets,
         "compliance_metadata": _load_cis_benchmark_metadata(),
         "quick_policy_enabled_values": quick_policy_enabled_values,
     }
+    if include_compliance:
+        catalog["compliance_merged_presets"] = _build_compliance_presets()
+    return catalog
 
 
 def resolve_wizard_starter_policy_values(
@@ -423,7 +426,9 @@ def resolve_wizard_starter_policy_values(
     preset = _STARTER_PRESETS.get(starter_key, {})
     policy_values = preset.get("policy_values", {})
     resolved = _resolve_policy_values_for_channel(policy_values.get("default", {}), schema_version)
-    resolved.update(_resolve_policy_values_for_channel(policy_values.get(schema_version, {}), schema_version))
+    resolved.update(
+        _resolve_policy_values_for_channel(policy_values.get(schema_version, {}), schema_version)
+    )
     return resolved
 
 
@@ -494,6 +499,60 @@ def _build_compliance_presets() -> dict[str, dict[str, dict[str, Any]]]:
         presets[starter_key] = layer_variants
 
     return presets
+
+
+def get_wizard_starter_compliance_snapshot(
+    starter_key: str,
+    schema_version: str,
+    layer_key: str,
+) -> dict[str, Any] | None:
+    """Build one immutable guided-editor CIS selection on demand.
+
+    Python callers may need the full cross-product, but serializing every
+    starter, CIS layer, and schema channel into the first guided page exceeds
+    its response budget. Browser callers request one validated selection only
+    after a user chooses a non-default layer.
+    """
+
+    if (
+        starter_key not in _STARTER_PRESETS
+        or schema_version not in SUPPORTED_POLICY_CHANNELS
+        or layer_key not in CIS_LAYER_OPTIONS
+    ):
+        return None
+
+    base_document = build_wizard_starter_document(starter_key, schema_version)
+    if layer_key == CIS_LAYER_NONE or starter_key == "keep_current":
+        return {
+            "policy_values": deepcopy(base_document),
+            "summary": {},
+            "review_required": 0,
+        }
+
+    layer_config = CIS_LAYER_OPTIONS[layer_key]
+    cis_layer = build_cis_layer(int(layer_config["level"]), schema_version)
+    merge_result = merge_base_with_cis_layer(
+        base_document,
+        cis_layer,
+        base_label=starter_key,
+        cis_label=layer_key,
+    )
+    return {
+        "policy_values": merge_result.effective_policies,
+        "summary": merge_result.summary,
+        "decisions": [
+            {
+                "path": decision.to_dict()["path"],
+                "decision": decision.decision,
+                "selected_source": decision.selected_source,
+                "recommendation_ids": list(decision.recommendation_ids),
+                "review_required": decision.review_required,
+                "reason": decision.reason,
+            }
+            for decision in merge_result.decisions
+        ],
+        "review_required": merge_result.summary.get("review_required", 0),
+    }
 
 
 def _load_cis_benchmark_metadata() -> dict[str, Any]:

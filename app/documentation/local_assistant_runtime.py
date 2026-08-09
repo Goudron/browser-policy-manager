@@ -57,8 +57,13 @@ class LocalAssistantAssemblyError(RuntimeError):
 class LocalAssistantRuntime:
     service: ControllerDocumentationAssistantService
     worker: LocalInferenceWorker
+    web_evidence_retriever: object
 
     def shutdown(self) -> None:
+        self.service.shutdown()
+        shutdown = getattr(self.web_evidence_retriever, "shutdown", None)
+        if callable(shutdown):
+            shutdown()
         self.worker.unload()
 
 
@@ -75,14 +80,16 @@ class LocalCitationResolver:
             return None
         locale = parts[2]
         try:
-            pointer = json.loads((self._index_root / "active-generation.json").read_text(encoding="utf-8"))
+            pointer = json.loads(
+                (self._index_root / "active-generation.json").read_text(encoding="utf-8")
+            )
             generation_id = pointer["generation_id"]
             chunks = json.loads(
-                (self._index_root / "generations" / generation_id / locale / "chunks.json").read_text(
-                    encoding="utf-8"
-                )
+                (
+                    self._index_root / "generations" / generation_id / locale / "chunks.json"
+                ).read_text(encoding="utf-8")
             )["chunks"]
-        except (KeyError, OSError, json.JSONDecodeError):
+        except KeyError, OSError, json.JSONDecodeError:
             return None
         for chunk in chunks:
             if (
@@ -145,7 +152,10 @@ def _scope_centroids(encoder: E5QueryEncoder, lexicon: ScopeLexicon) -> dict[str
 def _verified_index(retriever: ExactLocaleRetriever, encoder: E5QueryEncoder) -> bool:
     try:
         probe = encoder("Browser Policy Manager documentation")
-        return all(retriever.retrieve(locale=locale, query_vector=probe, limit=1).candidates for locale in SUPPORTED_LOCALES)
+        return all(
+            retriever.retrieve(locale=locale, query_vector=probe, limit=1).candidates
+            for locale in SUPPORTED_LOCALES
+        )
     except Exception:
         return False
 
@@ -247,4 +257,5 @@ def assemble_local_assistant(settings: Settings) -> LocalAssistantRuntime:
             web_mode_store=web_mode_store,
         ),
         worker=worker,
+        web_evidence_retriever=web_retriever,
     )

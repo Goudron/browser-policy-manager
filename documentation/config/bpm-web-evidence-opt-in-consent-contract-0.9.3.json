@@ -53,7 +53,7 @@
   },
   "next_owner": "BPM093-M9-03 may consume an approved one-time authorization before its one fixed provider POST; it must not bypass this disclosure or consent store.",
   "verification": {
-    "runtime": "tests/test_web_evidence_consent_093.py",
+    "runtime": "tests/integration/ai/incubation/test_web_evidence_consent.py",
     "contract": "documentation/tests/contract/test_bpm_web_evidence_opt_in_consent_contract_0_9_3.py",
     "architecture": "docs/architecture/bpm-web-evidence-opt-in-consent-0.9.3.md"
   }

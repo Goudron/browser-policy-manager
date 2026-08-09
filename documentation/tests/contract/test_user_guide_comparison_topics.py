@@ -39,12 +39,17 @@ def _topic_root(locale: str, topic_id: str) -> ET.Element:
     elif topic_id in CONCEPT_TOPICS:
         assert '<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">' in source
     else:
-        assert '<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">' in source
+        assert (
+            '<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">'
+            in source
+        )
     return ET.fromstring(source)
 
 
 def _section_keyrefs(locale: str) -> dict[str, list[str]]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     sections = {}
     for topichead in root.findall("topichead"):
         intent = topichead.find("./topicmeta/data[@name='intent-id']")
@@ -59,9 +64,7 @@ def _section_keyrefs(locale: str) -> dict[str, list[str]]:
 def _case_topics() -> dict[str, dict[str, object]]:
     case_map = json.loads(USER_GUIDE_MAP.read_text(encoding="utf-8"))
     return {
-        topic["topic_id"]: topic
-        for section in case_map["sections"]
-        for topic in section["topics"]
+        topic["topic_id"]: topic for section in case_map["sections"] for topic in section["topics"]
     }
 
 
@@ -69,7 +72,13 @@ def test_comparison_topics_exist_in_every_locale_with_stable_metadata() -> None:
     for locale in LOCALES:
         for topic_id in TOPICS:
             root = _topic_root(locale, topic_id)
-            expected_tag = "task" if topic_id in TASK_TOPICS else "concept" if topic_id in CONCEPT_TOPICS else "reference"
+            expected_tag = (
+                "task"
+                if topic_id in TASK_TOPICS
+                else "concept"
+                if topic_id in CONCEPT_TOPICS
+                else "reference"
+            )
             assert root.tag == expected_tag
             assert root.attrib == {
                 "id": topic_id,

@@ -54,7 +54,7 @@
   },
   "verification": {
     "contract": "documentation/tests/contract/test_documentation_assistant_floating_web_mode_contract_0_9_3.py",
-    "backend": ["tests/test_documentation_assistant_api_093.py", "tests/test_documentation_assistant_service_093.py"],
+    "backend": ["tests/integration/docs/test_documentation_assistant_api.py", "tests/integration/docs/test_documentation_assistant_service.py"],
     "builder": "documentation/tests/unit/test_build_docs.py",
     "browser": "documentation/tests/browser/test_documentation_portal_browser_smoke.py",
     "architecture": "docs/architecture/documentation-assistant-floating-web-mode-0.9.3.md"

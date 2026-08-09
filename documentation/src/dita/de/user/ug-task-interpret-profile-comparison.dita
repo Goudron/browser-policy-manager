@@ -4,15 +4,15 @@
   <title>Die Vergleichstabelle interpretieren</title>
   <shortdesc>Richtlinien- und verwaltete Einstellungszeilen in den Status „Gleich“, „Geändert“ und „Fehlend“ lesen.</shortdesc>
   <taskbody>
-    <prereq><p>Profil A und Profil B sind ausgewählt und die Vergleichstabelle ist sichtbar.</p></prereq>
+    <prereq><p><uicontrol>Profil A</uicontrol> und <uicontrol>Profil B</uicontrol> sind ausgewählt und die Vergleichstabelle ist sichtbar.</p></prereq>
     <context><p>Die Tabelle vergleicht die Kombination der Einstellungen beider Profile. Richtlinienzeilen und Zeilen mit verwalteten Einstellungen können zusammen angezeigt werden, da sich beide auf das Firefox-Verhalten auswirken können.</p></context>
     <steps>
       <step><cmd>Scannen Sie den Zeilentyp, um Richtlinienzeilen von Zeilen mit verwalteten Einstellungen zu unterscheiden.</cmd><info><p>Erwartetes Ergebnis: Sie wissen, ob die Zeile eine Firefox Enterprise-Richtlinie oder einen verwalteten Präferenzschlüssel darstellt.</p></info></step>
       <step><cmd>Lesen Sie den Wert und den Status jeder Seite.</cmd><info><p>Gleiche Zeilen haben übereinstimmende Werte, geänderte Zeilen haben unterschiedliche Werte und fehlende Zeilen sind nur auf einer Seite vorhanden.</p></info></step>
-      <step><cmd>Verwenden Sie fehlende oder geänderte Zeilen, um zu entscheiden, welches Profil überprüft werden muss.</cmd><info><note type="warning">Profileinstellungen vergleichen übernimmt keine Änderungen. Öffnen Sie den entsprechenden Profileditor, um Werte zu aktualisieren.</note></info></step>
+      <step><cmd>Verwenden Sie fehlende oder geänderte Zeilen, um zu entscheiden, welches Profil überprüft werden muss.</cmd><info><note type="warning"><uicontrol>Profileinstellungen vergleichen</uicontrol> übernimmt keine Änderungen. Öffnen Sie den entsprechenden Profileditor, um Werte zu aktualisieren.</note></info></step>
     </steps>
     <result><p>Sie können erklären, ob die ausgewählten Profile gleichwertig oder unterschiedlich sind oder auf einer Seite Einstellungen fehlen.</p></result>
-    <postreq><p>Wiederherstellung: Wenn Zeilen veraltet aussehen, speichern Sie zuerst die Editoränderungen und öffnen Sie Profileinstellungen vergleichen erneut aus der Bibliothek.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn Zeilen veraltet aussehen, speichern Sie zuerst die Editoränderungen und öffnen Sie <uicontrol>Profileinstellungen vergleichen</uicontrol> erneut aus der <uicontrol>Bibliothek</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -483,5 +482,4 @@
         };
     }
 
-    window.BPMProfilesShared = { create };
-})();
+    export { create };

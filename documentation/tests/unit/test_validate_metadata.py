@@ -172,8 +172,7 @@ def test_xml_validation_reports_parse_fixed_attribute_and_otherprops_errors(
 
     invalid = tmp_path / "invalid.dita"
     invalid.write_text(
-        '<topic id="bad" audience="guest" otherprops="policy(policy-z)">'
-        "<title>Bad</title></topic>",
+        '<topic id="bad" audience="guest" otherprops="policy(policy-z)"><title>Bad</title></topic>',
         encoding="utf-8",
     )
     errors = validate_metadata.validate_xml(invalid, vocabulary)
@@ -211,7 +210,9 @@ def test_main_reports_success_validation_errors_and_configuration_errors(
     assert validate_metadata.main() == 0
     assert "Validated conditional metadata in 1 DITA source files." in capsys.readouterr().out
 
-    source.write_text('<topic id="bad" audience="guest"><title>Bad</title></topic>', encoding="utf-8")
+    source.write_text(
+        '<topic id="bad" audience="guest"><title>Bad</title></topic>', encoding="utf-8"
+    )
     assert validate_metadata.main() == 1
     assert "unknown audience value(s): guest" in capsys.readouterr().err
 

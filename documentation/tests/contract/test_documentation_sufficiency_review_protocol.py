@@ -104,8 +104,14 @@ def test_evidence_types_include_hands_on_simulation_static_and_waiver_paths() ->
         "explicit_waiver",
     }
     assert "performs the documented UI workflow" in evidence["hands_on_browser"]["description"]
-    assert "runs the documented shell/API commands" in evidence["hands_on_command_transcript"]["description"]
-    assert "maps every step to deterministic source" in evidence["documented_simulation_evidence"]["description"]
+    assert (
+        "runs the documented shell/API commands"
+        in evidence["hands_on_command_transcript"]["description"]
+    )
+    assert (
+        "maps every step to deterministic source"
+        in evidence["documented_simulation_evidence"]["description"]
+    )
     assert "maintainer-approved non-goal" in evidence["explicit_waiver"]["description"]
 
 
@@ -122,7 +128,10 @@ def test_each_guide_family_has_minimum_evidence_and_closure_rules() -> None:
 
     assert "hands_on_browser" in rules["user-guide"]["minimum_evidence"]
     assert "documented_simulation_evidence" in rules["user-guide"]["minimum_evidence"]
-    assert "cannot close from topic presence or static coverage alone" in rules["user-guide"]["closure_rule"]
+    assert (
+        "cannot close from topic presence or static coverage alone"
+        in rules["user-guide"]["closure_rule"]
+    )
     assert "all settings" in rules["user-guide"]["must_cover"]
     assert "JSON editor" in rules["user-guide"]["must_cover"]
 
@@ -131,7 +140,9 @@ def test_each_guide_family_has_minimum_evidence_and_closure_rules() -> None:
     assert "source-attribution boundaries" in rules["cis-settings-guide"]["closure_rule"]
     assert "API integration" in rules["administrator-guide"]["scope"]
     assert "hands_on_command_transcript" in rules["administrator-guide"]["minimum_evidence"]
-    assert "cannot close from static text checks alone" in rules["administrator-guide"]["closure_rule"]
+    assert (
+        "cannot close from static text checks alone" in rules["administrator-guide"]["closure_rule"]
+    )
 
 
 def test_source_install_rule_requires_hands_on_or_documented_simulation_evidence() -> None:
@@ -181,9 +192,11 @@ def test_records_verification_and_non_goals_are_release_ready() -> None:
         "BPM091-M9-05",
     ]
     assert (
-        "./.venv/bin/pytest -q documentation/tests/contract/"
-        "test_documentation_sufficiency_drift.py"
+        "./.venv/bin/pytest -q documentation/tests/contract/test_documentation_sufficiency_drift.py"
     ) in protocol["verification"]["focused_contracts"]
     assert "make docs-release-check" in protocol["verification"]["release_gates"]
-    assert "User Guide task walkthroughs" in protocol["verification"]["manual_or_simulation_required_for"]
+    assert (
+        "User Guide task walkthroughs"
+        in protocol["verification"]["manual_or_simulation_required_for"]
+    )
     assert "This protocol does not perform the sufficiency review." in protocol["non_goals"]

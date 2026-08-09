@@ -4,10 +4,10 @@
   <title>Modifier les stratégies JSON brutes</title>
   <shortdesc>Modifiez le document brut policies.json avec l'éditeur Monaco fourni localement.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Éditeur JSON pour un profil enregistré.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Éditeur JSON</uicontrol> pour un profil enregistré.</p></prereq>
     <context><p>L'éditeur Monaco est fourni localement et édite le texte JSON brut. BPM est toujours validé avant d'être enregistré dans le modèle de profil normalisé.</p></context>
     <steps>
-      <step><cmd>Placez le focus sur Éditeur JSON.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Placez le focus sur <uicontrol>Éditeur JSON</uicontrol>.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Modifiez uniquement la stratégie, la préférence ou la valeur brute requise par la tâche.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Conservez l'objet de stratégie de niveau supérieur et la syntaxe JSON valide.</cmd><info><p>Résultat attendu : le document JSON reste focus sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Utilisez la validation avant d'enregistrer la modification brute.</cmd><info><note type="warning">L'enregistrement du JSON brut peut modifier le profil canonique BPM. Validez la syntaxe et les valeurs de stratégie avant d’enregistrer.</note></info></step>

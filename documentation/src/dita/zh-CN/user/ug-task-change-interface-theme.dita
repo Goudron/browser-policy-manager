@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-change-interface-theme" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>更改界面主题</title>
-  <shortdesc>选择系统、浅色或深色主题，而不更改配置文件内容。</shortdesc>
+  <shortdesc>选择<uicontrol>系统</uicontrol>、<uicontrol>浅色</uicontrol>或<uicontrol>深色</uicontrol>主题，而不更改配置文件内容。</shortdesc>
   <taskbody>
     <prereq><p>在浏览器中打开 BPM 或产品文档门户。</p></prereq>
-    <context><p>主题选择只影响外观。BPM 和文档门户支持跟随系统、浅色和深色模式，不会更改配置文件或帮助内容。</p></context>
+    <context><p>主题选择只影响外观。BPM 和文档门户支持跟随<uicontrol>系统</uicontrol>、<uicontrol>浅色</uicontrol>和<uicontrol>深色</uicontrol>模式，不会更改配置文件或帮助内容。</p></context>
     <steps>
-      <step><cmd>打开当前页眉中的主题选择器。</cmd><info><p>预期结果：可选择跟随系统、浅色或深色，而当前地址、语言和所选配置文件保持不变。</p></info></step>
-      <step><cmd>选择跟随系统、浅色或深色。</cmd><info><p>预期结果：跟随系统模式采用操作系统首选项；浅色和深色模式会明确应用到受支持的 BPM 和文档界面。</p></info></step>
-      <step><cmd>检查编辑器面板、表格、注释、代码块、焦点指示器和验证状态。</cmd><info><p>预期结果：内容保持清晰可读；文档的浅色主题使用舒适的浅灰色主表面，而不是纯白页面。</p></info></step>
+      <step><cmd>打开当前页眉中的主题选择器。</cmd><info><p>预期结果：可选择跟随<uicontrol>系统</uicontrol>、<uicontrol>浅色</uicontrol>或<uicontrol>深色</uicontrol>，而当前地址、语言和所选配置文件保持不变。</p></info></step>
+      <step><cmd>选择跟随<uicontrol>系统</uicontrol>、<uicontrol>浅色</uicontrol>或<uicontrol>深色</uicontrol>。</cmd><info><p>预期结果：跟随<uicontrol>系统</uicontrol>模式采用操作<uicontrol>系统</uicontrol>首选项；<uicontrol>浅色</uicontrol>和<uicontrol>深色</uicontrol>模式会明确应用到受支持的 BPM 和文档界面。</p></info></step>
+      <step><cmd>检查编辑器面板、表格、注释、代码块、焦点指示器和验证状态。</cmd><info><p>预期结果：内容保持清晰可读；文档的<uicontrol>浅色</uicontrol>主题使用舒适的浅灰色主表面，而不是纯白页面。</p></info></step>
       <step><cmd>确认未保存的配置文件数据仍然存在后继续编辑。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
     <result><p>BPM 和产品文档在所有受支持的界面中使用所选主题。</p></result>
-    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从<uicontrol>库</uicontrol>中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-accessible-product-operation"/>

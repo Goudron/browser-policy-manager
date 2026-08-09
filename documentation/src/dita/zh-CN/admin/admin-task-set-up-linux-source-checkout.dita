@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="admin-task-set-up-linux-source-checkout" xml:lang="zh-CN" audience="administrator devops" product="bpm-0-9-1" platform="linux">
   <title>设置开源系统源签出</title>
-  <shortdesc>克隆 BPM 存储库、创建 Python 虚拟环境、安装开发依赖项并准备本地数据库架构。</shortdesc>
+  <shortdesc>克隆 BPM 存储<uicontrol>库</uicontrol>、创建 Python 虚拟环境、安装开发依赖项并准备本地数据<uicontrol>库</uicontrol>架构。</shortdesc>
   <taskbody>
-    <prereq><p>Linux 主机已准备就绪，管理员可以访问版本 0.9.1 的 BPM 存储库 URL 和目标分支或标记。</p></prereq>
-    <context><p>存储库 README 定义支持的源设置序列。使用存储库本地命令，以便以后的故障排除可以将环境与已提交的脚本进行比较。</p></context>
+    <prereq><p>Linux 主机已准备就绪，管理员可以访问版本 0.9.1 的 BPM 存储<uicontrol>库</uicontrol> URL 和目标分支或标记。</p></prereq>
+    <context><p>存储<uicontrol>库</uicontrol> README 定义支持的源设置序列。使用存储<uicontrol>库</uicontrol>本地命令，以便以后的故障排除可以将环境与已提交的脚本进行比较。</p></context>
     <steps>
-      <step><cmd>克隆存储库并进入结账。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>克隆存储<uicontrol>库</uicontrol>并进入结账。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 git clone <repository-url> browser-policy-manager
 cd browser-policy-manager
 git checkout <approved-0.9.1-ref>
-]]></codeblock><p>将占位符替换为已批准的内部存储库 URL 和发布参考。</p></info></step>
+]]></codeblock><p>将占位符替换为已批准的内部存储<uicontrol>库</uicontrol> URL 和发布参考。</p></info></step>
       <step><cmd>创建并激活本地Python环境。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 python -m venv .venv
 source .venv/bin/activate
@@ -20,11 +20,11 @@ python -m pip install --upgrade pip
       <step><cmd>从结账中安装 BPM 源依赖项。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 pip install -e ".[dev]"
 ]]></codeblock><p>可编辑安装使运行时代码和测试与当前源代码树保持一致。</p></info></step>
-      <step><cmd>对选定的运行时数据库应用数据库迁移。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
+      <step><cmd>对选定的运行时数据<uicontrol>库</uicontrol>应用数据<uicontrol>库</uicontrol>迁移。</cmd><info><codeblock outputclass="language-bash"><![CDATA[
 alembic upgrade head
-]]></codeblock><note type="warning">仅针对预期的 BPM 数据库运行迁移。对于默认源工作流程，这是本地 SQLite 数据库，而不是生产服务数据库。</note></info></step>
+]]></codeblock><note type="warning">仅针对预期的 BPM 数据<uicontrol>库</uicontrol>运行迁移。对于默认源工作流程，这是本地 SQLite 数据<uicontrol>库</uicontrol>，而不是生产服务数据<uicontrol>库</uicontrol>。</note></info></step>
     </steps>
-    <result><p>签出具有激活的 Python 环境、安装的依赖项和迁移的数据库架构。</p></result>
+    <result><p>签出具有激活的 Python 环境、安装的依赖项和迁移的数据<uicontrol>库</uicontrol>架构。</p></result>
     <postreq><p>在启动应用程序流程之前配置运行时环境。</p></postreq>
   </taskbody>
   <related-links>

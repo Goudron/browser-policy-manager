@@ -4,7 +4,7 @@
   <title>Estados de revisión en «Todos los ajustes»</title>
   <shortdesc>Utilice esta referencia para interpretar estados de revisión limpios, no válidos, de revisión manual de CIS, sin procesar, desconocidos, obsoletos e importados.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Descripción general</title><p>Los estados de revisión explican por qué Todos los ajustes solicita atención antes de que el usuario edite los valores de la rutina.</p></section>
+    <section id="a-overview"><title>Descripción general</title><p>Los estados de revisión explican por qué <uicontrol>Todos los ajustes</uicontrol> solicita atención antes de que el usuario edite los valores de la rutina.</p></section>
     <section id="a-clean-profile"><title>Perfil limpio</title><p>Un perfil limpio no tiene elementos de revisión restantes. Todavía puede contener ajustes configurados; simplemente no tiene estados de atención que BPM pueda detectar.</p></section>
     <section id="a-invalid-items"><title>Artículos no válidos</title><p>Los elementos no válidos tienen valores que no superan la validación actual para el canal de esquema seleccionado y deben corregirse o eliminarse antes de la transferencia.</p></section>
     <section id="a-cis-manual-review"><title>Revisión del manual del SIC</title><p>Los elementos de revisión manual del CIS necesitan una decisión humana o una verificación externa. BPM puede sacar a la luz el elemento sin reclamar un cumplimiento certificado.</p></section>

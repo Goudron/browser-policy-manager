@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,7 +20,7 @@ from app.services.firefox_policy_import import (
     FirefoxPoliciesImportError,
     validate_firefox_policies_document,
 )
-from app.services.profile_service import ProfileService
+from app.services.profile_service import ProfilePageResult, ProfileService
 
 router = APIRouter(prefix="/api/profiles", tags=["profiles"])
 
@@ -67,11 +67,7 @@ class FirefoxPoliciesJsonImportRequest(BaseModel):
         description="Optional internal compliance metadata to attach to the created profile.",
     )
 
-    model_config = ConfigDict(
-        json_schema_extra={
-            "example": FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE
-        }
-    )
+    model_config = ConfigDict(json_schema_extra={"example": FIREFOX_POLICIES_JSON_IMPORT_EXAMPLE})
 
 
 def _decode_json_document(raw: bytes | str, *, source: str) -> Any:
@@ -243,8 +239,8 @@ async def _list_profiles_core(
     offset: int = 0,
     sort: str = "updated_at",
     order: str = "desc",
-    ) -> list[ProfileRead]:
-    return await ProfileService.list(
+) -> list[ProfileRead]:
+    page = await _profile_library_page_core(
         session,
         q=q,
         schema_version=schema_version,
@@ -255,6 +251,36 @@ async def _list_profiles_core(
         offset=offset,
         sort=sort,
         order=order,
+    )
+    return list(page.items)
+
+
+async def _profile_library_page_core(
+    session: AsyncSession,
+    *,
+    q: str | None = None,
+    schema_version: str | None = None,
+    validation_state: str | None = None,
+    lifecycle: str = "active",
+    include_deleted: bool = False,
+    limit: int = 50,
+    offset: int = 0,
+    sort: str = "updated_at",
+    order: str = "desc",
+    include_items: bool = True,
+) -> ProfilePageResult:
+    return await ProfileService.page(
+        session,
+        q=q,
+        schema_version=schema_version,
+        validation_state=validation_state,
+        lifecycle=lifecycle,
+        include_deleted=include_deleted,
+        limit=limit,
+        offset=offset,
+        sort=sort,
+        order=order,
+        include_items=include_items,
     )
 
 
@@ -267,24 +293,18 @@ async def _profile_library_stats_core(
     lifecycle: str = "active",
     include_deleted: bool = False,
 ) -> dict[str, int]:
-    filtered = await ProfileService.count(
+    page = await _profile_library_page_core(
         session,
         q=q,
         schema_version=schema_version,
         validation_state=validation_state,
         lifecycle=lifecycle,
         include_deleted=include_deleted,
-    )
-    total = await ProfileService.count(
-        session,
-        schema_version=schema_version,
-        validation_state=validation_state,
-        lifecycle=lifecycle,
-        include_deleted=include_deleted,
+        include_items=False,
     )
     return {
-        "filtered": filtered,
-        "total": total,
+        "filtered": page.filtered,
+        "total": page.total,
     }
 
 
@@ -360,7 +380,9 @@ async def _update_profile_core(
 
     if validate_policies:
         new_schema_version = normalized_payload.schema_version or current.schema_version
-        new_flags = normalized_payload.flags if normalized_payload.flags is not None else current.flags
+        new_flags = (
+            normalized_payload.flags if normalized_payload.flags is not None else current.flags
+        )
 
         _validate_profile_policies_or_422(
             name=current.name,
@@ -424,6 +446,7 @@ async def _reset_profiles_library_core(session: AsyncSession) -> dict[str, int]:
 
 @router.get("", response_model=list[ProfileRead], summary="List profiles")
 async def list_profiles(
+    response: Response,
     session: AsyncSession = Depends(get_session),
     q: str | None = Query(None, description="Substring filter for profile name/description"),
     schema_version: str | None = Query(None, description="Filter by schema_version (channel)"),
@@ -435,10 +458,12 @@ async def list_profiles(
     include_deleted: bool = Query(False, description="Include soft‑deleted profiles"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    sort: str = Query("updated_at", description="Sort field: created_at/updated_at/name/schema_version/id"),
+    sort: str = Query(
+        "updated_at", description="Sort field: created_at/updated_at/name/schema_version/id"
+    ),
     order: str = Query("desc", description="Sort order: asc/desc"),
 ) -> list[ProfileRead]:
-    return await _list_profiles_core(
+    page = await _profile_library_page_core(
         session,
         q=q,
         schema_version=schema_version,
@@ -450,6 +475,11 @@ async def list_profiles(
         sort=sort,
         order=order,
     )
+    # Preserve the exact JSON list contract. The library reads same-origin
+    # headers to render its already-existing summary without a second request.
+    response.headers["X-BPM-Profile-Filtered"] = str(page.filtered)
+    response.headers["X-BPM-Profile-Total"] = str(page.total)
+    return list(page.items)
 
 
 @router.get("/stats", summary="Get profile library stats")
@@ -644,7 +674,9 @@ async def update_profile(
     )
 
 
-@router.delete("/{profile_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Soft-delete profile")
+@router.delete(
+    "/{profile_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Soft-delete profile"
+)
 async def delete_profile(
     profile_id: int,
     session: AsyncSession = Depends(get_session),

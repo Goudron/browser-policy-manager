@@ -4,8 +4,8 @@
   <title>Set the profile identity and schema channel</title>
   <shortdesc>Choose the saved profile name and the Firefox schema channel before you configure guided settings.</shortdesc>
   <taskbody>
-    <prereq><p>Open a new or saved profile in Guided editor.</p></prereq>
-    <context><p>Use Step 1, Profile &amp; baseline, to set the name and schema channel that will drive validation and available controls.</p></context>
+    <prereq><p>Open a new or saved profile in <uicontrol>Guided editor</uicontrol>.</p></prereq>
+    <context><p>Use Step 1, <uicontrol>Profile &amp; baseline</uicontrol>, to set the name and schema channel that will drive validation and available controls.</p></context>
     <steps>
       <step><cmd>Confirm that you are editing the intended profile draft.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Enter a clear profile name.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>

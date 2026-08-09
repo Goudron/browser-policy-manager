@@ -7,7 +7,7 @@
     <prereq><p>可见的 BPM 状态、验证消息、浏览器警告或失败的操作表明当前工作流程无法安全地继续。</p></prereq>
     <context><p>格式错误的 JSON 是一个语法问题：BPM 无法充分解析文档以验证策略名称或值。</p></context>
     <steps>
-      <step><cmd>保持 JSON 编辑器 或导入错误打开，以便行、列或解析消息保持可见。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
+      <step><cmd>保持 <uicontrol>JSON 编辑器</uicontrol> 或导入错误打开，以便行、列或解析消息保持可见。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>检查报告位置周围最近的大括号、方括号、逗号、引号和转义字符。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>语法更正后再次格式化或验证文档。</cmd><info><p>预期结果：您保留配置文件状态并了解下一个安全恢复操作。</p></info></step>
       <step><cmd>仅在 JSON 解析成功后才继续进行模式验证。</cmd><info><note type="warning">仅通过 BPM 界面重试；不要在应用程序外修改配置文件数据。</note></info></step>

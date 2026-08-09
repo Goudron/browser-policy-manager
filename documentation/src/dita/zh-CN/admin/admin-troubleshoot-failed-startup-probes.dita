@@ -10,7 +10,7 @@
       <step><cmd>捕获失败的命令和前台日志。</cmd><info><p>运行或复制确切的命令，然后从前台终端记录 stdout 和 stderr。包括 <codeph>make dev</codeph>、<codeph>uvicorn app.main:app --reload --port 8000</codeph>、Python 回溯摘要、工作目录和来自 <codeph>git rev-parse --short HEAD</codeph> 的源版本。</p></info></step>
   <step><cmd>在更改代码之前验证配置的主机和端口。</cmd><info><p>检查 <codeph>BPM_HOST</codeph>、<codeph>BPM_PORT</codeph>、<codeph>BPM_RELOAD</codeph>、<codeph>BPM_DATABASE_URL</codeph> 和 <codeph>BPM_DOCUMENTATION_SITE_DIR</codeph>。重点重播：<codeph>curl -fsS http://127.0.0.1:8000/health</codeph> 和 <codeph>curl -fsS http://127.0.0.1:8000/health/ready</codeph>。</p></info></step>
   <step><cmd>将进程启动与探针可达性分开。</cmd><info><p>如果进程未运行，请首先修复依赖项、环境或迁移证据。如果进程正在运行但探测无法访问，请检查本地防火墙、绑定地址、WSL 端口转发以及请求是否针对 <codeph>127.0.0.1</codeph>、<codeph>0.0.0.0</codeph> 或 Windows 主机路由。</p></info></step>
-  <step><cmd>在收集证据时保留用户数据。</cmd><info><p>仅复制日志、环境名称和探测响应。不要将生成的工件、数据库行、架构缓存文件或源代码作为例行恢复进行编辑。不要删除 <codeph>data/bpm.db</codeph> 来使启动通过。</p></info></step>
+  <step><cmd>在收集证据时保留用户数据。</cmd><info><p>仅复制日志、环境名称和探测响应。不要将生成的工件、数据<uicontrol>库</uicontrol>行、架构缓存文件或源代码作为例行恢复进行编辑。不要删除 <codeph>data/bpm.db</codeph> 来使启动通过。</p></info></step>
   <step><cmd>选择最小的重新运行和升级路径。</cmd><info><p>重点重新运行： 用于产品烟雾， 仅当涉及文档输出时，而  仅用于文档合同。</p><note type="warning">如果在配置和流程检查后探测器仍然无法访问，请停止自动集成运行并使用命令、日志、配置名称和探测器证据进行升级。</note></info></step>
     </steps>
     <result><p>操作员可以区分失败的流程、无法访问的探针和部署边界，而无需更改用户数据。</p></result>

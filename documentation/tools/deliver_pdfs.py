@@ -8,7 +8,6 @@ import hashlib
 import json
 import shutil
 import sys
-import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -16,11 +15,15 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
+from documentation.buildlib.lifecycle import (  # noqa: E402
+    Progress,
+    StagedDirectory,
+    atomic_promote,
+    tracked_operation,
+)
 from documentation.tools import build_docs  # noqa: E402
 
-DELIVERY_CONTRACT = (
-    REPOSITORY_ROOT / "documentation/config/pdf-delivery-contract-0.9.3.json"
-)
+DELIVERY_CONTRACT = REPOSITORY_ROOT / "documentation/config/pdf-delivery-contract-0.9.3.json"
 DELIVERY_ROOT = REPOSITORY_ROOT / "distributions/documentation"
 METADATA_FILES = ("manifest.json", "checksums.sha256", "NOTICE.txt")
 
@@ -58,7 +61,7 @@ def _contract() -> dict[str, Any]:
     contract = _read_json(DELIVERY_CONTRACT)
     if (
         contract.get("schema_version") != 1
-        or contract.get("backlog_item") != "BPM093-M14-09"
+        or contract.get("backlog_item") != "BPM094-M11-05"
         or contract.get("target_bpm_version") != build_docs._product_version()
         or contract.get("candidate_root") != "documentation/build/pdf"
         or contract.get("delivery_root") != "distributions/documentation"
@@ -205,7 +208,9 @@ def validate_delivery_tree(root: Path) -> None:
     ):
         raise DeliveryError("delivery provenance does not match the verified PDF candidate")
     records = manifest.get("pdfs")
-    if not isinstance(records, list) or len(records) != len(build_docs.LOCALES) * len(build_docs.PDF_GUIDE_MAPS):
+    if not isinstance(records, list) or len(records) != len(build_docs.LOCALES) * len(
+        build_docs.PDF_GUIDE_MAPS
+    ):
         raise DeliveryError("delivery PDF inventory is invalid")
     expected_records = {record["path"]: record for record in _pdf_records(layout, candidate_root)}
     actual_records = {record.get("path"): record for record in records if isinstance(record, dict)}
@@ -231,25 +236,16 @@ def promote_delivery() -> None:
     build_docs.validate_pdf_tree(build_docs.PDF_BUILD_ROOT)
     DELIVERY_ROOT.mkdir(parents=True, exist_ok=True)
     destination = DELIVERY_ROOT / version
-    previous = DELIVERY_ROOT / f".{version}-previous"
-    if previous.exists() or previous.is_symlink():
-        build_docs._remove_path(previous)
-    with tempfile.TemporaryDirectory(prefix=f".{version}-staging-", dir=DELIVERY_ROOT) as temporary:
-        candidate = Path(temporary) / version
-        print("PDF delivery: building verified temporary release directory", flush=True)
-        build_delivery_tree(candidate)
-        print("PDF delivery: atomically promoting release directory", flush=True)
-        if destination.exists() or destination.is_symlink():
-            destination.replace(previous)
-        try:
-            candidate.replace(destination)
-        except OSError:
-            if previous.exists():
-                previous.replace(destination)
-            raise
-        finally:
-            if previous.exists() or previous.is_symlink():
-                build_docs._remove_path(previous)
+    with StagedDirectory(DELIVERY_ROOT, f"{version}-delivery") as staging:
+        candidate = staging.candidate(version)
+        progress = Progress("PDF delivery", 2)
+        with tracked_operation(progress):
+            progress.phase("build verified release directory")
+            build_delivery_tree(candidate)
+            progress.complete_unit("release directory")
+            progress.phase("atomically promote verified release directory")
+            atomic_promote(candidate, destination, validate=validate_delivery_tree)
+            progress.complete_unit("release directory promotion")
     validate_delivery_tree(destination)
     print(
         f"PDF delivery promoted to {_display_path(destination)}",

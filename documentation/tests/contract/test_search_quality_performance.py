@@ -57,15 +57,12 @@ def test_search_quality_fixtures_cover_required_categories_and_every_locale() ->
     assert {fixture["locale"] for fixture in fixtures} == set(build_docs.LOCALES)
     for locale in build_docs.LOCALES:
         locale_categories = {
-            fixture["category"]
-            for fixture in fixtures
-            if fixture["locale"] == locale
+            fixture["category"] for fixture in fixtures if fixture["locale"] == locale
         }
         assert common_categories <= locale_categories
         assert len([fixture for fixture in fixtures if fixture["locale"] == locale]) >= 9
     assert any(
-        fixture["locale"] == "zh-CN" and fixture["category"] == "cjk"
-        for fixture in fixtures
+        fixture["locale"] == "zh-CN" and fixture["category"] == "cjk" for fixture in fixtures
     )
     build_docs._validate_quality_fixture_coverage(contract)
 
@@ -74,14 +71,30 @@ def test_search_quality_fixtures_define_expected_top_counts_filters_and_score_co
     contract = _contract()
     fixtures = contract["quality_fixtures"]
 
-    top_fixtures = [fixture for fixture in fixtures if fixture["category"] not in {"no_result", "adversarial"}]
-    empty_fixtures = [fixture for fixture in fixtures if fixture["category"] in {"no_result", "adversarial"}]
+    top_fixtures = [
+        fixture for fixture in fixtures if fixture["category"] not in {"no_result", "adversarial"}
+    ]
+    empty_fixtures = [
+        fixture for fixture in fixtures if fixture["category"] in {"no_result", "adversarial"}
+    ]
     assert all(fixture.get("expected_top_topic_id") for fixture in top_fixtures)
     assert all(fixture.get("required_score_component") for fixture in top_fixtures)
     assert all(fixture.get("expected_count") == 0 for fixture in empty_fixtures)
-    assert any(fixture["filters"].get("firefox_channel") == ["release-153"] for fixture in fixtures if "filters" in fixture)
-    assert any(fixture["filters"].get("api_area") == ["validation"] for fixture in fixtures if "filters" in fixture)
-    assert any(fixture["filters"].get("guide_id") == ["cis-settings-guide"] for fixture in fixtures if "filters" in fixture)
+    assert any(
+        fixture["filters"].get("firefox_channel") == ["release-153"]
+        for fixture in fixtures
+        if "filters" in fixture
+    )
+    assert any(
+        fixture["filters"].get("api_area") == ["validation"]
+        for fixture in fixtures
+        if "filters" in fixture
+    )
+    assert any(
+        fixture["filters"].get("guide_id") == ["cis-settings-guide"]
+        for fixture in fixtures
+        if "filters" in fixture
+    )
 
 
 def test_search_performance_budget_is_deterministic_and_ci_stable() -> None:

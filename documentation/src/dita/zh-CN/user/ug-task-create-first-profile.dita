@@ -2,16 +2,16 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-create-first-profile" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>从库中创建第一个配置档案</title>
-  <shortdesc>当没有保存的配置文件适合重复使用时，从库中启动新的引导配置文件草稿。</shortdesc>
+  <shortdesc>当没有保存的配置文件适合重复使用时，从<uicontrol>库</uicontrol>中启动新的引导配置文件草稿。</shortdesc>
   <taskbody>
     <prereq><p>您在图书馆中，想要一个新的配置文件，而不是打开或复制现有的配置文件。</p></prereq>
-    <context><p>创建操作会打开 引导式编辑器 草稿。仅在保存后，草稿才会成为已保存的配置文件。</p></context>
+    <context><p>创建操作会打开 <uicontrol>引导式编辑器</uicontrol> 草稿。仅在保存后，草稿才会成为已保存的配置文件。</p></context>
     <steps>
-      <step><cmd>选择库操作以创建新配置文件。</cmd><info><p>预期结果：BPM 打开新草稿的 引导式编辑器。</p></info></step>
+      <step><cmd>选择<uicontrol>库</uicontrol>操作以创建新配置文件。</cmd><info><p>预期结果：BPM 打开新草稿的 <uicontrol>引导式编辑器</uicontrol>。</p></info></step>
       <step><cmd>选择编辑器显示的配置文件用途、模式通道和启动选项。</cmd><info><p>模式通道影响可用的控件和验证行为。</p></info></step>
       <step><cmd>当草稿具有所需的名称和初始设置时，保存草稿。</cmd><info><note type="warning">关闭未保存的草稿可能会丢失仅草稿的更改。</note></info></step>
     </steps>
-    <result><p>新配置文件已保存并可以从库中再次找到。</p></result>
+    <result><p>新配置文件已保存并可以从<uicontrol>库</uicontrol>中再次找到。</p></result>
     <postreq><p>恢复：如果您打算重复使用现有配置文件，请取消草稿并复制保存的配置文件。</p></postreq>
   </taskbody>
   <related-links>

@@ -93,7 +93,9 @@ def test_generated_cis_index_covers_planned_and_provenance_only_records() -> Non
     assert index["topic_count"] == len(planned) == 53
     assert index["provenance_only_count"] == len(provenance_only) == 2
     assert index["mapping_table_count"] == len(planned)
-    assert index["mapping_row_count"] == sum(len(recommendation["targets"]) for recommendation in planned)
+    assert index["mapping_row_count"] == sum(
+        len(recommendation["targets"]) for recommendation in planned
+    )
     assert index["mapping_example_count"] == sum(
         len(recommendation["targets"]) for recommendation in planned
     )
@@ -117,7 +119,9 @@ def test_generated_cis_index_covers_planned_and_provenance_only_records() -> Non
         )
         assert entry["doc_id"] == recommendation["doc_id"]
         assert entry["target_count"] == len(recommendation["targets"])
-        assert entry["target_doc_ids"] == [target["target_doc_id"] for target in recommendation["targets"]]
+        assert entry["target_doc_ids"] == [
+            target["target_doc_id"] for target in recommendation["targets"]
+        ]
         assert len(entry["mapping_table_rows"]) == len(recommendation["targets"])
         assert len(entry["mapping_table_rows"]) == entry["target_count"]
         assert entry["source_title_sha256"] == recommendation["source_title_sha256"]
@@ -149,8 +153,7 @@ def test_generated_cis_map_is_stable_keyed_and_excludes_provenance_only_records(
     assert root.findtext("title") == "Generated CIS recommendation skeletons"
     assert len(topicrefs) == len(planned)
     assert [topicref.attrib["href"] for topicref in topicrefs] == [
-        f"recommendations/{recommendation['doc_id']}.dita"
-        for recommendation in planned
+        f"recommendations/{recommendation['doc_id']}.dita" for recommendation in planned
     ]
     assert all(
         topicref.attrib["keys"] == f"topic.{Path(topicref.attrib['href']).stem}"
@@ -158,7 +161,9 @@ def test_generated_cis_map_is_stable_keyed_and_excludes_provenance_only_records(
     )
     for recommendation in provenance_only:
         assert recommendation["doc_id"] is None
-        assert not (RECOMMENDATIONS_ROOT / f"cis-rec-{recommendation['recommendation_id']}.dita").exists()
+        assert not (
+            RECOMMENDATIONS_ROOT / f"cis-rec-{recommendation['recommendation_id']}.dita"
+        ).exists()
 
 
 def test_each_generated_cis_topic_matches_model_sections_metadata_and_mapping_facts() -> None:
@@ -199,14 +204,16 @@ def test_each_generated_cis_topic_matches_model_sections_metadata_and_mapping_fa
         assert mapping_table is not None
         rows = mapping_table.findall("strow")
         assert len(rows) == len(recommendation["targets"])
-        assert len(mapping_section.findall("sectiondiv[@outputclass='cis-mapping-example']")) == len(
-            recommendation["targets"]
-        )
+        assert len(
+            mapping_section.findall("sectiondiv[@outputclass='cis-mapping-example']")
+        ) == len(recommendation["targets"])
         for target in recommendation["targets"]:
             assert target["target_id"] in topic_text
             assert target["target_doc_id"] in topic_text
             assert target["merge_rule"] in topic_text
-            assert json.dumps(target["value"], ensure_ascii=False, sort_keys=True) in topic_text.replace(
+            assert json.dumps(
+                target["value"], ensure_ascii=False, sort_keys=True
+            ) in topic_text.replace(
                 "&quot;",
                 '"',
             )
@@ -279,8 +286,9 @@ def test_cis_provenance_review_records_accuracy_sources_boundaries_and_forbidden
     inventory = _inventory()
     model = _model()
     matrix = json.loads(
-        (REPOSITORY_ROOT / "docs/architecture/product-documentation-provenance-matrix-0.9.0.json")
-        .read_text(encoding="utf-8")
+        (
+            REPOSITORY_ROOT / "docs/architecture/product-documentation-provenance-matrix-0.9.0.json"
+        ).read_text(encoding="utf-8")
     )
     source_families = {family["id"]: family for family in matrix["source_families"]}
     restricted_family = source_families["cis-benchmark-pdf"]
@@ -344,7 +352,9 @@ def test_cis_provenance_review_records_accuracy_sources_boundaries_and_forbidden
     }
 
     records = {record["recommendation_id"]: record for record in review["records"]}
-    assert set(records) == {recommendation["recommendation_id"] for recommendation in inventory["recommendations"]}
+    assert set(records) == {
+        recommendation["recommendation_id"] for recommendation in inventory["recommendations"]
+    }
     assert review["summary"] == {
         "level_counts": inventory["summary"]["level_counts"],
         "manual_review_path_count": len(inventory["manual_review_paths"]),
@@ -385,7 +395,9 @@ def test_cis_provenance_review_records_accuracy_sources_boundaries_and_forbidden
             )
             assert (REPOSITORY_ROOT / record["topic_path"]).is_file()
             assert record["expected_topic_props"] in {"cis-level-1", "cis-level-2"}
-            assert record["topic_section_ids"] == [section["id"] for section in model["required_sections"]]
+            assert record["topic_section_ids"] == [
+                section["id"] for section in model["required_sections"]
+            ]
             assert record["target_count"] == len(recommendation["targets"]) > 0
         else:
             assert record["doc_id"] is None
@@ -395,7 +407,9 @@ def test_cis_provenance_review_records_accuracy_sources_boundaries_and_forbidden
             assert record["non_publishable_reason"]
 
 
-def test_generated_cis_topics_carry_reviewed_version_level_mapping_manual_and_source_metadata() -> None:
+def test_generated_cis_topics_carry_reviewed_version_level_mapping_manual_and_source_metadata() -> (
+    None
+):
     inventory = _inventory()
     recommendations = {
         recommendation["recommendation_id"]: recommendation
@@ -409,7 +423,10 @@ def test_generated_cis_topics_carry_reviewed_version_level_mapping_manual_and_so
         recommendation = recommendations[record["recommendation_id"]]
         topic_text = (REPOSITORY_ROOT / record["topic_path"]).read_text(encoding="utf-8")
         root = ET.fromstring(topic_text)
-        sections = {section.attrib["id"]: " ".join(section.itertext()) for section in root.findall("./refbody/section")}
+        sections = {
+            section.attrib["id"]: " ".join(section.itertext())
+            for section in root.findall("./refbody/section")
+        }
 
         assert root.attrib["props"] == record["expected_topic_props"]
         assert root.attrib["otherprops"] == f"cis({record['recommendation_id']})"
@@ -477,10 +494,7 @@ def test_cis_generator_preserves_existing_reviewed_hand_regions(tmp_path: Path) 
         "    <!-- BPM-HAND-REGION-END verification -->"
     )
     existing_topic.write_text(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<reference>\n"
-        f"    {custom_region}\n"
-        "</reference>\n",
+        f'<?xml version="1.0" encoding="UTF-8"?>\n<reference>\n    {custom_region}\n</reference>\n',
         encoding="utf-8",
     )
 

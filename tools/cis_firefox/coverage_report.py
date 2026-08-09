@@ -10,7 +10,9 @@ from app.compliance.firefox.cis.validation import build_coverage_report, format_
 def main() -> int:
     parser = argparse.ArgumentParser(description="Report CIS Firefox source mapping coverage.")
     parser.add_argument("--json", action="store_true", help="Emit JSON instead of Markdown.")
-    parser.add_argument("--strict", action="store_true", help="Exit non-zero on validation warnings.")
+    parser.add_argument(
+        "--strict", action="store_true", help="Exit non-zero on validation warnings."
+    )
     args = parser.parse_args()
 
     report = build_coverage_report()
@@ -26,4 +28,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

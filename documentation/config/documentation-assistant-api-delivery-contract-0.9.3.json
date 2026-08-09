@@ -36,8 +36,8 @@
     "external_evidence": "outside-0.9.3"
   },
   "verification": {
-    "api": "tests/test_documentation_assistant_api_093.py",
-    "service": "tests/test_documentation_assistant_service_093.py",
+    "api": "tests/integration/docs/test_documentation_assistant_api.py",
+    "service": "tests/integration/docs/test_documentation_assistant_service.py",
     "contract": "documentation/tests/contract/test_documentation_assistant_api_delivery_contract_0_9_3.py"
   }
 }

@@ -2,17 +2,23 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-import-policies-json" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>将火狐浏览器策略文件导入浏览器策略管理器</title>
-  <shortdesc>本任务完整说明“将 Firefox policies.json 导入 BPM”场景，包括决策、操作、预期结果、警告和恢复。</shortdesc>
+  <shortdesc>导入规范的 Firefox Enterprise <filepath>policies.json</filepath> 文档，并由此创建标准化的 BPM 配置文件。</shortdesc>
   <taskbody>
-    <prereq><p>打开 BPM，并确认此任务所需的工作上下文、Firefox 架构或配置文件状态。</p></prereq>
-    <context><p>本主题面向中文本地化完整说明用户场景，不使用压缩摘要。</p></context>
+    <prereq><p>准备包含顶级 <codeph>policies</codeph> 对象的 Firefox Enterprise 文档，以及唯一的 BPM 配置文件名称。</p></prereq>
+    <context><p>导入跨越产品边界：<filepath>policies.json</filepath> 是 Firefox 文档；创建的 BPM 配置文件则保存标准化标志、架构通道、验证状态和配置文件元数据。</p></context>
     <steps>
-      <step><cmd>打开与“将 Firefox policies.json 导入 BPM”对应的 BPM 区域。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>检查当前值、配置文件状态、界面提示以及所选架构的限制。</cmd><info><p>预期结果：配置文件保持一致，并且该操作可在审查时解释。</p></info></step>
-      <step><cmd>只修改符合配置文件目标的值，避免误改相邻设置。</cmd><info><note type="warning">警告：保存前请检查架构、配置文件状态以及更改后果。</note></info></step>
+      <step><cmd>在<uicontrol>库</uicontrol>中选择 Firefox 策略导入操作并选择 JSON 文件。</cmd><info><p>预期结果：BPM 读取文档并准备导入请求。</p></info></step>
+      <step><cmd>输入唯一的配置文件名称并选择目标 Firefox 架构通道（Release 或 ESR）。</cmd><info><p>架构通道决定验证方式，以及导入后哪些策略受支持、已弃用、未知或以原始形式保留。</p></info></step>
+      <step><cmd>确认导入并等待<uicontrol>库</uicontrol>状态。</cmd><info><p>预期结果：BPM 创建保存的配置文件并返回<uicontrol>库</uicontrol>或编辑器工作流。</p><note type="warning">不要将导入文件视为 BPM 内部模型。如果规范化后需要新的 Firefox 边界文档，请重新导出。</note></info></step>
     </steps>
-    <result><p>BPM 配置文件或视图处于此场景的预期状态。</p></result>
-    <postreq><p>恢复：如果结果不符合预期，请返回拥有该设置的区域，撤销最后一次更改，或打开相关主题。</p></postreq>
+    <result><p>Firefox 文档成为具有配置文件 ID、修订、架构通道和验证状态的 BPM 配置文件。</p></result>
+    <example id="a-import-policies-document"><title>完整的 Firefox policies.json 文档</title><p>选择的文件是完整的 Firefox 文档，而不是 BPM 配置文件元数据或内部标志片段：</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
+    <postreq><p>恢复：如果导入因 JSON 格式错误、名称重复、不受支持的内容类型、架构不匹配、未知策略或验证错误而失败，请保留原文件，读取<uicontrol>库</uicontrol>状态，修正输入或名称，并从干净的<uicontrol>库</uicontrol>状态重试一次。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

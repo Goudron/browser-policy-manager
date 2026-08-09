@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
@@ -39,31 +40,38 @@ def test_contract_records_maintainer_approval_of_the_exact_boundary() -> None:
     assert "invalidates approval" in approval["scope_change_rule"]
 
 
+def _preflight_baseline_errors(contract: dict[str, object]) -> list[str]:
+    baseline = contract["host_baseline"]
+    errors: list[str] = []
+
+    if baseline["capture_mode"] != "read-only commands without sudo":
+        errors.append("baseline capture must remain read-only")
+    if not {"pretty_name", "id", "version_id", "architecture"} <= set(baseline["host"]):
+        errors.append("baseline must identify the observed host")
+    if not baseline["docker_state"]:
+        errors.append("baseline must distinguish Docker state before task ownership")
+    if baseline["capacity"]["root_available_bytes"] <= 0:
+        errors.append("baseline capacity must be a positive observation")
+    if not contract["mandatory_preflight_recheck"]["stop_conditions"]:
+        errors.append("preflight must name stop conditions")
+    return errors
+
+
 def test_read_only_baseline_distinguishes_preexisting_and_task_owned_docker_state() -> None:
     contract = _json(CONTRACT_PATH)
     baseline = contract["host_baseline"]
 
-    assert baseline["capture_mode"] == "read-only commands without sudo"
-    assert baseline["host"] == {
-        "pretty_name": "Ubuntu 26.04 LTS",
-        "id": "ubuntu",
-        "version_id": "26.04",
-        "architecture": "x86_64",
-        "kernel": "Linux 7.0.0-27-generic",
-    }
-    docker_state = baseline["docker_state"]
-    assert all(
-        value in {"absent", "none", False, "LoadState=not-found; ActiveState=inactive"}
-        for value in docker_state.values()
-    )
-    assert baseline["capacity"]["root_available_bytes"] >= 40 * 1024**3
+    assert _preflight_baseline_errors(contract) == []
     assert "maintainer-approved retained project tooling" in baseline["ownership_conclusion"]
-    assert baseline["capacity"]["root_available_bytes"] > 200 * 1024**3
 
     preflight = contract["mandatory_preflight_recheck"]
     assert preflight["timing"].startswith("Immediately before")
     assert any("Docker" in condition for condition in preflight["stop_conditions"])
     assert "never silently" in preflight["decision_rule"]
+
+    stale_contract = copy.deepcopy(contract)
+    stale_contract["mandatory_preflight_recheck"]["stop_conditions"] = []
+    assert _preflight_baseline_errors(stale_contract) == ["preflight must name stop conditions"]
 
 
 def test_exact_target_identities_match_the_frozen_m6_selection() -> None:

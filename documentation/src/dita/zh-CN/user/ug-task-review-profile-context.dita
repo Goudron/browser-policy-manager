@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-profile-context" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>查看配置档案上下文</title>
-  <shortdesc>在完成工作之前检查 配置档案身份、生命周期、模式通道、验证状态和源上下文。</shortdesc>
+  <shortdesc>在完成工作之前检查 <uicontrol>配置档案身份</uicontrol>、生命周期、模式通道、验证状态和源上下文。</shortdesc>
   <taskbody>
-    <prereq><p>在浏览器中打开 BPM 并保持配置文件、库、所有设置、引导、JSON 或比较表面可用。</p></prereq>
+    <prereq><p>在浏览器中打开 BPM 并保持配置文件、<uicontrol>库</uicontrol>、<uicontrol>所有设置</uicontrol>、引导、JSON 或比较表面可用。</p></prereq>
     <context><p>配置文件上下文可防止意外编辑错误的配置文件、错误的 Firefox 通道、存档行、导入的源代码或过时的选项卡。</p></context>
     <steps>
       <step><cmd>读取配置文件名称、生命周期状态、模式通道和上次更新的上下文。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>在显示源属性时检查当前值是否来自手动编辑、基线、CIS、导入或原始回退。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
       <step><cmd>在导出或比较之前查看验证状态和警告。</cmd><info><p>预期结果：BPM 在您工作时保持所选配置文件、编辑器界面、区域设置和主题清晰。</p></info></step>
-      <step><cmd>如果上下文与预期任务冲突，请停止并从库中重新打开配置文件。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
+      <step><cmd>如果上下文与预期任务冲突，请停止并从<uicontrol>库</uicontrol>中重新打开配置文件。</cmd><info><note type="warning">在离开编辑器、关闭选项卡或确认不可逆转的操作之前保存或故意放弃更改。</note></info></step>
     </steps>
     <result><p>您可以解释您正在编辑的配置文件以及适用于它的约束。</p></result>
-    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从库中重新打开配置文件。</p></postreq>
+    <postreq><p>恢复：如果可见状态不清楚，则停止编辑，读取当前状态消息，刷新一次，然后从<uicontrol>库</uicontrol>中重新打开配置文件。</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

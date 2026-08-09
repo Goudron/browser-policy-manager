@@ -37,11 +37,7 @@ def _case_map() -> dict[str, object]:
 
 
 def _case_topics(case_map: dict[str, object]) -> list[dict[str, object]]:
-    return [
-        topic
-        for section in case_map["sections"]
-        for topic in section["topics"]
-    ]
+    return [topic for section in case_map["sections"] for topic in section["topics"]]
 
 
 def test_case_map_covers_every_capability_and_planned_user_topic_once() -> None:
@@ -58,11 +54,7 @@ def test_case_map_covers_every_capability_and_planned_user_topic_once() -> None:
     assert {topic["topic_id"] for topic in topics} == {row["topic"] for row in rows}
     assert len(topics) == len({topic["topic_id"] for topic in topics})
 
-    mapped_capabilities = {
-        capability
-        for topic in topics
-        for capability in topic["capability_ids"]
-    }
+    mapped_capabilities = {capability for topic in topics for capability in topic["capability_ids"]}
     assert mapped_capabilities == {row["capability"] for row in rows}
     for row in rows:
         topic = next(topic for topic in topics if topic["topic_id"] == row["topic"])
@@ -84,7 +76,9 @@ def test_case_map_is_organized_by_user_intent_not_product_surface_modules() -> N
         "find-organize-and-compare-profiles",
         "recover-safely",
     ]
-    assert not any(section_id in {"library", "guided", "all-settings", "json"} for section_id in section_ids)
+    assert not any(
+        section_id in {"library", "guided", "all-settings", "json"} for section_id in section_ids
+    )
     assert all(section["outcome"].startswith("A user can ") for section in case_map["sections"])
 
 

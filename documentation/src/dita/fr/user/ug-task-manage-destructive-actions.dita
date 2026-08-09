@@ -4,7 +4,7 @@
   <title>Gérer les actions destructrices en toute sécurité</title>
   <shortdesc>Annulez ou confirmez délibérément les actions d'archivage, de restauration, de réinitialisation, de suppression et de suppression permanente.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
     <context><p>Les actions destructrices peuvent masquer un profil, supprimer des paramètres, réinitialiser des valeurs ou supprimer définitivement une ligne après confirmation.</p></context>
     <steps>
       <step><cmd>Lisez l'étiquette d'action et le profil ou paramètre concerné avant de confirmer.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>

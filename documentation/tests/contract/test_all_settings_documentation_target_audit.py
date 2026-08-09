@@ -69,10 +69,7 @@ def test_all_policy_inventory_entries_have_exact_generated_targets() -> None:
         "both": audit["coverage"]["firefox_policies"]["both_channel_count"],
         "partial": audit["coverage"]["firefox_policies"]["partial_channel_count"],
     }
-    assert all(
-        targets[f"policy:{policy_id}"]["source_id"] == policy_id
-        for policy_id in policy_ids
-    )
+    assert all(targets[f"policy:{policy_id}"]["source_id"] == policy_id for policy_id in policy_ids)
 
 
 def test_known_preferences_are_completely_classified_and_m9_02_closes_target_gap() -> None:

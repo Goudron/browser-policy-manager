@@ -71,7 +71,9 @@ def _repository_path(value: str) -> Path:
     return path if path.is_absolute() else BASE_DIR / path
 
 
-def load_schema_build_targets(path: Path = DEFAULT_SCHEMA_TARGETS_PATH) -> tuple[SchemaBuildTarget, ...]:
+def load_schema_build_targets(
+    path: Path = DEFAULT_SCHEMA_TARGETS_PATH,
+) -> tuple[SchemaBuildTarget, ...]:
     """Load and validate the declarative, multi-channel schema build manifest."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     raw_targets = payload.get("targets")

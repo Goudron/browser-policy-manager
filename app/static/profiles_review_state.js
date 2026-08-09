@@ -1,4 +1,3 @@
-(() => {
     function hasMeaningfulValue(value) {
         if (typeof value === "boolean" || typeof value === "number") return true;
         if (typeof value === "string") return value.trim().length > 0;
@@ -12,8 +11,7 @@
         return Object.values(currentObject).filter((entry) => hasMeaningfulValue(entry)).length;
     }
 
-    window.BPMProfilesReviewState = {
+    export {
         countConfiguredObjectEntries,
         hasMeaningfulValue,
     };
-})();

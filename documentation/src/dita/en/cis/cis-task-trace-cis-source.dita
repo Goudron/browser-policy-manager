@@ -7,7 +7,7 @@
     <prereq><p>Open a profile that was created from a starter preset or has a CIS Level 1 or Level 2 layer applied.</p></prereq>
     <context><p>Tracing a value is useful when a reviewer asks whether a setting came from the original baseline, the CIS layer, an import, a manual edit, or raw fallback.</p></context>
     <steps>
-      <step><cmd>Open All settings and filter by configured values or by the CIS source badge.</cmd><info><p>Expected result: the relevant policy or managed preference remains visible with its source attribution.</p></info></step>
+      <step><cmd>Open <uicontrol>All settings</uicontrol> and filter by configured values or by the CIS source badge.</cmd><info><p>Expected result: the relevant policy or managed preference remains visible with its source attribution.</p></info></step>
       <step><cmd>Read the source attribution and identify whether the current value is baseline, CIS, manual, imported, or raw.</cmd><info><p>Expected result: you can name the immediate source of the value.</p></info></step>
       <step><cmd>Open the related CIS recommendation or Firefox policy topic when a generated layer contributed the value.</cmd><info><p>Expected result: you can see the recommendation ID, path, value, channel support, and merge rule.</p></info></step>
       <step><cmd>Check the merge decision: added_from_cis, already_satisfied, cis_replaced_base, kept_base_only, kept_base_stricter, or manual_review_kept_base.</cmd><info><p>Expected result: you know whether CIS added the value, confirmed it, replaced it, or left a base value for review.</p></info></step>

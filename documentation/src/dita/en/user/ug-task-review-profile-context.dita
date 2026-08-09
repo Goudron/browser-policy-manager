@@ -4,16 +4,16 @@
   <title>Review profile context</title>
   <shortdesc>Check profile identity, lifecycle, schema channel, validation state, and source context before finishing work.</shortdesc>
   <taskbody>
-    <prereq><p>Open BPM in the browser and keep a profile, Library, All settings, Guided, JSON, or Compare surface available.</p></prereq>
+    <prereq><p>Open BPM in the browser and keep a profile, <uicontrol>Library</uicontrol>, <uicontrol>All settings</uicontrol>, Guided, JSON, or Compare surface available.</p></prereq>
     <context><p>Profile context prevents accidental edits to the wrong profile, wrong Firefox channel, archived row, imported source, or stale tab.</p></context>
     <steps>
       <step><cmd>Read the profile name, lifecycle status, schema channel, and last updated context.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Check whether the current value came from manual edit, baseline, CIS, import, or raw fallback when source attribution is shown.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
       <step><cmd>Review validation state and warnings before export or comparison.</cmd><info><p>Expected result: BPM keeps the selected profile, editor surface, locale, and theme clear while you work.</p></info></step>
-      <step><cmd>If context conflicts with the intended task, stop and reopen the profile from the Library.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
+      <step><cmd>If context conflicts with the intended task, stop and reopen the profile from the <uicontrol>Library</uicontrol>.</cmd><info><note type="warning">Save or deliberately discard changes before leaving an editor, closing a tab, or confirming an irreversible action.</note></info></step>
     </steps>
     <result><p>You can explain what profile you are editing and which constraints apply to it.</p></result>
-    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the Library.</p></postreq>
+    <postreq><p>Recovery: if the visible state is unclear, stop editing, read the current status message, refresh once, and reopen the profile from the <uicontrol>Library</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-library-profile-row"/>

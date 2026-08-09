@@ -9,9 +9,9 @@
     <steps>
       <step><cmd>在开始简短的 API 序列之前调用存活探测。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health</codeph>。响应示例：<codeph>200 {"status":"ok"}</codeph>。错误示例：当前未声明应用程序错误；传输、网关或流程故障在 BPM 外部处理。</p></info></step>
       <step><cmd>在依赖于应用程序启动完成的操作之前调用就绪探测。</cmd><info><p>请求示例：<codeph>GET $BPM_BASE_URL/health/ready</codeph>。响应示例：<codeph>200 {"status":"ready","ready":true}</codeph>。错误示例：当前未公开任何降级状态或依赖项详细信息主体。</p></info></step>
-      <step><cmd>使用就绪性作为门，而不是作为完整的依赖项清单。</cmd><info><p>当 <codeph>ready</codeph> 为 <codeph>true</codeph> 时，集成产品可以继续进行发现、验证、导入、导出或配置文件生命周期调用。它不得从此响应推断数据库运行状况详细信息、架构缓存详细信息、文档门户状态、队列状态或部署拓扑。</p></info></step>
+      <step><cmd>使用就绪性作为门，而不是作为完整的依赖项清单。</cmd><info><p>当 <codeph>ready</codeph> 为 <codeph>true</codeph> 时，集成产品可以继续进行发现、验证、导入、导出或配置文件生命周期调用。它不得从此响应推断数据<uicontrol>库</uicontrol>运行状况详细信息、架构缓存详细信息、文档门户状态、队列状态或部署拓扑。</p></info></step>
       <step><cmd>在集成产品中保持轮询并重试决策。</cmd><info><p>BPM 不声明轮询间隔、重试标头、服务级别目标、断路器合约、请求 ID 或用于探测更改的 Webhook。存储您自己的时间戳、观察到的状态、超时和重试决策。</p></info></step>
-      <step><cmd>将 API 握手检查与源部署故障排除分开。</cmd><info><p>如果探测器无法访问或响应与示例不同，请切换到源部署管理员指南以进行流程、环境、数据库、日志和从源更新检查，而不是将此 API 集成任务扩展为部署说明。</p></info></step>
+      <step><cmd>将 API 握手检查与源部署故障排除分开。</cmd><info><p>如果探测器无法访问或响应与示例不同，请切换到源部署管理员指南以进行流程、环境、数据<uicontrol>库</uicontrol>、日志和从源更新检查，而不是将此 API 集成任务扩展为部署说明。</p></info></step>
       <step><cmd>记录与下游 API 操作的运行状态预检结果。</cmd><info><note type="warning">成功的运行状况或就绪响应不会验证调用者、授权操作、保留配置文件修订、保证以后 API 成功或证明 Firefox 运行时强制执行。将其视为一个小的飞行前信号。</note></info></step>
     </steps>
     <result><p>集成产品具有最小且最新的 BPM 运行状态预检，以实现活跃性和就绪性，而不依赖于未记录的部署行为。</p></result>

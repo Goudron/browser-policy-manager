@@ -49,7 +49,9 @@ def verify_model_directory(model_dir: Path) -> None:
 class E5QueryEncoder:
     """One retained CPU session; queries always receive the E5 query prefix."""
 
-    def __init__(self, model_dir: Path, *, intra_op_threads: int = 2, inter_op_threads: int = 1) -> None:
+    def __init__(
+        self, model_dir: Path, *, intra_op_threads: int = 2, inter_op_threads: int = 1
+    ) -> None:
         if intra_op_threads < 1 or inter_op_threads < 1:
             raise E5RuntimeError("assistant_embedding_runtime_invalid")
         verify_model_directory(model_dir)

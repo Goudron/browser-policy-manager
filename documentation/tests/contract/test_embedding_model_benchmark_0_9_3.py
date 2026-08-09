@@ -40,7 +40,9 @@ def test_embedding_benchmark_contract_pins_two_compact_immutable_six_locale_cand
     assert config["schema_version"] == 1
     assert config["backlog_item"] == "BPM093-M5-03"
     assert config["protocol"]["id"] == "BPM093-M2-02"
-    assert config["protocol"]["target_host"]["cpu_model"] == "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz"
+    assert (
+        config["protocol"]["target_host"]["cpu_model"] == "Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz"
+    )
     assert config["inputs"]["top_k"] == 5
     assert config["runtime"]["threads"] == {"intra_op": 2, "inter_op": 1}
     assert config["runtime"]["maximum_sequence_tokens"] == 512
@@ -68,8 +70,12 @@ def test_embedding_prefixes_normalization_and_resource_gates_are_explicit() -> N
         "query": "",
         "passage": "",
     }
-    assert candidates["paraphrase-multilingual-minilm-l12-v2-onnx-quint8-avx2"]["required_cpu_features"] == ["avx2"]
-    assert all("L2 normalization" in candidate["normalization"] for candidate in config["candidates"])
+    assert candidates["paraphrase-multilingual-minilm-l12-v2-onnx-quint8-avx2"][
+        "required_cpu_features"
+    ] == ["avx2"]
+    assert all(
+        "L2 normalization" in candidate["normalization"] for candidate in config["candidates"]
+    )
     assert config["acceptance"]["model_and_direct_runtime_disk_gib_max"] == 0.5
     assert config["acceptance"]["peak_process_rss_gib_max"] == 1.5
     assert config["protocol"]["validity"]["swap_must_not_change"] is True
@@ -99,7 +105,9 @@ def test_remediation_contract_preserves_the_method_and_pins_new_candidates() -> 
 
 
 def test_topic_deduplication_metrics_and_selection_fail_closed() -> None:
-    assert runner._ranked_topic_ids(np.array([0.9, 0.8, 0.7]), [{"topic_id": "a"}, {"topic_id": "a"}, {"topic_id": "b"}], 2) == ["a", "b"]
+    assert runner._ranked_topic_ids(
+        np.array([0.9, 0.8, 0.7]), [{"topic_id": "a"}, {"topic_id": "a"}, {"topic_id": "b"}], 2
+    ) == ["a", "b"]
     config = _config()
     cases = runner._retrieval_cases()
     assert len(cases) == 96
@@ -109,17 +117,17 @@ def test_topic_deduplication_metrics_and_selection_fail_closed() -> None:
         case.locale == probe["query_locale"] and case.query_class == probe["query_class"]
         for case in cases
     )
-    assert all(any(case.locale == locale and case.query_class == probe["query_class"] for case in cases) for locale in runner.LOCALES)
+    assert all(
+        any(case.locale == locale and case.query_class == probe["query_class"] for case in cases)
+        for locale in runner.LOCALES
+    )
     assert runner._metrics([1, None]) == {
         "top_1": 0.5,
         "recall_at_5": 0.5,
     }
     report = {
         "validity": {"valid": False, "reasons": ["swap-changed-during-measurement"]},
-        "per_locale": {
-            locale: {"top_1": 1.0, "recall_at_5": 1.0}
-            for locale in runner.LOCALES
-        },
+        "per_locale": {locale: {"top_1": 1.0, "recall_at_5": 1.0} for locale in runner.LOCALES},
         "cross_language": {"recall_at_5": 1.0},
         "resources": {"direct_disk_gib": 0.1, "peak_rss_gib": 0.1},
         "latency": {"p95_ms_max": 1.0},

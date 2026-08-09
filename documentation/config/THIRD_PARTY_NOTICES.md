@@ -7,7 +7,7 @@ published documentation artifact. Upstream archives retain their bundled license
 | Component | Locked version | License | Source |
 | --- | --- | --- | --- |
 | DITA Open Toolkit | 4.4 | Apache-2.0; bundled transitive notices also cover ICU, EPL-1.0/LGPL-2.1, MPL-1.0, MIT, and W3C terms | `dita-ot/dita-ot` official 4.4 release |
-| Eclipse Temurin JRE (HotSpot) | 21.0.11+10 | GPL-2.0 with Classpath Exception; bundled third-party notices apply | `adoptium/temurin21-binaries` official release |
+| Eclipse Temurin JRE (HotSpot) | 21.0.12+8 | GPL-2.0 with Classpath Exception; bundled third-party notices apply | `adoptium/temurin21-binaries` official release |
 | attrs | 26.1.0 | MIT | PyPI |
 | iniconfig | 2.3.0 | MIT | PyPI |
 | jsonschema | 4.26.0 | MIT | PyPI |

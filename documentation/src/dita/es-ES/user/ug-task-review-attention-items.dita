@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-attention-items" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Revisar los elementos que requieren atención en «Todos los ajustes»</title>
-  <shortdesc>Use «Revisión» para clasificar los elementos no válidos, de revisión manual CIS, sin procesar, desconocidos, obsoletos e importados antes de una edición habitual.</shortdesc>
+  <shortdesc>Use «<uicontrol>Revisión</uicontrol>» para clasificar los elementos no válidos, de revisión manual CIS, sin procesar, desconocidos, obsoletos e importados antes de una edición habitual.</shortdesc>
   <taskbody>
-    <prereq><p>Abra un perfil guardado en Todos los ajustes.</p></prereq>
-    <context><p>Revisión es la vista predeterminada de atención primero. Reúne configuraciones que pueden requerir una decisión antes de exportar, comparar o transferir.</p></context>
+    <prereq><p>Abra un perfil guardado en <uicontrol>Todos los ajustes</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Revisión</uicontrol> es la vista predeterminada de atención primero. Reúne configuraciones que pueden requerir una decisión antes de exportar, comparar o transferir.</p></context>
     <steps>
-      <step><cmd>Abre Todos los ajustes y quédate en Revisión.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Lea el resumen de la revisión y las tarjetas de acción agrupadas.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
-      <step><cmd>Abra cada elemento no válido, de revisión manual de CIS, sin formato, desconocido, obsoleto o importado que se aplique al perfil.</cmd><info><p>Resultado esperado: el perfil Todos los ajustes permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abre <uicontrol>Todos los ajustes</uicontrol> y quédate en <uicontrol>Revisión</uicontrol>.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Lea el resumen de la revisión y las tarjetas de acción agrupadas.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
+      <step><cmd>Abra cada elemento no válido, de revisión manual de CIS, sin formato, desconocido, obsoleto o importado que se aplique al perfil.</cmd><info><p>Resultado esperado: el perfil <uicontrol>Todos los ajustes</uicontrol> permanece enfocado en la tarea seleccionada.</p></info></step>
       <step><cmd>Resuelva el elemento, documente por qué permanece o pase a la vista de detalles vinculada para realizar una edición deliberada.</cmd><info><note type="warning">Cambiar la configuración puede afectar la política exportada de Firefox. Revise la fuente, la validación y el soporte del esquema antes de guardar.</note></info></step>
     </steps>
     <result><p>Los elementos de atención se resuelven, se retienen intencionalmente o están listos para una edición de detalles enfocada.</p></result>
-    <postreq><p>Recuperación: si la Revisión parece vacía pero esperaba problemas, borre los filtros, actualice el perfil y confirme el canal de esquema seleccionado.</p></postreq>
+    <postreq><p>Recuperación: si la <uicontrol>Revisión</uicontrol> parece vacía pero esperaba problemas, borre los filtros, actualice el perfil y confirme el canal de esquema seleccionado.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-all-settings-review-states"/>

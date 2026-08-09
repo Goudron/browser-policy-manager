@@ -7,7 +7,7 @@
     <prereq><p>A profile draft and schema channel are selected.</p></prereq>
     <context><p>The CIS layer is a BPM mapping aid; review every resulting setting for the deployment and do not treat it as certification.</p></context>
     <steps>
-      <step><cmd>Open Step 1, Profile &amp; baseline.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
+      <step><cmd>Open Step 1, <uicontrol>Profile &amp; baseline</uicontrol>.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Choose the supported CIS layer that matches the target channel and scenario.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Review the compliance-aware baseline changes in the summary.</cmd><info><p>Expected result: the Guided profile remains consistent.</p></info></step>
       <step><cmd>Keep or adjust settings that conflict with the deployment goal.</cmd><info><note type="warning">Changing schema-dependent controls can make values invalid for the selected Firefox channel.</note></info></step>

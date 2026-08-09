@@ -1,4 +1,3 @@
-(() => {
     function create({
         documentRef = document,
         elements = {},
@@ -29,6 +28,7 @@
         formatUserMessagingObjectState,
         findSettingsTarget,
         state = {},
+        reviewState = {},
     }) {
         const {
             validationPreviewEl,
@@ -168,8 +168,6 @@
         const setWizardComplianceDecisionNote = state.setWizardComplianceDecisionNote || (() => {});
         const getBaselineSummary = state.getBaselineSummary || (() => ({ copy: "", items: [] }));
         const workspaceSignalEl = state.workspaceSignalEl || null;
-        const reviewState = window.BPMProfilesReviewState || {};
-
         function setText(el, value) {
             if (el) {
                 el.textContent = String(value);
@@ -2650,5 +2648,4 @@
         };
     }
 
-    window.BPMProfilesReview = { create };
-})();
+    export { create };

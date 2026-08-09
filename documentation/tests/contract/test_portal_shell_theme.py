@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
+
+from documentation.buildlib import portal as build_docs
 
 DOCUMENTATION_ROOT = Path(__file__).resolve().parents[2]
 REPOSITORY_ROOT = DOCUMENTATION_ROOT.parent
-MODULE_PATH = DOCUMENTATION_ROOT / "tools/build_docs.py"
-SPEC = importlib.util.spec_from_file_location("build_docs", MODULE_PATH)
-assert SPEC and SPEC.loader
-build_docs = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(build_docs)
 
 
 def test_portal_shell_has_localized_chrome_for_every_published_locale() -> None:
@@ -119,12 +115,19 @@ def test_portal_theme_covers_responsive_dark_light_focus_code_tables_notes_and_p
 
 def test_portal_current_navigation_uses_primary_ui_selected_surfaces() -> None:
     theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs.css").read_text(encoding="utf-8")
-    product_theme = (
-        REPOSITORY_ROOT / "app/static/profiles_css/00-foundation.css"
-    ).read_text(encoding="utf-8")
-    product_editor = (
-        REPOSITORY_ROOT / "app/static/profiles_css/20-editor-wizard.css"
-    ).read_text(encoding="utf-8")
+    product_theme = (REPOSITORY_ROOT / "app/static/profiles_css/00-foundation.css").read_text(
+        encoding="utf-8"
+    )
+    product_editor = "".join(
+        (REPOSITORY_ROOT / "app/static/profiles_css" / filename).read_text(encoding="utf-8")
+        for filename in (
+            "20-shell.css",
+            "21-settings.css",
+            "22-guided-wizard.css",
+            "23-workspace-editor.css",
+            "24-theme-overrides.css",
+        )
+    )
 
     for token in (
         "--bpm-docs-selected-bg: rgba(20, 184, 166, 0.12)",
@@ -151,9 +154,7 @@ def test_portal_current_navigation_uses_primary_ui_selected_surfaces() -> None:
 
 def test_portal_sidebar_has_independent_desktop_and_narrow_scroll_contract() -> None:
     theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs.css").read_text(encoding="utf-8")
-    script = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-search.js").read_text(
-        encoding="utf-8"
-    )
+    script = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-search.js").read_text(encoding="utf-8")
 
     sidebar_rule = theme.split(".bpm-docs-sidebar {", 1)[1].split("}", 1)[0]
     assert "max-block-size: calc(100dvh - 2rem)" in sidebar_rule
@@ -176,7 +177,7 @@ def test_portal_shell_keeps_csp_friendly_static_boundaries() -> None:
     print_theme = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-print.css").read_text(
         encoding="utf-8"
     )
-    source = (DOCUMENTATION_ROOT / "tools/build_docs.py").read_text(encoding="utf-8")
+    source = (DOCUMENTATION_ROOT / "buildlib/portal.py").read_text(encoding="utf-8")
     search_script = (DOCUMENTATION_ROOT / "assets/theme/bpm-docs-search.js").read_text(
         encoding="utf-8"
     )

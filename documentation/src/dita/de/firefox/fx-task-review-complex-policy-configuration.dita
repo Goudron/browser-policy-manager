@@ -7,7 +7,7 @@
     <prereq><p>Ein Profil ist geöffnet und enthält mindestens eine komplexe Richtlinienfamilie oder verwaltete Präferenz.</p></prereq>
     <context><p>Komplexe Richtlinien sind am sichersten, wenn sie nach Familie, Quelle, Schemakanal und exportierter Grenzform überprüft werden.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie Alle Einstellungen und filtern Sie nach der betroffenen Familie.</cmd><info><p>Erwartetes Ergebnis: Zugehörige Richtlinien, Einstellungen und Quellbezeichnungen sind zusammen sichtbar.</p></info></step>
+      <step><cmd>Öffnen Sie <uicontrol>Alle Einstellungen</uicontrol> und filtern Sie nach der betroffenen Familie.</cmd><info><p>Erwartetes Ergebnis: Zugehörige Richtlinien, Einstellungen und Quellbezeichnungen sind zusammen sichtbar.</p></info></step>
       <step><cmd>Überprüfen Sie das Release-/ESR-Abzeichen für jede Richtlinie in der Familie.</cmd><info><note type="warning">Eine Nur-Release-Richtlinie darf nicht für ein ESR-Zielprofil exportiert werden.</note></info></step>
       <step><cmd>Untersuchen Sie verschachtelte Objekt- und Array-Werte, einschließlich unbekannter beibehaltener Felder.</cmd><info><p>Erwartetes Ergebnis: Rohe Fallback-Werte werden vor dem Speichern absichtlich beibehalten oder entfernt.</p></info></step>
       <step><cmd>Vergleichen Sie voreingestellte, CIS-, importierte, manuelle und Rohquellen.</cmd><info><p>Erwartetes Ergebnis: Konflikte werden bewusst gelöst und nicht durch spätere Änderungen ausgeblendet.</p></info></step>

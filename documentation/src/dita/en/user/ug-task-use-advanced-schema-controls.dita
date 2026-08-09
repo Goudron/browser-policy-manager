@@ -2,15 +2,15 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Use advanced schema controls</title>
-  <shortdesc>Reach advanced schema-shell and preference controls from All settings without treating Guided as the complete editor.</shortdesc>
+  <shortdesc>Reach advanced schema-shell and preference controls from <uicontrol>All settings</uicontrol> without treating Guided as the complete editor.</shortdesc>
   <taskbody>
-    <prereq><p>Open All settings in Catalog mode.</p></prereq>
-    <context><p>Advanced controls remain deliberate. All settings is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
+    <prereq><p>Open <uicontrol>All settings</uicontrol> in <uicontrol>Catalog</uicontrol> mode.</p></prereq>
+    <context><p>Advanced controls remain deliberate. <uicontrol>All settings</uicontrol> is the superset for schema-backed policies and preferences that are not first-class Guided controls.</p></context>
     <steps>
-      <step><cmd>Switch to Catalog mode and open the advanced schema or preference disclosure.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Edit only the advanced control needed for the profile goal.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Validate and save before returning to Guided, JSON, or the Library.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
+      <step><cmd>Switch to <uicontrol>Catalog</uicontrol> mode and open the advanced schema or preference disclosure.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Review whether the control is Guided-covered, All-Settings-only, raw, deprecated, or schema-dependent.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Edit only the advanced control needed for the profile goal.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Validate and save before returning to Guided, JSON, or the <uicontrol>Library</uicontrol>.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>The advanced setting is reached and changed deliberately without duplicate default editors.</p></result>
     <postreq><p>Recovery: if the control is unsupported in the selected schema, leave it unchanged and document the schema boundary.</p></postreq>

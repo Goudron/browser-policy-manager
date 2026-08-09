@@ -4,12 +4,12 @@
   <title>Filtrer la liste « Tous les paramètres »</title>
   <shortdesc>Filtrez les paramètres selon leur état : configuré, disponible, couvert par le guidage, invalide, obsolète, brut ou inconnu.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres avec une liste de paramètres visible.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> avec une liste de paramètres visible.</p></prereq>
     <context><p>Les filtres d'état réduisent un vaste inventaire en fonction de la décision que l'utilisateur doit prendre. Ils sont différents des filtres source, qui expliquent l'origine d'une valeur.</p></context>
     <steps>
-      <step><cmd>Ouvrez la barre d'outils du filtre de liste.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Choisissez le filtre d'état qui correspond à la tâche : configuré, disponible, couvert par guidage, tous les paramètres uniquement, non valide, obsolète, brut ou inconnu.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Inspectez le nombre filtré et les lignes représentatives.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Ouvrez la barre d'outils du filtre de liste.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Choisissez le filtre d'état qui correspond à la tâche : configuré, disponible, couvert par guidage, tous les paramètres uniquement, non valide, obsolète, brut ou inconnu.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Inspectez le nombre filtré et les lignes représentatives.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Effacez le filtre d'état avant d'appliquer des modifications sans rapport.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>La liste affiche uniquement les paramètres avec l'état sélectionné.</p></result>

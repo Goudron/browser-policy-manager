@@ -154,8 +154,8 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-search-engine-list"',
     'id="wizard-preference-row-template"',
     'id="wizard-preferences-known-list"',
-    'wizard-preferences-known-list',
-    'data-preference-value-select',
+    "wizard-preferences-known-list",
+    "data-preference-value-select",
     'data-privacy-outcome-group="cookies-permissions"',
     'data-settings-target="policy:DisableTelemetry"',
     'data-settings-target="field:wizard-proxy-mode"',
@@ -163,16 +163,16 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'data-search-engine-preset="ticket_queue"',
     'data-search-engine-preset="wiki_portal"',
     'data-search-engine-preset="duckduckgo"',
-    'data-search-engine-presets-menu',
-    'data-search-engine-preset-status',
+    "data-search-engine-presets-menu",
+    "data-search-engine-preset-status",
     'data-search-engine-field="Name"',
     'data-search-engine-field="URLTemplate"',
     'data-search-engine-field="Alias"',
-    'data-search-engine-advanced',
+    "data-search-engine-advanced",
     'data-search-engine-field="Method"',
     'data-search-engine-field="PostData"',
-    'data-search-engine-summary',
-    'data-search-engine-warning',
+    "data-search-engine-summary",
+    "data-search-engine-warning",
     'data-policy-select-key="HttpsOnlyMode"',
     'id="wizard-new-tab-page"',
     'id="wizard-home-overrides-presets"',
@@ -210,7 +210,7 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-requested-locales-card"',
     'id="wizard-generative-ai-card"',
     'id="wizard-user-messaging-card"',
-    'profiles.wizard_user_environment_map_title',
+    "profiles.wizard_user_environment_map_title",
     'id="wizard-step-4-accounts"',
     'id="wizard-step-4-language"',
     'id="wizard-step-4-extensions"',
@@ -251,7 +251,7 @@ PROFILES_PAGE_EDITOR_TOKENS = (
     'id="wizard-website-section-status"',
     'id="wizard-website-fine-tuning-toggle"',
     'id="wizard-website-fine-tuning-panel"',
-    'data-bookmarks-handoff',
+    "data-bookmarks-handoff",
     'id="wizard-bookmarks-section-status"',
     'id="wizard-bookmarks-open-settings"',
     'id="wizard-bookmarks-configured-actions"',
@@ -288,7 +288,7 @@ PROFILES_PAGE_REVIEW_TOKENS = (
     'data-hardening-preset="balanced"',
     'data-hardening-preset="strict"',
     'id="wizard-hardening-section-status"',
-    'data-hardening-cleanup-subchoice',
+    "data-hardening-cleanup-subchoice",
     'data-hardening-subposture-menu="cleanup"',
     'data-cleanup-preset="defaults"',
     'data-cleanup-preset="shared"',
@@ -415,8 +415,8 @@ PROFILES_PAGE_SCHEMA_EXPORT_TOKENS = (
     'data-extension-profile="uBlock0@raymondhill.net"',
     'data-extension-profile="adguardadblocker@adguard.com"',
     'data-extension-profile="https-everywhere@eff.org"',
-    'wizard-extension-profile-row',
-    'wizard-extension-profile-status',
+    "wizard-extension-profile-row",
+    "wizard-extension-profile-status",
     'data-extension-profile-status="uBlock0@raymondhill.net"',
     'data-extension-profile-status="adguardadblocker@adguard.com"',
     'data-extension-profile-status="https-everywhere@eff.org"',
@@ -450,27 +450,44 @@ PROFILES_PAGE_FOOTER_TOKENS = (
     'value="light"',
     'value="dark"',
     "resolveBrowserLanguage",
-    '/static/profiles_head_bootstrap.js',
+    "/static/profiles_head_bootstrap.js",
     "Valery Ledovskoy",
     "https://www.mozilla.org/MPL/2.0/",
     "/api/profiles",
 )
+
 
 @cache
 def _profiles_page_response():
     client = make_test_client(app)
     return client.get("/profiles/new")
 
+
 def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.title"] == "Browser profile manager"
     assert locale_json["profiles.documentation_link"] == "Open product documentation"
     assert locale_json["profiles.context_help_action"] == "Help for this section"
-    assert locale_json["profiles.help_policy_ai_controls"] == "Open help for Firefox AI policy controls"
-    assert locale_json["profiles.help_policy_visual_search_enabled"] == "Open help for the VisualSearchEnabled policy"
-    assert locale_json["profiles.help_cis_baseline_selection"] == "Open help for selecting CIS baselines"
+    assert (
+        locale_json["profiles.help_policy_ai_controls"]
+        == "Open help for Firefox AI policy controls"
+    )
+    assert (
+        locale_json["profiles.help_policy_visual_search_enabled"]
+        == "Open help for the VisualSearchEnabled policy"
+    )
+    assert (
+        locale_json["profiles.help_cis_baseline_selection"]
+        == "Open help for selecting CIS baselines"
+    )
     assert locale_json["profiles.help_validation"] == "Open help for profile validation"
-    assert locale_json["profiles.help_import_firefox_policies"] == "Open help for importing Firefox policies.json"
-    assert locale_json["profiles.help_export_firefox_policies"] == "Open help for exporting Firefox policies.json"
+    assert (
+        locale_json["profiles.help_import_firefox_policies"]
+        == "Open help for importing Firefox policies.json"
+    )
+    assert (
+        locale_json["profiles.help_export_firefox_policies"]
+        == "Open help for exporting Firefox policies.json"
+    )
     assert locale_json["profiles.workspace_overview"] == "Profile setup overview"
     assert locale_json["profiles.footer_owner"] == "Valery Ledovskoy"
     assert locale_json["profiles.footer_license_prefix"] == "Licensed under"
@@ -499,9 +516,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.workspace_scope_guided"] == "Guided editor"
     assert locale_json["profiles.workspace_scope_settings"] == "All settings"
     assert locale_json["profiles.workspace_scope_current_label"] == "Current mode"
-    assert locale_json["profiles.workspace_scope_guided_title"] == (
-        "Best for most profile work"
-    )
+    assert locale_json["profiles.workspace_scope_guided_title"] == ("Best for most profile work")
     assert locale_json["profiles.workspace_scope_settings_title"] == (
         "Only when Guided editor is not enough"
     )
@@ -526,14 +541,14 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_setup_impact_title"] == "What this will apply"
     assert locale_json["profiles.wizard_baseline_recommended_title"] == "Change suggested baseline"
     assert locale_json["profiles.wizard_baseline_secondary_title"] == "Start another way"
-    assert locale_json["profiles.wizard_baseline_summary_title"] == "This baseline will preconfigure"
+    assert (
+        locale_json["profiles.wizard_baseline_summary_title"] == "This baseline will preconfigure"
+    )
     assert locale_json["profiles.wizard_cis_title"] == "CIS benchmark overlay"
     assert locale_json["profiles.wizard_export_review_cis_manual"] == (
         "Review CIS conflicts where the base scenario stayed in place: {count}."
     )
-    assert locale_json["profiles.wizard_cis_review_manual_title"] == (
-        "CIS manual review: {path}"
-    )
+    assert locale_json["profiles.wizard_cis_review_manual_title"] == ("CIS manual review: {path}")
     assert locale_json["profiles.wizard_cis_exceptions_count"] == (
         "CIS exceptions needing notes: {count}."
     )
@@ -581,25 +596,38 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.compare_action"] == "Compare here"
     assert locale_json["profiles.wizard_summary_derived"] == "Based on"
     assert locale_json["profiles.lifecycle_review_title"] == "Lifecycle review"
-    assert locale_json["profiles.selection_empty_status"] == "Choose a profile or start a new draft to begin."
+    assert (
+        locale_json["profiles.selection_empty_status"]
+        == "Choose a profile or start a new draft to begin."
+    )
     assert locale_json["profiles.confirm_hard_delete"].startswith("Delete this profile permanently")
     assert locale_json["profiles.confirm_reset_library"].startswith("Delete every profile")
     assert locale_json["profiles.wizard_search_title"] == "Search defaults"
-    assert locale_json["profiles.wizard_search_surfaces_workflow_title"] == "Search experience workflow"
+    assert (
+        locale_json["profiles.wizard_search_surfaces_workflow_title"]
+        == "Search experience workflow"
+    )
     assert locale_json["profiles.wizard_general_policy_title"] == "General browser behavior"
     assert locale_json["profiles.wizard_general_policy_preset_managed_title"] == (
         "Managed browser upkeep"
     )
     assert locale_json["profiles.wizard_upkeep_governance_title"] == "Browser upkeep workflow"
-    assert locale_json["profiles.wizard_home_surfaces_workflow_title"] == "Home and startup workflow"
-    assert locale_json["profiles.wizard_language_governance_title"] == "Language governance workflow"
+    assert (
+        locale_json["profiles.wizard_home_surfaces_workflow_title"] == "Home and startup workflow"
+    )
+    assert (
+        locale_json["profiles.wizard_language_governance_title"] == "Language governance workflow"
+    )
     assert locale_json["profiles.wizard_ai_controls_title"] == "Firefox 153 AI policy controls"
     assert locale_json["profiles.wizard_general_policy_section_state_download_prompt_on"] == (
         "Ask where to save downloads"
     )
     assert locale_json["profiles.wizard_settings_map_label"] == "Firefox Settings areas"
     assert locale_json["profiles.wizard_settings_covered_title"] == "Settings covered"
-    assert locale_json["profiles.wizard_preferences_covered_title"] == "All settings preference coverage"
+    assert (
+        locale_json["profiles.wizard_preferences_covered_title"]
+        == "All settings preference coverage"
+    )
     assert locale_json["profiles.wizard_preferences_general_handoff_title"] == (
         "All settings for General preferences"
     )
@@ -616,9 +644,15 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.order_desc"] == "Descending"
     assert locale_json["profiles.status_draft_ready"].startswith("Draft ready")
     assert locale_json["profiles.editor_formatted"] == "Document formatted."
-    assert locale_json["profiles.wizard_settings_search_kind_preference_preset"] == "Preference preset"
-    assert locale_json["profiles.wizard_settings_search_kind_preference_bundle"] == "Preference bundle"
-    assert locale_json["profiles.wizard_settings_search_kind_known_preference"] == "Known preference"
+    assert (
+        locale_json["profiles.wizard_settings_search_kind_preference_preset"] == "Preference preset"
+    )
+    assert (
+        locale_json["profiles.wizard_settings_search_kind_preference_bundle"] == "Preference bundle"
+    )
+    assert (
+        locale_json["profiles.wizard_settings_search_kind_known_preference"] == "Known preference"
+    )
     assert locale_json["profiles.wizard_settings_search_kind_policy_blueprint"] == "Schema policy"
     assert locale_json["profiles.wizard_section_network_access"] == "Network and enterprise access"
     assert locale_json["profiles.wizard_shell_title"] == "Technical coverage for this step"
@@ -629,9 +663,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_browser_defaults_review_title"] == "Local review"
     assert locale_json["profiles.wizard_step_four_index_title"] == "Search step map"
     assert locale_json["profiles.wizard_step_four_index_engines"] == "Managed engines"
-    assert locale_json["profiles.wizard_user_environment_map_title"] == (
-        "User environment map"
-    )
+    assert locale_json["profiles.wizard_user_environment_map_title"] == ("User environment map")
     assert locale_json["profiles.wizard_user_environment_map_extensions"] == "Extensions"
     assert locale_json["profiles.wizard_user_environment_map_websites"] == "Websites"
     assert locale_json["profiles.wizard_disclosure_show"] == "Show details"
@@ -703,16 +735,12 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Do not sync passwords"
     )
     assert locale_json["profiles.wizard_security_map_title"] == "Security posture map"
-    assert locale_json["profiles.wizard_privacy_review_title"] == (
-        "Security posture at a glance"
-    )
+    assert locale_json["profiles.wizard_privacy_review_title"] == ("Security posture at a glance")
     assert locale_json["profiles.wizard_privacy_review_user_data"] == (
         "Privacy and saved credentials"
     )
     assert locale_json["profiles.wizard_privacy_review_cleanup"] == "Shutdown cleanup"
-    assert locale_json["profiles.wizard_hardening_preset_balanced_title"] == (
-        "Balanced hardening"
-    )
+    assert locale_json["profiles.wizard_hardening_preset_balanced_title"] == ("Balanced hardening")
     assert locale_json["profiles.wizard_hardening_impact_cleanup"] == "Shutdown cleanup"
     assert locale_json["profiles.wizard_hardening_subposture_privacy"] == (
         "Adjust privacy data posture"
@@ -723,12 +751,8 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_privacy_outcome_site_data_title"] == (
         "Cookies and permissions"
     )
-    assert locale_json["profiles.wizard_hardening_governance_title"] == (
-        "Hardening workflow"
-    )
-    assert locale_json["profiles.wizard_hardening_governance_next_label"] == (
-        "Next recommendation"
-    )
+    assert locale_json["profiles.wizard_hardening_governance_title"] == ("Hardening workflow")
+    assert locale_json["profiles.wizard_hardening_governance_next_label"] == ("Next recommendation")
     assert locale_json["profiles.wizard_hardening_governance_remaining_count"] == (
         "Remaining: {count}"
     )
@@ -741,12 +765,8 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "What Firefox will use for network access"
     )
     assert locale_json["profiles.wizard_network_review_windows_sso"] == "Windows sign-in"
-    assert locale_json["profiles.wizard_home_review_title"] == (
-        "What users will see at startup"
-    )
-    assert locale_json["profiles.wizard_home_review_user_messaging"] == (
-        "Tips and recommendations"
-    )
+    assert locale_json["profiles.wizard_home_review_title"] == ("What users will see at startup")
+    assert locale_json["profiles.wizard_home_review_user_messaging"] == ("Tips and recommendations")
     assert locale_json["profiles.wizard_search_review_title"] == "How search will work"
     assert locale_json["profiles.wizard_search_review_custom"] == "Custom search engines"
     assert locale_json["profiles.wizard_homepage_section_state_invalid"] == (
@@ -795,9 +815,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Preset differs from current engine"
     )
     assert locale_json["profiles.wizard_search_preset_state_missing"] == "Preset not added yet"
-    assert locale_json["profiles.wizard_search_engine_summary_default"].startswith(
-        "GET by default"
-    )
+    assert locale_json["profiles.wizard_search_engine_summary_default"].startswith("GET by default")
     assert locale_json["profiles.wizard_search_engine_warning_required"].startswith(
         "Required for a valid engine"
     )
@@ -815,9 +833,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_firefox_suggest_preset_locked_down_title"] == (
         "Strict suggestions off"
     )
-    assert locale_json["profiles.wizard_homepage_preset_locked_title"] == (
-        "Locked homepage"
-    )
+    assert locale_json["profiles.wizard_homepage_preset_locked_title"] == ("Locked homepage")
     assert locale_json["profiles.wizard_home_overrides_preset_managed_title"] == (
         "Managed landing flow"
     )
@@ -829,33 +845,27 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Uses store download link"
     )
     assert locale_json["profiles.wizard_extension_profile_state_configured"] == "Configured"
-    assert locale_json["profiles.wizard_extension_profile_state_custom_url"] == "Custom download link"
-    assert locale_json["profiles.wizard_extensions_review_title"] == (
-        "How add-ons will be managed"
+    assert (
+        locale_json["profiles.wizard_extension_profile_state_custom_url"] == "Custom download link"
     )
+    assert locale_json["profiles.wizard_extensions_review_title"] == ("How add-ons will be managed")
     assert locale_json["profiles.wizard_sync_focus_managed_title"] == (
         "Account access and guidance"
     )
-    assert locale_json["profiles.wizard_extensions_preset_managed_title"] == (
-        "Managed rollout"
-    )
+    assert locale_json["profiles.wizard_extensions_preset_managed_title"] == ("Managed rollout")
     assert locale_json["profiles.wizard_extensions_governance_selector_hint"].startswith(
         "Choose the extension governance"
     )
     assert locale_json["profiles.wizard_extensions_governance_managed_title"] == (
         "Managed allowlist"
     )
-    assert locale_json["profiles.wizard_extensions_governance_curated_title"] == (
-        "Curated rollout"
-    )
+    assert locale_json["profiles.wizard_extensions_governance_curated_title"] == ("Curated rollout")
     assert locale_json["profiles.wizard_extensions_governance_title"] == (
         "Extension governance workflow"
     )
     assert locale_json["profiles.wizard_extensions_review_body"].startswith("Quick check")
     assert locale_json["profiles.wizard_extensions_review_curated"] == "Known add-ons"
-    assert locale_json["profiles.wizard_extensions_review_arbitrary"] == (
-        "Extra add-on rules"
-    )
+    assert locale_json["profiles.wizard_extensions_review_arbitrary"] == ("Extra add-on rules")
     assert locale_json["profiles.wizard_extensions_review_custom_urls"] == (
         "Custom install sources"
     )
@@ -866,9 +876,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_shared_device_workflow_title"] == "Shared-device workflow"
     assert locale_json["profiles.wizard_export_section_ready_title"] == "Final checklist"
     assert locale_json["profiles.wizard_export_section_changes_title"] == "Review before handoff"
-    assert locale_json["profiles.wizard_export_section_technical_title"] == (
-        "Technical details"
-    )
+    assert locale_json["profiles.wizard_export_section_technical_title"] == ("Technical details")
     assert locale_json["profiles.wizard_export_title"] == "Save, validate, download"
     assert locale_json["profiles.wizard_export_workspace_state"] == "Latest edits"
     assert locale_json["profiles.wizard_export_validation_state"] == "Final validation"
@@ -876,9 +884,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_export_ready_title"] == "Download policies.json"
     assert locale_json["profiles.wizard_export_guided_summary_title"] == "Review by area"
     assert locale_json["profiles.wizard_export_guided_ai"] == "AI and smart features"
-    assert locale_json["profiles.wizard_cleanup_preset_shared_title"] == (
-        "Shared-device cleanup"
-    )
+    assert locale_json["profiles.wizard_cleanup_preset_shared_title"] == ("Shared-device cleanup")
     assert locale_json["profiles.wizard_homepage_shared_preset_portal_title"] == (
         "Locked shared-device portal"
     )
@@ -912,9 +918,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.dock_state_kicker"] == "Current flow"
     assert locale_json["profiles.dock_state_dirty_title"] == "Save the latest edits"
-    assert locale_json["profiles.dock_state_archived_title"] == (
-        "Restore this archived profile"
-    )
+    assert locale_json["profiles.dock_state_archived_title"] == ("Restore this archived profile")
     assert locale_json["profiles.wizard_export_profile_saved"] == "Saved profile #{id}"
     assert locale_json["profiles.wizard_export_state_unsaved_existing"] == (
         "Save the latest edits before downloading."
@@ -934,9 +938,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_bookmarks_review_title"] == (
         "How managed bookmarks are set up"
     )
-    assert locale_json["profiles.wizard_bookmarks_review_nested"] == (
-        "Nested bookmark trees"
-    )
+    assert locale_json["profiles.wizard_bookmarks_review_nested"] == ("Nested bookmark trees")
     assert locale_json["profiles.wizard_bookmarks_review_open"] == "Open"
     assert locale_json["profiles.wizard_bookmarks_handoff_title"] == "Bookmark editor"
     assert locale_json["profiles.wizard_bookmarks_open_action"] == "Open advanced"
@@ -952,12 +954,8 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_website_governance_title"] == "Site access workflow"
     assert locale_json["profiles.wizard_website_access_decision_title"] == "Website access"
-    assert locale_json["profiles.wizard_website_access_posture_label"] == (
-        "Site access posture"
-    )
-    assert locale_json["profiles.wizard_website_access_handlers_label"] == (
-        "Handler management"
-    )
+    assert locale_json["profiles.wizard_website_access_posture_label"] == ("Site access posture")
+    assert locale_json["profiles.wizard_website_access_handlers_label"] == ("Handler management")
     assert locale_json["profiles.wizard_website_filter_preset_mixed_title"] == (
         "Blocked sites and exceptions"
     )
@@ -997,17 +995,13 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_trust_auth_workflow_title"] == (
         "Corporate trust and sign-in workflow"
     )
-    assert locale_json["profiles.wizard_step_memory_title"] == (
-        "Recently changed"
-    )
+    assert locale_json["profiles.wizard_step_memory_title"] == ("Recently changed")
     assert locale_json["profiles.wizard_step_memory_open"] == "Open step"
     assert locale_json["profiles.wizard_step_memory_current"] == "You are here"
     assert locale_json["profiles.wizard_export_boundary_register_title"] == (
         "What still stays advanced on purpose"
     )
-    assert locale_json["profiles.wizard_export_drilldown_title"] == (
-        "Detailed technical review"
-    )
+    assert locale_json["profiles.wizard_export_drilldown_title"] == ("Detailed technical review")
     assert locale_json["profiles.wizard_permissions_state_strict"] == (
         "Configured: {configured} • Strict: {strict}"
     )
@@ -1044,9 +1038,7 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
         "Rule configured"
     )
     assert locale_json["profiles.wizard_extensions_mode_blocked"] == "Block installs"
-    assert locale_json["profiles.wizard_extensions_advanced_title"] == (
-        "Advanced extension rules"
-    )
+    assert locale_json["profiles.wizard_extensions_advanced_title"] == ("Advanced extension rules")
     assert locale_json["profiles.wizard_extensions_advanced_install_permissions"] == (
         "Install source exceptions"
     )
@@ -1067,16 +1059,32 @@ def _assert_en_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.conflict_overwrite"] == "Overwrite anyway"
     assert locale_json["profiles.conflict_overwrite_confirm"].startswith("Overwrite the newer")
 
+
 def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.title"] == "Менеджер профилей браузера"
     assert locale_json["profiles.documentation_link"] == "Открыть документацию"
     assert locale_json["profiles.context_help_action"] == "Справка по разделу"
-    assert locale_json["profiles.help_policy_ai_controls"] == "Открыть справку по политикам Firefox для AI-контролов"
-    assert locale_json["profiles.help_policy_visual_search_enabled"] == "Открыть справку по политике визуального поиска"
-    assert locale_json["profiles.help_cis_baseline_selection"] == "Открыть справку по выбору базовых уровней CIS"
+    assert (
+        locale_json["profiles.help_policy_ai_controls"]
+        == "Открыть справку по политикам Firefox для AI-контролов"
+    )
+    assert (
+        locale_json["profiles.help_policy_visual_search_enabled"]
+        == "Открыть справку по политике визуального поиска"
+    )
+    assert (
+        locale_json["profiles.help_cis_baseline_selection"]
+        == "Открыть справку по выбору базовых уровней CIS"
+    )
     assert locale_json["profiles.help_validation"] == "Открыть справку по проверке профиля"
-    assert locale_json["profiles.help_import_firefox_policies"] == "Открыть справку по импорту Firefox policies.json"
-    assert locale_json["profiles.help_export_firefox_policies"] == "Открыть справку по экспорту Firefox policies.json"
+    assert (
+        locale_json["profiles.help_import_firefox_policies"]
+        == "Открыть справку по импорту Firefox policies.json"
+    )
+    assert (
+        locale_json["profiles.help_export_firefox_policies"]
+        == "Открыть справку по экспорту Firefox policies.json"
+    )
     assert locale_json["profiles.workspace_overview"] == "Сводка по настройке профиля"
     assert locale_json["profiles.footer_owner"] == "Валерий Ледовской"
     assert locale_json["profiles.footer_license_prefix"] == "Лицензия"
@@ -1117,9 +1125,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.settings_context_action_editor"] == (
         "Открыть полный policies.json"
     )
-    assert locale_json["profiles.settings_utility_title"] == (
-        "Работа во Всех настройках"
-    )
+    assert locale_json["profiles.settings_utility_title"] == ("Работа во Всех настройках")
     assert locale_json["profiles.settings_utility_editor_body"] == (
         "Используйте полный Firefox policies.json, когда уже знаете, какими низкоуровневыми ключами нужно управлять."
     )
@@ -1128,9 +1134,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Редактируйте здесь полный Firefox policies.json, когда Пошагового редактора и Всех настроек уже недостаточно."
     )
     assert locale_json["profiles.json_review_save_title"] == "Последние правки"
-    assert locale_json["profiles.json_review_download_title"] == (
-        "Готово к скачиванию"
-    )
+    assert locale_json["profiles.json_review_download_title"] == ("Готово к скачиванию")
     assert locale_json["profiles.status_revision_conflict"] == (
         "Этот профиль изменился в другой вкладке. Обновите его перед повторным сохранением."
     )
@@ -1206,7 +1210,10 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.compare_action"] == "Сравнить здесь"
     assert locale_json["profiles.wizard_summary_derived"] == "Основан на"
     assert locale_json["profiles.lifecycle_review_title"] == "Жизненный цикл профиля"
-    assert locale_json["profiles.selection_empty_status"] == "Выберите профиль или начните новый черновик, чтобы начать."
+    assert (
+        locale_json["profiles.selection_empty_status"]
+        == "Выберите профиль или начните новый черновик, чтобы начать."
+    )
     assert locale_json["profiles.confirm_hard_delete"].startswith("Удалить этот профиль навсегда")
     assert locale_json["profiles.confirm_reset_library"].startswith("Удалить навсегда все профили")
     assert locale_json["profiles.wizard_search_title"] == "Поисковые настройки"
@@ -1222,7 +1229,10 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.wizard_settings_map_label"] == "Разделы настроек Firefox"
     assert locale_json["profiles.wizard_settings_covered_title"] == "Покрытые настройки"
-    assert locale_json["profiles.wizard_preferences_covered_title"] == "Покрытие параметров во всех настройках"
+    assert (
+        locale_json["profiles.wizard_preferences_covered_title"]
+        == "Покрытие параметров во всех настройках"
+    )
     assert locale_json["profiles.wizard_preferences_general_handoff_title"] == (
         "Все настройки для раздела «Основные»"
     )
@@ -1271,7 +1281,9 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_review_filter_attention"] == "Требуют внимания"
     assert locale_json["profiles.wizard_review_filter_settings"] == "Вне Пошагового редактора"
     assert locale_json["profiles.wizard_review_filter_all"] == "Все"
-    assert locale_json["profiles.wizard_review_empty_changed"] == "Здесь пока нет изменённых пунктов."
+    assert (
+        locale_json["profiles.wizard_review_empty_changed"] == "Здесь пока нет изменённых пунктов."
+    )
     assert locale_json["profiles.wizard_review_empty_settings"] == (
         "Сейчас здесь нет пунктов вне Пошагового редактора."
     )
@@ -1305,10 +1317,10 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Запуск и восстановление"
     )
     assert locale_json["profiles.wizard_preferences_bundles_title"] == "Быстрые наборы"
-    assert locale_json["profiles.wizard_preferences_bundles_body"].startswith("Применяйте небольшую")
-    assert locale_json["profiles.wizard_preferences_known_title"] == (
-        "Известные параметры Firefox"
+    assert locale_json["profiles.wizard_preferences_bundles_body"].startswith(
+        "Применяйте небольшую"
     )
+    assert locale_json["profiles.wizard_preferences_known_title"] == ("Известные параметры Firefox")
     assert locale_json["profiles.wizard_preferences_known_body"].startswith(
         "Добавляйте известный ключ"
     )
@@ -1355,9 +1367,14 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_preferences_warning_required"].startswith(
         "Нужно указать ключ параметра"
     )
-    assert locale_json["profiles.wizard_preferences_preset_applied"] == "Готовый набор параметра добавлен."
+    assert (
+        locale_json["profiles.wizard_preferences_preset_applied"]
+        == "Готовый набор параметра добавлен."
+    )
     assert locale_json["profiles.wizard_preferences_bundle_applied"] == "Набор параметров добавлен."
-    assert locale_json["profiles.wizard_preferences_known_applied"] == "Известный параметр добавлен."
+    assert (
+        locale_json["profiles.wizard_preferences_known_applied"] == "Известный параметр добавлен."
+    )
     assert locale_json["profiles.wizard_preferences_bundle_state_applied"] == "Уже применён"
     assert locale_json["profiles.wizard_preferences_bundle_state_partial"] == (
         "Применён частично: {matched}/{total}"
@@ -1387,27 +1404,19 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_privacy_review_user_data"] == (
         "Приватность и сохранённые учётные данные"
     )
-    assert locale_json["profiles.wizard_privacy_review_cleanup"] == (
-        "Очистка при завершении"
-    )
+    assert locale_json["profiles.wizard_privacy_review_cleanup"] == ("Очистка при завершении")
     assert locale_json["profiles.wizard_hardening_preset_balanced_title"] == (
         "Сбалансированное усиление защиты"
     )
-    assert locale_json["profiles.wizard_hardening_impact_cleanup"] == (
-        "Очистка при завершении"
-    )
+    assert locale_json["profiles.wizard_hardening_impact_cleanup"] == ("Очистка при завершении")
     assert locale_json["profiles.wizard_hardening_subposture_privacy"] == (
         "Изменить режим данных приватности"
     )
     assert locale_json["profiles.wizard_privacy_outcome_telemetry_title"] == (
         "Телеметрия и исследования"
     )
-    assert locale_json["profiles.wizard_privacy_outcome_site_data_title"] == (
-        "Куки и разрешения"
-    )
-    assert locale_json["profiles.wizard_hardening_governance_title"] == (
-        "Сценарий усиления защиты"
-    )
+    assert locale_json["profiles.wizard_privacy_outcome_site_data_title"] == ("Куки и разрешения")
+    assert locale_json["profiles.wizard_hardening_governance_title"] == ("Сценарий усиления защиты")
     assert locale_json["profiles.wizard_hardening_governance_next_label"] == (
         "Следующая рекомендация"
     )
@@ -1426,15 +1435,9 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_home_review_title"] == (
         "Что пользователь увидит при запуске"
     )
-    assert locale_json["profiles.wizard_home_review_user_messaging"] == (
-        "Подсказки и рекомендации"
-    )
-    assert locale_json["profiles.wizard_search_review_title"] == (
-        "Как будет работать поиск"
-    )
-    assert locale_json["profiles.wizard_search_review_custom"] == (
-        "Пользовательские поисковики"
-    )
+    assert locale_json["profiles.wizard_home_review_user_messaging"] == ("Подсказки и рекомендации")
+    assert locale_json["profiles.wizard_search_review_title"] == ("Как будет работать поиск")
+    assert locale_json["profiles.wizard_search_review_custom"] == ("Пользовательские поисковики")
     assert locale_json["profiles.wizard_homepage_section_state_invalid"] == (
         "Для выбранного режима запуска нужен URL домашней страницы."
     )
@@ -1464,15 +1467,23 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_search_defaults_preset_restricted_title"] == (
         "Ограниченный поиск"
     )
-    assert locale_json["profiles.wizard_search_preset_applied"] == "Готовый набор поисковика добавлен."
+    assert (
+        locale_json["profiles.wizard_search_preset_applied"] == "Готовый набор поисковика добавлен."
+    )
     assert locale_json["profiles.wizard_search_preset_state_applied"] == (
         "Готовый набор совпадает с текущим поисковиком"
     )
-    assert locale_json["profiles.wizard_search_preset_state_partial"] == "Готовый набор применён частично"
+    assert (
+        locale_json["profiles.wizard_search_preset_state_partial"]
+        == "Готовый набор применён частично"
+    )
     assert locale_json["profiles.wizard_search_preset_state_conflict"] == (
         "Готовый набор расходится с текущим поисковиком"
     )
-    assert locale_json["profiles.wizard_search_preset_state_missing"] == "Готовый набор пока не добавлен"
+    assert (
+        locale_json["profiles.wizard_search_preset_state_missing"]
+        == "Готовый набор пока не добавлен"
+    )
     assert locale_json["profiles.wizard_search_engine_summary_default"].startswith(
         "По умолчанию используется GET"
     )
@@ -1489,8 +1500,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Истории и рекламный контент"
     )
     assert (
-        locale_json["profiles.wizard_home_step_summary_title"]
-        == "Итог настройки домашней страницы"
+        locale_json["profiles.wizard_home_step_summary_title"] == "Итог настройки домашней страницы"
     )
     assert locale_json["profiles.wizard_firefox_suggest_title"] == "Firefox Suggest"
     assert locale_json["profiles.wizard_firefox_suggest_preset_locked_down_title"] == (
@@ -1537,9 +1547,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_extensions_review_title"] == (
         "Как будут управляться дополнения"
     )
-    assert locale_json["profiles.wizard_sync_focus_managed_title"] == (
-        "Доступ и подсказки"
-    )
+    assert locale_json["profiles.wizard_sync_focus_managed_title"] == ("Доступ и подсказки")
     assert locale_json["profiles.wizard_extensions_preset_managed_title"] == (
         "Управляемая раскатка"
     )
@@ -1555,15 +1563,9 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_extensions_governance_title"] == (
         "Сценарий управления дополнениями"
     )
-    assert locale_json["profiles.wizard_profile_identity_title"] == (
-        "Идентификация профиля"
-    )
-    assert locale_json["profiles.wizard_extensions_review_body"].startswith(
-        "Быстрая проверка"
-    )
-    assert locale_json["profiles.wizard_extensions_review_curated"] == (
-        "Известные дополнения"
-    )
+    assert locale_json["profiles.wizard_profile_identity_title"] == ("Идентификация профиля")
+    assert locale_json["profiles.wizard_extensions_review_body"].startswith("Быстрая проверка")
+    assert locale_json["profiles.wizard_extensions_review_curated"] == ("Известные дополнения")
     assert locale_json["profiles.wizard_extensions_review_arbitrary"] == (
         "Дополнительные правила дополнений"
     )
@@ -1577,12 +1579,12 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_extension_rule_show"] == "Показать список"
     assert locale_json["profiles.wizard_extensions_rule_count"] == "Записей: {count}"
     assert locale_json["profiles.wizard_export_compatibility_title"] == "Техническое покрытие"
-    assert locale_json["profiles.wizard_shared_device_workflow_title"] == "Сценарий общего устройства"
+    assert (
+        locale_json["profiles.wizard_shared_device_workflow_title"] == "Сценарий общего устройства"
+    )
     assert locale_json["profiles.wizard_export_section_ready_title"] == "Финальный чеклист"
     assert locale_json["profiles.wizard_export_section_changes_title"] == "Проверка перед передачей"
-    assert locale_json["profiles.wizard_export_section_technical_title"] == (
-        "Технические детали"
-    )
+    assert locale_json["profiles.wizard_export_section_technical_title"] == ("Технические детали")
     assert locale_json["profiles.wizard_export_title"] == "Сохранить, проверить, скачать"
     assert locale_json["profiles.wizard_export_workspace_state"] == "Последние правки"
     assert locale_json["profiles.wizard_export_validation_state"] == "Финальная проверка"
@@ -1599,9 +1601,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_website_filter_shared_preset_allow_only_title"] == (
         "Только управляемые сайты"
     )
-    assert locale_json["profiles.wizard_website_access_decision_title"] == (
-        "Доступ к сайтам"
-    )
+    assert locale_json["profiles.wizard_website_access_decision_title"] == ("Доступ к сайтам")
     assert locale_json["profiles.wizard_website_access_posture_label"] == (
         "Сценарий доступа к сайтам"
     )
@@ -1635,9 +1635,7 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     )
     assert locale_json["profiles.dock_state_kicker"] == "Текущий этап"
     assert locale_json["profiles.dock_state_dirty_title"] == "Сохраните последние правки"
-    assert locale_json["profiles.dock_state_archived_title"] == (
-        "Восстановите архивный профиль"
-    )
+    assert locale_json["profiles.dock_state_archived_title"] == ("Восстановите архивный профиль")
     assert locale_json["profiles.wizard_export_profile_saved"] == "Сохранённый профиль #{id}"
     assert locale_json["profiles.wizard_export_state_unsaved_existing"] == (
         "Сначала сохраните последние правки перед скачиванием."
@@ -1650,14 +1648,10 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_bookmarks_review_title"] == (
         "Как настроены управляемые закладки"
     )
-    assert locale_json["profiles.wizard_bookmarks_review_nested"] == (
-        "Вложенные деревья закладок"
-    )
+    assert locale_json["profiles.wizard_bookmarks_review_nested"] == ("Вложенные деревья закладок")
     assert locale_json["profiles.wizard_bookmarks_review_open"] == "Открыть"
     assert locale_json["profiles.wizard_bookmarks_handoff_title"] == "Редактор закладок"
-    assert locale_json["profiles.wizard_bookmarks_open_action"] == (
-        "Открыть Все настройки"
-    )
+    assert locale_json["profiles.wizard_bookmarks_open_action"] == ("Открыть Все настройки")
     assert locale_json["profiles.wizard_bookmarks_row_state_toolbar"] == "Закладка на панели"
     assert locale_json["profiles.wizard_managed_bookmarks_row_state_invalid"] == (
         "JSON во вложенных элементах требует внимания"
@@ -1691,22 +1685,20 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
     assert locale_json["profiles.wizard_trust_auth_workflow_title"] == (
         "Сценарий корпоративного доверия и входа"
     )
-    assert locale_json["profiles.wizard_step_memory_title"] == (
-        "Недавно изменено"
-    )
+    assert locale_json["profiles.wizard_step_memory_title"] == ("Недавно изменено")
     assert locale_json["profiles.wizard_step_memory_open"] == "Открыть шаг"
     assert locale_json["profiles.wizard_step_memory_current"] == "Вы уже здесь"
     assert locale_json["profiles.wizard_export_boundary_register_title"] == (
         "Что сознательно остаётся во Всех настройках"
     )
-    assert locale_json["profiles.wizard_export_drilldown_title"] == (
-        "Детальный технический разбор"
-    )
+    assert locale_json["profiles.wizard_export_drilldown_title"] == ("Детальный технический разбор")
     assert locale_json["profiles.wizard_certificates_state_with_roots"] == (
         "Установлено: {count} • Включены корпоративные корневые сертификаты"
     )
     assert locale_json["profiles.wizard_doh_state_provider"] == "Свой поставщик"
-    assert locale_json["profiles.wizard_ai_generative_controls_title"] == "Настройки генеративного ИИ"
+    assert (
+        locale_json["profiles.wizard_ai_generative_controls_title"] == "Настройки генеративного ИИ"
+    )
     assert locale_json["profiles.wizard_permissions_state_strict"] == (
         "Настроено: {configured} • Строгих: {strict}"
     )
@@ -1755,5 +1747,6 @@ def _assert_ru_locale_catalog(locale_json: dict[str, str]) -> None:
         "Произвольные ExtensionSettings"
     )
     assert locale_json["profiles.wizard_extensions_advanced_count"] == "Настроено: {count}"
+
 
 __all__ = [name for name in globals() if not name.startswith("__")]

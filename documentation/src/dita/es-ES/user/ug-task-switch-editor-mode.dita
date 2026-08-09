@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-switch-editor-mode" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Cambiar de modo de edición</title>
-  <shortdesc>Alterne entre Guiado, Todos los ajustes y JSON para el mismo perfil guardado mediante el contexto compartido y compacto del perfil.</shortdesc>
+  <shortdesc>Alterne entre Guiado, <uicontrol>Todos los ajustes</uicontrol> y JSON para el mismo perfil guardado mediante el contexto compartido y compacto del perfil.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, Biblioteca, Todos los ajustes, Guiado, JSON o Superficie de comparación.</p></prereq>
+    <prereq><p>Abra BPM en el navegador y mantenga disponible un perfil, <uicontrol>Biblioteca</uicontrol>, <uicontrol>Todos los ajustes</uicontrol>, Guiado, JSON o Superficie de comparación.</p></prereq>
     <context><p>El contexto compartido y compacto muestra el nombre, estado, canal de esquema y señal de validación del perfil actual. Cambiar de modo modifica la superficie de edición, no el perfil guardado; guarde los cambios sin guardar antes de cambiar de superficie.</p></context>
     <steps>
       <step><cmd>Confirme que el perfil actual esté guardado y tenga un ID visible.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
-      <step><cmd>Elija el modo de destino: Guiado para flujos de trabajo comunes, Todos los ajustes para una inspección completa o JSON para trabajo con documentos sin procesar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
+      <step><cmd>Elija el modo de destino: Guiado para flujos de trabajo comunes, <uicontrol>Todos los ajustes</uicontrol> para una inspección completa o JSON para trabajo con documentos sin procesar.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Abra el modo de destino y compruebe el contexto compacto: nombre, estado, canal de esquema y señal de validación del perfil.</cmd><info><p>Resultado esperado: BPM mantiene claros el perfil, la superficie del editor, la configuración regional y el tema seleccionados mientras trabaja.</p></info></step>
       <step><cmd>Vuelve al modo anterior solo después de guardar o descartar intencionalmente los cambios.</cmd><info><note type="warning">Guarde o descarte deliberadamente los cambios antes de salir de un editor, cerrar una pestaña o confirmar una acción irreversible.</note></info></step>
     </steps>
     <result><p>Está trabajando en el mismo perfil en el modo editor que se ajusta a la tarea actual.</p></result>
-    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la Biblioteca.</p></postreq>
+    <postreq><p>Recuperación: si el estado visible no está claro, deje de editar, lea el mensaje de estado actual, actualice una vez y vuelva a abrir el perfil desde la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-choose-editor-surface"/>

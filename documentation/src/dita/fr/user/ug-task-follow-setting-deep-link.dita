@@ -4,8 +4,8 @@
   <title>Ouvrir les liens de paramètre et de documentation</title>
   <shortdesc>Ouvrez un emplacement ciblé de l'éditeur ou la rubrique exacte correspondant à une politique prise en charge ou à un paramètre géré connu.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres ou une autre interface BPM contenant un lien vers un paramètre.</p></prereq>
-    <context><p>Les liens directs de l'éditeur ciblent un paramètre ou un emplacement brut. Dans Tous les paramètres, l'icône d'information cerclée distincte ouvre la documentation résolue par le manifeste pour chaque politique prise en charge et chaque paramètre géré connu.</p></context>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> ou une autre interface BPM contenant un lien vers un paramètre.</p></prereq>
+    <context><p>Les liens directs de l'éditeur ciblent un paramètre ou un emplacement brut. Dans <uicontrol>Tous les paramètres</uicontrol>, l'icône d'information cerclée distincte ouvre la documentation résolue par le manifeste pour chaque politique prise en charge et chaque paramètre géré connu.</p></context>
     <steps>
       <step><cmd>Pour une politique prise en charge ou un paramètre géré connu, activez l'icône d'information cerclée à côté de sa ligne.</cmd><info><p>Résultat attendu : la documentation localisée s'ouvre dans un nouvel onglet sans sélectionner la ligne ni modifier les données du profil.</p></info></step>
       <step><cmd>Confirmez la destination de documentation et l'élément actif de l'arborescence.</cmd><info><p>Résultat attendu : l'arborescence se développe de « Documents » au guide et à la section propriétaires, puis à la rubrique exacte, visible et active.</p></info></step>

@@ -65,5 +65,5 @@ fallback contract. Amend this ADR before adding a dependency or replacing the se
 Focused check:
 
 ```bash
-./.venv/bin/pytest -q tests/test_product_documentation_release_contract.py
+./.venv/bin/pytest -q tests/contract/docs/general/test_product_documentation_release_contract.py
 ```

@@ -1,4 +1,3 @@
-(() => {
     const API_ERROR_MESSAGE_KEYS = new Map([
         ["Expected policies.json root object", "profiles.error_expected_policies_document_root"],
         ["Expected policies to be an object", "profiles.error_expected_policies_object"],
@@ -87,8 +86,8 @@
         return documentObj.policies;
     }
 
-    function parseEditorPolicyDocument(text, mode) {
-        const parsed = fromSerializedEditorValue(text, mode);
+    function parseEditorPolicyDocument(text) {
+        const parsed = fromSerializedEditorValue(text);
         return toFirefoxPoliciesDocument(toInternalFlags(parsed));
     }
 
@@ -107,24 +106,18 @@
         return flags;
     }
 
-    function fromSerializedEditorValue(text, mode) {
+    function fromSerializedEditorValue(text) {
         if (!text || !text.trim()) return {};
-        return mode === "yaml" ? window.jsyaml.load(text) : JSON.parse(text);
+        return JSON.parse(text);
     }
 
-    function toEditorValue(obj, mode) {
+    function toEditorValue(obj) {
         const documentObj = toFirefoxPoliciesDocument(obj);
-        if (mode === "yaml") {
-            return window.jsyaml.dump(documentObj, {
-                skipInvalid: true,
-                sortKeys: false,
-            });
-        }
         return JSON.stringify(documentObj, null, 2);
     }
 
-    function fromEditorValue(text, mode) {
-        return toInternalFlags(fromSerializedEditorValue(text, mode));
+    function fromEditorValue(text) {
+        return toInternalFlags(fromSerializedEditorValue(text));
     }
 
     async function readErrorPayload(res) {
@@ -183,7 +176,7 @@
         };
     }
 
-    async function listProfiles(filters = null, fetchImpl = fetch, locationRef = window.location, documentRef = document) {
+    function buildProfileListUrl(filters = null, locationRef = window.location, documentRef = document) {
         const resolvedFilters = filters || readProfileListFilters(documentRef);
         const url = new URL("/api/profiles", locationRef.origin);
         if (resolvedFilters.q) url.searchParams.set("q", resolvedFilters.q);
@@ -196,9 +189,27 @@
         }
         url.searchParams.set("sort", resolvedFilters.sort || "updated_at");
         url.searchParams.set("order", resolvedFilters.order || "desc");
+        return url;
+    }
+
+    async function listProfiles(filters = null, fetchImpl = fetch, locationRef = window.location, documentRef = document) {
+        const url = buildProfileListUrl(filters, locationRef, documentRef);
         const res = await fetchImpl(url.toString());
         if (!res.ok) throw new Error(await readError(res));
         return await res.json();
+    }
+
+    async function getProfileLibraryPage(filters = null, fetchImpl = fetch, locationRef = window.location, documentRef = document) {
+        const url = buildProfileListUrl(filters, locationRef, documentRef);
+        const res = await fetchImpl(url.toString());
+        if (!res.ok) throw new Error(await readError(res));
+        const items = await res.json();
+        const filtered = Number(res.headers.get("X-BPM-Profile-Filtered"));
+        const total = Number(res.headers.get("X-BPM-Profile-Total"));
+        if (!Number.isFinite(filtered) || !Number.isFinite(total)) {
+            throw new Error("Profile library response is missing summary headers.");
+        }
+        return { items, stats: { filtered, total } };
     }
 
     async function getProfileLibraryStats(filters = null, fetchImpl = fetch, locationRef = window.location, documentRef = document) {
@@ -285,7 +296,7 @@
         return await res.json();
     }
 
-    window.BPMProfilesData = {
+    export {
         toEditorValue,
         fromEditorValue,
         parseEditorPolicyDocument,
@@ -295,7 +306,9 @@
         setPolicyValue,
         readError,
         profileRequestError,
+        buildProfileListUrl,
         listProfiles,
+        getProfileLibraryPage,
         getProfileLibraryStats,
         getProfile,
         createProfile,
@@ -307,4 +320,3 @@
         resetProfilesLibrary,
         validateFlags,
     };
-})();

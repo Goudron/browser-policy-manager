@@ -10,18 +10,28 @@ from tests.docs_index import doc_path_from_index
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
-AUDIT_JSON = REPOSITORY_ROOT / "docs/architecture/product-documentation-content-coverage-audit-0.9.0.json"
-AUDIT_MD = REPOSITORY_ROOT / "docs/architecture/product-documentation-content-coverage-audit-0.9.0.md"
+AUDIT_JSON = (
+    REPOSITORY_ROOT / "docs/architecture/product-documentation-content-coverage-audit-0.9.0.json"
+)
+AUDIT_MD = (
+    REPOSITORY_ROOT / "docs/architecture/product-documentation-content-coverage-audit-0.9.0.md"
+)
 USER_INVENTORY = REPOSITORY_ROOT / "docs/architecture/product-user-capability-inventory-0.9.0.md"
-FIREFOX_INVENTORY = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+FIREFOX_INVENTORY = (
+    REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+)
 CIS_INVENTORY = REPOSITORY_ROOT / "docs/architecture/cis-documentation-inventory-0.9.0.json"
 API_INVENTORY = REPOSITORY_ROOT / "docs/architecture/api-documentation-inventory-0.9.0.md"
 API_REHOME_AUDIT = REPOSITORY_ROOT / "docs/architecture/api-integration-rehome-audit-0.9.0.json"
-ADMIN_VALIDATION = DOCUMENTATION_ROOT / "fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"
+ADMIN_VALIDATION = (
+    DOCUMENTATION_ROOT / "fixtures/admin-guide-validation/admin-guide-validation-0.9.0.json"
+)
 SCREENSHOT_FIXTURE = DOCUMENTATION_ROOT / "fixtures/screenshot-states/screenshot-states-0.9.0.json"
 ARTIFACT_POLICY = DOCUMENTATION_ROOT / "config/artifact-policy.json"
 SEARCH_CONTRACT = DOCUMENTATION_ROOT / "config/search-corpus-and-results-0.9.0.json"
-RELEASE_CONTRACT = REPOSITORY_ROOT / "docs/architecture/product-documentation-release-contract-0.9.0.md"
+RELEASE_CONTRACT = (
+    REPOSITORY_ROOT / "docs/architecture/product-documentation-release-contract-0.9.0.md"
+)
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 GUIDE_FAMILIES = (
     "user-guide",
@@ -58,8 +68,7 @@ API_ROW_RE = re.compile(
     r"\| `(?P<path>[^`]+)` \| .* \| `(?P<topic>(?:api|admin)-[a-z0-9-]+)` \|$"
 )
 WEB_ROW_RE = re.compile(
-    r"^\| `(?P<operation>WEB-[0-9]{3})` \| `(?P<method>GET)` "
-    r"\| `(?P<path>[^`]+)` \| .* \|$"
+    r"^\| `(?P<operation>WEB-[0-9]{3})` \| `(?P<method>GET)` " r"\| `(?P<path>[^`]+)` \| .* \|$"
 )
 
 pytestmark = pytest.mark.docs_contract
@@ -106,14 +115,20 @@ def _api_rows() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
 
 
 def test_content_coverage_audit_is_indexed_and_declares_m14_07_scope() -> None:
-    assert doc_path_from_index(
-        "architecture/product-documentation-content-coverage-audit-0.9.0.json",
-        status="active",
-    ) == AUDIT_JSON
-    assert doc_path_from_index(
-        "architecture/product-documentation-content-coverage-audit-0.9.0.md",
-        status="active",
-    ) == AUDIT_MD
+    assert (
+        doc_path_from_index(
+            "architecture/product-documentation-content-coverage-audit-0.9.0.json",
+            status="active",
+        )
+        == AUDIT_JSON
+    )
+    assert (
+        doc_path_from_index(
+            "architecture/product-documentation-content-coverage-audit-0.9.0.md",
+            status="active",
+        )
+        == AUDIT_MD
+    )
 
     audit = _audit()
     summary = AUDIT_MD.read_text(encoding="utf-8")
@@ -166,9 +181,9 @@ def test_every_audit_domain_has_evidence_or_named_release_blocker() -> None:
             assert domain["blocks_release"] is True
             assert domain["release_blockers"]
 
-    assert {
-        domain["id"] for domain in domains if domain["disposition"] == "release-blocker"
-    } == {"localized_screenshots"}
+    assert {domain["id"] for domain in domains if domain["disposition"] == "release-blocker"} == {
+        "localized_screenshots"
+    }
 
 
 def test_audit_counts_match_current_product_admin_firefox_cis_and_api_inventories() -> None:
@@ -200,7 +215,9 @@ def test_audit_counts_match_current_product_admin_firefox_cis_and_api_inventorie
     assert _domain("administrator_troubleshooting_diagnostics")["summary"]["topic_count"] == len(
         admin_groups["troubleshooting_and_production_readiness"][:6]
     )
-    assert _domain("administrator_production_readiness_boundaries")["summary"]["topic_count"] == len(
+    assert _domain("administrator_production_readiness_boundaries")["summary"][
+        "topic_count"
+    ] == len(
         admin_groups["requirements_and_scope"][1:]
         + admin_groups["troubleshooting_and_production_readiness"][6:]
     )
@@ -224,8 +241,7 @@ def test_audit_counts_match_current_product_admin_firefox_cis_and_api_inventorie
     assert _domain("cis_settings")["summary"] == {
         "recommendation_count": len(recommendations),
         "planned_topic_count": sum(
-            entry["publication_disposition"] == "planned-dita-topic"
-            for entry in recommendations
+            entry["publication_disposition"] == "planned-dita-topic" for entry in recommendations
         ),
         "provenance_only_count": sum(
             entry["publication_disposition"] == "provenance-only-non-publishable"
@@ -269,9 +285,10 @@ def test_locale_manifest_search_and_screenshot_states_are_reconciled() -> None:
     assert screenshot_domain["summary"]["current_fixture_capture_rows"] == len(
         screenshot_fixture["capture_matrix"]
     )
-    assert "localized screenshot capture and review" in artifact_policy[
-        "current_runtime_contract"
-    ]["required_before_shipping"]
+    assert (
+        "localized screenshot capture and review"
+        in artifact_policy["current_runtime_contract"]["required_before_shipping"]
+    )
     assert "DOC090-G09" in release_contract
     assert "Every required User Guide illustration" in release_contract
 
@@ -280,12 +297,14 @@ def test_audit_release_blockers_match_artifact_policy_and_no_other_domain_blocks
     audit = _audit()
     artifact_policy = _json(ARTIFACT_POLICY)
 
-    assert audit["release_blockers"] == artifact_policy["current_runtime_contract"][
-        "required_before_shipping"
-    ]
-    assert "localized screenshot capture and review" in _domain("localized_screenshots")[
-        "release_blockers"
-    ]
+    assert (
+        audit["release_blockers"]
+        == artifact_policy["current_runtime_contract"]["required_before_shipping"]
+    )
+    assert (
+        "localized screenshot capture and review"
+        in _domain("localized_screenshots")["release_blockers"]
+    )
     assert all(
         domain["id"] == "localized_screenshots"
         for domain in audit["domains"]

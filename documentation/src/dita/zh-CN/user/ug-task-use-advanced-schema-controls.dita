@@ -2,15 +2,15 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-use-advanced-schema-controls" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>使用高级架构控件</title>
-  <shortdesc>从“所有设置”使用高级架构面板和首选项控件，无需将“引导式编辑器”视为完整编辑器。</shortdesc>
+  <shortdesc>从“<uicontrol>所有设置</uicontrol>”使用高级架构面板和首选项控件，无需将“<uicontrol>引导式编辑器</uicontrol>”视为完整编辑器。</shortdesc>
   <taskbody>
-    <prereq><p>在 目录 中打开 所有设置。</p></prereq>
-    <context><p>高级控制仍然经过深思熟虑。 所有设置 是架构支持的策略和首选项的超集，这些策略和首选项不是一流的引导式控件。</p></context>
+    <prereq><p>在 <uicontrol>目录</uicontrol> 中打开 <uicontrol>所有设置</uicontrol>。</p></prereq>
+    <context><p>高级控制仍然经过深思熟虑。 <uicontrol>所有设置</uicontrol> 是架构支持的策略和首选项的超集，这些策略和首选项不是一流的引导式控件。</p></context>
     <steps>
-      <step><cmd>切换到 目录 并打开高级架构或首选项披露。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>检查控件是否受引导、仅限所有设置、原始、已弃用或依赖于架构。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>仅编辑配置文件目标所需的高级控制。</cmd><info><p>预期结果：所有设置 配置文件仍专注于所选任务。</p></info></step>
-      <step><cmd>返回引导、JSON 或库之前验证并保存。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
+      <step><cmd>切换到 <uicontrol>目录</uicontrol> 并打开高级架构或首选项披露。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>检查控件是否受引导、仅限<uicontrol>所有设置</uicontrol>、原始、已弃用或依赖于架构。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>仅编辑配置文件目标所需的高级控制。</cmd><info><p>预期结果：<uicontrol>所有设置</uicontrol> 配置文件仍专注于所选任务。</p></info></step>
+      <step><cmd>返回引导、JSON 或<uicontrol>库</uicontrol>之前验证并保存。</cmd><info><note type="warning">更改设置可能会影响导出的 Firefox 策略。保存之前检查源、验证和架构支持。</note></info></step>
     </steps>
     <result><p>高级设置已达到并有意更改，无需重复的默认编辑器。</p></result>
     <postreq><p>恢复：如果所选模式中不支持该控件，则保持其不变并记录模式边界。</p></postreq>

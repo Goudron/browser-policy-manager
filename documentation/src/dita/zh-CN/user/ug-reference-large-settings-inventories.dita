@@ -2,13 +2,13 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-large-settings-inventories" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>大型设置库存</title>
-  <shortdesc>当 所有设置 包含大量策略和首选项清单时，使用有界列表行为、搜索、过滤器和类别。</shortdesc>
+  <shortdesc>当 <uicontrol>所有设置</uicontrol> 包含大量策略和首选项清单时，使用有界列表行为、搜索、过滤器和类别。</shortdesc>
   <refbody>
-    <section id="a-overview"><title>概述</title><p>所有设置 可以公开许多模式支持的策略和已知的首选项。有界列表保持界面可用，并使下一个缩小操作变得明确。</p></section>
-    <section id="a-list-budget"><title>列出预算</title><p>所有设置 可以显示有界子集、计数或连续操作，而不是一次渲染每一行。</p></section>
-    <section id="a-narrowing-tools"><title>缩小工具</title><p>搜索、类别导航、源过滤器和状态过滤器是减少大量库存的受支持方法。</p></section>
-    <section id="a-performance-boundary"><title>性能边界</title><p>大库存处理是一个 UI 边界，而不是配置文件或目录中缺少设置的信号。</p></section>
-    <section id="a-recovery"><title>恢复</title><p>如果预期行不可见，请按精确的 ID 搜索、清除筛选器或在“已配置”和 目录 之间切换。</p></section>
+    <section id="a-overview"><title>概述</title><p><uicontrol>所有设置</uicontrol> 可以公开许多模式支持的策略和已知的首选项。有界列表保持界面可用，并使下一个缩小操作变得明确。</p></section>
+    <section id="a-list-budget"><title>列出预算</title><p><uicontrol>所有设置</uicontrol> 可以显示有界子集、计数或连续操作，而不是一次渲染每一行。</p></section>
+    <section id="a-narrowing-tools"><title>缩小工具</title><p>搜索、类别导航、源过滤器和状态过滤器是减少大量<uicontrol>库</uicontrol>存的受支持方法。</p></section>
+    <section id="a-performance-boundary"><title>性能边界</title><p>大<uicontrol>库</uicontrol>存处理是一个 UI 边界，而不是配置文件或<uicontrol>目录</uicontrol>中缺少设置的信号。</p></section>
+    <section id="a-recovery"><title>恢复</title><p>如果预期行不可见，请按精确的 ID 搜索、清除筛选器或在“<uicontrol>已配置</uicontrol>”和 <uicontrol>目录</uicontrol> 之间切换。</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-browse-settings-catalog"/>

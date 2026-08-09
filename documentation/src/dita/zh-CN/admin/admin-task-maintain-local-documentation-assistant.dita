@@ -5,12 +5,12 @@
   <shortdesc>在维护 BPM 文档时，保持本地化训练提示和确定性搜索边界的准确性。</shortdesc>
   <taskbody>
     <prereq><p>准备已批准的 BPM 源码修订版和文档发布流程。</p></prereq>
-    <context><p>0.9.3 中没有需要维护的本地模型、模型工件、RAG 生成、嵌入存储、引用存储或外部来源提供商。请勿为本版本未交付的功能创建维护状态。</p></context>
+    <context><p>0.9.4 中没有需要维护的本地模型、模型工件、RAG 生成、嵌入存储、引用存储或外部来源提供商。请勿为本版本未交付的功能创建维护状态。</p></context>
     <steps>
       <step><cmd>应用已批准的 BPM 源码修订版并重新构建文档。</cmd><info><p>使用正常文档流程；准备开发环境时可使用 <codeph>make docs-install-dev</codeph>。</p></info></step>
       <step><cmd>在所有受支持语言中打开已发布文档。</cmd><info><p>确认助手入口仍可用，确定性搜索仍可独立工作。</p></info></step>
       <step><cmd>在每个语言区域提交一个问题。</cmd><info><p>确认显示相应语言的训练提示，并且没有回答、来源、引用、外部声明或模型安装流程。</p></info></step>
-      <step><cmd>不要在 0.9.3 中运行模型安装或 RAG 生成命令。</cmd><info><p>这些命令属于后续版本，不能用于恢复训练提示。</p></info></step>
+      <step><cmd>不要在 0.9.4 中运行模型安装或 RAG 生成命令。</cmd><info><p>这些命令属于后续版本，不能用于恢复训练提示。</p></info></step>
       <step><cmd>记录文档修订版和验证结果。</cmd><info><p>已发布提示与确定性搜索边界不一致时，应作为文档缺陷处理。</p></info></step>
     </steps>
     <result><p>已发布门户在聊天窗口中保留本地化训练提示，并通过确定性搜索提供单独的当前信息路径。</p></result>

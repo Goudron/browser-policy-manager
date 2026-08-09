@@ -4,16 +4,16 @@
   <title>Inspecter les détails des paramètres</title>
   <shortdesc>Sélectionnez un paramètre et inspectez sa valeur, sa source, sa validation, la prise en charge du schéma et l'emplacement du produit.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez Tous les paramètres et sélectionnez une ligne de paramètres dans Révision, Configuré, Catalogue, recherche ou un lien profond.</p></prereq>
+    <prereq><p>Ouvrez <uicontrol>Tous les paramètres</uicontrol> et sélectionnez une ligne de paramètres dans Révision, Configuré, <uicontrol>Catalogue</uicontrol>, recherche ou un lien profond.</p></prereq>
     <context><p>Le panneau de détails est l'endroit sûr pour comprendre un seul paramètre avant de le modifier. Il montre la forme de la valeur, l'attribution de la source, les problèmes de validation et le contexte de navigation.</p></context>
     <steps>
-      <step><cmd>Sélectionnez la ligne de paramètres que vous devez comprendre.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Lisez la valeur actuelle, le badge source, les messages de validation et la prise en charge du schéma/canal.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
-      <step><cmd>Vérifiez l'emplacement du produit ou le lien de surface associé si le paramètre est également couvert ailleurs.</cmd><info><p>Résultat attendu : le profil Tous les paramètres reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Sélectionnez la ligne de paramètres que vous devez comprendre.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Lisez la valeur actuelle, le badge source, les messages de validation et la prise en charge du schéma/canal.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
+      <step><cmd>Vérifiez l'emplacement du produit ou le lien de surface associé si le paramètre est également couvert ailleurs.</cmd><info><p>Résultat attendu : le profil <uicontrol>Tous les paramètres</uicontrol> reste focalisé sur la tâche sélectionnée.</p></info></step>
       <step><cmd>Décidez si vous souhaitez modifier, supprimer, réinitialiser ou laisser la valeur inchangée.</cmd><info><note type="warning">La modification des paramètres peut affecter la stratégie Firefox exportée. Vérifiez la source, la validation et la prise en charge du schéma avant d'enregistrer.</note></info></step>
     </steps>
     <result><p>Vous comprenez ce que fait le paramètre dans ce profil et quelle action est sûre ensuite.</p></result>
-    <postreq><p>Récupération : si la forme de la valeur n'est pas claire, comparez avec Éditeur JSON ou laissez le paramètre inchangé jusqu'à ce que des instructions de validation soient disponibles.</p></postreq>
+    <postreq><p>Récupération : si la forme de la valeur n'est pas claire, comparez avec <uicontrol>Éditeur JSON</uicontrol> ou laissez le paramètre inchangé jusqu'à ce que des instructions de validation soient disponibles.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-edit-setting-detail"/>

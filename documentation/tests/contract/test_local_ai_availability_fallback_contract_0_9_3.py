@@ -116,7 +116,10 @@ def test_busy_cancelled_degraded_and_web_offline_have_safe_distinct_behavior() -
     assert states["cancelled"]["kind"] == "terminal_operation_outcome"
     assert "terminal cancellation event" in states["cancelled"]["api_behavior"]
     assert states["degraded"]["assistant_ready"] is False
-    assert "grounding, security, privacy, or resource guard is degraded" in states["degraded"]["ui_behavior"]
+    assert (
+        "grounding, security, privacy, or resource guard is degraded"
+        in states["degraded"]["ui_behavior"]
+    )
     assert states["web-offline"]["assistant_ready"] is True
     assert "local-only" in states["web-offline"]["ui_behavior"]
     assert "no further provider call" in states["web-offline"]["api_behavior"]

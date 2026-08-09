@@ -4,7 +4,7 @@
   <title>Prüfstatus in „Alle Einstellungen“</title>
   <shortdesc>Verwenden Sie diese Referenz, um die Status „sauber“, „ungültig“, „CIS manuelle Überprüfung“, „Roh“, „unbekannt“, „veraltet“ und „importiert“ zu interpretieren.</shortdesc>
   <refbody>
-    <section id="a-overview"><title>Übersicht</title><p>Überprüfungsstatus erklären, warum Alle Einstellungen um Aufmerksamkeit bittet, bevor der Benutzer Routinewerte bearbeitet.</p></section>
+    <section id="a-overview"><title>Übersicht</title><p>Überprüfungsstatus erklären, warum <uicontrol>Alle Einstellungen</uicontrol> um Aufmerksamkeit bittet, bevor der Benutzer Routinewerte bearbeitet.</p></section>
     <section id="a-clean-profile"><title>Sauberes Profil</title><p>Ein sauberes Profil weist keine verbleibenden Überprüfungselemente auf. Es kann weiterhin konfigurierte Einstellungen enthalten; Es gibt einfach keine Aufmerksamkeitszustände, die BPM erkennen kann.</p></section>
     <section id="a-invalid-items"><title>Ungültige Elemente</title><p>Ungültige Elemente haben Werte, die die aktuelle Validierung für den ausgewählten Schemakanal nicht bestehen und vor der Übergabe korrigiert oder entfernt werden sollten.</p></section>
     <section id="a-cis-manual-review"><title>CIS-Handbuchüberprüfung</title><p>CIS-Elemente zur manuellen Überprüfung erfordern eine menschliche Entscheidung oder eine externe Überprüfung. BPM kann den Artikel aufdecken, ohne eine zertifizierte Konformität zu beanspruchen.</p></section>

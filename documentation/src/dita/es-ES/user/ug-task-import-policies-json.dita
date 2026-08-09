@@ -2,17 +2,23 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-import-policies-json" xml:lang="es-ES" audience="user" product="bpm-0-9-0" platform="web">
   <title>Importar Firefox policies.json en BPM</title>
-  <shortdesc>Esta tarea describe el escenario completo «Importar Firefox policies.json en BPM»: decisiones, acciones, resultado esperado, advertencias y recuperación.</shortdesc>
+  <shortdesc>Importe un documento canónico Firefox Enterprise <filepath>policies.json</filepath> y cree a partir de él un perfil BPM normalizado.</shortdesc>
   <taskbody>
-    <prereq><p>Abra BPM y compruebe el contexto de trabajo, el esquema de Firefox o el estado del perfil necesarios para esta tarea.</p></prereq>
-    <context><p>Este tema describe el escenario de usuario completo para la localización española sin resumen reducido.</p></context>
+    <prereq><p>Prepare un documento Firefox Enterprise con un objeto <codeph>policies</codeph> de nivel superior y un nombre de perfil BPM único.</p></prereq>
+    <context><p>La importación cruza un límite de producto: <filepath>policies.json</filepath> es el documento de Firefox, mientras que el perfil BPM creado almacena indicadores normalizados, canal de esquema, estado de validación y metadatos del perfil.</p></context>
     <steps>
-      <step><cmd>Abra el área de BPM correspondiente a «Importar Firefox policies.json en BPM».</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Revise los valores actuales, el estado del perfil, las indicaciones y los límites del esquema elegido.</cmd><info><p>Resultado esperado: el perfil permanece coherente y la acción se puede explicar durante la revisión.</p></info></step>
-      <step><cmd>Cambie solo los valores necesarios para el objetivo del perfil y evite cambios vecinos accidentales.</cmd><info><note type="warning">Advertencia: compruebe el esquema, el estado del perfil y las consecuencias antes de guardar.</note></info></step>
+      <step><cmd>En la <uicontrol>Biblioteca</uicontrol>, elija la acción de importación de políticas de Firefox y seleccione el archivo JSON.</cmd><info><p>Resultado esperado: BPM lee el documento y prepara una solicitud de importación.</p></info></step>
+      <step><cmd>Escriba un nombre de perfil único y elija el canal de esquema Firefox Release o ESR.</cmd><info><p>El canal de esquema controla la validación y qué políticas quedan admitidas, obsoletas, desconocidas o conservadas sin procesar después de la importación.</p></info></step>
+      <step><cmd>Confirme la importación y espere el estado de la <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Resultado esperado: BPM crea un perfil guardado y vuelve al flujo de <uicontrol>Biblioteca</uicontrol> o editor.</p><note type="warning">No trate el archivo importado como el modelo interno de BPM. Vuelva a exportar tras la normalización si necesita un documento Firefox actualizado.</note></info></step>
     </steps>
-    <result><p>El perfil o la vista de BPM queda en el estado esperado para este escenario.</p></result>
-    <postreq><p>Recuperación: si el resultado no coincide, vuelva al área propietaria, deshaga el último cambio o abra el tema relacionado.</p></postreq>
+    <result><p>El documento Firefox se convierte en un perfil BPM con ID de perfil, revisión, canal de esquema y estado de validación.</p></result>
+    <example id="a-import-policies-document"><title>Documento Firefox policies.json completo</title><p>El archivo seleccionado es un documento Firefox completo, no metadatos de perfil BPM ni un fragmento interno de indicadores:</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
+    <postreq><p>Recuperación: si la importación falla por JSON mal formado, nombre duplicado, tipo de contenido no admitido, discrepancia de esquema, política desconocida o errores de validación, conserve el archivo original, lea el estado de la <uicontrol>Biblioteca</uicontrol>, corrija la entrada o el nombre y vuelva a intentarlo una vez desde un estado limpio de la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-schema-aware-behavior"/>

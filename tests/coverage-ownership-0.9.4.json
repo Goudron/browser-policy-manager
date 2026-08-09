@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "backlog_item": "BPM094-M10-06",
+  "purpose": "Declare the complete, fail-closed coverage gates without treating untested code as accepted debt.",
+  "python_application": {
+    "coverage_scopes": [
+      {
+        "id": "release-implementation-boundary",
+        "owner": "release-implementation-coverage",
+        "make_target": "coverage-release-implementation",
+        "modules": [
+          "app/ai/least_privilege.py",
+          "app/ai/model_management.py",
+          "app/documentation/training_notice.py"
+        ]
+      },
+      {
+        "id": "optional-ai-incubation",
+        "owner": "ai-incubation-tests",
+        "make_target": "test-ai-incubation-coverage",
+        "modules": [
+          "app/ai/e5_runtime.py",
+          "app/ai/local_inference_worker.py",
+          "app/ai/rag_bootstrap.py",
+          "app/documentation/answer_validation.py",
+          "app/documentation/assistant_capabilities.py",
+          "app/documentation/conversation.py",
+          "app/documentation/conversation_context.py",
+          "app/documentation/conversation_diagnostics.py",
+          "app/documentation/conversation_stream.py",
+          "app/documentation/evidence.py",
+          "app/documentation/evidence_relevance.py",
+          "app/documentation/local_assistant_runtime.py",
+          "app/documentation/response_timing.py",
+          "app/documentation/retrieval.py",
+          "app/documentation/topic_scope.py",
+          "app/documentation/web_evidence.py",
+          "app/documentation/web_evidence_consent.py",
+          "app/documentation/web_evidence_merge.py"
+        ]
+      }
+    ],
+    "line_threshold_percent": 100,
+    "branch_threshold_percent": 100,
+    "coverage_omit": false,
+    "semantic_owners": [
+      {
+        "id": "default-release-adapters",
+        "release_boundary_category": "default_release",
+        "ci_owners": [
+          "unit-tests",
+          "integration-tests",
+          "postgres-integration",
+          "contract-tests",
+          "chromium-tests"
+        ],
+        "boundary": "Default-release API, database, service, web and template adapters are exercised through their semantic layer owners. They are not omitted from coverage configuration and cannot be represented by a synthetic line-coverage result."
+      },
+      {
+        "id": "optional-incubation-delivery-boundary",
+        "release_boundary_category": "optional_incubation",
+        "ci_owners": ["ai-incubation-tests"],
+        "boundary": "The optional modules are not loaded by the base wheel; their complete implementation inventory is the optional-ai-incubation strict coverage scope above."
+      }
+    ]
+  },
+  "documentation_library": {
+    "policy": "documentation/config/coverage-policy-0.9.4.json",
+    "line_threshold_percent": 100,
+    "branch_threshold_percent": 100,
+    "execution_layers": [
+      "documentation/buildlib/pdf.py",
+      "documentation/buildlib/publishing.py"
+    ]
+  },
+  "javascript_pure_modules": {
+    "include_glob": "app/static/profiles_modules/**",
+    "modules": [
+      "app/static/profiles_modules/compare_state.mjs",
+      "app/static/profiles_modules/dirty_route_guard.mjs",
+      "app/static/profiles_modules/policy_document.mjs",
+      "app/static/profiles_modules/preference_values.mjs",
+      "app/static/profiles_modules/profile_list_url.mjs",
+      "app/static/profiles_modules/review_state.mjs",
+      "app/static/profiles_modules/workspace_state.mjs"
+    ],
+    "line_threshold_percent": 100,
+    "branch_threshold_percent": 100,
+    "function_threshold_percent": 100,
+    "boundary": "This gate covers only extracted dependency-free modules. DOM, network, browser, and route adapters remain covered by their semantic Node and Chromium owners; they are not silently omitted from this declared pure-module gate."
+  },
+  "artifacts": {
+    "python": "artifacts/coverage/python/",
+    "documentation": "documentation/reports/coverage/",
+    "javascript": "artifacts/coverage/frontend/"
+  }
+}

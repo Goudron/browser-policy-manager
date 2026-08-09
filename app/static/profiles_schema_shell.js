@@ -1,7 +1,6 @@
-(() => {
-    function create(config) {
-        return window.BPMProfilesSchemaShellSections.create(config);
+    function create({ components = {}, ...config }) {
+        const { createSections } = components;
+        return createSections(config);
     }
 
-    window.BPMProfilesSchemaShell = { create };
-})();
+    export { create };

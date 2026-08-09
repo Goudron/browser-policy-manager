@@ -38,7 +38,7 @@
     "generated_answer_or_source_for_rejected_evidence": false
   },
   "verification": {
-    "runtime": ["tests/test_evidence_relevance_093.py", "tests/test_grounded_conversation_orchestration_093.py"],
+    "runtime": ["tests/integration/ai/incubation/test_evidence_relevance.py", "tests/integration/ai/incubation/test_grounded_conversation_orchestration.py"],
     "contract": "documentation/tests/contract/test_assistant_evidence_relevance_contract_0_9_3.py"
   }
 }

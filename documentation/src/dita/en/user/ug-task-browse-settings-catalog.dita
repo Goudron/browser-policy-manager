@@ -2,14 +2,14 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-browse-settings-catalog" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Browse the settings catalog</title>
-  <shortdesc>Use Catalog mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
+  <shortdesc>Use <uicontrol>Catalog</uicontrol> mode to browse every supported policy and known managed preference for the selected schema.</shortdesc>
   <taskbody>
-    <prereq><p>Open a saved profile in All settings.</p></prereq>
-    <context><p>Catalog mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
+    <prereq><p>Open a saved profile in <uicontrol>All settings</uicontrol>.</p></prereq>
+    <context><p><uicontrol>Catalog</uicontrol> mode is the full visual inventory. It includes configured and available settings while keeping advanced controls behind deliberate disclosures.</p></context>
     <steps>
-      <step><cmd>Switch to Catalog mode.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Browse categories for supported policies and known managed preferences.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
-      <step><cmd>Use category cards or search to narrow the inventory.</cmd><info><p>Expected result: the All settings profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Switch to <uicontrol>Catalog</uicontrol> mode.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Browse categories for supported policies and known managed preferences.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
+      <step><cmd>Use category cards or search to narrow the inventory.</cmd><info><p>Expected result: the <uicontrol>All settings</uicontrol> profile remains focused on the selected task.</p></info></step>
       <step><cmd>Select a setting before applying, editing, or resetting a value.</cmd><info><note type="warning">Changing settings can affect the exported Firefox policy. Review source, validation, and schema support before saving.</note></info></step>
     </steps>
     <result><p>You can find supported policies and known preferences without using raw JSON first.</p></result>

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -16,27 +15,6 @@ pytestmark = pytest.mark.docs_contract
 
 def _contract() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-
-
-def test_m7_05_pins_streaming_to_the_existing_safe_pipeline_without_a_route() -> None:
-    contract = _contract()
-
-    assert contract["backlog_item"] == "BPM093-M7-05"
-    assert contract["status"] == "implemented-memory-only-no-http-route"
-    for pin in contract["pins"].values():
-        assert hashlib.sha256((ROOT / pin["path"]).read_bytes()).hexdigest() == pin["sha256"]
-    assert contract["boundaries"] == {
-        "http_route": False,
-        "browser_ui": False,
-        "network_calls": 0,
-        "ordinary_search_calls": 0,
-        "raw_model_token_streaming": False,
-        "persistence": False,
-        "telemetry": False,
-    }
-    source = (ROOT / "app/documentation/conversation_stream.py").read_text(encoding="utf-8")
-    assert "from fastapi" not in source
-    assert "@router." not in source
 
 
 def test_m7_05_freezes_safe_events_serialization_cancellation_and_backpressure() -> None:

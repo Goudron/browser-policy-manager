@@ -56,13 +56,11 @@ def _has_table(table: str) -> bool:
     bind = _bind()
     if bind.dialect.name == "sqlite":
         row = bind.execute(
-            sa.text(
-                """
+            sa.text("""
                 SELECT name
                 FROM sqlite_master
                 WHERE type = 'table' AND name = :table
-                """
-            ),
+                """),
             {"table": table},
         ).first()
         return row is not None

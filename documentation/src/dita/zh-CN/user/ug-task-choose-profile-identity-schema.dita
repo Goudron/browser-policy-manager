@@ -4,7 +4,7 @@
   <title>设置“配置档案身份”和架构通道</title>
   <shortdesc>在配置引导设置之前选择已保存的配置文件名称和 Firefox 架构通道。</shortdesc>
   <taskbody>
-    <prereq><p>在 引导式编辑器 中打开新的或保存的配置文件。</p></prereq>
+    <prereq><p>在 <uicontrol>引导式编辑器</uicontrol> 中打开新的或保存的配置文件。</p></prereq>
     <context><p>使用第 1 步设置名称和架构通道。它们决定验证和可用控件。</p></context>
     <steps>
       <step><cmd>确认您正在编辑预期的配置文件草稿。</cmd><info><p>预期结果：引导配置文件保持一致。</p></info></step>

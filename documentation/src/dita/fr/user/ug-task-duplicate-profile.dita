@@ -5,9 +5,9 @@
   <shortdesc>Créez un brouillon guidé nommé à partir d'un profil enregistré existant lorsque vous souhaitez un point de départ sûr pour les modifications.</shortdesc>
   <taskbody>
     <prereq><p>Le profil source est visible dans la bibliothèque et vous avez confirmé son identité de ligne.</p></prereq>
-    <context><p>Dupliquer crée un brouillon de profil distinct basé sur le profil enregistré sélectionné. Cela ne modifie pas le profil source.</p></context>
+    <context><p><uicontrol>Dupliquer</uicontrol> crée un brouillon de profil distinct basé sur le profil enregistré sélectionné. Cela ne modifie pas le profil source.</p></context>
     <steps>
-      <step><cmd>Choisissez Dupliquer sur la ligne du profil source.</cmd><info><p>Résultat attendu : BPM ouvre un panneau de nom de clone.</p></info></step>
+      <step><cmd>Choisissez <uicontrol>Dupliquer</uicontrol> sur la ligne du profil source.</cmd><info><p>Résultat attendu : BPM ouvre un panneau de nom de clone.</p></info></step>
       <step><cmd>Entrez un nom clair qui diffère des noms de profil existants.</cmd><info><p>BPM nécessite un nom et signale une validation de nom en double avant de confirmer.</p></info></step>
       <step><cmd>Confirmez l'action en double.</cmd><info><note type="warning">Un doublon est distinct de la source. Les modifications ultérieures apportées à un profil ne mettent pas à jour l'autre.</note></info></step>
     </steps>

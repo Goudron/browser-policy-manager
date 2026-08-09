@@ -5,7 +5,7 @@
   <shortdesc>Abra la página de comparación en una nueva pestaña antes de seleccionar dos perfiles guardados.</shortdesc>
   <taskbody>
     <prereq><p>La biblioteca está abierta y existen al menos dos perfiles guardados.</p></prereq>
-    <context><p>«Comparar ajustes de perfiles» es una página dedicada a los perfiles guardados. Mantiene el idioma y el tema actuales y no reemplaza la pestaña Biblioteca.</p>
+    <context><p>«<uicontrol>Comparar ajustes de perfiles</uicontrol>» es una página dedicada a los perfiles guardados. Mantiene el idioma y el tema actuales y no reemplaza la pestaña <uicontrol>Biblioteca</uicontrol>.</p>
       <fig id="screenshot-compare-profiles">
         <title>Página «Comparar ajustes de perfiles»</title>
         <image keyref="screenshot.compare-profiles" placement="break" scalefit="yes" align="center">
@@ -14,11 +14,11 @@
       </fig>
     </context>
     <steps>
-      <step><cmd>Elija la acción «Comparar ajustes de perfiles» en la Biblioteca.</cmd><info><p>Resultado esperado: BPM abre la interfaz de comparación en una nueva pestaña del navegador.</p></info></step>
-      <step><cmd>Utilice los campos de búsqueda izquierdo y derecho para elegir el Perfil A y el Perfil B.</cmd><info><note type="warning">Comparar lee el estado del perfil guardado. Guarde los cambios del editor antes de confiar en la comparación.</note></info></step>
+      <step><cmd>Elija la acción «<uicontrol>Comparar ajustes de perfiles</uicontrol>» en la <uicontrol>Biblioteca</uicontrol>.</cmd><info><p>Resultado esperado: BPM abre la interfaz de comparación en una nueva pestaña del navegador.</p></info></step>
+      <step><cmd>Utilice los campos de búsqueda izquierdo y derecho para elegir el <uicontrol>Perfil A</uicontrol> y el <uicontrol>Perfil B</uicontrol>.</cmd><info><note type="warning">Comparar lee el estado del perfil guardado. Guarde los cambios del editor antes de confiar en la comparación.</note></info></step>
     </steps>
-    <result><p>La superficie de comparación está lista para la selección independiente de Perfil A y Perfil B.</p></result>
-    <postreq><p>Recuperación: si la pestaña Comparar se abre sin los perfiles esperados, regrese a la Biblioteca, actualícela y confirme que ambos perfiles estén guardados y sean visibles.</p></postreq>
+    <result><p>La superficie de comparación está lista para la selección independiente de <uicontrol>Perfil A</uicontrol> y <uicontrol>Perfil B</uicontrol>.</p></result>
+    <postreq><p>Recuperación: si la pestaña Comparar se abre sin los perfiles esperados, regrese a la <uicontrol>Biblioteca</uicontrol>, actualícela y confirme que ambos perfiles estén guardados y sean visibles.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-concept-comparison-workflow"/>

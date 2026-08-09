@@ -1,124 +1,86 @@
 # app/core/db.py
 from __future__ import annotations
 
-import importlib
-import importlib.util
+import asyncio
 from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, cast
+from typing import cast
 
-from sqlalchemy import MetaData, create_engine, inspect
-from sqlalchemy.engine import Connection, Engine
+from fastapi import Request
+from sqlalchemy import inspect, text
+from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import NullPool
 
-from app.core.config import get_settings
+from app.core.config import Settings, get_settings
 
-# Cached metadata instance
-_metadata: MetaData | None = None
-_LEGACY_PROFILE_TABLE = "policies"
-_CURRENT_PROFILE_TABLE = "profiles"
-_LEGACY_PROFILE_INDEXES = (
-    "ix_policies_created_at",
-    "ix_policies_name",
-    "ix_policies_owner",
-    "ix_policies_updated_at",
-    "uq_policies_name",
-    "ix_profiles_owner",
-    "uq_profiles_name",
-)
-_CURRENT_PROFILE_INDEX_DDL = (
-    "CREATE INDEX IF NOT EXISTS ix_profiles_created_at ON profiles (created_at)",
-    "CREATE UNIQUE INDEX IF NOT EXISTS ix_profiles_name ON profiles (name)",
-    "CREATE INDEX IF NOT EXISTS ix_profiles_updated_at ON profiles (updated_at)",
-    "CREATE INDEX IF NOT EXISTS ix_profiles_schema_version ON profiles (schema_version)",
-    "CREATE INDEX IF NOT EXISTS ix_profiles_deleted_at ON profiles (deleted_at)",
-)
-
-
-def _resolve_metadata() -> MetaData:
-    """
-    Resolve project's central SQLAlchemy MetaData dynamically.
-
-    Resolution order:
-
-      1) Import `app.models` and use:
-         * `metadata` attribute if present, or
-         * `Base.metadata` if `Base` is exported.
-
-      2) Import `app.models.profile` (current single-model layout) and use
-         its `Base.metadata`.
-
-      3) Import `app.models.base` and use its `Base.metadata` if present.
-
-      4) Fallback: create a local declarative base. This is only used as a
-         last resort (e.g. in very minimal test setups).
-
-    Service-layer tests call `init_db()` directly and then use
-    `ProfileService` on the resulting schema, so it is important that this
-    function returns metadata that actually contains the ORM tables.
-    """
-    # 1) app.models package
-    try:
-        models = importlib.import_module("app.models")
-        md = getattr(models, "metadata", None)
-        if isinstance(md, MetaData):
-            return md
-
-        base = getattr(models, "Base", None)
-        if base is not None and hasattr(base, "metadata"):
-            return cast(MetaData, base.metadata)
-    except Exception:
-        # Best-effort; fall through to the next strategy.
-        pass
-
-    # 2) app.models.profile module (current single-model layout)
-    try:
-        mod_profile = importlib.import_module("app.models.profile")
-        base = getattr(mod_profile, "Base", None)
-        if base is not None and hasattr(base, "metadata"):
-            return cast(MetaData, base.metadata)
-    except Exception:
-        # If this fails, we try the optional base module next.
-        pass
-
-    # 3) app.models.base module (optional)
-    try:
-        if importlib.util.find_spec("app.models.base") is not None:
-            mod_base = importlib.import_module("app.models.base")
-            base = getattr(mod_base, "Base", None)
-            if base is not None and hasattr(base, "metadata"):
-                return cast(MetaData, base.metadata)
-    except Exception:
-        # Final fallback below.
-        pass
-
-    # 4) Fallback - local Base
-    from sqlalchemy.orm import declarative_base
-
-    LocalBase = declarative_base()
-    return LocalBase.metadata
+EXPECTED_DATABASE_REVISION = "20260804_add_profile_name_casefold"
+EXPECTED_PROFILE_COLUMNS = {
+    "id",
+    "name",
+    "name_casefold",
+    "description",
+    "schema_version",
+    "flags",
+    "compliance",
+    "revision",
+    "created_at",
+    "updated_at",
+    "deleted_at",
+}
+EXPECTED_PROFILE_INDEXES = {
+    "ix_profiles_name",
+    "ix_profiles_name_casefold",
+    "ix_profiles_schema_version",
+    "ix_profiles_created_at",
+    "ix_profiles_updated_at",
+    "ix_profiles_deleted_at",
+}
 
 
-def get_metadata() -> MetaData:
-    """Return cached MetaData, resolving it on first use."""
-    global _metadata
-    if _metadata is None:
-        _metadata = _resolve_metadata()
-    return _metadata
+class DatabaseReadinessError(RuntimeError):
+    """The configured database is not an exact, application-readable BPM head."""
 
 
-# Settings
-_settings = get_settings()
+def _assert_release_schema_ready(connection: Connection) -> None:
+    """Validate the release schema without mutating or attempting to repair it."""
+    inspector = inspect(connection)
+    tables = set(inspector.get_table_names())
+    if "alembic_version" not in tables:
+        raise DatabaseReadinessError(
+            "Database is not Alembic-managed; restore a verified backup and upgrade a clean "
+            "candidate before starting BPM"
+        )
+    if "profiles" not in tables or "policies" in tables:
+        raise DatabaseReadinessError(
+            "Database profile tables do not match the BPM 0.9.4 release schema"
+        )
+
+    revisions = connection.execute(text("SELECT version_num FROM alembic_version")).scalars().all()
+    if revisions != [EXPECTED_DATABASE_REVISION]:
+        raise DatabaseReadinessError(
+            "Database revision is not the BPM 0.9.4 head; run the documented verified-backup "
+            "candidate upgrade before starting BPM"
+        )
+
+    columns = {column["name"] for column in inspector.get_columns("profiles")}
+    if columns != EXPECTED_PROFILE_COLUMNS:
+        raise DatabaseReadinessError(
+            "Database is stamped at BPM 0.9.4 head but has a partial/incompatible profile shape"
+        )
+    indexes = {index["name"] for index in inspector.get_indexes("profiles")}
+    if not EXPECTED_PROFILE_INDEXES <= indexes:
+        raise DatabaseReadinessError(
+            "Database is stamped at BPM 0.9.4 head but is missing required profile indexes"
+        )
 
 
-def _normalize_database_url(url: str) -> str:
+def _normalize_database_url(url: str, *, root_dir: Path | None = None) -> str:
     """
     Resolve some file-based SQLite URLs against the project root.
 
@@ -127,7 +89,10 @@ def _normalize_database_url(url: str) -> str:
     We only normalize bare relative paths that do not already declare their
     filesystem intent.
     """
-    if not url.startswith(("sqlite+aiosqlite:///", "sqlite:///")) or ":memory:" in url:
+    if url.startswith("sqlite:///"):
+        url = url.replace("sqlite:///", "sqlite+aiosqlite:///", 1)
+
+    if not url.startswith("sqlite+aiosqlite:///") or ":memory:" in url:
         return url
 
     prefix, _, raw_path = url.partition(":///")
@@ -138,26 +103,8 @@ def _normalize_database_url(url: str) -> str:
     if path.is_absolute() or raw_path.startswith(("./", "../")):
         return url
 
-    resolved_path = (_settings.ROOT_DIR / path).resolve()
+    resolved_path = ((root_dir or get_settings().ROOT_DIR) / path).resolve()
     return f"{prefix}:///{resolved_path}"
-
-
-_DATABASE_URL: str = cast(
-    str,
-    _normalize_database_url(_settings.DATABASE_URL),
-)
-_DATABASE_ECHO: bool = cast(
-    bool,
-    _settings.DB_ECHO,
-)
-
-
-def _is_sqlite_async_url(url: str) -> bool:
-    return url.startswith("sqlite+aiosqlite://")
-
-
-def _to_sync_sqlite_url(url: str) -> str:
-    return url.replace("sqlite+aiosqlite://", "sqlite://", 1)
 
 
 def _ensure_sqlite_parent_dir(url: str) -> None:
@@ -182,130 +129,110 @@ def _ensure_sqlite_parent_dir(url: str) -> None:
     parent.mkdir(parents=True, exist_ok=True)
 
 
-class AsyncSessionAdapter:
-    """Async-friendly wrapper around a synchronous SQLAlchemy Session."""
+class DatabaseRuntime:
+    """Own one application's native async database engine and sessions."""
 
-    def __init__(self, session: Session) -> None:
-        self._session = session
+    def __init__(
+        self,
+        settings: Settings | None = None,
+        *,
+        database_url: str | None = None,
+        echo: bool | None = None,
+    ) -> None:
+        configured = settings or get_settings()
+        self.database_url = cast(
+            str,
+            _normalize_database_url(
+                database_url or configured.DATABASE_URL,
+                root_dir=configured.ROOT_DIR,
+            ),
+        )
+        self.echo = configured.DB_ECHO if echo is None else echo
+        self._engine: AsyncEngine | None = None
+        self._session_factory: async_sessionmaker[AsyncSession] | None = None
+        self._initialized = False
+        self._schema_ready = False
+        self._lifecycle_lock = asyncio.Lock()
 
-    async def scalars(self, *args: Any, **kwargs: Any) -> Any:
-        return self._session.scalars(*args, **kwargs)
+    @property
+    def engine(self) -> AsyncEngine | None:
+        return self._engine
 
-    async def scalar(self, *args: Any, **kwargs: Any) -> Any:
-        return self._session.scalar(*args, **kwargs)
+    @property
+    def initialized(self) -> bool:
+        return self._initialized
 
-    async def execute(self, *args: Any, **kwargs: Any) -> Any:
-        return self._session.execute(*args, **kwargs)
+    @property
+    def schema_ready(self) -> bool:
+        return self._initialized and self._schema_ready
 
-    async def flush(self) -> None:
-        self._session.flush()
-
-    async def refresh(self, instance: Any) -> None:
-        self._session.refresh(instance)
-
-    async def commit(self) -> None:
-        self._session.commit()
-
-    async def rollback(self) -> None:
-        self._session.rollback()
-
-    async def close(self) -> None:
-        self._session.close()
-
-    def add(self, instance: Any) -> None:
-        self._session.add(instance)
-
-
-def _upgrade_legacy_sqlite_schema(sync_engine: Engine) -> None:
-    """
-    Normalize local SQLite schema to the current `profiles` table layout.
-
-    This keeps `init_db()` usable for local/dev databases that were created
-    before the ORM table rename from `policies` to `profiles`.
-    """
-    inspector = inspect(sync_engine)
-    has_profiles = inspector.has_table(_CURRENT_PROFILE_TABLE)
-    has_policies = inspector.has_table(_LEGACY_PROFILE_TABLE)
-
-    with sync_engine.begin() as conn:
-        if not has_profiles and has_policies:
-            conn.exec_driver_sql(
-                f"ALTER TABLE {_LEGACY_PROFILE_TABLE} RENAME TO {_CURRENT_PROFILE_TABLE}"
+    def _ensure_engine(self) -> AsyncEngine:
+        if self._engine is None:
+            _ensure_sqlite_parent_dir(self.database_url)
+            self._engine = create_async_engine(self.database_url, echo=self.echo)
+            self._session_factory = async_sessionmaker(
+                self._engine,
+                expire_on_commit=False,
             )
+        return self._engine
 
-        inspector = inspect(conn)
-        if not inspector.has_table(_CURRENT_PROFILE_TABLE):
+    async def init(self) -> None:
+        """Open one runtime engine; Alembic exclusively owns schema and data upgrades."""
+        if self._initialized:
             return
+        async with self._lifecycle_lock:
+            if self._initialized:
+                return
+            engine = self._ensure_engine()
+            try:
+                async with engine.connect() as connection:
+                    await connection.exec_driver_sql("SELECT 1")
+            except BaseException:
+                await engine.dispose()
+                self._engine = None
+                self._session_factory = None
+                raise
+            self._initialized = True
 
-        columns = {column["name"] for column in inspector.get_columns(_CURRENT_PROFILE_TABLE)}
-        if "deleted_at" not in columns:
-            conn.exec_driver_sql("ALTER TABLE profiles ADD COLUMN deleted_at DATETIME")
-        if "compliance" not in columns:
-            conn.exec_driver_sql("ALTER TABLE profiles ADD COLUMN compliance JSON")
-        if "revision" not in columns:
-            conn.exec_driver_sql("ALTER TABLE profiles ADD COLUMN revision INTEGER NOT NULL DEFAULT 1")
+    async def verify_release_schema(self) -> None:
+        """Fail closed unless this runtime points to the exact release database head."""
+        engine = self._engine
+        if not self._initialized or engine is None:
+            raise RuntimeError("Database runtime must be initialized before readiness verification")
+        self._schema_ready = False
+        async with engine.connect() as connection:
+            await connection.run_sync(_assert_release_schema_ready)
+        self._schema_ready = True
 
-        for index_name in _LEGACY_PROFILE_INDEXES:
-            conn.exec_driver_sql(f"DROP INDEX IF EXISTS {index_name}")
+    @asynccontextmanager
+    async def session(self) -> AsyncIterator[AsyncSession]:
+        """Yield a request-scoped native AsyncSession after lifecycle readiness."""
+        session_factory = self._session_factory
+        if not self._initialized or session_factory is None:
+            raise RuntimeError(
+                "Database runtime is not initialized; enter the application lifespan first"
+            )
+        async with session_factory() as session:
+            yield session
 
-        if "owner" in columns:
-            conn.exec_driver_sql("ALTER TABLE profiles DROP COLUMN owner")
-
-        for ddl in _CURRENT_PROFILE_INDEX_DDL:
-            conn.exec_driver_sql(ddl)
-
-
-if _is_sqlite_async_url(_DATABASE_URL):
-    _SYNC_DATABASE_URL = _to_sync_sqlite_url(_DATABASE_URL)
-    _ensure_sqlite_parent_dir(_SYNC_DATABASE_URL)
-    engine: Any = create_engine(
-        _SYNC_DATABASE_URL,
-        echo=_DATABASE_ECHO,
-        future=True,
-        poolclass=NullPool,
-    )
-    SessionLocal: Any = sessionmaker(
-        bind=engine,
-        expire_on_commit=False,
-    )
-    _SQLITE_SYNC_MODE = True
-else:
-    async_engine: AsyncEngine = create_async_engine(
-        _DATABASE_URL,
-        echo=_DATABASE_ECHO,
-    )
-    engine = async_engine
-    SessionLocal = async_sessionmaker(
-        async_engine,
-        expire_on_commit=False,
-    )
-    _SQLITE_SYNC_MODE = False
-
-
-async def init_db() -> None:
-    """Create tables if they do not exist (idempotent)."""
-    if _SQLITE_SYNC_MODE:
-        _upgrade_legacy_sqlite_schema(engine)
-        get_metadata().create_all(bind=engine)
-        return
-
-    async with engine.begin() as conn:
-        def _create_all(sync_conn: Connection) -> None:
-            get_metadata().create_all(bind=sync_conn)
-
-        await conn.run_sync(_create_all)
+    async def dispose(self) -> None:
+        """Close all owned connections; the runtime may be initialized again later."""
+        async with self._lifecycle_lock:
+            engine = self._engine
+            self._engine = None
+            self._session_factory = None
+            self._initialized = False
+            self._schema_ready = False
+            if engine is not None:
+                await engine.dispose()
 
 
-async def get_session() -> AsyncIterator[AsyncSession | AsyncSessionAdapter]:
-    """FastAPI dependency that yields an AsyncSession."""
-    await init_db()
-    if _SQLITE_SYNC_MODE:
-        session = SessionLocal()
+async def get_session(request: Request) -> AsyncIterator[AsyncSession]:
+    """FastAPI dependency backed by the requesting application's runtime."""
+    runtime = cast(DatabaseRuntime, request.app.state.database_runtime)
+    async with runtime.session() as session:
         try:
-            yield AsyncSessionAdapter(session)
-        finally:
-            session.close()
-        return
-
-    async with SessionLocal() as session:
-        yield session
+            yield session
+        except BaseException:
+            await session.rollback()
+            raise

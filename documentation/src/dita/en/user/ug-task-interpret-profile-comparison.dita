@@ -4,7 +4,7 @@
   <title>Interpret the comparison table</title>
   <shortdesc>Read policy and managed-preference rows across equal, changed, and missing states.</shortdesc>
   <taskbody>
-    <prereq><p>Profile A and Profile B are selected and the comparison table is visible.</p></prereq>
+    <prereq><p><uicontrol>Profile A</uicontrol> and <uicontrol>Profile B</uicontrol> are selected and the comparison table is visible.</p></prereq>
     <context><p>The table compares the union of settings from both profiles. Policy rows and managed-preference rows may appear together because both can affect Firefox behavior.</p></context>
     <steps>
       <step><cmd>Scan the row type to distinguish policy rows from managed-preference rows.</cmd><info><p>Expected result: you know whether the row represents a Firefox Enterprise policy or a managed preference key.</p></info></step>
@@ -12,7 +12,7 @@
       <step><cmd>Use missing or changed rows to decide which profile needs review.</cmd><info><note type="warning">Compare does not apply changes. Open the relevant profile editor to update values.</note></info></step>
     </steps>
     <result><p>You can explain whether the selected profiles are equivalent, different, or missing settings on one side.</p></result>
-    <postreq><p>Recovery: if rows look stale, save editor changes first and reopen Compare from the Library.</p></postreq>
+    <postreq><p>Recovery: if rows look stale, save editor changes first and reopen Compare from the <uicontrol>Library</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

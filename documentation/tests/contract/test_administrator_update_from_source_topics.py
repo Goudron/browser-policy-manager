@@ -89,6 +89,8 @@ FORBIDDEN_SUPPORTED_CLAIMS = (
     "alembic downgrade is supported by default",
     "production-ready",
 )
+README_READER_ENTRYPOINTS = ("/profiles", "/help/", "/docs")
+README_MAINTAINER_COMMANDS = ("python -m venv .venv", "pip install .", "make dev")
 INVARIANT_TOKENS_BY_TOPIC = {
     "admin-task-prepare-source-update-evidence": (
         "git status --short",
@@ -141,23 +143,22 @@ def test_administrator_guide_maps_include_update_from_source_topics(locale: str)
     topicrefs = [topicref.attrib for topicref in admin_map.findall(".//topicref")]
     assert topicrefs[
         UPDATE_TOPICREF_OFFSET : UPDATE_TOPICREF_OFFSET + len(EXPECTED_UPDATE_KEYREFS)
-    ] == [
-        {"keyref": keyref} for keyref in EXPECTED_UPDATE_KEYREFS
-    ]
+    ] == [{"keyref": keyref} for keyref in EXPECTED_UPDATE_KEYREFS]
 
     keydefs = {
         keydef.attrib["keys"]: keydef.attrib.get("href")
         for keydef in ET.parse(maps / "keys.ditamap").getroot().findall("keydef")
     }
     assert {
-        key: f"../admin/{key.removeprefix('topic.')}.dita"
-        for key in EXPECTED_UPDATE_KEYREFS
+        key: f"../admin/{key.removeprefix('topic.')}.dita" for key in EXPECTED_UPDATE_KEYREFS
     }.items() <= keydefs.items()
 
 
 @pytest.mark.parametrize("locale", LOCALES)
 @pytest.mark.parametrize("topic_id", EXPECTED_UPDATE_TOPICS)
-def test_update_from_source_topics_are_full_localized_dita_tasks(locale: str, topic_id: str) -> None:
+def test_update_from_source_topics_are_full_localized_dita_tasks(
+    locale: str, topic_id: str
+) -> None:
     source = _source(locale, topic_id)
     assert '<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">' in source
 
@@ -194,8 +195,10 @@ def test_english_update_from_source_topics_match_current_commands_and_boundaries
         assert re.search(re.escape(term), combined, re.IGNORECASE), term
     assert not any(claim in combined for claim in FORBIDDEN_SUPPORTED_CLAIMS)
 
-    for token in ("pip install .", "make dev"):
-        assert token in readme
+    for entrypoint in README_READER_ENTRYPOINTS:
+        assert entrypoint in readme
+    for command in README_MAINTAINER_COMMANDS:
+        assert command not in readme
     for token in ('pip install -e ".[dev]"', "alembic upgrade head", "make dev"):
         assert token in combined
     for target in ("dev:",):

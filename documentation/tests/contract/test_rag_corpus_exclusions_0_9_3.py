@@ -21,14 +21,29 @@ pytestmark = pytest.mark.docs_contract
 
 
 def _chunk() -> dict:
-    return {"chunk_id": "ragc-v1:en:topic:root:0", "topic_id": "topic", "locale": "en", "source_dita_path": "documentation/src/dita/en/user/topic.dita", "source_sha256": "a" * 64, "manifest_sha256": "b" * 64, "provenance_class": "published_reviewed_dita", "publication_state": "published", "published_url": "/help/en/user/topic.html", "text": "excluded source text"}
+    return {
+        "chunk_id": "ragc-v1:en:topic:root:0",
+        "topic_id": "topic",
+        "locale": "en",
+        "source_dita_path": "documentation/src/dita/en/user/topic.dita",
+        "source_sha256": "a" * 64,
+        "manifest_sha256": "b" * 64,
+        "provenance_class": "published_reviewed_dita",
+        "publication_state": "published",
+        "published_url": "/help/en/user/topic.html",
+        "text": "excluded source text",
+    }
 
 
 def test_corpus_exclusions_fail_closed_and_diagnostics_do_not_leak_text() -> None:
     policy = json.loads(POLICY.read_text(encoding="utf-8"))
     assert policy["backlog_item"] == "BPM093-M5-02"
     extractor.validate_retrieval_chunk(_chunk())
-    for path, category in (("documentation/runbooks/private.md", "excluded-path"), ("documentation/reports/run.json", "excluded-path"), ("/tmp/chat.log", "unapproved-source")):
+    for path, category in (
+        ("documentation/runbooks/private.md", "excluded-path"),
+        ("documentation/reports/run.json", "excluded-path"),
+        ("/tmp/chat.log", "unapproved-source"),
+    ):
         rejected = deepcopy(_chunk())
         rejected["source_dita_path"] = path
         with pytest.raises(extractor.ChunkExtractionError) as error:

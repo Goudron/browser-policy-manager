@@ -2,12 +2,12 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="ug-reference-schema-dependent-guided-controls" xml:lang="zh-CN" audience="user" product="bpm-0-9-0" platform="web">
   <title>与架构相关的“引导式编辑器”控件</title>
-  <shortdesc>“引导式编辑器”只显示所选 Firefox 架构支持的控件。</shortdesc>
+  <shortdesc>“<uicontrol>引导式编辑器</uicontrol>”只显示所选 Firefox 架构支持的控件。</shortdesc>
   <refbody>
     <section id="a-release-controls"><title>当前架构中的控件</title><p>在 Release 153 和 ESR 153.0 中，第 5 步可以显示受支持的 AI 和智能功能、视觉搜索以及其他智能浏览器功能策略。</p></section>
-    <section id="a-esr-unavailable"><title>长期支持版中不可用的控件</title><p>在 ESR 140.13 中，不受支持的 AI 策略控件不会显示，或会标记为不可用。不要手动添加这些控件并假定“引导式编辑器”支持它们。</p></section>
+    <section id="a-esr-unavailable"><title>长期支持版中不可用的控件</title><p>在 ESR 140.13 中，不受支持的 AI 策略控件不会显示，或会标记为不可用。不要手动添加这些控件并假定“<uicontrol>引导式编辑器</uicontrol>”支持它们。</p></section>
     <section id="a-no-documentation-ai"><title>与文档助手相互独立</title><p>本参考仅说明现有的 Firefox 浏览器策略控件。这些控件不会配置、启用或限制独立的文档助手。</p></section>
-    <section id="a-recovery"><title>恢复</title><p>如果控件缺失，请确认架构通道，检查“所有设置”，并在验证时记录不受支持状态。</p></section>
+    <section id="a-recovery"><title>恢复</title><p>如果控件缺失，请确认架构通道，检查“<uicontrol>所有设置</uicontrol>”，并在验证时记录不受支持状态。</p></section>
   </refbody>
   <related-links>
     <link keyref="topic.ug-task-configure-firefox-ai-policies"/>

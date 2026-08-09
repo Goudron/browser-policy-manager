@@ -20,7 +20,9 @@ runner = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = runner
 SPEC.loader.exec_module(runner)
 
-PROGRESS_SPEC = importlib.util.spec_from_file_location("chat_rag_exact_generation_progress", PROGRESS_PATH)
+PROGRESS_SPEC = importlib.util.spec_from_file_location(
+    "chat_rag_exact_generation_progress", PROGRESS_PATH
+)
 assert PROGRESS_SPEC and PROGRESS_SPEC.loader
 progress_reporter = importlib.util.module_from_spec(PROGRESS_SPEC)
 sys.modules[PROGRESS_SPEC.name] = progress_reporter
@@ -41,9 +43,13 @@ def _candidate() -> dict:
     return {
         "model_id": "intfloat/multilingual-e5-base",
         "artifact": "onnx/model_O4.onnx",
-        "files": {"onnx/model_O4.onnx": "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703"},
+        "files": {
+            "onnx/model_O4.onnx": "f60256a833caee5c75a3903e589116752ee016ca7bc16f9b96e4db09984c5703"
+        },
         "dimension": 768,
-        "quantization": "ONNX O4 graph optimization; floating-point weights; no ISA-specific model requirement"
+        "quantization": (
+            "ONNX O4 graph optimization; floating-point weights; no ISA-specific model requirement"
+        ),
     }
 
 
@@ -67,14 +73,14 @@ def _manifest(config: dict) -> dict:
                 "publication_state": "published",
                 "heading_path": [f"Topic {ordinal}"],
                 "identifiers": [f"ID-{ordinal}"],
-                "text": f"Reviewed text for {locale}."
+                "text": f"Reviewed text for {locale}.",
             }
         )
     return {
         "chunk_schema_version": "rag-chunk-v1",
         "text_normalization_revision": "dita-visible-text-v1",
         "source_manifest_sha256": "b" * 64,
-        "chunks": chunks
+        "chunks": chunks,
     }
 
 
@@ -82,8 +88,12 @@ def test_generation_contract_pins_both_decisions_and_exact_matrix_boundary() -> 
     config = _config()
 
     assert config["backlog_item"] == "BPM093-M5-05"
-    assert config["storage_decision"]["sha256"] == _sha256(ROOT / config["storage_decision"]["path"])
-    assert config["embedding_decision"]["sha256"] == _sha256(ROOT / config["embedding_decision"]["path"])
+    assert config["storage_decision"]["sha256"] == _sha256(
+        ROOT / config["storage_decision"]["path"]
+    )
+    assert config["embedding_decision"]["sha256"] == _sha256(
+        ROOT / config["embedding_decision"]["path"]
+    )
     assert config["matrix"]["dtype"] == "little-endian float32"
     assert config["matrix"]["dimension"] == 768
     assert config["matrix"]["metadata_fields"] == [
@@ -109,7 +119,9 @@ def test_generation_contract_pins_both_decisions_and_exact_matrix_boundary() -> 
         "stream": "stdout",
         "update_percent": 5,
         "flush": True,
-        "content": "real runtime preparation, locale-local chunk completion, cache hits, and newly embedded vectors; no synthetic progress or ETA",
+        "content": (
+            "real runtime preparation, locale-local chunk completion, cache hits, and newly embedded vectors; no synthetic progress or ETA"
+        ),
     }
     assert "does not fine-tune model weights" in config["boundaries"]["resource_policy"]
 
@@ -130,7 +142,9 @@ def test_generation_is_locale_private_atomic_and_reuses_verified_cache(tmp_path:
     first = runner.build_generation(manifest, output_root, cache_root, config, _candidate(), encode)
     assert sum(first["cache_misses"].values()) == 6
     assert len(calls) == 6
-    pointer = json.loads((output_root / config["matrix"]["active_pointer_file_name"]).read_text(encoding="utf-8"))
+    pointer = json.loads(
+        (output_root / config["matrix"]["active_pointer_file_name"]).read_text(encoding="utf-8")
+    )
     assert pointer["generation_id"] == first["generation_id"]
     root = Path(first["generation_root"])
     generation = runner.validate_generation(root, config)
@@ -138,7 +152,9 @@ def test_generation_is_locale_private_atomic_and_reuses_verified_cache(tmp_path:
     assert not root.is_symlink()
 
     calls.clear()
-    second = runner.build_generation(manifest, output_root, cache_root, config, _candidate(), encode)
+    second = runner.build_generation(
+        manifest, output_root, cache_root, config, _candidate(), encode
+    )
     assert second["generation_id"] == first["generation_id"]
     assert sum(second["cache_misses"].values()) == 0
     assert calls == []
@@ -152,7 +168,9 @@ def test_generation_integrity_rejects_tampered_vectors(tmp_path: Path) -> None:
         vectors[:, 0] = 1.0
         return vectors
 
-    result = runner.build_generation(_manifest(config), tmp_path / "output", tmp_path / "cache", config, _candidate(), encode)
+    result = runner.build_generation(
+        _manifest(config), tmp_path / "output", tmp_path / "cache", config, _candidate(), encode
+    )
     vectors = Path(result["generation_root"]) / "en" / config["matrix"]["file_name"]
     vectors.write_bytes(b"tampered")
     with pytest.raises(runner.GenerationError, match="integrity mismatch"):
@@ -167,7 +185,9 @@ def test_generation_integrity_rejects_tampered_chunk_metadata(tmp_path: Path) ->
         vectors[:, 0] = 1.0
         return vectors
 
-    result = runner.build_generation(_manifest(config), tmp_path / "output", tmp_path / "cache", config, _candidate(), encode)
+    result = runner.build_generation(
+        _manifest(config), tmp_path / "output", tmp_path / "cache", config, _candidate(), encode
+    )
     metadata_path = Path(result["generation_root"]) / "en" / config["matrix"]["metadata_file_name"]
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     metadata["chunks"][0]["bpm_version"] = "stale"
@@ -191,7 +211,9 @@ def test_progress_reports_cache_staging_and_never_writes(tmp_path: Path) -> None
     chunks_path = tmp_path / "chunks.json"
     chunks_path.write_text(json.dumps(manifest), encoding="utf-8")
     before = sorted(path.relative_to(tmp_path) for path in tmp_path.rglob("*"))
-    snapshot = progress_reporter.progress(chunks_path, output_root, cache_root, config_path=CONFIG_PATH)
+    snapshot = progress_reporter.progress(
+        chunks_path, output_root, cache_root, config_path=CONFIG_PATH
+    )
     after = sorted(path.relative_to(tmp_path) for path in tmp_path.rglob("*"))
 
     assert snapshot["state"] == "activated"
@@ -201,7 +223,9 @@ def test_progress_reports_cache_staging_and_never_writes(tmp_path: Path) -> None
     assert before == after
 
 
-def test_generation_emits_real_flushed_chunk_progress(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+def test_generation_emits_real_flushed_chunk_progress(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
     config = _config()
 
     def encode(texts: list[str]) -> np.ndarray:
@@ -209,7 +233,9 @@ def test_generation_emits_real_flushed_chunk_progress(tmp_path: Path, capsys: py
         vectors[:, 0] = 1.0
         return vectors
 
-    runner.build_generation(_manifest(config), tmp_path / "output", tmp_path / "cache", config, _candidate(), encode)
+    runner.build_generation(
+        _manifest(config), tmp_path / "output", tmp_path / "cache", config, _candidate(), encode
+    )
     output = capsys.readouterr().out
     assert "RAG exact generation: en: 0/1 chunks (0%; cache hits 0; embedded 0)" in output
     assert "RAG exact generation: en: 1/1 chunks (100%; cache hits 0; embedded 1)" in output

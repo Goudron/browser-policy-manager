@@ -1,6 +1,6 @@
-# BPM 0.9.3 Documentation Index
+# BPM 0.9.4 Documentation Index
 
-Updated: 2026-08-03
+Updated: 2026-08-10
 
 This index classifies every maintained documentation file under `docs/` so
 release, refactoring, schema, CIS, locale, administrator, DevOps, and
@@ -15,6 +15,10 @@ Statuses:
 - `backlog` - planned or proposed work.
 - `archive` - historical material that should not steer new implementation
   without a fresh review.
+
+An `active` row identifies a maintained reference, not the current product
+target. Versioned 0.9.3 records remain indexed for traceability and must not
+be read as new 0.9.3 work.
 
 Ignored local artifact groups:
 
@@ -36,6 +40,11 @@ Ignored local artifact groups:
 | [docs/architecture/administrator-devops-guide-sufficiency-review-0.9.1.json](architecture/administrator-devops-guide-sufficiency-review-0.9.1.json) | active | Accepted BPM 0.9.1 Administrator/DevOps topic sufficiency review with five Linux transcripts and explicit conditional WSL boundaries. |
 | [docs/architecture/bpm-documentation-theme-token-audit-0.9.1.md](architecture/bpm-documentation-theme-token-audit-0.9.1.md) | audit | BPM 0.9.1 source CSS token and selector audit for light-theme comfort and documentation visual alignment. |
 | [docs/architecture/current-system-map.md](architecture/current-system-map.md) | active | Current backend, frontend, data, schema, and test-system map for refactoring. |
+| [docs/architecture/ci-layer-graph-0.9.4.md](architecture/ci-layer-graph-0.9.4.md) | active | BPM 0.9.4 mandatory CI primary-layer ownership, artifact flow, coverage aggregation, and Firefox separation decision. |
+| [docs/architecture/dependency-audit-sbom-0.9.4.md](architecture/dependency-audit-sbom-0.9.4.md) | active | BPM 0.9.4 fail-closed Python/npm advisory audit, CycloneDX evidence, suppression, and retention policy. |
+| [tools/frontend_profile_graph_0_9_4.json](../tools/frontend_profile_graph_0_9_4.json) | active | Machine-readable BPM 0.9.4 profile frontend ownership, route, dependency, vendor-boundary, DOM-test, and staged-conversion contract. |
+| [docs/architecture/database-upgrade-matrix-0.9.4.json](architecture/database-upgrade-matrix-0.9.4.json) | active | Machine-readable BPM 0.9.4 SQLite/PostgreSQL source revisions, schema invariants, stop conditions, and closed interruption/recovery evidence. |
+| [docs/architecture/database-upgrade-matrix-0.9.4.md](architecture/database-upgrade-matrix-0.9.4.md) | active | BPM 0.9.4 upgrade window, native backup procedures, fail-closed candidate retry commands, and two-engine recovery proof. |
 | [docs/architecture/current-documentation-search-inventory-0.9.3.md](architecture/current-documentation-search-inventory-0.9.3.md) | active | BPM 0.9.3 bounded inventory of current documentation-search sources, artifacts, contracts, and transition ownership. |
 | [docs/architecture/search-selection-criteria-and-shortlist-0.9.3.md](architecture/search-selection-criteria-and-shortlist-0.9.3.md) | active | BPM 0.9.3 public multilingual search-engine entry gates, weighted selection matrix, and unbenchmarked control/Pagefind/Meilisearch CE shortlist. |
 | [docs/architecture/search-candidate-adapter-prototypes-0.9.3.md](architecture/search-candidate-adapter-prototypes-0.9.3.md) | active | BPM 0.9.3 isolated compact candidate-adapter input and normalized-result prototypes for current search, Pagefind, and Meilisearch CE. |
@@ -47,6 +56,7 @@ Ignored local artifact groups:
 | [docs/architecture/dependency-currency-0.9.1.md](architecture/dependency-currency-0.9.1.md) | active | BPM 0.9.1 dependency, frontend vendor, documentation toolchain, browser-driver, and test/dev currency decision. |
 | [docs/architecture/dependency-currency-0.9.2.md](architecture/dependency-currency-0.9.2.md) | active | BPM 0.9.2 dependency, frontend vendor, documentation toolchain, browser-driver, and test/dev currency decision. |
 | [docs/architecture/dependency-currency-0.9.3.md](architecture/dependency-currency-0.9.3.md) | active | BPM 0.9.3 dependency, security-update, documentation toolchain, browser-driver, search, and local-RAG currency decision. |
+| [docs/architecture/dependency-currency-0.9.4.md](architecture/dependency-currency-0.9.4.md) | active | BPM 0.9.4 direct dependency, documentation toolchain, frontend-vendor, Firefox/geckodriver, license, advisory, platform, and verification decision matrix. |
 | [docs/architecture/compact-ui-screenshot-refresh-0.9.2.md](architecture/compact-ui-screenshot-refresh-0.9.2.md) | active | BPM 0.9.2 localized User Guide screenshot recapture evidence for compact UI changes. |
 | [docs/architecture/compact-ui-user-documentation-review-0.9.2.md](architecture/compact-ui-user-documentation-review-0.9.2.md) | active | BPM 0.9.2 review record for compact UI guidance and six-locale User Guide updates. |
 | [docs/architecture/context-help-gap-review-0.9.2.md](architecture/context-help-gap-review-0.9.2.md) | active | BPM 0.9.2 disposition confirming whether compact UI changes require new contextual-help topics or links. |
@@ -77,6 +87,9 @@ Ignored local artifact groups:
 | [docs/architecture/live-source-install-privileged-validation-contract-0.9.1.md](architecture/live-source-install-privileged-validation-contract-0.9.1.md) | active | Maintainer-approved safety, resource, provenance, evidence, rollback, and retained-Docker contract for privileged live source-install validation. |
 | [docs/architecture/profile-clone-naming-ux-decision.md](architecture/profile-clone-naming-ux-decision.md) | active | BPM 0.8.7 clone naming UX and validation decision. |
 | [docs/architecture/profile-comparison-entrypoint-audit.md](architecture/profile-comparison-entrypoint-audit.md) | active | Maintained profile comparison ownership boundary and guardrail map. |
+| [docs/architecture/python-architecture-boundaries-0.9.4.md](architecture/python-architecture-boundaries-0.9.4.md) | active | BPM 0.9.4 executable Python import-direction, protected-internal, tooling, and optional-runtime boundaries. |
+| [docs/architecture/release-incubation-development-boundary-0.9.4.md](architecture/release-incubation-development-boundary-0.9.4.md) | active | BPM 0.9.4 machine-checked release, optional-incubation, development-tooling, and clean-wheel delivery boundary. |
+| [docs/architecture/release-readiness-evidence-0.9.4.md](architecture/release-readiness-evidence-0.9.4.md) | active | BPM 0.9.4 M12 release-readiness closeout linking verified technical, documentation, PDF, README, and index evidence before commit/CI handoff. |
 | [docs/architecture/product-documentation-release-contract-0.9.0.md](architecture/product-documentation-release-contract-0.9.0.md) | active | BPM 0.9.0 product documentation blocking deliverables, ownership, evidence, and verification commands. |
 | [docs/architecture/product-documentation-release-contract-0.9.1.md](architecture/product-documentation-release-contract-0.9.1.md) | active | BPM 0.9.1 documentation completion release blockers, ownership, evidence, and verification commands. |
 | [docs/architecture/product-documentation-release-contract-0.9.2.md](architecture/product-documentation-release-contract-0.9.2.md) | active | BPM 0.9.2 UI-compaction and documentation-coherence release blockers, ownership, evidence, density exceptions, and verification commands. |
@@ -145,8 +158,10 @@ Ignored local artifact groups:
 | [docs/architecture/examples/product-documentation-manifest-v1.example.json](architecture/examples/product-documentation-manifest-v1.example.json) | active | Valid six-locale, four-guide architecture example for documentation manifest version 1. |
 | [docs/architecture/examples/product-documentation-ui-target-map-v1.example.json](architecture/examples/product-documentation-ui-target-map-v1.example.json) | active | Valid architecture example covering all approved documentation UI-target namespaces. |
 | [docs/architecture/product-user-capability-inventory-0.9.0.md](architecture/product-user-capability-inventory-0.9.0.md) | active | BPM 0.9.0 user-visible capability inventory and planned DITA topic coverage map. |
+| [docs/architecture/profile-performance-budgets-0.9.4.md](architecture/profile-performance-budgets-0.9.4.md) | active | BPM 0.9.4 comparable profile-performance guardrail, variance rule, and verified release targets. |
 | [docs/architecture/pytest-xdist-isolation-audit.md](architecture/pytest-xdist-isolation-audit.md) | audit | Current pytest-xdist isolation blocker map for BPM 0.8.5. |
-| [docs/architecture/pytest-xdist-readiness.md](architecture/pytest-xdist-readiness.md) | active | Maintained decision record for pytest-xdist readiness and adoption gates. |
+| [docs/architecture/pytest-parallelism-decision-0.9.4.md](architecture/pytest-parallelism-decision-0.9.4.md) | active | BPM 0.9.4 measured serial, xdist, sharding, and seeded-order decision. |
+| [docs/architecture/pytest-xdist-readiness.md](architecture/pytest-xdist-readiness.md) | audit | Historical BPM 0.8.5 pytest-xdist readiness decision. |
 | [docs/architecture/refactoring-acceptance-rules.md](architecture/refactoring-acceptance-rules.md) | active | Shared acceptance contract for behavior-preserving refactors. |
 | [docs/architecture/release-naming-audit-0.9.1.md](architecture/release-naming-audit-0.9.1.md) | audit | BPM 0.9.1 bounded release-name update list and historical/provenance exclusions. |
 | [docs/architecture/release-naming-audit-0.9.2.md](architecture/release-naming-audit-0.9.2.md) | audit | BPM 0.9.2 active-version and documentation-version field classification with bounded task-owned updates. |
@@ -170,6 +185,7 @@ Ignored local artifact groups:
 | [docs/bpm_0_9_1_documentation_completion_backlog_2026-07-06.md](bpm_0_9_1_documentation_completion_backlog_2026-07-06.md) | backlog | BPM 0.9.1 documentation completion, theme, localized screenshots, search/navigation, terminology, and All Settings help-link backlog. |
 | [docs/bpm_0_9_2_ui_compaction_documentation_coherence_backlog_2026-07-17.md](bpm_0_9_2_ui_compaction_documentation_coherence_backlog_2026-07-17.md) | backlog | BPM 0.9.2 UI compaction, unified documentation shell, stable search filters, and audience/locale editorial-quality backlog. |
 | [docs/bpm_0_9_3_documentation_search_local_rag_backlog_2026-07-28.md](bpm_0_9_3_documentation_search_local_rag_backlog_2026-07-28.md) | backlog | BPM 0.9.3 multilingual documentation search-engine selection, low-resource local RAG assistant, scoped six-locale dialogue, and optional web-evidence backlog. |
+| [docs/bpm_0_9_4_optimization_refactoring_backlog_2026-08-03.md](bpm_0_9_4_optimization_refactoring_backlog_2026-08-03.md) | backlog | BPM 0.9.4 behavior-preserving optimization, architecture refactoring, test-platform consolidation, live-browser automation, and release hardening backlog. |
 | [docs/archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md](archive/2026-q2/bpm_0_8_7_1_compare_clone_visual_qa_2026-06-12.md) | audit | BPM 0.8.7.1 compare and clone visual QA notes. |
 | [docs/archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md](archive/2026-q2/chromium_locale_smoke_matrix_audit_2026-05-30.md) | audit | Point-in-time Chromium locale smoke matrix. |
 | [docs/archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md](archive/2026-q2/cis_firefox_benchmark_feature_analysis_2026-04-12.md) | audit | Point-in-time CIS Firefox benchmark feature analysis. |

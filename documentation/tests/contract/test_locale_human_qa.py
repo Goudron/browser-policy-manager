@@ -31,13 +31,9 @@ def _json(path: Path) -> dict:
 def _localized_catalog_text(locale: str) -> str:
     chunks: list[str] = []
     for path in sorted((SOURCE_I18N / locale).glob("*.json")):
-        chunks.extend(
-            value for value in _json(path).values() if isinstance(value, str)
-        )
+        chunks.extend(value for value in _json(path).values() if isinstance(value, str))
     chunks.extend(
-        value
-        for value in _json(RUNTIME_I18N / f"{locale}.json").values()
-        if isinstance(value, str)
+        value for value in _json(RUNTIME_I18N / f"{locale}.json").values() if isinstance(value, str)
     )
     return "\n".join(chunks)
 
@@ -74,9 +70,7 @@ def test_locale_human_qa_accepts_visual_qa_and_closes_blockers() -> None:
     assert visual["screenshot_regeneration"]["backlog_item"] == "BPM091-M7-05"
     assert visual["screenshot_regeneration"]["rows_captured"] == 36
     assert set(visual["coverage"]["locales_reviewed"]) == {"en", *LOCALES}
-    assert set(visual["screenshot_regeneration"]["last_reviewed_locales"]) == set(
-        LOCALES
-    )
+    assert set(visual["screenshot_regeneration"]["last_reviewed_locales"]) == set(LOCALES)
     assert qa["status"] == visual["screenshot_regeneration"]["status"]
 
 
@@ -119,7 +113,7 @@ def test_locale_human_qa_remaining_english_is_allowlisted() -> None:
     for entry in qa["remaining_allowlisted_rationale"]:
         term = entry["term"]
         assert entry["rationale"]
-        assert (
-            term in visual_allowlist
-            or entry["category"] in {"policy identifier", "managed preference identifier"}
-        )
+        assert term in visual_allowlist or entry["category"] in {
+            "policy identifier",
+            "managed preference identifier",
+        }

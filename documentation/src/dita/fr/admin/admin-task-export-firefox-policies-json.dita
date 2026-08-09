@@ -15,6 +15,12 @@
       <step><cmd>Enregistrez l'artefact exporté exact en externe.</cmd><info><note type="warning">L'exportation n'a pas de ETag, d'en-tête de précondition, de point de terminaison groupé ou de wrapper de transaction. Enregistrez le profil ID, la révision observée avant l'exportation, le canal de schéma, les paramètres de requête, le hachage du document exporté et la décision de transfert en aval en dehors de BPM.</note></info></step>
     </steps>
     <result><p>L'intégration possède un artefact canonique Firefox <codeph>policies.json</codeph> qui exclut les métadonnées BPM uniquement et peut être fourni aux outils de déploiement.</p></result>
+    <example id="a-export-policies-document"><title>Document Firefox policies.json complet</title><p>Le corps de réponse est le document de déploiement Firefox complet, et non des métadonnées de profil BPM ou des <codeph>flags</codeph> :</p><codeblock outputclass="language-json">{
+  "policies": {
+    "DisableTelemetry": true,
+    "BlockAboutConfig": true
+  }
+}</codeblock></example>
     <postreq><p>Si la validation échoue ou si la révision du profil a été modifiée entre la lecture et l'exportation, arrêtez le transfert et actualisez l'état du profil.</p></postreq>
   </taskbody>
   <related-links>

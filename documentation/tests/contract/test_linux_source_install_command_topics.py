@@ -12,8 +12,16 @@ DITA = DOCS / "src/dita"
 CONTRACT = DOCS / "config/linux-source-install-command-contract-0.9.1.json"
 LOCALES = ("en", "ru", "de", "zh-CN", "fr", "es-ES")
 COMMON = (
-    "<approved-0.9.1-ref>", "git clone", "git checkout --detach", "-m venv .venv",
-    'pip install -e ".[dev]"', "alembic upgrade head", "make dev", "/health", "/health/ready", "/profiles",
+    "<approved-0.9.1-ref>",
+    "git clone",
+    "git checkout --detach",
+    "-m venv .venv",
+    'pip install -e ".[dev]"',
+    "alembic upgrade head",
+    "make dev",
+    "/health",
+    "/health/ready",
+    "/profiles",
 )
 
 pytestmark = pytest.mark.docs_contract
@@ -59,8 +67,14 @@ def test_command_contract_freezes_five_authored_targets_with_validation_handoff(
     assert contract["locales"] == list(LOCALES)
     assert len(contract["targets"]) == 5
     assert contract["validation_owner"] == "BPM091-M6-06"
-    assert contract["validation_report"] == "docs/architecture/linux-source-install-validation-0.9.1.json"
-    assert contract["python_source"]["sha256"] == "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63"
+    assert (
+        contract["validation_report"]
+        == "docs/architecture/linux-source-install-validation-0.9.1.json"
+    )
+    assert (
+        contract["python_source"]["sha256"]
+        == "143b1dddefaec3bd2e21e3b839b34a2b7fb9842272883c576420d605e9f30c63"
+    )
 
 
 @pytest.mark.parametrize("target", _contract()["targets"], ids=lambda item: item["id"])
@@ -79,7 +93,10 @@ def test_english_target_has_exact_end_to_end_commands(target: dict) -> None:
 
 
 def test_distribution_specific_python_and_package_paths_are_explicit() -> None:
-    sources = {item["id"]: _path("en", item["topic_id"]).read_text(encoding="utf-8") for item in _contract()["targets"]}
+    sources = {
+        item["id"]: _path("en", item["topic_id"]).read_text(encoding="utf-8")
+        for item in _contract()["targets"]
+    }
     assert "python3.14-venv" in sources["ubuntu-26-04"]
     assert "sudo dnf install" in sources["fedora-44"]
     assert "sudo pacman -Syu" in sources["manjaro-stable-2026-06-26"]
@@ -94,7 +111,11 @@ def test_localized_peers_resolve_invariant_command_blocks(locale: str) -> None:
     for target in _contract()["targets"]:
         path = _path(locale, target["topic_id"])
         root = ET.fromstring(path.read_text(encoding="utf-8"))
-        assert root.attrib["xml:lang"] == locale if "xml:lang" in root.attrib else root.attrib["{http://www.w3.org/XML/1998/namespace}lang"] == locale
+        assert (
+            root.attrib["xml:lang"] == locale
+            if "xml:lang" in root.attrib
+            else root.attrib["{http://www.w3.org/XML/1998/namespace}lang"] == locale
+        )
         assert root.attrib["product"] == "bpm-0-9-1"
         assert root.findtext("title", "").strip()
         assert root.find("./taskbody/result") is not None

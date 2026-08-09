@@ -62,8 +62,7 @@ def load_vocabulary(path: Path = DEFAULT_VOCABULARY) -> dict[str, Any]:
     if vocabulary.get("schema_version") != 1 or vocabulary.get("dita_version") != "1.3":
         raise MetadataError("unsupported metadata vocabulary schema or DITA version")
     vocabulary["registry_values"] = {
-        group: _registry_values(spec)
-        for group, spec in vocabulary["otherprops_groups"].items()
+        group: _registry_values(spec) for group, spec in vocabulary["otherprops_groups"].items()
     }
     return vocabulary
 

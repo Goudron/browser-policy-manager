@@ -96,10 +96,15 @@ def test_all_settings_contract_maps_policy_preferences_raw_and_unknown_entries()
 
     assert rules["firefox_policy"]["target_id"] == "policy:{exact_policy_id}"
     assert rules["firefox_policy"]["fallback_disposition"] == "missing_documentation"
-    assert rules["known_managed_preference"]["target_id"] == "known-preference:{exact.preference.id}"
+    assert (
+        rules["known_managed_preference"]["target_id"] == "known-preference:{exact.preference.id}"
+    )
     assert rules["known_managed_preference"]["fallback_disposition"] == "missing_documentation"
     assert "policy:{exact_policy_id}" in rules["generated_policy_or_preference"]["target_id"]
-    assert "known-preference:{exact.preference.id}" in rules["generated_policy_or_preference"]["target_id"]
+    assert (
+        "known-preference:{exact.preference.id}"
+        in rules["generated_policy_or_preference"]["target_id"]
+    )
     assert rules["raw_fallback"]["target_id"] is None
     assert rules["raw_fallback"]["fallback_disposition"] == "not_applicable_raw"
     assert rules["unknown_imported"]["target_id"] is None
@@ -107,7 +112,9 @@ def test_all_settings_contract_maps_policy_preferences_raw_and_unknown_entries()
 
     resolution = contract["target_resolution"]
     assert "must not imply that the setting value is valid" in resolution["invalid_rows"]
-    assert "Deprecated rows still link when a manifest target exists" in resolution["deprecated_rows"]
+    assert (
+        "Deprecated rows still link when a manifest target exists" in resolution["deprecated_rows"]
+    )
     assert "must not emit broken anchors" in resolution["missing_docs"]
     assert "unavailable, stale, incomplete, or incompatible" in resolution["unavailable_artifacts"]
 
@@ -217,4 +224,7 @@ def test_all_settings_contract_validates_manifest_targets_and_future_tasks() -> 
         "::test_all_settings_row_help_links_cover_modes_locales_search_and_keyboard"
     )
     assert "make test-docs-browser" in contract["verification"]["release_gates"]
-    assert "This contract does not implement the All Settings row help-link UI." in contract["non_goals"]
+    assert (
+        "This contract does not implement the All Settings row help-link UI."
+        in contract["non_goals"]
+    )

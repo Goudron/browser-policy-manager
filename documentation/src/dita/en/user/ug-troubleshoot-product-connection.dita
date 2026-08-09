@@ -2,7 +2,7 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-troubleshoot-product-connection" xml:lang="en" audience="user" product="bpm-0-9-0" platform="web">
   <title>Recover from product connection failure</title>
-  <shortdesc>Recover from a network, browser, or BPM API operation failure visible in Library or editor surfaces.</shortdesc>
+  <shortdesc>Recover from a network, browser, or BPM API operation failure visible in <uicontrol>Library</uicontrol> or editor surfaces.</shortdesc>
   <taskbody>
     <prereq><p>A visible BPM status, validation message, browser warning, or failed action indicates that the current workflow cannot safely continue.</p></prereq>
     <context><p>Connection failures can result from network interruptions, server restarts, or API failures; preserve the visible context before retrying.</p></context>

@@ -4,7 +4,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import JSON, DateTime, Integer, String, Text, func
+from sqlalchemy import JSON, DateTime, Integer, String, Text, event, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from app.core.schema_channels import DEFAULT_SCHEMA_CHANNEL
@@ -29,6 +29,10 @@ class Profile(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False, index=True, unique=True)
+    # Persist the exact Unicode casefold value used by profile-library search.
+    # Neither SQLite LOWER() nor a PostgreSQL database locale implements
+    # Python's Unicode casefold semantics consistently.
+    name_casefold: Mapped[str] = mapped_column(Text, nullable=False, index=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Schema version stays free-form here; business rules live in validation code.
@@ -68,3 +72,12 @@ class Profile(Base):
 
     def __repr__(self) -> str:  # pragma: no cover
         return f"<Profile id={self.id} name={self.name!r} deleted={self.is_deleted}>"
+
+
+def _synchronize_name_casefold(_: object, __: object, target: Profile) -> None:
+    """Keep direct ORM writes aligned with the portable search contract."""
+    target.name_casefold = target.name.casefold()
+
+
+event.listen(Profile, "before_insert", _synchronize_name_casefold)
+event.listen(Profile, "before_update", _synchronize_name_casefold)

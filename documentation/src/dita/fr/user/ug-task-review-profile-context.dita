@@ -2,9 +2,9 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-review-profile-context" xml:lang="fr" audience="user" product="bpm-0-9-0" platform="web">
   <title>Vérifier le contexte du profil</title>
-  <shortdesc>Vérifiez Identité du profil, le cycle de vie, le canal de schéma, l'état de validation et le contexte source avant de terminer le travail.</shortdesc>
+  <shortdesc>Vérifiez <uicontrol>Identité du profil</uicontrol>, le cycle de vie, le canal de schéma, l'état de validation et le contexte source avant de terminer le travail.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
     <context><p>Le contexte du profil empêche les modifications accidentelles d'un mauvais profil, d'un mauvais canal Firefox, d'une ligne archivée, d'une source importée ou d'un onglet obsolète.</p></context>
     <steps>
       <step><cmd>Lisez le nom du profil, l'état du cycle de vie, le canal de schéma et le dernier contexte mis à jour.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>

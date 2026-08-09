@@ -12,7 +12,7 @@
       <step><cmd>Utilice filas faltantes o modificadas para decidir qué perfil necesita revisión.</cmd><info><note type="warning">Comparar no aplica cambios. Abra el editor de perfil correspondiente para actualizar los valores.</note></info></step>
     </steps>
     <result><p>Puede explicar si los perfiles seleccionados son equivalentes, diferentes o faltan configuraciones en un lado.</p></result>
-    <postreq><p>Recuperación: si las filas parecen obsoletas, primero guarde los cambios del editor y vuelva a abrir Comparar desde la Biblioteca.</p></postreq>
+    <postreq><p>Recuperación: si las filas parecen obsoletas, primero guarde los cambios del editor y vuelva a abrir Comparar desde la <uicontrol>Biblioteca</uicontrol>.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-reference-comparison-states"/>

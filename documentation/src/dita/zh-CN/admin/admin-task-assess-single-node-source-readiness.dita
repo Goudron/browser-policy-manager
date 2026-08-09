@@ -15,7 +15,7 @@ make dev
 curl -fsS http://127.0.0.1:8000/health
 curl -fsS http://127.0.0.1:8000/health/ready
 ]]></codeblock><p>将结果记录为 <codeph>GET /health</codeph> 和 <codeph>GET /health/ready</codeph> 证据。通过探针仅证明源进程的活跃性和就绪性。</p></info></step>
-      <step><cmd>在共享实例之前检查数据和文档证据。</cmd><info><p>确认 <codeph>data/bpm.db</codeph> 是目标数据库，至少一个配置文件可以导出为 <codeph>policies.json</codeph>，并且 <codeph>/help/</codeph> 打开构建的文档工件或记录的不可用状态。</p></info></step>
+      <step><cmd>在共享实例之前检查数据和文档证据。</cmd><info><p>确认 <codeph>data/bpm.db</codeph> 是目标数据<uicontrol>库</uicontrol>，至少一个配置文件可以导出为 <codeph>policies.json</codeph>，并且 <codeph>/help/</codeph> 打开构建的文档工件或记录的不可用状态。</p></info></step>
       <step><cmd>将实例分类为当前状态源操作。</cmd><info><note type="warning">不要将实例标记为打包、强化、负载平衡或高可用。如果外部控制添加这些属性，请将它们记录为外部责任，并将 BPM 证据限制为单节点源操作。</note></info></step>
     </steps>
     <result><p>准备说明说明了今天可以从源头安全地完成哪些操作、哪些检查已通过以及哪些决策必须等待分发和运行时支持。</p></result>

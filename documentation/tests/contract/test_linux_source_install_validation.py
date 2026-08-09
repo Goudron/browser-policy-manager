@@ -38,7 +38,10 @@ def test_validation_report_records_m11_09_scope_and_honest_release_result() -> N
     assert report["status"] == "accepted-with-oci-boundary"
     assert report["validation_date"] == "2026-07-15"
     assert contract["status"] == "authored-validation-attempted"
-    assert contract["validation_report"] == "docs/architecture/linux-source-install-validation-0.9.1.json"
+    assert (
+        contract["validation_report"]
+        == "docs/architecture/linux-source-install-validation-0.9.1.json"
+    )
     assert report["summary"] == {
         "target_count": 5,
         "clean_userspace_container_pass_count": 5,
@@ -183,8 +186,10 @@ def test_validation_keeps_production_claims_out_of_install_topics_and_report() -
         "HA is supported",
         "managed backups are provided",
     )
-    corpus = REPORT.read_text(encoding="utf-8") + "\n" + "\n".join(
-        _source(item["topic_id"]) for item in _json(CONTRACT)["targets"]
+    corpus = (
+        REPORT.read_text(encoding="utf-8")
+        + "\n"
+        + "\n".join(_source(item["topic_id"]) for item in _json(CONTRACT)["targets"])
     )
     folded = corpus.casefold()
     assert all(claim.casefold() not in folded for claim in forbidden)

@@ -58,9 +58,6 @@ REQUIRED_CONFIGURATION_TOKENS = (
     "BPM_DB_ECHO",
     "BPM_ENABLE_CORS",
     "BPM_CORS_ALLOW_ORIGINS",
-    "BPM_SCHEMA_BASE_URL",
-    "BPM_SCHEMA_CACHE_DIR",
-    "BPM_SCHEMA_HTTP_TIMEOUT",
     ".env",
 )
 REQUIRED_STORAGE_LOG_TOKENS = (
@@ -151,23 +148,22 @@ def test_administrator_guide_maps_include_devops_operational_topics(locale: str)
     topicrefs = [topicref.attrib for topicref in admin_map.findall(".//topicref")]
     assert topicrefs[
         DEVOPS_TOPICREF_OFFSET : DEVOPS_TOPICREF_OFFSET + len(EXPECTED_DEVOPS_KEYREFS)
-    ] == [
-        {"keyref": keyref} for keyref in EXPECTED_DEVOPS_KEYREFS
-    ]
+    ] == [{"keyref": keyref} for keyref in EXPECTED_DEVOPS_KEYREFS]
 
     keydefs = {
         keydef.attrib["keys"]: keydef.attrib.get("href")
         for keydef in ET.parse(maps / "keys.ditamap").getroot().findall("keydef")
     }
     assert {
-        key: f"../admin/{key.removeprefix('topic.')}.dita"
-        for key in EXPECTED_DEVOPS_KEYREFS
+        key: f"../admin/{key.removeprefix('topic.')}.dita" for key in EXPECTED_DEVOPS_KEYREFS
     }.items() <= keydefs.items()
 
 
 @pytest.mark.parametrize("locale", LOCALES)
 @pytest.mark.parametrize("topic_id", EXPECTED_DEVOPS_TOPICS)
-def test_devops_operational_topics_are_full_localized_dita_tasks(locale: str, topic_id: str) -> None:
+def test_devops_operational_topics_are_full_localized_dita_tasks(
+    locale: str, topic_id: str
+) -> None:
     source = _source(locale, topic_id)
     assert '<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">' in source
 
@@ -222,9 +218,6 @@ def test_english_devops_operational_topics_match_current_config_and_boundaries()
         "API_PREFIX",
         "ENABLE_CORS",
         "CORS_ALLOW_ORIGINS",
-        "SCHEMA_BASE_URL",
-        "SCHEMA_CACHE_DIR",
-        "SCHEMA_HTTP_TIMEOUT",
         "DOCUMENTATION_SITE_DIR",
     ):
         assert source_setting in config
@@ -246,7 +239,12 @@ def test_localized_devops_operational_topics_preserve_parity_and_invariant_token
     assert localized.count("<related-links>") == english.count("<related-links>")
 
     if topic_id == "admin-task-review-devops-configuration-sources":
-        for token in ("BPM_DATABASE_URL", "BPM_CORS_ALLOW_ORIGINS", "BPM_DOCUMENTATION_SITE_DIR", ".env"):
+        for token in (
+            "BPM_DATABASE_URL",
+            "BPM_CORS_ALLOW_ORIGINS",
+            "BPM_DOCUMENTATION_SITE_DIR",
+            ".env",
+        ):
             assert token in localized
     if topic_id == "admin-task-plan-devops-storage-logs-backups":
         for token in ("data/bpm.db", "app/schemas/mozilla", "stdout", "stderr", "policies.json"):
@@ -255,5 +253,10 @@ def test_localized_devops_operational_topics_preserve_parity_and_invariant_token
         for token in ("BPM_HOST", "0.0.0.0", "127.0.0.1", "GET /health", "BPM_CORS_ALLOW_ORIGINS"):
             assert token in localized
     if topic_id == "admin-task-record-devops-operational-boundaries":
-        for token in ("make dev", "uvicorn app.main:app --reload --port 8000", "/health", "/health/ready"):
+        for token in (
+            "make dev",
+            "uvicorn app.main:app --reload --port 8000",
+            "/health",
+            "/health/ready",
+        ):
             assert token in localized

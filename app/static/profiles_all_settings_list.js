@@ -1,4 +1,3 @@
-(() => {
     const VISIBLE_ENTRY_BUDGET = 7;
     const VISIBLE_ENTRY_WINDOW_SIZE = 50;
 
@@ -9,7 +8,12 @@
         allSettingsCategoryCatalog = {},
         wizardPreferencesCatalog = {},
         wizardSchemaShellCatalog = {},
+        components = {},
     }) {
+        const {
+            createAllSettingsRouteState,
+            createSettingsInventory,
+        } = components;
         const {
             t,
             escapeHtml,
@@ -23,8 +27,8 @@
             onModeChange,
             documentationRowHelpLinks = {},
             documentationRowHelpStatus = "available",
-            allSettingsRouteState = window.BPMProfilesAllSettingsState?.create?.(),
-            settingsInventory = window.BPMProfilesSettingsInventory?.create?.({
+            allSettingsRouteState = createAllSettingsRouteState(),
+            settingsInventory = createSettingsInventory({
                 dependencies: {
                     t,
                     getActiveWizardSchemaVersion,
@@ -47,7 +51,7 @@
             allSettingsFilterButtons = [],
             allSettingsSourceFilterButtons = [],
         } = elements;
-        const routeState = allSettingsRouteState || window.BPMProfilesAllSettingsState.create();
+        const routeState = allSettingsRouteState || createAllSettingsRouteState();
         const listWindowOffsets = new Map();
         let cachedInventoryKey = "";
         let cachedInventoryEntries = [];
@@ -1264,5 +1268,4 @@
         };
     }
 
-    window.BPMProfilesAllSettingsList = { create };
-})();
+    export { create };

@@ -69,7 +69,10 @@ def _apply_handlers_semantic_hints(node: dict[str, Any]) -> None:
                 _walk_handler_scope(child)
 
         additional_properties = scope.get("additional_properties_schema")
-        if isinstance(additional_properties, dict) and additional_properties.get("type") == "object":
+        if (
+            isinstance(additional_properties, dict)
+            and additional_properties.get("type") == "object"
+        ):
             _walk_handler_scope(additional_properties)
 
     _walk_handler_scope(node)

@@ -4,10 +4,10 @@
   <title>Valider un profil</title>
   <shortdesc>Exécutez une validation basée sur le schéma avant d'enregistrer, d'exporter ou de comparer les modifications de stratégie.</shortdesc>
   <taskbody>
-    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, Tous les paramètres, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
+    <prereq><p>Ouvrez BPM dans le navigateur et conservez un profil, une bibliothèque, <uicontrol>Tous les paramètres</uicontrol>, une surface guidée, JSON ou de comparaison disponible.</p></prereq>
     <context><p>La validation vérifie les noms de stratégie, les formes de valeur, le canal de schéma pris en charge, les différences ESR uniquement non prises en charge et les entrées brutes ou inconnues visibles dans BPM.</p></context>
     <steps>
-      <step><cmd>Ouvrez le profil dans Éditeur guidé, Tous les paramètres ou JSON.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
+      <step><cmd>Ouvrez le profil dans <uicontrol>Éditeur guidé</uicontrol>, <uicontrol>Tous les paramètres</uicontrol> ou JSON.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Confirmez le canal de schéma Firefox sélectionné avant de valider.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Exécutez la validation ou examinez le panneau de validation visible sur la surface active.</cmd><info><p>Résultat attendu : BPM conserve le profil sélectionné, la surface de l'éditeur, les paramètres régionaux et le thème clairs pendant que vous travaillez.</p></info></step>
       <step><cmd>Résolvez les stratégies non prises en charge, les types de valeurs incorrects, les entrées brutes inconnues ou les valeurs importées obsolètes avant de traiter le profil comme prêt.</cmd><info><note type="warning">Enregistrez ou supprimez délibérément les modifications avant de quitter un éditeur, de fermer un onglet ou de confirmer une action irréversible.</note></info></step>

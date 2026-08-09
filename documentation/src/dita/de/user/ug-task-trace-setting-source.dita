@@ -4,12 +4,12 @@
   <title>Eine Einstellungsquelle verfolgen</title>
   <shortdesc>Verfolgen Sie eine konfigurierte Einstellung auf Basis-, CIS-, manuelle, importierte oder Rohquellenzuordnung.</shortdesc>
   <taskbody>
-    <prereq><p>Öffnen Sie eine konfigurierte Einstellung in Alle Einstellungen.</p></prereq>
+    <prereq><p>Öffnen Sie eine konfigurierte Einstellung in <uicontrol>Alle Einstellungen</uicontrol>.</p></prereq>
     <context><p>Die Quellenangabe hilft zu erklären, warum ein Wert vorhanden ist und ob eine Änderung eine Baseline, einen CIS-Layer, eine manuelle Bearbeitung, einen Import oder ein Roh-Fallback überschreiben würde.</p></context>
     <steps>
-      <step><cmd>Öffnen Sie das Einstellungsdetail oder die konfigurierte Zusammenfassung, die Quell-Badges anzeigt.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Identifizieren Sie, ob der Wert von der Baseline, CIS, manuell, importiert oder Rohquelle stammt.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Verfolgen Sie verwandte CIS- oder Profilkontextlinks, wenn ein generierter Layer den Wert beigetragen hat.</cmd><info><p>Erwartetes Ergebnis: Das Profil Alle Einstellungen bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Öffnen Sie das Einstellungsdetail oder die konfigurierte Zusammenfassung, die Quell-Badges anzeigt.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Identifizieren Sie, ob der Wert von der Baseline, CIS, manuell, importiert oder Rohquelle stammt.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Verfolgen Sie verwandte CIS- oder Profilkontextlinks, wenn ein generierter Layer den Wert beigetragen hat.</cmd><info><p>Erwartetes Ergebnis: Das Profil <uicontrol>Alle Einstellungen</uicontrol> bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Notieren Sie die Quelle, bevor Sie die Einstellung bearbeiten, entfernen oder zurücksetzen.</cmd><info><note type="warning">Das Ändern von Einstellungen kann sich auf die exportierte Firefox-Richtlinie auswirken. Überprüfen Sie vor dem Speichern die Quelle, Validierung und Schemaunterstützung.</note></info></step>
     </steps>
     <result><p>Sie wissen, woher der konfigurierte Wert stammt und können die Auswirkungen einer Änderung erläutern.</p></result>

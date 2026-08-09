@@ -2,18 +2,18 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="ug-task-save-json-document" xml:lang="de" audience="user" product="bpm-0-9-0" platform="web">
   <title>Das JSON-Dokument speichern</title>
-  <shortdesc>Speichern Sie ein gültiges JSON-Rohdokument zurück im kanonischen BPM-Profil.</shortdesc>
+  <shortdesc><uicontrol>Speichern</uicontrol> Sie ein gültiges JSON-Rohdokument zurück im kanonischen BPM-Profil.</shortdesc>
   <taskbody>
     <prereq><p>Das JSON-Dokument wurde validiert oder die verbleibenden Warnungen wurden verstanden.</p></prereq>
-    <context><p>Beim Speichern wird das Rohdokument durch BPM-Normalisierung zurückgeschrieben. Das gespeicherte Profil kann dann in geführten, Alle Einstellungen-, Vergleichs- oder Export-Arbeitsabläufe geöffnet werden.</p></context>
+    <context><p>Beim <uicontrol>Speichern</uicontrol> wird das Rohdokument durch BPM-Normalisierung zurückgeschrieben. Das gespeicherte Profil kann dann in geführten, <uicontrol>Alle Einstellungen</uicontrol>-, Vergleichs- oder Export-Arbeitsabläufe geöffnet werden.</p></context>
     <steps>
       <step><cmd>Validieren Sie das JSON-Dokument.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
-      <step><cmd>Wählen Sie „Speichern“ nur aus, wenn das Richtlinienobjekt und die Richtlinienwerte der obersten Ebene korrekt sind.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
+      <step><cmd>Wählen Sie „<uicontrol>Speichern</uicontrol>“ nur aus, wenn das Richtlinienobjekt und die Richtlinienwerte der obersten Ebene korrekt sind.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Warten Sie den gespeicherten Status ab, bevor Sie die Route verlassen.</cmd><info><p>Erwartetes Ergebnis: Das JSON-Dokument bleibt auf die ausgewählte Aufgabe fokussiert.</p></info></step>
       <step><cmd>Öffnen Sie das Profil erneut oder exportieren Sie policies.json, wenn Sie Übergabenachweise benötigen.</cmd><info><note type="warning">Das Speichern von Roh-JSON kann das kanonische BPM-Profil ändern. Überprüfen Sie die Syntax- und Richtlinienwerte vor dem Speichern.</note></info></step>
     </steps>
     <result><p>Das BPM-Profil speichert die JSON-Änderungen im kanonischen Profilmodell.</p></result>
-    <postreq><p>Wiederherstellung: Wenn das Speichern fehlschlägt, beheben Sie Validierungsfehler oder kehren Sie zu einem zuvor gespeicherten Profil zurück, bevor Sie es erneut bearbeiten.</p></postreq>
+    <postreq><p>Wiederherstellung: Wenn das <uicontrol>Speichern</uicontrol> fehlschlägt, beheben Sie Validierungsfehler oder kehren Sie zu einem zuvor gespeicherten Profil zurück, bevor Sie es erneut bearbeiten.</p></postreq>
   </taskbody>
   <related-links>
     <link keyref="topic.ug-task-validate-json-document"/>

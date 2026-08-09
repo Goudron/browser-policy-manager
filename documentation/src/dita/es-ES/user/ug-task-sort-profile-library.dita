@@ -11,7 +11,7 @@
       <step><cmd>Seleccione la dirección del pedido.</cmd><info><p>Utilice la hora de actualización descendente para trabajos recientes o el nombre ascendente para la navegación alfabética.</p></info></step>
       <step><cmd>Verifique los recuentos filtrados y totales antes de actuar en la primera fila.</cmd><info><note type="warning">La clasificación no elimina los filtros. Una fila aún se puede ocultar mediante búsquedas o filtros.</note></info></step>
     </steps>
-    <result><p>Las filas visibles de la Biblioteca aparecen en el orden seleccionado.</p></result>
+    <result><p>Las filas visibles de la <uicontrol>Biblioteca</uicontrol> aparecen en el orden seleccionado.</p></result>
     <postreq><p>Recuperación: vuelva a la clasificación por hora actualizada si el orden de las filas ya no coincide con su contexto de trabajo.</p></postreq>
   </taskbody>
   <related-links>

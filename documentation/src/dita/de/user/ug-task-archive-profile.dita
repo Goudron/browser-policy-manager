@@ -4,12 +4,12 @@
   <title>Ein aktives Profil archivieren</title>
   <shortdesc>Verschieben Sie ein aktives Profil aus der normalen aktiven Liste, ohne es dauerhaft zu löschen.</shortdesc>
   <taskbody>
-    <prereq><p>Das Profil ist aktiv, in der Bibliothek sichtbar und wird für normale Bearbeitungs- oder Export-Arbeitsabläufe nicht mehr benötigt.</p></prereq>
+    <prereq><p>Das Profil ist aktiv, in der <uicontrol>Bibliothek</uicontrol> sichtbar und wird für normale Bearbeitungs- oder Export-Arbeitsabläufe nicht mehr benötigt.</p></prereq>
     <context><p>Die Archivierung ist umkehrbar. Dadurch bleibt das Profil über archivierte oder alle Lebenszyklusfilter verfügbar.</p></context>
     <steps>
       <step><cmd>Bestätigen Sie den Zeilennamen, das Schema, den Validierungsstatus und die Aktualisierungszeit.</cmd><info><p>Erwartetes Ergebnis: Sie wissen genau, welches Profil den Lebenszyklusstatus ändern wird.</p></info></step>
       <step><cmd>Wählen Sie die Lebenszyklusaktion „Archivieren“.</cmd><info><note type="warning">Archivierte Profile bleiben erhalten, verhalten sich jedoch nicht mehr wie normale aktive Exportziele.</note></info></step>
-      <step><cmd>Warten Sie auf den Aktionsstatus und aktualisieren Sie die Bibliothek bei Bedarf.</cmd><info><p>Die Zeile wird nach Abschluss der Aktion unter „Archiviert“ oder „Alle Lebenszyklusfilter“ angezeigt.</p></info></step>
+      <step><cmd>Warten Sie auf den Aktionsstatus und aktualisieren Sie die <uicontrol>Bibliothek</uicontrol> bei Bedarf.</cmd><info><p>Die Zeile wird nach Abschluss der Aktion unter „Archiviert“ oder „Alle Lebenszyklusfilter“ angezeigt.</p></info></step>
     </steps>
     <result><p>Das Profil wird archiviert und kann später wiederhergestellt werden.</p></result>
     <postreq><p>Wiederherstellung: Stellen Sie das Profil wieder her, wenn Sie die falsche Zeile archiviert haben.</p></postreq>

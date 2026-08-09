@@ -125,7 +125,10 @@ def extract_policy_details(
     if header is None:
         normalized_policy_name = _normalize_policy_heading_text(policy_name)
         for h3 in soup.find_all("h3"):
-            if _normalize_policy_heading_text(h3.get_text(" ", strip=True)) == normalized_policy_name:
+            if (
+                _normalize_policy_heading_text(h3.get_text(" ", strip=True))
+                == normalized_policy_name
+            ):
                 header = h3
                 break
 
@@ -168,11 +171,17 @@ def extract_policy_details(
                     if code.get_text(" ", strip=True)
                 ]
                 property_name = (
-                    code_names[0] if code_names else name_cell.get_text(" ", strip=True)
-                ).replace("\xa0", " ").strip()
+                    (code_names[0] if code_names else name_cell.get_text(" ", strip=True))
+                    .replace("\xa0", " ")
+                    .strip()
+                )
                 property_name = property_name.strip("`\"' ")
                 description_text = description_cell.get_text(" ", strip=True)
-                if property_name and description_text and property_name not in property_descriptions:
+                if (
+                    property_name
+                    and description_text
+                    and property_name not in property_descriptions
+                ):
                     property_descriptions[property_name] = description_text
 
     section_text = "\n".join(text_chunks) if text_chunks else None

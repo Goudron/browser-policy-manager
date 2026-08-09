@@ -52,12 +52,17 @@ def _topic_root(locale: str, topic_id: str) -> ET.Element:
     source = path.read_text(encoding="utf-8")
     expected_kind = "Task" if topic_id in TASK_TOPICS else "Reference"
     expected_dtd = "task.dtd" if topic_id in TASK_TOPICS else "reference.dtd"
-    assert f'<!DOCTYPE {expected_kind.lower()} PUBLIC "-//OASIS//DTD DITA {expected_kind}//EN" "{expected_dtd}">' in source
+    assert (
+        f'<!DOCTYPE {expected_kind.lower()} PUBLIC "-//OASIS//DTD DITA {expected_kind}//EN" "{expected_dtd}">'
+        in source
+    )
     return ET.fromstring(source)
 
 
 def _section_keyrefs(locale: str) -> dict[str, list[str]]:
-    root = ET.fromstring((DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8"))
+    root = ET.fromstring(
+        (DITA_ROOT / locale / "maps/user-guide.ditamap").read_text(encoding="utf-8")
+    )
     sections: dict[str, list[str]] = {}
     for topichead in root.findall("topichead"):
         intent = topichead.find("./topicmeta/data[@name='intent-id']")
@@ -72,9 +77,7 @@ def _section_keyrefs(locale: str) -> dict[str, list[str]]:
 def _case_topic_map() -> dict[str, dict[str, object]]:
     case_map = json.loads(USER_GUIDE_MAP.read_text(encoding="utf-8"))
     return {
-        topic["topic_id"]: topic
-        for section in case_map["sections"]
-        for topic in section["topics"]
+        topic["topic_id"]: topic for section in case_map["sections"] for topic in section["topics"]
     }
 
 
@@ -114,12 +117,14 @@ def test_library_reference_topics_have_state_warning_recovery_and_related_links(
     for locale in LOCALES:
         for topic_id in REFERENCE_TOPICS:
             root = _topic_root(locale, topic_id)
-            sections = {
-                section.attrib["id"]
-                for section in root.findall("./refbody/section")
-            }
+            sections = {section.attrib["id"] for section in root.findall("./refbody/section")}
             if topic_id == "ug-reference-library-profile-row":
-                assert sections == {"a-row-identity", "a-row-state", "a-row-warning", "a-row-recovery"}
+                assert sections == {
+                    "a-row-identity",
+                    "a-row-state",
+                    "a-row-warning",
+                    "a-row-recovery",
+                }
             else:
                 assert sections == {
                     "a-archived-purpose",
@@ -157,17 +162,20 @@ def test_library_topics_cover_current_m4_03_capability_boundary() -> None:
         inventory_topic_ids.add(match.group(1))
 
     assert set(LIBRARY_TOPICS) <= set(case_topics)
-    assert inventory_topic_ids - set(LIBRARY_TOPICS) - M4_04_LIBRARY_HANDOFF_TOPICS - M4_05_LIBRARY_HANDOFF_TOPICS == set()
+    assert (
+        inventory_topic_ids
+        - set(LIBRARY_TOPICS)
+        - M4_04_LIBRARY_HANDOFF_TOPICS
+        - M4_05_LIBRARY_HANDOFF_TOPICS
+        == set()
+    )
     assert case_topics["ug-task-import-policies-json"]["kind"] == "task"
     assert case_topics["ug-task-export-policies-json"]["kind"] == "task"
     assert case_topics["ug-task-compare-profiles"]["kind"] == "task"
 
 
 def test_english_library_topics_explain_the_required_library_actions_and_states() -> None:
-    text = "\n".join(
-        "".join(_topic_root("en", topic_id).itertext())
-        for topic_id in LIBRARY_TOPICS
-    )
+    text = "\n".join("".join(_topic_root("en", topic_id).itertext()) for topic_id in LIBRARY_TOPICS)
 
     for required_term in (
         "Library",

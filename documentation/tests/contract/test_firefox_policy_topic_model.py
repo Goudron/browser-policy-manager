@@ -10,7 +10,9 @@ import pytest
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 DOCUMENTATION_ROOT = REPOSITORY_ROOT / "documentation"
 MODEL_PATH = DOCUMENTATION_ROOT / "config/firefox-policy-topic-model-0.9.0.json"
-INVENTORY_PATH = REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+INVENTORY_PATH = (
+    REPOSITORY_ROOT / "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+)
 TEMPLATE_PATH = DOCUMENTATION_ROOT / "src/shared/templates/firefox-policy-reference-topic.dita"
 XML_LANG = "{http://www.w3.org/XML/1998/namespace}lang"
 
@@ -42,8 +44,14 @@ def test_firefox_policy_topic_model_declares_stable_topic_identity_and_sections(
     assert model["guide_id"] == "firefox-policy-guide"
     assert model["backlog_item"] == "BPM090-M5-01"
     assert model["status"] == "defined"
-    assert model["source_inventory"] == "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
-    assert model["template_source"] == "documentation/src/shared/templates/firefox-policy-reference-topic.dita"
+    assert (
+        model["source_inventory"]
+        == "docs/architecture/firefox-policy-documentation-inventory-0.9.0.json"
+    )
+    assert (
+        model["template_source"]
+        == "documentation/src/shared/templates/firefox-policy-reference-topic.dita"
+    )
 
     topic = model["topic"]
     assert topic["dita_type"] == "reference"
@@ -112,13 +120,18 @@ def test_model_covers_supported_channels_simple_complex_and_release_only_policy_
                 assert field in channel
 
 
-def test_model_includes_examples_relationships_managed_preferences_and_generation_contract() -> None:
+def test_model_includes_examples_relationships_managed_preferences_and_generation_contract() -> (
+    None
+):
     model = _model()
     inventory = _inventory()
 
     example_model = model["example_model"]
     assert example_model["required"] is True
-    assert example_model["document_shape"] == "Firefox boundary document with top-level policies object"
+    assert (
+        example_model["document_shape"]
+        == "Firefox boundary document with top-level policies object"
+    )
     assert set(example_model["example_fields"]) == {
         "id",
         "channel",
@@ -133,7 +146,11 @@ def test_model_includes_examples_relationships_managed_preferences_and_generatio
     assert "known-preference:{preference_id}" in relationship_model["ui_targets"]
     assert "ug-task-use-all-settings" in relationship_model["user_guide_links"]
     assert relationship_model["cis_link_format"] == "cis({recommendation_id})"
-    assert relationship_model["api_operation_links"] == ["API-VAL-001", "API-EXP-001", "API-IMP-001"]
+    assert relationship_model["api_operation_links"] == [
+        "API-VAL-001",
+        "API-EXP-001",
+        "API-IMP-001",
+    ]
 
     managed_shape = model["value_shape_model"]["managed_preference_shape"]
     assert managed_shape["container_policy"] == "Preferences"
