@@ -1370,8 +1370,45 @@ def test_documentation_floating_assistant_install_failure_stays_locale_safe(
             ).is_enabled()
             assert not driver.find_elements(by.By.CSS_SELECTOR, "[data-assistant-web-control]")
             calls = driver.execute_script("return window.__assistantQaFailureCalls;")
-            assert [call["method"] for call in calls] == ["GET", "GET", "POST", "GET"]
-            assert all(call["path"].startswith("/api/") for call in calls)
+            assistant_status_path = f"/api/documentation-assistant/status?locale={locale}"
+            model_status_path = f"/api/local-model?locale={locale}"
+            install_path = "/api/local-model/install"
+            assert calls
+            assert all(
+                (
+                    call["method"] == "GET"
+                    and call["path"]
+                    in {
+                        assistant_status_path,
+                        model_status_path,
+                    }
+                )
+                or (call["method"] == "POST" and call["path"] == install_path)
+                for call in calls
+            )
+            install_calls = [
+                call for call in calls if call["method"] == "POST" and call["path"] == install_path
+            ]
+            assert len(install_calls) == 1
+            assert json.loads(install_calls[0]["body"]) == {
+                "api_version": 1,
+                "locale": locale,
+                "csrf_token": "c" * 24,
+                "confirm_install": True,
+            }
+            install_index = calls.index(install_calls[0])
+            assert any(
+                call["method"] == "GET" and call["path"] == assistant_status_path
+                for call in calls[:install_index]
+            )
+            assert any(
+                call["method"] == "GET" and call["path"] == model_status_path
+                for call in calls[:install_index]
+            )
+            assert any(
+                call["method"] == "GET" and call["path"] == model_status_path
+                for call in calls[install_index + 1 :]
+            )
             assert all(
                 "search" not in call["path"] and "brave" not in call["path"] for call in calls
             )
