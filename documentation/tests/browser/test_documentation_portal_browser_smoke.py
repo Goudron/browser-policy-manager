@@ -2184,6 +2184,14 @@ def test_documentation_header_preferences_persist_between_bpm_and_portal(tmp_pat
                     == "dark"
                 )
             )
+            wait.until(
+                lambda current_driver: (
+                    current_driver.execute_script(
+                        "return window.localStorage.getItem('bpm-theme-mode');"
+                    )
+                    == "dark"
+                )
+            )
 
             docs_link = wait.until(
                 ec.element_to_be_clickable((by.By.CSS_SELECTOR, ".compact-toolbar-docs-link"))
