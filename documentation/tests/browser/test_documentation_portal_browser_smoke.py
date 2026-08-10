@@ -2187,9 +2187,18 @@ def test_documentation_header_preferences_persist_between_bpm_and_portal(tmp_pat
             docs_link = wait.until(
                 ec.element_to_be_clickable((by.By.CSS_SELECTOR, ".compact-toolbar-docs-link"))
             )
+            assert docs_link.get_attribute("href") == f"{base_url}/help/ru/index.html"
             _click_and_switch_to_new_tab(driver, wait, docs_link)
             wait.until(
                 lambda current_driver: current_driver.current_url.endswith("/help/ru/index.html")
+            )
+            wait.until(
+                lambda current_driver: (
+                    current_driver.execute_script(
+                        "return document.documentElement.dataset.themeMode;"
+                    )
+                    == "dark"
+                )
             )
             assert (
                 ui.Select(
