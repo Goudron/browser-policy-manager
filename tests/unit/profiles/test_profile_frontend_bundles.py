@@ -18,6 +18,17 @@ def test_profile_bundle_output_is_reproducible_without_rewriting_checked_in_asse
     assert bundles.main(["--check"]) == 0
 
 
+def test_profile_bundle_build_replaces_stale_generated_output(tmp_path: Path):
+    output = tmp_path / "profiles_bundles"
+    output.mkdir()
+    (output / "obsolete-bundle.js").write_text("stale", encoding="utf-8")
+
+    bundles._clean(output)
+
+    assert output.is_dir()
+    assert list(output.iterdir()) == []
+
+
 def test_profile_bundle_manifest_keeps_route_entries_short_and_monaco_json_only():
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     routes = manifest["routes"]

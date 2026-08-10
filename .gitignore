@@ -106,6 +106,7 @@ pytestdebug.log
 /app/schemas/cache/
 /app/documentation/site/
 /app/documentation/.site-dev-install.json
+/app/static/profiles_bundles/
 /distributions/documentation/[0-9]*/
 
 # -----------------------------------------------------------------------------
