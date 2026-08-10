@@ -91,6 +91,16 @@ def test_required_ci_commands_are_nonoverlapping_and_release_heavy_work_stays_ou
     assert lanes["chromium-browser"]["primary_owner"] == "CI chromium-tests job"
 
 
+def test_required_ci_documentation_partition_installs_its_local_rag_contract_extra() -> None:
+    workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+    documentation_job = workflow.split("  documentation-coverage:", 1)[1].split(
+        "  frontend-tests:", 1
+    )[0]
+
+    assert "Install documentation and local-RAG contract dependencies" in documentation_job
+    assert 'pip install -e ".[dev,ai]"' in documentation_job
+
+
 def test_scheduled_audit_is_review_evidence_not_a_pull_request_requirement() -> None:
     contract = _contract()
     workflow = SCHEDULED_WORKFLOW.read_text(encoding="utf-8")

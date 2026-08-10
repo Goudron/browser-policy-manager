@@ -14,7 +14,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-import psycopg
 from alembic.config import Config
 from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine, text
@@ -78,6 +77,8 @@ def _expected_head() -> str:
 
 def collect_evidence(async_url: str) -> PostgreSqlEvidence:
     """Read current server facts and require that the disposable service is at Alembic head."""
+
+    import psycopg
 
     expected_head = _expected_head()
     engine = create_engine(_sync_url(async_url), future=True)

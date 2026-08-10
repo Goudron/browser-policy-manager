@@ -10,9 +10,10 @@ from __future__ import annotations
 import json
 from collections.abc import Callable, Collection
 from dataclasses import dataclass
-from typing import Any, Literal, Protocol
+from typing import TYPE_CHECKING, Any, Literal, Protocol
 
-import numpy as np
+if TYPE_CHECKING:
+    import numpy as np
 
 from app.ai.local_inference_worker import InferenceRequest, InferenceResult, LocalInferenceWorker
 from app.documentation.assistant_contracts import ConversationRequest, DialogueTurn

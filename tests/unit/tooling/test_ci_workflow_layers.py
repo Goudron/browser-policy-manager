@@ -212,10 +212,12 @@ def test_ci_workflow_fails_closed_on_resolved_dependency_audits_and_keeps_sboms_
 
 
 def test_ci_workflow_makes_chromium_a_required_owned_layer() -> None:
+    jobs = _workflow_jobs()
     source = _workflow_source("ci.yml")
 
     assert "chromium-tests:" in source
     assert "browser-actions/setup-chrome@v2" in source
+    assert 'pip install -e ".[dev,ai,postgres]"' in _joined_run_commands(jobs["chromium-tests"])
     assert "install-chromedriver: true" in source
     assert "BPM_CHROMIUM_BINARY: ${{ steps.chrome.outputs.chrome-path }}" in source
     assert "BPM_CHROMEDRIVER_BINARY: ${{ steps.chrome.outputs.chromedriver-path }}" in source

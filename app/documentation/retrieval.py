@@ -13,10 +13,11 @@ import re
 from collections.abc import Collection
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Final
+from typing import TYPE_CHECKING, Any, Final
 from urllib.parse import urlsplit
 
-import numpy as np
+if TYPE_CHECKING:
+    import numpy as np
 
 from app.documentation.assistant_contracts import SUPPORTED_LOCALES
 
@@ -52,6 +53,16 @@ class RetrievalUnavailable(RuntimeError):
     def __init__(self, code: str) -> None:
         super().__init__(code)
         self.code = code
+
+
+def _numpy() -> Any:
+    """Load the optional vector backend only when a retrieval operation needs it."""
+
+    try:
+        import numpy
+    except ModuleNotFoundError as error:
+        raise RetrievalUnavailable("optional_ai_dependencies_unavailable") from error
+    return numpy
 
 
 @dataclass(frozen=True)
@@ -134,14 +145,15 @@ def _safe_generation_root(index_root: Path) -> tuple[str, Path]:
 
 
 def _normalize_query(query_vector: np.ndarray | Collection[float]) -> np.ndarray:
+    numpy = _numpy()
     try:
-        vector = np.asarray(query_vector, dtype=np.float32)
+        vector = numpy.asarray(query_vector, dtype=numpy.float32)
     except (TypeError, ValueError) as error:
         raise RetrievalUnavailable("invalid_query_vector") from error
-    if vector.shape != (VECTOR_DIMENSION,) or not np.isfinite(vector).all():
+    if vector.shape != (VECTOR_DIMENSION,) or not numpy.isfinite(vector).all():
         raise RetrievalUnavailable("invalid_query_vector")
-    norm = float(np.linalg.norm(vector))
-    if not np.isclose(norm, 1.0, atol=1e-4):
+    norm = float(numpy.linalg.norm(vector))
+    if not numpy.isclose(norm, 1.0, atol=1e-4):
         raise RetrievalUnavailable("invalid_query_vector")
     return vector
 
@@ -294,9 +306,10 @@ class ExactLocaleRetriever:
         raw = vector_path.read_bytes()
         if len(raw) != rows * VECTOR_DIMENSION * 4:
             raise RetrievalUnavailable("invalid_generation_metadata")
-        vectors = np.frombuffer(raw, dtype="<f4").reshape(rows, VECTOR_DIMENSION)
-        if not np.isfinite(vectors).all() or not np.allclose(
-            np.linalg.norm(vectors, axis=1), 1.0, atol=1e-4
+        numpy = _numpy()
+        vectors = numpy.frombuffer(raw, dtype="<f4").reshape(rows, VECTOR_DIMENSION)
+        if not numpy.isfinite(vectors).all() or not numpy.allclose(
+            numpy.linalg.norm(vectors, axis=1), 1.0, atol=1e-4
         ):
             raise RetrievalUnavailable("invalid_generation_metadata")
         metadata = _load_json(chunks_path)
