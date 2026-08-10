@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -15,6 +16,7 @@ from app.documentation.retrieval import (
     _citation,
     _load_json,
     _normalize_query,
+    _numpy,
     _regular_file,
     _safe_generation_root,
     _validate_chunk,
@@ -281,6 +283,15 @@ def test_retrieval_low_level_guards_reject_unsafe_files_vectors_and_citations(
         invalid["published_url"] = url
         with pytest.raises(RetrievalUnavailable, match="invalid_citation_target"):
             _citation(invalid, "en")
+
+
+def test_retrieval_fails_closed_when_the_optional_numpy_extra_is_unavailable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setitem(sys.modules, "numpy", None)
+
+    with pytest.raises(RetrievalUnavailable, match="optional_ai_dependencies_unavailable"):
+        _numpy()
 
 
 def test_chunk_validation_rejects_every_untrusted_metadata_class() -> None:

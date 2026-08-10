@@ -1174,12 +1174,16 @@ def test_browser_smoke_compare_selector_scrolls_large_profile_lists_and_selects_
 
             selection = driver.execute_script("""
                 const list = document.querySelector("#compare-left-results");
+                const previousScrollBehavior = list.style.scrollBehavior;
+                list.style.scrollBehavior = "auto";
                 list.scrollTop = list.scrollHeight;
                 const options = list.querySelectorAll('[data-compare-profile-option="true"]');
                 const option = options[options.length - 1];
                 const name = option.querySelector("[data-compare-profile-name]").textContent.trim();
                 option.click();
-                return { name, scrollTop: list.scrollTop };
+                const scrollTop = list.scrollTop;
+                list.style.scrollBehavior = previousScrollBehavior;
+                return { name, scrollTop };
                 """)
             assert selection["scrollTop"] > 0
             selected_left_name = selection["name"]

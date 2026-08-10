@@ -92,6 +92,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
 
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: "npm"
+
+      - name: Build deterministic profile frontend assets
+        run: |
+          npm ci
+          make build-profile-frontend-bundles
+
       - name: Run the owned unit layer
         run: make test-unit
 
@@ -114,6 +125,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,ai]"
+
+      - name: Provision checksum-pinned offline Firefox schema inputs
+        run: make provision-firefox-schema-inputs
+
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: "npm"
+
+      - name: Build deterministic profile frontend assets
+        run: |
+          npm ci
+          make build-profile-frontend-bundles
 
       - name: Run the owned non-database integration layer
         run: make test-integration
@@ -185,6 +210,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,ai]"
+
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: "npm"
+
+      - name: Build deterministic profile frontend assets
+        run: |
+          npm ci
+          make build-profile-frontend-bundles
 
       - name: Run the owned opt-in AI implementation layer
         run: make test-ai-incubation-coverage
@@ -294,6 +330,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev,ai]"
 
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: "npm"
+
+      - name: Build deterministic profile frontend assets
+        run: |
+          npm ci
+          make build-profile-frontend-bundles
+
       - name: Run the owned product contract layer
         run: make test-contract
 
@@ -380,6 +427,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,ai,postgres]"
+
+      - name: Setup Node.js for generated profile assets
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.22.1"
+          cache: "npm"
+
+      - name: Build deterministic profile frontend assets
+        run: |
+          npm ci
+          make build-profile-frontend-bundles
 
       - name: Install matching Chrome for Testing and ChromeDriver
         id: chrome

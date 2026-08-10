@@ -335,10 +335,6 @@
       ]
     },
     {
-      "id": "firefox-live-fixtures",
-      "prefix": "tests/live/firefox/fixtures/"
-    },
-    {
       "id": "product-test-fixtures",
       "prefix": "tests/fixtures/"
     },

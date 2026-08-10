@@ -106,6 +106,7 @@ pytestdebug.log
 /app/schemas/cache/
 /app/documentation/site/
 /app/documentation/.site-dev-install.json
+/distributions/documentation/[0-9]*/
 
 # -----------------------------------------------------------------------------
 # Local deployment helpers
