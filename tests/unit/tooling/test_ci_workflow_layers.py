@@ -168,7 +168,10 @@ def test_documentation_owner_installs_its_pdf_navigation_verifier() -> None:
     job = _workflow_jobs()["documentation-coverage"]
 
     install_step = _named_step(job, "Install documentation PDF verification tools")
-    assert install_step["run"] == "sudo apt-get update\nsudo apt-get install --yes qpdf\n"
+    assert (
+        install_step["run"]
+        == "sudo apt-get update\nsudo apt-get install --yes qpdf poppler-utils\n"
+    )
 
 
 def test_ci_proves_clean_package_artifacts_without_ai_dependencies() -> None:

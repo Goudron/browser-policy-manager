@@ -382,7 +382,7 @@ jobs:
       - name: Install documentation PDF verification tools
         run: |
           sudo apt-get update
-          sudo apt-get install --yes qpdf
+          sudo apt-get install --yes qpdf poppler-utils
 
       - name: Run the owned non-browser documentation partition
         run: |
