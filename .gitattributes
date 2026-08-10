@@ -1,0 +1,4 @@
+# Checksum-verified upstream payloads; preserve their emitted whitespace verbatim.
+app/static/vendor/profiles_monaco.js -whitespace
+app/static/vendor/dompurify.LICENSE-MPL -whitespace
+app/static/vendor/monaco.ThirdPartyNotices.txt -whitespace

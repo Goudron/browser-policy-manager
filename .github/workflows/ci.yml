@@ -101,6 +101,8 @@ jobs:
       - name: Build deterministic profile frontend assets
         run: |
           npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
           make build-profile-frontend-bundles
 
       - name: Run the owned unit layer
@@ -138,6 +140,8 @@ jobs:
       - name: Build deterministic profile frontend assets
         run: |
           npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
           make build-profile-frontend-bundles
 
       - name: Run the owned non-database integration layer
@@ -220,6 +224,8 @@ jobs:
       - name: Build deterministic profile frontend assets
         run: |
           npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
           make build-profile-frontend-bundles
 
       - name: Run the owned opt-in AI implementation layer
@@ -339,6 +345,8 @@ jobs:
       - name: Build deterministic profile frontend assets
         run: |
           npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
           make build-profile-frontend-bundles
 
       - name: Run the owned product contract layer
@@ -437,6 +445,8 @@ jobs:
       - name: Build deterministic profile frontend assets
         run: |
           npm ci
+          make verify-frontend-vendor
+          make check-profiles-css
           make build-profile-frontend-bundles
 
       - name: Install matching Chrome for Testing and ChromeDriver

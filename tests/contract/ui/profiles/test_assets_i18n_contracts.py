@@ -1062,16 +1062,21 @@ def test_static_vendor_monaco_assets_exist():
     bundle_css_path = vendor_root / "profiles_monaco.css"
     editor_worker_path = vendor_root / "monaco-editor.worker.js"
     json_worker_path = vendor_root / "monaco-json.worker.js"
+    codicon_font_path = vendor_root / "vendor" / "monaco-assets" / "codicon-KP4OV2OO.ttf"
     license_path = vendor_root / "monaco.LICENSE"
 
     assert bundle_path.is_file()
     assert bundle_css_path.is_file()
     assert editor_worker_path.is_file()
     assert json_worker_path.is_file()
+    assert codicon_font_path.is_file()
     assert license_path.is_file()
     bundle_source = bundle_path.read_text(encoding="utf-8")
     assert "eval(" not in bundle_source
     assert re.search(r"\bnew\s+Function\s*\(", bundle_source) is None
+    assert "/static/vendor/monaco-assets/codicon-KP4OV2OO.ttf" in bundle_css_path.read_text(
+        encoding="utf-8"
+    )
     assert "Microsoft Corporation" in license_path.read_text(encoding="utf-8")
 
 
@@ -1227,6 +1232,7 @@ def test_web_profiles_module_wires_templates_and_route():
     assert profile_route_paths == {
         "/profiles",
         "/profiles/compare",
+        "/profiles/guided-compliance",
         "/profiles/new",
         "/profiles/{profile_id}/edit",
         "/profiles/{profile_id}/settings",

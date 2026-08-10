@@ -1306,12 +1306,11 @@
             color: #f8fafc !important;
         }
 
-/* profiles_css/20-editor-wizard.css */
+/* profiles_css/20-shell.css */
 
         .app-body {
             min-height: 100vh;
         }
-
         .app-shell {
             max-width: 1480px;
             margin: 0 auto;
@@ -1463,6 +1462,8 @@
             padding: 16px 18px;
             border-radius: 16px;
         }
+
+/* profiles_css/21-settings.css */
 
         .wizard-shell {
             display: grid;
@@ -2419,6 +2420,8 @@
             display: grid;
             gap: 12px;
         }
+
+/* profiles_css/22-guided-wizard.css */
 
         .wizard-title {
             margin: 0;
@@ -4458,6 +4461,8 @@
             white-space: nowrap;
         }
 
+/* profiles_css/23-workspace-editor.css */
+
         .dock-summary {
             display: grid;
             gap: 8px;
@@ -5399,6 +5404,8 @@
             margin-top: 20px;
             padding-bottom: 10px;
         }
+
+/* profiles_css/24-theme-overrides.css */
 
         html[data-theme="dark"] .hero-shell {
             background:

@@ -19,6 +19,7 @@ LOCKED_ASSET_PATHS = (
     "profiles_monaco.css",
     "monaco-editor.worker.js",
     "monaco-json.worker.js",
+    "vendor/monaco-assets/codicon-KP4OV2OO.ttf",
     "monaco.LICENSE",
     "monaco.ThirdPartyNotices.txt",
     "dompurify.LICENSE-APACHE",

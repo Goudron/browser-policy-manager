@@ -48,19 +48,20 @@ def _build_release_artifacts(tmp_path: Path) -> tuple[Path, Path]:
 
     artifacts_dir = tmp_path / "artifacts"
     artifacts_dir.mkdir()
-    build_script = (
-        "from pathlib import Path\n"
-        "from setuptools.build_meta import build_sdist, build_wheel\n"
-        "artifacts = Path.cwd().parent / 'artifacts'\n"
-        "build_sdist(str(artifacts))\n"
-        "build_wheel(str(artifacts))\n"
-    )
     subprocess.run(
-        [sys.executable, "-c", build_script],
+        [
+            sys.executable,
+            "-I",
+            "-m",
+            "build",
+            "--sdist",
+            "--wheel",
+            "--outdir",
+            str(artifacts_dir),
+            ".",
+        ],
         cwd=source_root,
         check=True,
-        capture_output=True,
-        text=True,
     )
 
     (sdist,) = artifacts_dir.glob("*.tar.gz")

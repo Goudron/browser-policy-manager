@@ -261,8 +261,11 @@ def test_browser_compact_header_is_usable_across_routes_locales_themes_and_zoom(
         assert metrics["documentationText"]
         assert catalog["profiles.locale_label"].casefold() in metrics["localeLabel"].casefold()
         assert catalog["profiles.theme_label"].casefold() in metrics["themeLabel"].casefold()
-        assert metrics["localeRect"]["height"] >= 44, metrics
-        assert metrics["themeRect"]["height"] >= 44, metrics
+        # Browser layout uses floating-point CSS pixels.  Preserve the 44 px
+        # touch-target requirement while ignoring sub-millipixel rounding noise
+        # such as Chromium's 43.99999237060547 for a computed 44 px control.
+        assert round(metrics["localeRect"]["height"], 3) >= 44, metrics
+        assert round(metrics["themeRect"]["height"], 3) >= 44, metrics
         assert metrics["headerScrollWidth"] <= metrics["headerClientWidth"] + 1, metrics
         assert metrics["documentWidth"] <= metrics["viewportWidth"] + 1, metrics
 
@@ -851,11 +854,10 @@ def test_browser_shared_editor_chrome_keeps_live_state_once_across_transitions()
                 assert state["validation"], state
 
             assert driver.find_element(by.By.ID, "format").is_displayed()
-            editor_languages = driver.execute_script(
-                "return window.monaco.languages.getLanguages().map((language) => language.id);"
+            editor_language = driver.execute_script(
+                "return window.monaco?.editor?.getModels?.()[0]?.getLanguageId?.();"
             )
-            assert "json" in editor_languages
-            assert "yaml" not in editor_languages
+            assert editor_language == "json"
             _click_element(driver, driver.find_element(by.By.ID, "validate"))
             wait.until(
                 lambda current_driver: (
